@@ -11,6 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Auth::routes();
+
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute.new');
+// ['auth', 'role:admin|user']
+
+Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+    Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute.new');
+});
+
+Route::group(['middleware' => ['auth', 'role:admin']], function () {
+    Route::get('dungeon/new', 'DungeonController@new')->name('dungeon.new');
+    Route::post('dungeon/new', 'DungeonController@store')->name('dungeon.store');
 });
