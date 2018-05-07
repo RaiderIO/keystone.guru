@@ -15,6 +15,7 @@ class CreateDungeonsTable extends Migration
     {
         Schema::create('dungeons', function (Blueprint $table) {
             $table->increments('id');
+            $table->text('expansion_id');
             $table->text('name');
             $table->text('key');
             $table->timestamps();
@@ -28,6 +29,6 @@ class CreateDungeonsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('dungeons');
     }
 }

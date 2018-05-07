@@ -23,6 +23,14 @@ Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
 });
 
 Route::group(['middleware' => ['auth', 'role:admin']], function () {
-    Route::get('dungeon/new', 'DungeonController@new')->name('dungeon.new');
-    Route::post('dungeon/new', 'DungeonController@store')->name('dungeon.store');
+    Route::get('admin/dungeon/new', 'DungeonController@new')->name('admin.dungeon.new');
+    Route::post('admin/dungeon/new', 'DungeonController@store')->name('admin.dungeon.store');
+
+    Route::get('admin/dungeons', 'DungeonController@view')->name('admin.dungeons');
+
+
+    Route::get('admin/expansion/new', 'ExpansionController@new')->name('admin.expansion.new');
+    Route::post('admin/expansion/new', 'ExpansionController@store')->name('admin.expansion.store');
+
+    Route::get('admin/expansions', 'ExpansionController@view')->name('admin.expansions');
 });

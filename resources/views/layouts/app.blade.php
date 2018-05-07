@@ -12,17 +12,23 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        .navbar-default .navbar-nav > li > a.btn-success {
+            color: #FFF;
+        }
+    </style>
+
+    @yield('head')
 </head>
 <body>
 <div id="app">
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
-
                 <!-- Collapsed Hamburger -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                         data-target="#app-navbar-collapse">
-                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="sr-only">{{__('Toggle Navigation')}}</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -49,12 +55,12 @@
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
-                        <li><a href="{{ route('login') }}">Login</a></li>
-                        <li><a href="{{ route('register') }}">Register</a></li>
+                        <li><a href="{{ route('login') }}">{{__('Login')}}</a></li>
+                        <li><a href="{{ route('register') }}">{{__('Register')}}</a></li>
                     @else
                         <li>
-                            <a href="{{ route('dungeonroute.new') }}"
-                               class="btn btn-success text-white" role="button">Create route</a>
+                            <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
+                               role="button">{{__('Create route')}}</a>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
@@ -63,17 +69,15 @@
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                @if( Auth::user()->can('create-dungeons') )
-                                <li>
-                                    <a href="{{ route('dungeon.new') }}">
-                                        Create dungeon
-                                    </a>
-                                </li>
+                                @if( Auth::user()->can('read-expansions') )
+                                    <li><a href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a></li>
+                                @endif
+                                @if( Auth::user()->can('read-dungeons') )
+                                    <li><a href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a></li>
                                 @endif
                                 <li>
                                     <a href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         Logout
                                     </a>
 
@@ -96,6 +100,16 @@
                     <div class="panel-heading">@yield('header-title')</div>
 
                     <div class="panel-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         @if (session('status'))
                             <div class="alert alert-success">
                                 {{ session('status') }}
@@ -112,5 +126,6 @@
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
+@yield('scripts')
 </body>
 </html>
