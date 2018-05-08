@@ -16,6 +16,9 @@
         .navbar-default .navbar-nav > li > a.btn-success {
             color: #FFF;
         }
+        .panel-heading {
+            font-size: 20px;
+        }
     </style>
 
     @yield('head')

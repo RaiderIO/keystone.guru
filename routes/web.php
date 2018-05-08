@@ -30,7 +30,10 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
 
 
     Route::get('admin/expansion/new', 'ExpansionController@new')->name('admin.expansion.new');
-    Route::post('admin/expansion/new', 'ExpansionController@store')->name('admin.expansion.store');
+    Route::get('admin/expansion/{id}', 'ExpansionController@edit')->name('admin.expansion.edit');
+
+    Route::post('admin/expansion/new', 'ExpansionController@savenew')->name('admin.expansion.savenew');
+    Route::patch('admin/expansion/{id}', 'ExpansionController@update')->name('admin.expansion.update');
 
     Route::get('admin/expansions', 'ExpansionController@view')->name('admin.expansions');
 });
