@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ExpansionFormRequest extends FormRequest
 {
@@ -23,10 +24,15 @@ class ExpansionFormRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|unique:expansions',
-            'icon' => 'required',
+        $id = $this->route()->parameter('id');
+        $rules = [
+            'name' => ['required', Rule::unique('expansions')->ignore($id)],
             'color' => 'required'
         ];
+        // Icon is required when making a new expansion, when editing it's optional
+        if($id === null){
+            $rules['icon'] = 'required|image|mimes:png|max:128';
+        }
+        return $rules;
     }
 }

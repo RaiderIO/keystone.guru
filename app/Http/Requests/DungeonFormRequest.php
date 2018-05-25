@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DungeonFormRequest extends FormRequest
 {
@@ -23,8 +24,10 @@ class DungeonFormRequest extends FormRequest
      */
     public function rules()
     {
+        dd($this);
+
         return [
-            'name' => 'required|unique:name',
+            'name' => ['required', Rule::unique('dungeons')->ignore($this->route()->parameter('id'))],
             'key' => 'required'
         ];
     }

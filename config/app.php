@@ -183,6 +183,7 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Folklore\Image\ImageServiceProvider::class,
 
     ],
 
@@ -239,6 +240,7 @@ return [
         'Laratrust' => Laratrust\LaratrustFacade::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Image' => Folklore\Image\Facades\Image::class,
     ],
 
 ];

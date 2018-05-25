@@ -30,9 +30,9 @@
     <table id="admin_expansion_table" class="tablesorter">
         <thead>
         <tr>
+            <th>{{ __('Icon') }}</th>
             <th>{{ __('Id') }}</th>
             <th>{{ __('Name') }}</th>
-            <th>{{ __('Icon') }}</th>
             <th>{{ __('Color') }}</th>
             <th>{{ __('Actions') }}</th>
         </tr>
@@ -41,9 +41,9 @@
         <tbody>
         @foreach ($expansions->all() as $expansion)
             <tr>
+                <td><img src="{{ Image::url($expansion->icon->getUrl(), 32, 32) }}"/></td>
                 <td>{{ $expansion->id }}</td>
                 <td>{{ $expansion->name }}</td>
-                <td>{{ $expansion->icon }}</td>
                 <td>{{ $expansion->color }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.expansion.edit', ['id' => $expansion->id]) }}">
