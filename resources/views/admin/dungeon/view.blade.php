@@ -2,12 +2,7 @@
 
 @section('header-title', __('View dungeons'))
 
-@section('head')
-<link rel="stylesheet" type="text/css" href="{{ url('//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css') }}"/>
-@endsection
-
 @section('scripts')
-<script type="text/javascript" src="{{ url('//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript">
     $(function () {
         $('#admin_dungeon_table').DataTable({

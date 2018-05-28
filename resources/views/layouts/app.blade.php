@@ -12,6 +12,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <style>
         .navbar-default .navbar-nav > li > a.btn-success {
             color: #FFF;
@@ -20,7 +22,6 @@
             font-size: 20px;
         }
     </style>
-
     @yield('head')
 </head>
 <body>
@@ -129,6 +130,7 @@
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/lib.js') }}"></script>
 @yield('scripts')
 </body>
 </html>

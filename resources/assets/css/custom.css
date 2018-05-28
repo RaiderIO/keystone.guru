@@ -1,0 +1,19 @@
+.sorting_asc {
+    background: url('/images/datatables/sort_asc.png') no-repeat center right !important;
+}
+
+.sorting_desc {
+    background: url('/images/datatables/sort_desc.png') no-repeat center right !important;
+}
+
+.sorting {
+    background: url('/images/datatables/sort_both.png') no-repeat center right !important;
+}
+
+.sorting_asc_disabled {
+    background: url('/images/datatables/sort_asc_disabled.png') no-repeat center right !important;
+}
+
+.sorting_desc_disabled {
+    background: url('/images/datatables/sort_desc_disabled.png') no-repeat center right !important;
+}
