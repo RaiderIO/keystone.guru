@@ -9,7 +9,7 @@
             columns: [
                 {data: 'id'},
                 {data: 'name'},
-                {data: 'key'}
+                {data: 'actions'}
             ]
         });
     });
@@ -24,16 +24,20 @@
     <tr>
         <th>{{ __('Id') }}</th>
         <th>{{ __('Name') }}</th>
-        <th>{{ __('Key') }}</th>
+        <th>{{ __('Actions') }}</th>
     </tr>
     </thead>
 
     <tbody>
-    @foreach ($dungeons->all() as $dungeon)
+    @foreach ($models->all() as $dungeon)
     <tr>
         <td>{{ $dungeon->id }}</td>
         <td>{{ $dungeon->name }}</td>
-        <td>{{ $dungeon->key }}</td>
+        <td>
+            <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['id' => $dungeon->id]) }}">
+                <i class="fa fa-pencil"></i>&nbsp;{{ __('Edit') }}
+            </a>
+        </td>
     </tr>
     @endforeach
     </tbody>

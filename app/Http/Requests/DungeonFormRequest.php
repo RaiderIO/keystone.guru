@@ -24,11 +24,9 @@ class DungeonFormRequest extends FormRequest
      */
     public function rules()
     {
-        dd($this);
-
         return [
             'name' => ['required', Rule::unique('dungeons')->ignore($this->route()->parameter('id'))],
-            'key' => 'required'
+            'expansion' => 'required'
         ];
     }
 }

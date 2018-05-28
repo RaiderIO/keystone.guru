@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDungeonsTable extends Migration
+class DungeonAddExpansionLink extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateDungeonsTable extends Migration
      */
     public function up()
     {
-        Schema::create('dungeons', function (Blueprint $table) {
-            $table->increments('id');
-            $table->text('expansion_id');
-            $table->text('name');
-            $table->timestamps();
+        Schema::table('dungeons', function(Blueprint $table){
+            $table->integer('expansion_id')->after('id');
         });
     }
 
@@ -28,6 +25,8 @@ class CreateDungeonsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dungeons');
+        Schema::table('dungeons', function(Blueprint $table){
+            $table->removeColumn('expansion_id');
+        });
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Model;
 use \Illuminate\Foundation\Http\FormRequest;
 
 abstract class BaseController extends Controller
@@ -11,47 +12,77 @@ abstract class BaseController extends Controller
      */
     private $_name;
 
-    public function __construct($name){
+    public function __construct($name)
+    {
         $this->_name = $name;
     }
 
     public abstract function getNewHeaderTitle();
+
     public abstract function getEditHeaderTitle();
 
     /**
-     * @param string $request
+     * @param FormRequest $request
      * @param int $id
      * @return mixed
      */
-    public abstract function storeModel($request, int $id = -1);
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Model The string class name of the model that this controller is representing.
-     * @note Type hint indicate this returns a model to help with PhpStorm warnings n auto-complete
-     */
-    private function _getModelClassName(){
-        return sprintf("\App\Models\%s", ucfirst($this->_name));
-    }
+    public abstract function store($request, int $id = -1);
 
     /**
      * @return \Illuminate\Database\Eloquent\Model
      */
-    private function _getModelInstance(){
-        $className = $this->_getModelClassName();
+    private function _getModelInstance()
+    {
+        $className = sprintf("\App\Models\%s", ucfirst($this->_name));
         $model = new $className();
         // MUST be a model!
-        assert($model instanceof \Illuminate\Database\Eloquent\Model);
+        assert($model instanceof Model);
 
         return $model;
     }
 
-    protected function _new()
+    /**
+     * Handles the viewing of a collection of items in a table.
+     *
+     * @param \Illuminate\Support\Collection $models
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     */
+    protected function _view(\Illuminate\Support\Collection $models)
+    {
+        return view(sprintf("admin.%s.view", $this->_name), compact('models'));
+    }
+
+    /**
+     * Saves a new Model to the database (from POST). This will redirect back to the Edit for that very item.
+     *
+     * @param FormRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    protected function _savenew($request)
+    {
+        // Store it and show the edit page for the new item upon success
+        return redirect()->route(sprintf("admin.%s.edit", $this->_name), ["id" => $this->store($request)]);
+    }
+
+    /**
+     * Handles the viewing of a new Model; shows the create Model page.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function new()
     {
         $headerTitle = $this->getNewHeaderTitle();
         return view(sprintf('admin.%s.edit', $this->_name), compact('headerTitle'));
     }
 
-    protected function _edit($id)
+    /**
+     * Edits a Model; displaying the edit Model page.
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit($id)
     {
         $model = $this->_getModelInstance();
         $model = $model->find($id);
@@ -63,41 +94,16 @@ abstract class BaseController extends Controller
     }
 
     /**
+     * Saves a new model to the database (from POST/PATCH). This will refresh the page and show the edit page again.
+     *
      * @param FormRequest $request
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      */
-    protected function _update(FormRequest $request, $id)
+    public function update(FormRequest $request, $id)
     {
         // Store it and show the edit page again
-        return $this->_edit($this->storeModel($request, $id));
-    }
-
-    /**
-     * @param FormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
-     */
-    protected function _savenew(FormRequest $request)
-    {
-        // Store it and show the edit page for the new item upon success
-        return redirect()->route(sprintf("admin.%s.edit", $this->_name), ["id" => $this->storeModel($request)]);
-    }
-
-    protected function view()
-    {
-        $className = $this->_getModelClassName();
-        $expansions = $className::select(['id', 'icon_file_id', 'name', 'color'])->with('icon')->get();
-
-        return view('admin.expansion.view', compact('expansions'));
-    }
-
-    /**
-     * Overriden from trait
-     * @return string The path to the directory where we should upload the files to.
-     */
-    protected function getUploadDirectory(){
-        return 'expansions';
+        return $this->edit($this->store($request, $id));
     }
 }
