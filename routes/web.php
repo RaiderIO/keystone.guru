@@ -24,7 +24,10 @@ Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
 
 Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::get('admin/dungeon/new', 'DungeonController@new')->name('admin.dungeon.new');
-    Route::post('admin/dungeon/new', 'DungeonController@store')->name('admin.dungeon.store');
+    Route::get('admin/dungeon/{id}', 'DungeonController@edit')->name('admin.dungeon.edit');
+
+    Route::post('admin/dungeon/new', 'DungeonController@savenew')->name('admin.dungeon.savenew');
+    Route::patch('admin/dungeon/{id}', 'DungeonController@update')->name('admin.dungeon.update');
 
     Route::get('admin/dungeons', 'DungeonController@view')->name('admin.dungeons');
 

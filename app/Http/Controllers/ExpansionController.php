@@ -28,12 +28,23 @@ class ExpansionController extends Controller implements FileUploadHandler
         return view('admin.expansion.edit', compact('expansion', 'headerTitle'));
     }
 
+    /**
+     * @param ExpansionFormRequest $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
+     */
     public function update(ExpansionFormRequest $request, $id)
     {
         // Store it and show the edit page again
         return $this->edit($this->_store($request, $id));
     }
 
+    /**
+     * @param ExpansionFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function savenew(ExpansionFormRequest $request)
     {
         // Store it and show the edit page for the new item upon success

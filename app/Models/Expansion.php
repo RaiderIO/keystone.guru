@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Expansion extends Model
 {
+    public function dungeons(){
+        return $this->hasMany('App\Models\Dungeon');
+    }
+
     public function icon(){
         return $this->hasOne('App\Models\File', 'model_id');
     }

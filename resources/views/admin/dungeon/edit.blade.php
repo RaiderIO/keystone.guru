@@ -1,9 +1,12 @@
 @extends('layouts.app')
-
-@section('header-title', 'Create dungeon')
+@section('header-title', $headerTitle)
 
 @section('content')
-{!! Form::open(['route' => 'admin.dungeon.store']) !!}
+    @isset($model)
+        {{ Form::model($model, ['route' => ['admin.dungeon.update', $model->id], 'method' => 'patch']) }}
+    @else
+        {{ Form::open(['route' => 'admin.dungeon.savenew', 'files' => true]) }}
+    @endisset
 
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
     {!! Form::label('name', __('Dungeon name')) !!}
