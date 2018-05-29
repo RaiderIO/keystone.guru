@@ -7,48 +7,23 @@ use App\Http\Controllers\Traits\FileUploadTrait;
 use App\Http\Requests\ExpansionFormRequest;
 use App\Models\Expansion;
 
-class ExpansionController extends Controller implements FileUploadHandler
+class ExpansionController extends BaseController implements FileUploadHandler
 {
     use FileUploadTrait;
 
-    public function new()
+    public function __construct()
     {
-        $headerTitle = __('New expansion');
-        return view('admin.expansion.edit', compact('headerTitle'));
+        parent::__construct('expansion');
     }
 
-    public function edit($id)
+    public function getNewHeaderTitle()
     {
-        $expansion = new Expansion();
-        $expansion = $expansion->find($id);
-        if ($expansion === null) {
-            abort(500, 'Unable to load expansion');
-        }
-        $headerTitle = __('Edit expansion');
-        return view('admin.expansion.edit', compact('expansion', 'headerTitle'));
+        return __('New expansion');
     }
 
-    /**
-     * @param ExpansionFormRequest $request
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
-     */
-    public function update(ExpansionFormRequest $request, $id)
+    public function getEditHeaderTitle()
     {
-        // Store it and show the edit page again
-        return $this->edit($this->_store($request, $id));
-    }
-
-    /**
-     * @param ExpansionFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
-     */
-    public function savenew(ExpansionFormRequest $request)
-    {
-        // Store it and show the edit page for the new item upon success
-        return redirect()->route("admin.expansion.edit", ["id" => $this->_store($request)]);
+        return __('Edit expansion');
     }
 
     /**
@@ -57,7 +32,7 @@ class ExpansionController extends Controller implements FileUploadHandler
      * @return mixed
      * @throws \Exception
      */
-    private function _store(ExpansionFormRequest $request, $id = -1)
+    public function store($request, int $id = -1)
     {
         $expansion = new Expansion();
         $edit = $id !== -1;
@@ -105,18 +80,24 @@ class ExpansionController extends Controller implements FileUploadHandler
         return $expansion->id;
     }
 
-    public function view()
-    {
-        $expansions = Expansion::select(['id', 'icon_file_id', 'name', 'color'])->with('icon')->get();
-
-        return view('admin.expansion.view', compact('expansions'));
-    }
-
     /**
      * Overriden from trait
      * @return string The path to the directory where we should upload the files to.
      */
     public function getUploadDirectory(){
         return 'expansions';
+    }
+
+    /**
+     * Override to give the type hint which is required.
+     *
+     * @param ExpansionFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    public function savenew(ExpansionFormRequest $request)
+    {
+        // Store it and show the edit page for the new item upon success
+        return parent::_savenew($request);
     }
 }

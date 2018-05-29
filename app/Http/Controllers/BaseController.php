@@ -29,27 +29,24 @@ abstract class BaseController extends Controller
     public abstract function store($request, int $id = -1);
 
     /**
+     * Gets the fully qualified class name of the model this controller is describing
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    private function _getModelClassname(){
+        return sprintf("\App\Models\%s", ucfirst($this->_name));
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Model
      */
     private function _getModelInstance()
     {
-        $className = sprintf("\App\Models\%s", ucfirst($this->_name));
+        $className = $this->_getModelClassname();
         $model = new $className();
         // MUST be a model!
         assert($model instanceof Model);
 
         return $model;
-    }
-
-    /**
-     * Handles the viewing of a collection of items in a table.
-     *
-     * @param \Illuminate\Support\Collection $models
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
-     */
-    protected function _view(\Illuminate\Support\Collection $models)
-    {
-        return view(sprintf("admin.%s.view", $this->_name), compact('models'));
     }
 
     /**
@@ -63,6 +60,18 @@ abstract class BaseController extends Controller
     {
         // Store it and show the edit page for the new item upon success
         return redirect()->route(sprintf("admin.%s.edit", $this->_name), ["id" => $this->store($request)]);
+    }
+
+    /**
+     * Handles the viewing of a collection of items in a table.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     */
+    public function view()
+    {
+        $className = $this->_getModelClassname();
+        $models = $className::all();
+        return view(sprintf("admin.%s.view", $this->_name), compact('models'));
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests\DungeonFormRequest;
 use App\Models\Dungeon;
 
@@ -49,7 +48,7 @@ class DungeonController extends BaseController
     }
 
     /**
-     * Override to give the type hint which is required
+     * Override to give the type hint which is required.
      *
      * @param DungeonFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
@@ -59,11 +58,5 @@ class DungeonController extends BaseController
     {
         // Store it and show the edit page for the new item upon success
         return parent::_savenew($request);
-    }
-
-    public function view(){
-        $dungeons = DB::table('dungeons')->select(['id', 'name'])->get();
-
-        return parent::_view($dungeons);
     }
 }

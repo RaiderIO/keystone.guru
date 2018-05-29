@@ -34,7 +34,7 @@
         </thead>
 
         <tbody>
-        @foreach ($expansions->all() as $expansion)
+        @foreach ($models->all() as $expansion)
             <tr>
                 <td><img src="{{ Image::url($expansion->icon->getUrl(), 32, 32) }}"/></td>
                 <td>{{ $expansion->id }}</td>
