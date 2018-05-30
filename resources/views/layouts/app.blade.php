@@ -99,7 +99,7 @@
     </nav>
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="<?php echo (isset($wide) && $wide ? "col-md-12" : "col-md-8 col-md-offset-2"); ?>">
                 <div class="panel panel-default">
                     <div class="panel-heading">@yield('header-title')</div>
 
@@ -132,5 +132,7 @@
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/lib.js') }}"></script>
 @yield('scripts')
+<!-- Custom last; may require anything from the above -->
+<script src="{{ asset('js/custom.js') }}"></script>
 </body>
 </html>

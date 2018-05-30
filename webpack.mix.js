@@ -15,10 +15,16 @@ mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css')
     // Lib processing
    .styles(['resources/assets/lib/**/*.css'], 'public/css/lib.css')
-   .combine(['resources/assets/lib/**/*.js'], 'public/js/lib.js')
-    // Custom css processing
-   .styles(['resources/assets/css/**/*.css'], 'public/css/custom.css');
+   .combine('resources/assets/lib/**/*.js', 'public/js/lib.js')
+    // Custom processing
+   .styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
+   .combine('resources/assets/js/custom/**/*.js', 'public/js/custom.js')
+   .sourceMaps();
 
-// Should be uncommented for production!
-// mix.copy('resources/assets/images', 'public/images', false);
-mix.copy('resources/assets/images/datatables', 'public/images/datatables', false);
+if( mix.inProduction() ){
+    // Copies all tiles as well which takes a while
+    mix.copy('resources/assets/images', 'public/images', false);
+} else {
+    mix.copy('resources/assets/images/lib', 'public/images/lib', false);
+    mix.copy('resources/assets/images/test', 'public/images/test', false);
+}

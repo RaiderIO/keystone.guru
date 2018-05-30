@@ -13,7 +13,7 @@ class ExpansionController extends BaseController implements FileUploadHandler
 
     public function __construct()
     {
-        parent::__construct('expansion');
+        parent::__construct('expansion', 'admin');
     }
 
     public function getNewHeaderTitle()

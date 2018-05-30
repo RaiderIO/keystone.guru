@@ -20,6 +20,12 @@ Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute
 
 Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
     Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute.new');
+    Route::get('dungeonroute/{id}', 'DungeonRouteController@edit')->name('dungeonroute.edit');
+
+    Route::post('dungeonroute/new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
+    Route::patch('dungeonroute/{id}', 'DungeonRouteController@update')->name('dungeonroute.update');
+
+    Route::get('dungeonroutes', 'DungeonRouteController@view')->name('dungeonroutes');
 });
 
 Route::group(['middleware' => ['auth', 'role:admin']], function () {

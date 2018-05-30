@@ -12,21 +12,32 @@ abstract class BaseController extends Controller
      */
     private $_name;
 
-    public function __construct($name)
-    {
-        $this->_name = $name;
-    }
-
-    public abstract function getNewHeaderTitle();
-
-    public abstract function getEditHeaderTitle();
+    /**
+     * @var string An optional prefix for the route.
+     */
+    private $_routePrefix;
 
     /**
-     * @param FormRequest $request
-     * @param int $id
-     * @return mixed
+     * @var array Any optional variables you want to pass to the view.
      */
-    public abstract function store($request, int $id = -1);
+    private $_variables = array();
+
+    public function __construct($name, $routePrefix = '')
+    {
+        $this->_name = $name;
+        $this->_routePrefix = trim($routePrefix, '.');
+    }
+
+    /**
+     * @return string The prefix to prepend to any routes that are called for this model.
+     */
+    private function _getRoutePrefix(){
+        $result = '';
+        if( !empty($this->_routePrefix) ){
+            $result = sprintf("%s.", $this->_routePrefix);
+        }
+        return $result;
+    }
 
     /**
      * Gets the fully qualified class name of the model this controller is describing
@@ -42,11 +53,20 @@ abstract class BaseController extends Controller
     private function _getModelInstance()
     {
         $className = $this->_getModelClassname();
+
         $model = new $className();
         // MUST be a model!
         assert($model instanceof Model);
 
         return $model;
+    }
+
+    protected function _setVariables(array $variables){
+        $this->_variables = $variables;
+    }
+
+    protected function _addVariable($key, $value){
+        $this->_variables[$key] = $value;
     }
 
     /**
@@ -59,7 +79,7 @@ abstract class BaseController extends Controller
     protected function _savenew($request)
     {
         // Store it and show the edit page for the new item upon success
-        return redirect()->route(sprintf("admin.%s.edit", $this->_name), ["id" => $this->store($request)]);
+        return redirect()->route(sprintf("%s%s.edit", $this->_getRoutePrefix(), $this->_name), ["id" => $this->store($request)]);
     }
 
     /**
@@ -71,7 +91,11 @@ abstract class BaseController extends Controller
     {
         $className = $this->_getModelClassname();
         $models = $className::all();
-        return view(sprintf("admin.%s.view", $this->_name), compact('models'));
+
+        return view(
+            sprintf("%s%s.view", $this->_getRoutePrefix(), $this->_name),
+            array_merge($this->_variables, compact('models'))
+        );
     }
 
     /**
@@ -82,7 +106,10 @@ abstract class BaseController extends Controller
     public function new()
     {
         $headerTitle = $this->getNewHeaderTitle();
-        return view(sprintf('admin.%s.edit', $this->_name), compact('headerTitle'));
+        return view(
+            sprintf('%s%s.edit', $this->_getRoutePrefix(), $this->_name),
+            array_merge($this->_variables, compact('headerTitle'))
+        );
     }
 
     /**
@@ -99,7 +126,10 @@ abstract class BaseController extends Controller
             abort(500, 'Unable to load ' . $this->_name);
         }
         $headerTitle = $this->getEditHeaderTitle();
-        return view(sprintf('admin.%s.edit', $this->_name), compact('model', 'headerTitle'));
+        return view(
+            sprintf('%s%s.edit', $this->_getRoutePrefix(), $this->_name),
+            array_merge($this->_variables, compact('model', 'headerTitle'))
+        );
     }
 
     /**
@@ -115,4 +145,15 @@ abstract class BaseController extends Controller
         // Store it and show the edit page again
         return $this->edit($this->store($request, $id));
     }
+
+    public abstract function getNewHeaderTitle();
+
+    public abstract function getEditHeaderTitle();
+
+    /**
+     * @param FormRequest $request
+     * @param int $id
+     * @return mixed
+     */
+    public abstract function store($request, int $id = -1);
 }

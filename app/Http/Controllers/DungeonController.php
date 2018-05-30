@@ -9,7 +9,7 @@ class DungeonController extends BaseController
 {
     public function __construct()
     {
-        parent::__construct('dungeon');
+        parent::__construct('dungeon', 'admin');
     }
 
     public function getNewHeaderTitle()
