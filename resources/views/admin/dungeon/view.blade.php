@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
-@section('header-title', __('View dungeons'))
+@section('header-title')
+    {{ __('View dungeons') }}
+    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white pull-right" role="button">{{ __('Create dungeon') }}</a>
+@endsection
 
 @section('scripts')
 <script type="text/javascript">
@@ -17,8 +20,6 @@
 @endsection
 
 @section('content')
-<a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white pull-right" role="button">{{ __('Create dungeon') }}</a>
-
 <table id="admin_dungeon_table" class="tablesorter">
     <thead>
     <tr>
@@ -43,4 +44,4 @@
     </tbody>
 
 </table>
-@endsection()
+@endsection

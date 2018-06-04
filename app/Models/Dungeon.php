@@ -11,7 +11,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Dungeon extends Model
 {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function expansion(){
         return $this->belongsTo('App\Models\Expansion');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function floors(){
+        return $this->hasMany('App\Models\Floor');
     }
 }

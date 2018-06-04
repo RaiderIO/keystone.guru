@@ -1,5 +1,8 @@
 @extends('layouts.app')
-@section('header-title', $headerTitle)
+@section('header-title')
+     {{ $headerTitle }}
+    <a href="{{ route('admin.expansions') }}" class="btn btn-info text-white pull-right" role="button">{{ __('Expansion list') }}</a>
+@endsection
 
 @section('content')
     @isset($model)

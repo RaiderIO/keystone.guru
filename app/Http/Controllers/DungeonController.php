@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DungeonFormRequest;
 use App\Models\Dungeon;
+use App\Models\Expansion;
 
 class DungeonController extends BaseController
 {
@@ -20,6 +21,21 @@ class DungeonController extends BaseController
     public function getEditHeaderTitle()
     {
         return __('Edit dungeon');
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit($id)
+    {
+        // Override so we can set the expansions and floors for the edit page
+        $this->_setVariables(array(
+            'expansions' => Expansion::all()->pluck('name', 'id'),
+            // 'floors' => DB::table('floors')->where('dungeon_id', '=', $id)
+        ));
+
+        return parent::edit($id);
     }
 
     /**

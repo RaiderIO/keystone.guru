@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
-@section('header-title', __('View expansions'))
+@section('header-title')
+    {{ __('View expansions') }}
+    <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right" role="button">{{ __('Create expansion') }}</a>
+@endsection
 
 @section('scripts')
     <script type="text/javascript">
@@ -19,9 +22,6 @@
 @endsection
 
 @section('content')
-    <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right"
-       role="button">{{ __('Create expansion') }}</a>
-
     <table id="admin_expansion_table" class="tablesorter">
         <thead>
         <tr>
