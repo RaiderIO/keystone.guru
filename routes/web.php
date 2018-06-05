@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
 });
 
 Route::group(['middleware' => ['auth', 'role:admin']], function () {
+    // Dungeons
     Route::get('admin/dungeon/new', 'DungeonController@new')->name('admin.dungeon.new');
     Route::get('admin/dungeon/{id}', 'DungeonController@edit')->name('admin.dungeon.edit');
 
@@ -37,13 +38,14 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
 
     Route::get('admin/dungeons', 'DungeonController@view')->name('admin.dungeons');
 
-    Route::get('admin/dungeon/{dungeonid}/floor/new', 'FloorController@newfloor')->name('admin.dungeon.floor.new');
-    Route::get('admin/dungeon/{dungeonid}/floor/{id}', 'FloorController@editfloor')->name('admin.dungeon.floor.edit');
+    // Floors
+    Route::get('admin/floor/new', 'FloorController@newfloor')->name('admin.floor.new')->where(['dungeon' => '[0-9]+']);
+    Route::get('admin/floor/{id}', 'FloorController@editfloor')->name('admin.floor.edit');
 
-    Route::post('admin/dungeon/{dungeonid}/floor/new', 'FloorController@savenew')->name('admin.dungeon.floor.savenew');
-    Route::patch('admin/dungeon/{dungeonid}/floor/{id}', 'FloorController@update')->name('admin.dungeon.floor.update');
+    Route::post('admin/floor/new', 'FloorController@savenew')->name('admin.floor.savenew')->where(['dungeon' => '[0-9]+']);
+    Route::patch('admin/floor/{id}', 'FloorController@update')->name('admin.floor.update');
 
-
+    // Expansions
     Route::get('admin/expansion/new', 'ExpansionController@new')->name('admin.expansion.new');
     Route::get('admin/expansion/{id}', 'ExpansionController@edit')->name('admin.expansion.edit');
 

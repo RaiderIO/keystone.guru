@@ -16,6 +16,7 @@
         $('#admin_dungeon_floor_table').DataTable({
             columns: [
                 {data: 'id'},
+                {data: 'index'},
                 {data: 'name'},
                 {data: 'actions'}
             ]
@@ -31,10 +32,10 @@
         {{ Form::open(['route' => 'admin.dungeon.savenew', 'files' => true]) }}
     @endisset
 
-<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+<div class="form-group{{ $errors->has('expansion') ? ' has-error' : '' }}">
     {!! Form::label('expansion', __('Expansion')) !!}
     {!! Form::select('expansion', $expansions, null, ['class' => 'form-control']) !!}
-    @include('common.forms.form-error', ['key' => 'name'])
+    @include('common.forms.form-error', ['key' => 'expansion'])
 </div>
 
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -46,10 +47,11 @@
 {!! Form::submit('Submit', ['class' => 'btn btn-info']) !!}
 
 {!! Form::close() !!}
+@isset($model)
 <br>
 <h4>Floor management</h4>
 <br>
-<a href="{{ route('admin.dungeon.floor.new', array('dungeonid' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">{{ __('Add floor') }}</a>
+<a href="{{ route('admin.floor.new', array('dungeon' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">{{ __('Add floor') }}</a>
 
 <table id="admin_dungeon_floor_table" class="tablesorter">
     <thead>
@@ -68,7 +70,7 @@
         <td>{{ $floor->index }}</td>
         <td>{{ $floor->name }}</td>
         <td>
-            <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['id' => $floor->id]) }}">
+            <a class="btn btn-primary" href="{{ route('admin.floor.edit', ['id' => $floor->id]) }}">
                 <i class="fa fa-pencil"></i>&nbsp;{{ __('Edit') }}
             </a>
         </td>
@@ -77,4 +79,5 @@
     </tbody>
 
 </table>
+@endisset
 @endsection

@@ -12,14 +12,20 @@
 
 @section('content')
     @isset($model)
-        {{ Form::model($model, ['route' => ['admin.dungeon.floor.update', $model->id], 'method' => 'patch']) }}
+        {{ Form::model($model, ['route' => ['admin.floor.update', 'id' => $model->id], 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => ['admin.dungeon.floor.savenew', $dungeon->id], 'files' => true]) }}
+        {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $dungeon->id]]) }}
     @endisset
 
 <div class="form-group">
     {!! Form::label('dungeon', __('Dungeon')) !!}
-    {!! Form::select('dungeon', [$dungeon->id => $dungeon->name], null, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
+    {!! Form::select('dungeon', [$dungeon->id => $dungeon->name], null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+</div>
+
+<div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
+    {!! Form::label('index', __('Index')) !!}
+    {!! Form::text('index', null, ['class' => 'form-control']) !!}
+    @include('common.forms.form-error', ['key' => 'index'])
 </div>
 
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">

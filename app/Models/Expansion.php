@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
+ * @property int $icon_file_id
  * @property string $name
  * @property string $color
  */

@@ -83,6 +83,20 @@ abstract class BaseController extends Controller
     }
 
     /**
+     * Saves a new model to the database (from POST/PATCH). This will refresh the page and show the edit page again.
+     *
+     * @param FormRequest $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
+     */
+    protected function _update($request, $id)
+    {
+        // Store it and show the edit page again
+        return $this->edit($this->store($request, $id));
+    }
+
+    /**
      * Handles the viewing of a collection of items in a table.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
@@ -130,20 +144,6 @@ abstract class BaseController extends Controller
             sprintf('%s%s.edit', $this->_getRoutePrefix(), $this->_name),
             array_merge($this->_variables, compact('model', 'headerTitle'))
         );
-    }
-
-    /**
-     * Saves a new model to the database (from POST/PATCH). This will refresh the page and show the edit page again.
-     *
-     * @param FormRequest $request
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
-     */
-    public function update(FormRequest $request, $id)
-    {
-        // Store it and show the edit page again
-        return $this->edit($this->store($request, $id));
     }
 
     public abstract function getNewHeaderTitle();

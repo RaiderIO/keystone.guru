@@ -10,7 +10,7 @@ class FloorController extends BaseController
 {
     public function __construct()
     {
-        parent::__construct('floor', 'admin.dungeon');
+        parent::__construct('floor', 'admin');
     }
 
     public function getNewHeaderTitle()
@@ -23,7 +23,8 @@ class FloorController extends BaseController
         return __('Edit floor');
     }
 
-    private function _setDungeonVariable($dungeonId){
+    private function _setDungeonVariable($dungeonId)
+    {
         // Override so we can set the
         $this->_setVariables(array(
             'dungeon' => Dungeon::findOrFail($dungeonId)
@@ -31,22 +32,24 @@ class FloorController extends BaseController
     }
 
     /**
-     * @param $dungeonid
-     * @param $id
+     * @param $request FloorFormRequest
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function newfloor($dungeonid){
-        $this->_setDungeonVariable($dungeonid);
+    public function newfloor(FloorFormRequest $request)
+    {
+        $this->_setDungeonVariable($request->get("dungeon"));
         return parent::new();
     }
 
     /**
-     * @param $dungeonid int
      * @param $id int
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function editfloor($dungeonid, $id){
-        $this->_setDungeonVariable($dungeonid);
+    public function editfloor($id)
+    {
+        /** @var $floor Floor */
+        $floor = Floor::findOrFail($id);
+        $this->_setDungeonVariable($floor->dungeon_id);
         return parent::edit($id);
     }
 
@@ -58,12 +61,16 @@ class FloorController extends BaseController
      */
     public function store($request, int $id = -1)
     {
-        $floor = new Floor();
+        /** @var Floor $floor */
+        $floor = Floor::findOrNew($id);
         $edit = $id !== -1;
 
+        $floor->index = $request->get('index');
         $floor->name = $request->get('name');
-        // May not be set when editing
-        $floor->dungeon_id = $request->get('dungeon');
+        if( !$edit ){
+            // May not be set when editing
+            $floor->dungeon_id = $request->get('dungeon');
+        }
 
         // Update or insert it
         if (!$floor->save()) {
@@ -72,7 +79,21 @@ class FloorController extends BaseController
 
         \Session::flash('status', sprintf(__('Floor %s'), $edit ? __("updated") : __("saved")));
 
+        // Must set the variable to set it for the incoming redirect
+        $this->_setDungeonVariable($floor->dungeon_id);
         return $floor->id;
+    }
+
+    /**
+     * Override to give the type hint which is required.
+     *
+     * @param FloorFormRequest $request
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
+     */
+    public function update(FloorFormRequest $request, $id){
+        return parent::_update($request, $id);
     }
 
     /**
@@ -84,7 +105,7 @@ class FloorController extends BaseController
      */
     public function savenew(FloorFormRequest $request)
     {
-        $this->_setVariables(['dungeonid' => $request->get('dungeon')]);
+        $this->_setVariables(['dungeon' => $request->get('dungeon')]);
 
         // Store it and show the edit page for the new item upon success
         return parent::_savenew($request);

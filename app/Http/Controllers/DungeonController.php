@@ -24,6 +24,20 @@ class DungeonController extends BaseController
     }
 
     /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function new()
+    {
+        // Override so we can set the expansions and floors for the edit page
+        $this->_setVariables(array(
+            'expansions' => Expansion::all()->pluck('name', 'id'),
+            // 'floors' => DB::table('floors')->where('dungeon_id', '=', $id)
+        ));
+
+        return parent::new();
+    }
+
+    /**
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -46,7 +60,8 @@ class DungeonController extends BaseController
      */
     public function store($request, int $id = -1)
     {
-        $dungeon = new Dungeon();
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::findOrNew($id);
         $edit = $id !== -1;
 
         $dungeon->name = $request->get('name');
@@ -61,6 +76,18 @@ class DungeonController extends BaseController
         \Session::flash('status', sprintf(__('Dungeon %s'), $edit ? __("updated") : __("saved")));
 
         return $dungeon->id;
+    }
+
+    /**
+     * Override to give the type hint which is required.
+     *
+     * @param DungeonFormRequest $request
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
+     */
+    public function update(DungeonFormRequest $request, $id){
+        return parent::_update($request, $id);
     }
 
     /**

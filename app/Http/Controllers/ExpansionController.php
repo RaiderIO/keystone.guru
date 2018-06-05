@@ -34,21 +34,12 @@ class ExpansionController extends BaseController implements FileUploadHandler
      */
     public function store($request, int $id = -1)
     {
-        $expansion = new Expansion();
+        /** @var Expansion $expansion */
+        $expansion = Expansion::findOrNew($id);
         $edit = $id !== -1;
         $file = $request->file('icon');
-        $fileId = -1;
-
-        if ($edit) {
-            // Load the expansion
-            $expansion = $expansion->find($id);
-            // Along with the ID of it's existing file
-            $fileId = $expansion->icon->id;
-        }
 
         $expansion->name = $request->get('name');
-        // May not be set when editing
-        $expansion->icon_file_id = $fileId;
         $expansion->color = $request->get('color');
 
         // Update or insert it
@@ -86,6 +77,18 @@ class ExpansionController extends BaseController implements FileUploadHandler
      */
     public function getUploadDirectory(){
         return 'expansions';
+    }
+
+    /**
+     * Override to give the type hint which is required.
+     *
+     * @param ExpansionFormRequest $request
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
+     */
+    public function update(ExpansionFormRequest $request, $id){
+        return parent::_update($request, $id);
     }
 
     /**
