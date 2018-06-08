@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FloorFormRequest;
 use App\Models\Dungeon;
 use App\Models\Floor;
+use Illuminate\Http\Request;
 
 class FloorController extends BaseController
 {
@@ -32,12 +33,14 @@ class FloorController extends BaseController
     }
 
     /**
-     * @param $request FloorFormRequest
+     * @param $request Request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function newfloor(FloorFormRequest $request)
+    public function newfloor(Request $request)
     {
-        $this->_setDungeonVariable($request->get("dungeon"));
+        $dungeon = $request->get("dungeon");
+        $this->_setDungeonVariable($dungeon);
+        $this->_addVariable('floors', Floor::all()->where('dungeon_id', '=', $dungeon));
         return parent::new();
     }
 
@@ -50,6 +53,7 @@ class FloorController extends BaseController
         /** @var $floor Floor */
         $floor = Floor::findOrFail($id);
         $this->_setDungeonVariable($floor->dungeon_id);
+        $this->_addVariable('floors', Floor::all()->where('dungeon_id', '=', $floor->dungeon_id)->where('id', '<>', $id));
         return parent::edit($id);
     }
 

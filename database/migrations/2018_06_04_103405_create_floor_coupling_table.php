@@ -15,8 +15,8 @@ class CreateFloorCouplingTable extends Migration
     {
         Schema::create('floor_couplings', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('floor_1_id');
-            $table->integer('floor_2_id');
+            $table->integer('floor_id');
+            $table->integer('floor1_id');
             $table->timestamps();
         });
     }

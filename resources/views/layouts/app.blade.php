@@ -14,14 +14,6 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-    <style>
-        .navbar-default .navbar-nav > li > a.btn-success {
-            color: #FFF;
-        }
-        .panel-heading {
-            font-size: 20px;
-        }
-    </style>
     @yield('head')
 </head>
 <body>
@@ -64,7 +56,7 @@
                     @else
                         <li>
                             <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
-                               role="button">{{__('Create route')}}</a>
+                               role="button"><i class="fa fa-plus"></i> {{__('Create route')}}</a>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"

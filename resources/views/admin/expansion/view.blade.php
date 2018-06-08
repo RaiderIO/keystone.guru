@@ -2,7 +2,9 @@
 
 @section('header-title')
     {{ __('View expansions') }}
-    <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right" role="button">{{ __('Create expansion') }}</a>
+    <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right" role="button">
+        <i class="fa fa-plus"></i> {{ __('Create expansion') }}
+    </a>
 @endsection
 
 @section('scripts')

@@ -7,3 +7,5 @@ echo "Regenerating IDE Helper..."
 ./ide_helper_regen.sh
 echo "Refreshing autoload..."
 ./refresh_autoload.sh
+echo "Compiling..."
+npm run dev

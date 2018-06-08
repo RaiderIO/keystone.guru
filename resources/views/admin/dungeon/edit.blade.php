@@ -1,7 +1,9 @@
 @extends('layouts.app')
 @section('header-title')
     {{ $headerTitle }}
-    <a href="{{ route('admin.dungeons') }}" class="btn btn-info text-white pull-right" role="button">{{ __('Dungeon list') }}</a>
+    <a href="{{ route('admin.dungeons') }}" class="btn btn-info text-white pull-right" role="button">
+        <i class="fa fa-backward"></i> {{ __('Dungeon list') }}
+    </a>
 @endsection
 <?php
 /**
@@ -51,7 +53,9 @@
 <br>
 <h4>Floor management</h4>
 <br>
-<a href="{{ route('admin.floor.new', array('dungeon' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">{{ __('Add floor') }}</a>
+<a href="{{ route('admin.floor.new', array('dungeon' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">
+    <i class="fa fa-plus"></i> {{ __('Add floor') }}
+</a>
 
 <table id="admin_dungeon_floor_table" class="tablesorter">
     <thead>

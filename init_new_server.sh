@@ -8,8 +8,8 @@ mkdir storage/app/public/expansions
 
 # ensure www-data permissions
 # TODO: log folders writable?
-echo "Setting www-data ownership to storage/app/public/* ..."
-chown -R www-data:www-data storage/app/public/*
+echo "Setting www-data ownership to some folders..."
+chown -R www-data:www-data storage/*
 
 # ensure some other permissions
 echo "Ensuring file permissions..."
@@ -23,6 +23,10 @@ chmod -R 755 bootstrap/cache
 # ensure any uploaded file may be accessed directly (symlinks public/storage to storage/app/public)
 echo "Ensuring storage link..."
 php artisan storage:link
+
+#make sure we have the correct versions for everything
+echo "Updating dependencies..."
+./update_dependencies.sh
 
 # This was somehow needed to get the image library to work
 echo "Publishing Folklore ImageServiceProvider..."

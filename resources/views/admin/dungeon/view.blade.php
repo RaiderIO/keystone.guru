@@ -2,7 +2,9 @@
 
 @section('header-title')
     {{ __('View dungeons') }}
-    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white pull-right" role="button">{{ __('Create dungeon') }}</a>
+    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white pull-right" role="button">
+        <i class="fa fa-plus"></i> {{ __('Create dungeon') }}
+    </a>
 @endsection
 
 @section('scripts')

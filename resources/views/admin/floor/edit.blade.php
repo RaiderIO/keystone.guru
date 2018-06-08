@@ -7,6 +7,7 @@
 /**
  * @var $model \App\Models\Floor
  * @var $dungeon \App\Models\Dungeon
+ * @var $floors \Illuminate\Support\Collection
  */
 ?>
 
@@ -34,7 +35,15 @@
     @include('common.forms.form-error', ['key' => 'name'])
 </div>
 
+@isset($model)
+    <div class="form-group">
+        {!! Form::label('floors', __('Connected floors')) !!}
+        {!! Form::select('floors', $floors->pluck('name', 'id'), null, ['multiple' => 'multiple', 'class' => 'form-control'    ]) !!}
+    </div>
+@endisset
+
 {!! Form::submit('Submit', ['class' => 'btn btn-info']) !!}
 
 {!! Form::close() !!}
+
 @endsection
