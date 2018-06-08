@@ -89,11 +89,13 @@
             </div>
         </div>
     </nav>
-    <div class="container">
+    <div class="container<?php echo (isset($wide) && $wide ? "-fluid" : ""); ?>">
         <div class="row">
             <div class="<?php echo (isset($wide) && $wide ? "col-md-12" : "col-md-8 col-md-offset-2"); ?>">
-                <div class="panel panel-default">
-                    <div class="panel-heading">@yield('header-title')</div>
+                <div class="panel panel-default ">
+                    <div class="panel-heading <?php echo (isset($wide) && $wide ? "panel-heading-wide" : ""); ?>">
+                        @yield('header-title')
+                    </div>
 
                     <div class="panel-body">
                         @if ($errors->any())

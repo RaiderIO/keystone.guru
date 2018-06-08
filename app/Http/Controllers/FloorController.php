@@ -79,12 +79,19 @@ class FloorController extends BaseController
         // Update or insert it
         if (!$floor->save()) {
             abort(500, 'Unable to save floor');
+        } else {
+            // Remove all existing relationships
+            $floor->directConnectedFloors()->detach($request->get('connectedfloors'));
+            $floor->reverseConnectedFloors()->detach($request->get('connectedfloors'));
+            // Create a new direct relationship
+            $floor->directConnectedFloors()->sync($request->get('connectedfloors'));
         }
 
         \Session::flash('status', sprintf(__('Floor %s'), $edit ? __("updated") : __("saved")));
 
         // Must set the variable to set it for the incoming redirect
         $this->_setDungeonVariable($floor->dungeon_id);
+        $this->_addVariable('floors', Floor::all()->where('dungeon_id', '=', $floor->dungeon_id)->where('id', '<>', $id));
         return $floor->id;
     }
 

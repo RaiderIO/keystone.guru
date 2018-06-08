@@ -33,3 +33,20 @@
 .panel-heading {
     font-size: 20px;
 }
+
+.panel-heading-wide {
+    text-align: center;
+}
+
+#map {
+    height: 500px;
+    padding: 10px;
+}
+
+#map-controls {
+    height: 500px;
+}
+
+.switch-dungeon-control {
+    width: 400px;
+}

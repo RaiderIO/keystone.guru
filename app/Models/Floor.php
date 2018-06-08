@@ -9,14 +9,37 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $dungeon_id
  * @property int $index
  * @property string $name
+ * @property \Illuminate\Support\Collection $directConnectedFloors
+ * @property \Illuminate\Support\Collection $reverseConnectedFloors
  */
 class Floor extends Model
 {
-    public function dungeon(){
+    public function dungeon()
+    {
         return $this->belongsTo('App\Models\Dungeon');
     }
 
+//    public function masterOf (){
+//        return $this->belongsToMany('Fighter', 'fighter_fighter', 'fighter_id', 'fighter_id_mestre');
+//    }
+//    public function trainedBy(){
+//        return $this->belongsToMany('Fighter', 'fighter_fighter', 'fighter_id_mestre', 'fighter_id');
+//    }
+
+    /**
+     * @return \Illuminate\Support\Collection A list of all connected floors, regardless of direction
+     */
     public function connectedFloors(){
-        return $this->belongsToMany('App\Models\Floor')->withPivot(['floor1_id'])->withTimestamps();
+        return $this->directConnectedFloors->merge($this->reverseConnectedFloors);
+    }
+
+    public function reverseConnectedFloors()
+    {
+        return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor2_id', 'floor1_id')->withTimestamps();
+    }
+
+    public function directConnectedFloors()
+    {
+        return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor1_id', 'floor2_id')->withTimestamps();
     }
 }
