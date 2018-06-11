@@ -3,53 +3,11 @@
 
 @section('scripts')
     <script>
-        var _switchDungeonSelect = "#switch_dungeon";
-        var _switchDungeonFloorSelect = "#switch_dungeon_floor";
+        $(function(){
+            #("#next_to_map_btn").bind('click', function(){
 
-        $(function () {
-            @foreach ($dungeons as $dungeon)
-            <?php /* @var $dungeon \App\Models\Dungeon */ ?>
-
-            $(_switchDungeonSelect).append($('<option>', {
-                text: "{{ $dungeon->name }}",
-                value: "{{ strtolower(str_replace(" ", "", ($dungeon->name))) }}"
-            }).data("floors", "1"));
-
-            @endforeach
-
-            $(_switchDungeonSelect).change(_dungeonChanged);
-
-            $(_switchDungeonFloorSelect).change(function () {
-                _refreshMap();
             });
-
-            // Init
-            _dungeonChanged();
-        });
-
-        function _dungeonChanged() {
-            // Change the amount of floors this map has
-            var selected = $(_switchDungeonSelect).find('option:selected');
-            var floors = selected.data('floors');
-            _setFloorCount(floors);
-
-            // Refresh now
-            _refreshMap();
-        }
-
-        function _refreshMap() {
-            setCurrentMapName($(_switchDungeonSelect).val(), $(_switchDungeonFloorSelect).val());
-        }
-
-        function _setFloorCount(floors) {
-            $(_switchDungeonFloorSelect).empty();
-            for (var i = 1; i <= floors; i++) {
-                $(_switchDungeonFloorSelect).append($('<option>', {
-                    text: i,
-                    value: i
-                }));
-            }
-        }
+        })
     </script>
 @endsection
 
@@ -59,12 +17,20 @@
     @else
         {{ Form::open(['route' => 'dungeonroute.savenew', 'files' => true]) }}
     @endisset
-    <div>
-        <select id="switch_dungeon" class="form-control switch-dungeon-control"></select>
-        <select id="switch_dungeon_floor" class="form-control switch-dungeon-control"></select>
+    <div id="setup_container" class="container">
+        <div class="form-group">
+            {!! Form::label('dungeon_selection', __('Select dungeon')) !!}
+            {!! Form::select('dungeon_selection', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+        </div>
+        {!! Form::button('<i class="fa fa-forward"></i> ' . __('Next'), ['id' => 'next_to_map_btn', 'class' => 'btn btn-info']) !!}
     </div>
-    <div id="map" class="col-md-12"></div>
 
-    {!! Form::submit('Submit', ['class' => 'btn btn-info']) !!}
+    <div id="map_container" class="invisible">
+        @include('common.maps.map', ['admin' => false, 'dungeons' => \App\Models\Dungeon::all()])
+
+        {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+    </div>
+
     {!! Form::close() !!}
 @endsection
+
