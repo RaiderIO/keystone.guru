@@ -1,4 +1,4 @@
-const { mix } = require('laravel-mix');
+const {mix} = require('laravel-mix');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,20 +11,29 @@ const { mix } = require('laravel-mix');
  |
  */
 
-mix//.js('resources/assets/js/app.js', 'public/js')
-   //.sass('resources/assets/sass/app.scss', 'public/css')
-    // Lib processing
-   //.styles(['resources/assets/lib/**/*.css'], 'public/css/lib.css')
-   //.combine('resources/assets/lib/**/*.js', 'public/js/lib.js')
-    // Custom processing
-   .styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
-   .combine('resources/assets/js/custom/**/*.js', 'public/js/custom.js')
-   .sourceMaps();
+var quick = false;
 
-if( mix.inProduction() ){
+if (quick) {
+    // Custom processing only
+    mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
+        .combine('resources/assets/js/custom/**/*.js', 'public/js/custom.js')
+        .sourceMaps();
+} else {
+    mix.js('resources/assets/js/app.js', 'public/js')
+        .sass('resources/assets/sass/app.scss', 'public/css')
+        // Lib processing
+        .styles(['resources/assets/lib/**/*.css'], 'public/css/lib.css')
+        .combine('resources/assets/lib/**/*.js', 'public/js/lib.js')
+        // Custom processing
+        .styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
+        .combine('resources/assets/js/custom/**/*.js', 'public/js/custom.js')
+        .sourceMaps();
+}
+
+if (mix.inProduction()) {
     // Copies all tiles as well which takes a while
     mix.copy('resources/assets/images', 'public/images', false);
 } else {
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);
-    mix.copy('resources/assets/images/test', 'public/images/test', false);
+    // mix.copy('resources/assets/images/test', 'public/images/test', false);
 }

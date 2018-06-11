@@ -10,38 +10,58 @@ var _mapTileLayer;
  */
 var _statusbar;
 
+var _mapInitializedListeners = [];
+
+/**
+ * Register a listener to be called when the map is initialized so you can
+ * @param fn
+ */
+function onMapInitialized(fn) {
+    _mapInitializedListeners.push(fn);
+}
+
 function initLeafletMap() {
     if (!_mapInitialized) {
+        // Create the map object
         mapObj = L.map('map', {
             minZoom: 1,
             maxZoom: 4,
-            maxBoundsViscosity: 0.5,
-            editable: true
+            // We use a custom draw control, so don't use this
+            // drawControl: true,
+            // Simple 1:1 coordinates to meters, don't use Mercator or anything like that
+            crs: L.CRS.Simple,
+            // Context menu when right clicking stuff
+            contextmenu: true
         });
 
-        L.Control.Statusbar = L.Control.extend({
-            onAdd: function (map) {
-                _statusbar = $("<p>")
-                    .css('font-size', '20px')
-                    .css('font-weight', 'bold')
-                    .css('color', '#5DADE2')
-                    .html('Test status bar');
-                _statusbar = _statusbar[0];
 
-                return _statusbar;
-            }
-        });
+        // Playground
 
-        L.control.statusbar = function (opts) {
-            return new L.Control.Statusbar(opts);
-        };
 
-        L.control.statusbar({position: 'topright'}).addTo(mapObj);
+        // Code for the statusbar
+        // L.Control.Statusbar = L.Control.extend({
+        //     onAdd: function (map) {
+        //         _statusbar = $("<p>")
+        //             .css('font-size', '20px')
+        //             .css('font-weight', 'bold')
+        //             .css('color', '#5DADE2')
+        //             .html('Test status bar');
+        //         _statusbar = _statusbar[0];
+        //
+        //         return _statusbar;
+        //     }
+        // });
+        //
+        // L.control.statusbar = function (opts) {
+        //     return new L.Control.Statusbar(opts);
+        // };
+        //
+        // L.control.statusbar({position: 'topright'}).addTo(mapObj);
     } else {
         mapObj.removeLayer(_mapTileLayer);
     }
 
-    mapObj.setView([0, 0], 0);
+    mapObj.setView([-128, 128], 0);
 
     _mapTileLayer = L.tileLayer('https://mpplnr.wofje.nl/images/tiles/' + _currentMapName + '/' + _currentFloor + '/{z}/{x}_{y}.png', {
         maxZoom: 4,
@@ -51,14 +71,17 @@ function initLeafletMap() {
         continuousWorld: true
     }).addTo(mapObj);
 
-    var polyline = L.polyline([[43.1, 1.2], [43.2, 1.3],[43.3, 1.2]]).addTo(mapObj);
-    polyline.enableEdit();
-
+    // Notify everyone the map is initialized and ready to use
+    if (!_mapInitialized) {
+        $.each(_mapInitializedListeners, function (listener) {
+            listener(mapObj);
+        });
+    }
     _mapInitialized = true;
 }
 
-function setLeafletStatusBarHtml(html){
-    if( typeof _statusbar !== 'undefined' ){
+function setLeafletStatusBarHtml(html) {
+    if (typeof _statusbar !== 'undefined') {
         $(_statusbar).html(html);
     }
 }
