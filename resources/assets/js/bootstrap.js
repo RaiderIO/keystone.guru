@@ -27,6 +27,9 @@ window.Vue = require('vue');
 
 window.axios = require('axios');
 
+window.leaflet = require('leaflet');
+window.leafleteditable = require('leaflet-editable');
+
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
 };

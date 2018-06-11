@@ -3,20 +3,24 @@
 $isAdmin = isset($admin) && $admin;
 /** @var \Illuminate\Support\Collection $dungeons */
 // Hide the floor selection if it's just one dungeon with no additional floors
-$dungeonSelection = $dungeons->count() > 1;
+$dungeonSelection = (!isset($dungeonSelect) || $dungeonSelect) && $dungeons->count() > 1;
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
 $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count() === 1 && $dungeons->first()->floors->count() === 1);
 ?>
 
 @section('scripts')
+    {{-- Make sure we don't override the scripts of the page this thing is included in --}}
+    @parent
+
     <script>
                 {{-- Always --}}
 
-        var _dungeonContruct = {
+        var _dungeonConstruct = {
                     @foreach ($dungeons as $dungeon)
                             {{-- @var $dungeon \App\Models\Dungeon --}}
-                    "{{ strtolower(str_replace(" ", "", $dungeon->name)) }}": {
+                    "{{ $dungeon->id }}": {
+                        "key": "{{ strtolower(str_replace(" ", "", $dungeon->name)) }}",
                         "name": "{{ $dungeon->name }}",
                         "floors": {
                             @foreach ($dungeon->floors as $floor)
@@ -30,15 +34,28 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
                     @endforeach
             };
 
+        @if(!isset($manualInit) || !$manualInit)
         $(function () {
             updateDungeonSelection();
             updateFloorSelection();
-            initMap();
             _refreshMap();
         });
+        @endif
 
         function _refreshMap() {
             setCurrentMapName(getCurrentDungeon(), getCurrentFloor());
+            refreshLeafletMap();
+        }
+
+        function getDungeonDataById(id){
+            var result = false;
+            $.each(_dungeonConstruct, function(key, value){
+                if( key === id ){
+                    result = value;
+                    return false;
+                }
+            });
+            return result;
         }
 
         function getCurrentDungeon() {
@@ -66,10 +83,10 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             // Clear of all options
             $(_switchDungeonSelect).find('option').remove();
             // Add new ones
-            $.each(_dungeonContruct, function (key, dungeon) {
+            $.each(_dungeonConstruct, function (id, dungeon) {
                 $(_switchDungeonSelect).append($('<option>', {
                     text: dungeon.name,
-                    value: key
+                    value: dungeon.key
                 }));
             });
             @endif
@@ -80,9 +97,9 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             // Clear of all options
             $(_switchDungeonFloorSelect).find('option').remove();
             // Add new ones
-            $.each(_dungeonContruct, function (key, dungeon) {
+            $.each(_dungeonConstruct, function (id, dungeon) {
                 // Find the dungeon..
-                if (key === $(_switchDungeonSelect).val()) {
+                if (dungeon.key === getCurrentDungeon()) {
                     // Add each new floor to the select
                     $.each(dungeon.floors, function (id, floor) {
                         $(_switchDungeonFloorSelect).append($('<option>', {
@@ -128,6 +145,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
 
     </script>
 @endsection
+
 <div class="container">
     {{-- Only show the dungeon selector when the amount of dungeons we want to show is greater than 1, otherwise just show the first --}}
     @if($dungeonSelection)
@@ -147,21 +165,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
 <div class="form-group">
     <div id="map" class="col-md-{{ $isAdmin ? "10" : "12" }}"></div>
     @if($isAdmin)
-        <div id="map-controls" class="col-md-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">{{ __("Map controls") }}</div>
-                <div class="panel-body">
-                    <div>
-                        {{ __("Enemies") }}
-                    </div>
-                    <div class="form-group">
-                        {!! Form::button('<i class="fa fa-plus"></i> ' . __('Add enemy pack'), ['class' => 'btn btn-success']) !!}
-                    </div>
-                    <div class="form-group">
-                        {!! Form::button('<i class="fa fa-plus"></i> ' .__('Add enemy to pack'), ['class' => 'btn btn-success']) !!}
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('common.maps.mapadmintools')
     @endif
 </div>
