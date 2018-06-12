@@ -19,17 +19,16 @@ class Floor extends Model
         return $this->belongsTo('App\Models\Dungeon');
     }
 
-//    public function masterOf (){
-//        return $this->belongsToMany('Fighter', 'fighter_fighter', 'fighter_id', 'fighter_id_mestre');
-//    }
-//    public function trainedBy(){
-//        return $this->belongsToMany('Fighter', 'fighter_fighter', 'fighter_id_mestre', 'fighter_id');
-//    }
+    function enemypacks()
+    {
+        return $this->hasMany('App\Models\EnemyPack');
+    }
 
     /**
      * @return \Illuminate\Support\Collection A list of all connected floors, regardless of direction
      */
-    public function connectedFloors(){
+    public function connectedFloors()
+    {
         return $this->directConnectedFloors->merge($this->reverseConnectedFloors);
     }
 

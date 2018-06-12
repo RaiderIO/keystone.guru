@@ -165,6 +165,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
 <div class="form-group">
     <div id="map" class="col-md-{{ $isAdmin ? "10" : "12" }}"></div>
     @if($isAdmin)
-        @include('common.maps.mapadmintools')
+        {{-- @include('common.maps.mapadmintools') -- }}
     @endif
 </div>

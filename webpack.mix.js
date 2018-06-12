@@ -11,7 +11,7 @@ const {mix} = require('laravel-mix');
  |
  */
 
-var quick = false;
+var quick = true;
 
 if (quick) {
     // Custom processing only
