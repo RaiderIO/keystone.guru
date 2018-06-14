@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Floor extends Model
 {
+    public $hidden = ['created_at', 'updated_at'];
+
     public function dungeon()
     {
         return $this->belongsTo('App\Models\Dungeon');

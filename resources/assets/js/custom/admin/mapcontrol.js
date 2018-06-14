@@ -7,12 +7,12 @@ $(function () {
 function adminInitControls(map) {
     console.log(">> adminInitControls");
 
-    var drawnItems = new L.FeatureGroup();
+    let drawnItems = new L.FeatureGroup();
     mapObj.addLayer(drawnItems);
 
     L.drawLocal.draw.toolbar.buttons.polygon = 'Draw an enemy group';
 
-    var options = {
+    let options = {
         position: 'topleft',
         draw: {
             polyline: false,
@@ -43,12 +43,12 @@ function adminInitControls(map) {
         }
     };
 
-    var drawControl = new L.Control.Draw(options);
+    let drawControl = new L.Control.Draw(options);
     mapObj.addControl(drawControl);
 
     mapObj.on(L.Draw.Event.CREATED, function (event) {
-        var layer = event.layer;
-        var enemyPack = createEnemyPack(layer);
+        let layer = event.layer;
+        let enemyPack = createEnemyPack(layer);
         enemyPack.addToFeatureGroup(drawnItems);
 
         drawnItems.addLayer(layer);
@@ -62,40 +62,43 @@ function adminInitControls(map) {
  * @param layer
  */
 function createEnemyPack(layer) {
-    var enemyPack = {
+    let enemyPack = {
         id: 0,
         layer: layer,
         label: 'Mob pack #' + _enemyPacks.length,
         synced: false,
+        saving: false,
         addToFeatureGroup: function (fg) {
             fg.addLayer(layer);
+
+            // Create the context menu items
+            let contextMenuItems = [{
+                text: this.label,
+                disabled: true
+            }, {
+                text: '<i class="fa fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
+                disabled: this.synced || this.saving,
+                callback: function () {
+                    saveEnemyPack(enemyPack);
+                }
+            }];
+
+            // Create the context menu
             layer.bindContextMenu({
                 contextmenuWidth: 140,
-                contextmenuItems: [{
-                    text: this.label,
-                    disabled: true
-                    // callback: ''
-                }, {
-                    text: '<i class="fa fa-save"></i> Save',
-                    disabled: this.synced,
-                    callback: function() {
-                        saveEnemyPack(enemyPack);
-                    }
-                }, '-',
-                    // {
-                    //     text: 'Zoom in',
-                    //     icon: 'images/zoom-in.png',
-                    //     // callback: zoomIn
-                    // }, {
-                    //     text: 'Zoom out',
-                    //     icon: 'images/zoom-out.png',
-                    //     // callback: zoomOut
-                    // }
-                ]
+                contextmenuItems: contextMenuItems
             });
 
-            // console.log(layer.toGeoJSON().geometry.coordinates[0]);
+            // Show a permantent tooltip for the pack's name
             layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
+        },
+        getVertices: function () {
+            let coordinates = this.layer.toGeoJSON().geometry.coordinates[0];
+            let result = [];
+            for (let i = 0; i < coordinates.length; i++) {
+                result.push({x: coordinates[i][0], y: coordinates[i][1]});
+            }
+            return result;
         }
     };
     _enemyPacks.push(enemyPack);
@@ -103,6 +106,31 @@ function createEnemyPack(layer) {
     return enemyPack;
 }
 
-function saveEnemyPack(pack){
+function saveEnemyPack(pack) {
+    $.ajax({
+        type: 'POST',
+        url: '/api/v1/enemypack',
+        dataType: 'json',
+        data: {
+            id: pack.id,
+            floor_id: getCurrentFloor().id,
+            label: pack.label,
+            vertices: pack.getVertices()
+        },
+        beforeSend: function () {
+            console.log("beforeSend");
+            pack.saving = true;
+        },
+        success: function (json) {
+            console.log(json);
+            if (json.result === "success") {
+                pack.id = json.id;
+            }
+        },
+        complete: function () {
+            console.log("complete");
+            pack.saving = false;
+        }
+    });
     console.log("Pack:", pack);
 }

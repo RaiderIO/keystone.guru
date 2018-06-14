@@ -15,4 +15,5 @@ use Illuminate\Http\Request;
 // middleware('auth:api')->
 Route::group(['prefix' => 'v1'], function(){
     Route::get('/enemypacks', 'EnemyPackController@list');
+    Route::post('/enemypack', 'EnemyPackController@store');
 });

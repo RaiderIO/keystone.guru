@@ -13,9 +13,10 @@ class CreateEnemyPackTable extends Migration
      */
     public function up()
     {
-        Schema::create('enemy_pack', function (Blueprint $table) {
+        Schema::create('enemy_packs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('floor_id');
+            $table->string('label');
             $table->timestamps();
         });
         Schema::create('enemy_pack_vertices', function (Blueprint $table) {
