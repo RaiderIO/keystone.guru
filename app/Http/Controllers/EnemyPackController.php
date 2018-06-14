@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\EnemyPack;
 use App\Models\EnemyPackVertex;
 use Illuminate\Http\Request;
-use App\Models\Floor;
 use Mockery\Exception;
 
 class EnemyPackController extends Controller
 {
     //
-    function list()
+    function list(Request $request)
     {
-        return Floor::all()->load(['enemypacks', 'enemypacks.vertices']);
+        $floorId = $request->get('floor_id');
+        return EnemyPack::with(['vertices' => function ($query) {
+            /** @var $query \Illuminate\Database\Query\Builder */
+            $query->select(['enemy_pack_id', 'x', 'y']); // must select enemy_pack_id, else it won't return results /sadface
+        }])->where('floor_id', '=', $floorId)->get(['id', 'label']);
     }
 
     function store(Request $request)
@@ -30,7 +33,7 @@ class EnemyPackController extends Controller
             // Load the existing vertices from the pack
             $existingVerticesIds = $enemyPack->vertices->pluck('id')->all();
             // Only if there's vertices to destroy
-            if(count($existingVerticesIds) > 0){
+            if (count($existingVerticesIds) > 0) {
                 // Kill them off
                 EnemyPackVertex::destroy($existingVerticesIds);
             }
@@ -50,6 +53,6 @@ class EnemyPackController extends Controller
             }
         }
 
-        return ['result' => 'success', 'id' => $enemyPack->id];
+        return ['id' => $enemyPack->id];
     }
 }

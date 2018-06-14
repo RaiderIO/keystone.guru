@@ -44,15 +44,15 @@
             {!! Form::select('connectedfloors[]', $floors->pluck('name', 'id'), isset($model) ? $model->connectedFloors()->pluck('id')->all() : null,
                 ['multiple' => 'multiple', 'class' => 'form-control']) !!}
         </div>
+
+        {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+
+        {!! Form::close() !!}
     </div>
 
     @isset($model)
         <h3>Enemy placement</h3>
         @include('common.maps.map', ['admin' => true, 'dungeons' => new \Illuminate\Support\Collection([$dungeon])])
     @endisset
-
-    {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
-
-    {!! Form::close() !!}
 
 @endsection

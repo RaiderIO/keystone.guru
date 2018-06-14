@@ -1,7 +1,6 @@
-var _enemyPacks = [];
-
 $(function () {
     onMapInitialized(adminInitControls);
+    onEnemyPackCreated(adminCreateEnemyPack);
 });
 
 function adminInitControls(map) {
@@ -57,20 +56,11 @@ function adminInitControls(map) {
     console.log("OK adminInitControls");
 }
 
-/**
- * Creates a pack of enemies from a newly created layer.
- * @param layer
- */
-function createEnemyPack(layer) {
-    let enemyPack = {
-        id: 0,
-        layer: layer,
-        label: 'Mob pack #' + _enemyPacks.length,
+function adminCreateEnemyPack(enemyPack) {
+    $.extend(enemyPack, {
         synced: false,
         saving: false,
-        addToFeatureGroup: function (fg) {
-            fg.addLayer(layer);
-
+        onLayerInit: function (layer) {
             // Create the context menu items
             let contextMenuItems = [{
                 text: this.label,
@@ -79,7 +69,7 @@ function createEnemyPack(layer) {
                 text: '<i class="fa fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
                 disabled: this.synced || this.saving,
                 callback: function () {
-                    saveEnemyPack(enemyPack);
+                    enemyPack.save();
                 }
             }];
 
@@ -92,45 +82,33 @@ function createEnemyPack(layer) {
             // Show a permantent tooltip for the pack's name
             layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
         },
-        getVertices: function () {
-            let coordinates = this.layer.toGeoJSON().geometry.coordinates[0];
-            let result = [];
-            for (let i = 0; i < coordinates.length; i++) {
-                result.push({x: coordinates[i][0], y: coordinates[i][1]});
-            }
-            return result;
-        }
-    };
-    _enemyPacks.push(enemyPack);
-
-    return enemyPack;
-}
-
-function saveEnemyPack(pack) {
-    $.ajax({
-        type: 'POST',
-        url: '/api/v1/enemypack',
-        dataType: 'json',
-        data: {
-            id: pack.id,
-            floor_id: getCurrentFloor().id,
-            label: pack.label,
-            vertices: pack.getVertices()
-        },
-        beforeSend: function () {
-            console.log("beforeSend");
-            pack.saving = true;
-        },
-        success: function (json) {
-            console.log(json);
-            if (json.result === "success") {
-                pack.id = json.id;
-            }
-        },
-        complete: function () {
-            console.log("complete");
-            pack.saving = false;
+        save: function () {
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/enemypack',
+                dataType: 'json',
+                data: {
+                    id: enemyPack.id,
+                    floor_id: getCurrentFloor().id,
+                    label: enemyPack.label,
+                    vertices: enemyPack.getVertices()
+                },
+                beforeSend: function () {
+                    console.log("beforeSend");
+                    enemyPack.saving = true;
+                    enemyPack.layer.setStyle({fillColor: c.map.admin.enemypack.colors.edited});
+                },
+                success: function (json) {
+                    console.log(json);
+                    enemyPack.id = json.id;
+                    enemyPack.layer.setStyle({fillColor: c.map.admin.enemypack.colors.saved});
+                },
+                complete: function () {
+                    console.log("complete");
+                    enemyPack.saving = false;
+                    enemyPack.layer.setStyle({fillColor: c.map.admin.enemypack.colors.unsaved});
+                }
+            });
         }
     });
-    console.log("Pack:", pack);
 }

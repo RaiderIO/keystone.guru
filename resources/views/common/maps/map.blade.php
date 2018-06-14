@@ -37,6 +37,12 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
         let _switchDungeonSelect = "#map_dungeon_selection";
         let _switchDungeonFloorSelect = "#map_floor_selection";
 
+        /**
+         * @var Object Stores all enemy packs which are displayed on the map
+         **/
+        var _enemyPacks = [];
+        var _enemyPackCreatedListeners = [];
+
         $(function () {
             $(_switchDungeonSelect).change(function () {
                 _refreshFloorSelect();
@@ -56,6 +62,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             @if($isAdmin)
             adminInitControls(mapObj);
             @endif
+
         });
 
         /**
@@ -65,6 +72,8 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
         function _refreshMap() {
             setCurrentMapName(getCurrentDungeon().key, getCurrentFloor().index);
             refreshLeafletMap();
+            // Load all packs for the currently selected dungeon/floor
+            refreshEnemyPacks();
         }
 
         /**
@@ -165,6 +174,109 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
          */
         function getCurrentFloor() {
             return getDungeonFloorDataById(getCurrentDungeon().id, $(_switchDungeonFloorSelect).val());
+        }
+
+        /**
+         * Register a listener to be called whenever an enemy pack is created.
+         * @param fn
+         */
+        function onEnemyPackCreated(fn) {
+            _enemyPackCreatedListeners.push(fn);
+        }
+
+        /**
+         * Creates a pack of enemies from a newly created layer.
+         * @param layer
+         */
+        function createEnemyPack(layer) {
+            let enemyPack = {
+                id: 0,
+                layer: layer,
+                label: 'Mob pack #' + _enemyPacks.length,
+                addToFeatureGroup: function (fg) {
+                    fg.addLayer(layer);
+
+                    enemyPack.onLayerInit(layer);
+                },
+                // To be overridden by any implementing classes
+                onLayerInit(layer) {
+
+                },
+                getVertices: function () {
+                    let coordinates = this.layer.toGeoJSON().geometry.coordinates[0];
+                    let result = [];
+                    for (let i = 0; i < coordinates.length - 1; i++) {
+                        result.push({x: coordinates[i][0], y: coordinates[i][1]});
+                    }
+                    return result;
+                }
+            };
+            _enemyPacks.push(enemyPack);
+
+            // Let all listeners warp the object as necessary
+            $.each(_enemyPackCreatedListeners, function (listener) {
+                enemyPack = listener(enemyPack);
+            });
+
+            console.log("Finished pack: ", enemyPack);
+
+            return enemyPack;
+        }
+
+        /**
+         * Refreshes the enemy packs that are displayed on the map based on the current dungeon & selected floor.
+         */
+        function refreshEnemyPacks() {
+            let dungeon = getCurrentDungeon();
+            let floor = getCurrentFloor();
+
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/enemypacks',
+                dataType: 'json',
+                data: {
+                    floor_id: floor.id
+                },
+                beforeSend: function () {
+                    console.log("beforeSend");
+                },
+                success: function (json) {
+                    console.log(json);
+
+                    // Remove any layers that were added before
+                    if (_enemyPacks !== null) {
+                        for (let i = 0; i < _enemyPacks.length; i++) {
+                            let enemyPack = _enemyPacks[i];
+                            // Remove all layers
+                            mapObj.removeLayer(enemyPack.layer);
+                        }
+                    }
+
+                    // Now draw the packs on the map
+                    let points = [];
+                    for (let i = 0; i < json.length; i++) {
+                        let floor = json[i];
+                        for (let j = 0; j < floor.vertices.length; j++) {
+                            let vertex = floor.vertices[j];
+                            points.push([vertex.y, vertex.x]);
+                        }
+
+                        console.log("points", points);
+                        console.log(mapObj);
+
+                        let layer = L.polygon(points, {
+                            fillColor: c.map.admin.enemypack.colors.saved,
+                            color: c.map.admin.enemypack.colors.savedBorder
+                        }).addTo(mapObj);
+
+                        createEnemyPack(layer);
+                    }
+
+                },
+                complete: function () {
+                    console.log("complete");
+                }
+            });
         }
     </script>
 @endsection

@@ -46,7 +46,7 @@
     @include('common.forms.form-error', ['key' => 'name'])
 </div>
 
-{!! Form::submit('Submit', ['class' => 'btn btn-info']) !!}
+{!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
 
 {!! Form::close() !!}
 @isset($model)
