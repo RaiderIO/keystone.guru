@@ -14,7 +14,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
     @parent
 
     <script>
-        let _dungeonConstruct = [
+        var _dungeonData = [
                 @foreach ($dungeons as $dungeon)
                 {{-- @var $dungeon \App\Models\Dungeon --}}
             {
@@ -37,47 +37,40 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
         let _switchDungeonSelect = "#map_dungeon_selection";
         let _switchDungeonFloorSelect = "#map_floor_selection";
 
-        /**
-         * @var Object Stores all enemy packs which are displayed on the map
-         **/
-        var _enemyPacks = [];
-        var _enemyPackCreatedListeners = [];
+        let dungeonMap;
 
         $(function () {
-            $(_switchDungeonSelect).change(function () {
-                _refreshFloorSelect();
-                _refreshMap();
-            });
-
-            $(_switchDungeonFloorSelect).change(function () {
-                _refreshMap();
-            });
 
             @if(!isset($manualInit) || !$manualInit)
+            // Make sure that the select options have a valid value
             _refreshDungeonSelect();
             _refreshFloorSelect();
-            _refreshMap();
+
+            dungeonMap = new DungeonMap('map', _dungeonData, $(_switchDungeonSelect).val(), $(_switchDungeonFloorSelect).val());
             @endif
 
             @if($isAdmin)
-            adminInitControls(mapObj);
+            adminInitControls();
             @endif
+
+            $(_switchDungeonSelect).change(function () {
+                // Pass the new dungeon to the map
+                dungeonMap.currentDungeonId = $(_switchDungeonSelect).val();
+                // If the dungeon switched, the floor needs to refresh to reflect the new dungeon
+                _refreshFloorSelect();
+                dungeonMap.refreshLeafletMap();
+            });
+
+            $(_switchDungeonFloorSelect).change(function () {
+                // Pass the new floor ID to the map
+                dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
+                dungeonMap.refreshLeafletMap();
+            });
 
         });
 
         /**
-         * Refreshes the map according to the currently selected dungeon and floor.
-         * @private
-         */
-        function _refreshMap() {
-            setCurrentMapName(getCurrentDungeon().key, getCurrentFloor().index);
-            refreshLeafletMap();
-            // Load all packs for the currently selected dungeon/floor
-            refreshEnemyPacks();
-        }
-
-        /**
-         * Refreshes the dungeon select and fills it with all the currently dungeons.
+         * Refreshes the dungeon select and fills it with all the current dungeons.
          * @private
          */
         function _refreshDungeonSelect() {
@@ -86,7 +79,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
                 // Clear of all options
                 $switchDungeonSelect.find('option').remove();
                 // Add new ones
-                $.each(_dungeonConstruct, function (index, dungeon) {
+                $.each(_dungeonData, function (index, dungeon) {
                     $(_switchDungeonSelect).append($('<option>', {
                         text: dungeon.name,
                         value: dungeon.id
@@ -105,9 +98,9 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
                 // Clear of all options
                 $switchDungeonFloorSelect.find('option').remove();
                 // Add new ones
-                $.each(_dungeonConstruct, function (index, dungeon) {
+                $.each(_dungeonData, function (index, dungeon) {
                     // Find the dungeon..
-                    if (dungeon.key === getCurrentDungeon().key) {
+                    if (dungeon.key === dungeonMap.getCurrentDungeon().key) {
                         // Add each new floor to the select
                         $.each(dungeon.floors, function (index, floor) {
                             // Reconstruct the dungeon floor select
@@ -119,164 +112,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
                     }
                 });
             }
-        }
-
-        /**
-         * Gets all data for a dungeon by its ID.
-         * @param id string The ID of the dungeon you want to retrieve.
-         * @returns {boolean|Object} False if the object could not be found, or the object.
-         */
-        function getDungeonDataById(id) {
-            let result = false;
-            $.each(_dungeonConstruct, function (index, value) {
-                if (value.id === id) {
-                    result = value;
-                    return false;
-                }
-            });
-            return result;
-        }
-
-        /**
-         * Gets all data of a dungeon floor by the dungeonId and its floorId
-         * @param dungeonId string The ID of the dungeon.
-         * @param floorId string The ID of the floor.
-         * @returns {boolean|Object} False if the object could not be found, or the object.
-         */
-        function getDungeonFloorDataById(dungeonId, floorId) {
-            let dungeonData = getDungeonDataById(dungeonId);
-            let result = false;
-            // Found the dungeon?
-            if (dungeonData !== false) {
-                // Iterate over the found floors
-                $.each(dungeonData.floors, function (index, value) {
-                    // Find the floor we're looking for
-                    if (value.id === floorId) {
-                        result = value;
-                        return false;
-                    }
-                });
-            }
-            return result;
-        }
-
-        /**
-         * Get the data of the currently selected dungeon.
-         * @returns {boolean|Object}
-         */
-        function getCurrentDungeon() {
-            return getDungeonDataById($(_switchDungeonSelect).val());
-        }
-
-        /**
-         * Gets the data of the currently selected floor
-         * @returns {boolean|Object}
-         */
-        function getCurrentFloor() {
-            return getDungeonFloorDataById(getCurrentDungeon().id, $(_switchDungeonFloorSelect).val());
-        }
-
-        /**
-         * Register a listener to be called whenever an enemy pack is created.
-         * @param fn
-         */
-        function onEnemyPackCreated(fn) {
-            _enemyPackCreatedListeners.push(fn);
-        }
-
-        /**
-         * Creates a pack of enemies from a newly created layer.
-         * @param layer
-         */
-        function createEnemyPack(layer) {
-            let enemyPack = {
-                id: 0,
-                layer: layer,
-                label: 'Mob pack #' + _enemyPacks.length,
-                addToFeatureGroup: function (fg) {
-                    fg.addLayer(layer);
-
-                    enemyPack.onLayerInit(layer);
-                },
-                // To be overridden by any implementing classes
-                onLayerInit(layer) {
-
-                },
-                getVertices: function () {
-                    let coordinates = this.layer.toGeoJSON().geometry.coordinates[0];
-                    let result = [];
-                    for (let i = 0; i < coordinates.length - 1; i++) {
-                        result.push({x: coordinates[i][0], y: coordinates[i][1]});
-                    }
-                    return result;
-                }
-            };
-            _enemyPacks.push(enemyPack);
-
-            // Let all listeners warp the object as necessary
-            $.each(_enemyPackCreatedListeners, function (listener) {
-                enemyPack = listener(enemyPack);
-            });
-
-            console.log("Finished pack: ", enemyPack);
-
-            return enemyPack;
-        }
-
-        /**
-         * Refreshes the enemy packs that are displayed on the map based on the current dungeon & selected floor.
-         */
-        function refreshEnemyPacks() {
-            let dungeon = getCurrentDungeon();
-            let floor = getCurrentFloor();
-
-            $.ajax({
-                type: 'GET',
-                url: '/api/v1/enemypacks',
-                dataType: 'json',
-                data: {
-                    floor_id: floor.id
-                },
-                beforeSend: function () {
-                    console.log("beforeSend");
-                },
-                success: function (json) {
-                    console.log(json);
-
-                    // Remove any layers that were added before
-                    if (_enemyPacks !== null) {
-                        for (let i = 0; i < _enemyPacks.length; i++) {
-                            let enemyPack = _enemyPacks[i];
-                            // Remove all layers
-                            mapObj.removeLayer(enemyPack.layer);
-                        }
-                    }
-
-                    // Now draw the packs on the map
-                    let points = [];
-                    for (let i = 0; i < json.length; i++) {
-                        let floor = json[i];
-                        for (let j = 0; j < floor.vertices.length; j++) {
-                            let vertex = floor.vertices[j];
-                            points.push([vertex.y, vertex.x]);
-                        }
-
-                        console.log("points", points);
-                        console.log(mapObj);
-
-                        let layer = L.polygon(points, {
-                            fillColor: c.map.admin.enemypack.colors.saved,
-                            color: c.map.admin.enemypack.colors.savedBorder
-                        }).addTo(mapObj);
-
-                        createEnemyPack(layer);
-                    }
-
-                },
-                complete: function () {
-                    console.log("complete");
-                }
-            });
         }
     </script>
 @endsection

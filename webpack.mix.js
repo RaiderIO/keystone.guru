@@ -11,24 +11,32 @@ const {mix} = require('laravel-mix');
  |
  */
 
-var quick = true;
+let full = false;
 
-if (quick) {
-    // Custom processing only
-    mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
-        .combine('resources/assets/js/custom/**/*.js', 'public/js/custom.js')
-        .sourceMaps();
-} else {
+// Custom processing only
+mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
+    .combine([
+        // Doesn't depend on anything
+        'resources/assets/js/custom/constants.js',
+        // Include in proper order
+        'resources/assets/js/custom/dungeonmap.js',
+        'resources/assets/js/custom/enemypack.js',
+        'resources/assets/js/custom/admin/adminenemypack.js',
+        'resources/assets/js/custom/admin/mapcontrol.js',
+        // Include the rest
+        // 'resources/assets/js/custom/**/*.js'
+    ], 'public/js/custom.js');
+// .combine(, 'public/js/custom.js');
+
+if (full) {
     mix.js('resources/assets/js/app.js', 'public/js')
         .sass('resources/assets/sass/app.scss', 'public/css')
         // Lib processing
         .styles(['resources/assets/lib/**/*.css'], 'public/css/lib.css')
-        .combine('resources/assets/lib/**/*.js', 'public/js/lib.js')
-        // Custom processing
-        .styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
-        .combine('resources/assets/js/custom/**/*.js', 'public/js/custom.js')
-        .sourceMaps();
+        .combine('resources/assets/lib/**/*.js', 'public/js/lib.js');
 }
+
+mix.sourceMaps();
 
 if (mix.inProduction()) {
     // Copies all tiles as well which takes a while

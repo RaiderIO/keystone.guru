@@ -125,8 +125,8 @@
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/lib.js') }}"></script>
-@yield('scripts')
 <!-- Custom last; may require anything from the above -->
 <script src="{{ asset('js/custom.js') }}"></script>
+@yield('scripts')
 </body>
 </html>
