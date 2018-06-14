@@ -1,0 +1,52 @@
+.sorting_asc {
+    background: url('/images/lib/datatables/sort_asc.png') no-repeat center right !important;
+}
+
+.sorting_desc {
+    background: url('/images/lib/datatables/sort_desc.png') no-repeat center right !important;
+}
+
+.sorting {
+    background: url('/images/lib/datatables/sort_both.png') no-repeat center right !important;
+}
+
+.sorting_asc_disabled {
+    background: url('/images/lib/datatables/sort_asc_disabled.png') no-repeat center right !important;
+}
+
+.sorting_desc_disabled {
+    background: url('/images/lib/datatables/sort_desc_disabled.png') no-repeat center right !important;
+}
+
+.navbar-default .navbar-nav > li > .btn-success > a:hover, .navbar-default .navbar-nav > li > .btn-success > a:focus {
+    background-color: #20895e;
+}
+
+.navbar-default .navbar-nav > li > a.btn-success {
+    color: #FFF;
+}
+
+.navbar-default .navbar-nav > li > a.btn-success:hover {
+    background-color: #20895E;
+}
+
+.panel-heading {
+    font-size: 20px;
+}
+
+.panel-heading-wide {
+    text-align: center;
+}
+
+#map {
+    height: 700px;
+    padding: 10px;
+}
+
+#map-controls {
+    height: 700px;
+}
+
+.switch-dungeon-control {
+    width: 400px;
+}

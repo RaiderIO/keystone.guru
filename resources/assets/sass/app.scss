@@ -7,3 +7,11 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Font-Awesome
+@import "~font-awesome/scss/font-awesome.scss";
+
+// Leaflet
+@import "~leaflet/dist/leaflet.css";
+@import "~leaflet-draw/dist/leaflet.draw.css";
+@import "~leaflet-contextmenu/dist/leaflet.contextmenu.css";
