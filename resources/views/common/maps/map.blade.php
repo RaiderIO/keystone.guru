@@ -100,7 +100,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
                 // Add new ones
                 $.each(_dungeonData, function (index, dungeon) {
                     // Find the dungeon..
-                    if (dungeon.key === dungeonMap.getCurrentDungeon().key) {
+                    if (dungeon.id === $(_switchDungeonSelect).val()) {
                         // Add each new floor to the select
                         $.each(dungeon.floors, function (index, floor) {
                             // Reconstruct the dungeon floor select

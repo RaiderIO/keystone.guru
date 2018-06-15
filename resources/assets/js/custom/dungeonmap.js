@@ -19,6 +19,7 @@ class DungeonMap {
 
         // Create the map object
         this.leafletMap = L.map(mapid, {
+            center: [0, 0],
             minZoom: 1,
             maxZoom: 4,
             // We use a custom draw control, so don't use this
@@ -26,7 +27,8 @@ class DungeonMap {
             // Simple 1:1 coordinates to meters, don't use Mercator or anything like that
             crs: L.CRS.Simple,
             // Context menu when right clicking stuff
-            contextmenu: true
+            contextmenu: true,
+            zoomControl: false
         });
 
         // Refresh the map; draw the layers on it
@@ -61,8 +63,8 @@ class DungeonMap {
      * @returns {EnemyPack}
      * @private
      */
-    _createEnemyPack(layer){
-        switch(this.enemyPackClassName){
+    _createEnemyPack(layer) {
+        switch (this.enemyPackClassName) {
             case "AdminEnemyPack":
                 return new AdminEnemyPack(this, layer);
             default:
@@ -133,15 +135,38 @@ class DungeonMap {
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
-        this.leafletMap.setView([-128, 128], 0);
+        this.leafletMap.setView([-128, 192], 0);
+
+        // let amount = 16;// 8192 / space
+        // for (let x = 0; x <= amount; x++) {
+        //     for (let y = 0; y <= amount; y++) {
+        //         L.marker(this.leafletMap.unproject([x * ( 6144 / amount), y * (4096 / amount)], this.leafletMap.getMaxZoom())).addTo(this.leafletMap);
+        //     }
+        // }
+        var southWest = this.leafletMap.unproject([0, 4096], this.leafletMap.getMaxZoom());
+        var northEast = this.leafletMap.unproject([6144, 0], this.leafletMap.getMaxZoom());
+
+        // L.marker(southWest).addTo(this.leafletMap);
+        L.marker(northEast).addTo(this.leafletMap);
+
 
         this.mapTileLayer = L.tileLayer('https://mpplnr.wofje.nl/images/tiles/' + this.getCurrentDungeon().key + '/' + this.getCurrentFloor().index + '/{z}/{x}_{y}.png', {
             maxZoom: 4,
             attribution: '',
             tileSize: L.point(384, 256),
             noWrap: true,
-            continuousWorld: true
+            continuousWorld: true,
+            bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
+
+        // var geoJsonTest = new L.geoJson(geojsonFeature, {
+        //     coordsToLatLng: function (newcoords) {
+        //         return (map.unproject([newcoords[1], newcoords[0]], map.getMaxZoom()));
+        //     },
+        //     pointToLayer: function (feature, coords) {
+        //         return L.circleMarker(coords, geojsonMarkerOptions);
+        //     }
+        // });
 
         // Refresh the packs on the map; re-add them
         this.refreshEnemyPacks();
@@ -175,8 +200,8 @@ class DungeonMap {
                 }
 
                 // Now draw the packs on the map
-                let points = [];
                 for (let i = 0; i < json.length; i++) {
+                    let points = [];
                     let floor = json[i];
                     for (let j = 0; j < floor.vertices.length; j++) {
                         let vertex = floor.vertices[j];
