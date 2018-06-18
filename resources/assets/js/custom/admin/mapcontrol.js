@@ -1,3 +1,5 @@
+/** @var dungeonMap object */
+
 function adminInitControls() {
     console.log(">> adminInitControls");
 
@@ -44,10 +46,7 @@ function adminInitControls() {
     dungeonMap.leafletMap.addControl(drawControl);
     dungeonMap.leafletMap.on(L.Draw.Event.CREATED, function (event) {
         let layer = event.layer;
-        let enemyPack = dungeonMap.addEnemyPack(layer);
-        drawnItems.addLayer(layer);
-        enemyPack.onLayerInit();
-
+        dungeonMap.addEnemyPack(layer);
         drawnItems.addLayer(layer);
     });
 

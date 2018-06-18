@@ -3,29 +3,25 @@ class AdminEnemyPack extends EnemyPack {
     constructor(map, layer) {
         super(map, layer);
 
-        this.synced = false;
         this.saving = false;
     }
 
-    onLayerInit() {
-        // Create the context menu items
-        let contextMenuItems = [{
-            text: this.label,
-            disabled: true
-        }, {
+    getContextMenuItems(){
+        console.log("get context menu items");
+        // Merge existing context menu items with the admin ones
+        return super.getContextMenuItems().concat([{
             text: '<i class="fa fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
             disabled: this.synced || this.saving,
             callback: this.save
-        }];
+        }, {
+            text: '<i class="fa fa-remove"></i> ' + (this.saving ? "Deleting.." : "Delete"),
+            disabled: !this.synced,
+            callback: this.delete
+        }]);
+    }
 
-        // Create the context menu
-        this.layer.bindContextMenu({
-            contextmenuWidth: 140,
-            contextmenuItems: contextMenuItems
-        });
-
-        // Show a permantent tooltip for the pack's name
-        this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
+    delete() {
+        console.log("Delete!");
     }
 
     save() {

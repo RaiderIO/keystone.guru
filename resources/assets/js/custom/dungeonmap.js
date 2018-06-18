@@ -143,8 +143,8 @@ class DungeonMap {
         //         L.marker(this.leafletMap.unproject([x * ( 6144 / amount), y * (4096 / amount)], this.leafletMap.getMaxZoom())).addTo(this.leafletMap);
         //     }
         // }
-        var southWest = this.leafletMap.unproject([0, 4096], this.leafletMap.getMaxZoom());
-        var northEast = this.leafletMap.unproject([6144, 0], this.leafletMap.getMaxZoom());
+        let southWest = this.leafletMap.unproject([0, 4096], this.leafletMap.getMaxZoom());
+        let northEast = this.leafletMap.unproject([6144, 0], this.leafletMap.getMaxZoom());
 
         // L.marker(southWest).addTo(this.leafletMap);
         L.marker(northEast).addTo(this.leafletMap);
@@ -216,7 +216,9 @@ class DungeonMap {
                         color: c.map.admin.enemypack.colors.savedBorder
                     });
 
-                    self.addEnemyPack(layer);
+
+                    let enemyPack = self.addEnemyPack(layer);
+                    enemyPack.synced = true;
                 }
 
             },
@@ -229,13 +231,15 @@ class DungeonMap {
     /**
      * Adds an enemy pack to the map and to the internal collection of packs.
      * @param layer The layer that represents the pack
+     * @return EnemyPack
      */
     addEnemyPack(layer) {
         console.log(this.enemyPackClassName);
         let enemyPack = this._createEnemyPack(layer);
         this.enemyPacks.push(enemyPack);
-
         layer.addTo(this.leafletMap);
+
+        enemyPack.onLayerInit();
 
         return enemyPack;
     }
