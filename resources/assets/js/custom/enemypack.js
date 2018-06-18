@@ -3,24 +3,51 @@ class EnemyPack {
         this.map = map;
         this.layer = layer;
         this.id = 0;
-        this.label = 'Mob pack'
+        this.label = 'Mob pack';
         this.synced = false;
+
+        this.contextMenuOptions = {};
     }
 
     getContextMenuItems(){
         return [{
-            text: this.label,
+            text: this.label += '1',
             disabled: true
         }];
     }
 
+    _updateContextMenuOptions(){
+        console.log("Updated context menu!");
+        return this.contextMenuOptions = {
+            contextmenuWidth: 140,
+            contextmenuItems: this.getContextMenuItems()
+        };
+    }
+
+    _onContextMenu(event){
+        console.log(event);
+        // Hack to get the context menu to refresh
+        let self = this;
+        // Remove ourselves
+        self.layer.on('contextmenu', function(){});
+        // Bind the context menu with current options
+        self.layer.bindContextMenu(self._updateContextMenuOptions());
+        // Show it
+        self.layer.fire('contextmenu');
+        // Unbind what was bound
+        self.layer.unbindContextMenu();
+        // Reattach ourselves like the parasite we are
+        self.layer.on('contextmenu', self._onContextMenu);
+    }
+
     // To be overridden by any implementing classes
     onLayerInit() {
-
-        // Create the context menu
-        this.layer.bindContextMenu({
-            contextmenuWidth: 140,
-            contextmenuItems: this.getContextMenuItems
+        let self = this;
+        // Refresh the context menu
+        // this.layer.on('contextmenu', this._onContextMenu);
+        this.layer.on('contextmenu', function(){
+            self.layer.bindContextMenu(self._updateContextMenuOptions());
+            return true;
         });
 
         // Show a permanent tooltip for the pack's name
