@@ -1,6 +1,6 @@
 class EnemyPack {
     constructor(map, layer) {
-        console.assert(map.constructor.name === "DungeonMap", map, 'Passed map is not a DungeonMap!');
+        console.assert(map.constructor.name.indexOf('DungeonMap') >= 0, map, 'Passed map is not a DungeonMap!');
 
         this.map = map;
         this.layer = layer;

@@ -46,11 +46,11 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             _refreshDungeonSelect();
             _refreshFloorSelect();
 
-            dungeonMap = new DungeonMap('map', _dungeonData, $(_switchDungeonSelect).val(), $(_switchDungeonFloorSelect).val());
-            @endif
-
             @if($isAdmin)
-            adminInitControls();
+                dungeonMap = new AdminDungeonMap('map', _dungeonData, $(_switchDungeonSelect).val(), $(_switchDungeonFloorSelect).val());
+            @else
+                dungeonMap = new DungeonMap('map', _dungeonData, $(_switchDungeonSelect).val(), $(_switchDungeonFloorSelect).val());
+            @endif
             @endif
 
             $(_switchDungeonSelect).change(function () {

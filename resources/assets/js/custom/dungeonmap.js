@@ -170,7 +170,7 @@ class DungeonMap {
 
 
         // Refresh the packs on the map; re-add them
-        // this.refreshEnemyPacks();
+        this.refreshEnemyPacks();
     }
 
     /**
@@ -213,8 +213,7 @@ class DungeonMap {
 
                     let layer = L.polygon(points, {
                         fillColor: c.map.admin.enemypack.colors.saved,
-                        color: c.map.admin.enemypack.colors.savedBorder,
-                        editing: {className: ""}
+                        color: c.map.admin.enemypack.colors.savedBorder
                     });
 
 
@@ -236,11 +235,12 @@ class DungeonMap {
      * @return EnemyPack
      */
     addEnemyPack(layer) {
-        console.assert(this.constructor.name === 'DungeonMap', this, 'this is not a DungeonMap');
+        console.assert(this.constructor.name.indexOf('DungeonMap') >= 0, this, 'this is not a DungeonMap');
 
         console.log(this.enemyPackClassName);
         let enemyPack = this._createEnemyPack(layer);
         this.enemyPacks.push(enemyPack);
+        // _drawnItems.addLayer(layer);
         layer.addTo(this.leafletMap);
 
         enemyPack.onLayerInit();
