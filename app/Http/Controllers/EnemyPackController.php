@@ -6,6 +6,7 @@ use App\Models\EnemyPack;
 use App\Models\EnemyPackVertex;
 use Illuminate\Http\Request;
 use Mockery\Exception;
+use Teapot\StatusCode\Http;
 
 class EnemyPackController extends Controller
 {
@@ -30,13 +31,7 @@ class EnemyPackController extends Controller
         if (!$enemyPack->save()) {
             throw new Exception("Unable to save pack!");
         } else {
-            // Load the existing vertices from the pack
-            $existingVerticesIds = $enemyPack->vertices->pluck('id')->all();
-            // Only if there's vertices to destroy
-            if (count($existingVerticesIds) > 0) {
-                // Kill them off
-                EnemyPackVertex::destroy($existingVerticesIds);
-            }
+            $enemyPack->deleteVertices();
 
             // Get the new vertices
             $vertices = $request->get('vertices');
@@ -54,5 +49,20 @@ class EnemyPackController extends Controller
         }
 
         return ['id' => $enemyPack->id];
+    }
+
+    function delete(Request $request){
+        try {
+            /** @var EnemyPack $enemyPack */
+            $enemyPack = EnemyPack::findOrFail($request->get('id'));
+
+            $enemyPack->deleteVertices();
+            $enemyPack->delete();
+            $result = ['result' => 'success'];
+        } catch( \Exception $ex ){
+            $result = response('Not found', Http::NOT_FOUND);
+        }
+
+        return $result;
     }
 }

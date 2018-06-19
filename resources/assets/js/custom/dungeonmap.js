@@ -28,7 +28,7 @@ class DungeonMap {
             crs: L.CRS.Simple,
             // Context menu when right clicking stuff
             contextmenu: true,
-            zoomControl: false
+            zoomControl: true
         });
 
         // Refresh the map; draw the layers on it
@@ -147,7 +147,7 @@ class DungeonMap {
         let northEast = this.leafletMap.unproject([6144, 0], this.leafletMap.getMaxZoom());
 
         // L.marker(southWest).addTo(this.leafletMap);
-        L.marker(northEast).addTo(this.leafletMap);
+        // L.marker(northEast).addTo(this.leafletMap);
 
 
         this.mapTileLayer = L.tileLayer('https://mpplnr.wofje.nl/images/tiles/' + this.getCurrentDungeon().key + '/' + this.getCurrentFloor().index + '/{z}/{x}_{y}.png', {
@@ -168,14 +168,17 @@ class DungeonMap {
         //     }
         // });
 
+
         // Refresh the packs on the map; re-add them
-        this.refreshEnemyPacks();
+        // this.refreshEnemyPacks();
     }
 
     /**
      * Refreshes the enemy packs that are displayed on the map based on the current dungeon & selected floor.
      */
     refreshEnemyPacks() {
+        console.log("refresh packs");
+
         let floor = this.getCurrentFloor();
         let self = this;
 
@@ -202,22 +205,21 @@ class DungeonMap {
                 // Now draw the packs on the map
                 for (let i = 0; i < json.length; i++) {
                     let points = [];
-                    let floor = json[i];
-                    for (let j = 0; j < floor.vertices.length; j++) {
-                        let vertex = floor.vertices[j];
+                    let remoteEnemyPack = json[i];
+                    for (let j = 0; j < remoteEnemyPack.vertices.length; j++) {
+                        let vertex = remoteEnemyPack.vertices[j];
                         points.push([vertex.y, vertex.x]);
                     }
 
-                    console.log("points", points);
-                    console.log(self.leafletMap);
-
                     let layer = L.polygon(points, {
                         fillColor: c.map.admin.enemypack.colors.saved,
-                        color: c.map.admin.enemypack.colors.savedBorder
+                        color: c.map.admin.enemypack.colors.savedBorder,
+                        editing: {className: ""}
                     });
 
 
                     let enemyPack = self.addEnemyPack(layer);
+                    enemyPack.id = remoteEnemyPack.id;
                     enemyPack.synced = true;
                 }
 
@@ -234,6 +236,8 @@ class DungeonMap {
      * @return EnemyPack
      */
     addEnemyPack(layer) {
+        console.assert(this.constructor.name === 'DungeonMap', this, 'this is not a DungeonMap');
+
         console.log(this.enemyPackClassName);
         let enemyPack = this._createEnemyPack(layer);
         this.enemyPacks.push(enemyPack);
@@ -242,5 +246,23 @@ class DungeonMap {
         enemyPack.onLayerInit();
 
         return enemyPack;
+    }
+
+    /**
+     * Removes an enemy pack from the leaflet map and our internal collection.
+     * @param pack EnemyPack The pack to remove.
+     */
+    removeEnemyPack(pack) {
+        console.assert(pack.constructor.name.indexOf('EnemyPack') >= 0, pack, 'passed pack likely wasn\'t an enemy pack!');
+
+        this.leafletMap.removeLayer(pack.layer);
+        let newEnemyPacks = [];
+        for (let i = 0; i < this.enemyPacks.length; i++) {
+            let packCandidate = this.enemyPacks[i];
+            if (packCandidate.id !== pack.id) {
+                newEnemyPacks.push(packCandidate);
+            }
+        }
+        this.enemyPacks = newEnemyPacks;
     }
 }

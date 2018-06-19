@@ -13,7 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 // middleware('auth:api')->
-Route::group(['prefix' => 'v1'], function(){
-    Route::get('/enemypacks', 'EnemyPackController@list');
-    Route::post('/enemypack', 'EnemyPackController@store');
+Route::group(['prefix' => 'v1'], function () {
+    // TODO: authentication for this API?
+    // Route::group(['middleware' => ['auth', 'role:admin']], function () {
+        Route::get('/enemypacks', 'EnemyPackController@list');
+        Route::post('/enemypack', 'EnemyPackController@store');
+        Route::delete('/enemypack', 'EnemyPackController@delete');
+    // });
 });
