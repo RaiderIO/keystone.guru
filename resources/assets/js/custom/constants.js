@@ -13,6 +13,9 @@ var c = {
                     savedBorder: '#347D47'
                 }
             }
+        },
+        placeholderColors: {
+
         }
     }
 };

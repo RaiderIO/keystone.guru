@@ -20,9 +20,12 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/constants.js',
         // Include in proper order
         'resources/assets/js/custom/dungeonmap.js',
+        'resources/assets/js/custom/mapobject.js',
+        'resources/assets/js/custom/enemy.js',
         'resources/assets/js/custom/enemypack.js',
-        'resources/assets/js/custom/admin/adminenemypack.js',
         'resources/assets/js/custom/admin/admindungeonmap.js',
+        'resources/assets/js/custom/admin/adminenemy.js',
+        'resources/assets/js/custom/admin/adminenemypack.js',
         // Include the rest
         // 'resources/assets/js/custom/**/*.js'
     ], 'public/js/custom.js');

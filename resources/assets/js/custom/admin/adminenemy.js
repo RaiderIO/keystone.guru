@@ -1,4 +1,4 @@
-class AdminEnemyPack extends EnemyPack {
+class AdminEnemy extends Enemy {
 
     constructor(map, layer) {
         super(map, layer);
@@ -8,7 +8,7 @@ class AdminEnemyPack extends EnemyPack {
     }
 
     getContextMenuItems() {
-        console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         // Merge existing context menu items with the admin ones
         return super.getContextMenuItems().concat([{
             text: '<i class="fa fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
@@ -23,7 +23,7 @@ class AdminEnemyPack extends EnemyPack {
 
     delete() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         $.ajax({
             type: 'POST',
             url: '/api/v1/enemypack',
@@ -52,7 +52,7 @@ class AdminEnemyPack extends EnemyPack {
 
     save() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         $.ajax({
             type: 'POST',
             url: '/api/v1/enemypack',
