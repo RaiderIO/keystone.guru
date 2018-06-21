@@ -14,8 +14,13 @@ var c = {
                 }
             }
         },
-        placeholderColors: {
-
-        }
+        enemy: {
+            colors: [
+                /*'#C000F0',
+                '#E25D5D',
+                '#5DE27F'*/
+                'green', 'yellow', 'orange', 'red', 'purple']
+        },
+        placeholderColors: {}
     }
 };

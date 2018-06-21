@@ -19,6 +19,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         // Doesn't depend on anything
         'resources/assets/js/custom/constants.js',
         // Include in proper order
+        'resources/assets/js/custom/util.js',
         'resources/assets/js/custom/dungeonmap.js',
         'resources/assets/js/custom/mapobject.js',
         'resources/assets/js/custom/enemy.js',

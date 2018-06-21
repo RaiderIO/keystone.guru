@@ -11,7 +11,6 @@ class MapObject {
         this.label = 'default label';
     }
 
-
     _updateContextMenuOptions() {
         return {
             contextmenuWidth: 140,

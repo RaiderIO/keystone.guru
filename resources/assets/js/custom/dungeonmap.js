@@ -45,6 +45,7 @@ class DungeonMap {
 
 
         this.leafletMap.on('zoomend', (this._adjustZoomForLayers).bind(this));
+        this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
         // Playground
     }
 
@@ -53,11 +54,16 @@ class DungeonMap {
      * @private
      */
     _adjustZoomForLayers() {
+        console.log("Adjusting zoom");
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         for (let i = 0; i < this.mapObjects.length; i++) {
             let layer = this.mapObjects[i].layer;
-            layer.setStyle({weight: 3 / Math.max(2, this.leafletMap.getZoom())});
+            let zoomStep = Math.max(2, this.leafletMap.getZoom());
+            layer.setStyle({weight: 3 / zoomStep});
+            if (layer instanceof L.CircleMarker) {
+                layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
+            }
         }
     }
 

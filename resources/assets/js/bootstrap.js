@@ -31,6 +31,7 @@ window.leaflet = require('leaflet');
 window.leafletdraw = require('leaflet-draw');
 // window.leafleteditable = require('leaflet-editable');
 window.leafletcontextmenu = require('leaflet-contextmenu');
+window.interpolate = require('color-interpolate');
 
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
