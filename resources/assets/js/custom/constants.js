@@ -10,7 +10,10 @@ var c = {
                     editedBorder: '#7C5034',
 
                     saved: '#5DE27F',
-                    savedBorder: '#347D47'
+                    savedBorder: '#347D47',
+
+                    mouseoverAddEnemy: '#5993D2',
+                    mouseoverAddEnemyBorder: '#34577D',
                 }
             }
         },

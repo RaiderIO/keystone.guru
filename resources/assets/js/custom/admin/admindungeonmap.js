@@ -12,6 +12,7 @@ class AdminDungeonMap extends DungeonMap {
         // For this page, let the enemy pack be the admin version with more functions which are otherwise hidden from the user
         this.enemyPackClassName = "AdminEnemyPack";
         this.enemyClassName = "AdminEnemy";
+        this.enemyAttaching = new EnemyAttaching(this);
 
         this._drawnItems = new L.FeatureGroup();
         this.leafletMap.addLayer(this._drawnItems);
@@ -80,7 +81,7 @@ class AdminDungeonMap extends DungeonMap {
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
             let layers = e.layers;
             layers.eachLayer(function (layer) {
-                console.log(layer, "Editted a layer!");
+                console.log(layer, "Edited a layer!");
                 let mapObject = self.findMapObjectByLayer(layer);
                 console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
                 mapObject.setSynced(false);
@@ -92,12 +93,9 @@ class AdminDungeonMap extends DungeonMap {
         });
 
         if (verboseEvents) {
-
-            this.leafletMap.on("mousemove", function (e) {
-                console.log("mousemove", e);
+            this.leafletMap.on('layeradd', function (e) {
+                console.log('layeradd', e);
             });
-
-
 
             this.leafletMap.on(L.Draw.Event.CREATED, function (e) {
                 console.log(L.Draw.Event.CREATED, e);

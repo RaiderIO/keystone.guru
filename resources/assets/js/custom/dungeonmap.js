@@ -54,7 +54,6 @@ class DungeonMap {
      * @private
      */
     _adjustZoomForLayers() {
-        console.log("Adjusting zoom");
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         for (let i = 0; i < this.mapObjects.length; i++) {
