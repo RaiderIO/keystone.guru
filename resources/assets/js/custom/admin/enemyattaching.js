@@ -24,34 +24,52 @@ class EnemyAttaching {
                 // Only track this when we're 'ghosting' an enemy around to place it somewhere
                 // Only polygons may be a target for enemies
                 if (self.drawingEnemy && layer instanceof L.Polygon) {
-                    if(self.currentMouseoverLayer === null){
-                        // If the mouse is currently in the polygon
-                        if (gju.pointInPolygon({
-                            type: 'Point',
-                            coordinates: [e.latlng.lng, e.latlng.lat]
-                        }, layer.toGeoJSON().geometry)) {
-                            // Save the options
-                            self.currentMouseoverLayerStyle = layer.options;
+                    // If the mouse is currently in the polygon
+                    if (gju.pointInPolygon({
+                        type: 'Point',
+                        coordinates: [e.latlng.lng, e.latlng.lat]
+                    }, layer.toGeoJSON().geometry)) {
+                        // If we just entered a new mouseover layer and weren't in one already
+                        if (self.currentMouseoverLayer === null) {
+                            // Save the options (shallow copy of the object)
+                            self.currentMouseoverLayerStyle = Object.assign({}, layer.options);
                             self.currentMouseoverLayer = layer;
                             layer.setStyle({
                                 fillColor: c.map.admin.enemypack.colors.mouseoverAddEnemy,
                                 color: c.map.admin.enemypack.colors.mouseoverAddEnemyBorder
                             });
+                            // Don't immediately reset it after we're done
+                            isMouseStillInLayer = true;
+                            console.log(self.currentMouseoverLayerStyle);
                         }
-                    } else if(self.currentMouseoverLayer === layer){
-                        isMouseStillInLayer = true;
+                        // We're still in one
+                        else if (self.currentMouseoverLayer === layer) {
+                            isMouseStillInLayer = true;
+                        }
                     }
                 }
             });
 
             // If we were in a layer but no longer
-            if(self.currentMouseoverLayer !== null && !isMouseStillInLayer){
+            if (self.currentMouseoverLayer !== null && !isMouseStillInLayer) {
                 // No longer in this layer, revert changes
                 self.currentMouseoverLayer.setStyle({
                     fillColor: self.currentMouseoverLayerStyle.fillColor,
                     color: self.currentMouseoverLayerStyle.color,
                 });
                 self.currentMouseoverLayer = null;
+            }
+        });
+
+
+        // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
+        this.map.on('enemy:add', function (event) {
+            console.log('enemy added!', event);
+            if (self.currentMouseoverLayer !== null) {
+                let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
+
+                console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject!');
+                event.data.enemy.enemypack = mapObject;
             }
         });
 

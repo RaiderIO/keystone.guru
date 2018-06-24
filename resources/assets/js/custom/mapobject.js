@@ -44,7 +44,6 @@ class MapObject {
         if (typeof this.colors !== 'undefined') {
             // Now synced, was not synced
             if (value && !this.synced) {
-                console.log("saved");
                 this.layer.setStyle({
                     fillColor: this.colors.saved,
                     color: this.colors.savedBorder
@@ -52,7 +51,6 @@ class MapObject {
             }
             // No longer synced when it was synced
             else if (!value && this.synced) {
-                console.log("edited");
                 this.layer.setStyle({
                     fillColor: this.colors.edited,
                     color: this.colors.editedBorder
@@ -60,7 +58,6 @@ class MapObject {
             }
             // No longer synced, possibly wasn't in the first place, so unsaved
             else if (!value) {
-                console.log("unsaved");
                 this.layer.setStyle({
                     fillColor: this.colors.unsaved,
                     color: this.colors.unsavedBorder

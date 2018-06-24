@@ -1,8 +1,9 @@
-class DungeonMap {
+class DungeonMap extends Signalable {
     /*
     var leafletMap;
      */
     constructor(mapid, dungeonData, dungeonId, floorID) {
+        super();
         let self = this;
 
         this.dungeonData = dungeonData;
@@ -262,6 +263,8 @@ class DungeonMap {
 
         enemyPack.onLayerInit();
 
+        this.signal('enemypack:add', {enemypack: enemyPack});
+
         return enemyPack;
     }
 
@@ -279,6 +282,8 @@ class DungeonMap {
         layer.addTo(this.leafletMap);
 
         enemy.onLayerInit();
+
+        this.signal('enemy:add', {enemy: enemy});
 
         return enemy;
     }

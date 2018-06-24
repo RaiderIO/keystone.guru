@@ -1,4 +1,5 @@
 const {mix} = require('laravel-mix');
+const argv = require('yargs').argv;
 
 /*
  |--------------------------------------------------------------------------
@@ -11,7 +12,11 @@ const {mix} = require('laravel-mix');
  |
  */
 
+// false if not defined, true if defined
 let full = false;
+if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
+    full = argv.env.full;
+}
 
 // Custom processing only
 mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
@@ -20,6 +25,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/constants.js',
         // Include in proper order
         'resources/assets/js/custom/util.js',
+        'resources/assets/js/custom/signalable.js',
         'resources/assets/js/custom/dungeonmap.js',
         'resources/assets/js/custom/mapobject.js',
         'resources/assets/js/custom/enemy.js',
