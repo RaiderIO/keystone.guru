@@ -71,6 +71,9 @@
                                 @if( Auth::user()->can('read-dungeons') )
                                     <li><a href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a></li>
                                 @endif
+                                @if( Auth::user()->can('read-npcs') )
+                                    <li><a href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a></li>
+                                @endif
                                 <li>
                                     <a href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

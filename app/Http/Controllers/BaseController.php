@@ -97,14 +97,23 @@ abstract class BaseController extends Controller
     }
 
     /**
+     * Gets a list of models to display when the view() is called.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|Model[]
+     */
+    protected function _getViewModels(){
+        $className = $this->_getModelClassname();
+        return $className::all();
+    }
+
+    /**
      * Handles the viewing of a collection of items in a table.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
      */
     public function view()
     {
-        $className = $this->_getModelClassname();
-        $models = $className::all();
+        $models = $this->_getViewModels();
 
         return view(
             sprintf("%s%s.view", $this->_getRoutePrefix(), $this->_name),

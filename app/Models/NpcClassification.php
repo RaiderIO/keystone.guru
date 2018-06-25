@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $color
  */
-class NPCClassification extends Model
+class NpcClassification extends Model
 {
     public $hidden = ['created_at', 'updated_at'];
 
@@ -20,6 +20,6 @@ class NPCClassification extends Model
      */
     function npcs()
     {
-        return $this->hasMany('App\Models\NPC');
+        return $this->hasMany('App\Models\Npc');
     }
 }

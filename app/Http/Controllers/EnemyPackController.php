@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\EnemyPack;
 use App\Models\EnemyPackVertex;
 use Illuminate\Http\Request;
-use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
 class EnemyPackController extends Controller
@@ -20,6 +19,11 @@ class EnemyPackController extends Controller
         }])->where('floor_id', '=', $floorId)->get(['id', 'label']);
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     * @throws \Exception
+     */
     function store(Request $request)
     {
         /** @var EnemyPack $enemyPack */
@@ -29,7 +33,7 @@ class EnemyPackController extends Controller
         $enemyPack->floor_id = $request->get('floor_id');
 
         if (!$enemyPack->save()) {
-            throw new Exception("Unable to save pack!");
+            throw new \Exception("Unable to save pack!");
         } else {
             $enemyPack->deleteVertices();
 
@@ -43,7 +47,7 @@ class EnemyPackController extends Controller
                 $vertexModel->y = $vertex['y'];
 
                 if (!$vertexModel->save()) {
-                    throw new Exception("Unable to save pack vertex!");
+                    throw new \Exception("Unable to save pack vertex!");
                 }
             }
         }

@@ -6,6 +6,12 @@
         <i class="fa fa-plus"></i> {{ __('Create dungeon') }}
     </a>
 @endsection
+<?php
+/**
+ * @var $models \App\Models\Dungeon
+ * @var $floor \App\Models\Floor
+ */
+?>
 
 @section('scripts')
 <script type="text/javascript">

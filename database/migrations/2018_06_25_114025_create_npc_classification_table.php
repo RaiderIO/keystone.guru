@@ -13,7 +13,7 @@ class CreateNPCClassificationTable extends Migration
      */
     public function up()
     {
-        Schema::create('npc_classification', function (Blueprint $table) {
+        Schema::create('npc_classifications', function (Blueprint $table) {
             $table->increments('id');
             $table->text('name');
             $table->text('color');
@@ -28,6 +28,6 @@ class CreateNPCClassificationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('npc_classification');
+        Schema::dropIfExists('npc_classifications');
     }
 }

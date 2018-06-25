@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property double $x
  * @property double $y
  * @property \App\Models\EnemyPack $enemyPack
- * @property \App\Models\NPC $npc
+ * @property \App\Models\Npc $npc
  * @property \App\Models\Floor $floor
  * @property \Illuminate\Support\Collection $vertices
  */
@@ -32,7 +32,7 @@ class Enemy extends Model
 
     function npc()
     {
-        return $this->belongsTo('App\Models\NPC');
+        return $this->belongsTo('App\Models\Npc');
     }
 
     function vertices()

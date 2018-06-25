@@ -13,7 +13,7 @@ class CreateNpcTable extends Migration
      */
     public function up()
     {
-        Schema::create('npc', function (Blueprint $table) {
+        Schema::create('npcs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('classification_id');
             $table->integer('game_id');
@@ -30,6 +30,6 @@ class CreateNpcTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('npc');
+        Schema::dropIfExists('npcs');
     }
 }
