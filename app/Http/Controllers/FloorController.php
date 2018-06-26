@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FloorFormRequest;
 use App\Models\Dungeon;
 use App\Models\Floor;
+use App\Models\Npc;
 use Illuminate\Http\Request;
 
 class FloorController extends BaseController
@@ -54,6 +55,7 @@ class FloorController extends BaseController
         $floor = Floor::findOrFail($id);
         $this->_setDungeonVariable($floor->dungeon_id);
         $this->_addVariable('floors', Floor::all()->where('dungeon_id', '=', $floor->dungeon_id)->where('id', '<>', $id));
+        $this->_addVariable('npcs', Npc::all());
         return parent::edit($id);
     }
 

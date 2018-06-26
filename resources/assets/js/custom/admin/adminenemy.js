@@ -7,10 +7,28 @@ class AdminEnemy extends Enemy {
         this.deleting = false;
     }
 
+    onLayerInit(){
+        super.onLayerInit();
+
+        let customPopup = $("#enemy_edit_popup").html();
+        let customOptions =
+        {
+            'maxWidth': '400',
+            'width': '200',
+            'className' : 'popupCustom'
+        };
+        this.layer.bindPopup(customPopup, customOptions);
+    }
+
     getContextMenuItems() {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.log("test");
         // Merge existing context menu items with the admin ones
         return super.getContextMenuItems().concat([{
+            text: '<i class="fa fa-pencil"></i> ' + (this.editing ? "Editing.." : "Edit"),
+            disabled: this.synced || this.editing,
+            callback: (this.startEdit).bind(this)
+        }, {
             text: '<i class="fa fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
             disabled: this.synced || this.saving,
             callback: (this.save).bind(this)
@@ -19,6 +37,17 @@ class AdminEnemy extends Enemy {
             disabled: !this.synced || this.deleting,
             callback: (this.delete).bind(this)
         }]);
+    }
+
+    startEdit() {
+        console.log("starting edit");
+
+        // Bind popup
+        this.layer.openPopup();
+    }
+
+    doEdit() {
+
     }
 
     delete() {

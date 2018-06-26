@@ -16,6 +16,8 @@
     "vue": "^2.0.1"
   },
   "dependencies": {
+    "ajv": "^6.5.1",
+    "bootstrap-select": "^1.13.1",
     "color-interpolate": "^1.0.2",
     "cross-env": "^5.2.0",
     "font-awesome": "^4.7.0",

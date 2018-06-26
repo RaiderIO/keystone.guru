@@ -43,7 +43,6 @@ class DungeonController extends BaseController
      */
     public function edit($id)
     {
-        dd($id);
         // Override so we can set the expansions and floors for the edit page
         $this->_setVariables(array(
             'expansions' => Expansion::all()->pluck('name', 'id'),

@@ -9,12 +9,25 @@ $dungeonSelection = (!isset($dungeonSelect) || $dungeonSelect) && $dungeons->cou
 $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count() === 1 && $dungeons->first()->floors->count() === 1);
 ?>
 
+@section('head')
+    @if($isAdmin)
+        <style>
+            /* css to customize Leaflet default styles  */
+            .popupCustom .leaflet-popup-tip,
+            .popupCustom .leaflet-popup-content-wrapper {
+                background: #e0e0e0;
+                color: #234c5e;
+            }
+        </style>
+    @endif
+@endsection
+
 @section('scripts')
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
 
     <script>
-        var _dungeonData = [
+        let _dungeonData = [
                 @foreach ($dungeons as $dungeon)
                 {{-- @var $dungeon \App\Models\Dungeon --}}
             {
@@ -143,3 +156,18 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
         {{-- @include('common.maps.mapadmintools') --}}
     @endif
 </div>
+
+@if($isAdmin)
+    <div id="enemy_edit_popup">
+        <div id="enemy_edit_popup_inner" class="popupCustom">
+            <div class="form-group">
+                <label for="enemy_edit_popup_npc">NPC</label>
+                <select data-live-search="true" id="enemy_edit_popup_npc" name="enemy_edit_popup_npc" class="selectpicker" tabindex="-98">
+                    @foreach($npcs as $npc)
+                        <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->game_id) }}</option>
+                        @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+@endif
