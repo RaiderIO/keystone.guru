@@ -10,11 +10,14 @@ class AdminEnemy extends Enemy {
     onLayerInit(){
         super.onLayerInit();
 
-        let customPopup = $("#enemy_edit_popup").html();
+        let customPopup = $("#enemy_edit_popup").children();
+        // Remove template so our
+        customPopup = customPopup.replace('_template', '');
+
         let customOptions =
         {
             'maxWidth': '400',
-            'width': '200',
+            'minWidth': '300',
             'className' : 'popupCustom'
         };
         this.layer.bindPopup(customPopup, customOptions);
@@ -22,7 +25,6 @@ class AdminEnemy extends Enemy {
 
     getContextMenuItems() {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
-        console.log("test");
         // Merge existing context menu items with the admin ones
         return super.getContextMenuItems().concat([{
             text: '<i class="fa fa-pencil"></i> ' + (this.editing ? "Editing.." : "Edit"),
@@ -40,14 +42,53 @@ class AdminEnemy extends Enemy {
     }
 
     startEdit() {
+        console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
         console.log("starting edit");
+        let self = this;
 
         // Bind popup
         this.layer.openPopup();
+        $("#enemy_edit_popup_submit").on('click', function(){
+            self.npc_id = $("#enemy_edit_popup_npc").val();
+
+            self.edit();
+        });
     }
 
-    doEdit() {
-
+    edit() {
+        let self = this;
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/enemy',
+            dataType: 'json',
+            data: {
+                _method: 'UPDATE',
+                id: self.id,
+                npc_id: self.npc_id,
+                x: self.x,
+                y: self.y,
+                enemypack: self.enemypack
+            },
+            beforeSend: function () {
+                self.editing = true;
+                $("#enemy_edit_popup_submit").attr('disabled', 'disabled');
+            },
+            success: function (json) {
+                self.setSynced(true);
+                self.layer.closePopup();
+            },
+            complete: function () {
+                $("#enemy_edit_popup_submit").removeAttr('disabled');
+                self.editing = false;
+            },
+            error: function () {
+                self.layer.setStyle({
+                    fillColor: c.map.admin.mapobject.colors.unsaved,
+                    color: c.map.admin.mapobject.colors.unsavedBorder
+                });
+            }
+        });
     }
 
     delete() {
@@ -72,8 +113,8 @@ class AdminEnemy extends Enemy {
             },
             error: function () {
                 self.layer.setStyle({
-                    fillColor: c.map.admin.enemypack.colors.unsaved,
-                    color: c.map.admin.enemypack.colors.unsavedBorder
+                    fillColor: c.map.admin.mapobject.colors.unsaved,
+                    color: c.map.admin.mapobject.colors.unsavedBorder
                 });
             }
         });
@@ -96,16 +137,16 @@ class AdminEnemy extends Enemy {
             beforeSend: function () {
                 self.saving = true;
                 self.layer.setStyle({
-                    fillColor: c.map.admin.enemypack.colors.edited,
-                    color: c.map.admin.enemypack.colors.editedBorder
+                    fillColor: c.map.admin.mapobject.colors.edited,
+                    color: c.map.admin.mapobject.colors.editedBorder
                 });
             },
             success: function (json) {
                 console.log(json);
                 self.id = json.id;
                 self.layer.setStyle({
-                    fillColor: c.map.admin.enemypack.colors.saved,
-                    color: c.map.admin.enemypack.colors.savedBorder
+                    fillColor: c.map.admin.mapobject.colors.saved,
+                    color: c.map.admin.mapobject.colors.savedBorder
                 });
             },
             complete: function () {
@@ -113,8 +154,8 @@ class AdminEnemy extends Enemy {
             },
             error: function () {
                 self.layer.setStyle({
-                    fillColor: c.map.admin.enemypack.colors.unsaved,
-                    color: c.map.admin.enemypack.colors.unsavedBorder
+                    fillColor: c.map.admin.mapobject.colors.unsaved,
+                    color: c.map.admin.mapobject.colors.unsavedBorder
                 });
             }
         });

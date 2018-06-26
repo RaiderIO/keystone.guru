@@ -37,7 +37,7 @@ class AdminDungeonMap extends DungeonMap {
                         message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
                     },
                     // shapeOptions: {
-                    //     color: c.map.admin.enemypack.colors.unsaved
+                    //     color: c.map.admin.mapobject.colors.unsaved
                     // }
                 },
                 rectangle: false,

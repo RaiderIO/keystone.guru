@@ -18,6 +18,10 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
                 background: #e0e0e0;
                 color: #234c5e;
             }
+
+            .enemy_edit_popup_npc {
+                width: 300px;
+            }
         </style>
     @endif
 @endsection
@@ -158,16 +162,17 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
 </div>
 
 @if($isAdmin)
-    <div id="enemy_edit_popup">
+    <div id="enemy_edit_popup" class="hidden">
         <div id="enemy_edit_popup_inner" class="popupCustom">
             <div class="form-group">
                 <label for="enemy_edit_popup_npc">NPC</label>
-                <select data-live-search="true" id="enemy_edit_popup_npc" name="enemy_edit_popup_npc" class="selectpicker" tabindex="-98">
+                <select data-live-search="true" id="enemy_edit_popup_npc_template" name="enemy_edit_popup_npc" class="selectpicker enemy_edit_popup_npc" data-width="300px">
                     @foreach($npcs as $npc)
                         <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->game_id) }}</option>
                         @endforeach
                 </select>
             </div>
+            {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit_template', 'class' => 'btn btn-info']) !!}
         </div>
     </div>
 @endif

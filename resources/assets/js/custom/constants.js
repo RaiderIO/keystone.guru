@@ -1,7 +1,7 @@
 var c = {
     map: {
         admin: {
-            enemypack: {
+            mapobject: {
                 colors: {
                     unsaved: '#E25D5D',
                     unsavedBorder: '#7C3434',

@@ -43,8 +43,8 @@ class AdminEnemyPack extends EnemyPack {
             },
             error: function () {
                 self.layer.setStyle({
-                    fillColor: c.map.admin.enemypack.colors.unsaved,
-                    color: c.map.admin.enemypack.colors.unsavedBorder
+                    fillColor: c.map.admin.mapobject.colors.unsaved,
+                    color: c.map.admin.mapobject.colors.unsavedBorder
                 });
             }
         });
@@ -67,16 +67,16 @@ class AdminEnemyPack extends EnemyPack {
             beforeSend: function () {
                 self.saving = true;
                 self.layer.setStyle({
-                    fillColor: c.map.admin.enemypack.colors.edited,
-                    color: c.map.admin.enemypack.colors.editedBorder
+                    fillColor: c.map.admin.mapobject.colors.edited,
+                    color: c.map.admin.mapobject.colors.editedBorder
                 });
             },
             success: function (json) {
                 console.log(json);
                 self.id = json.id;
                 self.layer.setStyle({
-                    fillColor: c.map.admin.enemypack.colors.saved,
-                    color: c.map.admin.enemypack.colors.savedBorder
+                    fillColor: c.map.admin.mapobject.colors.saved,
+                    color: c.map.admin.mapobject.colors.savedBorder
                 });
             },
             complete: function () {
@@ -84,8 +84,8 @@ class AdminEnemyPack extends EnemyPack {
             },
             error: function () {
                 self.layer.setStyle({
-                    fillColor: c.map.admin.enemypack.colors.unsaved,
-                    color: c.map.admin.enemypack.colors.unsavedBorder
+                    fillColor: c.map.admin.mapobject.colors.unsaved,
+                    color: c.map.admin.mapobject.colors.unsavedBorder
                 });
             }
         });

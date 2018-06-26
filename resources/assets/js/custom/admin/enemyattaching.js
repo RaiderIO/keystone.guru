@@ -35,8 +35,8 @@ class EnemyAttaching {
                             self.currentMouseoverLayerStyle = Object.assign({}, layer.options);
                             self.currentMouseoverLayer = layer;
                             layer.setStyle({
-                                fillColor: c.map.admin.enemypack.colors.mouseoverAddEnemy,
-                                color: c.map.admin.enemypack.colors.mouseoverAddEnemyBorder
+                                fillColor: c.map.admin.mapobject.colors.mouseoverAddEnemy,
+                                color: c.map.admin.mapobject.colors.mouseoverAddEnemyBorder
                             });
                             // Don't immediately reset it after we're done
                             isMouseStillInLayer = true;
@@ -108,8 +108,8 @@ class EnemyAttaching {
             // Only track this when we're 'ghosting' an enemy around to place it somewhere
             if (self.drawingEnemy) {
                 layer.setStyle({
-                    fillColor: c.map.admin.enemypack.colors.mouseoverAddEnemy,
-                    color: c.map.admin.enemypack.colors.mouseoverAddEnemyBorder
+                    fillColor: c.map.admin.mapobject.colors.mouseoverAddEnemy,
+                    color: c.map.admin.mapobject.colors.mouseoverAddEnemyBorder
                 });
                 self.currentMouseoverLayer = layer;
             }
