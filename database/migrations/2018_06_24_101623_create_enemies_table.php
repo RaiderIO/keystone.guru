@@ -13,9 +13,9 @@ class CreateEnemyTable extends Migration
      */
     public function up()
     {
-        Schema::create('enemy', function (Blueprint $table) {
+        Schema::create('enemies', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('enemy_pack_id');
+            $table->unsignedInteger('enemy_pack_id'); //nullable?
             $table->integer('npc_id');
             $table->integer('floor_id');
             $table->double('lat');
@@ -31,6 +31,6 @@ class CreateEnemyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('enemy');
+        Schema::dropIfExists('enemies');
     }
 }

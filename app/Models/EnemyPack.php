@@ -20,6 +20,11 @@ class EnemyPack extends Model
         return $this->belongsTo('App\Models\Floor');
     }
 
+    function enemies()
+    {
+        return $this->hasMany('App\Models\Enemy');
+    }
+
     function vertices()
     {
         return $this->hasMany('App\Models\EnemyPackVertex');

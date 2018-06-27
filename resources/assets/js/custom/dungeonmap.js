@@ -192,6 +192,8 @@ class DungeonMap extends Signalable {
 
         // Refresh the packs on the map; re-add them
         this.refreshEnemyPacks();
+        // Refresh all enemies on the map; re-add them
+        this.refreshEnemies();
     }
 
     /**
@@ -209,9 +211,6 @@ class DungeonMap extends Signalable {
             dataType: 'json',
             data: {
                 floor_id: floor.id
-            },
-            beforeSend: function () {
-                console.log("beforeSend");
             },
             success: function (json) {
                 console.log(json);
@@ -240,10 +239,52 @@ class DungeonMap extends Signalable {
                     // We just downloaded the enemy pack, it's synced alright!
                     enemyPack.setSynced(true);
                 }
+            }
+        });
+    }
 
+    /**
+     * Refreshes the enemies that are displayed on the map based on the current dungeon & selected floor.
+     */
+    refreshEnemies() {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
+        let floor = this.getCurrentFloor();
+        let self = this;
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/v1/enemies',
+            dataType: 'json',
+            data: {
+                floor_id: floor.id
             },
-            complete: function () {
-                console.log("complete");
+            success: function (json) {
+                console.log(json);
+
+                // Remove any layers that were added before
+                for (let i = 0; i < self.enemies.length; i++) {
+                    let enemy = self.enemies[i];
+                    // Remove all layers
+                    self.leafletMap.removeLayer(enemy.layer);
+                }
+
+                // Now draw the enemies on the map
+                for (let i = 0; i < json.length; i++) {
+                    let remoteEnemy = json[i];
+
+                    let layer = L.circleMarker();
+                    layer.setLatLng(L.latLng(remoteEnemy.lat, remoteEnemy.lng));
+
+                    let enemy = self.addEnemy(layer);
+                    enemy.id = remoteEnemy.id;
+                    enemy.enemypack = remoteEnemy.enemy_pack_id;
+                    enemy.npc_id = remoteEnemy.npc_id;
+                    enemy.floor_id = remoteEnemy.floor_id;
+                    // We just downloaded the enemy pack, it's synced alright!
+                    enemy.setSynced(true);
+                }
+
             }
         });
     }

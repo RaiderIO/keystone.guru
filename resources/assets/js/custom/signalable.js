@@ -4,7 +4,7 @@ class Signalable {
         this.signals = [];
     }
 
-    on(name, fn) {
+    register(name, fn) {
         // console.log('pushing ', name, fn);
         this.signals.push({
             name: name,

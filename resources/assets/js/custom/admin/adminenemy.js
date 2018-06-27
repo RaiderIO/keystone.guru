@@ -3,6 +3,9 @@ class AdminEnemy extends Enemy {
     constructor(map, layer) {
         super(map, layer);
 
+        this.npc_id = 0;
+        this.enemypack = 0;
+
         this.saving = false;
         this.deleting = false;
     }
@@ -10,7 +13,7 @@ class AdminEnemy extends Enemy {
     onLayerInit(){
         super.onLayerInit();
 
-        let customPopup = $("#enemy_edit_popup").children();
+        let customPopup = $("#enemy_edit_popup").html();
         // Remove template so our
         customPopup = customPopup.replace('_template', '');
 
@@ -48,6 +51,8 @@ class AdminEnemy extends Enemy {
 
         // Bind popup
         this.layer.openPopup();
+        // Refresh all select pickers so they work again
+        $(".selectpicker").selectpicker('refresh');
         $("#enemy_edit_popup_submit").on('click', function(){
             self.npc_id = $("#enemy_edit_popup_npc").val();
 
@@ -63,11 +68,11 @@ class AdminEnemy extends Enemy {
             url: '/api/v1/enemy',
             dataType: 'json',
             data: {
-                _method: 'UPDATE',
                 id: self.id,
                 npc_id: self.npc_id,
-                x: self.x,
-                y: self.y,
+                floor_id: self.map.getCurrentFloor().id,
+                lat: self.layer.getLatLng().lat,
+                lng: self.layer.getLatLng().lng,
                 enemypack: self.enemypack
             },
             beforeSend: function () {
@@ -83,10 +88,8 @@ class AdminEnemy extends Enemy {
                 self.editing = false;
             },
             error: function () {
-                self.layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.unsaved,
-                    color: c.map.admin.mapobject.colors.unsavedBorder
-                });
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
             }
         });
     }
@@ -96,7 +99,7 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemypack',
+            url: '/api/v1/enemy',
             dataType: 'json',
             data: {
                 _method: 'DELETE',
@@ -123,40 +126,33 @@ class AdminEnemy extends Enemy {
     save() {
         let self = this;
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemypack',
+            url: '/api/v1/enemy',
             dataType: 'json',
             data: {
                 id: self.id,
+                enemy_pack_id: self.enemypack.id,
+                npc_id: self.npc_id,
                 floor_id: self.map.getCurrentFloor().id,
-                label: self.label,
-                vertices: self.getVertices(),
-                data: JSON.stringify(self.layer.toGeoJSON())
+                lat: self.layer.getLatLng().lat,
+                lng: self.layer.getLatLng().lng
             },
             beforeSend: function () {
                 self.saving = true;
-                self.layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.edited,
-                    color: c.map.admin.mapobject.colors.editedBorder
-                });
             },
             success: function (json) {
                 console.log(json);
                 self.id = json.id;
-                self.layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.saved,
-                    color: c.map.admin.mapobject.colors.savedBorder
-                });
+                self.setSynced(true);
             },
             complete: function () {
                 self.saving = false;
             },
             error: function () {
-                self.layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.unsaved,
-                    color: c.map.admin.mapobject.colors.unsavedBorder
-                });
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
             }
         });
     }

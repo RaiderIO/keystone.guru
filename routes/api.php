@@ -16,8 +16,12 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'v1'], function () {
     // TODO: authentication for this API?
     // Route::group(['middleware' => ['auth', 'role:admin']], function () {
-        Route::get('/enemypacks', 'EnemyPackController@list');
-        Route::post('/enemypack', 'EnemyPackController@store');
-        Route::delete('/enemypack', 'EnemyPackController@delete');
+        Route::get('/enemypacks', 'APIEnemyPackController@list');
+        Route::post('/enemypack', 'APIEnemyPackController@store');
+        Route::delete('/enemypack', 'APIEnemyPackController@delete');
+
+        Route::get('/enemies', 'APIEnemyController@list');
+        Route::post('/enemy', 'APIEnemyController@store');
+        Route::delete('/enemy', 'APIEnemyController@delete');
     // });
 });

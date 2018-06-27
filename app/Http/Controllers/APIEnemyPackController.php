@@ -7,7 +7,7 @@ use App\Models\EnemyPackVertex;
 use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
 
-class EnemyPackController extends Controller
+class APIEnemyPackController extends Controller
 {
     //
     function list(Request $request)

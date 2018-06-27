@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $enemy_pack_id
  * @property int $npc_id
  * @property int $floor_id
- * @property double $x
- * @property double $y
+ * @property double $lat
+ * @property double $lng
  * @property \App\Models\EnemyPack $enemyPack
  * @property \App\Models\Npc $npc
  * @property \App\Models\Floor $floor
@@ -33,10 +33,5 @@ class Enemy extends Model
     function npc()
     {
         return $this->belongsTo('App\Models\Npc');
-    }
-
-    function vertices()
-    {
-        return $this->hasMany('App\Models\EnemyPackVertex');
     }
 }

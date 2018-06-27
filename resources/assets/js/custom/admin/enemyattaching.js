@@ -40,7 +40,6 @@ class EnemyAttaching {
                             });
                             // Don't immediately reset it after we're done
                             isMouseStillInLayer = true;
-                            console.log(self.currentMouseoverLayerStyle);
                         }
                         // We're still in one
                         else if (self.currentMouseoverLayer === layer) {
@@ -63,8 +62,7 @@ class EnemyAttaching {
 
 
         // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
-        this.map.on('enemy:add', function (event) {
-            console.log('enemy added!', event);
+        this.map.register('enemy:add', function (event) {
             if (self.currentMouseoverLayer !== null) {
                 let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
 
