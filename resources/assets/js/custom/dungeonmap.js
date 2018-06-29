@@ -26,6 +26,9 @@ class DungeonMap extends Signalable {
         this.currentFloorId = floorID;
 
         this.mapTileLayer = null;
+        this.enemiesLayerGroup = null;
+        this.enemyPacksLayerGroup = null;
+        this.mapControls = null;
 
         // Create the map object
         this.leafletMap = L.map(mapid, {
@@ -189,6 +192,13 @@ class DungeonMap extends Signalable {
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
 
+        this.enemiesLayerGroup = new L.LayerGroup();
+        this.enemyPacksLayerGroup = new L.LayerGroup();
+
+        this.setEnemiesVisibility(true);
+        this.setEnemyPacksVisibility(true);
+
+        this.mapControls = new MapControls(this);
 
         // Refresh the packs on the map; re-add them
         this.refreshEnemyPacks();
@@ -284,7 +294,6 @@ class DungeonMap extends Signalable {
                     // We just downloaded the enemy pack, it's synced alright!
                     enemy.setSynced(true);
                 }
-
             }
         });
     }
@@ -300,7 +309,8 @@ class DungeonMap extends Signalable {
         let enemyPack = this._createEnemyPack(layer);
         this.enemyPacks.push(enemyPack);
         this.mapObjects.push(enemyPack);
-        layer.addTo(this.leafletMap);
+        // layer.addTo(this.leafletMap);
+        this.enemyPacksLayerGroup.addLayer(layer);
 
         enemyPack.onLayerInit();
 
@@ -320,7 +330,9 @@ class DungeonMap extends Signalable {
         let enemy = this._createEnemy(layer);
         this.enemies.push(enemy);
         this.mapObjects.push(enemy);
-        layer.addTo(this.leafletMap);
+        // layer.addTo(this.leafletMap);
+
+        this.enemiesLayerGroup.addLayer(layer);
 
         enemy.onLayerInit();
 
@@ -348,32 +360,38 @@ class DungeonMap extends Signalable {
         }
         this.enemyPacks = newEnemyPacks;
     }
+
+    isEnemiesShown(){
+        return this.leafletMap.hasLayer(this.enemiesLayerGroup);
+    }
+
+    setEnemiesVisibility(visible){
+        if( !this.isEnemiesShown() && visible ){
+            this.leafletMap.addLayer(this.enemiesLayerGroup);
+        } else if( this.isEnemiesShown() && !visible ) {
+            this.leafletMap.removeLayer(this.enemiesLayerGroup);
+        }
+    }
+
+    isEnemyPacksShown(){
+        return this.leafletMap.hasLayer(this.enemyPacksLayerGroup);
+    }
+
+    setEnemyPacksVisibility(visible){
+        if( !this.isEnemyPacksShown() && visible ){
+            this.leafletMap.addLayer(this.enemyPacksLayerGroup);
+        } else if( this.isEnemyPacksShown() && !visible ) {
+            this.leafletMap.removeLayer(this.enemyPacksLayerGroup);
+        }
+    }
+
 }
 
 
-// Code for the statusbar
-// L.Control.Statusbar = L.Control.extend({
-//     onAdd: function (map) {
-//         _statusbar = $("<p>")
-//             .css('font-size', '20px')
-//             .css('font-weight', 'bold')
-//             .css('color', '#5DADE2')
-//             .html('Test status bar');
-//         _statusbar = _statusbar[0];
-//
-//         return _statusbar;
-//     }
-// });
-//
-// L.control.statusbar = function (opts) {
-//     return new L.Control.Statusbar(opts);
-// };
-//
-// L.control.statusbar({position: 'topright'}).addTo(mapObj);
 // let amount = 16;// 8192 / space
 // for (let x = 0; x <= amount; x++) {
 //     for (let y = 0; y <= amount; y++) {
-//         L.marker(this.leafletMap.unproject([x * ( 6144 / amount), y * (4096 / amount)], this.leafletMap.getMaxZoom())).addTo(this.leafletMap);
+//         L.marker(this.leafletMap.unproject([x * (6144 / amount), y * (4096 / amount)], this.leafletMap.getMaxZoom())).addTo(this.leafletMap);
 //     }
 // }
 

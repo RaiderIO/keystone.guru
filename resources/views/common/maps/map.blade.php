@@ -22,6 +22,16 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             .enemy_edit_popup_npc {
                 width: 300px;
             }
+
+            #map_controls_hide_enemies.map_controls_custom {
+                width: 50px;
+                background-image: none;
+            }
+
+            #map_controls_hide_enemy_packs.map_controls_custom {
+                width: 50px;
+                background-image: none;
+            }
         </style>
     @endif
 @endsection
@@ -166,13 +176,32 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
         <div id="enemy_edit_popup_inner" class="popupCustom">
             <div class="form-group">
                 <label for="enemy_edit_popup_npc">NPC</label>
-                <select data-live-search="true" id="enemy_edit_popup_npc_template" name="enemy_edit_popup_npc" class="selectpicker enemy_edit_popup_npc" data-width="300px">
+                <select data-live-search="true" id="enemy_edit_popup_npc_template" name="enemy_edit_popup_npc"
+                        class="selectpicker enemy_edit_popup_npc" data-width="300px">
                     @foreach($npcs as $npc)
                         <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->game_id) }}</option>
-                        @endforeach
+                    @endforeach
                 </select>
             </div>
             {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit_template', 'class' => 'btn btn-info']) !!}
         </div>
     </div>
 @endif
+
+<div id="map_controls_template" class="hidden">
+    <div class="leaflet-draw-section">
+        <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
+            <a id='map_controls_hide_enemies' class="map_controls_custom" href="#" title="Hide enemies">
+                <i id='map_controls_hide_enemies_checkbox' class="fa fa-check-square"></i>
+                <i class="fa fa-users"></i>
+                <span class="sr-only">Hide enemies</span>
+            </a>
+            <a id='map_controls_hide_enemy_packs' class="map_controls_custom" href="#" title="Hide enemy packs">
+                <i id='map_controls_hide_enemy_packs_checkbox' class="fa fa-check-square"></i>
+                <i class="fa fa-object-group"></i>
+                <span class="sr-only">Hide enemy packs</span>
+            </a>
+        </div>
+        <ul class="leaflet-draw-actions"></ul>
+    </div>
+</div>

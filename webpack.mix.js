@@ -27,6 +27,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/util.js',
         'resources/assets/js/custom/signalable.js',
         'resources/assets/js/custom/dungeonmap.js',
+        'resources/assets/js/custom/mapcontrols.js',
         'resources/assets/js/custom/mapobject.js',
         'resources/assets/js/custom/enemy.js',
         'resources/assets/js/custom/enemypack.js',
