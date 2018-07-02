@@ -71,10 +71,10 @@ class MapObject {
 
     onLayerInit() {
         let self = this;
+        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
 
         self.layer.bindContextMenu(self._updateContextMenuOptions());
-        this.layer.on('contextmenu', function () {
-            self.map.leafletMap.contextmenu.removeAllItems();
+        self.layer.on('contextmenu', function () {
             let items = self.getContextMenuItems();
 
             $.each(items, function (index, value) {
@@ -82,7 +82,11 @@ class MapObject {
             });
             return true;
         });
-        this.layer.on('draw:edited', function () {
+        // On hide, remove all items so they aren't lingering
+        self.map.leafletMap.on('contextmenu.hide', function(){
+            self.map.leafletMap.contextmenu.removeAllItems();
+        });
+        self.layer.on('draw:edited', function () {
             console.log('draw:edited');
             // Changed = gone out of sync
             self.setSynced(false);

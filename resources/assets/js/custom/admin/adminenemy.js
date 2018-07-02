@@ -31,7 +31,7 @@ class AdminEnemy extends Enemy {
         // Merge existing context menu items with the admin ones
         return super.getContextMenuItems().concat([{
             text: '<i class="fa fa-pencil"></i> ' + (this.editing ? "Editing.." : "Edit"),
-            disabled: this.synced || this.editing,
+            disabled: this.editing,
             callback: (this.startEdit).bind(this)
         }, {
             text: '<i class="fa fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
