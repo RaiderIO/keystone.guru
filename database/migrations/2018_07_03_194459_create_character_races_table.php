@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEnemiesTable extends Migration
+class CreateCharacterRacesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateEnemiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('enemies', function (Blueprint $table) {
+        Schema::create('character_races', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('enemy_pack_id'); //nullable?
-            $table->integer('npc_id');
-            $table->integer('floor_id');
-            $table->double('lat');
-            $table->double('lng');
-            $table->timestamps();
+            $table->string('name');
+            $table->string('faction');
+            $table->string('icon_file_id');
         });
     }
 
@@ -31,6 +28,6 @@ class CreateEnemiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('enemies');
+        Schema::dropIfExists('character_races');
     }
 }

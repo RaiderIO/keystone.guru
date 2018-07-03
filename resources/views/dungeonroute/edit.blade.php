@@ -5,11 +5,11 @@
     @parent
 
     <script>
-        var _selectedDungeonId;
-        var _currentStage = 1;
-        var _maxStage = 2;
+        let _selectedDungeonId;
+        let _currentStage = 1;
+        let _maxStage = 2;
 
-        var _stages = [
+        let _stages = [
             {
                 'id': 1,
                 'saveCallback': function () {
@@ -19,7 +19,7 @@
                 'id': 2,
                 'initCallback': function () {
                     // Get the data of the selected dungeon
-                    var dungeon = getDungeonDataById(_selectedDungeonId);
+                    let dungeon = getDungeonDataById(_selectedDungeonId);
                     // First floor, always
                     setCurrentMapName(dungeon.key, 1);
                     updateFloorSelection();
@@ -38,7 +38,7 @@
         });
 
         function _getStage(id) {
-            for (var i = 0; i < _stages.length; i++) {
+            for (let i = 0; i < _stages.length; i++) {
                 if (_stages[i].id === id) {
                     return _stages[i];
                 }
@@ -77,12 +77,12 @@
         function _setStage(stage) {
             $("#stage-" + _currentStage).hide();
             $("#stage-" + stage).show();
-            var currentStage = _getStage(_currentStage);
+            let currentStage = _getStage(_currentStage);
             if( currentStage.hasOwnProperty('saveCallback') ){
                 currentStage.saveCallback();
             }
 
-            var nextStage = _getStage(stage);
+            let nextStage = _getStage(stage);
             if( nextStage.hasOwnProperty('initCallback') ){
                 nextStage.initCallback();
             }
@@ -110,9 +110,18 @@
                 {!! Form::select('dungeon_selection', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
             </div>
         </div>
+
+        <div id="stage-2" style="display: none;">
+            <div class="form-group">
+                <div class="col-lg-2">
+                    {!! Form::label('dungeon_selection', __('Select dungeon')) !!}
+                    {!! Form::select('dungeon_selection', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="stage-2" style="display: none;">
+    <div id="stage-3" style="display: none;">
         <div id="map_container">
             @include('common.maps.map', [
                 'admin' => false,

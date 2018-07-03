@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\CharacterRace;
 use App\Models\CharacterClass;
+use App\Models\CharacterRaceClassCoupling;
 use App\Models\CharacterSpecialization;
 
-class ClassesSeeder extends Seeder
+class CharacterInfoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,7 +15,30 @@ class ClassesSeeder extends Seeder
      */
     public function run()
     {
-        $this->command->info('Adding known classes & specs');
+        $this->command->info('Adding known races');
+
+        $classes = [new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            new CharacterRace(['name' => 'Human']),
+            ];
+
+        foreach($classes as $class){
+            /** @var $class \Illuminate\Database\Eloquent\Model */
+            $class->save();
+        }
+
+        $this->command->info('Adding known classes');
 
         $classes = [new CharacterClass(['name' => 'Warrior', 'color' => '#C79C6E']),
             new CharacterClass(['name' => 'Paladin', 'color' => '#F58CBA']),
@@ -37,5 +62,10 @@ class ClassesSeeder extends Seeder
 //            'name' => 'Legion',
 //            'color' => '#27ff0f'
 //        ]);
+    }
+
+    private function _rollback(){
+        DB::table('character_classes')->truncate();
+        DB::table('character_specializations')->truncate();
     }
 }

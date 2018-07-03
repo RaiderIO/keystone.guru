@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCharacterClassSpecializationTable extends Migration
+class CreateCharacterClassSpecializationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,8 +17,7 @@ class CreateCharacterClassSpecializationTable extends Migration
             $table->increments('id');
             $table->integer('class_id');
             $table->string('name');
-            $table->string('icon');
-            $table->timestamps();
+            $table->string('icon_file_id');
         });
     }
 

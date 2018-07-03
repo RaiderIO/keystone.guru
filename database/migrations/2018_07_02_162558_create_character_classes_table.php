@@ -17,8 +17,7 @@ class CreateCharacterClassesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('color');
-            $table->string('icon');
-            $table->timestamps();
+            $table->string('icon_file_id');
         });
     }
 
