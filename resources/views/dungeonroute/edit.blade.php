@@ -99,10 +99,10 @@
         {{ Form::open(['route' => 'dungeonroute.savenew', 'files' => true]) }}
     @endisset
     <div id="setup_container" class="container">
-        <p>
-            {!! Form::button('<i class="fa fa-backward"></i> ' . __('Previous'), ['id' => 'previous', 'class' => 'btn btn-info', 'style' => 'display: none;']) !!}
-            {!! Form::button('<i class="fa fa-forward"></i> ' . __('Next'), ['id' => 'next', 'class' => 'btn btn-info']) !!}
-        </p>
+        <div class="col-lg-12">
+            {!! Form::button('<i class="fa fa-backward"></i> ' . __('Previous'), ['id' => 'previous', 'class' => 'btn btn-info col-lg-1', 'style' => 'display: none;']) !!}
+            {!! Form::button('<i class="fa fa-forward"></i> ' . __('Next'), ['id' => 'next', 'class' => 'btn btn-info col-lg-offset-11 col-lg-1']) !!}
+        </div>
 
         <div id="stage-1">
             <div class="form-group">

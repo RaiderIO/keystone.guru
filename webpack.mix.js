@@ -55,5 +55,6 @@ if (mix.inProduction()) {
     mix.copy('resources/assets/images', 'public/images', false);
 } else {
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);
+    mix.copy('resources/assets/images/classes', 'public/images/classes', false);
     // mix.copy('resources/assets/images/test', 'public/images/test', false);
 }
