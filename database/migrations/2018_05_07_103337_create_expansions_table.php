@@ -15,8 +15,8 @@ class CreateExpansionsTable extends Migration
     {
         Schema::create('expansions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('icon_file_id');
             $table->text('name');
-            $table->text('icon');
             $table->text('color');
             $table->timestamps();
         });

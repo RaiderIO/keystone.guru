@@ -1,6 +1,8 @@
 @extends('layouts.app', ['wide' => true])
 @section('header-title', $headerTitle)
 
+<?php dd(\App\Models\CharacterRace::with('class')->get()); ?>
+
 @section('scripts')
     @parent
 
@@ -15,8 +17,13 @@
                 'saveCallback': function () {
                     _selectedDungeonId = $("#dungeon_selection").val();
                 }
-            }, {
+            },  {
                 'id': 2,
+                'saveCallback': function () {
+
+                }
+            }, {
+                'id': 3,
                 'initCallback': function () {
                     // Get the data of the selected dungeon
                     let dungeon = getDungeonDataById(_selectedDungeonId);
@@ -112,7 +119,26 @@
         </div>
 
         <div id="stage-2" style="display: none;">
+            <h2>
+                {{ __('Group composition') }}
+            </h2>
             <div class="form-group">
+                <div class="col-lg-2 col-lg-offset-1">
+                    {!! Form::label('race_selection[]', __('Select race')) !!}
+                    {!! Form::select('race_selection[]', \App\Models\CharacterRace::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+
+                    {!! Form::label('class_selection[]', __('Select class')) !!}
+                    {!! Form::select('class_selection[]', \App\Models\CharacterClass::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+                <div class="col-lg-2">
+
+                </div>
                 <div class="col-lg-2">
                     {!! Form::label('dungeon_selection', __('Select dungeon')) !!}
                     {!! Form::select('dungeon_selection', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}

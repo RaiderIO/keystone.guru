@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CharacterSpecialization extends Model
 {
+    public $timestamps = false;
+
     public $hidden = ['created_at', 'updated_at'];
 
     function class()

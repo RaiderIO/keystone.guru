@@ -17,7 +17,6 @@ class CreateCharacterRacesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('faction');
-            $table->string('icon_file_id');
         });
     }
 

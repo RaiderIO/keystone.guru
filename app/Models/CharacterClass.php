@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CharacterClass extends Model
 {
+    public $timestamps = false;
+
     function specializations()
     {
         return $this->hasMany('App\Models\CharacterSpecialization');
