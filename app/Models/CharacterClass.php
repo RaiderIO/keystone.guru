@@ -11,6 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 class CharacterClass extends Model
 {
     public $timestamps = false;
+    public $hidden = ['icon_file_id', 'pivot'];
+
+    function iconfile()
+    {
+        return $this->hasOne('App\Models\File', 'model_id');
+    }
 
     function specializations()
     {

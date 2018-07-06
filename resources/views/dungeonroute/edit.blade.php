@@ -1,12 +1,17 @@
 @extends('layouts.app', ['wide' => true])
 @section('header-title', $headerTitle)
 
-<?php dd(\App\Models\CharacterRace::with('class')->get()); ?>
+<?php
+$racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get()->toArray();
+$classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
+?>
 
 @section('scripts')
     @parent
 
     <script>
+        let _racesClasses = JSON.parse(atob('<?php echo base64_encode(json_encode($racesClasses)); ?>'));
+        let _classes = JSON.parse(atob('<?php echo base64_encode(json_encode($classes)); ?>'));
         let _selectedDungeonId;
         let _currentStage = 1;
         let _maxStage = 2;
@@ -17,7 +22,7 @@
                 'saveCallback': function () {
                     _selectedDungeonId = $("#dungeon_selection").val();
                 }
-            },  {
+            }, {
                 'id': 2,
                 'saveCallback': function () {
 
@@ -34,6 +39,7 @@
                     refreshLeafletMap();
                 },
                 'saveCallback': function () {
+
                 }
             }
         ];
@@ -41,8 +47,48 @@
         $(function () {
             $("#previous").bind('click', _previousStage);
             $("#next").bind('click', _nextStage);
+
+            $("#faction").bind('change', _factionChanged);
+            $(".raceselect").bind('change', _raceChanged);
             _handleButtonVisibility();
+            // Force population of the race boxes
+            _factionChanged();
         });
+
+        function _factionChanged() {
+            console.log(">> _factionChanged");
+
+            let newFaction = $("#faction").val();
+            let $raceSelect = $("select.raceselect");
+
+            // Remove all existing options
+            $raceSelect.find('option').remove();
+
+            // Re-fill the races
+            $raceSelect.append(jQuery('<option>', {
+                value: -1,
+                text: "{{ __('Race...') }}"
+            }));
+
+            for (let i = 0; i < _racesClasses.length; i++) {
+                let raceClass = _racesClasses[i];
+                console.log(raceClass.faction, newFaction);
+                if (raceClass.faction === newFaction) {
+                    $raceSelect.append(jQuery('<option>', {
+                        value: raceClass.id,
+                        text: raceClass.name
+                    }));
+                }
+            }
+
+            $(".selectpicker").selectpicker('refresh');
+
+            console.log("OK _factionChanged");
+        }
+
+        function _raceChanged() {
+
+        }
 
         function _getStage(id) {
             for (let i = 0; i < _stages.length; i++) {
@@ -85,12 +131,12 @@
             $("#stage-" + _currentStage).hide();
             $("#stage-" + stage).show();
             let currentStage = _getStage(_currentStage);
-            if( currentStage.hasOwnProperty('saveCallback') ){
+            if (currentStage.hasOwnProperty('saveCallback')) {
                 currentStage.saveCallback();
             }
 
             let nextStage = _getStage(stage);
-            if( nextStage.hasOwnProperty('initCallback') ){
+            if (nextStage.hasOwnProperty('initCallback')) {
                 nextStage.initCallback();
             }
 
@@ -123,25 +169,39 @@
                 {{ __('Group composition') }}
             </h2>
             <div class="form-group">
+                {!! Form::label('faction', __('Select faction')) !!}
+                {!! Form::select('faction', ['Horde' => 'Horde', 'Alliance' => 'Alliance'], 0, ['class' => 'form-control selectpicker']) !!}
+            </div>
+            <div class="form-group">
                 <div class="col-lg-2 col-lg-offset-1">
-                    {!! Form::label('race_selection[]', __('Select race')) !!}
-                    {!! Form::select('race_selection[]', \App\Models\CharacterRace::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+                    {!! Form::label('race_selection_1', __('Party member #1')) !!}
+                    {!! Form::select('race_selection_1', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
 
-                    {!! Form::label('class_selection[]', __('Select class')) !!}
-                    {!! Form::select('class_selection[]', \App\Models\CharacterClass::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+                    {!! Form::select('class_selection_1', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
                 </div>
                 <div class="col-lg-2">
+                    {!! Form::label('race_selection_2', __('Party member #2')) !!}
+                    {!! Form::select('race_selection_2', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
 
+                    {!! Form::select('class_selection_2', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
                 </div>
                 <div class="col-lg-2">
+                    {!! Form::label('race_selection_3', __('Party member #3')) !!}
+                    {!! Form::select('race_selection_3', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
 
+                    {!! Form::select('class_selection_3', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
                 </div>
                 <div class="col-lg-2">
+                    {!! Form::label('race_selection_4', __('Party member #4')) !!}
+                    {!! Form::select('race_selection_4', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
 
+                    {!! Form::select('class_selection_4', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
                 </div>
                 <div class="col-lg-2">
-                    {!! Form::label('dungeon_selection', __('Select dungeon')) !!}
-                    {!! Form::select('dungeon_selection', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+                    {!! Form::label('race_selection_5', __('Party member #5')) !!}
+                    {!! Form::select('race_selection_5', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
+
+                    {!! Form::select('class_selection_5', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
                 </div>
             </div>
         </div>

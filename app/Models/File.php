@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
  */
 class File extends Model
 {
+    public $hidden = ['model_id', 'model_class', 'created_at', 'updated_at'];
+
     function delete(){
         if( parent::delete() ) {
             $this->deleteFromDisk();

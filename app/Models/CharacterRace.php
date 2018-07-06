@@ -17,7 +17,7 @@ class CharacterRace extends Model
         return $this->hasMany('App\Models\CharacterClass');
     }
 
-    function class()
+    function classes()
     {
         return $this->belongsToMany('App\Models\CharacterClass', 'character_race_class_couplings');
     }
