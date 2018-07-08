@@ -87,6 +87,33 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
         }
 
         function _raceChanged() {
+            console.log(">> _raceChanged");
+
+            let $raceSelect = $(this);
+            let $classSelect = $("#class_selection_" + $raceSelect.data('id'));
+            let raceId = parseInt($raceSelect.val());
+
+            $classSelect.find('option').remove();
+
+            let raceClass = null;
+            for ( let i = 0; i < _racesClasses.length; i++ ){
+                if( _racesClasses[i].id === raceId ){
+                    raceClass = _racesClasses[i];
+                    break;
+                }
+            }
+
+            console.log(raceClass);
+            console.assert(raceClass !== null, "RaceClass it not set!");
+
+            // for( let i = 0; i < _classes; i++ ){
+            //     let pClass = _classes[i];
+            // }
+
+            let newRace = $raceSelect.val();
+
+            console.log($raceSelect, $classSelect);
+
 
         }
 
@@ -173,36 +200,14 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
                 {!! Form::select('faction', ['Horde' => 'Horde', 'Alliance' => 'Alliance'], 0, ['class' => 'form-control selectpicker']) !!}
             </div>
             <div class="form-group">
-                <div class="col-lg-2 col-lg-offset-1">
-                    {!! Form::label('race_selection_1', __('Party member #1')) !!}
-                    {!! Form::select('race_selection_1', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
+                <?php for($i = 1; $i <= 5; $i++){ ?>
+                <div class="col-lg-2{{ $i === 1 ? ' col-lg-offset-1' : '' }}">
+                    {!! Form::label('race_selection_' . $i, __('Party member #' . $i)) !!}
+                    {!! Form::select('race_selection_' . $i, [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect', 'data-id' => $i]) !!}
 
-                    {!! Form::select('class_selection_1', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
+                    {!! Form::select('class_selection_' . $i, [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker', 'data-id' => $i]) !!}
                 </div>
-                <div class="col-lg-2">
-                    {!! Form::label('race_selection_2', __('Party member #2')) !!}
-                    {!! Form::select('race_selection_2', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
-
-                    {!! Form::select('class_selection_2', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
-                </div>
-                <div class="col-lg-2">
-                    {!! Form::label('race_selection_3', __('Party member #3')) !!}
-                    {!! Form::select('race_selection_3', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
-
-                    {!! Form::select('class_selection_3', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
-                </div>
-                <div class="col-lg-2">
-                    {!! Form::label('race_selection_4', __('Party member #4')) !!}
-                    {!! Form::select('race_selection_4', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
-
-                    {!! Form::select('class_selection_4', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
-                </div>
-                <div class="col-lg-2">
-                    {!! Form::label('race_selection_5', __('Party member #5')) !!}
-                    {!! Form::select('race_selection_5', [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect']) !!}
-
-                    {!! Form::select('class_selection_5', [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker']) !!}
-                </div>
+                <?php } ?>
             </div>
         </div>
     </div>

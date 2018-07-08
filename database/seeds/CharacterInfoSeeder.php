@@ -131,7 +131,6 @@ class CharacterInfoSeeder extends Seeder
                     $raceClassCoupling->character_class_id = $class->id;
 
                     $raceClassCoupling->save();
-
                 }
                 $i++;
             }
