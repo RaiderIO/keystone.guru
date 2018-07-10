@@ -17,6 +17,6 @@ class Expansion extends Model
     }
 
     public function icon(){
-        return $this->hasOne('App\Models\File', 'model_id');
+        return $this->hasOne('App\Models\File', 'model_id')->where('model_class', '=', get_class($this));
     }
 }

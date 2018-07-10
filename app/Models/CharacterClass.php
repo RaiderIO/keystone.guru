@@ -15,7 +15,7 @@ class CharacterClass extends Model
 
     function iconfile()
     {
-        return $this->hasOne('App\Models\File', 'model_id');
+        return $this->hasOne('App\Models\File', 'model_id')->where('model_class', '=', get_class($this));
     }
 
     function specializations()

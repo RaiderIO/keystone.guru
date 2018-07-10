@@ -6,12 +6,22 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
 ?>
 
+@section('head')
+    <style>
+        .class_icon {
+            width: 24px;
+            border-radius: 12px;
+            background-color: #1d3131;
+        }
+    </style>
+@endsection
+
 @section('scripts')
     @parent
 
     <script>
         let _racesClasses = JSON.parse(atob('<?php echo base64_encode(json_encode($racesClasses)); ?>'));
-        let _classes = JSON.parse(atob('<?php echo base64_encode(json_encode($classes)); ?>'));
+        let _classDetails = JSON.parse(atob('<?php echo base64_encode(json_encode($classes)); ?>'));
         let _selectedDungeonId;
         let _currentStage = 1;
         let _maxStage = 2;
@@ -50,6 +60,11 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
 
             $("#faction").bind('change', _factionChanged);
             $(".raceselect").bind('change', _raceChanged);
+
+            $(".selectpicker").selectpicker({
+                showIcon: true
+            });
+
             _handleButtonVisibility();
             // Force population of the race boxes
             _factionChanged();
@@ -90,31 +105,56 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
             console.log(">> _raceChanged");
 
             let $raceSelect = $(this);
+            console.log($raceSelect[0]);
             let $classSelect = $("#class_selection_" + $raceSelect.data('id'));
             let raceId = parseInt($raceSelect.val());
+            console.log($classSelect[0]);
 
             $classSelect.find('option').remove();
 
+            // Re-fill the races
+            $classSelect.append(jQuery('<option>', {
+                value: -1,
+                text: "{{ __('Class...') }}",
+                'data-thumbnail': 'images/classes/druid.png'
+            }));
+
+            // Find the raceclass for the class we've selected
             let raceClass = null;
-            for ( let i = 0; i < _racesClasses.length; i++ ){
-                if( _racesClasses[i].id === raceId ){
+            for (let i = 0; i < _racesClasses.length; i++) {
+                if (_racesClasses[i].id === raceId) {
                     raceClass = _racesClasses[i];
                     break;
                 }
             }
 
-            console.log(raceClass);
-            console.assert(raceClass !== null, "RaceClass it not set!");
+            console.assert(raceClass !== null, "RaceClass it not set (selected invalid class?)");
 
-            // for( let i = 0; i < _classes; i++ ){
-            //     let pClass = _classes[i];
-            // }
+            // Match the raceClass to the classDetails
+            for (let i = 0; i < raceClass.classes.length; i++) {
+                let rClass = raceClass.classes[i];
+                // Find the details
+                for (let j = 0; j < _classDetails.length; j++) {
+                    let classDetail = _classDetails[j];
+                    // If found
+                    if (classDetail.id === rClass.id) {
+                        // Display it
+                        $classSelect.append(jQuery('<option>', {
+                            value: classDetail.id, //zzz
+                            text: classDetail.name,
+                            'data-content': $("#template_dropdown_icon").html()
+                                .replace("{image}", '../../images/' + classDetail.iconfile.path)
+                                .replace("{text}", classDetail.name)
+                        }));
+                        break;
+                    }
+                }
+            }
 
-            let newRace = $raceSelect.val();
+            $('.selectpicker').selectpicker('refresh'); ///zzz
+            $('.selectpicker').selectpicker('render'); ///zzz
 
-            console.log($raceSelect, $classSelect);
-
-
+            console.log("OK _raceChanged");
         }
 
         function _getStage(id) {
@@ -205,7 +245,8 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
                     {!! Form::label('race_selection_' . $i, __('Party member #' . $i)) !!}
                     {!! Form::select('race_selection_' . $i, [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect', 'data-id' => $i]) !!}
 
-                    {!! Form::select('class_selection_' . $i, [-1 => __('Class...')], 0, ['class' => 'form-control selectpicker', 'data-id' => $i]) !!}
+                    {!! Form::select('class_selection_' . $i, [-1 => __('Class...')], 0,
+                    ['id' => 'class_selection_' . $i, 'class' => 'form-control selectpicker', 'data-id' => $i]) !!}
                 </div>
                 <?php } ?>
             </div>
@@ -223,6 +264,13 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
 
             {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
         </div>
+    </div>
+
+
+    <div id="template_dropdown_icon" style="display: none;">
+        <span>
+            <img src="{image}" class="class_icon"/> {text}
+        </span>
     </div>
 
     {!! Form::close() !!}
