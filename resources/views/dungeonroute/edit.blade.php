@@ -24,7 +24,6 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
         let _classDetails = JSON.parse(atob('<?php echo base64_encode(json_encode($classes)); ?>'));
         let _selectedDungeonId;
         let _currentStage = 1;
-        let _maxStage = 2;
 
         let _stages = [
             {
@@ -65,7 +64,8 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
                 showIcon: true
             });
 
-            _handleButtonVisibility();
+            // Init
+            _setStage(1);
             // Force population of the race boxes
             _factionChanged();
         });
@@ -143,8 +143,8 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
                             value: classDetail.id, //zzz
                             text: classDetail.name,
                             'data-content': $("#template_dropdown_icon").html()
-                                .replace("{image}", '../../images/' + classDetail.iconfile.path)
-                                .replace("{text}", classDetail.name)
+                                .replace('src=""', 'src="../../images/' + classDetail.iconfile.path + '"')
+                                .replace('{text}', classDetail.name)
                         }));
                         break;
                     }
@@ -170,27 +170,11 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
             if (_currentStage > 1) {
                 _setStage(_currentStage - 1);
             }
-            _handleButtonVisibility();
         }
 
         function _nextStage() {
-            if (_currentStage < _maxStage) {
+            if (_currentStage < _stages.length) {
                 _setStage(_currentStage + 1);
-            }
-            _handleButtonVisibility();
-        }
-
-        function _handleButtonVisibility() {
-            if (_currentStage === 1) {
-                $("#previous").hide();
-            } else {
-                $("#previous").show();
-            }
-
-            if (_currentStage === _maxStage) {
-                $("#next").hide();
-            } else {
-                $("#next").show();
             }
         }
 
@@ -208,6 +192,21 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
             }
 
             _currentStage = stage;
+            _handleButtonVisibility();
+        }
+
+        function _handleButtonVisibility() {
+            if (_currentStage === 1) {
+                $("#previous").addClass('invisible');
+            } else {
+                $("#previous").removeClass('invisible');
+            }
+
+            if (_currentStage === _stages.length) {
+                $("#next").addClass('invisible');
+            } else {
+                $("#next").removeClass('invisible');
+            } //
         }
     </script>
 @endsection
@@ -220,18 +219,23 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
     @endisset
     <div id="setup_container" class="container">
         <div class="col-lg-12">
-            {!! Form::button('<i class="fa fa-backward"></i> ' . __('Previous'), ['id' => 'previous', 'class' => 'btn btn-info col-lg-1', 'style' => 'display: none;']) !!}
-            {!! Form::button('<i class="fa fa-forward"></i> ' . __('Next'), ['id' => 'next', 'class' => 'btn btn-info col-lg-offset-11 col-lg-1']) !!}
+            {!! Form::button('<i class="fa fa-backward"></i> ' . __('Previous'), ['id' => 'previous', 'class' => 'btn btn-info col-lg-1 invisible']) !!}
+            {!! Form::button('<i class="fa fa-forward"></i> ' . __('Next'), ['id' => 'next', 'class' => 'btn btn-info col-lg-offset-10 col-lg-1']) !!}
         </div>
 
-        <div id="stage-1">
+        <hr />
+
+        <div id="stage-1" class="col-lg-12">
+            <h2>
+                {{ __('Dungeon') }}
+            </h2>
             <div class="form-group">
                 {!! Form::label('dungeon_selection', __('Select dungeon')) !!}
                 {!! Form::select('dungeon_selection', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
             </div>
         </div>
 
-        <div id="stage-2" style="display: none;">
+        <div id="stage-2" class="col-lg-12" style="display: none;">
             <h2>
                 {{ __('Group composition') }}
             </h2>
@@ -253,7 +257,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
         </div>
     </div>
 
-    <div id="stage-3" style="display: none;">
+    <div id="stage-3" class="col-lg-12" style="display: none;">
         <div id="map_container">
             @include('common.maps.map', [
                 'admin' => false,
@@ -269,7 +273,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
 
     <div id="template_dropdown_icon" style="display: none;">
         <span>
-            <img src="{image}" class="class_icon"/> {text}
+            <img src="" class="class_icon"/> {text}
         </span>
     </div>
 
