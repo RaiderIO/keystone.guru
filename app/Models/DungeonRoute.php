@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @property $id int The ID of this DungeonRoute.
+ * @property $faction string The faction that is assigned to this route.
+ */
+class DungeonRoute extends Model
+{
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function expansion(){
+        return $this->belongsTo('App\Models\Expansion');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function floors(){
+        return $this->hasMany('App\Models\Floor');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function races(){
+        return $this->hasMany('App\Models\DungeonRoutePlayerRace');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function classes(){
+        return $this->hasMany('App\Models\DungeonRoutePlayerClass');
+    }
+}

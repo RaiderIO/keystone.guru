@@ -14,7 +14,7 @@ class DungeonRouteFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::user()->hasRole("user");
+        return \Auth::user()->hasRole(["user", "admin"]);
     }
 
     /**
@@ -25,8 +25,14 @@ class DungeonRouteFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', Rule::unique('dungeons')->ignore($this->route()->parameter('id'))],
-            'expansion' => 'required'
+            'dungeon' => ['required', Rule::exists('dungeons', 'id')],
+            'faction' => ['required', Rule::in(config('mpplnr.factions'))],
+
+            'race' => 'nullable|array',
+            'class' => 'nullable|array',
+
+            'race.*' => 'nullable|numeric|min:1',
+            'class.*' => 'nullable|numeric|min:1',
         ];
     }
 }

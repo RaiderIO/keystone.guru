@@ -29,28 +29,29 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
             {
                 'id': 1,
                 'saveCallback': function () {
-                    _selectedDungeonId = $("#dungeon_selection").val();
+                    _selectedDungeonId = $("#dungeon").val();
                 }
             }, {
                 'id': 2,
                 'saveCallback': function () {
 
                 }
-            }, {
-                'id': 3,
-                'initCallback': function () {
-                    // Get the data of the selected dungeon
-                    let dungeon = getDungeonDataById(_selectedDungeonId);
-                    // First floor, always
-                    setCurrentMapName(dungeon.key, 1);
-                    updateFloorSelection();
-                    // Refresh the map to reflect changes
-                    refreshLeafletMap();
-                },
-                'saveCallback': function () {
-
-                }
-            }
+            },
+            // {
+            //     'id': 3,
+            //     'initCallback': function () {
+            //         // Get the data of the selected dungeon
+            //         let dungeon = getDungeonDataById(_selectedDungeonId);
+            //         // First floor, always
+            //         setCurrentMapName(dungeon.key, 1);
+            //         updateFloorSelection();
+            //         // Refresh the map to reflect changes
+            //         refreshLeafletMap();
+            //     },
+            //     'saveCallback': function () {
+            //
+            //     }
+            // }
         ];
 
         $(function () {
@@ -106,18 +107,11 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
 
             let $raceSelect = $(this);
             console.log($raceSelect[0]);
-            let $classSelect = $("#class_selection_" + $raceSelect.data('id'));
             let raceId = parseInt($raceSelect.val());
+            let $classSelect = $(".classselect").find("[data-id='" + $raceSelect.data('id') + "']");
             console.log($classSelect[0]);
 
             $classSelect.find('option').remove();
-
-            // Re-fill the races
-            $classSelect.append(jQuery('<option>', {
-                value: -1,
-                text: "{{ __('Class...') }}",
-                'data-thumbnail': 'images/classes/druid.png'
-            }));
 
             // Find the raceclass for the class we've selected
             let raceClass = null;
@@ -197,15 +191,16 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
 
         function _handleButtonVisibility() {
             if (_currentStage === 1) {
-                $("#previous").addClass('invisible');
+                $("#previous").addClass('hidden');
             } else {
-                $("#previous").removeClass('invisible');
+                $("#previous").removeClass('hidden');
             }
 
             if (_currentStage === _stages.length) {
-                $("#next").addClass('invisible');
+                $("#next").addClass('hidden');
+                $("#finish").removeClass('hidden');
             } else {
-                $("#next").removeClass('invisible');
+                $("#next").removeClass('hidden');
             } //
         }
     </script>
@@ -215,12 +210,17 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
     @isset($model)
         {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => 'dungeonroute.savenew', 'files' => true]) }}
+        {{ Form::open(['route' => 'dungeonroute.savenew']) }}
     @endisset
     <div id="setup_container" class="container">
         <div class="col-lg-12">
-            {!! Form::button('<i class="fa fa-backward"></i> ' . __('Previous'), ['id' => 'previous', 'class' => 'btn btn-info col-lg-1 invisible']) !!}
-            {!! Form::button('<i class="fa fa-forward"></i> ' . __('Next'), ['id' => 'next', 'class' => 'btn btn-info col-lg-offset-10 col-lg-1']) !!}
+            <div class="col-lg-1">
+                {!! Form::button('<i class="fa fa-backward"></i> ' . __('Previous'), ['id' => 'previous', 'class' => 'btn btn-info invisible']) !!}
+            </div>
+            <div class="col-lg-offset-10 col-lg-1">
+                {!! Form::button('<i class="fa fa-forward"></i> ' . __('Next'), ['id' => 'next', 'class' => 'btn btn-info']) !!}
+                {!! Form::submit('' . __('Finish'), ['id' => 'finish', 'class' => 'btn btn-success hidden']) !!}
+            </div>
         </div>
 
         <hr />
@@ -230,8 +230,8 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
                 {{ __('Dungeon') }}
             </h2>
             <div class="form-group">
-                {!! Form::label('dungeon_selection', __('Select dungeon')) !!}
-                {!! Form::select('dungeon_selection', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+                {!! Form::label('dungeon', __('Select dungeon') . "*") !!}
+                {!! Form::select('dungeon', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
             </div>
         </div>
 
@@ -241,34 +241,38 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
             </h2>
             <div class="form-group">
                 {!! Form::label('faction', __('Select faction')) !!}
-                {!! Form::select('faction', ['Horde' => 'Horde', 'Alliance' => 'Alliance'], 0, ['class' => 'form-control selectpicker']) !!}
+                {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
+                {!! Form::select('faction', array_combine(config('mpplnr.factions'), config('mpplnr.factions')), 0, ['class' => 'form-control selectpicker']) !!}
             </div>
             <div class="form-group">
-                <?php for($i = 1; $i <= 5; $i++){ ?>
+                <?php for($i = 1; $i <= config('mpplnr.party_size'); $i++){ ?>
                 <div class="col-lg-2{{ $i === 1 ? ' col-lg-offset-1' : '' }}">
-                    {!! Form::label('race_selection_' . $i, __('Party member #' . $i)) !!}
-                    {!! Form::select('race_selection_' . $i, [-1 => __('Race...')], 0, ['class' => 'form-control selectpicker raceselect', 'data-id' => $i]) !!}
+                    {!! Form::label('race[]', __('Party member #' . $i)) !!}
+                    <select name="race[]" class="form-control selectpicker raceselect" data-id="{{$i}}">
 
-                    {!! Form::select('class_selection_' . $i, [-1 => __('Class...')], 0,
-                    ['id' => 'class_selection_' . $i, 'class' => 'form-control selectpicker', 'data-id' => $i]) !!}
+                    </select>
+
+                    {{--{!! Form::select('class[]', [-1 => __('Class...')], 0,--}}
+                    {{--['id' => 'class_' . $i, 'class' => 'form-control selectpicker', 'data-id' => $i]) !!}--}}
+                    <select name="class[]" class="form-control selectpicker classselect" data-id="{{$i}}">
+
+                    </select>
                 </div>
                 <?php } ?>
             </div>
         </div>
     </div>
 
-    <div id="stage-3" class="col-lg-12" style="display: none;">
-        <div id="map_container">
-            @include('common.maps.map', [
-                'admin' => false,
-                'dungeons' => \App\Models\Dungeon::all(),
-                'dungeonSelect' => false,
-                'manualInit' => true
-            ])
-
-            {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
-        </div>
-    </div>
+    {{--<div id="stage-3" class="col-lg-12" style="display: none;">--}}
+        {{--<div id="map_container">--}}
+            {{--@include('common.maps.map', [--}}
+                {{--'admin' => false,--}}
+                {{--'dungeons' => \App\Models\Dungeon::all(),--}}
+                {{--'dungeonSelect' => false,--}}
+                {{--'manualInit' => true--}}
+            {{--])--}}
+        {{--</div>--}}
+    {{--</div>--}}
 
 
     <div id="template_dropdown_icon" style="display: none;">

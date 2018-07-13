@@ -31,7 +31,7 @@
     @isset($model)
         {{ Form::model($model, ['route' => ['admin.dungeon.update', $model->id], 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => 'admin.dungeon.savenew', 'files' => true]) }}
+        {{ Form::open(['route' => 'admin.dungeon.savenew']) }}
     @endisset
 
 <div class="form-group{{ $errors->has('expansion') ? ' has-error' : '' }}">

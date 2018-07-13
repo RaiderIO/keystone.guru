@@ -37,21 +37,23 @@ class DungeonRouteController extends BaseController
      */
     public function store($request, int $id = -1)
     {
-        $dungeon = new Dungeon();
+        dd($request);
+
+        $dungeonroute = new DungeonRoute();
         $edit = $id !== -1;
 
-        $dungeon->name = $request->get('name');
+        $dungeonroute->name = $request->get('name');
         // May not be set when editing
-        $dungeon->expansion_id = $request->get('expansion');
+        $dungeonroute->expansion_id = $request->get('expansion');
 
         // Update or insert it
-        if (!$dungeon->save()) {
+        if (!$dungeonroute->save()) {
             abort(500, 'Unable to save dungeon');
         }
 
         \Session::flash('status', sprintf(__('Dungeon %s'), $edit ? __("updated") : __("saved")));
 
-        return $dungeon->id;
+        return $dungeonroute->id;
     }
 
     /**

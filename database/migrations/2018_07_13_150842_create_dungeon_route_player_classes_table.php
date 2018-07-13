@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDungeonRouteTable extends Migration
+class CreateDungeonRoutePlayerClassesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateDungeonRouteTable extends Migration
      */
     public function up()
     {
-        Schema::create('dungeon_routes', function (Blueprint $table) {
+        Schema::create('dungeon_route_player_classes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('faction');
+            $table->integer('dungeonroute_id');
+            $table->integer('class_id');
+            $table->integer('index');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ class CreateDungeonRouteTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dungeon_route');
+        Schema::dropIfExists('dungeon_route_player_classes');
     }
 }
