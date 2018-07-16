@@ -215,7 +215,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
     <div id="setup_container" class="container">
         <div class="col-lg-12">
             <div class="col-lg-1">
-                {!! Form::button('<i class="fa fa-backward"></i> ' . __('Previous'), ['id' => 'previous', 'class' => 'btn btn-info invisible']) !!}
+                {!! Form::button('<i class="fa fa-backward"></i> ' . __('Previous'), ['id' => 'previous', 'class' => 'btn btn-info hidden']) !!}
             </div>
             <div class="col-lg-offset-10 col-lg-1">
                 {!! Form::button('<i class="fa fa-forward"></i> ' . __('Next'), ['id' => 'next', 'class' => 'btn btn-info']) !!}

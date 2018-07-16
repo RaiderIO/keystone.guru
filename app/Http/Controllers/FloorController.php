@@ -12,7 +12,7 @@ class FloorController extends BaseController
 {
     public function __construct()
     {
-        parent::__construct('floor', 'admin');
+        parent::__construct('floor', '\App\Models\Floor', 'admin');
     }
 
     public function getNewHeaderTitle()

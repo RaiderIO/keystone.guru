@@ -15,6 +15,8 @@ class CreateDungeonRouteTable extends Migration
     {
         Schema::create('dungeon_routes', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('author_id');
+            $table->integer('dungeon_id');
             $table->string('faction');
             $table->timestamps();
         });

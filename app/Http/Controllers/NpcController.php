@@ -13,7 +13,7 @@ class NpcController extends BaseController
 {
     public function __construct()
     {
-        parent::__construct('npc', 'admin');
+        parent::__construct('npc', '\App\Models\Npc', 'admin');
     }
 
     public function getNewHeaderTitle()
@@ -30,6 +30,22 @@ class NpcController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function new()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {
         // Override so we can set the classifications for the edit page
         $this->_setVariables(array(
@@ -42,6 +58,7 @@ class NpcController extends BaseController
 
     /**
      * @param $id
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)

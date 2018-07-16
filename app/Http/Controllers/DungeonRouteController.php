@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute;
+use App\Models\DungeonRoutePlayerRace;
+use App\Models\DungeonRoutePlayerClass;
 
 class DungeonRouteController extends BaseController
 {
     public function __construct()
     {
-        parent::__construct('dungeonroute');
+        parent::__construct('dungeonroute', '\App\Models\DungeonRoute');
     }
 
     public function getNewHeaderTitle()
@@ -37,21 +40,36 @@ class DungeonRouteController extends BaseController
      */
     public function store($request, int $id = -1)
     {
-        dd($request);
-
         $dungeonroute = new DungeonRoute();
         $edit = $id !== -1;
 
-        $dungeonroute->name = $request->get('name');
+        $dungeonroute->dungeon_id = $request->get('dungeon');
         // May not be set when editing
-        $dungeonroute->expansion_id = $request->get('expansion');
+        $dungeonroute->faction = $request->get('faction');
 
         // Update or insert it
-        if (!$dungeonroute->save()) {
+        if ($dungeonroute->save()) {
+            // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
+            foreach($request->get('race') as $key => $value){
+                $drpRace = new DungeonRoutePlayerRace();
+                $drpRace->index = $key;
+                $drpRace->race_id = $value;
+                $drpRace->dungeonroute_id = $dungeonroute->id;
+                $drpRace->save();
+            }
+
+            foreach($request->get('class') as $key => $value){
+                $drpRace = new DungeonRoutePlayerClass();
+                $drpRace->index = $key;
+                $drpRace->class_id = $value;
+                $drpRace->dungeonroute_id = $dungeonroute->id;
+                $drpRace->save();
+            }
+        } else {
             abort(500, 'Unable to save dungeon');
         }
 
-        \Session::flash('status', sprintf(__('Dungeon %s'), $edit ? __("updated") : __("saved")));
+        \Session::flash('status', sprintf(__('Dungeonroute %s'), $edit ? __("updated") : __("saved")));
 
         return $dungeonroute->id;
     }

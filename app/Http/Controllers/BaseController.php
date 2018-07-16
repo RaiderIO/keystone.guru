@@ -13,6 +13,11 @@ abstract class BaseController extends Controller
     private $_name;
 
     /**
+     * @var string The class name of the model that this controller is representing.
+     */
+    private $_modelClassName;
+
+    /**
      * @var string An optional prefix for the route.
      */
     private $_routePrefix;
@@ -22,9 +27,10 @@ abstract class BaseController extends Controller
      */
     private $_variables = array();
 
-    public function __construct($name, $routePrefix = '')
+    public function __construct($name, $modelClassName, $routePrefix = '')
     {
         $this->_name = $name;
+        $this->_modelClassName = $modelClassName;
         $this->_routePrefix = trim($routePrefix, '.');
     }
 
@@ -40,21 +46,11 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Gets the fully qualified class name of the model this controller is describing
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    private function _getModelClassname(){
-        return sprintf("\App\Models\%s", ucfirst($this->_name));
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Model
      */
     private function _getModelInstance()
     {
-        $className = $this->_getModelClassname();
-
-        $model = new $className();
+        $model = new $this->_modelClassName();
         // MUST be a model!
         assert($model instanceof Model);
 
@@ -102,8 +98,7 @@ abstract class BaseController extends Controller
      * @return \Illuminate\Database\Eloquent\Collection|Model[]
      */
     protected function _getViewModels(){
-        $className = $this->_getModelClassname();
-        return $className::all();
+        return $this->_modelClassName::all();
     }
 
     /**

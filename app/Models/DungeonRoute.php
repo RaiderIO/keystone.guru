@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property $id int The ID of this DungeonRoute.
+ * @property $dungeon_id int .
  * @property $faction string The faction that is assigned to this route.
  */
 class DungeonRoute extends Model
@@ -13,15 +14,15 @@ class DungeonRoute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function expansion(){
-        return $this->belongsTo('App\Models\Expansion');
+    public function dungeon(){
+        return $this->belongsTo('App\Models\Dungeon');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function floors(){
-        return $this->hasMany('App\Models\Floor');
+    public function author(){
+        return $this->belongsTo('App\User');
     }
 
     /**
