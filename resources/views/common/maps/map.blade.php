@@ -10,30 +10,31 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
 ?>
 
 @section('head')
-    @if($isAdmin)
-        <style>
-            /* css to customize Leaflet default styles  */
-            .popupCustom .leaflet-popup-tip,
-            .popupCustom .leaflet-popup-content-wrapper {
-                background: #e0e0e0;
-                color: #234c5e;
-            }
+    {{-- Make sure we don't override the head of the page this thing is included in --}}
+    @parent
 
-            .enemy_edit_popup_npc {
-                width: 300px;
-            }
+    <style>
+        /* css to customize Leaflet default styles  */
+        .popupCustom .leaflet-popup-tip,
+        .popupCustom .leaflet-popup-content-wrapper {
+            background: #e0e0e0;
+            color: #234c5e;
+        }
 
-            #map_controls_hide_enemies.map_controls_custom {
-                width: 50px;
-                background-image: none;
-            }
+        .enemy_edit_popup_npc {
+            width: 300px;
+        }
 
-            #map_controls_hide_enemy_packs.map_controls_custom {
-                width: 50px;
-                background-image: none;
-            }
-        </style>
-    @endif
+        #map_controls_hide_enemies.map_controls_custom {
+            width: 50px;
+            background-image: none;
+        }
+
+        #map_controls_hide_enemy_packs.map_controls_custom {
+            width: 50px;
+            background-image: none;
+        }
+    </style>
 @endsection
 
 @section('scripts')
@@ -41,26 +42,8 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
     @parent
 
     <script>
-        let _dungeonData = [
-                @foreach ($dungeons as $dungeon)
-                {{-- @var $dungeon \App\Models\Dungeon --}}
-            {
-                "id": "{{ $dungeon->id }}",
-                "key": "{{ strtolower(str_replace(" ", "", $dungeon->name)) }}",
-                "name": "{{ $dungeon->name }}",
-                "floors": [
-                        @foreach ($dungeon->floors as $floor)
-                    {
-                        "id": "{{ $floor->id }}",
-                        "index": "{{ $floor->index }}",
-                        "name": "{{ $floor->name }}"
-                    },
-                    @endforeach
-                ]
-            },
-            @endforeach
-        ];
-
+        // Data of the dungeon(s) we're selecting in the map
+        let _dungeonData = JSON.parse(atob('<?php echo base64_encode(json_encode($dungeons)); ?>'));
         let _switchDungeonSelect = "#map_dungeon_selection";
         let _switchDungeonFloorSelect = "#map_floor_selection";
 
@@ -127,7 +110,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
                 // Add new ones
                 $.each(_dungeonData, function (index, dungeon) {
                     // Find the dungeon..
-                    if (dungeon.id === $(_switchDungeonSelect).val()) {
+                    if (parseInt(dungeon.id) === parseInt($(_switchDungeonSelect).val())) {
                         // Add each new floor to the select
                         $.each(dungeon.floors, function (index, floor) {
                             // Reconstruct the dungeon floor select

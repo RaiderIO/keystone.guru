@@ -36,6 +36,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/admin/adminenemy.js',
         'resources/assets/js/custom/admin/adminenemypack.js',
         // Include the rest
+        'resources/assets/js/custom/dungeonroutesetup.js',
         // 'resources/assets/js/custom/**/*.js'
     ], 'public/js/custom.js');
 // .combine(, 'public/js/custom.js');

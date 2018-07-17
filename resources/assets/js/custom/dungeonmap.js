@@ -122,7 +122,7 @@ class DungeonMap extends Signalable {
     getDungeonDataById(id) {
         let result = false;
         $.each(this.dungeonData, function (index, value) {
-            if (value.id === id) {
+            if (parseInt(value.id) === parseInt(id)) {
                 result = value;
                 return false;
             }
@@ -144,7 +144,7 @@ class DungeonMap extends Signalable {
             // Iterate over the found floors
             $.each(dungeon.floors, function (index, value) {
                 // Find the floor we're looking for
-                if (value.id === floorId) {
+                if (parseInt(value.id) === parseInt(floorId)) {
                     result = value;
                     return false;
                 }

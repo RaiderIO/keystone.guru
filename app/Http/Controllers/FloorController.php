@@ -27,10 +27,9 @@ class FloorController extends BaseController
 
     private function _setDungeonVariable($dungeonId)
     {
-        // Override so we can set the
-        $this->_setVariables(array(
-            'dungeon' => Dungeon::findOrFail($dungeonId)
-        ));
+        $this->_addVariable(
+            'dungeon', Dungeon::findOrFail($dungeonId)
+        );
     }
 
     /**
@@ -106,6 +105,8 @@ class FloorController extends BaseController
      * @throws \Exception
      */
     public function update(FloorFormRequest $request, $id){
+        $this->_addVariable('npcs', Npc::all());
+
         return parent::_update($request, $id);
     }
 

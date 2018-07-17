@@ -25,6 +25,14 @@ class DungeonRouteController extends BaseController
         return __('Edit dungeonroute');
     }
 
+    /**
+     * Redirect new to a 'new' page, since the new page is different from the edit page in this case.
+     * @return string
+     */
+    protected function _getNewActionView(){
+        return 'new';
+    }
+
     public function new()
     {
         $this->_addVariable("dungeons", Dungeon::all());

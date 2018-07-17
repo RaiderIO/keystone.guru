@@ -37,9 +37,10 @@ abstract class BaseController extends Controller
     /**
      * @return string The prefix to prepend to any routes that are called for this model.
      */
-    private function _getRoutePrefix(){
+    private function _getRoutePrefix()
+    {
         $result = '';
-        if( !empty($this->_routePrefix) ){
+        if (!empty($this->_routePrefix)) {
             $result = sprintf("%s.", $this->_routePrefix);
         }
         return $result;
@@ -57,12 +58,23 @@ abstract class BaseController extends Controller
         return $model;
     }
 
-    protected function _setVariables(array $variables){
+    protected function _setVariables(array $variables)
+    {
         $this->_variables = $variables;
     }
 
-    protected function _addVariable($key, $value){
+    protected function _addVariable($key, $value)
+    {
         $this->_variables[$key] = $value;
+    }
+
+    /**
+     * Override the new action view.
+     * @return string String with the name of the new action's view.
+     */
+    protected function _getNewActionView()
+    {
+        return 'edit';
     }
 
     /**
@@ -97,7 +109,8 @@ abstract class BaseController extends Controller
      *
      * @return \Illuminate\Database\Eloquent\Collection|Model[]
      */
-    protected function _getViewModels(){
+    protected function _getViewModels()
+    {
         return $this->_modelClassName::all();
     }
 
@@ -125,7 +138,7 @@ abstract class BaseController extends Controller
     {
         $headerTitle = $this->getNewHeaderTitle();
         return view(
-            sprintf('%s%s.edit', $this->_getRoutePrefix(), $this->_name),
+            sprintf('%s%s.%s', $this->_getRoutePrefix(), $this->_name, $this->_getNewActionView()),
             array_merge($this->_variables, compact('headerTitle'))
         );
     }

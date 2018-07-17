@@ -17,15 +17,13 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute.new');
 Route::post('dungeonroute/new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
+Route::get('dungeonroute/{id}', 'DungeonRouteController@edit')->name('dungeonroute.edit');
+Route::patch('dungeonroute/{id}', 'DungeonRouteController@update')->name('dungeonroute.update');
+Route::get('dungeonroutes', 'DungeonRouteController@view')->name('dungeonroutes');
 
 // ['auth', 'role:admin|user']
 
 Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
-    Route::get('dungeonroute/{id}', 'DungeonRouteController@edit')->name('dungeonroute.edit');
-
-    Route::patch('dungeonroute/{id}', 'DungeonRouteController@update')->name('dungeonroute.update');
-
-    Route::get('dungeonroutes', 'DungeonRouteController@view')->name('dungeonroutes');
 });
 
 Route::group(['middleware' => ['auth', 'role:admin']], function () {
