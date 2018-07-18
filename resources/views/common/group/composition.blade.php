@@ -39,22 +39,24 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get()->toArray();
     {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
     {!! Form::select('faction', array_combine(config('mpplnr.factions'), config('mpplnr.factions')), 0, ['class' => 'form-control selectpicker']) !!}
 </div>
-<div class="form-group">
-    <?php for($i = 1; $i <= config('mpplnr.party_size'); $i++){ ?>
-    <div class="col-lg-2{{ $i === 1 ? ' col-lg-offset-1' : '' }}">
+<?php for($i = 1; $i <= config('mpplnr.party_size'); $i++){ ?>
+<div class="col-lg-2{{ $i === 1 ? ' col-lg-offset-1' : '' }}">
+    <div class="form-group">
         {!! Form::label('race[]', __('Party member #' . $i)) !!}
         <select name="race[]" class="form-control selectpicker raceselect" data-id="{{$i}}">
 
         </select>
+    </div>
 
+    <div class="form-group">
         {{--{!! Form::select('class[]', [-1 => __('Class...')], 0,--}}
         {{--['id' => 'class_' . $i, 'class' => 'form-control selectpicker', 'data-id' => $i]) !!}--}}
         <select name="class[]" class="form-control selectpicker classselect" data-id="{{$i}}">
 
         </select>
     </div>
-    <?php } ?>
 </div>
+<?php } ?>
 
 <div id="template_dropdown_icon" style="display: none;">
         <span>

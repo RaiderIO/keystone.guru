@@ -5,7 +5,7 @@
     @parent
 
     <style>
-        #group_composition_toggle {
+        #settings_toggle {
             cursor: pointer;
             border: #d3e0e9 solid 1px;
 
@@ -26,20 +26,25 @@
 
     <script>
         $(function () {
-            let $groupComposition = $('#group_composition');
-            $groupComposition.on('hide.bs.collapse', function (e) {
-                let $caret = $("#group_composition_caret");
+            let $settings = $('#settings');
+            $settings.on('hide.bs.collapse', function (e) {
+                let $caret = $("#settings_caret");
                 $caret.removeClass('fa-caret-up');
                 $caret.addClass('fa-caret-down');
             });
 
-            $groupComposition.on('show.bs.collapse', function (e) {
-                console.log()
-                let $caret = $("#group_composition_caret");
+            $settings.on('show.bs.collapse', function (e) {
+                let $caret = $("#settings_caret");
                 $caret.removeClass('fa-caret-down');
                 $caret.addClass('fa-caret-up');
             });
+
+
         });
+
+        function _saveSettings(){
+
+        }
     </script>
 @endsection
 
@@ -60,15 +65,25 @@
                 ])
             </div>
 
-            <div id="group_composition_toggle" class="col-lg-12 text-center btn btn-default" data-toggle="collapse"
-                 data-target="#group_composition">
+            <div id="settings_toggle" class="col-lg-12 text-center btn btn-default" data-toggle="collapse"
+                 data-target="#settings">
                 <h4>
-                    Group composition <i id="group_composition_caret" class="fa fa-caret-down"></i>
+                    Settings <i id="settings_caret" class="fa fa-caret-down"></i>
                 </h4>
             </div>
 
-            <div id="group_composition" class="col-lg-12 collapse">
+            <div id="settings" class="col-lg-12 collapse">
+                {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
                 @include('common.group.composition')
+
+                <div class="form-group">
+                    <div id="save_settings" class="col-lg-12 btn btn-success">
+                        <i class="fa fa-save"></i> {{ __('Save settings') }}
+                    </div>
+                </div>
+
+                {!! Form::button(__('Save settings'), ['id' => 'save_settings', 'class' => 'btn btn-success', 'type' => 'submit']) !!}
+                {!! Form::close() !!}
             </div>
 
         </div>
