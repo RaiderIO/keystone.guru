@@ -43,7 +43,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
 
     <script>
         // Data of the dungeon(s) we're selecting in the map
-        let _dungeonData = JSON.parse(atob('<?php echo base64_encode(json_encode($dungeons)); ?>'));
+        let _dungeonData = {!! $dungeons !!};
         let _switchDungeonSelect = "#map_dungeon_selection";
         let _switchDungeonFloorSelect = "#map_floor_selection";
 

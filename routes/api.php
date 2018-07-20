@@ -23,5 +23,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/enemies', 'APIEnemyController@list');
         Route::post('/enemy', 'APIEnemyController@store');
         Route::delete('/enemy', 'APIEnemyController@delete');
+
+        Route::patch('/dungeonroute/{id}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
     // });
 });

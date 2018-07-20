@@ -39,11 +39,32 @@
                 $caret.addClass('fa-caret-up');
             });
 
-
+            $("#save_settings").bind('click', _saveSettings);
         });
 
-        function _saveSettings(){
-
+        function _saveSettings() {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('api.dungeonroute.update', $model->id) }}',
+                dataType: 'json',
+                data: {
+                    faction: $("#faction").val(),
+                    race:
+                        $(".raceselect select").map(function () {
+                            return $(this).val();
+                        }).get()
+                    ,
+                    class:
+                        $(".raceselect select").map(function () {
+                            return $(this).val();
+                        }).get()
+                    ,
+                    _method: 'PATCH'
+                },
+                success: function (json) {
+                    console.log(json);
+                }
+            });
         }
     </script>
 @endsection
@@ -68,22 +89,18 @@
             <div id="settings_toggle" class="col-lg-12 text-center btn btn-default" data-toggle="collapse"
                  data-target="#settings">
                 <h4>
-                    Settings <i id="settings_caret" class="fa fa-caret-down"></i>
+                    <i class="fa fa-cog"></i> {{ __('Settings') }} <i id="settings_caret" class="fa fa-caret-down"></i>
                 </h4>
             </div>
 
             <div id="settings" class="col-lg-12 collapse">
-                {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
-                @include('common.group.composition')
+                @include('common.group.composition', ['dungeonroute' => $model])
 
                 <div class="form-group">
-                    <div id="save_settings" class="col-lg-12 btn btn-success">
+                    <div id="save_settings" class="col-lg-offset-5 col-lg-2 btn btn-success">
                         <i class="fa fa-save"></i> {{ __('Save settings') }}
                     </div>
                 </div>
-
-                {!! Form::button(__('Save settings'), ['id' => 'save_settings', 'class' => 'btn btn-success', 'type' => 'submit']) !!}
-                {!! Form::close() !!}
             </div>
 
         </div>

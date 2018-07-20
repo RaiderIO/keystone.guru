@@ -21,34 +21,32 @@
         {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $dungeon->id]]) }}
     @endisset
 
-    <div class="container">
-        <div class="form-group">
-            {!! Form::label('dungeon', __('Dungeon')) !!}
-            {!! Form::select('dungeon', [$dungeon->id => $dungeon->name], null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
-        </div>
-
-        <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
-            {!! Form::label('index', __('Index')) !!}
-            {!! Form::text('index', null, ['class' => 'form-control']) !!}
-            @include('common.forms.form-error', ['key' => 'index'])
-        </div>
-
-        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-            {!! Form::label('name', __('Floor name')) !!}
-            {!! Form::text('name', null, ['class' => 'form-control']) !!}
-            @include('common.forms.form-error', ['key' => 'name'])
-        </div>
-
-        <div class="form-group">
-            {!! Form::label('connectedfloors[]', __('Connected floors')) !!}
-            {!! Form::select('connectedfloors[]', $floors->pluck('name', 'id'), isset($model) ? $model->connectedFloors()->pluck('id')->all() : null,
-                ['multiple' => 'multiple', 'class' => 'form-control']) !!}
-        </div>
-
-        {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
-
-        {!! Form::close() !!}
+    <div class="form-group">
+        {!! Form::label('dungeon', __('Dungeon')) !!}
+        {!! Form::select('dungeon', [$dungeon->id => $dungeon->name], null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
     </div>
+
+    <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
+        {!! Form::label('index', __('Index')) !!}
+        {!! Form::text('index', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'index'])
+    </div>
+
+    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+        {!! Form::label('name', __('Floor name')) !!}
+        {!! Form::text('name', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'name'])
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('connectedfloors[]', __('Connected floors')) !!}
+        {!! Form::select('connectedfloors[]', $floors->pluck('name', 'id'), isset($model) ? $model->connectedFloors()->pluck('id')->all() : null,
+            ['multiple' => 'multiple', 'class' => 'form-control']) !!}
+    </div>
+
+    {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+
+    {!! Form::close() !!}
 
     @isset($model)
         <h3>Enemy placement</h3>

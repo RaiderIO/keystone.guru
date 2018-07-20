@@ -18,6 +18,8 @@ class Dungeon extends Model
      */
     protected $appends = ['key'];
 
+    public $hidden = ['expansion_id', 'created_at', 'updated_at'];
+
     /**
      * @return string The key as used in the front-end to identify the dungeon.
      */

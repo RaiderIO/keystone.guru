@@ -15,7 +15,7 @@ class CreateDungeonRoutePlayerClassesTable extends Migration
     {
         Schema::create('dungeon_route_player_classes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('dungeonroute_id');
+            $table->integer('dungeon_route_id');
             $table->integer('class_id');
             $table->integer('index');
             $table->timestamps();

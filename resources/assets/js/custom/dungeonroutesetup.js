@@ -47,9 +47,11 @@ function _factionChanged() {
 
     let newFaction = $("#faction").val();
     let $raceSelect = $("select.raceselect");
+    let $classSelect = $("select.classselect");
 
     // Remove all existing options
     $raceSelect.find('option').remove();
+    $classSelect.find('option').remove();
 
     // Re-fill the races
     $raceSelect.append(jQuery('<option>', {
@@ -59,7 +61,6 @@ function _factionChanged() {
 
     for (let i = 0; i < _racesClasses.length; i++) {
         let raceClass = _racesClasses[i];
-        console.log(raceClass.faction, newFaction);
         if (raceClass.faction === newFaction) {
             $raceSelect.append(jQuery('<option>', {
                 value: raceClass.id,
@@ -77,10 +78,8 @@ function _raceChanged() {
     console.log(">> _raceChanged");
 
     let $raceSelect = $(this);
-    console.log($raceSelect[0]);
     let raceId = parseInt($raceSelect.val());
     let $classSelect = $(".classselect").find("[data-id='" + $raceSelect.data('id') + "']");
-    console.log($classSelect[0]);
 
     $classSelect.find('option').remove();
 

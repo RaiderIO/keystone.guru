@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property $id int
- * @property $dungeonroute_id int
+ * @property $dungeon_route_id int
  * @property $class_id int
  * @property $index int
  */
 class DungeonRoutePlayerClass extends Model
 {
+
+    public $hidden = ['id', 'dungeon_route_id', 'created_at', 'updated_at'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

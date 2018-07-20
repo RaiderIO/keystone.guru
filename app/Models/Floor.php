@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Floor extends Model
 {
-    public $hidden = ['created_at', 'updated_at'];
+    public $hidden = ['dungeon_id', 'created_at', 'updated_at'];
 
     public function dungeon()
     {
