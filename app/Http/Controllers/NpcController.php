@@ -30,22 +30,6 @@ class NpcController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function new()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     {
         // Override so we can set the classifications for the edit page
         $this->_setVariables(array(

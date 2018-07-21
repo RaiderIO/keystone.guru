@@ -40,12 +40,21 @@ $(function () {
     $(".selectpicker").selectpicker({
         showIcon: true
     });
+
+    // Add icons to the faction dropdown
+    $.each($("#faction option"), function(index, value){
+        console.log(index, value);
+        let faction = _factions[index];
+        $(value).data('content', $("#template_dropdown_icon").html()
+                        .replace('src=""', 'src="../../images/' + faction.iconfile.path + '"')
+                        .replace('{text}', faction.name));
+    });
 });
 
 function _factionChanged() {
     console.log(">> _factionChanged");
 
-    let newFaction = $("#faction").val();
+    let newFaction = parseInt($("#faction").val());
     let $raceSelect = $("select.raceselect");
     let $classSelect = $("select.classselect");
 
@@ -61,7 +70,7 @@ function _factionChanged() {
 
     for (let i = 0; i < _racesClasses.length; i++) {
         let raceClass = _racesClasses[i];
-        if (raceClass.faction === newFaction) {
+        if (raceClass.faction_id === newFaction) {
             $raceSelect.append(jQuery('<option>', {
                 value: raceClass.id,
                 text: raceClass.name

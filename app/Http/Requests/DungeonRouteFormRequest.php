@@ -26,7 +26,7 @@ class DungeonRouteFormRequest extends FormRequest
     {
         return [
             'dungeon' => ['required', Rule::exists('dungeons', 'id')],
-            'faction' => ['required', Rule::in(config('mpplnr.factions'))],
+            'faction' => ['required', Rule::exists('factions', 'id')],
 
             'race' => 'nullable|array',
             'class' => 'nullable|array',

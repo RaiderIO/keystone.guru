@@ -1,5 +1,6 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
+$factions = \App\Models\Faction::with('iconfile')->get();
 $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
 $classes = \App\Models\CharacterClass::with('iconfile')->get();
 ?>
@@ -12,6 +13,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
             width: 24px;
             border-radius: 12px;
             background-color: #1d3131;
+            max-height: 24px;
         }
     </style>
 @endsection
@@ -20,6 +22,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
     @parent
 
     <script>
+        let _factions = {!! $factions !!};
         let _racesClasses = {!! $racesClasses !!};
         let _classDetails = {!! $classes !!};
 
@@ -39,7 +42,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         function _loadDungeonRouteDefaults() {
                     @isset($dungeonroute)
 
-            let faction = '{{ $dungeonroute->faction }}';
+            let faction = '{{ $dungeonroute->faction_id }}';
             let races = {!! $dungeonroute->races !!};
             let classes = {!! $dungeonroute->classes !!};
 
@@ -82,7 +85,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         <div class="form-group">
             {!! Form::label('faction', __('Select faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
-            {!! Form::select('faction', array_combine(config('mpplnr.factions'), config('mpplnr.factions')), 0, ['class' => 'form-control selectpicker']) !!}
+            {!! Form::select('faction', \App\Models\Faction::all()->pluck('name', 'id'), 0, ['class' => 'form-control selectpicker']) !!}
         </div>
     </div>
     @isset($dungeonroute)

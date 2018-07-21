@@ -18,7 +18,6 @@ class CreateDungeonRoutePlayerClassesTable extends Migration
             $table->integer('dungeon_route_id');
             $table->integer('class_id');
             $table->integer('index');
-            $table->timestamps();
         });
     }
 

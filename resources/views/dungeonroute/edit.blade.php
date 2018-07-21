@@ -55,7 +55,7 @@
                         }).get()
                     ,
                     class:
-                        $(".raceselect select").map(function () {
+                        $(".classselect select").map(function () {
                             return $(this).val();
                         }).get()
                     ,

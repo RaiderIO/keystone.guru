@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 class DungeonRoutePlayerRace extends Model
 {
 
-    public $hidden = ['id', 'dungeon_route_id', 'created_at', 'updated_at'];
+    public $hidden = ['id', 'dungeon_route_id'];
+
+    public $timestamps = false;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
