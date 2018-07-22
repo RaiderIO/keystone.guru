@@ -11,27 +11,20 @@
     <script type="text/javascript">
         $(function () {
             $('#admin_expansion_table').DataTable({
-                columns: [
-                    {data: 'id'},
-                    {data: 'name'},
-                    {data: 'icon'},
-                    {data: 'color'},
-                    {data: 'actions'}
-                ]
             });
         });
     </script>
 @endsection
 
 @section('content')
-    <table id="admin_expansion_table" class="tablesorter">
+    <table id="admin_expansion_table" class="tablesorter default_table">
         <thead>
         <tr>
-            <th>{{ __('Icon') }}</th>
-            <th>{{ __('Id') }}</th>
-            <th>{{ __('Name') }}</th>
-            <th>{{ __('Color') }}</th>
-            <th>{{ __('Actions') }}</th>
+            <th width="10%">{{ __('Icon') }}</th>
+            <th width="10%">{{ __('Id') }}</th>
+            <th width="50%">{{ __('Name') }}</th>
+            <th width="20%">{{ __('Color') }}</th>
+            <th width="10%">{{ __('Actions') }}</th>
         </tr>
         </thead>
 

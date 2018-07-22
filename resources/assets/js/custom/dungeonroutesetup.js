@@ -45,7 +45,7 @@ $(function () {
     $.each($("#faction option"), function(index, value){
         console.log(index, value);
         let faction = _factions[index];
-        $(value).data('content', $("#template_dropdown_icon").html()
+        $(value).data('content', $("#template_faction_dropdown_icon").html()
                         .replace('src=""', 'src="../../images/' + faction.iconfile.path + '"')
                         .replace('{text}', faction.name));
     });
@@ -115,7 +115,7 @@ function _raceChanged() {
                 $classSelect.append(jQuery('<option>', {
                     value: classDetail.id, //zzz
                     text: classDetail.name,
-                    'data-content': $("#template_dropdown_icon").html()
+                    'data-content': $("#template_class_dropdown_icon").html()
                         .replace('src=""', 'src="../../images/' + classDetail.iconfile.path + '"')
                         .replace('{text}', classDetail.name)
                 }));
@@ -180,5 +180,6 @@ function _handleButtonVisibility() {
         $("#finish").removeClass('hidden');
     } else {
         $("#next").removeClass('hidden');
+        $("#finish").addClass('hidden');
     } //
 }

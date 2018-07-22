@@ -58,6 +58,10 @@ class MapControls {
             return new L.Control.Statusbar(opts);
         };
 
-        L.control.statusbar({position: 'topright'}).addTo(this.map.leafletMap);
+        this.layer = L.control.statusbar({position: 'topright'}).addTo(this.map.leafletMap);
+    }
+
+    cleanup() {
+        this.map.leafletMap.removeControl(this.layer);
     }
 }

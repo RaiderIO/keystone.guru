@@ -39,11 +39,8 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    &nbsp;<li>
-                        <a href="/">Test</a>
-                    </li>
                     <li>
-                        <a href="">Test 2</a>
+                        <a href="{{ route('dungeonroutes') }}">Routes</a>
                     </li>
                 </ul>
 
@@ -55,13 +52,23 @@
                         <li><a href="{{ route('register') }}">{{__('Register')}}</a></li>
                     @else
                         <li>
-                            <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
-                               role="button"><i class="fa fa-plus"></i> {{__('Create route')}}</a>
+                            <div style="padding: 7px">
+                                <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
+                                   role="button"><i class="fa fa-plus"></i> {{__('Create route')}}</a>
+                            </div>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-expanded="false">
-                                {{ Auth::user()->name }} <span class="caret"></span>
+                                <div class="username_menu">
+                                    <div class="pull-left user_icon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <div class="pull-left">
+                                        {{ Auth::user()->name }}
+                                    </div>
+                                    <span class="caret"></span>
+                                </div>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
@@ -74,6 +81,9 @@
                                 @if( Auth::user()->can('read-npcs') )
                                     <li><a href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a></li>
                                 @endif
+                                <li>
+                                    <a href="#">My profile</a>
+                                </li>
                                 <li>
                                     <a href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -92,11 +102,11 @@
             </div>
         </div>
     </nav>
-    <div class="container<?php echo (isset($wide) && $wide ? "-fluid" : ""); ?>">
+    <div class="container<?php echo(isset($wide) && $wide ? "-fluid" : ""); ?>">
         <div class="row">
-            <div class="<?php echo (isset($wide) && $wide ? "col-md-12" : "col-md-8 col-md-offset-2"); ?>">
+            <div class="<?php echo(isset($wide) && $wide ? "col-md-12" : "col-md-8 col-md-offset-2"); ?>">
                 <div class="panel panel-default ">
-                    <div class="panel-heading <?php echo (isset($wide) && $wide ? "panel-heading-wide" : ""); ?>">
+                    <div class="panel-heading <?php echo(isset($wide) && $wide ? "panel-heading-wide" : ""); ?>">
                         @yield('header-title')
                     </div>
 

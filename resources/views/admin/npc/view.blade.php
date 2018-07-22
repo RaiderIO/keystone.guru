@@ -30,15 +30,15 @@
 @endsection
 
 @section('content')
-    <table id="admin_npc_table" class="tablesorter">
+    <table id="admin_npc_table" class="tablesorter default_table">
         <thead>
         <tr>
-            <th>{{ __('Id') }}</th>
-            <th>{{ __('Name') }}</th>
-            <th>{{ __('Classification') }}</th>
-            <th>{{ __('Base health') }}</th>
-            <th>{{ __('Game ID') }}</th>
-            <th>{{ __('Actions') }}</th>
+            <th width="10%">{{ __('Id') }}</th>
+            <th width="40%">{{ __('Name') }}</th>
+            <th width="10%">{{ __('Classification') }}</th>
+            <th width="10%">{{ __('Base health') }}</th>
+            <th width="10%">{{ __('Game ID') }}</th>
+            <th width="10%">{{ __('Actions') }}</th>
         </tr>
         </thead>
 

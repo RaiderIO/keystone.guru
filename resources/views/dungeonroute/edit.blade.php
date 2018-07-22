@@ -94,6 +94,8 @@
             </div>
 
             <div id="settings" class="col-lg-12 collapse">
+
+
                 @include('common.group.composition', ['dungeonroute' => $model])
 
                 <div class="form-group">

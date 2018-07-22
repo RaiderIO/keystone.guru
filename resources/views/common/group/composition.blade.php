@@ -9,11 +9,14 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
     @parent
 
     <style>
-        .class_icon {
+        .icon {
             width: 24px;
             border-radius: 12px;
-            background-color: #1d3131;
             max-height: 24px;
+        }
+
+        .class_icon {
+            background-color: #1d3131;
         }
     </style>
 @endsection
@@ -77,9 +80,9 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
     </script>
 @endsection
 
-<h2>
+<h3>
     {{ __('Group composition') }}
-</h2>
+</h3>
 <div class="col-lg-12">
     <div class="col-lg-offset-5 col-lg-2">
         <div class="form-group">
@@ -117,8 +120,14 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 </div>
 <?php } ?>
 
-<div id="template_dropdown_icon" style="display: none;">
+<div id="template_faction_dropdown_icon" style="display: none;">
         <span>
-            <img src="" class="class_icon"/> {text}
+            <img src="" class="icon faction_icon"/> {text}
+        </span>
+</div>
+
+<div id="template_class_dropdown_icon" style="display: none;">
+        <span>
+            <img src="" class="icon class_icon"/> {text}
         </span>
 </div>

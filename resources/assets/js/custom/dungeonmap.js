@@ -198,6 +198,9 @@ class DungeonMap extends Signalable {
         this.setEnemiesVisibility(true);
         this.setEnemyPacksVisibility(true);
 
+        if( this.mapControls !== null ){
+            this.mapControls.cleanup();
+        }
         this.mapControls = new MapControls(this);
 
         // Refresh the packs on the map; re-add them

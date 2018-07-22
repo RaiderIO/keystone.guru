@@ -16,12 +16,6 @@
 <script type="text/javascript">
     $(function () {
         $('#admin_dungeon_floor_table').DataTable({
-            columns: [
-                {data: 'id'},
-                {data: 'index'},
-                {data: 'name'},
-                {data: 'actions'}
-            ]
         });
     });
 </script>
@@ -57,13 +51,13 @@
     <i class="fa fa-plus"></i> {{ __('Add floor') }}
 </a>
 
-<table id="admin_dungeon_floor_table" class="tablesorter">
+<table id="admin_dungeon_floor_table" class="tablesorter default_table">
     <thead>
     <tr>
-        <th>{{ __('Id') }}</th>
-        <th>{{ __('Index') }}</th>
-        <th>{{ __('Name') }}</th>
-        <th>{{ __('Actions') }}</th>
+        <th width="10%">{{ __('Id') }}</th>
+        <th width="10%">{{ __('Index') }}</th>
+        <th width="70%">{{ __('Name') }}</th>
+        <th width="10%">{{ __('Actions') }}</th>
     </tr>
     </thead>
 
