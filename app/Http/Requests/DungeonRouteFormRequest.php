@@ -25,6 +25,7 @@ class DungeonRouteFormRequest extends FormRequest
     public function rules()
     {
         return [
+            'title' => 'required|string|min:3|max:255',
             'dungeon' => ['required', Rule::exists('dungeons', 'id')],
             'faction' => ['required', Rule::exists('factions', 'id')],
 

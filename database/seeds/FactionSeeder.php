@@ -18,9 +18,9 @@ class FactionSeeder extends Seeder
         $this->command->info('Adding known factions');
 
         $factions = [
-            new Faction(['name' => 'Unspecified', 'icon_file_id' => -1]),
-            new Faction(['name' => 'Horde', 'icon_file_id' => -1]),
-            new Faction(['name' => 'Alliance', 'icon_file_id' => -1])
+            new Faction(['name' => 'Unspecified', 'icon_file_id' => -1, 'color' =>'gray']),
+            new Faction(['name' => 'Horde', 'icon_file_id' => -1, 'color' => 'red']),
+            new Faction(['name' => 'Alliance', 'icon_file_id' => -1, 'color' => 'blue'])
         ];
 
         foreach($factions as $faction){

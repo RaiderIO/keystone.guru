@@ -13,9 +13,6 @@ class DungeonsSeeder extends Seeder
     {
         $this->command->info('Adding known dungeons');
 
-//        $dungeon = new App\Models\Expansion([
-//            'name' => 'Legion',
-//            'color' => '#27ff0f'
-//        ]);
+
     }
 }

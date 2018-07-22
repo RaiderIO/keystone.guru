@@ -18,6 +18,14 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         .class_icon {
             background-color: #1d3131;
         }
+
+        @foreach($factions as $faction)
+        .{{ strtolower($faction->name) }} {
+            color: {{ $faction->color }};
+            font-weight: bold;
+        }
+        @endforeach
+
     </style>
 @endsection
 
@@ -121,13 +129,13 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 <?php } ?>
 
 <div id="template_faction_dropdown_icon" style="display: none;">
-        <span>
-            <img src="" class="icon faction_icon"/> {text}
-        </span>
+    <span class="placeholder">
+        <img src="" class="icon faction_icon"/> {text}
+    </span>
 </div>
 
 <div id="template_class_dropdown_icon" style="display: none;">
-        <span>
-            <img src="" class="icon class_icon"/> {text}
-        </span>
+    <span class="placeholder">
+        <img src="" class="icon class_icon"/> {text}
+    </span>
 </div>

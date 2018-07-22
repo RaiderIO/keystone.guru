@@ -13,8 +13,7 @@
 @section('scripts')
 <script type="text/javascript">
     $(function () {
-        $('#routes_table').DataTable({
-        });
+        $('#routes_table').DataTable({});
     });
 </script>
 @endsection
@@ -23,11 +22,12 @@
 <table id="routes_table" class="tablesorter default_table">
     <thead>
     <tr>
-        <th width="50%">{{ __('Name') }}</th>
+        <th width="40%">{{ __('Title') }}</th>
         <th width="15%">{{ __('Dungeon') }}</th>
         <th width="10%">{{ __('Affixes') }}</th>
         <th width="10%">{{ __('Setup') }}</th>
         <th width="10%">{{ __('Author') }}</th>
+        <th width="10%">{{ __('Rating') }}</th>
         <th width="5%">{{ __('Actions') }}</th>
     </tr>
     </thead>
@@ -35,11 +35,12 @@
     <tbody>
     @foreach ($models->all() as $route)
     <tr>
-        <td>{{ $route->name }}</td>
+        <td>{{ $route->title }}</td>
         <td>{{ $route->dungeon->name }}</td>
         <td>{{ $route->affixes }}</td>
         <td>{{ $route->setup }}</td>
         <td>{{ $route->author->name }}</td>
+        <td>{{ $route->rating }}</td>
         <td>
             <a class="btn btn-primary" href="{{ route('dungeonroute.edit', ['id' => $route->id]) }}">
                 <i class="fa fa-pencil"></i>&nbsp;{{ __('Edit') }}

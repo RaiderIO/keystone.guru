@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $author_id int
  * @property $dungeon_id int
  * @property $faction_id int
+ * @property $title string
  */
 class DungeonRoute extends Model
 {
