@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class APIDungeonRouteController extends Controller
 {
+    function list(Request $request)
+    {
+        $floorId = $request->get('floor_id');
+        return DungeonRoute::all()->where('floor_id', '=', $floorId);
+    }
+
     /**
      * @param Request $request
      * @param int $id
@@ -25,6 +31,7 @@ class APIDungeonRouteController extends Controller
         }
         $dungeonroute->dungeon_id = $request->get('dungeon', $dungeonroute->dungeon_id);
         $dungeonroute->faction_id = $request->get('faction', $dungeonroute->faction_id);
+        $dungeonroute->title = $request->get('title', $dungeonroute->title);
 
         // Update or insert it
         if ($dungeonroute->save()) {

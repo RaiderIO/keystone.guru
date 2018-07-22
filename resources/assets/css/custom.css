@@ -55,7 +55,13 @@
     width: 105px;
 }
 
-.user_icon  {
+.select_icon {
+    width: 24px;
+    border-radius: 12px;
+    max-height: 24px;
+}
+
+.user_icon {
     width: 22px;
     color: white;
     text-align: center;

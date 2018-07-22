@@ -9,18 +9,12 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
     @parent
 
     <style>
-        .icon {
-            width: 24px;
-            border-radius: 12px;
-            max-height: 24px;
-        }
-
         .class_icon {
             background-color: #1d3131;
         }
 
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }} {
+        .{{ strtolower($faction->name) }}  {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -39,7 +33,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 
         // Defined in dungeonroutesetup.js
         $(function () {
-            $("#reload_button").bind('click', function(e){
+            $("#reload_button").bind('click', function (e) {
                 e.preventDefault();
                 _loadDungeonRouteDefaults();
             });
@@ -87,10 +81,6 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         }
     </script>
 @endsection
-
-<h3>
-    {{ __('Group composition') }}
-</h3>
 <div class="col-lg-12">
     <div class="col-lg-offset-5 col-lg-2">
         <div class="form-group">
@@ -100,42 +90,44 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         </div>
     </div>
     @isset($dungeonroute)
-    <div class="col-lg-offset-4 col-lg-1">
-        <div class="form-group">
-            <button id="reload_button" class="btn btn-warning">
-                <i class="fa fa-undo"></i> {{ __('Reset') }}
-            </button>
+        <div class="col-lg-offset-4 col-lg-1">
+            <div class="form-group">
+                <button id="reload_button" class="btn btn-warning">
+                    <i class="fa fa-undo"></i> {{ __('Reset') }}
+                </button>
+            </div>
         </div>
-    </div>
     @endisset
 </div>
-<?php for($i = 1; $i <= config('mpplnr.party_size'); $i++){ ?>
-<div class="col-lg-2{{ $i === 1 ? ' col-lg-offset-1' : '' }}">
-    <div class="form-group">
-        {!! Form::label('race[]', __('Party member #' . $i)) !!}
-        <select name="race[]" id="race_{{ $i }}" class="form-control selectpicker raceselect" data-id="{{$i}}">
+<div class="col-lg-12">
+    <?php for($i = 1; $i <= config('mpplnr.party_size'); $i++){ ?>
+    <div class="col-lg-2{{ $i === 1 ? ' col-lg-offset-1' : '' }}">
+        <div class="form-group">
+            {!! Form::label('race[]', __('Party member #' . $i)) !!}
+            <select name="race[]" id="race_{{ $i }}" class="form-control selectpicker raceselect" data-id="{{$i}}">
 
-        </select>
+            </select>
+        </div>
+
+        <div class="form-group">
+            {{--{!! Form::select('class[]', [-1 => __('Class...')], 0,--}}
+            {{--['id' => 'class_' . $i, 'class' => 'form-control selectpicker', 'data-id' => $i]) !!}--}}
+            <select name="class[]" class="form-control selectpicker classselect" data-id="{{$i}}">
+
+            </select>
+        </div>
     </div>
-
-    <div class="form-group">
-        {{--{!! Form::select('class[]', [-1 => __('Class...')], 0,--}}
-        {{--['id' => 'class_' . $i, 'class' => 'form-control selectpicker', 'data-id' => $i]) !!}--}}
-        <select name="class[]" class="form-control selectpicker classselect" data-id="{{$i}}">
-
-        </select>
-    </div>
+    <?php } ?>
 </div>
-<?php } ?>
 
 <div id="template_faction_dropdown_icon" style="display: none;">
     <span class="placeholder">
-        <img src="" class="icon faction_icon"/> {text}
+        <img src="" class="select_icon faction_icon"/> {text}
     </span>
 </div>
 
 <div id="template_class_dropdown_icon" style="display: none;">
     <span class="placeholder">
-        <img src="" class="icon class_icon"/> {text}
+        <img src="" class="select_icon class_icon"/> {text}
     </span>
 </div>

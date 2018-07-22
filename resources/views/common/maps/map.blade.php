@@ -25,6 +25,11 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             width: 300px;
         }
 
+        #map {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
         #map_controls_hide_enemies.map_controls_custom {
             width: 50px;
             background-image: none;

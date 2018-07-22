@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(FactionSeeder::class);
         $this->call(CharacterInfoSeeder::class);
+
+        $this->call(AffixSeeder::class);
     }
 }

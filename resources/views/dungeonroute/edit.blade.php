@@ -13,11 +13,6 @@
             -moz-border-radius: 3px;
             border-radius: 3px;
         }
-
-        #map {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
     </style>
 @endsection
 
@@ -40,6 +35,20 @@
             });
 
             $("#save_settings").bind('click', _saveSettings);
+
+            $(".selectpicker").selectpicker({
+                showIcon: true
+            });
+
+            // Add icons to the faction dropdown
+            $.each($("#faction option"), function (index, value) {
+                let faction = _factions[index];
+                let html = $("#template_faction_dropdown_icon").html();
+                html = html.replace('src=""', 'src="../../images/' + faction.iconfile.path + '"')
+                    .replace('placeholder', faction.name.toLowerCase())
+                    .replace('{text}', faction.name);
+                $(value).data('content', html);
+            });
         });
 
         function _saveSettings() {
@@ -80,7 +89,7 @@
         <div class="col-lg-12">
             <div id="map_container col-lg-12">
                 @include('common.maps.map', [
-                // Use findMany rather than findOrFail; we need a collection in this parameter
+                    // Use findMany rather than findOrFail; we need a collection in this parameter
                     'dungeons' => \App\Models\Dungeon::findMany([$model->dungeon_id]),
                     'dungeonSelect' => false
                 ])
@@ -94,9 +103,19 @@
             </div>
 
             <div id="settings" class="col-lg-12 collapse">
-
+                <h3>
+                    {{ __('Group composition') }}
+                </h3>
 
                 @include('common.group.composition', ['dungeonroute' => $model])
+
+                <h3>
+                    {{ __('Affixes (optional)') }}
+                </h3>
+
+                <div class="container">
+                    @include('common.group.affixes')
+                </div>
 
                 <div class="form-group">
                     <div id="save_settings" class="col-lg-offset-5 col-lg-2 btn btn-success">

@@ -7,7 +7,7 @@
     @else
         {{ Form::open(['route' => 'dungeonroute.savenew']) }}
     @endisset
-    <div id="setup_container" class="container {{ isset($model) ? 'hidden' : '' }}">
+    <div class="container {{ isset($model) ? 'hidden' : '' }}">
         <h3>
             {{ __('General') }}
         </h3>
@@ -19,7 +19,17 @@
             {!! Form::label('dungeon', __('Select dungeon') . "*") !!}
             {!! Form::select('dungeon', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
         </div>
+
+        <h3>
+            {{ __('Group composition (optional)') }}
+        </h3>
         @include('common.group.composition')
+
+        <h3>
+            {{ __('Affixes (optional)') }}
+        </h3>
+
+        @include('common.group.affixes')
 
         <div class="col-lg-12">
             <div class="form-group">

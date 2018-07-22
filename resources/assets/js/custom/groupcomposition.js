@@ -2,17 +2,15 @@ $(function () {
     $("#faction").bind('change', _factionChanged);
     $(".raceselect").bind('change', _raceChanged);
 
-    $(".selectpicker").selectpicker({
-        showIcon: true
-    });
+    $(".selectpicker").selectpicker();
 
     // Add icons to the faction dropdown
-    $.each($("#faction option"), function(index, value){
+    $.each($("#faction option"), function (index, value) {
         let faction = _factions[index];
         let html = $("#template_faction_dropdown_icon").html();
         html = html.replace('src=""', 'src="../../images/' + faction.iconfile.path + '"')
-                        .replace('placeholder', faction.name.toLowerCase())
-                        .replace('{text}', faction.name);
+            .replace('placeholder', faction.name.toLowerCase())
+            .replace('{text}', faction.name);
         $(value).data('content', html);
     });
 });
@@ -67,32 +65,34 @@ function _raceChanged() {
         }
     }
 
-    console.assert(raceClass !== null, "RaceClass it not set (selected invalid class?)");
-
-    // Match the raceClass to the classDetails
-    for (let i = 0; i < raceClass.classes.length; i++) {
-        let rClass = raceClass.classes[i];
-        // Find the details
-        for (let j = 0; j < _classDetails.length; j++) {
-            let classDetail = _classDetails[j];
-            // If found
-            if (classDetail.id === rClass.id) {
-                // Display it
-                $classSelect.append(jQuery('<option>', {
-                    value: classDetail.id, //zzz
-                    text: classDetail.name,
-                    'data-content': $("#template_class_dropdown_icon").html()
-                        .replace('src=""', 'src="../../images/' + classDetail.iconfile.path + '"')
-                        .replace('{text}', classDetail.name)
-                }));
-                break;
+    // May be null if unspecified was set
+    if (raceClass !== null) {
+        // Match the raceClass to the classDetails
+        for (let i = 0; i < raceClass.classes.length; i++) {
+            let rClass = raceClass.classes[i];
+            // Find the details
+            for (let j = 0; j < _classDetails.length; j++) {
+                let classDetail = _classDetails[j];
+                // If found
+                if (classDetail.id === rClass.id) {
+                    // Display it
+                    $classSelect.append(jQuery('<option>', {
+                        value: classDetail.id, //zzz
+                        text: classDetail.name,
+                        'data-content': $("#template_class_dropdown_icon").html()
+                            .replace('src=""', 'src="../../images/' + classDetail.iconfile.path + '"')
+                            .replace('{text}', classDetail.name)
+                    }));
+                    break;
+                }
             }
         }
     }
 
+    // Refresh always; we removed options
     let $selectPicker = $('.selectpicker');
-    $selectPicker.selectpicker('refresh'); ///zzz
-    $selectPicker.selectpicker('render'); ///zzz
+    $selectPicker.selectpicker('refresh');
+    $selectPicker.selectpicker('render');
 
     // console.log("OK _raceChanged");
 }
