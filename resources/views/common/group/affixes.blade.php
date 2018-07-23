@@ -6,8 +6,12 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
 @section('head')
     <style>
         .affix_row {
-            width: 100px;
+            width: 120px;
             padding-right: 10px;
+        }
+
+        .affix_list_row {
+            padding-bottom: 10px;
         }
 
         .affixselect {
@@ -25,19 +29,14 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
 
 
         $(function () {
-            $affixesSelect = $('#affixes');
+            let $affixesSelect = $('#affixes');
+            $affixesSelect.bind('change', _refreshAffixesList);
+
             $.each(_affixGroups, function (index, group) {
-                console.log(index, group);
-                let affixes = getAffixes(group);
+                let affixes = _getAffixes(group);
                 // console.log(affixes);
 
-                let text = '';
-                for (let i = 0; i < affixes.length; i++) {
-                    let affix = affixes[i];
-                    text += $("#template_affix_dropdown_icon").html()
-                        .replace(/{text}/g, affix.name)
-                        .replace(/src=""/g, 'src="../images/' + affix.iconfile.path + '"')
-                }
+                let text = _getHtmlByAffixes(affixes, true);
 
                 // console.log(text);
 
@@ -54,12 +53,56 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
             $selectPicker.selectpicker('render');
         });
 
+        function _getHtmlByAffixes(affixes, select) {
+            let html = '';
+            for (let i = 0; i < affixes.length; i++) {
+                let affix = affixes[i];
+                html += $("#template_affix_dropdown_icon").html()
+                    .replace(/{text}/g, affix.name)
+                    .replace(/src=""/g, 'src="../images/' + affix.iconfile.path + '"')
+            }
+            return html;
+        }
+
+        function _refreshAffixesList() {
+            let $el = $("#affixes_list");
+            // Clear it completely
+            $el.html('');
+            // Get the current value
+            let affixGroupIds = $(this).val();
+            console.log(affixGroupIds);
+
+            // Add the new affixes to the div
+            $.each(affixGroupIds, function (index, affixGroupId) {
+                affixGroupId = parseInt(affixGroupId);
+                let affixGroup = _getAffixGroupById(affixGroupId);
+                let affixes = _getAffixes(affixGroup);
+                let $html = $("<div>").addClass('row col-lg-12 affix_list_row').html(
+                    _getHtmlByAffixes(affixes, false)
+                );
+                $el.append($html);
+            });
+        }
+
+        function _getAffixGroupById(id) {
+            let result = null;
+            $.each(_affixGroups, function (index, group) {
+                console.log(index, group);
+                if (group.id === id) {
+                    result = group;
+                    return false;
+                }
+            });
+
+            return result;
+        }
+
         /**
          * Finds all actual affix data from a list of IDs found in the group.
          * @param group
          * @returns {Array}
          */
-        function getAffixes(group) {
+        function _getAffixes(group) {
             let result = [];
 
             $.each(group.affixes, function (index, affix) {
@@ -81,9 +124,14 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
 
 <div class="col-lg-12">
     <div class="form-group">
-        <select name="affixes[]" id="affixes" class="form-control selectpicker affixselect" multiple data-selected-text-format="count > 2">
+        <select name="affixes[]" id="affixes" class="form-control selectpicker affixselect" multiple
+                data-selected-text-format="count > 2">
 
         </select>
+
+        <div id="affixes_list">
+
+        </div>
     </div>
 </div>
 
