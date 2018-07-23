@@ -31,7 +31,7 @@
 }
 
 .panel-heading {
-    font-size: 20px;
+    font-size: 28px;
 }
 
 .panel-heading-wide {
@@ -49,4 +49,27 @@
 
 .switch-dungeon-control {
     width: 400px;
+}
+
+.username_menu {
+    width: 105px;
+}
+
+.select_icon {
+    width: 24px;
+    border-radius: 12px;
+    max-height: 24px;
+}
+
+.user_icon {
+    width: 22px;
+    color: white;
+    text-align: center;
+    background-color: gray;
+    border-radius: 12px;
+    margin-right: 5px;
+}
+
+.default_table {
+    width: 100%;
 }

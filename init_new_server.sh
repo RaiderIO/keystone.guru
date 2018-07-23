@@ -10,6 +10,7 @@ mkdir storage/app/public/expansions
 # TODO: log folders writable?
 echo "Setting www-data ownership to some folders..."
 chown -R www-data:www-data storage/*
+chown -R www-data:www-data bootstrap/cache
 
 # ensure some other permissions
 echo "Ensuring file permissions..."

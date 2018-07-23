@@ -6,28 +6,29 @@
         <i class="fa fa-plus"></i> {{ __('Create dungeon') }}
     </a>
 @endsection
+<?php
+/**
+ * @var $models \App\Models\Dungeon
+ * @var $floor \App\Models\Floor
+ */
+?>
 
 @section('scripts')
 <script type="text/javascript">
     $(function () {
         $('#admin_dungeon_table').DataTable({
-            columns: [
-                {data: 'id'},
-                {data: 'name'},
-                {data: 'actions'}
-            ]
         });
     });
 </script>
 @endsection
 
 @section('content')
-<table id="admin_dungeon_table" class="tablesorter">
+<table id="admin_dungeon_table" class="tablesorter default_table">
     <thead>
     <tr>
-        <th>{{ __('Id') }}</th>
-        <th>{{ __('Name') }}</th>
-        <th>{{ __('Actions') }}</th>
+        <th width="10%">{{ __('Id') }}</th>
+        <th width="80%">{{ __('Name') }}</th>
+        <th width="10%">{{ __('Actions') }}</th>
     </tr>
     </thead>
 

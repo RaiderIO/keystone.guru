@@ -13,5 +13,13 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
         $this->call(LaratrustSeeder::class);
+
+        $this->call(ExpansionsSeeder::class);
+        $this->call(DungeonsSeeder::class);
+
+        $this->call(FactionSeeder::class);
+        $this->call(CharacterInfoSeeder::class);
+
+        $this->call(AffixSeeder::class);
     }
 }

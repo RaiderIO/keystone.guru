@@ -13,6 +13,11 @@ abstract class BaseController extends Controller
     private $_name;
 
     /**
+     * @var string The class name of the model that this controller is representing.
+     */
+    private $_modelClassName;
+
+    /**
      * @var string An optional prefix for the route.
      */
     private $_routePrefix;
@@ -22,29 +27,23 @@ abstract class BaseController extends Controller
      */
     private $_variables = array();
 
-    public function __construct($name, $routePrefix = '')
+    public function __construct($name, $modelClassName, $routePrefix = '')
     {
         $this->_name = $name;
+        $this->_modelClassName = $modelClassName;
         $this->_routePrefix = trim($routePrefix, '.');
     }
 
     /**
      * @return string The prefix to prepend to any routes that are called for this model.
      */
-    private function _getRoutePrefix(){
+    private function _getRoutePrefix()
+    {
         $result = '';
-        if( !empty($this->_routePrefix) ){
+        if (!empty($this->_routePrefix)) {
             $result = sprintf("%s.", $this->_routePrefix);
         }
         return $result;
-    }
-
-    /**
-     * Gets the fully qualified class name of the model this controller is describing
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    private function _getModelClassname(){
-        return sprintf("\App\Models\%s", ucfirst($this->_name));
     }
 
     /**
@@ -52,21 +51,30 @@ abstract class BaseController extends Controller
      */
     private function _getModelInstance()
     {
-        $className = $this->_getModelClassname();
-
-        $model = new $className();
+        $model = new $this->_modelClassName();
         // MUST be a model!
         assert($model instanceof Model);
 
         return $model;
     }
 
-    protected function _setVariables(array $variables){
+    protected function _setVariables(array $variables)
+    {
         $this->_variables = $variables;
     }
 
-    protected function _addVariable($key, $value){
+    protected function _addVariable($key, $value)
+    {
         $this->_variables[$key] = $value;
+    }
+
+    /**
+     * Override the new action view.
+     * @return string String with the name of the new action's view.
+     */
+    protected function _getNewActionView()
+    {
+        return 'edit';
     }
 
     /**
@@ -97,14 +105,23 @@ abstract class BaseController extends Controller
     }
 
     /**
+     * Gets a list of models to display when the view() is called.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|Model[]
+     */
+    protected function _getViewModels()
+    {
+        return $this->_modelClassName::all();
+    }
+
+    /**
      * Handles the viewing of a collection of items in a table.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
      */
     public function view()
     {
-        $className = $this->_getModelClassname();
-        $models = $className::all();
+        $models = $this->_getViewModels();
 
         return view(
             sprintf("%s%s.view", $this->_getRoutePrefix(), $this->_name),
@@ -121,7 +138,7 @@ abstract class BaseController extends Controller
     {
         $headerTitle = $this->getNewHeaderTitle();
         return view(
-            sprintf('%s%s.edit', $this->_getRoutePrefix(), $this->_name),
+            sprintf('%s%s.%s', $this->_getRoutePrefix(), $this->_name, $this->_getNewActionView()),
             array_merge($this->_variables, compact('headerTitle'))
         );
     }

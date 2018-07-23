@@ -1,93 +1,79 @@
 @extends('layouts.app', ['wide' => true])
 @section('header-title', $headerTitle)
 
+@section('head')
+    @parent
+
+    <style>
+        #settings_toggle {
+            cursor: pointer;
+            border: #d3e0e9 solid 1px;
+
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+    </style>
+@endsection
+
 @section('scripts')
     @parent
 
     <script>
-        var _selectedDungeonId;
-        var _currentStage = 1;
-        var _maxStage = 2;
-
-        var _stages = [
-            {
-                'id': 1,
-                'saveCallback': function () {
-                    _selectedDungeonId = $("#dungeon_selection").val();
-                }
-            }, {
-                'id': 2,
-                'initCallback': function () {
-                    // Get the data of the selected dungeon
-                    var dungeon = getDungeonDataById(_selectedDungeonId);
-                    // First floor, always
-                    setCurrentMapName(dungeon.key, 1);
-                    updateFloorSelection();
-                    // Refresh the map to reflect changes
-                    refreshLeafletMap();
-                },
-                'saveCallback': function () {
-                }
-            }
-        ];
-
         $(function () {
-            $("#previous").bind('click', _previousStage);
-            $("#next").bind('click', _nextStage);
-            _handleButtonVisibility();
+            let $settings = $('#settings');
+            $settings.on('hide.bs.collapse', function (e) {
+                let $caret = $("#settings_caret");
+                $caret.removeClass('fa-caret-up');
+                $caret.addClass('fa-caret-down');
+            });
+
+            $settings.on('show.bs.collapse', function (e) {
+                let $caret = $("#settings_caret");
+                $caret.removeClass('fa-caret-down');
+                $caret.addClass('fa-caret-up');
+            });
+
+            $("#save_settings").bind('click', _saveSettings);
+
+            $(".selectpicker").selectpicker({
+                showIcon: true
+            });
+
+            // Add icons to the faction dropdown
+            $.each($("#faction option"), function (index, value) {
+                let faction = _factions[index];
+                let html = $("#template_faction_dropdown_icon").html();
+                html = html.replace('src=""', 'src="../../images/' + faction.iconfile.path + '"')
+                    .replace('placeholder', faction.name.toLowerCase())
+                    .replace('{text}', faction.name);
+                $(value).data('content', html);
+            });
         });
 
-        function _getStage(id) {
-            for (var i = 0; i < _stages.length; i++) {
-                if (_stages[i].id === id) {
-                    return _stages[i];
+        function _saveSettings() {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('api.dungeonroute.update', $model->id) }}',
+                dataType: 'json',
+                data: {
+                    faction: $("#faction").val(),
+                    race:
+                        $(".raceselect select").map(function () {
+                            return $(this).val();
+                        }).get()
+                    ,
+                    class:
+                        $(".classselect select").map(function () {
+                            return $(this).val();
+                        }).get()
+                    ,
+                    _method: 'PATCH'
+                },
+                success: function (json) {
+                    console.log(json);
                 }
-            }
-            return null;
-        }
-
-        function _previousStage() {
-            if (_currentStage > 1) {
-                _setStage(_currentStage - 1);
-            }
-            _handleButtonVisibility();
-        }
-
-        function _nextStage() {
-            if (_currentStage < _maxStage) {
-                _setStage(_currentStage + 1);
-            }
-            _handleButtonVisibility();
-        }
-
-        function _handleButtonVisibility() {
-            if (_currentStage === 1) {
-                $("#previous").hide();
-            } else {
-                $("#previous").show();
-            }
-
-            if (_currentStage === _maxStage) {
-                $("#next").hide();
-            } else {
-                $("#next").show();
-            }
-        }
-
-        function _setStage(stage) {
-            $("#stage-" + _currentStage).hide();
-            $("#stage-" + stage).show();
-            var currentStage = _getStage(_currentStage);
-            if( currentStage.hasOwnProperty('saveCallback') ){
-                currentStage.saveCallback();
-            }
-
-            var nextStage = _getStage(stage);
-            if( nextStage.hasOwnProperty('initCallback') ){
-                nextStage.initCallback();
-            }
-
-            _currentStage = stage;
+            });
         }
     </script>
 @endsection
@@ -96,34 +82,50 @@
     @isset($model)
         {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => 'dungeonroute.savenew', 'files' => true]) }}
+        {{ Form::open(['route' => 'dungeonroute.savenew']) }}
     @endisset
-    <div id="setup_container" class="container">
-        <p>
-            {!! Form::button('<i class="fa fa-backward"></i> ' . __('Previous'), ['id' => 'previous', 'class' => 'btn btn-info', 'style' => 'display: none;']) !!}
-            {!! Form::button('<i class="fa fa-forward"></i> ' . __('Next'), ['id' => 'next', 'class' => 'btn btn-info']) !!}
-        </p>
 
-        <div id="stage-1">
-            <div class="form-group">
-                {!! Form::label('dungeon_selection', __('Select dungeon')) !!}
-                {!! Form::select('dungeon_selection', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+    @isset($model)
+        <div class="col-lg-12">
+            <div id="map_container col-lg-12">
+                @include('common.maps.map', [
+                    // Use findMany rather than findOrFail; we need a collection in this parameter
+                    'dungeons' => \App\Models\Dungeon::findMany([$model->dungeon_id]),
+                    'dungeonSelect' => false
+                ])
             </div>
-        </div>
-    </div>
 
-    <div id="stage-2" style="display: none;">
-        <div id="map_container">
-            @include('common.maps.map', [
-                'admin' => false,
-                'dungeons' => \App\Models\Dungeon::all(),
-                'dungeonSelect' => false,
-                'manualInit' => true
-            ])
+            <div id="settings_toggle" class="col-lg-12 text-center btn btn-default" data-toggle="collapse"
+                 data-target="#settings">
+                <h4>
+                    <i class="fa fa-cog"></i> {{ __('Settings') }} <i id="settings_caret" class="fa fa-caret-down"></i>
+                </h4>
+            </div>
 
-            {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+            <div id="settings" class="col-lg-12 collapse">
+                <h3>
+                    {{ __('Group composition') }}
+                </h3>
+
+                @include('common.group.composition', ['dungeonroute' => $model])
+
+                <h3>
+                    {{ __('Affixes (optional)') }}
+                </h3>
+
+                <div class="container">
+                    @include('common.group.affixes')
+                </div>
+
+                <div class="form-group">
+                    <div id="save_settings" class="col-lg-offset-5 col-lg-2 btn btn-success">
+                        <i class="fa fa-save"></i> {{ __('Save settings') }}
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </div>
+    @endisset
 
     {!! Form::close() !!}
 @endsection

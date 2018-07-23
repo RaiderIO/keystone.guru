@@ -16,16 +16,14 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute.new');
+Route::post('dungeonroute/new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
+Route::get('dungeonroute/{id}', 'DungeonRouteController@edit')->name('dungeonroute.edit');
+Route::patch('dungeonroute/{id}', 'DungeonRouteController@update')->name('dungeonroute.update');
+Route::get('dungeonroutes', 'DungeonRouteController@view')->name('dungeonroutes');
+
 // ['auth', 'role:admin|user']
 
 Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
-    Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute.new');
-    Route::get('dungeonroute/{id}', 'DungeonRouteController@edit')->name('dungeonroute.edit');
-
-    Route::post('dungeonroute/new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
-    Route::patch('dungeonroute/{id}', 'DungeonRouteController@update')->name('dungeonroute.update');
-
-    Route::get('dungeonroutes', 'DungeonRouteController@view')->name('dungeonroutes');
 });
 
 Route::group(['middleware' => ['auth', 'role:admin']], function () {
@@ -53,4 +51,13 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::patch('admin/expansion/{id}', 'ExpansionController@update')->name('admin.expansion.update');
 
     Route::get('admin/expansions', 'ExpansionController@view')->name('admin.expansions');
+
+    // NPCs
+    Route::get('admin/npc/new', 'NpcController@new')->name('admin.npc.new');
+    Route::get('admin/npc/{id}', 'NpcController@edit')->name('admin.npc.edit');
+
+    Route::post('admin/npc/new', 'NpcController@savenew')->name('admin.npc.savenew');
+    Route::patch('admin/npc/{id}', 'NpcController@update')->name('admin.npc.update');
+
+    Route::get('admin/npcs', 'NpcController@view')->name('admin.npcs');
 });

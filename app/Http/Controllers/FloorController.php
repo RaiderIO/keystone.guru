@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FloorFormRequest;
 use App\Models\Dungeon;
 use App\Models\Floor;
+use App\Models\Npc;
 use Illuminate\Http\Request;
 
 class FloorController extends BaseController
 {
     public function __construct()
     {
-        parent::__construct('floor', 'admin');
+        parent::__construct('floor', '\App\Models\Floor', 'admin');
     }
 
     public function getNewHeaderTitle()
@@ -26,10 +27,9 @@ class FloorController extends BaseController
 
     private function _setDungeonVariable($dungeonId)
     {
-        // Override so we can set the
-        $this->_setVariables(array(
-            'dungeon' => Dungeon::findOrFail($dungeonId)
-        ));
+        $this->_addVariable(
+            'dungeon', Dungeon::findOrFail($dungeonId)
+        );
     }
 
     /**
@@ -54,6 +54,7 @@ class FloorController extends BaseController
         $floor = Floor::findOrFail($id);
         $this->_setDungeonVariable($floor->dungeon_id);
         $this->_addVariable('floors', Floor::all()->where('dungeon_id', '=', $floor->dungeon_id)->where('id', '<>', $id));
+        $this->_addVariable('npcs', Npc::all());
         return parent::edit($id);
     }
 
@@ -104,6 +105,8 @@ class FloorController extends BaseController
      * @throws \Exception
      */
     public function update(FloorFormRequest $request, $id){
+        $this->_addVariable('npcs', Npc::all());
+
         return parent::_update($request, $id);
     }
 

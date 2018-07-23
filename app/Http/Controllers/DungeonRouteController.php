@@ -9,7 +9,7 @@ class DungeonRouteController extends BaseController
 {
     public function __construct()
     {
-        parent::__construct('dungeonroute');
+        parent::__construct('dungeonroute', '\App\Models\DungeonRoute');
     }
 
     public function getNewHeaderTitle()
@@ -20,6 +20,14 @@ class DungeonRouteController extends BaseController
     public function getEditHeaderTitle()
     {
         return __('Edit dungeonroute');
+    }
+
+    /**
+     * Redirect new to a 'new' page, since the new page is different from the edit page in this case.
+     * @return string
+     */
+    protected function _getNewActionView(){
+        return 'new';
     }
 
     public function new()
@@ -37,21 +45,28 @@ class DungeonRouteController extends BaseController
      */
     public function store($request, int $id = -1)
     {
-        $dungeon = new Dungeon();
-        $edit = $id !== -1;
+        // Do an internal API request
+        $controller = new APIDungeonRouteController();
 
-        $dungeon->name = $request->get('name');
-        // May not be set when editing
-        $dungeon->expansion_id = $request->get('expansion');
-
-        // Update or insert it
-        if (!$dungeon->save()) {
-            abort(500, 'Unable to save dungeon');
+        $storeResult = $controller->store($request, $id);
+        if( !is_array($storeResult) ){
+            abort(500, 'Unable to save dungeonroute');
         }
 
-        \Session::flash('status', sprintf(__('Dungeon %s'), $edit ? __("updated") : __("saved")));
+        \Session::flash('status', sprintf(__('Dungeonroute %s'), $id !== -1 ? __("updated") : __("saved")));
+        return $storeResult['id'];
+    }
 
-        return $dungeon->id;
+    /**
+     * Override to give the type hint which is required.
+     *
+     * @param DungeonRouteFormRequest $request
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
+     */
+    public function update(DungeonRouteFormRequest $request, $id){
+        return parent::_update($request, $id);
     }
 
     /**
