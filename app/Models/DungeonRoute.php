@@ -52,4 +52,12 @@ class DungeonRoute extends Model
     {
         return $this->hasMany('App\Models\DungeonRoutePlayerClass');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function affixes()
+    {
+        return $this->hasMany('App\Models\DungeonRouteAffix');
+    }
 }

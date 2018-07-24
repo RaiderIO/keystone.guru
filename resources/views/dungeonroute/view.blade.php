@@ -24,9 +24,9 @@
     <tr>
         <th width="40%">{{ __('Title') }}</th>
         <th width="15%">{{ __('Dungeon') }}</th>
-        <th width="10%">{{ __('Affixes') }}</th>
-        <th width="10%">{{ __('Setup') }}</th>
-        <th width="10%">{{ __('Author') }}</th>
+        <th width="10%" class="hidden-xs">{{ __('Affixes') }}</th>
+        <th width="10%" class="hidden-xs">{{ __('Setup') }}</th>
+        <th width="10%" class="hidden-xs">{{ __('Author') }}</th>
         <th width="10%">{{ __('Rating') }}</th>
         <th width="5%">{{ __('Actions') }}</th>
     </tr>
@@ -37,13 +37,13 @@
     <tr>
         <td>{{ $route->title }}</td>
         <td>{{ $route->dungeon->name }}</td>
-        <td>{{ $route->affixes }}</td>
-        <td>{{ $route->setup }}</td>
-        <td>{{ $route->author->name }}</td>
+        <td class="hidden-xs">{{ $route->affixes }}</td>
+        <td class="hidden-xs">{{ $route->setup }}</td>
+        <td class="hidden-xs">{{ $route->author->name }}</td>
         <td>{{ $route->rating }}</td>
         <td>
             <a class="btn btn-primary" href="{{ route('dungeonroute.edit', ['id' => $route->id]) }}">
-                <i class="fa fa-pencil"></i>&nbsp;{{ __('Edit') }}
+                <i class="fa fa-pencil"></i>&nbsp;<span class="hidden-xs"> {{ __('Edit') }} </span>
             </a>
         </td>
     </tr>

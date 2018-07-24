@@ -63,6 +63,19 @@ class APIDungeonRouteController extends Controller
                     $drpClass->save();
                 }
             }
+
+            $newAffixes = $request->get('affixes', array());
+            if (!empty($newAffixes)) {
+                // Remove old affixes
+                $dungeonroute->classes()->delete();
+                foreach ($newClasses as $key => $value) {
+                    $drpClass = new DungeonRoutePlayerClass();
+                    $drpClass->index = $key;
+                    $drpClass->class_id = $value;
+                    $drpClass->dungeon_route_id = $dungeonroute->id;
+                    $drpClass->save();
+                }
+            }
         } else {
             abort(500, 'Unable to save dungeonroute');
         }

@@ -1,17 +1,31 @@
 <?php
-$affixGroups = \App\Models\AffixGroup::with(['affixes:affixes.id'])->get();
+$affixGroups = \App\Models\AffixGroup::with(['affixes:affixes.id,affixes.name'])->get();
 $affixes = \App\Models\Affix::with('iconfile')->get();
 ?>
 
 @section('head')
     <style>
+        .affix_list {
+            border: 1px solid #ccd0d2;
+            border-radius: 4px;
+        }
+
         .affix_row {
-            width: 120px;
             padding-right: 10px;
         }
 
         .affix_list_row {
-            padding-bottom: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .affix_list_row_selected {
+            background-color: #F5F5F5;
+        }
+
+        .affix_list_row:hover {
+            background-color: #ccc;
+            cursor: pointer;
         }
 
         .affixselect {
@@ -24,113 +38,94 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
     @parent
 
     <script>
-        let _affixes = {!! $affixes !!};
-        let _affixGroups = {!! $affixGroups !!};
-
-
         $(function () {
-            let $affixesSelect = $('#affixes');
-            $affixesSelect.bind('change', _refreshAffixesList);
-
-            $.each(_affixGroups, function (index, group) {
-                let affixes = _getAffixes(group);
-                // console.log(affixes);
-
-                let text = _getHtmlByAffixes(affixes, true);
-
-                // console.log(text);
-
-                $affixesSelect.append(jQuery('<option>', {
-                    value: group.id,
-                    text: 'text',
-                    'data-content': text
-                }));
-            });
-
-            // Refresh always; we removed options
-            let $selectPicker = $('.selectpicker');
-            $selectPicker.selectpicker('refresh');
-            $selectPicker.selectpicker('render');
+            $(".affix_list_row").bind('click', _affixRowClicked);
         });
 
-        function _getHtmlByAffixes(affixes, select) {
-            let html = '';
-            for (let i = 0; i < affixes.length; i++) {
-                let affix = affixes[i];
-                html += $("#template_affix_dropdown_icon").html()
-                    .replace(/{text}/g, affix.name)
-                    .replace(/src=""/g, 'src="../images/' + affix.iconfile.path + '"')
+        function _affixRowClicked() {
+            console.log(">> _affixRowClicked");
+            let $el = $(this);
+            // Convert to string since currentSelection has strings
+            let id = $el.data('id') + "";
+
+            // Affixes is leading!
+            let $affixRowSelect = $("#affixes");
+            let currentSelection = $affixRowSelect.val();
+
+            // If it exists in the current selection
+            let index = currentSelection.indexOf(id);
+            if (index >= 0) {
+                // remove it from the list
+                currentSelection.splice(index, 1);
             }
-            return html;
+            // Otherwise add it
+            else {
+                currentSelection.push(id);
+            }
+
+            $affixRowSelect.val(currentSelection);
+            _applyAffixRowSelectionOnList();
+            console.log("OK _affixRowClicked");
         }
 
-        function _refreshAffixesList() {
-            let $el = $("#affixes_list");
-            // Clear it completely
-            $el.html('');
-            // Get the current value
-            let affixGroupIds = $(this).val();
-            console.log(affixGroupIds);
+        function _applyAffixRowSelectionOnList() {
+            console.log(">> _applyAffixRowSelectionOnList");
 
-            // Add the new affixes to the div
-            $.each(affixGroupIds, function (index, affixGroupId) {
-                affixGroupId = parseInt(affixGroupId);
-                let affixGroup = _getAffixGroupById(affixGroupId);
-                let affixes = _getAffixes(affixGroup);
-                let $html = $("<div>").addClass('row col-lg-12 affix_list_row').html(
-                    _getHtmlByAffixes(affixes, false)
-                );
-                $el.append($html);
-            });
-        }
+            let $list = $("#affixes_list_custom");
+            let currentSelection = $("#affixes").val();
 
-        function _getAffixGroupById(id) {
-            let result = null;
-            $.each(_affixGroups, function (index, group) {
-                console.log(index, group);
-                if (group.id === id) {
-                    result = group;
-                    return false;
-                }
-            });
+            $.each($list.children(), function (index, child) {
+                let $child = $(child);
+                let found = false;
 
-            return result;
-        }
-
-        /**
-         * Finds all actual affix data from a list of IDs found in the group.
-         * @param group
-         * @returns {Array}
-         */
-        function _getAffixes(group) {
-            let result = [];
-
-            $.each(group.affixes, function (index, affix) {
-                for (let i = 0; i < _affixes.length; i++) {
-                    let affixCandidate = _affixes[i];
-                    console.log(affixCandidate.id, '-', affix.id);
-                    if (affixCandidate.id === affix.id) {
-                        result.push(affixCandidate);
+                for (let i = 0; i < currentSelection.length; i++) {
+                    if (parseInt(currentSelection[i]) === $child.data('id')) {
+                        $child.addClass('affix_list_row_selected');
+                        $child.find('.check').show();
+                        console.log('found!');
+                        found = true;
                         break;
                     }
                 }
-            });
 
-            return result;
+                if (!found) {
+                    $child.removeClass('affix_list_row_selected');
+                    $child.find('.check').hide();
+                }
+            });
+            console.log("OK _applyAffixRowSelectionOnList");
         }
     </script>
 
 @endsection
 
 <div class="col-lg-12">
-    <div class="form-group">
-        <select name="affixes[]" id="affixes" class="form-control selectpicker affixselect" multiple
+    <div class="form-group col-lg-12">
+        <select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple
                 data-selected-text-format="count > 2">
-
+            @foreach($affixGroups as $group)
+                <option value="{{ $group->id }}">{{ $group->id }}</option>
+            @endforeach
         </select>
 
-        <div id="affixes_list">
-
+        <div id="affixes_list_custom" class="affix_list col-lg-12">
+            @foreach($affixGroups as $affixGroup)
+                <div class="row affix_list_row" data-id="{{ $affixGroup->id }}">
+                    <?php $count = 0; ?>
+                    @foreach($affixGroup->affixes as $affix)
+                        @php( $number = count($affixGroup->affixes) - 1 === $count ? '3' : '4' )
+                        <div class="col-xl-{{ $number }} col-lg-{{ $number }} col-md-{{ $number }} col-sm-{{ $number }} col-xs-{{ $number }} affix_row pull-left">
+                            <img src="../images/{{ $affix->iconfile->path }}" class="select_icon affix_icon"
+                                 title="{{ $affix->name }}"/>
+                            <span class="hidden-xs"> {{ $affix->name }} </span>
+                        </div>
+                        <?php $count++; ?>
+                    @endforeach
+                    <span class="col-lg-1 check pull-right text-right" style="display: none;">
+                        <i class="fa fa-check"></i>
+                    </span>
+                </div>
+            @endforeach
         </div>
     </div>
 </div>

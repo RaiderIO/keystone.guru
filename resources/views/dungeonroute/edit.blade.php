@@ -68,6 +68,7 @@
                             return $(this).val();
                         }).get()
                     ,
+                    affixes: $("#affixes").val(),
                     _method: 'PATCH'
                 },
                 success: function (json) {
@@ -95,7 +96,7 @@
                 ])
             </div>
 
-            <div id="settings_toggle" class="col-lg-12 text-center btn btn-default" data-toggle="collapse"
+            <div id="settings_toggle" class="col-lg-12 col-xs-12 text-center btn btn-default" data-toggle="collapse"
                  data-target="#settings">
                 <h4>
                     <i class="fa fa-cog"></i> {{ __('Settings') }} <i id="settings_caret" class="fa fa-caret-down"></i>
