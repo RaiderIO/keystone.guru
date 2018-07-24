@@ -2,22 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * @property string $name
  * @property \Illuminate\Support\Collection $races
  * @property \Illuminate\Support\Collection $dungeonroutes
  */
-class Faction extends Model
+class Faction extends IconFileModel
 {
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
-
-    function iconfile()
-    {
-        return $this->hasOne('App\Models\File', 'model_id')->where('model_class', '=', get_class($this));
-    }
 
     function races()
     {

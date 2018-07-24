@@ -32,7 +32,7 @@ class FactionSeeder extends Seeder
             $icon->model_id = $faction->id;
             $icon->model_class = get_class($faction);
             $icon->disk = 'public';
-            $icon->path = sprintf('factions/%s.png', $iconName);
+            $icon->path = sprintf('images/factions/%s.png', $iconName);
             $icon->save();
 
             $faction->icon_file_id = $icon->id;

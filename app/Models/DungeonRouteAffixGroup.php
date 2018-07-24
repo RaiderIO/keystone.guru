@@ -7,27 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property $id int
  * @property $dungeon_route_id int
- * @property $class_id int
- * @property $index int
+ * @property $affix_group_id int
  */
-class DungeonRoutePlayerClass extends Model
+class DungeonRouteAffixGroup extends Model
 {
-
-    public $hidden = ['id', 'dungeon_route_id'];
-
     public $timestamps = false;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function dungeonroute(){
-        return $this->belongsTo('App\Models\DungeonRoute');
+    public function dungeonroute()
+    {
+        return $this->belongsTo('App\DungeonRoute');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function characterclass(){
-        return $this->belongsTo('App\Models\CharacterClass');
+    public function affixgroup()
+    {
+        return $this->belongsTo('App\AffixGroup');
     }
 }

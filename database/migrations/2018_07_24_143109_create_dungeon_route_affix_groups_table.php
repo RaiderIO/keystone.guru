@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDungeonRouteAffixesTable extends Migration
+class CreateDungeonRouteAffixGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateDungeonRouteAffixesTable extends Migration
      */
     public function up()
     {
-        Schema::create('dungeon_route_affixes', function (Blueprint $table) {
+        Schema::create('dungeon_route_affix_groups', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('dungeon_route_id');
             $table->integer('affix_group_id');
-            $table->timestamps();
         });
     }
 
@@ -28,6 +27,6 @@ class CreateDungeonRouteAffixesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dungeon_route_affixes');
+        Schema::dropIfExists('dungeon_route_affix_groups');
     }
 }

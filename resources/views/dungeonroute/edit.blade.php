@@ -115,7 +115,7 @@
                 </h3>
 
                 <div class="container">
-                    @include('common.group.affixes')
+                    @include('common.group.affixes', ['dungeonroute' => $model])
                 </div>
 
                 <div class="form-group">

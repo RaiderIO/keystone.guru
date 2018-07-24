@@ -59,14 +59,17 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
             let $racesSelects = $(".raceselect select");
             let $classSelects = $(".classselect select");
 
-            // For each party member
-            for (let i = 0; i < {{ config('mpplnr.party_size') }}; i++) {
+            // For each race
+            for (let i = 0; i < races.length; i++) {
                 let race = races[i];
                 let $raceSelect = $($racesSelects[race.index]);
                 $raceSelect.val(race.race_id);
                 // Have to manually trigger change..
                 $raceSelect.trigger('change');
+            }
 
+            // For each class
+            for (let i = 0; i < classes.length; i++) {
                 let drClass = classes[i];
                 let $classSelect = $($classSelects[drClass.index]);
                 $classSelect.val(drClass.class_id);

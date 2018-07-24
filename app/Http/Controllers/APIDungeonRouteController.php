@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRoutePlayerRace;
 use App\Models\DungeonRoutePlayerClass;
+use App\Models\DungeonRouteAffixGroup;
 use Illuminate\Http\Request;
 
 class APIDungeonRouteController extends Controller
@@ -66,14 +67,13 @@ class APIDungeonRouteController extends Controller
 
             $newAffixes = $request->get('affixes', array());
             if (!empty($newAffixes)) {
-                // Remove old affixes
-                $dungeonroute->classes()->delete();
-                foreach ($newClasses as $key => $value) {
-                    $drpClass = new DungeonRoutePlayerClass();
-                    $drpClass->index = $key;
-                    $drpClass->class_id = $value;
-                    $drpClass->dungeon_route_id = $dungeonroute->id;
-                    $drpClass->save();
+                // Remove old affixgroups
+                $dungeonroute->affixgroups()->delete();
+                foreach ($newAffixes as $key => $value) {
+                    $drAffixGroup = new DungeonRouteAffixGroup();
+                    $drAffixGroup->affix_group_id = $value;
+                    $drAffixGroup->dungeon_route_id = $dungeonroute->id;
+                    $drAffixGroup->save();
                 }
             }
         } else {

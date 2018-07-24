@@ -33,11 +33,20 @@ class File extends Model
     }
 
     /**
+     * Get a full path on the file system of this file.
+     * @return string The string containing the file path.
+     */
+    public function getFullPath(){
+        // @TODO May need to do something with $this->disk here?
+        return public_path($this->path);
+    }
+
+    /**
      * Get an URL for putting in the url() function in your view.
      * @return string The string containing the URL.
      */
     public function getURL(){
-        // May need to do something with $this->disk here?
-        return 'storage/' . $this->path;
+        // @TODO May need to do something with $this->disk here?
+        return $this->path;
     }
 }

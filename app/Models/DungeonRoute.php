@@ -56,8 +56,8 @@ class DungeonRoute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function affixes()
+    public function affixgroups()
     {
-        return $this->hasMany('App\Models\DungeonRouteAffix');
+        return $this->hasMany('App\Models\DungeonRouteAffixGroup');
     }
 }

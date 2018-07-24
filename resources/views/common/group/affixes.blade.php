@@ -40,6 +40,9 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
     <script>
         $(function () {
             $(".affix_list_row").bind('click', _affixRowClicked);
+
+            // Perform loading of existing affix groups
+            _applyAffixRowSelectionOnList();
         });
 
         function _affixRowClicked() {
@@ -101,12 +104,16 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
 
 <div class="col-lg-12">
     <div class="form-group col-lg-12">
-        <select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple
-                data-selected-text-format="count > 2">
-            @foreach($affixGroups as $group)
-                <option value="{{ $group->id }}">{{ $group->id }}</option>
-            @endforeach
-        </select>
+        {!! Form::label('affixes[]', __('Select affixes') . "*") !!}
+        {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('id', 'id'),
+            !isset($dungeonroute) ? 0 : $dungeonroute->affixgroups->pluck(['affix_group_id']),
+            ['id' => 'affixes', 'class' => 'form-control affixselect hidden', 'multiple'=>'multiple']) !!}
+        {{--<select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple--}}
+        {{--data-selected-text-format="count > 2">--}}
+        {{--@foreach($affixGroups as $group)--}}
+        {{--<option value="{{ $group->id }}">{{ $group->id }}</option>--}}
+        {{--@endforeach--}}
+        {{--</select>--}}
 
         <div id="affixes_list_custom" class="affix_list col-lg-12">
             @foreach($affixGroups as $affixGroup)
@@ -115,7 +122,8 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                     @foreach($affixGroup->affixes as $affix)
                         @php( $number = count($affixGroup->affixes) - 1 === $count ? '3' : '4' )
                         <div class="col-xl-{{ $number }} col-lg-{{ $number }} col-md-{{ $number }} col-sm-{{ $number }} col-xs-{{ $number }} affix_row pull-left">
-                            <img src="../images/{{ $affix->iconfile->path }}" class="select_icon affix_icon"
+                            <img src="{{ Image::url($affix->iconfile->getUrl(), 32, 32) }}"
+                                 class="select_icon affix_icon"
                                  title="{{ $affix->name }}"/>
                             <span class="hidden-xs"> {{ $affix->name }} </span>
                         </div>
@@ -128,8 +136,4 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
             @endforeach
         </div>
     </div>
-</div>
-
-<div id="template_affix_dropdown_icon" style="display: none;">
-    <div class="affix_row pull-left"><img src="" class="select_icon affix_icon" title="{text}"/> {text}</div>
 </div>

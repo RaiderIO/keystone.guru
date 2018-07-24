@@ -47,7 +47,7 @@ class AffixSeeder extends Seeder
             $icon->model_id = $affix->id;
             $icon->model_class = get_class($affix);
             $icon->disk = 'public';
-            $icon->path = sprintf('affixes/%s.jpg', $iconName);
+            $icon->path = sprintf('images/affixes/%s.jpg', $iconName);
             $icon->save();
 
             $affix->icon_file_id = $icon->id;

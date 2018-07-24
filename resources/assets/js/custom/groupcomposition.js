@@ -8,7 +8,7 @@ $(function () {
     $.each($("#faction option"), function (index, value) {
         let faction = _factions[index];
         let html = $("#template_faction_dropdown_icon").html();
-        html = html.replace('src=""', 'src="../../images/' + faction.iconfile.path + '"')
+        html = html.replace('src=""', 'src="../../' + faction.iconfile.path + '"')
             .replace('placeholder', faction.name.toLowerCase())
             .replace('{text}', faction.name);
         $(value).data('content', html);
@@ -80,7 +80,7 @@ function _raceChanged() {
                         value: classDetail.id, //zzz
                         text: classDetail.name,
                         'data-content': $("#template_class_dropdown_icon").html()
-                            .replace('src=""', 'src="../../images/' + classDetail.iconfile.path + '"')
+                            .replace('src=""', 'src="../../' + classDetail.iconfile.path + '"')
                             .replace('{text}', classDetail.name)
                     }));
                     break;
