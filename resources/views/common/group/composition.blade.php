@@ -14,7 +14,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         }
 
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}  {
+        .{{ strtolower($faction->name) }}    {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -49,7 +49,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 
             let faction = '{{ $dungeonroute->faction_id }}';
             let races = {!! $dungeonroute->races !!};
-            let classes = {!! $dungeonroute->classes !!};
+            let classes = {!! $dungeonroute->characterclasses !!};
 
             let $faction = $("#faction");
             $faction.val(faction);
@@ -63,7 +63,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
             for (let i = 0; i < races.length; i++) {
                 let race = races[i];
                 let $raceSelect = $($racesSelects[race.index]);
-                $raceSelect.val(race.race_id);
+                $raceSelect.val(race.character_race_id);
                 // Have to manually trigger change..
                 $raceSelect.trigger('change');
             }
@@ -72,7 +72,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
             for (let i = 0; i < classes.length; i++) {
                 let drClass = classes[i];
                 let $classSelect = $($classSelects[drClass.index]);
-                $classSelect.val(drClass.class_id);
+                $classSelect.val(drClass.character_class_id);
                 // Have to manually trigger change..
                 $classSelect.trigger('change');
             }
@@ -123,14 +123,19 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
     <?php } ?>
 </div>
 
-<div id="template_faction_dropdown_icon" style="display: none;">
-    <span class="placeholder">
-        <img src="" class="select_icon faction_icon"/> {text}
-    </span>
-</div>
+@foreach($factions as $faction)
+    <div id="template_faction_dropdown_icon_{{ strtolower($faction->name) }}" style="display: none;">
+        <span class="{{ strtolower($faction->name) }}">
+            <img src="{{ Image::url($faction->iconfile->getUrl(), 32, 32) }}"
+                 class="select_icon faction_icon"/> {{ $faction->name }}
+        </span>
+    </div>
+@endforeach
 
-<div id="template_class_dropdown_icon" style="display: none;">
-    <span class="placeholder">
-        <img src="" class="select_icon class_icon"/> {text}
+@foreach( $classes as $class)
+    <div id="template_class_dropdown_icon_{{ $class->key }}" style="display: none;">
+    <span class="{{ $class->key }}">
+        <img src="{{ Image::url($class->iconfile->getUrl(), 32, 32) }}" class="select_icon class_icon"/> {{ $class->name }}
     </span>
-</div>
+    </div>
+@endforeach

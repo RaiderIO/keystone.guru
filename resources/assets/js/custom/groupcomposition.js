@@ -7,10 +7,7 @@ $(function () {
     // Add icons to the faction dropdown
     $.each($("#faction option"), function (index, value) {
         let faction = _factions[index];
-        let html = $("#template_faction_dropdown_icon").html();
-        html = html.replace('src=""', 'src="../../' + faction.iconfile.path + '"')
-            .replace('placeholder', faction.name.toLowerCase())
-            .replace('{text}', faction.name);
+        let html = $("#template_faction_dropdown_icon_" + faction.name.toLowerCase()).html();
         $(value).data('content', html);
     });
 });
@@ -79,9 +76,7 @@ function _raceChanged() {
                     $classSelect.append(jQuery('<option>', {
                         value: classDetail.id, //zzz
                         text: classDetail.name,
-                        'data-content': $("#template_class_dropdown_icon").html()
-                            .replace('src=""', 'src="../../' + classDetail.iconfile.path + '"')
-                            .replace('{text}', classDetail.name)
+                        'data-content': $("#template_class_dropdown_icon_" + classDetail.key).html()
                     }));
                     break;
                 }

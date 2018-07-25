@@ -32,4 +32,9 @@ class CharacterRace extends Model
     {
         return $this->belongsTo('App\Models\Faction');
     }
+
+    function dungeonrouteplayerrace()
+    {
+        return $this->hasMany('App\Models\DungeonRoutePlayerRace');
+    }
 }

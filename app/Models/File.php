@@ -14,12 +14,27 @@ use Illuminate\Support\Facades\Storage;
  */
 class File extends Model
 {
-    public $hidden = ['model_id', 'model_class', 'created_at', 'updated_at'];
+    /**
+     * @var array None of this really matters for externals
+     */
+    public $hidden = ['disk', 'path', 'model_id', 'model_class', 'created_at', 'updated_at'];
+
+    /**
+     * @var array Only this really matters when we're echoing the file.
+     */
+    public $appends = ['url'];
 
     function delete(){
         if( parent::delete() ) {
             $this->deleteFromDisk();
         }
+    }
+
+    /**
+     * @return string Extend the file object with the full URL which is relevant for externals
+     */
+    public function getUrlAttribute(){
+        return $this->getURL();
     }
 
     /**

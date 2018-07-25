@@ -40,10 +40,9 @@
                 <td>{{ $route->dungeon->name }}</td>
                 <td class="hidden-xs">{{ sprintf(__('%s selected'), count($route->affixgroups)) }}</td>
                 <td class="hidden-xs">
-                    @foreach($route->classes as $class)
-                        <?php /** @var $class \App\Models\DungeonRoutePlayerClass */
-                        $class->load('characterclass');
-                        // $class->characterclass->load('iconfile'); // xxxxx ?>
+                    @foreach($route->characterclasses as $class)
+                        <?php /** @var $class \App\Models\CharacterClass */ ?>
+                        <img src="{{ Image::url($class->iconfile->getUrl(), 32, 32) }}" class="select_icon faction_icon"/>
                     @endforeach
                 </td>
                 <td class="hidden-xs">{{ $route->author->name }}</td>

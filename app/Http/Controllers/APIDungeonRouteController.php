@@ -46,7 +46,7 @@ class APIDungeonRouteController extends Controller
                 foreach ($newRaces as $key => $value) {
                     $drpRace = new DungeonRoutePlayerRace();
                     $drpRace->index = $key;
-                    $drpRace->race_id = $value;
+                    $drpRace->character_race_id = $value;
                     $drpRace->dungeon_route_id = $dungeonroute->id;
                     $drpRace->save();
                 }
@@ -59,7 +59,7 @@ class APIDungeonRouteController extends Controller
                 foreach ($newClasses as $key => $value) {
                     $drpClass = new DungeonRoutePlayerClass();
                     $drpClass->index = $key;
-                    $drpClass->class_id = $value;
+                    $drpClass->character_class_id = $value;
                     $drpClass->dungeon_route_id = $dungeonroute->id;
                     $drpClass->save();
                 }

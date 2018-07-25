@@ -39,16 +39,6 @@
             $(".selectpicker").selectpicker({
                 showIcon: true
             });
-
-            // Add icons to the faction dropdown
-            $.each($("#faction option"), function (index, value) {
-                let faction = _factions[index];
-                let html = $("#template_faction_dropdown_icon").html();
-                html = html.replace('src=""', 'src="../../images/' + faction.iconfile.path + '"')
-                    .replace('placeholder', faction.name.toLowerCase())
-                    .replace('{text}', faction.name);
-                $(value).data('content', html);
-            });
         });
 
         function _saveSettings() {
