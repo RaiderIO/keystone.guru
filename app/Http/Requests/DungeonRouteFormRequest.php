@@ -14,7 +14,7 @@ class DungeonRouteFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::user()->hasRole(["user", "admin"]);
+        return true; // \Auth::user()->hasRole(["user", "admin"]);
     }
 
     /**

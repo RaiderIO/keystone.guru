@@ -11,6 +11,7 @@
 |
 */
 
+use App\Models\DungeonRoute;
 
 Auth::routes();
 
@@ -20,16 +21,24 @@ Route::post('dungeonroute/new', 'DungeonRouteController@savenew')->name('dungeon
 Route::patch('dungeonroute/{id}', 'DungeonRouteController@update')->name('dungeonroute.update');
 Route::get('dungeonroutes', 'DungeonRouteController@view')->name('dungeonroutes');
 
-Route::get('dungeonroute/{dungeonroute}', 'DungeonRouteController@editImplicit')
-    ->middleware('can:update')
+Route::get('dungeonroute/{dungeonroute}', 'DungeonRouteController@editTest')
+    ->middleware('can:editTest,dungeonroute')
     ->name('dungeonroute.edit');
 
 // ['auth', 'role:admin|user']
 
+Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
+
 Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+    Route::get('profile', 'ProfileController@edit')->name('profile.edit');
+    Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
+    Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
 });
 
 Route::group(['middleware' => ['auth', 'role:admin']], function () {
+    // Only admins may view a list of profiles
+    Route::get('profiles', 'ProfileController@list')->name('profile.list');
+
     // Dungeons
     Route::get('admin/dungeon/new', 'DungeonController@new')->name('admin.dungeon.new');
     Route::get('admin/dungeon/{id}', 'DungeonController@edit')->name('admin.dungeon.edit');

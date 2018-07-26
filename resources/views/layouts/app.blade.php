@@ -82,7 +82,7 @@
                                     <li><a href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a></li>
                                 @endif
                                 <li>
-                                    <a href="#">My profile</a>
+                                    <a href="{{ route('profile.edit') }}">My profile</a>
                                 </li>
                                 <li>
                                     <a href="{{ route('logout') }}"

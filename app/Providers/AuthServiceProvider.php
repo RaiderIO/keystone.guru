@@ -16,8 +16,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
-        DungeonRoute::class => DungeonRoutePolicy::class
-        //'App\Models\DungeonRoute' => 'App\Policies\DungeonRoutePolicy'
+        // DungeonRoute::class => DungeonRoutePolicy::class,
+        'App\Models\DungeonRoute' => 'App\Policies\DungeonRoutePolicy'
     ];
 
     /**

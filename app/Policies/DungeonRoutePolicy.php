@@ -42,11 +42,10 @@ class DungeonRoutePolicy
      * @param  \App\Models\DungeonRoute $dungeonroute
      * @return mixed
      */
-    public function update(User $user, DungeonRoute $dungeonroute)
+    public function editTest(User $user, DungeonRoute $dungeonroute)
     {
-        return true;
         // Only authors or if the user is an admin
-        // return $user->id === $dungeonroute->author_id || $user->hasRole('admin');
+        return $user->id === $dungeonroute->author_id || $user->hasRole('admin');
     }
 
     /**

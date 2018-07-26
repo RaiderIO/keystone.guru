@@ -6,12 +6,14 @@ use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
 
 class DungeonRouteController extends BaseController
 {
     public function __construct()
     {
+        // $this->authorize(DungeonRoute::class);
         parent::__construct('dungeonroute', '\App\Models\DungeonRoute');
     }
 
@@ -61,8 +63,9 @@ class DungeonRouteController extends BaseController
         return $storeResult['id'];
     }
 
-    public function editImplicit(DungeonRoute $dungeonroute)
+    public function editTest(Request $request, DungeonRoute $dungeonroute)
     {
+        //  dd($dungeonroute);
         /** @var DungeonRoute $dungeonroute */
 //        $dungeonroute = DungeonRoute::findOrFail($id);
 //        // If the current user is not an admin AND the current user is the author of the route
