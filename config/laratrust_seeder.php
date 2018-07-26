@@ -6,10 +6,12 @@ return [
             'dungeons' => 'c,r,u,d',
             'expansions' => 'c,r,u,d',
             'npcs' => 'c,r,u,d',
-            'profile' => 'r,u'
+            'profile' => 'r,u',
+            'dungeonroute' => 'c,r,u,d'
         ],
         'user' => [
-            'profile' => 'r,u'
+            'profile' => 'r,u',
+            'dungeonroute' => 'c,r,u,d'
         ],
     ],
     'permission_structure' => [

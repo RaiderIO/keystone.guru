@@ -23,9 +23,9 @@
         <thead>
         <tr>
             <th width="40%">{{ __('Title') }}</th>
-            <th width="15%">{{ __('Dungeon') }}</th>
+            <th width="10%">{{ __('Dungeon') }}</th>
             <th width="10%" class="hidden-xs">{{ __('Affixes') }}</th>
-            <th width="10%" class="hidden-xs">{{ __('Setup') }}</th>
+            <th width="15%" class="hidden-xs">{{ __('Setup') }}</th>
             <th width="10%" class="hidden-xs">{{ __('Author') }}</th>
             <th width="10%">{{ __('Rating') }}</th>
             <th width="5%">{{ __('Actions') }}</th>
@@ -40,9 +40,10 @@
                 <td>{{ $route->dungeon->name }}</td>
                 <td class="hidden-xs">{{ sprintf(__('%s selected'), count($route->affixgroups)) }}</td>
                 <td class="hidden-xs">
+                    <img src="{{ Image::url($route->faction->iconfile->getUrl(), 32, 32) }}" class="select_icon faction_icon"/> |
                     @foreach($route->characterclasses as $class)
                         <?php /** @var $class \App\Models\CharacterClass */ ?>
-                        <img src="{{ Image::url($class->iconfile->getUrl(), 32, 32) }}" class="select_icon faction_icon"/>
+                        <img src="{{ Image::url($class->iconfile->getUrl(), 32, 32) }}" class="select_icon class_icon"/>
                     @endforeach
                 </td>
                 <td class="hidden-xs">{{ $route->author->name }}</td>

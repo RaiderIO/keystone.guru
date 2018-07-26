@@ -70,6 +70,10 @@
     margin-right: 5px;
 }
 
+.class_icon {
+    background-color: #1d3131;
+}
+
 .default_table {
     width: 100%;
 }

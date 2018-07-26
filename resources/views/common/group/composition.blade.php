@@ -9,10 +9,6 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
     @parent
 
     <style>
-        .class_icon {
-            background-color: #1d3131;
-        }
-
         @foreach($factions as $faction)
         .{{ strtolower($faction->name) }}    {
             color: {{ $faction->color }};

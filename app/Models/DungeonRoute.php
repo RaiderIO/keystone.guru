@@ -51,6 +51,7 @@ class DungeonRoute extends Model
     public function characterclasses(){
         return $this->belongsToMany('App\Models\CharacterClass', 'dungeon_route_player_classes');
     }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
