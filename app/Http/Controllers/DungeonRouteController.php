@@ -12,15 +12,6 @@ use Teapot\StatusCode\Http;
 class DungeonRouteController extends Controller
 {
     /**
-     * Redirect new to a 'new' page, since the new page is different from the edit page in this case.
-     * @return string
-     */
-    protected function _getNewActionView()
-    {
-        return 'new';
-    }
-
-    /**
      * Show a page for creating a new dungeon route.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -81,8 +72,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * Override to give the type hint which is required.
-     *
      * @param DungeonRouteFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception

@@ -61,12 +61,12 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
 
     // Expansions
     Route::get('admin/expansion/new', 'ExpansionController@new')->name('admin.expansion.new');
-    Route::get('admin/expansion/{id}', 'ExpansionController@edit')->name('admin.expansion.edit');
+    Route::get('admin/expansion/{expansion}', 'ExpansionController@edit')->name('admin.expansion.edit');
 
     Route::post('admin/expansion/new', 'ExpansionController@savenew')->name('admin.expansion.savenew');
-    Route::patch('admin/expansion/{id}', 'ExpansionController@update')->name('admin.expansion.update');
+    Route::patch('admin/expansion/{expansion}', 'ExpansionController@update')->name('admin.expansion.update');
 
-    Route::get('admin/expansions', 'ExpansionController@view')->name('admin.expansions');
+    Route::get('admin/expansions', 'ExpansionController@list')->name('admin.expansions');
 
     // NPCs
     Route::get('admin/npc/new', 'NpcController@new')->name('admin.npc.new');

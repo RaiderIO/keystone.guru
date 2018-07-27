@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -63,5 +64,33 @@ class File extends Model
     public function getURL(){
         // @TODO May need to do something with $this->disk here?
         return $this->path;
+    }
+
+    /**
+     * Saves a file to the database
+     * @param $uploadedFile UploadedFile The uploaded file element.
+     * @param $model Model The model that wants to save this file.
+     * @return \App\Models\File The newly saved file in the database.
+     * @throws \Exception
+     */
+    public static function saveFileToDB($uploadedFile, $model, $dir = 'upload')
+    {
+        $disk = 'public';
+
+        $newFile = new File();
+        $newFile->model_id = $model->id;
+        $newFile->model_class = get_class($model);
+        $newFile->disk = $disk;
+        $newFile->path = $uploadedFile->store($dir, $disk);
+        $saveResult = $newFile->save();
+
+        if (!$saveResult) {
+            // Remove the uploaded file from disk
+            $newFile->deleteFromDisk();
+
+            throw new \Exception("Unable to save file to DB!");
+        }
+
+        return $newFile;
     }
 }

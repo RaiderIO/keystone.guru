@@ -62,6 +62,12 @@ class DungeonRoute extends Model
         return $this->hasMany('App\Models\DungeonRouteAffixGroup');
     }
 
+    /**
+     * Saves this DungeonRoute with information from the passed Request.
+     * 
+     * @param Request $request
+     * @return bool
+     */
     public function saveFromRequest(Request $request)
     {
         $result = false;
