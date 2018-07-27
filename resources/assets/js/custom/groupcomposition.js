@@ -1,11 +1,11 @@
 $(function () {
-    $("#faction").bind('change', _factionChanged);
+    $("#faction_id").bind('change', _factionChanged);
     $(".raceselect").bind('change', _raceChanged);
 
     $(".selectpicker").selectpicker();
 
     // Add icons to the faction dropdown
-    $.each($("#faction option"), function (index, value) {
+    $.each($("#faction_id option"), function (index, value) {
         let faction = _factions[index];
         let html = $("#template_faction_dropdown_icon_" + faction.name.toLowerCase()).html();
         $(value).data('content', html);
@@ -15,7 +15,7 @@ $(function () {
 function _factionChanged() {
     // console.log(">> _factionChanged");
 
-    let newFaction = parseInt($("#faction").val());
+    let newFaction = parseInt($("#faction_id").val());
     let $raceSelect = $("select.raceselect");
     let $classSelect = $("select.classselect");
 

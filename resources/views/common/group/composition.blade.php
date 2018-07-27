@@ -45,9 +45,9 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 
             let faction = '{{ $dungeonroute->faction_id }}';
             let races = {!! $dungeonroute->races !!};
-            let classes = {!! $dungeonroute->characterclasses !!};
+            let classes = {!! $dungeonroute->classes !!};
 
-            let $faction = $("#faction");
+            let $faction = $("#faction_id");
             $faction.val(faction);
             // Have to manually trigger change..
             $faction.trigger('change');
@@ -58,17 +58,18 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
             // For each race
             for (let i = 0; i < races.length; i++) {
                 let race = races[i];
-                let $raceSelect = $($racesSelects[race.index]);
-                $raceSelect.val(race.character_race_id);
+                let $raceSelect = $($racesSelects[i]);
+                $raceSelect.val(race.id);
                 // Have to manually trigger change..
                 $raceSelect.trigger('change');
             }
 
             // For each class
             for (let i = 0; i < classes.length; i++) {
-                let drClass = classes[i];
-                let $classSelect = $($classSelects[drClass.index]);
-                $classSelect.val(drClass.character_class_id);
+                let characterClass = classes[i];
+                console.log(characterClass);
+                let $classSelect = $($classSelects[i]);
+                $classSelect.val(characterClass.id);
                 // Have to manually trigger change..
                 $classSelect.trigger('change');
             }
@@ -83,9 +84,9 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 <div class="col-lg-12">
     <div class="col-lg-offset-5 col-lg-2">
         <div class="form-group">
-            {!! Form::label('faction', __('Select faction')) !!}
+            {!! Form::label('faction_id', __('Select faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
-            {!! Form::select('faction', \App\Models\Faction::all()->pluck('name', 'id'), 0, ['class' => 'form-control selectpicker']) !!}
+            {!! Form::select('faction_id', \App\Models\Faction::all()->pluck('name', 'id'), 0, ['class' => 'form-control selectpicker']) !!}
         </div>
     </div>
     @isset($dungeonroute)

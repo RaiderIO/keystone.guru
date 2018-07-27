@@ -41,7 +41,7 @@
                 <td class="hidden-xs">{{ sprintf(__('%s selected'), count($route->affixgroups)) }}</td>
                 <td class="hidden-xs">
                     <img src="{{ Image::url($route->faction->iconfile->getUrl(), 32, 32) }}" class="select_icon faction_icon"/> |
-                    @foreach($route->characterclasses as $class)
+                    @foreach($route->classes as $class)
                         <?php /** @var $class \App\Models\CharacterClass */ ?>
                         <img src="{{ Image::url($class->iconfile->getUrl(), 32, 32) }}" class="select_icon class_icon"/>
                     @endforeach

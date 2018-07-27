@@ -47,7 +47,7 @@
                 url: '{{ route('api.dungeonroute.update', $model->id) }}',
                 dataType: 'json',
                 data: {
-                    faction: $("#faction").val(),
+                    faction_id: $("#faction_id").val(),
                     race:
                         $(".raceselect select").map(function () {
                             return $(this).val();

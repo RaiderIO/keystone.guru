@@ -19,8 +19,8 @@
         </div>
         <div class="col-lg-12">
             <div class="form-group">
-                {!! Form::label('dungeon', __('Select dungeon') . "*") !!}
-                {!! Form::select('dungeon', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+                {!! Form::label('dungeon_id', __('Select dungeon') . "*") !!}
+                {!! Form::select('dungeon_id', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
             </div>
         </div>
 

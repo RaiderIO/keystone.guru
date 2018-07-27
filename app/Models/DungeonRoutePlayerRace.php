@@ -20,7 +20,24 @@ class DungeonRoutePlayerRace extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function dungeonroute(){
+    public function dungeonroute()
+    {
         return $this->belongsTo('App\Models\DungeonRoute');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function characterrace()
+    {
+        return $this->belongsTo('App\Models\CharacterRace');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function races()
+    {
+        return $this->belongsToMany('App\Models\DungeonRoutePlayerRace', 'dungeon_route_player_races');
     }
 }

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class CharacterRace extends Model
 {
     public $timestamps = false;
+    public $hidden = ['icon_file_id', 'pivot'];
 
     function classes()
     {

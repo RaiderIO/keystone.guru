@@ -20,17 +20,22 @@ class DungeonRoutePlayerClass extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function dungeonroute(){
+    public function dungeonroute()
+    {
         return $this->belongsTo('App\Models\DungeonRoute');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function characterclass(){
+    public function characterclass()
+    {
         return $this->belongsTo('App\Models\CharacterClass');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     function dungeonrouteplayerclasses()
     {
         return $this->belongsToMany('App\Models\DungeonRoutePlayerClass', 'dungeon_route_player_classes');
