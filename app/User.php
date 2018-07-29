@@ -8,6 +8,9 @@ use Laratrust\Traits\LaratrustUserTrait;
 
 /**
  * @property $id int
+ * @property $name string
+ * @property $email string
+ * @property $password string
  */
 class User extends Authenticatable
 {

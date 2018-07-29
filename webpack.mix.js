@@ -12,6 +12,7 @@ const argv = require('yargs').argv;
  |
  */
 
+// npm run dev -- --env.full true
 // false if not defined, true if defined
 let full = false;
 if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
