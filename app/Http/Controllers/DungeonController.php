@@ -5,22 +5,33 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DungeonFormRequest;
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use Illuminate\Http\Request;
 
-class DungeonController extends BaseController
+class DungeonController extends Controller
 {
-    public function __construct()
+    /**
+     * @param DungeonFormRequest $request
+     * @param Dungeon $dungeon
+     * @return mixed
+     * @throws \Exception
+     */
+    public function store($request, Dungeon $dungeon = null)
     {
-        parent::__construct('dungeon', '\App\Models\Dungeon', 'admin');
-    }
+        if ($dungeon === null) {
+            $dungeon = new Dungeon();
+        }
 
-    public function getNewHeaderTitle()
-    {
-        return __('New dungeon');
-    }
+        /** @var Dungeon $dungeon */
+        $dungeon->name = $request->get('name');
+        // May not be set when editing
+        $dungeon->expansion_id = $request->get('expansion_id');
 
-    public function getEditHeaderTitle()
-    {
-        return __('Edit dungeon');
+        // Update or insert it
+        if (!$dungeon->save()) {
+            abort(500, 'Unable to save dungeon');
+        }
+
+        return $dungeon;
     }
 
     /**
@@ -28,78 +39,67 @@ class DungeonController extends BaseController
      */
     public function new()
     {
-        // Override so we can set the expansions and floors for the edit page
-        $this->_setVariables(array(
+        return view('admin.dungeon.edit', [
             'expansions' => Expansion::all()->pluck('name', 'id'),
-            // 'floors' => DB::table('floors')->where('dungeon_id', '=', $id)
-        ));
-
-        return parent::new();
+            'headerTitle' => __('New dungeon')
+        ]);
     }
 
     /**
-     * @param $id
+     * @param Request $request
+     * @param Dungeon $dungeon
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Request $request, Dungeon $dungeon)
     {
-        // Override so we can set the expansions and floors for the edit page
-        $this->_setVariables(array(
+        return view('admin.dungeon.edit', [
             'expansions' => Expansion::all()->pluck('name', 'id'),
-            // 'floors' => DB::table('floors')->where('dungeon_id', '=', $id)
-        ));
-
-        return parent::edit($id);
+            'model' => $dungeon,
+            'headerTitle' => __('Edit dungeon')
+        ]);
     }
 
     /**
      * @param DungeonFormRequest $request
-     * @param int $id
-     * @return mixed
-     * @throws \Exception
-     */
-    public function store($request, int $id = -1)
-    {
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::findOrNew($id);
-        $edit = $id !== -1;
-
-        $dungeon->name = $request->get('name');
-        // May not be set when editing
-        $dungeon->expansion_id = $request->get('expansion');
-
-        // Update or insert it
-        if (!$dungeon->save()) {
-            abort(500, 'Unable to save dungeon');
-        }
-
-        \Session::flash('status', sprintf(__('Dungeon %s'), $edit ? __("updated") : __("saved")));
-
-        return $dungeon->id;
-    }
-
-    /**
-     * Override to give the type hint which is required.
-     *
-     * @param DungeonFormRequest $request
-     * @param int $id
+     * @param Dungeon $dungeon
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      */
-    public function update(DungeonFormRequest $request, $id){
-        return parent::_update($request, $id);
+    public function update(DungeonFormRequest $request, Dungeon $dungeon)
+    {
+        // Store it and show the edit page again
+        $dungeon = $this->store($request, $dungeon);
+
+        // Message to the user
+        \Session::flash('status', __('Dungeon updated'));
+
+        // Display the edit page
+        return $this->edit($request, $dungeon);
     }
 
     /**
-     * Override to give the type hint which is required.
-     *
      * @param DungeonFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
     public function savenew(DungeonFormRequest $request)
     {
-        // Store it and show the edit page for the new item upon success
-        return parent::_savenew($request);
+        // Store it and show the edit page
+        $dungeon = $this->store($request);
+
+        // Message to the user
+        \Session::flash('status', __('Dungeon created'));
+
+        return redirect()->route('admin.dungeon.edit', ["dungeon" => $dungeon]);
+    }
+
+    /**
+     * Handles the viewing of a collection of items in a table.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     */
+    public function list()
+    {
+        return view('admin.dungeon.list', ['models' => Dungeon::all()]);
     }
 }

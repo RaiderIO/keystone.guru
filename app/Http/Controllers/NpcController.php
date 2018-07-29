@@ -31,7 +31,7 @@ class NpcController extends Controller
             abort(500, 'Unable to save npc!');
         }
 
-        return $npc->id;
+        return $npc;
     }
 
     /**
@@ -41,7 +41,10 @@ class NpcController extends Controller
      */
     public function new()
     {
-        return view('admin.expansion.edit', ['classifications' => NpcClassification::all()->pluck('name', 'id'), 'headerTitle' => __('New expansion')]);
+        return view('admin.npc.edit', [
+            'classifications' => NpcClassification::all()->pluck('name', 'id'),
+            'headerTitle' => __('New npc')
+        ]);
     }
 
     /**
@@ -51,10 +54,10 @@ class NpcController extends Controller
      */
     public function edit(Request $request, Npc $npc)
     {
-        return view('admin.expansion.edit', [
+        return view('admin.npc.edit', [
             'model' => $npc,
             'classifications' => NpcClassification::all()->pluck('name', 'id'),
-            'headerTitle' => __('Edit expansion')
+            'headerTitle' => __('Edit npc')
         ]);
     }
 
@@ -72,7 +75,7 @@ class NpcController extends Controller
         $npc = $this->store($request, $npc);
 
         // Message to the user
-        \Session::flash('status', __('Expansion updated'));
+        \Session::flash('status', __('Npc updated'));
 
         // Display the edit page
         return $this->edit($request, $npc);
@@ -89,8 +92,18 @@ class NpcController extends Controller
         $npc = $this->store($request);
 
         // Message to the user
-        \Session::flash('status', __('NPC created'));
+        \Session::flash('status', __('Npc created'));
 
-        return redirect()->route('admin.expansion.edit', ["npc" => $npc]);
+        return redirect()->route('admin.npc.edit', ["npc" => $npc]);
+    }
+
+    /**
+     * Handles the viewing of a collection of items in a table.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     */
+    public function list()
+    {
+        return view('admin.npc.list', ['models' => Npc::all()]);
     }
 }

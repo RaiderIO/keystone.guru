@@ -49,8 +49,6 @@ class ExpansionController extends Controller
     }
 
     /**
-     * Override to give the type hint which is required.
-     *
      * @param ExpansionFormRequest $request
      * @param Expansion $expansion
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -69,8 +67,6 @@ class ExpansionController extends Controller
     }
 
     /**
-     * Override to give the type hint which is required.
-     *
      * @param ExpansionFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception

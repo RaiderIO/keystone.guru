@@ -45,12 +45,12 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
 
     // Dungeons
     Route::get('admin/dungeon/new', 'DungeonController@new')->name('admin.dungeon.new');
-    Route::get('admin/dungeon/{id}', 'DungeonController@edit')->name('admin.dungeon.edit');
+    Route::get('admin/dungeon/{dungeon}', 'DungeonController@edit')->name('admin.dungeon.edit');
 
     Route::post('admin/dungeon/new', 'DungeonController@savenew')->name('admin.dungeon.savenew');
-    Route::patch('admin/dungeon/{id}', 'DungeonController@update')->name('admin.dungeon.update');
+    Route::patch('admin/dungeon/{dungeon}', 'DungeonController@update')->name('admin.dungeon.update');
 
-    Route::get('admin/dungeons', 'DungeonController@view')->name('admin.dungeons');
+    Route::get('admin/dungeons', 'DungeonController@list')->name('admin.dungeons');
 
     // Floors
     Route::get('admin/floor/new', 'FloorController@newfloor')->name('admin.floor.new')->where(['dungeon' => '[0-9]+']);
@@ -75,5 +75,5 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::post('admin/npc/new', 'NpcController@savenew')->name('admin.npc.savenew');
     Route::patch('admin/npc/{npc}', 'NpcController@update')->name('admin.npc.update');
 
-    Route::get('admin/npcs', 'NpcController@view')->name('admin.npcs');
+    Route::get('admin/npcs', 'NpcController@list')->name('admin.npcs');
 });

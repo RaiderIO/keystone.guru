@@ -28,10 +28,10 @@
         {{ Form::open(['route' => 'admin.dungeon.savenew']) }}
     @endisset
 
-<div class="form-group{{ $errors->has('expansion') ? ' has-error' : '' }}">
-    {!! Form::label('expansion', __('Expansion')) !!}
-    {!! Form::select('expansion', $expansions, null, ['class' => 'form-control']) !!}
-    @include('common.forms.form-error', ['key' => 'expansion'])
+<div class="form-group{{ $errors->has('expansion_id') ? ' has-error' : '' }}">
+    {!! Form::label('expansion_id', __('Expansion')) !!}
+    {!! Form::select('expansion_id', $expansions, null, ['class' => 'form-control']) !!}
+    @include('common.forms.form-error', ['key' => 'expansion_id'])
 </div>
 
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
