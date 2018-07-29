@@ -25,10 +25,10 @@
     @include('common.forms.form-error', ['key' => 'name'])
 </div>
 
-<div class="form-group{{ $errors->has('classification') ? ' has-error' : '' }}">
-    {!! Form::label('classification', __('Classification')) !!}
-    {!! Form::select('classification', $classifications, null, ['class' => 'form-control']) !!}
-    @include('common.forms.form-error', ['key' => 'classification'])
+<div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
+    {!! Form::label('classification_id', __('Classification')) !!}
+    {!! Form::select('classification_id', $classifications, null, ['class' => 'form-control']) !!}
+    @include('common.forms.form-error', ['key' => 'classification_id'])
 </div>
 
 <div class="form-group{{ $errors->has('base_health') ? ' has-error' : '' }}">

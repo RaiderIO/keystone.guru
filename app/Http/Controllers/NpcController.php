@@ -2,79 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use App\Http\Requests\NpcFormRequest;
 use App\Models\Npc;
 use App\Models\NpcClassification;
-use Teapot\StatusCode\Http;
+use Illuminate\Http\Request;
 
-class NpcController extends BaseController
+class NpcController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct('npc', '\App\Models\Npc', 'admin');
-    }
-
-    public function getNewHeaderTitle()
-    {
-        return __('New NPC');
-    }
-
-    public function getEditHeaderTitle()
-    {
-        return __('Edit NPC');
-    }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function new()
-    {
-        // Override so we can set the classifications for the edit page
-        $this->_setVariables(array(
-            'classifications' => NpcClassification::all()->pluck('name', 'id'),
-            // 'floors' => DB::table('floors')->where('dungeon_id', '=', $id)
-        ));
-
-        return parent::new();
-    }
-
-    /**
-     * @param $id
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        // Override so we can set the classifications for the edit page
-        $this->_setVariables(array(
-            'classifications' => NpcClassification::all()->pluck('name', 'id'),
-            // 'floors' => DB::table('floors')->where('dungeon_id', '=', $id)
-        ));
-
-        return parent::edit($id);
-    }
-
-    public function list(Request $request)
-    {
-        return Npc::all()/*with(['vertices'])->*/
-        ->get(['id', 'name']);
-    }
-
-    /**
-     * @param NPCFormRequest $request
-     * @param int $id
+     * @param NpcFormRequest $request
+     * @param Npc $npc
      * @return array|mixed
      * @throws \Exception
      */
-    public function store($request, int $id = -1)
+    public function store(NpcFormRequest $request, Npc $npc = null)
     {
-        /** @var Npc $npc */
-        $npc = Npc::findOrNew($id);
-        $edit = $id !== -1;
+        if ($npc === null) {
+            $npc = new Npc();
+        }
 
-        $npc->classification_id = $request->get('classification');
+        $npc->classification_id = $request->get('classification_id');
         $npc->game_id = $request->get('game_id');
         $npc->name = $request->get('name');
         $npc->base_health = $request->get('base_health');
@@ -82,49 +30,67 @@ class NpcController extends BaseController
         if (!$npc->save()) {
             abort(500, 'Unable to save npc!');
         }
-        \Session::flash('status', sprintf(__('Npc %s'), $edit ? __("updated") : __("saved")));
 
         return $npc->id;
     }
 
-    public function delete(Request $request)
+    /**
+     * Show a page for creating a new expansion.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function new()
     {
-        try {
-            /** @var Npc $npc */
-            $npc = Npc::findOrFail($request->get('id'));
+        return view('admin.expansion.edit', ['classifications' => NpcClassification::all()->pluck('name', 'id'), 'headerTitle' => __('New expansion')]);
+    }
 
-            $npc->delete();
-            $result = ['result' => 'success'];
-        } catch (\Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
-
-        return $result;
+    /**
+     * @param Request $request
+     * @param Npc $npc
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit(Request $request, Npc $npc)
+    {
+        return view('admin.expansion.edit', [
+            'model' => $npc,
+            'classifications' => NpcClassification::all()->pluck('name', 'id'),
+            'headerTitle' => __('Edit expansion')
+        ]);
     }
 
     /**
      * Override to give the type hint which is required.
      *
      * @param NpcFormRequest $request
-     * @param int $id
+     * @param Npc $npc
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      */
-    public function update(NpcFormRequest $request, $id)
+    public function update(NpcFormRequest $request, Npc $npc)
     {
-        return parent::_update($request, $id);
+        // Store it and show the edit page again
+        $npc = $this->store($request, $npc);
+
+        // Message to the user
+        \Session::flash('status', __('Expansion updated'));
+
+        // Display the edit page
+        return $this->edit($request, $npc);
     }
 
     /**
-     * Override to give the type hint which is required.
-     *
      * @param NpcFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
     public function savenew(NpcFormRequest $request)
     {
-        // Store it and show the edit page for the new item upon success
-        return parent::_savenew($request);
+        // Store it and show the edit page
+        $npc = $this->store($request);
+
+        // Message to the user
+        \Session::flash('status', __('NPC created'));
+
+        return redirect()->route('admin.expansion.edit', ["npc" => $npc]);
     }
 }

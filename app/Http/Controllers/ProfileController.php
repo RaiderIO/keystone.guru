@@ -14,8 +14,11 @@ class ProfileController extends Controller
         return view('profile.edit');
     }
 
-    //
-
+    /**
+     * @param Request $request
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, User $user)
     {
         $user->name = $request->get('name');
@@ -35,12 +38,12 @@ class ProfileController extends Controller
         return view('profile.view');
     }
 
-    public function list(Request $request)
+    public function changepassword(Request $request)
     {
         return view('profile.list');
     }
 
-    public function changepassword(Request $request)
+    public function list(Request $request)
     {
         return view('profile.list');
     }

@@ -26,7 +26,7 @@ class NpcFormRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'classification' => 'required',
+            'classification_id' => 'required',
             'base_health' => [
                 'required',
                 'regex:/^[\d\s,]*$/',
