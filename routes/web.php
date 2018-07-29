@@ -53,11 +53,11 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::get('admin/dungeons', 'DungeonController@list')->name('admin.dungeons');
 
     // Floors
-    Route::get('admin/floor/new', 'FloorController@newfloor')->name('admin.floor.new')->where(['dungeon' => '[0-9]+']);
-    Route::get('admin/floor/{id}', 'FloorController@editfloor')->name('admin.floor.edit');
+    Route::get('admin/floor/new', 'FloorController@new')->name('admin.floor.new')->where(['dungeon' => '[0-9]+']);
+    Route::get('admin/floor/{floor}', 'FloorController@edit')->name('admin.floor.edit');
 
     Route::post('admin/floor/new', 'FloorController@savenew')->name('admin.floor.savenew')->where(['dungeon' => '[0-9]+']);
-    Route::patch('admin/floor/{id}', 'FloorController@update')->name('admin.floor.update');
+    Route::patch('admin/floor/{floor}', 'FloorController@update')->name('admin.floor.update');
 
     // Expansions
     Route::get('admin/expansion/new', 'ExpansionController@new')->name('admin.expansion.new');

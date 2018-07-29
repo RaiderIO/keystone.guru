@@ -8,74 +8,24 @@ use App\Models\Floor;
 use App\Models\Npc;
 use Illuminate\Http\Request;
 
-class FloorController extends BaseController
+class FloorController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct('floor', '\App\Models\Floor', 'admin');
-    }
-
-    public function getNewHeaderTitle()
-    {
-        return __('New floor');
-    }
-
-    public function getEditHeaderTitle()
-    {
-        return __('Edit floor');
-    }
-
-    private function _setDungeonVariable($dungeonId)
-    {
-        $this->_addVariable(
-            'dungeon', Dungeon::findOrFail($dungeonId)
-        );
-    }
 
     /**
-     * @param $request Request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Request $request
+     * @param Floor|null $floor
+     * @return Floor
      */
-    public function newfloor(Request $request)
+    public function store(Request $request, Floor $floor = null)
     {
-        $dungeon = $request->get("dungeon");
-        $this->_setDungeonVariable($dungeon);
-        $this->_addVariable('floors', Floor::all()->where('dungeon_id', '=', $dungeon));
-        return parent::new();
-    }
-
-    /**
-     * @param $id int
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function editfloor($id)
-    {
-        /** @var $floor Floor */
-        $floor = Floor::findOrFail($id);
-        $this->_setDungeonVariable($floor->dungeon_id);
-        $this->_addVariable('floors', Floor::all()->where('dungeon_id', '=', $floor->dungeon_id)->where('id', '<>', $id));
-        $this->_addVariable('npcs', Npc::all());
-        return parent::edit($id);
-    }
-
-    /**
-     * @param FloorFormRequest $request
-     * @param int $id
-     * @return mixed
-     * @throws \Exception
-     */
-    public function store($request, int $id = -1)
-    {
-        /** @var Floor $floor */
-        $floor = Floor::findOrNew($id);
-        $edit = $id !== -1;
-
-        $floor->index = $request->get('index');
-        $floor->name = $request->get('name');
-        if( !$edit ){
+        if($floor === null ){
+            $floor = new Floor();
             // May not be set when editing
             $floor->dungeon_id = $request->get('dungeon');
         }
+
+        $floor->index = $request->get('index');
+        $floor->name = $request->get('name');
 
         // Update or insert it
         if (!$floor->save()) {
@@ -84,44 +34,80 @@ class FloorController extends BaseController
             // Remove all existing relationships
             $floor->directConnectedFloors()->detach($request->get('connectedfloors'));
             $floor->reverseConnectedFloors()->detach($request->get('connectedfloors'));
+
             // Create a new direct relationship
             $floor->directConnectedFloors()->sync($request->get('connectedfloors'));
         }
 
-        \Session::flash('status', sprintf(__('Floor %s'), $edit ? __("updated") : __("saved")));
-
-        // Must set the variable to set it for the incoming redirect
-        $this->_setDungeonVariable($floor->dungeon_id);
-        $this->_addVariable('floors', Floor::all()->where('dungeon_id', '=', $floor->dungeon_id)->where('id', '<>', $id));
-        return $floor->id;
+        return $floor;
     }
 
     /**
-     * Override to give the type hint which is required.
-     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function new(Request $request)
+    {
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::findOrFail($request->get("dungeon"));
+
+        return view('admin.floor.edit', [
+            'dungeon' => $dungeon,
+            'floors' => Floor::all()->where('dungeon_id', '=', $dungeon->id),
+            'headerTitle' => __('New floor')
+        ]); // xxx
+    }
+
+    /**
+     * @param Request $request
+     * @param Floor $floor
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit(Request $request, Floor $floor)
+    {
+        return view('admin.floor.edit', [
+            'model' => $floor,
+            'dungeon' => $floor->dungeon,
+            'floors' => Floor::all()->where('dungeon_id', '=', $floor->dungeon_id)->where('id', '<>', $floor->id),
+            'npcs' => Npc::all(),
+            'headerTitle' => __('Edit floor')
+        ]);
+    }
+
+    /**
      * @param FloorFormRequest $request
-     * @param int $id
+     * @param Floor $floor
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      */
-    public function update(FloorFormRequest $request, $id){
-        $this->_addVariable('npcs', Npc::all());
+    public function update(FloorFormRequest $request, Floor $floor)
+    {
+        // Store it and show the edit page again
+        $floor = $this->store($request, $floor);
 
-        return parent::_update($request, $id);
+        // Message to the user
+        \Session::flash('status', __('Floor updated'));
+
+        // Display the edit page
+        return $this->edit($request, $floor);
     }
 
     /**
-     * Override to give the type hint which is required.
-     *
      * @param FloorFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
     public function savenew(FloorFormRequest $request)
     {
-        $this->_setVariables(['dungeon' => $request->get('dungeon')]);
+        // Store it and show the edit page
+        $floor = $this->store($request);
 
-        // Store it and show the edit page for the new item upon success
-        return parent::_savenew($request);
+        // Message to the user
+        \Session::flash('status', __('Floor created'));
+
+        return redirect()->route('admin.floor.edit', [
+            'dungeon' => $request->get('dungeon'),
+            'floor' => $floor
+        ]);
     }
 }

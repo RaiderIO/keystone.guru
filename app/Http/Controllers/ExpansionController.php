@@ -14,7 +14,7 @@ class ExpansionController extends Controller
      * @return mixed
      * @throws \Exception
      */
-    public function store($request, Expansion $expansion = null)
+    public function store(ExpansionFormRequest $request, Expansion $expansion = null)
     {
         if ($new = ($expansion === null)) {
             $expansion = new Expansion();
