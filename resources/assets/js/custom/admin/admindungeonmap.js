@@ -2,10 +2,20 @@
 
 class AdminDungeonMap extends DungeonMap {
 
+    /**
+     * Get a new instance of a DrawControls object which will be added to the map
+     * @param drawnItemsLayer
+     * @returns {DrawControls}
+     * @protected
+     */
+    _getDrawControls(drawnItemsLayer) {
+        return new AdminDrawControls(this, drawnItemsLayer);
+    }
+
     refreshLeafletMap() {
         super.refreshLeafletMap();
 
-        let verboseEvents = true;
+        let verboseEvents = false;
 
         let self = this;
 
@@ -14,56 +24,10 @@ class AdminDungeonMap extends DungeonMap {
         this.enemyClassName = "AdminEnemy";
         this.enemyAttaching = new EnemyAttaching(this);
 
-        this._drawnItems = new L.FeatureGroup();
-        this.leafletMap.addLayer(this._drawnItems);
-
         L.drawLocal.draw.toolbar.buttons.polygon = 'Draw an enemy group';
         L.drawLocal.draw.toolbar.buttons.circlemarker = 'Draw an enemy';
 
-        let options = {
-            position: 'topleft',
-            draw: {
-                polyline: false,
-                // polyline: {
-                //     shapeOptions: {
-                //         color: '#f357a1',
-                //         weight: 10
-                //     }
-                // },
-                polygon: {
-                    allowIntersection: false, // Restricts shapes to simple polygons
-                    drawError: {
-                        color: '#e1e100', // Color the shape will turn when intersects
-                        message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
-                    },
-                    // shapeOptions: {
-                    //     color: c.map.admin.mapobject.colors.unsaved
-                    // }
-                },
-                rectangle: false,
-                circle: false,
-                marker: false,
-                circlemarker: {
-                    icon: new L.DivIcon({
-                        iconSize: new L.Point(10, 10),
-                        className: 'leaflet-div-icon leaflet-editing-icon my-own-class'
-                    }),
-                }
-            },
-            edit: {
-                featureGroup: this._drawnItems, //REQUIRED!!
-                remove: true
-            }
-        };
 
-        // Make sure it does not get added multiple times
-        console.log(typeof this._drawControl);
-        if (typeof this._drawControl === 'object') {
-            this.leafletMap.removeControl(this._drawControl);
-        }
-
-        this._drawControl = new L.Control.Draw(options);
-        this.leafletMap.addControl(this._drawControl);
 
         // If we created something
         this.leafletMap.on(L.Draw.Event.CREATED, function (event) {

@@ -29,6 +29,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/signalable.js',
         'resources/assets/js/custom/dungeonmap.js',
         'resources/assets/js/custom/mapcontrols.js',
+        'resources/assets/js/custom/drawcontrols.js',
         'resources/assets/js/custom/mapobject.js',
         'resources/assets/js/custom/enemy.js',
         'resources/assets/js/custom/enemypack.js',
@@ -36,6 +37,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/admin/admindungeonmap.js',
         'resources/assets/js/custom/admin/adminenemy.js',
         'resources/assets/js/custom/admin/adminenemypack.js',
+        'resources/assets/js/custom/admin/admindrawcontrols.js',
         // Include the rest
         'resources/assets/js/custom/groupcomposition.js',
         // 'resources/assets/js/custom/**/*.js'

@@ -29,6 +29,7 @@ class DungeonMap extends Signalable {
         this.enemiesLayerGroup = null;
         this.enemyPacksLayerGroup = null;
         this.mapControls = null;
+        this.drawControls = null;
 
         // Create the map object
         this.leafletMap = L.map(mapid, {
@@ -96,6 +97,16 @@ class DungeonMap extends Signalable {
             default:
                 return new Enemy(this, layer);
         }
+    }
+
+    /**
+     * Get a new instance of a DrawControls object which will be added to the map
+     * @param drawnItemsLayer
+     * @returns {DrawControls}
+     * @protected
+     */
+    _getDrawControls(drawnItemsLayer) {
+        return new DrawControls(this, drawnItemsLayer);
     }
 
     /**
@@ -198,10 +209,29 @@ class DungeonMap extends Signalable {
         this.setEnemiesVisibility(true);
         this.setEnemyPacksVisibility(true);
 
-        if( this.mapControls !== null ){
+        // Configure the controls (toggle display of enemies, groups etc.)
+        if (this.mapControls !== null) {
             this.mapControls.cleanup();
         }
+
+        // Get the map controls and add it to the map
         this.mapControls = new MapControls(this);
+        this.mapControls.addControl();
+
+        // Configure the Draw Control (draw routes, enemies, enemy groups etc)
+        // Make sure it does not get added multiple times
+        console.log(this.drawControls);
+        if (this.drawControls !== null) {
+            this.drawControls.cleanup();
+        }
+
+        // Refresh the list of drawn items
+        this._drawnItems = new L.FeatureGroup();
+        this.leafletMap.addLayer(this._drawnItems);
+
+        // Get the draw controls and add it to the map
+        this.drawControls = this._getDrawControls(this._drawnItems);
+        this.drawControls.addControl();
 
         // Refresh the packs on the map; re-add them
         this.refreshEnemyPacks();
@@ -226,8 +256,6 @@ class DungeonMap extends Signalable {
                 floor_id: floor.id
             },
             success: function (json) {
-                console.log(json);
-
                 // Remove any layers that were added before
                 for (let i = 0; i < self.enemyPacks.length; i++) {
                     let enemyPack = self.enemyPacks[i];
@@ -273,7 +301,7 @@ class DungeonMap extends Signalable {
                 floor_id: floor.id
             },
             success: function (json) {
-                console.log(json);
+                self.json = json;
 
                 // Remove any layers that were added before
                 for (let i = 0; i < self.enemies.length; i++) {
@@ -283,19 +311,21 @@ class DungeonMap extends Signalable {
                 }
 
                 // Now draw the enemies on the map
-                for (let i = 0; i < json.length; i++) {
-                    let remoteEnemy = json[i];
+                for (let index in json) {
+                    if (json.hasOwnProperty(index)) {
+                        let remoteEnemy = json[index];
 
-                    let layer = L.circleMarker();
-                    layer.setLatLng(L.latLng(remoteEnemy.lat, remoteEnemy.lng));
+                        let layer = L.circleMarker();
+                        layer.setLatLng(L.latLng(remoteEnemy.lat, remoteEnemy.lng));
 
-                    let enemy = self.addEnemy(layer);
-                    enemy.id = remoteEnemy.id;
-                    enemy.enemypack = remoteEnemy.enemy_pack_id;
-                    enemy.npc_id = remoteEnemy.npc_id;
-                    enemy.floor_id = remoteEnemy.floor_id;
-                    // We just downloaded the enemy pack, it's synced alright!
-                    enemy.setSynced(true);
+                        let enemy = self.addEnemy(layer);
+                        enemy.id = remoteEnemy.id;
+                        enemy.enemypack = remoteEnemy.enemy_pack_id;
+                        enemy.npc_id = remoteEnemy.npc_id;
+                        enemy.floor_id = remoteEnemy.floor_id;
+                        // We just downloaded the enemy pack, it's synced alright!
+                        enemy.setSynced(true);
+                    }
                 }
             }
         });
@@ -364,26 +394,26 @@ class DungeonMap extends Signalable {
         this.enemyPacks = newEnemyPacks;
     }
 
-    isEnemiesShown(){
+    isEnemiesShown() {
         return this.leafletMap.hasLayer(this.enemiesLayerGroup);
     }
 
-    setEnemiesVisibility(visible){
-        if( !this.isEnemiesShown() && visible ){
+    setEnemiesVisibility(visible) {
+        if (!this.isEnemiesShown() && visible) {
             this.leafletMap.addLayer(this.enemiesLayerGroup);
-        } else if( this.isEnemiesShown() && !visible ) {
+        } else if (this.isEnemiesShown() && !visible) {
             this.leafletMap.removeLayer(this.enemiesLayerGroup);
         }
     }
 
-    isEnemyPacksShown(){
+    isEnemyPacksShown() {
         return this.leafletMap.hasLayer(this.enemyPacksLayerGroup);
     }
 
-    setEnemyPacksVisibility(visible){
-        if( !this.isEnemyPacksShown() && visible ){
+    setEnemyPacksVisibility(visible) {
+        if (!this.isEnemyPacksShown() && visible) {
             this.leafletMap.addLayer(this.enemyPacksLayerGroup);
-        } else if( this.isEnemyPacksShown() && !visible ) {
+        } else if (this.isEnemyPacksShown() && !visible) {
             this.leafletMap.removeLayer(this.enemyPacksLayerGroup);
         }
     }
