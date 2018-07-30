@@ -12,4 +12,5 @@ use Illuminate\Database\Eloquent\Model;
 class FloorCoupling extends Model
 {
     //
+    public $timestamps = false;
 }

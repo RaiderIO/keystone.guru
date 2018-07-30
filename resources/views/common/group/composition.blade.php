@@ -67,7 +67,6 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
             // For each class
             for (let i = 0; i < classes.length; i++) {
                 let characterClass = classes[i];
-                console.log(characterClass);
                 let $classSelect = $($classSelects[i]);
                 $classSelect.val(characterClass.id);
                 // Have to manually trigger change..

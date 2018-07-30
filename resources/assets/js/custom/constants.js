@@ -24,6 +24,17 @@ var c = {
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple']
         },
+        route: {
+            colors: {
+                unsaved: '#E25D5D',
+
+                edited: '#E2915D',
+
+                saved: '#5DE27F',
+
+                mouseoverAddObject: '#5993D2',
+            }
+        },
         placeholderColors: {}
     }
 };

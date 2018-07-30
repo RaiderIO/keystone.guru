@@ -37,13 +37,13 @@ class Floor extends Model
         return $this->directConnectedFloors->merge($this->reverseConnectedFloors);
     }
 
-    public function reverseConnectedFloors()
-    {
-        return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor2_id', 'floor1_id')->withTimestamps();
-    }
-
     public function directConnectedFloors()
     {
-        return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor1_id', 'floor2_id')->withTimestamps();
+        return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor1_id', 'floor2_id');
+    }
+
+    public function reverseConnectedFloors()
+    {
+        return $this->belongsToMany('App\Models\Floor', 'floor_couplings', 'floor2_id', 'floor1_id');
     }
 }

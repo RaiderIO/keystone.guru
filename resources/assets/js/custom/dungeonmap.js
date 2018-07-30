@@ -220,18 +220,18 @@ class DungeonMap extends Signalable {
 
         // Configure the Draw Control (draw routes, enemies, enemy groups etc)
         // Make sure it does not get added multiple times
-        console.log(this.drawControls);
         if (this.drawControls !== null) {
             this.drawControls.cleanup();
         }
 
         // Refresh the list of drawn items
-        this._drawnItems = new L.FeatureGroup();
-        this.leafletMap.addLayer(this._drawnItems);
+        this.drawnItems = new L.FeatureGroup();
+        this.leafletMap.addLayer(this.drawnItems);
 
         // Get the draw controls and add it to the map
-        this.drawControls = this._getDrawControls(this._drawnItems);
+        this.drawControls = this._getDrawControls(this.drawnItems);
         this.drawControls.addControl();
+
 
         // Refresh the packs on the map; re-add them
         this.refreshEnemyPacks();

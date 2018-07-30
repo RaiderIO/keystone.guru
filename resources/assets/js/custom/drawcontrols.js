@@ -6,7 +6,9 @@ class DrawControls {
         let self = this;
 
         this.map = map;
+        this.drawnItems = drawnItemsLayer;
 
+        console.log(drawnItemsLayer);
         this.drawControlOptions = {
             position: 'topleft',
             draw: {
@@ -27,8 +29,17 @@ class DrawControls {
                 remove: true
             }
         };
+
+        // Add a created item to the list of drawn items
+        this.map.leafletMap.on(L.Draw.Event.CREATED, function (event) {
+            let layer = event.layer;
+            self.drawnItems.addLayer(layer);
+        });
     }
 
+    /**
+     * Removes the control from the map if it exists.
+     */
     cleanup() {
         // Remove the control if it already existed
         if (typeof this._drawControl === 'object') {

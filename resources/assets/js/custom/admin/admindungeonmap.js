@@ -28,12 +28,8 @@ class AdminDungeonMap extends DungeonMap {
         L.drawLocal.draw.toolbar.buttons.circlemarker = 'Draw an enemy';
 
 
-
         // If we created something
         this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
-            let layer = event.layer;
-            self._drawnItems.addLayer(layer);
-
             if (layer instanceof L.Polygon) {
                 self.addEnemyPack(layer);
             } else if (layer instanceof L.CircleMarker) {
@@ -52,11 +48,11 @@ class AdminDungeonMap extends DungeonMap {
             });
         });
 
-        this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
-            console.log(L.Draw.Event.DRAWSTART, e);
-        });
-
         if (verboseEvents) {
+            this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
+                console.log(L.Draw.Event.DRAWSTART, e);
+            });
+
             this.leafletMap.on('layeradd', function (e) {
                 console.log('layeradd', e);
             });
@@ -110,7 +106,6 @@ class AdminDungeonMap extends DungeonMap {
                 console.log(L.Draw.Event.MARKERCONTEXT, e);
             });
         }
-
     }
 
     addEnemyPack(layer) {
@@ -119,7 +114,7 @@ class AdminDungeonMap extends DungeonMap {
         // Just created, not synced!
         enemyPack.setSynced(false);
 
-        this._drawnItems.addLayer(layer);
+        this.drawnItems.addLayer(layer);
         return enemyPack;
     }
 
@@ -129,7 +124,7 @@ class AdminDungeonMap extends DungeonMap {
         // Just created, not synced!
         enemy.setSynced(false);
 
-        this._drawnItems.addLayer(layer);
+        this.drawnItems.addLayer(layer);
         return enemy;
     }
 }
