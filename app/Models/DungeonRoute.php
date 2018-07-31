@@ -11,6 +11,13 @@ use Illuminate\Http\Request;
  * @property $dungeon_id int
  * @property $faction_id int
  * @property $title string
+ * @property $dungeon Dungeon
+ * @property $route Route
+ * @property $faction Faction
+ * @property $author User
+ * @property $races \Illuminate\Support\Collection
+ * @property $classes \Illuminate\Support\Collection
+ * @property $affixgroups \Illuminate\Support\Collection
  */
 class DungeonRoute extends Model
 {
@@ -20,6 +27,14 @@ class DungeonRoute extends Model
     public function dungeon()
     {
         return $this->belongsTo('App\Models\Dungeon');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function route()
+    {
+        return $this->hasOne('App\Models\Route');
     }
 
     /**
@@ -64,7 +79,7 @@ class DungeonRoute extends Model
 
     /**
      * Saves this DungeonRoute with information from the passed Request.
-     * 
+     *
      * @param Request $request
      * @return bool
      */
@@ -76,7 +91,7 @@ class DungeonRoute extends Model
         if (!isset($this->id)) {
             $this->author_id = \Auth::user()->id;
         }
-        
+
         $this->dungeon_id = $request->get('dungeon_id', $this->dungeon_id);
         $this->faction_id = $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('title', $this->title);

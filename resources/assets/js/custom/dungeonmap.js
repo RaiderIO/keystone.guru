@@ -13,9 +13,15 @@ class DungeonMap extends Signalable {
          **/
         this.enemyPacks = [];
         this.enemyPackClassName = "EnemyPack";
+        this.enemyPacksLayerGroup = null;
 
         this.enemies = [];
         this.enemyClassName = "Enemy";
+        this.enemiesLayerGroup = null;
+
+        this.routes = [];
+        this.routeClassName = "Route";
+        this.routeLayerGroup = null;
 
         /**
          * @var Array Stores all possible objects that are displayed on the map
@@ -26,8 +32,6 @@ class DungeonMap extends Signalable {
         this.currentFloorId = floorID;
 
         this.mapTileLayer = null;
-        this.enemiesLayerGroup = null;
-        this.enemyPacksLayerGroup = null;
         this.mapControls = null;
         this.drawControls = null;
 
@@ -68,6 +72,18 @@ class DungeonMap extends Signalable {
             if (layer instanceof L.CircleMarker) {
                 layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
             }
+        }
+    }
+
+    /**
+     * Factory for creating a new route.
+     * @returns {Route}
+     * @private
+     */
+    _createRoute(layer) {
+        switch (this.routeClassName) {
+            default:
+                return new Route(this, layer);
         }
     }
 
@@ -205,6 +221,7 @@ class DungeonMap extends Signalable {
 
         this.enemiesLayerGroup = new L.LayerGroup();
         this.enemyPacksLayerGroup = new L.LayerGroup();
+        this.routeLayerGroup = new L.LayerGroup();
 
         this.setEnemiesVisibility(true);
         this.setEnemyPacksVisibility(true);
@@ -231,6 +248,13 @@ class DungeonMap extends Signalable {
         // Get the draw controls and add it to the map
         this.drawControls = this._getDrawControls(this.drawnItems);
         this.drawControls.addControl();
+
+        // When a
+        this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
+            if (layer instanceof L.Polyline) {
+                self.addRoute(layer);
+            }
+        });
 
 
         // Refresh the packs on the map; re-add them
@@ -332,6 +356,27 @@ class DungeonMap extends Signalable {
     }
 
     /**
+     * Adds a route to the map and to the internal collection of routes.
+     * @param layer The layer that represents the route.
+     * @return Route
+     */
+    addRoute(layer) {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
+        let route = this._createRoute(layer);
+        this.routes.push(route);
+        this.mapObjects.push(route);
+        // layer.addTo(this.leafletMap);
+        this.routeLayerGroup.addLayer(layer);
+
+        route.onLayerInit();
+
+        this.signal('route:add', {route: route});
+
+        return route;
+    }
+
+    /**
      * Adds an enemy pack to the map and to the internal collection of packs.
      * @param layer The layer that represents the pack
      * @return EnemyPack
@@ -392,6 +437,18 @@ class DungeonMap extends Signalable {
             }
         }
         this.enemyPacks = newEnemyPacks;
+    }
+
+    isRouteShown() {
+        return this.leafletMap.hasLayer(this.routeLayerGroup);
+    }
+
+    setRouteVisibility(visible) {
+        if (!this.isRouteShown() && visible) {
+            this.leafletMap.addLayer(this.routeLayerGroup);
+        } else if (this.isRouteShown() && !visible) {
+            this.leafletMap.removeLayer(this.routeLayerGroup);
+        }
     }
 
     isEnemiesShown() {
