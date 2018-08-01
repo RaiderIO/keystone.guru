@@ -12,6 +12,19 @@ class AdminDungeonMap extends DungeonMap {
         return new AdminDrawControls(this, drawnItemsLayer);
     }
 
+    /**
+     *
+     * @returns {[]}
+     * @protected
+     */
+    _createMapObjectGroups(){
+        // For this page, let the enemy pack be the admin version with more functions which are otherwise hidden from the user
+        return [
+            new EnemyMapObjectGroup(this, 'enemy', 'AdminEnemy'),
+            new EnemyPackMapObjectGroup(this, 'enemypack', 'AdminEnemyPack'),
+        ];
+    }
+
     refreshLeafletMap() {
         super.refreshLeafletMap();
 
@@ -19,9 +32,6 @@ class AdminDungeonMap extends DungeonMap {
 
         let self = this;
 
-        // For this page, let the enemy pack be the admin version with more functions which are otherwise hidden from the user
-        this.enemyPackClassName = "AdminEnemyPack";
-        this.enemyClassName = "AdminEnemy";
         this.enemyAttaching = new EnemyAttaching(this);
 
         L.drawLocal.draw.toolbar.buttons.polygon = 'Draw an enemy group';

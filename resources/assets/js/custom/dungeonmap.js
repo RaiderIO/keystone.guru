@@ -8,10 +8,7 @@ class DungeonMap extends Signalable {
 
         this.dungeonData = dungeonData;
 
-        this.mapObjectGroups = [
-            new EnemyMapObjectGroup(this, 'enemy', 'Enemy'),
-            new EnemyPackMapObjectGroup(this, 'enemypacks', 'EnemyPack'),
-        ];
+        this.mapObjectGroups = this._createMapObjectGroups();
 
         console.log(this.mapObjectGroups);
 
@@ -20,12 +17,8 @@ class DungeonMap extends Signalable {
             console.log(this.mapObjectGroups[i]);
             this.mapObjectGroups[i].register('object:add', function (event) {
                 self.mapObjects.push(event.data.object);
-            })
+            });
         }
-
-        this.routes = [];
-        this.routeClassName = "Route";
-        this.routeLayerGroup = null;
 
         /**
          * @var Array Stores all possible objects that are displayed on the map
@@ -59,7 +52,19 @@ class DungeonMap extends Signalable {
 
         this.leafletMap.on('zoomend', (this._adjustZoomForLayers).bind(this));
         this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
-        // Playground
+    }
+
+    /**
+     *
+     * @returns {[]}
+     * @protected
+     */
+    _createMapObjectGroups(){
+        return [
+            new EnemyMapObjectGroup(this, 'enemy', 'Enemy'),
+            new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack'),
+            new RouteMapObjectGroup(this, 'route', 'Route'),
+        ];
     }
 
     /**
@@ -76,18 +81,6 @@ class DungeonMap extends Signalable {
             if (layer instanceof L.CircleMarker) {
                 layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
             }
-        }
-    }
-
-    /**
-     * Factory for creating a new route.
-     * @returns {Route}
-     * @private
-     */
-    _createRoute(layer) {
-        switch (this.routeClassName) {
-            default:
-                return new Route(this, layer);
         }
     }
 
@@ -229,29 +222,10 @@ class DungeonMap extends Signalable {
 
         this.signal('map:refresh', {dungeonmap: this});
 
+        //
         for (let i in this.mapObjectGroups) {
             this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor());
         }
-    }
-    /**
-     * Adds a route to the map and to the internal collection of routes.
-     * @param layer The layer that represents the route.
-     * @return Route
-     */
-    addRoute(layer) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        let route = this._createRoute(layer);
-        this.routes.push(route);
-        this.mapObjects.push(route);
-        // layer.addTo(this.leafletMap);
-        this.routeLayerGroup.addLayer(layer);
-
-        route.onLayerInit();
-
-        this.signal('route:add', {route: route});
-
-        return route;
     }
 
     /**
@@ -272,18 +246,6 @@ class DungeonMap extends Signalable {
             }
         }
         this.enemyPacks = newEnemyPacks;
-    }
-
-    isRouteShown() {
-        return this.leafletMap.hasLayer(this.routeLayerGroup);
-    }
-
-    setRouteVisibility(visible) {
-        if (!this.isRouteShown() && visible) {
-            this.leafletMap.addLayer(this.routeLayerGroup);
-        } else if (this.isRouteShown() && !visible) {
-            this.leafletMap.removeLayer(this.routeLayerGroup);
-        }
     }
 }
 

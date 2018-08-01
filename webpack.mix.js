@@ -43,6 +43,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/mapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/routemapobjectgroup.js',
         // 'resources/assets/js/custom/**/*.js'
     ], 'public/js/custom.js');
 // .combine(, 'public/js/custom.js');

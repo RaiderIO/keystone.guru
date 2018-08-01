@@ -18,7 +18,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
 
     fetchFromServer(floor){
         // no super call required
-        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
+        console.assert(this instanceof EnemyPackMapObjectGroup, this, 'this is not a EnemyPackMapObjectGroup');
 
         let self = this;
 
