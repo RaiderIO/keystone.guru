@@ -70,6 +70,10 @@
     margin-right: 5px;
 }
 
+.user_icon i {
+    padding-left: 1px;
+}
+
 .class_icon {
     background-color: #1d3131;
 }

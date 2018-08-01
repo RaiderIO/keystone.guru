@@ -3,6 +3,7 @@ class Route extends MapObject {
         super(map, layer);
 
         this.setSynced(true);
+        this.label = "The route through the dungeon";
     }
 
     getDifficultyColor(difficulty){

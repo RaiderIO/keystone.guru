@@ -40,12 +40,16 @@ class MapObjectGroup extends Signalable {
         console.error('override the _createObject function!');
     }
 
+    /**
+     *
+     * @param layer
+     * @return MapObject
+     */
     createNew(layer) {
         console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
 
         let object = this._createObject(layer);
         this.objects.push(object);
-        // layer.addTo(this.leafletMap);
         this.layerGroup.addLayer(layer);
 
         object.onLayerInit();

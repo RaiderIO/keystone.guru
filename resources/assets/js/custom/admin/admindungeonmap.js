@@ -1,5 +1,3 @@
-/** @var dungeonMap object */
-
 class AdminDungeonMap extends DungeonMap {
 
     /**
@@ -17,7 +15,7 @@ class AdminDungeonMap extends DungeonMap {
      * @returns {[]}
      * @protected
      */
-    _createMapObjectGroups(){
+    _createMapObjectGroups() {
         // For this page, let the enemy pack be the admin version with more functions which are otherwise hidden from the user
         return [
             new EnemyMapObjectGroup(this, 'enemy', 'AdminEnemy'),
@@ -33,19 +31,6 @@ class AdminDungeonMap extends DungeonMap {
         let self = this;
 
         this.enemyAttaching = new EnemyAttaching(this);
-
-        L.drawLocal.draw.toolbar.buttons.polygon = 'Draw an enemy group';
-        L.drawLocal.draw.toolbar.buttons.circlemarker = 'Draw an enemy';
-
-
-        // If we created something
-        this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
-            if (layer instanceof L.Polygon) {
-                self.addEnemyPack(layer);
-            } else if (layer instanceof L.CircleMarker) {
-                self.addEnemy(layer);
-            }
-        });
 
         // Set all edited layers to no longer be synced.
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {

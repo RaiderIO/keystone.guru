@@ -1,3 +1,18 @@
+$(function () {
+    L.Draw.Enemy = L.Draw.CircleMarker.extend({
+        statics: {
+            TYPE: 'enemy'
+        },
+        options: {},
+        initialize: function (map, options) {
+            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+            this.type = L.Draw.Enemy.TYPE;
+
+            L.Draw.Feature.prototype.initialize.call(this, map, options);
+        }
+    });
+});
+
 class AdminEnemy extends Enemy {
 
     constructor(map, layer) {
@@ -8,20 +23,21 @@ class AdminEnemy extends Enemy {
 
         this.saving = false;
         this.deleting = false;
+        this.setColors(c.map.admin.mapobject.colors);
+        this.setSynced(false);
     }
 
-    onLayerInit(){
+    onLayerInit() {
         super.onLayerInit();
 
         let customPopup = $("#enemy_edit_popup").html();
         // Remove template so our
         customPopup = customPopup.replace('_template', '');
 
-        let customOptions =
-        {
+        let customOptions = {
             'maxWidth': '400',
             'minWidth': '300',
-            'className' : 'popupCustom'
+            'className': 'popupCustom'
         };
         this.layer.bindPopup(customPopup, customOptions);
     }
@@ -53,7 +69,7 @@ class AdminEnemy extends Enemy {
         this.layer.openPopup();
         // Refresh all select pickers so they work again
         $(".selectpicker").selectpicker('refresh');
-        $("#enemy_edit_popup_submit").on('click', function(){
+        $("#enemy_edit_popup_submit").on('click', function () {
             self.npc_id = $("#enemy_edit_popup_npc").val();
 
             self.edit();

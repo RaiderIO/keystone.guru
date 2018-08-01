@@ -74,7 +74,7 @@ class EnemyAttaching {
         this.map.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
             // Whatever we were drawing, we're not anymore so don't do any check for what layerType it is
             self.drawingEnemy = false;
-            console.log("DRAWSTOP" + self.currentMouseoverLayer);
+            console.log("DRAWSTOP", self.currentMouseoverLayer, e);
             if (typeof self.currentMouseoverLayer !== 'undefined') {
                 console.log('assign enemy to ' + self.currentMouseoverLayer);
             }

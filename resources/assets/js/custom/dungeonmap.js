@@ -49,7 +49,6 @@ class DungeonMap extends Signalable {
         // Refresh the map; draw the layers on it
         this.refreshLeafletMap();
 
-
         this.leafletMap.on('zoomend', (this._adjustZoomForLayers).bind(this));
         this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
@@ -59,7 +58,9 @@ class DungeonMap extends Signalable {
      * @returns {[]}
      * @protected
      */
-    _createMapObjectGroups(){
+    _createMapObjectGroups() {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
         return [
             new EnemyMapObjectGroup(this, 'enemy', 'Enemy'),
             new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack'),
@@ -77,9 +78,12 @@ class DungeonMap extends Signalable {
         for (let i = 0; i < this.mapObjects.length; i++) {
             let layer = this.mapObjects[i].layer;
             let zoomStep = Math.max(2, this.leafletMap.getZoom());
-            layer.setStyle({weight: 3 / zoomStep});
-            if (layer instanceof L.CircleMarker) {
+            if (layer instanceof L.Polyline) {
                 layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
+            } else if (layer instanceof L.CircleMarker) {
+                layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
+            } else {
+                layer.setStyle({weight: 3 / zoomStep});
             }
         }
     }
@@ -91,7 +95,27 @@ class DungeonMap extends Signalable {
      * @protected
      */
     _getDrawControls(drawnItemsLayer) {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
         return new DrawControls(this, drawnItemsLayer);
+    }
+
+    /**
+     * Retrieves a map object group by its name.
+     * @param name
+     * @returns {boolean}|{MapObjectGroup}
+     */
+    getMapObjectGroupByName(name) {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
+        let result = false;
+        for (let i in this.mapObjectGroups) {
+            if (this.mapObjectGroups[i].name === name) {
+                result = this.mapObjectGroups[i];
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -99,6 +123,7 @@ class DungeonMap extends Signalable {
      * @returns {boolean|Object}
      */
     getCurrentDungeon() {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
         return this.getDungeonDataById(this.currentDungeonId);
     }
 
@@ -107,6 +132,7 @@ class DungeonMap extends Signalable {
      * @returns {boolean|Object}
      */
     getCurrentFloor() {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
         return this.getDungeonFloorDataById(this.currentDungeonId, this.currentFloorId);
     }
 
@@ -116,6 +142,8 @@ class DungeonMap extends Signalable {
      * @returns {boolean|Object} False if the object could not be found, or the object.
      */
     getDungeonDataById(id) {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
         let result = false;
         $.each(this.dungeonData, function (index, value) {
             if (parseInt(value.id) === parseInt(id)) {
@@ -133,6 +161,8 @@ class DungeonMap extends Signalable {
      * @returns {boolean|Object} False if the object could not be found, or the object.
      */
     getDungeonFloorDataById(dungeonId, floorId) {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
         let dungeon = this.getDungeonDataById(dungeonId);
         let result = false;
         // Found the dungeon?
@@ -154,6 +184,8 @@ class DungeonMap extends Signalable {
      * @param layer object The layer you want the map object for.
      */
     findMapObjectByLayer(layer) {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
         let result = false;
         for (let i = 0; i < this.mapObjects.length; i++) {
             let mapObject = this.mapObjects[i];
@@ -170,6 +202,7 @@ class DungeonMap extends Signalable {
      */
     refreshLeafletMap() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        let self = this;
 
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
@@ -213,10 +246,14 @@ class DungeonMap extends Signalable {
         this.drawControls = this._getDrawControls(this.drawnItems);
         this.drawControls.addControl();
 
-        // When a
+        // If we created something
         this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
-            if (layer instanceof L.Polyline) {
-                self.addRoute(layer);
+            console.log(event);
+            let mapObjectGroup = self.getMapObjectGroupByName(event.layerType);
+            if( mapObjectGroup !== false ){
+                mapObjectGroup.createNew(event.layer);
+            } else {
+                console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
             }
         });
 

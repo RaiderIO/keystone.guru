@@ -21,7 +21,7 @@ class MapObject {
 
     getContextMenuItems() {
         return [{
-            text: this.label,
+            text: this.label + ' (synced: ' + this.synced + ')',
             disabled: true
         }];
     }
@@ -83,7 +83,7 @@ class MapObject {
             return true;
         });
         // On hide, remove all items so they aren't lingering
-        self.map.leafletMap.on('contextmenu.hide', function(){
+        self.map.leafletMap.on('contextmenu.hide', function () {
             self.map.leafletMap.contextmenu.removeAllItems();
         });
         self.layer.on('draw:edited', function () {

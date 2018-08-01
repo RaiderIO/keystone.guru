@@ -1,3 +1,18 @@
+$(function(){
+    L.Draw.EnemyPack = L.Draw.Polygon.extend({
+        statics: {
+            TYPE: 'enemypack'
+        },
+        options: {},
+        initialize: function (map, options) {
+            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+            this.type = L.Draw.EnemyPack.TYPE;
+
+            L.Draw.Feature.prototype.initialize.call(this, map, options);
+        }
+    });
+});
+
 class AdminEnemyPack extends EnemyPack {
 
     constructor(map, layer) {
@@ -5,6 +20,8 @@ class AdminEnemyPack extends EnemyPack {
 
         this.saving = false;
         this.deleting = false;
+        this.setColors(c.map.admin.mapobject.colors);
+        this.setSynced(false);
     }
 
     getContextMenuItems() {

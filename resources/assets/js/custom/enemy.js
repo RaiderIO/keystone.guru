@@ -9,7 +9,7 @@ class Enemy extends MapObject {
         this.setSynced(true);
     }
 
-    getDifficultyColor(difficulty){
+    getDifficultyColor(difficulty) {
         let palette = window.interpolate(c.map.enemy.colors);
         // let rand = Math.random();
         let color = palette(difficulty);

@@ -50,9 +50,23 @@ class DrawControls {
     /**
      * Adds the control to the map.
      */
-    addControl(){
+    addControl() {
         // Add the control to the map
         this._drawControl = new L.Control.Draw(this.drawControlOptions);
         this.map.leafletMap.addControl(this._drawControl);
+
+        // If the option wants, render it with a font-awesome icon instead.
+        // Surely there must be a better way for this but whatever, this works..
+        for (let optionName in this.drawControlOptions.draw) {
+            if (this.drawControlOptions.draw.hasOwnProperty(optionName)) {
+                let option = this.drawControlOptions.draw[optionName];
+                if (option.hasOwnProperty('faClass')) {
+                    // Set the FA icon and remove the background image that was initially there
+                    $(".leaflet-draw-draw-" + optionName)
+                        .html("<i class='fas " + option.faClass + "'></i>")
+                        .css('background-image', 'none');
+                }
+            }
+        }
     }
 }

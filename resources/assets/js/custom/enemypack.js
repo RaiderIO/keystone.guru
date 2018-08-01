@@ -3,8 +3,7 @@ class EnemyPack extends MapObject {
         super(map, layer);
 
         this.label = 'Enemy pack';
-        this.setColors(c.map.admin.mapobject.colors);
-        this.setSynced(false);
+        this.setSynced(true);
     }
 
     // To be overridden by any implementing classes
