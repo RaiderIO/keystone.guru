@@ -10,9 +10,11 @@ class DungeonMap extends Signalable {
 
         this.mapObjectGroups = [
             new EnemyMapObjectGroup(this, 'enemy', 'Enemy'),
+            new EnemyPackMapObjectGroup(this, 'enemypacks', 'EnemyPack'),
         ];
 
         console.log(this.mapObjectGroups);
+
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i in this.mapObjectGroups) {
             console.log(this.mapObjectGroups[i]);
@@ -20,15 +22,6 @@ class DungeonMap extends Signalable {
                 self.mapObjects.push(event.data.object);
             })
         }
-
-        /**
-         * @var Array Stores all enemy packs which are displayed on the map
-         **/
-        this.enemyPacks = [];
-        this.enemyPackClassName = "EnemyPack";
-        this.enemyPacksLayerGroup = null;
-
-        this.enemiesLayerGroup = null;
 
         this.routes = [];
         this.routeClassName = "Route";
@@ -95,20 +88,6 @@ class DungeonMap extends Signalable {
         switch (this.routeClassName) {
             default:
                 return new Route(this, layer);
-        }
-    }
-
-    /**
-     * Factory for creating a new enemy pack.
-     * @returns {EnemyPack}
-     * @private
-     */
-    _createEnemyPack(layer) {
-        switch (this.enemyPackClassName) {
-            case "AdminEnemyPack":
-                return new AdminEnemyPack(this, layer);
-            default:
-                return new EnemyPack(this, layer);
         }
     }
 
@@ -216,10 +195,7 @@ class DungeonMap extends Signalable {
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
 
-        this.enemyPacksLayerGroup = new L.LayerGroup();
         this.routeLayerGroup = new L.LayerGroup();
-
-        this.setEnemyPacksVisibility(true);
 
         // Configure the controls (toggle display of enemies, groups etc.)
         if (this.mapControls !== null) {
@@ -256,103 +232,7 @@ class DungeonMap extends Signalable {
         for (let i in this.mapObjectGroups) {
             this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor());
         }
-
-        // Refresh the packs on the map; re-add them
-        this.refreshEnemyPacks();
     }
-
-    /**
-     * Refreshes the enemy packs that are displayed on the map based on the current dungeon & selected floor.
-     */
-    refreshEnemyPacks() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        let floor = this.getCurrentFloor();
-        let self = this;
-
-        $.ajax({
-            type: 'GET',
-            url: '/api/v1/enemypacks',
-            dataType: 'json',
-            data: {
-                floor_id: floor.id
-            },
-            success: function (json) {
-                // Remove any layers that were added before
-                for (let i = 0; i < self.enemyPacks.length; i++) {
-                    let enemyPack = self.enemyPacks[i];
-                    // Remove all layers
-                    self.leafletMap.removeLayer(enemyPack.layer);
-                }
-
-                // Now draw the packs on the map
-                for (let i = 0; i < json.length; i++) {
-                    let points = [];
-                    let remoteEnemyPack = json[i];
-                    for (let j = 0; j < remoteEnemyPack.vertices.length; j++) {
-                        let vertex = remoteEnemyPack.vertices[j];
-                        points.push([vertex.y, vertex.x]);
-                    }
-
-                    let layer = L.polygon(points);
-
-
-                    let enemyPack = self.addEnemyPack(layer);
-                    enemyPack.id = remoteEnemyPack.id;
-                    // We just downloaded the enemy pack, it's synced alright!
-                    enemyPack.setSynced(true);
-                }
-            }
-        });
-    }
-
-    /**
-     * Refreshes the enemies that are displayed on the map based on the current dungeon & selected floor.
-     */
-    refreshEnemies() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        let floor = this.getCurrentFloor();
-        let self = this;
-
-        $.ajax({
-            type: 'GET',
-            url: '/api/v1/enemies',
-            dataType: 'json',
-            data: {
-                floor_id: floor.id
-            },
-            success: function (json) {
-                self.json = json;
-
-                // Remove any layers that were added before
-                for (let i = 0; i < self.enemies.length; i++) {
-                    let enemy = self.enemies[i];
-                    // Remove all layers
-                    self.leafletMap.removeLayer(enemy.layer);
-                }
-
-                // Now draw the enemies on the map
-                for (let index in json) {
-                    if (json.hasOwnProperty(index)) {
-                        let remoteEnemy = json[index];
-
-                        let layer = L.circleMarker();
-                        layer.setLatLng(L.latLng(remoteEnemy.lat, remoteEnemy.lng));
-
-                        let enemy = self.addEnemy(layer);
-                        enemy.id = remoteEnemy.id;
-                        enemy.enemypack = remoteEnemy.enemy_pack_id;
-                        enemy.npc_id = remoteEnemy.npc_id;
-                        enemy.floor_id = remoteEnemy.floor_id;
-                        // We just downloaded the enemy pack, it's synced alright!
-                        enemy.setSynced(true);
-                    }
-                }
-            }
-        });
-    }
-
     /**
      * Adds a route to the map and to the internal collection of routes.
      * @param layer The layer that represents the route.
@@ -372,27 +252,6 @@ class DungeonMap extends Signalable {
         this.signal('route:add', {route: route});
 
         return route;
-    }
-
-    /**
-     * Adds an enemy pack to the map and to the internal collection of packs.
-     * @param layer The layer that represents the pack
-     * @return EnemyPack
-     */
-    addEnemyPack(layer) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        let enemyPack = this._createEnemyPack(layer);
-        this.enemyPacks.push(enemyPack);
-        this.mapObjects.push(enemyPack);
-        // layer.addTo(this.leafletMap);
-        this.enemyPacksLayerGroup.addLayer(layer);
-
-        enemyPack.onLayerInit();
-
-        this.signal('enemypack:add', {enemypack: enemyPack});
-
-        return enemyPack;
     }
 
     /**
@@ -426,19 +285,6 @@ class DungeonMap extends Signalable {
             this.leafletMap.removeLayer(this.routeLayerGroup);
         }
     }
-
-    isEnemyPacksShown() {
-        return this.leafletMap.hasLayer(this.enemyPacksLayerGroup);
-    }
-
-    setEnemyPacksVisibility(visible) {
-        if (!this.isEnemyPacksShown() && visible) {
-            this.leafletMap.addLayer(this.enemyPacksLayerGroup);
-        } else if (this.isEnemyPacksShown() && !visible) {
-            this.leafletMap.removeLayer(this.enemyPacksLayerGroup);
-        }
-    }
-
 }
 
 

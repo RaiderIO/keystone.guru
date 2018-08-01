@@ -31,11 +31,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             },
             success: function (json) {
                 // Remove any layers that were added before
-                for (let i = 0; i < self.objects.length; i++) {
-                    let enemy = self.objects[i];
-                    // Remove all layers
-                    self.map.leafletMap.removeLayer(enemy.layer);
-                }
+                self._removeObjectsFromLayer.call(self);
 
                 // Now draw the enemies on the map
                 for (let index in json) {

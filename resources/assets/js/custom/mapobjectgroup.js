@@ -21,6 +21,21 @@ class MapObjectGroup extends Signalable {
         }).bind(this));
     }
 
+    /**
+     * Removes all objects' layer from the map layer.
+     * @protected
+     */
+    _removeObjectsFromLayer(){
+        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
+
+        // Remove any layers that were added before
+        for (let i = 0; i < this.objects.length; i++) {
+            let enemyPack = this.objects[i];
+            // Remove all layers
+            this.map.leafletMap.removeLayer(enemyPack.layer);
+        }
+    }
+
     _createObject(layer) {
         console.error('override the _createObject function!');
     }
