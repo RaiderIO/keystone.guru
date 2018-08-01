@@ -34,6 +34,7 @@ window.leafletcontextmenu = require('leaflet-contextmenu');
 window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
 window.bootstrapselect = require('bootstrap-select');
+window.handlebars = require('handlebars');
 
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'

@@ -8,4 +8,4 @@ echo "Regenerating IDE Helper..."
 echo "Refreshing autoload..."
 ./refresh_autoload.sh
 echo "Compiling..."
-npm run dev
+npm run dev -- --env.full true

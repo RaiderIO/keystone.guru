@@ -3,6 +3,8 @@ class RouteMapObjectGroup extends MapObjectGroup {
         super(map, name);
 
         this.classname = classname;
+        this.title = 'Hide/show route';
+        this.fa_class = 'fa-route';
     }
 
     _createObject(layer){

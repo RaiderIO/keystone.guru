@@ -196,7 +196,7 @@ class DungeonMap extends Signalable {
         }
 
         // Get the map controls and add it to the map
-        this.mapControls = new MapControls(this);
+        this.mapControls = new MapObjectGroupControls(this);
         this.mapControls.addControl();
 
         // Configure the Draw Control (draw routes, enemies, enemy groups etc)

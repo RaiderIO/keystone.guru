@@ -30,12 +30,12 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             margin-bottom: 10px;
         }
 
-        #map_controls_hide_enemies.map_controls_custom {
+        #map_controls .map_controls_custom {
             width: 50px;
             background-image: none;
         }
 
-        #map_controls_hide_enemy_packs.map_controls_custom {
+        #map_controls .map_controls_custom {
             width: 50px;
             background-image: none;
         }
@@ -129,6 +129,21 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             }
         }
     </script>
+
+    <script id="map_controls_template" type="text/x-handlebars-template">
+        <div id="map_controls" class="leaflet-draw-section">
+            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
+                @{{#mapobjectgroups}}
+                <a id='map_controls_hide_@{{name}}' class="map_controls_custom" href="#" title="@{{title}}">
+                    <i id='map_controls_hide_@{{name}}_checkbox' class="fa fa-check-square"></i>
+                    <i class="fa @{{fa_class}}"></i>
+                    <span class="sr-only">@{{title}}</span>
+                </a>
+                @{{/mapobjectgroups}}
+            </div>
+            <ul class="leaflet-draw-actions"></ul>
+        </div>
+    </script>
 @endsection
 
 <div class="container">
@@ -175,21 +190,3 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
         </div>
     </div>
 @endif
-
-<div id="map_controls_template" class="hidden">
-    <div class="leaflet-draw-section">
-        <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-            <a id='map_controls_hide_enemies' class="map_controls_custom" href="#" title="Hide enemies">
-                <i id='map_controls_hide_enemies_checkbox' class="fa fa-check-square"></i>
-                <i class="fa fa-users"></i>
-                <span class="sr-only">Hide enemies</span>
-            </a>
-            <a id='map_controls_hide_enemy_packs' class="map_controls_custom" href="#" title="Hide enemy packs">
-                <i id='map_controls_hide_enemy_packs_checkbox' class="fa fa-check-square"></i>
-                <i class="fa fa-object-group"></i>
-                <span class="sr-only">Hide enemy packs</span>
-            </a>
-        </div>
-        <ul class="leaflet-draw-actions"></ul>
-    </div>
-</div>

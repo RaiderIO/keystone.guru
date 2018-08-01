@@ -28,7 +28,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/util.js',
         'resources/assets/js/custom/signalable.js',
         'resources/assets/js/custom/dungeonmap.js',
-        'resources/assets/js/custom/mapcontrols.js',
+        'resources/assets/js/custom/mapobjectgroupcontrols.js',
         'resources/assets/js/custom/drawcontrols.js',
         'resources/assets/js/custom/mapobject.js',
         'resources/assets/js/custom/enemy.js',
@@ -49,6 +49,14 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
 // .combine(, 'public/js/custom.js');
 
 if (full) {
+    // Handlebars has a bug which requires this: https://github.com/wycats/handlebars.js/issues/1174
+    mix.webpackConfig({
+        resolve: {
+            alias: {
+               handlebars: 'handlebars/dist/handlebars.min.js'
+            }
+        }
+    });
     mix.js('resources/assets/js/app.js', 'public/js')
         .sass('resources/assets/sass/app.scss', 'public/css')
         // Lib processing

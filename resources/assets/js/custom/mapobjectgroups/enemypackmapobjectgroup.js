@@ -3,6 +3,8 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
         super(map, name);
 
         this.classname = classname;
+        this.title = 'Hide/show enemy packs';
+        this.fa_class = 'fa-object-group';
     }
 
     _createObject(layer){
