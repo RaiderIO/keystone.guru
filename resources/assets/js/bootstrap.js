@@ -36,6 +36,8 @@ window.gju = require('geojson-utils');
 window.bootstrapselect = require('bootstrap-select');
 window.handlebars = require('handlebars');
 
+require('@fortawesome/fontawesome-free');
+
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
 };

@@ -130,7 +130,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                         <?php $count++; ?>
                     @endforeach
                     <span class="col-lg-1 check pull-right text-right" style="display: none;">
-                        <i class="fa fa-check"></i>
+                        <i class="fas fa-check"></i>
                     </span>
                 </div>
             @endforeach

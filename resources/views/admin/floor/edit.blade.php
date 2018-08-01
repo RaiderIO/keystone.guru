@@ -3,7 +3,7 @@
     {{ $headerTitle }}
     <a href="{{ route('admin.dungeon.edit', ['id' => $dungeon->id]) }}" class="btn btn-info text-white pull-right"
        role="button">
-        <i class="fa fa-backward"></i> {{ __('Back to dungeon') }}
+        <i class="fas fa-backward"></i> {{ __('Back to dungeon') }}
     </a>
 @endsection
 <?php

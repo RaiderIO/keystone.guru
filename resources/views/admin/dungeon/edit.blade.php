@@ -2,7 +2,7 @@
 @section('header-title')
     {{ $headerTitle }}
     <a href="{{ route('admin.dungeons') }}" class="btn btn-info text-white pull-right" role="button">
-        <i class="fa fa-backward"></i> {{ __('Dungeon list') }}
+        <i class="fas fa-backward"></i> {{ __('Dungeon list') }}
     </a>
 @endsection
 <?php
@@ -48,7 +48,7 @@
 <h4>Floor management</h4>
 <br>
 <a href="{{ route('admin.floor.new', array('dungeon' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">
-    <i class="fa fa-plus"></i> {{ __('Add floor') }}
+    <i class="fas fa-plus"></i> {{ __('Add floor') }}
 </a>
 
 <table id="admin_dungeon_floor_table" class="tablesorter default_table">
@@ -69,7 +69,7 @@
         <td>{{ $floor->name }}</td>
         <td>
             <a class="btn btn-primary" href="{{ route('admin.floor.edit', ['id' => $floor->id]) }}">
-                <i class="fa fa-pencil"></i>&nbsp;{{ __('Edit') }}
+                <i class="fas fa-pencil"></i>&nbsp;{{ __('Edit') }}
             </a>
         </td>
     </tr>

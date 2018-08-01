@@ -92,7 +92,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         <div class="col-lg-offset-4 col-lg-1">
             <div class="form-group">
                 <button id="reload_button" class="btn btn-warning">
-                    <i class="fa fa-undo"></i> {{ __('Reset') }}
+                    <i class="fas fa-undo"></i> {{ __('Reset') }}
                 </button>
             </div>
         </div>

@@ -33,16 +33,16 @@
         <div class="panel-heading">{{ __("Map controls") }}</div>
         <div class="panel-body">
             <div class="form-group">
-                {!! Form::button('<i class="fa fa-ban"></i> ' . __('Stop action'), ['id' => 'admin_stop_action', 'class' => 'btn btn-danger', 'style' => 'display: none;']) !!}
+                {!! Form::button('<i class="fas fa-ban"></i> ' . __('Stop action'), ['id' => 'admin_stop_action', 'class' => 'btn btn-danger', 'style' => 'display: none;']) !!}
             </div>
             <div>
                 {{ __("Enemies") }}
             </div>
             <div class="form-group">
-                {!! Form::button('<i class="fa fa-plus"></i> ' . __('Add enemy pack'), ['id' => 'admin_add_enemy_pack', 'class' => 'btn btn-success']) !!}
+                {!! Form::button('<i class="fas fa-plus"></i> ' . __('Add enemy pack'), ['id' => 'admin_add_enemy_pack', 'class' => 'btn btn-success']) !!}
             </div>
             <div class="form-group">
-                {!! Form::button('<i class="fa fa-plus"></i> ' .__('Add enemy to pack'), ['id' => 'admin_add_enemy_to_pack', 'class' => 'btn btn-success']) !!}
+                {!! Form::button('<i class="fas fa-plus"></i> ' .__('Add enemy to pack'), ['id' => 'admin_add_enemy_to_pack', 'class' => 'btn btn-success']) !!}
             </div>
         </div>
     </div>

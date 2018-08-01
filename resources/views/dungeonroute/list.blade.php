@@ -50,7 +50,7 @@
                 <td>{{ $route->rating }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('dungeonroute.edit', ['id' => $route->id]) }}">
-                        <i class="fa fa-pencil"></i>&nbsp;<span class="hidden-xs"> {{ __('Edit') }} </span>
+                        <i class="fas fa-pencil"></i>&nbsp;<span class="hidden-xs"> {{ __('Edit') }} </span>
                     </a>
                 </td>
             </tr>

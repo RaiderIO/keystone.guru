@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 echo "Updating npm..."
 npm update
+echo "Installing npm packages..."
+npm install
 echo "Updating composer..."
 composer update
 echo "Regenerating IDE Helper..."

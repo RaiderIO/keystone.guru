@@ -89,7 +89,7 @@
             <div id="settings_toggle" class="col-lg-12 col-xs-12 text-center btn btn-default" data-toggle="collapse"
                  data-target="#settings">
                 <h4>
-                    <i class="fa fa-cog"></i> {{ __('Settings') }} <i id="settings_caret" class="fa fa-caret-down"></i>
+                    <i class="fas fa-cog"></i> {{ __('Settings') }} <i id="settings_caret" class="fas fa-caret-down"></i>
                 </h4>
             </div>
 
@@ -110,7 +110,7 @@
 
                 <div class="form-group">
                     <div id="save_settings" class="col-lg-offset-5 col-lg-2 btn btn-success">
-                        <i class="fa fa-save"></i> {{ __('Save settings') }}
+                        <i class="fas fa-save"></i> {{ __('Save settings') }}
                     </div>
                 </div>
             </div>

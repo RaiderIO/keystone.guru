@@ -3,7 +3,7 @@
 @section('header-title')
     {{ __('View expansions') }}
     <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right" role="button">
-        <i class="fa fa-plus"></i> {{ __('Create expansion') }}
+        <i class="fas fa-plus"></i> {{ __('Create expansion') }}
     </a>
 @endsection
 
@@ -37,7 +37,7 @@
                 <td>{{ $expansion->color }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.expansion.edit', ['id' => $expansion->id]) }}">
-                        <i class="fa fa-pencil"></i>&nbsp;{{ __('Edit') }}
+                        <i class="fas fa-pencil"></i>&nbsp;{{ __('Edit') }}
                     </a>
                 </td>
             </tr>

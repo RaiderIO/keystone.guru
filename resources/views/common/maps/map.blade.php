@@ -135,8 +135,8 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
                 @{{#mapobjectgroups}}
                 <a id='map_controls_hide_@{{name}}' class="map_controls_custom" href="#" title="@{{title}}">
-                    <i id='map_controls_hide_@{{name}}_checkbox' class="fa fa-check-square"></i>
-                    <i class="fa @{{fa_class}}"></i>
+                    <i id='map_controls_hide_@{{name}}_checkbox' class="fas fa-check-square"></i>
+                    <i class="fas @{{fa_class}}"></i>
                     <span class="sr-only">@{{title}}</span>
                 </a>
                 @{{/mapobjectgroups}}

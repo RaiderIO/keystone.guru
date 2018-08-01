@@ -30,15 +30,15 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         // Merge existing context menu items with the admin ones
         return super.getContextMenuItems().concat([{
-            text: '<i class="fa fa-pencil"></i> ' + (this.editing ? "Editing.." : "Edit"),
+            text: '<i class="fas fa-pencil"></i> ' + (this.editing ? "Editing.." : "Edit"),
             disabled: this.editing,
             callback: (this.startEdit).bind(this)
         }, {
-            text: '<i class="fa fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
+            text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
             disabled: this.synced || this.saving,
             callback: (this.save).bind(this)
         }, '-', {
-            text: '<i class="fa fa-remove"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
+            text: '<i class="fas fa-remove"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
             disabled: !this.synced || this.deleting,
             callback: (this.delete).bind(this)
         }]);

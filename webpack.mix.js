@@ -21,6 +21,7 @@ if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
 
 // Custom processing only
 mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
+    .copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts')
     .combine([
         // Doesn't depend on anything
         'resources/assets/js/custom/constants.js',

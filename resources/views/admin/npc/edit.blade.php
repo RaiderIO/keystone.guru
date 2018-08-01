@@ -2,7 +2,7 @@
 @section('header-title')
     {{ $headerTitle }}
     <a href="{{ route('admin.npcs') }}" class="btn btn-info text-white pull-right" role="button">
-        <i class="fa fa-backward"></i> {{ __('Npc list') }}
+        <i class="fas fa-backward"></i> {{ __('Npc list') }}
     </a>
 @endsection
 <?php

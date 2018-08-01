@@ -3,7 +3,7 @@
 @section('header-title')
     {{ __('View NPCs') }}
     <a href="{{ route('admin.npc.new') }}" class="btn btn-success text-white pull-right" role="button">
-        <i class="fa fa-plus"></i> {{ __('Create NPC') }}
+        <i class="fas fa-plus"></i> {{ __('Create NPC') }}
     </a>
 @endsection
 
@@ -52,7 +52,7 @@
                 <td>{{ $npc->game_id }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.npc.edit', ['id' => $npc->id]) }}">
-                        <i class="fa fa-pencil"></i>&nbsp;{{ __('Edit') }}
+                        <i class="fas fa-pencil"></i>&nbsp;{{ __('Edit') }}
                     </a>
                 </td>
             </tr>

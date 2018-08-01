@@ -54,7 +54,7 @@
                         <li>
                             <div style="padding: 7px">
                                 <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
-                                   role="button"><i class="fa fa-plus"></i> {{__('Create route')}}</a>
+                                   role="button"><i class="fas fa-plus"></i> {{__('Create route')}}</a>
                             </div>
                         </li>
                         <li class="dropdown">
@@ -62,7 +62,7 @@
                                aria-expanded="false">
                                 <div class="username_menu">
                                     <div class="pull-left user_icon">
-                                        <i class="fa fa-user"></i>
+                                        <i class="fas fa-user"></i>
                                     </div>
                                     <div class="pull-left">
                                         {{ Auth::user()->name }}
