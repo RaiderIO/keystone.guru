@@ -178,7 +178,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
     <div id="enemy_edit_popup" class="hidden">
         <div id="enemy_edit_popup_inner" class="popupCustom">
             <div class="form-group">
-                <label for="enemy_edit_popup_npc">NPC</label>
+                <label for="enemy_edit_popup_npc">{{ __('NPC') }}</label>
                 <select data-live-search="true" id="enemy_edit_popup_npc_template" name="enemy_edit_popup_npc"
                         class="selectpicker enemy_edit_popup_npc" data-width="300px">
                     @foreach($npcs as $npc)
