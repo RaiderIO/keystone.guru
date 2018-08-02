@@ -26,7 +26,7 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
 
         $.ajax({
             type: 'GET',
-            url: '/api/v1/enemies',
+            url: '/api/v1/dungeonstartmarkers',
             dataType: 'json',
             data: {
                 floor_id: floor.id
@@ -38,18 +38,16 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
                 // Now draw the enemies on the map
                 for (let index in json) {
                     if (json.hasOwnProperty(index)) {
-                        let remoteEnemy = json[index];
+                        let remoteDungeonStartMarker = json[index];
 
-                        let layer = L.circleMarker();
-                        layer.setLatLng(L.latLng(remoteEnemy.lat, remoteEnemy.lng));
+                        let layer = new LeafletDungeonStartMarker();
+                        layer.setLatLng(L.latLng(remoteDungeonStartMarker.lat, remoteDungeonStartMarker.lng));
 
-                        let enemy = self.createNew(layer);
-                        enemy.id = remoteEnemy.id;
-                        enemy.enemypack = remoteEnemy.enemy_pack_id;
-                        enemy.npc_id = remoteEnemy.npc_id;
-                        enemy.floor_id = remoteEnemy.floor_id;
+                        let dungeonStartMarker = self.createNew(layer);
+                        dungeonStartMarker.id = remoteDungeonStartMarker.id;
+                        dungeonStartMarker.floor_id = remoteDungeonStartMarker.floor_id;
                         // We just downloaded the enemy pack, it's synced alright!
-                        enemy.setSynced(true);
+                        dungeonStartMarker.setSynced(true);
                     }
                 }
             }

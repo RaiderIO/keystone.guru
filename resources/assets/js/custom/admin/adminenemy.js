@@ -1,18 +1,3 @@
-$(function () {
-    L.Draw.Enemy = L.Draw.CircleMarker.extend({
-        statics: {
-            TYPE: 'enemy'
-        },
-        options: {},
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.Enemy.TYPE;
-
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
-});
-
 class AdminEnemy extends Enemy {
 
     constructor(map, layer) {

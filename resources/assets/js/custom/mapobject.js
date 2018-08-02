@@ -41,7 +41,7 @@ class MapObject {
      */
     setSynced(value) {
         // Only if the colors object was ever set by a parent
-        if (typeof this.colors !== 'undefined') {
+        if (typeof this.colors !== 'undefined' && this.layer.hasOwnProperty('setStyle')) {
             // Now synced, was not synced
             if (value && !this.synced) {
                 this.layer.setStyle({

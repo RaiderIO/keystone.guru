@@ -40,7 +40,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     if (json.hasOwnProperty(index)) {
                         let remoteEnemy = json[index];
 
-                        let layer = L.circleMarker();
+                        let layer = L.marker();
                         layer.setLatLng(L.latLng(remoteEnemy.lat, remoteEnemy.lng));
 
                         let enemy = self.createNew(layer);

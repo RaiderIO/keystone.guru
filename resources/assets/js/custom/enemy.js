@@ -1,3 +1,18 @@
+$(function () {
+    L.Draw.Enemy = L.Draw.CircleMarker.extend({
+        statics: {
+            TYPE: 'enemy'
+        },
+        options: {},
+        initialize: function (map, options) {
+            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+            this.type = L.Draw.Enemy.TYPE;
+
+            L.Draw.Feature.prototype.initialize.call(this, map, options);
+        }
+    });
+});
+
 class Enemy extends MapObject {
     constructor(map, layer) {
         super(map, layer);
@@ -25,7 +40,6 @@ class Enemy extends MapObject {
     onLayerInit() {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         super.onLayerInit();
-        this.layer.setStyle({fillOpacity: 0.6});
 
         // Show a permanent tooltip for the pack's name
         // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();

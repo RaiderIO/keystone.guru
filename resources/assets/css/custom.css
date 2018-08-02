@@ -81,3 +81,24 @@
 .default_table {
     width: 100%;
 }
+
+/* Class that's used for displaying custom markers with a font-awesome icon instead of the default marker */
+.marker_div_icon {
+    width: 30px;
+    height: 30px;
+    text-shadow: 2px 2px #1A1A1A;
+}
+
+.marker_div_icon_font_awesome {
+    text-align: center; /* Horizontally center the text (icon) */
+    line-height: 25px; /* Vertically center the text (icon) */
+}
+
+.marker_div_icon_dungeon_start_marker {
+    color: green;
+}
+
+.marker_div_icon_circle_border {
+    border: 3px solid;
+    border-radius: 15px;
+}

@@ -9,21 +9,6 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
         this.setSynced(false);
     }
 
-    onLayerInit() {
-        super.onLayerInit();
-
-        // let customPopup = $("#DungeonStartMarker_edit_popup").html();
-        // // Remove template so our
-        // customPopup = customPopup.replace('_template', '');
-        //
-        // let customOptions = {
-        //     'maxWidth': '400',
-        //     'minWidth': '300',
-        //     'className': 'popupCustom'
-        // };
-        // this.layer.bindPopup(customPopup, customOptions);
-    }
-
     getContextMenuItems() {
         console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
         // Merge existing context menu items with the admin ones

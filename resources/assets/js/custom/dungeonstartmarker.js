@@ -1,9 +1,11 @@
 $(function () {
-    L.Draw.DungeonStartMarker = L.Draw.CircleMarker.extend({
+    L.Draw.DungeonStartMarker = L.Draw.Marker.extend({
         statics: {
             TYPE: 'dungeonstartmarker'
         },
-        options: {},
+        options: {
+            icon: LeafletDungeonStartIcon
+        },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
             this.type = L.Draw.DungeonStartMarker.TYPE;
@@ -13,6 +15,17 @@ $(function () {
     });
 });
 
+var LeafletDungeonStartIcon = L.divIcon({
+    html: '<div class="marker_div_icon marker_div_icon_circle_border"><i class="fas fa-flag"></i></div>',
+    iconSize: [30, 30],
+    className: 'marker_div_icon_font_awesome marker_div_icon_dungeon_start_marker'
+});
+
+var LeafletDungeonStartMarker = L.Marker.extend({
+    options: {
+        icon: LeafletDungeonStartIcon
+    }
+});
 
 class DungeonStartMarker extends MapObject {
 
@@ -29,7 +42,6 @@ class DungeonStartMarker extends MapObject {
     onLayerInit() {
         console.assert(this instanceof DungeonStartMarker, this, 'this is not a DungeonStartMarker');
         super.onLayerInit();
-        this.layer.setStyle({fillOpacity: 0.6});
 
         // Show a permanent tooltip for the pack's name
         // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();

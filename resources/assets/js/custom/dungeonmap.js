@@ -78,13 +78,15 @@ class DungeonMap extends Signalable {
 
         for (let i = 0; i < this.mapObjects.length; i++) {
             let layer = this.mapObjects[i].layer;
-            let zoomStep = Math.max(2, this.leafletMap.getZoom());
-            if (layer instanceof L.Polyline) {
-                layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
-            } else if (layer instanceof L.CircleMarker) {
-                layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
-            } else {
-                layer.setStyle({weight: 3 / zoomStep});
+            if(layer.hasOwnProperty('setStyle')){
+                let zoomStep = Math.max(2, this.leafletMap.getZoom());
+                if (layer instanceof L.Polyline) {
+                    layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
+                } else if (layer instanceof L.CircleMarker) {
+                    layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
+                } else {
+                    layer.setStyle({weight: 3 / zoomStep});
+                }
             }
         }
     }
