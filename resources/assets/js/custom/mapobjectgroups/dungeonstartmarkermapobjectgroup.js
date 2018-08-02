@@ -1,26 +1,26 @@
-class SpecialMarkerMapObjectGroup extends MapObjectGroup {
+class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
     constructor(map, name, classname){
         super(map, name);
 
         this.classname = classname;
-        this.title = 'Hide/show special markers';
-        this.fa_class = 'fa-map-marker-alt';
+        this.title = 'Hide/show dungeon start';
+        this.fa_class = 'fa-flag';
     }
 
     _createObject(layer){
-        console.assert(this instanceof SpecialMarkerMapObjectGroup, 'this is not an SpecialMarkerMapObjectGroup');
+        console.assert(this instanceof DungeonStartMarkerMapObjectGroup, 'this is not an DungeonStartMarkerMapObjectGroup');
 
         switch (this.classname) {
-            // case "AdminEnemy":
-            //     return new AdminSpecialMarker(this.map, layer);
+            case "AdminDungeonStartMarker":
+                return new AdminDungeonStartMarker(this.map, layer);
             default:
-                return new SpecialMarker(this.map, layer);
+                return new DungeonStartMarker(this.map, layer);
         }
     }
 
     fetchFromServer(floor){
         // no super call required
-        console.assert(this instanceof SpecialMarkerMapObjectGroup, this, 'this is not a SpecialMarkerMapObjectGroup');
+        console.assert(this instanceof DungeonStartMarkerMapObjectGroup, this, 'this is not a DungeonStartMarkerMapObjectGroup');
 
         let self = this;
 

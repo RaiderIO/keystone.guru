@@ -35,17 +35,20 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/enemy.js',
         'resources/assets/js/custom/enemypack.js',
         'resources/assets/js/custom/route.js',
+        'resources/assets/js/custom/dungeonstartmarker.js',
         'resources/assets/js/custom/admin/enemyattaching.js',
         'resources/assets/js/custom/admin/admindungeonmap.js',
         'resources/assets/js/custom/admin/adminenemy.js',
         'resources/assets/js/custom/admin/adminenemypack.js',
         'resources/assets/js/custom/admin/admindrawcontrols.js',
+        'resources/assets/js/custom/admin/admindungeonstartmarker.js',
         // Include the rest
         'resources/assets/js/custom/groupcomposition.js',
         'resources/assets/js/custom/mapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/routemapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
         // 'resources/assets/js/custom/**/*.js'
     ], 'public/js/custom.js');
 // .combine(, 'public/js/custom.js');
