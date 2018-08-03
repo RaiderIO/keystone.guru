@@ -37,7 +37,7 @@
                 <td>{{ $expansion->color }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.expansion.edit', ['id' => $expansion->id]) }}">
-                        <i class="fas fa-pencil"></i>&nbsp;{{ __('Edit') }}
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
                     </a>
                 </td>
             </tr>

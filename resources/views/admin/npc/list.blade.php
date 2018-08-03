@@ -52,7 +52,7 @@
                 <td>{{ $npc->game_id }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.npc.edit', ['id' => $npc->id]) }}">
-                        <i class="fas fa-pencil"></i>&nbsp;{{ __('Edit') }}
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
                     </a>
                 </td>
             </tr>

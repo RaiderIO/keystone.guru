@@ -15,50 +15,47 @@ class AdminEnemy extends Enemy {
     onLayerInit() {
         super.onLayerInit();
 
-        let customPopup = $("#enemy_edit_popup").html();
+        let customPopupHtml = $("#enemy_edit_popup_template").html();
         // Remove template so our
-        customPopup = customPopup.replace('_template', '');
+        let template = handlebars.compile(customPopupHtml);
+
+        // No data in this template
+        let data = {};
+
+        // Build the status bar from the template
+        customPopupHtml = template(data);
 
         let customOptions = {
             'maxWidth': '400',
             'minWidth': '300',
             'className': 'popupCustom'
         };
-        this.layer.bindPopup(customPopup, customOptions);
+        this.layer.bindPopup(customPopupHtml, customOptions);
+        this.layer.on('popupopen', function () {
+            // Refresh all select pickers so they work again
+            $(".selectpicker").selectpicker('refresh');
+            $(".selectpicker").selectpicker('render');
+
+            $("#enemy_edit_popup_submit").on('click', function () {
+                self.npc_id = $("#enemy_edit_popup_npc").val();
+
+                self.edit();
+            });
+        })
     }
 
     getContextMenuItems() {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         // Merge existing context menu items with the admin ones
         return super.getContextMenuItems().concat([{
-            text: '<i class="fas fa-pencil"></i> ' + (this.editing ? "Editing.." : "Edit"),
-            disabled: this.editing,
-            callback: (this.startEdit).bind(this)
-        }, {
             text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
             disabled: this.synced || this.saving,
             callback: (this.save).bind(this)
         }, '-', {
-            text: '<i class="fas fa-remove"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
+            text: '<i class="fas fa-trash"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
             disabled: !this.synced || this.deleting,
             callback: (this.delete).bind(this)
         }]);
-    }
-
-    startEdit() {
-        console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
-        console.log("starting edit");
-        let self = this;
-
-        // Bind popup
-        this.layer.openPopup();
-        // Refresh all select pickers so they work again
-        $(".selectpicker").selectpicker('refresh');
-        $("#enemy_edit_popup_submit").on('click', function () {
-            self.npc_id = $("#enemy_edit_popup_npc").val();
-
-            self.edit();
-        });
     }
 
     edit() {

@@ -1,9 +1,11 @@
 $(function () {
-    L.Draw.Enemy = L.Draw.CircleMarker.extend({
+    L.Draw.Enemy = L.Draw.Marker.extend({
         statics: {
             TYPE: 'enemy'
         },
-        options: {},
+        options: {
+            icon: LeafletEnemyIcon
+        },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
             this.type = L.Draw.Enemy.TYPE;

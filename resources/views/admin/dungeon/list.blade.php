@@ -39,7 +39,7 @@
         <td>{{ $dungeon->name }}</td>
         <td>
             <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['id' => $dungeon->id]) }}">
-                <i class="fas fa-pencil"></i>&nbsp;{{ __('Edit') }}
+                <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
             </a>
         </td>
     </tr>

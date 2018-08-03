@@ -144,6 +144,38 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             <ul class="leaflet-draw-actions"></ul>
         </div>
     </script>
+
+    @if($isAdmin)
+        <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
+            <div id="enemy_edit_popup_inner" class="popupCustom">
+                <div class="form-group">
+                    <label for="enemy_edit_popup_npc">{{ __('NPC') }}</label>
+                    <select data-live-search="true" id="enemy_edit_popup_npc" name="enemy_edit_popup_npc"
+                            class="selectpicker enemy_edit_popup_npc" data-width="300px">
+                        @foreach($npcs as $npc)
+                            <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->game_id) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit_template', 'class' => 'btn btn-info']) !!}
+            </div>
+        </script>
+
+        <script id="dungeon_floor_select_edit_popup_template" type="text/x-handlebars-template">
+            <div id="dungeon_floor_select_edit_popup_inner" class="popupCustom">
+                <div class="form-group">
+                    <label for="dungeon_floor_select_edit_popup_floor">{{ __('Connected floor') }}</label>
+                    <select id="dungeon_floor_select_edit_popup_floor" name="dungeon_floor_select_edit_popup_floor"
+                            class="selectpicker dungeon_floor_select_edit_popup_floor" data-width="300px">
+                        @{{#floors}}
+                            <option value="@{{id}}">@{{name}}</option>
+                        @{{/floors}}
+                    </select>
+                </div>
+                {!! Form::button(__('Submit'), ['id' => 'dungeon_floor_select_edit_popup_submit', 'class' => 'btn btn-info']) !!}
+            </div>
+        </script>
+    @endif
 @endsection
 
 <div class="container">
@@ -173,20 +205,3 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
         {{-- @include('common.maps.mapadmintools') --}}
     @endif
 </div>
-
-@if($isAdmin)
-    <div id="enemy_edit_popup" class="hidden">
-        <div id="enemy_edit_popup_inner" class="popupCustom">
-            <div class="form-group">
-                <label for="enemy_edit_popup_npc">{{ __('NPC') }}</label>
-                <select data-live-search="true" id="enemy_edit_popup_npc_template" name="enemy_edit_popup_npc"
-                        class="selectpicker enemy_edit_popup_npc" data-width="300px">
-                    @foreach($npcs as $npc)
-                        <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->game_id) }}</option>
-                    @endforeach
-                </select>
-            </div>
-            {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit_template', 'class' => 'btn btn-info']) !!}
-        </div>
-    </div>
-@endif

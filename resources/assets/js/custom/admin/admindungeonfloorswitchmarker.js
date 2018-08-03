@@ -1,4 +1,4 @@
-class AdminDungeonStartMarker extends DungeonStartMarker {
+class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
 
     constructor(map, layer) {
         super(map, layer);
@@ -10,7 +10,7 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
     }
 
     getContextMenuItems() {
-        console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
         // Merge existing context menu items with the admin ones
         return super.getContextMenuItems().concat([{
             text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
@@ -23,12 +23,56 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
         }]);
     }
 
+    onLayerInit() {
+        super.onLayerInit();
+        let self = this;
+
+        let customPopupHtml = $("#dungeon_floor_select_edit_popup_template").html();
+        // Remove template so our
+        let template = handlebars.compile(customPopupHtml);
+
+        let data = {
+            floors: []
+        };
+        let currentFloorId = this.map.getCurrentFloor().id;
+        for (let i in this.map.dungeonData[0].floors) {
+            let floor = this.map.dungeonData[0].floors[i];
+            console.log(floor, currentFloorId);
+            if (floor.id !== currentFloorId) {
+                data.floors.push({
+                    id: floor.id,
+                    name: floor.name,
+                });
+            }
+        }
+
+        // Build the status bar from the template
+        customPopupHtml = template(data);
+
+        let customOptions = {
+            'maxWidth': '400',
+            'minWidth': '300',
+            'className': 'popupCustom'
+        };
+        this.layer.bindPopup(customPopupHtml, customOptions);
+        this.layer.on('popupopen', function(){
+            // Refresh all select pickers so they work again
+            $(".selectpicker").selectpicker('refresh');
+            $(".selectpicker").selectpicker('render');
+            $("#enemy_edit_popup_submit").on('click', function () {
+                self.npc_id = $("#enemy_edit_popup_npc").val();
+
+                self.edit();
+            });
+        });
+    }
+
     // edit() {
     //     let self = this;
-    //     console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
+    //     console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
     //     $.ajax({
     //         type: 'POST',
-    //         url: '/api/v1/dungeonstartmarker',
+    //         url: '/api/v1/floorSwitchMarker',
     //         dataType: 'json',
     //         data: {
     //             _method: 'PATCH',
@@ -56,10 +100,10 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
     //
     delete() {
         let self = this;
-        console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/dungeonstartmarker',
+            url: '/api/v1/floorswitchmarker',
             dataType: 'json',
             data: {
                 _method: 'DELETE',
@@ -85,11 +129,11 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
 
     save() {
         let self = this;
-        console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/dungeonstartmarker',
+            url: '/api/v1/floorswitchmarker',
             dataType: 'json',
             data: {
                 floor_id: self.map.getCurrentFloor().id,

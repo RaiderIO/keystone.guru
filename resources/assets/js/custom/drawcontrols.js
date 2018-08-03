@@ -36,6 +36,10 @@ $(function () {
             enabled: this.options.dungeonstartmarker,
             handler: new L.Draw.DungeonStartMarker(map, this.options.dungeonstartmarker),
             title: this.options.dungeonstartmarker.title
+        }, {
+            enabled: this.options.dungeonfloorswitchmarker,
+            handler: new L.Draw.DungeonFloorSwitchMarker(map, this.options.dungeonfloorswitchmarker),
+            title: this.options.dungeonfloorswitchmarker.title
         }]
     };
 });
@@ -67,7 +71,8 @@ class DrawControls {
                 circlemarker: false,
                 enemypack: false,
                 enemy: false,
-                dungeonstartmarker: false
+                dungeonstartmarker: false,
+                dungeonfloorswitchmarker: false
             },
             edit: {
                 featureGroup: drawnItemsLayer, //REQUIRED!!

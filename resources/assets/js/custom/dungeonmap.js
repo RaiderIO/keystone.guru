@@ -8,8 +8,6 @@ class DungeonMap extends Signalable {
 
         this.mapObjectGroups = this._createMapObjectGroups();
 
-        console.log(this.mapObjectGroups);
-
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
             this.mapObjectGroups[i].register('object:add', function (event) {
@@ -63,6 +61,7 @@ class DungeonMap extends Signalable {
             new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack'),
             new RouteMapObjectGroup(this, 'route', 'Route'),
             new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker'),
+            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker'),
         ];
     }
 

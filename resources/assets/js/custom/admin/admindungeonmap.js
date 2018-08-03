@@ -21,6 +21,7 @@ class AdminDungeonMap extends DungeonMap {
             new EnemyMapObjectGroup(this, 'enemy', 'AdminEnemy'),
             new EnemyPackMapObjectGroup(this, 'enemypack', 'AdminEnemyPack'),
             new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'AdminDungeonStartMarker'),
+            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'AdminDungeonFloorSwitchMarker'),
         ];
     }
 

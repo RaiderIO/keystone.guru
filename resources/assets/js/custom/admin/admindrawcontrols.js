@@ -14,9 +14,6 @@ class AdminDrawControls extends DrawControls {
                     },
                     faClass: 'fa-draw-polygon',
                     title: 'Draw an enemy pack'
-                    // shapeOptions: {
-                    //     color: c.map.admin.mapobject.colors.unsaved
-                    // }
                 },
                 enemy: {
                     repeatMode: false,
@@ -29,6 +26,12 @@ class AdminDrawControls extends DrawControls {
                     zIndexOffset: 1000,
                     faClass: 'fa-flag',
                     title: 'Draw a dungeon start marker'
+                },
+                dungeonfloorswitchmarker: {
+                    repeatMode: false,
+                    zIndexOffset: 1000,
+                    faClass: 'fa-door-open',
+                    title: 'Draw a dungeon floor switch marker'
                 }
             }
         });

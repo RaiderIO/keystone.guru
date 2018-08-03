@@ -98,6 +98,10 @@
     color: green;
 }
 
+.marker_div_icon_dungeon_floor_switch_marker {
+    color: sandybrown;
+}
+
 .marker_div_icon_circle_border {
     border: 3px solid;
     border-radius: 15px;
