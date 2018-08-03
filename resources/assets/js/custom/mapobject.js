@@ -1,6 +1,7 @@
-class MapObject {
+class MapObject extends Signalable {
 
     constructor(map, layer) {
+        super();
         console.assert(map instanceof DungeonMap, map, 'Passed map is not a DungeonMap!');
 
         this.synced = false;

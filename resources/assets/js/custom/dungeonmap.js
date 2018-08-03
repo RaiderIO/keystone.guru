@@ -1,7 +1,5 @@
 class DungeonMap extends Signalable {
-    /*
-    var leafletMap;
-     */
+
     constructor(mapid, dungeonData, dungeonId, floorID) {
         super();
         let self = this;
@@ -13,7 +11,7 @@ class DungeonMap extends Signalable {
         console.log(this.mapObjectGroups);
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
-        for (let i in this.mapObjectGroups) {
+        for (let i = 0; i < this.mapObjectGroups.length; i++) {
             this.mapObjectGroups[i].register('object:add', function (event) {
                 self.mapObjects.push(event.data.object);
             });
@@ -77,7 +75,7 @@ class DungeonMap extends Signalable {
 
         for (let i = 0; i < this.mapObjects.length; i++) {
             let layer = this.mapObjects[i].layer;
-            if(layer.hasOwnProperty('setStyle')){
+            if (layer.hasOwnProperty('setStyle')) {
                 let zoomStep = Math.max(2, this.leafletMap.getZoom());
                 if (layer instanceof L.Polyline) {
                     layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
@@ -111,7 +109,7 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         let result = false;
-        for (let i in this.mapObjectGroups) {
+        for (let i = 0; i < this.mapObjectGroups.length; i++) {
             if (this.mapObjectGroups[i].name === name) {
                 result = this.mapObjectGroups[i];
             }
@@ -252,7 +250,7 @@ class DungeonMap extends Signalable {
         this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
             console.log(event);
             let mapObjectGroup = self.getMapObjectGroupByName(event.layerType);
-            if( mapObjectGroup !== false ){
+            if (mapObjectGroup !== false) {
                 mapObjectGroup.createNew(event.layer);
             } else {
                 console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
@@ -261,30 +259,9 @@ class DungeonMap extends Signalable {
 
         this.signal('map:refresh', {dungeonmap: this});
 
-        //
-        for (let i in this.mapObjectGroups) {
+        for (let i = 0; i < this.mapObjectGroups.length; i++) {
             this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor());
         }
-    }
-
-    /**
-     * Removes an enemy pack from the leaflet map and our internal collection.
-     * @param pack EnemyPack The pack to remove.
-     */
-    removeEnemyPack(pack) {
-        console.assert(pack instanceof EnemyPack, pack, 'this is not an EnemyPack');
-
-        // Remove the pack from the map
-        this.leafletMap.removeLayer(pack.layer);
-        // Remove it from our records
-        let newEnemyPacks = [];
-        for (let i = 0; i < this.enemyPacks.length; i++) {
-            let packCandidate = this.enemyPacks[i];
-            if (packCandidate.id !== pack.id) {
-                newEnemyPacks.push(packCandidate);
-            }
-        }
-        this.enemyPacks = newEnemyPacks;
     }
 }
 

@@ -103,24 +103,4 @@ class AdminDungeonMap extends DungeonMap {
             });
         }
     }
-
-    addEnemyPack(layer) {
-        console.assert(this instanceof AdminDungeonMap, this, 'this was not an AdminDungeonMap');
-        let enemyPack = super.addEnemyPack(layer);
-        // Just created, not synced!
-        enemyPack.setSynced(false);
-
-        this.drawnItems.addLayer(layer);
-        return enemyPack;
-    }
-
-    addEnemy(layer) {
-        console.assert(this instanceof AdminDungeonMap, this, 'this was not an AdminDungeonMap');
-        let enemy = super.addEnemy(layer);
-        // Just created, not synced!
-        enemy.setSynced(false);
-
-        this.drawnItems.addLayer(layer);
-        return enemy;
-    }
 }

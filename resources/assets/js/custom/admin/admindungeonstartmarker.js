@@ -55,32 +55,32 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
     // }
     //
     delete() {
-    //     let self = this;
-    //     console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: '/api/v1/DungeonStartMarker',
-    //         dataType: 'json',
-    //         data: {
-    //             _method: 'DELETE',
-    //             id: self.id
-    //         },
-    //         beforeSend: function () {
-    //             self.deleting = true;
-    //         },
-    //         success: function (json) {
-    //             self.map.removeDungeonStartMarkerPack(self);
-    //         },
-    //         complete: function () {
-    //             self.deleting = false;
-    //         },
-    //         error: function () {
-    //             self.layer.setStyle({
-    //                 fillColor: c.map.admin.mapobject.colors.unsaved,
-    //                 color: c.map.admin.mapobject.colors.unsavedBorder
-    //             });
-    //         }
-    //     });
+        let self = this;
+        console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/dungeonstartmarker',
+            dataType: 'json',
+            data: {
+                _method: 'DELETE',
+                id: self.id
+            },
+            beforeSend: function () {
+                self.deleting = true;
+            },
+            success: function (json) {
+                self.signal('object:deleted', {response: json});
+            },
+            complete: function () {
+                self.deleting = false;
+            },
+            error: function () {
+                self.layer.setStyle({
+                    fillColor: c.map.admin.mapobject.colors.unsaved,
+                    color: c.map.admin.mapobject.colors.unsavedBorder
+                });
+            }
+        });
     }
 
     save() {

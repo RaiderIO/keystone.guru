@@ -110,7 +110,7 @@ class AdminEnemy extends Enemy {
                 self.deleting = true;
             },
             success: function (json) {
-                self.map.removeEnemyPack(self);
+                self.signal('object:deleted', {response: json});
             },
             complete: function () {
                 self.deleting = false;

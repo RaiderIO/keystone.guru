@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "744444de315893aae8930f9802e072ca",
+    "content-hash": "5aaf24ae0f958dc87c10d766662057be",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -127,6 +127,73 @@
                 }
             ],
             "time": "2016-06-13T19:28:20+00:00"
+        },
+        {
+            "name": "bjuppa/laravel-blog",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bjuppa/laravel-blog.git",
+                "reference": "d9954b89c3427a3a9fce2784e2b0edeef14af889"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bjuppa/laravel-blog/zipball/d9954b89c3427a3a9fce2784e2b0edeef14af889",
+                "reference": "d9954b89c3427a3a9fce2784e2b0edeef14af889",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "5.5.*|5.6.*",
+                "illuminate/http": "5.5.*|5.6.*",
+                "illuminate/routing": "5.5.*|5.6.*",
+                "illuminate/support": "5.5.*|5.6.*",
+                "illuminate/view": "~5.5.5|5.6.*",
+                "php": "^7.1.0",
+                "spatie/laravel-sluggable": "^2.1"
+            },
+            "require-dev": {
+                "erusev/parsedown": "^1.7",
+                "graham-campbell/markdown": "^10.0",
+                "laravel/framework": ">=5.5.5",
+                "orchestra/testbench": "~3.5",
+                "phpunit/phpunit": ">6.5"
+            },
+            "suggest": {
+                "erusev/parsedown": "Enables use of markdown in blog posts (install only one of the suggested markdown packages)",
+                "graham-campbell/markdown": "Enables use of markdown in blog posts (install only one of the suggested markdown packages)"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bjuppa\\LaravelBlog\\BlogServiceProvider"
+                    ],
+                    "aliases": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bjuppa\\LaravelBlog\\": "src/",
+                    "Bjuppa\\LaravelBlog\\Database\\Seeds\\": "database/seeds/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Björn Nilsved",
+                    "email": "nilsved@gmail.com"
+                }
+            ],
+            "description": "Add blog functionality to your Laravel project",
+            "homepage": "https://github.com/bjuppa/laravel-blog",
+            "keywords": [
+                "blog",
+                "laravel"
+            ],
+            "time": "2018-07-04T10:03:36+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1919,6 +1986,55 @@
                 "http"
             ],
             "time": "2017-09-01T13:56:48+00:00"
+        },
+        {
+            "name": "spatie/laravel-sluggable",
+            "version": "2.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-sluggable.git",
+                "reference": "99b22153b67bccbe8db0fd9288334c978323ffdb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-sluggable/zipball/99b22153b67bccbe8db0fd9288334c978323ffdb",
+                "reference": "99b22153b67bccbe8db0fd9288334c978323ffdb",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.5.0|~5.6.0",
+                "illuminate/support": "~5.5.0|~5.6.0",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.5.0|~3.6.0",
+                "phpunit/phpunit": "^6.3|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Sluggable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Generate slugs when saving Eloquent models",
+            "homepage": "https://github.com/spatie/laravel-sluggable",
+            "keywords": [
+                "laravel-sluggable",
+                "spatie"
+            ],
+            "time": "2018-02-15T11:41:25+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4615,7 +4731,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "bjuppa/laravel-blog": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

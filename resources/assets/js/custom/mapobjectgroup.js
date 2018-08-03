@@ -36,8 +36,37 @@ class MapObjectGroup extends Signalable {
         }
     }
 
+    /**
+     * @param layer
+     * @protected
+     * @return MapObject
+     */
     _createObject(layer) {
         console.error('override the _createObject function!');
+    }
+
+    /**
+     * Called whenever an object has deleted itself.
+     * @param data
+     * @private
+     */
+    _onObjectDeleted(data){
+        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
+
+        this.layerGroup.removeLayer(data.context.layer);
+        this.map.leafletMap.removeLayer(data.context.layer);
+
+        let object = data.context;
+
+        // Remove it from our records
+        let newObjects = [];
+        for (let i = 0; i < this.objects.length; i++) {
+            let objectCandidate = this.objects[i];
+            if (objectCandidate.id !== object.id) {
+                newObjects.push(objectCandidate);
+            }
+        }
+        this.objects = newObjects;
     }
 
     /**
@@ -54,6 +83,7 @@ class MapObjectGroup extends Signalable {
 
         object.onLayerInit();
 
+        object.register('object:deleted', (this._onObjectDeleted).bind(this));
         this.signal('object:add', {object: object});
 
         return object;
