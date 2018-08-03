@@ -41,7 +41,7 @@ class MapObject {
      */
     setSynced(value) {
         // Only if the colors object was ever set by a parent
-        if (typeof this.colors !== 'undefined' && this.layer.hasOwnProperty('setStyle')) {
+        if (typeof this.colors !== 'undefined' && typeof this.layer.setStyle === 'function') {
             // Now synced, was not synced
             if (value && !this.synced) {
                 this.layer.setStyle({
@@ -76,18 +76,14 @@ class MapObject {
         self.layer.bindContextMenu(self._updateContextMenuOptions());
         self.layer.on('contextmenu', function () {
             let items = self.getContextMenuItems();
+            self.map.leafletMap.contextmenu.removeAllItems();
 
             $.each(items, function (index, value) {
                 self.map.leafletMap.contextmenu.addItem(value);
             });
             return true;
         });
-        // On hide, remove all items so they aren't lingering
-        self.map.leafletMap.on('contextmenu.hide', function () {
-            self.map.leafletMap.contextmenu.removeAllItems();
-        });
         self.layer.on('draw:edited', function () {
-            console.log('draw:edited');
             // Changed = gone out of sync
             self.setSynced(false);
         });

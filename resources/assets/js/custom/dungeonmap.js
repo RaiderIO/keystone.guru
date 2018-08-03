@@ -14,7 +14,6 @@ class DungeonMap extends Signalable {
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i in this.mapObjectGroups) {
-            console.log(this.mapObjectGroups[i]);
             this.mapObjectGroups[i].register('object:add', function (event) {
                 self.mapObjects.push(event.data.object);
             });

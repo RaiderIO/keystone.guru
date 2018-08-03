@@ -13,6 +13,15 @@ $(function () {
     });
 });
 
+let LeafletEnemyIcon = new L.Icon.Default();
+LeafletEnemyIcon.options.shadowSize = [0,0];
+
+let LeafletEnemyMarker = L.Marker.extend({
+    options: {
+        icon: LeafletEnemyIcon
+    }
+});
+
 class Enemy extends MapObject {
     constructor(map, layer) {
         super(map, layer);
