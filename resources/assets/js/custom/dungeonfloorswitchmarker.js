@@ -61,8 +61,8 @@ class DungeonFloorSwitchMarker extends MapObject {
         if (value && typeof this.layer !== 'undefined') {
             let targetFloor = null;
 
-            for (let i = 0; i < this.map.dungeonData[0].floors.length; i++) {
-                let floor = this.map.dungeonData[0].floors[i];
+            for (let i = 0; i < this.map.dungeonData.floors.length; i++) {
+                let floor = this.map.dungeonData.floors[i];
                 if (floor.id === this.target_floor_id) {
                     targetFloor = floor;
                     break;

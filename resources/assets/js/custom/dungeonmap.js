@@ -1,6 +1,6 @@
 class DungeonMap extends Signalable {
 
-    constructor(mapid, dungeonData, dungeonId, floorID) {
+    constructor(mapid, dungeonData, floorID) {
         super();
         let self = this;
 
@@ -20,7 +20,6 @@ class DungeonMap extends Signalable {
          **/
         this.mapObjects = [];
 
-        this.currentDungeonId = dungeonId;
         this.currentFloorId = floorID;
 
         this.mapTileLayer = null;
@@ -118,63 +117,24 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Get the data of the currently selected dungeon.
-     * @returns {boolean|Object}
-     */
-    getCurrentDungeon() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-        return this.getDungeonDataById(this.currentDungeonId);
-    }
-
-    /**
      * Gets the data of the currently selected floor
      * @returns {boolean|Object}
      */
     getCurrentFloor() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-        return this.getDungeonFloorDataById(this.currentDungeonId, this.currentFloorId);
-    }
 
-    /**
-     * Gets all data for a dungeon by its ID.
-     * @param id string The ID of the dungeon you want to retrieve.
-     * @returns {boolean|Object} False if the object could not be found, or the object.
-     */
-    getDungeonDataById(id) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
+        let self = this;
         let result = false;
-        $.each(this.dungeonData, function (index, value) {
-            if (parseInt(value.id) === parseInt(id)) {
+        // Iterate over the found floors
+        $.each(this.dungeonData.floors, function (index, value) {
+            // Find the floor we're looking for
+            if (parseInt(value.id) === parseInt(self.currentFloorId)) {
                 result = value;
                 return false;
             }
         });
-        return result;
-    }
 
-    /**
-     * Gets all data of a dungeon floor by the dungeonId and its floorId
-     * @param dungeonId string The ID of the dungeon.
-     * @param floorId string The ID of the floor.
-     * @returns {boolean|Object} False if the object could not be found, or the object.
-     */
-    getDungeonFloorDataById(dungeonId, floorId) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        let dungeon = this.getDungeonDataById(dungeonId);
-        let result = false;
-        // Found the dungeon?
-        if (dungeon !== false) {
-            // Iterate over the found floors
-            $.each(dungeon.floors, function (index, value) {
-                // Find the floor we're looking for
-                if (parseInt(value.id) === parseInt(floorId)) {
-                    result = value;
-                    return false;
-                }
-            });
-        }
+        console.log(result);
         return result;
     }
 
@@ -211,7 +171,7 @@ class DungeonMap extends Signalable {
         let northEast = this.leafletMap.unproject([6144, 0], this.leafletMap.getMaxZoom());
 
 
-        this.mapTileLayer = L.tileLayer('https://mpplnr.wofje.nl/images/tiles/' + this.getCurrentDungeon().key + '/' + this.getCurrentFloor().index + '/{z}/{x}_{y}.png', {
+        this.mapTileLayer = L.tileLayer('https://mpplnr.wofje.nl/images/tiles/' + this.dungeonData.key + '/' + this.getCurrentFloor().index + '/{z}/{x}_{y}.png', {
             maxZoom: 4,
             attribution: '',
             tileSize: L.point(384, 256),

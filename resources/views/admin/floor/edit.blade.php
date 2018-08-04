@@ -52,7 +52,7 @@
         <h3>Enemy placement</h3>
         @include('common.maps.map', [
         'admin' => true,
-        'dungeons' => new \Illuminate\Support\Collection([$dungeon]),
+        'dungeon' => $dungeon,
         'npcs' => $npcs,
         'selectedFloorId' => $model->id
         ])

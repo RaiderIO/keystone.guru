@@ -80,8 +80,7 @@
         <div class="col-lg-12">
             <div id="map_container col-lg-12">
                 @include('common.maps.map', [
-                    // Use findMany rather than findOrFail; we need a collection in this parameter
-                    'dungeons' => \App\Models\Dungeon::findMany([$model->dungeon_id]),
+                    'dungeon' => \App\Models\Dungeon::findOrFail([$model->dungeon_id]),
                     'dungeonSelect' => false
                 ])
             </div>
