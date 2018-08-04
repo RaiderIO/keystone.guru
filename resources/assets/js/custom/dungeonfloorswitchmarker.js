@@ -43,7 +43,35 @@ class DungeonFloorSwitchMarker extends MapObject {
         console.assert(this instanceof DungeonFloorSwitchMarker, this, 'this is not a DungeonFloorSwitchMarker');
         super.onLayerInit();
 
+        let self = this;
+
+        this.layer.on('click', function () {
+            $(_switchDungeonFloorSelect).val(self.target_floor_id);
+            $(_switchDungeonFloorSelect).change();
+        });
+
         // Show a permanent tooltip for the pack's name
         // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
+    }
+
+    setSynced(value) {
+        super.setSynced(value);
+
+        // If we've fully loaded this marker
+        if (value && typeof this.layer !== 'undefined') {
+            let targetFloor = null;
+
+            for (let i = 0; i < this.map.dungeonData[0].floors.length; i++) {
+                let floor = this.map.dungeonData[0].floors[i];
+                if (floor.id === this.target_floor_id) {
+                    targetFloor = floor;
+                    break;
+                }
+            }
+
+            if (targetFloor !== null) {
+                this.layer.bindTooltip("Go to " + targetFloor.name);
+            }
+        }
     }
 }

@@ -1,5 +1,10 @@
 class MapObject extends Signalable {
 
+    /**
+     *
+     * @param map
+     * @param layer {L.layer}
+     */
     constructor(map, layer) {
         super();
         console.assert(map instanceof DungeonMap, map, 'Passed map is not a DungeonMap!');

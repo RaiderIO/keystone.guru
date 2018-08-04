@@ -49,6 +49,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
                         dungeonFloorSwitchMarker.target_floor_id = remoteDungeonFloorSwitchMarker.target_floor_id;
                         // We just downloaded the enemy pack, it's synced alright!
                         dungeonFloorSwitchMarker.setSynced(true);
+                        console.log(dungeonFloorSwitchMarker);
                     }
                 }
             }

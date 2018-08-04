@@ -32,5 +32,10 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');
         Route::post('/dungeonstartmarker', 'APIDungeonStartMarkerController@store')->where(['dungeon' => '[0-9]+']);
+        Route::delete('/dungeonstartmarker', 'APIDungeonStartMarkerController@delete');
+
+        Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
+        Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
+        Route::delete('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@delete');
     // });
 });

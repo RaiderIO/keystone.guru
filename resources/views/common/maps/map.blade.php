@@ -61,6 +61,10 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             _refreshDungeonSelect();
             _refreshFloorSelect();
 
+            @isset($selectedFloorId)
+            $(_switchDungeonFloorSelect).val({{$selectedFloorId}});
+            @endisset
+
             @if($isAdmin)
                 dungeonMap = new AdminDungeonMap('map', _dungeonData, $(_switchDungeonSelect).val(), $(_switchDungeonFloorSelect).val());
             @else
@@ -81,7 +85,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
                 dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
                 dungeonMap.refreshLeafletMap();
             });
-
         });
 
         /**
@@ -161,18 +164,19 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && !($dungeons->count()
             </div>
         </script>
 
-        <script id="dungeon_floor_select_edit_popup_template" type="text/x-handlebars-template">
-            <div id="dungeon_floor_select_edit_popup_inner" class="popupCustom">
+        <script id="dungeon_floor_switch_edit_popup_template" type="text/x-handlebars-template">
+            <div id="dungeon_floor_switch_edit_popup_inner" class="popupCustom">
                 <div class="form-group">
-                    <label for="dungeon_floor_select_edit_popup_floor">{{ __('Connected floor') }}</label>
-                    <select id="dungeon_floor_select_edit_popup_floor" name="dungeon_floor_select_edit_popup_floor"
-                            class="selectpicker dungeon_floor_select_edit_popup_floor" data-width="300px">
+                    <label for="dungeon_floor_switch_edit_popup_target_floor">{{ __('Connected floor') }}</label>
+                    <select id="dungeon_floor_switch_edit_popup_target_floor"
+                            name="dungeon_floor_switch_edit_popup_target_floor"
+                            class="selectpicker dungeon_floor_switch_edit_popup_target_floor" data-width="300px">
                         @{{#floors}}
-                            <option value="@{{id}}">@{{name}}</option>
+                        <option value="@{{id}}">@{{name}}</option>
                         @{{/floors}}
                     </select>
                 </div>
-                {!! Form::button(__('Submit'), ['id' => 'dungeon_floor_select_edit_popup_submit', 'class' => 'btn btn-info']) !!}
+                {!! Form::button(__('Submit'), ['id' => 'dungeon_floor_switch_edit_popup_submit', 'class' => 'btn btn-info']) !!}
             </div>
         </script>
     @endif
