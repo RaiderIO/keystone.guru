@@ -59,17 +59,9 @@ class DungeonFloorSwitchMarker extends MapObject {
 
         // If we've fully loaded this marker
         if (value && typeof this.layer !== 'undefined') {
-            let targetFloor = null;
+            let targetFloor = this.map.getFloorById(this.target_floor_id);
 
-            for (let i = 0; i < this.map.dungeonData.floors.length; i++) {
-                let floor = this.map.dungeonData.floors[i];
-                if (floor.id === this.target_floor_id) {
-                    targetFloor = floor;
-                    break;
-                }
-            }
-
-            if (targetFloor !== null) {
+            if (targetFloor !== false) {
                 this.layer.bindTooltip("Go to " + targetFloor.name);
             }
         }

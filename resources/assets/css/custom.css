@@ -18,6 +18,10 @@
     background: url('/images/lib/datatables/sort_desc_disabled.png') no-repeat center right !important;
 }
 
+.leaflet-container {
+
+}
+
 .navbar-default .navbar-nav > li > .btn-success > a:hover, .navbar-default .navbar-nav > li > .btn-success > a:focus {
     background-color: #20895e;
 }

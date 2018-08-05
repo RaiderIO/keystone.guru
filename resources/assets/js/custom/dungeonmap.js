@@ -117,6 +117,25 @@ class DungeonMap extends Signalable {
     }
 
     /**
+     * Finds a floor by id.
+     * @param floorId
+     * @returns {*}|bool
+     */
+    getFloorById(floorId) {
+        let result = false;
+
+        for (let i = 0; i < this.dungeonData.floors.length; i++) {
+            let floor = this.dungeonData.floors[i];
+            if (floor.id === floorId) {
+                result = floor;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Gets the data of the currently selected floor
      * @returns {boolean|Object}
      */
@@ -134,7 +153,6 @@ class DungeonMap extends Signalable {
             }
         });
 
-        console.log(result);
         return result;
     }
 
@@ -210,7 +228,9 @@ class DungeonMap extends Signalable {
             console.log(event);
             let mapObjectGroup = self.getMapObjectGroupByName(event.layerType);
             if (mapObjectGroup !== false) {
-                mapObjectGroup.createNew(event.layer);
+                let object = mapObjectGroup.createNew(event.layer);
+                // Save it to server instantly, manually saving is meh
+                object.save();
             } else {
                 console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
             }

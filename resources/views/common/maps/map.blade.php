@@ -123,7 +123,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
                         @endforeach
                     </select>
                 </div>
-                {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit_template', 'class' => 'btn btn-info']) !!}
+                {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit', 'class' => 'btn btn-info']) !!}
             </div>
         </script>
 

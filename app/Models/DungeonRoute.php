@@ -94,7 +94,7 @@ class DungeonRoute extends Model
 
         $this->dungeon_id = $request->get('dungeon_id', $this->dungeon_id);
         $this->faction_id = $request->get('faction_id', $this->faction_id);
-        $this->title = $request->get('title', $this->title);
+        $this->title = $request->get('dungeon_route_title', $this->title);
 
         // Update or insert it
         if ($this->save()) {
@@ -107,7 +107,6 @@ class DungeonRoute extends Model
                 // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
                 foreach ($newRaces as $key => $value) {
                     $drpRace = new DungeonRoutePlayerRace();
-                    $drpRace->index = $key;
                     $drpRace->character_race_id = $value;
                     $drpRace->dungeon_route_id = $this->id;
                     $drpRace->save();
@@ -120,7 +119,6 @@ class DungeonRoute extends Model
                 $this->classes()->delete();
                 foreach ($newClasses as $key => $value) {
                     $drpClass = new DungeonRoutePlayerClass();
-                    $drpClass->index = $key;
                     $drpClass->character_class_id = $value;
                     $drpClass->dungeon_route_id = $this->id;
                     $drpClass->save();

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#make sure we have the correct versions for everything
+echo "Updating dependencies..."
+./update_dependencies.sh
+
 # create directories
 echo "Creating directories..."
 # cache for image library
@@ -25,10 +29,9 @@ chmod -R 755 bootstrap/cache
 echo "Ensuring storage link..."
 php artisan storage:link
 
-#make sure we have the correct versions for everything
-echo "Updating dependencies..."
-./update_dependencies.sh
-
 # This was somehow needed to get the image library to work
 echo "Publishing Folklore ImageServiceProvider..."
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider"
+
+echo "Compiling sources..."
+npm run dev -- --env.full true

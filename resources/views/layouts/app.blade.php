@@ -133,6 +133,52 @@
             </div>
         </div>
     </div>
+
+    <div class="container text-center">
+        <hr/>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">News</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="#">Product for Mac</a></li>
+                        <li><a href="#">Product for Windows</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Presentations</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li>
+                            <a href="https://">
+                                <i class="fab fa-github"> Github</i>
+                            </a>
+                        </li>
+                        <li><a href="#">Developer API</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-12"> <!-- -->
+                <ul class="nav nav-pills nav-justified">
+                    <li><a href="/">©{{ date('Y') }} {{ Config::get('app.name') }}</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Scripts -->
