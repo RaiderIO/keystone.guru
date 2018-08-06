@@ -23,37 +23,6 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
         }]);
     }
 
-    // edit() {
-    //     let self = this;
-    //     console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: '/api/v1/dungeonstartmarker',
-    //         dataType: 'json',
-    //         data: {
-    //             _method: 'PATCH',
-    //             id: self.id,
-    //             floor_id: self.map.getCurrentFloor().id,
-    //             lat: self.layer.getLatLng().lat,
-    //             lng: self.layer.getLatLng().lng
-    //         },
-    //         beforeSend: function () {
-    //             self.editing = true;
-    //         },
-    //         success: function (json) {
-    //             self.setSynced(true);
-    //             self.layer.closePopup();
-    //         },
-    //         complete: function () {
-    //             self.editing = false;
-    //         },
-    //         error: function () {
-    //             // Even if we were synced, make sure user knows it's no longer / an error occurred
-    //             self.setSynced(false);
-    //         }
-    //     });
-    // }
-    //
     delete() {
         let self = this;
         console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');

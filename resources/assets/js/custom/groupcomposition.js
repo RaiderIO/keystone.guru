@@ -25,7 +25,7 @@ function _factionChanged() {
 
     // Re-fill the races
     $raceSelect.append(jQuery('<option>', {
-        value: -1,
+        value: '0', // Laravel can then accept values that haven't been set
         text: "Race..."
     }));
 

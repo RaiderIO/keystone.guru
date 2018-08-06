@@ -14,7 +14,9 @@ class DungeonStartMarker extends Model
 {
     public $timestamps = false;
 
-    //
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     function floor()
     {
         return $this->belongsTo('App\Models\Floor');

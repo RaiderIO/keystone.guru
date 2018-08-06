@@ -13,8 +13,8 @@
         </h3>
         <div class="col-lg-12">
             <div class="form-group">
-                {!! Form::label('title', __('Title') . "*") !!}
-                {!! Form::text('title', '', ['class' => 'form-control']) !!}
+                {!! Form::label('dungeon_route_title', __('Title') . "*") !!}
+                {!! Form::text('dungeon_route_title', '', ['class' => 'form-control']) !!}
             </div>
         </div>
         <div class="col-lg-12">

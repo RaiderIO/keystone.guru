@@ -13,7 +13,9 @@ class AdminEnemy extends Enemy {
     }
 
     onLayerInit() {
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         super.onLayerInit();
+        let self = this;
 
         let customPopupHtml = $("#enemy_edit_popup_template").html();
         // Remove template so our
@@ -32,11 +34,15 @@ class AdminEnemy extends Enemy {
         };
         this.layer.bindPopup(customPopupHtml, customOptions);
         this.layer.on('popupopen', function () {
-            // Refresh all select pickers so they work again
-            $(".selectpicker").selectpicker('refresh');
-            $(".selectpicker").selectpicker('render');
+            $("#enemy_edit_popup_npc").val(self.npc_id);
 
-            $("#enemy_edit_popup_submit").on('click', function () {
+            // Refresh all select pickers so they work again
+            let $selectpicker = $(".selectpicker");
+            $selectpicker.selectpicker('refresh');
+            $selectpicker.selectpicker('render');
+
+            $("#enemy_edit_popup_submit").bind('click', function () {
+                console.log('test');
                 self.npc_id = $("#enemy_edit_popup_npc").val();
 
                 self.edit();

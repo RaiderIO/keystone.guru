@@ -50,7 +50,12 @@
 
     @isset($model)
         <h3>Enemy placement</h3>
-        @include('common.maps.map', ['admin' => true, 'dungeons' => new \Illuminate\Support\Collection([$dungeon]), 'npcs' => $npcs])
+        @include('common.maps.map', [
+        'admin' => true,
+        'dungeon' => $dungeon,
+        'npcs' => $npcs,
+        'selectedFloorId' => $model->id
+        ])
     @endisset
 
 @endsection

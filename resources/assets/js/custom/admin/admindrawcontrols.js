@@ -36,8 +36,4 @@ class AdminDrawControls extends DrawControls {
             }
         });
     }
-
-    addControl() {
-        super.addControl();
-    }
 }

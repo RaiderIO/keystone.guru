@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property $id int The ID of this Dungeon.
  * @property $expansion_id int The linked expansion to this dungeon.
  * @property $name string The name of the dungeon
+ * @property $expansion \Expansion
+ * @property $floors \Illuminate\Support\Collection
  */
 class Dungeon extends Model
 {
@@ -23,7 +25,8 @@ class Dungeon extends Model
     /**
      * @return string The key as used in the front-end to identify the dungeon.
      */
-    public function getKeyAttribute(){
+    public function getKeyAttribute()
+    {
         return strtolower(str_replace(" ", "", $this->name));
     }
 

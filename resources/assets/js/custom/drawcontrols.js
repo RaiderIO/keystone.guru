@@ -54,7 +54,6 @@ class DrawControls {
         this.map = map;
         this.drawnItems = drawnItemsLayer;
 
-        console.log(drawnItemsLayer);
         this.drawControlOptions = {
             position: 'topleft',
             draw: {
