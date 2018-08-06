@@ -7,7 +7,11 @@
 
 // Bootstrap
 @import "~bootstrap-select/dist/css/bootstrap-select.min.css";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~bootstrap/scss/bootstrap";
+
+// Bootstrap theme
+//@import "~bootswatch/dist/superhero/_variables.scss";
+//@import "~bootswatch/dist/superhero/_bootswatch.scss";
 
 // Font-Awesome
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";

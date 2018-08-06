@@ -14,121 +14,110 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-default navbar-static-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom border-dark">
         <div class="container">
-            <div class="navbar-header">
-                <!-- Collapsed Hamburger -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#app-navbar-collapse">
-                    <span class="sr-only">{{__('Toggle Navigation')}}</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+            <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-            </div>
-
-            <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="{{ route('dungeonroutes') }}">Routes</a>
-                    </li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
                 </ul>
-
-                <!-- Right Side Of Navbar -->
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Authentication Links -->
+                <ul class="navbar-nav">
                     @if (Auth::guest())
-                        <li><a href="{{ route('login') }}">{{__('Login')}}</a></li>
-                        <li><a href="{{ route('register') }}">{{__('Register')}}</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{__('Login')}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{__('Register')}}</a>
+                        </li>
                     @else
-                        <li>
+                        <li class="nav-item">
                             <div style="padding: 7px">
                                 <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
                                    role="button"><i class="fas fa-plus"></i> {{__('Create route')}}</a>
                             </div>
                         </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-expanded="false">
-                                <div class="username_menu">
-                                    <div class="pull-left user_icon">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div class="pull-left">
-                                        {{ Auth::user()->name }}
-                                    </div>
-                                    <span class="caret"></span>
-                                </div>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="user_icon">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                {{ Auth::user()->name }}
                             </a>
-
-                            <ul class="dropdown-menu" role="menu">
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @if( Auth::user()->can('read-expansions') )
-                                    <li><a href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a></li>
+                                <a class="dropdown-item" href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
                                 @endif
                                 @if( Auth::user()->can('read-dungeons') )
-                                    <li><a href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a></li>
+                                <a class="dropdown-item" href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
                                 @endif
                                 @if( Auth::user()->can('read-npcs') )
-                                    <li><a href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a></li>
+                                    <a class="dropdown-item" href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
                                 @endif
-                                <li>
-                                    <a href="{{ route('profile.edit') }}">My profile</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('logout') }}"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">My profile</a>
+                                <div class="dropdown-divider"></div>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                          style="display: none;">
-                                        {{ csrf_field() }}
-                                    </form>
-                                </li>
-                            </ul>
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                      style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                            </div>
                         </li>
                     @endif
                 </ul>
             </div>
         </div>
     </nav>
+
     <div class="container<?php echo(isset($wide) && $wide ? "-fluid" : ""); ?>">
         <div class="row">
-            <div class="<?php echo(isset($wide) && $wide ? "col-md-12" : "col-md-8 col-md-offset-2"); ?>">
-                <div class="panel panel-default ">
-                    <div class="panel-heading <?php echo(isset($wide) && $wide ? "panel-heading-wide" : ""); ?>">
-                        @yield('header-title')
+            <div class="card mt-3 mb-3 <?php echo(isset($wide) && $wide ? "col-md-12 ml-3 mr-3" : "col-md-8 offset-md-2"); ?>">
+                <div class="card-body">
+                    <div class="card-header <?php echo(isset($wide) && $wide ? "panel-heading-wide" : ""); ?>">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h4>@yield('header-title')</h4>
+                            </div>
+                            <div class="ml-auto">
+                                @yield('header-addition')
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="panel-body">
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-                        @if (session('status'))
-                            <div class="alert alert-success">
-                                {{ session('status') }}
-                            </div>
-                        @endif
+                    @if (session('status'))
+                        <div class="alert alert-success">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
-                        @yield('content')
-                    </div>
+                    @yield('content')
                 </div>
             </div>
         </div>

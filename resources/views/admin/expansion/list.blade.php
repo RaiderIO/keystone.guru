@@ -1,10 +1,16 @@
 @extends('layouts.app')
 
 @section('header-title')
-    {{ __('View expansions') }}
-    <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('Create expansion') }}
-    </a>
+    <div class="row">
+        <div class="col-lg-6">
+            <h4>{{ __('View expansions') }}</h4>
+        </div>
+        <div class="ml-auto">
+            <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right ml-auto" role="button">
+                <i class="fas fa-plus"></i> {{ __('Create expansion') }}
+            </a>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')

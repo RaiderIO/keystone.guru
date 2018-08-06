@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('header-title')
-     {{ $headerTitle }}
-    <a href="{{ route('admin.expansions') }}" class="btn btn-info text-white pull-right" role="button">
+@section('header-title', __('View expansions'))
+@section('header-addition')
+    <a href="{{ route('admin.expansions') }}" class="btn btn-info text-white float-right" role="button">
         <i class="fas fa-backward"></i> {{ __('Expansion list') }}
     </a>
 @endsection

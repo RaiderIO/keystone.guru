@@ -24,7 +24,7 @@ class AffixSeeder extends Seeder
             new Affix(['name' => 'Bolstering', 'icon_file_id' => -1, 'description' => 'When any non-boss enemy dies, its death cry empowers nearby allies, increasing their maximum health and damage by 20%.']),
             new Affix(['name' => 'Bursting', 'icon_file_id' => -1, 'description' => 'When slain, non-boss enemies explode, causing all players to suffer 10% of their max health in damage over 4 sec. This effect stacks.']),
             new Affix(['name' => 'Explosive', 'icon_file_id' => -1, 'description' => 'While in combat, enemies periodically summon Explosive Orbs that will detonate if not destroyed.']),
-            new Affix(['name' => 'Fortified', 'icon_file_id' => -1, 'description' => '	Non-boss enemies have 20% more health and inflict up to 30% increased damage.']),
+            new Affix(['name' => 'Fortified', 'icon_file_id' => -1, 'description' => 'Non-boss enemies have 20% more health and inflict up to 30% increased damage.']),
             new Affix(['name' => 'Grievous', 'icon_file_id' => -1, 'description' => 'When injured below 90% health, players will suffer increasing damage over time until healed above 90% health.']),
             new Affix(['name' => 'Infested', 'icon_file_id' => -1, 'description' => 'Some non-boss enemies have been infested with a Spawn of G\'huun.']),
             new Affix(['name' => 'Necrotic', 'icon_file_id' => -1, 'description' => 'All enemies\' melee attacks apply a stacking blight that inflicts damage over time and reduces healing received.']),

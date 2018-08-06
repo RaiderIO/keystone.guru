@@ -48,7 +48,7 @@ return array(
     | to generate the right URL.
     |
     */
-    'host' => 'https://mpplnr.wofje.nl/',
+    'host' => env('URL_HOST'),
 
     /*
     |--------------------------------------------------------------------------

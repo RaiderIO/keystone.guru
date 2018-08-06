@@ -78,6 +78,7 @@ if (mix.inProduction()) {
     // Copies all tiles as well which takes a while
     mix.copy('resources/assets/images', 'public/images', false);
 } else {
+    mix.copy('resources/assets/images/icon', 'public/images/icon', false);
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);
     mix.copy('resources/assets/images/classes', 'public/images/classes', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);

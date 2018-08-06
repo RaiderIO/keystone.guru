@@ -5,6 +5,8 @@ echo "Installing npm packages..."
 npm install
 echo "Updating composer..."
 composer update
+echo "Fixing vulnerabilities..."
+npm audit fix
 echo "Regenerating IDE Helper..."
 ./ide_helper_regen.sh
 echo "Refreshing autoload..."
