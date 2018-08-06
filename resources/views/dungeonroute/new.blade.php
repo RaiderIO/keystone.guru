@@ -11,17 +11,13 @@
         <h3>
             {{ __('General') }}
         </h3>
-        <div class="col-lg-12">
-            <div class="form-group">
-                {!! Form::label('dungeon_route_title', __('Title') . "*") !!}
-                {!! Form::text('dungeon_route_title', '', ['class' => 'form-control']) !!}
-            </div>
+        <div class="form-group">
+            {!! Form::label('dungeon_route_title', __('Title') . "*") !!}
+            {!! Form::text('dungeon_route_title', '', ['class' => 'form-control']) !!}
         </div>
-        <div class="col-lg-12">
-            <div class="form-group">
-                {!! Form::label('dungeon_id', __('Select dungeon') . "*") !!}
-                {!! Form::select('dungeon_id', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
-            </div>
+        <div class="form-group">
+            {!! Form::label('dungeon_id', __('Select dungeon') . "*") !!}
+            {!! Form::select('dungeon_id', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
         </div>
 
         <h3>

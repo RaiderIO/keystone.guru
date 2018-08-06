@@ -102,38 +102,36 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
 
 @endsection
 
-<div class="col-lg-12">
-    <div class="form-group col-lg-12">
-        {!! Form::label('affixes[]', __('Select affixes') . "*") !!}
-        {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('id', 'id'),
-            !isset($dungeonroute) ? 0 : $dungeonroute->affixgroups->pluck(['affix_group_id']),
-            ['id' => 'affixes', 'class' => 'form-control affixselect hidden', 'multiple'=>'multiple']) !!}
-        {{--<select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple--}}
-        {{--data-selected-text-format="count > 2">--}}
-        {{--@foreach($affixGroups as $group)--}}
-        {{--<option value="{{ $group->id }}">{{ $group->id }}</option>--}}
-        {{--@endforeach--}}
-        {{--</select>--}}
+<div class="form-group">
+    {!! Form::label('affixes[]', __('Select affixes') . "*") !!}
+    {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('id', 'id'),
+        !isset($dungeonroute) ? 0 : $dungeonroute->affixgroups->pluck(['affix_group_id']),
+        ['id' => 'affixes', 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
+    {{--<select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple--}}
+    {{--data-selected-text-format="count > 2">--}}
+    {{--@foreach($affixGroups as $group)--}}
+    {{--<option value="{{ $group->id }}">{{ $group->id }}</option>--}}
+    {{--@endforeach--}}
+    {{--</select>--}}
 
-        <div id="affixes_list_custom" class="affix_list col-lg-12">
-            @foreach($affixGroups as $affixGroup)
-                <div class="row affix_list_row" data-id="{{ $affixGroup->id }}">
-                    <?php $count = 0; ?>
-                    @foreach($affixGroup->affixes as $affix)
-                        @php( $number = count($affixGroup->affixes) - 1 === $count ? '3' : '4' )
-                        <div class="col-xl-{{ $number }} col-lg-{{ $number }} col-md-{{ $number }} col-sm-{{ $number }} col-xs-{{ $number }} affix_row pull-left">
-                            <img src="{{ Image::url($affix->iconfile->getUrl(), 32, 32) }}"
-                                 class="select_icon affix_icon"
-                                 title="{{ $affix->name }}"/>
-                            <span class="hidden-xs"> {{ $affix->name }} </span>
-                        </div>
-                        <?php $count++; ?>
-                    @endforeach
-                    <span class="col-lg-1 check pull-right text-right" style="display: none;">
-                        <i class="fas fa-check"></i>
-                    </span>
-                </div>
-            @endforeach
-        </div>
+    <div id="affixes_list_custom" class="affix_list col-lg-12">
+        @foreach($affixGroups as $affixGroup)
+            <div class="row affix_list_row" data-id="{{ $affixGroup->id }}">
+                <?php $count = 0; ?>
+                @foreach($affixGroup->affixes as $affix)
+                    @php( $number = count($affixGroup->affixes) - 1 === $count ? '3' : '4' )
+                    <div class="col-xl-{{ $number }} col-lg-{{ $number }} col-md-{{ $number }} col-sm-{{ $number }} col-xs-{{ $number }} affix_row">
+                        <img src="{{ Image::url($affix->iconfile->getUrl(), 32, 32) }}"
+                             class="select_icon affix_icon"
+                             title="{{ $affix->name }}"/>
+                        <span class="hidden-xs-down"> {{ $affix->name }} </span>
+                    </div>
+                    <?php $count++; ?>
+                @endforeach
+                <span class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-xs-1 check text-right" style="display: none;">
+                    <i class="fas fa-check"></i>
+                </span>
+            </div>
+        @endforeach
     </div>
 </div>

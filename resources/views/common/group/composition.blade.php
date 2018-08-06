@@ -80,8 +80,8 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         }
     </script>
 @endsection
-<div class="col-lg-12">
-    <div class="col-lg-offset-5 col-lg-2">
+<div class="row">
+    <div class="col-lg-2 offset-lg-5">
         <div class="form-group">
             {!! Form::label('faction_id', __('Select faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
@@ -98,9 +98,9 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         </div>
     @endisset
 </div>
-<div class="col-lg-12">
+<div class="row">
     <?php for($i = 1; $i <= config('mpplnr.party_size'); $i++){ ?>
-    <div class="col-lg-2{{ $i === 1 ? ' col-lg-offset-1' : '' }}">
+    <div class="col-lg-2{{ $i === 1 ? ' offset-lg-1' : '' }}">
         <div class="form-group">
             {!! Form::label('race[]', __('Party member #' . $i)) !!}
             <select name="race[]" id="race_{{ $i }}" class="form-control selectpicker raceselect" data-id="{{$i}}">
