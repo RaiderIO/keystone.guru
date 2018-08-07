@@ -13,4 +13,14 @@ use Illuminate\Database\Eloquent\Model;
 class CharacterRaceClassCoupling extends Model
 {
     public $timestamps = false;
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // This model may NOT be deleted, it's read only!
+        static::deleting(function ($someModel) {
+            return false;
+        });
+    }
 }

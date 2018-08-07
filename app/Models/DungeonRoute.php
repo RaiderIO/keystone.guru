@@ -62,11 +62,27 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function playerraces()
+    {
+        return $this->hasMany('App\Models\DungeonRoutePlayerRace');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function classes()
     {
         return $this->belongsToMany('App\Models\CharacterClass', 'dungeon_route_player_classes');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function playerclasses()
+    {
+        return $this->hasMany('App\Models\DungeonRoutePlayerClass');
     }
 
     /**
@@ -102,7 +118,7 @@ class DungeonRoute extends Model
 
             if (!empty($newRaces)) {
                 // Remove old races
-                $this->races()->delete();
+                $this->playerraces()->delete();
 
                 // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
                 foreach ($newRaces as $key => $value) {
@@ -116,7 +132,7 @@ class DungeonRoute extends Model
             $newClasses = $request->get('class', array());
             if (!empty($newClasses)) {
                 // Remove old classes
-                $this->classes()->delete();
+                $this->playerclasses()->delete();
                 foreach ($newClasses as $key => $value) {
                     $drpClass = new DungeonRoutePlayerClass();
                     $drpClass->character_class_id = $value;

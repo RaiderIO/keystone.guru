@@ -10,9 +10,7 @@ use App\Models\File;
 class CharacterInfoSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * @throws Exception
      */
     public function run()
     {
@@ -20,31 +18,38 @@ class CharacterInfoSeeder extends Seeder
 
         $this->command->info('Adding known races');
 
+        $alliance_id = \App\Models\Faction::all()->where('name', '=', 'Alliance')->first()->id;
+        $horde_id = \App\Models\Faction::all()->where('name', '=', 'Horde')->first()->id;
+
+        if ($alliance_id === 0 || $horde_id === 0) {
+            throw new Exception('Unable to find factions');
+        }
+
         // Do the name as key => value so we can easily fetch it later on
-        $races = ['Human' => new CharacterRace(['faction' => 'Alliance']),
-            'Dwarf' => new CharacterRace(['faction' => 'Alliance']),
-            'Night Elf' => new CharacterRace(['faction' => 'Alliance']),
-            'Gnome' => new CharacterRace(['faction' => 'Alliance']),
-            'Draenei' => new CharacterRace(['faction' => 'Alliance']),
-            'Worgen' => new CharacterRace(['faction' => 'Alliance']),
-            'PandarenAlliance' => new CharacterRace(['faction' => 'Alliance']),
-            'Void Elf' => new CharacterRace(['faction' => 'Alliance']),
-            'Lightforged Draenei' => new CharacterRace(['faction' => 'Alliance']),
-            'Dark Iron Dwarf' => new CharacterRace(['faction' => 'Alliance']),
-            'Kul Tiran Human' => new CharacterRace(['faction' => 'Alliance']),
+        $races = ['Human' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Dwarf' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Night Elf' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Gnome' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Draenei' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Worgen' => new CharacterRace(['faction_id' => $alliance_id]),
+            'PandarenAlliance' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Void Elf' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Lightforged Draenei' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Dark Iron Dwarf' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Kul Tiran Human' => new CharacterRace(['faction_id' => $alliance_id]),
 
 
-            'Orc' => new CharacterRace(['faction' => 'Horde']),
-            'Undead' => new CharacterRace(['faction' => 'Horde']),
-            'Tauren' => new CharacterRace(['faction' => 'Horde']),
-            'Troll' => new CharacterRace(['faction' => 'Horde']),
-            'Blood Elf' => new CharacterRace(['faction' => 'Horde']),
-            'Goblin' => new CharacterRace(['faction' => 'Horde']),
-            'PandarenHorde' => new CharacterRace(['faction' => 'Horde']),
-            'Nightborne' => new CharacterRace(['faction' => 'Horde']),
-            'Highmountain Tauren' => new CharacterRace(['faction' => 'Horde']),
-            'Mag\'har Orc' => new CharacterRace(['faction' => 'Horde']),
-            'Zandalari Troll' => new CharacterRace(['faction' => 'Horde']),
+            'Orc' => new CharacterRace(['faction_id' => $horde_id]),
+            'Undead' => new CharacterRace(['faction_id' => $horde_id]),
+            'Tauren' => new CharacterRace(['faction_id' => $horde_id]),
+            'Troll' => new CharacterRace(['faction_id' => $horde_id]),
+            'Blood Elf' => new CharacterRace(['faction_id' => $horde_id]),
+            'Goblin' => new CharacterRace(['faction_id' => $horde_id]),
+            'PandarenHorde' => new CharacterRace(['faction_id' => $horde_id]),
+            'Nightborne' => new CharacterRace(['faction_id' => $horde_id]),
+            'Highmountain Tauren' => new CharacterRace(['faction_id' => $horde_id]),
+            'Mag\'har Orc' => new CharacterRace(['faction_id' => $horde_id]),
+            'Zandalari Troll' => new CharacterRace(['faction_id' => $horde_id]),
         ];
 
         foreach ($races as $name => $race) {
