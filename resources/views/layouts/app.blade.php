@@ -164,21 +164,13 @@
             </div>
         </div>
         <hr>
-        <div class="row">
-            <ul class="nav nav-pills nav-justified">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">
-                        ©{{ date('Y') }} {{ Config::get('app.name') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">{{ __('Terms of Service') }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">{{ __('Privacy') }}</a>
-                </li>
-            </ul>
-        </div>
+        <nav class="nav nav-pills nav-justified">
+            <a class="nav-item nav-link" href="/">
+                ©{{ date('Y') }} {{ Config::get('app.name') }}
+            </a>
+            <a class="nav-item nav-link" href="#">{{ __('Terms of Service') }}</a>
+            <a class="nav-item nav-link" href="#">{{ __('Privacy') }}</a>
+        </nav>
     </div>
 </div>
 
