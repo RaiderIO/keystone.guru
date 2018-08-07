@@ -11,9 +11,23 @@
 |
 */
 
-use App\Models\DungeonRoute;
-
 Auth::routes();
+
+Route::get('about', function () {
+    return view('misc.about');
+})->name('misc.about');
+
+Route::get('privacy', function () {
+    return view('legal.privacy');
+})->name('legal.privacy');
+
+Route::get('terms', function () {
+    return view('legal.terms');
+})->name('legal.terms');
+
+Route::get('cookies', function () {
+    return view('legal.cookies');
+})->name('legal.cookies');
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute.new');

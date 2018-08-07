@@ -15,7 +15,31 @@
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
-    @yield('head')
+@yield('head')
+
+<!-- Cookie nag -->
+    <link rel="stylesheet" type="text/css"
+          href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#252e39"
+                    },
+                    "button": {
+                        "background": "#14a7d0"
+                    }
+                },
+                "theme": "classic",
+                "content": {
+                    "link": "Learn more",
+                    "href": "/cookies"
+                }
+            })
+        });
+    </script>
 </head>
 <body>
 <div id="app">
@@ -136,20 +160,16 @@
         <div class="row">
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
-                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">News</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
-                    <li class="nav-item"><a class="nav-link" href="#">Product for Mac</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Product for Windows</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('misc.about') }}">About</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
-                    <li class="nav-item"><a class="nav-link" href="#">Help</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Presentations</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
@@ -159,7 +179,6 @@
                             <i class="fab fa-github"> Github</i>
                         </a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="#">Developer API</a></li>
                 </ul>
             </div>
         </div>
@@ -168,8 +187,9 @@
             <a class="nav-item nav-link" href="/">
                 ©{{ date('Y') }} {{ Config::get('app.name') }}
             </a>
-            <a class="nav-item nav-link" href="#">{{ __('Terms of Service') }}</a>
-            <a class="nav-item nav-link" href="#">{{ __('Privacy') }}</a>
+            <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
+            <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
+            <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
         </nav>
     </div>
 </div>
