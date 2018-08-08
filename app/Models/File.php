@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Folklore\Image\Facades\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -18,12 +19,12 @@ class File extends Model
     /**
      * @var array None of this really matters for externals
      */
-    public $hidden = ['disk', 'path', 'model_id', 'model_class', 'created_at', 'updated_at'];
+    public $hidden = ['id', 'disk', 'path', 'model_id', 'model_class', 'created_at', 'updated_at'];
 
     /**
      * @var array Only this really matters when we're echoing the file.
      */
-    public $appends = ['url'];
+    public $appends = ['url', 'icon_url'];
 
     function delete(){
         if( parent::delete() ) {
@@ -36,6 +37,16 @@ class File extends Model
      */
     public function getUrlAttribute(){
         return $this->getURL();
+    }
+
+    public function getIconUrlAttribute(){
+        $iconUrl = '';
+        // Only if it's an image!
+        if(Image::format($this->getUrl()) !== null){
+            // Send as little data as possible, fetch the url, but strip it off the full path
+            $iconUrl = @parse_url(Image::url($this->getUrl(), 32, 32))['path'];
+        }
+        return $iconUrl;
     }
 
     /**

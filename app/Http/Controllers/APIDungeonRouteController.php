@@ -12,8 +12,7 @@ class APIDungeonRouteController extends Controller
 {
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        return DungeonRoute::all()->where('floor_id', '=', $floorId);
+        return datatables(DungeonRoute::with(['dungeon', 'affixgroups', 'author']))->toJson();
     }
 
     /**

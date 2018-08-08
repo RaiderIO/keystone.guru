@@ -18,9 +18,18 @@ use Illuminate\Http\Request;
  * @property $races \Illuminate\Support\Collection
  * @property $classes \Illuminate\Support\Collection
  * @property $affixgroups \Illuminate\Support\Collection
+ * @property $playerclasses \Illuminate\Support\Collection
+ * @property $playerraces \Illuminate\Support\Collection
  */
 class DungeonRoute extends Model
 {
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['setup'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -91,6 +100,18 @@ class DungeonRoute extends Model
     public function affixgroups()
     {
         return $this->hasMany('App\Models\DungeonRouteAffixGroup');
+    }
+
+    /**
+     * @return array The setup as used in the front-end.
+     */
+    public function getSetupAttribute()
+    {
+        return [
+            'faction' => $this->faction,
+            'classes' => $this->classes,
+            'races' => $this->races
+        ];
     }
 
     /**

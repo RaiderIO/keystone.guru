@@ -7,13 +7,14 @@
     "require": {
         "php": ">=5.6.4",
         "barryvdh/laravel-ide-helper": "^2.4",
-        "bjuppa/laravel-blog": "dev-master",
+        "bjuppa/laravel-blog": "~0.2",
         "folklore/image": "0.3.*",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.6",
         "santigarcor/laratrust": "5.0.*",
-        "shrikeh/teapot": "^2.3"
+        "shrikeh/teapot": "^2.3",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
