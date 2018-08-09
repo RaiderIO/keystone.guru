@@ -65,6 +65,12 @@
     max-height: 24px;
 }
 
+.display_icon {
+    width: 32px;
+    border-radius: 16px;
+    max-height: 32px;
+}
+
 .user_icon {
     width: 22px;
     color: white;

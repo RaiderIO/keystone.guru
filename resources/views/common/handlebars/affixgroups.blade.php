@@ -1,11 +1,11 @@
 <script id="affixgroups_single_template" type="text/x-handlebars-template">
     <?php // Is only one but keeps the underlying code much simpler to keep that data structure the same ?>
     @{{#affixgroups}}
-    <div class="row affix_list_row">
+    <div class="affix_list_row">
         @{{#affixes}}
-        <div class="col-sm-4 affix_row p-0">
+        <div class="affix_row float-left">
             <img src="@{{icon_url}}"
-                 class="select_icon affix_icon"
+                 class="select_icon affix_icon pr-1"
                  data-toggle="tooltip"
                  title="@{{title}}"/>
         </div>
@@ -14,17 +14,15 @@
     @{{/affixgroups}}
 </script>
 <script id="affixgroups_complex_template" type="text/x-handlebars-template">
-    <div class="row">
-        <span class="target_tooltip" data-toggle="tooltip" data-html="true">
-            @{{count}} {{ __('selected') }}
-        </span>
-    </div>
+    <span class="target_tooltip" data-toggle="tooltip" data-html="true">
+        @{{count}} {{ __('selected') }}
+    </span>
     <?php // Wrapper so we can put all this in the tooltip of the above span. I'm not cramming that in a tiny attribute manually ?>
     <div class="affix_list_row_container">
         @{{#affixgroups}}
-        <div class="row affix_list_row" style="width: 120px">
+        <div class="col-lg-12 affix_list_row" style="width: 140px">
             @{{#affixes}}
-            <div class="affix_row col-sm p-1">
+            <div class="affix_row col-sm">
                 <img src="@{{icon_url}}"
                      class="select_icon affix_icon"/>
             </div>
@@ -39,7 +37,6 @@
      * @returns {*}
      */
     function handlebarsAffixGroupsParse(data) {
-        console.log('data', data);
         let groupSetupHtml = '';
         if (data.length === 1) {
             groupSetupHtml = $("#affixgroups_single_template").html();
@@ -77,8 +74,6 @@
             }
         }
 
-        console.log('handlebarsData', handlebarsData);
-
         let result = template(handlebarsData);
         // Start with an empty div since .html() takes the inner html, I don't want to lose the outer most div doing this
         let $result = $("<div>").append($(result));
@@ -87,8 +82,6 @@
         if( data.length > 1 ){
             let $rowContainer = $($result.find('.affix_list_row_container'));
             let $targetTooltip = $($result.find('.target_tooltip'));
-
-            console.log($rowContainer, $targetTooltip);
 
             // Put the contents of the row container in the tooltip
             $targetTooltip.attr('title', $rowContainer.html());

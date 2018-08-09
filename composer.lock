@@ -130,16 +130,16 @@
         },
         {
             "name": "bjuppa/laravel-blog",
-            "version": "v0.2",
+            "version": "v0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bjuppa/laravel-blog.git",
-                "reference": "477594f4e21efd413920394ec98ec3db576c9ee7"
+                "reference": "eceb5e292e1c4396fb35ea2f24cac3721936151f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bjuppa/laravel-blog/zipball/477594f4e21efd413920394ec98ec3db576c9ee7",
-                "reference": "477594f4e21efd413920394ec98ec3db576c9ee7",
+                "url": "https://api.github.com/repos/bjuppa/laravel-blog/zipball/eceb5e292e1c4396fb35ea2f24cac3721936151f",
+                "reference": "eceb5e292e1c4396fb35ea2f24cac3721936151f",
                 "shasum": ""
             },
             "require": {
@@ -194,7 +194,7 @@
                 "blog",
                 "laravel"
             ],
-            "time": "2018-08-08T06:59:03+00:00"
+            "time": "2018-08-09T11:20:59+00:00"
         },
         {
             "name": "bjuppa/metatagbag",
@@ -986,16 +986,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.6.31",
+            "version": "v5.6.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "b11fbad84cd90d109c6d817ff3c9af428746edfd"
+                "reference": "81a8f999461b6f45fe797abf88486f17a8659c09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/b11fbad84cd90d109c6d817ff3c9af428746edfd",
-                "reference": "b11fbad84cd90d109c6d817ff3c9af428746edfd",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/81a8f999461b6f45fe797abf88486f17a8659c09",
+                "reference": "81a8f999461b6f45fe797abf88486f17a8659c09",
                 "shasum": ""
             },
             "require": {
@@ -1121,7 +1121,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-08-08T20:56:17+00:00"
+            "time": "2018-08-09T19:19:52+00:00"
         },
         {
             "name": "laravel/tinker",

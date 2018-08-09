@@ -28,6 +28,7 @@ require('bootstrap');
 
 window.axios = require('axios');
 
+window.datatables = require('datatables');
 window.leaflet = require('leaflet');
 window.leafletdraw = require('leaflet-draw');
 // window.leafleteditable = require('leaflet-editable');
