@@ -1,8 +1,8 @@
 <script id="group_setup_template" type="text/x-handlebars-template">
-    <img src="@{{faction_icon_url}}" class="select_icon faction_icon"/>
+    <img src="@{{faction_icon_url}}" class="select_icon faction_icon" data-toggle="tooltip" title="@{{faction_title}}"/>
     |
     @{{#classes}}
-    <img src="@{{class_icon_url}}" class="select_icon class_icon"/>
+    <img src="@{{icon_url}}" class="select_icon class_icon" data-toggle="tooltip" title="@{{title}}"/>
     @{{/classes}}
 </script>
 <script>
@@ -17,6 +17,7 @@
 
         let handlebarsData = {
             faction_icon_url: data.faction.iconfile.icon_url,
+            faction_title: data.faction.name,
             classes: []
         };
 
@@ -24,7 +25,8 @@
             if( data.classes.hasOwnProperty(i) ){
                 let playerClass = data.classes[i];
                 handlebarsData.classes.push({
-                    class_icon_url: playerClass.iconfile.icon_url
+                    icon_url: playerClass.iconfile.icon_url,
+                    title: playerClass.name
                 })
             }
         }
@@ -32,3 +34,4 @@
         return template(handlebarsData);
     }
 </script>
+

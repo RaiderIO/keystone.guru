@@ -12,6 +12,8 @@ class AffixGroup extends Model
 {
 
     public $timestamps = false;
+    public $with = ['affixes'];
+    public $hidden = ['pivot'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany

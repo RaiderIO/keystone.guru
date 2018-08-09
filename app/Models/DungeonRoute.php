@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
  * @property $affixgroups \Illuminate\Support\Collection
  * @property $playerclasses \Illuminate\Support\Collection
  * @property $playerraces \Illuminate\Support\Collection
+ * @property $affixes \Illuminate\Support\Collection
  */
 class DungeonRoute extends Model
 {
@@ -100,6 +101,14 @@ class DungeonRoute extends Model
     public function affixgroups()
     {
         return $this->hasMany('App\Models\DungeonRouteAffixGroup');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function affixes()
+    {
+        return $this->belongsToMany('App\Models\AffixGroup', 'dungeon_route_affix_groups');
     }
 
     /**

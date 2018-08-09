@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
-use App\Models\DungeonRoutePlayerRace;
-use App\Models\DungeonRoutePlayerClass;
-use App\Models\DungeonRouteAffixGroup;
 use Illuminate\Http\Request;
 
 class APIDungeonRouteController extends Controller
 {
     function list(Request $request)
     {
-        return datatables(DungeonRoute::with(['dungeon', 'affixgroups', 'author']))->toJson();
+        // @todo this must be the wrong way of doing it
+        $result = datatables(DungeonRoute::with(['dungeon', 'affixes', 'author']))->toArray();
+        unset($result['input']);
+        unset($result['queries']);
+        return json_encode($result);
     }
 
     /**

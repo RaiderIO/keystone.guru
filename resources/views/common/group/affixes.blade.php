@@ -123,6 +123,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                     <div class="col-xl-{{ $number }} col-lg-{{ $number }} col-md-{{ $number }} col-sm-{{ $number }} col-xs-{{ $number }} affix_row">
                         <img src="{{ Image::url($affix->iconfile->getUrl(), 32, 32) }}"
                              class="select_icon affix_icon"
+                             data-toggle="tooltip"
                              title="{{ $affix->name }}"/>
                         <span class="hidden-xs-down"> {{ $affix->name }} </span>
                     </div>

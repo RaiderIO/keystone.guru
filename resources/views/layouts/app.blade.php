@@ -37,8 +37,16 @@
                     "link": "Learn more",
                     "href": "/cookies"
                 }
-            })
+            });
+
+            // Enable tooltips for all elements
+            refreshTooltips();
         });
+
+        function refreshTooltips(){
+            console.log('refreshing tooltips');
+            $('[data-toggle="tooltip"]').tooltip();
+        }
     </script>
 </head>
 <body>
