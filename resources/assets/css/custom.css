@@ -51,10 +51,6 @@
     height: 700px;
 }
 
-.switch-dungeon-control {
-    width: 400px;
-}
-
 .username_menu {
     width: 105px;
 }
@@ -115,4 +111,9 @@
 .marker_div_icon_circle_border {
     border: 3px solid;
     border-radius: 15px;
+}
+
+/** DATATABLES */
+.routes_table_filter {
+    display: none;
 }

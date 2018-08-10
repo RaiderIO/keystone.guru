@@ -2,18 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AffixGroup;
 use App\Models\DungeonRoute;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class APIDungeonRouteController extends Controller
 {
     function list(Request $request)
     {
+//        dd($request->get('columns'));
+        $model = DungeonRoute::query()->with(['dungeon', 'affixes', 'author'])
+//            ->whereHas('affixes', function($query){
+//
+//        })
+        ;
+
+        return DataTables::eloquent($model)
+            ->addColumn('affixes', function (DungeonRoute $dungeonRoute) {
+                    return $dungeonRoute->affixes;
+                })
+            ->rawColumns(['affixes'])
+            ->make(true);
+
         // @todo this must be the wrong way of doing it
-        $result = datatables(DungeonRoute::with(['dungeon', 'affixes', 'author']))->toArray();
-        unset($result['input']);
-        unset($result['queries']);
-        return json_encode($result);
+//        $result = datatables(DungeonRoute::with(['dungeon', 'affixes', 'author']))->toArray();
+//        unset($result['input']);
+//        unset($result['queries']);
+//        return json_encode($result);
     }
 
     /**
@@ -24,7 +41,7 @@ class APIDungeonRouteController extends Controller
      */
     function store(Request $request, DungeonRoute $dungeonroute = null)
     {
-        if( $dungeonroute === null ){
+        if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
 

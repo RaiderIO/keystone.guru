@@ -2,8 +2,6 @@ $(function () {
     $("#faction_id").bind('change', _factionChanged);
     $(".raceselect").bind('change', _raceChanged);
 
-    $(".selectpicker").selectpicker();
-
     // Add icons to the faction dropdown
     $.each($("#faction_id option"), function (index, value) {
         let faction = _factions[index];

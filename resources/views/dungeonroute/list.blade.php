@@ -27,9 +27,8 @@
                     }, <?php // Enable caching when in production mode, disable it when developing ?>
                     'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}'
                 },
-                'lengthMenu': [25],
+                'lengthMenu': [5],
                 'bLengthChange': false,
-                'bFilter': false,
                 'columns': [
                     {
                         'data': 'title',
@@ -39,9 +38,13 @@
                                 return '<a href="/dungeonroute/view/' + row.id + '" >' + data + '</a>';
                         }
                     },
-                    {'data': 'dungeon.name'},
+                    {
+                        'data': 'dungeon.name',
+                        'name': 'dungeon_id'
+                    },
                     {
                         'data': 'affixes',
+                        'name': 'affixes.id',
                         'render': function (data, type, row, meta) {
                             return handlebarsAffixGroupsParse(data);
                         },
@@ -68,17 +71,51 @@
                 ]
             });
 
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    'processing': true,
+                    'serverSide': true,
+                    'responsive': true,
+                    "ajax": "https://wofje.nl/test/dt.php",
+                    'columns': [
+                        {
+                            'data': 'name',
+                            'name': 'name',
+                            'render': function (data, type, row, meta) {
+                                return 'test';
+                            }
+                        }
+                    ]
+                });
+            });
+
+
             _dt.on('draw.dt', function (e, settings, json, xhr) {
                 refreshTooltips();
             });
 
-            $("#dungeonroute_filter").bind('click', function(){
-                _dt.column(0).search($("#dungeonroute_search_title").val()).draw();
+            $("#dungeonroute_filter").bind('click', function () {
+
+                // Build the search parameters
+                let title = $("#dungeonroute_search_title").val();
+                let dungeonId = $("#dungeonroute_search_dungeon_id").val();
+                if (parseInt(dungeonId) < 1) {
+                    dungeonId = '';
+                }
+                let affixes = $("#affixes").val();
+
+                _dt.column(0).search(title);
+                _dt.column(1).search(dungeonId);
+                _dt.column(2).search(affixes);
+                _dt.draw();
             });
+            // Do this asap
+            // $("#affixgroup_select_container").html(handlebarsAffixGroupSelectParse({}));
         });
     </script>
     @include('common.handlebars.groupsetup')
     @include('common.handlebars.affixgroups')
+    @include('common.handlebars.affixgroupsselect')
 @endsection
 
 @section('content')
@@ -89,7 +126,15 @@
         </div>
         <div class="col-lg-2">
             {!! Form::label('dungeon_id', __('Dungeon')) !!}
-            {!! Form::select('dungeon_id', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+            {!! Form::select('dungeon_id', array_merge([0 => 'All'], \App\Models\Dungeon::all()->pluck('name', 'id')->toArray()), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
+        </div>
+        <div id="affixgroup_select_container" class="col-lg-2">
+            {!! Form::label('affixes[]', __('Select affixes') . "*") !!}
+            {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('text', 'id'), null,
+                ['id' => 'affixes',
+                'class' => 'form-control affixselect selectpicker',
+                'multiple' => 'multiple',
+                'data-selected-text-format' => 'count > 1']) !!}
         </div>
         <div class="col-lg-2">
             {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info']) !!}
