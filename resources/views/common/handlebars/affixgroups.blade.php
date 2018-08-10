@@ -20,9 +20,9 @@
     <?php // Wrapper so we can put all this in the tooltip of the above span. I'm not cramming that in a tiny attribute manually ?>
     <div class="affix_list_row_container">
         @{{#affixgroups}}
-        <div class="col-lg-12 affix_list_row" style="width: 140px">
+        <div class="row affix_list_row" style="width: 140px">
             @{{#affixes}}
-            <div class="affix_row col-sm">
+            <div class="affix_row col-md-4">
                 <img src="@{{icon_url}}"
                      class="select_icon affix_icon"/>
             </div>
@@ -88,10 +88,9 @@
             // Delete the container, it was only a placeholder
             $rowContainer.remove();
 
-            $targetTooltip.tooltip('show');
+            $targetTooltip.tooltip();
         }
 
         return $result.html();
     }
 </script>
-

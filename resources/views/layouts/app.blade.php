@@ -49,6 +49,7 @@
         function refreshTooltips(){
             console.log('refreshing tooltips');
             $('[data-toggle="tooltip"]').tooltip();
+            // $('[data-toggle="tooltip"]').tooltip({trigger: 'manual'}).tooltip('show');
         }
     </script>
 </head>

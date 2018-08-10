@@ -6,31 +6,26 @@ use App\Models\AffixGroup;
 use App\Models\DungeonRoute;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class APIDungeonRouteController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     function list(Request $request)
     {
-//        dd($request->get('columns'));
-        $model = DungeonRoute::query()->with(['dungeon', 'affixes', 'author'])
-//            ->whereHas('affixes', function($query){
-//
-//        })
-        ;
+        $builder = DungeonRoute::query()->with(['dungeon', 'affixes', 'author']);
+        // Filter by our own user if logged in
+        if( $request->has('author_id') ){
+            $builder = $builder->where('author_id', '=', $request->has('author_id'));
+        }
 
-        return DataTables::eloquent($model)
-//            ->addColumn('affixes', function (DungeonRoute $dungeonRoute) {
-//                    return $dungeonRoute->affixes;
-//                })
-//            ->rawColumns(['affixes'])
+        return DataTables::eloquent($builder)
             ->make(true);
-
-        // @todo this must be the wrong way of doing it
-//        $result = datatables(DungeonRoute::with(['dungeon', 'affixes', 'author']))->toArray();
-//        unset($result['input']);
-//        unset($result['queries']);
-//        return json_encode($result);
     }
 
     /**

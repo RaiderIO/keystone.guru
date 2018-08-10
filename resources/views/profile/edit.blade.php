@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['wide' => true])
 
 @section('header-title', __('My profile'))
 
@@ -24,28 +24,36 @@
     {!! Form::close() !!}
 
     {{ Form::model($user, ['route' => ['profile.changepassword', $user->name], 'method' => 'patch']) }}
-    <h3>{{ __('Change password') }}</h3>
+    <div class="mt-4">
+        <h3>{{ __('Change password') }}</h3>
 
-    <div class="form-group{{ $errors->has('current_password') ? ' has-error' : '' }}">
-        {!! Form::label('current_password', __('Current password')) !!}
-        {!! Form::password('current_password', ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'current_password'])
-    </div>
+        <div class="form-group{{ $errors->has('current_password') ? ' has-error' : '' }}">
+            {!! Form::label('current_password', __('Current password')) !!}
+            {!! Form::password('current_password', ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'current_password'])
+        </div>
 
-    <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
-        {!! Form::label('new_password', __('New password')) !!}
-        {!! Form::password('new_password', ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'new_password'])
-    </div>
+        <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
+            {!! Form::label('new_password', __('New password')) !!}
+            {!! Form::password('new_password', ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'new_password'])
+        </div>
 
 
-    <div class="form-group{{ $errors->has('new_password-confirm') ? ' has-error' : '' }}">
-        {!! Form::label('new_password-confirm', __('New password (confirm)')) !!}
-        {!! Form::password('new_password-confirm', ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'new_password-confirm'])
+        <div class="form-group{{ $errors->has('new_password-confirm') ? ' has-error' : '' }}">
+            {!! Form::label('new_password-confirm', __('New password (confirm)')) !!}
+            {!! Form::password('new_password-confirm', ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'new_password-confirm'])
+        </div>
     </div>
 
     {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
 
     {!! Form::close() !!}
+
+    <div class="mt-4">
+        <h1>{{ __('My dungeonroutes') }}</h1>
+
+        @include('common.dungeonroute.table', ['author_id' => $user->id])
+    </div>
 @endsection
