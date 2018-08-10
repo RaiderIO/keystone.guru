@@ -101,8 +101,7 @@
         <div class="col-lg-12">
             <div id="map_container">
                 @include('common.maps.map', [
-                    'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
-                    'dungeonSelect' => false
+                    'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id)
                 ])
             </div>
 

@@ -1,6 +1,6 @@
 class DungeonMap extends Signalable {
 
-    constructor(mapid, dungeonData, floorID) {
+    constructor(mapid, dungeonData, floorID, edit) {
         super();
         let self = this;
 
@@ -21,6 +21,7 @@ class DungeonMap extends Signalable {
         this.mapObjects = [];
 
         this.currentFloorId = floorID;
+        this.edit = edit;
 
         this.mapTileLayer = null;
         this.mapControls = null;
@@ -184,7 +185,7 @@ class DungeonMap extends Signalable {
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
-        this.leafletMap.setView([-128, 192], 0);
+        this.leafletMap.setView([-128, 192], 2);
         let southWest = this.leafletMap.unproject([0, 4096], this.leafletMap.getMaxZoom());
         let northEast = this.leafletMap.unproject([6144, 0], this.leafletMap.getMaxZoom());
 
@@ -220,8 +221,11 @@ class DungeonMap extends Signalable {
         this.leafletMap.addLayer(this.drawnItems);
 
         // Get the draw controls and add it to the map
-        this.drawControls = this._getDrawControls(this.drawnItems);
-        this.drawControls.addControl();
+        console.log('edit', this.edit);
+        if( this.edit ){
+            this.drawControls = this._getDrawControls(this.drawnItems);
+            this.drawControls.addControl();
+        }
 
         // If we created something
         this.leafletMap.on(L.Draw.Event.CREATED, function (event) {

@@ -35,7 +35,7 @@
                         'name': 'title',
                         'render': function (data, type, row, meta) {
                             <?php // @todo Use laravel route for this link ?>
-                                return '<a href="/dungeonroute/view/' + row.id + '" >' + data + '</a>';
+                                return '<a href="/dungeonroute?v=' + row.id + '" >' + data + '</a>';
                         }
                     },
                     {
@@ -103,10 +103,12 @@
                     dungeonId = '';
                 }
                 let affixes = $("#affixes").val();
+                let rating = $("#rating").val();
 
                 _dt.column(0).search(title);
                 _dt.column(1).search(dungeonId);
                 _dt.column(2).search(affixes);
+                _dt.column(5).search(rating);
                 _dt.draw();
             });
             // Do this asap
@@ -135,6 +137,10 @@
                 'class' => 'form-control affixselect selectpicker',
                 'multiple' => 'multiple',
                 'data-selected-text-format' => 'count > 1']) !!}
+        </div>
+        <div class="col-lg-2">
+            {!! Form::label('rating', __('Rating')) !!}
+            {!! Form::text('rating', null, ['id' => 'dungeonroute_search_rating', 'class' => 'form-control']) !!}
         </div>
         <div class="col-lg-2">
             {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info']) !!}

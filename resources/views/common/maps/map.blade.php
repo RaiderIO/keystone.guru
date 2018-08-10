@@ -5,6 +5,7 @@ $isAdmin = isset($admin) && $admin;
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
+$edit = isset($edit) && $edit ? 'true' : 'false';
 ?>
 
 @section('head')
@@ -21,11 +22,6 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
 
         .enemy_edit_popup_npc {
             width: 300px;
-        }
-
-        #map {
-            margin-top: 10px;
-            margin-bottom: 10px;
         }
 
         #map_controls .map_controls_custom {
@@ -62,9 +58,9 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
             @endisset
 
                     @if($isAdmin)
-                dungeonMap = new AdminDungeonMap('map', _dungeonData, $(_switchDungeonFloorSelect).val());
+                dungeonMap = new AdminDungeonMap('map', _dungeonData, $(_switchDungeonFloorSelect).val(), {{ $edit }});
             @else
-                dungeonMap = new DungeonMap('map', _dungeonData, $(_switchDungeonFloorSelect).val());
+                dungeonMap = new DungeonMap('map', _dungeonData, $(_switchDungeonFloorSelect).val(), {{ $edit }});
             @endif
             @endif
 

@@ -20,10 +20,10 @@ class APIDungeonRouteController extends Controller
         ;
 
         return DataTables::eloquent($model)
-            ->addColumn('affixes', function (DungeonRoute $dungeonRoute) {
-                    return $dungeonRoute->affixes;
-                })
-            ->rawColumns(['affixes'])
+//            ->addColumn('affixes', function (DungeonRoute $dungeonRoute) {
+//                    return $dungeonRoute->affixes;
+//                })
+//            ->rawColumns(['affixes'])
             ->make(true);
 
         // @todo this must be the wrong way of doing it

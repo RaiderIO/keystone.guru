@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Teapot\StatusCode\Http;
 
 class DungeonRouteController extends Controller
 {
@@ -22,6 +20,15 @@ class DungeonRouteController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function view(Request $request)
+    {
+        return view('dungeonroute.view', ['model' => DungeonRoute::findOrFail($request->get('v'))]);
+    }
+
+    /**
      * @param DungeonRouteFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @return mixed
@@ -29,12 +36,12 @@ class DungeonRouteController extends Controller
      */
     public function store(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null)
     {
-        if( $dungeonroute === null ){
+        if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
 
         // May fail
-        if(!$dungeonroute->saveFromRequest($request)){
+        if (!$dungeonroute->saveFromRequest($request)) {
             abort(500, __('Unable to save dungeonroute'));
         }
 

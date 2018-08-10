@@ -34,6 +34,10 @@ Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute
 Route::post('dungeonroute/new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
 Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
 
+// View any dungeon route
+Route::get('dungeonroute', 'DungeonRouteController@view')
+    ->name('dungeonroute.view')
+    ->where(['v' => '[0-9]+']);
 // Edit your own dungeon routes
 Route::get('dungeonroute/{dungeonroute}', 'DungeonRouteController@edit')
     ->middleware('can:edit,dungeonroute')
