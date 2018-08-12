@@ -16,8 +16,9 @@ class CreateFactionsTable extends Migration
         Schema::create('factions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('icon_file_id');
-            $table->string('title');
+            $table->text('name');
             $table->string('color');
+
         });
     }
 

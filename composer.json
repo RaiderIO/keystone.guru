@@ -7,7 +7,6 @@
     "require": {
         "php": ">=5.6.4",
         "barryvdh/laravel-ide-helper": "^2.4",
-        "bjuppa/laravel-blog": "~0.2",
         "folklore/image": "0.3.*",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
