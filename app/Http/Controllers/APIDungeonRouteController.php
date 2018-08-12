@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AffixGroup;
 use App\Models\DungeonRoute;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class APIDungeonRouteController extends Controller
@@ -20,8 +18,28 @@ class APIDungeonRouteController extends Controller
     {
         $builder = DungeonRoute::query()->with(['dungeon', 'affixes', 'author']);
         // Filter by our own user if logged in
-        if( $request->has('author_id') ){
+        if ($request->has('author_id')) {
             $builder = $builder->where('author_id', '=', $request->has('author_id'));
+        }
+
+        // Handle searching on affixes
+        if ($request->has('columns')) {
+            $columns = $request->get('columns');
+
+            $affixes = $columns[2]['search']['value'];
+            if (!empty($affixes)) {
+                $affixIds = explode(',', $affixes);
+
+                $builder->whereHas('affixes', function($query) use(&$affixIds){
+                    /** @var $query Builder */
+                    $query->whereIn('affix_groups.id', $affixIds);
+                });
+            }
+
+            // Unset the search value, we already filtered it and I don't know how to convince DT to do the above for me
+            $columns[2]['search']['value'] = '';
+            // Apply to request parameters
+            $request->merge(['columns' => $columns]);
         }
 
         return DataTables::eloquent($builder)
