@@ -17,6 +17,9 @@ class APIDungeonRouteController extends Controller
     function list(Request $request)
     {
         $builder = DungeonRoute::query()->with(['dungeon', 'affixes', 'author']);
+        // No unlisted routes!
+        $builder = $builder->where('unlisted', '<>', true);
+
         // Filter by our own user if logged in
         if ($request->has('author_id')) {
             $builder = $builder->where('author_id', '=', $request->has('author_id'));

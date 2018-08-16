@@ -12,6 +12,8 @@ class ExpansionsSeeder extends Seeder
      */
     public function run()
     {
+        $this->_rollback();
+
         $this->command->info('Adding known Expansions');
 
         $expansions = [
@@ -42,5 +44,11 @@ class ExpansionsSeeder extends Seeder
             $expansion->icon_file_id = $icon->id;
             $expansion->save();
         }
+    }
+
+    private function _rollback()
+    {
+        DB::table('expansions')->truncate();
+        DB::table('files')->where('model_class', '=', 'App\Models\Expansion')->delete();
     }
 }

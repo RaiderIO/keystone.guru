@@ -1,6 +1,7 @@
 @extends('layouts.app', ['wide' => true])
 @section('header-title', $model->title)
 
+
 @section('content')
     @isset($model)
         {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}

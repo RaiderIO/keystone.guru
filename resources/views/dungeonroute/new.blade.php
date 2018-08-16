@@ -31,6 +31,14 @@
 
         @include('common.group.affixes')
 
+        <h3>
+            {{ __('Sharing') }}
+        </h3>
+        <div class="form-group">
+            {!! Form::label('unlisted', __('Unlisted (only people with the link may view your route)')) !!}
+            {!! Form::checkbox('unlisted', 1, 0, ['class' => 'form-control left_checkbox']) !!}
+        </div>
+
         <div class="col-lg-12">
             <div class="form-group">
                 {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}

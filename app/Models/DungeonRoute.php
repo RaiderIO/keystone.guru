@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
  * @property $author_id int
  * @property $dungeon_id int
  * @property $faction_id int
+ * @property $public_key string
  * @property $title string
+ * @property $unlisted boolean
  * @property $dungeon Dungeon
  * @property $route Route
  * @property $faction Faction
@@ -30,6 +32,24 @@ class DungeonRoute extends Model
      * @var array
      */
     protected $appends = ['setup'];
+
+    protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'created_at', 'updated_at'];
+
+    /**
+     * @return string Generates a random public key that is displayed to the user in the URL.
+     */
+    public static function generateRandomPublicKey(){
+        do {
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $charactersLength = strlen($characters);
+            $newKey = '';
+            for ($i = 0; $i < 7; $i++) {
+                $newKey .= $characters[rand(0, $charactersLength - 1)];
+            }
+        } while(DungeonRoute::where('public_key', '=', $newKey)->count() > 0);
+
+        return $newKey;
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -138,9 +158,11 @@ class DungeonRoute extends Model
             $this->author_id = \Auth::user()->id;
         }
 
+        $this->public_key = DungeonRoute::generateRandomPublicKey();
         $this->dungeon_id = $request->get('dungeon_id', $this->dungeon_id);
         $this->faction_id = $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
+        $this->unlisted = intval($request->get('unlisted', 0)) > 0;
 
         // Update or insert it
         if ($this->save()) {

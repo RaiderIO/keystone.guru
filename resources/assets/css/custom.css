@@ -18,6 +18,11 @@
     background: url('/images/lib/datatables/sort_desc_disabled.png') no-repeat center right !important;
 }
 
+/** BOOTSTRAP **/
+.left_checkbox {
+    width: 40px;
+}
+
 .leaflet-container {
 
 }

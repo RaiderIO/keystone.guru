@@ -25,7 +25,9 @@ class DungeonRouteController extends Controller
      */
     public function view(Request $request)
     {
-        return view('dungeonroute.view', ['model' => DungeonRoute::findOrFail($request->get('v'))]);
+        return view('dungeonroute.view', [
+            'model' => DungeonRoute::firstOrFail()->where('public_key', '=', $request->get('v'))->first()
+        ]);
     }
 
     /**

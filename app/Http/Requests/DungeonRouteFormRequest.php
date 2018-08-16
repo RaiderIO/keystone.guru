@@ -34,6 +34,8 @@ class DungeonRouteFormRequest extends FormRequest
 
             'race.*' => 'nullable|numeric',
             'class.*' => 'nullable|numeric',
+
+            'unlisted' => 'nullable|int',
         ];
     }
 }
