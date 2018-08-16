@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Faction;
 use App\Models\File;
 
-class FactionSeeder extends Seeder
+class FactionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.

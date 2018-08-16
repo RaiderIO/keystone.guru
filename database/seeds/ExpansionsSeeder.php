@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\File;
 
 class ExpansionsSeeder extends Seeder
 {
@@ -13,9 +14,33 @@ class ExpansionsSeeder extends Seeder
     {
         $this->command->info('Adding known Expansions');
 
-//        $legion = new App\Models\Expansion([
-//            'name' => 'Legion',
-//            'color' => '#27ff0f'
-//        ]);
+        $expansions = [
+            'Legion' => new App\Models\Expansion([
+                'shortname' => 'legion',
+                'color' => '#27ff0f'
+            ]), 'Battle for Azeroth' => new App\Models\Expansion([
+                'shortname' => 'bfa',
+                'color' => '#906554'
+            ])
+        ];
+
+
+        foreach($expansions as $name => $expansion){
+            $expansion->name = $name;
+            // Temp file
+            $expansion->icon_file_id = -1;
+            /** @var $race \Illuminate\Database\Eloquent\Model */
+            $expansion->save();
+
+            $icon = new File();
+            $icon->model_id = $expansion->id;
+            $icon->model_class = get_class($expansion);
+            $icon->disk = 'public';
+            $icon->path = sprintf('images/expansions/%s.png', $expansion->shortname);
+            $icon->save();
+
+            $expansion->icon_file_id = $icon->id;
+            $expansion->save();
+        }
     }
 }

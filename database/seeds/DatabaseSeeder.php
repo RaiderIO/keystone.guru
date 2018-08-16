@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ExpansionsSeeder::class);
         $this->call(DungeonsSeeder::class);
 
-        $this->call(FactionSeeder::class);
+        $this->call(FactionsSeeder::class);
         $this->call(CharacterInfoSeeder::class);
 
         $this->call(AffixSeeder::class);

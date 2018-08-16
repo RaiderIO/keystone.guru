@@ -61,7 +61,7 @@ if (full) {
     mix.webpackConfig({
         resolve: {
             alias: {
-               handlebars: 'handlebars/dist/handlebars.min.js'
+                handlebars: 'handlebars/dist/handlebars.min.js'
             }
         }
     });
@@ -77,11 +77,12 @@ mix.sourceMaps();
 if (mix.inProduction()) {
     // Copies all tiles as well which takes a while
     mix.copy('resources/assets/images', 'public/images', false);
-} else {
-    mix.copy('resources/assets/images/icon', 'public/images/icon', false);
-    mix.copy('resources/assets/images/lib', 'public/images/lib', false);
-    mix.copy('resources/assets/images/classes', 'public/images/classes', false);
-    mix.copy('resources/assets/images/factions', 'public/images/factions', false);
-    mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
-    // mix.copy('resources/assets/images/test', 'public/images/test', false);
 }
+
+mix.copy('resources/assets/images/icon', 'public/images/icon', false);
+mix.copy('resources/assets/images/lib', 'public/images/lib', false);
+mix.copy('resources/assets/images/classes', 'public/images/classes', false);
+mix.copy('resources/assets/images/factions', 'public/images/factions', false);
+mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
+mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
+mix.copy('resources/assets/images/test', 'public/images/test', false);

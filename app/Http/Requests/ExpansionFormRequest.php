@@ -28,7 +28,8 @@ class ExpansionFormRequest extends FormRequest
         /** @var Expansion $expansion */
         $expansion = $this->route()->parameter('expansion');
         $rules = [
-            'name' => ['required', Rule::unique('expansions')],
+            'name' => ['required', Rule::unique('expansions')->ignore($this->route()->parameter('id'))],
+            'shortname' => ['required', Rule::unique('expansions')->ignore($this->route()->parameter('id'))],
             'color' => 'required'
         ];
         // Icon is required when making a new expansion, when editing it's optional

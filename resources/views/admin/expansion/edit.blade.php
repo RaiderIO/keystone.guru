@@ -14,9 +14,15 @@
     @endisset
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        {!! Form::label('name', __('Expansion name')) !!}
+        {!! Form::label('name', __('Name')) !!}
         {!! Form::text('name', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'name'])
+    </div>
+
+    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+        {!! Form::label('shortname', __('Shortname')) !!}
+        {!! Form::text('shortname', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'shortname'])
     </div>
 
     <div class="form-group{{ $errors->has('icon') ? ' has-error' : '' }}">

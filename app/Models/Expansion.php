@@ -8,10 +8,14 @@ use Illuminate\Http\Request;
  * @property int $id
  * @property int $icon_file_id
  * @property string $name
+ * @property string $shortname
  * @property string $color
  */
 class Expansion extends IconFileModel
 {
+
+    public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
+
     public function dungeons()
     {
         return $this->hasMany('App\Models\Dungeon');
@@ -32,6 +36,7 @@ class Expansion extends IconFileModel
 
         $this->icon_file_id = -1;
         $this->name = $request->get('name');
+        $this->shortname = $request->get('shortname');
         $this->color = $request->get('color');
 
         // Update or insert it
