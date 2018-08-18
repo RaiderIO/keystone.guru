@@ -14,7 +14,6 @@ class FactionsSeeder extends Seeder
     public function run()
     {
         $this->_rollback();
-
         $this->command->info('Adding known factions');
 
         $factions = [

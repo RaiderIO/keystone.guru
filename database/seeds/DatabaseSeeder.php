@@ -21,5 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CharacterInfoSeeder::class);
 
         $this->call(AffixSeeder::class);
+
+        $this->call(NpcClassificationSeeder::class);
     }
 }

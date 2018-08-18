@@ -27,7 +27,6 @@
                         'data': 'title',
                         'name': 'title',
                         'render': function (data, type, row, meta) {
-                            console.log(row);
                             <?php // @todo Use laravel route for this link ?>
                                 return '<a href="/dungeonroute?v=' + row.public_key + '" >' + data + '</a>';
                         }
