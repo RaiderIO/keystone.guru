@@ -1,7 +1,9 @@
 @extends('layouts.app', ['wide' => isset($model)])
 @section('header-title')
     {{ $headerTitle }}
-    <a href="{{ route('admin.dungeon.edit', ['id' => $dungeon->id]) }}" class="btn btn-info text-white pull-right"
+@endsection
+@section('header-addition')
+    <a href="{{ route('admin.dungeon.edit', ['id' => $dungeon->id]) }}" class="btn btn-info text-white float-right"
        role="button">
         <i class="fas fa-backward"></i> {{ __('Back to dungeon') }}
     </a>

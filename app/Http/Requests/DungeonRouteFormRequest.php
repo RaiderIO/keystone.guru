@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Dungeon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,7 +27,8 @@ class DungeonRouteFormRequest extends FormRequest
     {
         return [
             'dungeon_route_title' => 'required|string|min:3|max:255',
-            'dungeon_id' => ['required', Rule::exists('dungeons', 'id')],
+            // Only active dungeons are allowed
+            'dungeon_id' => ['required', Rule::exists('dungeons', 'id'), Rule::in(Dungeon::active()->pluck('id')->toArray())],
             'faction_id' => ['required', Rule::exists('factions', 'id')],
 
             'race' => 'nullable|array',

@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property $id int The ID of this Dungeon.
  * @property $expansion_id int The linked expansion to this dungeon.
  * @property $name string The name of the dungeon
+ * @property $active boolean True if this dungeon is active, false if it is not
  * @property $expansion \Expansion
  * @property $floors \Illuminate\Support\Collection
+ * @function active
  */
 class Dungeon extends Model
 {
@@ -45,5 +48,27 @@ class Dungeon extends Model
     public function floors()
     {
         return $this->hasMany('App\Models\Floor');
+    }
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('active', 0);
     }
 }

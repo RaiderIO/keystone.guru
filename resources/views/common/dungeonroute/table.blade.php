@@ -82,7 +82,6 @@
                 });
             });
 
-
             _dt.on('draw.dt', function (e, settings, json, xhr) {
                 refreshTooltips();
             });
@@ -123,7 +122,7 @@
         </div>
         <div class="col-lg-2">
             {!! Form::label('dungeon_id', __('Dungeon')) !!}
-            {!! Form::select('dungeon_id', array_merge([0 => 'All'], \App\Models\Dungeon::all()->pluck('name', 'id')->toArray()), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
+            {!! Form::select('dungeon_id', array_merge([0 => 'All'], \App\Models\Dungeon::active()->pluck('name', 'id')->toArray()), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
         </div>
         <div id="affixgroup_select_container" class="col-lg-2">
             {!! Form::label('affixes[]', __('Select affixes') . "*") !!}

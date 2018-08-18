@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('header-title')
     {{ $headerTitle }}
+@endsection
+@section('header-addition')
     <a href="{{ route('admin.dungeons') }}" class="btn btn-info text-white pull-right" role="button">
         <i class="fas fa-backward"></i> {{ __('Dungeon list') }}
     </a>
@@ -22,11 +24,18 @@
 @endsection
 
 @section('content')
+<div class="mb-4">
     @isset($model)
         {{ Form::model($model, ['route' => ['admin.dungeon.update', $model->id], 'method' => 'patch']) }}
     @else
         {{ Form::open(['route' => 'admin.dungeon.savenew']) }}
     @endisset
+
+<div class="form-group{{ $errors->has('active') ? ' has-error' : '' }}">
+    {!! Form::label('active', __('Active')) !!}
+    {!! Form::checkbox('active', 1, isset($model) ? $model->active : 1, ['class' => 'form-control left_checkbox']) !!}
+    @include('common.forms.form-error', ['key' => 'active'])
+</div>
 
 <div class="form-group{{ $errors->has('expansion_id') ? ' has-error' : '' }}">
     {!! Form::label('expansion_id', __('Expansion')) !!}
@@ -44,12 +53,13 @@
 
 {!! Form::close() !!}
 @isset($model)
-<br>
+</div>
 <h4>Floor management</h4>
-<br>
-<a href="{{ route('admin.floor.new', array('dungeon' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">
-    <i class="fas fa-plus"></i> {{ __('Add floor') }}
-</a>
+<div class="float-right">
+    <a href="{{ route('admin.floor.new', array('dungeon' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">
+        <i class="fas fa-plus"></i> {{ __('Add floor') }}
+    </a>
+</div>
 
 <table id="admin_dungeon_floor_table" class="tablesorter default_table">
     <thead>

@@ -23,6 +23,7 @@ class DungeonsSeeder extends Seeder
         $dungeonsData = [
             'Arcway' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'Arcway' => [
                         'index' => 1
@@ -31,6 +32,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Black Rook Hold' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'The Ravenscrypt' => [
                         'index' => 1
@@ -54,6 +56,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Cathedral of Eternal Night' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'Hall of the Moon' => [
                         'index' => 1
@@ -74,6 +77,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Court of Stars' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'Court of Stars' => [
                         'index' => 1
@@ -83,6 +87,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Darkheart Thicket' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'Darkheart Thicket' => [
                         'index' => 1
@@ -91,6 +96,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Eye of Azshara' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'Eye of Azshara' => [
                         'index' => 1
@@ -99,6 +105,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Halls of Valor' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     // Yes the indices are intended
                     'The High Gate' => [
@@ -137,6 +144,7 @@ class DungeonsSeeder extends Seeder
                 ]
             ], 'Lower Karazhan' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'Master\'s Terrace' => [
                         'index' => 6
@@ -160,6 +168,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Maw of Souls' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'Hellmouth Cliffs' => [
                         'index' => 1
@@ -174,6 +183,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Neltharion\'s Lair' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'Neltharion\'s Lair' => [
                         'index' => 1
@@ -182,6 +192,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Upper Karazhan' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'Lower Broken Stair' => [
                         'index' => 7
@@ -211,6 +222,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'The Seat of the Triumvirate' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'The Seat of the Triumvirate' => [
                         'index' => 1
@@ -219,6 +231,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Vault of the Wardens' => [
                 'expansion_id' => $legion->id,
+                'active' => true,
                 'floors' => [
                     'The Warden\'s Court' => [
                         'index' => 1
@@ -236,6 +249,7 @@ class DungeonsSeeder extends Seeder
 
             'Atal\'Dazar' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'Atal\'Dazar' => [
                         'index' => 1
@@ -259,6 +273,7 @@ class DungeonsSeeder extends Seeder
             ],
             'Freehold' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'Freehold' => [
                         'index' => 1
@@ -268,6 +283,7 @@ class DungeonsSeeder extends Seeder
             ],
             'Kings\' Rest' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'Kings\' Rest' => [
                         'index' => 1
@@ -277,6 +293,7 @@ class DungeonsSeeder extends Seeder
             ],
             'Shrine of the Storm' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'Shrine of the Storm' => [
                         'index' => 1
@@ -300,6 +317,7 @@ class DungeonsSeeder extends Seeder
             ],
             'Siege of Boralus' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'Siege of Boralus' => [
                         'index' => 1
@@ -309,6 +327,7 @@ class DungeonsSeeder extends Seeder
             ],
             'Temple of Sethraliss' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'Temple of Sethraliss' => [
                         'index' => 1
@@ -332,6 +351,7 @@ class DungeonsSeeder extends Seeder
             ],
             'The MOTHERLODE!!' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'The Motherlode' => [
                         'index' => 1
@@ -341,6 +361,7 @@ class DungeonsSeeder extends Seeder
             ],
             'The Underrot' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'The Underrot' => [
                         'index' => 1
@@ -364,6 +385,7 @@ class DungeonsSeeder extends Seeder
             ],
             'Tol Dagor' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'Tol Dagor' => [
                         'index' => 1
@@ -462,6 +484,7 @@ class DungeonsSeeder extends Seeder
             ],
             'Waycrest Manor' => [
                 'expansion_id' => $bfa->id,
+                'active' => true,
                 'floors' => [
                     'The Grand Foyer' => [
                         'index' => 2
@@ -533,8 +556,9 @@ class DungeonsSeeder extends Seeder
         foreach ($dungeonsData as $name => $dungeonData) {
             $this->command->info('Adding dungeon ' . $name);
             $dungeon = new \App\Models\Dungeon();
-            $dungeon->name = $name;
             $dungeon->expansion_id = $dungeonData['expansion_id'];
+            $dungeon->name = $name;
+            $dungeon->active = $dungeonData['active'];
 
             $dungeon->save();
 

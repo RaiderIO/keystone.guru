@@ -20,6 +20,11 @@ class APIDungeonRouteController extends Controller
         // No unlisted routes!
         $builder = $builder->where('unlisted', '<>', true);
 
+        $builder->whereHas('dungeon', function($query){
+            /** @var $query Builder This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
+            $query->active();
+        });
+
         // Filter by our own user if logged in
         if ($request->has('author_id')) {
             $builder = $builder->where('author_id', '=', $request->has('author_id'));

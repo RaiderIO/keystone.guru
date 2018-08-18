@@ -1,7 +1,9 @@
 @extends('layouts.app')
 @section('header-title')
     {{ $headerTitle }}
-    <a href="{{ route('admin.npcs') }}" class="btn btn-info text-white pull-right" role="button">
+@endsection
+@section('header-addition')
+    <a href="{{ route('admin.npcs') }}" class="btn btn-info text-white float-right" role="button">
         <i class="fas fa-backward"></i> {{ __('Npc list') }}
     </a>
 @endsection

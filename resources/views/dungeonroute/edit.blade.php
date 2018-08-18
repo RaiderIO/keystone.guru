@@ -61,6 +61,7 @@
                             return $(this).val();
                         }).get()
                     ,
+                    unlisted: $("#unlisted").val(),
                     affixes: $("#affixes").val(),
                     _method: 'PATCH'
                 },
@@ -128,6 +129,11 @@
 
                     <div class="container mt-1">
                         @include('common.group.affixes', ['dungeonroute' => $model])
+                    </div>
+
+                    <div class="form-group">
+                        {!! Form::label('unlisted', __('Unlisted (only people with the link may view your route)')) !!}
+                        {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
                     </div>
 
                     <div class="form-group">

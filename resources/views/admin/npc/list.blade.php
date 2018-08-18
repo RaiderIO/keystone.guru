@@ -2,7 +2,9 @@
 
 @section('header-title')
     {{ __('View NPCs') }}
-    <a href="{{ route('admin.npc.new') }}" class="btn btn-success text-white pull-right" role="button">
+@endsection
+@section('header-addition')
+    <a href="{{ route('admin.npc.new') }}" class="btn btn-success text-white float-right" role="button">
         <i class="fas fa-plus"></i> {{ __('Create NPC') }}
     </a>
 @endsection

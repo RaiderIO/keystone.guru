@@ -2,7 +2,9 @@
 
 @section('header-title')
     {{ __('View dungeons') }}
-    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white pull-right" role="button">
+@endsection
+@section('header-addition')
+    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-right" role="button">
         <i class="fas fa-plus"></i> {{ __('Create dungeon') }}
     </a>
 @endsection
@@ -16,7 +18,11 @@
 @section('scripts')
 <script type="text/javascript">
     $(function () {
-        $('#admin_dungeon_table').DataTable({
+        var dt = $('#admin_dungeon_table').DataTable({
+        });
+
+        dt.on('draw.dt', function (e, settings, json, xhr) {
+            refreshTooltips();
         });
     });
 </script>
@@ -27,15 +33,22 @@
     <thead>
     <tr>
         <th width="10%">{{ __('Id') }}</th>
-        <th width="80%">{{ __('Name') }}</th>
+        <th width="10%">{{ __('Exp.') }}</th>
+        <th width="70%">{{ __('Name') }}</th>
         <th width="10%">{{ __('Actions') }}</th>
     </tr>
     </thead>
 
     <tbody>
     @foreach ($models->all() as $dungeon)
+        <?php /** @var $dungeon \App\Models\Dungeon */?>
     <tr>
         <td>{{ $dungeon->id }}</td>
+        <td>
+            <img src="{{ Image::url($dungeon->expansion->iconfile->getUrl(), 32, 32) }}"
+                 title="{{ $dungeon->expansion->name }}"
+                 data-toggle="tooltip"/>
+        </td>
         <td>{{ $dungeon->name }}</td>
         <td>
             <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['id' => $dungeon->id]) }}">

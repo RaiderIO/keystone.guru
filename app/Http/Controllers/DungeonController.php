@@ -25,6 +25,7 @@ class DungeonController extends Controller
         $dungeon->name = $request->get('name');
         // May not be set when editing
         $dungeon->expansion_id = $request->get('expansion_id');
+        $dungeon->active = $request->get('active', 0);
 
         // Update or insert it
         if (!$dungeon->save()) {
@@ -100,6 +101,6 @@ class DungeonController extends Controller
      */
     public function list()
     {
-        return view('admin.dungeon.list', ['models' => Dungeon::all()]);
+        return view('admin.dungeon.list', ['models' => Dungeon::all()->sortBy('active')]);
     }
 }

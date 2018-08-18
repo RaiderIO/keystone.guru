@@ -130,7 +130,7 @@
                     <div class="card-header <?php echo(isset($wide) && $wide ? "panel-heading-wide" : ""); ?>">
                         <div class="row">
                             @hasSection('header-addition')
-                                <div class="col-lg-6">
+                                <div class="ml-3">
                                     <h4>@yield('header-title')</h4>
                                 </div>
                                 <div class="ml-auto">
@@ -187,7 +187,7 @@
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="https://">
+                        <a class="nav-link" href="https://github.com/Wotuu/keystone.guru">
                             <i class="fab fa-github"> Github</i>
                         </a>
                     </li>
