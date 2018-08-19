@@ -81,6 +81,12 @@
     text-align: center;
 }
 
+.enemy-icon {
+    width: 12px;
+    height: 12px;
+    background: url("/images/mapicon/pin-yellow.png") no-repeat center right !important;
+}
+
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;

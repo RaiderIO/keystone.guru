@@ -15,8 +15,7 @@ $(function () {
     });
 });
 
-let LeafletEnemyIcon = new L.Icon.Default();
-LeafletEnemyIcon.options.shadowSize = [0,0];
+let LeafletEnemyIcon = new L.divIcon({className: 'enemy-icon'});
 
 let LeafletEnemyMarker = L.Marker.extend({
     options: {

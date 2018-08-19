@@ -54,6 +54,7 @@
         <h3>Enemy placement</h3>
         @include('common.maps.map', [
         'admin' => true,
+        'edit' => true,
         'dungeon' => $dungeon,
         'npcs' => $npcs,
         'selectedFloorId' => $model->id

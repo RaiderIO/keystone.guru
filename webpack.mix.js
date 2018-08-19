@@ -82,6 +82,7 @@ if (mix.inProduction()) {
     mix.copy('resources/assets/js/custom', 'public/js/custom', false);
 
     mix.copy('resources/assets/images/icon', 'public/images/icon', false);
+    mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);
     mix.copy('resources/assets/images/classes', 'public/images/classes', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);

@@ -11,6 +11,16 @@ class NpcController extends Controller
 {
 
     /**
+     * Checks if the incoming request is a save as new request or not.
+     * @param Request $request
+     * @return bool
+     */
+    private function isSaveAsNew(Request $request)
+    {
+        return $request->get('submit', 'submit') !== 'Submit';
+    }
+
+    /**
      * @param NpcFormRequest $request
      * @param Npc $npc
      * @return array|mixed
@@ -18,7 +28,8 @@ class NpcController extends Controller
      */
     public function store(NpcFormRequest $request, Npc $npc = null)
     {
-        if ($npc === null) {
+        // If we're saving as new, make a new NPC and save that instead
+        if ($npc === null || $this->isSaveAsNew($request)) {
             $npc = new Npc();
         }
 
@@ -26,6 +37,7 @@ class NpcController extends Controller
         $npc->game_id = $request->get('game_id');
         $npc->name = $request->get('name');
         $npc->base_health = $request->get('base_health');
+        $npc->aggressiveness = $request->get('aggressiveness');
 
         if (!$npc->save()) {
             abort(500, 'Unable to save npc!');
@@ -63,22 +75,25 @@ class NpcController extends Controller
 
     /**
      * Override to give the type hint which is required.
-     *
      * @param NpcFormRequest $request
      * @param Npc $npc
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      * @throws \Exception
      */
     public function update(NpcFormRequest $request, Npc $npc)
     {
-        // Store it and show the edit page again
-        $npc = $this->store($request, $npc);
+        if($this->isSaveAsNew($request)){
+            return $this->savenew($request);
+        } else {
+            // Store it and show the edit page again
+            $npc = $this->store($request, $npc);
 
-        // Message to the user
-        \Session::flash('status', __('Npc updated'));
+            // Message to the user
+            \Session::flash('status', __('Npc updated'));
 
-        // Display the edit page
-        return $this->edit($request, $npc);
+            // Display the edit page
+            return $this->edit($request, $npc);
+        }
     }
 
     /**

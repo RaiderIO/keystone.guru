@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $game_id
  * @property string $name
  * @property int $base_health
+ * @property string $aggressiveness
  * @property \Illuminate\Support\Collection $enemies
  */
 class Npc extends Model
