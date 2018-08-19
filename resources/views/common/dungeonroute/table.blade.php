@@ -137,6 +137,9 @@
             {!! Form::text('rating', null, ['id' => 'dungeonroute_search_rating', 'class' => 'form-control']) !!}
         </div>
         <div class="col-lg-2">
+            <div class="mb-2">
+                &nbsp;
+            </div>
             {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info']) !!}
         </div>
     </div>

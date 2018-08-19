@@ -46,7 +46,7 @@
             $(".selectpicker").selectpicker();
         });
 
-        function refreshTooltips(){
+        function refreshTooltips() {
             console.log('refreshing tooltips');
             $('[data-toggle="tooltip"]').tooltip();
             // $('[data-toggle="tooltip"]').tooltip({trigger: 'manual'}).tooltip('show');
@@ -78,18 +78,18 @@
                         </li>
                     @else
                         <li class="nav-item">
-                            <div style="padding: 7px">
-                                <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
-                                   role="button"><i class="fas fa-plus"></i> {{__('Create route')}}</a>
-                            </div>
+                            <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
+                               role="button"><i class="fas fa-plus"></i> {{__('Create route')}}</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="user_icon">
+                                <div class="user_icon float-left">
                                     <i class="fas fa-user"></i>
-                                </span>
-                                {{ Auth::user()->name }}
+                                </div>
+                                <div class="float-left">
+                                    {{ Auth::user()->name }}
+                                </div>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @if( Auth::user()->can('read-expansions') )

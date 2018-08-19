@@ -39,6 +39,27 @@ class DungeonMap extends Signalable {
             // Context menu when right clicking stuff
             contextmenu: true,
             zoomControl: true
+        });  //disable default scroll
+        this.leafletMap.scrollWheelZoom.disable();
+
+        // Make sure only control + scroll allows a zoom
+        $("#map").bind('mousewheel DOMMouseScroll', function (event) {
+            event.stopPropagation();
+            if (event.ctrlKey === true) {
+                event.preventDefault();
+                self.leafletMap.scrollWheelZoom.enable();
+                $('#map').removeClass('map-scroll');
+                setTimeout(function () {
+                    self.leafletMap.scrollWheelZoom.disable();
+                }, 1000);
+            } else {
+                self.leafletMap.scrollWheelZoom.disable();
+                $('#map').addClass('map-scroll');
+            }
+        });
+
+        $(window).bind('mousewheel DOMMouseScroll', function (event) {
+            $('#map').removeClass('map-scroll');
         });
 
         // Refresh the map; draw the layers on it
@@ -222,7 +243,7 @@ class DungeonMap extends Signalable {
 
         // Get the draw controls and add it to the map
         console.log('edit', this.edit);
-        if( this.edit ){
+        if (this.edit) {
             this.drawControls = this._getDrawControls(this.drawnItems);
             this.drawControls.addControl();
         }

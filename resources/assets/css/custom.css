@@ -47,6 +47,7 @@
     text-align: center;
 }
 
+/** LEAFLET */
 #map {
     height: 900px;
     padding: 10px;
@@ -58,6 +59,29 @@
     height: 700px;
 }
 
+.map-scroll:before {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    content: '';
+    background: #00000061;
+    z-index: 999;
+}
+
+.map-scroll:after {
+    content: 'Use ctrl + scroll to zoom the map';
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    z-index: 999;
+    font-size: 34px;
+    color: #eaeaea;
+    text-align: center;
+}
+
+/** GENERAL ICONS */
 .username_menu {
     width: 105px;
 }
@@ -75,16 +99,12 @@
 }
 
 .user_icon {
-    width: 22px;
+    width: 24px;
     color: white;
     text-align: center;
     background-color: gray;
     border-radius: 12px;
     margin-right: 5px;
-}
-
-.user_icon i {
-    padding-left: 1px;
 }
 
 .class_icon {
