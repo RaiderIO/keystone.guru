@@ -209,8 +209,44 @@
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/lib.js') }}"></script>
-<!-- Custom last; may require anything from the above -->
-<script src="{{ asset('js/custom.js') }}"></script>
+
+    @if (config('app.env') === 'production')
+     <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
+    <script src="{{ asset('js/custom.js') }}"></script>
+
+        @else
+
+    <script src="{{ asset('js/custom/constants.js') }}"></script>
+     <?php // Include in proper order ?>
+    <script src="{{ asset('js/custom/util.js') }}"></script>
+    <script src="{{ asset('js/custom/signalable.js') }}"></script>
+    <script src="{{ asset('js/custom/dungeonmap.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroupcontrols.js') }}"></script>
+    <script src="{{ asset('js/custom/drawcontrols.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobject.js') }}"></script>
+    <script src="{{ asset('js/custom/enemy.js') }}"></script>
+    <script src="{{ asset('js/custom/enemypack.js') }}"></script>
+    <script src="{{ asset('js/custom/route.js') }}"></script>
+    <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
+    <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
+    <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
+    <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>
+    <script src="{{ asset('js/custom/admin/adminenemy.js') }}"></script>
+    <script src="{{ asset('js/custom/admin/adminenemypack.js') }}"></script>
+    <script src="{{ asset('js/custom/admin/admindrawcontrols.js') }}"></script>
+    <script src="{{ asset('js/custom/admin/admindungeonstartmarker.js') }}"></script>
+    <script src="{{ asset('js/custom/admin/admindungeonfloorswitchmarker.js') }}"></script>
+     <?php // Include the rest ?>
+
+    <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/enemymapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/enemypackmapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
+
+    @endif
 @yield('scripts')
 </body>
 </html>
