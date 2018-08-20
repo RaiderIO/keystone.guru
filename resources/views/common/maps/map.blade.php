@@ -115,7 +115,7 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
                     <select data-live-search="true" id="enemy_edit_popup_npc" name="enemy_edit_popup_npc"
                             class="selectpicker enemy_edit_popup_npc" data-width="300px">
                         @foreach($npcs as $npc)
-                            <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->game_id) }}</option>
+                            <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->id) }}</option>
                         @endforeach
                     </select>
                 </div>

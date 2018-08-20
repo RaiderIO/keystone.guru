@@ -21,6 +21,12 @@
         {{ Form::open(['route' => 'admin.npc.savenew', 'autocomplete' => 'off']) }}
     @endisset
 
+    <div class="form-group{{ $errors->has('game_id') ? ' has-error' : '' }}">
+        {!! Form::label('game_id', __('Game ID')) !!}
+        {!! Form::text('game_id', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'game_id'])
+    </div>
+
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
         {!! Form::label('name', __('Name')) !!}
         {!! Form::text('name', null, ['class' => 'form-control']) !!}
@@ -48,12 +54,6 @@
         {!! Form::label('base_health', __('Base health')) !!}
         {!! Form::text('base_health', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'base_health'])
-    </div>
-
-    <div class="form-group{{ $errors->has('game_id') ? ' has-error' : '' }}">
-        {!! Form::label('game_id', __('Game ID')) !!}
-        {!! Form::text('game_id', null, ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'game_id'])
     </div>
 
     <div>

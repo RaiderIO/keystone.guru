@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $dungeon_id
  * @property int $classification_id
- * @property int $game_id
  * @property string $name
  * @property int $base_health
  * @property string $aggressiveness
