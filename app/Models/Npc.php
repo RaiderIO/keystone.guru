@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
+ * @property int $dungeon_id
  * @property int $classification_id
  * @property int $game_id
  * @property string $name
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
 class Npc extends Model
 {
     public $hidden = ['created_at', 'updated_at'];
+
+    public $timestamps = false;
 
     /**
      * Gets all derived enemies from this Npc.

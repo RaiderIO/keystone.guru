@@ -33,6 +33,7 @@ class NpcController extends Controller
             $npc = new Npc();
         }
 
+        $npc->dungeon_id = $request->get('dungeon_id');
         $npc->classification_id = $request->get('classification_id');
         $npc->game_id = $request->get('game_id');
         $npc->name = $request->get('name');
@@ -107,7 +108,7 @@ class NpcController extends Controller
         $npc = $this->store($request);
 
         // Message to the user
-        \Session::flash('status', __('Npc created'));
+        \Session::flash('status', sprintf(__('Npc %s created'), $npc->name));
 
         return redirect()->route('admin.npc.edit', ["npc" => $npc]);
     }

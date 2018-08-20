@@ -16,15 +16,20 @@
 
 @section('content')
     @isset($model)
-        {{ Form::model($model, ['route' => ['admin.npc.update', $model->id], 'method' => 'patch']) }}
+        {{ Form::model($model, ['route' => ['admin.npc.update', $model->id], 'autocomplete' => 'off', 'method' => 'patch']) }}
     @else
-        {{ Form::open(['route' => 'admin.npc.savenew']) }}
+        {{ Form::open(['route' => 'admin.npc.savenew', 'autocomplete' => 'off']) }}
     @endisset
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
         {!! Form::label('name', __('Name')) !!}
         {!! Form::text('name', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'name'])
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('dungeon_id', __('Select dungeon') . "*") !!}
+        {!! Form::select('dungeon_id', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
     </div>
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
@@ -53,9 +58,11 @@
 
     <div>
         {!! Form::submit(__('Submit'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'submit']) !!}
-        <div class="float-right">
-            {!! Form::submit(__('Save as new npc'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'saveasnew']) !!}
-        </div>
+        @isset($model)
+            <div class="float-right">
+                {!! Form::submit(__('Save as new npc'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'saveasnew']) !!}
+            </div>
+        @endisset
     </div>
 
     {!! Form::close() !!}

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateNpcTable extends Migration
+class AddDungeonToNpcs extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateNpcTable extends Migration
      */
     public function up()
     {
-        Schema::create('npcs', function (Blueprint $table) {
-            $table->primary('id');
-            $table->integer('classification_id');
-            $table->integer('game_id');
-            $table->text('name');
-            $table->integer('base_health');
+        Schema::table('npcs', function (Blueprint $table) {
+            $table->integer('dungeon_id')->after('id');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateNpcTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('npcs');
+        Schema::table('npcs', function (Blueprint $table) {
+            $table->dropColumn('dungeon_id');
+        });
     }
 }

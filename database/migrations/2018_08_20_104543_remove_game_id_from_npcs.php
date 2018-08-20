@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddAggressivenessToNpcs extends Migration
+class RemoveGameIdFromNpcs extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddAggressivenessToNpcs extends Migration
      */
     public function up()
     {
+        // Yea, should fill id with the current game_id but that's not really important atm, all tables are empty
         Schema::table('npcs', function (Blueprint $table) {
-            $table->enum('aggressiveness', ['neutral', 'unfriendly', 'aggressive']);
+            $table->dropColumn('game_id');
         });
     }
 
@@ -26,7 +27,7 @@ class AddAggressivenessToNpcs extends Migration
     public function down()
     {
         Schema::table('npcs', function (Blueprint $table) {
-            $table->dropColumn('aggressiveness');
+            $table->integer('game_id')->after('classification_id');
         });
     }
 }

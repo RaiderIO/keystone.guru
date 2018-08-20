@@ -28,7 +28,7 @@ class DungeonRouteFormRequest extends FormRequest
         return [
             'dungeon_route_title' => 'required|string|min:3|max:255',
             // Only active dungeons are allowed
-            'dungeon_id' => ['required', Rule::exists('dungeons', 'id'), Rule::in(Dungeon::active()->pluck('id')->toArray())],
+            'dungeon_id' => ['required', Rule::exists('dungeons', 'id')->where('active', '1')],
             'faction_id' => ['required', Rule::exists('factions', 'id')],
 
             'race' => 'nullable|array',

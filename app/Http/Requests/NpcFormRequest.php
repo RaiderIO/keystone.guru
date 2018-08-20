@@ -26,13 +26,15 @@ class NpcFormRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'dungeon_id' => Rule::exists('dungeons', 'id'),
             'classification_id' => 'required',
+            'aggressiveness' => Rule::in(config('keystoneguru.aggressiveness')),
             'base_health' => [
                 'required',
                 'regex:/^[\d\s,]*$/',
             ],
             // Can only add one entry per game_id, but exclude if we're editing a row but don't change the game_id
-            'game_id' => ['required'], // , Rule::unique('npcs', 'game_id')->ignore($this->route()->parameter('id'), 'id')
+            'game_id' => ['required'],
         ];
     }
 }
