@@ -19,6 +19,7 @@
 <script type="text/javascript">
     $(function () {
         var dt = $('#admin_dungeon_table').DataTable({
+            'lengthMenu': [25],
         });
 
         dt.on('draw.dt', function (e, settings, json, xhr) {

@@ -85,7 +85,7 @@ if( images ){
         mix.copy('resources/assets/images', 'public/images', false);
     } else {
         // Allow import of pure JS
-        mix.copy('resources/assets/js/custom', 'public/js/custom', false);
+        // mix.copy('resources/assets/js/custom', 'public/js/custom', false);
 
         mix.copy('resources/assets/images/icon', 'public/images/icon', false);
         mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);

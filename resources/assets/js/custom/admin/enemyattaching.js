@@ -3,6 +3,10 @@ class EnemyAttaching {
         console.assert(map instanceof DungeonMap);
         let self = this;
 
+        this.drawingEnemy = false;
+        this.drawingEnemyPack = false;
+        this.currentEnemyPackVertices = [];
+
         this.map = map;
         this.map.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
             // Drawing an enemy
@@ -64,12 +68,22 @@ class EnemyAttaching {
             }
         });
 
-        this.map.leafletMap.on('draw:drawvertex', function(e){
-            console.log('Drawing vertex!', e)
+        this.map.leafletMap.on('draw:drawvertex', function(a, b, c, d){
+            console.log('Drawing vertex!', a, b, c, d);
+            self.currentEnemyPackVertices.push(a);
         });
 
 
         // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
+        this.map.register('enemypack:add', function (event) {
+            if (self.currentMouseoverLayer !== null) {
+                let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
+
+                console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject!');
+                event.data.enemy.enemypack = mapObject;
+            }
+        });
+
         this.map.register('enemy:add', function (event) {
             if (self.currentMouseoverLayer !== null) {
                 let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
