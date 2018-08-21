@@ -14,6 +14,7 @@ class CreateNpcTable extends Migration
     public function up()
     {
         Schema::create('npcs', function (Blueprint $table) {
+            $table->integer('id');
             $table->primary('id');
             $table->integer('classification_id');
             $table->integer('game_id');
