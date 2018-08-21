@@ -69,7 +69,7 @@ class FloorController extends Controller
             'model' => $floor,
             'dungeon' => $floor->dungeon,
             'floors' => Floor::all()->where('dungeon_id', '=', $floor->dungeon_id)->where('id', '<>', $floor->id),
-            'npcs' => Npc::all(),
+            'npcs' => Npc::all()->where('dungeon_id', '=', $floor->dungeon_id),
             'headerTitle' => __('Edit floor')
         ]);
     }

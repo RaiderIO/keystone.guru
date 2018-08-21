@@ -18,37 +18,42 @@ class AdminEnemy extends Enemy {
         super.onLayerInit();
         let self = this;
 
-        let customPopupHtml = $("#enemy_edit_popup_template").html();
-        // Remove template so our
-        let template = handlebars.compile(customPopupHtml);
+        // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
+        self.register('synced', function(event){
+            let customPopupHtml = $("#enemy_edit_popup_template").html();
+            // Remove template so our
+            let template = handlebars.compile(customPopupHtml);
 
-        // No data in this template
-        let data = {};
+            let data = {id: self.id};
 
-        // Build the status bar from the template
-        customPopupHtml = template(data);
+            // Build the status bar from the template
+            customPopupHtml = template(data);
 
-        let customOptions = {
-            'maxWidth': '400',
-            'minWidth': '300',
-            'className': 'popupCustom'
-        };
-        this.layer.bindPopup(customPopupHtml, customOptions);
-        this.layer.on('popupopen', function () {
-            $("#enemy_edit_popup_npc").val(self.npc_id);
+            let customOptions = {
+                'maxWidth': '400',
+                'minWidth': '300',
+                'className': 'popupCustom'
+            };
+            self.layer.bindPopup(customPopupHtml, customOptions);
+            self.layer.on('popupopen', function (event) {
+                console.log(event);
 
-            // Refresh all select pickers so they work again
-            let $selectpicker = $(".selectpicker");
-            $selectpicker.selectpicker('refresh');
-            $selectpicker.selectpicker('render');
+                $("#enemy_edit_popup_attached_to_pack_" + self.id).text(self.enemy_pack_id >= 0 ? 'true' : 'false');
+                $("#enemy_edit_popup_npc_" + self.id).val(self.npc_id);
 
-            $("#enemy_edit_popup_submit").bind('click', function () {
-                console.log('test');
-                self.npc_id = $("#enemy_edit_popup_npc").val();
+                // Refresh all select pickers so they work again
+                let $selectpicker = $(".selectpicker");
+                $selectpicker.selectpicker('refresh');
+                $selectpicker.selectpicker('render');
 
-                self.edit();
+                $("#enemy_edit_popup_submit").bind('click', function () {
+                    console.log('test');
+                    self.npc_id = $("#enemy_edit_popup_npc_" + self.id).val();
+
+                    self.edit();
+                });
             });
-        })
+        });
     }
 
     getContextMenuItems() {

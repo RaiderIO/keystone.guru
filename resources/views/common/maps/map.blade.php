@@ -111,8 +111,11 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">
                 <div class="form-group">
-                    <label for="enemy_edit_popup_npc">{{ __('NPC') }}</label>
-                    <select data-live-search="true" id="enemy_edit_popup_npc" name="enemy_edit_popup_npc"
+                    <span>{{ __('Attached to pack:') }}</span> <span id="enemy_edit_popup_attached_to_pack_@{{id}}">false</span>
+                </div>
+                <div class="form-group">
+                    <label for="enemy_edit_popup_npc_@{{id}}">{{ __('NPC') }}</label>
+                    <select data-live-search="true" id="enemy_edit_popup_npc_@{{id}}" name="enemy_edit_popup_npc_@{{id}}"
                             class="selectpicker enemy_edit_popup_npc" data-width="300px">
                         @foreach($npcs as $npc)
                             <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->id) }}</option>
