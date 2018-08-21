@@ -18,11 +18,16 @@ let full = false;
 if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
     full = argv.env.full;
 }
+// npm run dev -- --env.images false
+let images = true;
+if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
+    images = argv.env.images;
+}
 
 // Custom processing only
 mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
     .copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts')
-    .combine([
+    .babel([
         // Doesn't depend on anything
         'resources/assets/js/custom/constants.js',
         // Include in proper order
@@ -56,7 +61,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
     ], 'public/js/custom.js');
 // .combine(, 'public/js/custom.js');
 
-if (full) {
+if (full || mix.inProduction()) {
     // Handlebars has a bug which requires this: https://github.com/wycats/handlebars.js/issues/1174
     mix.webpackConfig({
         resolve: {
@@ -69,24 +74,25 @@ if (full) {
         .sass('resources/assets/sass/app.scss', 'public/css')
         // Lib processing
         .styles(['resources/assets/lib/**/*.css'], 'public/css/lib.css')
-        .combine('resources/assets/lib/**/*.js', 'public/js/lib.js');
+        .babel('resources/assets/lib/**/*.js', 'public/js/lib.js');
 }
 
 mix.sourceMaps();
 
-if (mix.inProduction()) {
-    // Copies all tiles as well which takes a while
-    mix.copy('resources/assets/images', 'public/images', false);
-} else {
-    // Allow import of pure JS
-    mix.copy('resources/assets/js/custom', 'public/js/custom', false);
+if( images ){
+    if (mix.inProduction()) {
+        // Copies all tiles as well which takes a while
+        mix.copy('resources/assets/images', 'public/images', false);
+    } else {
+        // Allow import of pure JS
+        mix.copy('resources/assets/js/custom', 'public/js/custom', false);
 
-    mix.copy('resources/assets/images/icon', 'public/images/icon', false);
-    mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
-    mix.copy('resources/assets/images/lib', 'public/images/lib', false);
-    mix.copy('resources/assets/images/classes', 'public/images/classes', false);
-    mix.copy('resources/assets/images/factions', 'public/images/factions', false);
-    mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
-    mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
-    mix.copy('resources/assets/images/test', 'public/images/test', false);
+        mix.copy('resources/assets/images/icon', 'public/images/icon', false);
+        mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
+        mix.copy('resources/assets/images/lib', 'public/images/lib', false);
+        mix.copy('resources/assets/images/classes', 'public/images/classes', false);
+        mix.copy('resources/assets/images/factions', 'public/images/factions', false);
+        mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
+        mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
+    }
 }
