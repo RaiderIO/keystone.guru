@@ -154,7 +154,4 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
 
 <div class="form-group">
     <div id="map" class="col-md-12"></div>
-    @if($isAdmin)
-        {{-- @include('common.maps.mapadmintools') --}}
-    @endif
 </div>
