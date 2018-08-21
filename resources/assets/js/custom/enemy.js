@@ -4,7 +4,7 @@ $(function () {
             TYPE: 'enemy'
         },
         options: {
-            icon: LeafletEnemyIcon
+            icon: LeafletNeutralEnemyIcon
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
@@ -15,11 +15,14 @@ $(function () {
     });
 });
 
-let LeafletEnemyIcon = new L.divIcon({className: 'enemy-icon'});
+let LeafletAggressiveEnemyIcon = new L.divIcon({className: 'aggressive_enemy_icon', iconSize: [12, 12]});
+let LeafletNeutralEnemyIcon = new L.divIcon({className: 'neutral_enemy_icon', iconSize: [12, 12]});
+let LeafletUnfriendlyEnemyIcon = new L.divIcon({className: 'unfriendly_enemy_icon', iconSize: [12, 12]});
+let LeafletBossEnemyIcon = new L.divIcon({className: 'boss_enemy_icon', iconSize: [32, 32]});
 
 let LeafletEnemyMarker = L.Marker.extend({
     options: {
-        icon: LeafletEnemyIcon
+        icon: LeafletAggressiveEnemyIcon
     }
 });
 
@@ -53,5 +56,28 @@ class Enemy extends MapObject {
 
         // Show a permanent tooltip for the pack's name
         // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
+    }
+
+    setIcon(name){
+        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+
+        switch(name){
+            case 'aggressive':
+                this.layer.setIcon(LeafletAggressiveEnemyIcon);
+
+                break;
+            case 'neutral':
+                this.layer.setIcon(LeafletNeutralEnemyIcon);
+
+                break;
+            case 'unfriendly':
+                this.layer.setIcon(LeafletUnfriendlyEnemyIcon);
+
+                break;
+            case 'boss':
+                this.layer.setIcon(LeafletBossEnemyIcon);
+
+                break;
+        }
     }
 }

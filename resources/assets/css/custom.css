@@ -81,10 +81,20 @@
     text-align: center;
 }
 
-.enemy-icon {
-    width: 12px;
-    height: 12px;
-    background: url("/images/mapicon/pin-yellow.png") no-repeat center right !important;
+.aggressive_enemy_icon {
+    background: url("/images/mapicon/aggressive.png") no-repeat center right !important;
+}
+
+.neutral_enemy_icon {
+    background: url("/images/mapicon/neutral.png") no-repeat center right !important;
+}
+
+.unfriendly_enemy_icon {
+    background: url("/images/mapicon/neutral.png") no-repeat center right !important;
+}
+
+.boss_enemy_icon {
+    background: url("/images/mapicon/boss.png") no-repeat center right !important;
 }
 
 /** GENERAL ICONS */

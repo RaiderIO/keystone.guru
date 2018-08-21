@@ -1,5 +1,5 @@
 class EnemyMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname){
+    constructor(map, name, classname) {
         super(map, name);
 
         this.classname = classname;
@@ -7,7 +7,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-users';
     }
 
-    _createObject(layer){
+    _createObject(layer) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not an EnemyMapObjectGroup');
 
         switch (this.classname) {
@@ -18,7 +18,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor){
+    fetchFromServer(floor) {
         // no super call required
         console.assert(this instanceof EnemyMapObjectGroup, this, 'this is not a EnemyMapObjectGroup');
 
@@ -46,8 +46,21 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         let enemy = self.createNew(layer);
                         enemy.id = remoteEnemy.id;
                         enemy.enemy_pack_id = remoteEnemy.enemy_pack_id;
-                        enemy.npc_id = remoteEnemy.npc_id;
                         enemy.floor_id = remoteEnemy.floor_id;
+                        // May be null if not set at all (yet)
+                        if (remoteEnemy.npc !== null) {
+                            enemy.npc_id = remoteEnemy.npc.id;
+                            // TODO Hard coded 3 = boss
+                            if (remoteEnemy.npc.classification_id === 3) {
+                                enemy.setIcon('boss');
+                            } else {
+                                enemy.setIcon(remoteEnemy.npc.aggressiveness);
+                            }
+                        } else {
+                            // Not set :(
+                            enemy.npc_id = -1;
+                        }
+
                         // We just downloaded the enemy pack, it's synced alright!
                         enemy.setSynced(true);
                     }

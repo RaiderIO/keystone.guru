@@ -18,7 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Enemy extends Model
 {
-    public $hidden = ['created_at', 'updated_at'];
+    public $with = ['npc'];
+    public $hidden = ['npc_id'];
+    public $timestamps = false;
 
     function pack()
     {

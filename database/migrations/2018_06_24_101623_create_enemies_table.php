@@ -20,7 +20,6 @@ class CreateEnemiesTable extends Migration
             $table->integer('floor_id');
             $table->double('lat');
             $table->double('lng');
-            $table->timestamps();
         });
     }
 

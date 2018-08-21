@@ -74,11 +74,6 @@ class EnemyAttaching {
             }
         });
 
-        this.map.leafletMap.on('draw:drawvertex', function (a, b, c, d) {
-            console.log('Drawing vertex!', a, b, c, d);
-            self.currentEnemyPackVertices.push(a);
-        });
-
         // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
         let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
         enemyMapObjectGroup.register('object:add', function (event) {
@@ -94,7 +89,6 @@ class EnemyAttaching {
         let enemyPackMapObjectGroup = this.map.getMapObjectGroupByName('enemypack');
         // When an enemy pack is loaded..
         enemyPackMapObjectGroup.register('object:add', function (event) {
-            console.log('event: ', event);
             // Gather some data
             let enemyPack = event.data.object;
 
@@ -103,11 +97,9 @@ class EnemyAttaching {
             enemyPack.register.call(enemyPack, 'synced', function (syncedEvent) {
 
                 enemyPack = syncedEvent.data.object;
-                console.log('synced enemypack: ', enemyPack);
                 let enemyPackPolygon = enemyPack.layer;
                 // For each enemy we know of
                 $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-                    console.log('enemy: ', i, enemy);
 
                     // Check if it falls in the layer
                     let latLng = enemy.layer.getLatLng();
@@ -115,10 +107,13 @@ class EnemyAttaching {
                         type: 'Point',
                         coordinates: [latLng.lng, latLng.lat]
                     }, enemyPackPolygon.toGeoJSON().geometry)) {
-                        // Bind the enemies
-                        enemy.enemy_pack_id = enemyPack.id;
-                        // Save all enemies so their pack connection is never broken
-                        enemy.save();
+                        // Only if something changed; we don't want to make unnecessary requests
+                        if( enemy.enemy_pack_id !== enemyPack.id ){
+                            // Bind the enemies
+                            enemy.enemy_pack_id = enemyPack.id;
+                            // Save all enemies so their pack connection is never broken
+                            enemy.save();
+                        }
                     }
                 });
 
