@@ -18,6 +18,7 @@ class CreateDungeonRouteTable extends Migration
             $table->integer('author_id');
             $table->integer('dungeon_id');
             $table->integer('faction_id');
+            $table->text('title');
             $table->timestamps();
         });
     }
