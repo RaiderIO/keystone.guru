@@ -5,11 +5,17 @@ class Signalable {
     }
 
     register(name, fn) {
+        console.assert(this instanceof Signalable, this, 'this is not a Signalable!');
+
         // console.log('pushing ', name, fn);
         this.signals.push({
             name: name,
             callback: fn
         })
+    }
+
+    unregister(name){
+        // TODO
     }
 
     signal(name, data) {

@@ -17,7 +17,6 @@ class CreateEnemyPackTable extends Migration
             $table->increments('id');
             $table->integer('floor_id');
             $table->string('label');
-            $table->timestamps();
         });
         Schema::create('enemy_pack_vertices', function (Blueprint $table) {
             $table->increments('id');

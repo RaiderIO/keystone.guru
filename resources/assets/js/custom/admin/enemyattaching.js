@@ -12,12 +12,18 @@ class EnemyAttaching {
             // Drawing an enemy
             if (e.layerType === 'enemy') {
                 self.drawingEnemy = true;
-            } else if( e.layerType === 'enemypack' ){
+            } else if (e.layerType === 'enemypack') {
                 self.drawingEnemyPack = true;
             }
         });
+
+        // Reset
+        this.map.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
+            self.drawingEnemy = false;
+            self.drawingEnemyPack = false;
+        });
         this.currentMouseoverLayer = null;
-        this.currentMouseoverLayerStyle = null
+        this.currentMouseoverLayerStyle = null;
         // Attach the monitor to each existing layer
         // this.map.leafletMap.on('layeradd', (this.onLayerCreated).bind(this));
         // this.map.leafletMap.eachLayer((this.monitorLayer).bind(this));
@@ -25,7 +31,7 @@ class EnemyAttaching {
         this.map.leafletMap.on('mousemove', function (e) {
             // let layers = leafletPip.pointInLayer(e.latlng, self.map.leafletMap);
 
-            if( self.drawingEnemy ){
+            if (self.drawingEnemy) {
                 let isMouseStillInLayer = false;
                 self.map.leafletMap.eachLayer(function (layer) {
                     // Only track this when we're 'ghosting' an enemy around to place it somewhere
@@ -68,14 +74,14 @@ class EnemyAttaching {
             }
         });
 
-        this.map.leafletMap.on('draw:drawvertex', function(a, b, c, d){
+        this.map.leafletMap.on('draw:drawvertex', function (a, b, c, d) {
             console.log('Drawing vertex!', a, b, c, d);
             self.currentEnemyPackVertices.push(a);
         });
 
-
         // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
-        this.map.register('enemypack:add', function (event) {
+        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        enemyMapObjectGroup.register('object:add', function (event) {
             if (self.currentMouseoverLayer !== null) {
                 let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
 
@@ -84,22 +90,41 @@ class EnemyAttaching {
             }
         });
 
-        this.map.register('enemy:add', function (event) {
-            if (self.currentMouseoverLayer !== null) {
-                let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
+        // When a pack is created, own all objects that it was placed under
+        let enemyPackMapObjectGroup = this.map.getMapObjectGroupByName('enemypack');
+        // When an enemy pack is loaded..
+        enemyPackMapObjectGroup.register('object:add', function (event) {
+            console.log('event: ', event);
+            // Gather some data
+            let enemyPack = event.data.object;
 
-                console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject!');
-                event.data.enemy.enemypack = mapObject;
-            }
-        });
+            // Preserve the 'this' reference, we gotta couple enemies when we know the enemy pack's ID from the server
+            // Thus bind to the synced function and read the object then.
+            enemyPack.register.call(enemyPack, 'synced', function (syncedEvent) {
 
-        this.map.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
-            // Whatever we were drawing, we're not anymore so don't do any check for what layerType it is
-            self.drawingEnemy = false;
-            console.log("DRAWSTOP", self.currentMouseoverLayer, e);
-            if (typeof self.currentMouseoverLayer !== 'undefined') {
-                console.log('assign enemy to ' + self.currentMouseoverLayer);
-            }
+                enemyPack = syncedEvent.data.object;
+                console.log('synced enemypack: ', enemyPack);
+                let enemyPackPolygon = enemyPack.layer;
+                // For each enemy we know of
+                $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+                    console.log('enemy: ', i, enemy);
+
+                    // Check if it falls in the layer
+                    let latLng = enemy.layer.getLatLng();
+                    if (gju.pointInPolygon({
+                        type: 'Point',
+                        coordinates: [latLng.lng, latLng.lat]
+                    }, enemyPackPolygon.toGeoJSON().geometry)) {
+                        // Bind the enemies
+                        enemy.enemy_pack_id = enemyPack.id;
+                        // Save all enemies so their pack connection is never broken
+                        enemy.save();
+                    }
+                });
+
+                // TODO: this doesn't actually do anything yet
+                enemyPack.unregister('synced');
+            });
         });
     }
 

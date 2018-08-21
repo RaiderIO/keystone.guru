@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EnemyPack extends Model
 {
-    public $hidden = ['created_at', 'updated_at'];
+    public $timestamps = false;
 
     function floor()
     {

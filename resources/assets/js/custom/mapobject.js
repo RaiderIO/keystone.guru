@@ -46,6 +46,8 @@ class MapObject extends Signalable {
      * @todo Somehow this does not work when trying to set edited colors. Very strange, couldn't get it to work
      */
     setSynced(value) {
+        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
+
         // Only if the colors object was ever set by a parent
         if (typeof this.colors !== 'undefined' && typeof this.layer.setStyle === 'function') {
             // Now synced, was not synced
@@ -70,6 +72,11 @@ class MapObject extends Signalable {
                 });
             }
             this.layer.redraw();
+        }
+
+        // If we're synced, trigger the synced event
+        if( value ){
+            this.signal('synced', {object: this});
         }
 
         this.synced = value;

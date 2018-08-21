@@ -80,6 +80,7 @@ class AdminEnemyPack extends EnemyPack {
                     fillColor: c.map.admin.mapobject.colors.saved,
                     color: c.map.admin.mapobject.colors.savedBorder
                 });
+                self.setSynced(true);
             },
             complete: function () {
                 self.saving = false;
@@ -89,6 +90,8 @@ class AdminEnemyPack extends EnemyPack {
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
             }
         });
     }

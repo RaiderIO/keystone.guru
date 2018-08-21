@@ -45,7 +45,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
                         let enemy = self.createNew(layer);
                         enemy.id = remoteEnemy.id;
-                        enemy.enemypack = remoteEnemy.enemy_pack_id;
+                        enemy.enemy_pack_id = remoteEnemy.enemy_pack_id;
                         enemy.npc_id = remoteEnemy.npc_id;
                         enemy.floor_id = remoteEnemy.floor_id;
                         // We just downloaded the enemy pack, it's synced alright!

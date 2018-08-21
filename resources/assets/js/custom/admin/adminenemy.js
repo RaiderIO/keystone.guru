@@ -4,7 +4,8 @@ class AdminEnemy extends Enemy {
         super(map, layer);
 
         this.npc_id = 0;
-        this.enemypack = 0;
+        // Init to an empty value
+        this.enemy_pack_id = -1;
 
         this.saving = false;
         this.deleting = false;
@@ -73,11 +74,11 @@ class AdminEnemy extends Enemy {
             dataType: 'json',
             data: {
                 id: self.id,
+                enemy_pack_id: self.enemy_pack_id,
                 npc_id: self.npc_id,
                 floor_id: self.map.getCurrentFloor().id,
                 lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng,
-                enemypack: self.enemypack
+                lng: self.layer.getLatLng().lng
             },
             beforeSend: function () {
                 self.editing = true;
@@ -137,7 +138,7 @@ class AdminEnemy extends Enemy {
             dataType: 'json',
             data: {
                 id: self.id,
-                enemy_pack_id: self.enemypack.id,
+                enemy_pack_id: self.enemy_pack_id,
                 npc_id: self.npc_id,
                 floor_id: self.map.getCurrentFloor().id,
                 lat: self.layer.getLatLng().lat,

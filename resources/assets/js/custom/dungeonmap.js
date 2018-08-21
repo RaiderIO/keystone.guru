@@ -58,6 +58,10 @@ class DungeonMap extends Signalable {
             }
         });
 
+        $(window).bind('click', function (event) {
+            $('#map').removeClass('map-scroll');
+        });
+
         $(window).bind('mousewheel DOMMouseScroll', function (event) {
             $('#map').removeClass('map-scroll');
         });
