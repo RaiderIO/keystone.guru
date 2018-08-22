@@ -21,12 +21,13 @@ class DungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param DungeonRoute $dungeonroute
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function view(Request $request)
+    public function view(Request $request, DungeonRoute $dungeonroute)
     {
         return view('dungeonroute.view', [
-            'model' => DungeonRoute::firstOrFail()->where('public_key', '=', $request->get('v'))->first()
+            'model' => $dungeonroute
         ]);
     }
 

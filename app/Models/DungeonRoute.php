@@ -36,9 +36,19 @@ class DungeonRoute extends Model
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'created_at', 'updated_at'];
 
     /**
+     * https://stackoverflow.com/a/34485411/771270
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'public_key';
+    }
+
+    /**
      * @return string Generates a random public key that is displayed to the user in the URL.
      */
-    public static function generateRandomPublicKey(){
+    public static function generateRandomPublicKey()
+    {
         do {
             $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $charactersLength = strlen($characters);
@@ -46,7 +56,7 @@ class DungeonRoute extends Model
             for ($i = 0; $i < 7; $i++) {
                 $newKey .= $characters[rand(0, $charactersLength - 1)];
             }
-        } while(DungeonRoute::where('public_key', '=', $newKey)->count() > 0);
+        } while (DungeonRoute::all()->where('public_key', '=', $newKey)->count() > 0);
 
         return $newKey;
     }

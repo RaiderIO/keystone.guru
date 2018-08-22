@@ -1,3 +1,7 @@
+<?php
+$editLinks = isset($edit_links) ? $edit_links : false;
+?>
+
 @section('scripts')
     @parent
 
@@ -27,8 +31,11 @@
                         'data': 'title',
                         'name': 'title',
                         'render': function (data, type, row, meta) {
-                            <?php // @todo Use laravel route for this link ?>
-                                return '<a href="/dungeonroute?v=' + row.public_key + '" >' + data + '</a>';
+                            <?php if( $editLinks ) { ?>
+                            return '<a href="{{ route('dungeonroute.edit', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
+                            <?php } else { ?>
+                            return '<a href="{{ route('dungeonroute.view') }}?v=' + row.public_key + '" >' + data + '</a>';
+                            <?php } ?>
                         }
                     },
                     {

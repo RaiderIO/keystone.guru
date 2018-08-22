@@ -30,22 +30,6 @@ Route::get('cookies', function () {
 })->name('legal.cookies');
 
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('dungeonroute/new', 'DungeonRouteController@new')->name('dungeonroute.new');
-Route::post('dungeonroute/new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
-Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
-
-// View any dungeon route
-Route::get('dungeonroute', 'DungeonRouteController@view')
-    ->name('dungeonroute.view')
-    ->where(['v' => '[0-9a-zA-Z]+']);
-// Edit your own dungeon routes
-Route::get('dungeonroute/{dungeonroute}', 'DungeonRouteController@edit')
-    ->middleware('can:edit,dungeonroute')
-    ->name('dungeonroute.edit');
-// Submit a patch for your own dungeon route
-Route::patch('dungeonroute/{dungeonroute}', 'DungeonRouteController@update')
-    ->middleware('can:edit,dungeonroute')
-    ->name('dungeonroute.update');
 
 // ['auth', 'role:admin|user']
 
@@ -95,3 +79,20 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
 
     Route::get('admin/npcs', 'NpcController@list')->name('admin.npcs');
 });
+
+// Put this down below, since it contains a catch all
+Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
+Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
+Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
+
+// View any dungeon route
+Route::get('{dungeonroute}', 'DungeonRouteController@view')
+    ->name('dungeonroute.view');
+// Edit your own dungeon routes
+Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
+    ->middleware('can:edit,dungeonroute')
+    ->name('dungeonroute.edit');
+// Submit a patch for your own dungeon route
+Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
+    ->middleware('can:edit,dungeonroute')
+    ->name('dungeonroute.update');
