@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $enemy_pack_id
  * @property int $npc_id
  * @property int $floor_id
+ * @property string $teeming
  * @property double $lat
  * @property double $lng
  * @property \App\Models\EnemyPack $enemyPack

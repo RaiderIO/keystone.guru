@@ -21,6 +21,7 @@ class EnemyAttaching {
         this.map.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
             self.drawingEnemy = false;
             self.drawingEnemyPack = false;
+            self.resetCurrentMouseoverLayer();
         });
         this.currentMouseoverLayer = null;
         this.currentMouseoverLayerStyle = null;
@@ -63,13 +64,8 @@ class EnemyAttaching {
                 });
 
                 // If we were in a layer but no longer
-                if (self.currentMouseoverLayer !== null && !isMouseStillInLayer) {
-                    // No longer in this layer, revert changes
-                    self.currentMouseoverLayer.setStyle({
-                        fillColor: self.currentMouseoverLayerStyle.fillColor,
-                        color: self.currentMouseoverLayerStyle.color,
-                    });
-                    self.currentMouseoverLayer = null;
+                if (!isMouseStillInLayer) {
+                    self.resetCurrentMouseoverLayer();
                 }
             }
         });
@@ -81,7 +77,7 @@ class EnemyAttaching {
                 let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
 
                 console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject!');
-                event.data.enemy.enemypack = mapObject;
+                event.data.object.enemy_pack_id = mapObject.id;
             }
         });
 
@@ -121,6 +117,23 @@ class EnemyAttaching {
                 enemyPack.unregister('synced');
             });
         });
+    }
+
+    /**
+     * Resets the current mouse over layer, if we have it
+     */
+    resetCurrentMouseoverLayer(){
+        console.assert(this instanceof EnemyAttaching, this, 'this is not an instance of EnemyAttaching');
+        console.log(this.currentMouseoverLayer);
+
+        if( this.currentMouseoverLayer !== null ){
+            // No longer in this layer, revert changes
+            this.currentMouseoverLayer.setStyle({
+                fillColor: this.currentMouseoverLayerStyle.fillColor,
+                color: this.currentMouseoverLayerStyle.color,
+            });
+            this.currentMouseoverLayer = null;
+        }
     }
 
     /**

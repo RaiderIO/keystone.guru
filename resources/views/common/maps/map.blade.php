@@ -24,6 +24,10 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
             width: 300px;
         }
 
+        .enemy_edit_popup_teeming {
+            width: 300px;
+        }
+
         #map_controls .map_controls_custom {
             width: 50px;
             background-image: none;
@@ -112,6 +116,15 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
             <div id="enemy_edit_popup_inner" class="popupCustom">
                 <div class="form-group">
                     <span>{{ __('Attached to pack:') }}</span> <span id="enemy_edit_popup_attached_to_pack_@{{id}}">false</span>
+                </div>
+                <div class="form-group">
+                    <label for="enemy_edit_popup_teeming_@{{id}}">{{ __('Teeming') }}</label>
+                    <select data-live-search="true" id="enemy_edit_popup_teeming_@{{id}}" name="enemy_edit_popup_teeming_@{{id}}"
+                            class="selectpicker enemy_edit_popup_teeming" data-width="300px">
+                        <option value="">{{ __('Always visible') }}</option>
+                        <option value="visible">{{ __('Visible when Teeming only') }}</option>
+                        <option value="hidden">{{ __('Hidden when Teeming only') }}</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="enemy_edit_popup_npc_@{{id}}">{{ __('NPC') }}</label>

@@ -60,6 +60,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                             // Not set :(
                             enemy.npc_id = -1;
                         }
+                        enemy.teeming = remoteEnemy.teeming;
 
                         // We just downloaded the enemy pack, it's synced alright!
                         enemy.setSynced(true);

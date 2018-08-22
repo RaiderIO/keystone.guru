@@ -6,6 +6,7 @@ class AdminEnemy extends Enemy {
         this.npc_id = 0;
         // Init to an empty value
         this.enemy_pack_id = -1;
+        this.teeming = '';
 
         this.saving = false;
         this.deleting = false;
@@ -40,6 +41,7 @@ class AdminEnemy extends Enemy {
 
                 $("#enemy_edit_popup_attached_to_pack_" + self.id).text(self.enemy_pack_id >= 0 ? 'true' : 'false');
                 $("#enemy_edit_popup_npc_" + self.id).val(self.npc_id);
+                $("#enemy_edit_popup_teeming_" + self.id).val(self.teeming);
 
                 // Refresh all select pickers so they work again
                 let $selectpicker = $(".selectpicker");
@@ -49,6 +51,7 @@ class AdminEnemy extends Enemy {
                 $("#enemy_edit_popup_submit").bind('click', function () {
                     console.log('test');
                     self.npc_id = $("#enemy_edit_popup_npc_" + self.id).val();
+                    self.teeming = $("#enemy_edit_popup_teeming_" + self.id).val();
 
                     self.edit();
                 });
@@ -82,6 +85,7 @@ class AdminEnemy extends Enemy {
                 enemy_pack_id: self.enemy_pack_id,
                 npc_id: self.npc_id,
                 floor_id: self.map.getCurrentFloor().id,
+                teeming: self.teeming,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng
             },
@@ -146,6 +150,7 @@ class AdminEnemy extends Enemy {
                 enemy_pack_id: self.enemy_pack_id,
                 npc_id: self.npc_id,
                 floor_id: self.map.getCurrentFloor().id,
+                teeming: self.teeming,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng
             },
