@@ -7,6 +7,8 @@ class AdminEnemy extends Enemy {
         // Init to an empty value
         this.enemy_pack_id = -1;
         this.teeming = '';
+        // Filled when we're currently drawing a patrol line
+        this.currentPatrolPolyline = null;
 
         this.saving = false;
         this.deleting = false;
@@ -42,6 +44,20 @@ class AdminEnemy extends Enemy {
                 $("#enemy_edit_popup_attached_to_pack_" + self.id).text(self.enemy_pack_id >= 0 ? 'true' : 'false');
                 $("#enemy_edit_popup_npc_" + self.id).val(self.npc_id);
                 $("#enemy_edit_popup_teeming_" + self.id).val(self.teeming);
+                $("#enemy_edit_popup_patrol_create_" + self.id).bind('click', function(){
+                    console.log('Starting patrol creation!');
+                    // Close the popup
+                    self.map.leafletMap.closePopup();
+                    // Initiate drawing a patrol
+                    // I kind of feel this is a bit of a hack, but I'll work with it for now TODO is this a hack?
+                    self.currentPatrolPolyline = new L.Draw.EnemyPatrol(self.map.leafletMap, self.map.drawControls.drawControlOptions.enemypatrol);
+                    // console.log(self.currentPatrolPolyline);
+                    self.currentPatrolPolyline.enable();
+                    self.currentPatrolPolyline.addVertex.call(self.currentPatrolPolyline, self.layer.getLatLng());
+                });
+                $("#enemy_edit_popup_patrol_delete_" + self.id).bind('click', function(){
+                    console.log('Deleting patrol!');
+                });
 
                 // Refresh all select pickers so they work again
                 let $selectpicker = $(".selectpicker");
@@ -49,13 +65,20 @@ class AdminEnemy extends Enemy {
                 $selectpicker.selectpicker('render');
 
                 $("#enemy_edit_popup_submit").bind('click', function () {
-                    console.log('test');
                     self.npc_id = $("#enemy_edit_popup_npc_" + self.id).val();
                     self.teeming = $("#enemy_edit_popup_teeming_" + self.id).val();
 
                     self.edit();
                 });
             });
+        });
+
+        self.map.leafletMap.on('contextmenu', function(){
+            if( self.currentPatrolPolyline !== null ){
+                console.log('currentPatrol: ', self.currentPatrolPolyline);
+                self.map.leafletMap.addLayer(self.currentPatrolPolyline);
+                self.currentPatrolPolyline.disable();
+            }
         });
     }
 
@@ -95,7 +118,7 @@ class AdminEnemy extends Enemy {
             },
             success: function (json) {
                 self.setSynced(true);
-                self.layer.closePopup();
+                self.map.leafletMap.closePopup();
             },
             complete: function () {
                 $("#enemy_edit_popup_submit").removeAttr('disabled');

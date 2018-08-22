@@ -33,6 +33,10 @@ $(function () {
             handler: new L.Draw.Enemy(map, this.options.enemy),
             title: this.options.enemy.title
         }, {
+            enabled: this.options.enemypatrol,
+            handler: new L.Draw.EnemyPatrol(map, this.options.enemypatrol),
+            title: this.options.enemypatrol.title
+        }, {
             enabled: this.options.dungeonstartmarker,
             handler: new L.Draw.DungeonStartMarker(map, this.options.dungeonstartmarker),
             title: this.options.dungeonstartmarker.title
@@ -69,6 +73,7 @@ class DrawControls {
                 marker: false,
                 circlemarker: false,
                 enemypack: false,
+                enemypatrol: false,
                 enemy: false,
                 dungeonstartmarker: false,
                 dungeonfloorswitchmarker: false
@@ -83,6 +88,8 @@ class DrawControls {
         this.map.leafletMap.on(L.Draw.Event.CREATED, function (event) {
             let layer = event.layer;
             self.drawnItems.addLayer(layer);
+
+            console.log("DrawControls-> drawn item", event);
         });
     }
 

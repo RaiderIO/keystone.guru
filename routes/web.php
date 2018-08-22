@@ -85,9 +85,6 @@ Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
 Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
 Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
 
-// View any dungeon route
-Route::get('{dungeonroute}', 'DungeonRouteController@view')
-    ->name('dungeonroute.view');
 // Edit your own dungeon routes
 Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
     ->middleware('can:edit,dungeonroute')
@@ -96,3 +93,6 @@ Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
 Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
     ->middleware('can:edit,dungeonroute')
     ->name('dungeonroute.update');
+// View any dungeon route
+Route::get('{dungeonroute}', 'DungeonRouteController@view')
+    ->name('dungeonroute.view');

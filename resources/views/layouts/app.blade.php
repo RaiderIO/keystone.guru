@@ -17,48 +17,10 @@
     <link rel="icon" href="/images/icon/favicon.ico">
 @yield('head')
 
-<!-- Cookie nag -->
-    <link rel="stylesheet" type="text/css"
-          href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"/>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
-    <script>
-        window.addEventListener("load", function () {
-            window.cookieconsent.initialise({
-                "palette": {
-                    "popup": {
-                        "background": "#252e39"
-                    },
-                    "button": {
-                        "background": "#14a7d0"
-                    }
-                },
-                "theme": "classic",
-                "content": {
-                    "link": "Learn more",
-                    "href": "/cookies"
-                }
-            });
-
-            // Enable tooltips for all elements
-            refreshTooltips();
-
-            // Make sure selectpicker is enabled
-            $(".selectpicker").selectpicker();
-        });
-
-        function refreshTooltips() {
-            console.log('refreshing tooltips');
-            $('[data-toggle="tooltip"]').tooltip();
-            // $('[data-toggle="tooltip"]').tooltip({trigger: 'manual'}).tooltip('show');
-        }
-    </script>
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-2985471802502246",
-        enable_page_level_ads: true
-      });
-    </script>
+    @include('common.thirdparty.cookieconsent')
+    <?php if( !isset($noads) || (isset($noads) && !$noads) ){ ?>
+    @include('common.thirdparty.adsense')
+    <?php } ?>
 </head>
 <body>
 <div id="app">
@@ -232,6 +194,7 @@
     <script src="{{ asset('js/custom/drawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapobject.js') }}"></script>
     <script src="{{ asset('js/custom/enemy.js') }}"></script>
+    <script src="{{ asset('js/custom/enemypatrol.js') }}"></script>
     <script src="{{ asset('js/custom/enemypack.js') }}"></script>
     <script src="{{ asset('js/custom/route.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
@@ -248,6 +211,7 @@
     <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/enemymapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/enemypackmapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>

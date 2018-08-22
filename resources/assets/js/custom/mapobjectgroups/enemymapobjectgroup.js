@@ -47,6 +47,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         enemy.id = remoteEnemy.id;
                         enemy.enemy_pack_id = remoteEnemy.enemy_pack_id;
                         enemy.floor_id = remoteEnemy.floor_id;
+                        enemy.teeming = remoteEnemy.teeming;
+
                         // May be null if not set at all (yet)
                         if (remoteEnemy.npc !== null) {
                             enemy.npc_id = remoteEnemy.npc.id;
@@ -60,7 +62,11 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                             // Not set :(
                             enemy.npc_id = -1;
                         }
-                        enemy.teeming = remoteEnemy.teeming;
+
+                        // Is probably null if there's no patrol set
+                        if (remoteEnemy.patrol !== null) {
+
+                        }
 
                         // We just downloaded the enemy pack, it's synced alright!
                         enemy.setSynced(true);

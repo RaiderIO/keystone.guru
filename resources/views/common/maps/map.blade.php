@@ -119,7 +119,8 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
                 </div>
                 <div class="form-group">
                     <label for="enemy_edit_popup_teeming_@{{id}}">{{ __('Teeming') }}</label>
-                    <select data-live-search="true" id="enemy_edit_popup_teeming_@{{id}}" name="enemy_edit_popup_teeming_@{{id}}"
+                    <select data-live-search="true" id="enemy_edit_popup_teeming_@{{id}}"
+                            name="enemy_edit_popup_teeming_@{{id}}"
                             class="selectpicker enemy_edit_popup_teeming" data-width="300px">
                         <option value="">{{ __('Always visible') }}</option>
                         <option value="visible">{{ __('Visible when Teeming only') }}</option>
@@ -128,12 +129,23 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
                 </div>
                 <div class="form-group">
                     <label for="enemy_edit_popup_npc_@{{id}}">{{ __('NPC') }}</label>
-                    <select data-live-search="true" id="enemy_edit_popup_npc_@{{id}}" name="enemy_edit_popup_npc_@{{id}}"
+                    <select data-live-search="true" id="enemy_edit_popup_npc_@{{id}}"
+                            name="enemy_edit_popup_npc_@{{id}}"
                             class="selectpicker enemy_edit_popup_npc" data-width="300px">
                         @foreach($npcs as $npc)
                             <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->id) }}</option>
                         @endforeach
                     </select>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div id="enemy_edit_popup_patrol_create_@{{id}}" class="btn btn-success"><i class="fas fa-plus"></i> {{ __('Patrol') }}</div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div id="enemy_edit_popup_patrol_delete_@{{id}}" class="btn btn-danger"><i class="fas fa-ban"></i> {{ __('Patrol') }}</div>
+                        </div>
+                    </div>
                 </div>
                 {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit', 'class' => 'btn btn-info']) !!}
             </div>

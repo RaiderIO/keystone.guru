@@ -21,6 +21,7 @@ class AdminDrawControls extends DrawControls {
                     faClass: 'fa-user',
                     title: 'Draw an enemy'
                 },
+                enemypatrol: false,
                 dungeonstartmarker: {
                     repeatMode: false,
                     zIndexOffset: 1000,
