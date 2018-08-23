@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEnemyPatrolVertices extends Migration
+class CreateEnemyPatrolTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateEnemyPatrolVertices extends Migration
      */
     public function up()
     {
-        Schema::create('enemy_patrol_vertices', function (Blueprint $table) {
+        Schema::create('enemy_patrols', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('floor_id');
             $table->integer('enemy_id');
-            $table->float('lat');
-            $table->float('lng');
         });
     }
 
@@ -28,6 +27,6 @@ class CreateEnemyPatrolVertices extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('enemy_patrol_vertices');
+        Schema::dropIfExists('enemy_patrols');
     }
 }

@@ -202,6 +202,7 @@
     <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>
     <script src="{{ asset('js/custom/admin/adminenemy.js') }}"></script>
+    <script src="{{ asset('js/custom/admin/adminenemypatrol.js') }}"></script>
     <script src="{{ asset('js/custom/admin/adminenemypack.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindrawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonstartmarker.js') }}"></script>

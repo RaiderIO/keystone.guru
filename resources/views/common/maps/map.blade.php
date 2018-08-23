@@ -137,16 +137,6 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div id="enemy_edit_popup_patrol_create_@{{id}}" class="btn btn-success"><i class="fas fa-plus"></i> {{ __('Patrol') }}</div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div id="enemy_edit_popup_patrol_delete_@{{id}}" class="btn btn-danger"><i class="fas fa-ban"></i> {{ __('Patrol') }}</div>
-                        </div>
-                    </div>
-                </div>
                 {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit', 'class' => 'btn btn-info']) !!}
             </div>
         </script>

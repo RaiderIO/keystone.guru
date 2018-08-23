@@ -1,4 +1,4 @@
-class AdminEnemyPack extends EnemyPack {
+class AdminEnemyPatrol extends EnemyPatrol {
 
     constructor(map, layer) {
         super(map, layer);
@@ -7,10 +7,12 @@ class AdminEnemyPack extends EnemyPack {
         this.deleting = false;
         this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
+
+        this.enemy_id = -1;
     }
 
     getContextMenuItems() {
-        console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
+        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
         // Merge existing context menu items with the admin ones
         return super.getContextMenuItems().concat([{
             text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
@@ -25,10 +27,10 @@ class AdminEnemyPack extends EnemyPack {
 
     delete() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
+        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemypack',
+            url: '/api/v1/enemypatrol',
             dataType: 'json',
             data: {
                 _method: 'DELETE',
@@ -55,15 +57,15 @@ class AdminEnemyPack extends EnemyPack {
 
     save() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
+        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemypack',
+            url: '/api/v1/enemypatrol',
             dataType: 'json',
             data: {
                 id: self.id,
                 floor_id: self.map.getCurrentFloor().id,
-                label: self.label,
+                enemy_id: self.enemy_id,
                 vertices: self.getVertices()
             },
             beforeSend: function () {

@@ -1,12 +1,5 @@
 $(function () {
     L.Draw.EnemyPatrol = L.Draw.Polyline.extend({
-        options: {
-            shapeOptions: {
-                color: 'red',
-                weight: 4
-            },
-            zIndexOffset: 1000,
-        },
         statics: {
             TYPE: 'enemypatrol'
         },
@@ -37,5 +30,15 @@ class EnemyPatrol extends MapObject {
 
         // Show a permanent tooltip for the pack's name
         // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
+    }
+
+    getVertices() {
+        let coordinates = this.layer.toGeoJSON().geometry.coordinates;
+        console.log(this.layer, this.layer.toGeoJSON(), coordinates);
+        let result = [];
+        for (let i = 0; i < coordinates.length; i++) {
+            result.push({lat: coordinates[i][0], lng: coordinates[i][1]});
+        }
+        return result;
     }
 }

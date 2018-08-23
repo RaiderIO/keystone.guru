@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $enemy_pack_id
- * @property int $x
- * @property int $y
+ * @property int $enemy_patrol_id
+ * @property int $lat
+ * @property int $lng
  */
 class EnemyPatrolVertex extends Model
 {
     /**
      * @var string Custom name because 'vertexs' is not a word
      */
-    protected $table = 'enemy_partrol_vertices';
+    protected $table = 'enemy_patrol_vertices';
 
     /**
      * @var array Hide some columns which we don't need to echo to the user
@@ -26,7 +26,7 @@ class EnemyPatrolVertex extends Model
      */
     public $timestamps = false;
 
-    function enemy(){
-        return $this->belongsTo('App\Models\Enemy');
+    function enemypatrol(){
+        return $this->belongsTo('App\Models\EnemyPatrol');
     }
 }

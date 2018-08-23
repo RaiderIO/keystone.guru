@@ -34,7 +34,7 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                             <?php if( $editLinks ) { ?>
                             return '<a href="{{ route('dungeonroute.edit', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
                             <?php } else { ?>
-                            return '<a href="{{ route('dungeonroute.view', ['dungeonroute' => '']) }}?v=' + row.public_key + '" >' + data + '</a>';
+                            return '<a href="{{ route('dungeonroute.view', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
                             <?php } ?>
                         }
                     },

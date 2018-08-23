@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $floor_id
- * @property string $label
+ * @property int $enemy_id
  * @property \App\Models\Floor $floor
- * @property \Illuminate\Support\Collection $enemies
+ * @property \App\Models\Enemy $enemy
  * @property \Illuminate\Support\Collection $vertices
  */
-class EnemyPack extends Model
+class EnemyPatrol extends Model
 {
+    public $with = ['vertices'];
     public $timestamps = false;
 
     /**
@@ -25,11 +26,11 @@ class EnemyPack extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    function enemies()
+    function enemy()
     {
-        return $this->hasMany('App\Models\Enemy');
+        return $this->belongsTo('App\Models\Enemy');
     }
 
     /**
@@ -37,7 +38,7 @@ class EnemyPack extends Model
      */
     function vertices()
     {
-        return $this->hasMany('App\Models\EnemyPackVertex');
+        return $this->hasMany('App\Models\EnemyPatrolVertex');
     }
 
     function deleteVertices()
@@ -47,7 +48,7 @@ class EnemyPack extends Model
         // Only if there's vertices to destroy
         if (count($existingVerticesIds) > 0) {
             // Kill them off
-            EnemyPackVertex::destroy($existingVerticesIds);
+            EnemyPatrolVertex::destroy($existingVerticesIds);
         }
     }
 }

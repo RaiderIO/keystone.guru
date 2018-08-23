@@ -83,7 +83,7 @@ class DungeonMap extends Signalable {
 
         return [
             new EnemyMapObjectGroup(this, 'enemy', 'Enemy'),
-            new EnemyPatrolMapObjectGroup(this, 'enemypatrol'),
+            new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol'),
             new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack'),
             new RouteMapObjectGroup(this, 'route', 'Route'),
             new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker'),

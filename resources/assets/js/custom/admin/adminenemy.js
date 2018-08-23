@@ -44,20 +44,6 @@ class AdminEnemy extends Enemy {
                 $("#enemy_edit_popup_attached_to_pack_" + self.id).text(self.enemy_pack_id >= 0 ? 'true' : 'false');
                 $("#enemy_edit_popup_npc_" + self.id).val(self.npc_id);
                 $("#enemy_edit_popup_teeming_" + self.id).val(self.teeming);
-                $("#enemy_edit_popup_patrol_create_" + self.id).bind('click', function(){
-                    console.log('Starting patrol creation!');
-                    // Close the popup
-                    self.map.leafletMap.closePopup();
-                    // Initiate drawing a patrol
-                    // I kind of feel this is a bit of a hack, but I'll work with it for now TODO is this a hack?
-                    self.currentPatrolPolyline = new L.Draw.EnemyPatrol(self.map.leafletMap, self.map.drawControls.drawControlOptions.enemypatrol);
-                    // console.log(self.currentPatrolPolyline);
-                    self.currentPatrolPolyline.enable();
-                    self.currentPatrolPolyline.addVertex.call(self.currentPatrolPolyline, self.layer.getLatLng());
-                });
-                $("#enemy_edit_popup_patrol_delete_" + self.id).bind('click', function(){
-                    console.log('Deleting patrol!');
-                });
 
                 // Refresh all select pickers so they work again
                 let $selectpicker = $(".selectpicker");
