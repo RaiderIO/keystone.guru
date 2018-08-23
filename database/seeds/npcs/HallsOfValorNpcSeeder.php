@@ -26,7 +26,7 @@ class HallsOfValorNpcSeeder extends NpcSeeder
             [95832, 2, 'Valarjar Shieldmaiden', 34764, 'aggressive'],
             [95842, 2, 'Valarjar Thundercaller', 36369, 'aggressive'],
             [96934, 2, 'Valarjar Trapper', 35807, 'aggressive'],
-            [96611, 2, 'Angerhoof Bull', 38241, 'neutral'],
+            [96611, 2, 'Angerhoof Bull', 38241, 'aggressive'],
             [96608, 2, 'Ebonclaw Worg', 31288, 'aggressive'],
             [96609, 2, 'Gildedfur Stag', 10429, 'neutral'],
             [97081, 2, 'King Bjorn', 82990, 'aggressive'],

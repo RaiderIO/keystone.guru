@@ -72,6 +72,9 @@
                                 @if( Auth::user()->can('read-npcs') )
                                     <a class="dropdown-item" href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
                                 @endif
+                                @if( Auth::user()->hasRole('admin')) 
+                                    <a class="dropdown-item" href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
+                                @endif
                                 <a class="dropdown-item" href="{{ route('profile.edit') }}">My profile</a>
                                 <div class="dropdown-divider"></div>
 

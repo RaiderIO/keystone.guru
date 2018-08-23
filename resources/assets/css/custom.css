@@ -97,6 +97,10 @@
     background: url("/images/mapicon/boss.png") no-repeat center right !important;
 }
 
+.door_icon {
+    background: url("/images/mapicon/door.png") no-repeat center right !important;
+}
+
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;

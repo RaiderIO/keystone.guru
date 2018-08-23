@@ -26,7 +26,7 @@ class NpcFormRequest extends FormRequest
     {
         return [
             // Can only add one entry per game_id, but exclude if we're editing a row but don't change the game_id
-            'game_id' => ['required'],
+            'id' => ['required'],
             'name' => 'required',
             'dungeon_id' => Rule::exists('dungeons', 'id'),
             'classification_id' => 'required',

@@ -78,6 +78,9 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::patch('admin/npc/{npc}', 'NpcController@update')->name('admin.npc.update');
 
     Route::get('admin/npcs', 'NpcController@list')->name('admin.npcs');
+
+    Route::get('admin/datadump/exportdungeondata', 'ExportDungeonDataController@view')->name('admin.datadump.exportdungeondata');
+    Route::post('admin/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.datadump.viewexporteddungeondata');
 });
 
 // Put this down below, since it contains a catch all

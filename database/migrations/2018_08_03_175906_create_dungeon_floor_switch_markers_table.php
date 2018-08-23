@@ -19,7 +19,6 @@ class CreateDungeonFloorSwitchMarkersTable extends Migration
             $table->integer('target_floor_id');
             $table->float('lat');
             $table->float('lng');
-            $table->timestamps();
         });
     }
 
