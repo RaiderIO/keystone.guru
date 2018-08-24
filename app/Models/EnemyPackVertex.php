@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $enemy_pack_id
- * @property int $x
- * @property int $y
+ * @property int $lat
+ * @property int $lng
  */
 class EnemyPackVertex extends Model
 {

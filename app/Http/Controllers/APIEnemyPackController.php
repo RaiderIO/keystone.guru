@@ -15,7 +15,7 @@ class APIEnemyPackController extends Controller
         $floorId = $request->get('floor_id');
         return EnemyPack::with(['vertices' => function ($query) {
             /** @var $query \Illuminate\Database\Query\Builder */
-            $query->select(['enemy_pack_id', 'x', 'y']); // must select enemy_pack_id, else it won't return results /sadface
+            $query->select(['enemy_pack_id', 'lat', 'lng']); // must select enemy_pack_id, else it won't return results /sadface
         }])->where('floor_id', '=', $floorId)->get(['id', 'label']);
     }
 
@@ -43,8 +43,8 @@ class APIEnemyPackController extends Controller
             foreach ($vertices as $vertex) {
                 $vertexModel = new EnemyPackVertex();
                 $vertexModel->enemy_pack_id = $enemyPack->id;
-                $vertexModel->x = $vertex['x'];
-                $vertexModel->y = $vertex['y'];
+                $vertexModel->lat = $vertex['lat'];
+                $vertexModel->lng = $vertex['lng'];
 
                 if (!$vertexModel->save()) {
                     throw new \Exception("Unable to save pack vertex!");

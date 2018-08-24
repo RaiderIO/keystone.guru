@@ -24,6 +24,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(NpcClassificationSeeder::class);
 
-        $this->call(HallsOfValorNpcSeeder::class);
+        $this->call(DungeonDataSeeder::class);
     }
 }

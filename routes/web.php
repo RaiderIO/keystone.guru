@@ -78,6 +78,9 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::patch('admin/npc/{npc}', 'NpcController@update')->name('admin.npc.update');
 
     Route::get('admin/npcs', 'NpcController@list')->name('admin.npcs');
+
+    Route::get('admin/datadump/exportdungeondata', 'ExportDungeonDataController@view')->name('admin.datadump.exportdungeondata');
+    Route::post('admin/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.datadump.viewexporteddungeondata');
 });
 
 // Put this down below, since it contains a catch all
@@ -85,9 +88,6 @@ Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
 Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
 Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
 
-// View any dungeon route
-Route::get('{dungeonroute}', 'DungeonRouteController@view')
-    ->name('dungeonroute.view');
 // Edit your own dungeon routes
 Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
     ->middleware('can:edit,dungeonroute')
@@ -96,3 +96,6 @@ Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
 Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
     ->middleware('can:edit,dungeonroute')
     ->name('dungeonroute.update');
+// View any dungeon route
+Route::get('{dungeonroute}', 'DungeonRouteController@view')
+    ->name('dungeonroute.view');

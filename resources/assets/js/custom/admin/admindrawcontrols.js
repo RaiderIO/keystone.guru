@@ -21,6 +21,15 @@ class AdminDrawControls extends DrawControls {
                     faClass: 'fa-user',
                     title: 'Draw an enemy'
                 },
+                enemypatrol: {
+                    shapeOptions: {
+                        color: 'red',
+                        weight: 3
+                    },
+                    zIndexOffset: 1000,
+                    faClass: 'fa-exchange-alt',
+                    title: 'Draw a patrol route for an enemy'
+                },
                 dungeonstartmarker: {
                     repeatMode: false,
                     zIndexOffset: 1000,

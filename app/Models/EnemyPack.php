@@ -9,22 +9,33 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $floor_id
  * @property string $label
  * @property \App\Models\Floor $floor
+ * @property \Illuminate\Support\Collection $enemies
  * @property \Illuminate\Support\Collection $vertices
  */
 class EnemyPack extends Model
 {
+    public $with = ['vertices'];
     public $timestamps = false;
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     function floor()
     {
         return $this->belongsTo('App\Models\Floor');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     function enemies()
     {
         return $this->hasMany('App\Models\Enemy');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     function vertices()
     {
         return $this->hasMany('App\Models\EnemyPackVertex');

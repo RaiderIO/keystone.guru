@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DungeonFloorSwitchMarker extends Model
 {
+    public $timestamps = false;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

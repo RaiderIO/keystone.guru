@@ -1,0 +1,1117 @@
+[
+    {
+        "id": 4,
+        "enemy_pack_id": 11,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -55.75390625,
+        "lng": 182,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 5,
+        "enemy_pack_id": 11,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -55.87890625,
+        "lng": 185.25,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 6,
+        "enemy_pack_id": 12,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -67.439453125,
+        "lng": 181.0625,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 7,
+        "enemy_pack_id": 12,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -67.501953125,
+        "lng": 183.9375,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 8,
+        "enemy_pack_id": 12,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -67.564453125,
+        "lng": 187.125,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 10,
+        "enemy_pack_id": 13,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -81.439453125,
+        "lng": 177.25,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 11,
+        "enemy_pack_id": 13,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -81.689453125,
+        "lng": 190.1875,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 12,
+        "enemy_pack_id": 13,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -83.251953125,
+        "lng": 180.875,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 14,
+        "enemy_pack_id": 13,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -83.376953125,
+        "lng": 186.625,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 15,
+        "enemy_pack_id": 13,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -83.314453125,
+        "lng": 183.8125,
+        "npc": {
+            "id": 99891,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Storm Drake",
+            "base_health": 61136,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 16,
+        "enemy_pack_id": -1,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -102.37890625,
+        "lng": 183.375,
+        "npc": {
+            "id": 94960,
+            "dungeon_id": 7,
+            "classification_id": 3,
+            "name": "Hymdall",
+            "base_health": 253595,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 17,
+        "enemy_pack_id": -1,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -127.87890625,
+        "lng": 171.625,
+        "npc": {
+            "id": 96574,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Stormforged Sentinel",
+            "base_health": 57539,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 18,
+        "enemy_pack_id": 14,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -134.50390625,
+        "lng": 173.25,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 19,
+        "enemy_pack_id": 14,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -134.50390625,
+        "lng": 176.5,
+        "npc": null
+    },
+    {
+        "id": 20,
+        "enemy_pack_id": 9,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -134.87890625,
+        "lng": 191.125,
+        "npc": {
+            "id": 96664,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Runecarver",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 21,
+        "enemy_pack_id": 9,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -134.87890625,
+        "lng": 194.625,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 22,
+        "enemy_pack_id": -1,
+        "floor_id": 16,
+        "teeming": "visible",
+        "lat": -129.87890625,
+        "lng": 172.25,
+        "npc": {
+            "id": 96574,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Stormforged Sentinel",
+            "base_health": 57539,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 23,
+        "enemy_pack_id": 14,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -135.189453125,
+        "lng": 174.8125,
+        "npc": {
+            "id": 95834,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Mystic",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 24,
+        "enemy_pack_id": 9,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -135.564453125,
+        "lng": 192.9375,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 25,
+        "enemy_pack_id": 12,
+        "floor_id": 16,
+        "teeming": "visible",
+        "lat": -67.376953125,
+        "lng": 179.3125,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 26,
+        "enemy_pack_id": 12,
+        "floor_id": 16,
+        "teeming": "visible",
+        "lat": -67.814453125,
+        "lng": 188.875,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 29,
+        "enemy_pack_id": 13,
+        "floor_id": 16,
+        "teeming": "visible",
+        "lat": -81.689453125,
+        "lng": 183.8125,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 30,
+        "enemy_pack_id": 15,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -151.939453125,
+        "lng": 183.25,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 31,
+        "enemy_pack_id": 15,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -152.064453125,
+        "lng": 184.75,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 32,
+        "enemy_pack_id": 15,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -153.689453125,
+        "lng": 186.4375,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 33,
+        "enemy_pack_id": 15,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -154.189453125,
+        "lng": 187.4375,
+        "npc": null
+    },
+    {
+        "id": 34,
+        "enemy_pack_id": 15,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -152.814453125,
+        "lng": 182,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 36,
+        "enemy_pack_id": 15,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -154.439453125,
+        "lng": 182.1875,
+        "npc": {
+            "id": 96664,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Runecarver",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 37,
+        "enemy_pack_id": 15,
+        "floor_id": 16,
+        "teeming": "visible",
+        "lat": -152.501953125,
+        "lng": 187.125,
+        "npc": {
+            "id": 96664,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Runecarver",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 38,
+        "enemy_pack_id": 15,
+        "floor_id": 16,
+        "teeming": "visible",
+        "lat": -155.251953125,
+        "lng": 187.625,
+        "npc": {
+            "id": 95834,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Mystic",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 39,
+        "enemy_pack_id": 16,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -172.814453125,
+        "lng": 183.8125,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 40,
+        "enemy_pack_id": 16,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -174.501953125,
+        "lng": 181.5,
+        "npc": {
+            "id": 96664,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Runecarver",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 41,
+        "enemy_pack_id": 16,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -174.564453125,
+        "lng": 186.125,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 42,
+        "enemy_pack_id": 16,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -176.751953125,
+        "lng": 183.9375,
+        "npc": {
+            "id": 96640,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Marksman",
+            "base_health": 34069,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 43,
+        "enemy_pack_id": 17,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -167.689453125,
+        "lng": 200.25,
+        "npc": {
+            "id": 95834,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Mystic",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 44,
+        "enemy_pack_id": 17,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -169.376953125,
+        "lng": 200.25,
+        "npc": null
+    },
+    {
+        "id": 45,
+        "enemy_pack_id": -1,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -182.251953125,
+        "lng": 159.4375,
+        "npc": {
+            "id": 96574,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Stormforged Sentinel",
+            "base_health": 57539,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 46,
+        "enemy_pack_id": -1,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -182.439453125,
+        "lng": 208.75,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 47,
+        "enemy_pack_id": 19,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -177.251953125,
+        "lng": 210.25,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 48,
+        "enemy_pack_id": 19,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -179.439453125,
+        "lng": 210.4375,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 49,
+        "enemy_pack_id": 18,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -180.064453125,
+        "lng": 201.1875,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 50,
+        "enemy_pack_id": 18,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -181.376953125,
+        "lng": 203,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 51,
+        "enemy_pack_id": 18,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -181.939453125,
+        "lng": 201.0625,
+        "npc": {
+            "id": 95834,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Mystic",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 53,
+        "enemy_pack_id": 22,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -195.689453125,
+        "lng": 218.875,
+        "npc": {
+            "id": 95832,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Shieldmaiden",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 54,
+        "enemy_pack_id": 22,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -193.314453125,
+        "lng": 221.5625,
+        "npc": {
+            "id": 95832,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Shieldmaiden",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 55,
+        "enemy_pack_id": 22,
+        "floor_id": 16,
+        "teeming": "visible",
+        "lat": -194.501953125,
+        "lng": 220.125,
+        "npc": {
+            "id": 95832,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Shieldmaiden",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 56,
+        "enemy_pack_id": 23,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -202.064453125,
+        "lng": 227.875,
+        "npc": {
+            "id": 97197,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Purifier",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 57,
+        "enemy_pack_id": 23,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -204.314453125,
+        "lng": 225.125,
+        "npc": {
+            "id": 95832,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Shieldmaiden",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 58,
+        "enemy_pack_id": 23,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -199.314453125,
+        "lng": 230.375,
+        "npc": {
+            "id": 95832,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Shieldmaiden",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 59,
+        "enemy_pack_id": 24,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -208.876953125,
+        "lng": 239.1875,
+        "npc": {
+            "id": 95832,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Shieldmaiden",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 60,
+        "enemy_pack_id": 24,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -210.689453125,
+        "lng": 237.5625,
+        "npc": {
+            "id": 101637,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Aspirant",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 61,
+        "enemy_pack_id": 24,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -212.626953125,
+        "lng": 235.8125,
+        "npc": {
+            "id": 95832,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Shieldmaiden",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 62,
+        "enemy_pack_id": -1,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -207.126953125,
+        "lng": 248.5,
+        "npc": {
+            "id": 97219,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Solsten",
+            "base_health": 115079,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 63,
+        "enemy_pack_id": -1,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -223.314453125,
+        "lng": 232.3125,
+        "npc": {
+            "id": 97202,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Olmyr the Enlightened",
+            "base_health": 115079,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 64,
+        "enemy_pack_id": -1,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -218.189453125,
+        "lng": 243.1875,
+        "npc": {
+            "id": 95833,
+            "dungeon_id": 7,
+            "classification_id": 3,
+            "name": "Hyrja",
+            "base_health": 260419,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 65,
+        "enemy_pack_id": 19,
+        "floor_id": 16,
+        "teeming": "visible",
+        "lat": -178.251953125,
+        "lng": 211.25,
+        "npc": {
+            "id": 96664,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Runecarver",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 66,
+        "enemy_pack_id": 27,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -167.001953125,
+        "lng": 172.75,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 67,
+        "enemy_pack_id": 27,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -168.814453125,
+        "lng": 171.3125,
+        "npc": {
+            "id": 95834,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Mystic",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 68,
+        "enemy_pack_id": 27,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -168.751953125,
+        "lng": 174.0625,
+        "npc": {
+            "id": 96640,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Marksman",
+            "base_health": 34069,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 69,
+        "enemy_pack_id": 25,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -183.064453125,
+        "lng": 180.6875,
+        "npc": {
+            "id": 96574,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Stormforged Sentinel",
+            "base_health": 57539,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 70,
+        "enemy_pack_id": 25,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -182.876953125,
+        "lng": 187.0625,
+        "npc": {
+            "id": 96574,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Stormforged Sentinel",
+            "base_health": 57539,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 71,
+        "enemy_pack_id": 26,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -180.626953125,
+        "lng": 174.5,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 72,
+        "enemy_pack_id": 26,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -180.376953125,
+        "lng": 172,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 73,
+        "enemy_pack_id": 26,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -178.376953125,
+        "lng": 173.3125,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 74,
+        "enemy_pack_id": 28,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -179.876953125,
+        "lng": 157.125,
+        "npc": {
+            "id": 95834,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Mystic",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 75,
+        "enemy_pack_id": 28,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -177.876953125,
+        "lng": 155.9375,
+        "npc": {
+            "id": 96640,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Marksman",
+            "base_health": 34069,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 76,
+        "enemy_pack_id": 28,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -179.689453125,
+        "lng": 155.125,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 77,
+        "enemy_pack_id": 28,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -180.376953125,
+        "lng": 153.9375,
+        "npc": {
+            "id": 96664,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Runecarver",
+            "base_health": 34764,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 78,
+        "enemy_pack_id": 29,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -184.439453125,
+        "lng": 161.0625,
+        "npc": {
+            "id": 96640,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Marksman",
+            "base_health": 34069,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 79,
+        "enemy_pack_id": 29,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -185.751953125,
+        "lng": 160.6875,
+        "npc": {
+            "id": 97087,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Champion",
+            "base_health": 24335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    {
+        "id": 80,
+        "enemy_pack_id": 29,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -185.876953125,
+        "lng": 163.375,
+        "npc": {
+            "id": 95842,
+            "dungeon_id": 7,
+            "classification_id": 2,
+            "name": "Valarjar Thundercaller",
+            "base_health": 36369,
+            "aggressiveness": "aggressive"
+        }
+    }
+]

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['noads' => true])
 @section('header-title')
     {{ $headerTitle }}
 @endsection
@@ -21,10 +21,10 @@
         {{ Form::open(['route' => 'admin.npc.savenew', 'autocomplete' => 'off']) }}
     @endisset
 
-    <div class="form-group{{ $errors->has('game_id') ? ' has-error' : '' }}">
-        {!! Form::label('game_id', __('Game ID')) !!}
-        {!! Form::text('game_id', null, ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'game_id'])
+    <div class="form-group{{ $errors->has('id') ? ' has-error' : '' }}">
+        {!! Form::label('id', __('Game ID')) !!}
+        {!! Form::text('id', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'id'])
     </div>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -35,7 +35,7 @@
 
     <div class="form-group">
         {!! Form::label('dungeon_id', __('Select dungeon') . "*") !!}
-        {!! Form::select('dungeon_id', \App\Models\Dungeon::all()->pluck('name', 'id'), 0, ['class' => 'form-control']) !!}
+        {!! Form::select('dungeon_id', \App\Models\Dungeon::all()->pluck('name', 'id'), null, ['class' => 'form-control']) !!}
     </div>
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['noads' => true])
 @section('header-title', __('View expansions'))
 @section('header-addition')
     <a href="{{ route('admin.expansions') }}" class="btn btn-info text-white float-right" role="button">

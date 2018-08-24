@@ -119,7 +119,8 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
                 </div>
                 <div class="form-group">
                     <label for="enemy_edit_popup_teeming_@{{id}}">{{ __('Teeming') }}</label>
-                    <select data-live-search="true" id="enemy_edit_popup_teeming_@{{id}}" name="enemy_edit_popup_teeming_@{{id}}"
+                    <select data-live-search="true" id="enemy_edit_popup_teeming_@{{id}}"
+                            name="enemy_edit_popup_teeming_@{{id}}"
                             class="selectpicker enemy_edit_popup_teeming" data-width="300px">
                         <option value="">{{ __('Always visible') }}</option>
                         <option value="visible">{{ __('Visible when Teeming only') }}</option>
@@ -128,7 +129,8 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
                 </div>
                 <div class="form-group">
                     <label for="enemy_edit_popup_npc_@{{id}}">{{ __('NPC') }}</label>
-                    <select data-live-search="true" id="enemy_edit_popup_npc_@{{id}}" name="enemy_edit_popup_npc_@{{id}}"
+                    <select data-live-search="true" id="enemy_edit_popup_npc_@{{id}}"
+                            name="enemy_edit_popup_npc_@{{id}}"
                             class="selectpicker enemy_edit_popup_npc" data-width="300px">
                         @foreach($npcs as $npc)
                             <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->id) }}</option>

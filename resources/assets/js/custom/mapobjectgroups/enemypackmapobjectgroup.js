@@ -41,10 +41,12 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                     let remoteEnemyPack = json[i];
                     for (let j = 0; j < remoteEnemyPack.vertices.length; j++) {
                         let vertex = remoteEnemyPack.vertices[j];
-                        points.push([vertex.y, vertex.x]);
+                        // I.. don't really know why this needs to be lng/lat but it needs to be
+                        points.push([vertex.lng, vertex.lat]);
                     }
 
                     let layer = L.polygon(points);
+                    console.log(points, layer);
 
                     let enemyPack = self.createNew(layer);
                     enemyPack.id = remoteEnemyPack.id;

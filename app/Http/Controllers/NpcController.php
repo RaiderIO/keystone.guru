@@ -33,7 +33,7 @@ class NpcController extends Controller
             $npc = new Npc();
         }
 
-        $npc->id = $request->get('game_id');
+        $npc->id = $request->get('id');
         $npc->dungeon_id = $request->get('dungeon_id');
         $npc->classification_id = $request->get('classification_id');
         $npc->name = $request->get('name');

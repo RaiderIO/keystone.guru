@@ -15,11 +15,7 @@ $(function () {
     });
 });
 
-let LeafletDungeonFloorSwitchIcon = L.divIcon({
-    html: '<div class="marker_div_icon marker_div_icon_circle_border"><i class="fas fa-door-open"></i></div>',
-    iconSize: [30, 30],
-    className: 'marker_div_icon_font_awesome marker_div_icon_dungeon_floor_switch_marker'
-});
+let LeafletDungeonFloorSwitchIcon = new L.divIcon({className: 'door_icon', iconSize: [32, 32]});
 
 let LeafletDungeonFloorSwitchMarker = L.Marker.extend({
     options: {

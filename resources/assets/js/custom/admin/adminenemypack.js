@@ -48,6 +48,7 @@ class AdminEnemyPack extends EnemyPack {
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
+                self.setSynced(false);
             }
         });
     }
@@ -63,8 +64,7 @@ class AdminEnemyPack extends EnemyPack {
                 id: self.id,
                 floor_id: self.map.getCurrentFloor().id,
                 label: self.label,
-                vertices: self.getVertices(),
-                data: JSON.stringify(self.layer.toGeoJSON())
+                vertices: self.getVertices()
             },
             beforeSend: function () {
                 self.saving = true;
