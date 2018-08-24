@@ -154,6 +154,12 @@
             </div>
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://discord.gg/2KtWrqw">
+                            <i class="fab fa-discord"> Discord</i>
+                        </a>
+                    </li>
+
                 </ul>
             </div>
             <div class="col-md-3">

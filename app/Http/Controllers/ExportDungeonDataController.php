@@ -9,6 +9,8 @@ use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Floor;
+use App\Models\Npc;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class ExportDungeonDataController extends Controller
@@ -23,6 +25,12 @@ class ExportDungeonDataController extends Controller
         $result = array();
 
         foreach (Dungeon::all() as $dungeon) {
+            $npcs = Npc::all()->where('dungeon_id', '=', $dungeon->id);
+            $dirPath = storage_path() . '/dungeondata/' . $dungeon->expansion->shortname . '/' . $dungeon->key;
+
+            // Save NPC data in the root of the dungeon folder
+            $this->_saveData($npcs, $dirPath, 'npcs.json');
+
             /** @var Dungeon $dungeon */
             foreach ($dungeon->floors as $floor) {
                 /** @var Floor $floor */
@@ -39,19 +47,29 @@ class ExportDungeonDataController extends Controller
                 $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
 
                 foreach ($result as $category => $categoryData) {
-                    $filePath = storage_path() . '/dungeondata/' . $dungeon->key . '/' . $category . '.json';
-                    mkdir($filePath, 755, true);
-                    $file = fopen($filePath, 'w') or die('Cannot create file');
-                    fwrite($file, json_encode($categoryData, JSON_PRETTY_PRINT));
-                    fclose($file);
+                    // Save enemies, packs, patrols, markers on a per-floor basis
+                    $this->_saveData($categoryData, $dirPath . '/' . $floor->index, $category . '.json');
                 }
             }
         }
 
-        dd($result);
-
-
         return view('admin.datadump.viewexporteddungeondata', ['data' => $result]);
+    }
+
+    /**
+     * @param $dataArr Collection
+     * @param $dir string
+     * @param $filename string
+     */
+    private function _saveData($dataArr, $dir, $filename){
+        if(!file_exists($dir) ){
+            mkdir($dir, 755, true);
+        }
+
+        $filePath = $dir . '/' . $filename;
+        $file = fopen($filePath, 'w') or die('Cannot create file');
+        fwrite($file, json_encode($dataArr, JSON_PRETTY_PRINT));
+        fclose($file);
     }
 
     /**

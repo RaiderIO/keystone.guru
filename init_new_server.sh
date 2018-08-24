@@ -26,10 +26,7 @@ chown -R www-data:www-data bootstrap/cache
 tput setaf 2;
 echo "Ensuring file permissions..."
 tput sgr0;
-chmod 755 ide_helper_regen.sh
-chmod 755 update_dependencies.sh
-chmod 755 refresh_autoload.sh
-chmod 755 refresh_db_seed.sh
+chmod 755 *.sh
 chmod -R 755 storage
 chmod -R 755 bootstrap/cache
 
@@ -44,8 +41,3 @@ tput setaf 2;
 echo "Publishing Folklore ImageServiceProvider..."
 tput sgr0;
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider"
-
-tput setaf 2;
-echo "Compiling sources..."
-tput sgr0;
-npm run dev -- --env.full true

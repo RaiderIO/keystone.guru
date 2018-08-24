@@ -1,4 +1,4 @@
-@extends('layouts.app', ['wide' => true])
+@extends('layouts.app')
 
 @section('header-title', __('Dump dungeon data'))
 

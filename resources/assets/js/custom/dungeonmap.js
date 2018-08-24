@@ -218,7 +218,7 @@ class DungeonMap extends Signalable {
 
         this.mapTileLayer = L.tileLayer('/images/tiles/' + this.dungeonData.expansion.shortname + '/' + this.dungeonData.key + '/' + this.getCurrentFloor().index + '/{z}/{x}_{y}.png', {
             maxZoom: 4,
-            attribution: '',
+            attribution: 'Map data © Blizzard Entertainment',
             tileSize: L.point(384, 256),
             noWrap: true,
             continuousWorld: true,
