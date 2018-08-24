@@ -7,32 +7,12 @@ use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonStartMarker;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
-use App\Models\EnemyPackVertex;
 use App\Models\EnemyPatrol;
-use App\Models\EnemyPatrolVertex;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Floor;
 use Illuminate\Http\Request;
 
 class ExportDungeonDataController extends Controller
 {
-
-    /**
-     * @param $model Model
-     * @return string
-     */
-    private function _getExportedLine($model)
-    {
-        $attributes = $model->getAttributes();
-        foreach($attributes as $key => $value){
-            if($attributes[$key] === null ){
-                $attributes[$key] = 'NULL';
-            } else if(is_string($attributes[$key])) {
-                $attributes[$key] = sprintf('\'%s\'', $attributes[$key]);
-            }
-        }
-        return sprintf("INSERT INTO %s (%s) VALUES(%s)", $model->getTable(), implode(', ', array_keys($attributes)), implode(', ', array_values($attributes)));
-    }
-
     /**
      * @param Request $request
      * @return mixed
@@ -40,57 +20,32 @@ class ExportDungeonDataController extends Controller
      */
     public function submit(Request $request)
     {
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::findOrFail($request->get('dungeon_id', 0));
-
         $result = array();
 
-        $tables = [
-            (new DungeonFloorSwitchMarker())->getTable(),
-            (new DungeonStartMarker())->getTable(),
+        foreach (Dungeon::all() as $dungeon) {
+            /** @var Dungeon $dungeon */
+            foreach ($dungeon->floors as $floor) {
+                /** @var Floor $floor */
+                $enemies = Enemy::all()->where('floor_id', '=', $floor->id);
+                $enemyPacks = EnemyPack::all()->where('floor_id', '=', $floor->id);
+                $enemyPatrols = EnemyPatrol::all()->where('floor_id', '=', $floor->id);
+                $dungeonStartMarkers = DungeonStartMarker::all()->where('floor_id', '=', $floor->id);
+                $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::all()->where('floor_id', '=', $floor->id);
 
-            (new Enemy())->getTable(),
-            (new EnemyPack())->getTable(),
-            (new EnemyPackVertex())->getTable(),
-            (new EnemyPatrol())->getTable(),
-            (new EnemyPatrolVertex())->getTable(),
+                $result['enemies'] = $enemies;
+                $result['enemy_packs'] = $enemyPacks;
+                $result['enemy_patrols'] = $enemyPatrols;
+                $result['dungeon_start_markers'] = $dungeonStartMarkers;
+                $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
 
-        ];
-
-        foreach ($dungeon->floors as $floor) {
-            $enemies = Enemy::all()->where('floor_id', '=', $floor->id);
-
-            $result[] = '';
-            $result[] = sprintf('/** %s - %s - Enemies */', $dungeon->name, $floor->name);
-            $result[] = '';
-            $result[] = sprintf('DELETE FROM %s WHERE `floor_id` = \'%s\'', (new Enemy())->getTable(), $floor->id);
-            foreach ($enemies as $enemy) {
-                $result[] = $this->_getExportedLine($enemy);
-            }
-
-            // new line
-            $enemyPacks = EnemyPack::all()->where('floor_id', '=', $floor->id);
-
-            $result[] = '';
-            $result[] = sprintf('/** %s - %s - Enemy Packs */', $dungeon->name, $floor->name);
-            $result[] = '';
-
-            $result[] = sprintf('DELETE FROM %s WHERE `floor_id` = \'%s\'', (new EnemyPack())->getTable(), $floor->id);
-            foreach ($enemyPacks as $enemyPack) {
-            $result[] = sprintf('DELETE FROM %s WHERE `enemy_pack_id` = \'%s\'', (new EnemyPackVertex())->getTable(), $enemyPack->id);
-                /** @var $enemyPack EnemyPack */
-                $result[] = $this->_getExportedLine($enemyPack);
-                foreach($enemyPack->vertices as $vertex){
-                    $result[] = $this->_getExportedLine($vertex);
+                foreach ($result as $category => $categoryData) {
+                    $filePath = storage_path() . '/dungeondata/' . $dungeon->key . '/' . $category . '.json';
+                    mkdir($filePath, 755, true);
+                    $file = fopen($filePath, 'w') or die('Cannot create file');
+                    fwrite($file, json_encode($categoryData, JSON_PRETTY_PRINT));
+                    fclose($file);
                 }
             }
-
-//            foreach($tables as $table){
-//                $modelsToExport = DB::table($table)->where('floor_id', '=', $floor->id)->get();
-//                    dd($modelsToExport);
-//                if( count($modelsToExport) > 0 ){
-//                }
-//            }
         }
 
         dd($result);

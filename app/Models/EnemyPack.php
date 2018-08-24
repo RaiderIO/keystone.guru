@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EnemyPack extends Model
 {
+    public $with = ['vertices'];
     public $timestamps = false;
 
     /**
