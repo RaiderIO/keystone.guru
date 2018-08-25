@@ -15,7 +15,7 @@ class CreateEnemiesTable extends Migration
     {
         Schema::create('enemies', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('enemy_pack_id'); //nullable?
+            $table->integer('enemy_pack_id'); //nullable?
             $table->integer('npc_id');
             $table->integer('floor_id');
             $table->double('lat');
