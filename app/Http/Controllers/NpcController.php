@@ -110,7 +110,7 @@ class NpcController extends Controller
         // Message to the user
         \Session::flash('status', sprintf(__('Npc %s created'), $npc->name));
 
-        return redirect()->route('admin.npc.edit', ["npc" => $npc]);
+        return redirect()->route('admin.npc.edit', ['npc' => $npc->id]);
     }
 
     /**

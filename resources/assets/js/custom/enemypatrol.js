@@ -6,7 +6,6 @@ $(function () {
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
             this.type = L.Draw.EnemyPatrol.TYPE;
-            console.log('this:', this);
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });

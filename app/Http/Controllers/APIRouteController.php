@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DungeonRoute;
-use Illuminate\Http\Request;
 use App\Models\Route;
+use App\Models\RouteVertex;
+use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
 
 class APIRouteController extends Controller
 {
+    function list(Request $request)
+    {
+        $floorId = $request->get('floor_id');
+        return Route::all()->where('floor_id', '=', $floorId);
+    }
+
     /**
      * @param Request $request
      * @return array
@@ -16,30 +22,48 @@ class APIRouteController extends Controller
      */
     function store(Request $request)
     {
-        /** @var Enemy $enemy */
-        $enemy = Enemy::findOrNew($request->get('id'));
+        /** @var Route $route */
+        $route = Route::findOrNew($request->get('id'));
 
-        $enemy->enemy_pack_id = $request->get('enemy_pack_id');
-        $enemy->npc_id = $request->get('npc_id');
-        $enemy->floor_id = $request->get('floor_id');
-        $enemy->lat = $request->get('lat');
-        $enemy->lng = $request->get('lng');
+        $route->floor_id = $request->get('floor_id');
+        $route->enemy_id = $request->get('enemy_id');
 
-        if (!$enemy->save()) {
-            throw new \Exception("Unable to save enemy!");
+        if (!$route->save()) {
+            throw new \Exception("Unable to save enemy patrol!");
+        } else {
+            $route->deleteVertices();
+
+            // Get the new vertices
+            $vertices = $request->get('vertices');
+            // Store them
+            foreach ($vertices as $vertex) {
+                $vertexModel = new RouteVertex();
+                $vertexModel->enemy_patrol_id = $route->id;
+                $vertexModel->lat = $vertex['lat'];
+                $vertexModel->lng = $vertex['lng'];
+
+                if (!$vertexModel->save()) {
+                    throw new \Exception("Unable to save pack vertex!");
+                }
+            }
         }
 
-        return ['id' => $enemy->id];
+        return ['id' => $route->id];
     }
 
-    function get(Request $request)
+    function delete(Request $request)
     {
-        /** @var DungeonRoute $dungeonroute */
-        $dungeonroute = DungeonRoute::findOrFail($request->get('dungeonroute'));
+        try {
+            /** @var Route $route */
+            $route = Route::findOrFail($request->get('id'));
 
-        /** @var Route $route */
-        $route = Route::findOrFail($dungeonroute->id);
+            $route->delete();
+            $route->deleteVertices();
+            $result = ['result' => 'success'];
+        } catch (\Exception $ex) {
+            $result = response('Not found', Http::NOT_FOUND);
+        }
 
-        return $route;
+        return $result;
     }
 }

@@ -34,8 +34,24 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="demoDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ __('Demo') }}
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="demoDropdown">
+                            @foreach(\App\Models\DungeonRoute::where('demo', '=', true)->get() as $route)
+                                <a class="dropdown-item"
+                                   href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
+                                    {{ $route->dungeon->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     @if (Auth::guest())
