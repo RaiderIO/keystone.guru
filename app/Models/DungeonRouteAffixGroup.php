@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DungeonRouteAffixGroup extends Model
 {
+    public $hidden = ['id'];
+
     public $timestamps = false;
 
     /**

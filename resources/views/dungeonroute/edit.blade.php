@@ -47,7 +47,7 @@
         function _saveSettings() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('api.dungeonroute.update', $model->id) }}',
+                url: '{{ route('api.dungeonroute.update', $model->public_key) }}',
                 dataType: 'json',
                 data: {
                     faction_id: $("#faction_id").val(),
@@ -93,7 +93,7 @@
 
 @section('content')
     @isset($model)
-        {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
+        {{ Form::model($model, ['route' => ['dungeonroute.update', $model->public_key], 'method' => 'patch']) }}
     @else
         {{ Form::open(['route' => 'dungeonroute.savenew']) }}
     @endisset

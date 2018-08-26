@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 class DungeonRoutePlayerClass extends Model
 {
 
-    public $hidden = ['id', 'dungeon_route_id'];
+    public $hidden = ['id'];
 
     public $timestamps = false;
 

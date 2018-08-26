@@ -81,6 +81,19 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
 
     Route::get('admin/datadump/exportdungeondata', 'ExportDungeonDataController@view')->name('admin.datadump.exportdungeondata');
     Route::post('admin/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.datadump.viewexporteddungeondata');
+
+    Route::get('admin/makeadmin', function(){
+        $adminRole = \App\Role::all()->where('name', '=', 'admin')->first();
+        foreach(\App\User::all() as $user){
+            /** @var $user \App\User */
+
+            if(!$user->hasRole('admin') ){
+                $user->attachRole($adminRole);
+            }
+        }
+
+        return view('home');
+    })->name('admin.makeadmin');
 });
 
 // Put this down below, since it contains a catch all

@@ -19,7 +19,7 @@ class EnemyPatrolVertex extends Model
     /**
      * @var array Hide some columns which we don't need to echo to the user
      */
-    public $hidden = ['enemy_id'];
+    public $hidden = ['enemy_patrol_id'];
 
     /**
      * @var bool Irrelevant to keep timestamps for each individual vertex.

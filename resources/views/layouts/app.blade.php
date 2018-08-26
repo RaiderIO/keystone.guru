@@ -15,10 +15,10 @@
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
-@yield('head')
+    @yield('head')
 
     @include('common.thirdparty.cookieconsent')
-    <?php if( !isset($noads) || (isset($noads) && !$noads) ){ ?>
+    <?php if( (!isset($noads) || (isset($noads) && !$noads)) && config('app.env') === 'production' ){ ?>
     @include('common.thirdparty.adsense')
     <?php } ?>
 </head>
@@ -72,8 +72,13 @@
                                 @if( Auth::user()->can('read-npcs') )
                                     <a class="dropdown-item" href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
                                 @endif
-                                @if( Auth::user()->hasRole('admin')) 
-                                    <a class="dropdown-item" href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
+                                @if( Auth::user()->hasRole('admin'))
+                                    <a class="dropdown-item"
+                                       href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
+                                @endif
+                                @if( Auth::user()->hasRole('admin'))
+                                    <a class="dropdown-item"
+                                       href="{{ route('admin.makeadmin') }}">{{__('TEMP: Make all users admin')}}</a>
                                 @endif
                                 <a class="dropdown-item" href="{{ route('profile.edit') }}">My profile</a>
                                 <div class="dropdown-divider"></div>
@@ -188,14 +193,14 @@
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/lib.js') }}"></script>
 
-    @if (config('app.env') === 'production')
-     <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
+@if (config('app.env') === 'production')
+    <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
     <script src="{{ asset('js/custom.js') }}"></script>
 
-        @else
+@else
 
     <script src="{{ asset('js/custom/constants.js') }}"></script>
-     <?php // Include in proper order ?>
+    <?php // Include in proper order ?>
     <script src="{{ asset('js/custom/util.js') }}"></script>
     <script src="{{ asset('js/custom/signalable.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonmap.js') }}"></script>
@@ -216,7 +221,7 @@
     <script src="{{ asset('js/custom/admin/admindrawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonstartmarker.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonfloorswitchmarker.js') }}"></script>
-     <?php // Include the rest ?>
+    <?php // Include the rest ?>
 
     <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroup.js') }}"></script>
@@ -227,7 +232,7 @@
     <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
 
-    @endif
+@endif
 @yield('scripts')
 </body>
 </html>

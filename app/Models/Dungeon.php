@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $active boolean True if this dungeon is active, false if it is not
  * @property $expansion \Expansion
  * @property $floors \Illuminate\Support\Collection
+ * @property $dungeonroutes \Illuminate\Support\Collection
  * @function active
  */
 class Dungeon extends Model
@@ -51,6 +52,13 @@ class Dungeon extends Model
     public function floors()
     {
         return $this->hasMany('App\Models\Floor');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function dungeonroutes(){
+        return $this->hasMany('App\Models\DungeonRoute');
     }
 
     /**

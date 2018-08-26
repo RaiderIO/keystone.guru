@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Dungeon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class DungeonRouteFormRequest extends FormRequest
@@ -25,7 +25,7 @@ class DungeonRouteFormRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'dungeon_route_title' => 'required|string|min:3|max:255',
             // Only active dungeons are allowed
             'dungeon_id' => ['required', Rule::exists('dungeons', 'id')->where('active', '1')],
@@ -39,5 +39,10 @@ class DungeonRouteFormRequest extends FormRequest
 
             'unlisted' => 'nullable|int',
         ];
+        // Validate demo state, optional or numeric
+        if (Auth::user()->hasRole('admin')) {
+            $rules['demo'] = 'numeric';
+        }
+        return $rules;
     }
 }
