@@ -27,7 +27,7 @@ class APIDungeonRouteController extends Controller
 
         // Filter by our own user if logged in
         if ($request->has('author_id')) {
-            $builder = $builder->where('author_id', '=', $request->has('author_id'));
+            $builder = $builder->where('author_id', '=', $request->get('author_id'));
         }
 
         // Handle searching on affixes
