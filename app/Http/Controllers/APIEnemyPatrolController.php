@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\EnemyPatrol;
 use App\Models\EnemyPatrolVertex;
 use Illuminate\Http\Request;
-use App\Models\Enemy;
-use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 
 class APIEnemyPatrolController extends Controller

@@ -150,11 +150,16 @@
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item"><a class="nav-link" href="#">News</a></li>
+                    <li class="nav-item border-top"><a class="nav-item nav-link" href="/">
+                            ©{{ date('Y') }} {{ Config::get('app.name') }} </a></li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item"><a class="nav-link" href="{{ route('misc.about') }}">About</a></li>
+                    <li class="nav-item border-top">
+                        <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3">
@@ -164,7 +169,9 @@
                             <i class="fab fa-discord"> Discord</i>
                         </a>
                     </li>
-
+                    <li class="nav-item border-top">
+                        <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3">
@@ -174,18 +181,12 @@
                             <i class="fab fa-github"> Github</i>
                         </a>
                     </li>
+                    <li class="nav-item border-top">
+                        <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
+                    </li>
                 </ul>
             </div>
         </div>
-        <hr>
-        <nav class="nav nav-pills nav-justified">
-            <a class="nav-item nav-link" href="/">
-                ©{{ date('Y') }} {{ Config::get('app.name') }}
-            </a>
-            <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
-            <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
-            <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
-        </nav>
     </div>
 </div>
 
