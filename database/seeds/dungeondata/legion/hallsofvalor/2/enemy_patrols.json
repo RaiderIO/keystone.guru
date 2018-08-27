@@ -6,49 +6,41 @@
         "vertices": [
             {
                 "id": 4,
-                "enemy_patrol_id": 4,
                 "lat": 159.44,
                 "lng": -182.25
             },
             {
                 "id": 5,
-                "enemy_patrol_id": 4,
                 "lat": 166.94,
                 "lng": -174.81
             },
             {
                 "id": 6,
-                "enemy_patrol_id": 4,
                 "lat": 176.69,
                 "lng": -174.5
             },
             {
                 "id": 7,
-                "enemy_patrol_id": 4,
                 "lat": 180.12,
                 "lng": -169.31
             },
             {
                 "id": 8,
-                "enemy_patrol_id": 4,
                 "lat": 187.81,
                 "lng": -169.44
             },
             {
                 "id": 9,
-                "enemy_patrol_id": 4,
                 "lat": 192.31,
                 "lng": -174.69
             },
             {
                 "id": 10,
-                "enemy_patrol_id": 4,
                 "lat": 200.56,
                 "lng": -174.69
             },
             {
                 "id": 11,
-                "enemy_patrol_id": 4,
                 "lat": 206.12,
                 "lng": -179.81
             }
@@ -61,19 +53,16 @@
         "vertices": [
             {
                 "id": 12,
-                "enemy_patrol_id": 5,
                 "lat": 208.81,
                 "lng": -182.38
             },
             {
                 "id": 13,
-                "enemy_patrol_id": 5,
                 "lat": 207.31,
                 "lng": -179.19
             },
             {
                 "id": 14,
-                "enemy_patrol_id": 5,
                 "lat": 199.94,
                 "lng": -171.94
             }
@@ -86,25 +75,21 @@
         "vertices": [
             {
                 "id": 15,
-                "enemy_patrol_id": 6,
                 "lat": 172.19,
                 "lng": -128.81
             },
             {
                 "id": 16,
-                "enemy_patrol_id": 6,
                 "lat": 180,
                 "lng": -126.13
             },
             {
                 "id": 17,
-                "enemy_patrol_id": 6,
                 "lat": 187.75,
                 "lng": -126.5
             },
             {
                 "id": 18,
-                "enemy_patrol_id": 6,
                 "lat": 194.69,
                 "lng": -129.44
             }

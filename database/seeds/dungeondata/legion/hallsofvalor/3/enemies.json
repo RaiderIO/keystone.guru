@@ -4,8 +4,8 @@
         "enemy_pack_id": -1,
         "floor_id": 18,
         "teeming": null,
-        "lat": -229.126953125,
-        "lng": 188.1875,
+        "lat": -229.13,
+        "lng": 188.19,
         "npc": {
             "id": 97084,
             "dungeon_id": 7,
@@ -20,7 +20,7 @@
         "enemy_pack_id": -1,
         "floor_id": 18,
         "teeming": null,
-        "lat": -232.126953125,
+        "lat": -232.13,
         "lng": 191,
         "npc": {
             "id": 97081,
@@ -36,8 +36,8 @@
         "enemy_pack_id": -1,
         "floor_id": 18,
         "teeming": null,
-        "lat": -232.314453125,
-        "lng": 204.3125,
+        "lat": -232.31,
+        "lng": 204.31,
         "npc": {
             "id": 95843,
             "dungeon_id": 7,
@@ -52,8 +52,8 @@
         "enemy_pack_id": -1,
         "floor_id": 18,
         "teeming": null,
-        "lat": -229.376953125,
-        "lng": 207.375,
+        "lat": -229.38,
+        "lng": 207.38,
         "npc": {
             "id": 97083,
             "dungeon_id": 7,
@@ -68,8 +68,8 @@
         "enemy_pack_id": -1,
         "floor_id": 18,
         "teeming": null,
-        "lat": -234.814453125,
-        "lng": 197.8125,
+        "lat": -234.81,
+        "lng": 197.81,
         "npc": {
             "id": 95676,
             "dungeon_id": 7,
@@ -84,8 +84,8 @@
         "enemy_pack_id": -1,
         "floor_id": 18,
         "teeming": null,
-        "lat": -226.814453125,
-        "lng": 197.8125,
+        "lat": -226.81,
+        "lng": 197.81,
         "npc": {
             "id": 95675,
             "dungeon_id": 7,

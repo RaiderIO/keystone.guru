@@ -1,1 +1,18 @@
-[]
+{
+    "134": {
+        "id": 145,
+        "enemy_pack_id": -1,
+        "floor_id": 63,
+        "teeming": null,
+        "lat": -59,
+        "lng": 198.25,
+        "npc": {
+            "id": 131527,
+            "dungeon_id": 23,
+            "classification_id": 3,
+            "name": "Lord Waycrest",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

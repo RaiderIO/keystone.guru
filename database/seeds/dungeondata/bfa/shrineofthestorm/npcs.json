@@ -1,1 +1,34 @@
-[]
+{
+    "55": {
+        "id": 134056,
+        "dungeon_id": 17,
+        "classification_id": 3,
+        "name": "Aqu'sirr",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "56": {
+        "id": 134063,
+        "dungeon_id": 17,
+        "classification_id": 3,
+        "name": "Brother Ironhull",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "57": {
+        "id": 134069,
+        "dungeon_id": 17,
+        "classification_id": 3,
+        "name": "Vol'zith the Whisperer",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "65": {
+        "id": 139737,
+        "dungeon_id": 17,
+        "classification_id": 3,
+        "name": "Lord Stormsong",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    }
+}

@@ -1,1 +1,50 @@
-[]
+{
+    "170": {
+        "id": 181,
+        "enemy_pack_id": -1,
+        "floor_id": 41,
+        "teeming": null,
+        "lat": -39.759999999999998,
+        "lng": 210.5,
+        "npc": {
+            "id": 129399,
+            "dungeon_id": 14,
+            "classification_id": 3,
+            "name": "Vol'kaal",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "171": {
+        "id": 182,
+        "enemy_pack_id": -1,
+        "floor_id": 41,
+        "teeming": null,
+        "lat": -123.76000000000001,
+        "lng": 133.75,
+        "npc": {
+            "id": 129412,
+            "dungeon_id": 14,
+            "classification_id": 3,
+            "name": "Yazma",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "172": {
+        "id": 183,
+        "enemy_pack_id": -1,
+        "floor_id": 41,
+        "teeming": null,
+        "lat": -216.75999999999999,
+        "lng": 211,
+        "npc": {
+            "id": 129614,
+            "dungeon_id": 14,
+            "classification_id": 3,
+            "name": "Priestess Alun'za",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

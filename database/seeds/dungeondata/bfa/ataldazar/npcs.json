@@ -1,1 +1,34 @@
-[]
+{
+    "34": {
+        "id": 129399,
+        "dungeon_id": 14,
+        "classification_id": 3,
+        "name": "Vol'kaal",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "35": {
+        "id": 129412,
+        "dungeon_id": 14,
+        "classification_id": 3,
+        "name": "Yazma",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "39": {
+        "id": 129614,
+        "dungeon_id": 14,
+        "classification_id": 3,
+        "name": "Priestess Alun'za",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "67": {
+        "id": 143577,
+        "dungeon_id": 14,
+        "classification_id": 3,
+        "name": "Rezan",
+        "base_health": 904737,
+        "aggressiveness": "aggressive"
+    }
+}

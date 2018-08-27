@@ -1,1 +1,34 @@
-[]
+{
+    "59": {
+        "id": 134993,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "Mchimba the Embalmer",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "60": {
+        "id": 135322,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "The Golden Serpent",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "62": {
+        "id": 135470,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "Aka'ali the Conqueror",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "63": {
+        "id": 136160,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "King Dazar",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    }
+}

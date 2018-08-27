@@ -1,1 +1,34 @@
-[]
+{
+    "51": {
+        "id": 133379,
+        "dungeon_id": 19,
+        "classification_id": 3,
+        "name": "Adderis",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "52": {
+        "id": 133384,
+        "dungeon_id": 19,
+        "classification_id": 3,
+        "name": "Merektha",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "53": {
+        "id": 133389,
+        "dungeon_id": 19,
+        "classification_id": 3,
+        "name": "Galvazzt",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "54": {
+        "id": 133392,
+        "dungeon_id": 19,
+        "classification_id": 3,
+        "name": "Avatar of Sethraliss",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    }
+}

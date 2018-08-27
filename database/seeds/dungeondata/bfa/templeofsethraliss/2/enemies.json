@@ -1,1 +1,18 @@
-[]
+{
+    "152": {
+        "id": 163,
+        "enemy_pack_id": -1,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -61.759999999999998,
+        "lng": 146.75,
+        "npc": {
+            "id": 133392,
+            "dungeon_id": 19,
+            "classification_id": 3,
+            "name": "Avatar of Sethraliss",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

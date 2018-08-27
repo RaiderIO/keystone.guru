@@ -1,1 +1,42 @@
-[]
+{
+    "28": {
+        "id": 126847,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Captain Raoul",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "36": {
+        "id": 129431,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Captain Eudora",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "37": {
+        "id": 129432,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Captain Jolly",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "38": {
+        "id": 129440,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Harlan Sweete",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "40": {
+        "id": 129732,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Skycap'n Kragg",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    }
+}

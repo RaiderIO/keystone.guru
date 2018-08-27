@@ -1,1 +1,66 @@
-[]
+{
+    "145": {
+        "id": 156,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -121.91,
+        "lng": 175.75,
+        "npc": {
+            "id": 139904,
+            "dungeon_id": 20,
+            "classification_id": 3,
+            "name": "Coin-Operated Crowd Pummeler",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "146": {
+        "id": 157,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.659999999999997,
+        "lng": 116.75,
+        "npc": {
+            "id": 129227,
+            "dungeon_id": 20,
+            "classification_id": 3,
+            "name": "Azerokk",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "147": {
+        "id": 158,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.659999999999997,
+        "lng": 214.75,
+        "npc": {
+            "id": 139273,
+            "dungeon_id": 20,
+            "classification_id": 3,
+            "name": "Rixxa Fluxflame",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "148": {
+        "id": 159,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -102.16,
+        "lng": 265,
+        "npc": {
+            "id": 131227,
+            "dungeon_id": 20,
+            "classification_id": 3,
+            "name": "Mogul Razdunk",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

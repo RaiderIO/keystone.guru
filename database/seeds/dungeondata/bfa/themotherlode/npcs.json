@@ -1,1 +1,34 @@
-[]
+{
+    "33": {
+        "id": 129227,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Azerokk",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "43": {
+        "id": 131227,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Mogul Razdunk",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "64": {
+        "id": 139273,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Rixxa Fluxflame",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "66": {
+        "id": 139904,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Coin-Operated Crowd Pummeler",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    }
+}

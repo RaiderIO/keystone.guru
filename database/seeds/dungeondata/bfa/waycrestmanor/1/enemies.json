@@ -1,1 +1,50 @@
-[]
+{
+    "132": {
+        "id": 143,
+        "enemy_pack_id": -1,
+        "floor_id": 61,
+        "teeming": null,
+        "lat": -178.75999999999999,
+        "lng": 104.25,
+        "npc": {
+            "id": 135360,
+            "dungeon_id": 23,
+            "classification_id": 3,
+            "name": "Sister Briar",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "135": {
+        "id": 146,
+        "enemy_pack_id": -1,
+        "floor_id": 61,
+        "teeming": null,
+        "lat": -110.26000000000001,
+        "lng": 267.75,
+        "npc": {
+            "id": 131863,
+            "dungeon_id": 23,
+            "classification_id": 3,
+            "name": "Raal the Gluttonous",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "136": {
+        "id": 147,
+        "enemy_pack_id": -1,
+        "floor_id": 61,
+        "teeming": null,
+        "lat": -47.759999999999998,
+        "lng": 198.25,
+        "npc": {
+            "id": 131667,
+            "dungeon_id": 23,
+            "classification_id": 3,
+            "name": "Soulbound Goliath",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

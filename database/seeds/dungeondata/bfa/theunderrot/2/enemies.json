@@ -1,1 +1,18 @@
-[]
+{
+    "144": {
+        "id": 155,
+        "enemy_pack_id": -1,
+        "floor_id": 52,
+        "teeming": null,
+        "lat": -107.26000000000001,
+        "lng": 136,
+        "npc": {
+            "id": 133007,
+            "dungeon_id": 21,
+            "classification_id": 3,
+            "name": "Unbound Abomination",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

@@ -1,1 +1,42 @@
-[]
+{
+    "46": {
+        "id": 131527,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Lord Waycrest",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "47": {
+        "id": 131667,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Soulbound Goliath",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "49": {
+        "id": 131863,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Raal the Gluttonous",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "61": {
+        "id": 135360,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Sister Briar",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "69": {
+        "id": 144324,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Gorak Tul",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    }
+}

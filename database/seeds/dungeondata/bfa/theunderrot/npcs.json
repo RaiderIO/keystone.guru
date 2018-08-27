@@ -1,1 +1,34 @@
-[]
+{
+    "44": {
+        "id": 131318,
+        "dungeon_id": 21,
+        "classification_id": 3,
+        "name": "Elder Leaxa",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "45": {
+        "id": 131383,
+        "dungeon_id": 21,
+        "classification_id": 3,
+        "name": "Sporecaller Zancha",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "48": {
+        "id": 131817,
+        "dungeon_id": 21,
+        "classification_id": 3,
+        "name": "Cragmaw the Infested",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "50": {
+        "id": 133007,
+        "dungeon_id": 21,
+        "classification_id": 3,
+        "name": "Unbound Abomination",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    }
+}
