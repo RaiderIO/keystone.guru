@@ -49,6 +49,13 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
         let _dungeonData = {!! $dungeon !!};
         let _switchDungeonFloorSelect = "#map_floor_selection";
 
+            <?php if (isset($model)) { ?>
+        let dungeonRoutePublicKey = '{{ $model->public_key }}';
+            <?php } else { ?>
+        let dungeonRoutePublicKey = '';
+            <?php } ?>
+
+
         let dungeonMap;
 
         $(function () {

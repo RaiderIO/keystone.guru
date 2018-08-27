@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DungeonRoute;
 use App\Models\Route;
 use App\Models\RouteVertex;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
 class APIRouteController extends Controller
@@ -12,7 +15,15 @@ class APIRouteController extends Controller
     function list(Request $request)
     {
         $floorId = $request->get('floor_id');
-        return Route::all()->where('floor_id', '=', $floorId);
+        $dungeonRoutePublicKey = $request->get('dungeonroute');
+        try {
+            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
+            $result = Route::where('floor_id', '=', $floorId)->where('dungeon_route_id', '=', $dungeonRoute->id)->get();
+        } catch (Exception $ex) {
+            $result = response('Not found', Http::NOT_FOUND);
+        }
+
+        return $result;
     }
 
     /**
@@ -25,30 +36,38 @@ class APIRouteController extends Controller
         /** @var Route $route */
         $route = Route::findOrNew($request->get('id'));
 
-        $route->floor_id = $request->get('floor_id');
-        $route->enemy_id = $request->get('enemy_id');
+        try {
+            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($request->get('dungeonroute'));
 
-        if (!$route->save()) {
-            throw new \Exception("Unable to save enemy patrol!");
-        } else {
-            $route->deleteVertices();
+            $route->dungeon_route_id = $dungeonRoute->id;
+            $route->floor_id = $request->get('floor_id');
+            $route->color = $request->get('color');
 
-            // Get the new vertices
-            $vertices = $request->get('vertices');
-            // Store them
-            foreach ($vertices as $vertex) {
-                $vertexModel = new RouteVertex();
-                $vertexModel->enemy_patrol_id = $route->id;
-                $vertexModel->lat = $vertex['lat'];
-                $vertexModel->lng = $vertex['lng'];
+            if (!$route->save()) {
+                throw new \Exception("Unable to save enemy patrol!");
+            } else {
+                $route->deleteVertices();
 
-                if (!$vertexModel->save()) {
-                    throw new \Exception("Unable to save pack vertex!");
+                // Get the new vertices
+                $vertices = $request->get('vertices');
+                // Store them
+                foreach ($vertices as $vertex) {
+                    $vertexModel = new RouteVertex();
+                    $vertexModel->route_id = $route->id;
+                    $vertexModel->lat = $vertex['lat'];
+                    $vertexModel->lng = $vertex['lng'];
+
+                    if (!$vertexModel->save()) {
+                        throw new \Exception("Unable to save pack vertex!");
+                    }
                 }
             }
-        }
 
-        return ['id' => $route->id];
+            $result = ['id' => $route->id];
+        } catch (Exception $ex) {
+            $result = response('Not found', Http::NOT_FOUND);
+        }
+        return $result;
     }
 
     function delete(Request $request)
@@ -56,6 +75,11 @@ class APIRouteController extends Controller
         try {
             /** @var Route $route */
             $route = Route::findOrFail($request->get('id'));
+            // If we're not the author, don't delete anything
+            // @TODO handle this in a policy?
+            if ($route->dungeonroute->author_id !== Auth::user()->id) {
+                throw new Exception('Unauthorized');
+            }
 
             $route->delete();
             $route->deleteVertices();
@@ -66,4 +90,17 @@ class APIRouteController extends Controller
 
         return $result;
     }
+
+    function _getDungeonRouteFromPublicKey($publicKey)
+    {
+        $dungeonRoute = DungeonRoute::where('public_key', '=', $publicKey)->firstOrFail();
+
+        // @TODO handle this in a policy?
+        if ($dungeonRoute->author_id !== Auth::user()->id) {
+            throw new Exception('Unauthorized');
+        }
+
+        return $dungeonRoute;
+    }
+
 }

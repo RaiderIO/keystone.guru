@@ -27,9 +27,6 @@ class ExportDungeonDataController extends Controller
 
         foreach (Dungeon::all() as $dungeon) {
             /** @var $dungeon Dungeon */
-            if ($dungeon->getKeyAttribute() !== 'hallsofvalor') {
-                continue;
-            }
             $rootDirPath = storage_path() . '/dungeondata/' . $dungeon->expansion->shortname . '/' . $dungeon->key;
 
             // Demo routes, load it in a specific way to make it easier to import it back in again
@@ -42,18 +39,10 @@ class ExportDungeonDataController extends Controller
                 // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
                 // for each and every re-import
                 $demoRoute->setHidden(['id']);
-                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups']);
+                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups', 'routes']);
             }
 
             $this->_saveData($demoRoutes, $rootDirPath, 'dungeonroutes.json');
-
-            dd($demoRoutes);
-
-            // $demoRoutes->(['playerraces', 'playerclasses', 'affixgroups']);
-
-//            foreach($demoRoutes->playerraces as $playerrace){
-//                dd($playerrace);
-//            }
 
             $npcs = Npc::all()->where('dungeon_id', '=', $dungeon->id);
 

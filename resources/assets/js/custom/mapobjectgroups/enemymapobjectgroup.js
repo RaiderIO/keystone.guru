@@ -26,7 +26,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         $.ajax({
             type: 'GET',
-            url: '/api/v1/enemies',
+            url: '/ajax/enemies',
             dataType: 'json',
             data: {
                 floor_id: floor.id

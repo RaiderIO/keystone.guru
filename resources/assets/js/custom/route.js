@@ -43,7 +43,7 @@ class Route extends MapObject {
         console.assert(this instanceof Route, this, 'this was not a Route');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/route',
+            url: '/ajax/route',
             dataType: 'json',
             data: {
                 _method: 'DELETE',
@@ -73,10 +73,11 @@ class Route extends MapObject {
         console.assert(this instanceof Route, this, 'this was not a Route');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/route',
+            url: '/ajax/route',
             dataType: 'json',
             data: {
                 id: self.id,
+                dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
                 floor_id: self.map.getCurrentFloor().id,
                 color: self.color,
                 vertices: self.getVertices(),

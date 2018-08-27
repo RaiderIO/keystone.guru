@@ -71,11 +71,11 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function route()
+    public function routes()
     {
-        return $this->hasOne('App\Models\Route');
+        return $this->hasMany('App\Models\Route');
     }
 
     /**

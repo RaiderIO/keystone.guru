@@ -247,7 +247,6 @@ class DungeonMap extends Signalable {
         this.leafletMap.addLayer(this.drawnItems);
 
         // Get the draw controls and add it to the map
-        console.log('edit', this.edit);
         if (this.edit) {
             this.drawControls = this._getDrawControls(this.drawnItems);
             this.drawControls.addControl();

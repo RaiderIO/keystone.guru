@@ -26,7 +26,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
 
         $.ajax({
             type: 'GET',
-            url: '/api/v1/dungeonfloorswitchmarkers',
+            url: '/ajax/dungeonfloorswitchmarkers',
             dataType: 'json',
             data: {
                 floor_id: floor.id

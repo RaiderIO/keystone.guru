@@ -26,7 +26,7 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
 
         $.ajax({
             type: 'GET',
-            url: '/api/v1/dungeonstartmarkers',
+            url: '/ajax/dungeonstartmarkers',
             dataType: 'json',
             data: {
                 floor_id: floor.id

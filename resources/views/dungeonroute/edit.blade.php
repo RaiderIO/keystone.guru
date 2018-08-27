@@ -102,7 +102,9 @@
         <div class="col-lg-12">
             <div id="map_container">
                 @include('common.maps.map', [
-                    'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id)
+                    'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
+                    'model' => $model,
+                    'edit' => true
                 ])
             </div>
 
@@ -147,7 +149,8 @@
                     </div>
 
                     <div class="container">
-                        <div id="save_settings_success" class="alert alert-success alert-dismissible fade show text-center"
+                        <div id="save_settings_success"
+                             class="alert alert-success alert-dismissible fade show text-center"
                              style="display: none;" role="alert">
                         </div>
                         <div id="save_settings_error" class="alert alert-danger alert-dismissible fade show text-center"

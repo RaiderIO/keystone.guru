@@ -87,7 +87,7 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemy',
+            url: '/ajax/enemy',
             dataType: 'json',
             data: {
                 id: self.id,
@@ -122,7 +122,7 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemy',
+            url: '/ajax/enemy',
             dataType: 'json',
             data: {
                 _method: 'DELETE',
@@ -152,7 +152,7 @@ class AdminEnemy extends Enemy {
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemy',
+            url: '/ajax/enemy',
             dataType: 'json',
             data: {
                 id: self.id,

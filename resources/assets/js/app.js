@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -18,3 +17,10 @@ require('./bootstrap');
 // const app = new Vue({
 //     el: '#app'
 // });
+
+// Prepare ajax to always use the CSRF token
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});

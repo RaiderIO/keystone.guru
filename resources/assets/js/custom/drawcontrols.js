@@ -26,7 +26,11 @@ $(function () {
         //     handler: new L.Draw.CircleMarker(map, this.options.circlemarker),
         //     title: this.options.circlemarker.hasOwnProperty('title') ? this.options.circlemarker.title : L.drawLocal.draw.toolbar.buttons.circlemarker
         // },
-            {
+        {
+            enabled: this.options.route,
+            handler: new L.Draw.Route(map, this.options.route),
+            title: this.options.route.title
+        }, {
             enabled: this.options.enemypack,
             handler: new L.Draw.EnemyPack(map, this.options.enemypack),
             title: this.options.enemypack.title
@@ -74,6 +78,15 @@ class DrawControls {
                 // circle: false,
                 // marker: false,
                 // circlemarker: false,
+                route: {
+                    shapeOptions: {
+                        color: 'green',
+                        weight: 3
+                    },
+                    zIndexOffset: 1000,
+                    faClass: 'fa-route',
+                    title: 'Draw a route'
+                },
                 enemypack: false,
                 enemypatrol: false,
                 enemy: false,
