@@ -1,1 +1,34 @@
-[]
+{
+    "29": {
+        "id": 127484,
+        "dungeon_id": 22,
+        "classification_id": 3,
+        "name": "Jes Howlis",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "30": {
+        "id": 127503,
+        "dungeon_id": 22,
+        "classification_id": 3,
+        "name": "Overseer Korgus",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "41": {
+        "id": 130646,
+        "dungeon_id": 22,
+        "classification_id": 3,
+        "name": "Knight Captain Valyri",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "58": {
+        "id": 134927,
+        "dungeon_id": 22,
+        "classification_id": 3,
+        "name": "The Sand Queen",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    }
+}

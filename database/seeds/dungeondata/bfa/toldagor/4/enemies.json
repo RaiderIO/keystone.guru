@@ -1,1 +1,18 @@
-[]
+{
+    "138": {
+        "id": 149,
+        "enemy_pack_id": -1,
+        "floor_id": 56,
+        "teeming": null,
+        "lat": -173.75999999999999,
+        "lng": 148.75,
+        "npc": {
+            "id": 127484,
+            "dungeon_id": 22,
+            "classification_id": 3,
+            "name": "Jes Howlis",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

@@ -1,1 +1,18 @@
-[]
+{
+    "140": {
+        "id": 151,
+        "enemy_pack_id": -1,
+        "floor_id": 59,
+        "teeming": null,
+        "lat": -175.75999999999999,
+        "lng": 152,
+        "npc": {
+            "id": 127503,
+            "dungeon_id": 22,
+            "classification_id": 3,
+            "name": "Overseer Korgus",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}
