@@ -58,7 +58,7 @@ class DungeonMap extends Signalable {
             }
         });
 
-        $(window).bind('click', function (event) {
+        $(window).bind('mousedown', function (event) {
             $('#map').removeClass('map-scroll');
         });
 
@@ -82,12 +82,12 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         return [
-            new EnemyMapObjectGroup(this, 'enemy', 'Enemy'),
-            new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol'),
-            new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack'),
-            new RouteMapObjectGroup(this, 'route'),
-            new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker'),
-            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker'),
+            new EnemyMapObjectGroup(this, 'enemy', 'Enemy', false),
+            new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol', false),
+            new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false),
+            new RouteMapObjectGroup(this, 'route', true),
+            new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false),
+            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false),
         ];
     }
 
@@ -225,8 +225,6 @@ class DungeonMap extends Signalable {
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
 
-        this.routeLayerGroup = new L.LayerGroup();
-
         // Configure the controls (toggle display of enemies, groups etc.)
         if (this.mapControls !== null) {
             this.mapControls.cleanup();
@@ -263,6 +261,16 @@ class DungeonMap extends Signalable {
             } else {
                 console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
             }
+        });
+
+        // If we confirmed editing something..
+        this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
+            e.layers.eachLayer(function(i, layer){
+                console.log(i, layer);
+                let mapObject = self.findMapObjectByLayer(layer);
+                console.log(mapObject);
+            });
+            console.log(L.Draw.Event.EDITED, e);
         });
 
         this.signal('map:refresh', {dungeonmap: this});

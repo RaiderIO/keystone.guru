@@ -1,9 +1,10 @@
 class MapObjectGroup extends Signalable {
 
-    constructor(map, name) {
+    constructor(map, name, editable = false) {
         super();
         this.map = map;
         this.name = name;
+        this.editable = editable;
 
         this.objects = [];
         this.layerGroup = null;
@@ -54,6 +55,7 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
 
         this.layerGroup.removeLayer(data.context.layer);
+        // @TODO Should this be put in the dungeonmap instead?
         this.map.leafletMap.removeLayer(data.context.layer);
 
         let object = data.context;
@@ -80,6 +82,12 @@ class MapObjectGroup extends Signalable {
         let object = this._createObject(layer);
         this.objects.push(object);
         this.layerGroup.addLayer(layer);
+
+        // Make sure we know it's editable
+        // @TODO Should this be put in the dungeonmap instead?
+        if( this.editable ){
+            this.map.drawControls.drawnItems.addLayer(layer);
+        }
 
         object.onLayerInit();
 

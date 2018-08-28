@@ -1,6 +1,6 @@
 class EnemyPackMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname){
-        super(map, name);
+    constructor(map, name, classname, editable){
+        super(map, name, editable);
 
         this.classname = classname;
         this.title = 'Hide/show enemy packs';

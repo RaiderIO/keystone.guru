@@ -1,6 +1,6 @@
 class RouteMapObjectGroup extends MapObjectGroup {
-    constructor(map, name){
-        super(map, name);
+    constructor(map, name, editable){
+        super(map, name, editable);
 
         this.title = 'Hide/show route';
         this.fa_class = 'fa-route';
