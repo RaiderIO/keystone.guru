@@ -73,9 +73,12 @@ class APIRouteController extends Controller
         try {
             /** @var Route $route */
             $route = Route::findOrFail($request->get('id'));
+
+            // @TODO WTF why does $route->dungeonroute not work?? It will NOT load the relation despite everything being OK?
+            $dungeonroute = DungeonRoute::findOrFail($route->dungeon_route_id);
             // If we're not the author, don't delete anything
             // @TODO handle this in a policy?
-            if ($route->dungeonroute->author_id !== Auth::user()->id) {
+            if ($dungeonroute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin')) {
                 throw new Exception('Unauthorized');
             }
 

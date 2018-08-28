@@ -32,12 +32,4 @@ class DungeonRoutePlayerClass extends Model
     {
         return $this->belongsTo('App\Models\CharacterClass');
     }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    function dungeonrouteplayerclasses()
-    {
-        return $this->belongsToMany('App\Models\DungeonRoutePlayerClass', 'dungeon_route_player_classes');
-    }
 }

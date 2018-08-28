@@ -131,7 +131,7 @@ Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
     Route::get('/dungeonroutes', 'APIDungeonRouteController@list')->name('api.dungeonroutes');
 
     Route::get('/routes', 'APIRouteController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
-    Route::post('/route', 'APIRouteController@store')   ;
+    Route::post('/route', 'APIRouteController@store');
     Route::delete('/route', 'APIRouteController@delete');
 
     Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');

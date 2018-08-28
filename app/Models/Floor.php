@@ -24,9 +24,19 @@ class Floor extends Model
         return $this->belongsTo('App\Models\Dungeon');
     }
 
+    function enemies()
+    {
+        return $this->hasMany('App\Models\Enemy');
+    }
+
     function enemypacks()
     {
         return $this->hasMany('App\Models\EnemyPack');
+    }
+
+    function enemypatrols()
+    {
+        return $this->hasMany('App\Models\EnemyPatrol');
     }
 
     /**

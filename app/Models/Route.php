@@ -19,11 +19,11 @@ class Route extends Model
     /**
      * Get the dungeon route that this route is attached to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     function dungeonroute()
     {
-        return $this->hasOne('App\Models\DungeonRoute');
+        return $this->belongsTo('App\Models\DungeonRoute');
     }
 
     /**

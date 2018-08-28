@@ -21,7 +21,7 @@ class Route extends MapObject {
         this.setColors(c.map.route.colors);
         this.setSynced(false);
 
-        this.setRouteColor('#FF69B4');
+        this.setRouteColor('#9dff56');
     }
 
     setRouteColor(color) {
