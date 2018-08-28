@@ -50,7 +50,7 @@ class AdminEnemy extends Enemy {
                 $selectpicker.selectpicker('refresh');
                 $selectpicker.selectpicker('render');
 
-                $("#enemy_edit_popup_submit").bind('click', function () {
+                $("#enemy_edit_popup_submit_" + self.id).bind('click', function () {
                     self.npc_id = $("#enemy_edit_popup_npc_" + self.id).val();
                     self.teeming = $("#enemy_edit_popup_teeming_" + self.id).val();
 

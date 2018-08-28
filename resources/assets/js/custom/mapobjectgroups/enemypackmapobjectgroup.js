@@ -46,7 +46,6 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                     }
 
                     let layer = L.polygon(points);
-                    console.log(points, layer);
 
                     let enemyPack = self.createNew(layer);
                     enemyPack.id = remoteEnemyPack.id;

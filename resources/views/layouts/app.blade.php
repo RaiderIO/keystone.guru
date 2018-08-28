@@ -166,14 +166,15 @@
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item"><a class="nav-link" href="#">News</a></li>
-                    <li class="nav-item border-top"><a class="nav-item nav-link" href="/">
-                            ©{{ date('Y') }} {{ Config::get('app.name') }} </a></li>
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} </a>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item"><a class="nav-link" href="{{ route('misc.about') }}">About</a></li>
-                    <li class="nav-item border-top">
+                    <li class="nav-item">
                         <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
                     </li>
                 </ul>
@@ -182,10 +183,10 @@
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="https://discord.gg/2KtWrqw">
-                            <i class="fab fa-discord"> Discord</i>
+                            <i class="fab fa-discord"></i> Discord
                         </a>
                     </li>
-                    <li class="nav-item border-top">
+                    <li class="nav-item">
                         <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
                     </li>
                 </ul>
@@ -194,10 +195,10 @@
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="https://github.com/Wotuu/keystone.guru">
-                            <i class="fab fa-github"> Github</i>
+                            <i class="fab fa-github"></i> Github
                         </a>
                     </li>
-                    <li class="nav-item border-top">
+                    <li class="nav-item">
                         <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
                     </li>
                 </ul>

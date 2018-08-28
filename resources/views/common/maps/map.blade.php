@@ -118,6 +118,16 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
         </div>
     </script>
 
+    <script id="route_edit_popup_template" type="text/x-handlebars-template">
+        <div id="route_edit_popup_inner" class="popupCustom">
+            <div class="form-group">
+                {!! Form::label('route_edit_popup_color_@{{id}}', __('Color')) !!}
+                {!! Form::color('route_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+            </div>
+            {!! Form::button(__('Submit'), ['id' => 'route_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+        </div>
+    </script>
+
     @if($isAdmin)
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">
@@ -144,7 +154,7 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
                         @endforeach
                     </select>
                 </div>
-                {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit', 'class' => 'btn btn-info']) !!}
+                {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
             </div>
         </script>
 

@@ -18,10 +18,25 @@ class Route extends MapObject {
         this.label = 'Route';
         this.saving = false;
         this.deleting = false;
-        this.setColors(c.map.admin.mapobject.colors);
+        this.setColors(c.map.route.colors);
         this.setSynced(false);
 
-        this.color = 'pink';
+        this.setRouteColor('#FF69B4');
+    }
+
+    setRouteColor(color) {
+        console.log('RouteColor is now', color);
+        this.routeColor = color;
+        this.setColors({
+            unsavedBorder: color,
+            unsaved: color,
+
+            editedBorder: color,
+            edited: color,
+
+            savedBorder: color,
+            saved: color
+        });
     }
 
     getContextMenuItems() {
@@ -36,6 +51,40 @@ class Route extends MapObject {
             disabled: !this.synced || this.deleting,
             callback: (this.delete).bind(this)
         }]);
+    }
+
+    edit() {
+        let self = this;
+        console.assert(this instanceof Route, this, 'this was not a Route');
+
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/route',
+            dataType: 'json',
+            data: {
+                id: self.id,
+                dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                floor_id: self.map.getCurrentFloor().id,
+                color: self.routeColor,
+                vertices: self.getVertices(),
+            },
+            beforeSend: function () {
+                self.editing = true;
+                $("#route_edit_popup_submit").attr('disabled', 'disabled');
+            },
+            success: function (json) {
+                self.setSynced(true);
+                self.map.leafletMap.closePopup();
+            },
+            complete: function () {
+                $("#route_edit_popup_submit").removeAttr('disabled');
+                self.editing = false;
+            },
+            error: function () {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
+            }
+        });
     }
 
     delete() {
@@ -59,10 +108,6 @@ class Route extends MapObject {
                 self.deleting = false;
             },
             error: function () {
-                self.layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.unsaved,
-                    color: c.map.admin.mapobject.colors.unsavedBorder
-                });
                 self.setSynced(false);
             }
         });
@@ -79,30 +124,21 @@ class Route extends MapObject {
                 id: self.id,
                 dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
                 floor_id: self.map.getCurrentFloor().id,
-                color: self.color,
+                color: self.routeColor,
                 vertices: self.getVertices(),
             },
             beforeSend: function () {
                 self.saving = true;
-                self.layer.setStyle({
-                    color: c.map.admin.mapobject.colors.editedBorder
-                });
             },
             success: function (json) {
-                console.log(json);
                 self.id = json.id;
-                self.layer.setStyle({
-                    color: self.color
-                });
+
                 self.setSynced(true);
             },
             complete: function () {
                 self.saving = false;
             },
             error: function () {
-                self.layer.setStyle({
-                    color: c.map.admin.mapobject.colors.unsavedBorder
-                });
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
             }
@@ -113,11 +149,40 @@ class Route extends MapObject {
     onLayerInit() {
         console.assert(this instanceof Route, this, 'this is not an Route');
         super.onLayerInit();
+
+        let self = this;
+
+        // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
+        self.register('synced', function (event) {
+            let customPopupHtml = $("#route_edit_popup_template").html();
+            // Remove template so our
+            let template = handlebars.compile(customPopupHtml);
+
+            let data = {id: self.id};
+
+            // Build the status bar from the template
+            customPopupHtml = template(data);
+
+            let customOptions = {
+                'maxWidth': '400',
+                'minWidth': '300',
+                'className': 'popupCustom'
+            };
+            self.layer.bindPopup(customPopupHtml, customOptions);
+            self.layer.on('popupopen', function (event) {
+                $("#route_edit_popup_color_" + self.id).val(self.routeColor);
+
+                $("#route_edit_popup_submit_" + self.id).bind('click', function () {
+                    self.setRouteColor($("#route_edit_popup_color_" + self.id).val());
+
+                    self.edit();
+                });
+            });
+        });
     }
 
     getVertices() {
         let coordinates = this.layer.toGeoJSON().geometry.coordinates;
-        console.log(this.layer, this.layer.toGeoJSON(), coordinates);
         let result = [];
         for (let i = 0; i < coordinates.length; i++) {
             result.push({lat: coordinates[i][0], lng: coordinates[i][1]});

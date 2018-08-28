@@ -50,8 +50,8 @@ class MapObject extends Signalable {
 
         // Only if the colors object was ever set by a parent
         if (typeof this.colors !== 'undefined' && typeof this.layer.setStyle === 'function') {
-            // Now synced, was not synced
-            if (value && !this.synced) {
+            // Now synced
+            if (value) {
                 this.layer.setStyle({
                     fillColor: this.colors.saved,
                     color: this.colors.savedBorder
@@ -71,6 +71,7 @@ class MapObject extends Signalable {
                     color: this.colors.unsavedBorder
                 });
             }
+            console.log('redrawing layer with colors', this.colors);
             this.layer.redraw();
         }
 
