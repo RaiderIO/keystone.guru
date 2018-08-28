@@ -50,17 +50,15 @@ class APIRouteController extends Controller
 
                 // Get the new vertices
                 $vertices = $request->get('vertices');
-                // Store them
-                foreach ($vertices as $vertex) {
-                    $vertexModel = new RouteVertex();
-                    $vertexModel->route_id = $route->id;
-                    $vertexModel->lat = $vertex['lat'];
-                    $vertexModel->lng = $vertex['lng'];
 
-                    if (!$vertexModel->save()) {
-                        throw new \Exception("Unable to save pack vertex!");
-                    }
+                // Store them
+                foreach ($vertices as $key => $vertex) {
+                    // Assign route to each passed vertex
+                    $vertices[$key]['route_id'] = $route->id;
                 }
+
+                // Bulk insert
+                RouteVertex::insert($vertices);
             }
 
             $result = ['id' => $route->id];
