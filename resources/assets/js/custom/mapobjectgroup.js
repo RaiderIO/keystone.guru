@@ -85,7 +85,7 @@ class MapObjectGroup extends Signalable {
 
         // Make sure we know it's editable
         // @TODO Should this be put in the dungeonmap instead?
-        if( this.editable ){
+        if( this.editable && this.map.edit ){
             this.map.drawControls.drawnItems.addLayer(layer);
         }
 
