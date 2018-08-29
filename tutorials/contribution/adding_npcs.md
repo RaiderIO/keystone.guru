@@ -8,20 +8,20 @@ You need to be an admin in order to access these pages. Contact me in order to b
 
 Start by accessing the NPC overview as follows:
 
-![View NPCs](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/1.png "NPCs")
+![View NPCs](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/add_npcs_1.png "NPCs")
 
 You will see the following screen:
 
-![NPC overview](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/2.png "NPCs overview")
+![NPC overview](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/add_npcs_2.png "NPCs overview")
 
 With more entries than that, but you get the point. You can use the filter to check if the NPC
 you wish to add already exists. If it does not, go ahead and press the `Create NPC` button.
 
-![NPC creation](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/3.png "NPCs creation")
+![NPC creation](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/add_npcs_3.png "NPCs creation")
 
 Let's say we want to add a Valarjar Champion. We start by looking up the NPC on https://wowhead.com/
 
-![Wowhead](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/4.png "Wowhead")
+![Wowhead](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/add_npcs_4.png "Wowhead")
 
 Which do you pick? Usually you want the top entry, as we do in this case. It has the location we're looking for (`Halls of Valor`)
 , and `React` is set to a red A and H. This means the NPC is hostile to both Alliance and Horde. The
@@ -32,7 +32,7 @@ Now back to our NPC creation form.
 ### Game ID
 This is the ID the game has assigned for this NPC. You can find this in the URL of wowhead:
 
-![Wowhead](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/5.png "Wowhead")
+![Wowhead](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/add_npcs_5.png "Wowhead")
 
 ### Name
 The name of the NPC, goes without saying.

@@ -6,6 +6,7 @@ class AdminDrawControls extends DrawControls {
         $.extend(true, this.drawControlOptions, {
             draw: {
                 polyline: false,
+                route: false,
                 enemypack: {
                     allowIntersection: false, // Restricts shapes to simple polygons
                     drawError: {
