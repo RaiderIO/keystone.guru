@@ -6,6 +6,7 @@ class DungeonMap extends Signalable {
 
         this.dungeonData = dungeonData;
 
+        this.hotkeys = this._getHotkeys();
         this.mapObjectGroups = this._createMapObjectGroups();
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
@@ -73,6 +74,10 @@ class DungeonMap extends Signalable {
         this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
 
+    _getHotkeys(){
+        return new Hotkeys(this);
+    }
+
     /**
      *
      * @returns {[]}
@@ -123,6 +128,23 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         return new DrawControls(this, drawnItemsLayer);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    hasPopupOpen(){
+        let result = false;
+        for (let i = 0; i < this.mapObjects.length; i++) {
+            let mapObject = this.mapObjects[i];
+            let popup = mapObject.layer.getPopup();
+            if (typeof popup !== 'undefined' && popup.isOpen()) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     /**

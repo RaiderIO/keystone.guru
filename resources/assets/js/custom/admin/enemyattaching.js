@@ -124,7 +124,6 @@ class EnemyAttaching {
      */
     resetCurrentMouseoverLayer(){
         console.assert(this instanceof EnemyAttaching, this, 'this is not an instance of EnemyAttaching');
-        console.log(this.currentMouseoverLayer);
 
         if( this.currentMouseoverLayer !== null ){
             // No longer in this layer, revert changes

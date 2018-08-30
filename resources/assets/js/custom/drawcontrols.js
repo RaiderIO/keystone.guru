@@ -67,17 +67,6 @@ class DrawControls {
         this.drawControlOptions = {
             position: 'topleft',
             draw: {
-                // polyline: {
-                //     shapeOptions: {
-                //         color: '#f357a1',
-                //         weight: 10
-                //     }
-                // },
-                // polygon: false,
-                // rectangle: false,
-                // circle: false,
-                // marker: false,
-                // circlemarker: false,
                 route: {
                     shapeOptions: {
                         color: 'green',
@@ -106,6 +95,10 @@ class DrawControls {
 
             console.log("DrawControls-> drawn item", event);
         });
+
+        this.map.hotkeys.attach('r', 'leaflet-draw-draw-route');
+        this.map.hotkeys.attach('c', 'leaflet-draw-edit-edit');
+        this.map.hotkeys.attach('d', 'leaflet-draw-edit-remove');
     }
 
     /**

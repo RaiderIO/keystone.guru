@@ -231,6 +231,7 @@
     <script src="{{ asset('js/custom/route.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
+    <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
     <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>
     <script src="{{ asset('js/custom/admin/adminenemy.js') }}"></script>

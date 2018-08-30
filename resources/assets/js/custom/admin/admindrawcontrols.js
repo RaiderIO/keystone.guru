@@ -45,5 +45,9 @@ class AdminDrawControls extends DrawControls {
                 }
             }
         });
+
+        this.map.hotkeys.attach('e', 'leaflet-draw-draw-enemy');
+        this.map.hotkeys.attach('a', 'leaflet-draw-draw-enemypack');
+        this.map.hotkeys.attach('p', 'leaflet-draw-draw-enemypatrol');
     }
 }

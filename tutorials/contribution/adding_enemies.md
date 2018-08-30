@@ -40,13 +40,13 @@ delete it and recreate it again.
 
 1. Zooms in the map (or use ctrl + mouse wheel)
 2. Zooms out the map (or use ctrl + mouse wheel)
-3. Draws an enemy pack
-4. Draws an enemy
-5. Draws an enemy patrol
+3. Draws an enemy pack (hotkey: a)
+4. Draws an enemy (hotkey: e)
+5. Draws an enemy patrol (hotkey: p)
 6. Draws a 'dungeon start marker'
 7. Draws a 'floor switch marker'
-8. Edits all current elements so you can move them around (YES IT LOOKS LIKE IT WORKS BUT IT DOES NOT SYNCHRONIZE TO SERVER. DO NOT USE.)
-9. Allows you to select an element for deletion (YES IT LOOKS LIKE IT WORKS BUT IT DOES NOT SYNCHRONIZE TO SERVER. DO NOT USE.)
+8. Edits all current elements so you can move them around (YES IT LOOKS LIKE IT WORKS BUT IT DOES NOT SYNCHRONIZE TO SERVER. DO NOT USE.) (hotkey: c)
+9. Allows you to select an element for deletion (YES IT LOOKS LIKE IT WORKS BUT IT DOES NOT SYNCHRONIZE TO SERVER. DO NOT USE.) (hotkey: d)
 10. Toggles display of enemies on/off
 11. Toggles display of patrols on/off
 12. Toggles display of enemy packs on/off
