@@ -53,7 +53,7 @@ delete it and recreate it again.
 13. Toggles display of dungeon start markers on/off
 14. Toggles display of floor switch markers on/off
 
-### Actually adding elements to the map
+### Actually adding enemies to the map
 
 Hit one of the control buttons on the left (labelled 3 through 7) and move your cursor over the map. In the case of an enemy
 you will have a yellow dot underneath your mouse. Place it where you think the enemy is on the map. Next, LEFT click on the
@@ -65,3 +65,9 @@ Teeming settings can be ignored for now, it allows to hide/show enemies when the
 this is where you select the NPC that was created in the previous tutorial. Once you selected your NPC, click Submit and your enemy is saved.
 
 Repeat this process for all enemies you wish to add, and you're done!
+
+### Enemy packs
+
+An enemy pack is the definition of a group of enemies that all come at you the moment you pull one of them. To draw an enemy
+pack, use tool 3. Encircle the already placed enemies with a fair margin so that the enemies fall in the pack with a decent amount
+of space. When zoomed out, everything becomes smaller, so it must still be visible to see it's a pack when the user is fully zoomed out.

@@ -18,6 +18,7 @@ $(function () {
 let LeafletAggressiveEnemyIcon = new L.divIcon({className: 'aggressive_enemy_icon', iconSize: [12, 12]});
 let LeafletNeutralEnemyIcon = new L.divIcon({className: 'neutral_enemy_icon', iconSize: [12, 12]});
 let LeafletUnfriendlyEnemyIcon = new L.divIcon({className: 'unfriendly_enemy_icon', iconSize: [12, 12]});
+let LeafletFriendlyEnemyIcon = new L.divIcon({className: 'friendly_enemy_icon', iconSize: [12, 12]});
 let LeafletBossEnemyIcon = new L.divIcon({className: 'boss_enemy_icon', iconSize: [32, 32]});
 
 let LeafletEnemyMarker = L.Marker.extend({
@@ -72,6 +73,10 @@ class Enemy extends MapObject {
                 break;
             case 'unfriendly':
                 this.layer.setIcon(LeafletUnfriendlyEnemyIcon);
+
+                break;
+            case 'friendly':
+                this.layer.setIcon(LeafletFriendlyEnemyIcon);
 
                 break;
             case 'boss':

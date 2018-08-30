@@ -93,6 +93,10 @@
     background: url("/images/mapicon/neutral.png") no-repeat center right !important;
 }
 
+.friendly_enemy_icon {
+    background: url("/images/mapicon/friendly.png") no-repeat center right !important;
+}
+
 .boss_enemy_icon {
     background: url("/images/mapicon/boss.png") no-repeat center right !important;
 }
