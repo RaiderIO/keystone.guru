@@ -1,10 +1,10 @@
-[
-    {
+{
+    "0": {
         "id": 4,
         "enemy_pack_id": 11,
         "floor_id": 16,
         "teeming": null,
-        "lat": -55.75390625,
+        "lat": -55.75,
         "lng": 182,
         "npc": {
             "id": 97087,
@@ -15,12 +15,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "1": {
         "id": 5,
         "enemy_pack_id": 11,
         "floor_id": 16,
         "teeming": null,
-        "lat": -55.87890625,
+        "lat": -55.880000000000003,
         "lng": 185.25,
         "npc": {
             "id": 97087,
@@ -31,13 +31,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "2": {
         "id": 6,
         "enemy_pack_id": 12,
         "floor_id": 16,
         "teeming": null,
-        "lat": -67.439453125,
-        "lng": 181.0625,
+        "lat": -67.439999999999998,
+        "lng": 181.06,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -47,13 +47,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "3": {
         "id": 7,
         "enemy_pack_id": 12,
         "floor_id": 16,
         "teeming": null,
-        "lat": -67.501953125,
-        "lng": 183.9375,
+        "lat": -67.5,
+        "lng": 183.94,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -63,13 +63,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "4": {
         "id": 8,
         "enemy_pack_id": 12,
         "floor_id": 16,
         "teeming": null,
-        "lat": -67.564453125,
-        "lng": 187.125,
+        "lat": -67.560000000000002,
+        "lng": 187.12,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -79,12 +79,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "5": {
         "id": 10,
         "enemy_pack_id": 13,
         "floor_id": 16,
         "teeming": null,
-        "lat": -81.439453125,
+        "lat": -81.439999999999998,
         "lng": 177.25,
         "npc": {
             "id": 97087,
@@ -95,13 +95,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "6": {
         "id": 11,
         "enemy_pack_id": 13,
         "floor_id": 16,
         "teeming": null,
-        "lat": -81.689453125,
-        "lng": 190.1875,
+        "lat": -81.689999999999998,
+        "lng": 190.19,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -111,13 +111,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "7": {
         "id": 12,
         "enemy_pack_id": 13,
         "floor_id": 16,
         "teeming": null,
-        "lat": -83.251953125,
-        "lng": 180.875,
+        "lat": -83.25,
+        "lng": 180.88,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -127,13 +127,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "8": {
         "id": 14,
         "enemy_pack_id": 13,
         "floor_id": 16,
         "teeming": null,
-        "lat": -83.376953125,
-        "lng": 186.625,
+        "lat": -83.379999999999995,
+        "lng": 186.62,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -143,13 +143,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "9": {
         "id": 15,
         "enemy_pack_id": 13,
         "floor_id": 16,
         "teeming": null,
-        "lat": -83.314453125,
-        "lng": 183.8125,
+        "lat": -83.310000000000002,
+        "lng": 183.81,
         "npc": {
             "id": 99891,
             "dungeon_id": 7,
@@ -159,13 +159,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "10": {
         "id": 16,
         "enemy_pack_id": -1,
         "floor_id": 16,
         "teeming": null,
-        "lat": -102.37890625,
-        "lng": 183.375,
+        "lat": -102.38,
+        "lng": 183.38,
         "npc": {
             "id": 94960,
             "dungeon_id": 7,
@@ -175,13 +175,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "11": {
         "id": 17,
         "enemy_pack_id": -1,
         "floor_id": 16,
         "teeming": null,
-        "lat": -127.87890625,
-        "lng": 171.625,
+        "lat": -127.88,
+        "lng": 171.62,
         "npc": {
             "id": 96574,
             "dungeon_id": 7,
@@ -191,12 +191,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "12": {
         "id": 18,
         "enemy_pack_id": 14,
         "floor_id": 16,
         "teeming": null,
-        "lat": -134.50390625,
+        "lat": -134.5,
         "lng": 173.25,
         "npc": {
             "id": 97087,
@@ -207,22 +207,22 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "13": {
         "id": 19,
         "enemy_pack_id": 14,
         "floor_id": 16,
         "teeming": null,
-        "lat": -134.50390625,
+        "lat": -134.5,
         "lng": 176.5,
         "npc": null
     },
-    {
+    "14": {
         "id": 20,
         "enemy_pack_id": 9,
         "floor_id": 16,
         "teeming": null,
-        "lat": -134.87890625,
-        "lng": 191.125,
+        "lat": -134.88,
+        "lng": 191.12,
         "npc": {
             "id": 96664,
             "dungeon_id": 7,
@@ -232,13 +232,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "15": {
         "id": 21,
         "enemy_pack_id": 9,
         "floor_id": 16,
         "teeming": null,
-        "lat": -134.87890625,
-        "lng": 194.625,
+        "lat": -134.88,
+        "lng": 194.62,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -248,12 +248,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "16": {
         "id": 22,
         "enemy_pack_id": -1,
         "floor_id": 16,
         "teeming": "visible",
-        "lat": -129.87890625,
+        "lat": -129.88,
         "lng": 172.25,
         "npc": {
             "id": 96574,
@@ -264,13 +264,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "17": {
         "id": 23,
         "enemy_pack_id": 14,
         "floor_id": 16,
         "teeming": null,
-        "lat": -135.189453125,
-        "lng": 174.8125,
+        "lat": -135.19,
+        "lng": 174.81,
         "npc": {
             "id": 95834,
             "dungeon_id": 7,
@@ -280,13 +280,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "18": {
         "id": 24,
         "enemy_pack_id": 9,
         "floor_id": 16,
         "teeming": null,
-        "lat": -135.564453125,
-        "lng": 192.9375,
+        "lat": -135.56,
+        "lng": 192.94,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -296,13 +296,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "19": {
         "id": 25,
         "enemy_pack_id": 12,
         "floor_id": 16,
         "teeming": "visible",
-        "lat": -67.376953125,
-        "lng": 179.3125,
+        "lat": -67.379999999999995,
+        "lng": 179.31,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -312,13 +312,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "20": {
         "id": 26,
         "enemy_pack_id": 12,
         "floor_id": 16,
         "teeming": "visible",
-        "lat": -67.814453125,
-        "lng": 188.875,
+        "lat": -67.810000000000002,
+        "lng": 188.88,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -328,13 +328,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "21": {
         "id": 29,
         "enemy_pack_id": 13,
         "floor_id": 16,
         "teeming": "visible",
-        "lat": -81.689453125,
-        "lng": 183.8125,
+        "lat": -81.689999999999998,
+        "lng": 183.81,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -344,12 +344,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "22": {
         "id": 30,
         "enemy_pack_id": 15,
         "floor_id": 16,
         "teeming": null,
-        "lat": -151.939453125,
+        "lat": -151.94,
         "lng": 183.25,
         "npc": {
             "id": 97087,
@@ -360,12 +360,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "23": {
         "id": 31,
         "enemy_pack_id": 15,
         "floor_id": 16,
         "teeming": null,
-        "lat": -152.064453125,
+        "lat": -152.06,
         "lng": 184.75,
         "npc": {
             "id": 97087,
@@ -376,13 +376,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "24": {
         "id": 32,
         "enemy_pack_id": 15,
         "floor_id": 16,
         "teeming": null,
-        "lat": -153.689453125,
-        "lng": 186.4375,
+        "lat": -153.69,
+        "lng": 186.44,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -392,21 +392,21 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "25": {
         "id": 33,
         "enemy_pack_id": 15,
         "floor_id": 16,
         "teeming": null,
-        "lat": -154.189453125,
-        "lng": 187.4375,
+        "lat": -154.19,
+        "lng": 187.44,
         "npc": null
     },
-    {
+    "26": {
         "id": 34,
         "enemy_pack_id": 15,
         "floor_id": 16,
         "teeming": null,
-        "lat": -152.814453125,
+        "lat": -152.81,
         "lng": 182,
         "npc": {
             "id": 97087,
@@ -417,13 +417,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "27": {
         "id": 36,
         "enemy_pack_id": 15,
         "floor_id": 16,
         "teeming": null,
-        "lat": -154.439453125,
-        "lng": 182.1875,
+        "lat": -154.44,
+        "lng": 182.19,
         "npc": {
             "id": 96664,
             "dungeon_id": 7,
@@ -433,13 +433,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "28": {
         "id": 37,
         "enemy_pack_id": 15,
         "floor_id": 16,
         "teeming": "visible",
-        "lat": -152.501953125,
-        "lng": 187.125,
+        "lat": -152.5,
+        "lng": 187.12,
         "npc": {
             "id": 96664,
             "dungeon_id": 7,
@@ -449,13 +449,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "29": {
         "id": 38,
         "enemy_pack_id": 15,
         "floor_id": 16,
         "teeming": "visible",
-        "lat": -155.251953125,
-        "lng": 187.625,
+        "lat": -155.25,
+        "lng": 187.62,
         "npc": {
             "id": 95834,
             "dungeon_id": 7,
@@ -465,13 +465,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "30": {
         "id": 39,
         "enemy_pack_id": 16,
         "floor_id": 16,
         "teeming": null,
-        "lat": -172.814453125,
-        "lng": 183.8125,
+        "lat": -172.81,
+        "lng": 183.81,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -481,12 +481,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "31": {
         "id": 40,
         "enemy_pack_id": 16,
         "floor_id": 16,
         "teeming": null,
-        "lat": -174.501953125,
+        "lat": -174.5,
         "lng": 181.5,
         "npc": {
             "id": 96664,
@@ -497,13 +497,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "32": {
         "id": 41,
         "enemy_pack_id": 16,
         "floor_id": 16,
         "teeming": null,
-        "lat": -174.564453125,
-        "lng": 186.125,
+        "lat": -174.56,
+        "lng": 186.12,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -513,13 +513,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "33": {
         "id": 42,
         "enemy_pack_id": 16,
         "floor_id": 16,
         "teeming": null,
-        "lat": -176.751953125,
-        "lng": 183.9375,
+        "lat": -176.75,
+        "lng": 183.94,
         "npc": {
             "id": 96640,
             "dungeon_id": 7,
@@ -529,12 +529,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "34": {
         "id": 43,
         "enemy_pack_id": 17,
         "floor_id": 16,
         "teeming": null,
-        "lat": -167.689453125,
+        "lat": -167.69,
         "lng": 200.25,
         "npc": {
             "id": 95834,
@@ -545,22 +545,22 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "35": {
         "id": 44,
         "enemy_pack_id": 17,
         "floor_id": 16,
         "teeming": null,
-        "lat": -169.376953125,
+        "lat": -169.38,
         "lng": 200.25,
         "npc": null
     },
-    {
+    "36": {
         "id": 45,
         "enemy_pack_id": -1,
         "floor_id": 16,
         "teeming": null,
-        "lat": -182.251953125,
-        "lng": 159.4375,
+        "lat": -182.25,
+        "lng": 159.44,
         "npc": {
             "id": 96574,
             "dungeon_id": 7,
@@ -570,12 +570,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "37": {
         "id": 46,
         "enemy_pack_id": -1,
         "floor_id": 16,
         "teeming": null,
-        "lat": -182.439453125,
+        "lat": -182.44,
         "lng": 208.75,
         "npc": {
             "id": 97087,
@@ -586,12 +586,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "38": {
         "id": 47,
         "enemy_pack_id": 19,
         "floor_id": 16,
         "teeming": null,
-        "lat": -177.251953125,
+        "lat": -177.25,
         "lng": 210.25,
         "npc": {
             "id": 95842,
@@ -602,13 +602,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "39": {
         "id": 48,
         "enemy_pack_id": 19,
         "floor_id": 16,
         "teeming": null,
-        "lat": -179.439453125,
-        "lng": 210.4375,
+        "lat": -179.44,
+        "lng": 210.44,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -618,13 +618,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "40": {
         "id": 49,
         "enemy_pack_id": 18,
         "floor_id": 16,
         "teeming": null,
-        "lat": -180.064453125,
-        "lng": 201.1875,
+        "lat": -180.06,
+        "lng": 201.19,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -634,12 +634,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "41": {
         "id": 50,
         "enemy_pack_id": 18,
         "floor_id": 16,
         "teeming": null,
-        "lat": -181.376953125,
+        "lat": -181.38,
         "lng": 203,
         "npc": {
             "id": 95842,
@@ -650,13 +650,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "42": {
         "id": 51,
         "enemy_pack_id": 18,
         "floor_id": 16,
         "teeming": null,
-        "lat": -181.939453125,
-        "lng": 201.0625,
+        "lat": -181.94,
+        "lng": 201.06,
         "npc": {
             "id": 95834,
             "dungeon_id": 7,
@@ -666,13 +666,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "43": {
         "id": 53,
         "enemy_pack_id": 22,
         "floor_id": 16,
         "teeming": null,
-        "lat": -195.689453125,
-        "lng": 218.875,
+        "lat": -195.69,
+        "lng": 218.88,
         "npc": {
             "id": 95832,
             "dungeon_id": 7,
@@ -682,13 +682,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "44": {
         "id": 54,
         "enemy_pack_id": 22,
         "floor_id": 16,
         "teeming": null,
-        "lat": -193.314453125,
-        "lng": 221.5625,
+        "lat": -193.31,
+        "lng": 221.56,
         "npc": {
             "id": 95832,
             "dungeon_id": 7,
@@ -698,13 +698,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "45": {
         "id": 55,
         "enemy_pack_id": 22,
         "floor_id": 16,
         "teeming": "visible",
-        "lat": -194.501953125,
-        "lng": 220.125,
+        "lat": -194.5,
+        "lng": 220.12,
         "npc": {
             "id": 95832,
             "dungeon_id": 7,
@@ -714,13 +714,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "46": {
         "id": 56,
         "enemy_pack_id": 23,
         "floor_id": 16,
         "teeming": null,
-        "lat": -202.064453125,
-        "lng": 227.875,
+        "lat": -202.06,
+        "lng": 227.88,
         "npc": {
             "id": 97197,
             "dungeon_id": 7,
@@ -730,13 +730,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "47": {
         "id": 57,
         "enemy_pack_id": 23,
         "floor_id": 16,
         "teeming": null,
-        "lat": -204.314453125,
-        "lng": 225.125,
+        "lat": -204.31,
+        "lng": 225.12,
         "npc": {
             "id": 95832,
             "dungeon_id": 7,
@@ -746,13 +746,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "48": {
         "id": 58,
         "enemy_pack_id": 23,
         "floor_id": 16,
         "teeming": null,
-        "lat": -199.314453125,
-        "lng": 230.375,
+        "lat": -199.31,
+        "lng": 230.38,
         "npc": {
             "id": 95832,
             "dungeon_id": 7,
@@ -762,13 +762,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "49": {
         "id": 59,
         "enemy_pack_id": 24,
         "floor_id": 16,
         "teeming": null,
-        "lat": -208.876953125,
-        "lng": 239.1875,
+        "lat": -208.88,
+        "lng": 239.19,
         "npc": {
             "id": 95832,
             "dungeon_id": 7,
@@ -778,13 +778,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "50": {
         "id": 60,
         "enemy_pack_id": 24,
         "floor_id": 16,
         "teeming": null,
-        "lat": -210.689453125,
-        "lng": 237.5625,
+        "lat": -210.69,
+        "lng": 237.56,
         "npc": {
             "id": 101637,
             "dungeon_id": 7,
@@ -794,13 +794,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "51": {
         "id": 61,
         "enemy_pack_id": 24,
         "floor_id": 16,
         "teeming": null,
-        "lat": -212.626953125,
-        "lng": 235.8125,
+        "lat": -212.63,
+        "lng": 235.81,
         "npc": {
             "id": 95832,
             "dungeon_id": 7,
@@ -810,12 +810,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "52": {
         "id": 62,
         "enemy_pack_id": -1,
         "floor_id": 16,
         "teeming": null,
-        "lat": -207.126953125,
+        "lat": -207.13,
         "lng": 248.5,
         "npc": {
             "id": 97219,
@@ -826,13 +826,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "53": {
         "id": 63,
         "enemy_pack_id": -1,
         "floor_id": 16,
         "teeming": null,
-        "lat": -223.314453125,
-        "lng": 232.3125,
+        "lat": -223.31,
+        "lng": 232.31,
         "npc": {
             "id": 97202,
             "dungeon_id": 7,
@@ -842,13 +842,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "54": {
         "id": 64,
         "enemy_pack_id": -1,
         "floor_id": 16,
         "teeming": null,
-        "lat": -218.189453125,
-        "lng": 243.1875,
+        "lat": -218.19,
+        "lng": 243.19,
         "npc": {
             "id": 95833,
             "dungeon_id": 7,
@@ -858,12 +858,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "55": {
         "id": 65,
         "enemy_pack_id": 19,
         "floor_id": 16,
         "teeming": "visible",
-        "lat": -178.251953125,
+        "lat": -178.25,
         "lng": 211.25,
         "npc": {
             "id": 96664,
@@ -874,12 +874,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "56": {
         "id": 66,
         "enemy_pack_id": 27,
         "floor_id": 16,
         "teeming": null,
-        "lat": -167.001953125,
+        "lat": -167,
         "lng": 172.75,
         "npc": {
             "id": 97087,
@@ -890,13 +890,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "57": {
         "id": 67,
         "enemy_pack_id": 27,
         "floor_id": 16,
         "teeming": null,
-        "lat": -168.814453125,
-        "lng": 171.3125,
+        "lat": -168.81,
+        "lng": 171.31,
         "npc": {
             "id": 95834,
             "dungeon_id": 7,
@@ -906,13 +906,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "58": {
         "id": 68,
         "enemy_pack_id": 27,
         "floor_id": 16,
         "teeming": null,
-        "lat": -168.751953125,
-        "lng": 174.0625,
+        "lat": -168.75,
+        "lng": 174.06,
         "npc": {
             "id": 96640,
             "dungeon_id": 7,
@@ -922,13 +922,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "59": {
         "id": 69,
         "enemy_pack_id": 25,
         "floor_id": 16,
         "teeming": null,
-        "lat": -183.064453125,
-        "lng": 180.6875,
+        "lat": -183.06,
+        "lng": 180.69,
         "npc": {
             "id": 96574,
             "dungeon_id": 7,
@@ -938,13 +938,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "60": {
         "id": 70,
         "enemy_pack_id": 25,
         "floor_id": 16,
         "teeming": null,
-        "lat": -182.876953125,
-        "lng": 187.0625,
+        "lat": -182.88,
+        "lng": 187.06,
         "npc": {
             "id": 96574,
             "dungeon_id": 7,
@@ -954,12 +954,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "61": {
         "id": 71,
         "enemy_pack_id": 26,
         "floor_id": 16,
         "teeming": null,
-        "lat": -180.626953125,
+        "lat": -180.63,
         "lng": 174.5,
         "npc": {
             "id": 97087,
@@ -970,12 +970,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "62": {
         "id": 72,
         "enemy_pack_id": 26,
         "floor_id": 16,
         "teeming": null,
-        "lat": -180.376953125,
+        "lat": -180.38,
         "lng": 172,
         "npc": {
             "id": 97087,
@@ -986,13 +986,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "63": {
         "id": 73,
         "enemy_pack_id": 26,
         "floor_id": 16,
         "teeming": null,
-        "lat": -178.376953125,
-        "lng": 173.3125,
+        "lat": -178.38,
+        "lng": 173.31,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -1002,13 +1002,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "64": {
         "id": 74,
         "enemy_pack_id": 28,
         "floor_id": 16,
         "teeming": null,
-        "lat": -179.876953125,
-        "lng": 157.125,
+        "lat": -179.88,
+        "lng": 157.12,
         "npc": {
             "id": 95834,
             "dungeon_id": 7,
@@ -1018,13 +1018,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "65": {
         "id": 75,
         "enemy_pack_id": 28,
         "floor_id": 16,
         "teeming": null,
-        "lat": -177.876953125,
-        "lng": 155.9375,
+        "lat": -177.88,
+        "lng": 155.94,
         "npc": {
             "id": 96640,
             "dungeon_id": 7,
@@ -1034,13 +1034,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "66": {
         "id": 76,
         "enemy_pack_id": 28,
         "floor_id": 16,
         "teeming": null,
-        "lat": -179.689453125,
-        "lng": 155.125,
+        "lat": -179.69,
+        "lng": 155.12,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -1050,13 +1050,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "67": {
         "id": 77,
         "enemy_pack_id": 28,
         "floor_id": 16,
         "teeming": null,
-        "lat": -180.376953125,
-        "lng": 153.9375,
+        "lat": -180.38,
+        "lng": 153.94,
         "npc": {
             "id": 96664,
             "dungeon_id": 7,
@@ -1066,13 +1066,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "68": {
         "id": 78,
         "enemy_pack_id": 29,
         "floor_id": 16,
         "teeming": null,
-        "lat": -184.439453125,
-        "lng": 161.0625,
+        "lat": -184.44,
+        "lng": 161.06,
         "npc": {
             "id": 96640,
             "dungeon_id": 7,
@@ -1082,13 +1082,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "69": {
         "id": 79,
         "enemy_pack_id": 29,
         "floor_id": 16,
         "teeming": null,
-        "lat": -185.751953125,
-        "lng": 160.6875,
+        "lat": -185.75,
+        "lng": 160.69,
         "npc": {
             "id": 97087,
             "dungeon_id": 7,
@@ -1098,13 +1098,13 @@
             "aggressiveness": "aggressive"
         }
     },
-    {
+    "70": {
         "id": 80,
         "enemy_pack_id": 29,
         "floor_id": 16,
         "teeming": null,
-        "lat": -185.876953125,
-        "lng": 163.375,
+        "lat": -185.88,
+        "lng": 163.38,
         "npc": {
             "id": 95842,
             "dungeon_id": 7,
@@ -1113,5 +1113,14 @@
             "base_health": 36369,
             "aggressiveness": "aggressive"
         }
+    },
+    "174": {
+        "id": 185,
+        "enemy_pack_id": -1,
+        "floor_id": 16,
+        "teeming": null,
+        "lat": -102.26000000000001,
+        "lng": 170.75,
+        "npc": null
     }
-]
+}

@@ -26,11 +26,11 @@ var c = {
         },
         route: {
             colors: {
-                unsaved: '#E25D5D',
+                unsavedBorder: '#E25D5D',
 
-                edited: '#E2915D',
+                editedBorder: '#E2915D',
 
-                saved: '#5DE27F',
+                savedBorder: '#5DE27F',
 
                 mouseoverAddObject: '#5993D2',
             }

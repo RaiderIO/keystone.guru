@@ -15,7 +15,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Npc extends Model
 {
+    public $incrementing = false;
     public $timestamps = false;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    function dungeon()
+    {
+        return $this->belongsTo('App\Models\Dungeon');
+    }
 
     /**
      * Gets all derived enemies from this Npc.

@@ -1,1 +1,210 @@
-[]
+{
+    "151": {
+        "id": 133935,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Animated Guardian",
+        "base_health": 500370,
+        "aggressiveness": "aggressive"
+    },
+    "152": {
+        "id": 133943,
+        "dungeon_id": 16,
+        "classification_id": 1,
+        "name": "Minion of Zul",
+        "base_health": 24,
+        "aggressiveness": "aggressive"
+    },
+    "166": {
+        "id": 134157,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Shadow-Borne Warrior",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "167": {
+        "id": 134158,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Shadow-Borne Champion",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "169": {
+        "id": 134174,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Shadow-Borne Witch Doctor",
+        "base_health": 441503,
+        "aggressiveness": "aggressive"
+    },
+    "171": {
+        "id": 134251,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Seneschal M'bara",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "188": {
+        "id": 134739,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Purification Construct",
+        "base_health": 706404,
+        "aggressiveness": "aggressive"
+    },
+    "192": {
+        "id": 134993,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "Mchimba the Embalmer",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "197": {
+        "id": 135167,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Spectral Berserker",
+        "base_health": 353202,
+        "aggressiveness": "aggressive"
+    },
+    "198": {
+        "id": 135192,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Honored Raptor",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "200": {
+        "id": 135204,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Spectral Hex Priest",
+        "base_health": 264902,
+        "aggressiveness": "aggressive"
+    },
+    "201": {
+        "id": 135231,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Spectral Brute",
+        "base_health": 588670,
+        "aggressiveness": "aggressive"
+    },
+    "203": {
+        "id": 135235,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Spectral Beastmaster",
+        "base_health": 279618,
+        "aggressiveness": "aggressive"
+    },
+    "204": {
+        "id": 135239,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Spectral Witch Doctor",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "209": {
+        "id": 135322,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "The Golden Serpent",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "214": {
+        "id": 135470,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "Aka'ali the Conqueror",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "222": {
+        "id": 136160,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "King Dazar",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "237": {
+        "id": 137473,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Guard Captain Atu",
+        "base_health": 478294,
+        "aggressiveness": "aggressive"
+    },
+    "238": {
+        "id": 137474,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "King Timalji",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "239": {
+        "id": 137478,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Queen Wasi",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "240": {
+        "id": 137484,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "King A'akul",
+        "base_health": 765271,
+        "aggressiveness": "aggressive"
+    },
+    "241": {
+        "id": 137485,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Bloodsworn Agent",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "242": {
+        "id": 137486,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Queen Patlaa",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "243": {
+        "id": 137487,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Skeletal Hunting Raptor",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "248": {
+        "id": 137969,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "Interment Construct",
+        "base_health": 588670,
+        "aggressiveness": "aggressive"
+    },
+    "254": {
+        "id": 138489,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "Shadow of Zul",
+        "base_health": 1000739,
+        "aggressiveness": "aggressive"
+    }
+}

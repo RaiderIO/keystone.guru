@@ -47,7 +47,7 @@
         function _saveSettings() {
             $.ajax({
                 type: 'POST',
-                url: '{{ route('api.dungeonroute.update', $model->id) }}',
+                url: '{{ route('api.dungeonroute.update', $model->public_key) }}',
                 dataType: 'json',
                 data: {
                     faction_id: $("#faction_id").val(),
@@ -93,7 +93,7 @@
 
 @section('content')
     @isset($model)
-        {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
+        {{ Form::model($model, ['route' => ['dungeonroute.update', $model->public_key], 'method' => 'patch']) }}
     @else
         {{ Form::open(['route' => 'dungeonroute.savenew']) }}
     @endisset
@@ -102,7 +102,9 @@
         <div class="col-lg-12">
             <div id="map_container">
                 @include('common.maps.map', [
-                    'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id)
+                    'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
+                    'model' => $model,
+                    'edit' => true
                 ])
             </div>
 
@@ -147,7 +149,8 @@
                     </div>
 
                     <div class="container">
-                        <div id="save_settings_success" class="alert alert-success alert-dismissible fade show text-center"
+                        <div id="save_settings_success"
+                             class="alert alert-success alert-dismissible fade show text-center"
                              style="display: none;" role="alert">
                         </div>
                         <div id="save_settings_error" class="alert alert-danger alert-dismissible fade show text-center"

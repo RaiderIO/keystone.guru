@@ -30,7 +30,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemypatrol',
+            url: '/ajax/enemypatrol',
             dataType: 'json',
             data: {
                 _method: 'DELETE',
@@ -60,7 +60,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemypatrol',
+            url: '/ajax/enemypatrol',
             dataType: 'json',
             data: {
                 id: self.id,

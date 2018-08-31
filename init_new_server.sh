@@ -38,6 +38,7 @@ php artisan storage:link
 
 # This was somehow needed to get the image library to work
 tput setaf 2;
-echo "Publishing Folklore ImageServiceProvider..."
+echo "Publishing service providers..."
 tput sgr0;
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider"
+php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"

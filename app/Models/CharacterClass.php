@@ -41,6 +41,11 @@ class CharacterClass extends IconFileModel
         return $this->belongsToMany('App\Models\DungeonRoutePlayerClass', 'dungeon_route_player_classes');
     }
 
+    function dungeonrouteplayerraces()
+    {
+        return $this->belongsToMany('App\Models\DungeonRoutePlayerRace', 'dungeon_route_player_races');
+    }
+
     public static function boot()
     {
         parent::boot();

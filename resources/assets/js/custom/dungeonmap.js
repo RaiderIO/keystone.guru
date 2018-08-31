@@ -6,6 +6,7 @@ class DungeonMap extends Signalable {
 
         this.dungeonData = dungeonData;
 
+        this.hotkeys = this._getHotkeys();
         this.mapObjectGroups = this._createMapObjectGroups();
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
@@ -58,7 +59,7 @@ class DungeonMap extends Signalable {
             }
         });
 
-        $(window).bind('click', function (event) {
+        $(window).bind('mousedown', function (event) {
             $('#map').removeClass('map-scroll');
         });
 
@@ -73,6 +74,10 @@ class DungeonMap extends Signalable {
         this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
 
+    _getHotkeys(){
+        return new Hotkeys(this);
+    }
+
     /**
      *
      * @returns {[]}
@@ -82,12 +87,12 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         return [
-            new EnemyMapObjectGroup(this, 'enemy', 'Enemy'),
-            new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol'),
-            new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack'),
-            new RouteMapObjectGroup(this, 'route', 'Route'),
-            new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker'),
-            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker'),
+            new EnemyMapObjectGroup(this, 'enemy', 'Enemy', false),
+            new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol', false),
+            new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false),
+            new RouteMapObjectGroup(this, 'route', true),
+            new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false),
+            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false),
         ];
     }
 
@@ -123,6 +128,23 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         return new DrawControls(this, drawnItemsLayer);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    hasPopupOpen(){
+        let result = false;
+        for (let i = 0; i < this.mapObjects.length; i++) {
+            let mapObject = this.mapObjects[i];
+            let popup = mapObject.layer.getPopup();
+            if (typeof popup !== 'undefined' && popup.isOpen()) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     /**
@@ -225,8 +247,6 @@ class DungeonMap extends Signalable {
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
 
-        this.routeLayerGroup = new L.LayerGroup();
-
         // Configure the controls (toggle display of enemies, groups etc.)
         if (this.mapControls !== null) {
             this.mapControls.cleanup();
@@ -247,7 +267,6 @@ class DungeonMap extends Signalable {
         this.leafletMap.addLayer(this.drawnItems);
 
         // Get the draw controls and add it to the map
-        console.log('edit', this.edit);
         if (this.edit) {
             this.drawControls = this._getDrawControls(this.drawnItems);
             this.drawControls.addControl();
@@ -264,6 +283,16 @@ class DungeonMap extends Signalable {
             } else {
                 console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
             }
+        });
+
+        // If we confirmed editing something..
+        this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
+            e.layers.eachLayer(function(i, layer){
+                console.log(i, layer);
+                let mapObject = self.findMapObjectByLayer(layer);
+                console.log(mapObject);
+            });
+            console.log(L.Draw.Event.EDITED, e);
         });
 
         this.signal('map:refresh', {dungeonmap: this});

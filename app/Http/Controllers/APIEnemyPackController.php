@@ -39,17 +39,15 @@ class APIEnemyPackController extends Controller
 
             // Get the new vertices
             $vertices = $request->get('vertices');
-            // Store them
-            foreach ($vertices as $vertex) {
-                $vertexModel = new EnemyPackVertex();
-                $vertexModel->enemy_pack_id = $enemyPack->id;
-                $vertexModel->lat = $vertex['lat'];
-                $vertexModel->lng = $vertex['lng'];
 
-                if (!$vertexModel->save()) {
-                    throw new \Exception("Unable to save pack vertex!");
-                }
+            // Store them
+            foreach ($vertices as $key => $vertex) {
+                // Assign route to each passed vertex
+                $vertices[$key]['enemy_pack_id'] = $enemyPack->id;
             }
+
+            // Bulk insert
+            EnemyPackVertex::insert($vertices);
         }
 
         return ['id' => $enemyPack->id];

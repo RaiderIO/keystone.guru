@@ -1,1 +1,50 @@
-[]
+{
+    "149": {
+        "id": 160,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -203.50999999999999,
+        "lng": 263,
+        "npc": {
+            "id": 133379,
+            "dungeon_id": 19,
+            "classification_id": 3,
+            "name": "Adderis",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "150": {
+        "id": 161,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -131.25999999999999,
+        "lng": 167.25,
+        "npc": {
+            "id": 133384,
+            "dungeon_id": 19,
+            "classification_id": 3,
+            "name": "Merektha",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "151": {
+        "id": 162,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -77.760000000000005,
+        "lng": 172.25,
+        "npc": {
+            "id": 133389,
+            "dungeon_id": 19,
+            "classification_id": 3,
+            "name": "Galvazzt",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

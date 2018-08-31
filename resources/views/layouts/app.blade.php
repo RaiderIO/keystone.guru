@@ -15,10 +15,10 @@
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
-@yield('head')
+    @yield('head')
 
     @include('common.thirdparty.cookieconsent')
-    <?php if( !isset($noads) || (isset($noads) && !$noads) ){ ?>
+    <?php if( (!isset($noads) || (isset($noads) && !$noads)) && config('app.env') === 'production' ){ ?>
     @include('common.thirdparty.adsense')
     <?php } ?>
 </head>
@@ -34,8 +34,24 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="demoDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ __('Demo') }}
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="demoDropdown">
+                            @foreach(\App\Models\DungeonRoute::where('demo', '=', true)->get() as $route)
+                                <a class="dropdown-item"
+                                   href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
+                                    {{ $route->dungeon->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     @if (Auth::guest())
@@ -72,8 +88,13 @@
                                 @if( Auth::user()->can('read-npcs') )
                                     <a class="dropdown-item" href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
                                 @endif
-                                @if( Auth::user()->hasRole('admin')) 
-                                    <a class="dropdown-item" href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
+                                @if( Auth::user()->hasRole('admin'))
+                                    <a class="dropdown-item"
+                                       href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
+                                @endif
+                                @if( Auth::user()->hasRole('admin'))
+                                    <a class="dropdown-item"
+                                       href="{{ route('admin.makeadmin') }}">{{__('TEMP: Make all users admin')}}</a>
                                 @endif
                                 <a class="dropdown-item" href="{{ route('profile.edit') }}">My profile</a>
                                 <div class="dropdown-divider"></div>
@@ -95,7 +116,7 @@
         </div>
     </nav>
 
-    <div class="container<?php echo(isset($wide) && $wide ? "-fluid" : ""); ?>">
+    <div class="container-fluid">
         <div class="row">
             <div class="<?php echo(isset($wide) && $wide ? "flex-fill ml-3 mr-3" : "col-md-8 offset-md-2"); ?>">
                 <div class="card mt-3 mb-3">
@@ -145,42 +166,44 @@
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item"><a class="nav-link" href="#">News</a></li>
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} </a>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item"><a class="nav-link" href="{{ route('misc.about') }}">About</a></li>
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="https://discord.gg/2KtWrqw">
-                            <i class="fab fa-discord"> Discord</i>
+                            <i class="fab fa-discord"></i> Discord
                         </a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="https://github.com/Wotuu/keystone.guru">
-                            <i class="fab fa-github"> Github</i>
+                            <i class="fab fa-github"></i> Github
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
                     </li>
                 </ul>
             </div>
         </div>
-        <hr>
-        <nav class="nav nav-pills nav-justified">
-            <a class="nav-item nav-link" href="/">
-                ©{{ date('Y') }} {{ Config::get('app.name') }}
-            </a>
-            <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
-            <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
-            <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
-        </nav>
     </div>
 </div>
 
@@ -188,14 +211,14 @@
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/lib.js') }}"></script>
 
-    @if (config('app.env') === 'production')
-     <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
+@if (config('app.env') === 'production')
+    <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
     <script src="{{ asset('js/custom.js') }}"></script>
 
-        @else
+@else
 
     <script src="{{ asset('js/custom/constants.js') }}"></script>
-     <?php // Include in proper order ?>
+    <?php // Include in proper order ?>
     <script src="{{ asset('js/custom/util.js') }}"></script>
     <script src="{{ asset('js/custom/signalable.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonmap.js') }}"></script>
@@ -208,6 +231,7 @@
     <script src="{{ asset('js/custom/route.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
+    <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
     <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>
     <script src="{{ asset('js/custom/admin/adminenemy.js') }}"></script>
@@ -216,7 +240,7 @@
     <script src="{{ asset('js/custom/admin/admindrawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonstartmarker.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonfloorswitchmarker.js') }}"></script>
-     <?php // Include the rest ?>
+    <?php // Include the rest ?>
 
     <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroup.js') }}"></script>
@@ -227,7 +251,7 @@
     <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
 
-    @endif
+@endif
 @yield('scripts')
 </body>
 </html>

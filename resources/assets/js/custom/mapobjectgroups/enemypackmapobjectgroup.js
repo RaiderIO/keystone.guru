@@ -1,6 +1,6 @@
 class EnemyPackMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname){
-        super(map, name);
+    constructor(map, name, classname, editable){
+        super(map, name, editable);
 
         this.classname = classname;
         this.title = 'Hide/show enemy packs';
@@ -26,7 +26,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
 
         $.ajax({
             type: 'GET',
-            url: '/api/v1/enemypacks',
+            url: '/ajax/enemypacks',
             dataType: 'json',
             data: {
                 floor_id: floor.id
@@ -46,7 +46,6 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                     }
 
                     let layer = L.polygon(points);
-                    console.log(points, layer);
 
                     let enemyPack = self.createNew(layer);
                     enemyPack.id = remoteEnemyPack.id;

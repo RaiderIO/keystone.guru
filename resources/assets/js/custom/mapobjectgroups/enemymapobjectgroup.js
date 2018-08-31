@@ -1,6 +1,6 @@
 class EnemyMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname) {
-        super(map, name);
+    constructor(map, name, classname, editable) {
+        super(map, name, editable);
 
         this.classname = classname;
         this.title = 'Hide/show enemies';
@@ -26,7 +26,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         $.ajax({
             type: 'GET',
-            url: '/api/v1/enemies',
+            url: '/ajax/enemies',
             dataType: 'json',
             data: {
                 floor_id: floor.id

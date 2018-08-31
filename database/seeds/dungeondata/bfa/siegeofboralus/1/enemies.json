@@ -1,1 +1,66 @@
-[]
+{
+    "153": {
+        "id": 164,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "lat": -245.41,
+        "lng": 205.25,
+        "npc": {
+            "id": 128652,
+            "dungeon_id": 18,
+            "classification_id": 3,
+            "name": "Viq'Goth",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "154": {
+        "id": 165,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "lat": -200.41,
+        "lng": 184.25,
+        "npc": {
+            "id": 130836,
+            "dungeon_id": 18,
+            "classification_id": 3,
+            "name": "Hadal Darkfathom",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "155": {
+        "id": 166,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "lat": -157.16,
+        "lng": 212,
+        "npc": {
+            "id": 129208,
+            "dungeon_id": 18,
+            "classification_id": 3,
+            "name": "Dread Captain Lockwood",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "156": {
+        "id": 167,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "lat": -74.409999999999997,
+        "lng": 228.25,
+        "npc": {
+            "id": 144158,
+            "dungeon_id": 18,
+            "classification_id": 3,
+            "name": "Sergeant Bainbridge",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

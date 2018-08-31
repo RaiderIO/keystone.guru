@@ -28,7 +28,7 @@ class AdminEnemyPack extends EnemyPack {
         console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemypack',
+            url: '/ajax/enemypack',
             dataType: 'json',
             data: {
                 _method: 'DELETE',
@@ -58,7 +58,7 @@ class AdminEnemyPack extends EnemyPack {
         console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemypack',
+            url: '/ajax/enemypack',
             dataType: 'json',
             data: {
                 id: self.id,

@@ -1,1 +1,186 @@
-[]
+{
+    "35": {
+        "id": 126847,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Captain Raoul",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "36": {
+        "id": 126918,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Crackshot",
+        "base_health": 264902,
+        "aggressiveness": "aggressive"
+    },
+    "37": {
+        "id": 126928,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Corsair",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "38": {
+        "id": 127106,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Officer",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "39": {
+        "id": 127111,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Oarsman",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "55": {
+        "id": 128551,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Mastiff",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "69": {
+        "id": 129431,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Captain Eudora",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "70": {
+        "id": 129432,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Captain Jolly",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "71": {
+        "id": 129440,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Harlan Sweete",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "72": {
+        "id": 129529,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Blacktooth Scrapper",
+        "base_health": 353202,
+        "aggressiveness": "aggressive"
+    },
+    "73": {
+        "id": 129547,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Blacktooth Knuckleduster",
+        "base_health": 323769,
+        "aggressiveness": "aggressive"
+    },
+    "74": {
+        "id": 129548,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Blacktooth Brute",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "75": {
+        "id": 129550,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Bilge Rat Padfoot",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "78": {
+        "id": 129559,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Cutwater Duelist",
+        "base_health": 237980,
+        "aggressiveness": "aggressive"
+    },
+    "79": {
+        "id": 129599,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Cutwater Knife Juggler",
+        "base_health": 264902,
+        "aggressiveness": "aggressive"
+    },
+    "80": {
+        "id": 129601,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Cutwater Harpooner",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "81": {
+        "id": 129602,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Enforcer",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "84": {
+        "id": 129732,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Skycap'n Kragg",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "85": {
+        "id": 129788,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Bonesaw",
+        "base_health": 235470,
+        "aggressiveness": "aggressive"
+    },
+    "86": {
+        "id": 130011,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Buccaneer",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "87": {
+        "id": 130012,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Ravager",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "92": {
+        "id": 130400,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Crusher",
+        "base_health": 588670,
+        "aggressiveness": "aggressive"
+    },
+    "93": {
+        "id": 130404,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Vermin Trapper",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    }
+}

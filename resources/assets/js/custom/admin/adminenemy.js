@@ -50,7 +50,7 @@ class AdminEnemy extends Enemy {
                 $selectpicker.selectpicker('refresh');
                 $selectpicker.selectpicker('render');
 
-                $("#enemy_edit_popup_submit").bind('click', function () {
+                $("#enemy_edit_popup_submit_" + self.id).bind('click', function () {
                     self.npc_id = $("#enemy_edit_popup_npc_" + self.id).val();
                     self.teeming = $("#enemy_edit_popup_teeming_" + self.id).val();
 
@@ -87,7 +87,7 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemy',
+            url: '/ajax/enemy',
             dataType: 'json',
             data: {
                 id: self.id,
@@ -122,7 +122,7 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemy',
+            url: '/ajax/enemy',
             dataType: 'json',
             data: {
                 _method: 'DELETE',
@@ -152,7 +152,7 @@ class AdminEnemy extends Enemy {
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/enemy',
+            url: '/ajax/enemy',
             dataType: 'json',
             data: {
                 id: self.id,

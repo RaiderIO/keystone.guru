@@ -1,1 +1,34 @@
-[]
+{
+    "159": {
+        "id": 170,
+        "enemy_pack_id": -1,
+        "floor_id": 46,
+        "teeming": null,
+        "lat": -137.00999999999999,
+        "lng": 151.5,
+        "npc": {
+            "id": 139737,
+            "dungeon_id": 17,
+            "classification_id": 3,
+            "name": "Lord Stormsong",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "160": {
+        "id": 171,
+        "enemy_pack_id": -1,
+        "floor_id": 46,
+        "teeming": null,
+        "lat": -91.010000000000005,
+        "lng": 267.25,
+        "npc": {
+            "id": 134069,
+            "dungeon_id": 17,
+            "classification_id": 3,
+            "name": "Vol'zith the Whisperer",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

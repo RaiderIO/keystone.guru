@@ -12,7 +12,7 @@ return [
      * States of aggressiveness of NPCs. Aggressive = will aggro upon getting close, unfriendly = will not aggro,
      * but will soon turn aggressive (not sure if it's going to be used), neutral = will not aggro unless provoked.
      */
-    'aggressiveness' => ['aggressive', 'unfriendly', 'neutral'],
+    'aggressiveness' => ['aggressive', 'unfriendly', 'neutral', 'friendly'],
 
-    'aggressiveness_pretty' => ['Aggressive', 'Unfriendly', 'Neutral']
+    'aggressiveness_pretty' => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly']
 ];

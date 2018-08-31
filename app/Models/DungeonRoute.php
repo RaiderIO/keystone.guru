@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
  * @property $public_key string
  * @property $title string
  * @property $unlisted boolean
+ * @property $demo boolean
  * @property $dungeon Dungeon
  * @property $route Route
  * @property $faction Faction
@@ -33,7 +34,7 @@ class DungeonRoute extends Model
      */
     protected $appends = ['setup'];
 
-    protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'created_at', 'updated_at'];
+    protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -70,11 +71,11 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function route()
+    public function routes()
     {
-        return $this->hasOne('App\Models\Route');
+        return $this->hasMany('App\Models\Route');
     }
 
     /**
@@ -166,13 +167,14 @@ class DungeonRoute extends Model
         // Overwrite the author_id if it's not been set yet
         if (!isset($this->id)) {
             $this->author_id = \Auth::user()->id;
+            $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
-        $this->public_key = DungeonRoute::generateRandomPublicKey();
         $this->dungeon_id = $request->get('dungeon_id', $this->dungeon_id);
         $this->faction_id = $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
         $this->unlisted = intval($request->get('unlisted', 0)) > 0;
+        $this->demo = intval($request->get('demo', 0)) > 0;
 
         // Update or insert it
         if ($this->save()) {
@@ -218,5 +220,17 @@ class DungeonRoute extends Model
         }
 
         return $result;
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete route properly if it gets deleted
+        static::deleting(function ($item) {
+            DungeonRoutePlayerRace::where('dungeon_route_id', '=', $item->id)->delete();
+            DungeonRoutePlayerClass::where('dungeon_route_id', '=', $item->id)->delete();
+            DungeonRouteAffixGroup::where('dungeon_route_id', '=', $item->id)->delete();
+        });
     }
 }

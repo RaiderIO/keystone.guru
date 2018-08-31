@@ -19,9 +19,15 @@ class DungeonDataSeeder extends Seeder
     {
         // Just a base class
         $this->_rollback();
+
         $this->command->info('Starting import of dungeon data for all dungeons');
 
         $nameMapping = [
+            // Loose files
+            'npcs' => '\App\Models\Npc',
+            'dungeonroutes' => '\App\Models\DungeonRoute',
+
+            // Files inside floor folder
             'enemies' => '\App\Models\Enemy',
             'enemy_packs' => '\App\Models\EnemyPack',
             'enemy_patrols' => '\App\Models\EnemyPatrol',
@@ -36,44 +42,55 @@ class DungeonDataSeeder extends Seeder
         foreach ($rootDirIterator as $expansionShortnameDir) {
             $this->command->info('Expansion ' . basename($expansionShortnameDir));
             $expansionDirIterator = new FilesystemIterator($expansionShortnameDir);
+
             // For each dungeon inside an expansion dir
             foreach ($expansionDirIterator as $dungeonKeyDir) {
                 $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
 
-                // Import NPCs
-                $this->command->info('-- Importing npcs');
-                // Get contents
-                $npcFileName = $dungeonKeyDir . '/npcs.json';
-                $count = $this->_loadModelsFromFile($npcFileName, '\App\Models\Npc');
-                $this->command->info(sprintf('-- Imported %s (%s into %s)', str_replace($rootDir, '', $npcFileName), $count, 'npcs'));
-
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
-                foreach ($floorDirIterator as $floorDir) {
-                    // Skip loose files (npcs.json looking at you)
-                    if (is_dir($floorDir)) {
-                        $this->command->info('-- Importing floor ' . basename($floorDir));
+                foreach ($floorDirIterator as $floorDirFile) {
+                    // Parse loose files
+                    if (!is_dir($floorDirFile)) {
+                        // npcs, dungeon_routes
+                        $this->_parseRawFile($rootDir, $floorDirFile, $nameMapping, 2);
+                    } // Parse floor dir
+                    else {
+                        $this->command->info('-- Importing floor ' . basename($floorDirFile));
 
-                        $importFileIterator = new FilesystemIterator($floorDir);
+                        $importFileIterator = new FilesystemIterator($floorDirFile);
                         // For each file inside a floor
                         foreach ($importFileIterator as $importFile) {
-                            $tableName = basename($importFile, '.json');
-                            $this->command->info('--- Importing ' . $tableName);
-
-                            if (!array_key_exists($tableName, $nameMapping)) {
-                                $this->command->error('--- Unable to find table->model mapping for file ' . $importFile);
-                            } else {
-                                $count = $this->_loadModelsFromFile($importFile, $nameMapping[$tableName]);
-                                $this->command->info(sprintf('--- Imported %s (%s into %s)', str_replace($rootDir, '', $importFile), $count, $tableName));
-                            }
-
+                            $this->_parseRawFile($rootDir, $importFile, $nameMapping, 3);
                         }
                     }
                 }
             }
         }
+    }
 
+    /**
+     * @param $rootDir string
+     * @param $file string
+     * @param $nameMapping array
+     * @param $depth integer
+     * @throws Exception
+     */
+    private function _parseRawFile($rootDir, $file, $nameMapping, $depth = 1)
+    {
+        $prefix = str_repeat('-', $depth) . ' ';
 
+        $tableName = basename($file, '.json');
+
+        // Import file
+        $this->command->info($prefix . 'Importing ' . $tableName);
+        // Get contents
+        if (!array_key_exists($tableName, $nameMapping)) {
+            $this->command->error($prefix . 'Unable to find table->model mapping for file ' . $file);
+        } else {
+            $count = $this->_loadModelsFromFile($file, $nameMapping[$tableName]);
+            $this->command->info(sprintf($prefix . 'Imported %s (%s into %s)', str_replace($rootDir, '', $file), $count, $tableName));
+        }
     }
 
     /**
@@ -93,6 +110,22 @@ class DungeonDataSeeder extends Seeder
         // Pre-fetch all valid columns to make the below loop a bit faster
         $modelColumns = Schema::getColumnListing($modelClassName::newModelInstance()->getTable());
 
+        $attributeParsers = [
+            // Generic
+            new NestedModelRelationParser(),
+
+            // Dungeon route
+            new DungeonRoutePlayerRaceRelationParser(),
+            new DungeonRoutePlayerClassRelationParser(),
+            new DungeonRouteAffixGroupRelationParser(),
+
+            // Enemy Pack
+            new EnemyPackVerticesRelationParser(),
+
+            // Enemy Patrol
+            new EnemyPatrolVerticesRelationParser()
+        ];
+
         // Do some php fuckery to make this a bit cleaner
         foreach ($modelsData as $modelData) {
 
@@ -103,29 +136,19 @@ class DungeonDataSeeder extends Seeder
 
                 // $this->command->info(json_encode($key) . ' ' . json_encode($value));
 
+                foreach ($attributeParsers as $attributeParser) {
+                    /** @var $attributeParser RelationParser */
+                    // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
+                    if (is_array($value) &&
+                        $attributeParser->canParseModel($modelClassName) &&
+                        $attributeParser->canParseRelation($key, $value)) {
 
-                // foreach ($modelData as $key => $value) {
-                // Encountered an object; we gotta de-normalize it
-                if (is_array($value)) {
-                    // If it's a nested model
-                    if (isset($value['id'])) {
-                        $modelData[$key . '_id'] = $value['id'];
-                    } // @TODO fix this hack?
-                    else if ($key === 'vertices') {
-                        foreach ($value as $vertex) {
-                            /** @var \Illuminate\Database\Eloquent\Model $vertexModelClassName */
-                            $vertexModelClassName = ($modelClassName . 'Vertex');
-                            // Rebuild the reference to the original model (EnemyPack -> enemy_pack)
-                            $snakedClassName = snake_case(last(explode('\\', $modelClassName)));
-                            $vertex[$snakedClassName . '_id'] = $modelData['id'];
-
-                            // $vertex->
-                            $vertexModelClassName::create($vertex);
-                        }
+                        $this->command->info(get_class($attributeParser) . ' can parse ' . $key);
+                        $modelData = $attributeParser->parseRelation($modelClassName, $modelData, $key, $value);
                     }
                 }
 
-                // The column may not be set due to objects appearing in this array that need to be de-normalized
+//                // The column may not be set due to objects appearing in this array that need to be de-normalized
                 if (!in_array($key, $modelColumns)) {
                     unset($modelData[$key]);
                     $i--;
@@ -151,5 +174,16 @@ class DungeonDataSeeder extends Seeder
         DB::table('enemy_patrol_vertices')->truncate();
         DB::table('dungeon_start_markers')->truncate();
         DB::table('dungeon_floor_switch_markers')->truncate();
+
+        $demoRoutes = \App\Models\DungeonRoute::all()->where('demo', '=', true);
+
+        foreach ($demoRoutes as $demoRoute) {
+            try {
+                /** @var $demoRoute \Illuminate\Database\Eloquent\Model */
+                $demoRoute->delete();
+            } catch (Exception $ex) {
+                $this->command->error('Exception deleting demo dungeonroute');
+            }
+        }
     }
 }

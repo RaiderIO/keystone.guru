@@ -1,1 +1,2194 @@
-[]
+{
+    "145": {
+        "id": 156,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -121.91,
+        "lng": 175.75,
+        "npc": {
+            "id": 139904,
+            "dungeon_id": 20,
+            "classification_id": 3,
+            "name": "Coin-Operated Crowd Pummeler",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "146": {
+        "id": 157,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.659999999999997,
+        "lng": 116.75,
+        "npc": {
+            "id": 129227,
+            "dungeon_id": 20,
+            "classification_id": 3,
+            "name": "Azerokk",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "147": {
+        "id": 158,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.659999999999997,
+        "lng": 214.75,
+        "npc": {
+            "id": 139273,
+            "dungeon_id": 20,
+            "classification_id": 3,
+            "name": "Rixxa Fluxflame",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "148": {
+        "id": 159,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -102.16,
+        "lng": 265,
+        "npc": {
+            "id": 131227,
+            "dungeon_id": 20,
+            "classification_id": 3,
+            "name": "Mogul Razdunk",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "269": {
+        "id": 281,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -202.16,
+        "lng": 206.88,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "270": {
+        "id": 282,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -200.78999999999999,
+        "lng": 207,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "272": {
+        "id": 284,
+        "enemy_pack_id": 54,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -201.47999999999999,
+        "lng": 207.12,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "282": {
+        "id": 294,
+        "enemy_pack_id": 58,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -193.16,
+        "lng": 204.31,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "283": {
+        "id": 295,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -193.78999999999999,
+        "lng": 203.62,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "284": {
+        "id": 296,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -192.53999999999999,
+        "lng": 205.12,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "285": {
+        "id": 297,
+        "enemy_pack_id": 59,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -194.09999999999999,
+        "lng": 214.31,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "286": {
+        "id": 298,
+        "enemy_pack_id": 59,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -192.84999999999999,
+        "lng": 213,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "287": {
+        "id": 299,
+        "enemy_pack_id": 59,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -192.91,
+        "lng": 214.38,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "288": {
+        "id": 300,
+        "enemy_pack_id": 60,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -187.09999999999999,
+        "lng": 213.88,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "289": {
+        "id": 301,
+        "enemy_pack_id": 60,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -188.03999999999999,
+        "lng": 214.81,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "290": {
+        "id": 302,
+        "enemy_pack_id": 60,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -188.22999999999999,
+        "lng": 213.69,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "291": {
+        "id": 303,
+        "enemy_pack_id": 61,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -180.53999999999999,
+        "lng": 210.94,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "292": {
+        "id": 304,
+        "enemy_pack_id": 61,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -180.59999999999999,
+        "lng": 209.69,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "293": {
+        "id": 305,
+        "enemy_pack_id": 62,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -186.34999999999999,
+        "lng": 199.19,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "294": {
+        "id": 306,
+        "enemy_pack_id": 62,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -186.72999999999999,
+        "lng": 200.62,
+        "npc": {
+            "id": 134232,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "295": {
+        "id": 307,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -187.41,
+        "lng": 204.88,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "296": {
+        "id": 308,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -188.28999999999999,
+        "lng": 204.56,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "297": {
+        "id": 309,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -189.47999999999999,
+        "lng": 204.19,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "298": {
+        "id": 310,
+        "enemy_pack_id": 63,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -199.03999999999999,
+        "lng": 219.88,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "299": {
+        "id": 311,
+        "enemy_pack_id": 63,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -197.53999999999999,
+        "lng": 218.69,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "300": {
+        "id": 312,
+        "enemy_pack_id": 63,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -198.03999999999999,
+        "lng": 219.75,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "301": {
+        "id": 313,
+        "enemy_pack_id": 64,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -175.47999999999999,
+        "lng": 204.88,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "302": {
+        "id": 314,
+        "enemy_pack_id": 64,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -176.53999999999999,
+        "lng": 204.56,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "303": {
+        "id": 315,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -175.59999999999999,
+        "lng": 206.44,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "304": {
+        "id": 316,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -176.78999999999999,
+        "lng": 206.25,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "305": {
+        "id": 317,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -177.78999999999999,
+        "lng": 205.5,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "306": {
+        "id": 318,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -180.22999999999999,
+        "lng": 205.69,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "307": {
+        "id": 319,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -180.09999999999999,
+        "lng": 204.75,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "308": {
+        "id": 320,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -178.22999999999999,
+        "lng": 202.44,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "309": {
+        "id": 321,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -179.22999999999999,
+        "lng": 202.25,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "310": {
+        "id": 322,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -178.59999999999999,
+        "lng": 201.69,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "311": {
+        "id": 323,
+        "enemy_pack_id": 65,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -172.84999999999999,
+        "lng": 213.19,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "312": {
+        "id": 324,
+        "enemy_pack_id": 65,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -172.41,
+        "lng": 211.62,
+        "npc": {
+            "id": 134232,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "313": {
+        "id": 325,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -174.97999999999999,
+        "lng": 224.25,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "314": {
+        "id": 326,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -174.03999999999999,
+        "lng": 223.81,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "315": {
+        "id": 327,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -169.72999999999999,
+        "lng": 215.81,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "316": {
+        "id": 328,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -169.53999999999999,
+        "lng": 214.88,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "317": {
+        "id": 329,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -171.78999999999999,
+        "lng": 217.44,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "318": {
+        "id": 330,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -171.97999999999999,
+        "lng": 216.44,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "319": {
+        "id": 331,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -173.28999999999999,
+        "lng": 220.12,
+        "npc": {
+            "id": 144243,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Drix Bassbolter",
+            "base_health": 1,
+            "aggressiveness": "friendly"
+        }
+    },
+    "320": {
+        "id": 332,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -175.41,
+        "lng": 221.88,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "321": {
+        "id": 333,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -176.28999999999999,
+        "lng": 222.75,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "322": {
+        "id": 334,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -176.34999999999999,
+        "lng": 221.69,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "323": {
+        "id": 335,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -175.72999999999999,
+        "lng": 220.88,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "324": {
+        "id": 336,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -177.66,
+        "lng": 219.5,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "325": {
+        "id": 337,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -178.53999999999999,
+        "lng": 217.88,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "326": {
+        "id": 338,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -178.84999999999999,
+        "lng": 217.19,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "327": {
+        "id": 339,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -174.16,
+        "lng": 217.38,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "328": {
+        "id": 340,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -174.47999999999999,
+        "lng": 216.88,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "329": {
+        "id": 341,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -174.97999999999999,
+        "lng": 218.56,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "330": {
+        "id": 342,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -175.53999999999999,
+        "lng": 219.12,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "331": {
+        "id": 343,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -175.59999999999999,
+        "lng": 218.5,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "332": {
+        "id": 344,
+        "enemy_pack_id": 66,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.22999999999999,
+        "lng": 205.56,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "333": {
+        "id": 345,
+        "enemy_pack_id": 66,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -162.09999999999999,
+        "lng": 206.19,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "334": {
+        "id": 346,
+        "enemy_pack_id": 66,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.28999999999999,
+        "lng": 207.38,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "335": {
+        "id": 347,
+        "enemy_pack_id": 66,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.91,
+        "lng": 208.38,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "336": {
+        "id": 348,
+        "enemy_pack_id": 67,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -159.53999999999999,
+        "lng": 223.5,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "337": {
+        "id": 349,
+        "enemy_pack_id": 67,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -160.16,
+        "lng": 222.44,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "338": {
+        "id": 350,
+        "enemy_pack_id": 68,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -156.91,
+        "lng": 213.94,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "339": {
+        "id": 351,
+        "enemy_pack_id": 68,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -155.91,
+        "lng": 214.69,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "340": {
+        "id": 352,
+        "enemy_pack_id": 68,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -158.22999999999999,
+        "lng": 213.81,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "341": {
+        "id": 353,
+        "enemy_pack_id": 68,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -157.41,
+        "lng": 215.06,
+        "npc": {
+            "id": 134232,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "342": {
+        "id": 354,
+        "enemy_pack_id": 69,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -150.59999999999999,
+        "lng": 229.31,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "343": {
+        "id": 355,
+        "enemy_pack_id": 69,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -151.84999999999999,
+        "lng": 229.38,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "344": {
+        "id": 356,
+        "enemy_pack_id": 69,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -151.16,
+        "lng": 228.19,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "345": {
+        "id": 357,
+        "enemy_pack_id": 70,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -155.78999999999999,
+        "lng": 232.69,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "346": {
+        "id": 358,
+        "enemy_pack_id": 70,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -154.22999999999999,
+        "lng": 232.31,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "347": {
+        "id": 359,
+        "enemy_pack_id": 70,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -154.66,
+        "lng": 233.69,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "348": {
+        "id": 360,
+        "enemy_pack_id": 71,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -151.28999999999999,
+        "lng": 210.69,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "349": {
+        "id": 361,
+        "enemy_pack_id": 71,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -149.78999999999999,
+        "lng": 210.88,
+        "npc": {
+            "id": 134232,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "350": {
+        "id": 362,
+        "enemy_pack_id": 71,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -150.72999999999999,
+        "lng": 212,
+        "npc": {
+            "id": 134232,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "351": {
+        "id": 363,
+        "enemy_pack_id": 72,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -149.91,
+        "lng": 224.12,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "352": {
+        "id": 364,
+        "enemy_pack_id": 72,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -148.91,
+        "lng": 222.69,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "353": {
+        "id": 365,
+        "enemy_pack_id": 73,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -135.78999999999999,
+        "lng": 211.31,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "354": {
+        "id": 366,
+        "enemy_pack_id": 73,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -136.78999999999999,
+        "lng": 212.25,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "355": {
+        "id": 367,
+        "enemy_pack_id": 73,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -136.66,
+        "lng": 210.44,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "356": {
+        "id": 368,
+        "enemy_pack_id": 73,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -137.34999999999999,
+        "lng": 211.31,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "357": {
+        "id": 369,
+        "enemy_pack_id": 74,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -144.09999999999999,
+        "lng": 219.38,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "358": {
+        "id": 370,
+        "enemy_pack_id": 74,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -145.22999999999999,
+        "lng": 218.56,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "359": {
+        "id": 371,
+        "enemy_pack_id": 74,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -144.41,
+        "lng": 217.69,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "360": {
+        "id": 372,
+        "enemy_pack_id": 75,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -162.03999999999999,
+        "lng": 214.19,
+        "npc": {
+            "id": 134232,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "361": {
+        "id": 373,
+        "enemy_pack_id": 75,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -160.72999999999999,
+        "lng": 214.19,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "362": {
+        "id": 374,
+        "enemy_pack_id": 75,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.66,
+        "lng": 215.38,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "363": {
+        "id": 375,
+        "enemy_pack_id": 76,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -141.84999999999999,
+        "lng": 206.81,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "364": {
+        "id": 376,
+        "enemy_pack_id": 76,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -142.91,
+        "lng": 206.5,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "365": {
+        "id": 377,
+        "enemy_pack_id": 76,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -142.97999999999999,
+        "lng": 205.44,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "366": {
+        "id": 378,
+        "enemy_pack_id": 77,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -141.16,
+        "lng": 200.94,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "367": {
+        "id": 379,
+        "enemy_pack_id": 77,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -139.72999999999999,
+        "lng": 199.62,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "368": {
+        "id": 380,
+        "enemy_pack_id": 77,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -139.84999999999999,
+        "lng": 197.62,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "369": {
+        "id": 381,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -163.78999999999999,
+        "lng": 199.69,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "370": {
+        "id": 382,
+        "enemy_pack_id": 78,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -158.97999999999999,
+        "lng": 198.81,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "371": {
+        "id": 383,
+        "enemy_pack_id": 78,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -159.22999999999999,
+        "lng": 199.88,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "372": {
+        "id": 384,
+        "enemy_pack_id": 78,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -160.03999999999999,
+        "lng": 200.62,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "373": {
+        "id": 385,
+        "enemy_pack_id": 78,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -160.72999999999999,
+        "lng": 199.94,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "374": {
+        "id": 386,
+        "enemy_pack_id": 78,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -160.22999999999999,
+        "lng": 199.25,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "375": {
+        "id": 387,
+        "enemy_pack_id": 78,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -159.78999999999999,
+        "lng": 198.5,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "376": {
+        "id": 388,
+        "enemy_pack_id": 79,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -166.16,
+        "lng": 196.5,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "377": {
+        "id": 389,
+        "enemy_pack_id": 79,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -165.78999999999999,
+        "lng": 197.81,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "378": {
+        "id": 390,
+        "enemy_pack_id": 79,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -166.97999999999999,
+        "lng": 197.88,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "379": {
+        "id": 391,
+        "enemy_pack_id": 79,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -167.22999999999999,
+        "lng": 196.62,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "380": {
+        "id": 392,
+        "enemy_pack_id": 80,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -162.22999999999999,
+        "lng": 187.94,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "381": {
+        "id": 393,
+        "enemy_pack_id": 80,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -162.09999999999999,
+        "lng": 189.56,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "382": {
+        "id": 394,
+        "enemy_pack_id": 80,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -163.47999999999999,
+        "lng": 188.94,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "383": {
+        "id": 395,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -164.72999999999999,
+        "lng": 186.38,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "384": {
+        "id": 396,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -163.66,
+        "lng": 186.31,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "385": {
+        "id": 397,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -164.22999999999999,
+        "lng": 187.06,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "386": {
+        "id": 398,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.09999999999999,
+        "lng": 183.62,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "387": {
+        "id": 399,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.97999999999999,
+        "lng": 183.62,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "388": {
+        "id": 400,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.91,
+        "lng": 184.5,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "389": {
+        "id": 401,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -160.84999999999999,
+        "lng": 184.44,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "390": {
+        "id": 402,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.28999999999999,
+        "lng": 184.75,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "391": {
+        "id": 403,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -160.72999999999999,
+        "lng": 184.94,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "392": {
+        "id": 404,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -160.84999999999999,
+        "lng": 185.5,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "393": {
+        "id": 405,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.28999999999999,
+        "lng": 185.19,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "394": {
+        "id": 406,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -161.47999999999999,
+        "lng": 185.69,
+        "npc": {
+            "id": 136006,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Rowdy Reveler",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "395": {
+        "id": 407,
+        "enemy_pack_id": 81,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -153.28999999999999,
+        "lng": 188.19,
+        "npc": {
+            "id": 134232,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "396": {
+        "id": 408,
+        "enemy_pack_id": 81,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -154.66,
+        "lng": 187.75,
+        "npc": {
+            "id": 130435,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Addled Thug",
+            "base_health": 382636,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "397": {
+        "id": 409,
+        "enemy_pack_id": 81,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -154.41,
+        "lng": 188.88,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "398": {
+        "id": 410,
+        "enemy_pack_id": 82,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -152.09999999999999,
+        "lng": 182.06,
+        "npc": {
+            "id": 134232,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "399": {
+        "id": 411,
+        "enemy_pack_id": 82,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -153.91,
+        "lng": 182,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "400": {
+        "id": 412,
+        "enemy_pack_id": 82,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -152.91,
+        "lng": 180.75,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "401": {
+        "id": 413,
+        "enemy_pack_id": 83,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -149.84999999999999,
+        "lng": 197.44,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "402": {
+        "id": 414,
+        "enemy_pack_id": 83,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -150.97999999999999,
+        "lng": 196.38,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "403": {
+        "id": 415,
+        "enemy_pack_id": 83,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -149.34999999999999,
+        "lng": 196.19,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "404": {
+        "id": 416,
+        "enemy_pack_id": 83,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -150.16,
+        "lng": 195.62,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "405": {
+        "id": 417,
+        "enemy_pack_id": 84,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -143.53999999999999,
+        "lng": 188.5,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "406": {
+        "id": 418,
+        "enemy_pack_id": 84,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -145.09999999999999,
+        "lng": 187.31,
+        "npc": {
+            "id": 130488,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mech Jockey",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "407": {
+        "id": 419,
+        "enemy_pack_id": 84,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -143.16,
+        "lng": 186.94,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "408": {
+        "id": 420,
+        "enemy_pack_id": 84,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -144.09999999999999,
+        "lng": 185.5,
+        "npc": {
+            "id": 130436,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Off-Duty Laborer",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "409": {
+        "id": 421,
+        "enemy_pack_id": 85,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -134.28999999999999,
+        "lng": 188.81,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "410": {
+        "id": 422,
+        "enemy_pack_id": 85,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -134.28999999999999,
+        "lng": 191.5,
+        "npc": {
+            "id": 136470,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Refreshment Vendor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "411": {
+        "id": 423,
+        "enemy_pack_id": 85,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -136.47999999999999,
+        "lng": 187.62,
+        "npc": {
+            "id": 134232,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

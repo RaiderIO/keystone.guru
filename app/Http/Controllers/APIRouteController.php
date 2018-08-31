@@ -3,12 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
-use Illuminate\Http\Request;
 use App\Models\Route;
+use App\Models\RouteVertex;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
 class APIRouteController extends Controller
 {
+    function list(Request $request)
+    {
+        $floorId = $request->get('floor_id');
+        $dungeonRoutePublicKey = $request->get('dungeonroute');
+        try {
+            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
+            $result = Route::where('floor_id', '=', $floorId)->where('dungeon_route_id', '=', $dungeonRoute->id)->get();
+        } catch (Exception $ex) {
+            $result = response('Not found', Http::NOT_FOUND);
+        }
+
+        return $result;
+    }
+
     /**
      * @param Request $request
      * @return array
@@ -16,30 +33,75 @@ class APIRouteController extends Controller
      */
     function store(Request $request)
     {
-        /** @var Enemy $enemy */
-        $enemy = Enemy::findOrNew($request->get('id'));
+        /** @var Route $route */
+        $route = Route::findOrNew($request->get('id'));
 
-        $enemy->enemy_pack_id = $request->get('enemy_pack_id');
-        $enemy->npc_id = $request->get('npc_id');
-        $enemy->floor_id = $request->get('floor_id');
-        $enemy->lat = $request->get('lat');
-        $enemy->lng = $request->get('lng');
+        try {
+            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($request->get('dungeonroute'));
 
-        if (!$enemy->save()) {
-            throw new \Exception("Unable to save enemy!");
+            $route->dungeon_route_id = $dungeonRoute->id;
+            $route->floor_id = $request->get('floor_id');
+            $route->color = $request->get('color');
+
+            if (!$route->save()) {
+                throw new \Exception("Unable to save enemy patrol!");
+            } else {
+                $route->deleteVertices();
+
+                // Get the new vertices
+                $vertices = $request->get('vertices');
+
+                // Store them
+                foreach ($vertices as $key => $vertex) {
+                    // Assign route to each passed vertex
+                    $vertices[$key]['route_id'] = $route->id;
+                }
+
+                // Bulk insert
+                RouteVertex::insert($vertices);
+            }
+
+            $result = ['id' => $route->id];
+        } catch (Exception $ex) {
+            $result = response('Not found', Http::NOT_FOUND);
+        }
+        return $result;
+    }
+
+    function delete(Request $request)
+    {
+        try {
+            /** @var Route $route */
+            $route = Route::findOrFail($request->get('id'));
+
+            // @TODO WTF why does $route->dungeonroute not work?? It will NOT load the relation despite everything being OK?
+            $dungeonroute = DungeonRoute::findOrFail($route->dungeon_route_id);
+            // If we're not the author, don't delete anything
+            // @TODO handle this in a policy?
+            if ($dungeonroute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin')) {
+                throw new Exception('Unauthorized');
+            }
+
+            $route->delete();
+            $route->deleteVertices();
+            $result = ['result' => 'success'];
+        } catch (\Exception $ex) {
+            $result = response('Not found', Http::NOT_FOUND);
         }
 
-        return ['id' => $enemy->id];
+        return $result;
     }
 
-    function get(Request $request)
+    function _getDungeonRouteFromPublicKey($publicKey)
     {
-        /** @var DungeonRoute $dungeonroute */
-        $dungeonroute = DungeonRoute::findOrFail($request->get('dungeonroute'));
+        $dungeonRoute = DungeonRoute::where('public_key', '=', $publicKey)->firstOrFail();
 
-        /** @var Route $route */
-        $route = Route::findOrFail($dungeonroute->id);
+        // @TODO handle this in a policy?
+        if ($dungeonRoute->author_id !== Auth::user()->id) {
+            throw new Exception('Unauthorized');
+        }
 
-        return $route;
+        return $dungeonRoute;
     }
+
 }

@@ -99,7 +99,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
     @endisset
 </div>
 <div class="row">
-    <?php for($i = 1; $i <= config('keystone.guru.party_size'); $i++){ ?>
+    <?php for($i = 1; $i <= config('keystoneguru.party_size'); $i++){ ?>
     <div class="col-lg-2{{ $i === 1 ? ' offset-lg-1' : '' }}">
         <div class="form-group">
             {!! Form::label('race[]', __('Party member #' . $i)) !!}

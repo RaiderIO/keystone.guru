@@ -23,4 +23,4 @@ npm audit fix
 
 ./refresh_autoload.sh
 
-./compile.sh
+./compile.sh $1

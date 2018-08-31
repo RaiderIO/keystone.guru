@@ -28,7 +28,7 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
         console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/dungeonstartmarker',
+            url: '/ajax/dungeonstartmarker',
             dataType: 'json',
             data: {
                 _method: 'DELETE',
@@ -58,7 +58,7 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/dungeonstartmarker',
+            url: '/ajax/dungeonstartmarker',
             dataType: 'json',
             data: {
                 floor_id: self.map.getCurrentFloor().id,

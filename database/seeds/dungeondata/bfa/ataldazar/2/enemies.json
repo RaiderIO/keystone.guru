@@ -1,1 +1,18 @@
-[]
+{
+    "173": {
+        "id": 184,
+        "enemy_pack_id": -1,
+        "floor_id": 42,
+        "teeming": null,
+        "lat": -153.75999999999999,
+        "lng": 147,
+        "npc": {
+            "id": 143577,
+            "dungeon_id": 14,
+            "classification_id": 3,
+            "name": "Rezan",
+            "base_health": 904737,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

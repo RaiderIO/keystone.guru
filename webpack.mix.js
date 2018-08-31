@@ -43,6 +43,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/route.js',
         'resources/assets/js/custom/dungeonstartmarker.js',
         'resources/assets/js/custom/dungeonfloorswitchmarker.js',
+        'resources/assets/js/custom/hotkeys.js',
         'resources/assets/js/custom/admin/enemyattaching.js',
         'resources/assets/js/custom/admin/admindungeonmap.js',
         'resources/assets/js/custom/admin/adminenemy.js',

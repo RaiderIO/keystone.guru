@@ -1,1 +1,261 @@
-[]
+{
+    "511": {
+        "id": 533,
+        "enemy_pack_id": 120,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -71.019999999999996,
+        "lng": 243.5,
+        "npc": {
+            "id": 131666,
+            "dungeon_id": 23,
+            "classification_id": 1,
+            "name": "Coven Thornshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "512": {
+        "id": 534,
+        "enemy_pack_id": 120,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -61.520000000000003,
+        "lng": 233.5,
+        "npc": {
+            "id": 131669,
+            "dungeon_id": 23,
+            "classification_id": 1,
+            "name": "Jagged Hound",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "513": {
+        "id": 535,
+        "enemy_pack_id": 120,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -78.019999999999996,
+        "lng": 234,
+        "npc": {
+            "id": 131669,
+            "dungeon_id": 23,
+            "classification_id": 1,
+            "name": "Jagged Hound",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "514": {
+        "id": 536,
+        "enemy_pack_id": 120,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -79.519999999999996,
+        "lng": 253,
+        "npc": {
+            "id": 131669,
+            "dungeon_id": 23,
+            "classification_id": 1,
+            "name": "Jagged Hound",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "515": {
+        "id": 537,
+        "enemy_pack_id": 120,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -62.520000000000003,
+        "lng": 252,
+        "npc": {
+            "id": 131669,
+            "dungeon_id": 23,
+            "classification_id": 1,
+            "name": "Jagged Hound",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "516": {
+        "id": 538,
+        "enemy_pack_id": 121,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -176.00999999999999,
+        "lng": 233,
+        "npc": null
+    },
+    "517": {
+        "id": 539,
+        "enemy_pack_id": 121,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -176.00999999999999,
+        "lng": 233,
+        "npc": null
+    },
+    "518": {
+        "id": 540,
+        "enemy_pack_id": 121,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -176.00999999999999,
+        "lng": 233,
+        "npc": null
+    },
+    "519": {
+        "id": 541,
+        "enemy_pack_id": 121,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -176.00999999999999,
+        "lng": 233,
+        "npc": null
+    },
+    "520": {
+        "id": 542,
+        "enemy_pack_id": 121,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -173.50999999999999,
+        "lng": 226,
+        "npc": null
+    },
+    "521": {
+        "id": 543,
+        "enemy_pack_id": 121,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -173.50999999999999,
+        "lng": 226,
+        "npc": null
+    },
+    "522": {
+        "id": 544,
+        "enemy_pack_id": 121,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -173.50999999999999,
+        "lng": 226,
+        "npc": null
+    },
+    "523": {
+        "id": 545,
+        "enemy_pack_id": 121,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -173.50999999999999,
+        "lng": 226,
+        "npc": null
+    },
+    "524": {
+        "id": 546,
+        "enemy_pack_id": 125,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -108.76000000000001,
+        "lng": 99.5,
+        "npc": {
+            "id": 131818,
+            "dungeon_id": 23,
+            "classification_id": 2,
+            "name": "Marked Sister",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "525": {
+        "id": 547,
+        "enemy_pack_id": 125,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -114.76000000000001,
+        "lng": 90.5,
+        "npc": {
+            "id": 131587,
+            "dungeon_id": 23,
+            "classification_id": 2,
+            "name": "Bewitched Captain",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "526": {
+        "id": 548,
+        "enemy_pack_id": 125,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -116.76000000000001,
+        "lng": 99.75,
+        "npc": null
+    },
+    "527": {
+        "id": 549,
+        "enemy_pack_id": -1,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -126.01000000000001,
+        "lng": 243.5,
+        "npc": {
+            "id": 135365,
+            "dungeon_id": 23,
+            "classification_id": 2,
+            "name": "Matron Alma",
+            "base_health": 706404,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "528": {
+        "id": 550,
+        "enemy_pack_id": 126,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -168.00999999999999,
+        "lng": 126.25,
+        "npc": null
+    },
+    "529": {
+        "id": 551,
+        "enemy_pack_id": 126,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -168.00999999999999,
+        "lng": 126.25,
+        "npc": {
+            "id": 131819,
+            "dungeon_id": 23,
+            "classification_id": 2,
+            "name": "Coven Diviner",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "530": {
+        "id": 552,
+        "enemy_pack_id": 126,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -174.00999999999999,
+        "lng": 119,
+        "npc": null
+    },
+    "531": {
+        "id": 553,
+        "enemy_pack_id": 126,
+        "floor_id": 62,
+        "teeming": null,
+        "lat": -174.00999999999999,
+        "lng": 119,
+        "npc": {
+            "id": 135240,
+            "dungeon_id": 23,
+            "classification_id": 1,
+            "name": "Soul Essence",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    }
+}

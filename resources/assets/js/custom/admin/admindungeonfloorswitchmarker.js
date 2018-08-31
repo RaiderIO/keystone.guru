@@ -82,7 +82,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/dungeonfloorswitchmarker',
+            url: '/ajax/dungeonfloorswitchmarker',
             dataType: 'json',
             data: {
                 id: self.id,
@@ -114,7 +114,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
         $.ajax({
             type: 'POST',
-            url: '/api/v1/dungeonfloorswitchmarker',
+            url: '/ajax/dungeonfloorswitchmarker',
             dataType: 'json',
             data: {
                 _method: 'DELETE',

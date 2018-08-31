@@ -20,14 +20,22 @@ class APIDungeonRouteController extends Controller
         // No unlisted routes!
         $builder = $builder->where('unlisted', '<>', true);
 
-        $builder->whereHas('dungeon', function($query){
+        $builder->whereHas('dungeon', function ($query) {
             /** @var $query Builder This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
             $query->active();
         });
 
+        $authorId = intval($request->get('author_id', -1));
         // Filter by our own user if logged in
-        if ($request->has('author_id')) {
-            $builder = $builder->where('author_id', '=', $request->has('author_id'));
+        if ($authorId > -1) {
+            $builder = $builder->where('author_id', '=', $authorId);
+        }
+
+        // This is safe enough, even with the links people will get denied access
+        // @TODO hardcoded admin ID?
+        if ($authorId !== 1) {
+            // Never show demo routes here
+            $builder = $builder->where('demo', '=', '0');
         }
 
         // Handle searching on affixes
@@ -38,7 +46,7 @@ class APIDungeonRouteController extends Controller
             if (!empty($affixes)) {
                 $affixIds = explode(',', $affixes);
 
-                $builder->whereHas('affixes', function($query) use(&$affixIds){
+                $builder->whereHas('affixes', function ($query) use (&$affixIds) {
                     /** @var $query Builder */
                     $query->whereIn('affix_groups.id', $affixIds);
                 });

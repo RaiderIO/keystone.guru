@@ -1,1 +1,226 @@
-[]
+{
+    "60": {
+        "id": 129227,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Azerokk",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "94": {
+        "id": 130435,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Addled Thug",
+        "base_health": 382636,
+        "aggressiveness": "aggressive"
+    },
+    "95": {
+        "id": 130436,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Off-Duty Laborer",
+        "base_health": 117734,
+        "aggressiveness": "aggressive"
+    },
+    "96": {
+        "id": 130437,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Mine Rat",
+        "base_health": 176601,
+        "aggressiveness": "aggressive"
+    },
+    "97": {
+        "id": 130488,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Mech Jockey",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "99": {
+        "id": 130635,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Stonefury",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "101": {
+        "id": 130653,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Wanton Sapper",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "105": {
+        "id": 131227,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Mogul Razdunk",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "134": {
+        "id": 133345,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Feckless Assistant",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "139": {
+        "id": 133430,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Venture Co. Mastermind",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "140": {
+        "id": 133432,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Venture Co. Alchemist",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "141": {
+        "id": 133436,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Venture Co. Skyscorcher",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "142": {
+        "id": 133463,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Venture Co. War Machine",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "143": {
+        "id": 133593,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Expert Technician",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "153": {
+        "id": 133963,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Test Subject",
+        "base_health": 58867,
+        "aggressiveness": "aggressive"
+    },
+    "154": {
+        "id": 134005,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Shalebiter",
+        "base_health": 58867,
+        "aggressiveness": "aggressive"
+    },
+    "155": {
+        "id": 134012,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Taskmaster Askari",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "170": {
+        "id": 134232,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Hired Assassin",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "219": {
+        "id": 136006,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Rowdy Reveler",
+        "base_health": 58867,
+        "aggressiveness": "neutral"
+    },
+    "221": {
+        "id": 136139,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Mechanized Peacekeeper",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "231": {
+        "id": 136470,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Refreshment Vendor",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "232": {
+        "id": 136643,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Azerite Extractor",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "234": {
+        "id": 136688,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Fanatical Driller",
+        "base_health": 176601,
+        "aggressiveness": "aggressive"
+    },
+    "235": {
+        "id": 136934,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Weapons Tester",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "236": {
+        "id": 137029,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Ordnance Specialist",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "256": {
+        "id": 139273,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Rixxa Fluxflame",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "262": {
+        "id": 139904,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Coin-Operated Crowd Pummeler",
+        "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "270": {
+        "id": 144243,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Drix Bassbolter",
+        "base_health": 1,
+        "aggressiveness": "friendly"
+    }
+}

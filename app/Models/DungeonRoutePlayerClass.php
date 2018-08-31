@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 class DungeonRoutePlayerClass extends Model
 {
 
-    public $hidden = ['id', 'dungeon_route_id'];
+    public $hidden = ['id'];
 
     public $timestamps = false;
 
@@ -31,13 +31,5 @@ class DungeonRoutePlayerClass extends Model
     public function characterclass()
     {
         return $this->belongsTo('App\Models\CharacterClass');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    function dungeonrouteplayerclasses()
-    {
-        return $this->belongsToMany('App\Models\DungeonRoutePlayerClass', 'dungeon_route_player_classes');
     }
 }

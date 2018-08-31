@@ -37,7 +37,9 @@ class NpcController extends Controller
         $npc->dungeon_id = $request->get('dungeon_id');
         $npc->classification_id = $request->get('classification_id');
         $npc->name = $request->get('name');
-        $npc->base_health = $request->get('base_health');
+        // Remove commas or dots in the name; we want the integer value
+        $npc->base_health = str_replace(',', '', $request->get('base_health'));
+        $npc->base_health = str_replace('.', '', $npc->base_health);
         $npc->aggressiveness = $request->get('aggressiveness');
 
         if (!$npc->save()) {
@@ -110,7 +112,7 @@ class NpcController extends Controller
         // Message to the user
         \Session::flash('status', sprintf(__('Npc %s created'), $npc->name));
 
-        return redirect()->route('admin.npc.edit', ["npc" => $npc]);
+        return redirect()->route('admin.npc.edit', ['npc' => $npc->id]);
     }
 
     /**

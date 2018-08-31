@@ -49,6 +49,13 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
         let _dungeonData = {!! $dungeon !!};
         let _switchDungeonFloorSelect = "#map_floor_selection";
 
+            <?php if (isset($model)) { ?>
+        let dungeonRoutePublicKey = '{{ $model->public_key }}';
+            <?php } else { ?>
+        let dungeonRoutePublicKey = '';
+            <?php } ?>
+
+
         let dungeonMap;
 
         $(function () {
@@ -111,6 +118,16 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
         </div>
     </script>
 
+    <script id="route_edit_popup_template" type="text/x-handlebars-template">
+        <div id="route_edit_popup_inner" class="popupCustom">
+            <div class="form-group">
+                {!! Form::label('route_edit_popup_color_@{{id}}', __('Color')) !!}
+                {!! Form::color('route_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+            </div>
+            {!! Form::button(__('Submit'), ['id' => 'route_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+        </div>
+    </script>
+
     @if($isAdmin)
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">
@@ -137,7 +154,7 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
                         @endforeach
                     </select>
                 </div>
-                {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit', 'class' => 'btn btn-info']) !!}
+                {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
             </div>
         </script>
 

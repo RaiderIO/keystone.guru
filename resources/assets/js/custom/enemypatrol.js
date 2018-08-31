@@ -6,7 +6,6 @@ $(function () {
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
             this.type = L.Draw.EnemyPatrol.TYPE;
-            console.log('this:', this);
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
@@ -34,7 +33,6 @@ class EnemyPatrol extends MapObject {
 
     getVertices() {
         let coordinates = this.layer.toGeoJSON().geometry.coordinates;
-        console.log(this.layer, this.layer.toGeoJSON(), coordinates);
         let result = [];
         for (let i = 0; i < coordinates.length; i++) {
             result.push({lat: coordinates[i][0], lng: coordinates[i][1]});

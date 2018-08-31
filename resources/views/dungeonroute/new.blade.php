@@ -39,6 +39,16 @@
             {!! Form::checkbox('unlisted', 1, 0, ['class' => 'form-control left_checkbox']) !!}
         </div>
 
+        @if(Auth::user()->hasRole('admin'))
+        <h3>
+            {{ __('Admin') }}
+        </h3>
+        <div class="form-group">
+            {!! Form::label('demo', __('Mark as demo route')) !!}
+            {!! Form::checkbox('demo', 1, 0, ['class' => 'form-control left_checkbox']) !!}
+        </div>
+        @endif
+
         <div class="col-lg-12">
             <div class="form-group">
                 {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}

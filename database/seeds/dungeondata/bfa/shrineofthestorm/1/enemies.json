@@ -1,1 +1,34 @@
-[]
+{
+    "157": {
+        "id": 168,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -100.76000000000001,
+        "lng": 93.25,
+        "npc": {
+            "id": 134063,
+            "dungeon_id": 17,
+            "classification_id": 3,
+            "name": "Brother Ironhull",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "158": {
+        "id": 169,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -102.63,
+        "lng": 176.25,
+        "npc": {
+            "id": 134056,
+            "dungeon_id": 17,
+            "classification_id": 3,
+            "name": "Aqu'sirr",
+            "base_health": 1,
+            "aggressiveness": "aggressive"
+        }
+    }
+}
