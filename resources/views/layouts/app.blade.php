@@ -116,7 +116,7 @@
         </div>
     </nav>
 
-    <div class="container<?php echo(isset($wide) && $wide ? "-fluid" : ""); ?>">
+    <div class="container-fluid">
         <div class="row">
             <div class="<?php echo(isset($wide) && $wide ? "flex-fill ml-3 mr-3" : "col-md-8 offset-md-2"); ?>">
                 <div class="card mt-3 mb-3">
