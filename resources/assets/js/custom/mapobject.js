@@ -71,7 +71,6 @@ class MapObject extends Signalable {
                     color: this.colors.unsavedBorder
                 });
             }
-            console.log('redrawing layer with colors', this.colors);
             this.layer.redraw();
         }
 

@@ -9,20 +9,6 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
         this.setSynced(false);
     }
 
-    getContextMenuItems() {
-        console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
-        // Merge existing context menu items with the admin ones
-        return super.getContextMenuItems().concat([{
-            text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
-            disabled: this.synced || this.saving,
-            callback: (this.save).bind(this)
-        }, '-', {
-            text: '<i class="fas fa-trash"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
-            disabled: !this.synced || this.deleting,
-            callback: (this.delete).bind(this)
-        }]);
-    }
-
     delete() {
         let self = this;
         console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');

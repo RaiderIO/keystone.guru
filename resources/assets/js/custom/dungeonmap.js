@@ -59,6 +59,37 @@ class DungeonMap extends Signalable {
             }
         });
 
+        // Set all edited layers to no longer be synced.
+        this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
+            let layers = e.layers;
+            layers.eachLayer(function (layer) {
+                let mapObject = self.findMapObjectByLayer(layer);
+                console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
+
+                // No longer synched
+                mapObject.setSynced(false);
+                if( typeof mapObject.edit === 'function' ){
+                    mapObject.edit();
+                } else {
+                    console.error(mapObject, ' does not have an edit() function!');
+                }
+            });
+        });
+
+        this.leafletMap.on(L.Draw.Event.DELETED, function (e) {
+            let layers = e.layers;
+            layers.eachLayer(function (layer) {
+                let mapObject = self.findMapObjectByLayer(layer);
+                console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
+
+                if( typeof mapObject.delete === 'function' ){
+                    mapObject.delete();
+                } else {
+                    console.error(mapObject, ' does not have a delete() function!');
+                }
+            });
+        });
+
         $(window).bind('mousedown', function (event) {
             $('#map').removeClass('map-scroll');
         });

@@ -68,20 +68,6 @@ class AdminEnemy extends Enemy {
         });
     }
 
-    getContextMenuItems() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
-        // Merge existing context menu items with the admin ones
-        return super.getContextMenuItems().concat([{
-            text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
-            disabled: this.synced || this.saving,
-            callback: (this.save).bind(this)
-        }, '-', {
-            text: '<i class="fas fa-trash"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
-            disabled: !this.synced || this.deleting,
-            callback: (this.delete).bind(this)
-        }]);
-    }
-
     edit() {
         let self = this;
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
@@ -100,14 +86,14 @@ class AdminEnemy extends Enemy {
             },
             beforeSend: function () {
                 self.editing = true;
-                $("#enemy_edit_popup_submit").attr('disabled', 'disabled');
+                $("#enemy_edit_popup_submit_" + self.id).attr('disabled', 'disabled');
             },
             success: function (json) {
                 self.setSynced(true);
                 self.map.leafletMap.closePopup();
             },
             complete: function () {
-                $("#enemy_edit_popup_submit").removeAttr('disabled');
+                $("#enemy_edit_popup_submit_" + self.id).removeAttr('disabled');
                 self.editing = false;
             },
             error: function () {

@@ -16,20 +16,6 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         this.target_floor_id = -1;
     }
 
-    getContextMenuItems() {
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
-        // Merge existing context menu items with the admin ones
-        return super.getContextMenuItems().concat([{
-            text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
-            disabled: this.synced || this.saving,
-            callback: (this.save).bind(this)
-        }, '-', {
-            text: '<i class="fas fa-trash"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
-            disabled: !this.synced || this.deleting,
-            callback: (this.delete).bind(this)
-        }]);
-    }
-
     onLayerInit() {
         // do not call super; we don't want an on-click to redirect us to the target floor
         // super.onLayerInit();

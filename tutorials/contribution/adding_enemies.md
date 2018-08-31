@@ -33,11 +33,6 @@ To the left you can see a control panel (on the map) which allows you to interac
 t
 ![Control panel](https://raw.githubusercontent.com/Wotuu/keystone.guru/development/resources/assets/images/tutorials/contribution/add_enemies_4.png "Control panel")
 
-Before I go into details of what the buttons do, know that you can delete your created enemies/packs by RIGHT clicking
-the offending element on the map. You will then get the option to delete the enemy/pack/element. Editing existing elements
-DOES NOT WORK at the moment (though I will fix this soon) when using the 8. and 9. options. If you misplaced an enemy or pack,
-delete it and recreate it again.
-
 1. Zooms in the map (or use ctrl + mouse wheel)
 2. Zooms out the map (or use ctrl + mouse wheel)
 3. Draws an enemy pack (hotkey: a)
@@ -45,8 +40,8 @@ delete it and recreate it again.
 5. Draws an enemy patrol (hotkey: p)
 6. Draws a 'dungeon start marker'
 7. Draws a 'floor switch marker'
-8. Edits all current elements so you can move them around (YES IT LOOKS LIKE IT WORKS BUT IT DOES NOT SYNCHRONIZE TO SERVER. DO NOT USE.) (hotkey: c)
-9. Allows you to select an element for deletion (YES IT LOOKS LIKE IT WORKS BUT IT DOES NOT SYNCHRONIZE TO SERVER. DO NOT USE.) (hotkey: d)
+8. Edits all current elements so you can move them around (hotkey: c)
+9. Allows you to select an element for deletion (hotkey: d)
 10. Toggles display of enemies on/off
 11. Toggles display of patrols on/off
 12. Toggles display of enemy packs on/off

@@ -7,6 +7,8 @@ git pull
 
 ./update_dependencies.sh production
 
+./migrate.sh
+
 # Drop and re-populate all dungeon data, it's designed to do this no worries
 php artisan db:seed --class=DungeonDataSeeder --database=migrate
 

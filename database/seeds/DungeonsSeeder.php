@@ -486,10 +486,10 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $bfa->id,
                 'active' => true,
                 'floors' => [
-                    'The Grand Foyer' => [
+                    'Upstairs' => [
                         'index' => 2
                     ],
-                    'Upstairs' => [
+                    'The Grand Foyer' => [
                         'index' => 1
                     ],
                     'The Cellar' => [
