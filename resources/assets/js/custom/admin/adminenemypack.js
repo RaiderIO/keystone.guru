@@ -39,6 +39,11 @@ class AdminEnemyPack extends EnemyPack {
         });
     }
 
+    edit(){
+        console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
+        this.save();
+    }
+
     save() {
         let self = this;
         console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');

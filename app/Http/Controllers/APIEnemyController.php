@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\EnemyPatrolVertex;
+use App\Models\Npc;
 use Illuminate\Http\Request;
 use App\Models\Enemy;
-use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 
 class APIEnemyController extends Controller
@@ -37,7 +36,13 @@ class APIEnemyController extends Controller
             throw new \Exception("Unable to save enemy!");
         }
 
-        return ['id' => $enemy->id];
+        $result = ['id' => $enemy->id];
+
+        if( $enemy->npc_id > 0 ){
+            $result['npc'] = Npc::findOrFail($enemy->npc_id);
+        }
+
+        return $result;
     }
 
     function delete(Request $request)

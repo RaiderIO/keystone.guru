@@ -91,6 +91,15 @@ class AdminEnemy extends Enemy {
             success: function (json) {
                 self.setSynced(true);
                 self.map.leafletMap.closePopup();
+                // May be null if not set at all (yet)
+                if (json.hasOwnProperty('npc') && json.npc !== null) {
+                    // TODO Hard coded 3 = boss
+                    if (json.npc.classification_id === 3) {
+                        self.setIcon('boss');
+                    } else {
+                        self.setIcon(json.npc.aggressiveness);
+                    }
+                }
             },
             complete: function () {
                 $("#enemy_edit_popup_submit_" + self.id).removeAttr('disabled');
