@@ -1,5 +1,109 @@
 {
+    "28": {
+        "id": 122969,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Zanchuli Witch-Doctor",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "29": {
+        "id": 122970,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Shadowblade Stalker",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "30": {
+        "id": 122971,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Dazar'ai Juggernaut",
+        "base_health": 338485,
+        "aggressiveness": "aggressive"
+    },
+    "31": {
+        "id": 122972,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Dazar'ai Augur",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "32": {
+        "id": 122973,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Dazar'ai Confessor",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "33": {
+        "id": 122984,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Dazar'ai Colossus",
+        "base_health": 500370,
+        "aggressiveness": "aggressive"
+    },
     "34": {
+        "id": 125977,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Reanimation Totem",
+        "base_health": 235468,
+        "aggressiveness": "aggressive"
+    },
+    "49": {
+        "id": 127757,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Reanimated Honor Guard",
+        "base_health": 323769,
+        "aggressiveness": "aggressive"
+    },
+    "50": {
+        "id": 127799,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Dazar'ai Honor Guard",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "51": {
+        "id": 127879,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Shieldbearer of Zul",
+        "base_health": 291392,
+        "aggressiveness": "aggressive"
+    },
+    "52": {
+        "id": 128434,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Feasting Skyscreamer",
+        "base_health": 288448,
+        "aggressiveness": "aggressive"
+    },
+    "53": {
+        "id": 128435,
+        "dungeon_id": 14,
+        "classification_id": 1,
+        "name": "Toxic Saurid",
+        "base_health": 58867,
+        "aggressiveness": "aggressive"
+    },
+    "54": {
+        "id": 128455,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "T'lonja",
+        "base_health": 588670,
+        "aggressiveness": "aggressive"
+    },
+    "67": {
         "id": 129399,
         "dungeon_id": 14,
         "classification_id": 3,
@@ -7,7 +111,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "35": {
+    "68": {
         "id": 129412,
         "dungeon_id": 14,
         "classification_id": 3,
@@ -15,7 +119,23 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "39": {
+    "76": {
+        "id": 129552,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Monzumi",
+        "base_health": 600443,
+        "aggressiveness": "aggressive"
+    },
+    "77": {
+        "id": 129553,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Dinomancer Kish'o",
+        "base_health": 706404,
+        "aggressiveness": "aggressive"
+    },
+    "82": {
         "id": 129614,
         "dungeon_id": 14,
         "classification_id": 3,
@@ -23,7 +143,15 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "67": {
+    "130": {
+        "id": 132126,
+        "dungeon_id": 14,
+        "classification_id": 2,
+        "name": "Gilded Priestess",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "268": {
         "id": 143577,
         "dungeon_id": 14,
         "classification_id": 3,

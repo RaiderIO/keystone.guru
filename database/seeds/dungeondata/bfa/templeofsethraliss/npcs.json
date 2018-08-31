@@ -1,5 +1,5 @@
 {
-    "51": {
+    "135": {
         "id": 133379,
         "dungeon_id": 19,
         "classification_id": 3,
@@ -7,7 +7,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "52": {
+    "136": {
         "id": 133384,
         "dungeon_id": 19,
         "classification_id": 3,
@@ -15,7 +15,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "53": {
+    "137": {
         "id": 133389,
         "dungeon_id": 19,
         "classification_id": 3,
@@ -23,12 +23,164 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "54": {
+    "138": {
         "id": 133392,
         "dungeon_id": 19,
         "classification_id": 3,
         "name": "Avatar of Sethraliss",
         "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "174": {
+        "id": 134364,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Faithless Tender",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "175": {
+        "id": 134390,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Sand-crusted Striker",
+        "base_health": 117734,
+        "aggressiveness": "aggressive"
+    },
+    "181": {
+        "id": 134599,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Imbued Stormcaller",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "182": {
+        "id": 134600,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Sandswept Marksman",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "183": {
+        "id": 134602,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Shrouded Fang",
+        "base_health": 235468,
+        "aggressiveness": "aggressive"
+    },
+    "184": {
+        "id": 134616,
+        "dungeon_id": 19,
+        "classification_id": 1,
+        "name": "Krolusk Pup",
+        "base_health": 176601,
+        "aggressiveness": "aggressive"
+    },
+    "185": {
+        "id": 134629,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Scaled Krolusk Rider",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "186": {
+        "id": 134686,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Mature Krolusk",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "187": {
+        "id": 134691,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Static-charged Dervish",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "190": {
+        "id": 134990,
+        "dungeon_id": 19,
+        "classification_id": 1,
+        "name": "Charged Dust Devil",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "191": {
+        "id": 134991,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Sandfury Stonefist",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "193": {
+        "id": 135007,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Orb Guardian",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "216": {
+        "id": 135562,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Venomous Ophidian",
+        "base_health": 117734,
+        "aggressiveness": "aggressive"
+    },
+    "218": {
+        "id": 135971,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Faithless Conscript",
+        "base_health": 88301,
+        "aggressiveness": "aggressive"
+    },
+    "220": {
+        "id": 136076,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Agitated Nimbus",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "226": {
+        "id": 136250,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Hoodoo Hexer",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "257": {
+        "id": 139425,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Crazed Incubator",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "263": {
+        "id": 139946,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Heart Guardian",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "264": {
+        "id": 139949,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Plague Doctor",
+        "base_health": 294335,
         "aggressiveness": "aggressive"
     }
 }

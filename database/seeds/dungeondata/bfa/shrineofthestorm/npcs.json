@@ -1,5 +1,5 @@
 {
-    "55": {
+    "158": {
         "id": 134056,
         "dungeon_id": 17,
         "classification_id": 3,
@@ -7,7 +7,15 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "56": {
+    "159": {
+        "id": 134058,
+        "dungeon_id": 17,
+        "classification_id": 3,
+        "name": "Galecaller Faye",
+        "base_health": 1545259,
+        "aggressiveness": "aggressive"
+    },
+    "160": {
         "id": 134063,
         "dungeon_id": 17,
         "classification_id": 3,
@@ -15,7 +23,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "57": {
+    "161": {
         "id": 134069,
         "dungeon_id": 17,
         "classification_id": 3,
@@ -23,12 +31,180 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "65": {
+    "162": {
+        "id": 134137,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Temple Attendant",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "163": {
+        "id": 134139,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Shrine Templar",
+        "base_health": 353202,
+        "aggressiveness": "aggressive"
+    },
+    "164": {
+        "id": 134144,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Living Current",
+        "base_health": 529803,
+        "aggressiveness": "aggressive"
+    },
+    "165": {
+        "id": 134150,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Runecarver Sorn",
+        "base_health": 941872,
+        "aggressiveness": "aggressive"
+    },
+    "168": {
+        "id": 134173,
+        "dungeon_id": 17,
+        "classification_id": 1,
+        "name": "Animated Droplet",
+        "base_health": 41207,
+        "aggressiveness": "aggressive"
+    },
+    "173": {
+        "id": 134338,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Tidesage Enforcer",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "176": {
+        "id": 134417,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Deepsea Ritualist",
+        "base_health": 647537,
+        "aggressiveness": "aggressive"
+    },
+    "177": {
+        "id": 134418,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Drowned Depthbringer",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "179": {
+        "id": 134423,
+        "dungeon_id": 17,
+        "classification_id": 1,
+        "name": "Abyss Dweller",
+        "base_health": 41207,
+        "aggressiveness": "aggressive"
+    },
+    "180": {
+        "id": 134514,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Abyssal Cultist",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "223": {
+        "id": 136186,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Tidesage Spiritualist",
+        "base_health": 353202,
+        "aggressiveness": "aggressive"
+    },
+    "224": {
+        "id": 136214,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Windspeaker Heldis",
+        "base_health": 1059606,
+        "aggressiveness": "aggressive"
+    },
+    "225": {
+        "id": 136249,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Guardian Elemental",
+        "base_health": 883005,
+        "aggressiveness": "aggressive"
+    },
+    "227": {
+        "id": 136295,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Sunken Denizen",
+        "base_health": 470936,
+        "aggressiveness": "aggressive"
+    },
+    "228": {
+        "id": 136297,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Forgotten Denizen",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "229": {
+        "id": 136347,
+        "dungeon_id": 17,
+        "classification_id": 1,
+        "name": "Tidesage Initiate",
+        "base_health": 58867,
+        "aggressiveness": "aggressive"
+    },
+    "230": {
+        "id": 136353,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Colossal Tentacle",
+        "base_health": 323769,
+        "aggressiveness": "aggressive"
+    },
+    "258": {
+        "id": 139626,
+        "dungeon_id": 17,
+        "classification_id": 1,
+        "name": "Dredged Sailor",
+        "base_health": 14717,
+        "aggressiveness": "aggressive"
+    },
+    "259": {
         "id": 139737,
         "dungeon_id": 17,
         "classification_id": 3,
         "name": "Lord Stormsong",
         "base_health": 1,
+        "aggressiveness": "aggressive"
+    },
+    "260": {
+        "id": 139799,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Ironhull Apprentice",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "261": {
+        "id": 139800,
+        "dungeon_id": 17,
+        "classification_id": 2,
+        "name": "Galecaller Apprentice",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "265": {
+        "id": 140038,
+        "dungeon_id": 17,
+        "classification_id": 1,
+        "name": "Abyssal Eel",
+        "base_health": 117734,
         "aggressiveness": "aggressive"
     }
 }
