@@ -13,7 +13,7 @@ class CreateDungeonRouteRatingTable extends Migration
      */
     public function up()
     {
-        Schema::create('dungeon_route_rating', function (Blueprint $table) {
+        Schema::create('dungeon_route_ratings', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('dungeon_route_id');
             $table->integer('user_id');
@@ -28,6 +28,6 @@ class CreateDungeonRouteRatingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dungeon_route_rating');
+        Schema::dropIfExists('dungeon_route_ratings');
     }
 }

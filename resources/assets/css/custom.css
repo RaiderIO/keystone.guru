@@ -47,6 +47,12 @@
     text-align: center;
 }
 
+.bootstrap-select .btn {
+    background-color: white;
+    border: 1px solid #ced4da;
+    color: #495057;
+}
+
 /** LEAFLET */
 #map {
     height: 940px;
@@ -167,4 +173,14 @@
 /** DATATABLES */
 #routes_table_filter {
     display: none;
+}
+
+/** MISC STYLES */
+.view_dungeonroute_details_row {
+    height: 40px;
+}
+
+#view_dungeonroute_group_setup {
+    display: flex;
+    align-items: center;
 }

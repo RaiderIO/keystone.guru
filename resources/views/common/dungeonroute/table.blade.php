@@ -65,28 +65,16 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                     },
                     {
                         'render': function (data, type, row, meta) {
-                            return 'some rating';
+                            let result = '-';
+
+                            if( row.avg_rating !== 0 ){
+                                result = row.avg_rating + ' (' +  row.rating_count + ' votes)';
+                            }
+
+                            return result;
                         }
                     }
                 ]
-            });
-
-            $(document).ready(function () {
-                $('#example').DataTable({
-                    'processing': true,
-                    'serverSide': true,
-                    'responsive': true,
-                    "ajax": "https://wofje.nl/test/dt.php",
-                    'columns': [
-                        {
-                            'data': 'name',
-                            'name': 'name',
-                            'render': function (data, type, row, meta) {
-                                return 'test';
-                            }
-                        }
-                    ]
-                });
             });
 
             _dt.on('draw.dt', function (e, settings, json, xhr) {
@@ -137,7 +125,8 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                 ['id' => 'affixes',
                 'class' => 'form-control affixselect selectpicker',
                 'multiple' => 'multiple',
-                'data-selected-text-format' => 'count > 1']) !!}
+                'data-selected-text-format' => 'count > 1',
+                'data-count-selected-text' => __('{0} affixes selected')]) !!}
         </div>
         <div class="col-lg-2">
             {!! Form::label('rating', __('Rating')) !!}

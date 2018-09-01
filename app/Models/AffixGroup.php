@@ -31,7 +31,7 @@ class AffixGroup extends Model
     public function getTextAttribute()
     {
         $result = [];
-        foreach($this->affixes as $affix){
+        foreach ($this->affixes as $affix) {
             /** @var $affix Affix */
             $result[] = $affix->name;
         }

@@ -37,6 +37,7 @@ window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
 window.bootstrapselect = require('bootstrap-select');
 window.handlebars = require('handlebars');
+window.barrating = require('jquery-bar-rating');
 
 require('@fortawesome/fontawesome-free');
 

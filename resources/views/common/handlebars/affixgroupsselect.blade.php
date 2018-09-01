@@ -1,6 +1,9 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
-$affixGroups = \App\Models\AffixGroup::with('affixes')->get();
+if(!isset($affixgroups) ){
+    $affixgroups = \App\Models\AffixGroup::with('affixes')->get();
+}
+
 ?><script id="affixgroup_select_option_template" type="text/x-handlebars-template">
     <div class="row">
         @{{#affixes}}
@@ -11,7 +14,7 @@ $affixGroups = \App\Models\AffixGroup::with('affixes')->get();
     </div>
 </script>
 <script>
-    let _affixGroups = {!! $affixGroups !!};
+    let _affixGroups = {!! $affixgroups !!};
 
     $(function(){
         handlebarsLoadAffixGroupSelect("#affixes");
@@ -26,7 +29,6 @@ $affixGroups = \App\Models\AffixGroup::with('affixes')->get();
         for( let i in _affixGroups ){
             if( _affixGroups.hasOwnProperty(i) ){
                 let affixGroup = _affixGroups[i];
-                console.log(affixGroup);
 
                 let optionTemplate = $("#affixgroup_select_option_template").html();
                 let template = handlebars.compile(optionTemplate);
@@ -51,7 +53,6 @@ $affixGroups = \App\Models\AffixGroup::with('affixes')->get();
 
                 let html = template(handlebarsData);
                 let selector = affixSelectSelector + ' option[value=' + affixGroup.id + ']';
-                console.log(selector);
                 $(selector).attr('data-content', html);
             }
         }
@@ -70,4 +71,3 @@ $affixGroups = \App\Models\AffixGroup::with('affixes')->get();
         // }
     }
 </script>
-

@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
  * @property $playerclasses \Illuminate\Support\Collection
  * @property $playerraces \Illuminate\Support\Collection
  * @property $affixes \Illuminate\Support\Collection
+ * @property $ratings \Illuminate\Support\Collection
  */
 class DungeonRoute extends Model
 {
@@ -32,7 +33,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at'];
 
@@ -140,6 +141,32 @@ class DungeonRoute extends Model
     public function affixes()
     {
         return $this->belongsToMany('App\Models\AffixGroup', 'dungeon_route_affix_groups');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ratings()
+    {
+        return $this->hasMany('App\Models\DungeonRouteRating');
+    }
+
+    /**
+     * @return double
+     */
+    public function getAvgRatingAttribute(){
+        $avg = 0;
+        if( !$this->ratings->isEmpty() ){
+            return $this->ratings->avg();
+        }
+        return $avg;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getRatingCountAttribute(){
+        return $this->ratings->count();
     }
 
     /**
