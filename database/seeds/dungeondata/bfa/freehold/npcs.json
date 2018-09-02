@@ -16,6 +16,14 @@
         "aggressiveness": "aggressive"
     },
     "37": {
+        "id": 126919,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Irontide Stormcaller",
+        "base_health": 235470,
+        "aggressiveness": "aggressive"
+    },
+    "38": {
         "id": 126928,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -23,7 +31,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "38": {
+    "39": {
         "id": 127106,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -31,7 +39,7 @@
         "base_health": 470936,
         "aggressiveness": "aggressive"
     },
-    "39": {
+    "40": {
         "id": 127111,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -39,7 +47,15 @@
         "base_health": 470936,
         "aggressiveness": "aggressive"
     },
-    "55": {
+    "41": {
+        "id": 127124,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "name": "Freehold Barhand",
+        "base_health": 44150,
+        "aggressiveness": "neutral"
+    },
+    "57": {
         "id": 128551,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -47,7 +63,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "69": {
+    "71": {
         "id": 129431,
         "dungeon_id": 15,
         "classification_id": 3,
@@ -55,7 +71,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "70": {
+    "72": {
         "id": 129432,
         "dungeon_id": 15,
         "classification_id": 3,
@@ -63,7 +79,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "71": {
+    "73": {
         "id": 129440,
         "dungeon_id": 15,
         "classification_id": 3,
@@ -71,7 +87,23 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "72": {
+    "74": {
+        "id": 129526,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Bilge Rat Swabby",
+        "base_health": 294335,
+        "aggressiveness": "neutral"
+    },
+    "75": {
+        "id": 129527,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Bilge Rat Buccaneer",
+        "base_health": 294335,
+        "aggressiveness": "aggressive"
+    },
+    "76": {
         "id": 129529,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -79,7 +111,7 @@
         "base_health": 353202,
         "aggressiveness": "aggressive"
     },
-    "73": {
+    "77": {
         "id": 129547,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -87,7 +119,7 @@
         "base_health": 323769,
         "aggressiveness": "aggressive"
     },
-    "74": {
+    "78": {
         "id": 129548,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -95,7 +127,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "75": {
+    "79": {
         "id": 129550,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -103,7 +135,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "78": {
+    "82": {
         "id": 129559,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -111,7 +143,15 @@
         "base_health": 237980,
         "aggressiveness": "aggressive"
     },
-    "79": {
+    "83": {
+        "id": 129598,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "name": "Freehold Pack Mule",
+        "base_health": 58867,
+        "aggressiveness": "neutral"
+    },
+    "84": {
         "id": 129599,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -119,7 +159,15 @@
         "base_health": 264902,
         "aggressiveness": "aggressive"
     },
-    "80": {
+    "85": {
+        "id": 129600,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Bilge Rat Brinescale",
+        "base_health": 188376,
+        "aggressiveness": "aggressive"
+    },
+    "86": {
         "id": 129601,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -127,7 +175,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "81": {
+    "87": {
         "id": 129602,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -135,7 +183,7 @@
         "base_health": 470936,
         "aggressiveness": "aggressive"
     },
-    "84": {
+    "90": {
         "id": 129732,
         "dungeon_id": 15,
         "classification_id": 3,
@@ -143,7 +191,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "85": {
+    "91": {
         "id": 129788,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -151,7 +199,7 @@
         "base_health": 235470,
         "aggressiveness": "aggressive"
     },
-    "86": {
+    "93": {
         "id": 130011,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -159,7 +207,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "87": {
+    "94": {
         "id": 130012,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -167,7 +215,15 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "92": {
+    "95": {
+        "id": 130024,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "name": "Soggy Shiprat",
+        "base_health": 29434,
+        "aggressiveness": "aggressive"
+    },
+    "100": {
         "id": 130400,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -175,12 +231,28 @@
         "base_health": 588670,
         "aggressiveness": "aggressive"
     },
-    "93": {
+    "101": {
         "id": 130404,
         "dungeon_id": 15,
         "classification_id": 2,
         "name": "Vermin Trapper",
         "base_health": 470936,
         "aggressiveness": "aggressive"
+    },
+    "106": {
+        "id": 130521,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "name": "Freehold Deckhand",
+        "base_health": 58867,
+        "aggressiveness": "neutral"
+    },
+    "107": {
+        "id": 130522,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "name": "Freehold Shipmate",
+        "base_health": 58867,
+        "aggressiveness": "neutral"
     }
 }

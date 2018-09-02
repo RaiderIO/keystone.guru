@@ -14,5 +14,158 @@
             "base_health": 1,
             "aggressiveness": "aggressive"
         }
+    },
+    "608": {
+        "id": 633,
+        "enemy_pack_id": 146,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -84.689999999999998,
+        "lng": 163.81,
+        "npc": null
+    },
+    "611": {
+        "id": 636,
+        "enemy_pack_id": 147,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -110.63,
+        "lng": 178,
+        "npc": {
+            "id": 136250,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Hoodoo Hexer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "612": {
+        "id": 637,
+        "enemy_pack_id": 147,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -107.38,
+        "lng": 178.5,
+        "npc": {
+            "id": 139946,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Heart Guardian",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "613": {
+        "id": 638,
+        "enemy_pack_id": 146,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -85.439999999999998,
+        "lng": 159.94,
+        "npc": {
+            "id": 139949,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Plague Doctor",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "614": {
+        "id": 639,
+        "enemy_pack_id": 146,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -84.879999999999995,
+        "lng": 163.88,
+        "npc": {
+            "id": 136250,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Hoodoo Hexer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "615": {
+        "id": 640,
+        "enemy_pack_id": 146,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -83.310000000000002,
+        "lng": 162.81,
+        "npc": {
+            "id": 139946,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Heart Guardian",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "616": {
+        "id": 641,
+        "enemy_pack_id": -1,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -61.630000000000003,
+        "lng": 154.38,
+        "npc": {
+            "id": 136250,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Hoodoo Hexer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "617": {
+        "id": 642,
+        "enemy_pack_id": -1,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -67.939999999999998,
+        "lng": 144.5,
+        "npc": {
+            "id": 136250,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Hoodoo Hexer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "618": {
+        "id": 643,
+        "enemy_pack_id": -1,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -59.060000000000002,
+        "lng": 138.69,
+        "npc": {
+            "id": 136250,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Hoodoo Hexer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "619": {
+        "id": 644,
+        "enemy_pack_id": -1,
+        "floor_id": 49,
+        "teeming": null,
+        "lat": -52.5,
+        "lng": 148,
+        "npc": {
+            "id": 136250,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Hoodoo Hexer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
     }
 }

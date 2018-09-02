@@ -46,5 +46,1040 @@
             "base_health": 1,
             "aggressiveness": "aggressive"
         }
+    },
+    "547": {
+        "id": 571,
+        "enemy_pack_id": 135,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -216.38,
+        "lng": 271.75,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "548": {
+        "id": 572,
+        "enemy_pack_id": 135,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -216.25,
+        "lng": 274,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "549": {
+        "id": 573,
+        "enemy_pack_id": 135,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -218,
+        "lng": 271.94,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "550": {
+        "id": 574,
+        "enemy_pack_id": 135,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -218.13,
+        "lng": 274.19,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "551": {
+        "id": 575,
+        "enemy_pack_id": 135,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -215,
+        "lng": 273,
+        "npc": {
+            "id": 134990,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Charged Dust Devil",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "552": {
+        "id": 576,
+        "enemy_pack_id": 134,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -215.31,
+        "lng": 250.88,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "553": {
+        "id": 577,
+        "enemy_pack_id": 134,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -215.69,
+        "lng": 253.19,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "554": {
+        "id": 578,
+        "enemy_pack_id": 134,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -217.5,
+        "lng": 253.06,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "555": {
+        "id": 579,
+        "enemy_pack_id": 134,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -217.13,
+        "lng": 250.69,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "556": {
+        "id": 580,
+        "enemy_pack_id": 134,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -214.19,
+        "lng": 252.19,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "557": {
+        "id": 581,
+        "enemy_pack_id": 136,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -195.88,
+        "lng": 246.38,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "558": {
+        "id": 582,
+        "enemy_pack_id": 136,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -196.56,
+        "lng": 248.31,
+        "npc": {
+            "id": 134990,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Charged Dust Devil",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "559": {
+        "id": 583,
+        "enemy_pack_id": 136,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -197.56,
+        "lng": 246.88,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "560": {
+        "id": 584,
+        "enemy_pack_id": 137,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -185.5,
+        "lng": 258.94,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "561": {
+        "id": 585,
+        "enemy_pack_id": 137,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -185.81,
+        "lng": 257.31,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "562": {
+        "id": 586,
+        "enemy_pack_id": 137,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -187,
+        "lng": 260.44,
+        "npc": {
+            "id": 134991,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandfury Stonefist",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "563": {
+        "id": 587,
+        "enemy_pack_id": 137,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -187.13,
+        "lng": 262.44,
+        "npc": {
+            "id": 134991,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandfury Stonefist",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "564": {
+        "id": 588,
+        "enemy_pack_id": 137,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -185.31,
+        "lng": 263.06,
+        "npc": {
+            "id": 134990,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Charged Dust Devil",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "565": {
+        "id": 589,
+        "enemy_pack_id": 138,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -196.44,
+        "lng": 276.75,
+        "npc": {
+            "id": 134991,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandfury Stonefist",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "566": {
+        "id": 590,
+        "enemy_pack_id": 138,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -196.38,
+        "lng": 278.25,
+        "npc": {
+            "id": 134990,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Charged Dust Devil",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "567": {
+        "id": 591,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -186.81,
+        "lng": 218.12,
+        "npc": {
+            "id": 134629,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Scaled Krolusk Rider",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "568": {
+        "id": 592,
+        "enemy_pack_id": 139,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -185.75,
+        "lng": 200,
+        "npc": {
+            "id": 134390,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sand-crusted Striker",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "569": {
+        "id": 593,
+        "enemy_pack_id": 139,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -188.88,
+        "lng": 200.75,
+        "npc": {
+            "id": 134390,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sand-crusted Striker",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "570": {
+        "id": 594,
+        "enemy_pack_id": 139,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -190.5,
+        "lng": 198.88,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "571": {
+        "id": 595,
+        "enemy_pack_id": 139,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -186.5,
+        "lng": 197.88,
+        "npc": {
+            "id": 134629,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Scaled Krolusk Rider",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "572": {
+        "id": 596,
+        "enemy_pack_id": 142,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -200,
+        "lng": 196.38,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "573": {
+        "id": 597,
+        "enemy_pack_id": 142,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -202.38,
+        "lng": 194.12,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "574": {
+        "id": 598,
+        "enemy_pack_id": 142,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -204.31,
+        "lng": 190.69,
+        "npc": {
+            "id": 134686,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Mature Krolusk",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "575": {
+        "id": 599,
+        "enemy_pack_id": 143,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -207.38,
+        "lng": 183.06,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "576": {
+        "id": 600,
+        "enemy_pack_id": 143,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -207.38,
+        "lng": 179.06,
+        "npc": {
+            "id": 134686,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Mature Krolusk",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "577": {
+        "id": 601,
+        "enemy_pack_id": 143,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -206.88,
+        "lng": 175.5,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "578": {
+        "id": 602,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -203.44,
+        "lng": 176.31,
+        "npc": {
+            "id": 139422,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Scaled Krolusk Tamer",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "579": {
+        "id": 604,
+        "enemy_pack_id": 140,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -188.88,
+        "lng": 173.62,
+        "npc": {
+            "id": 135562,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Venomous Ophidian",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "580": {
+        "id": 605,
+        "enemy_pack_id": 140,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -190.25,
+        "lng": 170.88,
+        "npc": {
+            "id": 134390,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sand-crusted Striker",
+            "base_health": 117734,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "581": {
+        "id": 606,
+        "enemy_pack_id": 140,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -187.88,
+        "lng": 168.88,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "582": {
+        "id": 607,
+        "enemy_pack_id": 140,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -186.25,
+        "lng": 172.12,
+        "npc": {
+            "id": 134629,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Scaled Krolusk Rider",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "583": {
+        "id": 608,
+        "enemy_pack_id": 141,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -199.5,
+        "lng": 169.88,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "584": {
+        "id": 609,
+        "enemy_pack_id": 141,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -201.75,
+        "lng": 167.88,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "585": {
+        "id": 610,
+        "enemy_pack_id": 144,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -146.81,
+        "lng": 166.94,
+        "npc": {
+            "id": 134364,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Faithless Tender",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "586": {
+        "id": 611,
+        "enemy_pack_id": 144,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -146.81,
+        "lng": 168.94,
+        "npc": {
+            "id": 139425,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Crazed Incubator",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "587": {
+        "id": 612,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -140.88,
+        "lng": 168.44,
+        "npc": {
+            "id": 134629,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Scaled Krolusk Rider",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "588": {
+        "id": 613,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -132.06,
+        "lng": 156.12,
+        "npc": {
+            "id": 134629,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Scaled Krolusk Rider",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "589": {
+        "id": 614,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -131,
+        "lng": 164.12,
+        "npc": {
+            "id": 134364,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Faithless Tender",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "590": {
+        "id": 615,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -133.56,
+        "lng": 166,
+        "npc": {
+            "id": 134364,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Faithless Tender",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "591": {
+        "id": 616,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -133.5,
+        "lng": 162.5,
+        "npc": {
+            "id": 134364,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Faithless Tender",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "592": {
+        "id": 617,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -135.13,
+        "lng": 175.69,
+        "npc": {
+            "id": 139425,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Crazed Incubator",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "593": {
+        "id": 618,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -136.19,
+        "lng": 156.94,
+        "npc": {
+            "id": 139425,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Crazed Incubator",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "594": {
+        "id": 619,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -128.06,
+        "lng": 177.25,
+        "npc": {
+            "id": 139425,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Crazed Incubator",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "595": {
+        "id": 620,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -122.69,
+        "lng": 173.94,
+        "npc": {
+            "id": 134364,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Faithless Tender",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "596": {
+        "id": 621,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -120.25,
+        "lng": 166.56,
+        "npc": {
+            "id": 134364,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Faithless Tender",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "597": {
+        "id": 622,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -122.94,
+        "lng": 159.56,
+        "npc": {
+            "id": 139425,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Crazed Incubator",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "598": {
+        "id": 623,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -124.56,
+        "lng": 189.5,
+        "npc": {
+            "id": 136076,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Agitated Nimbus",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "599": {
+        "id": 624,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -114.13,
+        "lng": 198,
+        "npc": {
+            "id": 136076,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Agitated Nimbus",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "600": {
+        "id": 625,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -115.56,
+        "lng": 196.5,
+        "npc": {
+            "id": 134599,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Imbued Stormcaller",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "601": {
+        "id": 626,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -102.88,
+        "lng": 196,
+        "npc": {
+            "id": 134599,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Imbued Stormcaller",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "602": {
+        "id": 627,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -100.06,
+        "lng": 192.06,
+        "npc": {
+            "id": 136076,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Agitated Nimbus",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "603": {
+        "id": 628,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -100,
+        "lng": 199,
+        "npc": null
+    },
+    "604": {
+        "id": 629,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -100,
+        "lng": 195.69,
+        "npc": {
+            "id": 134599,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Imbued Stormcaller",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "605": {
+        "id": 630,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -89.939999999999998,
+        "lng": 187.38,
+        "npc": {
+            "id": 134691,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Static-charged Dervish",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "606": {
+        "id": 631,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -86.5,
+        "lng": 189.12,
+        "npc": {
+            "id": 134691,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Static-charged Dervish",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "607": {
+        "id": 632,
+        "enemy_pack_id": -1,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -72.060000000000002,
+        "lng": 171.81,
+        "npc": {
+            "id": 134691,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Static-charged Dervish",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "609": {
+        "id": 634,
+        "enemy_pack_id": 145,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -87.879999999999995,
+        "lng": 161.31,
+        "npc": null
+    },
+    "610": {
+        "id": 635,
+        "enemy_pack_id": 145,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -88.189999999999998,
+        "lng": 165.06,
+        "npc": null
+    },
+    "620": {
+        "id": 645,
+        "enemy_pack_id": 148,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -240.63,
+        "lng": 260.12,
+        "npc": {
+            "id": 134990,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Charged Dust Devil",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "621": {
+        "id": 646,
+        "enemy_pack_id": 148,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -240.63,
+        "lng": 262.5,
+        "npc": {
+            "id": 134600,
+            "dungeon_id": 19,
+            "classification_id": 2,
+            "name": "Sandswept Marksman",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "622": {
+        "id": 647,
+        "enemy_pack_id": 148,
+        "floor_id": 48,
+        "teeming": null,
+        "lat": -242.25,
+        "lng": 261.25,
+        "npc": {
+            "id": 134616,
+            "dungeon_id": 19,
+            "classification_id": 1,
+            "name": "Krolusk Pup",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
     }
 }

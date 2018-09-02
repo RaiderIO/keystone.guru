@@ -30,5 +30,1831 @@
             "base_health": 1,
             "aggressiveness": "aggressive"
         }
+    },
+    "1083": {
+        "id": 1111,
+        "enemy_pack_id": 236,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -17.379999999999999,
+        "lng": 198.38,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1084": {
+        "id": 1112,
+        "enemy_pack_id": 236,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -19.129999999999999,
+        "lng": 198.5,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1085": {
+        "id": 1113,
+        "enemy_pack_id": 236,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -21,
+        "lng": 198.5,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1086": {
+        "id": 1114,
+        "enemy_pack_id": 236,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -22.75,
+        "lng": 198.5,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1087": {
+        "id": 1115,
+        "enemy_pack_id": 236,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -22,
+        "lng": 197.12,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1088": {
+        "id": 1116,
+        "enemy_pack_id": 236,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -20,
+        "lng": 197.12,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1089": {
+        "id": 1117,
+        "enemy_pack_id": 236,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -18.5,
+        "lng": 197,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1090": {
+        "id": 1118,
+        "enemy_pack_id": 236,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -16.629999999999999,
+        "lng": 197,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1091": {
+        "id": 1119,
+        "enemy_pack_id": 235,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -25.879999999999999,
+        "lng": 184.75,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1092": {
+        "id": 1120,
+        "enemy_pack_id": 235,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -26.75,
+        "lng": 186.25,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1093": {
+        "id": 1121,
+        "enemy_pack_id": 235,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -28.059999999999999,
+        "lng": 187.38,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1094": {
+        "id": 1122,
+        "enemy_pack_id": 235,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -29.629999999999999,
+        "lng": 188.12,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1095": {
+        "id": 1123,
+        "enemy_pack_id": 235,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -31.190000000000001,
+        "lng": 188.5,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1096": {
+        "id": 1124,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -22.190000000000001,
+        "lng": 193.5,
+        "npc": {
+            "id": 134139,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Shrine Templar",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1097": {
+        "id": 1125,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -44.630000000000003,
+        "lng": 192.06,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1098": {
+        "id": 1126,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -44.75,
+        "lng": 194.19,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1099": {
+        "id": 1127,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -54.560000000000002,
+        "lng": 182.44,
+        "npc": {
+            "id": 136186,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Spiritualist",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1100": {
+        "id": 1128,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -54.689999999999998,
+        "lng": 203.44,
+        "npc": {
+            "id": 136186,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Spiritualist",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1101": {
+        "id": 1129,
+        "enemy_pack_id": 237,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -60.689999999999998,
+        "lng": 191.81,
+        "npc": {
+            "id": 134137,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Temple Attendant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1102": {
+        "id": 1130,
+        "enemy_pack_id": 237,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -60.75,
+        "lng": 193.88,
+        "npc": {
+            "id": 134137,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Temple Attendant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1103": {
+        "id": 1131,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -64.060000000000002,
+        "lng": 193.19,
+        "npc": {
+            "id": 134139,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Shrine Templar",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1104": {
+        "id": 1132,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -56.75,
+        "lng": 193,
+        "npc": {
+            "id": 134144,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Living Current",
+            "base_health": 529803,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1105": {
+        "id": 1133,
+        "enemy_pack_id": 238,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -64.689999999999998,
+        "lng": 204.81,
+        "npc": {
+            "id": 136186,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Spiritualist",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1106": {
+        "id": 1134,
+        "enemy_pack_id": 238,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -67.310000000000002,
+        "lng": 204.94,
+        "npc": {
+            "id": 136186,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Spiritualist",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1107": {
+        "id": 1135,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -82.810000000000002,
+        "lng": 202.06,
+        "npc": {
+            "id": 136186,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Spiritualist",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1108": {
+        "id": 1136,
+        "enemy_pack_id": 239,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -80.439999999999998,
+        "lng": 186.62,
+        "npc": {
+            "id": 134144,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Living Current",
+            "base_health": 529803,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1109": {
+        "id": 1137,
+        "enemy_pack_id": 239,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -79.379999999999995,
+        "lng": 188.12,
+        "npc": {
+            "id": 134137,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Temple Attendant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1110": {
+        "id": 1138,
+        "enemy_pack_id": 239,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -81.25,
+        "lng": 188.06,
+        "npc": {
+            "id": 134137,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Temple Attendant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1111": {
+        "id": 1139,
+        "enemy_pack_id": 240,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -83.939999999999998,
+        "lng": 176,
+        "npc": {
+            "id": 136186,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Spiritualist",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1112": {
+        "id": 1140,
+        "enemy_pack_id": 240,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -84.810000000000002,
+        "lng": 173.25,
+        "npc": {
+            "id": 134137,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Temple Attendant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1113": {
+        "id": 1141,
+        "enemy_pack_id": 240,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -85.5,
+        "lng": 170.38,
+        "npc": {
+            "id": 136186,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Spiritualist",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1114": {
+        "id": 1143,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -79.810000000000002,
+        "lng": 201.75,
+        "npc": {
+            "id": 136186,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Spiritualist",
+            "base_health": 353202,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1115": {
+        "id": 1144,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -105.88,
+        "lng": 160.88,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1116": {
+        "id": 1145,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -104.31,
+        "lng": 160.19,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1117": {
+        "id": 1146,
+        "enemy_pack_id": 241,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -99.75,
+        "lng": 159.5,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1118": {
+        "id": 1147,
+        "enemy_pack_id": 241,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -97.629999999999995,
+        "lng": 160.81,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1119": {
+        "id": 1148,
+        "enemy_pack_id": 241,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -97.379999999999995,
+        "lng": 157.81,
+        "npc": {
+            "id": 136214,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Windspeaker Heldis",
+            "base_health": 1059606,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1120": {
+        "id": 1149,
+        "enemy_pack_id": 241,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -97.560000000000002,
+        "lng": 154.56,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1121": {
+        "id": 1150,
+        "enemy_pack_id": 241,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -95.629999999999995,
+        "lng": 155.75,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1122": {
+        "id": 1151,
+        "enemy_pack_id": 242,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -89.060000000000002,
+        "lng": 153.94,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1123": {
+        "id": 1152,
+        "enemy_pack_id": 242,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -88.689999999999998,
+        "lng": 155.38,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1124": {
+        "id": 1153,
+        "enemy_pack_id": 242,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -87.439999999999998,
+        "lng": 154.88,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1125": {
+        "id": 1154,
+        "enemy_pack_id": 242,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -87.75,
+        "lng": 153.62,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1126": {
+        "id": 1155,
+        "enemy_pack_id": 243,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -83.129999999999995,
+        "lng": 150.75,
+        "npc": {
+            "id": 139799,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Ironhull Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1127": {
+        "id": 1156,
+        "enemy_pack_id": 243,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -82.5,
+        "lng": 153.69,
+        "npc": {
+            "id": 139799,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Ironhull Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1128": {
+        "id": 1157,
+        "enemy_pack_id": 244,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -67.560000000000002,
+        "lng": 153.81,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1129": {
+        "id": 1158,
+        "enemy_pack_id": 244,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -66.129999999999995,
+        "lng": 153.81,
+        "npc": {
+            "id": 134137,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Temple Attendant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1130": {
+        "id": 1159,
+        "enemy_pack_id": 244,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -64.75,
+        "lng": 153.56,
+        "npc": {
+            "id": 139799,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Ironhull Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1131": {
+        "id": 1160,
+        "enemy_pack_id": 245,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -53.25,
+        "lng": 144.75,
+        "npc": {
+            "id": 139799,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Ironhull Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1132": {
+        "id": 1161,
+        "enemy_pack_id": 245,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -52.5,
+        "lng": 145.81,
+        "npc": {
+            "id": 134137,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Temple Attendant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1133": {
+        "id": 1162,
+        "enemy_pack_id": 245,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -52.939999999999998,
+        "lng": 147.12,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1134": {
+        "id": 1163,
+        "enemy_pack_id": 245,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -54.75,
+        "lng": 145.06,
+        "npc": {
+            "id": 139799,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Ironhull Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1135": {
+        "id": 1164,
+        "enemy_pack_id": 246,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -66.810000000000002,
+        "lng": 141.75,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1136": {
+        "id": 1165,
+        "enemy_pack_id": 246,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -64.689999999999998,
+        "lng": 143.25,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1137": {
+        "id": 1166,
+        "enemy_pack_id": 246,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -64.879999999999995,
+        "lng": 141.06,
+        "npc": {
+            "id": 134150,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Runecarver Sorn",
+            "base_health": 941872,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1138": {
+        "id": 1167,
+        "enemy_pack_id": 246,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -64.810000000000002,
+        "lng": 138.81,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1139": {
+        "id": 1168,
+        "enemy_pack_id": 246,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -62.939999999999998,
+        "lng": 140.44,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1140": {
+        "id": 1169,
+        "enemy_pack_id": 247,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -77.25,
+        "lng": 130.12,
+        "npc": {
+            "id": 139799,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Ironhull Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1141": {
+        "id": 1170,
+        "enemy_pack_id": 247,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -77.129999999999995,
+        "lng": 128.75,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1142": {
+        "id": 1171,
+        "enemy_pack_id": 247,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -76.5,
+        "lng": 127.69,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1143": {
+        "id": 1172,
+        "enemy_pack_id": 247,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -75.379999999999995,
+        "lng": 126.75,
+        "npc": {
+            "id": 139799,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Ironhull Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1144": {
+        "id": 1173,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -81.689999999999998,
+        "lng": 124.44,
+        "npc": {
+            "id": 136249,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Guardian Elemental",
+            "base_health": 883005,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1145": {
+        "id": 1174,
+        "enemy_pack_id": 250,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -85.189999999999998,
+        "lng": 113.44,
+        "npc": {
+            "id": 134137,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Temple Attendant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1146": {
+        "id": 1175,
+        "enemy_pack_id": 250,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -85.75,
+        "lng": 114.88,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1147": {
+        "id": 1176,
+        "enemy_pack_id": 250,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -86.310000000000002,
+        "lng": 113.56,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1148": {
+        "id": 1177,
+        "enemy_pack_id": 249,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -96.310000000000002,
+        "lng": 127.12,
+        "npc": null
+    },
+    "1149": {
+        "id": 1178,
+        "enemy_pack_id": 249,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -97.439999999999998,
+        "lng": 126.19,
+        "npc": null
+    },
+    "1150": {
+        "id": 1179,
+        "enemy_pack_id": 248,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -94.189999999999998,
+        "lng": 124.25,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1151": {
+        "id": 1180,
+        "enemy_pack_id": 248,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -95.25,
+        "lng": 123.44,
+        "npc": {
+            "id": 139799,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Ironhull Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1152": {
+        "id": 1181,
+        "enemy_pack_id": 253,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -92.879999999999995,
+        "lng": 106.62,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1153": {
+        "id": 1182,
+        "enemy_pack_id": 253,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -93.5,
+        "lng": 107.44,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1154": {
+        "id": 1183,
+        "enemy_pack_id": 253,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -93.879999999999995,
+        "lng": 108.31,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1155": {
+        "id": 1184,
+        "enemy_pack_id": 253,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -94,
+        "lng": 109.31,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1156": {
+        "id": 1185,
+        "enemy_pack_id": 252,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -96.189999999999998,
+        "lng": 111.88,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1157": {
+        "id": 1186,
+        "enemy_pack_id": 251,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -94.189999999999998,
+        "lng": 111.69,
+        "npc": {
+            "id": 139799,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Ironhull Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1158": {
+        "id": 1187,
+        "enemy_pack_id": 251,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -93.560000000000002,
+        "lng": 112.56,
+        "npc": {
+            "id": 139800,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Galecaller Apprentice",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1159": {
+        "id": 1188,
+        "enemy_pack_id": 252,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -97.5,
+        "lng": 112,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1160": {
+        "id": 1189,
+        "enemy_pack_id": 252,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -98.560000000000002,
+        "lng": 111.62,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1161": {
+        "id": 1190,
+        "enemy_pack_id": 252,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -99.189999999999998,
+        "lng": 110.81,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1162": {
+        "id": 1191,
+        "enemy_pack_id": 254,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -100.38,
+        "lng": 108.81,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1163": {
+        "id": 1192,
+        "enemy_pack_id": 254,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -100.75,
+        "lng": 107.69,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1164": {
+        "id": 1193,
+        "enemy_pack_id": 254,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -101.13,
+        "lng": 106.44,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1165": {
+        "id": 1194,
+        "enemy_pack_id": 254,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -101.25,
+        "lng": 105,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1166": {
+        "id": 1195,
+        "enemy_pack_id": 255,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -107.06,
+        "lng": 94.560000000000002,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1167": {
+        "id": 1196,
+        "enemy_pack_id": 255,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -106.63,
+        "lng": 95.810000000000002,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1168": {
+        "id": 1197,
+        "enemy_pack_id": 255,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -106,
+        "lng": 97.120000000000005,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1169": {
+        "id": 1198,
+        "enemy_pack_id": 255,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -105,
+        "lng": 98.189999999999998,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1170": {
+        "id": 1199,
+        "enemy_pack_id": 256,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -100.94,
+        "lng": 99.439999999999998,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1171": {
+        "id": 1200,
+        "enemy_pack_id": 256,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -99.439999999999998,
+        "lng": 99.620000000000005,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1172": {
+        "id": 1201,
+        "enemy_pack_id": 256,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -97.879999999999995,
+        "lng": 99.310000000000002,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1173": {
+        "id": 1202,
+        "enemy_pack_id": 256,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -96.689999999999998,
+        "lng": 98.560000000000002,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1174": {
+        "id": 1203,
+        "enemy_pack_id": 257,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -91.810000000000002,
+        "lng": 99.25,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1175": {
+        "id": 1204,
+        "enemy_pack_id": 257,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -91.189999999999998,
+        "lng": 100.5,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1176": {
+        "id": 1205,
+        "enemy_pack_id": 257,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -90.560000000000002,
+        "lng": 101.69,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1177": {
+        "id": 1206,
+        "enemy_pack_id": 257,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -89.689999999999998,
+        "lng": 102.94,
+        "npc": {
+            "id": 136347,
+            "dungeon_id": 17,
+            "classification_id": 1,
+            "name": "Tidesage Initiate",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1178": {
+        "id": 1207,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -98.629999999999995,
+        "lng": 92.810000000000002,
+        "npc": {
+            "id": 134058,
+            "dungeon_id": 17,
+            "classification_id": 3,
+            "name": "Galecaller Faye",
+            "base_health": 1545259,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1179": {
+        "id": 1208,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -115.31,
+        "lng": 128.81,
+        "npc": {
+            "id": 134417,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Deepsea Ritualist",
+            "base_health": 647537,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1180": {
+        "id": 1209,
+        "enemy_pack_id": 259,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -125.5,
+        "lng": 116.81,
+        "npc": {
+            "id": 134417,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Deepsea Ritualist",
+            "base_health": 647537,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1181": {
+        "id": 1210,
+        "enemy_pack_id": 259,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -126.38,
+        "lng": 115.19,
+        "npc": {
+            "id": 134338,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Enforcer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1182": {
+        "id": 1211,
+        "enemy_pack_id": 259,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -125.25,
+        "lng": 118.44,
+        "npc": {
+            "id": 134338,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Enforcer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1183": {
+        "id": 1212,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -136.5,
+        "lng": 134.69,
+        "npc": {
+            "id": 134417,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Deepsea Ritualist",
+            "base_health": 647537,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1184": {
+        "id": 1213,
+        "enemy_pack_id": 258,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -141.31,
+        "lng": 129.56,
+        "npc": {
+            "id": 134338,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Enforcer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1185": {
+        "id": 1214,
+        "enemy_pack_id": 258,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -142.69,
+        "lng": 131.81,
+        "npc": {
+            "id": 134338,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Tidesage Enforcer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1186": {
+        "id": 1215,
+        "enemy_pack_id": 260,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -156.38,
+        "lng": 127,
+        "npc": {
+            "id": 134418,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Drowned Depthbringer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1187": {
+        "id": 1216,
+        "enemy_pack_id": 260,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -158,
+        "lng": 125.94,
+        "npc": {
+            "id": 134418,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Drowned Depthbringer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1188": {
+        "id": 1217,
+        "enemy_pack_id": 261,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -189.94,
+        "lng": 175.12,
+        "npc": {
+            "id": 134514,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Abyssal Cultist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1189": {
+        "id": 1218,
+        "enemy_pack_id": 261,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -187.44,
+        "lng": 176.56,
+        "npc": {
+            "id": 134514,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Abyssal Cultist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1190": {
+        "id": 1219,
+        "enemy_pack_id": 262,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -189.88,
+        "lng": 184.12,
+        "npc": {
+            "id": 134514,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Abyssal Cultist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1191": {
+        "id": 1220,
+        "enemy_pack_id": 262,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -190.56,
+        "lng": 185.94,
+        "npc": {
+            "id": 134514,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Abyssal Cultist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1192": {
+        "id": 1221,
+        "enemy_pack_id": 262,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -192.13,
+        "lng": 185.06,
+        "npc": {
+            "id": 134514,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Abyssal Cultist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1193": {
+        "id": 1222,
+        "enemy_pack_id": 262,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -191.5,
+        "lng": 183.25,
+        "npc": {
+            "id": 134514,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Abyssal Cultist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1194": {
+        "id": 1223,
+        "enemy_pack_id": 263,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -204.88,
+        "lng": 205.19,
+        "npc": {
+            "id": 134418,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Drowned Depthbringer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1195": {
+        "id": 1224,
+        "enemy_pack_id": 263,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -206.31,
+        "lng": 204.81,
+        "npc": {
+            "id": 134418,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Drowned Depthbringer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1196": {
+        "id": 1225,
+        "enemy_pack_id": 263,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -205.44,
+        "lng": 206.56,
+        "npc": {
+            "id": 134418,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Drowned Depthbringer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "1197": {
+        "id": 1226,
+        "enemy_pack_id": 263,
+        "floor_id": 45,
+        "teeming": null,
+        "lat": -207.06,
+        "lng": 206.12,
+        "npc": {
+            "id": 134418,
+            "dungeon_id": 17,
+            "classification_id": 2,
+            "name": "Drowned Depthbringer",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
     }
 }

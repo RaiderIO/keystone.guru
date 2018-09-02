@@ -63,9 +63,9 @@
             "aggressiveness": "aggressive"
         }
     },
-    "269": {
+    "268": {
         "id": 281,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 54,
         "floor_id": 50,
         "teeming": null,
         "lat": -202.16,
@@ -79,9 +79,9 @@
             "aggressiveness": "aggressive"
         }
     },
-    "270": {
+    "269": {
         "id": 282,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 54,
         "floor_id": 50,
         "teeming": null,
         "lat": -200.78999999999999,
@@ -95,7 +95,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "272": {
+    "271": {
         "id": 284,
         "enemy_pack_id": 54,
         "floor_id": 50,
@@ -111,7 +111,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "282": {
+    "281": {
         "id": 294,
         "enemy_pack_id": 58,
         "floor_id": 50,
@@ -127,12 +127,12 @@
             "aggressiveness": "aggressive"
         }
     },
-    "283": {
+    "282": {
         "id": 295,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 58,
         "floor_id": 50,
         "teeming": null,
-        "lat": -193.78999999999999,
+        "lat": -193.94,
         "lng": 203.62,
         "npc": {
             "id": 136470,
@@ -143,9 +143,9 @@
             "aggressiveness": "aggressive"
         }
     },
-    "284": {
+    "283": {
         "id": 296,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 58,
         "floor_id": 50,
         "teeming": null,
         "lat": -192.53999999999999,
@@ -159,7 +159,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "285": {
+    "284": {
         "id": 297,
         "enemy_pack_id": 59,
         "floor_id": 50,
@@ -175,7 +175,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "286": {
+    "285": {
         "id": 298,
         "enemy_pack_id": 59,
         "floor_id": 50,
@@ -191,7 +191,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "287": {
+    "286": {
         "id": 299,
         "enemy_pack_id": 59,
         "floor_id": 50,
@@ -207,7 +207,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "288": {
+    "287": {
         "id": 300,
         "enemy_pack_id": 60,
         "floor_id": 50,
@@ -223,7 +223,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "289": {
+    "288": {
         "id": 301,
         "enemy_pack_id": 60,
         "floor_id": 50,
@@ -239,7 +239,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "290": {
+    "289": {
         "id": 302,
         "enemy_pack_id": 60,
         "floor_id": 50,
@@ -255,7 +255,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "291": {
+    "290": {
         "id": 303,
         "enemy_pack_id": 61,
         "floor_id": 50,
@@ -271,7 +271,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "292": {
+    "291": {
         "id": 304,
         "enemy_pack_id": 61,
         "floor_id": 50,
@@ -287,7 +287,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "293": {
+    "292": {
         "id": 305,
         "enemy_pack_id": 62,
         "floor_id": 50,
@@ -303,7 +303,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "294": {
+    "293": {
         "id": 306,
         "enemy_pack_id": 62,
         "floor_id": 50,
@@ -319,7 +319,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "295": {
+    "294": {
         "id": 307,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -335,7 +335,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "296": {
+    "295": {
         "id": 308,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -351,7 +351,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "297": {
+    "296": {
         "id": 309,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -367,7 +367,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "298": {
+    "297": {
         "id": 310,
         "enemy_pack_id": 63,
         "floor_id": 50,
@@ -383,7 +383,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "299": {
+    "298": {
         "id": 311,
         "enemy_pack_id": 63,
         "floor_id": 50,
@@ -399,7 +399,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "300": {
+    "299": {
         "id": 312,
         "enemy_pack_id": 63,
         "floor_id": 50,
@@ -415,7 +415,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "301": {
+    "300": {
         "id": 313,
         "enemy_pack_id": 64,
         "floor_id": 50,
@@ -431,7 +431,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "302": {
+    "301": {
         "id": 314,
         "enemy_pack_id": 64,
         "floor_id": 50,
@@ -447,7 +447,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "303": {
+    "302": {
         "id": 315,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -463,7 +463,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "304": {
+    "303": {
         "id": 316,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -479,7 +479,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "305": {
+    "304": {
         "id": 317,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -495,7 +495,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "306": {
+    "305": {
         "id": 318,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -511,7 +511,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "307": {
+    "306": {
         "id": 319,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -527,7 +527,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "308": {
+    "307": {
         "id": 320,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -543,7 +543,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "309": {
+    "308": {
         "id": 321,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -559,7 +559,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "310": {
+    "309": {
         "id": 322,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -575,7 +575,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "311": {
+    "310": {
         "id": 323,
         "enemy_pack_id": 65,
         "floor_id": 50,
@@ -591,7 +591,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "312": {
+    "311": {
         "id": 324,
         "enemy_pack_id": 65,
         "floor_id": 50,
@@ -607,7 +607,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "313": {
+    "312": {
         "id": 325,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -623,7 +623,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "314": {
+    "313": {
         "id": 326,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -639,7 +639,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "315": {
+    "314": {
         "id": 327,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -655,7 +655,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "316": {
+    "315": {
         "id": 328,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -671,7 +671,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "317": {
+    "316": {
         "id": 329,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -687,7 +687,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "318": {
+    "317": {
         "id": 330,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -703,7 +703,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "319": {
+    "318": {
         "id": 331,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -719,7 +719,7 @@
             "aggressiveness": "friendly"
         }
     },
-    "320": {
+    "319": {
         "id": 332,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -735,7 +735,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "321": {
+    "320": {
         "id": 333,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -751,7 +751,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "322": {
+    "321": {
         "id": 334,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -767,7 +767,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "323": {
+    "322": {
         "id": 335,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -783,7 +783,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "324": {
+    "323": {
         "id": 336,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -799,7 +799,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "325": {
+    "324": {
         "id": 337,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -815,7 +815,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "326": {
+    "325": {
         "id": 338,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -831,7 +831,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "327": {
+    "326": {
         "id": 339,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -847,7 +847,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "328": {
+    "327": {
         "id": 340,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -863,7 +863,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "329": {
+    "328": {
         "id": 341,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -879,7 +879,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "330": {
+    "329": {
         "id": 342,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -895,7 +895,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "331": {
+    "330": {
         "id": 343,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -911,7 +911,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "332": {
+    "331": {
         "id": 344,
         "enemy_pack_id": 66,
         "floor_id": 50,
@@ -927,7 +927,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "333": {
+    "332": {
         "id": 345,
         "enemy_pack_id": 66,
         "floor_id": 50,
@@ -943,7 +943,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "334": {
+    "333": {
         "id": 346,
         "enemy_pack_id": 66,
         "floor_id": 50,
@@ -959,7 +959,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "335": {
+    "334": {
         "id": 347,
         "enemy_pack_id": 66,
         "floor_id": 50,
@@ -975,7 +975,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "336": {
+    "335": {
         "id": 348,
         "enemy_pack_id": 67,
         "floor_id": 50,
@@ -991,7 +991,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "337": {
+    "336": {
         "id": 349,
         "enemy_pack_id": 67,
         "floor_id": 50,
@@ -1007,7 +1007,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "338": {
+    "337": {
         "id": 350,
         "enemy_pack_id": 68,
         "floor_id": 50,
@@ -1023,7 +1023,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "339": {
+    "338": {
         "id": 351,
         "enemy_pack_id": 68,
         "floor_id": 50,
@@ -1039,7 +1039,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "340": {
+    "339": {
         "id": 352,
         "enemy_pack_id": 68,
         "floor_id": 50,
@@ -1055,7 +1055,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "341": {
+    "340": {
         "id": 353,
         "enemy_pack_id": 68,
         "floor_id": 50,
@@ -1071,7 +1071,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "342": {
+    "341": {
         "id": 354,
         "enemy_pack_id": 69,
         "floor_id": 50,
@@ -1087,7 +1087,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "343": {
+    "342": {
         "id": 355,
         "enemy_pack_id": 69,
         "floor_id": 50,
@@ -1103,7 +1103,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "344": {
+    "343": {
         "id": 356,
         "enemy_pack_id": 69,
         "floor_id": 50,
@@ -1119,7 +1119,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "345": {
+    "344": {
         "id": 357,
         "enemy_pack_id": 70,
         "floor_id": 50,
@@ -1135,7 +1135,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "346": {
+    "345": {
         "id": 358,
         "enemy_pack_id": 70,
         "floor_id": 50,
@@ -1151,7 +1151,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "347": {
+    "346": {
         "id": 359,
         "enemy_pack_id": 70,
         "floor_id": 50,
@@ -1167,7 +1167,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "348": {
+    "347": {
         "id": 360,
         "enemy_pack_id": 71,
         "floor_id": 50,
@@ -1183,7 +1183,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "349": {
+    "348": {
         "id": 361,
         "enemy_pack_id": 71,
         "floor_id": 50,
@@ -1199,7 +1199,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "350": {
+    "349": {
         "id": 362,
         "enemy_pack_id": 71,
         "floor_id": 50,
@@ -1215,7 +1215,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "351": {
+    "350": {
         "id": 363,
         "enemy_pack_id": 72,
         "floor_id": 50,
@@ -1231,7 +1231,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "352": {
+    "351": {
         "id": 364,
         "enemy_pack_id": 72,
         "floor_id": 50,
@@ -1247,7 +1247,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "353": {
+    "352": {
         "id": 365,
         "enemy_pack_id": 73,
         "floor_id": 50,
@@ -1263,7 +1263,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "354": {
+    "353": {
         "id": 366,
         "enemy_pack_id": 73,
         "floor_id": 50,
@@ -1279,7 +1279,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "355": {
+    "354": {
         "id": 367,
         "enemy_pack_id": 73,
         "floor_id": 50,
@@ -1295,7 +1295,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "356": {
+    "355": {
         "id": 368,
         "enemy_pack_id": 73,
         "floor_id": 50,
@@ -1311,7 +1311,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "357": {
+    "356": {
         "id": 369,
         "enemy_pack_id": 74,
         "floor_id": 50,
@@ -1327,7 +1327,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "358": {
+    "357": {
         "id": 370,
         "enemy_pack_id": 74,
         "floor_id": 50,
@@ -1343,7 +1343,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "359": {
+    "358": {
         "id": 371,
         "enemy_pack_id": 74,
         "floor_id": 50,
@@ -1359,7 +1359,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "360": {
+    "359": {
         "id": 372,
         "enemy_pack_id": 75,
         "floor_id": 50,
@@ -1375,7 +1375,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "361": {
+    "360": {
         "id": 373,
         "enemy_pack_id": 75,
         "floor_id": 50,
@@ -1391,7 +1391,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "362": {
+    "361": {
         "id": 374,
         "enemy_pack_id": 75,
         "floor_id": 50,
@@ -1407,7 +1407,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "363": {
+    "362": {
         "id": 375,
         "enemy_pack_id": 76,
         "floor_id": 50,
@@ -1423,7 +1423,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "364": {
+    "363": {
         "id": 376,
         "enemy_pack_id": 76,
         "floor_id": 50,
@@ -1439,7 +1439,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "365": {
+    "364": {
         "id": 377,
         "enemy_pack_id": 76,
         "floor_id": 50,
@@ -1455,7 +1455,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "366": {
+    "365": {
         "id": 378,
         "enemy_pack_id": 77,
         "floor_id": 50,
@@ -1471,7 +1471,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "367": {
+    "366": {
         "id": 379,
         "enemy_pack_id": 77,
         "floor_id": 50,
@@ -1487,7 +1487,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "368": {
+    "367": {
         "id": 380,
         "enemy_pack_id": 77,
         "floor_id": 50,
@@ -1503,7 +1503,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "369": {
+    "368": {
         "id": 381,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1516,10 +1516,10 @@
             "classification_id": 2,
             "name": "Mechanized Peacekeeper",
             "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "aggressiveness": "neutral"
         }
     },
-    "370": {
+    "369": {
         "id": 382,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1535,7 +1535,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "371": {
+    "370": {
         "id": 383,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1551,7 +1551,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "372": {
+    "371": {
         "id": 384,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1567,7 +1567,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "373": {
+    "372": {
         "id": 385,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1583,7 +1583,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "374": {
+    "373": {
         "id": 386,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1599,7 +1599,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "375": {
+    "374": {
         "id": 387,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1615,7 +1615,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "376": {
+    "375": {
         "id": 388,
         "enemy_pack_id": 79,
         "floor_id": 50,
@@ -1631,7 +1631,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "377": {
+    "376": {
         "id": 389,
         "enemy_pack_id": 79,
         "floor_id": 50,
@@ -1647,7 +1647,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "378": {
+    "377": {
         "id": 390,
         "enemy_pack_id": 79,
         "floor_id": 50,
@@ -1663,7 +1663,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "379": {
+    "378": {
         "id": 391,
         "enemy_pack_id": 79,
         "floor_id": 50,
@@ -1679,7 +1679,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "380": {
+    "379": {
         "id": 392,
         "enemy_pack_id": 80,
         "floor_id": 50,
@@ -1695,7 +1695,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "381": {
+    "380": {
         "id": 393,
         "enemy_pack_id": 80,
         "floor_id": 50,
@@ -1711,7 +1711,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "382": {
+    "381": {
         "id": 394,
         "enemy_pack_id": 80,
         "floor_id": 50,
@@ -1727,7 +1727,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "383": {
+    "382": {
         "id": 395,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1743,7 +1743,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "384": {
+    "383": {
         "id": 396,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1759,7 +1759,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "385": {
+    "384": {
         "id": 397,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1775,7 +1775,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "386": {
+    "385": {
         "id": 398,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1791,7 +1791,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "387": {
+    "386": {
         "id": 399,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1807,7 +1807,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "388": {
+    "387": {
         "id": 400,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1823,7 +1823,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "389": {
+    "388": {
         "id": 401,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1839,7 +1839,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "390": {
+    "389": {
         "id": 402,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1855,7 +1855,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "391": {
+    "390": {
         "id": 403,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1871,7 +1871,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "392": {
+    "391": {
         "id": 404,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1887,7 +1887,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "393": {
+    "392": {
         "id": 405,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1903,7 +1903,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "394": {
+    "393": {
         "id": 406,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1919,7 +1919,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "395": {
+    "394": {
         "id": 407,
         "enemy_pack_id": 81,
         "floor_id": 50,
@@ -1935,7 +1935,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "396": {
+    "395": {
         "id": 408,
         "enemy_pack_id": 81,
         "floor_id": 50,
@@ -1951,7 +1951,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "397": {
+    "396": {
         "id": 409,
         "enemy_pack_id": 81,
         "floor_id": 50,
@@ -1967,7 +1967,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "398": {
+    "397": {
         "id": 410,
         "enemy_pack_id": 82,
         "floor_id": 50,
@@ -1983,7 +1983,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "399": {
+    "398": {
         "id": 411,
         "enemy_pack_id": 82,
         "floor_id": 50,
@@ -1999,7 +1999,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "400": {
+    "399": {
         "id": 412,
         "enemy_pack_id": 82,
         "floor_id": 50,
@@ -2015,7 +2015,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "401": {
+    "400": {
         "id": 413,
         "enemy_pack_id": 83,
         "floor_id": 50,
@@ -2031,7 +2031,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "402": {
+    "401": {
         "id": 414,
         "enemy_pack_id": 83,
         "floor_id": 50,
@@ -2047,7 +2047,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "403": {
+    "402": {
         "id": 415,
         "enemy_pack_id": 83,
         "floor_id": 50,
@@ -2063,7 +2063,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "404": {
+    "403": {
         "id": 416,
         "enemy_pack_id": 83,
         "floor_id": 50,
@@ -2079,7 +2079,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "405": {
+    "404": {
         "id": 417,
         "enemy_pack_id": 84,
         "floor_id": 50,
@@ -2095,7 +2095,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "406": {
+    "405": {
         "id": 418,
         "enemy_pack_id": 84,
         "floor_id": 50,
@@ -2111,7 +2111,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "407": {
+    "406": {
         "id": 419,
         "enemy_pack_id": 84,
         "floor_id": 50,
@@ -2127,7 +2127,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "408": {
+    "407": {
         "id": 420,
         "enemy_pack_id": 84,
         "floor_id": 50,
@@ -2143,7 +2143,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "409": {
+    "408": {
         "id": 421,
         "enemy_pack_id": 85,
         "floor_id": 50,
@@ -2156,10 +2156,10 @@
             "classification_id": 2,
             "name": "Mechanized Peacekeeper",
             "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "aggressiveness": "neutral"
         }
     },
-    "410": {
+    "409": {
         "id": 422,
         "enemy_pack_id": 85,
         "floor_id": 50,
@@ -2175,7 +2175,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "411": {
+    "410": {
         "id": 423,
         "enemy_pack_id": 85,
         "floor_id": 50,
@@ -2187,6 +2187,3427 @@
             "dungeon_id": 20,
             "classification_id": 2,
             "name": "Hired Assassin",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "734": {
+        "id": 761,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -219.47999999999999,
+        "lng": 206.38,
+        "npc": {
+            "id": 137713,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Big Money Crab",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "735": {
+        "id": 762,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -216.59999999999999,
+        "lng": 195,
+        "npc": {
+            "id": 137713,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Big Money Crab",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "736": {
+        "id": 763,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -210.03999999999999,
+        "lng": 206.69,
+        "npc": {
+            "id": 137713,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Big Money Crab",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "737": {
+        "id": 764,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -210.06,
+        "lng": 209.56,
+        "npc": {
+            "id": 138061,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Venture Co. Longshoreman",
+            "base_health": 117734,
+            "aggressiveness": "neutral"
+        }
+    },
+    "738": {
+        "id": 765,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -209.78999999999999,
+        "lng": 214.25,
+        "npc": {
+            "id": 138061,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Venture Co. Longshoreman",
+            "base_health": 117734,
+            "aggressiveness": "neutral"
+        }
+    },
+    "739": {
+        "id": 766,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -209.22999999999999,
+        "lng": 216.75,
+        "npc": {
+            "id": 138061,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Venture Co. Longshoreman",
+            "base_health": 117734,
+            "aggressiveness": "neutral"
+        }
+    },
+    "740": {
+        "id": 767,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -211.91,
+        "lng": 224,
+        "npc": {
+            "id": 138061,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Venture Co. Longshoreman",
+            "base_health": 117734,
+            "aggressiveness": "neutral"
+        }
+    },
+    "741": {
+        "id": 768,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -217.66,
+        "lng": 211.81,
+        "npc": {
+            "id": 138061,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Venture Co. Longshoreman",
+            "base_health": 117734,
+            "aggressiveness": "neutral"
+        }
+    },
+    "742": {
+        "id": 769,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -219.16,
+        "lng": 211.81,
+        "npc": {
+            "id": 138061,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Venture Co. Longshoreman",
+            "base_health": 117734,
+            "aggressiveness": "neutral"
+        }
+    },
+    "743": {
+        "id": 770,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -219.22999999999999,
+        "lng": 214.44,
+        "npc": {
+            "id": 137716,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Bottom Feeder",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "744": {
+        "id": 771,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.16,
+        "lng": 224.31,
+        "npc": {
+            "id": 137716,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Bottom Feeder",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "745": {
+        "id": 772,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -224.72999999999999,
+        "lng": 228.25,
+        "npc": {
+            "id": 138063,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Posh Vacationer",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "746": {
+        "id": 773,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -224.78999999999999,
+        "lng": 229.25,
+        "npc": {
+            "id": 138063,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Posh Vacationer",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "747": {
+        "id": 774,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -224.47999999999999,
+        "lng": 227.5,
+        "npc": {
+            "id": 138063,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Posh Vacationer",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "748": {
+        "id": 775,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.78999999999999,
+        "lng": 228.31,
+        "npc": {
+            "id": 138063,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Posh Vacationer",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "749": {
+        "id": 776,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.84999999999999,
+        "lng": 229.31,
+        "npc": {
+            "id": 138063,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Posh Vacationer",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "750": {
+        "id": 777,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.34999999999999,
+        "lng": 227.38,
+        "npc": {
+            "id": 137713,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Big Money Crab",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "751": {
+        "id": 778,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -226.91,
+        "lng": 230.12,
+        "npc": {
+            "id": 138063,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Posh Vacationer",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "752": {
+        "id": 779,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -227.03999999999999,
+        "lng": 231.25,
+        "npc": {
+            "id": 138063,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Posh Vacationer",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "753": {
+        "id": 780,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.22999999999999,
+        "lng": 204.75,
+        "npc": {
+            "id": 137716,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Bottom Feeder",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "754": {
+        "id": 781,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -227.88,
+        "lng": 198.38,
+        "npc": {
+            "id": 137716,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Bottom Feeder",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "755": {
+        "id": 782,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -204.34999999999999,
+        "lng": 194.75,
+        "npc": {
+            "id": 138061,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Venture Co. Longshoreman",
+            "base_health": 117734,
+            "aggressiveness": "neutral"
+        }
+    },
+    "756": {
+        "id": 783,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -208.41,
+        "lng": 186.44,
+        "npc": {
+            "id": 138061,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Venture Co. Longshoreman",
+            "base_health": 117734,
+            "aggressiveness": "neutral"
+        }
+    },
+    "757": {
+        "id": 784,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -210.97999999999999,
+        "lng": 183.94,
+        "npc": {
+            "id": 138061,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Venture Co. Longshoreman",
+            "base_health": 117734,
+            "aggressiveness": "neutral"
+        }
+    },
+    "758": {
+        "id": 785,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.28999999999999,
+        "lng": 188.94,
+        "npc": {
+            "id": 137716,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Bottom Feeder",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "759": {
+        "id": 786,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -227.53999999999999,
+        "lng": 182.62,
+        "npc": {
+            "id": 137716,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Bottom Feeder",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "760": {
+        "id": 787,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -229.16,
+        "lng": 179.62,
+        "npc": {
+            "id": 138063,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Posh Vacationer",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "761": {
+        "id": 788,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -229.97999999999999,
+        "lng": 178.5,
+        "npc": {
+            "id": 138063,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Posh Vacationer",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "762": {
+        "id": 789,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -232.34999999999999,
+        "lng": 180.88,
+        "npc": {
+            "id": 137716,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Bottom Feeder",
+            "base_health": 58867,
+            "aggressiveness": "neutral"
+        }
+    },
+    "763": {
+        "id": 790,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -190.59999999999999,
+        "lng": 214.81,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "764": {
+        "id": 791,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -208.59999999999999,
+        "lng": 208.19,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "765": {
+        "id": 792,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -208.41,
+        "lng": 215.12,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "766": {
+        "id": 793,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -159.84999999999999,
+        "lng": 206.81,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "767": {
+        "id": 794,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -156.22999999999999,
+        "lng": 212.75,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "768": {
+        "id": 795,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -156.03999999999999,
+        "lng": 212.06,
+        "npc": {
+            "id": 140319,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Dr. Wrenchly von Boom",
+            "base_health": 183935,
+            "aggressiveness": "friendly"
+        }
+    },
+    "769": {
+        "id": 796,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -158.47999999999999,
+        "lng": 224.56,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "770": {
+        "id": 797,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -149.22999999999999,
+        "lng": 225.12,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "771": {
+        "id": 798,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -147.84999999999999,
+        "lng": 223.44,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "772": {
+        "id": 799,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -142.84999999999999,
+        "lng": 218.19,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "773": {
+        "id": 800,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -141.41,
+        "lng": 209,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "774": {
+        "id": 801,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -148.84999999999999,
+        "lng": 187.44,
+        "npc": {
+            "id": 136139,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Mechanized Peacekeeper",
+            "base_health": 470936,
+            "aggressiveness": "neutral"
+        }
+    },
+    "775": {
+        "id": 802,
+        "enemy_pack_id": 179,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -112.04000000000001,
+        "lng": 155.62,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "776": {
+        "id": 803,
+        "enemy_pack_id": 179,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.54000000000001,
+        "lng": 155.12,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "777": {
+        "id": 804,
+        "enemy_pack_id": 179,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -111.41,
+        "lng": 154.06,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "778": {
+        "id": 805,
+        "enemy_pack_id": 182,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -120.98,
+        "lng": 153.56,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "779": {
+        "id": 806,
+        "enemy_pack_id": 182,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -122.16,
+        "lng": 152.56,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "780": {
+        "id": 807,
+        "enemy_pack_id": 182,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -122.59999999999999,
+        "lng": 154.19,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "781": {
+        "id": 808,
+        "enemy_pack_id": 181,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -122.81,
+        "lng": 147.44,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "782": {
+        "id": 809,
+        "enemy_pack_id": 181,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -123.23,
+        "lng": 149.44,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "783": {
+        "id": 810,
+        "enemy_pack_id": 181,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -123.06,
+        "lng": 148.25,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "784": {
+        "id": 811,
+        "enemy_pack_id": 180,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.59999999999999,
+        "lng": 149,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "785": {
+        "id": 812,
+        "enemy_pack_id": 180,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -111.73,
+        "lng": 148,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "786": {
+        "id": 813,
+        "enemy_pack_id": 180,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -111.79000000000001,
+        "lng": 146.38,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "787": {
+        "id": 814,
+        "enemy_pack_id": 180,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.98,
+        "lng": 144.31,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "788": {
+        "id": 815,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -92.120000000000005,
+        "lng": 134.12,
+        "npc": {
+            "id": 137940,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Safety Shark",
+            "base_health": 1177340,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "789": {
+        "id": 816,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -103.23,
+        "lng": 150.88,
+        "npc": {
+            "id": 137940,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Safety Shark",
+            "base_health": 1177340,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "790": {
+        "id": 817,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -85.849999999999994,
+        "lng": 148.38,
+        "npc": {
+            "id": 137940,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Safety Shark",
+            "base_health": 1177340,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "791": {
+        "id": 818,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -94.659999999999997,
+        "lng": 163.19,
+        "npc": {
+            "id": 137940,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Safety Shark",
+            "base_health": 1177340,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "792": {
+        "id": 819,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -96.159999999999997,
+        "lng": 158.38,
+        "npc": {
+            "id": 137940,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Safety Shark",
+            "base_health": 1177340,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "793": {
+        "id": 820,
+        "enemy_pack_id": 183,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -111.91,
+        "lng": 140.81,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "794": {
+        "id": 821,
+        "enemy_pack_id": 183,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -109.84999999999999,
+        "lng": 139.88,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "795": {
+        "id": 822,
+        "enemy_pack_id": 183,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -112.54000000000001,
+        "lng": 138.88,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "796": {
+        "id": 823,
+        "enemy_pack_id": 183,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.59999999999999,
+        "lng": 137.62,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "797": {
+        "id": 824,
+        "enemy_pack_id": 184,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -119.16,
+        "lng": 136.62,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "798": {
+        "id": 825,
+        "enemy_pack_id": 184,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -120.34999999999999,
+        "lng": 137.06,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "799": {
+        "id": 826,
+        "enemy_pack_id": 184,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -121.91,
+        "lng": 137.62,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "800": {
+        "id": 827,
+        "enemy_pack_id": 185,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -124.04000000000001,
+        "lng": 130.12,
+        "npc": {
+            "id": 136643,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Azerite Extractor",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "801": {
+        "id": 828,
+        "enemy_pack_id": 185,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -122.54000000000001,
+        "lng": 130.94,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "802": {
+        "id": 829,
+        "enemy_pack_id": 185,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -124.09999999999999,
+        "lng": 131.69,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "803": {
+        "id": 830,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -126.09999999999999,
+        "lng": 128.25,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "804": {
+        "id": 831,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -126.41,
+        "lng": 129.81,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "805": {
+        "id": 832,
+        "enemy_pack_id": 186,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -125.98,
+        "lng": 119.31,
+        "npc": {
+            "id": 136643,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Azerite Extractor",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "806": {
+        "id": 833,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -121.48,
+        "lng": 118.88,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "807": {
+        "id": 834,
+        "enemy_pack_id": 186,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -124.84999999999999,
+        "lng": 117.81,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "808": {
+        "id": 835,
+        "enemy_pack_id": 187,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -121.48,
+        "lng": 115.44,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "809": {
+        "id": 836,
+        "enemy_pack_id": 187,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -119.79000000000001,
+        "lng": 116.31,
+        "npc": {
+            "id": 136643,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Azerite Extractor",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "810": {
+        "id": 837,
+        "enemy_pack_id": 188,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -117.12,
+        "lng": 123.5,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "811": {
+        "id": 838,
+        "enemy_pack_id": 188,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -116.16,
+        "lng": 122.25,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "812": {
+        "id": 839,
+        "enemy_pack_id": 188,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -115.98,
+        "lng": 124.5,
+        "npc": {
+            "id": 130437,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Mine Rat",
+            "base_health": 176601,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "813": {
+        "id": 840,
+        "enemy_pack_id": 189,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.98,
+        "lng": 131.81,
+        "npc": {
+            "id": 136643,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Azerite Extractor",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "814": {
+        "id": 841,
+        "enemy_pack_id": 189,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -112.34999999999999,
+        "lng": 131.44,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "815": {
+        "id": 842,
+        "enemy_pack_id": 189,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -109.54000000000001,
+        "lng": 132.06,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "816": {
+        "id": 843,
+        "enemy_pack_id": 190,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -104.73,
+        "lng": 131.75,
+        "npc": {
+            "id": 134005,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Shalebiter",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "817": {
+        "id": 844,
+        "enemy_pack_id": 190,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -104.29000000000001,
+        "lng": 130.06,
+        "npc": {
+            "id": 134005,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Shalebiter",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "818": {
+        "id": 845,
+        "enemy_pack_id": 190,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -103.34999999999999,
+        "lng": 131.81,
+        "npc": {
+            "id": 134005,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Shalebiter",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "819": {
+        "id": 846,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -100.16,
+        "lng": 127.75,
+        "npc": {
+            "id": 130635,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Stonefury",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "820": {
+        "id": 847,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -95.120000000000005,
+        "lng": 121.56,
+        "npc": {
+            "id": 130635,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Stonefury",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "821": {
+        "id": 848,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -91.730000000000004,
+        "lng": 118.38,
+        "npc": {
+            "id": 130635,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Stonefury",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "822": {
+        "id": 849,
+        "enemy_pack_id": 191,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -93.480000000000004,
+        "lng": 118.31,
+        "npc": {
+            "id": 134005,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Shalebiter",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "823": {
+        "id": 850,
+        "enemy_pack_id": 191,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -92.159999999999997,
+        "lng": 120.62,
+        "npc": {
+            "id": 134005,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Shalebiter",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "824": {
+        "id": 851,
+        "enemy_pack_id": 191,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -93.790000000000006,
+        "lng": 120.12,
+        "npc": {
+            "id": 134005,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Shalebiter",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "825": {
+        "id": 852,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -83.349999999999994,
+        "lng": 114.38,
+        "npc": {
+            "id": 134012,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Taskmaster Askari",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "826": {
+        "id": 853,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -84.409999999999997,
+        "lng": 111.25,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "827": {
+        "id": 854,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -85.659999999999997,
+        "lng": 113.12,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "828": {
+        "id": 855,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -85.659999999999997,
+        "lng": 115.44,
+        "npc": {
+            "id": 130661,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Earthshaper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "829": {
+        "id": 856,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -84.159999999999997,
+        "lng": 117.5,
+        "npc": {
+            "id": 130653,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Wanton Sapper",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "830": {
+        "id": 857,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.659999999999997,
+        "lng": 111.62,
+        "npc": null
+    },
+    "831": {
+        "id": 858,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -70.909999999999997,
+        "lng": 115.5,
+        "npc": null
+    },
+    "832": {
+        "id": 859,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -68.159999999999997,
+        "lng": 121.19,
+        "npc": null
+    },
+    "833": {
+        "id": 860,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -63.979999999999997,
+        "lng": 117.06,
+        "npc": null
+    },
+    "834": {
+        "id": 861,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -79.099999999999994,
+        "lng": 132.19,
+        "npc": null
+    },
+    "835": {
+        "id": 862,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.5,
+        "lng": 141.81,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "836": {
+        "id": 863,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.310000000000002,
+        "lng": 142.69,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "837": {
+        "id": 864,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -44.380000000000003,
+        "lng": 141.38,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "838": {
+        "id": 865,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -43.689999999999998,
+        "lng": 142.62,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "839": {
+        "id": 866,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -43,
+        "lng": 143.94,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "840": {
+        "id": 867,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.939999999999998,
+        "lng": 145.56,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "841": {
+        "id": 868,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -40.939999999999998,
+        "lng": 146.44,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "842": {
+        "id": 869,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -40.25,
+        "lng": 147.12,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "843": {
+        "id": 870,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.810000000000002,
+        "lng": 143.94,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "844": {
+        "id": 871,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -45.380000000000003,
+        "lng": 145.19,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "845": {
+        "id": 872,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -39.689999999999998,
+        "lng": 148.75,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "846": {
+        "id": 873,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -39.880000000000003,
+        "lng": 149.5,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "847": {
+        "id": 874,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -40,
+        "lng": 151.62,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "848": {
+        "id": 875,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -40.880000000000003,
+        "lng": 150.75,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "849": {
+        "id": 876,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -42.810000000000002,
+        "lng": 152.5,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "850": {
+        "id": 877,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.539999999999999,
+        "lng": 153.69,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "851": {
+        "id": 878,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -39.729999999999997,
+        "lng": 154.62,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "852": {
+        "id": 879,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -46.229999999999997,
+        "lng": 151.81,
+        "npc": {
+            "id": 138369,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Footbomb Hooligan",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "853": {
+        "id": 880,
+        "enemy_pack_id": 197,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.229999999999997,
+        "lng": 161.88,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "854": {
+        "id": 881,
+        "enemy_pack_id": 197,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.850000000000001,
+        "lng": 160.62,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "855": {
+        "id": 882,
+        "enemy_pack_id": 197,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -52.100000000000001,
+        "lng": 158.88,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "856": {
+        "id": 883,
+        "enemy_pack_id": 197,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -53.289999999999999,
+        "lng": 160.62,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "857": {
+        "id": 884,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -50.039999999999999,
+        "lng": 166.69,
+        "npc": {
+            "id": 133430,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Mastermind",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "858": {
+        "id": 885,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -59,
+        "lng": 167.81,
+        "npc": {
+            "id": 136934,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Weapons Tester",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "859": {
+        "id": 886,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -57.75,
+        "lng": 166.69,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "860": {
+        "id": 887,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -56.810000000000002,
+        "lng": 167.88,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "861": {
+        "id": 888,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -57.689999999999998,
+        "lng": 168.94,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "862": {
+        "id": 889,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -61.909999999999997,
+        "lng": 177.94,
+        "npc": {
+            "id": 133430,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Mastermind",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "863": {
+        "id": 890,
+        "enemy_pack_id": 196,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -70.290000000000006,
+        "lng": 161.88,
+        "npc": {
+            "id": 136934,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Weapons Tester",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "864": {
+        "id": 891,
+        "enemy_pack_id": 196,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -68.480000000000004,
+        "lng": 161.06,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "865": {
+        "id": 892,
+        "enemy_pack_id": 196,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -69.290000000000006,
+        "lng": 163.38,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "866": {
+        "id": 893,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -70.5,
+        "lng": 169.62,
+        "npc": {
+            "id": 133430,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Mastermind",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "867": {
+        "id": 894,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.790000000000006,
+        "lng": 170.38,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "868": {
+        "id": 895,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.730000000000004,
+        "lng": 170.81,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "869": {
+        "id": 896,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.480000000000004,
+        "lng": 171.25,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "870": {
+        "id": 897,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.099999999999994,
+        "lng": 171.44,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "871": {
+        "id": 898,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.659999999999997,
+        "lng": 171,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "872": {
+        "id": 899,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -68.040000000000006,
+        "lng": 170.25,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "873": {
+        "id": 900,
+        "enemy_pack_id": 195,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -71.730000000000004,
+        "lng": 171.81,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "874": {
+        "id": 901,
+        "enemy_pack_id": 195,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -71.730000000000004,
+        "lng": 173.62,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "875": {
+        "id": 902,
+        "enemy_pack_id": 195,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -70.409999999999997,
+        "lng": 172.75,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "876": {
+        "id": 903,
+        "enemy_pack_id": 198,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -45.600000000000001,
+        "lng": 154.81,
+        "npc": {
+            "id": 136934,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Weapons Tester",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "877": {
+        "id": 904,
+        "enemy_pack_id": 198,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -46.539999999999999,
+        "lng": 156.38,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "878": {
+        "id": 905,
+        "enemy_pack_id": 198,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.479999999999997,
+        "lng": 154.75,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "879": {
+        "id": 906,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -42.479999999999997,
+        "lng": 160.12,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "880": {
+        "id": 907,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -43.039999999999999,
+        "lng": 161.12,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "881": {
+        "id": 908,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -43.039999999999999,
+        "lng": 162.12,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "882": {
+        "id": 909,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.600000000000001,
+        "lng": 160.69,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "883": {
+        "id": 910,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.909999999999997,
+        "lng": 161.44,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "884": {
+        "id": 911,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.979999999999997,
+        "lng": 162.44,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "885": {
+        "id": 912,
+        "enemy_pack_id": 200,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -42.689999999999998,
+        "lng": 169.69,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "886": {
+        "id": 913,
+        "enemy_pack_id": 200,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.5,
+        "lng": 168.81,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "887": {
+        "id": 914,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.689999999999998,
+        "lng": 173.5,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "888": {
+        "id": 915,
+        "enemy_pack_id": 201,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -42.310000000000002,
+        "lng": 177.5,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "889": {
+        "id": 916,
+        "enemy_pack_id": 201,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.619999999999997,
+        "lng": 178.38,
+        "npc": {
+            "id": 136934,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Weapons Tester",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "890": {
+        "id": 917,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.619999999999997,
+        "lng": 182.38,
+        "npc": {
+            "id": 133430,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Mastermind",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "891": {
+        "id": 918,
+        "enemy_pack_id": 202,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.5,
+        "lng": 189.06,
+        "npc": {
+            "id": 136934,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Weapons Tester",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "892": {
+        "id": 919,
+        "enemy_pack_id": 202,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.619999999999997,
+        "lng": 188.06,
+        "npc": {
+            "id": 136934,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Weapons Tester",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "893": {
+        "id": 920,
+        "enemy_pack_id": 202,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.310000000000002,
+        "lng": 187.19,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "894": {
+        "id": 921,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -53.409999999999997,
+        "lng": 171.5,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "895": {
+        "id": 922,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -54.039999999999999,
+        "lng": 172.94,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "896": {
+        "id": 923,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -53.039999999999999,
+        "lng": 173.88,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "897": {
+        "id": 924,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -52.909999999999997,
+        "lng": 172.75,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "898": {
+        "id": 925,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.75,
+        "lng": 172.06,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "899": {
+        "id": 926,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.909999999999997,
+        "lng": 180.06,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "900": {
+        "id": 927,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.290000000000006,
+        "lng": 181,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "901": {
+        "id": 928,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.409999999999997,
+        "lng": 180.88,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "902": {
+        "id": 929,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.159999999999997,
+        "lng": 181.81,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "903": {
+        "id": 930,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.659999999999997,
+        "lng": 180.81,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "904": {
+        "id": 931,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.290000000000006,
+        "lng": 182.25,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "905": {
+        "id": 932,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.790000000000006,
+        "lng": 180.25,
+        "npc": {
+            "id": 136934,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Weapons Tester",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "906": {
+        "id": 933,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -73.290000000000006,
+        "lng": 177.88,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "907": {
+        "id": 934,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -74.040000000000006,
+        "lng": 178.44,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "908": {
+        "id": 935,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -73.599999999999994,
+        "lng": 179.38,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "909": {
+        "id": 936,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -74.790000000000006,
+        "lng": 179.12,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "910": {
+        "id": 937,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -74.540000000000006,
+        "lng": 177.81,
+        "npc": {
+            "id": 133963,
+            "dungeon_id": 20,
+            "classification_id": 1,
+            "name": "Test Subject",
+            "base_health": 58867,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "911": {
+        "id": 938,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -72.980000000000004,
+        "lng": 177,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "912": {
+        "id": 939,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -74.480000000000004,
+        "lng": 179.81,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "913": {
+        "id": 940,
+        "enemy_pack_id": 206,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -76.290000000000006,
+        "lng": 173,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "914": {
+        "id": 941,
+        "enemy_pack_id": 206,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -75.730000000000004,
+        "lng": 174.38,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "915": {
+        "id": 942,
+        "enemy_pack_id": 206,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -76.909999999999997,
+        "lng": 174.62,
+        "npc": {
+            "id": 136934,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Weapons Tester",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "916": {
+        "id": 943,
+        "enemy_pack_id": 207,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -60.789999999999999,
+        "lng": 186.31,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "917": {
+        "id": 944,
+        "enemy_pack_id": 207,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -59.979999999999997,
+        "lng": 187.38,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "918": {
+        "id": 945,
+        "enemy_pack_id": 207,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -59.229999999999997,
+        "lng": 188.19,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "919": {
+        "id": 946,
+        "enemy_pack_id": 207,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -58.289999999999999,
+        "lng": 189.06,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "920": {
+        "id": 947,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -52.350000000000001,
+        "lng": 194.44,
+        "npc": {
+            "id": 133430,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Mastermind",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "921": {
+        "id": 948,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -54.039999999999999,
+        "lng": 194.44,
+        "npc": {
+            "id": 133430,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Mastermind",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "922": {
+        "id": 949,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -50.289999999999999,
+        "lng": 193.94,
+        "npc": {
+            "id": 133345,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Feckless Assistant",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "923": {
+        "id": 950,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -56.039999999999999,
+        "lng": 193.94,
+        "npc": {
+            "id": 133432,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Alchemist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "924": {
+        "id": 951,
+        "enemy_pack_id": 212,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -56.659999999999997,
+        "lng": 232.62,
+        "npc": {
+            "id": 133593,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Expert Technician",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "925": {
+        "id": 952,
+        "enemy_pack_id": 212,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -56.659999999999997,
+        "lng": 234.44,
+        "npc": {
+            "id": 137029,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Ordnance Specialist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "926": {
+        "id": 953,
+        "enemy_pack_id": 212,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -57.979999999999997,
+        "lng": 233.62,
+        "npc": {
+            "id": 133463,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. War Machine",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "927": {
+        "id": 954,
+        "enemy_pack_id": 211,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.979999999999997,
+        "lng": 232.5,
+        "npc": {
+            "id": 133593,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Expert Technician",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "928": {
+        "id": 955,
+        "enemy_pack_id": 211,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.479999999999997,
+        "lng": 232.75,
+        "npc": {
+            "id": 133463,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. War Machine",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "929": {
+        "id": 956,
+        "enemy_pack_id": 210,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.039999999999999,
+        "lng": 237.19,
+        "npc": {
+            "id": 137029,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Ordnance Specialist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "930": {
+        "id": 957,
+        "enemy_pack_id": 210,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -49.409999999999997,
+        "lng": 237.38,
+        "npc": {
+            "id": 137029,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Ordnance Specialist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "931": {
+        "id": 958,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -49.810000000000002,
+        "lng": 252.69,
+        "npc": {
+            "id": 137029,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Ordnance Specialist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "932": {
+        "id": 959,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.189999999999998,
+        "lng": 246.69,
+        "npc": {
+            "id": 133436,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Skyscorcher",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "933": {
+        "id": 960,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -54.100000000000001,
+        "lng": 254.88,
+        "npc": {
+            "id": 133593,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Expert Technician",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "934": {
+        "id": 961,
+        "enemy_pack_id": 209,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -50.289999999999999,
+        "lng": 256.81,
+        "npc": {
+            "id": 133593,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Expert Technician",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "935": {
+        "id": 962,
+        "enemy_pack_id": 209,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.479999999999997,
+        "lng": 257,
+        "npc": {
+            "id": 137029,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Ordnance Specialist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "936": {
+        "id": 963,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -46.659999999999997,
+        "lng": 257.75,
+        "npc": {
+            "id": 133436,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Skyscorcher",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "937": {
+        "id": 964,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -57.600000000000001,
+        "lng": 254.12,
+        "npc": {
+            "id": 133436,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Skyscorcher",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "938": {
+        "id": 965,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -45.539999999999999,
+        "lng": 258.06,
+        "npc": {
+            "id": 133436,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Skyscorcher",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "939": {
+        "id": 966,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.439999999999998,
+        "lng": 271.44,
+        "npc": {
+            "id": 133463,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. War Machine",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "940": {
+        "id": 967,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -55.380000000000003,
+        "lng": 265.94,
+        "npc": {
+            "id": 133463,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. War Machine",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "941": {
+        "id": 968,
+        "enemy_pack_id": 208,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -52.979999999999997,
+        "lng": 279.81,
+        "npc": {
+            "id": 133436,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Skyscorcher",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "942": {
+        "id": 969,
+        "enemy_pack_id": 208,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -55.229999999999997,
+        "lng": 279.31,
+        "npc": {
+            "id": 133593,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Expert Technician",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "943": {
+        "id": 970,
+        "enemy_pack_id": 213,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -64.25,
+        "lng": 254.06,
+        "npc": {
+            "id": 137029,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Ordnance Specialist",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "944": {
+        "id": 971,
+        "enemy_pack_id": 213,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.379999999999995,
+        "lng": 253,
+        "npc": {
+            "id": 133436,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Skyscorcher",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "945": {
+        "id": 972,
+        "enemy_pack_id": 213,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.599999999999994,
+        "lng": 251.88,
+        "npc": {
+            "id": 133463,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. War Machine",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "946": {
+        "id": 973,
+        "enemy_pack_id": 214,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.790000000000006,
+        "lng": 274.19,
+        "npc": {
+            "id": 133463,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. War Machine",
+            "base_health": 470936,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "947": {
+        "id": 974,
+        "enemy_pack_id": 214,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.099999999999994,
+        "lng": 272.81,
+        "npc": {
+            "id": 133436,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Skyscorcher",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "948": {
+        "id": 975,
+        "enemy_pack_id": 214,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -64.349999999999994,
+        "lng": 275.56,
+        "npc": {
+            "id": 133436,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Venture Co. Skyscorcher",
+            "base_health": 294335,
+            "aggressiveness": "aggressive"
+        }
+    },
+    "949": {
+        "id": 976,
+        "enemy_pack_id": 214,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.230000000000004,
+        "lng": 273.5,
+        "npc": {
+            "id": 133593,
+            "dungeon_id": 20,
+            "classification_id": 2,
+            "name": "Expert Technician",
             "base_health": 294335,
             "aggressiveness": "aggressive"
         }
