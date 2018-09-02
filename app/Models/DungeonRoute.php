@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 /**
  * @property $id int The ID of this DungeonRoute.
@@ -154,10 +155,15 @@ class DungeonRoute extends Model
     /**
      * @return double
      */
-    public function getAvgRatingAttribute(){
+    public function getAvgRatingAttribute()
+    {
         $avg = 0;
-        if( !$this->ratings->isEmpty() ){
-            return $this->ratings->avg();
+        if (!$this->ratings->isEmpty()) {
+            /** @var Collection $ratings */
+            $ratings = $this->ratings;
+            $ratingsArr = $ratings->pluck(['rating'])->toArray();
+
+            $avg = array_sum($ratingsArr) / count($ratingsArr);
         }
         return $avg;
     }
@@ -165,7 +171,8 @@ class DungeonRoute extends Model
     /**
      * @return integer
      */
-    public function getRatingCountAttribute(){
+    public function getRatingCountAttribute()
+    {
         return $this->ratings->count();
     }
 

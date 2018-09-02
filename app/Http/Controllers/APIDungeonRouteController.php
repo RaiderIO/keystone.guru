@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
+use App\Models\DungeonRouteRating;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class APIDungeonRouteController extends Controller
@@ -25,15 +27,15 @@ class APIDungeonRouteController extends Controller
             $query->active();
         });
 
-        $authorId = intval($request->get('author_id', -1));
+        $mine = $request->get('mine', false);
+        $user = Auth::user();
+
         // Filter by our own user if logged in
-        if ($authorId > -1) {
-            $builder = $builder->where('author_id', '=', $authorId);
+        if ($mine) {
+            $builder = $builder->where('author_id', '=', $user->id);
         }
 
-        // This is safe enough, even with the links people will get denied access
-        // @TODO hardcoded admin ID?
-        if ($authorId !== 1) {
+        if (!$user->hasRole('admin')) {
             // Never show demo routes here
             $builder = $builder->where('demo', '=', '0');
         }
@@ -80,5 +82,27 @@ class APIDungeonRouteController extends Controller
         }
 
         return ['id' => $dungeonroute->id];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     */
+    function rate(Request $request, DungeonRoute $dungeonroute)
+    {
+        $value = $request->get('rating', -1);
+
+        if ($value > 0) {
+            $user = Auth::user();
+
+            /** @var DungeonRouteRating $dungeonRouteRating */
+            $dungeonRouteRating = DungeonRouteRating::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
+            $dungeonRouteRating->rating = max(1, min(10, $value));
+            $dungeonRouteRating->save();
+        }
+
+        $dungeonroute->unsetRelation('ratings');
+        return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
     }
 }

@@ -119,31 +119,43 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
     Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
         Route::get('/enemypacks', 'APIEnemyPackController@list');
-        Route::post('/enemypack', 'APIEnemyPackController@store');
-        Route::delete('/enemypack', 'APIEnemyPackController@delete');
 
         Route::get('/enemies', 'APIEnemyController@list');
-        Route::post('/enemy', 'APIEnemyController@store');
-        Route::delete('/enemy', 'APIEnemyController@delete');
 
         Route::get('/enemypatrols', 'APIEnemyPatrolController@list');
-        Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
-        Route::delete('/enemypatrol', 'APIEnemyPatrolController@delete');
 
-        Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
         Route::get('/dungeonroutes', 'APIDungeonRouteController@list')->name('api.dungeonroutes');
 
         Route::get('/routes', 'APIRouteController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
-        Route::post('/route', 'APIRouteController@store');
-        Route::delete('/route', 'APIRouteController@delete');
 
         Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');
-        Route::post('/dungeonstartmarker', 'APIDungeonStartMarkerController@store')->where(['dungeon' => '[0-9]+']);
-        Route::delete('/dungeonstartmarker', 'APIDungeonStartMarkerController@delete');
 
         Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
-        Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
-        Route::delete('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@delete');
+
+        Route::group(['middleware' => ['auth', 'role:user']], function () {
+            Route::post('/route', 'APIRouteController@store');
+            Route::delete('/route', 'APIRouteController@delete');
+
+            Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
+            Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
+        });
+
+        Route::group(['middleware' => ['auth', 'role:admin']], function () {
+            Route::post('/enemypack', 'APIEnemyPackController@store');
+            Route::delete('/enemypack', 'APIEnemyPackController@delete');
+
+            Route::post('/enemy', 'APIEnemyController@store');
+            Route::delete('/enemy', 'APIEnemyController@delete');
+
+            Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
+            Route::delete('/enemypatrol', 'APIEnemyPatrolController@delete');
+
+            Route::post('/dungeonstartmarker', 'APIDungeonStartMarkerController@store')->where(['dungeon' => '[0-9]+']);
+            Route::delete('/dungeonstartmarker', 'APIDungeonStartMarkerController@delete');
+
+            Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
+            Route::delete('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@delete');
+        });
     });
 
 });

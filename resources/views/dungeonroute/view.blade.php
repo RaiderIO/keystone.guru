@@ -1,7 +1,6 @@
 @extends('layouts.app', ['wide' => true])
 @section('header-title', $model->title)
 
-
 @section('scripts')
     @parent
 
@@ -20,25 +19,28 @@
                 readonly: true,
                 initialRating: {{ $model->avg_rating }}
             });
-            $('#vote').barrating({
+            $('#your_rating').barrating({
                 theme: 'bars-1to10',
                 deselectable: true,
                 allowEmpty: true,
                 onSelect: function (value, text, event) {
-                    console.log(value, text, event);
-                    if (value === '') {
-                        value = 1;
-                    } else {
-                        // Value is 0 based, make it 1 based
-                        value += 1;
-                    }
-                    vote(value);
+                    rate(value);
                 }
             });
         });
 
-        function vote(value) {
-
+        function rate(value) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/dungeonroute/' + _dungeonRoute.public_key + '/rate',
+                dataType: 'json',
+                data: {
+                    rating: value
+                },
+                success: function (json) {
+                    // We don't _really_ care if this doesn't go through or not
+                }
+            });
         }
     </script>
 @endsection
@@ -91,16 +93,19 @@
             {{ __('Rating') }}:
         </div>
         <div class="col-6">
-            {!! Form::select('rating', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], $model->avg_rating, ['id' => 'rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
-            {{ $model->avg_rating === 0 ? '-' : sprintf('%s (%s votes)', $model->avg_rating, $model->ratings->count()) }}
+            {!! Form::select('rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10], $model->avg_rating, ['id' => 'rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
         </div>
     </div>
     <div class="row view_dungeonroute_details_row">
         <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Vote') }}:
+            {{ __('Your rating') }}:
         </div>
         <div class="col-6">
-            {!! Form::select('vote', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], null, ['id' => 'vote', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
+            @if(Auth::user() === null )
+                {{ __('Login to rate this route') }}
+            @else
+                {!! Form::select('your_rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10], null, ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
+            @endif
         </div>
     </div>
     <div class="col-lg-12 mt-5">

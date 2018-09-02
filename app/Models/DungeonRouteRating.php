@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $dungeon_route_id
+ * @property int $user_id
+ * @property int $rating
  * @property \App\Models\DungeonRoute $dungeonroute
  * @property \App\User $user
  */
 class DungeonRouteRating extends Model
 {
+    public $fillable = ['dungeon_route_id', 'user_id'];
     public $timestamps = false;
 
     /**

@@ -18,8 +18,8 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                     'data': function (d) {
                         // Prevent this variable from busting cache
                         d.draw = null;
-                        <?php if( isset($author_id)) {?>
-                            d.author_id = {{ $author_id }};
+                        <?php if( $editLinks ) {?>
+                            d.mine = true;
                         <?php } ?>
                     }, <?php // Enable caching when in production mode, disable it when developing ?>
                     'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}'
@@ -32,9 +32,9 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                         'name': 'title',
                         'render': function (data, type, row, meta) {
                             <?php if( $editLinks ) { ?>
-                            return '<a href="{{ route('dungeonroute.edit', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
+                                return '<a href="{{ route('dungeonroute.edit', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
                             <?php } else { ?>
-                            return '<a href="{{ route('dungeonroute.view', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
+                                return '<a href="{{ route('dungeonroute.view', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
                             <?php } ?>
                         }
                     },
@@ -67,8 +67,8 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                         'render': function (data, type, row, meta) {
                             let result = '-';
 
-                            if( row.avg_rating !== 0 ){
-                                result = row.avg_rating + ' (' +  row.rating_count + ' votes)';
+                            if (row.avg_rating !== 0) {
+                                result = row.avg_rating + ' (' + row.rating_count + ' votes)';
                             }
 
                             return result;
