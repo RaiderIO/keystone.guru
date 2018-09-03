@@ -23,6 +23,8 @@ class DungeonController extends Controller
 
         /** @var Dungeon $dungeon */
         $dungeon->name = $request->get('name');
+        $dungeon->enemy_forces_required = $request->get('enemy_forces_required');
+        $dungeon->enemy_forces_required_teeming = $request->get('enemy_forces_required_teeming');
         // May not be set when editing
         $dungeon->expansion_id = $request->get('expansion_id');
         $dungeon->active = $request->get('active', 0);

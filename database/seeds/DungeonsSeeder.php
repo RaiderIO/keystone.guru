@@ -23,6 +23,8 @@ class DungeonsSeeder extends Seeder
         $dungeonsData = [
             'Arcway' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Arcway' => [
@@ -32,6 +34,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Black Rook Hold' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'The Ravenscrypt' => [
@@ -56,6 +60,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Cathedral of Eternal Night' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Hall of the Moon' => [
@@ -77,6 +83,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Court of Stars' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Court of Stars' => [
@@ -87,6 +95,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Darkheart Thicket' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Darkheart Thicket' => [
@@ -96,6 +106,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Eye of Azshara' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Eye of Azshara' => [
@@ -105,6 +117,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Halls of Valor' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     // Yes the indices are intended
@@ -144,6 +158,8 @@ class DungeonsSeeder extends Seeder
                 ]
             ], 'Lower Karazhan' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Master\'s Terrace' => [
@@ -168,6 +184,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Maw of Souls' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Hellmouth Cliffs' => [
@@ -183,6 +201,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Neltharion\'s Lair' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Neltharion\'s Lair' => [
@@ -192,6 +212,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Upper Karazhan' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Lower Broken Stair' => [
@@ -222,6 +244,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'The Seat of the Triumvirate' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'The Seat of the Triumvirate' => [
@@ -231,6 +255,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Vault of the Wardens' => [
                 'expansion_id' => $legion->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'The Warden\'s Court' => [
@@ -249,6 +275,8 @@ class DungeonsSeeder extends Seeder
 
             'Atal\'Dazar' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Atal\'Dazar' => [
@@ -273,6 +301,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Freehold' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Freehold' => [
@@ -283,6 +313,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Kings\' Rest' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Kings\' Rest' => [
@@ -293,6 +325,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Shrine of the Storm' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Shrine of the Storm' => [
@@ -317,6 +351,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Siege of Boralus' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Siege of Boralus' => [
@@ -327,6 +363,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Temple of Sethraliss' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Temple of Sethraliss' => [
@@ -351,6 +389,8 @@ class DungeonsSeeder extends Seeder
             ],
             'The MOTHERLODE!!' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'The Motherlode' => [
@@ -361,6 +401,8 @@ class DungeonsSeeder extends Seeder
             ],
             'The Underrot' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'The Underrot' => [
@@ -385,6 +427,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Tol Dagor' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Tol Dagor' => [
@@ -484,6 +528,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Waycrest Manor' => [
                 'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
                     'Upstairs' => [
