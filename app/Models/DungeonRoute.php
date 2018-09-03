@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property $id int The ID of this DungeonRoute.
@@ -13,6 +15,7 @@ use Illuminate\Support\Collection;
  * @property $faction_id int
  * @property $public_key string
  * @property $title string
+ * @property $difficulty string
  * @property $unlisted boolean
  * @property $demo boolean
  * @property $dungeon Dungeon
@@ -207,6 +210,7 @@ class DungeonRoute extends Model
         $this->dungeon_id = $request->get('dungeon_id', $this->dungeon_id);
         $this->faction_id = $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
+        $this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->unlisted = intval($request->get('unlisted', 0)) > 0;
         $this->demo = intval($request->get('demo', 0)) > 0;
 
@@ -251,6 +255,27 @@ class DungeonRoute extends Model
                 }
             }
             $result = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return int Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
+     */
+    public function getRatingByCurrentUser(){
+        $result = 1;
+        $user = Auth::user();
+        if( $user !== null ){
+            // @TODO Probably going to want an index on this one
+            $rating = DB::table('dungeon_route_ratings')
+                ->where('dungeon_route_id', '=', $this->id)
+                ->where('user_id', '=', $user->id)
+            ->get(['rating'])->first();
+
+            if( $rating !== null ){
+                $result = $rating->rating;
+            }
         }
 
         return $result;

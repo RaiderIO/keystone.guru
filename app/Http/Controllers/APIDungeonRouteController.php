@@ -35,16 +35,16 @@ class APIDungeonRouteController extends Controller
             $builder = $builder->where('author_id', '=', $user->id);
         }
 
+        // Never show demo routes here
         if (!$user->hasRole('admin')) {
-            // Never show demo routes here
             $builder = $builder->where('demo', '=', '0');
         }
 
-        // Handle searching on affixes
+        // Handle searching
         if ($request->has('columns')) {
             $columns = $request->get('columns');
 
-            $affixes = $columns[2]['search']['value'];
+            $affixes = $columns[3]['search']['value'];
             if (!empty($affixes)) {
                 $affixIds = explode(',', $affixes);
 
@@ -55,7 +55,7 @@ class APIDungeonRouteController extends Controller
             }
 
             // Unset the search value, we already filtered it and I don't know how to convince DT to do the above for me
-            $columns[2]['search']['value'] = '';
+            $columns[3]['search']['value'] = '';
             // Apply to request parameters
             $request->merge(['columns' => $columns]);
         }

@@ -1,5 +1,14 @@
 @extends('layouts.app', ['wide' => true])
 @section('header-title', $model->title)
+<?php
+/** @var $model \App\Models\DungeonRoute */
+$affixes = $model->affixes->pluck('text', 'id');
+$selectedAffixes = $model->affixes->pluck('id');
+if (count($affixes) == 0) {
+    $affixes = [-1 => 'Any'];
+    $selectedAffixes = -1;
+}
+?>
 
 @section('scripts')
     @parent
@@ -38,7 +47,8 @@
                     rating: value
                 },
                 success: function (json) {
-                    // We don't _really_ care if this doesn't go through or not
+                    // Update the new average rating
+                    $('#rating').barrating('set',  json.new_avg_rating);
                 }
             });
         }
@@ -66,11 +76,19 @@
     </div>
     <div class="row view_dungeonroute_details_row">
         <div class="col-md-2 ml-auto font-weight-bold">
+            {{ __('Difficulty') }}:
+        </div>
+        <div class="col-6">
+            {{ $model->difficulty }}
+        </div>
+    </div>
+    <div class="row view_dungeonroute_details_row">
+        <div class="col-md-2 ml-auto font-weight-bold">
             {{ __('Affixes') }}:
         </div>
         <div class="col-6">
             <div id="affixgroup_select_container" style="width: 200px">
-                {!! Form::select('affixes[]', $model->affixes->pluck('text', 'id'), $model->affixes->pluck('id'),
+                {!! Form::select('affixes[]', $affixes, $selectedAffixes,
                     ['id' => 'affixes',
                     'class' => 'form-control affixselect selectpicker',
                     'multiple' => 'multiple',
@@ -93,7 +111,8 @@
             {{ __('Rating') }}:
         </div>
         <div class="col-6">
-            {!! Form::select('rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10], $model->avg_rating, ['id' => 'rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
+            {!! Form::select('rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
+                                $model->avg_rating, ['id' => 'rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
         </div>
     </div>
     <div class="row view_dungeonroute_details_row">
@@ -104,7 +123,8 @@
             @if(Auth::user() === null )
                 {{ __('Login to rate this route') }}
             @else
-                {!! Form::select('your_rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10], null, ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
+                {!! Form::select('your_rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
+                                    $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
             @endif
         </div>
     </div>

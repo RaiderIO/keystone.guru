@@ -51,7 +51,7 @@ class NpcController extends Controller
     }
 
     /**
-     * Show a page for creating a new expansion.
+     * Show a page for creating a new npc.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
