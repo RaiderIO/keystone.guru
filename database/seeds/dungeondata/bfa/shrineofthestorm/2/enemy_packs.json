@@ -1,5 +1,5 @@
-{
-    "236": {
+[
+    {
         "id": 266,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -26,7 +26,7 @@
             }
         ]
     },
-    "237": {
+    {
         "id": 268,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -63,7 +63,7 @@
             }
         ]
     },
-    "238": {
+    {
         "id": 269,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -100,7 +100,7 @@
             }
         ]
     },
-    "239": {
+    {
         "id": 270,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -137,7 +137,7 @@
             }
         ]
     },
-    "240": {
+    {
         "id": 271,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -174,7 +174,7 @@
             }
         ]
     },
-    "241": {
+    {
         "id": 272,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -201,7 +201,7 @@
             }
         ]
     },
-    "242": {
+    {
         "id": 273,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -228,7 +228,7 @@
             }
         ]
     },
-    "243": {
+    {
         "id": 274,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -255,7 +255,7 @@
             }
         ]
     },
-    "244": {
+    {
         "id": 275,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -282,7 +282,7 @@
             }
         ]
     },
-    "245": {
+    {
         "id": 276,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -309,7 +309,7 @@
             }
         ]
     },
-    "246": {
+    {
         "id": 277,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -336,7 +336,7 @@
             }
         ]
     },
-    "247": {
+    {
         "id": 278,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -363,7 +363,7 @@
             }
         ]
     },
-    "248": {
+    {
         "id": 279,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -390,7 +390,7 @@
             }
         ]
     },
-    "249": {
+    {
         "id": 280,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -412,7 +412,7 @@
             }
         ]
     },
-    "250": {
+    {
         "id": 281,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -434,7 +434,7 @@
             }
         ]
     },
-    "251": {
+    {
         "id": 282,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -456,7 +456,7 @@
             }
         ]
     },
-    "252": {
+    {
         "id": 283,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -478,7 +478,7 @@
             }
         ]
     },
-    "253": {
+    {
         "id": 284,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -505,7 +505,7 @@
             }
         ]
     },
-    "254": {
+    {
         "id": 285,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -532,7 +532,7 @@
             }
         ]
     },
-    "255": {
+    {
         "id": 286,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -559,7 +559,7 @@
             }
         ]
     },
-    "256": {
+    {
         "id": 287,
         "floor_id": 46,
         "label": "Enemy pack",
@@ -586,4 +586,4 @@
             }
         ]
     }
-}
+]

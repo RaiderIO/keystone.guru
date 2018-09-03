@@ -1,5 +1,5 @@
-{
-    "71": {
+[
+    {
         "id": 81,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -8,7 +8,7 @@
         "lng": 260.62,
         "npc": null
     },
-    "72": {
+    {
         "id": 82,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -24,7 +24,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "73": {
+    {
         "id": 83,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -33,7 +33,7 @@
         "lng": 229.88,
         "npc": null
     },
-    "74": {
+    {
         "id": 84,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -49,7 +49,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "75": {
+    {
         "id": 85,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -58,7 +58,7 @@
         "lng": 231.62,
         "npc": null
     },
-    "76": {
+    {
         "id": 86,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -74,7 +74,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "77": {
+    {
         "id": 87,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -90,7 +90,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "78": {
+    {
         "id": 88,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -106,7 +106,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "79": {
+    {
         "id": 89,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -115,7 +115,7 @@
         "lng": 228.62,
         "npc": null
     },
-    "80": {
+    {
         "id": 90,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -131,7 +131,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "81": {
+    {
         "id": 91,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -147,7 +147,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "82": {
+    {
         "id": 92,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -163,7 +163,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "83": {
+    {
         "id": 93,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -172,7 +172,7 @@
         "lng": 215.62,
         "npc": null
     },
-    "84": {
+    {
         "id": 94,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -188,7 +188,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "85": {
+    {
         "id": 95,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -197,7 +197,7 @@
         "lng": 218.25,
         "npc": null
     },
-    "86": {
+    {
         "id": 96,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -213,7 +213,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "87": {
+    {
         "id": 97,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -222,7 +222,7 @@
         "lng": 221.12,
         "npc": null
     },
-    "88": {
+    {
         "id": 98,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -238,7 +238,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "89": {
+    {
         "id": 99,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -254,7 +254,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "90": {
+    {
         "id": 100,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -270,7 +270,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "91": {
+    {
         "id": 101,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -286,7 +286,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "92": {
+    {
         "id": 102,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -302,7 +302,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "93": {
+    {
         "id": 103,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -318,7 +318,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "94": {
+    {
         "id": 104,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -334,7 +334,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "95": {
+    {
         "id": 105,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -350,7 +350,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "96": {
+    {
         "id": 106,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -366,7 +366,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "97": {
+    {
         "id": 107,
         "enemy_pack_id": 30,
         "floor_id": 17,
@@ -382,7 +382,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "98": {
+    {
         "id": 108,
         "enemy_pack_id": 30,
         "floor_id": 17,
@@ -398,7 +398,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "99": {
+    {
         "id": 109,
         "enemy_pack_id": 30,
         "floor_id": 17,
@@ -414,7 +414,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "100": {
+    {
         "id": 110,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -430,7 +430,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "101": {
+    {
         "id": 111,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -446,7 +446,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "102": {
+    {
         "id": 112,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -462,7 +462,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "103": {
+    {
         "id": 113,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -478,7 +478,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "104": {
+    {
         "id": 114,
         "enemy_pack_id": 31,
         "floor_id": 17,
@@ -494,7 +494,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "105": {
+    {
         "id": 115,
         "enemy_pack_id": 31,
         "floor_id": 17,
@@ -510,7 +510,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "106": {
+    {
         "id": 116,
         "enemy_pack_id": 31,
         "floor_id": 17,
@@ -526,7 +526,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "107": {
+    {
         "id": 117,
         "enemy_pack_id": 32,
         "floor_id": 17,
@@ -542,7 +542,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "108": {
+    {
         "id": 118,
         "enemy_pack_id": 32,
         "floor_id": 17,
@@ -558,7 +558,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "109": {
+    {
         "id": 119,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -574,7 +574,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "110": {
+    {
         "id": 120,
         "enemy_pack_id": 33,
         "floor_id": 17,
@@ -590,7 +590,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "111": {
+    {
         "id": 121,
         "enemy_pack_id": 33,
         "floor_id": 17,
@@ -606,7 +606,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "112": {
+    {
         "id": 122,
         "enemy_pack_id": 33,
         "floor_id": 17,
@@ -622,7 +622,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "113": {
+    {
         "id": 123,
         "enemy_pack_id": 34,
         "floor_id": 17,
@@ -638,7 +638,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "114": {
+    {
         "id": 124,
         "enemy_pack_id": 34,
         "floor_id": 17,
@@ -654,7 +654,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "115": {
+    {
         "id": 125,
         "enemy_pack_id": 34,
         "floor_id": 17,
@@ -670,7 +670,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "116": {
+    {
         "id": 126,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -686,7 +686,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "117": {
+    {
         "id": 127,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -702,7 +702,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "118": {
+    {
         "id": 128,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -718,7 +718,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "119": {
+    {
         "id": 129,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -734,7 +734,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "120": {
+    {
         "id": 130,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -750,7 +750,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "121": {
+    {
         "id": 131,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -766,7 +766,7 @@
             "aggressiveness": "neutral"
         }
     },
-    "122": {
+    {
         "id": 132,
         "enemy_pack_id": 35,
         "floor_id": 17,
@@ -782,7 +782,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "123": {
+    {
         "id": 133,
         "enemy_pack_id": 35,
         "floor_id": 17,
@@ -798,7 +798,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "124": {
+    {
         "id": 134,
         "enemy_pack_id": 35,
         "floor_id": 17,
@@ -814,7 +814,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "125": {
+    {
         "id": 135,
         "enemy_pack_id": 35,
         "floor_id": 17,
@@ -830,4 +830,4 @@
             "aggressiveness": "aggressive"
         }
     }
-}
+]

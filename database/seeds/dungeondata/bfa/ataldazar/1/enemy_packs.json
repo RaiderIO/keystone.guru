@@ -1,5 +1,5 @@
-{
-    "24": {
+[
+    {
         "id": 36,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -21,7 +21,7 @@
             }
         ]
     },
-    "25": {
+    {
         "id": 37,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -43,7 +43,7 @@
             }
         ]
     },
-    "26": {
+    {
         "id": 38,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -70,7 +70,7 @@
             }
         ]
     },
-    "27": {
+    {
         "id": 39,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -102,7 +102,7 @@
             }
         ]
     },
-    "28": {
+    {
         "id": 40,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -129,7 +129,7 @@
             }
         ]
     },
-    "29": {
+    {
         "id": 41,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -151,7 +151,7 @@
             }
         ]
     },
-    "30": {
+    {
         "id": 42,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -173,7 +173,7 @@
             }
         ]
     },
-    "31": {
+    {
         "id": 43,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -200,7 +200,7 @@
             }
         ]
     },
-    "32": {
+    {
         "id": 44,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -227,7 +227,7 @@
             }
         ]
     },
-    "33": {
+    {
         "id": 45,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -254,7 +254,7 @@
             }
         ]
     },
-    "34": {
+    {
         "id": 46,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -281,7 +281,7 @@
             }
         ]
     },
-    "35": {
+    {
         "id": 47,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -308,7 +308,7 @@
             }
         ]
     },
-    "36": {
+    {
         "id": 48,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -335,7 +335,7 @@
             }
         ]
     },
-    "37": {
+    {
         "id": 49,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -362,7 +362,7 @@
             }
         ]
     },
-    "38": {
+    {
         "id": 50,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -389,7 +389,7 @@
             }
         ]
     },
-    "39": {
+    {
         "id": 51,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -416,7 +416,7 @@
             }
         ]
     },
-    "40": {
+    {
         "id": 52,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -443,7 +443,7 @@
             }
         ]
     },
-    "41": {
+    {
         "id": 53,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -470,7 +470,7 @@
             }
         ]
     },
-    "43": {
+    {
         "id": 55,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -497,7 +497,7 @@
             }
         ]
     },
-    "44": {
+    {
         "id": 56,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -519,7 +519,7 @@
             }
         ]
     },
-    "45": {
+    {
         "id": 57,
         "floor_id": 41,
         "label": "Enemy pack",
@@ -546,4 +546,4 @@
             }
         ]
     }
-}
+]

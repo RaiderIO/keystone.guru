@@ -1,5 +1,5 @@
-{
-    "152": {
+[
+    {
         "id": 163,
         "enemy_pack_id": -1,
         "floor_id": 49,
@@ -15,7 +15,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "608": {
+    {
         "id": 633,
         "enemy_pack_id": 146,
         "floor_id": 49,
@@ -24,7 +24,7 @@
         "lng": 163.81,
         "npc": null
     },
-    "611": {
+    {
         "id": 636,
         "enemy_pack_id": 147,
         "floor_id": 49,
@@ -40,7 +40,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "612": {
+    {
         "id": 637,
         "enemy_pack_id": 147,
         "floor_id": 49,
@@ -56,7 +56,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "613": {
+    {
         "id": 638,
         "enemy_pack_id": 146,
         "floor_id": 49,
@@ -72,7 +72,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "614": {
+    {
         "id": 639,
         "enemy_pack_id": 146,
         "floor_id": 49,
@@ -88,7 +88,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "615": {
+    {
         "id": 640,
         "enemy_pack_id": 146,
         "floor_id": 49,
@@ -104,7 +104,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "616": {
+    {
         "id": 641,
         "enemy_pack_id": -1,
         "floor_id": 49,
@@ -120,7 +120,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "617": {
+    {
         "id": 642,
         "enemy_pack_id": -1,
         "floor_id": 49,
@@ -136,7 +136,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "618": {
+    {
         "id": 643,
         "enemy_pack_id": -1,
         "floor_id": 49,
@@ -152,7 +152,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "619": {
+    {
         "id": 644,
         "enemy_pack_id": -1,
         "floor_id": 49,
@@ -168,4 +168,4 @@
             "aggressiveness": "aggressive"
         }
     }
-}
+]

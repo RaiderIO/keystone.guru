@@ -1,5 +1,5 @@
-{
-    "153": {
+[
+    {
         "id": 164,
         "enemy_pack_id": -1,
         "floor_id": 47,
@@ -15,7 +15,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "154": {
+    {
         "id": 165,
         "enemy_pack_id": -1,
         "floor_id": 47,
@@ -31,7 +31,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "155": {
+    {
         "id": 166,
         "enemy_pack_id": -1,
         "floor_id": 47,
@@ -47,7 +47,7 @@
             "aggressiveness": "aggressive"
         }
     },
-    "156": {
+    {
         "id": 167,
         "enemy_pack_id": -1,
         "floor_id": 47,
@@ -63,4 +63,4 @@
             "aggressiveness": "aggressive"
         }
     }
-}
+]

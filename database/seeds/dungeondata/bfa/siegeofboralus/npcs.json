@@ -1,5 +1,5 @@
-{
-    "58": {
+[
+    {
         "id": 128652,
         "dungeon_id": 18,
         "classification_id": 3,
@@ -7,7 +7,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "59": {
+    {
         "id": 128967,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -15,7 +15,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "60": {
+    {
         "id": 128969,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -23,7 +23,7 @@
         "base_health": 470936,
         "aggressiveness": "aggressive"
     },
-    "61": {
+    {
         "id": 129208,
         "dungeon_id": 18,
         "classification_id": 3,
@@ -31,7 +31,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "63": {
+    {
         "id": 129366,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -39,7 +39,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "64": {
+    {
         "id": 129367,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -47,7 +47,7 @@
         "base_health": 235470,
         "aggressiveness": "aggressive"
     },
-    "65": {
+    {
         "id": 129369,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -55,7 +55,7 @@
         "base_health": 470936,
         "aggressiveness": "aggressive"
     },
-    "66": {
+    {
         "id": 129371,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -63,7 +63,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "67": {
+    {
         "id": 129372,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -71,7 +71,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "68": {
+    {
         "id": 129373,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -79,7 +79,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "89": {
+    {
         "id": 129640,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -87,7 +87,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "113": {
+    {
         "id": 130836,
         "dungeon_id": 18,
         "classification_id": 3,
@@ -95,7 +95,7 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     },
-    "142": {
+    {
         "id": 132481,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -103,7 +103,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "143": {
+    {
         "id": 132532,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -111,7 +111,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "217": {
+    {
         "id": 135241,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -119,7 +119,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "218": {
+    {
         "id": 135245,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -127,7 +127,7 @@
         "base_health": 588670,
         "aggressiveness": "aggressive"
     },
-    "219": {
+    {
         "id": 135263,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -135,7 +135,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "255": {
+    {
         "id": 137511,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -143,7 +143,7 @@
         "base_health": 235468,
         "aggressiveness": "aggressive"
     },
-    "256": {
+    {
         "id": 137516,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -151,7 +151,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "257": {
+    {
         "id": 137517,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -159,7 +159,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "266": {
+    {
         "id": 138247,
         "dungeon_id": 18,
         "classification_id": 1,
@@ -167,7 +167,7 @@
         "base_health": 58867,
         "aggressiveness": "aggressive"
     },
-    "267": {
+    {
         "id": 138254,
         "dungeon_id": 18,
         "classification_id": 1,
@@ -175,7 +175,7 @@
         "base_health": 58867,
         "aggressiveness": "aggressive"
     },
-    "270": {
+    {
         "id": 138464,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -183,7 +183,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "285": {
+    {
         "id": 141283,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -191,7 +191,7 @@
         "base_health": 294335,
         "aggressiveness": "aggressive"
     },
-    "286": {
+    {
         "id": 141565,
         "dungeon_id": 18,
         "classification_id": 1,
@@ -199,7 +199,7 @@
         "base_health": 58867,
         "aggressiveness": "aggressive"
     },
-    "288": {
+    {
         "id": 144158,
         "dungeon_id": 18,
         "classification_id": 3,
@@ -207,4 +207,4 @@
         "base_health": 1,
         "aggressiveness": "aggressive"
     }
-}
+]

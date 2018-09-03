@@ -1,5 +1,5 @@
-{
-    "173": {
+[
+    {
         "id": 184,
         "enemy_pack_id": -1,
         "floor_id": 42,
@@ -15,4 +15,4 @@
             "aggressiveness": "aggressive"
         }
     }
-}
+]
