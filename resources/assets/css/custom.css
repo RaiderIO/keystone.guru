@@ -96,7 +96,7 @@
 }
 
 .unfriendly_enemy_icon {
-    background: url("/images/mapicon/neutral.png") no-repeat center right !important;
+    background: url("/images/mapicon/unfriendly.png") no-repeat center right !important;
 }
 
 .friendly_enemy_icon {
@@ -105,6 +105,10 @@
 
 .boss_enemy_icon {
     background: url("/images/mapicon/boss.png") no-repeat center right !important;
+}
+
+.unset_enemy_icon {
+    background: url("/images/mapicon/unset.png") no-repeat center right !important;
 }
 
 .door_icon {

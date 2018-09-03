@@ -61,6 +61,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         } else {
                             // Not set :(
                             enemy.npc_id = -1;
+                            enemy.setIcon('unset');
                         }
 
                         // Is probably null if there's no patrol set

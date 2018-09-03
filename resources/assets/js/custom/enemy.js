@@ -4,7 +4,7 @@ $(function () {
             TYPE: 'enemy'
         },
         options: {
-            icon: LeafletNeutralEnemyIcon
+            icon: LeafletUnsetEnemyIcon
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
@@ -19,11 +19,12 @@ let LeafletAggressiveEnemyIcon = new L.divIcon({className: 'aggressive_enemy_ico
 let LeafletNeutralEnemyIcon = new L.divIcon({className: 'neutral_enemy_icon', iconSize: [12, 12]});
 let LeafletUnfriendlyEnemyIcon = new L.divIcon({className: 'unfriendly_enemy_icon', iconSize: [12, 12]});
 let LeafletFriendlyEnemyIcon = new L.divIcon({className: 'friendly_enemy_icon', iconSize: [12, 12]});
+let LeafletUnsetEnemyIcon = new L.divIcon({className: 'unset_enemy_icon', iconSize: [12, 12]});
 let LeafletBossEnemyIcon = new L.divIcon({className: 'boss_enemy_icon', iconSize: [32, 32]});
 
 let LeafletEnemyMarker = L.Marker.extend({
     options: {
-        icon: LeafletAggressiveEnemyIcon
+        icon: LeafletUnsetEnemyIcon
     }
 });
 
@@ -77,6 +78,10 @@ class Enemy extends MapObject {
                 break;
             case 'friendly':
                 this.layer.setIcon(LeafletFriendlyEnemyIcon);
+
+                break;
+            case 'unset':
+                this.layer.setIcon(LeafletUnsetEnemyIcon);
 
                 break;
             case 'boss':
