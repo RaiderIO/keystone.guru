@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $classification_id
  * @property string $name
  * @property int $base_health
+ * @property int $enemy_forces
  * @property string $aggressiveness
  * @property \Illuminate\Support\Collection $enemies
  */

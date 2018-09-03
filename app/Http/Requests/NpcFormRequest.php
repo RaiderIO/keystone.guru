@@ -35,6 +35,7 @@ class NpcFormRequest extends FormRequest
                 'required',
                 'regex:/^[\d\s,]*$/',
             ],
+            'enemy_forces' => 'int'
         ];
     }
 }
