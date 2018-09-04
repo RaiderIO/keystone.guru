@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
+use App\Models\KillZoneEnemy;
 use Illuminate\Http\Request;
 use App\Models\KillZone;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +49,24 @@ class APIKillZoneController extends Controller
 
             if (!$killZone->save()) {
                 throw new \Exception("Unable to save enemy!");
+            } else {
+                $killZone->deleteEnemies();
+
+                // Get the new enemies
+                $enemies = $request->get('enemies', []);
+
+                // Store them
+                $killZoneEnemies = [];
+                foreach ($enemies as $enemyId) {
+                    // Assign kill zone to each passed enemy
+                    $killZoneEnemies[] = [
+                        'kill_zone_id' => $killZone->id,
+                        'enemy_id' => $enemyId
+                    ];
+                }
+
+                // Bulk insert
+                KillZoneEnemy::insert($killZoneEnemies);
             }
 
             $result = ['id' => $killZone->id];

@@ -6,12 +6,14 @@ class DungeonMap extends Signalable {
 
         this.dungeonData = dungeonData;
 
+        // How many map objects have returned a success status
+        this.mapObjectGroupFetchSuccessCount = 0;
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroups = this._createMapObjectGroups();
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
-            this.mapObjectGroups[i].register('object:add', function (event) {
+            this.mapObjectGroups[i].register('object:add', this, function (event) {
                 self.mapObjects.push(event.data.object);
             });
         }
@@ -68,7 +70,7 @@ class DungeonMap extends Signalable {
 
                 // No longer synched
                 mapObject.setSynced(false);
-                if( typeof mapObject.edit === 'function' ){
+                if (typeof mapObject.edit === 'function') {
                     mapObject.edit();
                 } else {
                     console.error(mapObject, ' does not have an edit() function!');
@@ -82,7 +84,7 @@ class DungeonMap extends Signalable {
                 let mapObject = self.findMapObjectByLayer(layer);
                 console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
 
-                if( typeof mapObject.delete === 'function' ){
+                if (typeof mapObject.delete === 'function') {
                     mapObject.delete();
                 } else {
                     console.error(mapObject, ' does not have a delete() function!');
@@ -105,7 +107,7 @@ class DungeonMap extends Signalable {
         this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
 
-    _getHotkeys(){
+    _getHotkeys() {
         return new Hotkeys(this);
     }
 
@@ -167,7 +169,7 @@ class DungeonMap extends Signalable {
      *
      * @returns {boolean}
      */
-    hasPopupOpen(){
+    hasPopupOpen() {
         let result = false;
         for (let i = 0; i < this.mapObjects.length; i++) {
             let mapObject = this.mapObjects[i];
@@ -320,7 +322,7 @@ class DungeonMap extends Signalable {
 
         // If we confirmed editing something..
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
-            e.layers.eachLayer(function(i, layer){
+            e.layers.eachLayer(function (i, layer) {
                 console.log(i, layer);
                 let mapObject = self.findMapObjectByLayer(layer);
                 console.log(mapObject);
@@ -331,7 +333,17 @@ class DungeonMap extends Signalable {
         this.signal('map:refresh', {dungeonmap: this});
 
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
-            this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor());
+            this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor(), this.mapObjectGroupFetchSuccess.bind(this));
+        }
+    }
+
+    mapObjectGroupFetchSuccess() {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
+        this.mapObjectGroupFetchSuccessCount++;
+        // Let everyone know we're done and you can use all fetched data
+        if (this.mapObjectGroupFetchSuccessCount === this.mapObjectGroups.length) {
+            this.signal('map:mapobjectgroupsfetchsuccess');
         }
     }
 }

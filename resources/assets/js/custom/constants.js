@@ -44,6 +44,10 @@ var c = {
                 savedBorder: '#5DE27F',
 
                 mouseoverAddObject: '#5993D2',
+            },
+            polylineOptions: {
+                color: 'red',
+                weight: 1
             }
         },
         placeholderColors: {}

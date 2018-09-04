@@ -18,7 +18,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor){
+    fetchFromServer(floor, callback){
         // no super call required
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, this, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup');
 
@@ -51,6 +51,8 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
                         dungeonFloorSwitchMarker.setSynced(true);
                     }
                 }
+
+                callback();
             }
         });
     }

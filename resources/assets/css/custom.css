@@ -88,31 +88,41 @@
 }
 
 .aggressive_enemy_icon {
-    background: url("/images/mapicon/aggressive.png") no-repeat center right !important;
+    background: url("/images/mapicon/aggressive.png") no-repeat center !important;
 }
 
 .neutral_enemy_icon {
-    background: url("/images/mapicon/neutral.png") no-repeat center right !important;
+    background: url("/images/mapicon/neutral.png") no-repeat center !important;
 }
 
 .unfriendly_enemy_icon {
-    background: url("/images/mapicon/unfriendly.png") no-repeat center right !important;
+    background: url("/images/mapicon/unfriendly.png") no-repeat center !important;
 }
 
 .friendly_enemy_icon {
-    background: url("/images/mapicon/friendly.png") no-repeat center right !important;
+    background: url("/images/mapicon/friendly.png") no-repeat center !important;
 }
 
 .boss_enemy_icon {
-    background: url("/images/mapicon/boss.png") no-repeat center right !important;
+    background: url("/images/mapicon/boss.png") no-repeat center !important;
 }
 
 .unset_enemy_icon {
-    background: url("/images/mapicon/unset.png") no-repeat center right !important;
+    background: url("/images/mapicon/unset.png") no-repeat center !important;
 }
 
 .door_icon {
-    background: url("/images/mapicon/door.png") no-repeat center right !important;
+    background: url("/images/mapicon/door.png") no-repeat center !important;
+}
+
+.killzone_icon_small {
+    margin-left: -10px !important;
+    margin-top: -10px !important;
+}
+
+.killzone_icon_big {
+    margin-left: -20px !important;
+    margin-top: -20px !important;
 }
 
 /** GENERAL ICONS */

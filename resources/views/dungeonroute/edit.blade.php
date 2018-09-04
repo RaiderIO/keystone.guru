@@ -123,7 +123,8 @@
                         {{ __('Group composition') }}
                     </h3>
 
-                    @include('common.group.composition', ['dungeonroute' => $model])
+                    {{--//@TODO Fix JS Errors inside--}}
+                    {{--@include('common.group.composition', ['dungeonroute' => $model])--}}
 
                     <h3 class="mt-1">
                         {{ __('Affixes (optional)') }}

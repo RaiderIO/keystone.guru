@@ -13,7 +13,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     }
 
 
-    fetchFromServer(floor) {
+    fetchFromServer(floor, callback) {
         // no super call required
         console.assert(this instanceof KillZoneMapObjectGroup, this, 'this is not a KillZoneMapObjectGroup');
 
@@ -39,12 +39,26 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                         let layer = new LeafletKillZoneMarker();
                         layer.setLatLng(L.latLng(remoteKillZone.lat, remoteKillZone.lng));
 
+                        /** @var KillZone killzone */
                         let killzone = self.createNew(layer);
                         killzone.id = remoteKillZone.id;
+
+                        // Reconstruct the enemies we're coupled with in a format we expect
+                        if( remoteKillZone.killzoneenemies !== null ){
+                            let enemies = [];
+                            for(let i = 0; i < remoteKillZone.killzoneenemies.length; i++ ){
+                                let enemy = remoteKillZone.killzoneenemies[i];
+                                enemies.push(enemy.enemy_id);
+                            }
+                            // Restore the enemies, done!
+                            killzone.setEnemies(enemies);
+                        }
                         // We just downloaded the kill zone, it's synced alright!
                         killzone.setSynced(true);
                     }
                 }
+
+                callback();
             }
         });
     }

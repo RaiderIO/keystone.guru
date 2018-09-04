@@ -1,5 +1,5 @@
 class EnemyPackMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname, editable){
+    constructor(map, name, classname, editable) {
         super(map, name, editable);
 
         this.classname = classname;
@@ -7,7 +7,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-draw-polygon';
     }
 
-    _createObject(layer){
+    _createObject(layer) {
         console.assert(this instanceof EnemyPackMapObjectGroup, 'this is not an EnemyPackMapObjectGroup');
 
         switch (this.classname) {
@@ -18,7 +18,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor){
+    fetchFromServer(floor, callback) {
         // no super call required
         console.assert(this instanceof EnemyPackMapObjectGroup, this, 'this is not a EnemyPackMapObjectGroup');
 
@@ -52,6 +52,8 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                     // We just downloaded the enemy pack, it's synced alright!
                     enemyPack.setSynced(true);
                 }
+
+                callback();
             }
         });
     }

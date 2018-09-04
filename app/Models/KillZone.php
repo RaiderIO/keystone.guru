@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
 class KillZone extends Model
 {
     public $hidden = ['dungeon_route_id'];
-    public $with = ['dungeonroute', 'enemies'];
+    public $with = ['dungeonroute', 'killzoneenemies'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -58,10 +58,10 @@ class KillZone extends Model
     {
         // Load the existing kill zone enemies
         $existingKillZoneEnemiesIds = $this->killzoneenemies->pluck('id')->all();
-        // Only if there's vertices to destroy
+        // Only if there's enemies to destroy
         if (count($existingKillZoneEnemiesIds) > 0) {
             // Kill them off
-            RouteVertex::destroy($existingKillZoneEnemiesIds);
+            KillZoneEnemy::destroy($existingKillZoneEnemiesIds);
         }
     }
 }

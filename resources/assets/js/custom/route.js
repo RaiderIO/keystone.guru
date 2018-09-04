@@ -153,7 +153,7 @@ class Route extends MapObject {
         let self = this;
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        self.register('synced', function (event) {
+        self.register('synced', this, function (event) {
             let customPopupHtml = $("#route_edit_popup_template").html();
             // Remove template so our
             let template = handlebars.compile(customPopupHtml);

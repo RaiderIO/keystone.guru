@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class KillZoneEnemy extends Model
 {
-    public $hidden = ['id'];
+    public $hidden = ['id', 'kill_zone_id'];
 
     public $timestamps = false;
 

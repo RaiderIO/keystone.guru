@@ -13,7 +13,7 @@ class RouteMapObjectGroup extends MapObjectGroup {
     }
 
 
-    fetchFromServer(floor) {
+    fetchFromServer(floor, callback) {
         // no super call required
         console.assert(this instanceof RouteMapObjectGroup, this, 'this is not a RouteMapObjectGroup');
 
@@ -51,6 +51,8 @@ class RouteMapObjectGroup extends MapObjectGroup {
                         route.setSynced(true);
                     }
                 }
+
+                callback();
             }
         });
     }

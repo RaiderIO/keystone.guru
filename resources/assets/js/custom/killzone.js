@@ -26,13 +26,20 @@ let LeafletKillZoneMarker = L.Marker.extend({
     }
 });
 
+let KillZoneSelectModeEnabled = false;
+
 class KillZone extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
+        this.id = 0;
         this.label = 'KillZone';
         this.saving = false;
         this.deleting = false;
+        // List of IDs of selected enemies
+        this._enemies = [];
+        this.enemyConnectionsLayerGroup = null;
+
         this.setColors(c.map.killzone.colors);
         this.setSynced(false);
     }
@@ -52,37 +59,8 @@ class KillZone extends MapObject {
     }
 
     edit() {
-        let self = this;
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
-
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/killzone',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
-                floor_id: self.map.getCurrentFloor().id,
-                lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng
-            },
-            beforeSend: function () {
-                self.editing = true;
-                $("#killzone_edit_popup_submit").attr('disabled', 'disabled');
-            },
-            success: function (json) {
-                self.setSynced(true);
-                self.map.leafletMap.closePopup();
-            },
-            complete: function () {
-                $("#killzone_edit_popup_submit").removeAttr('disabled');
-                self.editing = false;
-            },
-            error: function () {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-            }
-        });
+        this.save();
     }
 
     delete() {
@@ -123,7 +101,8 @@ class KillZone extends MapObject {
                 dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
                 floor_id: self.map.getCurrentFloor().id,
                 lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng
+                lng: self.layer.getLatLng().lng,
+                enemies: self._enemies
             },
             beforeSend: function () {
                 self.saving = true;
@@ -143,6 +122,124 @@ class KillZone extends MapObject {
         });
     }
 
+    setEnemies(enemies) {
+        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        let self = this;
+
+        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        $.each(enemies, function (i, id) {
+            let enemy = enemyMapObjectGroup.findMapObjectById(id);
+            if (enemy !== null) {
+                enemy.kill_zone_id = self.id;
+            } else {
+                console.warn('Unable to find enemy with id ' + id + ', this enemy was probably removed during a migration?');
+            }
+        });
+
+        this._enemies = enemies;
+    }
+
+    /**
+     * Starts select mode on this KillZone, if no other select mode was enabled already
+     */
+    startSelectMode() {
+        if (!KillZoneSelectModeEnabled) {
+            console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+            let self = this;
+
+            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+                // We cannot kill an enemy twice, but can deselect once we have selected it
+                if (enemy.kill_zone_id <= 0 || enemy.kill_zone_id === self.id) {
+                    enemy.setKillZoneSelectable(!enemy.isKillZoneSelectable());
+                }
+
+                enemy.register('killzone:selected', self, function (data) {
+                    self.enemySelected(data.context);
+                })
+            });
+
+            // Now killzoning something
+            KillZoneSelectModeEnabled = true;
+        }
+    }
+
+    cancelSelectMode() {
+        if (KillZoneSelectModeEnabled) {
+            console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+            KillZoneSelectModeEnabled = false;
+
+            let self = this;
+
+            // Revert all things we did to enemies
+            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+                enemy.setKillZoneSelectable(false);
+                enemy.unregister('killzone:selected', self);
+            });
+
+            this.save();
+        }
+    }
+
+    /**
+     * Triggered when an enemy was selected by the user when edit mode was enabled.
+     * @param enemy The enemy that was selected (or de-selected). Will add/remove the enemy to the list to be redrawn.
+     */
+    enemySelected(enemy) {
+        console.assert(enemy instanceof Enemy, enemy, 'enemy is not an Enemy');
+        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+
+        let index = $.inArray(enemy.id, this._enemies);
+        // Already exists, user wants to deselect the enemy
+        if (index >= 0) {
+            enemy.kill_zone_id = -1;
+            // Remove it
+            this._enemies.splice(index, 1);
+        } else {
+            enemy.kill_zone_id = this.id;
+            // Add it
+            this._enemies.push(enemy.id);
+        }
+
+        this.redrawConnectionsToEnemies();
+    }
+
+    /**
+     * Throws away all current visible connections to enemies, and rebuilds the visuals.
+     */
+    redrawConnectionsToEnemies() {
+        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+
+        let self = this;
+
+        // Remove previous layers if it's needed
+        if (this.enemyConnectionsLayerGroup !== null) {
+            this.map.leafletMap.removeLayer(this.enemyConnectionsLayerGroup);
+        }
+
+        // Create & add new layer
+        this.enemyConnectionsLayerGroup = new L.LayerGroup();
+        this.map.leafletMap.addLayer(this.enemyConnectionsLayerGroup);
+
+        // Add connections from each enemy to our location
+        let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
+        $.each(this._enemies, function (i, id) {
+            let enemy = enemyMapObjectGroup.findMapObjectById(id);
+
+            if (enemy !== null) {
+                let layer = L.polyline([
+                    enemy.layer.getLatLng(),
+                    self.layer.getLatLng()
+                ], c.map.killzone.polylineOptions);
+
+                self.enemyConnectionsLayerGroup.addLayer(layer);
+            } else {
+                console.warn('Unable to find enemy with id ' + id + ', cannot draw connection, this enemy was probably removed during a migration?');
+            }
+        });
+    }
+
     // To be overridden by any implementing classes
     onLayerInit() {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
@@ -150,32 +247,53 @@ class KillZone extends MapObject {
 
         let self = this;
 
+        this.layer.on('click', function () {
+            if (KillZoneSelectModeEnabled) {
+                self.cancelSelectMode();
+            } else {
+                self.startSelectMode();
+            }
+        });
+
+        // When moved, keep drawing the connections anew
+        this.layer.on('move', function () {
+            self.redrawConnectionsToEnemies();
+        });
+
+
+        // When we have all data, redraw the connections. Not sooner or otherwise we may not have the enemies back yet
+        this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+            self.redrawConnectionsToEnemies();
+        });
+
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        self.register('synced', function (event) {
-            let customPopupHtml = $("#killzone_edit_popup_template").html();
-            // Remove template so our
-            let template = handlebars.compile(customPopupHtml);
+        this.register('synced', this, function (event) {
+            // Restore the connections to our enemies
 
-            let data = {id: self.id};
-
-            // Build the status bar from the template
-            customPopupHtml = template(data);
-
-            let customOptions = {
-                'maxWidth': '400',
-                'minWidth': '300',
-                'className': 'popupCustom'
-            };
-            self.layer.bindPopup(customPopupHtml, customOptions);
-            self.layer.on('popupopen', function (event) {
-                $("#killzone_edit_popup_color_" + self.id).val(self.killzoneColor);
-
-                $("#killzone_edit_popup_submit_" + self.id).bind('click', function () {
-                    self.setKillZoneColor($("#killzone_edit_popup_color_" + self.id).val());
-
-                    self.edit();
-                });
-            });
+            // let customPopupHtml = $("#killzone_edit_popup_template").html();
+            // // Remove template so our
+            // let template = handlebars.compile(customPopupHtml);
+            //
+            // let data = {id: self.id};
+            //
+            // // Build the status bar from the template
+            // customPopupHtml = template(data);
+            //
+            // let customOptions = {
+            //     'maxWidth': '400',
+            //     'minWidth': '300',
+            //     'className': 'popupCustom'
+            // };
+            // self.layer.bindPopup(customPopupHtml, customOptions);
+            // self.layer.on('popupopen', function (event) {
+            //     $("#killzone_edit_popup_color_" + self.id).val(self.killzoneColor);
+            //
+            //     $("#killzone_edit_popup_submit_" + self.id).bind('click', function () {
+            //         self.setKillZoneColor($("#killzone_edit_popup_color_" + self.id).val());
+            //
+            //         self.edit();
+            //     });
+            // });
         });
     }
 }
