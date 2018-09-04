@@ -18,6 +18,7 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                     'data': function (d) {
                         // Prevent this variable from busting cache
                         d.draw = null;
+                        d.favorites = $("#favorites").is(':checked') ? 1 : 0;
                         <?php if( $editLinks ) {?>
                             d.mine = true;
                         <?php } ?>
@@ -73,7 +74,7 @@ $editLinks = isset($edit_links) ? $edit_links : false;
 
                             if (row.avg_rating !== 0) {
                                 result = row.avg_rating;
-                                if( row.rating_count == 0  || row.rating_count >  1 ){
+                                if (row.rating_count == 0 || row.rating_count > 1) {
                                     result += ' (' + row.rating_count + ' {{ __('votes') }})';
                                 } else {
                                     result += ' (' + row.rating_count + ' {{ __('vote') }})';
@@ -146,6 +147,12 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                 'data-selected-text-format' => 'count > 1',
                 'data-count-selected-text' => __('{0} affixes selected')]) !!}
         </div>
+        @if(Auth::user() !== null )
+            <div class="col-lg-2">
+                {!! Form::label('favorites', __('Favorites')) !!}
+                {!! Form::checkbox('favorites', 1, 0, ['id' => 'favorites', 'class' => 'form-control left_checkbox']) !!}
+            </div>
+        @endif
         <div class="col-lg-2">
             <div class="mb-2">
                 &nbsp;

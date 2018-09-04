@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
+use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -36,8 +37,18 @@ class APIDungeonRouteController extends Controller
         }
 
         // Never show demo routes here
-        if (!$user->hasRole('admin')) {
-            $builder = $builder->where('demo', '=', '0');
+        if ($user !== null) {
+            if (!$user->hasRole('admin')) {
+                $builder = $builder->where('demo', '=', '0');
+            }
+
+            // Handle favorites
+            if ($request->get('favorites', false)) {
+                $builder->whereHas('favorites', function ($query) use (&$user) {
+                    /** @var $query Builder */
+                    $query->where('dungeon_route_favorites.user_id', '=', $user->id);
+                });
+            }
         }
 
         // Handle searching
@@ -104,5 +115,60 @@ class APIDungeonRouteController extends Controller
 
         $dungeonroute->unsetRelation('ratings');
         return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws \Exception
+     */
+    function rateDelete(Request $request, DungeonRoute $dungeonroute)
+    {
+        $user = Auth::user();
+
+        /** @var DungeonRouteRating $dungeonRouteRating */
+        $dungeonRouteRating = DungeonRouteRating::firstOrFail()
+            ->where('dungeon_route_id', $dungeonroute->id)
+            ->where('user_id', $user->id);
+        $dungeonRouteRating->delete();
+
+        $dungeonroute->unsetRelation('ratings');
+        return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     */
+    function favorite(Request $request, DungeonRoute $dungeonroute)
+    {
+        $user = Auth::user();
+
+        /** @var DungeonRouteFavorite $dungeonRouteFavorite */
+        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
+        $dungeonRouteFavorite->save();
+
+        return ['result' => 'success'];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws \Exception
+     */
+    function favoriteDelete(Request $request, DungeonRoute $dungeonroute)
+    {
+        $user = Auth::user();
+
+        /** @var DungeonRouteFavorite $dungeonRouteFavorite */
+        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrFail()
+            ->where('dungeon_route_id', $dungeonroute->id)
+            ->where('user_id', $user->id);
+        $dungeonRouteFavorite->delete();
+
+        return ['result' => 'success'];
     }
 }

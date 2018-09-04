@@ -36,11 +36,19 @@ if (count($affixes) == 0) {
                     rate(value);
                 }
             });
+            $('#favorite').bind('change', function (el) {
+                favorite($('#favorite').is(':checked'));
+            })
         });
 
+        /**
+         * Rates the current dungeon route or unset it.
+         * @param value int
+         */
         function rate(value) {
+            let isDelete = value === '';
             $.ajax({
-                type: 'POST',
+                type: isDelete ? 'DELETE' : 'POST',
                 url: '/ajax/dungeonroute/' + _dungeonRoute.public_key + '/rate',
                 dataType: 'json',
                 data: {
@@ -48,7 +56,22 @@ if (count($affixes) == 0) {
                 },
                 success: function (json) {
                     // Update the new average rating
-                    $('#rating').barrating('set',  json.new_avg_rating);
+                    $('#rating').barrating('set', json.new_avg_rating);
+                }
+            });
+        }
+
+        /**
+         * Favorites the current dungeon route, or not.
+         * @param value bool
+         */
+        function favorite(value) {
+            $.ajax({
+                type: !value ? 'DELETE' : 'POST',
+                url: '/ajax/dungeonroute/' + _dungeonRoute.public_key + '/favorite',
+                dataType: 'json',
+                success: function (json) {
+
                 }
             });
         }
@@ -123,8 +146,20 @@ if (count($affixes) == 0) {
             @if(Auth::user() === null )
                 {{ __('Login to rate this route') }}
             @else
-                {!! Form::select('your_rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
+                {!! Form::select('your_rating', ['' => '', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
                                     $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
+            @endif
+        </div>
+    </div>
+    <div class="row view_dungeonroute_details_row">
+        <div class="col-md-2 ml-auto font-weight-bold">
+            {{ __('Favorite') }}:
+        </div>
+        <div class="col-6">
+            @if(Auth::user() === null )
+                {{ __('Login to favorite this route') }}
+            @else
+                {!! Form::checkbox('favorite', 1, $model->isFavoritedByCurrentUser(), ['id' => 'favorite', 'class' => 'form-control left_checkbox']) !!}
             @endif
         </div>
     </div>

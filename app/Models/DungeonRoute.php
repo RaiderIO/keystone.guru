@@ -156,11 +156,19 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function favorites()
+    {
+        return $this->hasMany('App\Models\DungeonRouteFavorite');
+    }
+
+    /**
      * @return double
      */
     public function getAvgRatingAttribute()
     {
-        $avg = 0;
+        $avg = 1;
         if (!$this->ratings->isEmpty()) {
             /** @var Collection $ratings */
             $ratings = $this->ratings;
@@ -168,6 +176,7 @@ class DungeonRoute extends Model
 
             $avg = array_sum($ratingsArr) / count($ratingsArr);
         }
+
         return $avg;
     }
 
@@ -261,21 +270,42 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return int Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
+     * @return int|bool Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
      */
-    public function getRatingByCurrentUser(){
-        $result = 1;
+    public function getRatingByCurrentUser()
+    {
+        $result = false;
         $user = Auth::user();
-        if( $user !== null ){
+        if ($user !== null) {
             // @TODO Probably going to want an index on this one
             $rating = DB::table('dungeon_route_ratings')
                 ->where('dungeon_route_id', '=', $this->id)
                 ->where('user_id', '=', $user->id)
-            ->get(['rating'])->first();
+                ->get(['rating'])->first();
 
-            if( $rating !== null ){
+            if ($rating !== null) {
                 $result = $rating->rating;
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return int|mixed
+     */
+    public function isFavoritedByCurrentUser()
+    {
+        $result = false;
+        $user = Auth::user();
+        if ($user !== null) {
+            // @TODO Probably going to want an index on this one
+            $favorite = DB::table('dungeon_route_favorites')
+                ->where('dungeon_route_id', '=', $this->id)
+                ->where('user_id', '=', $user->id)
+                ->first();
+
+            $result = $favorite !== null;
         }
 
         return $result;
