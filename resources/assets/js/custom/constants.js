@@ -35,6 +35,17 @@ var c = {
                 mouseoverAddObject: '#5993D2',
             }
         },
+        killzone: {
+            colors: {
+                unsavedBorder: '#E25D5D',
+
+                editedBorder: '#E2915D',
+
+                savedBorder: '#5DE27F',
+
+                mouseoverAddObject: '#5993D2',
+            }
+        },
         placeholderColors: {}
     }
 };

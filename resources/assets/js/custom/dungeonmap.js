@@ -122,6 +122,7 @@ class DungeonMap extends Signalable {
             new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol', false),
             new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false),
             new RouteMapObjectGroup(this, 'route', true),
+            new KillZoneMapObjectGroup(this, 'killzone', true),
             new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false),
             new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false),
         ];
@@ -134,6 +135,7 @@ class DungeonMap extends Signalable {
     _adjustZoomForLayers() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
+        // @TODO Verify if this code still does what it's supposed to do?
         for (let i = 0; i < this.mapObjects.length; i++) {
             let layer = this.mapObjects[i].layer;
             if (layer.hasOwnProperty('setStyle')) {
