@@ -41,6 +41,10 @@ class EnemyPack extends Model
         return $this->hasMany('App\Models\EnemyPackVertex');
     }
 
+
+    /**
+     * Deletes all vertices that are related to this EnemyPack.
+     */
     function deleteVertices()
     {
         // Load the existing vertices from the pack

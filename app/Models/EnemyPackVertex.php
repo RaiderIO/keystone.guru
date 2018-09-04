@@ -27,7 +27,11 @@ class EnemyPackVertex extends Model
      */
     public $timestamps = false;
 
-    function enemypack(){
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function enemypack()
+    {
         return $this->belongsTo('App\Models\EnemyPack');
     }
 }

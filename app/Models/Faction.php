@@ -12,11 +12,17 @@ class Faction extends IconFileModel
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     function races()
     {
         return $this->hasMany('App\Models\CharacterRace');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     function dungeonroutes()
     {
         return $this->hasMany('App\Models\DungeonRoute');
