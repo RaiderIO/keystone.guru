@@ -128,6 +128,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
         Route::get('/routes', 'APIRouteController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
 
+        Route::get('/killzones', 'APIKillZoneController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
+
         Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');
 
         Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
@@ -135,6 +137,9 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         Route::group(['middleware' => ['auth', 'role:user']], function () {
             Route::post('/route', 'APIRouteController@store');
             Route::delete('/route', 'APIRouteController@delete');
+
+            Route::post('/killzone', 'APIKillZoneController@store');
+            Route::delete('/killzone', 'APIKillZoneController@delete');
 
             Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
             Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');

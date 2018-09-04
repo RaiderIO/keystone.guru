@@ -1,7 +1,10 @@
 $(function () {
-    L.Draw.KillZone = L.Draw.Polyline.extend({
+    L.Draw.KillZone = L.Draw.Marker.extend({
         statics: {
             TYPE: 'killzone'
+        },
+        options: {
+            icon: LeafletKillZoneIcon
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
@@ -9,6 +12,18 @@ $(function () {
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
+});
+
+let LeafletKillZoneIcon = L.divIcon({
+    html: '<i class="fas fa-bullseye"></i>',
+    iconSize: [30, 30],
+    className: 'marker_div_icon_font_awesome marker_div_icon_killzone'
+});
+
+let LeafletKillZoneMarker = L.Marker.extend({
+    options: {
+        icon: LeafletKillZoneIcon
+    }
 });
 
 class KillZone extends MapObject {

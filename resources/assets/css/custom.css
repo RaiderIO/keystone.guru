@@ -169,6 +169,11 @@
     color: lightblue;
 }
 
+.marker_div_icon_killzone {
+    color: #d12600;
+    font-size: 30px;
+}
+
 .marker_div_icon_circle_border {
     border: 3px solid;
     border-radius: 15px;

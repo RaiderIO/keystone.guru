@@ -36,7 +36,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     if (json.hasOwnProperty(index)) {
                         let remoteKillZone = json[index];
 
-                        let layer = new LeafletEnemyMarker();
+                        let layer = new LeafletKillZoneMarker();
                         layer.setLatLng(L.latLng(remoteKillZone.lat, remoteKillZone.lng));
 
                         let killzone = self.createNew(layer);
