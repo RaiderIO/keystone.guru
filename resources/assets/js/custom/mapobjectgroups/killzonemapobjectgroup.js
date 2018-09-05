@@ -50,8 +50,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                                 let enemy = remoteKillZone.killzoneenemies[i];
                                 enemies.push(enemy.enemy_id);
                             }
-                            // Restore the enemies, done!
-                            killzone.setEnemies(enemies);
+                            // Restore the enemies, STILL NEED TO CALL SETENEMIES WHEN EVERYTHING'S DONE LOADING
+                            // Should be handled by the killzone itself
+                            killzone.enemies = enemies;
                         }
                         // We just downloaded the kill zone, it's synced alright!
                         killzone.setSynced(true);
