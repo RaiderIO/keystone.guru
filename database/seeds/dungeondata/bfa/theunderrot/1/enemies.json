@@ -1,5 +1,5 @@
-{
-    "141": {
+[
+    {
         "id": 152,
         "enemy_pack_id": -1,
         "floor_id": 51,
@@ -7,15 +7,10 @@
         "lat": -136.00999999999999,
         "lng": 184.75,
         "npc": {
-            "id": 131318,
-            "dungeon_id": 21,
-            "classification_id": 3,
-            "name": "Elder Leaxa",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 131318
         }
     },
-    "142": {
+    {
         "id": 153,
         "enemy_pack_id": -1,
         "floor_id": 51,
@@ -23,15 +18,10 @@
         "lat": -136.75999999999999,
         "lng": 280,
         "npc": {
-            "id": 131817,
-            "dungeon_id": 21,
-            "classification_id": 3,
-            "name": "Cragmaw the Infested",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 131817
         }
     },
-    "143": {
+    {
         "id": 154,
         "enemy_pack_id": -1,
         "floor_id": 51,
@@ -39,12 +29,7 @@
         "lat": -73.760000000000005,
         "lng": 247.75,
         "npc": {
-            "id": 131383,
-            "dungeon_id": 21,
-            "classification_id": 3,
-            "name": "Sporecaller Zancha",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 131383
         }
     }
-}
+]

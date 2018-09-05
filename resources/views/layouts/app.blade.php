@@ -229,6 +229,7 @@
     <script src="{{ asset('js/custom/enemypatrol.js') }}"></script>
     <script src="{{ asset('js/custom/enemypack.js') }}"></script>
     <script src="{{ asset('js/custom/route.js') }}"></script>
+    <script src="{{ asset('js/custom/killzone.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
     <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
@@ -248,6 +249,7 @@
     <script src="{{ asset('js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/enemypackmapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/killzonemapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
 

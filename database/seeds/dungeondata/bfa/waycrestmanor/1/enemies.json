@@ -1,5 +1,5 @@
-{
-    "132": {
+[
+    {
         "id": 143,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -7,15 +7,10 @@
         "lat": -178.75999999999999,
         "lng": 104.25,
         "npc": {
-            "id": 135360,
-            "dungeon_id": 23,
-            "classification_id": 3,
-            "name": "Sister Briar",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 135360
         }
     },
-    "135": {
+    {
         "id": 146,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -23,15 +18,10 @@
         "lat": -110.26000000000001,
         "lng": 267.75,
         "npc": {
-            "id": 131863,
-            "dungeon_id": 23,
-            "classification_id": 3,
-            "name": "Raal the Gluttonous",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 131863
         }
     },
-    "136": {
+    {
         "id": 147,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -39,15 +29,10 @@
         "lat": -47.759999999999998,
         "lng": 198.25,
         "npc": {
-            "id": 131667,
-            "dungeon_id": 23,
-            "classification_id": 3,
-            "name": "Soulbound Goliath",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 131667
         }
     },
-    "412": {
+    {
         "id": 426,
         "enemy_pack_id": 98,
         "floor_id": 61,
@@ -55,15 +40,10 @@
         "lat": -192.00999999999999,
         "lng": 221.25,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "413": {
+    {
         "id": 427,
         "enemy_pack_id": 98,
         "floor_id": 61,
@@ -71,15 +51,10 @@
         "lat": -194.00999999999999,
         "lng": 218.5,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "414": {
+    {
         "id": 428,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -87,63 +62,43 @@
         "lat": -173.75,
         "lng": 174.75,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "415": {
+    {
         "id": 429,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 289,
         "floor_id": 61,
         "teeming": null,
         "lat": -177.63,
         "lng": 194.12,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "416": {
+    {
         "id": 430,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 289,
         "floor_id": 61,
         "teeming": null,
         "lat": -177.75,
         "lng": 198,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "417": {
+    {
         "id": 431,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 289,
         "floor_id": 61,
         "teeming": null,
         "lat": -177.88,
         "lng": 202.12,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "418": {
+    {
         "id": 432,
         "enemy_pack_id": 93,
         "floor_id": 61,
@@ -151,15 +106,10 @@
         "lat": -173.63,
         "lng": 188.25,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "419": {
+    {
         "id": 433,
         "enemy_pack_id": 93,
         "floor_id": 61,
@@ -167,15 +117,10 @@
         "lat": -173.88,
         "lng": 184.75,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "420": {
+    {
         "id": 434,
         "enemy_pack_id": 94,
         "floor_id": 61,
@@ -183,15 +128,10 @@
         "lat": -173.5,
         "lng": 207.25,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "421": {
+    {
         "id": 435,
         "enemy_pack_id": 94,
         "floor_id": 61,
@@ -199,15 +139,10 @@
         "lat": -173.63,
         "lng": 211.38,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "436": {
+    {
         "id": 454,
         "enemy_pack_id": 92,
         "floor_id": 61,
@@ -215,15 +150,10 @@
         "lat": -149.38,
         "lng": 107.62,
         "npc": {
-            "id": 135474,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Thistle Acolyte",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 135474
         }
     },
-    "437": {
+    {
         "id": 455,
         "enemy_pack_id": 92,
         "floor_id": 61,
@@ -231,15 +161,10 @@
         "lat": -146.88,
         "lng": 104.62,
         "npc": {
-            "id": 135052,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Blight Toad",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 135052
         }
     },
-    "438": {
+    {
         "id": 456,
         "enemy_pack_id": 92,
         "floor_id": 61,
@@ -247,15 +172,10 @@
         "lat": -151.63,
         "lng": 105,
         "npc": {
-            "id": 135052,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Blight Toad",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 135052
         }
     },
-    "439": {
+    {
         "id": 457,
         "enemy_pack_id": 92,
         "floor_id": 61,
@@ -263,24 +183,21 @@
         "lat": -146.75,
         "lng": 110,
         "npc": {
-            "id": 135052,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Blight Toad",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 135052
         }
     },
-    "440": {
+    {
         "id": 458,
         "enemy_pack_id": 92,
         "floor_id": 61,
         "teeming": null,
         "lat": -151.63,
         "lng": 110.5,
-        "npc": null
+        "npc": {
+            "id": 135052
+        }
     },
-    "441": {
+    {
         "id": 459,
         "enemy_pack_id": 91,
         "floor_id": 61,
@@ -288,15 +205,10 @@
         "lat": -210.00999999999999,
         "lng": 120,
         "npc": {
-            "id": 135474,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Thistle Acolyte",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 135474
         }
     },
-    "442": {
+    {
         "id": 460,
         "enemy_pack_id": 91,
         "floor_id": 61,
@@ -304,15 +216,10 @@
         "lat": -209.25999999999999,
         "lng": 114.75,
         "npc": {
-            "id": 135052,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Blight Toad",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 135052
         }
     },
-    "443": {
+    {
         "id": 461,
         "enemy_pack_id": 91,
         "floor_id": 61,
@@ -320,15 +227,10 @@
         "lat": -205.75999999999999,
         "lng": 119.25,
         "npc": {
-            "id": 135052,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Blight Toad",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 135052
         }
     },
-    "444": {
+    {
         "id": 462,
         "enemy_pack_id": 91,
         "floor_id": 61,
@@ -336,15 +238,10 @@
         "lat": -208.75999999999999,
         "lng": 125,
         "npc": {
-            "id": 135052,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Blight Toad",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 135052
         }
     },
-    "445": {
+    {
         "id": 465,
         "enemy_pack_id": 99,
         "floor_id": 61,
@@ -352,15 +249,10 @@
         "lat": -186.25,
         "lng": 143.62,
         "npc": {
-            "id": 131587,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Bewitched Captain",
-            "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "id": 131587
         }
     },
-    "446": {
+    {
         "id": 466,
         "enemy_pack_id": 99,
         "floor_id": 61,
@@ -368,15 +260,10 @@
         "lat": -186.25,
         "lng": 146.62,
         "npc": {
-            "id": 131585,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Enthralled Guard",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131585
         }
     },
-    "447": {
+    {
         "id": 467,
         "enemy_pack_id": 103,
         "floor_id": 61,
@@ -384,15 +271,10 @@
         "lat": -135.63,
         "lng": 140.5,
         "npc": {
-            "id": 131585,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Enthralled Guard",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131585
         }
     },
-    "448": {
+    {
         "id": 468,
         "enemy_pack_id": 103,
         "floor_id": 61,
@@ -400,15 +282,10 @@
         "lat": -133.38,
         "lng": 137.75,
         "npc": {
-            "id": 131585,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Enthralled Guard",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131585
         }
     },
-    "449": {
+    {
         "id": 469,
         "enemy_pack_id": 101,
         "floor_id": 61,
@@ -417,7 +294,7 @@
         "lng": 136.38,
         "npc": null
     },
-    "450": {
+    {
         "id": 470,
         "enemy_pack_id": 101,
         "floor_id": 61,
@@ -426,7 +303,7 @@
         "lng": 139.62,
         "npc": null
     },
-    "451": {
+    {
         "id": 471,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -434,15 +311,10 @@
         "lat": -117.26000000000001,
         "lng": 142,
         "npc": {
-            "id": 131812,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Heartsbane Soulcharmer",
-            "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "id": 131812
         }
     },
-    "452": {
+    {
         "id": 472,
         "enemy_pack_id": 101,
         "floor_id": 61,
@@ -451,7 +323,7 @@
         "lng": 140,
         "npc": null
     },
-    "453": {
+    {
         "id": 473,
         "enemy_pack_id": 104,
         "floor_id": 61,
@@ -459,15 +331,10 @@
         "lat": -138.25,
         "lng": 212.5,
         "npc": {
-            "id": 131666,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Coven Thornshaper",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131666
         }
     },
-    "454": {
+    {
         "id": 474,
         "enemy_pack_id": 104,
         "floor_id": 61,
@@ -475,15 +342,10 @@
         "lat": -141.13,
         "lng": 212,
         "npc": {
-            "id": 131858,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Thornguard",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131858
         }
     },
-    "455": {
+    {
         "id": 475,
         "enemy_pack_id": 104,
         "floor_id": 61,
@@ -491,15 +353,10 @@
         "lat": -140.5,
         "lng": 208.88,
         "npc": {
-            "id": 131666,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Coven Thornshaper",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131666
         }
     },
-    "457": {
+    {
         "id": 477,
         "enemy_pack_id": 105,
         "floor_id": 61,
@@ -507,15 +364,10 @@
         "lat": -96.510000000000005,
         "lng": 198.25,
         "npc": {
-            "id": 131666,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Coven Thornshaper",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131666
         }
     },
-    "458": {
+    {
         "id": 478,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -523,15 +375,10 @@
         "lat": -72.129999999999995,
         "lng": 190.75,
         "npc": {
-            "id": 131666,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Coven Thornshaper",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131666
         }
     },
-    "459": {
+    {
         "id": 479,
         "enemy_pack_id": 105,
         "floor_id": 61,
@@ -539,15 +386,10 @@
         "lat": -89.010000000000005,
         "lng": 197.75,
         "npc": {
-            "id": 131858,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Thornguard",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131858
         }
     },
-    "460": {
+    {
         "id": 480,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -555,15 +397,10 @@
         "lat": -72.129999999999995,
         "lng": 206.75,
         "npc": {
-            "id": 131666,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Coven Thornshaper",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131666
         }
     },
-    "461": {
+    {
         "id": 481,
         "enemy_pack_id": 108,
         "floor_id": 61,
@@ -571,15 +408,10 @@
         "lat": -61.5,
         "lng": 198.12,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "462": {
+    {
         "id": 482,
         "enemy_pack_id": 108,
         "floor_id": 61,
@@ -587,15 +419,10 @@
         "lat": -57.380000000000003,
         "lng": 192.38,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "463": {
+    {
         "id": 483,
         "enemy_pack_id": 108,
         "floor_id": 61,
@@ -603,15 +430,10 @@
         "lat": -58.130000000000003,
         "lng": 203.75,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "464": {
+    {
         "id": 484,
         "enemy_pack_id": 108,
         "floor_id": 61,
@@ -619,15 +441,10 @@
         "lat": -57.5,
         "lng": 198.38,
         "npc": {
-            "id": 135329,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Matron Bryndle",
-            "base_health": 706404,
-            "aggressiveness": "aggressive"
+            "id": 135329
         }
     },
-    "465": {
+    {
         "id": 485,
         "enemy_pack_id": 106,
         "floor_id": 61,
@@ -635,15 +452,10 @@
         "lat": -112.76000000000001,
         "lng": 190,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "468": {
+    {
         "id": 488,
         "enemy_pack_id": 107,
         "floor_id": 61,
@@ -651,42 +463,43 @@
         "lat": -110.76000000000001,
         "lng": 204.5,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "469": {
+    {
         "id": 489,
         "enemy_pack_id": 107,
         "floor_id": 61,
         "teeming": null,
         "lat": -112.76000000000001,
         "lng": 207.5,
-        "npc": null
+        "npc": {
+            "id": 131669
+        }
     },
-    "470": {
+    {
         "id": 490,
         "enemy_pack_id": 107,
         "floor_id": 61,
         "teeming": null,
         "lat": -114.26000000000001,
         "lng": 204.75,
-        "npc": null
+        "npc": {
+            "id": 131669
+        }
     },
-    "471": {
+    {
         "id": 491,
         "enemy_pack_id": 107,
         "floor_id": 61,
         "teeming": null,
         "lat": -112.26000000000001,
         "lng": 202,
-        "npc": null
+        "npc": {
+            "id": 131669
+        }
     },
-    "472": {
+    {
         "id": 493,
         "enemy_pack_id": 109,
         "floor_id": 61,
@@ -694,15 +507,10 @@
         "lat": -137.75999999999999,
         "lng": 186,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "473": {
+    {
         "id": 494,
         "enemy_pack_id": 109,
         "floor_id": 61,
@@ -710,15 +518,10 @@
         "lat": -133.50999999999999,
         "lng": 186.5,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "474": {
+    {
         "id": 495,
         "enemy_pack_id": 109,
         "floor_id": 61,
@@ -726,15 +529,10 @@
         "lat": -136.50999999999999,
         "lng": 189.25,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "475": {
+    {
         "id": 496,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -742,15 +540,10 @@
         "lat": -135.63,
         "lng": 232.5,
         "npc": {
-            "id": 135048,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gorestained Piglet",
-            "base_health": 147168,
-            "aggressiveness": "aggressive"
+            "id": 135048
         }
     },
-    "476": {
+    {
         "id": 497,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -758,15 +551,10 @@
         "lat": -145.38,
         "lng": 231.5,
         "npc": {
-            "id": 134041,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Infected Peasant",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134041
         }
     },
-    "477": {
+    {
         "id": 498,
         "enemy_pack_id": 110,
         "floor_id": 61,
@@ -774,15 +562,10 @@
         "lat": -89.75,
         "lng": 232.5,
         "npc": {
-            "id": 137830,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Pallid Gorger",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 137830
         }
     },
-    "478": {
+    {
         "id": 499,
         "enemy_pack_id": 110,
         "floor_id": 61,
@@ -790,15 +573,10 @@
         "lat": -89.810000000000002,
         "lng": 234.62,
         "npc": {
-            "id": 137830,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Pallid Gorger",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 137830
         }
     },
-    "479": {
+    {
         "id": 500,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -806,15 +584,10 @@
         "lat": -127.06,
         "lng": 250.75,
         "npc": {
-            "id": 135048,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gorestained Piglet",
-            "base_health": 147168,
-            "aggressiveness": "aggressive"
+            "id": 135048
         }
     },
-    "480": {
+    {
         "id": 501,
         "enemy_pack_id": 111,
         "floor_id": 61,
@@ -822,15 +595,10 @@
         "lat": -128.5,
         "lng": 266.94,
         "npc": {
-            "id": 137830,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Pallid Gorger",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 137830
         }
     },
-    "481": {
+    {
         "id": 502,
         "enemy_pack_id": 111,
         "floor_id": 61,
@@ -838,15 +606,10 @@
         "lat": -126.44,
         "lng": 267.88,
         "npc": {
-            "id": 131847,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Waycrest Reveler",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 131847
         }
     },
-    "482": {
+    {
         "id": 503,
         "enemy_pack_id": 111,
         "floor_id": 61,
@@ -854,15 +617,10 @@
         "lat": -124.25,
         "lng": 267.44,
         "npc": {
-            "id": 135048,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gorestained Piglet",
-            "base_health": 147168,
-            "aggressiveness": "aggressive"
+            "id": 135048
         }
     },
-    "483": {
+    {
         "id": 504,
         "enemy_pack_id": 111,
         "floor_id": 61,
@@ -870,15 +628,10 @@
         "lat": -122.75,
         "lng": 266.69,
         "npc": {
-            "id": 131586,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Banquet Steward",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131586
         }
     },
-    "484": {
+    {
         "id": 505,
         "enemy_pack_id": 114,
         "floor_id": 61,
@@ -886,15 +639,10 @@
         "lat": -112.19,
         "lng": 250.5,
         "npc": {
-            "id": 137830,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Pallid Gorger",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 137830
         }
     },
-    "485": {
+    {
         "id": 506,
         "enemy_pack_id": 114,
         "floor_id": 61,
@@ -902,15 +650,10 @@
         "lat": -109.5,
         "lng": 250.56,
         "npc": {
-            "id": 131847,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Waycrest Reveler",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 131847
         }
     },
-    "486": {
+    {
         "id": 507,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -918,15 +661,10 @@
         "lat": -124.38,
         "lng": 257.75,
         "npc": {
-            "id": 131586,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Banquet Steward",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131586
         }
     },
-    "487": {
+    {
         "id": 508,
         "enemy_pack_id": 112,
         "floor_id": 61,
@@ -934,15 +672,10 @@
         "lat": -91.810000000000002,
         "lng": 250.56,
         "npc": {
-            "id": 131847,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Waycrest Reveler",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 131847
         }
     },
-    "488": {
+    {
         "id": 509,
         "enemy_pack_id": 112,
         "floor_id": 61,
@@ -950,15 +683,10 @@
         "lat": -89.310000000000002,
         "lng": 251.88,
         "npc": {
-            "id": 131847,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Waycrest Reveler",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 131847
         }
     },
-    "489": {
+    {
         "id": 510,
         "enemy_pack_id": 112,
         "floor_id": 61,
@@ -966,15 +694,10 @@
         "lat": -89.560000000000002,
         "lng": 248.94,
         "npc": {
-            "id": 131847,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Waycrest Reveler",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 131847
         }
     },
-    "490": {
+    {
         "id": 511,
         "enemy_pack_id": 113,
         "floor_id": 61,
@@ -982,15 +705,10 @@
         "lat": -88.879999999999995,
         "lng": 264.94,
         "npc": {
-            "id": 131586,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Banquet Steward",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131586
         }
     },
-    "491": {
+    {
         "id": 512,
         "enemy_pack_id": 113,
         "floor_id": 61,
@@ -998,15 +716,10 @@
         "lat": -91.25,
         "lng": 264.94,
         "npc": {
-            "id": 135048,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gorestained Piglet",
-            "base_health": 147168,
-            "aggressiveness": "aggressive"
+            "id": 135048
         }
     },
-    "492": {
+    {
         "id": 513,
         "enemy_pack_id": 113,
         "floor_id": 61,
@@ -1014,15 +727,10 @@
         "lat": -92.25,
         "lng": 266.62,
         "npc": {
-            "id": 135048,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gorestained Piglet",
-            "base_health": 147168,
-            "aggressiveness": "aggressive"
+            "id": 135048
         }
     },
-    "493": {
+    {
         "id": 514,
         "enemy_pack_id": 113,
         "floor_id": 61,
@@ -1030,15 +738,10 @@
         "lat": -89.560000000000002,
         "lng": 268.19,
         "npc": {
-            "id": 137830,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Pallid Gorger",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 137830
         }
     },
-    "494": {
+    {
         "id": 515,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -1046,15 +749,10 @@
         "lat": -145.25,
         "lng": 236.62,
         "npc": {
-            "id": 135048,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gorestained Piglet",
-            "base_health": 147168,
-            "aggressiveness": "aggressive"
+            "id": 135048
         }
     },
-    "495": {
+    {
         "id": 517,
         "enemy_pack_id": 115,
         "floor_id": 61,
@@ -1062,15 +760,10 @@
         "lat": -191.19,
         "lng": 272.06,
         "npc": {
-            "id": 131850,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Maddened Survivalist",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131850
         }
     },
-    "496": {
+    {
         "id": 518,
         "enemy_pack_id": 115,
         "floor_id": 61,
@@ -1078,15 +771,10 @@
         "lat": -188.56,
         "lng": 272.62,
         "npc": {
-            "id": 131849,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Crazed Marksman",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131849
         }
     },
-    "497": {
+    {
         "id": 519,
         "enemy_pack_id": 117,
         "floor_id": 61,
@@ -1094,15 +782,10 @@
         "lat": -165.25,
         "lng": 258.88,
         "npc": {
-            "id": 131849,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Crazed Marksman",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131849
         }
     },
-    "498": {
+    {
         "id": 520,
         "enemy_pack_id": 117,
         "floor_id": 61,
@@ -1110,24 +793,21 @@
         "lat": -167.88,
         "lng": 259,
         "npc": {
-            "id": 131850,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Maddened Survivalist",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131850
         }
     },
-    "499": {
+    {
         "id": 521,
         "enemy_pack_id": 117,
         "floor_id": 61,
         "teeming": null,
         "lat": -165.75,
         "lng": 261.62,
-        "npc": null
+        "npc": {
+            "id": 131850
+        }
     },
-    "500": {
+    {
         "id": 522,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -1135,15 +815,10 @@
         "lat": -173,
         "lng": 266.88,
         "npc": {
-            "id": 131677,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Heartsbane Runeweaver",
-            "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "id": 131677
         }
     },
-    "501": {
+    {
         "id": 523,
         "enemy_pack_id": 116,
         "floor_id": 61,
@@ -1151,15 +826,10 @@
         "lat": -176.63,
         "lng": 284.25,
         "npc": {
-            "id": 131850,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Maddened Survivalist",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131850
         }
     },
-    "502": {
+    {
         "id": 524,
         "enemy_pack_id": 116,
         "floor_id": 61,
@@ -1167,15 +837,10 @@
         "lat": -179.25,
         "lng": 283.12,
         "npc": {
-            "id": 135234,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Diseased Mastiff",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135234
         }
     },
-    "503": {
+    {
         "id": 525,
         "enemy_pack_id": -1,
         "floor_id": 61,
@@ -1183,12 +848,7 @@
         "lat": -144.5,
         "lng": 288.75,
         "npc": {
-            "id": 134041,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Infected Peasant",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134041
         }
     }
-}
+]

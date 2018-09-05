@@ -18,8 +18,9 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                     'data': function (d) {
                         // Prevent this variable from busting cache
                         d.draw = null;
-                        <?php if( isset($author_id)) {?>
-                            d.author_id = {{ $author_id }};
+                        d.favorites = $("#favorites").is(':checked') ? 1 : 0;
+                        <?php if( $editLinks ) {?>
+                            d.mine = true;
                         <?php } ?>
                     }, <?php // Enable caching when in production mode, disable it when developing ?>
                     'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}'
@@ -32,15 +33,19 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                         'name': 'title',
                         'render': function (data, type, row, meta) {
                             <?php if( $editLinks ) { ?>
-                            return '<a href="{{ route('dungeonroute.edit', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
+                                return '<a href="{{ route('dungeonroute.edit', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
                             <?php } else { ?>
-                            return '<a href="{{ route('dungeonroute.view', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
+                                return '<a href="{{ route('dungeonroute.view', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
                             <?php } ?>
                         }
                     },
                     {
                         'data': 'dungeon.name',
                         'name': 'dungeon_id'
+                    },
+                    {
+                        'data': 'difficulty',
+                        'className': 'd-none d-md-table-cell'
                     },
                     {
                         'data': 'affixes',
@@ -61,32 +66,25 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                     },
                     {
                         'data': 'author.name',
-                        'className': 'd-none d-md-table-cell'
+                        'className': 'd-none d-lg-table-cell'
                     },
                     {
                         'render': function (data, type, row, meta) {
-                            return 'some rating';
+                            let result = '-';
+
+                            if (row.avg_rating !== 0) {
+                                result = row.avg_rating;
+                                if (row.rating_count == 0 || row.rating_count > 1) {
+                                    result += ' (' + row.rating_count + ' {{ __('votes') }})';
+                                } else {
+                                    result += ' (' + row.rating_count + ' {{ __('vote') }})';
+                                }
+                            }
+
+                            return result;
                         }
                     }
                 ]
-            });
-
-            $(document).ready(function () {
-                $('#example').DataTable({
-                    'processing': true,
-                    'serverSide': true,
-                    'responsive': true,
-                    "ajax": "https://wofje.nl/test/dt.php",
-                    'columns': [
-                        {
-                            'data': 'name',
-                            'name': 'name',
-                            'render': function (data, type, row, meta) {
-                                return 'test';
-                            }
-                        }
-                    ]
-                });
             });
 
             _dt.on('draw.dt', function (e, settings, json, xhr) {
@@ -102,12 +100,15 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                     dungeonId = '';
                 }
                 let affixes = $("#affixes").val();
-                let rating = $("#rating").val();
+                let difficulty = $("#difficulty").val();
+                if (parseInt(difficulty) < 1) {
+                    difficulty = '';
+                }
 
                 _dt.column(0).search(title);
                 _dt.column(1).search(dungeonId);
-                _dt.column(2).search(affixes);
-                _dt.column(5).search(rating);
+                _dt.column(2).search(difficulty);
+                _dt.column(3).search(affixes);
                 _dt.draw();
             });
             // Do this asap
@@ -129,20 +130,29 @@ $editLinks = isset($edit_links) ? $edit_links : false;
         </div>
         <div class="col-lg-2">
             {!! Form::label('dungeon_id', __('Dungeon')) !!}
-            {!! Form::select('dungeon_id', array_merge([0 => 'All'], \App\Models\Dungeon::active()->pluck('name', 'id')->toArray()), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
+            {!! Form::select('dungeon_id', [0 => 'All'] + \App\Models\Dungeon::active()->pluck('name', 'id')->toArray(), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
+        </div>
+        <div class="col-lg-2">
+            {!! Form::label('difficulty', __('Difficulty')) !!}
+            {!! Form::select('difficulty',
+            array_merge([0 => 'All'], array_combine(config('keystoneguru.dungeonroute_difficulty'), config('keystoneguru.dungeonroute_difficulty'))), 0,
+            ['id' => 'difficulty', 'class' => 'form-control']) !!}
         </div>
         <div id="affixgroup_select_container" class="col-lg-2">
-            {!! Form::label('affixes[]', __('Select affixes') . "*") !!}
+            {!! Form::label('affixes[]', __('Affixes') . "*") !!}
             {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('text', 'id'), null,
                 ['id' => 'affixes',
                 'class' => 'form-control affixselect selectpicker',
                 'multiple' => 'multiple',
-                'data-selected-text-format' => 'count > 1']) !!}
+                'data-selected-text-format' => 'count > 1',
+                'data-count-selected-text' => __('{0} affixes selected')]) !!}
         </div>
-        <div class="col-lg-2">
-            {!! Form::label('rating', __('Rating')) !!}
-            {!! Form::text('rating', null, ['id' => 'dungeonroute_search_rating', 'class' => 'form-control']) !!}
-        </div>
+        @if(Auth::user() !== null )
+            <div class="col-lg-2">
+                {!! Form::label('favorites', __('Favorites')) !!}
+                {!! Form::checkbox('favorites', 1, 0, ['id' => 'favorites', 'class' => 'form-control left_checkbox']) !!}
+            </div>
+        @endif
         <div class="col-lg-2">
             <div class="mb-2">
                 &nbsp;
@@ -153,11 +163,12 @@ $editLinks = isset($edit_links) ? $edit_links : false;
     <table id="routes_table" class="tablesorter default_table dt-responsive nowrap" width="100%">
         <thead>
         <tr>
-            <th width="30%">{{ __('Title') }}</th>
+            <th width="20%">{{ __('Title') }}</th>
             <th width="15%">{{ __('Dungeon') }}</th>
+            <th width="10%" class="d-none d-md-table-cell">{{ __('Difficulty') }}</th>
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
-            <th width="15%" class="d-none d-md-table-cell">{{ __('Author') }}</th>
+            <th width="15%" class="d-none d-lg-table-cell">{{ __('Author') }}</th>
             <th width="10%">{{ __('Rating') }}</th>
         </tr>
         </thead>

@@ -26,21 +26,33 @@ class CharacterClass extends IconFileModel
         return strtolower(str_replace(" ", "", $this->name));
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     function specializations()
     {
         return $this->hasMany('App\Models\CharacterSpecialization');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     function races()
     {
         return $this->belongsToMany('App\Models\CharacterRace', 'character_race_class_couplings');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     function dungeonrouteplayerclasses()
     {
         return $this->belongsToMany('App\Models\DungeonRoutePlayerClass', 'dungeon_route_player_classes');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     function dungeonrouteplayerraces()
     {
         return $this->belongsToMany('App\Models\DungeonRoutePlayerRace', 'dungeon_route_player_races');

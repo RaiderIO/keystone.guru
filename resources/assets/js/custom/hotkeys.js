@@ -2,7 +2,7 @@ class Hotkeys {
     constructor(map) {
         this.map = map;
 
-        this.map.register('map:refresh', (this._mapRefreshed).bind(this))
+        this.map.register('map:refresh', this, (this._mapRefreshed).bind(this))
         this.keys = [];
     }
 

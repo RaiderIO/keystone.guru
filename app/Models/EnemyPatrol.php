@@ -41,6 +41,10 @@ class EnemyPatrol extends Model
         return $this->hasMany('App\Models\EnemyPatrolVertex');
     }
 
+
+    /**
+     * Deletes all vertices that are related to this EnemyPatrol.
+     */
     function deleteVertices()
     {
         // Load the existing vertices from the pack

@@ -1,5 +1,5 @@
-{
-    "71": {
+[
+    {
         "id": 81,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -8,7 +8,7 @@
         "lng": 260.62,
         "npc": null
     },
-    "72": {
+    {
         "id": 82,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -16,15 +16,10 @@
         "lat": -82.379999999999995,
         "lng": 260.62,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "73": {
+    {
         "id": 83,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -33,7 +28,7 @@
         "lng": 229.88,
         "npc": null
     },
-    "74": {
+    {
         "id": 84,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -41,15 +36,10 @@
         "lat": -94.75,
         "lng": 229.88,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "75": {
+    {
         "id": 85,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -58,7 +48,7 @@
         "lng": 231.62,
         "npc": null
     },
-    "76": {
+    {
         "id": 86,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -66,15 +56,10 @@
         "lat": -86.129999999999995,
         "lng": 231.62,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "77": {
+    {
         "id": 87,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -82,15 +67,10 @@
         "lat": -87,
         "lng": 226.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "78": {
+    {
         "id": 88,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -98,15 +78,10 @@
         "lat": -87,
         "lng": 226.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "79": {
+    {
         "id": 89,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -115,7 +90,7 @@
         "lng": 228.62,
         "npc": null
     },
-    "80": {
+    {
         "id": 90,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -123,15 +98,10 @@
         "lat": -80.5,
         "lng": 228.62,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "81": {
+    {
         "id": 91,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -139,15 +109,10 @@
         "lat": -84.25,
         "lng": 215.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "82": {
+    {
         "id": 92,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -155,15 +120,10 @@
         "lat": -84.25,
         "lng": 215.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "83": {
+    {
         "id": 93,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -172,7 +132,7 @@
         "lng": 215.62,
         "npc": null
     },
-    "84": {
+    {
         "id": 94,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -180,15 +140,10 @@
         "lat": -89.25,
         "lng": 215.62,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "85": {
+    {
         "id": 95,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -197,7 +152,7 @@
         "lng": 218.25,
         "npc": null
     },
-    "86": {
+    {
         "id": 96,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -205,15 +160,10 @@
         "lat": -93.379999999999995,
         "lng": 218.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "87": {
+    {
         "id": 97,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -222,7 +172,7 @@
         "lng": 221.12,
         "npc": null
     },
-    "88": {
+    {
         "id": 98,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -230,15 +180,10 @@
         "lat": -87.129999999999995,
         "lng": 221.12,
         "npc": {
-            "id": 99891,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Storm Drake",
-            "base_health": 61136,
-            "aggressiveness": "aggressive"
+            "id": 99891
         }
     },
-    "89": {
+    {
         "id": 99,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -246,15 +191,10 @@
         "lat": -91.379999999999995,
         "lng": 204.12,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "90": {
+    {
         "id": 100,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -262,15 +202,10 @@
         "lat": -98.25,
         "lng": 206,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "91": {
+    {
         "id": 101,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -278,15 +213,10 @@
         "lat": -103,
         "lng": 216.75,
         "npc": {
-            "id": 96611,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Angerhoof Bull",
-            "base_health": 38241,
-            "aggressiveness": "aggressive"
+            "id": 96611
         }
     },
-    "92": {
+    {
         "id": 102,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -294,15 +224,10 @@
         "lat": -103.88,
         "lng": 198.88,
         "npc": {
-            "id": 96611,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Angerhoof Bull",
-            "base_health": 38241,
-            "aggressiveness": "aggressive"
+            "id": 96611
         }
     },
-    "93": {
+    {
         "id": 103,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -310,15 +235,10 @@
         "lat": -111.38,
         "lng": 192.5,
         "npc": {
-            "id": 96611,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Angerhoof Bull",
-            "base_health": 38241,
-            "aggressiveness": "aggressive"
+            "id": 96611
         }
     },
-    "94": {
+    {
         "id": 104,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -326,15 +246,10 @@
         "lat": -122.63,
         "lng": 196.38,
         "npc": {
-            "id": 96611,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Angerhoof Bull",
-            "base_health": 38241,
-            "aggressiveness": "aggressive"
+            "id": 96611
         }
     },
-    "95": {
+    {
         "id": 105,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -342,15 +257,10 @@
         "lat": -119.63,
         "lng": 206.38,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
-    "96": {
+    {
         "id": 106,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -358,15 +268,10 @@
         "lat": -131.38,
         "lng": 179,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "97": {
+    {
         "id": 107,
         "enemy_pack_id": 30,
         "floor_id": 17,
@@ -374,15 +279,10 @@
         "lat": -113.38,
         "lng": 166.88,
         "npc": {
-            "id": 96934,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Trapper",
-            "base_health": 35807,
-            "aggressiveness": "aggressive"
+            "id": 96934
         }
     },
-    "98": {
+    {
         "id": 108,
         "enemy_pack_id": 30,
         "floor_id": 17,
@@ -390,15 +290,10 @@
         "lat": -112,
         "lng": 163.38,
         "npc": {
-            "id": 99804,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Falconer",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 99804
         }
     },
-    "99": {
+    {
         "id": 109,
         "enemy_pack_id": 30,
         "floor_id": 17,
@@ -406,15 +301,10 @@
         "lat": -116,
         "lng": 164,
         "npc": {
-            "id": 99804,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Falconer",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 99804
         }
     },
-    "100": {
+    {
         "id": 110,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -422,15 +312,10 @@
         "lat": -91.879999999999995,
         "lng": 140.88,
         "npc": {
-            "id": 99868,
-            "dungeon_id": 7,
-            "classification_id": 3,
-            "name": "Fenryr",
-            "base_health": 284114,
-            "aggressiveness": "aggressive"
+            "id": 99868
         }
     },
-    "101": {
+    {
         "id": 111,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -438,15 +323,10 @@
         "lat": -190.5,
         "lng": 110.25,
         "npc": {
-            "id": 99868,
-            "dungeon_id": 7,
-            "classification_id": 3,
-            "name": "Fenryr",
-            "base_health": 284114,
-            "aggressiveness": "aggressive"
+            "id": 99868
         }
     },
-    "102": {
+    {
         "id": 112,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -454,15 +334,10 @@
         "lat": -124.38,
         "lng": 107.75,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "103": {
+    {
         "id": 113,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -470,15 +345,10 @@
         "lat": -127.63,
         "lng": 124.75,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "104": {
+    {
         "id": 114,
         "enemy_pack_id": 31,
         "floor_id": 17,
@@ -486,15 +356,10 @@
         "lat": -139.38,
         "lng": 123.38,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "105": {
+    {
         "id": 115,
         "enemy_pack_id": 31,
         "floor_id": 17,
@@ -502,15 +367,10 @@
         "lat": -142.5,
         "lng": 126.12,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "106": {
+    {
         "id": 116,
         "enemy_pack_id": 31,
         "floor_id": 17,
@@ -518,15 +378,10 @@
         "lat": -143.5,
         "lng": 121.88,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "107": {
+    {
         "id": 117,
         "enemy_pack_id": 32,
         "floor_id": 17,
@@ -534,15 +389,10 @@
         "lat": -141.38,
         "lng": 106,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "108": {
+    {
         "id": 118,
         "enemy_pack_id": 32,
         "floor_id": 17,
@@ -550,15 +400,10 @@
         "lat": -143.5,
         "lng": 109.88,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "109": {
+    {
         "id": 119,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -566,15 +411,10 @@
         "lat": -162.88,
         "lng": 123,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "110": {
+    {
         "id": 120,
         "enemy_pack_id": 33,
         "floor_id": 17,
@@ -582,15 +422,10 @@
         "lat": -158.5,
         "lng": 103.25,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "111": {
+    {
         "id": 121,
         "enemy_pack_id": 33,
         "floor_id": 17,
@@ -598,15 +433,10 @@
         "lat": -163.5,
         "lng": 99.120000000000005,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "112": {
+    {
         "id": 122,
         "enemy_pack_id": 33,
         "floor_id": 17,
@@ -614,15 +444,10 @@
         "lat": -165,
         "lng": 102.38,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "113": {
+    {
         "id": 123,
         "enemy_pack_id": 34,
         "floor_id": 17,
@@ -630,15 +455,10 @@
         "lat": -93,
         "lng": 177.88,
         "npc": {
-            "id": 96640,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Marksman",
-            "base_health": 34069,
-            "aggressiveness": "aggressive"
+            "id": 96640
         }
     },
-    "114": {
+    {
         "id": 124,
         "enemy_pack_id": 34,
         "floor_id": 17,
@@ -646,15 +466,10 @@
         "lat": -95.129999999999995,
         "lng": 174.88,
         "npc": {
-            "id": 96640,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Marksman",
-            "base_health": 34069,
-            "aggressiveness": "aggressive"
+            "id": 96640
         }
     },
-    "115": {
+    {
         "id": 125,
         "enemy_pack_id": 34,
         "floor_id": 17,
@@ -662,15 +477,10 @@
         "lat": -91,
         "lng": 173.38,
         "npc": {
-            "id": 96934,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Trapper",
-            "base_health": 35807,
-            "aggressiveness": "aggressive"
+            "id": 96934
         }
     },
-    "116": {
+    {
         "id": 126,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -678,15 +488,10 @@
         "lat": -124,
         "lng": 213.62,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
-    "117": {
+    {
         "id": 127,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -694,15 +499,10 @@
         "lat": -131.81,
         "lng": 205.81,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
-    "118": {
+    {
         "id": 128,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -710,15 +510,10 @@
         "lat": -147.63,
         "lng": 200,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
-    "119": {
+    {
         "id": 129,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -726,15 +521,10 @@
         "lat": -168.75,
         "lng": 188.62,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
-    "120": {
+    {
         "id": 130,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -742,15 +532,10 @@
         "lat": -156.44,
         "lng": 171.12,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
-    "121": {
+    {
         "id": 131,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -758,15 +543,10 @@
         "lat": -170.38,
         "lng": 159.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
-    "122": {
+    {
         "id": 132,
         "enemy_pack_id": 35,
         "floor_id": 17,
@@ -774,15 +554,10 @@
         "lat": -169.94,
         "lng": 147.62,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "123": {
+    {
         "id": 133,
         "enemy_pack_id": 35,
         "floor_id": 17,
@@ -790,15 +565,10 @@
         "lat": -172.19,
         "lng": 144.31,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "124": {
+    {
         "id": 134,
         "enemy_pack_id": 35,
         "floor_id": 17,
@@ -806,15 +576,10 @@
         "lat": -174.56,
         "lng": 148,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
-    "125": {
+    {
         "id": 135,
         "enemy_pack_id": 35,
         "floor_id": 17,
@@ -822,12 +587,7 @@
         "lat": -171.81,
         "lng": 150.62,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     }
-}
+]

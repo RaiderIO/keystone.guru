@@ -19,6 +19,10 @@
             {!! Form::label('dungeon_id', __('Select dungeon') . "*") !!}
             {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->pluck('name', 'id'), null, ['class' => 'form-control']) !!}
         </div>
+        <div class="form-group">
+            {!! Form::label('difficulty', __('Difficulty') . "*") !!}
+            {!! Form::select('difficulty', config('keystoneguru.dungeonroute_difficulty'), null, ['class' => 'form-control']) !!}
+        </div>
 
         <h3>
             {{ __('Group composition (optional)') }}

@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property $id int The ID of this Dungeon.
  * @property $expansion_id int The linked expansion to this dungeon.
- * @property $name string The name of the dungeon
- * @property $active boolean True if this dungeon is active, false if it is not
+ * @property $name string The name of the dungeon.
+ * @property $enemy_forces_required int The amount of total enemy forces required to complete the dungeon.
+ * @property $enemy_forces_required_teeming int The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
+ * @property $active boolean True if this dungeon is active, false if it is not.
  * @property $expansion \Expansion
  * @property $floors \Illuminate\Support\Collection
  * @property $dungeonroutes \Illuminate\Support\Collection
@@ -26,6 +28,7 @@ class Dungeon extends Model
     public $with = ['expansion'];
 
     public $hidden = ['expansion_id', 'created_at', 'updated_at'];
+    public $timestamps = false;
 
     /**
      * @return string The key as used in the front-end to identify the dungeon.
@@ -57,7 +60,8 @@ class Dungeon extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function dungeonroutes(){
+    public function dungeonroutes()
+    {
         return $this->hasMany('App\Models\DungeonRoute');
     }
 

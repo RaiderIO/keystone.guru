@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property $id int The ID of this DungeonRoute.
@@ -12,6 +15,7 @@ use Illuminate\Http\Request;
  * @property $faction_id int
  * @property $public_key string
  * @property $title string
+ * @property $difficulty string
  * @property $unlisted boolean
  * @property $demo boolean
  * @property $dungeon Dungeon
@@ -24,6 +28,7 @@ use Illuminate\Http\Request;
  * @property $playerclasses \Illuminate\Support\Collection
  * @property $playerraces \Illuminate\Support\Collection
  * @property $affixes \Illuminate\Support\Collection
+ * @property $ratings \Illuminate\Support\Collection
  */
 class DungeonRoute extends Model
 {
@@ -32,7 +37,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at'];
 
@@ -143,6 +148,47 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ratings()
+    {
+        return $this->hasMany('App\Models\DungeonRouteRating');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function favorites()
+    {
+        return $this->hasMany('App\Models\DungeonRouteFavorite');
+    }
+
+    /**
+     * @return double
+     */
+    public function getAvgRatingAttribute()
+    {
+        $avg = 1;
+        if (!$this->ratings->isEmpty()) {
+            /** @var Collection $ratings */
+            $ratings = $this->ratings;
+            $ratingsArr = $ratings->pluck(['rating'])->toArray();
+
+            $avg = array_sum($ratingsArr) / count($ratingsArr);
+        }
+
+        return $avg;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getRatingCountAttribute()
+    {
+        return $this->ratings->count();
+    }
+
+    /**
      * @return array The setup as used in the front-end.
      */
     public function getSetupAttribute()
@@ -173,6 +219,7 @@ class DungeonRoute extends Model
         $this->dungeon_id = $request->get('dungeon_id', $this->dungeon_id);
         $this->faction_id = $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
+        $this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->unlisted = intval($request->get('unlisted', 0)) > 0;
         $this->demo = intval($request->get('demo', 0)) > 0;
 
@@ -217,6 +264,48 @@ class DungeonRoute extends Model
                 }
             }
             $result = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return int|bool Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
+     */
+    public function getRatingByCurrentUser()
+    {
+        $result = false;
+        $user = Auth::user();
+        if ($user !== null) {
+            // @TODO Probably going to want an index on this one
+            $rating = DB::table('dungeon_route_ratings')
+                ->where('dungeon_route_id', '=', $this->id)
+                ->where('user_id', '=', $user->id)
+                ->get(['rating'])->first();
+
+            if ($rating !== null) {
+                $result = $rating->rating;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return int|mixed
+     */
+    public function isFavoritedByCurrentUser()
+    {
+        $result = false;
+        $user = Auth::user();
+        if ($user !== null) {
+            // @TODO Probably going to want an index on this one
+            $favorite = DB::table('dungeon_route_favorites')
+                ->where('dungeon_route_id', '=', $this->id)
+                ->where('user_id', '=', $user->id)
+                ->first();
+
+            $result = $favorite !== null;
         }
 
         return $result;

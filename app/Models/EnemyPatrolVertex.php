@@ -26,7 +26,11 @@ class EnemyPatrolVertex extends Model
      */
     public $timestamps = false;
 
-    function enemypatrol(){
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function enemypatrol()
+    {
         return $this->belongsTo('App\Models\EnemyPatrol');
     }
 }

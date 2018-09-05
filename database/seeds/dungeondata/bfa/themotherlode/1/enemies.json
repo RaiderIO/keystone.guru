@@ -1,5 +1,5 @@
-{
-    "145": {
+[
+    {
         "id": 156,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -7,15 +7,10 @@
         "lat": -121.91,
         "lng": 175.75,
         "npc": {
-            "id": 139904,
-            "dungeon_id": 20,
-            "classification_id": 3,
-            "name": "Coin-Operated Crowd Pummeler",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 139904
         }
     },
-    "146": {
+    {
         "id": 157,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -23,15 +18,10 @@
         "lat": -67.659999999999997,
         "lng": 116.75,
         "npc": {
-            "id": 129227,
-            "dungeon_id": 20,
-            "classification_id": 3,
-            "name": "Azerokk",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 129227
         }
     },
-    "147": {
+    {
         "id": 158,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -39,15 +29,10 @@
         "lat": -51.659999999999997,
         "lng": 214.75,
         "npc": {
-            "id": 139273,
-            "dungeon_id": 20,
-            "classification_id": 3,
-            "name": "Rixxa Fluxflame",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 139273
         }
     },
-    "148": {
+    {
         "id": 159,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -55,47 +40,32 @@
         "lat": -102.16,
         "lng": 265,
         "npc": {
-            "id": 131227,
-            "dungeon_id": 20,
-            "classification_id": 3,
-            "name": "Mogul Razdunk",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 131227
         }
     },
-    "269": {
+    {
         "id": 281,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 54,
         "floor_id": 50,
         "teeming": null,
         "lat": -202.16,
         "lng": 206.88,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "270": {
+    {
         "id": 282,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 54,
         "floor_id": 50,
         "teeming": null,
         "lat": -200.78999999999999,
         "lng": 207,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "272": {
+    {
         "id": 284,
         "enemy_pack_id": 54,
         "floor_id": 50,
@@ -103,15 +73,10 @@
         "lat": -201.47999999999999,
         "lng": 207.12,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "282": {
+    {
         "id": 294,
         "enemy_pack_id": 58,
         "floor_id": 50,
@@ -119,47 +84,32 @@
         "lat": -193.16,
         "lng": 204.31,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "283": {
+    {
         "id": 295,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 58,
         "floor_id": 50,
         "teeming": null,
-        "lat": -193.78999999999999,
+        "lat": -193.94,
         "lng": 203.62,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "284": {
+    {
         "id": 296,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 58,
         "floor_id": 50,
         "teeming": null,
         "lat": -192.53999999999999,
         "lng": 205.12,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "285": {
+    {
         "id": 297,
         "enemy_pack_id": 59,
         "floor_id": 50,
@@ -167,15 +117,10 @@
         "lat": -194.09999999999999,
         "lng": 214.31,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "286": {
+    {
         "id": 298,
         "enemy_pack_id": 59,
         "floor_id": 50,
@@ -183,15 +128,10 @@
         "lat": -192.84999999999999,
         "lng": 213,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "287": {
+    {
         "id": 299,
         "enemy_pack_id": 59,
         "floor_id": 50,
@@ -199,15 +139,10 @@
         "lat": -192.91,
         "lng": 214.38,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "288": {
+    {
         "id": 300,
         "enemy_pack_id": 60,
         "floor_id": 50,
@@ -215,15 +150,10 @@
         "lat": -187.09999999999999,
         "lng": 213.88,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "289": {
+    {
         "id": 301,
         "enemy_pack_id": 60,
         "floor_id": 50,
@@ -231,15 +161,10 @@
         "lat": -188.03999999999999,
         "lng": 214.81,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "290": {
+    {
         "id": 302,
         "enemy_pack_id": 60,
         "floor_id": 50,
@@ -247,15 +172,10 @@
         "lat": -188.22999999999999,
         "lng": 213.69,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "291": {
+    {
         "id": 303,
         "enemy_pack_id": 61,
         "floor_id": 50,
@@ -263,15 +183,10 @@
         "lat": -180.53999999999999,
         "lng": 210.94,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "292": {
+    {
         "id": 304,
         "enemy_pack_id": 61,
         "floor_id": 50,
@@ -279,15 +194,10 @@
         "lat": -180.59999999999999,
         "lng": 209.69,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "293": {
+    {
         "id": 305,
         "enemy_pack_id": 62,
         "floor_id": 50,
@@ -295,15 +205,10 @@
         "lat": -186.34999999999999,
         "lng": 199.19,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "294": {
+    {
         "id": 306,
         "enemy_pack_id": 62,
         "floor_id": 50,
@@ -311,15 +216,10 @@
         "lat": -186.72999999999999,
         "lng": 200.62,
         "npc": {
-            "id": 134232,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Hired Assassin",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134232
         }
     },
-    "295": {
+    {
         "id": 307,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -327,15 +227,10 @@
         "lat": -187.41,
         "lng": 204.88,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "296": {
+    {
         "id": 308,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -343,15 +238,10 @@
         "lat": -188.28999999999999,
         "lng": 204.56,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "297": {
+    {
         "id": 309,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -359,15 +249,10 @@
         "lat": -189.47999999999999,
         "lng": 204.19,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "298": {
+    {
         "id": 310,
         "enemy_pack_id": 63,
         "floor_id": 50,
@@ -375,15 +260,10 @@
         "lat": -199.03999999999999,
         "lng": 219.88,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "299": {
+    {
         "id": 311,
         "enemy_pack_id": 63,
         "floor_id": 50,
@@ -391,15 +271,10 @@
         "lat": -197.53999999999999,
         "lng": 218.69,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "300": {
+    {
         "id": 312,
         "enemy_pack_id": 63,
         "floor_id": 50,
@@ -407,15 +282,10 @@
         "lat": -198.03999999999999,
         "lng": 219.75,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "301": {
+    {
         "id": 313,
         "enemy_pack_id": 64,
         "floor_id": 50,
@@ -423,15 +293,10 @@
         "lat": -175.47999999999999,
         "lng": 204.88,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "302": {
+    {
         "id": 314,
         "enemy_pack_id": 64,
         "floor_id": 50,
@@ -439,15 +304,10 @@
         "lat": -176.53999999999999,
         "lng": 204.56,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "303": {
+    {
         "id": 315,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -455,15 +315,10 @@
         "lat": -175.59999999999999,
         "lng": 206.44,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "304": {
+    {
         "id": 316,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -471,15 +326,10 @@
         "lat": -176.78999999999999,
         "lng": 206.25,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "305": {
+    {
         "id": 317,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -487,15 +337,10 @@
         "lat": -177.78999999999999,
         "lng": 205.5,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "306": {
+    {
         "id": 318,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -503,15 +348,10 @@
         "lat": -180.22999999999999,
         "lng": 205.69,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "307": {
+    {
         "id": 319,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -519,15 +359,10 @@
         "lat": -180.09999999999999,
         "lng": 204.75,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "308": {
+    {
         "id": 320,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -535,15 +370,10 @@
         "lat": -178.22999999999999,
         "lng": 202.44,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "309": {
+    {
         "id": 321,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -551,15 +381,10 @@
         "lat": -179.22999999999999,
         "lng": 202.25,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "310": {
+    {
         "id": 322,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -567,15 +392,10 @@
         "lat": -178.59999999999999,
         "lng": 201.69,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "311": {
+    {
         "id": 323,
         "enemy_pack_id": 65,
         "floor_id": 50,
@@ -583,15 +403,10 @@
         "lat": -172.84999999999999,
         "lng": 213.19,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "312": {
+    {
         "id": 324,
         "enemy_pack_id": 65,
         "floor_id": 50,
@@ -599,15 +414,10 @@
         "lat": -172.41,
         "lng": 211.62,
         "npc": {
-            "id": 134232,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Hired Assassin",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134232
         }
     },
-    "313": {
+    {
         "id": 325,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -615,15 +425,10 @@
         "lat": -174.97999999999999,
         "lng": 224.25,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "314": {
+    {
         "id": 326,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -631,15 +436,10 @@
         "lat": -174.03999999999999,
         "lng": 223.81,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "315": {
+    {
         "id": 327,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -647,15 +447,10 @@
         "lat": -169.72999999999999,
         "lng": 215.81,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "316": {
+    {
         "id": 328,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -663,15 +458,10 @@
         "lat": -169.53999999999999,
         "lng": 214.88,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "317": {
+    {
         "id": 329,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -679,15 +469,10 @@
         "lat": -171.78999999999999,
         "lng": 217.44,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "318": {
+    {
         "id": 330,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -695,15 +480,10 @@
         "lat": -171.97999999999999,
         "lng": 216.44,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "319": {
+    {
         "id": 331,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -711,15 +491,10 @@
         "lat": -173.28999999999999,
         "lng": 220.12,
         "npc": {
-            "id": 144243,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Drix Bassbolter",
-            "base_health": 1,
-            "aggressiveness": "friendly"
+            "id": 144243
         }
     },
-    "320": {
+    {
         "id": 332,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -727,15 +502,10 @@
         "lat": -175.41,
         "lng": 221.88,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "321": {
+    {
         "id": 333,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -743,15 +513,10 @@
         "lat": -176.28999999999999,
         "lng": 222.75,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "322": {
+    {
         "id": 334,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -759,15 +524,10 @@
         "lat": -176.34999999999999,
         "lng": 221.69,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "323": {
+    {
         "id": 335,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -775,15 +535,10 @@
         "lat": -175.72999999999999,
         "lng": 220.88,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "324": {
+    {
         "id": 336,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -791,15 +546,10 @@
         "lat": -177.66,
         "lng": 219.5,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "325": {
+    {
         "id": 337,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -807,15 +557,10 @@
         "lat": -178.53999999999999,
         "lng": 217.88,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "326": {
+    {
         "id": 338,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -823,15 +568,10 @@
         "lat": -178.84999999999999,
         "lng": 217.19,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "327": {
+    {
         "id": 339,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -839,15 +579,10 @@
         "lat": -174.16,
         "lng": 217.38,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "328": {
+    {
         "id": 340,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -855,15 +590,10 @@
         "lat": -174.47999999999999,
         "lng": 216.88,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "329": {
+    {
         "id": 341,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -871,15 +601,10 @@
         "lat": -174.97999999999999,
         "lng": 218.56,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "330": {
+    {
         "id": 342,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -887,15 +612,10 @@
         "lat": -175.53999999999999,
         "lng": 219.12,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "331": {
+    {
         "id": 343,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -903,15 +623,10 @@
         "lat": -175.59999999999999,
         "lng": 218.5,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "332": {
+    {
         "id": 344,
         "enemy_pack_id": 66,
         "floor_id": 50,
@@ -919,15 +634,10 @@
         "lat": -161.22999999999999,
         "lng": 205.56,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "333": {
+    {
         "id": 345,
         "enemy_pack_id": 66,
         "floor_id": 50,
@@ -935,15 +645,10 @@
         "lat": -162.09999999999999,
         "lng": 206.19,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "334": {
+    {
         "id": 346,
         "enemy_pack_id": 66,
         "floor_id": 50,
@@ -951,15 +656,10 @@
         "lat": -161.28999999999999,
         "lng": 207.38,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "335": {
+    {
         "id": 347,
         "enemy_pack_id": 66,
         "floor_id": 50,
@@ -967,15 +667,10 @@
         "lat": -161.91,
         "lng": 208.38,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "336": {
+    {
         "id": 348,
         "enemy_pack_id": 67,
         "floor_id": 50,
@@ -983,15 +678,10 @@
         "lat": -159.53999999999999,
         "lng": 223.5,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "337": {
+    {
         "id": 349,
         "enemy_pack_id": 67,
         "floor_id": 50,
@@ -999,15 +689,10 @@
         "lat": -160.16,
         "lng": 222.44,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "338": {
+    {
         "id": 350,
         "enemy_pack_id": 68,
         "floor_id": 50,
@@ -1015,15 +700,10 @@
         "lat": -156.91,
         "lng": 213.94,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "339": {
+    {
         "id": 351,
         "enemy_pack_id": 68,
         "floor_id": 50,
@@ -1031,15 +711,10 @@
         "lat": -155.91,
         "lng": 214.69,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "340": {
+    {
         "id": 352,
         "enemy_pack_id": 68,
         "floor_id": 50,
@@ -1047,15 +722,10 @@
         "lat": -158.22999999999999,
         "lng": 213.81,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "341": {
+    {
         "id": 353,
         "enemy_pack_id": 68,
         "floor_id": 50,
@@ -1063,15 +733,10 @@
         "lat": -157.41,
         "lng": 215.06,
         "npc": {
-            "id": 134232,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Hired Assassin",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134232
         }
     },
-    "342": {
+    {
         "id": 354,
         "enemy_pack_id": 69,
         "floor_id": 50,
@@ -1079,15 +744,10 @@
         "lat": -150.59999999999999,
         "lng": 229.31,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "343": {
+    {
         "id": 355,
         "enemy_pack_id": 69,
         "floor_id": 50,
@@ -1095,15 +755,10 @@
         "lat": -151.84999999999999,
         "lng": 229.38,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "344": {
+    {
         "id": 356,
         "enemy_pack_id": 69,
         "floor_id": 50,
@@ -1111,15 +766,10 @@
         "lat": -151.16,
         "lng": 228.19,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "345": {
+    {
         "id": 357,
         "enemy_pack_id": 70,
         "floor_id": 50,
@@ -1127,15 +777,10 @@
         "lat": -155.78999999999999,
         "lng": 232.69,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "346": {
+    {
         "id": 358,
         "enemy_pack_id": 70,
         "floor_id": 50,
@@ -1143,15 +788,10 @@
         "lat": -154.22999999999999,
         "lng": 232.31,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "347": {
+    {
         "id": 359,
         "enemy_pack_id": 70,
         "floor_id": 50,
@@ -1159,15 +799,10 @@
         "lat": -154.66,
         "lng": 233.69,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "348": {
+    {
         "id": 360,
         "enemy_pack_id": 71,
         "floor_id": 50,
@@ -1175,15 +810,10 @@
         "lat": -151.28999999999999,
         "lng": 210.69,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "349": {
+    {
         "id": 361,
         "enemy_pack_id": 71,
         "floor_id": 50,
@@ -1191,15 +821,10 @@
         "lat": -149.78999999999999,
         "lng": 210.88,
         "npc": {
-            "id": 134232,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Hired Assassin",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134232
         }
     },
-    "350": {
+    {
         "id": 362,
         "enemy_pack_id": 71,
         "floor_id": 50,
@@ -1207,15 +832,10 @@
         "lat": -150.72999999999999,
         "lng": 212,
         "npc": {
-            "id": 134232,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Hired Assassin",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134232
         }
     },
-    "351": {
+    {
         "id": 363,
         "enemy_pack_id": 72,
         "floor_id": 50,
@@ -1223,15 +843,10 @@
         "lat": -149.91,
         "lng": 224.12,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "352": {
+    {
         "id": 364,
         "enemy_pack_id": 72,
         "floor_id": 50,
@@ -1239,15 +854,10 @@
         "lat": -148.91,
         "lng": 222.69,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "353": {
+    {
         "id": 365,
         "enemy_pack_id": 73,
         "floor_id": 50,
@@ -1255,15 +865,10 @@
         "lat": -135.78999999999999,
         "lng": 211.31,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "354": {
+    {
         "id": 366,
         "enemy_pack_id": 73,
         "floor_id": 50,
@@ -1271,15 +876,10 @@
         "lat": -136.78999999999999,
         "lng": 212.25,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "355": {
+    {
         "id": 367,
         "enemy_pack_id": 73,
         "floor_id": 50,
@@ -1287,15 +887,10 @@
         "lat": -136.66,
         "lng": 210.44,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "356": {
+    {
         "id": 368,
         "enemy_pack_id": 73,
         "floor_id": 50,
@@ -1303,15 +898,10 @@
         "lat": -137.34999999999999,
         "lng": 211.31,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "357": {
+    {
         "id": 369,
         "enemy_pack_id": 74,
         "floor_id": 50,
@@ -1319,15 +909,10 @@
         "lat": -144.09999999999999,
         "lng": 219.38,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "358": {
+    {
         "id": 370,
         "enemy_pack_id": 74,
         "floor_id": 50,
@@ -1335,15 +920,10 @@
         "lat": -145.22999999999999,
         "lng": 218.56,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "359": {
+    {
         "id": 371,
         "enemy_pack_id": 74,
         "floor_id": 50,
@@ -1351,15 +931,10 @@
         "lat": -144.41,
         "lng": 217.69,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "360": {
+    {
         "id": 372,
         "enemy_pack_id": 75,
         "floor_id": 50,
@@ -1367,15 +942,10 @@
         "lat": -162.03999999999999,
         "lng": 214.19,
         "npc": {
-            "id": 134232,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Hired Assassin",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134232
         }
     },
-    "361": {
+    {
         "id": 373,
         "enemy_pack_id": 75,
         "floor_id": 50,
@@ -1383,15 +953,10 @@
         "lat": -160.72999999999999,
         "lng": 214.19,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "362": {
+    {
         "id": 374,
         "enemy_pack_id": 75,
         "floor_id": 50,
@@ -1399,15 +964,10 @@
         "lat": -161.66,
         "lng": 215.38,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "363": {
+    {
         "id": 375,
         "enemy_pack_id": 76,
         "floor_id": 50,
@@ -1415,15 +975,10 @@
         "lat": -141.84999999999999,
         "lng": 206.81,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "364": {
+    {
         "id": 376,
         "enemy_pack_id": 76,
         "floor_id": 50,
@@ -1431,15 +986,10 @@
         "lat": -142.91,
         "lng": 206.5,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "365": {
+    {
         "id": 377,
         "enemy_pack_id": 76,
         "floor_id": 50,
@@ -1447,15 +997,10 @@
         "lat": -142.97999999999999,
         "lng": 205.44,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "366": {
+    {
         "id": 378,
         "enemy_pack_id": 77,
         "floor_id": 50,
@@ -1463,15 +1008,10 @@
         "lat": -141.16,
         "lng": 200.94,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "367": {
+    {
         "id": 379,
         "enemy_pack_id": 77,
         "floor_id": 50,
@@ -1479,15 +1019,10 @@
         "lat": -139.72999999999999,
         "lng": 199.62,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "368": {
+    {
         "id": 380,
         "enemy_pack_id": 77,
         "floor_id": 50,
@@ -1495,15 +1030,10 @@
         "lat": -139.84999999999999,
         "lng": 197.62,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "369": {
+    {
         "id": 381,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1511,15 +1041,10 @@
         "lat": -163.78999999999999,
         "lng": 199.69,
         "npc": {
-            "id": 136139,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Mechanized Peacekeeper",
-            "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "id": 136139
         }
     },
-    "370": {
+    {
         "id": 382,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1527,15 +1052,10 @@
         "lat": -158.97999999999999,
         "lng": 198.81,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "371": {
+    {
         "id": 383,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1543,15 +1063,10 @@
         "lat": -159.22999999999999,
         "lng": 199.88,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "372": {
+    {
         "id": 384,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1559,15 +1074,10 @@
         "lat": -160.03999999999999,
         "lng": 200.62,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "373": {
+    {
         "id": 385,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1575,15 +1085,10 @@
         "lat": -160.72999999999999,
         "lng": 199.94,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "374": {
+    {
         "id": 386,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1591,15 +1096,10 @@
         "lat": -160.22999999999999,
         "lng": 199.25,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "375": {
+    {
         "id": 387,
         "enemy_pack_id": 78,
         "floor_id": 50,
@@ -1607,15 +1107,10 @@
         "lat": -159.78999999999999,
         "lng": 198.5,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "376": {
+    {
         "id": 388,
         "enemy_pack_id": 79,
         "floor_id": 50,
@@ -1623,15 +1118,10 @@
         "lat": -166.16,
         "lng": 196.5,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "377": {
+    {
         "id": 389,
         "enemy_pack_id": 79,
         "floor_id": 50,
@@ -1639,15 +1129,10 @@
         "lat": -165.78999999999999,
         "lng": 197.81,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "378": {
+    {
         "id": 390,
         "enemy_pack_id": 79,
         "floor_id": 50,
@@ -1655,15 +1140,10 @@
         "lat": -166.97999999999999,
         "lng": 197.88,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "379": {
+    {
         "id": 391,
         "enemy_pack_id": 79,
         "floor_id": 50,
@@ -1671,15 +1151,10 @@
         "lat": -167.22999999999999,
         "lng": 196.62,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "380": {
+    {
         "id": 392,
         "enemy_pack_id": 80,
         "floor_id": 50,
@@ -1687,15 +1162,10 @@
         "lat": -162.22999999999999,
         "lng": 187.94,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "381": {
+    {
         "id": 393,
         "enemy_pack_id": 80,
         "floor_id": 50,
@@ -1703,15 +1173,10 @@
         "lat": -162.09999999999999,
         "lng": 189.56,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "382": {
+    {
         "id": 394,
         "enemy_pack_id": 80,
         "floor_id": 50,
@@ -1719,15 +1184,10 @@
         "lat": -163.47999999999999,
         "lng": 188.94,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "383": {
+    {
         "id": 395,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1735,15 +1195,10 @@
         "lat": -164.72999999999999,
         "lng": 186.38,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "384": {
+    {
         "id": 396,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1751,15 +1206,10 @@
         "lat": -163.66,
         "lng": 186.31,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "385": {
+    {
         "id": 397,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1767,15 +1217,10 @@
         "lat": -164.22999999999999,
         "lng": 187.06,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "386": {
+    {
         "id": 398,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1783,15 +1228,10 @@
         "lat": -161.09999999999999,
         "lng": 183.62,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "387": {
+    {
         "id": 399,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1799,15 +1239,10 @@
         "lat": -161.97999999999999,
         "lng": 183.62,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "388": {
+    {
         "id": 400,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1815,15 +1250,10 @@
         "lat": -161.91,
         "lng": 184.5,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "389": {
+    {
         "id": 401,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1831,15 +1261,10 @@
         "lat": -160.84999999999999,
         "lng": 184.44,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "390": {
+    {
         "id": 402,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1847,15 +1272,10 @@
         "lat": -161.28999999999999,
         "lng": 184.75,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "391": {
+    {
         "id": 403,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1863,15 +1283,10 @@
         "lat": -160.72999999999999,
         "lng": 184.94,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "392": {
+    {
         "id": 404,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1879,15 +1294,10 @@
         "lat": -160.84999999999999,
         "lng": 185.5,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "393": {
+    {
         "id": 405,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1895,15 +1305,10 @@
         "lat": -161.28999999999999,
         "lng": 185.19,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "394": {
+    {
         "id": 406,
         "enemy_pack_id": -1,
         "floor_id": 50,
@@ -1911,15 +1316,10 @@
         "lat": -161.47999999999999,
         "lng": 185.69,
         "npc": {
-            "id": 136006,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Rowdy Reveler",
-            "base_health": 58867,
-            "aggressiveness": "neutral"
+            "id": 136006
         }
     },
-    "395": {
+    {
         "id": 407,
         "enemy_pack_id": 81,
         "floor_id": 50,
@@ -1927,15 +1327,10 @@
         "lat": -153.28999999999999,
         "lng": 188.19,
         "npc": {
-            "id": 134232,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Hired Assassin",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134232
         }
     },
-    "396": {
+    {
         "id": 408,
         "enemy_pack_id": 81,
         "floor_id": 50,
@@ -1943,15 +1338,10 @@
         "lat": -154.66,
         "lng": 187.75,
         "npc": {
-            "id": 130435,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Addled Thug",
-            "base_health": 382636,
-            "aggressiveness": "aggressive"
+            "id": 130435
         }
     },
-    "397": {
+    {
         "id": 409,
         "enemy_pack_id": 81,
         "floor_id": 50,
@@ -1959,15 +1349,10 @@
         "lat": -154.41,
         "lng": 188.88,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "398": {
+    {
         "id": 410,
         "enemy_pack_id": 82,
         "floor_id": 50,
@@ -1975,15 +1360,10 @@
         "lat": -152.09999999999999,
         "lng": 182.06,
         "npc": {
-            "id": 134232,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Hired Assassin",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134232
         }
     },
-    "399": {
+    {
         "id": 411,
         "enemy_pack_id": 82,
         "floor_id": 50,
@@ -1991,15 +1371,10 @@
         "lat": -153.91,
         "lng": 182,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "400": {
+    {
         "id": 412,
         "enemy_pack_id": 82,
         "floor_id": 50,
@@ -2007,15 +1382,10 @@
         "lat": -152.91,
         "lng": 180.75,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "401": {
+    {
         "id": 413,
         "enemy_pack_id": 83,
         "floor_id": 50,
@@ -2023,15 +1393,10 @@
         "lat": -149.84999999999999,
         "lng": 197.44,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "402": {
+    {
         "id": 414,
         "enemy_pack_id": 83,
         "floor_id": 50,
@@ -2039,15 +1404,10 @@
         "lat": -150.97999999999999,
         "lng": 196.38,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "403": {
+    {
         "id": 415,
         "enemy_pack_id": 83,
         "floor_id": 50,
@@ -2055,15 +1415,10 @@
         "lat": -149.34999999999999,
         "lng": 196.19,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "404": {
+    {
         "id": 416,
         "enemy_pack_id": 83,
         "floor_id": 50,
@@ -2071,15 +1426,10 @@
         "lat": -150.16,
         "lng": 195.62,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "405": {
+    {
         "id": 417,
         "enemy_pack_id": 84,
         "floor_id": 50,
@@ -2087,15 +1437,10 @@
         "lat": -143.53999999999999,
         "lng": 188.5,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "406": {
+    {
         "id": 418,
         "enemy_pack_id": 84,
         "floor_id": 50,
@@ -2103,15 +1448,10 @@
         "lat": -145.09999999999999,
         "lng": 187.31,
         "npc": {
-            "id": 130488,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Mech Jockey",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 130488
         }
     },
-    "407": {
+    {
         "id": 419,
         "enemy_pack_id": 84,
         "floor_id": 50,
@@ -2119,15 +1459,10 @@
         "lat": -143.16,
         "lng": 186.94,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "408": {
+    {
         "id": 420,
         "enemy_pack_id": 84,
         "floor_id": 50,
@@ -2135,15 +1470,10 @@
         "lat": -144.09999999999999,
         "lng": 185.5,
         "npc": {
-            "id": 130436,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Off-Duty Laborer",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 130436
         }
     },
-    "409": {
+    {
         "id": 421,
         "enemy_pack_id": 85,
         "floor_id": 50,
@@ -2151,15 +1481,10 @@
         "lat": -134.28999999999999,
         "lng": 188.81,
         "npc": {
-            "id": 136139,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Mechanized Peacekeeper",
-            "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "id": 136139
         }
     },
-    "410": {
+    {
         "id": 422,
         "enemy_pack_id": 85,
         "floor_id": 50,
@@ -2167,15 +1492,10 @@
         "lat": -134.28999999999999,
         "lng": 191.5,
         "npc": {
-            "id": 136470,
-            "dungeon_id": 20,
-            "classification_id": 1,
-            "name": "Refreshment Vendor",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136470
         }
     },
-    "411": {
+    {
         "id": 423,
         "enemy_pack_id": 85,
         "floor_id": 50,
@@ -2183,12 +1503,2383 @@
         "lat": -136.47999999999999,
         "lng": 187.62,
         "npc": {
-            "id": 134232,
-            "dungeon_id": 20,
-            "classification_id": 2,
-            "name": "Hired Assassin",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 134232
+        }
+    },
+    {
+        "id": 761,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -219.47999999999999,
+        "lng": 206.38,
+        "npc": {
+            "id": 137713
+        }
+    },
+    {
+        "id": 762,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -216.59999999999999,
+        "lng": 195,
+        "npc": {
+            "id": 137713
+        }
+    },
+    {
+        "id": 763,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -210.03999999999999,
+        "lng": 206.69,
+        "npc": {
+            "id": 137713
+        }
+    },
+    {
+        "id": 764,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -210.06,
+        "lng": 209.56,
+        "npc": {
+            "id": 138061
+        }
+    },
+    {
+        "id": 765,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -209.78999999999999,
+        "lng": 214.25,
+        "npc": {
+            "id": 138061
+        }
+    },
+    {
+        "id": 766,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -209.22999999999999,
+        "lng": 216.75,
+        "npc": {
+            "id": 138061
+        }
+    },
+    {
+        "id": 767,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -211.91,
+        "lng": 224,
+        "npc": {
+            "id": 138061
+        }
+    },
+    {
+        "id": 768,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -217.66,
+        "lng": 211.81,
+        "npc": {
+            "id": 138061
+        }
+    },
+    {
+        "id": 769,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -219.16,
+        "lng": 211.81,
+        "npc": {
+            "id": 138061
+        }
+    },
+    {
+        "id": 770,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -219.22999999999999,
+        "lng": 214.44,
+        "npc": {
+            "id": 137716
+        }
+    },
+    {
+        "id": 771,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.16,
+        "lng": 224.31,
+        "npc": {
+            "id": 137716
+        }
+    },
+    {
+        "id": 772,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -224.72999999999999,
+        "lng": 228.25,
+        "npc": {
+            "id": 138063
+        }
+    },
+    {
+        "id": 773,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -224.78999999999999,
+        "lng": 229.25,
+        "npc": {
+            "id": 138063
+        }
+    },
+    {
+        "id": 774,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -224.47999999999999,
+        "lng": 227.5,
+        "npc": {
+            "id": 138063
+        }
+    },
+    {
+        "id": 775,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.78999999999999,
+        "lng": 228.31,
+        "npc": {
+            "id": 138063
+        }
+    },
+    {
+        "id": 776,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.84999999999999,
+        "lng": 229.31,
+        "npc": {
+            "id": 138063
+        }
+    },
+    {
+        "id": 777,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.34999999999999,
+        "lng": 227.38,
+        "npc": {
+            "id": 137713
+        }
+    },
+    {
+        "id": 778,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -226.91,
+        "lng": 230.12,
+        "npc": {
+            "id": 138063
+        }
+    },
+    {
+        "id": 779,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -227.03999999999999,
+        "lng": 231.25,
+        "npc": {
+            "id": 138063
+        }
+    },
+    {
+        "id": 780,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.22999999999999,
+        "lng": 204.75,
+        "npc": {
+            "id": 137716
+        }
+    },
+    {
+        "id": 781,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -227.88,
+        "lng": 198.38,
+        "npc": {
+            "id": 137716
+        }
+    },
+    {
+        "id": 782,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -204.34999999999999,
+        "lng": 194.75,
+        "npc": {
+            "id": 138061
+        }
+    },
+    {
+        "id": 783,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -208.41,
+        "lng": 186.44,
+        "npc": {
+            "id": 138061
+        }
+    },
+    {
+        "id": 784,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -210.97999999999999,
+        "lng": 183.94,
+        "npc": {
+            "id": 138061
+        }
+    },
+    {
+        "id": 785,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -223.28999999999999,
+        "lng": 188.94,
+        "npc": {
+            "id": 137716
+        }
+    },
+    {
+        "id": 786,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -227.53999999999999,
+        "lng": 182.62,
+        "npc": {
+            "id": 137716
+        }
+    },
+    {
+        "id": 787,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -229.16,
+        "lng": 179.62,
+        "npc": {
+            "id": 138063
+        }
+    },
+    {
+        "id": 788,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -229.97999999999999,
+        "lng": 178.5,
+        "npc": {
+            "id": 138063
+        }
+    },
+    {
+        "id": 789,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -232.34999999999999,
+        "lng": 180.88,
+        "npc": {
+            "id": 137716
+        }
+    },
+    {
+        "id": 790,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -190.59999999999999,
+        "lng": 214.81,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 791,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -208.59999999999999,
+        "lng": 208.19,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 792,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -208.41,
+        "lng": 215.12,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 793,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -159.84999999999999,
+        "lng": 206.81,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 794,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -156.22999999999999,
+        "lng": 212.75,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 795,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -156.03999999999999,
+        "lng": 212.06,
+        "npc": {
+            "id": 140319
+        }
+    },
+    {
+        "id": 796,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -158.47999999999999,
+        "lng": 224.56,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 797,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -149.22999999999999,
+        "lng": 225.12,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 798,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -147.84999999999999,
+        "lng": 223.44,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 799,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -142.84999999999999,
+        "lng": 218.19,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 800,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -141.41,
+        "lng": 209,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 801,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -148.84999999999999,
+        "lng": 187.44,
+        "npc": {
+            "id": 136139
+        }
+    },
+    {
+        "id": 802,
+        "enemy_pack_id": 179,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -112.04000000000001,
+        "lng": 155.62,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 803,
+        "enemy_pack_id": 179,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.54000000000001,
+        "lng": 155.12,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 804,
+        "enemy_pack_id": 179,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -111.41,
+        "lng": 154.06,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 805,
+        "enemy_pack_id": 182,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -120.98,
+        "lng": 153.56,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 806,
+        "enemy_pack_id": 182,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -122.16,
+        "lng": 152.56,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 807,
+        "enemy_pack_id": 182,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -122.59999999999999,
+        "lng": 154.19,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 808,
+        "enemy_pack_id": 181,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -122.81,
+        "lng": 147.44,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 809,
+        "enemy_pack_id": 181,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -123.23,
+        "lng": 149.44,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 810,
+        "enemy_pack_id": 181,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -123.06,
+        "lng": 148.25,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 811,
+        "enemy_pack_id": 180,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.59999999999999,
+        "lng": 149,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 812,
+        "enemy_pack_id": 180,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -111.73,
+        "lng": 148,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 813,
+        "enemy_pack_id": 180,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -111.79000000000001,
+        "lng": 146.38,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 814,
+        "enemy_pack_id": 180,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.98,
+        "lng": 144.31,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 815,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -92.120000000000005,
+        "lng": 134.12,
+        "npc": {
+            "id": 137940
+        }
+    },
+    {
+        "id": 816,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -103.23,
+        "lng": 150.88,
+        "npc": {
+            "id": 137940
+        }
+    },
+    {
+        "id": 817,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -85.849999999999994,
+        "lng": 148.38,
+        "npc": {
+            "id": 137940
+        }
+    },
+    {
+        "id": 818,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -94.659999999999997,
+        "lng": 163.19,
+        "npc": {
+            "id": 137940
+        }
+    },
+    {
+        "id": 819,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -96.159999999999997,
+        "lng": 158.38,
+        "npc": {
+            "id": 137940
+        }
+    },
+    {
+        "id": 820,
+        "enemy_pack_id": 183,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -111.91,
+        "lng": 140.81,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 821,
+        "enemy_pack_id": 183,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -109.84999999999999,
+        "lng": 139.88,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 822,
+        "enemy_pack_id": 183,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -112.54000000000001,
+        "lng": 138.88,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 823,
+        "enemy_pack_id": 183,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.59999999999999,
+        "lng": 137.62,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 824,
+        "enemy_pack_id": 184,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -119.16,
+        "lng": 136.62,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 825,
+        "enemy_pack_id": 184,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -120.34999999999999,
+        "lng": 137.06,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 826,
+        "enemy_pack_id": 184,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -121.91,
+        "lng": 137.62,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 827,
+        "enemy_pack_id": 185,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -124.04000000000001,
+        "lng": 130.12,
+        "npc": {
+            "id": 136643
+        }
+    },
+    {
+        "id": 828,
+        "enemy_pack_id": 185,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -122.54000000000001,
+        "lng": 130.94,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 829,
+        "enemy_pack_id": 185,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -124.09999999999999,
+        "lng": 131.69,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 830,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -126.09999999999999,
+        "lng": 128.25,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 831,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -126.41,
+        "lng": 129.81,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 832,
+        "enemy_pack_id": 186,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -125.98,
+        "lng": 119.31,
+        "npc": {
+            "id": 136643
+        }
+    },
+    {
+        "id": 833,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -121.48,
+        "lng": 118.88,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 834,
+        "enemy_pack_id": 186,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -124.84999999999999,
+        "lng": 117.81,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 835,
+        "enemy_pack_id": 187,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -121.48,
+        "lng": 115.44,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 836,
+        "enemy_pack_id": 187,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -119.79000000000001,
+        "lng": 116.31,
+        "npc": {
+            "id": 136643
+        }
+    },
+    {
+        "id": 837,
+        "enemy_pack_id": 188,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -117.12,
+        "lng": 123.5,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 838,
+        "enemy_pack_id": 188,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -116.16,
+        "lng": 122.25,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 839,
+        "enemy_pack_id": 188,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -115.98,
+        "lng": 124.5,
+        "npc": {
+            "id": 130437
+        }
+    },
+    {
+        "id": 840,
+        "enemy_pack_id": 189,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -110.98,
+        "lng": 131.81,
+        "npc": {
+            "id": 136643
+        }
+    },
+    {
+        "id": 841,
+        "enemy_pack_id": 189,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -112.34999999999999,
+        "lng": 131.44,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 842,
+        "enemy_pack_id": 189,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -109.54000000000001,
+        "lng": 132.06,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 843,
+        "enemy_pack_id": 190,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -104.73,
+        "lng": 131.75,
+        "npc": {
+            "id": 134005
+        }
+    },
+    {
+        "id": 844,
+        "enemy_pack_id": 190,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -104.29000000000001,
+        "lng": 130.06,
+        "npc": {
+            "id": 134005
+        }
+    },
+    {
+        "id": 845,
+        "enemy_pack_id": 190,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -103.34999999999999,
+        "lng": 131.81,
+        "npc": {
+            "id": 134005
+        }
+    },
+    {
+        "id": 846,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -100.16,
+        "lng": 127.75,
+        "npc": {
+            "id": 130635
+        }
+    },
+    {
+        "id": 847,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -95.120000000000005,
+        "lng": 121.56,
+        "npc": {
+            "id": 130635
+        }
+    },
+    {
+        "id": 848,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -91.730000000000004,
+        "lng": 118.38,
+        "npc": {
+            "id": 130635
+        }
+    },
+    {
+        "id": 849,
+        "enemy_pack_id": 191,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -93.480000000000004,
+        "lng": 118.31,
+        "npc": {
+            "id": 134005
+        }
+    },
+    {
+        "id": 850,
+        "enemy_pack_id": 191,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -92.159999999999997,
+        "lng": 120.62,
+        "npc": {
+            "id": 134005
+        }
+    },
+    {
+        "id": 851,
+        "enemy_pack_id": 191,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -93.790000000000006,
+        "lng": 120.12,
+        "npc": {
+            "id": 134005
+        }
+    },
+    {
+        "id": 852,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -83.349999999999994,
+        "lng": 114.38,
+        "npc": {
+            "id": 134012
+        }
+    },
+    {
+        "id": 853,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -84.409999999999997,
+        "lng": 111.25,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 854,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -85.659999999999997,
+        "lng": 113.12,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 855,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -85.659999999999997,
+        "lng": 115.44,
+        "npc": {
+            "id": 130661
+        }
+    },
+    {
+        "id": 856,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -84.159999999999997,
+        "lng": 117.5,
+        "npc": {
+            "id": 130653
+        }
+    },
+    {
+        "id": 857,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.659999999999997,
+        "lng": 111.62,
+        "npc": {
+            "id": 129802
+        }
+    },
+    {
+        "id": 858,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -70.909999999999997,
+        "lng": 115.5,
+        "npc": {
+            "id": 129802
+        }
+    },
+    {
+        "id": 859,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -68.159999999999997,
+        "lng": 121.19,
+        "npc": {
+            "id": 129802
+        }
+    },
+    {
+        "id": 860,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -63.979999999999997,
+        "lng": 117.06,
+        "npc": {
+            "id": 129802
+        }
+    },
+    {
+        "id": 861,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -79.099999999999994,
+        "lng": 132.19,
+        "npc": {
+            "id": 137940
+        }
+    },
+    {
+        "id": 862,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.5,
+        "lng": 141.81,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 863,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.310000000000002,
+        "lng": 142.69,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 864,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -44.380000000000003,
+        "lng": 141.38,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 865,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -43.689999999999998,
+        "lng": 142.62,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 866,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -43,
+        "lng": 143.94,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 867,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.939999999999998,
+        "lng": 145.56,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 868,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -40.939999999999998,
+        "lng": 146.44,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 869,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -40.25,
+        "lng": 147.12,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 870,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.810000000000002,
+        "lng": 143.94,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 871,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -45.380000000000003,
+        "lng": 145.19,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 872,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -39.689999999999998,
+        "lng": 148.75,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 873,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -39.880000000000003,
+        "lng": 149.5,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 874,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -40,
+        "lng": 151.62,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 875,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -40.880000000000003,
+        "lng": 150.75,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 876,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -42.810000000000002,
+        "lng": 152.5,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 877,
+        "enemy_pack_id": 193,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.539999999999999,
+        "lng": 153.69,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 878,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -39.729999999999997,
+        "lng": 154.62,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 879,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -46.229999999999997,
+        "lng": 151.81,
+        "npc": {
+            "id": 138369
+        }
+    },
+    {
+        "id": 880,
+        "enemy_pack_id": 197,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.229999999999997,
+        "lng": 161.88,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 881,
+        "enemy_pack_id": 197,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.850000000000001,
+        "lng": 160.62,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 882,
+        "enemy_pack_id": 197,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -52.100000000000001,
+        "lng": 158.88,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 883,
+        "enemy_pack_id": 197,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -53.289999999999999,
+        "lng": 160.62,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 884,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -50.039999999999999,
+        "lng": 166.69,
+        "npc": {
+            "id": 133430
+        }
+    },
+    {
+        "id": 885,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -59,
+        "lng": 167.81,
+        "npc": {
+            "id": 136934
+        }
+    },
+    {
+        "id": 886,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -57.75,
+        "lng": 166.69,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 887,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -56.810000000000002,
+        "lng": 167.88,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 888,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -57.689999999999998,
+        "lng": 168.94,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 889,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -61.909999999999997,
+        "lng": 177.94,
+        "npc": {
+            "id": 133430
+        }
+    },
+    {
+        "id": 890,
+        "enemy_pack_id": 196,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -70.290000000000006,
+        "lng": 161.88,
+        "npc": {
+            "id": 136934
+        }
+    },
+    {
+        "id": 891,
+        "enemy_pack_id": 196,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -68.480000000000004,
+        "lng": 161.06,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 892,
+        "enemy_pack_id": 196,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -69.290000000000006,
+        "lng": 163.38,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 893,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -70.5,
+        "lng": 169.62,
+        "npc": {
+            "id": 133430
+        }
+    },
+    {
+        "id": 894,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.790000000000006,
+        "lng": 170.38,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 895,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.730000000000004,
+        "lng": 170.81,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 896,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.480000000000004,
+        "lng": 171.25,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 897,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.099999999999994,
+        "lng": 171.44,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 898,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.659999999999997,
+        "lng": 171,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 899,
+        "enemy_pack_id": 194,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -68.040000000000006,
+        "lng": 170.25,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 900,
+        "enemy_pack_id": 195,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -71.730000000000004,
+        "lng": 171.81,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 901,
+        "enemy_pack_id": 195,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -71.730000000000004,
+        "lng": 173.62,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 902,
+        "enemy_pack_id": 195,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -70.409999999999997,
+        "lng": 172.75,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 903,
+        "enemy_pack_id": 198,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -45.600000000000001,
+        "lng": 154.81,
+        "npc": {
+            "id": 136934
+        }
+    },
+    {
+        "id": 904,
+        "enemy_pack_id": 198,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -46.539999999999999,
+        "lng": 156.38,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 905,
+        "enemy_pack_id": 198,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.479999999999997,
+        "lng": 154.75,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 906,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -42.479999999999997,
+        "lng": 160.12,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 907,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -43.039999999999999,
+        "lng": 161.12,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 908,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -43.039999999999999,
+        "lng": 162.12,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 909,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.600000000000001,
+        "lng": 160.69,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 910,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.909999999999997,
+        "lng": 161.44,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 911,
+        "enemy_pack_id": 199,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.979999999999997,
+        "lng": 162.44,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 912,
+        "enemy_pack_id": 200,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -42.689999999999998,
+        "lng": 169.69,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 913,
+        "enemy_pack_id": 200,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.5,
+        "lng": 168.81,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 914,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.689999999999998,
+        "lng": 173.5,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 915,
+        "enemy_pack_id": 201,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -42.310000000000002,
+        "lng": 177.5,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 916,
+        "enemy_pack_id": 201,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -41.619999999999997,
+        "lng": 178.38,
+        "npc": {
+            "id": 136934
+        }
+    },
+    {
+        "id": 917,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.619999999999997,
+        "lng": 182.38,
+        "npc": {
+            "id": 133430
+        }
+    },
+    {
+        "id": 918,
+        "enemy_pack_id": 202,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.5,
+        "lng": 189.06,
+        "npc": {
+            "id": 136934
+        }
+    },
+    {
+        "id": 919,
+        "enemy_pack_id": 202,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.619999999999997,
+        "lng": 188.06,
+        "npc": {
+            "id": 136934
+        }
+    },
+    {
+        "id": 920,
+        "enemy_pack_id": 202,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.310000000000002,
+        "lng": 187.19,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 921,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -53.409999999999997,
+        "lng": 171.5,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 922,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -54.039999999999999,
+        "lng": 172.94,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 923,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -53.039999999999999,
+        "lng": 173.88,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 924,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -52.909999999999997,
+        "lng": 172.75,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 925,
+        "enemy_pack_id": 203,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.75,
+        "lng": 172.06,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 926,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.909999999999997,
+        "lng": 180.06,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 927,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.290000000000006,
+        "lng": 181,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 928,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.409999999999997,
+        "lng": 180.88,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 929,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.159999999999997,
+        "lng": 181.81,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 930,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.659999999999997,
+        "lng": 180.81,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 931,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.290000000000006,
+        "lng": 182.25,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 932,
+        "enemy_pack_id": 204,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.790000000000006,
+        "lng": 180.25,
+        "npc": {
+            "id": 136934
+        }
+    },
+    {
+        "id": 933,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -73.290000000000006,
+        "lng": 177.88,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 934,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -74.040000000000006,
+        "lng": 178.44,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 935,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -73.599999999999994,
+        "lng": 179.38,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 936,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -74.790000000000006,
+        "lng": 179.12,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 937,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -74.540000000000006,
+        "lng": 177.81,
+        "npc": {
+            "id": 133963
+        }
+    },
+    {
+        "id": 938,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -72.980000000000004,
+        "lng": 177,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 939,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -74.480000000000004,
+        "lng": 179.81,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 940,
+        "enemy_pack_id": 206,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -76.290000000000006,
+        "lng": 173,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 941,
+        "enemy_pack_id": 206,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -75.730000000000004,
+        "lng": 174.38,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 942,
+        "enemy_pack_id": 206,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -76.909999999999997,
+        "lng": 174.62,
+        "npc": {
+            "id": 136934
+        }
+    },
+    {
+        "id": 943,
+        "enemy_pack_id": 207,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -60.789999999999999,
+        "lng": 186.31,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 944,
+        "enemy_pack_id": 207,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -59.979999999999997,
+        "lng": 187.38,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 945,
+        "enemy_pack_id": 207,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -59.229999999999997,
+        "lng": 188.19,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 946,
+        "enemy_pack_id": 207,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -58.289999999999999,
+        "lng": 189.06,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 947,
+        "enemy_pack_id": 288,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -52.350000000000001,
+        "lng": 194.44,
+        "npc": {
+            "id": 133430
+        }
+    },
+    {
+        "id": 948,
+        "enemy_pack_id": 288,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -54.039999999999999,
+        "lng": 194.44,
+        "npc": {
+            "id": 133430
+        }
+    },
+    {
+        "id": 949,
+        "enemy_pack_id": 288,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -50.289999999999999,
+        "lng": 193.94,
+        "npc": {
+            "id": 133345
+        }
+    },
+    {
+        "id": 950,
+        "enemy_pack_id": 288,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -56.039999999999999,
+        "lng": 193.94,
+        "npc": {
+            "id": 133432
+        }
+    },
+    {
+        "id": 951,
+        "enemy_pack_id": 212,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -56.659999999999997,
+        "lng": 232.62,
+        "npc": {
+            "id": 133593
+        }
+    },
+    {
+        "id": 952,
+        "enemy_pack_id": 212,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -56.659999999999997,
+        "lng": 234.44,
+        "npc": {
+            "id": 137029
+        }
+    },
+    {
+        "id": 953,
+        "enemy_pack_id": 212,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -57.979999999999997,
+        "lng": 233.62,
+        "npc": {
+            "id": 133463
+        }
+    },
+    {
+        "id": 954,
+        "enemy_pack_id": 211,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.979999999999997,
+        "lng": 232.5,
+        "npc": {
+            "id": 133593
+        }
+    },
+    {
+        "id": 955,
+        "enemy_pack_id": 211,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.479999999999997,
+        "lng": 232.75,
+        "npc": {
+            "id": 133463
+        }
+    },
+    {
+        "id": 956,
+        "enemy_pack_id": 210,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.039999999999999,
+        "lng": 237.19,
+        "npc": {
+            "id": 137029
+        }
+    },
+    {
+        "id": 957,
+        "enemy_pack_id": 210,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -49.409999999999997,
+        "lng": 237.38,
+        "npc": {
+            "id": 137029
+        }
+    },
+    {
+        "id": 958,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -49.810000000000002,
+        "lng": 252.69,
+        "npc": {
+            "id": 137029
+        }
+    },
+    {
+        "id": 959,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -48.189999999999998,
+        "lng": 246.69,
+        "npc": {
+            "id": 133436
+        }
+    },
+    {
+        "id": 960,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -54.100000000000001,
+        "lng": 254.88,
+        "npc": {
+            "id": 133593
+        }
+    },
+    {
+        "id": 961,
+        "enemy_pack_id": 209,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -50.289999999999999,
+        "lng": 256.81,
+        "npc": {
+            "id": 133593
+        }
+    },
+    {
+        "id": 962,
+        "enemy_pack_id": 209,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -51.479999999999997,
+        "lng": 257,
+        "npc": {
+            "id": 137029
+        }
+    },
+    {
+        "id": 963,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -46.659999999999997,
+        "lng": 257.75,
+        "npc": {
+            "id": 133436
+        }
+    },
+    {
+        "id": 964,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -57.600000000000001,
+        "lng": 254.12,
+        "npc": {
+            "id": 133436
+        }
+    },
+    {
+        "id": 965,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -45.539999999999999,
+        "lng": 258.06,
+        "npc": {
+            "id": 133436
+        }
+    },
+    {
+        "id": 966,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -47.439999999999998,
+        "lng": 271.44,
+        "npc": {
+            "id": 133463
+        }
+    },
+    {
+        "id": 967,
+        "enemy_pack_id": -1,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -55.380000000000003,
+        "lng": 265.94,
+        "npc": {
+            "id": 133463
+        }
+    },
+    {
+        "id": 968,
+        "enemy_pack_id": 208,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -52.979999999999997,
+        "lng": 279.81,
+        "npc": {
+            "id": 133436
+        }
+    },
+    {
+        "id": 969,
+        "enemy_pack_id": 208,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -55.229999999999997,
+        "lng": 279.31,
+        "npc": {
+            "id": 133593
+        }
+    },
+    {
+        "id": 970,
+        "enemy_pack_id": 213,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -64.25,
+        "lng": 254.06,
+        "npc": {
+            "id": 137029
+        }
+    },
+    {
+        "id": 971,
+        "enemy_pack_id": 213,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.379999999999995,
+        "lng": 253,
+        "npc": {
+            "id": 133436
+        }
+    },
+    {
+        "id": 972,
+        "enemy_pack_id": 213,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -66.599999999999994,
+        "lng": 251.88,
+        "npc": {
+            "id": 133463
+        }
+    },
+    {
+        "id": 973,
+        "enemy_pack_id": 214,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.790000000000006,
+        "lng": 274.19,
+        "npc": {
+            "id": 133463
+        }
+    },
+    {
+        "id": 974,
+        "enemy_pack_id": 214,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -67.099999999999994,
+        "lng": 272.81,
+        "npc": {
+            "id": 133436
+        }
+    },
+    {
+        "id": 975,
+        "enemy_pack_id": 214,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -64.349999999999994,
+        "lng": 275.56,
+        "npc": {
+            "id": 133436
+        }
+    },
+    {
+        "id": 976,
+        "enemy_pack_id": 214,
+        "floor_id": 50,
+        "teeming": null,
+        "lat": -65.230000000000004,
+        "lng": 273.5,
+        "npc": {
+            "id": 133593
         }
     }
-}
+]

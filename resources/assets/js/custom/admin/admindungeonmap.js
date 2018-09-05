@@ -35,17 +35,6 @@ class AdminDungeonMap extends DungeonMap {
 
         this.enemyAttaching = new EnemyAttaching(this);
 
-        // Set all edited layers to no longer be synced.
-        this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
-            let layers = e.layers;
-            layers.eachLayer(function (layer) {
-                console.log(layer, "Edited a layer!");
-                let mapObject = self.findMapObjectByLayer(layer);
-                console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
-                mapObject.setSynced(false);
-            });
-        });
-
         if (verboseEvents) {
             this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
                 console.log(L.Draw.Event.DRAWSTART, e);

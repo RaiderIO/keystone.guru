@@ -26,6 +26,10 @@ class File extends Model
      */
     public $appends = ['url', 'icon_url'];
 
+    /**
+     * @return bool|null|void
+     * @throws \Exception
+     */
     function delete(){
         if( parent::delete() ) {
             $this->deleteFromDisk();
@@ -39,6 +43,9 @@ class File extends Model
         return $this->getURL();
     }
 
+    /**
+     * @return string Gets the URL Attribute if this File is an Icon.
+     */
     public function getIconUrlAttribute(){
         $iconUrl = '';
         // Only if it's an image!

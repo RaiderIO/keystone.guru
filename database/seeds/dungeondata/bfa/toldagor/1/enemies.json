@@ -1,5 +1,5 @@
-{
-    "137": {
+[
+    {
         "id": 148,
         "enemy_pack_id": -1,
         "floor_id": 53,
@@ -7,12 +7,7 @@
         "lat": -134.00999999999999,
         "lng": 199,
         "npc": {
-            "id": 134927,
-            "dungeon_id": 22,
-            "classification_id": 3,
-            "name": "The Sand Queen",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 134927
         }
     }
-}
+]

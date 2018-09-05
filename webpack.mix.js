@@ -24,10 +24,12 @@ if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
     images = argv.env.images;
 }
 
-// Custom processing only
-mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
-    .copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts')
-    .babel([
+mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
+
+if (mix.inProduction()) {
+    // Custom processing only
+    mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css');
+    mix.babel([
         // Doesn't depend on anything
         'resources/assets/js/custom/constants.js',
         // Include in proper order
@@ -63,6 +65,7 @@ mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css')
         'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
         // 'resources/assets/js/custom/**/*.js'
     ], 'public/js/custom.js');
+}
 // .combine(, 'public/js/custom.js');
 
 if (full || mix.inProduction()) {
@@ -83,7 +86,7 @@ if (full || mix.inProduction()) {
 
 mix.sourceMaps();
 
-if( images ){
+if (images) {
     if (mix.inProduction()) {
         // Copies all tiles as well which takes a while
         mix.copy('resources/assets/images', 'public/images', false);

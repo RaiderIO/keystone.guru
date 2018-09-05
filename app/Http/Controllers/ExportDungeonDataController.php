@@ -30,7 +30,7 @@ class ExportDungeonDataController extends Controller
             $rootDirPath = storage_path() . '/dungeondata/' . $dungeon->expansion->shortname . '/' . $dungeon->key;
 
             // Demo routes, load it in a specific way to make it easier to import it back in again
-            $demoRoutes = $dungeon->dungeonroutes->where('demo', '=', true);
+            $demoRoutes = $dungeon->dungeonroutes->where('demo', '=', true)->values();
             foreach ($demoRoutes as $demoRoute) {
                 /** @var $demoRoute Model */
                 unset($demoRoute->relations);
@@ -44,7 +44,7 @@ class ExportDungeonDataController extends Controller
 
             $this->_saveData($demoRoutes, $rootDirPath, 'dungeonroutes.json');
 
-            $npcs = Npc::all()->where('dungeon_id', '=', $dungeon->id);
+            $npcs = Npc::all()->where('dungeon_id', '=', $dungeon->id)->values();
 
             // Save NPC data in the root of the dungeon folder
             $this->_saveData($npcs, $rootDirPath, 'npcs.json');
@@ -52,11 +52,12 @@ class ExportDungeonDataController extends Controller
             /** @var Dungeon $dungeon */
             foreach ($dungeon->floors as $floor) {
                 /** @var Floor $floor */
-                $enemies = Enemy::all()->where('floor_id', '=', $floor->id);
-                $enemyPacks = EnemyPack::all()->where('floor_id', '=', $floor->id);
-                $enemyPatrols = EnemyPatrol::all()->where('floor_id', '=', $floor->id);
-                $dungeonStartMarkers = DungeonStartMarker::all()->where('floor_id', '=', $floor->id);
-                $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::all()->where('floor_id', '=', $floor->id);
+                // Only export NPC->id, no need to store the full npc in the enemy
+                $enemies = Enemy::where('floor_id', '=', $floor->id)->without('npc')->with('npc:id')->get()->values();
+                $enemyPacks = EnemyPack::where('floor_id', '=', $floor->id)->get()->values();
+                $enemyPatrols = EnemyPatrol::where('floor_id', '=', $floor->id)->get()->values();
+                $dungeonStartMarkers = DungeonStartMarker::where('floor_id', '=', $floor->id)->get()->values();
+                $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', '=', $floor->id)->get()->values();
 
                 $result['enemies'] = $enemies;
                 $result['enemy_packs'] = $enemyPacks;

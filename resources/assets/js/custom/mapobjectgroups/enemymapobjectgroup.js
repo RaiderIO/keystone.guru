@@ -18,7 +18,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor) {
+    fetchFromServer(floor, callback) {
         // no super call required
         console.assert(this instanceof EnemyMapObjectGroup, this, 'this is not a EnemyMapObjectGroup');
 
@@ -61,6 +61,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         } else {
                             // Not set :(
                             enemy.npc_id = -1;
+                            enemy.setIcon('unset');
                         }
 
                         // Is probably null if there's no patrol set
@@ -72,6 +73,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         enemy.setSynced(true);
                     }
                 }
+
+                callback();
             }
         });
     }

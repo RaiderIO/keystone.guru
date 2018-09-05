@@ -5,13 +5,72 @@
         "dungeon_id": 7,
         "faction_id": 2,
         "title": "Halls of Valor Demo",
+        "difficulty": "Casual",
         "unlisted": 1,
         "demo": 1,
         "created_at": "2018-08-23 10:56:42",
-        "updated_at": "2018-08-25 08:21:02",
-        "playerraces": [],
+        "updated_at": "2018-08-31 20:12:51",
+        "playerraces": [
+            {
+                "dungeon_route_id": 6,
+                "character_race_id": 0
+            },
+            {
+                "dungeon_route_id": 6,
+                "character_race_id": 0
+            },
+            {
+                "dungeon_route_id": 6,
+                "character_race_id": 0
+            },
+            {
+                "dungeon_route_id": 6,
+                "character_race_id": 0
+            },
+            {
+                "dungeon_route_id": 6,
+                "character_race_id": 0
+            }
+        ],
         "playerclasses": [],
-        "affixgroups": [],
+        "affixgroups": [
+            {
+                "dungeon_route_id": 6,
+                "affix_group_id": 1
+            },
+            {
+                "dungeon_route_id": 6,
+                "affix_group_id": 3
+            },
+            {
+                "dungeon_route_id": 6,
+                "affix_group_id": 4
+            },
+            {
+                "dungeon_route_id": 6,
+                "affix_group_id": 5
+            },
+            {
+                "dungeon_route_id": 6,
+                "affix_group_id": 7
+            },
+            {
+                "dungeon_route_id": 6,
+                "affix_group_id": 8
+            },
+            {
+                "dungeon_route_id": 6,
+                "affix_group_id": 10
+            },
+            {
+                "dungeon_route_id": 6,
+                "affix_group_id": 11
+            },
+            {
+                "dungeon_route_id": 6,
+                "affix_group_id": 12
+            }
+        ],
         "routes": [
             {
                 "id": 1,

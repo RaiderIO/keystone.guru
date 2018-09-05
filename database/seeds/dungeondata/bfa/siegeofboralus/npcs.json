@@ -1,210 +1,236 @@
-{
-    "56": {
+[
+    {
         "id": 128652,
         "dungeon_id": 18,
         "classification_id": 3,
         "name": "Viq'Goth",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "57": {
+    {
         "id": 128967,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Sniper",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "58": {
+    {
         "id": 128969,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Commander",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "59": {
+    {
         "id": 129208,
         "dungeon_id": 18,
         "classification_id": 3,
         "name": "Dread Captain Lockwood",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "61": {
+    {
         "id": 129366,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Buccaneer",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "62": {
+    {
         "id": 129367,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Tempest",
         "base_health": 235470,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "63": {
+    {
         "id": 129369,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Irontide Raider",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "64": {
+    {
         "id": 129371,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Riptide Shredder",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "65": {
+    {
         "id": 129372,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Blacktar Bomber",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "66": {
+    {
         "id": 129373,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Dockhound Packmaster",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "83": {
+    {
         "id": 129640,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Snarling Dockhound",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "102": {
+    {
         "id": 130836,
         "dungeon_id": 18,
         "classification_id": 3,
         "name": "Hadal Darkfathom",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "131": {
+    {
         "id": 132481,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Kul Tiran Vanguard",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "132": {
+    {
         "id": 132532,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Kul Tiran Marksman",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "206": {
+    {
         "id": 135241,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Pillager",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "207": {
+    {
         "id": 135245,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Demolisher",
         "base_health": 588670,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "208": {
+    {
         "id": 135263,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Spotter",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "244": {
+    {
         "id": 137511,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Cutthroat",
         "base_health": 235468,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "245": {
+    {
         "id": 137516,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Invader",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "246": {
+    {
         "id": 137517,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Destroyer",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "250": {
+    {
         "id": 138247,
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Irontide Marauder",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "251": {
+    {
         "id": 138254,
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Irontide Powdershot",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "253": {
+    {
         "id": 138464,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Deckhand",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "266": {
+    {
         "id": 141283,
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Kul Tiran Halberd",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "267": {
+    {
         "id": 141565,
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Kul Tiran Footman",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "269": {
+    {
         "id": 144158,
         "dungeon_id": 18,
         "classification_id": 3,
         "name": "Sergeant Bainbridge",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     }
-}
+]

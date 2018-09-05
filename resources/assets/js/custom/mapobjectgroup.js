@@ -12,7 +12,7 @@ class MapObjectGroup extends Signalable {
         let self = this;
 
         // Whenever the map refreshes, we need to add ourselves to the map again
-        this.map.register('map:refresh', (function (data) {
+        this.map.register('map:refresh', this, (function (data) {
             // Rebuild the layer group
             self.layerGroup = new L.LayerGroup();
 
@@ -72,6 +72,25 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Finds an object in this map object group by its ID.
+     * @param id int
+     * @returns {*}
+     */
+    findMapObjectById(id){
+        let result = null;
+
+        for (let i = 0; i < this.objects.length; i++) {
+            let objectCandidate = this.objects[i];
+            if (objectCandidate.id === id) {
+                result = objectCandidate;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      *
      * @param layer
      * @return MapObject
@@ -91,7 +110,7 @@ class MapObjectGroup extends Signalable {
 
         object.onLayerInit();
 
-        object.register('object:deleted', (this._onObjectDeleted).bind(this));
+        object.register('object:deleted', this, (this._onObjectDeleted).bind(this));
         this.signal('object:add', {object: object});
 
         return object;
@@ -119,7 +138,7 @@ class MapObjectGroup extends Signalable {
     /**
      * Refreshes the objects that are displayed on the map based on the current dungeon & selected floor.
      */
-    fetchFromServer(floor) {
+    fetchFromServer(floor, callback) {
         console.warn('call to empty fetchFromServer()');
     }
 }

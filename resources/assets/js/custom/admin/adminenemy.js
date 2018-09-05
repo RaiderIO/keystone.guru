@@ -22,7 +22,7 @@ class AdminEnemy extends Enemy {
         let self = this;
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        self.register('synced', function(event){
+        this.register('synced', this, function(event){
             let customPopupHtml = $("#enemy_edit_popup_template").html();
             // Remove template so our
             let template = handlebars.compile(customPopupHtml);
@@ -68,20 +68,6 @@ class AdminEnemy extends Enemy {
         });
     }
 
-    getContextMenuItems() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
-        // Merge existing context menu items with the admin ones
-        return super.getContextMenuItems().concat([{
-            text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
-            disabled: this.synced || this.saving,
-            callback: (this.save).bind(this)
-        }, '-', {
-            text: '<i class="fas fa-trash"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
-            disabled: !this.synced || this.deleting,
-            callback: (this.delete).bind(this)
-        }]);
-    }
-
     edit() {
         let self = this;
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
@@ -100,14 +86,23 @@ class AdminEnemy extends Enemy {
             },
             beforeSend: function () {
                 self.editing = true;
-                $("#enemy_edit_popup_submit").attr('disabled', 'disabled');
+                $("#enemy_edit_popup_submit_" + self.id).attr('disabled', 'disabled');
             },
             success: function (json) {
                 self.setSynced(true);
                 self.map.leafletMap.closePopup();
+                // May be null if not set at all (yet)
+                if (json.hasOwnProperty('npc') && json.npc !== null) {
+                    // TODO Hard coded 3 = boss
+                    if (json.npc.classification_id === 3) {
+                        self.setIcon('boss');
+                    } else {
+                        self.setIcon(json.npc.aggressiveness);
+                    }
+                }
             },
             complete: function () {
-                $("#enemy_edit_popup_submit").removeAttr('disabled');
+                $("#enemy_edit_popup_submit_" + self.id).removeAttr('disabled');
                 self.editing = false;
             },
             error: function () {

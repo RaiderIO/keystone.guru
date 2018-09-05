@@ -19,7 +19,7 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
     }
 
 
-    fetchFromServer(floor) {
+    fetchFromServer(floor, callback) {
         // no super call required
         console.assert(this instanceof EnemyPatrolMapObjectGroup, this, 'this is not a EnemyPatrolMapObjectGroup');
 
@@ -56,6 +56,8 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
                         enemyPatrol.setSynced(true);
                     }
                 }
+
+                callback();
             }
         });
     }

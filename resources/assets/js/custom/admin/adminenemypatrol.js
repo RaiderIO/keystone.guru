@@ -11,20 +11,6 @@ class AdminEnemyPatrol extends EnemyPatrol {
         this.enemy_id = -1;
     }
 
-    getContextMenuItems() {
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
-        // Merge existing context menu items with the admin ones
-        return super.getContextMenuItems().concat([{
-            text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
-            disabled: this.synced || this.saving,
-            callback: (this.save).bind(this)
-        }, '-', {
-            text: '<i class="fas fa-trash"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
-            disabled: !this.synced || this.deleting,
-            callback: (this.delete).bind(this)
-        }]);
-    }
-
     delete() {
         let self = this;
         console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
@@ -53,6 +39,11 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 self.setSynced(false);
             }
         });
+    }
+
+    edit(){
+        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        this.save();
     }
 
     save() {

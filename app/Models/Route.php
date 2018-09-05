@@ -34,6 +34,9 @@ class Route extends Model
         return $this->hasMany('App\Models\RouteVertex');
     }
 
+    /**
+     * Deletes all vertices that are related to this Route.
+     */
     function deleteVertices()
     {
         // Load the existing vertices from the pack

@@ -13,132 +13,158 @@
 
 Auth::routes();
 
-Route::get('about', function () {
-    return view('misc.about');
-})->name('misc.about');
+Route::group(['middleware' => ['viewcachebuster']], function () {
 
-Route::get('privacy', function () {
-    return view('legal.privacy');
-})->name('legal.privacy');
 
-Route::get('terms', function () {
-    return view('legal.terms');
-})->name('legal.terms');
+    Route::get('about', function () {
+        return view('misc.about');
+    })->name('misc.about');
 
-Route::get('cookies', function () {
-    return view('legal.cookies');
-})->name('legal.cookies');
+    Route::get('privacy', function () {
+        return view('legal.privacy');
+    })->name('legal.privacy');
 
-Route::get('/', 'HomeController@index')->name('home');
+    Route::get('terms', function () {
+        return view('legal.terms');
+    })->name('legal.terms');
 
-// ['auth', 'role:admin|user']
+    Route::get('cookies', function () {
+        return view('legal.cookies');
+    })->name('legal.cookies');
 
-Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
+    Route::get('/', 'HomeController@index')->name('home');
 
-Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
-    Route::get('profile', 'ProfileController@edit')->name('profile.edit');
-    Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
-    Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
-});
+    // ['auth', 'role:admin|user']
 
-Route::group(['middleware' => ['auth', 'role:admin']], function () {
-    // Only admins may view a list of profiles
-    Route::get('profiles', 'ProfileController@list')->name('profile.list');
+    Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
 
-    // Dungeons
-    Route::get('admin/dungeon/new', 'DungeonController@new')->name('admin.dungeon.new');
-    Route::get('admin/dungeon/{dungeon}', 'DungeonController@edit')->name('admin.dungeon.edit');
+    Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+        Route::get('profile', 'ProfileController@edit')->name('profile.edit');
+        Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
+        Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
+    });
 
-    Route::post('admin/dungeon/new', 'DungeonController@savenew')->name('admin.dungeon.savenew');
-    Route::patch('admin/dungeon/{dungeon}', 'DungeonController@update')->name('admin.dungeon.update');
+    Route::group(['middleware' => ['auth', 'role:admin']], function () {
+        // Only admins may view a list of profiles
+        Route::get('profiles', 'ProfileController@list')->name('profile.list');
 
-    Route::get('admin/dungeons', 'DungeonController@list')->name('admin.dungeons');
+        // Dungeons
+        Route::get('admin/dungeon/new', 'DungeonController@new')->name('admin.dungeon.new');
+        Route::get('admin/dungeon/{dungeon}', 'DungeonController@edit')->name('admin.dungeon.edit');
 
-    // Floors
-    Route::get('admin/floor/new', 'FloorController@new')->name('admin.floor.new')->where(['dungeon' => '[0-9]+']);
-    Route::get('admin/floor/{floor}', 'FloorController@edit')->name('admin.floor.edit');
+        Route::post('admin/dungeon/new', 'DungeonController@savenew')->name('admin.dungeon.savenew');
+        Route::patch('admin/dungeon/{dungeon}', 'DungeonController@update')->name('admin.dungeon.update');
 
-    Route::post('admin/floor/new', 'FloorController@savenew')->name('admin.floor.savenew')->where(['dungeon' => '[0-9]+']);
-    Route::patch('admin/floor/{floor}', 'FloorController@update')->name('admin.floor.update');
+        Route::get('admin/dungeons', 'DungeonController@list')->name('admin.dungeons');
 
-    // Expansions
-    Route::get('admin/expansion/new', 'ExpansionController@new')->name('admin.expansion.new');
-    Route::get('admin/expansion/{expansion}', 'ExpansionController@edit')->name('admin.expansion.edit');
+        // Floors
+        Route::get('admin/floor/new', 'FloorController@new')->name('admin.floor.new')->where(['dungeon' => '[0-9]+']);
+        Route::get('admin/floor/{floor}', 'FloorController@edit')->name('admin.floor.edit');
 
-    Route::post('admin/expansion/new', 'ExpansionController@savenew')->name('admin.expansion.savenew');
-    Route::patch('admin/expansion/{expansion}', 'ExpansionController@update')->name('admin.expansion.update');
+        Route::post('admin/floor/new', 'FloorController@savenew')->name('admin.floor.savenew')->where(['dungeon' => '[0-9]+']);
+        Route::patch('admin/floor/{floor}', 'FloorController@update')->name('admin.floor.update');
 
-    Route::get('admin/expansions', 'ExpansionController@list')->name('admin.expansions');
+        // Expansions
+        Route::get('admin/expansion/new', 'ExpansionController@new')->name('admin.expansion.new');
+        Route::get('admin/expansion/{expansion}', 'ExpansionController@edit')->name('admin.expansion.edit');
 
-    // NPCs
-    Route::get('admin/npc/new', 'NpcController@new')->name('admin.npc.new');
-    Route::get('admin/npc/{npc}', 'NpcController@edit')->name('admin.npc.edit');
+        Route::post('admin/expansion/new', 'ExpansionController@savenew')->name('admin.expansion.savenew');
+        Route::patch('admin/expansion/{expansion}', 'ExpansionController@update')->name('admin.expansion.update');
 
-    Route::post('admin/npc/new', 'NpcController@savenew')->name('admin.npc.savenew');
-    Route::patch('admin/npc/{npc}', 'NpcController@update')->name('admin.npc.update');
+        Route::get('admin/expansions', 'ExpansionController@list')->name('admin.expansions');
 
-    Route::get('admin/npcs', 'NpcController@list')->name('admin.npcs');
+        // NPCs
+        Route::get('admin/npc/new', 'NpcController@new')->name('admin.npc.new');
+        Route::get('admin/npc/{npc}', 'NpcController@edit')->name('admin.npc.edit');
 
-    Route::get('admin/datadump/exportdungeondata', 'ExportDungeonDataController@view')->name('admin.datadump.exportdungeondata');
-    Route::post('admin/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.datadump.viewexporteddungeondata');
+        Route::post('admin/npc/new', 'NpcController@savenew')->name('admin.npc.savenew');
+        Route::patch('admin/npc/{npc}', 'NpcController@update')->name('admin.npc.update');
 
-    Route::get('admin/makeadmin', function () {
-        $adminRole = \App\Role::all()->where('name', '=', 'admin')->first();
-        foreach (\App\User::all() as $user) {
-            /** @var $user \App\User */
+        Route::get('admin/npcs', 'NpcController@list')->name('admin.npcs');
 
-            if (!$user->hasRole('admin')) {
-                $user->attachRole($adminRole);
+        Route::get('admin/datadump/exportdungeondata', 'ExportDungeonDataController@view')->name('admin.datadump.exportdungeondata');
+        Route::post('admin/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.datadump.viewexporteddungeondata');
+
+        Route::get('admin/makeadmin', function () {
+            $adminRole = \App\Role::all()->where('name', '=', 'admin')->first();
+            foreach (\App\User::all() as $user) {
+                /** @var $user \App\User */
+
+                if (!$user->hasRole('admin')) {
+                    $user->attachRole($adminRole);
+                }
             }
-        }
 
-        return view('home');
-    })->name('admin.makeadmin');
-});
+            return view('home');
+        })->name('admin.makeadmin');
+    });
 
-// Put this down below, since it contains a catch all
-Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
-Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
-Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
+    // Put this down below, since it contains a catch all
+    Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
+    Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
+    Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
 
-// Edit your own dungeon routes
-Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
-    ->middleware('can:edit,dungeonroute')
-    ->name('dungeonroute.edit');
-// Submit a patch for your own dungeon route
-Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
-    ->middleware('can:edit,dungeonroute')
-    ->name('dungeonroute.update');
-// View any dungeon route
-Route::get('{dungeonroute}', 'DungeonRouteController@view')
-    ->name('dungeonroute.view');
+    // Edit your own dungeon routes
+    Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
+        ->middleware('can:edit,dungeonroute')
+        ->name('dungeonroute.edit');
+    // Submit a patch for your own dungeon route
+    Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
+        ->middleware('can:edit,dungeonroute')
+        ->name('dungeonroute.update');
+    // View any dungeon route
+    Route::get('{dungeonroute}', 'DungeonRouteController@view')
+        ->name('dungeonroute.view');
 
 
-Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
-    Route::get('/enemypacks', 'APIEnemyPackController@list');
-    Route::post('/enemypack', 'APIEnemyPackController@store');
-    Route::delete('/enemypack', 'APIEnemyPackController@delete');
+    Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
+        Route::get('/enemypacks', 'APIEnemyPackController@list');
 
-    Route::get('/enemies', 'APIEnemyController@list');
-    Route::post('/enemy', 'APIEnemyController@store');
-    Route::delete('/enemy', 'APIEnemyController@delete');
+        Route::get('/enemies', 'APIEnemyController@list');
 
-    Route::get('/enemypatrols', 'APIEnemyPatrolController@list');
-    Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
-    Route::delete('/enemypatrol', 'APIEnemyPatrolController@delete');
+        Route::get('/enemypatrols', 'APIEnemyPatrolController@list');
 
-    Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
-    Route::get('/dungeonroutes', 'APIDungeonRouteController@list')->name('api.dungeonroutes');
+        Route::get('/dungeonroutes', 'APIDungeonRouteController@list')->name('api.dungeonroutes');
 
-    Route::get('/routes', 'APIRouteController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
-    Route::post('/route', 'APIRouteController@store');
-    Route::delete('/route', 'APIRouteController@delete');
+        Route::get('/routes', 'APIRouteController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
 
-    Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');
-    Route::post('/dungeonstartmarker', 'APIDungeonStartMarkerController@store')->where(['dungeon' => '[0-9]+']);
-    Route::delete('/dungeonstartmarker', 'APIDungeonStartMarkerController@delete');
+        Route::get('/killzones', 'APIKillZoneController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
 
-    Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
-    Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
-    Route::delete('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@delete');
+        Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');
+
+        Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
+
+        Route::group(['middleware' => ['auth', 'role:user']], function () {
+            Route::post('/route', 'APIRouteController@store');
+            Route::delete('/route', 'APIRouteController@delete');
+
+            Route::post('/killzone', 'APIKillZoneController@store');
+            Route::delete('/killzone', 'APIKillZoneController@delete');
+
+            Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
+            Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
+            Route::delete('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
+
+            Route::post('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
+            Route::delete('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
+        });
+
+        Route::group(['middleware' => ['auth', 'role:admin']], function () {
+            Route::post('/enemypack', 'APIEnemyPackController@store');
+            Route::delete('/enemypack', 'APIEnemyPackController@delete');
+
+            Route::post('/enemy', 'APIEnemyController@store');
+            Route::delete('/enemy', 'APIEnemyController@delete');
+
+            Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
+            Route::delete('/enemypatrol', 'APIEnemyPatrolController@delete');
+
+            Route::post('/dungeonstartmarker', 'APIDungeonStartMarkerController@store')->where(['dungeon' => '[0-9]+']);
+            Route::delete('/dungeonstartmarker', 'APIDungeonStartMarkerController@delete');
+
+            Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
+            Route::delete('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@delete');
+        });
+    });
+
 });

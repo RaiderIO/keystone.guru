@@ -1,6 +1,7 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
 $factions = \App\Models\Faction::with('iconfile')->get();
+// @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
 $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
 $classes = \App\Models\CharacterClass::with('iconfile')->get();
 ?>

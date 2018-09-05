@@ -16,6 +16,9 @@ class Expansion extends IconFileModel
 
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function dungeons()
     {
         return $this->hasMany('App\Models\Dungeon');

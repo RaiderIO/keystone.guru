@@ -23,16 +23,25 @@ class Enemy extends Model
     public $hidden = ['npc_id'];
     public $timestamps = false;
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     function pack()
     {
         return $this->belongsTo('App\Models\EnemyPack');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     function floor()
     {
         return $this->belongsTo('App\Models\Floor');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     function npc()
     {
         return $this->belongsTo('App\Models\Npc');

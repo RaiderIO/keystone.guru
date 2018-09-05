@@ -1,162 +1,182 @@
-{
-    "40": {
+[
+    {
         "id": 127381,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Silt Crab",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "41": {
+    {
         "id": 127480,
         "dungeon_id": 22,
         "classification_id": 1,
         "name": "Stinging Parasite",
         "base_health": 88301,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "42": {
+    {
         "id": 127482,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Sewer Vicejaw",
         "base_health": 323769,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "43": {
+    {
         "id": 127484,
         "dungeon_id": 22,
         "classification_id": 3,
         "name": "Jes Howlis",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "44": {
+    {
         "id": 127485,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Bilge Rat Looter",
         "base_health": 176601,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "45": {
+    {
         "id": 127486,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Officer",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "46": {
+    {
         "id": 127488,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Flamecaster",
         "base_health": 412069,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "47": {
+    {
         "id": 127497,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Warden",
         "base_health": 529803,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "48": {
+    {
         "id": 127503,
         "dungeon_id": 22,
         "classification_id": 3,
         "name": "Overseer Korgus",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "88": {
+    {
         "id": 130025,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Irontide Thug",
         "base_health": 441503,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "89": {
+    {
         "id": 130026,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Bilge Rat Seaspeaker",
         "base_health": 264902,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "90": {
+    {
         "id": 130027,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Marine",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "91": {
+    {
         "id": 130028,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Priest",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "98": {
+    {
         "id": 130582,
         "dungeon_id": 22,
         "classification_id": 1,
         "name": "Despondent Scallywag",
         "base_health": 88301,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "100": {
+    {
         "id": 130646,
         "dungeon_id": 22,
         "classification_id": 3,
         "name": "Knight Captain Valyri",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "104": {
+    {
         "id": 131112,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Cutwater Striker",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "189": {
+    {
         "id": 134927,
         "dungeon_id": 22,
         "classification_id": 3,
         "name": "The Sand Queen",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "213": {
+    {
         "id": 135366,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Blacktooth Arsonist",
         "base_health": 323769,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "217": {
+    {
         "id": 135699,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Jailer",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "233": {
+    {
         "id": 136665,
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Spotter",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     }
-}
+]

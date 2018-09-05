@@ -1,5 +1,5 @@
-{
-    "134": {
+[
+    {
         "id": 145,
         "enemy_pack_id": -1,
         "floor_id": 63,
@@ -7,15 +7,10 @@
         "lat": -59,
         "lng": 198.25,
         "npc": {
-            "id": 131527,
-            "dungeon_id": 23,
-            "classification_id": 3,
-            "name": "Lord Waycrest",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 131527
         }
     },
-    "456": {
+    {
         "id": 476,
         "enemy_pack_id": 131,
         "floor_id": 63,
@@ -23,15 +18,10 @@
         "lat": -119.51000000000001,
         "lng": 198.25,
         "npc": {
-            "id": 131666,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Coven Thornshaper",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131666
         }
     },
-    "466": {
+    {
         "id": 486,
         "enemy_pack_id": 131,
         "floor_id": 63,
@@ -39,15 +29,10 @@
         "lat": -117.51000000000001,
         "lng": 193.5,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "467": {
+    {
         "id": 487,
         "enemy_pack_id": 131,
         "floor_id": 63,
@@ -55,15 +40,10 @@
         "lat": -118.01000000000001,
         "lng": 189.25,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
-    "532": {
+    {
         "id": 554,
         "enemy_pack_id": 129,
         "floor_id": 63,
@@ -71,15 +51,10 @@
         "lat": -169.50999999999999,
         "lng": 198,
         "npc": {
-            "id": 131812,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Heartsbane Soulcharmer",
-            "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "id": 131812
         }
     },
-    "533": {
+    {
         "id": 555,
         "enemy_pack_id": 129,
         "floor_id": 63,
@@ -87,15 +62,10 @@
         "lat": -159.25999999999999,
         "lng": 188.25,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "534": {
+    {
         "id": 556,
         "enemy_pack_id": 129,
         "floor_id": 63,
@@ -103,15 +73,10 @@
         "lat": -161.50999999999999,
         "lng": 206,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "535": {
+    {
         "id": 557,
         "enemy_pack_id": 128,
         "floor_id": 63,
@@ -119,15 +84,10 @@
         "lat": -145.50999999999999,
         "lng": 146.5,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "536": {
+    {
         "id": 558,
         "enemy_pack_id": 128,
         "floor_id": 63,
@@ -135,15 +95,10 @@
         "lat": -145.75999999999999,
         "lng": 155,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     },
-    "537": {
+    {
         "id": 559,
         "enemy_pack_id": 128,
         "floor_id": 63,
@@ -151,15 +106,10 @@
         "lat": -152.25999999999999,
         "lng": 151.75,
         "npc": {
-            "id": 131819,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Coven Diviner",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131819
         }
     },
-    "538": {
+    {
         "id": 560,
         "enemy_pack_id": -1,
         "floor_id": 63,
@@ -167,15 +117,10 @@
         "lat": -200.00999999999999,
         "lng": 230.25,
         "npc": {
-            "id": 131818,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Marked Sister",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131818
         }
     },
-    "539": {
+    {
         "id": 562,
         "enemy_pack_id": 131,
         "floor_id": 63,
@@ -183,15 +128,10 @@
         "lat": -120.51000000000001,
         "lng": 182,
         "npc": {
-            "id": 139269,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gloom Horror",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 139269
         }
     },
-    "540": {
+    {
         "id": 563,
         "enemy_pack_id": 131,
         "floor_id": 63,
@@ -199,15 +139,10 @@
         "lat": -121.51000000000001,
         "lng": 199.25,
         "npc": {
-            "id": 139269,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gloom Horror",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 139269
         }
     },
-    "541": {
+    {
         "id": 564,
         "enemy_pack_id": 131,
         "floor_id": 63,
@@ -215,15 +150,10 @@
         "lat": -120.26000000000001,
         "lng": 212.75,
         "npc": {
-            "id": 139269,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gloom Horror",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 139269
         }
     },
-    "542": {
+    {
         "id": 565,
         "enemy_pack_id": 130,
         "floor_id": 63,
@@ -231,15 +161,10 @@
         "lat": -99.760000000000005,
         "lng": 241.75,
         "npc": {
-            "id": 139269,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gloom Horror",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 139269
         }
     },
-    "543": {
+    {
         "id": 566,
         "enemy_pack_id": 130,
         "floor_id": 63,
@@ -247,62 +172,49 @@
         "lat": -105.51000000000001,
         "lng": 247,
         "npc": {
-            "id": 139269,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gloom Horror",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 139269
         }
     },
-    "544": {
+    {
         "id": 567,
-        "enemy_pack_id": 132,
+        "enemy_pack_id": 133,
         "floor_id": 63,
         "teeming": null,
         "lat": -83.760000000000005,
         "lng": 253.75,
         "npc": {
-            "id": 139269,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gloom Horror",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 139269
         }
     },
-    "545": {
+    {
         "id": 568,
-        "enemy_pack_id": 132,
+        "enemy_pack_id": 133,
         "floor_id": 63,
         "teeming": null,
         "lat": -83.760000000000005,
         "lng": 253.75,
-        "npc": null
+        "npc": {
+            "id": 139269
+        }
     },
-    "546": {
+    {
         "id": 569,
-        "enemy_pack_id": 132,
+        "enemy_pack_id": 133,
         "floor_id": 63,
         "teeming": null,
         "lat": -87.760000000000005,
         "lng": 259.25,
         "npc": null
     },
-    "547": {
+    {
         "id": 570,
-        "enemy_pack_id": 132,
+        "enemy_pack_id": 133,
         "floor_id": 63,
         "teeming": null,
         "lat": -87.760000000000005,
         "lng": 259.25,
         "npc": {
-            "id": 139269,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Gloom Horror",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 139269
         }
     }
-}
+]

@@ -18,7 +18,7 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor){
+    fetchFromServer(floor, callback){
         // no super call required
         console.assert(this instanceof DungeonStartMarkerMapObjectGroup, this, 'this is not a DungeonStartMarkerMapObjectGroup');
 
@@ -50,6 +50,8 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
                         dungeonStartMarker.setSynced(true);
                     }
                 }
+
+                callback();
             }
         });
     }

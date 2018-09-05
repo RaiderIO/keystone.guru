@@ -40,6 +40,7 @@ class NpcController extends Controller
         // Remove commas or dots in the name; we want the integer value
         $npc->base_health = str_replace(',', '', $request->get('base_health'));
         $npc->base_health = str_replace('.', '', $npc->base_health);
+        $npc->enemy_forces = $request->get('enemy_forces');
         $npc->aggressiveness = $request->get('aggressiveness');
 
         if (!$npc->save()) {
@@ -50,7 +51,7 @@ class NpcController extends Controller
     }
 
     /**
-     * Show a page for creating a new expansion.
+     * Show a page for creating a new npc.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

@@ -1,154 +1,173 @@
-{
-    "103": {
+[
+    {
         "id": 130909,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Fetid Maggot",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "106": {
+    {
         "id": 131318,
         "dungeon_id": 21,
         "classification_id": 3,
         "name": "Elder Leaxa",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "107": {
+    {
         "id": 131383,
         "dungeon_id": 21,
         "classification_id": 3,
         "name": "Sporecaller Zancha",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "108": {
+    {
         "id": 131402,
         "dungeon_id": 21,
         "classification_id": 1,
         "name": "Underrot Tick",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "109": {
+    {
         "id": 131436,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Chosen Blood Matron",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "110": {
+    {
         "id": 131492,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Devout Blood Priest",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "121": {
+    {
         "id": 131817,
         "dungeon_id": 21,
         "classification_id": 3,
         "name": "Cragmaw the Infested",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "133": {
+    {
         "id": 133007,
         "dungeon_id": 21,
         "classification_id": 3,
         "name": "Unbound Abomination",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "144": {
+    {
         "id": 133663,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Fanatical Headhunter",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "145": {
+    {
         "id": 133685,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Befouled Spirit",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "146": {
+    {
         "id": 133835,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Feral Bloodswarmer",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "147": {
+    {
         "id": 133836,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Reanimated Guardian",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "148": {
+    {
         "id": 133852,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Living Rot",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "149": {
+    {
         "id": 133870,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Diseased Lasher",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "150": {
+    {
         "id": 133912,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Bloodsworn Defiler",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "172": {
+    {
         "id": 134284,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Fallen Deathspeaker",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "178": {
+    {
         "id": 134419,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Titan Keeper Hezrel",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "friendly"
     },
-    "249": {
+    {
         "id": 138187,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Grotesque Horror",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
-    "252": {
+    {
         "id": 138281,
         "dungeon_id": 21,
         "classification_id": 2,
         "name": "Faceless Corruptor",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     }
-}
+]

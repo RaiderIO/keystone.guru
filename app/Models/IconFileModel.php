@@ -18,6 +18,9 @@ class IconFileModel extends Model
      */
     protected $with = ['iconfile'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     function iconfile()
     {
         return $this->hasOne('App\Models\File', 'model_id')->where('model_class', '=', get_class($this));

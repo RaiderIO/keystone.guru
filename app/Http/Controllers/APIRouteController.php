@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Route;
 use App\Models\RouteVertex;
@@ -12,6 +13,8 @@ use Teapot\StatusCode\Http;
 
 class APIRouteController extends Controller
 {
+    use PublicKeyDungeonRoute;
+
     function list(Request $request)
     {
         $floorId = $request->get('floor_id');
@@ -91,17 +94,4 @@ class APIRouteController extends Controller
 
         return $result;
     }
-
-    function _getDungeonRouteFromPublicKey($publicKey)
-    {
-        $dungeonRoute = DungeonRoute::where('public_key', '=', $publicKey)->firstOrFail();
-
-        // @TODO handle this in a policy?
-        if ($dungeonRoute->author_id !== Auth::user()->id) {
-            throw new Exception('Unauthorized');
-        }
-
-        return $dungeonRoute;
-    }
-
 }

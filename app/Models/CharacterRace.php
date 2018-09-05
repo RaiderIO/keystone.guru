@@ -16,11 +16,17 @@ class CharacterRace extends Model
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     function classes()
     {
         return $this->belongsToMany('App\Models\CharacterClass', 'character_race_class_couplings');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     function specializations()
     {
         return $this->hasMany('App\Models\CharacterClass');
@@ -34,6 +40,9 @@ class CharacterRace extends Model
         return $this->belongsTo('App\Models\Faction');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     function dungeonrouteplayerrace()
     {
         return $this->hasMany('App\Models\DungeonRoutePlayerRace');

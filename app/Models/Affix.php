@@ -10,7 +10,7 @@ namespace App\Models;
  */
 class Affix extends IconFileModel
 {
-    public $hidden = ['pivot'];
+    public $hidden = ['icon_file_id', 'pivot'];
 
     public $timestamps = false;
 

@@ -14,6 +14,9 @@ class CharacterSpecialization extends Model
 
     public $hidden = ['created_at', 'updated_at'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     function class()
     {
         return $this->belongsTo('App\Models\CharacterClass');

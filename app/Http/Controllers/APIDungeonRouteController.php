@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
+use App\Models\DungeonRouteFavorite;
+use App\Models\DungeonRouteRating;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class APIDungeonRouteController extends Controller
@@ -25,24 +28,34 @@ class APIDungeonRouteController extends Controller
             $query->active();
         });
 
-        $authorId = intval($request->get('author_id', -1));
+        $mine = $request->get('mine', false);
+        $user = Auth::user();
+
         // Filter by our own user if logged in
-        if ($authorId > -1) {
-            $builder = $builder->where('author_id', '=', $authorId);
+        if ($mine) {
+            $builder = $builder->where('author_id', '=', $user->id);
         }
 
-        // This is safe enough, even with the links people will get denied access
-        // @TODO hardcoded admin ID?
-        if ($authorId !== 1) {
-            // Never show demo routes here
-            $builder = $builder->where('demo', '=', '0');
+        // Never show demo routes here
+        if ($user !== null) {
+            if (!$user->hasRole('admin')) {
+                $builder = $builder->where('demo', '=', '0');
+            }
+
+            // Handle favorites
+            if ($request->get('favorites', false)) {
+                $builder->whereHas('favorites', function ($query) use (&$user) {
+                    /** @var $query Builder */
+                    $query->where('dungeon_route_favorites.user_id', '=', $user->id);
+                });
+            }
         }
 
-        // Handle searching on affixes
+        // Handle searching
         if ($request->has('columns')) {
             $columns = $request->get('columns');
 
-            $affixes = $columns[2]['search']['value'];
+            $affixes = $columns[3]['search']['value'];
             if (!empty($affixes)) {
                 $affixIds = explode(',', $affixes);
 
@@ -53,7 +66,7 @@ class APIDungeonRouteController extends Controller
             }
 
             // Unset the search value, we already filtered it and I don't know how to convince DT to do the above for me
-            $columns[2]['search']['value'] = '';
+            $columns[3]['search']['value'] = '';
             // Apply to request parameters
             $request->merge(['columns' => $columns]);
         }
@@ -80,5 +93,82 @@ class APIDungeonRouteController extends Controller
         }
 
         return ['id' => $dungeonroute->id];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     */
+    function rate(Request $request, DungeonRoute $dungeonroute)
+    {
+        $value = $request->get('rating', -1);
+
+        if ($value > 0) {
+            $user = Auth::user();
+
+            /** @var DungeonRouteRating $dungeonRouteRating */
+            $dungeonRouteRating = DungeonRouteRating::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
+            $dungeonRouteRating->rating = max(1, min(10, $value));
+            $dungeonRouteRating->save();
+        }
+
+        $dungeonroute->unsetRelation('ratings');
+        return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws \Exception
+     */
+    function rateDelete(Request $request, DungeonRoute $dungeonroute)
+    {
+        $user = Auth::user();
+
+        /** @var DungeonRouteRating $dungeonRouteRating */
+        $dungeonRouteRating = DungeonRouteRating::firstOrFail()
+            ->where('dungeon_route_id', $dungeonroute->id)
+            ->where('user_id', $user->id);
+        $dungeonRouteRating->delete();
+
+        $dungeonroute->unsetRelation('ratings');
+        return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     */
+    function favorite(Request $request, DungeonRoute $dungeonroute)
+    {
+        $user = Auth::user();
+
+        /** @var DungeonRouteFavorite $dungeonRouteFavorite */
+        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
+        $dungeonRouteFavorite->save();
+
+        return ['result' => 'success'];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws \Exception
+     */
+    function favoriteDelete(Request $request, DungeonRoute $dungeonroute)
+    {
+        $user = Auth::user();
+
+        /** @var DungeonRouteFavorite $dungeonRouteFavorite */
+        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrFail()
+            ->where('dungeon_route_id', $dungeonroute->id)
+            ->where('user_id', $user->id);
+        $dungeonRouteFavorite->delete();
+
+        return ['result' => 'success'];
     }
 }

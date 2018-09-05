@@ -1,5 +1,5 @@
-{
-    "161": {
+[
+    {
         "id": 172,
         "enemy_pack_id": -1,
         "floor_id": 44,
@@ -7,15 +7,10 @@
         "lat": -122.41,
         "lng": 52.25,
         "npc": {
-            "id": 136160,
-            "dungeon_id": 16,
-            "classification_id": 3,
-            "name": "King Dazar",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 136160
         }
     },
-    "162": {
+    {
         "id": 173,
         "enemy_pack_id": -1,
         "floor_id": 44,
@@ -23,15 +18,10 @@
         "lat": -63.409999999999997,
         "lng": 210,
         "npc": {
-            "id": 134993,
-            "dungeon_id": 16,
-            "classification_id": 3,
-            "name": "Mchimba the Embalmer",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 134993
         }
     },
-    "163": {
+    {
         "id": 174,
         "enemy_pack_id": -1,
         "floor_id": 44,
@@ -39,15 +29,10 @@
         "lat": -175.41,
         "lng": 292.75,
         "npc": {
-            "id": 135322,
-            "dungeon_id": 16,
-            "classification_id": 3,
-            "name": "The Golden Serpent",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 135322
         }
     },
-    "164": {
+    {
         "id": 175,
         "enemy_pack_id": -1,
         "floor_id": 44,
@@ -55,12 +40,7 @@
         "lat": -207.16,
         "lng": 168.75,
         "npc": {
-            "id": 135470,
-            "dungeon_id": 16,
-            "classification_id": 3,
-            "name": "Aka'ali the Conqueror",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 135470
         }
     }
-}
+]

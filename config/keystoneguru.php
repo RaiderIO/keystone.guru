@@ -14,5 +14,10 @@ return [
      */
     'aggressiveness' => ['aggressive', 'unfriendly', 'neutral', 'friendly'],
 
-    'aggressiveness_pretty' => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly']
+    'aggressiveness_pretty' => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly'],
+
+    /**
+     * Some playful names for difficulties. I didn't want to offend anyone (looking at you non-casuals).
+     */
+    'dungeonroute_difficulty' => ['Casual', 'Dedicated', 'Hardcore']
 ];

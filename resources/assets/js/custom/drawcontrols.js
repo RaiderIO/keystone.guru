@@ -31,6 +31,10 @@ $(function () {
             handler: new L.Draw.Route(map, this.options.route),
             title: this.options.route.title
         }, {
+            enabled: this.options.killzone,
+            handler: new L.Draw.KillZone(map, this.options.killzone),
+            title: this.options.killzone.title
+        }, {
             enabled: this.options.enemypack,
             handler: new L.Draw.EnemyPack(map, this.options.enemypack),
             title: this.options.enemypack.title
@@ -75,6 +79,12 @@ class DrawControls {
                     zIndexOffset: 1000,
                     faClass: 'fa-route',
                     title: 'Draw a route'
+                },
+                killzone: {
+                    repeatMode: false,
+                    zIndexOffset: 1000,
+                    faClass: 'fa-bullseye',
+                    title: 'Draw a killzone'
                 },
                 enemypack: false,
                 enemypatrol: false,

@@ -1,5 +1,5 @@
-{
-    "106": {
+[
+    {
         "id": 128,
         "floor_id": 63,
         "label": "Enemy pack",
@@ -21,7 +21,7 @@
             }
         ]
     },
-    "107": {
+    {
         "id": 129,
         "floor_id": 63,
         "label": "Enemy pack",
@@ -43,7 +43,7 @@
             }
         ]
     },
-    "108": {
+    {
         "id": 130,
         "floor_id": 63,
         "label": "Enemy pack",
@@ -70,7 +70,7 @@
             }
         ]
     },
-    "109": {
+    {
         "id": 131,
         "floor_id": 63,
         "label": "Enemy pack",
@@ -97,7 +97,7 @@
             }
         ]
     },
-    "110": {
+    {
         "id": 132,
         "floor_id": 63,
         "label": "Enemy pack",
@@ -124,7 +124,7 @@
             }
         ]
     },
-    "111": {
+    {
         "id": 133,
         "floor_id": 63,
         "label": "Enemy pack",
@@ -151,4 +151,4 @@
             }
         ]
     }
-}
+]

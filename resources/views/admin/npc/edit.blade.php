@@ -22,13 +22,13 @@
     @endisset
 
     <div class="form-group{{ $errors->has('id') ? ' has-error' : '' }}">
-        {!! Form::label('id', __('Game ID')) !!}
+        {!! Form::label('id', __('Game ID') . "*") !!}
         {!! Form::text('id', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'id'])
     </div>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        {!! Form::label('name', __('Name')) !!}
+        {!! Form::label('name', __('Name') . "*") !!}
         {!! Form::text('name', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
@@ -39,21 +39,27 @@
     </div>
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
-        {!! Form::label('classification_id', __('Classification')) !!}
+        {!! Form::label('classification_id', __('Classification') . "*") !!}
         {!! Form::select('classification_id', $classifications, null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'classification_id'])
     </div>
 
     <div class="form-group{{ $errors->has('aggressiveness') ? ' has-error' : '' }}">
-        {!! Form::label('aggressiveness', __('Aggressiveness')) !!}
+        {!! Form::label('aggressiveness', __('Aggressiveness') . "*") !!}
         {!! Form::select('aggressiveness', array_combine(config('keystoneguru.aggressiveness'), config('keystoneguru.aggressiveness_pretty')), null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'classification_id'])
     </div>
 
     <div class="form-group{{ $errors->has('base_health') ? ' has-error' : '' }}">
-        {!! Form::label('base_health', __('Base health')) !!}
+        {!! Form::label('base_health', __('Base health') . "*") !!}
         {!! Form::text('base_health', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'base_health'])
+    </div>
+
+    <div class="form-group{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">
+        {!! Form::label('enemy_forces', __('Enemy forces')) !!}
+        {!! Form::text('enemy_forces', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'enemy_forces'])
     </div>
 
     <div>

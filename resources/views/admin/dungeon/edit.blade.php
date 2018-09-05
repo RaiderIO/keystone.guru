@@ -49,6 +49,18 @@
     @include('common.forms.form-error', ['key' => 'name'])
 </div>
 
+<div class="form-group{{ $errors->has('enemy_forces_required') ? ' has-error' : '' }}">
+    {!! Form::label('enemy_forces_required', __('Enemy forces required')) !!}
+    {!! Form::text('enemy_forces_required', null, ['class' => 'form-control']) !!}
+    @include('common.forms.form-error', ['key' => 'enemy_forces_required'])
+</div>
+
+<div class="form-group{{ $errors->has('enemy_forces_required_teeming') ? ' has-error' : '' }}">
+    {!! Form::label('enemy_forces_required_teeming', __('Enemy forces required (teeming)')) !!}
+    {!! Form::text('enemy_forces_required_teeming', null, ['class' => 'form-control']) !!}
+    @include('common.forms.form-error', ['key' => 'enemy_forces_required_teeming'])
+</div>
+
 {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
 
 {!! Form::close() !!}
