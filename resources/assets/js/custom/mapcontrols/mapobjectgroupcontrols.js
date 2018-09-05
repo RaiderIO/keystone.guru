@@ -1,12 +1,10 @@
-class MapObjectGroupControls {
+class MapObjectGroupControls extends MapControl {
     constructor(map) {
-        console.assert(this instanceof MapObjectGroupControls, this, 'this is not MapObjectGroupControls');
-        console.assert(map instanceof DungeonMap, map, 'map is not DungeonMap');
+        super(map);
 
         let self = this;
 
         this.map = map;
-        this._mapControl = null;
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
@@ -29,7 +27,7 @@ class MapObjectGroupControls {
                 self.statusbar = $(template(data));
 
 
-                for(let i in self.map.mapObjectGroups){
+                for (let i in self.map.mapObjectGroups) {
                     let group = self.map.mapObjectGroups[i];
                     self.statusbar.find('#map_controls_hide_' + group.name).bind('click', function (e) {
                         let checkbox = $(self.statusbar).find('#map_controls_hide_' + group.name + '_checkbox');
@@ -73,17 +71,6 @@ class MapObjectGroupControls {
                 return self.statusbar;
             }
         };
-    }
-
-    /**
-     * Cleans up the MapControl; removing it from the current LeafletMap.
-     */
-    cleanup() {
-        console.assert(this instanceof MapObjectGroupControls, this, 'this is not MapObjectGroupControls');
-
-        if (typeof this._mapControl === 'object') {
-            this.map.leafletMap.removeControl(this._mapControl);
-        }
     }
 
     /**

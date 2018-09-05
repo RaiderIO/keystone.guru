@@ -14,21 +14,25 @@ class DungeonMap extends Signalable {
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
             this.mapObjectGroups[i].register('object:add', this, function (event) {
-                self.mapObjects.push(event.data.object);
+                let object = event.data.object;
+                self.mapObjects.push(object);
+
+                // Make sure we know it's editable
+                if( event.data.objectgroup.editable && self.edit ){
+                    self.drawnItems.addLayer(object.layer);
+                }
             });
         }
 
-        /**
-         * @var Array Stores all possible objects that are displayed on the map
-         **/
+        /** @var Array Stores all possible objects that are displayed on the map */
         this.mapObjects = [];
+        /** @var Array Stores all UI elements that are drawn on the map */
+        this.mapControls = [];
 
         this.currentFloorId = floorID;
         this.edit = edit;
 
         this.mapTileLayer = null;
-        this.mapControls = null;
-        this.drawControls = null;
 
         // Create the map object
         this.leafletMap = L.map(mapid, {
@@ -131,6 +135,22 @@ class DungeonMap extends Signalable {
     }
 
     /**
+     * Create instances of all controls that will be added to the map (UI on the map itself)
+     * @param drawnItemsLayer
+     * @returns {*[]}
+     * @private
+     */
+    _createMapControls(drawnItemsLayer) {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
+        return [
+            new DrawControls(this, drawnItemsLayer),
+            new EnemyForcesControls(this),
+            new MapObjectGroupControls(this)
+        ]
+    }
+
+    /**
      * Fixes the border width for based on current zoom of the map
      * @private
      */
@@ -151,18 +171,6 @@ class DungeonMap extends Signalable {
                 }
             }
         }
-    }
-
-    /**
-     * Get a new instance of a DrawControls object which will be added to the map
-     * @param drawnItemsLayer
-     * @returns {DrawControls}
-     * @protected
-     */
-    _getDrawControls(drawnItemsLayer) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        return new DrawControls(this, drawnItemsLayer);
     }
 
     /**
@@ -282,34 +290,24 @@ class DungeonMap extends Signalable {
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
 
-        // Configure the controls (toggle display of enemies, groups etc.)
-        if (this.mapControls !== null) {
-            this.mapControls.cleanup();
+        // Remove existing map controls
+        for (let i = 0; i < this.mapControls.length; i++) {
+            this.mapControls[i].cleanup();
         }
 
-        // Get the map controls and add it to the map
-        this.mapControls = new MapObjectGroupControls(this);
-        this.mapControls.addControl();
+        this.drawnItems = new L.FeatureGroup();
+        this.mapControls = this._createMapControls(this.drawnItems);
 
-        // Configure the Draw Control (draw routes, enemies, enemy groups etc)
-        // Make sure it does not get added multiple times
-        if (this.drawControls !== null) {
-            this.drawControls.cleanup();
+        // Add new controls
+        for (let i = 0; i < this.mapControls.length; i++) {
+            this.mapControls[i].addControl();
         }
 
         // Refresh the list of drawn items
-        this.drawnItems = new L.FeatureGroup();
         this.leafletMap.addLayer(this.drawnItems);
-
-        // Get the draw controls and add it to the map
-        if (this.edit) {
-            this.drawControls = this._getDrawControls(this.drawnItems);
-            this.drawControls.addControl();
-        }
 
         // If we created something
         this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
-            console.log(event);
             let mapObjectGroup = self.getMapObjectGroupByName(event.layerType);
             if (mapObjectGroup !== false) {
                 let object = mapObjectGroup.createNew(event.layer);
@@ -337,6 +335,10 @@ class DungeonMap extends Signalable {
         }
     }
 
+    /**
+     * Called whenever a map object group has claimed success over their AJAX request.
+     * Once all map object groups have returned, this will fire an event that the data is ready to use in the map.
+     */
     mapObjectGroupFetchSuccess() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 

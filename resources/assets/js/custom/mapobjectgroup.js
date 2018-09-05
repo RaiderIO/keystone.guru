@@ -102,16 +102,10 @@ class MapObjectGroup extends Signalable {
         this.objects.push(object);
         this.layerGroup.addLayer(layer);
 
-        // Make sure we know it's editable
-        // @TODO Should this be put in the dungeonmap instead?
-        if( this.editable && this.map.edit ){
-            this.map.drawControls.drawnItems.addLayer(layer);
-        }
-
         object.onLayerInit();
 
         object.register('object:deleted', this, (this._onObjectDeleted).bind(this));
-        this.signal('object:add', {object: object});
+        this.signal('object:add', {object: object, objectgroup: this});
 
         return object;
     }

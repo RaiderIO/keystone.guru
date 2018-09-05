@@ -17,6 +17,7 @@
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
+    @include('common.general.scripts')
     @include('common.thirdparty.cookieconsent')
     <?php if( (!isset($noads) || (isset($noads) && !$noads)) && config('app.env') === 'production' ){ ?>
     @include('common.thirdparty.adsense')
@@ -222,8 +223,6 @@
     <script src="{{ asset('js/custom/util.js') }}"></script>
     <script src="{{ asset('js/custom/signalable.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonmap.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroupcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/drawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapobject.js') }}"></script>
     <script src="{{ asset('js/custom/enemy.js') }}"></script>
     <script src="{{ asset('js/custom/enemypatrol.js') }}"></script>
@@ -233,6 +232,12 @@
     <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
     <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
+
+    <script src="{{ asset('js/custom/mapcontrol.js') }}"></script>
+    <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
+    <script src="{{ asset('js/custom/mapcontrols/drawcontrols.js') }}"></script>
+    <script src="{{ asset('js/custom/mapcontrols/enemyforcescontrols.js') }}"></script>
+
     <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>
     <script src="{{ asset('js/custom/admin/adminenemy.js') }}"></script>

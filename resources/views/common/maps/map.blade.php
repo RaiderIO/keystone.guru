@@ -118,6 +118,12 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
         </div>
     </script>
 
+    <script id="map_enemy_forces_template" type="text/x-handlebars-template">
+        <div id="map_enemy_forces" class="leaflet-draw-section">
+            {{ __('Enemy forces:')}} <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
+        </div>
+    </script>
+
     <script id="route_edit_popup_template" type="text/x-handlebars-template">
         <div id="route_edit_popup_inner" class="popupCustom">
             <div class="form-group">

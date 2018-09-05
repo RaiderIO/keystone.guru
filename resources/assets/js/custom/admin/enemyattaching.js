@@ -90,7 +90,7 @@ class EnemyAttaching {
 
             // Preserve the 'this' reference, we gotta couple enemies when we know the enemy pack's ID from the server
             // Thus bind to the synced function and read the object then.
-            enemyPack.register.call(enemyPack, 'synced', function (syncedEvent) {
+            enemyPack.register.call(enemyPack, enemyPack, 'synced', function (syncedEvent) {
 
                 enemyPack = syncedEvent.data.object;
                 let enemyPackPolygon = enemyPack.layer;
