@@ -9,7 +9,9 @@ use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Floor;
+use App\Models\KillZone;
 use App\Models\Npc;
+use App\Models\Route;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -26,6 +28,11 @@ class ExportDungeonDataController extends Controller
         $result = array();
 
         foreach (Dungeon::all() as $dungeon) {
+            // HoV is our test dungeon so keep there here so I don't have to rewrite this every time I want to debug
+//            if( $dungeon->getKeyAttribute() !== 'hallsofvalor' ){
+//                continue;
+//            }
+
             /** @var $dungeon Dungeon */
             $rootDirPath = storage_path() . '/dungeondata/' . $dungeon->expansion->shortname . '/' . $dungeon->key;
 
@@ -39,7 +46,21 @@ class ExportDungeonDataController extends Controller
                 // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
                 // for each and every re-import
                 $demoRoute->setHidden(['id']);
-                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups', 'routes']);
+                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups', 'routes', 'killzones']);
+
+                // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
+                // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
+                // Thus, remove the IDs from both Routes and KillZones as we need to make new IDs when the DungeonRoute
+                // is imported into the production environment
+                foreach($demoRoute->routes as $route){
+                    /** @var $route Route */
+                    $route->makeHidden(['id', 'dungeon_route_id']);
+                }
+
+                foreach($demoRoute->killzones as $killzone){
+                    /** @var $killzone KillZone */
+                    $killzone->makeHidden(['id', 'dungeon_route_id']);
+                }
             }
 
             $this->_saveData($demoRoutes, $rootDirPath, 'dungeonroutes.json');

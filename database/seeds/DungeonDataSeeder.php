@@ -47,6 +47,10 @@ class DungeonDataSeeder extends Seeder
             foreach ($expansionDirIterator as $dungeonKeyDir) {
                 $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
 
+//                if( basename($dungeonKeyDir) !== 'hallsofvalor' ){
+//                    continue;
+//                }
+
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
                 foreach ($floorDirIterator as $floorDirFile) {
@@ -110,7 +114,7 @@ class DungeonDataSeeder extends Seeder
         // Pre-fetch all valid columns to make the below loop a bit faster
         $modelColumns = Schema::getColumnListing($modelClassName::newModelInstance()->getTable());
 
-        $attributeParsers = [
+        $preModelSaveAttributeParsers = [
             // Generic
             new NestedModelRelationParser(),
 
@@ -126,8 +130,17 @@ class DungeonDataSeeder extends Seeder
             new EnemyPatrolVerticesRelationParser()
         ];
 
+        // Parse these attributes AFTER the model has been inserted into the database (so we know its ID)
+        $postModelSaveAttributeParsers = [
+            // Dungeon route
+            new DungeonRouteRoutesRelationParser(),
+            new DungeonRouteKillZoneRelationParser(),
+        ];
+
         // Do some php fuckery to make this a bit cleaner
         foreach ($modelsData as $modelData) {
+
+            $unsetRelations = [];
 
             for ($i = 0; $i < count($modelData); $i++) {
                 $keys = array_keys($modelData);
@@ -136,7 +149,7 @@ class DungeonDataSeeder extends Seeder
 
                 // $this->command->info(json_encode($key) . ' ' . json_encode($value));
 
-                foreach ($attributeParsers as $attributeParser) {
+                foreach ($preModelSaveAttributeParsers as $attributeParser) {
                     /** @var $attributeParser RelationParser */
                     // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
                     if (is_array($value) &&
@@ -147,8 +160,10 @@ class DungeonDataSeeder extends Seeder
                     }
                 }
 
-//                // The column may not be set due to objects appearing in this array that need to be de-normalized
+                // The column may not be set due to objects appearing in this array that need to be de-normalized
                 if (!in_array($key, $modelColumns)) {
+                    // Keep track of all relations we removed so we can parse them again after saving the model
+                    $unsetRelations[$key] = $value;
                     unset($modelData[$key]);
                     $i--;
                 }
@@ -156,7 +171,27 @@ class DungeonDataSeeder extends Seeder
 
             // $this->command->info("Creating model " . json_encode($modelData));
             // Create and save a new instance to the database
-            $modelClassName::create($modelData);
+            /** @var \Illuminate\Database\Eloquent\Model $createdModel */
+            $createdModel = $modelClassName::create($modelData);
+            $modelData['id'] = $createdModel->id;
+
+            // Merge the unset relations with the model again so we can parse the model again
+            $modelData = $modelData + $unsetRelations;
+
+            foreach($modelData as $key => $value) {
+                foreach ($postModelSaveAttributeParsers as $attributeParser) {
+                    /** @var $attributeParser RelationParser */
+                    // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
+                    if (is_array($value) &&
+                        $attributeParser->canParseModel($modelClassName) &&
+                        $attributeParser->canParseRelation($key, $value)) {
+
+                        // Ignore return value, use preModelSaveAttributeParser if you want the parser to have effect on the
+                        // model that's about to be saved. It's already saved at this point
+                        $attributeParser->parseRelation($modelClassName, $modelData, $key, $value);
+                    }
+                }
+            }
         }
 
         // $this->command->info('OK _loadModelsFromFile ' . $filePath . ' ' . $modelClassName);
@@ -174,9 +209,12 @@ class DungeonDataSeeder extends Seeder
         DB::table('dungeon_start_markers')->truncate();
         DB::table('dungeon_floor_switch_markers')->truncate();
 
+        // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
         $demoRoutes = \App\Models\DungeonRoute::all()->where('demo', '=', true);
 
+        // Delete each found route that was a demo (controlled by me only)
         foreach ($demoRoutes as $demoRoute) {
+            /** @var $demoRoute \App\Models\DungeonRoute */
             try {
                 /** @var $demoRoute \Illuminate\Database\Eloquent\Model */
                 $demoRoute->delete();
