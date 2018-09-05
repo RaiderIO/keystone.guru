@@ -143,7 +143,6 @@ class DungeonDataSeeder extends Seeder
                         $attributeParser->canParseModel($modelClassName) &&
                         $attributeParser->canParseRelation($key, $value)) {
 
-                        $this->command->info(get_class($attributeParser) . ' can parse ' . $key);
                         $modelData = $attributeParser->parseRelation($modelClassName, $modelData, $key, $value);
                     }
                 }

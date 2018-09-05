@@ -43,6 +43,7 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/enemypatrol.js',
         'resources/assets/js/custom/enemypack.js',
         'resources/assets/js/custom/route.js',
+        'resources/assets/js/custom/killzone.js',
         'resources/assets/js/custom/dungeonstartmarker.js',
         'resources/assets/js/custom/dungeonfloorswitchmarker.js',
         'resources/assets/js/custom/hotkeys.js',
@@ -61,6 +62,7 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/routemapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
         // 'resources/assets/js/custom/**/*.js'
