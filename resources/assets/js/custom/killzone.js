@@ -37,7 +37,7 @@ class KillZone extends MapObject {
         this.saving = false;
         this.deleting = false;
         // List of IDs of selected enemies
-        this._enemies = [];
+        this.enemies = [];
         this.enemyConnectionsLayerGroup = null;
 
         this.setColors(c.map.killzone.colors);
@@ -102,7 +102,7 @@ class KillZone extends MapObject {
                 floor_id: self.map.getCurrentFloor().id,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng,
-                enemies: self._enemies
+                enemies: self.enemies
             },
             beforeSend: function () {
                 self.saving = true;
@@ -136,7 +136,7 @@ class KillZone extends MapObject {
             }
         });
 
-        this._enemies = enemies;
+        this.enemies = enemies;
     }
 
     /**
@@ -190,16 +190,16 @@ class KillZone extends MapObject {
         console.assert(enemy instanceof Enemy, enemy, 'enemy is not an Enemy');
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
 
-        let index = $.inArray(enemy.id, this._enemies);
+        let index = $.inArray(enemy.id, this.enemies);
         // Already exists, user wants to deselect the enemy
         if (index >= 0) {
             enemy.kill_zone_id = -1;
             // Remove it
-            this._enemies.splice(index, 1);
+            this.enemies.splice(index, 1);
         } else {
             enemy.kill_zone_id = this.id;
             // Add it
-            this._enemies.push(enemy.id);
+            this.enemies.push(enemy.id);
         }
 
         this.redrawConnectionsToEnemies();
@@ -224,7 +224,7 @@ class KillZone extends MapObject {
 
         // Add connections from each enemy to our location
         let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
-        $.each(this._enemies, function (i, id) {
+        $.each(this.enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
             if (enemy !== null) {
@@ -263,6 +263,10 @@ class KillZone extends MapObject {
 
         // When we have all data, redraw the connections. Not sooner or otherwise we may not have the enemies back yet
         this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+            // The enemies data has been set, but not properly propagated to all enemies that they're attached to a killzone
+            // Couldn't do that because enemies may not have been loaded at that point. Now we're sure the enemies have been
+            // loaded so we can inject ourselves in the enemy
+            self.setEnemies(self.enemies);
             self.redrawConnectionsToEnemies();
         });
 
