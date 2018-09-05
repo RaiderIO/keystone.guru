@@ -7,12 +7,7 @@
         "lat": -153.75999999999999,
         "lng": 147,
         "npc": {
-            "id": 143577,
-            "dungeon_id": 14,
-            "classification_id": 3,
-            "name": "Rezan",
-            "base_health": 904737,
-            "aggressiveness": "aggressive"
+            "id": 143577
         }
     }
 ]

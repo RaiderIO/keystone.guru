@@ -7,12 +7,7 @@
         "lat": -137.00999999999999,
         "lng": 151.5,
         "npc": {
-            "id": 139737,
-            "dungeon_id": 17,
-            "classification_id": 3,
-            "name": "Lord Stormsong",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 139737
         }
     },
     {
@@ -23,12 +18,7 @@
         "lat": -91.010000000000005,
         "lng": 267.25,
         "npc": {
-            "id": 134069,
-            "dungeon_id": 17,
-            "classification_id": 3,
-            "name": "Vol'zith the Whisperer",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 134069
         }
     },
     {
@@ -48,12 +38,7 @@
         "lat": -98.129999999999995,
         "lng": 65.620000000000005,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -73,12 +58,7 @@
         "lat": -99.439999999999998,
         "lng": 64.75,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -98,12 +78,7 @@
         "lat": -100.5,
         "lng": 64.189999999999998,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -123,12 +98,7 @@
         "lat": -101.69,
         "lng": 63.619999999999997,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -148,12 +118,7 @@
         "lat": -101.88,
         "lng": 65.689999999999998,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -164,12 +129,7 @@
         "lat": -100.81,
         "lng": 66.439999999999998,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -179,7 +139,9 @@
         "teeming": null,
         "lat": -100.81,
         "lng": 66.439999999999998,
-        "npc": null
+        "npc": {
+            "id": 134423
+        }
     },
     {
         "id": 1239,
@@ -198,12 +160,7 @@
         "lat": -99.439999999999998,
         "lng": 67.060000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -223,12 +180,7 @@
         "lat": -98.189999999999998,
         "lng": 67.939999999999998,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -239,12 +191,7 @@
         "lat": -102.31,
         "lng": 67.439999999999998,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -254,7 +201,9 @@
         "teeming": null,
         "lat": -102.31,
         "lng": 67.439999999999998,
-        "npc": null
+        "npc": {
+            "id": 134423
+        }
     },
     {
         "id": 1245,
@@ -273,12 +222,7 @@
         "lat": -101,
         "lng": 68.120000000000005,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -298,12 +242,7 @@
         "lat": -99.689999999999998,
         "lng": 68.879999999999995,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -323,12 +262,7 @@
         "lat": -98.379999999999995,
         "lng": 69.879999999999995,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -348,12 +282,7 @@
         "lat": -102.63,
         "lng": 69.060000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -373,12 +302,7 @@
         "lat": -101.31,
         "lng": 69.810000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -398,12 +322,7 @@
         "lat": -100,
         "lng": 70.560000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -423,12 +342,7 @@
         "lat": -98.689999999999998,
         "lng": 71.310000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -448,12 +362,7 @@
         "lat": -86.75,
         "lng": 71.310000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -473,12 +382,7 @@
         "lat": -85.5,
         "lng": 72.310000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -498,12 +402,7 @@
         "lat": -84.5,
         "lng": 73.120000000000005,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -514,12 +413,7 @@
         "lat": -82.879999999999995,
         "lng": 73.810000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -529,7 +423,9 @@
         "teeming": null,
         "lat": -82.879999999999995,
         "lng": 73.810000000000002,
-        "npc": null
+        "npc": {
+            "id": 134423
+        }
     },
     {
         "id": 1267,
@@ -548,12 +444,7 @@
         "lat": -87.129999999999995,
         "lng": 73.120000000000005,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -573,12 +464,7 @@
         "lat": -85.939999999999998,
         "lng": 73.810000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -598,12 +484,7 @@
         "lat": -84.939999999999998,
         "lng": 74.439999999999998,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -623,12 +504,7 @@
         "lat": -83.75,
         "lng": 75.25,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -648,12 +524,7 @@
         "lat": -84.560000000000002,
         "lng": 76.379999999999995,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -673,12 +544,7 @@
         "lat": -85.75,
         "lng": 75.620000000000005,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -698,12 +564,7 @@
         "lat": -86.939999999999998,
         "lng": 74.75,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -714,12 +575,7 @@
         "lat": -88.189999999999998,
         "lng": 73.879999999999995,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -729,7 +585,9 @@
         "teeming": null,
         "lat": -88.189999999999998,
         "lng": 73.879999999999995,
-        "npc": null
+        "npc": {
+            "id": 134423
+        }
     },
     {
         "id": 1283,
@@ -748,12 +606,7 @@
         "lat": -89.060000000000002,
         "lng": 75.189999999999998,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -773,12 +626,7 @@
         "lat": -87.629999999999995,
         "lng": 76.060000000000002,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -798,12 +646,7 @@
         "lat": -86.25,
         "lng": 76.939999999999998,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -823,12 +666,7 @@
         "lat": -85.189999999999998,
         "lng": 77.689999999999998,
         "npc": {
-            "id": 134423,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyss Dweller",
-            "base_health": 41207,
-            "aggressiveness": "aggressive"
+            "id": 134423
         }
     },
     {
@@ -866,12 +704,7 @@
         "lat": -124,
         "lng": 235.25,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -909,12 +742,7 @@
         "lat": -122.38,
         "lng": 237.75,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -952,12 +780,7 @@
         "lat": -125,
         "lng": 237.88,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -995,12 +818,7 @@
         "lat": -124.13,
         "lng": 240,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1038,12 +856,7 @@
         "lat": -127.13,
         "lng": 240.62,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1081,12 +894,7 @@
         "lat": -126.13,
         "lng": 242.62,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1124,12 +932,7 @@
         "lat": -128,
         "lng": 243.12,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1149,12 +952,7 @@
         "lat": -126.5,
         "lng": 245.75,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1173,7 +971,9 @@
         "teeming": null,
         "lat": -126.5,
         "lng": 245.75,
-        "npc": null
+        "npc": {
+            "id": 140038
+        }
     },
     {
         "id": 1323,
@@ -1192,12 +992,7 @@
         "lat": -112.25,
         "lng": 227.62,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1216,7 +1011,9 @@
         "teeming": null,
         "lat": -112.25,
         "lng": 227.62,
-        "npc": null
+        "npc": {
+            "id": 140038
+        }
     },
     {
         "id": 1327,
@@ -1253,12 +1050,7 @@
         "lat": -110.25,
         "lng": 229.88,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1296,12 +1088,7 @@
         "lat": -110,
         "lng": 227.62,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1339,12 +1126,7 @@
         "lat": -107.63,
         "lng": 229,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1382,12 +1164,7 @@
         "lat": -106.5,
         "lng": 226.38,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1416,12 +1193,7 @@
         "lat": -103.13,
         "lng": 228.5,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1431,7 +1203,9 @@
         "teeming": null,
         "lat": -103.13,
         "lng": 228.5,
-        "npc": null
+        "npc": {
+            "id": 140038
+        }
     },
     {
         "id": 1347,
@@ -1459,12 +1233,7 @@
         "lat": -102.63,
         "lng": 225.12,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1474,7 +1243,9 @@
         "teeming": null,
         "lat": -102.63,
         "lng": 225.12,
-        "npc": null
+        "npc": {
+            "id": 140038
+        }
     },
     {
         "id": 1351,
@@ -1511,12 +1282,7 @@
         "lat": -100.25,
         "lng": 227.62,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1545,12 +1311,7 @@
         "lat": -127.25,
         "lng": 263.5,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1560,7 +1321,9 @@
         "teeming": null,
         "lat": -127.25,
         "lng": 263.5,
-        "npc": null
+        "npc": {
+            "id": 140038
+        }
     },
     {
         "id": 1359,
@@ -1597,12 +1360,7 @@
         "lat": -130,
         "lng": 264.38,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1640,12 +1398,7 @@
         "lat": -127.88,
         "lng": 267.5,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1683,12 +1436,7 @@
         "lat": -130,
         "lng": 267.62,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1726,12 +1474,7 @@
         "lat": -127.5,
         "lng": 270.62,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1769,12 +1512,7 @@
         "lat": -129.63,
         "lng": 271.75,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1812,12 +1550,7 @@
         "lat": -126.88,
         "lng": 272.75,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1855,12 +1588,7 @@
         "lat": -128.25,
         "lng": 275.12,
         "npc": {
-            "id": 140038,
-            "dungeon_id": 17,
-            "classification_id": 1,
-            "name": "Abyssal Eel",
-            "base_health": 117734,
-            "aggressiveness": "aggressive"
+            "id": 140038
         }
     },
     {
@@ -1898,12 +1626,7 @@
         "lat": -101.38,
         "lng": 255.25,
         "npc": {
-            "id": 136295,
-            "dungeon_id": 17,
-            "classification_id": 2,
-            "name": "Sunken Denizen",
-            "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "id": 136295
         }
     },
     {
@@ -1941,12 +1664,7 @@
         "lat": -97.379999999999995,
         "lng": 256.5,
         "npc": {
-            "id": 136297,
-            "dungeon_id": 17,
-            "classification_id": 2,
-            "name": "Forgotten Denizen",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136297
         }
     },
     {
@@ -1984,12 +1702,7 @@
         "lat": -100.75,
         "lng": 259.38,
         "npc": {
-            "id": 136297,
-            "dungeon_id": 17,
-            "classification_id": 2,
-            "name": "Forgotten Denizen",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 136297
         }
     }
 ]

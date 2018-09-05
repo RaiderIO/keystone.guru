@@ -7,12 +7,7 @@
         "lat": -173.75999999999999,
         "lng": 148.75,
         "npc": {
-            "id": 127484,
-            "dungeon_id": 22,
-            "classification_id": 3,
-            "name": "Jes Howlis",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 127484
         }
     }
 ]

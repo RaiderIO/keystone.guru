@@ -7,12 +7,7 @@
         "lat": -229.13,
         "lng": 188.19,
         "npc": {
-            "id": 97084,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "King Tor",
-            "base_health": 82990,
-            "aggressiveness": "aggressive"
+            "id": 97084
         }
     },
     {
@@ -23,12 +18,7 @@
         "lat": -232.13,
         "lng": 191,
         "npc": {
-            "id": 97081,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "King Bjorn",
-            "base_health": 82990,
-            "aggressiveness": "aggressive"
+            "id": 97081
         }
     },
     {
@@ -39,12 +29,7 @@
         "lat": -232.31,
         "lng": 204.31,
         "npc": {
-            "id": 95843,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "King Haldor",
-            "base_health": 82990,
-            "aggressiveness": "aggressive"
+            "id": 95843
         }
     },
     {
@@ -55,12 +40,7 @@
         "lat": -229.38,
         "lng": 207.38,
         "npc": {
-            "id": 97083,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "King Ranulf",
-            "base_health": 82990,
-            "aggressiveness": "aggressive"
+            "id": 97083
         }
     },
     {
@@ -71,12 +51,7 @@
         "lat": -234.81,
         "lng": 197.81,
         "npc": {
-            "id": 95676,
-            "dungeon_id": 7,
-            "classification_id": 3,
-            "name": "Odyn",
-            "base_health": 1302095,
-            "aggressiveness": "aggressive"
+            "id": 95676
         }
     },
     {
@@ -87,12 +62,7 @@
         "lat": -226.81,
         "lng": 197.81,
         "npc": {
-            "id": 95675,
-            "dungeon_id": 7,
-            "classification_id": 3,
-            "name": "God-King Skovald",
-            "base_health": 247255,
-            "aggressiveness": "aggressive"
+            "id": 95675
         }
     }
 ]

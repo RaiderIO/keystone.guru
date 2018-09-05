@@ -5,6 +5,7 @@
         "classification_id": 3,
         "name": "Azerokk",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -13,6 +14,7 @@
         "classification_id": 2,
         "name": "Earthrager",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -21,6 +23,7 @@
         "classification_id": 2,
         "name": "Addled Thug",
         "base_health": 382636,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -29,6 +32,7 @@
         "classification_id": 1,
         "name": "Off-Duty Laborer",
         "base_health": 117734,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -37,6 +41,7 @@
         "classification_id": 1,
         "name": "Mine Rat",
         "base_health": 176601,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -45,6 +50,7 @@
         "classification_id": 1,
         "name": "Mech Jockey",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -53,6 +59,7 @@
         "classification_id": 2,
         "name": "Stonefury",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -61,6 +68,7 @@
         "classification_id": 2,
         "name": "Wanton Sapper",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -69,6 +77,7 @@
         "classification_id": 2,
         "name": "Venture Co. Earthshaper",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -77,6 +86,7 @@
         "classification_id": 3,
         "name": "Mogul Razdunk",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -85,6 +95,7 @@
         "classification_id": 2,
         "name": "Feckless Assistant",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -93,6 +104,7 @@
         "classification_id": 2,
         "name": "Venture Co. Mastermind",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -101,6 +113,7 @@
         "classification_id": 2,
         "name": "Venture Co. Alchemist",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -109,6 +122,7 @@
         "classification_id": 2,
         "name": "Venture Co. Skyscorcher",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -117,6 +131,7 @@
         "classification_id": 2,
         "name": "Venture Co. War Machine",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -125,6 +140,7 @@
         "classification_id": 2,
         "name": "Expert Technician",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -133,6 +149,7 @@
         "classification_id": 1,
         "name": "Test Subject",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -141,6 +158,7 @@
         "classification_id": 1,
         "name": "Shalebiter",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -149,6 +167,7 @@
         "classification_id": 2,
         "name": "Taskmaster Askari",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -157,6 +176,7 @@
         "classification_id": 2,
         "name": "Hired Assassin",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -165,6 +185,7 @@
         "classification_id": 1,
         "name": "Rowdy Reveler",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "neutral"
     },
     {
@@ -173,6 +194,7 @@
         "classification_id": 2,
         "name": "Mechanized Peacekeeper",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "neutral"
     },
     {
@@ -181,6 +203,7 @@
         "classification_id": 1,
         "name": "Refreshment Vendor",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -189,6 +212,7 @@
         "classification_id": 2,
         "name": "Azerite Extractor",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -197,6 +221,7 @@
         "classification_id": 1,
         "name": "Fanatical Driller",
         "base_health": 176601,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -205,6 +230,7 @@
         "classification_id": 2,
         "name": "Weapons Tester",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -213,6 +239,7 @@
         "classification_id": 2,
         "name": "Ordnance Specialist",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -221,6 +248,7 @@
         "classification_id": 1,
         "name": "Big Money Crab",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "neutral"
     },
     {
@@ -229,6 +257,7 @@
         "classification_id": 1,
         "name": "Bottom Feeder",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "neutral"
     },
     {
@@ -237,6 +266,7 @@
         "classification_id": 2,
         "name": "Safety Shark",
         "base_health": 1177340,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -245,6 +275,7 @@
         "classification_id": 1,
         "name": "Venture Co. Longshoreman",
         "base_health": 117734,
+        "enemy_forces": 0,
         "aggressiveness": "neutral"
     },
     {
@@ -253,6 +284,7 @@
         "classification_id": 1,
         "name": "Posh Vacationer",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "neutral"
     },
     {
@@ -261,6 +293,7 @@
         "classification_id": 1,
         "name": "Footbomb Hooligan",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -269,6 +302,7 @@
         "classification_id": 3,
         "name": "Rixxa Fluxflame",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -277,6 +311,7 @@
         "classification_id": 3,
         "name": "Coin-Operated Crowd Pummeler",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -285,6 +320,7 @@
         "classification_id": 2,
         "name": "Dr. Wrenchly von Boom",
         "base_health": 183935,
+        "enemy_forces": 0,
         "aggressiveness": "friendly"
     },
     {
@@ -293,6 +329,7 @@
         "classification_id": 2,
         "name": "Drix Bassbolter",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "friendly"
     }
 ]

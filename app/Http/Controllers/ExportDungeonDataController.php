@@ -52,11 +52,12 @@ class ExportDungeonDataController extends Controller
             /** @var Dungeon $dungeon */
             foreach ($dungeon->floors as $floor) {
                 /** @var Floor $floor */
-                $enemies = Enemy::all()->where('floor_id', '=', $floor->id)->values();
-                $enemyPacks = EnemyPack::all()->where('floor_id', '=', $floor->id)->values();
-                $enemyPatrols = EnemyPatrol::all()->where('floor_id', '=', $floor->id)->values();
-                $dungeonStartMarkers = DungeonStartMarker::all()->where('floor_id', '=', $floor->id)->values();
-                $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::all()->where('floor_id', '=', $floor->id)->values();
+                // Only export NPC->id, no need to store the full npc in the enemy
+                $enemies = Enemy::where('floor_id', '=', $floor->id)->without('npc')->with('npc:id')->get()->values();
+                $enemyPacks = EnemyPack::where('floor_id', '=', $floor->id)->get()->values();
+                $enemyPatrols = EnemyPatrol::where('floor_id', '=', $floor->id)->get()->values();
+                $dungeonStartMarkers = DungeonStartMarker::where('floor_id', '=', $floor->id)->get()->values();
+                $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', '=', $floor->id)->get()->values();
 
                 $result['enemies'] = $enemies;
                 $result['enemy_packs'] = $enemyPacks;

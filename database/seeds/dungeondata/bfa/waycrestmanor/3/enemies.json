@@ -7,12 +7,7 @@
         "lat": -71.019999999999996,
         "lng": 243.5,
         "npc": {
-            "id": 131666,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Coven Thornshaper",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131666
         }
     },
     {
@@ -23,12 +18,7 @@
         "lat": -61.520000000000003,
         "lng": 233.5,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
     {
@@ -39,12 +29,7 @@
         "lat": -78.019999999999996,
         "lng": 234,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
     {
@@ -55,12 +40,7 @@
         "lat": -79.519999999999996,
         "lng": 253,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
     {
@@ -71,12 +51,7 @@
         "lat": -62.520000000000003,
         "lng": 252,
         "npc": {
-            "id": 131669,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Jagged Hound",
-            "base_health": 58867,
-            "aggressiveness": "aggressive"
+            "id": 131669
         }
     },
     {
@@ -159,12 +134,7 @@
         "lat": -108.76000000000001,
         "lng": 99.5,
         "npc": {
-            "id": 131818,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Marked Sister",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131818
         }
     },
     {
@@ -175,12 +145,7 @@
         "lat": -114.76000000000001,
         "lng": 90.5,
         "npc": {
-            "id": 131587,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Bewitched Captain",
-            "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "id": 131587
         }
     },
     {
@@ -200,12 +165,7 @@
         "lat": -126.01000000000001,
         "lng": 243.5,
         "npc": {
-            "id": 135365,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Matron Alma",
-            "base_health": 706404,
-            "aggressiveness": "aggressive"
+            "id": 135365
         }
     },
     {
@@ -225,12 +185,7 @@
         "lat": -168.00999999999999,
         "lng": 126.25,
         "npc": {
-            "id": 131819,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Coven Diviner",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131819
         }
     },
     {
@@ -250,12 +205,7 @@
         "lat": -174.00999999999999,
         "lng": 119,
         "npc": {
-            "id": 135240,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Soul Essence",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135240
         }
     }
 ]

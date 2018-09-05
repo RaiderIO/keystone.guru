@@ -7,12 +7,7 @@
         "lat": -245.41,
         "lng": 205.25,
         "npc": {
-            "id": 128652,
-            "dungeon_id": 18,
-            "classification_id": 3,
-            "name": "Viq'Goth",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 128652
         }
     },
     {
@@ -23,12 +18,7 @@
         "lat": -200.41,
         "lng": 184.25,
         "npc": {
-            "id": 130836,
-            "dungeon_id": 18,
-            "classification_id": 3,
-            "name": "Hadal Darkfathom",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 130836
         }
     },
     {
@@ -39,12 +29,7 @@
         "lat": -157.16,
         "lng": 212,
         "npc": {
-            "id": 129208,
-            "dungeon_id": 18,
-            "classification_id": 3,
-            "name": "Dread Captain Lockwood",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 129208
         }
     },
     {
@@ -55,12 +40,7 @@
         "lat": -74.409999999999997,
         "lng": 228.25,
         "npc": {
-            "id": 144158,
-            "dungeon_id": 18,
-            "classification_id": 3,
-            "name": "Sergeant Bainbridge",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 144158
         }
     }
 ]

@@ -7,12 +7,7 @@
         "lat": -66.010000000000005,
         "lng": 220.75,
         "npc": {
-            "id": 144324,
-            "dungeon_id": 23,
-            "classification_id": 3,
-            "name": "Gorak Tul",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 144324
         }
     }
 ]

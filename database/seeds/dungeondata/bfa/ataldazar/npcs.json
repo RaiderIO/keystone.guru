@@ -5,6 +5,7 @@
         "classification_id": 2,
         "name": "Zanchuli Witch-Doctor",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -13,6 +14,7 @@
         "classification_id": 2,
         "name": "Shadowblade Stalker",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -21,6 +23,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Juggernaut",
         "base_health": 338485,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -29,6 +32,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Augur",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -37,6 +41,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Confessor",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -45,6 +50,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Colossus",
         "base_health": 500370,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -53,6 +59,7 @@
         "classification_id": 2,
         "name": "Reanimation Totem",
         "base_health": 235468,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -61,6 +68,7 @@
         "classification_id": 2,
         "name": "Reanimated Honor Guard",
         "base_health": 323769,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -69,6 +77,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Honor Guard",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -77,6 +86,7 @@
         "classification_id": 2,
         "name": "Shieldbearer of Zul",
         "base_health": 291392,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -85,6 +95,7 @@
         "classification_id": 2,
         "name": "Feasting Skyscreamer",
         "base_health": 288448,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -93,6 +104,7 @@
         "classification_id": 1,
         "name": "Toxic Saurid",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -101,6 +113,7 @@
         "classification_id": 2,
         "name": "T'lonja",
         "base_health": 588670,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -109,6 +122,7 @@
         "classification_id": 3,
         "name": "Vol'kaal",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -117,6 +131,7 @@
         "classification_id": 3,
         "name": "Yazma",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -125,6 +140,7 @@
         "classification_id": 2,
         "name": "Monzumi",
         "base_health": 600443,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -133,6 +149,7 @@
         "classification_id": 2,
         "name": "Dinomancer Kish'o",
         "base_health": 706404,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -141,6 +158,7 @@
         "classification_id": 3,
         "name": "Priestess Alun'za",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -149,6 +167,7 @@
         "classification_id": 2,
         "name": "Gilded Priestess",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -157,6 +176,7 @@
         "classification_id": 3,
         "name": "Rezan",
         "base_health": 904737,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     }
 ]

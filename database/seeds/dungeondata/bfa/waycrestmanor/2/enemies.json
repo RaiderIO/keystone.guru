@@ -16,12 +16,7 @@
         "lat": -185.75999999999999,
         "lng": 159.5,
         "npc": {
-            "id": 131585,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Enthralled Guard",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131585
         }
     },
     {
@@ -41,17 +36,12 @@
         "lat": -190.50999999999999,
         "lng": 159.75,
         "npc": {
-            "id": 131685,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Runic Disciple",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131685
         }
     },
     {
         "id": 444,
-        "enemy_pack_id": 87,
+        "enemy_pack_id": 88,
         "floor_id": 60,
         "teeming": null,
         "lat": -213.00999999999999,
@@ -60,23 +50,18 @@
     },
     {
         "id": 445,
-        "enemy_pack_id": 87,
+        "enemy_pack_id": 88,
         "floor_id": 60,
         "teeming": null,
         "lat": -213.00999999999999,
         "lng": 74.5,
         "npc": {
-            "id": 131685,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Runic Disciple",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131685
         }
     },
     {
         "id": 446,
-        "enemy_pack_id": 87,
+        "enemy_pack_id": 88,
         "floor_id": 60,
         "teeming": null,
         "lat": -208.50999999999999,
@@ -85,34 +70,24 @@
     },
     {
         "id": 447,
-        "enemy_pack_id": 87,
+        "enemy_pack_id": 88,
         "floor_id": 60,
         "teeming": null,
         "lat": -208.50999999999999,
         "lng": 74.5,
         "npc": {
-            "id": 135049,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Dreadwing Raven",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135049
         }
     },
     {
         "id": 448,
-        "enemy_pack_id": 90,
+        "enemy_pack_id": 89,
         "floor_id": 60,
         "teeming": null,
         "lat": -131.50999999999999,
         "lng": 77.75,
         "npc": {
-            "id": 131818,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Marked Sister",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131818
         }
     },
     {
@@ -122,22 +97,19 @@
         "teeming": null,
         "lat": -131.50999999999999,
         "lng": 77.75,
-        "npc": null
+        "npc": {
+            "id": 131685
+        }
     },
     {
         "id": 450,
-        "enemy_pack_id": 90,
+        "enemy_pack_id": 89,
         "floor_id": 60,
         "teeming": null,
         "lat": -132.25999999999999,
         "lng": 72.25,
         "npc": {
-            "id": 131685,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Runic Disciple",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131685
         }
     },
     {
@@ -147,7 +119,9 @@
         "teeming": null,
         "lat": -132.25999999999999,
         "lng": 72.25,
-        "npc": null
+        "npc": {
+            "id": 131685
+        }
     },
     {
         "id": 452,
@@ -160,18 +134,13 @@
     },
     {
         "id": 453,
-        "enemy_pack_id": 89,
+        "enemy_pack_id": 90,
         "floor_id": 60,
         "teeming": null,
         "lat": -135.75999999999999,
         "lng": 74.25,
         "npc": {
-            "id": 135049,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Dreadwing Raven",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135049
         }
     },
     {
@@ -182,12 +151,7 @@
         "lat": -155.50999999999999,
         "lng": 282.75,
         "npc": {
-            "id": 135234,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Diseased Mastiff",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135234
         }
     },
     {
@@ -198,12 +162,7 @@
         "lat": -153.50999999999999,
         "lng": 285.25,
         "npc": {
-            "id": 131850,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Maddened Survivalist",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131850
         }
     },
     {
@@ -214,12 +173,7 @@
         "lat": -151.75999999999999,
         "lng": 288.75,
         "npc": {
-            "id": 135234,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Diseased Mastiff",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 135234
         }
     },
     {
@@ -230,12 +184,7 @@
         "lat": -117.26000000000001,
         "lng": 289,
         "npc": {
-            "id": 131821,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Faceless Maiden",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 131821
         }
     },
     {
@@ -246,12 +195,7 @@
         "lat": -115.38,
         "lng": 271.62,
         "npc": {
-            "id": 131821,
-            "dungeon_id": 23,
-            "classification_id": 1,
-            "name": "Faceless Maiden",
-            "base_health": 176601,
-            "aggressiveness": "aggressive"
+            "id": 131821
         }
     },
     {
@@ -262,12 +206,7 @@
         "lat": -118.25,
         "lng": 270.5,
         "npc": {
-            "id": 131685,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Runic Disciple",
-            "base_health": 294335,
-            "aggressiveness": "aggressive"
+            "id": 131685
         }
     },
     {
@@ -278,12 +217,7 @@
         "lat": -124,
         "lng": 283.5,
         "npc": {
-            "id": 131677,
-            "dungeon_id": 23,
-            "classification_id": 2,
-            "name": "Heartsbane Runeweaver",
-            "base_health": 470936,
-            "aggressiveness": "aggressive"
+            "id": 131677
         }
     }
 ]

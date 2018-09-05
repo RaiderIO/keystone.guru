@@ -7,12 +7,7 @@
         "lat": -175.75999999999999,
         "lng": 152,
         "npc": {
-            "id": 127503,
-            "dungeon_id": 22,
-            "classification_id": 3,
-            "name": "Overseer Korgus",
-            "base_health": 1,
-            "aggressiveness": "aggressive"
+            "id": 127503
         }
     }
 ]

@@ -16,12 +16,7 @@
         "lat": -82.379999999999995,
         "lng": 260.62,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -41,12 +36,7 @@
         "lat": -94.75,
         "lng": 229.88,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -66,12 +56,7 @@
         "lat": -86.129999999999995,
         "lng": 231.62,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -82,12 +67,7 @@
         "lat": -87,
         "lng": 226.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -98,12 +78,7 @@
         "lat": -87,
         "lng": 226.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -123,12 +98,7 @@
         "lat": -80.5,
         "lng": 228.62,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -139,12 +109,7 @@
         "lat": -84.25,
         "lng": 215.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -155,12 +120,7 @@
         "lat": -84.25,
         "lng": 215.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -180,12 +140,7 @@
         "lat": -89.25,
         "lng": 215.62,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -205,12 +160,7 @@
         "lat": -93.379999999999995,
         "lng": 218.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -230,12 +180,7 @@
         "lat": -87.129999999999995,
         "lng": 221.12,
         "npc": {
-            "id": 99891,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Storm Drake",
-            "base_health": 61136,
-            "aggressiveness": "aggressive"
+            "id": 99891
         }
     },
     {
@@ -246,12 +191,7 @@
         "lat": -91.379999999999995,
         "lng": 204.12,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -262,12 +202,7 @@
         "lat": -98.25,
         "lng": 206,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -278,12 +213,7 @@
         "lat": -103,
         "lng": 216.75,
         "npc": {
-            "id": 96611,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Angerhoof Bull",
-            "base_health": 38241,
-            "aggressiveness": "aggressive"
+            "id": 96611
         }
     },
     {
@@ -294,12 +224,7 @@
         "lat": -103.88,
         "lng": 198.88,
         "npc": {
-            "id": 96611,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Angerhoof Bull",
-            "base_health": 38241,
-            "aggressiveness": "aggressive"
+            "id": 96611
         }
     },
     {
@@ -310,12 +235,7 @@
         "lat": -111.38,
         "lng": 192.5,
         "npc": {
-            "id": 96611,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Angerhoof Bull",
-            "base_health": 38241,
-            "aggressiveness": "aggressive"
+            "id": 96611
         }
     },
     {
@@ -326,12 +246,7 @@
         "lat": -122.63,
         "lng": 196.38,
         "npc": {
-            "id": 96611,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Angerhoof Bull",
-            "base_health": 38241,
-            "aggressiveness": "aggressive"
+            "id": 96611
         }
     },
     {
@@ -342,12 +257,7 @@
         "lat": -119.63,
         "lng": 206.38,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
     {
@@ -358,12 +268,7 @@
         "lat": -131.38,
         "lng": 179,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -374,12 +279,7 @@
         "lat": -113.38,
         "lng": 166.88,
         "npc": {
-            "id": 96934,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Trapper",
-            "base_health": 35807,
-            "aggressiveness": "aggressive"
+            "id": 96934
         }
     },
     {
@@ -390,12 +290,7 @@
         "lat": -112,
         "lng": 163.38,
         "npc": {
-            "id": 99804,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Falconer",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 99804
         }
     },
     {
@@ -406,12 +301,7 @@
         "lat": -116,
         "lng": 164,
         "npc": {
-            "id": 99804,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Falconer",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 99804
         }
     },
     {
@@ -422,12 +312,7 @@
         "lat": -91.879999999999995,
         "lng": 140.88,
         "npc": {
-            "id": 99868,
-            "dungeon_id": 7,
-            "classification_id": 3,
-            "name": "Fenryr",
-            "base_health": 284114,
-            "aggressiveness": "aggressive"
+            "id": 99868
         }
     },
     {
@@ -438,12 +323,7 @@
         "lat": -190.5,
         "lng": 110.25,
         "npc": {
-            "id": 99868,
-            "dungeon_id": 7,
-            "classification_id": 3,
-            "name": "Fenryr",
-            "base_health": 284114,
-            "aggressiveness": "aggressive"
+            "id": 99868
         }
     },
     {
@@ -454,12 +334,7 @@
         "lat": -124.38,
         "lng": 107.75,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -470,12 +345,7 @@
         "lat": -127.63,
         "lng": 124.75,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -486,12 +356,7 @@
         "lat": -139.38,
         "lng": 123.38,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -502,12 +367,7 @@
         "lat": -142.5,
         "lng": 126.12,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -518,12 +378,7 @@
         "lat": -143.5,
         "lng": 121.88,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -534,12 +389,7 @@
         "lat": -141.38,
         "lng": 106,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -550,12 +400,7 @@
         "lat": -143.5,
         "lng": 109.88,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -566,12 +411,7 @@
         "lat": -162.88,
         "lng": 123,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -582,12 +422,7 @@
         "lat": -158.5,
         "lng": 103.25,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -598,12 +433,7 @@
         "lat": -163.5,
         "lng": 99.120000000000005,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -614,12 +444,7 @@
         "lat": -165,
         "lng": 102.38,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -630,12 +455,7 @@
         "lat": -93,
         "lng": 177.88,
         "npc": {
-            "id": 96640,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Marksman",
-            "base_health": 34069,
-            "aggressiveness": "aggressive"
+            "id": 96640
         }
     },
     {
@@ -646,12 +466,7 @@
         "lat": -95.129999999999995,
         "lng": 174.88,
         "npc": {
-            "id": 96640,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Marksman",
-            "base_health": 34069,
-            "aggressiveness": "aggressive"
+            "id": 96640
         }
     },
     {
@@ -662,12 +477,7 @@
         "lat": -91,
         "lng": 173.38,
         "npc": {
-            "id": 96934,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Valarjar Trapper",
-            "base_health": 35807,
-            "aggressiveness": "aggressive"
+            "id": 96934
         }
     },
     {
@@ -678,12 +488,7 @@
         "lat": -124,
         "lng": 213.62,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
     {
@@ -694,12 +499,7 @@
         "lat": -131.81,
         "lng": 205.81,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
     {
@@ -710,12 +510,7 @@
         "lat": -147.63,
         "lng": 200,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
     {
@@ -726,12 +521,7 @@
         "lat": -168.75,
         "lng": 188.62,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
     {
@@ -742,12 +532,7 @@
         "lat": -156.44,
         "lng": 171.12,
         "npc": {
-            "id": 96677,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Steeljaw Grizzly",
-            "base_health": 41717,
-            "aggressiveness": "aggressive"
+            "id": 96677
         }
     },
     {
@@ -758,12 +543,7 @@
         "lat": -170.38,
         "lng": 159.25,
         "npc": {
-            "id": 96609,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Gildedfur Stag",
-            "base_health": 10429,
-            "aggressiveness": "neutral"
+            "id": 96609
         }
     },
     {
@@ -774,12 +554,7 @@
         "lat": -169.94,
         "lng": 147.62,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -790,12 +565,7 @@
         "lat": -172.19,
         "lng": 144.31,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -806,12 +576,7 @@
         "lat": -174.56,
         "lng": 148,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     },
     {
@@ -822,12 +587,7 @@
         "lat": -171.81,
         "lng": 150.62,
         "npc": {
-            "id": 96608,
-            "dungeon_id": 7,
-            "classification_id": 2,
-            "name": "Ebonclaw Worg",
-            "base_health": 31288,
-            "aggressiveness": "aggressive"
+            "id": 96608
         }
     }
 ]

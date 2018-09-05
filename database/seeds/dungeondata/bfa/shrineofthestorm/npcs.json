@@ -5,6 +5,7 @@
         "classification_id": 3,
         "name": "Aqu'sirr",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -13,6 +14,7 @@
         "classification_id": 3,
         "name": "Galecaller Faye",
         "base_health": 1545259,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -21,6 +23,7 @@
         "classification_id": 3,
         "name": "Brother Ironhull",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -29,6 +32,7 @@
         "classification_id": 3,
         "name": "Vol'zith the Whisperer",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -37,6 +41,7 @@
         "classification_id": 2,
         "name": "Temple Attendant",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -45,6 +50,7 @@
         "classification_id": 2,
         "name": "Shrine Templar",
         "base_health": 353202,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -53,6 +59,7 @@
         "classification_id": 2,
         "name": "Living Current",
         "base_health": 529803,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -61,6 +68,7 @@
         "classification_id": 2,
         "name": "Runecarver Sorn",
         "base_health": 941872,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -69,6 +77,7 @@
         "classification_id": 1,
         "name": "Animated Droplet",
         "base_health": 41207,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -77,6 +86,7 @@
         "classification_id": 2,
         "name": "Tidesage Enforcer",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -85,6 +95,7 @@
         "classification_id": 2,
         "name": "Deepsea Ritualist",
         "base_health": 647537,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -93,6 +104,7 @@
         "classification_id": 2,
         "name": "Drowned Depthbringer",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -101,6 +113,7 @@
         "classification_id": 1,
         "name": "Abyss Dweller",
         "base_health": 41207,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -109,6 +122,7 @@
         "classification_id": 2,
         "name": "Abyssal Cultist",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -117,6 +131,7 @@
         "classification_id": 2,
         "name": "Tidesage Spiritualist",
         "base_health": 353202,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -125,6 +140,7 @@
         "classification_id": 2,
         "name": "Windspeaker Heldis",
         "base_health": 1059606,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -133,6 +149,7 @@
         "classification_id": 2,
         "name": "Guardian Elemental",
         "base_health": 883005,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -141,6 +158,7 @@
         "classification_id": 2,
         "name": "Sunken Denizen",
         "base_health": 470936,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -149,6 +167,7 @@
         "classification_id": 2,
         "name": "Forgotten Denizen",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -157,6 +176,7 @@
         "classification_id": 1,
         "name": "Tidesage Initiate",
         "base_health": 58867,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -165,6 +185,7 @@
         "classification_id": 2,
         "name": "Colossal Tentacle",
         "base_health": 323769,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -173,6 +194,7 @@
         "classification_id": 1,
         "name": "Dredged Sailor",
         "base_health": 14717,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -181,6 +203,7 @@
         "classification_id": 3,
         "name": "Lord Stormsong",
         "base_health": 1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -189,6 +212,7 @@
         "classification_id": 2,
         "name": "Ironhull Apprentice",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -197,6 +221,7 @@
         "classification_id": 2,
         "name": "Galecaller Apprentice",
         "base_health": 294335,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -205,6 +230,7 @@
         "classification_id": 1,
         "name": "Abyssal Eel",
         "base_health": 117734,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     }
 ]
