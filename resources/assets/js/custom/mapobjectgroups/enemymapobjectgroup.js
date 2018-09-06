@@ -52,6 +52,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         // May be null if not set at all (yet)
                         if (remoteEnemy.npc !== null) {
                             enemy.npc_id = remoteEnemy.npc.id;
+                            enemy.enemy_forces = remoteEnemy.npc.enemy_forces;
                             // TODO Hard coded 3 = boss
                             if (remoteEnemy.npc.classification_id === 3) {
                                 enemy.setIcon('boss');

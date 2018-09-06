@@ -1,5 +1,10 @@
 class AdminDungeonMap extends DungeonMap {
 
+    constructor(mapid, dungeonData, floorID, edit) {
+        // Always teeming on admin!
+        super(mapid, dungeonData, floorID, edit, true);
+    }
+
     /**
      * Create instances of all controls that will be added to the map (UI on the map itself)
      * @param drawnItemsLayer

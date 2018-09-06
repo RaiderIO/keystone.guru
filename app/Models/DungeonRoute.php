@@ -209,6 +209,26 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return bool True if the route contains an affix group which contains the Teeming affix, false if this is not the case.
+     */
+    public function isTeeming()
+    {
+        $result = false;
+        if ($this->affixes->count() === 0) {
+            $result = true;
+        } else {
+            foreach ($this->affixes as $affixGroup) {
+                /** @var $affixGroup AffixGroup */
+                if ($result = $affixGroup->isTeeming()) {
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Saves this DungeonRoute with information from the passed Request.
      *
      * @param Request $request
@@ -330,14 +350,14 @@ class DungeonRoute extends Model
             DungeonRouteAffixGroup::where('dungeon_route_id', '=', $item->id)->delete();
 
             // Delete routes
-            foreach($item->routes as $route){
+            foreach ($item->routes as $route) {
                 /** @var $route \App\Models\Route */
                 $route->deleteVertices();
                 $route->delete();
             }
 
             // Delete kill zones
-            foreach($item->killzones as $killzone){
+            foreach ($item->killzones as $killzone) {
                 /** @var $killzone \App\Models\KillZone */
                 $killzone->deleteEnemies();
                 $killzone->delete();

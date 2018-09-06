@@ -1,6 +1,6 @@
 class DungeonMap extends Signalable {
 
-    constructor(mapid, dungeonData, floorID, edit) {
+    constructor(mapid, dungeonData, floorID, edit, teeming) {
         super();
         let self = this;
 
@@ -18,7 +18,7 @@ class DungeonMap extends Signalable {
                 self.mapObjects.push(object);
 
                 // Make sure we know it's editable
-                if( event.data.objectgroup.editable && self.edit ){
+                if (event.data.objectgroup.editable && self.edit) {
                     self.drawnItems.addLayer(object.layer);
                 }
             });
@@ -31,6 +31,7 @@ class DungeonMap extends Signalable {
 
         this.currentFloorId = floorID;
         this.edit = edit;
+        this.teeming = teeming;
 
         this.mapTileLayer = null;
 
@@ -264,6 +265,14 @@ class DungeonMap extends Signalable {
             }
         }
         return result;
+    }
+
+    /**
+     * Get the amount of enemy forces that are required to complete this dungeon.
+     * @returns {*}
+     */
+    getEnemyForcesRequired() {
+        return this.teeming ? this.dungeonData.enemy_forces_required_teeming : this.dungeonData.enemy_forces_required;
     }
 
     /**
