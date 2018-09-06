@@ -5,7 +5,6 @@ class AdminEnemyPatrol extends EnemyPatrol {
 
         this.saving = false;
         this.deleting = false;
-        this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
 
         this.enemy_id = -1;

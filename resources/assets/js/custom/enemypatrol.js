@@ -19,7 +19,21 @@ class EnemyPatrol extends MapObject {
         // console.log(rand);
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 
+        this.setColor(c.map.enemypatrol.defaultColor);
         this.setSynced(true);
+    }
+
+    setColor(color) {
+        this.setColors({
+            unsavedBorder: color,
+            unsaved: color,
+
+            editedBorder: color,
+            edited: color,
+
+            savedBorder: color,
+            saved: color
+        });
     }
 
     // To be overridden by any implementing classes

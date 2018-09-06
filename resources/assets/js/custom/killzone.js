@@ -279,7 +279,6 @@ class KillZone extends MapObject {
 
         // Remove previous layers if it's needed
         if (this.enemyConnectionsLayerGroup !== null) {
-            console.log('removing existing connections!');
             let killZoneMapObjectGroup = this.map.getMapObjectGroupByName('killzone');
             killZoneMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionsLayerGroup);
         }
@@ -290,7 +289,6 @@ class KillZone extends MapObject {
      */
     redrawConnectionsToEnemies() {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
-        console.log('redrawing connections!');
 
         let self = this;
 

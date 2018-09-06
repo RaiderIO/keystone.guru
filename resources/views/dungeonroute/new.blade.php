@@ -21,7 +21,8 @@
         </div>
         <div class="form-group">
             {!! Form::label('difficulty', __('Difficulty') . "*") !!}
-            {!! Form::select('difficulty', config('keystoneguru.dungeonroute_difficulty'), null, ['class' => 'form-control']) !!}
+            <?php $difficulty = config('keystoneguru.dungeonroute_difficulty'); ?>
+            {!! Form::select('difficulty', array_combine($difficulty, $difficulty), null, ['class' => 'form-control']) !!}
         </div>
 
         <h3>
@@ -39,7 +40,7 @@
             {{ __('Sharing') }}
         </h3>
         <div class="form-group">
-            {!! Form::label('unlisted', __('Unlisted (only people with the link may view your route)')) !!}
+            {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
             {!! Form::checkbox('unlisted', 1, 0, ['class' => 'form-control left_checkbox']) !!}
         </div>
 

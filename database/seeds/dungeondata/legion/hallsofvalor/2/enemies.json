@@ -149,7 +149,9 @@
         "teeming": null,
         "lat": -134.5,
         "lng": 176.5,
-        "npc": null
+        "npc": {
+            "id": 97087
+        }
     },
     {
         "id": 20,
@@ -279,7 +281,9 @@
         "teeming": null,
         "lat": -154.19,
         "lng": 187.44,
-        "npc": null
+        "npc": {
+            "id": 95834
+        }
     },
     {
         "id": 34,
@@ -387,7 +391,9 @@
         "teeming": null,
         "lat": -169.38,
         "lng": 200.25,
-        "npc": null
+        "npc": {
+            "id": 97087
+        }
     },
     {
         "id": 45,

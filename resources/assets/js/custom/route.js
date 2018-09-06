@@ -18,14 +18,12 @@ class Route extends MapObject {
         this.label = 'Route';
         this.saving = false;
         this.deleting = false;
-        this.setColors(c.map.route.colors);
-        this.setSynced(false);
 
-        this.setRouteColor('#9dff56');
+        this.setColor(c.map.route.defaultColor);
+        this.setSynced(false);
     }
 
-    setRouteColor(color) {
-        console.log('RouteColor is now', color);
+    setColor(color) {
         this.routeColor = color;
         this.setColors({
             unsavedBorder: color,
@@ -175,7 +173,7 @@ class Route extends MapObject {
                     $("#route_edit_popup_color_" + self.id).val(self.routeColor);
 
                     $("#route_edit_popup_submit_" + self.id).bind('click', function () {
-                        self.setRouteColor($("#route_edit_popup_color_" + self.id).val());
+                        self.setColor($("#route_edit_popup_color_" + self.id).val());
 
                         self.edit();
                     });

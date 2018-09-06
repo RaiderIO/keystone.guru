@@ -167,7 +167,7 @@ if (count($affixes) == 0) {
         <div id="map_container">
             @include('common.maps.map', [
                 'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
-                'model' => $model,
+                'dungeonroute' => $model,
                 'edit' => false
             ])
         </div>

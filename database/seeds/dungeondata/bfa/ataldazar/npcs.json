@@ -5,7 +5,7 @@
         "classification_id": 2,
         "name": "Zanchuli Witch-Doctor",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -14,7 +14,7 @@
         "classification_id": 2,
         "name": "Shadowblade Stalker",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -23,7 +23,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Juggernaut",
         "base_health": 338485,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -32,7 +32,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Augur",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -41,7 +41,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Confessor",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -68,7 +68,7 @@
         "classification_id": 2,
         "name": "Reanimated Honor Guard",
         "base_health": 323769,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -77,7 +77,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Honor Guard",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -86,7 +86,7 @@
         "classification_id": 2,
         "name": "Shieldbearer of Zul",
         "base_health": 291392,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -95,7 +95,7 @@
         "classification_id": 2,
         "name": "Feasting Skyscreamer",
         "base_health": 288448,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -104,7 +104,7 @@
         "classification_id": 1,
         "name": "Toxic Saurid",
         "base_health": 58867,
-        "enemy_forces": 0,
+        "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
     {
@@ -167,7 +167,7 @@
         "classification_id": 2,
         "name": "Gilded Priestess",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {

@@ -5,13 +5,13 @@ $(function () {
     // Add icons to the faction dropdown
     $.each($("#faction_id option"), function (index, value) {
         let faction = _factions[index];
-        let html = $("#template_faction_dropdown_icon_" + faction.name.toLowerCase()).html();
+        let html = $('#template_faction_dropdown_icon_' + faction.name.toLowerCase()).html();
         $(value).data('content', html);
     });
 });
 
 function _factionChanged() {
-    // console.log(">> _factionChanged");
+    console.log(">> _factionChanged");
 
     let newFaction = parseInt($("#faction_id").val());
     let $raceSelect = $("select.raceselect");
@@ -20,15 +20,20 @@ function _factionChanged() {
     // Remove all existing options
     $raceSelect.find('option').remove();
     $classSelect.find('option').remove();
+    $classSelect.append(jQuery('<option>', {
+        value: '0', // Laravel can then accept values that haven't been set
+        text: 'Class...'
+    }));
 
     // Re-fill the races
     $raceSelect.append(jQuery('<option>', {
         value: '0', // Laravel can then accept values that haven't been set
-        text: "Race..."
+        text: 'Race...'
     }));
 
     for (let i = 0; i < _racesClasses.length; i++) {
         let raceClass = _racesClasses[i];
+        console.log(raceClass.faction_id, newFaction, raceClass.faction_id === newFaction);
         if (raceClass.faction_id === newFaction) {
             $raceSelect.append(jQuery('<option>', {
                 value: raceClass.id,
@@ -37,17 +42,19 @@ function _factionChanged() {
         }
     }
 
-    $(".selectpicker").selectpicker('refresh');
+    let $selectPicker = $('.selectpicker');
+    $selectPicker.selectpicker('refresh');
+    $selectPicker.selectpicker('render');
 
-    // console.log("OK _factionChanged");
+    console.log('OK _factionChanged');
 }
 
 function _raceChanged() {
-    // console.log(">> _raceChanged");
+    console.log('>> _raceChanged');
 
     let $raceSelect = $(this);
     let raceId = parseInt($raceSelect.val());
-    let $classSelect = $(".classselect").find("[data-id='" + $raceSelect.data('id') + "']");
+    let $classSelect = $('.classselect').find("[data-id='" + $raceSelect.data('id') + "']");
 
     $classSelect.find('option').remove();
 
@@ -74,7 +81,7 @@ function _raceChanged() {
                     $classSelect.append(jQuery('<option>', {
                         value: classDetail.id, //zzz
                         text: classDetail.name,
-                        'data-content': $("#template_class_dropdown_icon_" + classDetail.key).html()
+                        'data-content': $('#template_class_dropdown_icon_' + classDetail.key).html()
                     }));
                     break;
                 }
@@ -87,5 +94,5 @@ function _raceChanged() {
     $selectPicker.selectpicker('refresh');
     $selectPicker.selectpicker('render');
 
-    // console.log("OK _raceChanged");
+    console.log('OK _raceChanged');
 }

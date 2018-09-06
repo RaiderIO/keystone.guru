@@ -70,7 +70,6 @@ class Enemy extends MapObject {
      */
     setKillZone(killZoneId) {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
-        console.log('Setting killzone to ' + killZoneId + ' for enemy ' + this.id);
         this.kill_zone_id = killZoneId;
         if (this.kill_zone_id >= 0) {
             this.signal('killzone:attached');

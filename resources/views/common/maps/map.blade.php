@@ -2,13 +2,13 @@
 
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
-/** @var App\Models\DungeonRoute $model */
+/** @var App\Models\DungeonRoute $dungeonroute */
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 $edit = isset($edit) && $edit ? 'true' : 'false';
-$routePublicKey = isset($model) ? $model->public_key : '';
-$teeming = isset($model) ? $model->isTeeming() : false;
+$routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
+$teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
 ?>
 
 @section('head')
