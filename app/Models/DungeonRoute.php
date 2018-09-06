@@ -150,6 +150,14 @@ class DungeonRoute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function killzones()
+    {
+        return $this->hasMany('App\Models\KillZone');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function ratings()
     {
         return $this->hasMany('App\Models\DungeonRouteRating');
@@ -320,6 +328,20 @@ class DungeonRoute extends Model
             DungeonRoutePlayerRace::where('dungeon_route_id', '=', $item->id)->delete();
             DungeonRoutePlayerClass::where('dungeon_route_id', '=', $item->id)->delete();
             DungeonRouteAffixGroup::where('dungeon_route_id', '=', $item->id)->delete();
+
+            // Delete routes
+            foreach($item->routes as $route){
+                /** @var $route \App\Models\Route */
+                $route->deleteVertices();
+                $route->delete();
+            }
+
+            // Delete kill zones
+            foreach($item->killzones as $killzone){
+                /** @var $killzone \App\Models\KillZone */
+                $killzone->deleteEnemies();
+                $killzone->delete();
+            }
         });
     }
 }

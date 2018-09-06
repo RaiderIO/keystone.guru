@@ -1,13 +1,18 @@
 class AdminDungeonMap extends DungeonMap {
 
     /**
-     * Get a new instance of a DrawControls object which will be added to the map
+     * Create instances of all controls that will be added to the map (UI on the map itself)
      * @param drawnItemsLayer
-     * @returns {DrawControls}
-     * @protected
+     * @returns {*[]}
+     * @private
      */
-    _getDrawControls(drawnItemsLayer) {
-        return new AdminDrawControls(this, drawnItemsLayer);
+    _createMapControls(drawnItemsLayer){
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
+        return [
+            new AdminDrawControls(this, drawnItemsLayer),
+            new MapObjectGroupControls(this)
+        ]
     }
 
     /**

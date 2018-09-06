@@ -36,8 +36,6 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/util.js',
         'resources/assets/js/custom/signalable.js',
         'resources/assets/js/custom/dungeonmap.js',
-        'resources/assets/js/custom/mapobjectgroupcontrols.js',
-        'resources/assets/js/custom/drawcontrols.js',
         'resources/assets/js/custom/mapobject.js',
         'resources/assets/js/custom/enemy.js',
         'resources/assets/js/custom/enemypatrol.js',
@@ -47,6 +45,12 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/dungeonstartmarker.js',
         'resources/assets/js/custom/dungeonfloorswitchmarker.js',
         'resources/assets/js/custom/hotkeys.js',
+
+        'resources/assets/js/custom/mapcontrol.js',
+        'resources/assets/js/custom/mapcontrols/mapobjectgroupcontrols.js',
+        'resources/assets/js/custom/mapcontrols/drawcontrols.js',
+        'resources/assets/js/custom/mapcontrols/enemyforcescontrols.js',
+
         'resources/assets/js/custom/admin/enemyattaching.js',
         'resources/assets/js/custom/admin/admindungeonmap.js',
         'resources/assets/js/custom/admin/adminenemy.js',

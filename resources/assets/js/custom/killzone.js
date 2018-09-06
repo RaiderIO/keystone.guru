@@ -44,6 +44,33 @@ class KillZone extends MapObject {
         this.setSynced(false);
     }
 
+    /**
+     * Removes an enemy from this killzone.
+     * @param enemy Object The enemy object to remove.
+     * @private
+     */
+    _removeEnemy(enemy) {
+        enemy.kill_zone_id = -1;
+        let index = $.inArray(enemy.id, this.enemies);
+        if (index !== -1) {
+            // Remove it
+            this.enemies.splice(index, 1);
+        }
+    }
+
+    /**
+     * Adds an enemy to this killzone.
+     * @param enemy Object The enemy object to add.
+     * @private
+     */
+    _addEnemy(enemy) {
+        enemy.kill_zone_id = this.id;
+        // Add it, but don't double add it
+        if ($.inArray(enemy.id, this.enemies) === -1) {
+            this.enemies.push(enemy.id);
+        }
+    }
+
     getContextMenuItems() {
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
         // Merge existing context menu items with the admin ones
@@ -140,7 +167,7 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Starts select mode on this KillZone, if no other select mode was enabled already
+     * Starts select mode on this KillZone, if no other select mode was enabled already.
      */
     startSelectMode() {
         if (!KillZoneSelectModeEnabled) {
@@ -159,11 +186,18 @@ class KillZone extends MapObject {
                 })
             });
 
+            // Cannot start editing things while we're doing this.
+            $('.leaflet-draw-edit-edit').addClass('leaflet-disabled');
+            $('.leaflet-draw-edit-remove').addClass('leaflet-disabled');
+
             // Now killzoning something
             KillZoneSelectModeEnabled = true;
         }
     }
 
+    /**
+     * Stops select mode of this KillZone.
+     */
     cancelSelectMode() {
         if (KillZoneSelectModeEnabled) {
             console.assert(this instanceof KillZone, this, 'this is not an KillZone');
@@ -177,6 +211,10 @@ class KillZone extends MapObject {
                 enemy.setKillZoneSelectable(false);
                 enemy.unregister('killzone:selected', self);
             });
+
+            // Ok we're clear, may edit again (there's always something to edit because this KillZone exists)
+            $('.leaflet-draw-edit-edit').removeClass('leaflet-disabled');
+            $('.leaflet-draw-edit-remove').removeClass('leaflet-disabled');
 
             this.save();
         }
@@ -192,14 +230,30 @@ class KillZone extends MapObject {
 
         let index = $.inArray(enemy.id, this.enemies);
         // Already exists, user wants to deselect the enemy
-        if (index >= 0) {
-            enemy.kill_zone_id = -1;
-            // Remove it
-            this.enemies.splice(index, 1);
+        let removed = index >= 0;
+        if (removed) {
+            this._removeEnemy(enemy);
         } else {
-            enemy.kill_zone_id = this.id;
-            // Add it
-            this.enemies.push(enemy.id);
+            this._addEnemy(enemy);
+        }
+
+        // If the enemy was part of a pack..
+        if (enemy.enemy_pack_id > 0) {
+            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+                let enemyCandidate = enemyMapObjectGroup.objects[i];
+                // If we should couple the enemy in addition to our own..
+                if (enemyCandidate.enemy_pack_id === enemy.enemy_pack_id) {
+                    // Remove it too if we should
+                    if (removed) {
+                        this._removeEnemy(enemyCandidate);
+                    }
+                    // Or add it too if we need
+                    else {
+                        this._addEnemy(enemyCandidate);
+                    }
+                }
+            }
         }
 
         this.redrawConnectionsToEnemies();
@@ -247,13 +301,15 @@ class KillZone extends MapObject {
 
         let self = this;
 
-        this.layer.on('click', function () {
-            if (KillZoneSelectModeEnabled) {
-                self.cancelSelectMode();
-            } else {
-                self.startSelectMode();
-            }
-        });
+        if (this.map.edit) {
+            this.layer.on('click', function () {
+                if (KillZoneSelectModeEnabled) {
+                    self.cancelSelectMode();
+                } else {
+                    self.startSelectMode();
+                }
+            });
+        }
 
         // When moved, keep drawing the connections anew
         this.layer.on('move', function () {

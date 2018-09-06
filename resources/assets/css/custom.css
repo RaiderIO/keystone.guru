@@ -125,6 +125,14 @@
     margin-top: -20px !important;
 }
 
+#map_enemy_forces {
+    background-color: #fff;
+    border: 2px solid rgba(0,0,0,0.2);
+    background-clip: padding-box;
+    border-radius: 4px;
+    padding: 6px;
+}
+
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;

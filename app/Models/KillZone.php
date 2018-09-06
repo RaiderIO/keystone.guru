@@ -16,8 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class KillZone extends Model
 {
-    public $hidden = ['dungeon_route_id'];
-    public $with = ['dungeonroute', 'killzoneenemies'];
+    public $with = ['killzoneenemies'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

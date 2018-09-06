@@ -58,14 +58,14 @@ $(function () {
     };
 });
 
-class DrawControls {
+class DrawControls extends MapControl {
     constructor(map, drawnItemsLayer) {
+        super(map);
         console.assert(this instanceof DrawControls, this, 'this is not DrawControls');
         console.assert(map instanceof DungeonMap, map, 'map is not DungeonMap');
 
         let self = this;
 
-        this.map = map;
         this.drawnItems = drawnItemsLayer;
 
         this.drawControlOptions = {
@@ -110,17 +110,6 @@ class DrawControls {
         this.map.hotkeys.attach('c', 'leaflet-draw-edit-edit');
         this.map.hotkeys.attach('d', 'leaflet-draw-edit-remove');
     }
-
-    /**
-     * Removes the control from the map if it exists.
-     */
-    cleanup() {
-        // Remove the control if it already existed
-        if (typeof this._drawControl === 'object') {
-            this.map.leafletMap.removeControl(this._drawControl);
-        }
-    }
-
     /**
      * Adds the control to the map.
      */

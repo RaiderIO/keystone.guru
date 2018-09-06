@@ -25,6 +25,7 @@
                         data: 'dungeon.name',
                         name: 'dungeon_id'
                     },
+                    {data: 'enemy_forces'},
                     {data: 'classification'},
                     {data: 'actions'}
                 ]
@@ -39,7 +40,8 @@
         <tr>
             <th width="15%">{{ __('Id') }}</th>
             <th width="30%">{{ __('Name') }}</th>
-            <th width="25%">{{ __('Dungeon') }}</th>
+            <th width="15%">{{ __('Dungeon') }}</th>
+            <th width="10%">{{ __('Enemy forces') }}</th>
             <th width="10%">{{ __('Classification') }}</th>
             <th width="10%">{{ __('Actions') }}</th>
         </tr>
@@ -51,6 +53,7 @@
                 <td>{{ $npc->id }}</td>
                 <td>{{ $npc->name }}</td>
                 <td>{{ $npc->dungeon->name }}</td>
+                <td>{{ $npc->enemy_forces }}</td>
                 <td>{{ $npc->classification->name }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.npc.edit', ['id' => $npc->id]) }}">

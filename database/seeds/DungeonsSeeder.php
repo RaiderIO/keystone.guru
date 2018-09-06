@@ -23,8 +23,8 @@ class DungeonsSeeder extends Seeder
         $dungeonsData = [
             'Arcway' => [
                 'expansion_id' => $legion->id,
-                'enemy_forces_required' => 0,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required' => 392,
+                'enemy_forces_required_teeming' => 466,
                 'active' => true,
                 'floors' => [
                     'Arcway' => [
@@ -117,8 +117,8 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Halls of Valor' => [
                 'expansion_id' => $legion->id,
-                'enemy_forces_required' => 0,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required' => 115,
+                'enemy_forces_required_teeming' => 151,
                 'active' => true,
                 'floors' => [
                     // Yes the indices are intended
@@ -255,7 +255,7 @@ class DungeonsSeeder extends Seeder
                 'floor_couplings' => []
             ], 'Vault of the Wardens' => [
                 'expansion_id' => $legion->id,
-                'enemy_forces_required' => 0,
+                'enemy_forces_required' => 210,
                 'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [
@@ -275,7 +275,7 @@ class DungeonsSeeder extends Seeder
 
             'Atal\'Dazar' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 0,
+                'enemy_forces_required' => 198,
                 'enemy_forces_required_teeming' => 0,
                 'active' => true,
                 'floors' => [

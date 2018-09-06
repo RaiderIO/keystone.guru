@@ -19,7 +19,7 @@ class RouteVertex extends Model
     /**
      * @var array Hide some columns which we don't need to echo to the user
      */
-    public $hidden = ['route_id'];
+    public $hidden = ['id', 'route_id'];
 
     /**
      * @var bool Irrelevant to keep timestamps for each individual vertex.
