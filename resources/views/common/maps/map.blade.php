@@ -2,10 +2,13 @@
 
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
+/** @var App\Models\DungeonRoute $dungeonroute */
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 $edit = isset($edit) && $edit ? 'true' : 'false';
+$routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
+$teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
 ?>
 
 @section('head')
@@ -48,12 +51,7 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
         // Data of the dungeon(s) we're selecting in the map
         let _dungeonData = {!! $dungeon !!};
         let _switchDungeonFloorSelect = "#map_floor_selection";
-
-            <?php if (isset($model)) { ?>
-        let dungeonRoutePublicKey = '{{ $model->public_key }}';
-            <?php } else { ?>
-        let dungeonRoutePublicKey = '';
-            <?php } ?>
+        let dungeonRoutePublicKey = '{{ $routePublicKey }}';
 
 
         let dungeonMap;
@@ -71,7 +69,7 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
                     @if($isAdmin)
                 dungeonMap = new AdminDungeonMap('map', _dungeonData, $(_switchDungeonFloorSelect).val(), {{ $edit }});
             @else
-                dungeonMap = new DungeonMap('map', _dungeonData, $(_switchDungeonFloorSelect).val(), {{ $edit }});
+                dungeonMap = new DungeonMap('map', _dungeonData, $(_switchDungeonFloorSelect).val(), {{ $edit }}, {{ $teeming }});
             @endif
             @endif
 
@@ -120,7 +118,7 @@ $edit = isset($edit) && $edit ? 'true' : 'false';
 
     <script id="map_enemy_forces_template" type="text/x-handlebars-template">
         <div id="map_enemy_forces" class="leaflet-draw-section">
-            {{ __('Enemy forces:')}} <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
+            {{ __('Enemy forces:')}} <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }} (<span id="map_enemy_forces_percent">0</span>%)
         </div>
     </script>
 

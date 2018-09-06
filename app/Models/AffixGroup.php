@@ -37,4 +37,22 @@ class AffixGroup extends Model
         }
         return implode(', ', $result);
     }
+
+    /**
+     * @return bool Checks if this group contains the Teeming affix.
+     */
+    public function isTeeming()
+    {
+        $result = false;
+
+        foreach ($this->affixes as $affix) {
+            /** @var $affix Affix */
+            // A bit hacky I guess? But Teeming is such a special case that I'm justifying this magic string
+            if ($result = ($affix->name === 'Teeming')) {
+                break;
+            }
+        }
+
+        return $result;
+    }
 }

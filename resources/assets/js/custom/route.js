@@ -18,14 +18,12 @@ class Route extends MapObject {
         this.label = 'Route';
         this.saving = false;
         this.deleting = false;
-        this.setColors(c.map.route.colors);
-        this.setSynced(false);
 
-        this.setRouteColor('#9dff56');
+        this.setColor(c.map.route.defaultColor);
+        this.setSynced(false);
     }
 
-    setRouteColor(color) {
-        console.log('RouteColor is now', color);
+    setColor(color) {
         this.routeColor = color;
         this.setColors({
             unsavedBorder: color,
@@ -152,33 +150,36 @@ class Route extends MapObject {
 
         let self = this;
 
-        // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        self.register('synced', this, function (event) {
-            let customPopupHtml = $("#route_edit_popup_template").html();
-            // Remove template so our
-            let template = handlebars.compile(customPopupHtml);
+        // Only when we're editing
+        if( this.map.edit ){
+            // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
+            self.register('synced', this, function (event) {
+                let customPopupHtml = $("#route_edit_popup_template").html();
+                // Remove template so our
+                let template = handlebars.compile(customPopupHtml);
 
-            let data = {id: self.id};
+                let data = {id: self.id};
 
-            // Build the status bar from the template
-            customPopupHtml = template(data);
+                // Build the status bar from the template
+                customPopupHtml = template(data);
 
-            let customOptions = {
-                'maxWidth': '400',
-                'minWidth': '300',
-                'className': 'popupCustom'
-            };
-            self.layer.bindPopup(customPopupHtml, customOptions);
-            self.layer.on('popupopen', function (event) {
-                $("#route_edit_popup_color_" + self.id).val(self.routeColor);
+                let customOptions = {
+                    'maxWidth': '400',
+                    'minWidth': '300',
+                    'className': 'popupCustom'
+                };
+                self.layer.bindPopup(customPopupHtml, customOptions);
+                self.layer.on('popupopen', function (event) {
+                    $("#route_edit_popup_color_" + self.id).val(self.routeColor);
 
-                $("#route_edit_popup_submit_" + self.id).bind('click', function () {
-                    self.setRouteColor($("#route_edit_popup_color_" + self.id).val());
+                    $("#route_edit_popup_submit_" + self.id).bind('click', function () {
+                        self.setColor($("#route_edit_popup_color_" + self.id).val());
 
-                    self.edit();
+                        self.edit();
+                    });
                 });
             });
-        });
+        }
     }
 
     getVertices() {

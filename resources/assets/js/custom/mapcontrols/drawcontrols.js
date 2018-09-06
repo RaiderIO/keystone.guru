@@ -115,8 +115,8 @@ class DrawControls extends MapControl {
      */
     addControl() {
         // Add the control to the map
-        this._drawControl = new L.Control.Draw(this.drawControlOptions);
-        this.map.leafletMap.addControl(this._drawControl);
+        this._mapControl = new L.Control.Draw(this.drawControlOptions);
+        this.map.leafletMap.addControl(this._mapControl);
 
         // If the option wants, render it with a font-awesome icon instead.
         // Surely there must be a better way for this but whatever, this works..

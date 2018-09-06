@@ -24,16 +24,11 @@ var c = {
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple']
         },
+        enemypatrol : {
+            defaultColor: '#E25D5D'
+        },
         route: {
-            colors: {
-                unsavedBorder: '#E25D5D',
-
-                editedBorder: '#E2915D',
-
-                savedBorder: '#5DE27F',
-
-                mouseoverAddObject: '#5993D2',
-            }
+            defaultColor: '#9dff56'
         },
         killzone: {
             colors: {

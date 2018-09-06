@@ -32,6 +32,7 @@ class KillZone extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
+        let self = this;
         this.id = 0;
         this.label = 'KillZone';
         this.saving = false;
@@ -42,6 +43,12 @@ class KillZone extends MapObject {
 
         this.setColors(c.map.killzone.colors);
         this.setSynced(false);
+
+        // We gotta remove the connections manually since they're self managed here.
+        this.map.register('map:refresh', this, function () {
+            console.log('map refreshed!');
+            self.removeExistingConnectionsToEnemies();
+        });
     }
 
     /**
@@ -50,7 +57,7 @@ class KillZone extends MapObject {
      * @private
      */
     _removeEnemy(enemy) {
-        enemy.kill_zone_id = -1;
+        enemy.setKillZone(-1);
         let index = $.inArray(enemy.id, this.enemies);
         if (index !== -1) {
             // Remove it
@@ -64,7 +71,7 @@ class KillZone extends MapObject {
      * @private
      */
     _addEnemy(enemy) {
-        enemy.kill_zone_id = this.id;
+        enemy.setKillZone(this.id);
         // Add it, but don't double add it
         if ($.inArray(enemy.id, this.enemies) === -1) {
             this.enemies.push(enemy.id);
@@ -149,6 +156,10 @@ class KillZone extends MapObject {
         });
     }
 
+    /**
+     * Bulk sets the enemies for this killzone.
+     * @param enemies
+     */
     setEnemies(enemies) {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
         let self = this;
@@ -157,13 +168,14 @@ class KillZone extends MapObject {
         $.each(enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
             if (enemy !== null) {
-                enemy.kill_zone_id = self.id;
+                enemy.setKillZone(self.id);
             } else {
                 console.warn('Unable to find enemy with id ' + id + ', this enemy was probably removed during a migration?');
             }
         });
 
         this.enemies = enemies;
+        this.redrawConnectionsToEnemies();
     }
 
     /**
@@ -260,6 +272,19 @@ class KillZone extends MapObject {
     }
 
     /**
+     * Removes any existing UI connections to enemies.
+     */
+    removeExistingConnectionsToEnemies() {
+        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+
+        // Remove previous layers if it's needed
+        if (this.enemyConnectionsLayerGroup !== null) {
+            let killZoneMapObjectGroup = this.map.getMapObjectGroupByName('killzone');
+            killZoneMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionsLayerGroup);
+        }
+    }
+
+    /**
      * Throws away all current visible connections to enemies, and rebuilds the visuals.
      */
     redrawConnectionsToEnemies() {
@@ -267,14 +292,13 @@ class KillZone extends MapObject {
 
         let self = this;
 
-        // Remove previous layers if it's needed
-        if (this.enemyConnectionsLayerGroup !== null) {
-            this.map.leafletMap.removeLayer(this.enemyConnectionsLayerGroup);
-        }
+        let killZoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
+
+        this.removeExistingConnectionsToEnemies();
 
         // Create & add new layer
         this.enemyConnectionsLayerGroup = new L.LayerGroup();
-        this.map.leafletMap.addLayer(this.enemyConnectionsLayerGroup);
+        killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
 
         // Add connections from each enemy to our location
         let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
@@ -311,7 +335,7 @@ class KillZone extends MapObject {
             });
         }
 
-        // When moved, keep drawing the connections anew
+        // When we're moved, keep drawing the connections anew
         this.layer.on('move', function () {
             self.redrawConnectionsToEnemies();
         });
@@ -323,7 +347,6 @@ class KillZone extends MapObject {
             // Couldn't do that because enemies may not have been loaded at that point. Now we're sure the enemies have been
             // loaded so we can inject ourselves in the enemy
             self.setEnemies(self.enemies);
-            self.redrawConnectionsToEnemies();
         });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.

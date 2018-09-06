@@ -64,6 +64,20 @@ class Enemy extends MapObject {
         this.setSynced(true);
     }
 
+    /**
+     * Sets the killzone for this enemy.
+     * @param killZoneId id
+     */
+    setKillZone(killZoneId) {
+        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        this.kill_zone_id = killZoneId;
+        if (this.kill_zone_id >= 0) {
+            this.signal('killzone:attached');
+        } else {
+            this.signal('killzone:detached');
+        }
+    }
+
     getDifficultyColor(difficulty) {
         let palette = window.interpolate(c.map.enemy.colors);
         // let rand = Math.random();

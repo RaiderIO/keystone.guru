@@ -46,7 +46,7 @@ class RouteMapObjectGroup extends MapObjectGroup {
 
                         let route = self.createNew(layer);
                         route.id = remoteRoute.id;
-                        route.setRouteColor(remoteRoute.color);
+                        route.setColor(remoteRoute.color);
                         // We just downloaded the enemy pack, it's synced alright!
                         route.setSynced(true);
                     }

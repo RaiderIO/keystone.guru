@@ -103,7 +103,7 @@
             <div id="map_container">
                 @include('common.maps.map', [
                     'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
-                    'model' => $model,
+                    'dungeonroute' => $model,
                     'edit' => true
                 ])
             </div>
@@ -123,8 +123,7 @@
                         {{ __('Group composition') }}
                     </h3>
 
-                    {{--//@TODO Fix JS Errors inside--}}
-                    {{--@include('common.group.composition', ['dungeonroute' => $model])--}}
+                    @include('common.group.composition', ['dungeonroute' => $model])
 
                     <h3 class="mt-1">
                         {{ __('Affixes (optional)') }}
@@ -135,7 +134,7 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('unlisted', __('Unlisted (only people with the link may view your route)')) !!}
+                        {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
                         {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
                     </div>
 
