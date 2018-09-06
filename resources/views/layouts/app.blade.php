@@ -95,14 +95,14 @@
                                 @endif
                                 @if( Auth::user()->hasRole('admin'))
                                     <a class="dropdown-item"
-                                       href="{{ route('admin.makeadmin') }}">{{__('TEMP: Make all users admin')}}</a>
+                                       href="{{ route('admin.users') }}">{{__('View users')}}</a>
                                 @endif
-                                <a class="dropdown-item" href="{{ route('profile.edit') }}">My profile</a>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
                                 <div class="dropdown-divider"></div>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    Logout
+                                    {{ __('Logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
