@@ -25,7 +25,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 392,
                 'enemy_forces_required_teeming' => 466,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'Arcway' => [
                         'index' => 1
@@ -36,7 +36,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'The Ravenscrypt' => [
                         'index' => 1
@@ -62,7 +62,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'Hall of the Moon' => [
                         'index' => 1
@@ -85,7 +85,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'Court of Stars' => [
                         'index' => 1
@@ -97,7 +97,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'Darkheart Thicket' => [
                         'index' => 1
@@ -108,7 +108,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'Eye of Azshara' => [
                         'index' => 1
@@ -119,7 +119,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 115,
                 'enemy_forces_required_teeming' => 151,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     // Yes the indices are intended
                     'The High Gate' => [
@@ -160,7 +160,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'Master\'s Terrace' => [
                         'index' => 6
@@ -186,7 +186,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'Hellmouth Cliffs' => [
                         'index' => 1
@@ -203,7 +203,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'Neltharion\'s Lair' => [
                         'index' => 1
@@ -214,7 +214,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'Lower Broken Stair' => [
                         'index' => 7
@@ -246,7 +246,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 0,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'The Seat of the Triumvirate' => [
                         'index' => 1
@@ -257,7 +257,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $legion->id,
                 'enemy_forces_required' => 210,
                 'enemy_forces_required_teeming' => 0,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'The Warden\'s Court' => [
                         'index' => 1

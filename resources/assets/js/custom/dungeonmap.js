@@ -144,11 +144,14 @@ class DungeonMap extends Signalable {
     _createMapControls(drawnItemsLayer) {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        return [
-            new DrawControls(this, drawnItemsLayer),
-            new EnemyForcesControls(this),
-            new MapObjectGroupControls(this)
-        ]
+        let result = [];
+        if (this.edit) {
+            result.push(new DrawControls(this, drawnItemsLayer));
+        }
+
+        result.push(new EnemyForcesControls(this));
+        result.push(new MapObjectGroupControls(this));
+        return result;
     }
 
     /**
