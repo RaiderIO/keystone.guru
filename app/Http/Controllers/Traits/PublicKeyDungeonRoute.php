@@ -8,8 +8,13 @@ use Mockery\Exception;
 
 trait PublicKeyDungeonRoute
 {
+    /**
+     * @param $publicKey
+     * @return DungeonRoute
+     */
     function _getDungeonRouteFromPublicKey($publicKey)
     {
+        /** @var DungeonRoute $dungeonRoute */
         $dungeonRoute = DungeonRoute::where('public_key', '=', $publicKey)->firstOrFail();
 
         // @TODO handle this in a policy?

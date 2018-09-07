@@ -92,7 +92,7 @@ class APIDungeonRouteController extends Controller
             abort(500, 'Unable to save dungeonroute');
         }
 
-        return ['id' => $dungeonroute->id];
+        return ['key' => $dungeonroute->public_key];
     }
 
     /**

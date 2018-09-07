@@ -11,6 +11,20 @@ class MapObjectGroup extends Signalable {
 
         let self = this;
 
+        this.map.register('map:beforerefresh', this, function () {
+            // Remove any layers that were added before
+            self._removeObjectsFromLayer.call(self);
+
+            if (self.layerGroup !== null) {
+                // Remove ourselves from the map prior to refreshing
+                self.map.leafletMap.removeLayer(self.layerGroup);
+            }
+
+            for (let i = self.objects.length - 1; i >= 0; i--) {
+                self.objects[i].cleanup();
+            }
+            self.objects = [];
+        });
         // Whenever the map refreshes, we need to add ourselves to the map again
         this.map.register('map:refresh', this, (function (data) {
             // Rebuild the layer group
@@ -26,7 +40,7 @@ class MapObjectGroup extends Signalable {
      * Removes all objects' layer from the map layer.
      * @protected
      */
-    _removeObjectsFromLayer(){
+    _removeObjectsFromLayer() {
         console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
 
         // Remove any layers that were added before
@@ -51,7 +65,7 @@ class MapObjectGroup extends Signalable {
      * @param data
      * @private
      */
-    _onObjectDeleted(data){
+    _onObjectDeleted(data) {
         console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
 
         this.layerGroup.removeLayer(data.context.layer);
@@ -76,7 +90,7 @@ class MapObjectGroup extends Signalable {
      * @param id int
      * @returns {*}
      */
-    findMapObjectById(id){
+    findMapObjectById(id) {
         let result = null;
 
         for (let i = 0; i < this.objects.length; i++) {

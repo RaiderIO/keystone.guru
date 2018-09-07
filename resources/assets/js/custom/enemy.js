@@ -36,12 +36,12 @@ let LeafletUnsetEnemyIcon = new L.divIcon($.extend({className: _unsetClass}, _sm
 let LeafletBossEnemyIcon = new L.divIcon($.extend({className: _bossClass}, _bigIcon));
 
 // Have to extend this as to not override the above icons
-let LeafletAggressiveEnemyIconKillZone = new L.divIcon($.extend({className: _aggressiveClass + ' killzone_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletNeutralEnemyIconKillZone = new L.divIcon($.extend({className: _neutralClass + ' killzone_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletUnfriendlyEnemyIconKillZone = new L.divIcon($.extend({className: _unfriendlyClass + ' killzone_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletFriendlyEnemyIconKillZone = new L.divIcon($.extend({className: _friendlyClass + ' killzone_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletUnsetEnemyIconKillZone = new L.divIcon($.extend({className: _unsetClass + ' killzone_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletBossEnemyIconKillZone = new L.divIcon($.extend({className: _bossClass + ' killzone_icon_big leaflet-edit-marker-selected'}, _bigIcon));
+let LeafletAggressiveEnemyIconKillZone = new L.divIcon($.extend({className: _aggressiveClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
+let LeafletNeutralEnemyIconKillZone = new L.divIcon($.extend({className: _neutralClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
+let LeafletUnfriendlyEnemyIconKillZone = new L.divIcon($.extend({className: _unfriendlyClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
+let LeafletFriendlyEnemyIconKillZone = new L.divIcon($.extend({className: _friendlyClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
+let LeafletUnsetEnemyIconKillZone = new L.divIcon($.extend({className: _unsetClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
+let LeafletBossEnemyIconKillZone = new L.divIcon($.extend({className: _bossClass + ' killzone_enemy_icon_big leaflet-edit-marker-selected'}, _bigIcon));
 
 let LeafletEnemyMarker = L.Marker.extend({
     options: {
@@ -71,10 +71,16 @@ class Enemy extends MapObject {
     setKillZone(killZoneId) {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         this.kill_zone_id = killZoneId;
-        if (this.kill_zone_id >= 0) {
-            this.signal('killzone:attached');
-        } else {
-            this.signal('killzone:detached');
+
+        // @TODO Perhaps this should be different? I don't like the dependency on killzone.js
+        // We only want to trigger these events when the killzone is actively being edited, not when loading in
+        // the connections from the server initially
+        if( KillZoneSelectModeEnabled ){
+            if (this.kill_zone_id >= 0) {
+                this.signal('killzone:attached');
+            } else {
+                this.signal('killzone:detached');
+            }
         }
     }
 

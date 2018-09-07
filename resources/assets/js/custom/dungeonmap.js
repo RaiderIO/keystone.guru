@@ -7,7 +7,6 @@ class DungeonMap extends Signalable {
         this.dungeonData = dungeonData;
 
         // How many map objects have returned a success status
-        this.mapObjectGroupFetchSuccessCount = 0;
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroups = this._createMapObjectGroups();
 
@@ -19,6 +18,7 @@ class DungeonMap extends Signalable {
 
                 // Make sure we know it's editable
                 if (event.data.objectgroup.editable && self.edit) {
+                    console.log('Added editable mapobject!', object);
                     self.drawnItems.addLayer(object.layer);
                 }
             });
@@ -28,6 +28,9 @@ class DungeonMap extends Signalable {
         this.mapObjects = [];
         /** @var Array Stores all UI elements that are drawn on the map */
         this.mapControls = [];
+        // Keeps track of if we're in edit or delete mode
+        this.deleteModeActive = false;
+        this.editModeActive = false;
 
         this.currentFloorId = floorID;
         this.edit = edit;
@@ -95,6 +98,20 @@ class DungeonMap extends Signalable {
                     console.error(mapObject, ' does not have a delete() function!');
                 }
             });
+        });
+
+        this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
+            self.deleteModeActive = true;
+        });
+        this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
+            self.deleteModeActive = false;
+        });
+
+        this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
+            self.deleteModeActive = true;
+        });
+        this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
+            self.deleteModeActive = false;
         });
 
         $(window).bind('mousedown', function (event) {
@@ -285,6 +302,9 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
         let self = this;
 
+        this.signal('map:beforerefresh', {dungeonmap: this});
+
+        this.mapObjectGroupFetchSuccessCount = 0;
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
@@ -344,6 +364,67 @@ class DungeonMap extends Signalable {
 
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
             this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor(), this.mapObjectGroupFetchSuccess.bind(this));
+        }
+
+        // Not very pretty but needed for debugging
+        let verboseEvents = false;
+        if (verboseEvents) {
+            this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
+                console.log(L.Draw.Event.DRAWSTART, e);
+            });
+
+            this.leafletMap.on('layeradd', function (e) {
+                console.log('layeradd', e);
+            });
+
+            this.leafletMap.on(L.Draw.Event.CREATED, function (e) {
+                console.log(L.Draw.Event.CREATED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
+                console.log(L.Draw.Event.EDITED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DELETED, function (e) {
+                console.log(L.Draw.Event.DELETED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
+                console.log(L.Draw.Event.DRAWSTART, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
+                console.log(L.Draw.Event.DRAWSTOP, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DRAWVERTEX, function (e) {
+                console.log(L.Draw.Event.DRAWVERTEX, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
+                console.log(L.Draw.Event.EDITSTART, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITMOVE, function (e) {
+                console.log(L.Draw.Event.EDITMOVE, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITRESIZE, function (e) {
+                console.log(L.Draw.Event.EDITRESIZE, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITVERTEX, function (e) {
+                console.log(L.Draw.Event.EDITVERTEX, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
+                console.log(L.Draw.Event.EDITSTOP, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
+                console.log(L.Draw.Event.DELETESTART, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
+                console.log(L.Draw.Event.DELETESTOP, e);
+            });
+            this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
+                console.log(L.Draw.Event.TOOLBAROPENED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
+                console.log(L.Draw.Event.TOOLBARCLOSED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.MARKERCONTEXT, function (e) {
+                console.log(L.Draw.Event.MARKERCONTEXT, e);
+            });
         }
     }
 

@@ -1,6 +1,5 @@
 @extends('layouts.app', ['wide' => true])
 @section('header-title', $headerTitle)
-
 @section('head')
     @parent
 
@@ -62,6 +61,9 @@
                         }).get()
                     ,
                     unlisted: $("#unlisted").val(),
+                    @if(Auth::user()->hasRole('admin'))
+                    demo: $("#demo").val(),
+                    @endif
                     affixes: $("#affixes").val(),
                     _method: 'PATCH'
                 },
@@ -70,7 +72,6 @@
                     $("#save_settings_saving").show();
                 },
                 success: function (json) {
-                    console.log(json);
                     $("#save_settings_success").show().delay(5000).hide(200);
                     $("#save_settings_error").hide();
 
@@ -133,10 +134,23 @@
                         @include('common.group.affixes', ['dungeonroute' => $model])
                     </div>
 
+                    <h3>
+                        {{ __('Sharing') }}
+                    </h3>
                     <div class="form-group">
                         {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
                         {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
                     </div>
+
+                    @if(Auth::user()->hasRole('admin'))
+                        <h3>
+                            {{ __('Admin') }}
+                        </h3>
+                        <div class="form-group">
+                            {!! Form::label('demo', __('Mark as demo route')) !!}
+                            {!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}
+                        </div>
+                    @endif
 
                     <div class="form-group">
                         <div id="save_settings" class="offset-lg-5 col-lg-2 btn btn-success">

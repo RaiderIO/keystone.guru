@@ -37,7 +37,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'avg_rating', 'rating_count'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count', 'enemy_forces'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at'];
 
@@ -194,6 +194,37 @@ class DungeonRoute extends Model
     public function getRatingCountAttribute()
     {
         return $this->ratings->count();
+    }
+
+    /**
+     * Gets the current amount of enemy forces that have been targeted for killing in this dungeon route.
+     */
+    public function getEnemyForcesAttribute()
+    {
+        // Build an ID => amount array of NPCs we've killed in this route
+        $killedNPCs = [];
+        foreach ($this->killzones as $killzone) {
+            /** @var KillZone $killzone */
+            foreach ($killzone->enemies as $enemy) {
+                /** @var Enemy $enemy */
+                if (isset($killedNPCs[$enemy->npc_id])) {
+                    $killedNPCs[$enemy->npc_id]++;
+                } else {
+                    $killedNPCs[$enemy->npc_id] = 1;
+                }
+            }
+        }
+
+        // Find all Npcs that we've killed
+        $npcs = Npc::findMany(array_keys($killedNPCs));
+        $result = 0;
+        // Build the result
+        foreach ($npcs as $npc) {
+            /** @var $npc Npc */
+            $result += $killedNPCs[$npc->id] * $npc->enemy_forces;
+        }
+
+        return $result;
     }
 
     /**

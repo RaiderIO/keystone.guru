@@ -101,4 +101,8 @@ class MapObject extends Signalable {
             self.setSynced(false);
         });
     }
+
+    cleanup(){
+        this._cleanupSignals();
+    }
 }

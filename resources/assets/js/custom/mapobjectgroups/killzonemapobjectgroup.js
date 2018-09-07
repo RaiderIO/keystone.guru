@@ -28,9 +28,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 floor_id: floor.id
             },
             success: function (json) {
-                // Remove any layers that were added before
-                self._removeObjectsFromLayer.call(self);
-
                 // Now draw the patrols on the map
                 for (let index in json) {
                     if (json.hasOwnProperty(index)) {
@@ -42,6 +39,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                         /** @var KillZone killzone */
                         let killzone = self.createNew(layer);
                         killzone.id = remoteKillZone.id;
+                        killzone.floor_id = remoteKillZone.floor_id;
 
                         // Reconstruct the enemies we're coupled with in a format we expect
                         if( remoteKillZone.killzoneenemies !== null ){

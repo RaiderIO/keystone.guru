@@ -8,6 +8,7 @@ $isAdmin = isset($admin) && $admin;
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 $edit = isset($edit) && $edit ? 'true' : 'false';
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
+$routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
 ?>
 
@@ -52,6 +53,7 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
         let _dungeonData = {!! $dungeon !!};
         let _switchDungeonFloorSelect = "#map_floor_selection";
         let dungeonRoutePublicKey = '{{ $routePublicKey }}';
+        let dungeonRouteEnemyForces = {{ $routeEnemyForces }};
 
 
         let dungeonMap;
@@ -118,7 +120,11 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
 
     <script id="map_enemy_forces_template" type="text/x-handlebars-template">
         <div id="map_enemy_forces" class="leaflet-draw-section">
-            {{ __('Enemy forces:')}} <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }} (<span id="map_enemy_forces_percent">0</span>%)
+            {{ __('Enemy forces:')}}
+            <span id="map_enemy_forces_numbers">
+                <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
+                (<span id="map_enemy_forces_percent">0</span>%)
+            </span>
         </div>
     </script>
 
