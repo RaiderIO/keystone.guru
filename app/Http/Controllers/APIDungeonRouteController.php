@@ -28,16 +28,17 @@ class APIDungeonRouteController extends Controller
             $query->active();
         });
 
-        $mine = $request->get('mine', false);
         $user = Auth::user();
 
-        // Filter by our own user if logged in
-        if ($mine) {
-            $builder = $builder->where('author_id', '=', $user->id);
-        }
-
-        // Never show demo routes here
+        // If logged in
         if ($user !== null) {
+
+            // Filter by our own user if logged in
+            if ($request->get('mine', false)) {
+                $builder = $builder->where('author_id', '=', $user->id);
+            }
+
+            // Never show demo routes here
             if (!$user->hasRole('admin')) {
                 $builder = $builder->where('demo', '=', '0');
             }

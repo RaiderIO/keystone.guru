@@ -58,10 +58,30 @@ class Enemy extends MapObject {
         this.divIcon = null;
         // Not actually saved to the enemy, but is used for keeping track of what killzone this enemy is attached to
         this.kill_zone_id = 0;
+        // May be set when loaded from server
+        this.npc = null;
         // console.log(rand);
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 
         this.setSynced(true);
+    }
+
+    bindTooltip() {
+        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        let source = $("#map_enemy_tooltip_template").html();
+        let template = handlebars.compile(source);
+
+        let data = {};
+        if (this.npc !== null) {
+            data = {
+                npc_name: this.npc.name,
+                enemy_forces: this.npc.enemy_forces === -1 ? 'unknown' : this.npc.enemy_forces,
+                base_health: this.npc.base_health
+            };
+        }
+
+
+        this.layer.bindTooltip(template(data));
     }
 
     /**
@@ -75,7 +95,7 @@ class Enemy extends MapObject {
         // @TODO Perhaps this should be different? I don't like the dependency on killzone.js
         // We only want to trigger these events when the killzone is actively being edited, not when loading in
         // the connections from the server initially
-        if( KillZoneSelectModeEnabled ){
+        if (KillZoneSelectModeEnabled) {
             if (this.kill_zone_id >= 0) {
                 this.signal('killzone:attached');
             } else {

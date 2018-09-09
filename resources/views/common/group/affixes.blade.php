@@ -43,20 +43,20 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
     @parent
 
     <script>
+        let _teemingSelector = '{{ $teemingselector }}';
+
         $(function () {
+            $(_teemingSelector).bind('change', function () {
+                _applyAffixRowSelectionOnList();
+            });
             $(".affix_list_row").bind('click', _affixRowClicked);
 
             // Perform loading of existing affix groups
             _applyAffixRowSelectionOnList();
         });
 
-        function hasTeemingSelected(){
-
-            if(teeming){
-                $('.affix_row_no_teeming').addClass('affix_list_row_disabled');
-            } else {
-
-            }
+        function _isTeemingSelected() {
+            return $(_teemingSelector).is(':checked') || $(_teemingSelector).val() === '1';
         }
 
         function _affixRowClicked() {
@@ -109,6 +109,14 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                     $child.find('.check').hide();
                 }
             });
+
+            if (_isTeemingSelected()) {
+                $(".affix_row_no_teeming").hide();
+                $(".affix_row_teeming").show();
+            } else {
+                $(".affix_row_no_teeming").show();
+                $(".affix_row_teeming").hide();
+            }
             // console.log("OK _applyAffixRowSelectionOnList");
         }
     </script>
@@ -129,7 +137,9 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
 
     <div id="affixes_list_custom" class="affix_list col-lg-12">
         @foreach($affixGroups as $affixGroup)
-            <div class="row affix_list_row {{ $affixGroup->isTeeming() ? 'affix_row_teeming' : 'affix_row_no_teeming' }}" data-id="{{ $affixGroup->id }}">
+            <div class="row affix_list_row {{ $affixGroup->isTeeming() ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
+                  {{ $affixGroup->isTeeming() ? 'style="display: none;"' : '' }}
+                 data-id="{{ $affixGroup->id }}">
                 @php( $count = 0 )
                 @foreach($affixGroup->affixes as $affix)
                     @php( $number = count($affixGroup->affixes) - 1 === $count ? '3' : '4' )

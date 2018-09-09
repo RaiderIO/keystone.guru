@@ -38,7 +38,9 @@ if (count($affixes) == 0) {
             });
             $('#favorite').bind('change', function (el) {
                 favorite($('#favorite').is(':checked'));
-            })
+            });
+
+            refreshTooltips();
         });
 
         /**
@@ -107,6 +109,14 @@ if (count($affixes) == 0) {
     </div>
     <div class="row view_dungeonroute_details_row">
         <div class="col-md-2 ml-auto font-weight-bold">
+            {{ __('Teeming') }}:
+        </div>
+        <div class="col-6">
+            {{ $model->teeming ? __('Yes') : __('No') }}
+        </div>
+    </div>
+    <div class="row view_dungeonroute_details_row">
+        <div class="col-md-2 ml-auto font-weight-bold">
             {{ __('Affixes') }}:
         </div>
         <div class="col-6">
@@ -161,6 +171,19 @@ if (count($affixes) == 0) {
             @else
                 {!! Form::checkbox('favorite', 1, $model->isFavoritedByCurrentUser(), ['id' => 'favorite', 'class' => 'form-control left_checkbox']) !!}
             @endif
+        </div>
+    </div>
+    <div class="row view_dungeonroute_details_row">
+        @php($title = 'This indicates what percent of the dungeon has their enemy forces value assigned. Since this information is still partly unknown to the website, it may
+        appear as if the Enemy Forces counter is broken when in reality there\'s simply no value assigned to that NPC. 0% = bad, 100% = good.')
+        <div class="col-md-2 ml-auto font-weight-bold" data-toggle="tooltip" title="{{$title}}">
+            {{ __('Enemy forces assigned to NPCs (TEMP)') }}:
+        </div>
+        <div class="col-6">
+            @php($status = $model->dungeon->enemy_forces_mapped_status)
+            <span data-toggle="tooltip" title="{{$title}}">
+                {{ sprintf('%d%% (%s/%s)', $status['percent'], $status['total'] - $status['unmapped'], $status['total']) }}
+            </span>
         </div>
     </div>
     <div class="col-lg-12 mt-5">

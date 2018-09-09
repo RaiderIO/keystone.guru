@@ -63,16 +63,17 @@ class EnemyForcesControls extends MapControl {
         console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
 
         let enemyForcesRequired = this.map.getEnemyForcesRequired();
-        let enemyForcesPercent = ((this.enemyForces / enemyForcesRequired) * 100);
+        let enemyForcesPercent = enemyForcesRequired === 0 ? 0 : ((this.enemyForces / enemyForcesRequired) * 100);
+        let $numbers = $('#map_enemy_forces_numbers');
         if (this.enemyForces > enemyForcesRequired) {
             if (enemyForcesPercent > 110) {
-                $('#map_enemy_forces_numbers').addClass('map_enemy_forces_too_much');
+                $numbers.addClass('map_enemy_forces_too_much');
             } else {
-                $('#map_enemy_forces_numbers').addClass('map_enemy_forces_too_much_warning');
+                $numbers.addClass('map_enemy_forces_too_much_warning');
             }
         } else {
-            $('#map_enemy_forces_numbers').removeClass('map_enemy_forces_too_much');
-            $('#map_enemy_forces_numbers').removeClass('map_enemy_forces_too_much_warning');
+            $numbers.removeClass('map_enemy_forces_too_much');
+            $numbers.removeClass('map_enemy_forces_too_much_warning');
         }
 
         $('#map_enemy_forces_count').html(this.enemyForces);

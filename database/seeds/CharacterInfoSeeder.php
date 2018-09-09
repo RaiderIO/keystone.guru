@@ -116,7 +116,7 @@ class CharacterInfoSeeder extends Seeder
             'Tauren' =>                 ['x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', 'x', 'x', ' '],
             'Troll' =>                  ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' '],
             'Blood Elf' =>              ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x'],
-            'Goblin' =>                 ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'Goblin' =>                 ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' '],
             'Nightborne' =>             ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
             'Highmountain Tauren' =>    ['x', 'x', ' ', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' '],
             'Mag\'har Orc' =>           ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],

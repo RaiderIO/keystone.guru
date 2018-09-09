@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Mockery\Exception;
 
 /**
  * @property $id int The ID of this Dungeon.
@@ -24,7 +24,7 @@ class Dungeon extends Model
      *
      * @var array
      */
-    protected $appends = ['key'];
+    protected $appends = ['key', 'enemy_forces_mapped_status'];
     public $with = ['expansion'];
 
     public $hidden = ['expansion_id', 'created_at', 'updated_at'];
@@ -39,6 +39,49 @@ class Dungeon extends Model
         $string = str_replace(' ', '', strtolower($this->name)); // Replaces all spaces with hyphens.
 
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+    }
+
+    /**
+     * Gets the amount of enemy forces that this dungeon has mapped (non-zero enemy_forces on NPCs)
+     */
+    public function getEnemyForcesMappedStatusAttribute()
+    {
+        //
+        $result = [];
+        $npcs = [];
+
+        try {
+            // Loop through all floors
+            foreach ($this->floors as $floor) {
+                /** @var $floor Floor */
+                foreach ($floor->enemies as $enemy) {
+                    /** @var $enemy Enemy */
+                    // Keep track which enemy has enemy_forces filled vrs not, we do it like this
+                    // because there can be multiple enemies with the same npc, this prevents those from counting double
+                    if ($enemy->npc !== null) {
+                        $npcs[$enemy->npc_id] = $enemy->npc->enemy_forces >= 0;
+                    }
+                }
+            }
+        } catch (Exception $ex) {
+            dd($ex);
+        }
+
+        // Calculate which ones are unmapped
+        $unmappedCount = 0;
+        foreach ($npcs as $id => $npc) {
+            if (!$npc) {
+                $unmappedCount++;
+            }
+        }
+
+        $total = count($npcs);
+        $result['npcs'] = $npcs;
+        $result['unmapped'] = $unmappedCount;
+        $result['total'] = $total;
+        $result['percent'] = 100 - (($unmappedCount / $total) * 100);
+
+        return $result;
     }
 
     /**

@@ -62,9 +62,14 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         });
     }
 
-    save() {
-        let self = this;
+    edit() {
         console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
+        this.save();
+    }
+
+    save() {
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
+        let self = this;
 
         $.ajax({
             type: 'POST',

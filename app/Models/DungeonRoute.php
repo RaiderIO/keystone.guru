@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
  * @property $public_key string
  * @property $title string
  * @property $difficulty string
+ * @property $teeming boolean
  * @property $unlisted boolean
  * @property $demo boolean
  * @property $dungeon Dungeon
@@ -220,8 +221,11 @@ class DungeonRoute extends Model
         $result = 0;
         // Build the result
         foreach ($npcs as $npc) {
-            /** @var $npc Npc */
-            $result += $killedNPCs[$npc->id] * $npc->enemy_forces;
+            // Only if they're set (> -1) and if it makes sense (> 0)
+            if ($npc->enemy_forces > 0) {
+                /** @var $npc Npc */
+                $result += $killedNPCs[$npc->id] * $npc->enemy_forces;
+            }
         }
 
         return $result;
@@ -279,6 +283,7 @@ class DungeonRoute extends Model
         $this->faction_id = $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
         $this->difficulty = $request->get('difficulty', $this->difficulty);
+        $this->teeming = $request->get('teeming', 0);
         $this->unlisted = intval($request->get('unlisted', 0)) > 0;
         $this->demo = intval($request->get('demo', 0)) > 0;
 
@@ -316,6 +321,14 @@ class DungeonRoute extends Model
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
                 foreach ($newAffixes as $key => $value) {
+                    /** @var AffixGroup $affixGroup */
+                    $affixGroup = AffixGroup::findOrNew($value);
+
+                    // Do not add affixes that do not belong to our Teeming selection
+                    if ($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) {
+                        continue;
+                    }
+
                     $drAffixGroup = new DungeonRouteAffixGroup();
                     $drAffixGroup->affix_group_id = $value;
                     $drAffixGroup->dungeon_route_id = $this->id;

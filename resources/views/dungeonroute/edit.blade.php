@@ -25,20 +25,20 @@
         $(function () {
             let $settings = $('#settings');
             $settings.on('hide.bs.collapse', function (e) {
-                let $caret = $("#settings_caret");
+                let $caret = $('#settings_caret');
                 $caret.removeClass('fa-caret-up');
                 $caret.addClass('fa-caret-down');
             });
 
             $settings.on('show.bs.collapse', function (e) {
-                let $caret = $("#settings_caret");
+                let $caret = $('#settings_caret');
                 $caret.removeClass('fa-caret-down');
                 $caret.addClass('fa-caret-up');
             });
 
-            $("#save_settings").bind('click', _saveSettings);
+            $('#save_settings').bind('click', _saveSettings);
 
-            $(".selectpicker").selectpicker({
+            $('.selectpicker').selectpicker({
                 showIcon: true
             });
         });
@@ -49,43 +49,44 @@
                 url: '{{ route('api.dungeonroute.update', $model->public_key) }}',
                 dataType: 'json',
                 data: {
-                    faction_id: $("#faction_id").val(),
+                    faction_id: $('#faction_id').val(),
                     race:
-                        $(".raceselect select").map(function () {
+                        $('.raceselect select').map(function () {
                             return $(this).val();
                         }).get()
                     ,
                     class:
-                        $(".classselect select").map(function () {
+                        $('.classselect select').map(function () {
                             return $(this).val();
                         }).get()
                     ,
-                    unlisted: $("#unlisted").val(),
+                    teeming: $('#teeming').val(),
+                    unlisted: $('#unlisted').val(),
                     @if(Auth::user()->hasRole('admin'))
-                    demo: $("#demo").val(),
+                    demo: $('#demo').val(),
                     @endif
-                    affixes: $("#affixes").val(),
+                    affixes: $('#affixes').val(),
                     _method: 'PATCH'
                 },
                 beforeSend: function () {
-                    $("#save_settings").hide();
-                    $("#save_settings_saving").show();
+                    $('#save_settings').hide();
+                    $('#save_settings_saving').show();
                 },
                 success: function (json) {
-                    $("#save_settings_success").show().delay(5000).hide(200);
-                    $("#save_settings_error").hide();
+                    $('#save_settings_success').show().delay(5000).hide(200);
+                    $('#save_settings_error').hide();
 
-                    $("#save_settings_success").html("{{__('Settings saved successfully')}}");
+                    $('#save_settings_success').html('{{__('Settings saved successfully')}}');
                 },
                 error: function (response) {
-                    $("#save_settings_success").hide();
-                    $("#save_settings_error").show().delay(5000).hide(200);
+                    $('#save_settings_success').hide();
+                    $('#save_settings_error').show().delay(5000).hide(200);
 
-                    $("#save_settings_error").html("{{__('An error occurred saving your settings. Please try again.')}}");
+                    $('#save_settings_error').html('{{__('An error occurred saving your settings. Please try again.')}}');
                 },
                 complete: function () {
-                    $("#save_settings").show();
-                    $("#save_settings_saving").hide();
+                    $('#save_settings').show();
+                    $('#save_settings_saving').hide();
                 }
             });
         }
@@ -100,8 +101,8 @@
     @endisset
 
     @isset($model)
-        <div class="col-lg-12">
-            <div id="map_container">
+        <div class='col-lg-12'>
+            <div id='map_container'>
                 @include('common.maps.map', [
                     'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
                     'dungeonroute' => $model,
@@ -110,34 +111,36 @@
             </div>
 
 
-            <div id="settings_wrapper" class="col-lg-12">
-                <div id="settings_toggle" class="col-lg-12 text-center btn btn-default" data-toggle="collapse"
-                     data-target="#settings">
-                    <h4 class="mb-0">
-                        <i class="fas fa-cog"></i> {{ __('Settings') }} <i id="settings_caret"
-                                                                           class="fas fa-caret-down"></i>
+            <div id='settings_wrapper' class='col-lg-12'>
+                <div id='settings_toggle' class='col-lg-12 text-center btn btn-default' data-toggle='collapse'
+                     data-target='#settings'>
+                    <h4 class='mb-0'>
+                        <i class='fas fa-cog'></i> {{ __('Settings') }} <i id='settings_caret'
+                                                                           class='fas fa-caret-down'></i>
                     </h4>
                 </div>
 
-                <div id="settings" class="col-lg-12 collapse">
+                <div id='settings' class='col-lg-12 collapse'>
+                    {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox d-none']) !!}
+
                     <h3>
                         {{ __('Group composition') }}
                     </h3>
 
                     @include('common.group.composition', ['dungeonroute' => $model])
 
-                    <h3 class="mt-1">
+                    <h3 class='mt-1'>
                         {{ __('Affixes (optional)') }}
                     </h3>
 
-                    <div class="container mt-1">
-                        @include('common.group.affixes', ['dungeonroute' => $model])
+                    <div class='container mt-1'>
+                        @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming'])
                     </div>
 
                     <h3>
                         {{ __('Sharing') }}
                     </h3>
-                    <div class="form-group">
+                    <div class='form-group'>
                         {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
                         {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
                     </div>
@@ -146,29 +149,29 @@
                         <h3>
                             {{ __('Admin') }}
                         </h3>
-                        <div class="form-group">
+                        <div class='form-group'>
                             {!! Form::label('demo', __('Mark as demo route')) !!}
                             {!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}
                         </div>
                     @endif
 
-                    <div class="form-group">
-                        <div id="save_settings" class="offset-lg-5 col-lg-2 btn btn-success">
-                            <i class="fas fa-save"></i> {{ __('Save settings') }}
+                    <div class='form-group'>
+                        <div id='save_settings' class='offset-lg-5 col-lg-2 btn btn-success'>
+                            <i class='fas fa-save'></i> {{ __('Save settings') }}
                         </div>
-                        <div id="save_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"
-                             style="display: none;">
-                            <i class="fas fa-circle-notch fa-spin"></i>
+                        <div id='save_settings_saving' class='offset-lg-5 col-lg-2 btn btn-success disabled'
+                             style='display: none;'>
+                            <i class='fas fa-circle-notch fa-spin'></i>
                         </div>
                     </div>
 
-                    <div class="container">
-                        <div id="save_settings_success"
-                             class="alert alert-success alert-dismissible fade show text-center"
-                             style="display: none;" role="alert">
+                    <div class='container'>
+                        <div id='save_settings_success'
+                             class='alert alert-success alert-dismissible fade show text-center'
+                             style='display: none;' role='alert'>
                         </div>
-                        <div id="save_settings_error" class="alert alert-danger alert-dismissible fade show text-center"
-                             style="display: none;" role="alert">
+                        <div id='save_settings_error' class='alert alert-danger alert-dismissible fade show text-center'
+                             style='display: none;' role='alert'>
                         </div>
                     </div>
                 </div>
