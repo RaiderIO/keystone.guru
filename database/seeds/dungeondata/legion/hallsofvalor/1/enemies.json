@@ -1,14 +1,5 @@
 [
     {
-        "id": 81,
-        "enemy_pack_id": -1,
-        "floor_id": 17,
-        "teeming": null,
-        "lat": -82.379999999999995,
-        "lng": 260.62,
-        "npc": null
-    },
-    {
         "id": 82,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -20,15 +11,6 @@
         }
     },
     {
-        "id": 83,
-        "enemy_pack_id": -1,
-        "floor_id": 17,
-        "teeming": null,
-        "lat": -94.75,
-        "lng": 229.88,
-        "npc": null
-    },
-    {
         "id": 84,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -38,15 +20,6 @@
         "npc": {
             "id": 96609
         }
-    },
-    {
-        "id": 85,
-        "enemy_pack_id": -1,
-        "floor_id": 17,
-        "teeming": null,
-        "lat": -86.129999999999995,
-        "lng": 231.62,
-        "npc": null
     },
     {
         "id": 86,
@@ -82,15 +55,6 @@
         }
     },
     {
-        "id": 89,
-        "enemy_pack_id": -1,
-        "floor_id": 17,
-        "teeming": null,
-        "lat": -80.5,
-        "lng": 228.62,
-        "npc": null
-    },
-    {
         "id": 90,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -124,15 +88,6 @@
         }
     },
     {
-        "id": 93,
-        "enemy_pack_id": -1,
-        "floor_id": 17,
-        "teeming": null,
-        "lat": -89.25,
-        "lng": 215.62,
-        "npc": null
-    },
-    {
         "id": 94,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -144,15 +99,6 @@
         }
     },
     {
-        "id": 95,
-        "enemy_pack_id": -1,
-        "floor_id": 17,
-        "teeming": null,
-        "lat": -93.379999999999995,
-        "lng": 218.25,
-        "npc": null
-    },
-    {
         "id": 96,
         "enemy_pack_id": -1,
         "floor_id": 17,
@@ -162,15 +108,6 @@
         "npc": {
             "id": 96609
         }
-    },
-    {
-        "id": 97,
-        "enemy_pack_id": -1,
-        "floor_id": 17,
-        "teeming": null,
-        "lat": -87.129999999999995,
-        "lng": 221.12,
-        "npc": null
     },
     {
         "id": 98,

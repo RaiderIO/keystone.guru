@@ -50,16 +50,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Colossus",
         "base_health": 500370,
-        "enemy_forces": 0,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 125977,
-        "dungeon_id": 14,
-        "classification_id": 2,
-        "name": "Reanimation Totem",
-        "base_health": 235468,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -113,7 +104,7 @@
         "classification_id": 2,
         "name": "T'lonja",
         "base_health": 588670,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -140,7 +131,7 @@
         "classification_id": 2,
         "name": "Monzumi",
         "base_health": 600443,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -149,7 +140,7 @@
         "classification_id": 2,
         "name": "Dinomancer Kish'o",
         "base_health": 706404,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
