@@ -15,15 +15,71 @@ class EnemyPatrol extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
+        let self = this;
+
         this.label = 'EnemyPatrol';
+        this.color = null;
+        this.decorator = null;
         // console.log(rand);
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 
         this.setColor(c.map.enemypatrol.defaultColor);
         this.setSynced(true);
+
+        this.register('synced', this, function () {
+            self._rebuildDecorator();
+        });
+        this.register('object:deleted', this, function () {
+            self._cleanDecorator();
+        });
+    }
+
+    /**
+     * Cleans up the decorator of this route, removing it from the map.
+     * @private
+     */
+    _cleanDecorator() {
+        console.assert(this instanceof Route, this, 'this is not an Route');
+
+        if (this.decorator !== null) {
+            this.map.leafletMap.removeLayer(this.decorator);
+        }
+    }
+
+    /**
+     * Rebuild the decorators for this route (directional arrows etc).
+     * @private
+     */
+    _rebuildDecorator() {
+        console.assert(this instanceof EnemyPatrol, this, 'this is not an Route');
+
+        this._cleanDecorator();
+
+        this.decorator = L.polylineDecorator(this.layer, {
+            patterns: [
+                {
+                    offset: 12,
+                    repeat: 25,
+                    symbol: L.Symbol.dash({
+                        pixelSize: 10,
+                        pathOptions: {color: 'darkred', weight: 2}
+                    })
+                },
+                {
+                    offset: 25,
+                    repeat: 100,
+                    symbol: L.Symbol.arrowHead({
+                        pixelSize: 12,
+                        pathOptions: {fillOpacity: 1, weight: 0, color: this.color}
+                    })
+                }
+            ]
+        });
+        this.decorator.addTo(this.map.leafletMap);
     }
 
     setColor(color) {
+        this.color = color;
         this.setColors({
             unsavedBorder: color,
             unsaved: color,

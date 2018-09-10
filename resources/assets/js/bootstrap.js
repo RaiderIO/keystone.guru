@@ -38,6 +38,7 @@ window.gju = require('geojson-utils');
 window.bootstrapselect = require('bootstrap-select');
 window.handlebars = require('handlebars');
 window.barrating = require('jquery-bar-rating');
+window.polylinedecorator = require('leaflet-polylinedecorator');
 
 require('@fortawesome/fontawesome-free');
 

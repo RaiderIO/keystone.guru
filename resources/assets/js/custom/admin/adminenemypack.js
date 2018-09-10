@@ -5,7 +5,6 @@ class AdminEnemyPack extends EnemyPack {
 
         this.saving = false;
         this.deleting = false;
-        this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
     }
 
