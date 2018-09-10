@@ -45,6 +45,10 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
         #map_enemy_tooltip {
             width: 200px;
         }
+
+        .leaflet-container {
+            background-color: #2B3E50;
+        }
     </style>
 @endsection
 

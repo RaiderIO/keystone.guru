@@ -46,7 +46,6 @@ class Dungeon extends Model
      */
     public function getEnemyForcesMappedStatusAttribute()
     {
-        //
         $result = [];
         $npcs = [];
 
@@ -79,7 +78,7 @@ class Dungeon extends Model
         $result['npcs'] = $npcs;
         $result['unmapped'] = $unmappedCount;
         $result['total'] = $total;
-        $result['percent'] = 100 - (($unmappedCount / $total) * 100);
+        $result['percent'] = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
 
         return $result;
     }
