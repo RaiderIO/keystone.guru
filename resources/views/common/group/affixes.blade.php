@@ -56,7 +56,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
         });
 
         function _isTeemingSelected() {
-            return $(_teemingSelector).is(':checked') || $(_teemingSelector).val() === '1';
+            return $(_teemingSelector).is(':checked');
         }
 
         function _affixRowClicked() {
