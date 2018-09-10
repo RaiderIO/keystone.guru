@@ -14,7 +14,7 @@
         "classification_id": 2,
         "name": "Ashvane Sniper",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -23,7 +23,7 @@
         "classification_id": 2,
         "name": "Ashvane Commander",
         "base_health": 470936,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -41,7 +41,7 @@
         "classification_id": 2,
         "name": "Bilge Rat Buccaneer",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -50,7 +50,7 @@
         "classification_id": 2,
         "name": "Bilge Rat Tempest",
         "base_health": 235470,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -59,7 +59,7 @@
         "classification_id": 2,
         "name": "Irontide Raider",
         "base_health": 470936,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -68,7 +68,7 @@
         "classification_id": 2,
         "name": "Riptide Shredder",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -77,7 +77,7 @@
         "classification_id": 2,
         "name": "Blacktar Bomber",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -86,7 +86,7 @@
         "classification_id": 2,
         "name": "Dockhound Packmaster",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -95,7 +95,7 @@
         "classification_id": 2,
         "name": "Snarling Dockhound",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -113,7 +113,7 @@
         "classification_id": 2,
         "name": "Kul Tiran Vanguard",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -122,7 +122,7 @@
         "classification_id": 2,
         "name": "Kul Tiran Marksman",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -131,7 +131,7 @@
         "classification_id": 2,
         "name": "Bilge Rat Pillager",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -140,7 +140,7 @@
         "classification_id": 2,
         "name": "Bilge Rat Demolisher",
         "base_health": 588670,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -149,7 +149,7 @@
         "classification_id": 2,
         "name": "Ashvane Spotter",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -158,7 +158,7 @@
         "classification_id": 2,
         "name": "Bilge Rat Cutthroat",
         "base_health": 235468,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -167,7 +167,7 @@
         "classification_id": 2,
         "name": "Ashvane Invader",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -176,7 +176,7 @@
         "classification_id": 2,
         "name": "Ashvane Destroyer",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -185,7 +185,7 @@
         "classification_id": 1,
         "name": "Irontide Marauder",
         "base_health": 58867,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -194,7 +194,7 @@
         "classification_id": 1,
         "name": "Irontide Powdershot",
         "base_health": 58867,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -203,7 +203,7 @@
         "classification_id": 2,
         "name": "Ashvane Deckhand",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -212,7 +212,7 @@
         "classification_id": 2,
         "name": "Kul Tiran Halberd",
         "base_health": 294335,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -221,7 +221,7 @@
         "classification_id": 1,
         "name": "Kul Tiran Footman",
         "base_health": 58867,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {

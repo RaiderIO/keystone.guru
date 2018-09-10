@@ -11,7 +11,7 @@ $(function () {
 });
 
 function _factionChanged() {
-    console.log(">> _factionChanged");
+    // console.log(">> _factionChanged");
 
     let newFaction = parseInt($("#faction_id").val());
     let $raceSelect = $("select.raceselect");
@@ -33,7 +33,7 @@ function _factionChanged() {
 
     for (let i = 0; i < _racesClasses.length; i++) {
         let raceClass = _racesClasses[i];
-        console.log(raceClass.faction_id, newFaction, raceClass.faction_id === newFaction);
+        // console.log(raceClass.faction_id, newFaction, raceClass.faction_id === newFaction);
         if (raceClass.faction_id === newFaction) {
             $raceSelect.append(jQuery('<option>', {
                 value: raceClass.id,
@@ -46,11 +46,11 @@ function _factionChanged() {
     $selectPicker.selectpicker('refresh');
     $selectPicker.selectpicker('render');
 
-    console.log('OK _factionChanged');
+    // console.log('OK _factionChanged');
 }
 
 function _raceChanged() {
-    console.log('>> _raceChanged');
+    // console.log('>> _raceChanged');
 
     let $raceSelect = $(this);
     let raceId = parseInt($raceSelect.val());
@@ -94,5 +94,5 @@ function _raceChanged() {
     $selectPicker.selectpicker('refresh');
     $selectPicker.selectpicker('render');
 
-    console.log('OK _raceChanged');
+    // console.log('OK _raceChanged');
 }

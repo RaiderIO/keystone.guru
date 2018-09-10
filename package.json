@@ -29,6 +29,7 @@
     "leaflet-contextmenu": "^1.4.0",
     "leaflet-draw": "^1.0.2",
     "leaflet-editable": "^1.1.0",
+    "leaflet-polylinedecorator": "^1.6.0",
     "popper.js": "^1.14.4"
   }
 }

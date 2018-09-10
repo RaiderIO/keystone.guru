@@ -115,22 +115,36 @@
     background: url("/images/mapicon/door.png") no-repeat center !important;
 }
 
-.killzone_icon_small {
+.killzone_icon_big {
+    margin-left: -19px !important;
+    margin-top: -19px !important;
+    border-color: yellow !important;
+}
+
+.killzone_enemy_icon_small {
     margin-left: -10px !important;
     margin-top: -10px !important;
 }
 
-.killzone_icon_big {
+.killzone_enemy_icon_big {
     margin-left: -20px !important;
     margin-top: -20px !important;
 }
 
 #map_enemy_forces {
     background-color: #fff;
-    border: 2px solid rgba(0,0,0,0.2);
+    border: 2px solid rgba(0, 0, 0, 0.2);
     background-clip: padding-box;
     border-radius: 4px;
     padding: 6px;
+}
+
+.map_enemy_forces_too_much {
+    color: red;
+}
+
+.map_enemy_forces_too_much_warning {
+    color: orange;
 }
 
 /** GENERAL ICONS */

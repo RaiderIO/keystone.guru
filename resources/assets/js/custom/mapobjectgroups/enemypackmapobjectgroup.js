@@ -32,9 +32,6 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                 floor_id: floor.id
             },
             success: function (json) {
-                // Remove any layers that were added before
-                self._removeObjectsFromLayer.call(self);
-
                 // Now draw the packs on the map
                 for (let i = 0; i < json.length; i++) {
                     let points = [];

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
  * @property $public_key string
  * @property $title string
  * @property $difficulty string
+ * @property $teeming boolean
  * @property $unlisted boolean
  * @property $demo boolean
  * @property $dungeon Dungeon
@@ -37,7 +38,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'avg_rating', 'rating_count'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count', 'enemy_forces'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at'];
 
@@ -197,6 +198,40 @@ class DungeonRoute extends Model
     }
 
     /**
+     * Gets the current amount of enemy forces that have been targeted for killing in this dungeon route.
+     */
+    public function getEnemyForcesAttribute()
+    {
+        // Build an ID => amount array of NPCs we've killed in this route
+        $killedNPCs = [];
+        foreach ($this->killzones as $killzone) {
+            /** @var KillZone $killzone */
+            foreach ($killzone->enemies as $enemy) {
+                /** @var Enemy $enemy */
+                if (isset($killedNPCs[$enemy->npc_id])) {
+                    $killedNPCs[$enemy->npc_id]++;
+                } else {
+                    $killedNPCs[$enemy->npc_id] = 1;
+                }
+            }
+        }
+
+        // Find all Npcs that we've killed
+        $npcs = Npc::findMany(array_keys($killedNPCs));
+        $result = 0;
+        // Build the result
+        foreach ($npcs as $npc) {
+            // Only if they're set (> -1) and if it makes sense (> 0)
+            if ($npc->enemy_forces > 0) {
+                /** @var $npc Npc */
+                $result += $killedNPCs[$npc->id] * $npc->enemy_forces;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @return array The setup as used in the front-end.
      */
     public function getSetupAttribute()
@@ -248,6 +283,7 @@ class DungeonRoute extends Model
         $this->faction_id = $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
         $this->difficulty = $request->get('difficulty', $this->difficulty);
+        $this->teeming = $request->get('teeming', 0);
         $this->unlisted = intval($request->get('unlisted', 0)) > 0;
         $this->demo = intval($request->get('demo', 0)) > 0;
 
@@ -285,6 +321,14 @@ class DungeonRoute extends Model
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
                 foreach ($newAffixes as $key => $value) {
+                    /** @var AffixGroup $affixGroup */
+                    $affixGroup = AffixGroup::findOrNew($value);
+
+                    // Do not add affixes that do not belong to our Teeming selection
+                    if ($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) {
+                        continue;
+                    }
+
                     $drAffixGroup = new DungeonRouteAffixGroup();
                     $drAffixGroup->affix_group_id = $value;
                     $drAffixGroup->dungeon_route_id = $this->id;

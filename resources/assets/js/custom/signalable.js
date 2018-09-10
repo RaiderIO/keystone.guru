@@ -28,13 +28,17 @@ class Signalable {
      * @param listener object Whoever you are and what you used to register yourself with.
      */
     unregister(name, listener) {
+        console.assert(this instanceof Signalable, this, 'this is not a Signalable!');
         let toRemove = [];
-        $.each(this.signals, function (index, caller) {
-            // console.log('caller:', caller);
+
+        for (let i = 0; i < this.signals.length; i++) {
+            let caller = this.signals[i];
             if (caller.name === name && caller.listener === listener) {
-                toRemove.push(index);
+                toRemove.push(i);
             }
-        });
+        }
+
+        // console.assert(toRemove.length > 0, 'Unregistered event "' + name + '" for listener ', listener, ' but said listener was not found on our ', this);
 
         // Reverse the loop, we're removing multiple indices. If we start with smallest first,
         // we're going to remove the wrong indexes after the first one. Not good. Reverse preserves the proper order.
@@ -45,14 +49,24 @@ class Signalable {
     }
 
     signal(name, data = {}) {
+        console.assert(this instanceof Signalable, this, 'this is not a Signalable!');
         let self = this;
-        console.assert(self instanceof Signalable, self, 'this is not a Signalable!');
 
-        $.each(this.signals, function (index, caller) {
-            // console.log('caller:', caller);
+        for (let i = 0; i < this.signals.length; i++) {
+            let caller = this.signals[i];
+
             if (caller.name === name) {
                 caller.callback({context: self, data: data});
             }
-        });
+        }
+    }
+
+    /**
+     * DROPS ALL LISTENERS FROM ALL SIGNALS OF THIS INSTANCE. May fuck your shit up.
+     * @private
+     */
+    _cleanupSignals() {
+        // Should be enough to get rid of all signals
+        this.signals = [];
     }
 }

@@ -221,7 +221,7 @@
         "classification_id": 2,
         "name": "Trained Hawk",
         "base_health": 15001,
-        "enemy_forces": 0,
+        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {

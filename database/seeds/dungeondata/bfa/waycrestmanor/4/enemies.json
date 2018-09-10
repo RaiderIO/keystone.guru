@@ -198,15 +198,6 @@
         }
     },
     {
-        "id": 569,
-        "enemy_pack_id": 133,
-        "floor_id": 63,
-        "teeming": null,
-        "lat": -87.760000000000005,
-        "lng": 259.25,
-        "npc": null
-    },
-    {
         "id": 570,
         "enemy_pack_id": 133,
         "floor_id": 63,

@@ -69,7 +69,7 @@ class APIKillZoneController extends Controller
                 KillZoneEnemy::insert($killZoneEnemies);
             }
 
-            $result = ['id' => $killZone->id];
+            $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonRoute->getEnemyForcesAttribute()];
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
@@ -83,7 +83,7 @@ class APIKillZoneController extends Controller
             /** @var KillZone $killZone */
             $killZone = KillZone::findOrFail($request->get('id'));
 
-            // @TODO WTF why does $route->dungeonroute not work?? It will NOT load the relation despite everything being OK?
+            // @TODO WTF why does $killZone->dungeonroute not work?? It will NOT load the relation despite everything being OK?
             $dungeonroute = DungeonRoute::findOrFail($killZone->dungeon_route_id);
             // If we're not the author, don't delete anything
             // @TODO handle this in a policy?
@@ -93,7 +93,11 @@ class APIKillZoneController extends Controller
 
             $killZone->delete();
             $killZone->deleteEnemies();
-            $result = ['result' => 'success'];
+
+            // Refresh the killzones relation
+            $dungeonroute->load('killzones');
+
+            $result = ['result' => 'success', 'enemy_forces' => $dungeonroute->getEnemyForcesAttribute()];
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

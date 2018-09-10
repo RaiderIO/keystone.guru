@@ -28,9 +28,6 @@ class RouteMapObjectGroup extends MapObjectGroup {
                 floor_id: floor.id
             },
             success: function (json) {
-                // Remove any layers that were added before
-                self._removeObjectsFromLayer.call(self);
-
                 // Now draw the patrols on the map
                 for (let index in json) {
                     if (json.hasOwnProperty(index)) {

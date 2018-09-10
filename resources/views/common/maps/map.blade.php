@@ -8,6 +8,7 @@ $isAdmin = isset($admin) && $admin;
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 $edit = isset($edit) && $edit ? 'true' : 'false';
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
+$routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
 ?>
 
@@ -40,6 +41,10 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
             width: 50px;
             background-image: none;
         }
+
+        #map_enemy_tooltip {
+            width: 200px;
+        }
     </style>
 @endsection
 
@@ -52,6 +57,7 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
         let _dungeonData = {!! $dungeon !!};
         let _switchDungeonFloorSelect = "#map_floor_selection";
         let dungeonRoutePublicKey = '{{ $routePublicKey }}';
+        let dungeonRouteEnemyForces = {{ $routeEnemyForces }};
 
 
         let dungeonMap;
@@ -118,7 +124,28 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
 
     <script id="map_enemy_forces_template" type="text/x-handlebars-template">
         <div id="map_enemy_forces" class="leaflet-draw-section">
-            {{ __('Enemy forces:')}} <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }} (<span id="map_enemy_forces_percent">0</span>%)
+            {{ __('Enemy forces')}}:
+            <span id="map_enemy_forces_numbers">
+                <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
+                (<span id="map_enemy_forces_percent">0</span>%)
+            </span>
+        </div>
+    </script>
+
+    <script id="map_enemy_tooltip_template" type="text/x-handlebars-template">
+        <div id="map_enemy_tooltip" class="leaflet-draw-section">
+            <div class="row">
+                <div class="col-5 no-gutters">{{ __('Name') }} </div>
+                <div class="col-7 no-gutters">@{{ npc_name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-5 no-gutters">{{ __('Enemy forces') }} </div>
+                <div class="col-7 no-gutters">@{{ enemy_forces }}</div>
+            </div>
+            <div class="row">
+                <div class="col-5 no-gutters">{{ __('Base health') }} </div>
+                <div class="col-7 no-gutters">@{{ base_health }}</div>
+            </div>
         </div>
     </script>
 
@@ -136,7 +163,7 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">
                 <div class="form-group">
-                    <span>{{ __('Attached to pack:') }}</span> <span id="enemy_edit_popup_attached_to_pack_@{{id}}">false</span>
+                    <span>{{ __('Attached to pack') }}: </span> <span id="enemy_edit_popup_attached_to_pack_@{{id}}">false</span>
                 </div>
                 <div class="form-group">
                     <label for="enemy_edit_popup_teeming_@{{id}}">{{ __('Teeming') }}</label>

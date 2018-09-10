@@ -24,6 +24,10 @@
             <?php $difficulty = config('keystoneguru.dungeonroute_difficulty'); ?>
             {!! Form::select('difficulty', array_combine($difficulty, $difficulty), null, ['class' => 'form-control']) !!}
         </div>
+        <div class="form-group">
+            {!! Form::label('teeming', __('Teeming (check to change the dungeon to resemble Teeming week)')) !!}
+            {!! Form::checkbox('teeming', 1, 0, ['class' => 'form-control left_checkbox']) !!}
+        </div>
 
         <h3>
             {{ __('Group composition (optional)') }}
@@ -34,7 +38,7 @@
             {{ __('Affixes (optional)') }}
         </h3>
 
-        @include('common.group.affixes')
+        @include('common.group.affixes', ['teemingselector' => '#teeming'])
 
         <h3>
             {{ __('Sharing') }}
@@ -44,14 +48,14 @@
             {!! Form::checkbox('unlisted', 1, 0, ['class' => 'form-control left_checkbox']) !!}
         </div>
 
-        @if(Auth::user()->hasRole('admin'))
-        <h3>
-            {{ __('Admin') }}
-        </h3>
-        <div class="form-group">
-            {!! Form::label('demo', __('Mark as demo route')) !!}
-            {!! Form::checkbox('demo', 1, 0, ['class' => 'form-control left_checkbox']) !!}
-        </div>
+        @if(Auth::user() !== null && Auth::user()->hasRole('admin'))
+            <h3>
+                {{ __('Admin') }}
+            </h3>
+            <div class="form-group">
+                {!! Form::label('demo', __('Mark as demo route')) !!}
+                {!! Form::checkbox('demo', 1, 0, ['class' => 'form-control left_checkbox']) !!}
+            </div>
         @endif
 
         <div class="col-lg-12">

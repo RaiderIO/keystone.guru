@@ -33,6 +33,13 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Applies the tooltip to this map object if applicable.
+     */
+    bindTooltip() {
+
+    }
+
+    /**
      * Sets the colors to use for a map object, if applicable.
      * @param colors object The colors object as found in the constants.js file.
      */
@@ -75,7 +82,9 @@ class MapObject extends Signalable {
         }
 
         // If we're synced, trigger the synced event
-        if( value ){
+        if (value) {
+            // Refresh the tooltip
+            this.bindTooltip();
             this.signal('synced', {object: this});
         }
 
@@ -100,5 +109,10 @@ class MapObject extends Signalable {
             // Changed = gone out of sync
             self.setSynced(false);
         });
+        self.bindTooltip();
+    }
+
+    cleanup() {
+        this._cleanupSignals();
     }
 }

@@ -20,6 +20,12 @@ let LeafletKillZoneIcon = L.divIcon({
     className: 'marker_div_icon_font_awesome marker_div_icon_killzone'
 });
 
+let LeafletKillZoneIconSelected = L.divIcon({
+    html: '<i class="fas fa-bullseye"></i>',
+    iconSize: [30, 30],
+    className: 'marker_div_icon_font_awesome marker_div_icon_killzone killzone_icon_big leaflet-edit-marker-selected'
+});
+
 let LeafletKillZoneMarker = L.Marker.extend({
     options: {
         icon: LeafletKillZoneIcon
@@ -45,8 +51,9 @@ class KillZone extends MapObject {
         this.setSynced(false);
 
         // We gotta remove the connections manually since they're self managed here.
-        this.map.register('map:refresh', this, function () {
-            console.log('map refreshed!');
+        this.map.register('map:beforerefresh', this, function () {
+            // In case someone switched dungeons prior to finishing the kill zone edit
+            KillZoneSelectModeEnabled = false;
             self.removeExistingConnectionsToEnemies();
         });
     }
@@ -112,7 +119,9 @@ class KillZone extends MapObject {
                 self.deleting = true;
             },
             success: function (json) {
+                self.removeExistingConnectionsToEnemies();
                 self.signal('object:deleted', {response: json});
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces})
             },
             complete: function () {
                 self.deleting = false;
@@ -145,6 +154,7 @@ class KillZone extends MapObject {
                 self.id = json.id;
 
                 self.setSynced(true);
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces})
             },
             complete: function () {
                 self.saving = false;
@@ -170,7 +180,8 @@ class KillZone extends MapObject {
             if (enemy !== null) {
                 enemy.setKillZone(self.id);
             } else {
-                console.warn('Unable to find enemy with id ' + id + ', this enemy was probably removed during a migration?');
+                console.warn('Unable to find enemy with id ' + id + ' for KZ on floor ' + self.floor_id + ', ' +
+                    'this enemy was probably removed during a migration?');
             }
         });
 
@@ -186,6 +197,8 @@ class KillZone extends MapObject {
             console.assert(this instanceof KillZone, this, 'this is not an KillZone');
             let self = this;
 
+            this.layer.setIcon(LeafletKillZoneIconSelected);
+
             let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
                 // We cannot kill an enemy twice, but can deselect once we have selected it
@@ -199,6 +212,7 @@ class KillZone extends MapObject {
             });
 
             // Cannot start editing things while we're doing this.
+            // @TODO https://stackoverflow.com/questions/40414970/disable-leaflet-draw-delete-button
             $('.leaflet-draw-edit-edit').addClass('leaflet-disabled');
             $('.leaflet-draw-edit-remove').addClass('leaflet-disabled');
 
@@ -214,6 +228,7 @@ class KillZone extends MapObject {
         if (KillZoneSelectModeEnabled) {
             console.assert(this instanceof KillZone, this, 'this is not an KillZone');
             KillZoneSelectModeEnabled = false;
+            this.layer.setIcon(LeafletKillZoneIcon);
 
             let self = this;
 
@@ -243,11 +258,6 @@ class KillZone extends MapObject {
         let index = $.inArray(enemy.id, this.enemies);
         // Already exists, user wants to deselect the enemy
         let removed = index >= 0;
-        if (removed) {
-            this._removeEnemy(enemy);
-        } else {
-            this._addEnemy(enemy);
-        }
 
         // If the enemy was part of a pack..
         if (enemy.enemy_pack_id > 0) {
@@ -265,6 +275,12 @@ class KillZone extends MapObject {
                         this._addEnemy(enemyCandidate);
                     }
                 }
+            }
+        } else {
+            if (removed) {
+                this._removeEnemy(enemy);
+            } else {
+                this._addEnemy(enemy);
             }
         }
 
@@ -289,6 +305,7 @@ class KillZone extends MapObject {
      */
     redrawConnectionsToEnemies() {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        console.log('redrawConnectionsToEnemies!');
 
         let self = this;
 
@@ -310,10 +327,13 @@ class KillZone extends MapObject {
                     enemy.layer.getLatLng(),
                     self.layer.getLatLng()
                 ], c.map.killzone.polylineOptions);
+                // do not prevent clicking on anything else
+                self.enemyConnectionsLayerGroup.setZIndex(-1000);
 
                 self.enemyConnectionsLayerGroup.addLayer(layer);
             } else {
-                console.warn('Unable to find enemy with id ' + id + ', cannot draw connection, this enemy was probably removed during a migration?');
+                console.warn('Unable to find enemy with id ' + id + ' for KZ on floor ' + self.floor_id + ', ' +
+                    'cannot draw connection, this enemy was probably removed during a migration?');
             }
         });
     }
@@ -322,15 +342,19 @@ class KillZone extends MapObject {
     onLayerInit() {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
         super.onLayerInit();
+        console.log('KillZone onLayerInit');
 
         let self = this;
 
         if (this.map.edit) {
-            this.layer.on('click', function () {
-                if (KillZoneSelectModeEnabled) {
-                    self.cancelSelectMode();
-                } else {
-                    self.startSelectMode();
+            this.layer.on('click', function (event) {
+                if (!self.map.deleteModeActive) {
+                    console.log('killzone clicked!', KillZoneSelectModeEnabled, event);
+                    if (KillZoneSelectModeEnabled) {
+                        self.cancelSelectMode();
+                    } else {
+                        self.startSelectMode();
+                    }
                 }
             });
         }
@@ -378,5 +402,19 @@ class KillZone extends MapObject {
             //     });
             // });
         });
+    }
+
+    cleanup() {
+        // this.unregister('synced', this); // Not needed as super.cleanup() does this
+        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
+        this.map.unregister('map:beforerefresh', this);
+
+        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+            enemy.setKillZoneSelectable(false);
+            enemy.unregister('killzone:selected', self);
+        });
+
+        super.cleanup();
     }
 }

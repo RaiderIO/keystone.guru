@@ -32,13 +32,21 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 floor_id: floor.id
             },
             success: function (json) {
-                // Remove any layers that were added before
-                self._removeObjectsFromLayer.call(self);
-
                 // Now draw the enemies on the map
                 for (let index in json) {
                     if (json.hasOwnProperty(index)) {
                         let remoteEnemy = json[index];
+
+                        // If the map isn't teeming, but the enemy is teeming..
+                        if (!self.map.teeming && remoteEnemy.teeming === 'visible') {
+                            console.log('Skipping teeming enemy ' + remoteEnemy.id);
+                            continue;
+                        }
+                        // If the map is teeming, but the enemy shouldn't be there for teeming maps..
+                        else if (self.map.teeming && remoteEnemy.teeming === 'invisible') {
+                            console.log('Skipping teeming-filtered enemy ' + remoteEnemy.id);
+                            continue;
+                        }
 
                         let layer = new LeafletEnemyMarker();
                         layer.setLatLng(L.latLng(remoteEnemy.lat, remoteEnemy.lng));
@@ -51,6 +59,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
                         // May be null if not set at all (yet)
                         if (remoteEnemy.npc !== null) {
+                            enemy.npc = remoteEnemy.npc;
                             enemy.npc_id = remoteEnemy.npc.id;
                             enemy.enemy_forces = remoteEnemy.npc.enemy_forces;
                             // TODO Hard coded 3 = boss

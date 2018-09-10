@@ -7,7 +7,8 @@ class EnemyForcesControls extends MapControl {
         let self = this;
 
         this.map = map;
-        this.currentEnemyForces = 0;
+        // Just the initial enemy forces upon page load.
+        this.enemyForces = dungeonRouteEnemyForces; // Defined in map.blade.php
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
                 let source = $("#map_enemy_forces_template").html();
@@ -33,13 +34,21 @@ class EnemyForcesControls extends MapControl {
 
             // For each enemy we've loaded
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+                // Local changes will update the counter
                 enemy.register('killzone:attached', self, function (data) {
-                    self.currentEnemyForces += data.context.enemy_forces;
+                    console.log('attached to killzone!');
+                    self.enemyForces += data.context.enemy_forces;
 
                     self.refreshUI();
                 });
                 enemy.register('killzone:detached', self, function (data) {
-                    self.currentEnemyForces -= data.context.enemy_forces;
+                    self.enemyForces -= data.context.enemy_forces;
+
+                    self.refreshUI();
+                });
+                // Remote changes will be the authority when it comes to forces
+                enemy.register('killzone:synced', self, function (data) {
+                    self.enemyForces = data.enemy_forces;
 
                     self.refreshUI();
                 });
@@ -47,11 +56,28 @@ class EnemyForcesControls extends MapControl {
         });
     }
 
+    /**
+     * Refreshes the UI to reflect the current enemy forces state
+     */
     refreshUI() {
         console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
 
-        $('#map_enemy_forces_count').html(this.currentEnemyForces);
-        $('#map_enemy_forces_percent').html(((this.currentEnemyForces / this.map.getEnemyForcesRequired()) * 100).toFixed(2));
+        let enemyForcesRequired = this.map.getEnemyForcesRequired();
+        let enemyForcesPercent = enemyForcesRequired === 0 ? 0 : ((this.enemyForces / enemyForcesRequired) * 100);
+        let $numbers = $('#map_enemy_forces_numbers');
+        if (this.enemyForces > enemyForcesRequired) {
+            if (enemyForcesPercent > 110) {
+                $numbers.addClass('map_enemy_forces_too_much');
+            } else {
+                $numbers.addClass('map_enemy_forces_too_much_warning');
+            }
+        } else {
+            $numbers.removeClass('map_enemy_forces_too_much');
+            $numbers.removeClass('map_enemy_forces_too_much_warning');
+        }
+
+        $('#map_enemy_forces_count').html(this.enemyForces);
+        $('#map_enemy_forces_percent').html(enemyForcesPercent.toFixed(2));
     }
 
     /**
@@ -68,5 +94,8 @@ class EnemyForcesControls extends MapControl {
         };
 
         this._mapControl = L.control.statusbar({position: 'topright'}).addTo(this.map.leafletMap);
+
+        // Show the default values
+        this.refreshUI();
     }
 }

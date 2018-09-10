@@ -1,14 +1,5 @@
 [
     {
-        "id": 440,
-        "enemy_pack_id": -1,
-        "floor_id": 60,
-        "teeming": null,
-        "lat": -185.75999999999999,
-        "lng": 159.5,
-        "npc": null
-    },
-    {
         "id": 441,
         "enemy_pack_id": -1,
         "floor_id": 60,
@@ -18,15 +9,6 @@
         "npc": {
             "id": 131585
         }
-    },
-    {
-        "id": 442,
-        "enemy_pack_id": -1,
-        "floor_id": 60,
-        "teeming": null,
-        "lat": -190.50999999999999,
-        "lng": 159.75,
-        "npc": null
     },
     {
         "id": 443,
@@ -40,15 +22,6 @@
         }
     },
     {
-        "id": 444,
-        "enemy_pack_id": 88,
-        "floor_id": 60,
-        "teeming": null,
-        "lat": -213.00999999999999,
-        "lng": 74.5,
-        "npc": null
-    },
-    {
         "id": 445,
         "enemy_pack_id": 88,
         "floor_id": 60,
@@ -58,15 +31,6 @@
         "npc": {
             "id": 131685
         }
-    },
-    {
-        "id": 446,
-        "enemy_pack_id": 88,
-        "floor_id": 60,
-        "teeming": null,
-        "lat": -208.50999999999999,
-        "lng": 74.5,
-        "npc": null
     },
     {
         "id": 447,
@@ -122,15 +86,6 @@
         "npc": {
             "id": 131685
         }
-    },
-    {
-        "id": 452,
-        "enemy_pack_id": 90,
-        "floor_id": 60,
-        "teeming": null,
-        "lat": -135.75999999999999,
-        "lng": 74.25,
-        "npc": null
     },
     {
         "id": 453,
