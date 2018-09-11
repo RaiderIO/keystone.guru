@@ -12,7 +12,9 @@ class Signalable {
      */
     register(name, listener, fn) {
         console.assert(this instanceof Signalable, this, 'this is not a Signalable!');
+        console.assert(typeof name === 'string', name, 'name is not a string!');
         console.assert(typeof listener !== 'function', listener, 'listener is not a function! You probably forgot to add the listener');
+        console.assert(typeof fn === 'function', listener, 'fn should be a function');
 
         // console.log('pushing ', name, fn);
         this.signals.push({

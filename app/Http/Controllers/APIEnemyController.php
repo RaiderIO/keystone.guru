@@ -26,7 +26,7 @@ class APIEnemyController extends Controller
         $enemy = Enemy::findOrNew($request->get('id'));
 
         $enemy->enemy_pack_id = $request->get('enemy_pack_id');
-        $enemy->npc_id = $request->get('npc_id');
+        $enemy->npc_id = $request->get('npc_id', -1);
         $enemy->floor_id = $request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
         $enemy->enemy_forces_override = $request->get('enemy_forces_override', -1);

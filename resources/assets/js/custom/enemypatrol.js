@@ -70,7 +70,7 @@ class EnemyPatrol extends MapObject {
                 },
                 {
                     offset: 25,
-                    repeat: 100,
+                    repeat: 50,
                     symbol: L.Symbol.arrowHead({
                         pixelSize: 12,
                         pathOptions: {fillOpacity: 1, weight: 0, color: this.color}

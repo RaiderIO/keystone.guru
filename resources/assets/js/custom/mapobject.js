@@ -85,7 +85,7 @@ class MapObject extends Signalable {
         if (value) {
             // Refresh the tooltip
             this.bindTooltip();
-            this.signal('synced', {object: this});
+            this.signal('synced');
         }
 
         this.synced = value;
