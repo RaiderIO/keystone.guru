@@ -53,7 +53,7 @@ class DungeonMap extends Signalable {
         this.leafletMap.scrollWheelZoom.disable();
 
         // Make sure only control + scroll allows a zoom
-        $("#map").bind('mousewheel DOMMouseScroll', function (event) {
+        $('#map').bind('mousewheel DOMMouseScroll', function (event) {
             event.stopPropagation();
             if (event.ctrlKey === true) {
                 event.preventDefault();
@@ -75,7 +75,7 @@ class DungeonMap extends Signalable {
                 let mapObject = self.findMapObjectByLayer(layer);
                 console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
 
-                // No longer synched
+                // No longer synced
                 mapObject.setSynced(false);
                 if (typeof mapObject.edit === 'function') {
                     mapObject.edit();
