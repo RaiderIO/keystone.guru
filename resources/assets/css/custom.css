@@ -132,6 +132,7 @@
 }
 
 #map_enemy_forces {
+    color: black;
     background-color: #fff;
     border: 2px solid rgba(0, 0, 0, 0.2);
     background-clip: padding-box;
@@ -174,7 +175,7 @@
 }
 
 .class_icon {
-    background-color: #1d3131;
+    background-color: #2B3E50;
 }
 
 .default_table {

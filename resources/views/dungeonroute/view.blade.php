@@ -83,107 +83,118 @@ if (count($affixes) == 0) {
     <h2 class="text-center">
         {{ __('Details') }}
     </h2>
-    <div class="row view_dungeonroute_details_row">
-        <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Author') }}:
-        </div>
-        <div class="col-6">
-            {{ $model->author->name }}
-        </div>
-    </div>
-    <div class="row view_dungeonroute_details_row">
-        <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Dungeon') }}:
-        </div>
-        <div class="col-6">
-            {{ $model->dungeon->name }}
-        </div>
-    </div>
-    <div class="row view_dungeonroute_details_row">
-        <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Difficulty') }}:
-        </div>
-        <div class="col-6">
-            {{ $model->difficulty }}
-        </div>
-    </div>
-    <div class="row view_dungeonroute_details_row">
-        <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Teeming') }}:
-        </div>
-        <div class="col-6">
-            {{ $model->teeming ? __('Yes') : __('No') }}
-        </div>
-    </div>
-    <div class="row view_dungeonroute_details_row">
-        <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Affixes') }}:
-        </div>
-        <div class="col-6">
-            <div id="affixgroup_select_container" style="width: 200px">
-                {!! Form::select('affixes[]', $affixes, $selectedAffixes,
-                    ['id' => 'affixes',
-                    'class' => 'form-control affixselect selectpicker',
-                    'multiple' => 'multiple',
-                    'title' => __('Expand to view'),
-                    'readonly' => 'readonly',
-                    'data-selected-text-format' => 'count > 1',
-                    'data-count-selected-text' => __('{0} affixes selected')]) !!}
+    <div class="container">
+        <div class="row">
+            <!-- First column -->
+            <div class="col-md-6">
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Author') }}:
+                    </div>
+                    <div class="col-6">
+                        {{ $model->author->name }}
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Dungeon') }}:
+                    </div>
+                    <div class="col-6">
+                        {{ $model->dungeon->name }}
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Difficulty') }}:
+                    </div>
+                    <div class="col-6">
+                        {{ $model->difficulty }}
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Teeming') }}:
+                    </div>
+                    <div class="col-6">
+                        {{ $model->teeming ? __('Yes') : __('No') }}
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    @php($title = 'This indicates what percent of the dungeon has their enemy forces value assigned. Since this information is still partly unknown to the website, it may
+                    appear as if the Enemy Forces counter is broken when in reality there\'s simply no value assigned to that NPC. 0% = bad, 100% = good.')
+                    <div class="col-6 font-weight-bold" data-toggle="tooltip" title="{{$title}}">
+                        {{ __('Enemy forces assigned to NPCs (TEMP)') }}:
+                    </div>
+                    <div class="col-6">
+                        @php($status = $model->dungeon->enemy_forces_mapped_status)
+                        <span data-toggle="tooltip" title="{{$title}}">
+                            {{ sprintf('%d%% (%s/%s)', $status['percent'], $status['total'] - $status['unmapped'], $status['total']) }}
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row view_dungeonroute_details_row">
-        <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Group setup') }}:
-        </div>
-        <div id="view_dungeonroute_group_setup" class="col-6">
-        </div>
-    </div>
-    <div class="row view_dungeonroute_details_row">
-        <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Rating') }}:
-        </div>
-        <div class="col-6">
-            {!! Form::select('rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
-                                $model->avg_rating, ['id' => 'rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
-        </div>
-    </div>
-    <div class="row view_dungeonroute_details_row">
-        <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Your rating') }}:
-        </div>
-        <div class="col-6">
-            @if(Auth::user() === null )
-                {{ __('Login to rate this route') }}
-            @else
-                {!! Form::select('your_rating', ['' => '', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
-                                    $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
-            @endif
-        </div>
-    </div>
-    <div class="row view_dungeonroute_details_row">
-        <div class="col-md-2 ml-auto font-weight-bold">
-            {{ __('Favorite') }}:
-        </div>
-        <div class="col-6">
-            @if(Auth::user() === null )
-                {{ __('Login to favorite this route') }}
-            @else
-                {!! Form::checkbox('favorite', 1, $model->isFavoritedByCurrentUser(), ['id' => 'favorite', 'class' => 'form-control left_checkbox']) !!}
-            @endif
-        </div>
-    </div>
-    <div class="row view_dungeonroute_details_row">
-        @php($title = 'This indicates what percent of the dungeon has their enemy forces value assigned. Since this information is still partly unknown to the website, it may
-        appear as if the Enemy Forces counter is broken when in reality there\'s simply no value assigned to that NPC. 0% = bad, 100% = good.')
-        <div class="col-md-2 ml-auto font-weight-bold" data-toggle="tooltip" title="{{$title}}">
-            {{ __('Enemy forces assigned to NPCs (TEMP)') }}:
-        </div>
-        <div class="col-6">
-            @php($status = $model->dungeon->enemy_forces_mapped_status)
-            <span data-toggle="tooltip" title="{{$title}}">
-                {{ sprintf('%d%% (%s/%s)', $status['percent'], $status['total'] - $status['unmapped'], $status['total']) }}
-            </span>
+
+            <!-- Second column -->
+            <div class="col-md-6">
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Affixes') }}:
+                    </div>
+                    <div class="col-6">
+                        <div id="affixgroup_select_container" style="width: 200px">
+                            {!! Form::select('affixes[]', $affixes, $selectedAffixes,
+                                ['id' => 'affixes',
+                                'class' => 'form-control affixselect selectpicker',
+                                'multiple' => 'multiple',
+                                'title' => __('Expand to view'),
+                                'readonly' => 'readonly',
+                                'data-selected-text-format' => 'count > 1',
+                                'data-count-selected-text' => __('{0} affixes selected')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Group setup') }}:
+                    </div>
+                    <div id="view_dungeonroute_group_setup" class="col-6">
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Rating') }}:
+                    </div>
+                    <div class="col-6">
+                        {!! Form::select('rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
+                                            $model->avg_rating, ['id' => 'rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Your rating') }}:
+                    </div>
+                    <div class="col-6">
+                        @if(Auth::user() === null )
+                            {{ __('Login to rate this route') }}
+                        @else
+                            {!! Form::select('your_rating', ['' => '', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
+                                                $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
+                        @endif
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Favorite') }}:
+                    </div>
+                    <div class="col-6">
+                        @if(Auth::user() === null )
+                            {{ __('Login to favorite this route') }}
+                        @else
+                            {!! Form::checkbox('favorite', 1, $model->isFavoritedByCurrentUser(), ['id' => 'favorite', 'class' => 'form-control left_checkbox']) !!}
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-lg-12 mt-5">
