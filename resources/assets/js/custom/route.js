@@ -186,6 +186,21 @@ class Route extends MapObject {
 
         // Only when we're editing
         if (this.map.edit) {
+            // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
+            // This also cannot be a private function since that'll apparently give different signatures as well.
+            let popupOpenFn = function (event) {
+                $("#route_edit_popup_color_" + self.id).val(self.routeColor);
+
+                // Prevent multiple binds to click
+                let $submitBtn = $("#route_edit_popup_submit_" + self.id);
+                $submitBtn.unbind('click');
+                $submitBtn.bind('click', function () {
+                    self.setColor($("#route_edit_popup_color_" + self.id).val());
+
+                    self.edit();
+                });
+            };
+
             // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
             self.register('synced', this, function (event) {
                 let customPopupHtml = $("#route_edit_popup_template").html();
@@ -202,19 +217,12 @@ class Route extends MapObject {
                     'minWidth': '300',
                     'className': 'popupCustom'
                 };
+
+                self.layer.unbindPopup();
                 self.layer.bindPopup(customPopupHtml, customOptions);
-                self.layer.on('popupopen', function (event) {
-                    $("#route_edit_popup_color_" + self.id).val(self.routeColor);
 
-                    // Prevent multiple binds to click
-                    let $submitBtn = $("#route_edit_popup_submit_" + self.id);
-                    $submitBtn.unbind('click');
-                    $submitBtn.bind('click', function () {
-                        self.setColor($("#route_edit_popup_color_" + self.id).val());
-
-                        self.edit();
-                    });
-                });
+                self.layer.off('popupopen', popupOpenFn);
+                self.layer.on('popupopen', popupOpenFn);
             });
         }
     }

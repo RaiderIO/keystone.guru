@@ -29,6 +29,7 @@ class APIEnemyController extends Controller
         $enemy->npc_id = $request->get('npc_id');
         $enemy->floor_id = $request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
+        $enemy->enemy_forces_override = $request->get('enemy_forces_override', -1);
         $enemy->lat = $request->get('lat');
         $enemy->lng = $request->get('lng');
 

@@ -56,23 +56,9 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         enemy.enemy_pack_id = remoteEnemy.enemy_pack_id;
                         enemy.floor_id = remoteEnemy.floor_id;
                         enemy.teeming = remoteEnemy.teeming;
+                        enemy.enemy_forces_override = remoteEnemy.enemy_forces_override;
 
-                        // May be null if not set at all (yet)
-                        if (remoteEnemy.npc !== null) {
-                            enemy.npc = remoteEnemy.npc;
-                            enemy.npc_id = remoteEnemy.npc.id;
-                            enemy.enemy_forces = remoteEnemy.npc.enemy_forces;
-                            // TODO Hard coded 3 = boss
-                            if (remoteEnemy.npc.classification_id === 3) {
-                                enemy.setIcon('boss');
-                            } else {
-                                enemy.setIcon(remoteEnemy.npc.aggressiveness);
-                            }
-                        } else {
-                            // Not set :(
-                            enemy.npc_id = -1;
-                            enemy.setIcon('unset');
-                        }
+                        enemy.setNpc(remoteEnemy.npc);
 
                         // Is probably null if there's no patrol set
                         if (remoteEnemy.patrol !== null) {

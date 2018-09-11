@@ -18,7 +18,6 @@ class DungeonMap extends Signalable {
 
                 // Make sure we know it's editable
                 if (event.data.objectgroup.editable && self.edit) {
-                    console.log('Added editable mapobject!', object);
                     self.drawnItems.addLayer(object.layer);
                 }
             });

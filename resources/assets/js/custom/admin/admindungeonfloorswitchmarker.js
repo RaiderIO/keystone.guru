@@ -45,9 +45,12 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
             'minWidth': '300',
             'className': 'popupCustom'
         };
+
         // Apply the popup
+        this.layer.unbindPopup();
         this.layer.bindPopup(template(data), customOptions);
-        this.layer.on('popupopen', function () {
+
+        let fn = function () {
             $("#dungeon_floor_switch_edit_popup_target_floor").val(self.target_floor_id);
 
             // Refresh all select pickers so they work again
@@ -62,7 +65,10 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
 
                 self.save();
             });
-        });
+        };
+
+        this.layer.off('popupopen', fn);
+        this.layer.on('popupopen', fn);
     }
 
     edit() {

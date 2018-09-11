@@ -42,8 +42,9 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
             background-image: none;
         }
 
-        #map_enemy_tooltip {
-            width: 200px;
+        .map_enemy_tooltip {
+            width: 240px;
+            white-space: normal;
         }
 
         .leaflet-container {
@@ -137,14 +138,14 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
     </script>
 
     <script id="map_enemy_tooltip_template" type="text/x-handlebars-template">
-        <div id="map_enemy_tooltip" class="leaflet-draw-section">
+        <div class="map_enemy_tooltip leaflet-draw-section">
             <div class="row">
                 <div class="col-5 no-gutters">{{ __('Name') }} </div>
                 <div class="col-7 no-gutters">@{{ npc_name }}</div>
             </div>
             <div class="row">
                 <div class="col-5 no-gutters">{{ __('Enemy forces') }} </div>
-                <div class="col-7 no-gutters">@{{ enemy_forces }}</div>
+                <div class="col-7 no-gutters">@{{{ enemy_forces }}}</div>
             </div>
             <div class="row">
                 <div class="col-5 no-gutters">{{ __('Base health') }} </div>
@@ -178,6 +179,11 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
                         <option value="visible">{{ __('Visible when Teeming only') }}</option>
                         <option value="hidden">{{ __('Hidden when Teeming only') }}</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="enemy_edit_popup_enemy_forces_override_@{{id}}">{{ __('Enemy forces (override, -1 to inherit)') }}</label>
+                    {!! Form::text('enemy_edit_popup_enemy_forces_override_@{{id}}', null,
+                                    ['id' => 'enemy_edit_popup_enemy_forces_override_@{{id}}', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
                     <label for="enemy_edit_popup_npc_@{{id}}">{{ __('NPC') }}</label>
