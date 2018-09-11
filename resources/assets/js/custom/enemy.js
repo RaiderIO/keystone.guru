@@ -21,6 +21,7 @@ let _neutralClass = 'neutral_enemy_icon';
 let _unfriendlyClass = 'unfriendly_enemy_icon';
 let _friendlyClass = 'friendly_enemy_icon';
 let _unsetClass = 'unset_enemy_icon';
+let _flaggedClass = 'flagged_enemy_icon';
 let _bossClass = 'boss_enemy_icon';
 
 // Icon sizes
@@ -33,6 +34,7 @@ let LeafletNeutralEnemyIcon = new L.divIcon($.extend({className: _neutralClass},
 let LeafletUnfriendlyEnemyIcon = new L.divIcon($.extend({className: _unfriendlyClass}, _smallIcon));
 let LeafletFriendlyEnemyIcon = new L.divIcon($.extend({className: _friendlyClass}, _smallIcon));
 let LeafletUnsetEnemyIcon = new L.divIcon($.extend({className: _unsetClass}, _smallIcon));
+let LeafletFlaggedEnemyIcon = new L.divIcon($.extend({className: _flaggedClass}, _smallIcon));
 let LeafletBossEnemyIcon = new L.divIcon($.extend({className: _bossClass}, _bigIcon));
 
 // Have to extend this as to not override the above icons
@@ -41,6 +43,7 @@ let LeafletNeutralEnemyIconKillZone = new L.divIcon($.extend({className: _neutra
 let LeafletUnfriendlyEnemyIconKillZone = new L.divIcon($.extend({className: _unfriendlyClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
 let LeafletFriendlyEnemyIconKillZone = new L.divIcon($.extend({className: _friendlyClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
 let LeafletUnsetEnemyIconKillZone = new L.divIcon($.extend({className: _unsetClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
+let LeafletFlaggedEnemyIconKillZone = new L.divIcon($.extend({className: _flaggedClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
 let LeafletBossEnemyIconKillZone = new L.divIcon($.extend({className: _bossClass + ' killzone_enemy_icon_big leaflet-edit-marker-selected'}, _bigIcon));
 
 let LeafletEnemyMarker = L.Marker.extend({
@@ -106,8 +109,11 @@ class Enemy extends MapObject {
             this.npc = npc;
             this.npc_id = npc.id;
             this.enemy_forces = npc.enemy_forces;
+            if( npc.enemy_forces === -1 ){
+                this.setIcon('flagged');
+            }
             // TODO Hard coded 3 = boss
-            if (npc.classification_id === 3) {
+            else if (npc.classification_id === 3) {
                 this.setIcon('boss');
             } else {
                 this.setIcon(npc.aggressiveness);
@@ -210,6 +216,10 @@ class Enemy extends MapObject {
                 break;
             case 'unset':
                 this.divIcon = this.killZoneSelectable ? LeafletUnsetEnemyIconKillZone : LeafletUnsetEnemyIcon;
+
+                break;
+            case 'flagged':
+                this.divIcon = this.killZoneSelectable ? LeafletFlaggedEnemyIconKillZone : LeafletFlaggedEnemyIcon;
 
                 break;
             case 'boss':

@@ -111,6 +111,10 @@
     background: url("/images/mapicon/unset.png") no-repeat center !important;
 }
 
+.flagged_enemy_icon {
+    background: url("/images/mapicon/flagged.png") no-repeat center !important;
+}
+
 .door_icon {
     background: url("/images/mapicon/door.png") no-repeat center !important;
 }
