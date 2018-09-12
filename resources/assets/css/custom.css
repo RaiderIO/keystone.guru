@@ -53,6 +53,14 @@
     color: #495057;
 }
 
+#map .dropdown-menu {
+    background-color: rgb(224, 224, 224);
+}
+
+#map .dropdown-item:hover, .dropdown-item:focus {
+    color: black;
+}
+
 /** LEAFLET */
 #map {
     height: 940px;
