@@ -21,6 +21,27 @@
         or send an e-mail to feedback@keystone.guru!
     </p>
 
+    <h2>{{ __('Enemy forces mapping progress') }}</h2>
+    @foreach(\App\Models\Dungeon::active()->get() as $dungeon )
+        <div class="row">
+            <div class="col-lg-2">
+                {{ $dungeon->name }}
+            </div>
+            <div class="col-lg-10">
+                <div class="progress">
+                    @php($percent = $dungeon->enemy_forces_mapped_status['percent'])
+                    @php($total = $dungeon->enemy_forces_mapped_status['total'])
+                    @php($curr = $total - $dungeon->enemy_forces_mapped_status['unmapped'])
+                    <div class="progress-bar" style="width: {{ $percent }}%;" role="progressbar"
+                         aria-valuenow="{{ $percent }}" aria-valuemin="0"
+                         aria-valuemax="100">
+                        {{ sprintf('%s/%s %d%%', $curr, $total, $percent) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
     <br>
     <h2>Changelog</h2>
 
@@ -33,13 +54,17 @@
         General changes:
     <ul>
         <li>
-            The amount of enemy forces that have been assigned to NPCs are now (temporarily) shown when viewing/editing your route.
-            Not all enemies have their enemy forces added yet, this is a manual job that takes time to process and will be added
-            over the the coming days/weeks. If the percentage is at 0%, the enemy forces counter on the map will not work. If it's
+            The amount of enemy forces that have been assigned to NPCs are now (temporarily) shown when viewing/editing
+            your route.
+            Not all enemies have their enemy forces added yet, this is a manual job that takes time to process and will
+            be added
+            over the the coming days/weeks. If the percentage is at 0%, the enemy forces counter on the map will not
+            work. If it's
             below 100%, it may not work properly.
         </li>
         <li>
-            The Halls of Valor Demo route is now fully functional, though not completely done yet, it depicts a proper run.
+            The Halls of Valor Demo route is now fully functional, though not completely done yet, it depicts a proper
+            run.
         </li>
     </ul>
 

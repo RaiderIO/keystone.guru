@@ -51,15 +51,11 @@ class Dungeon extends Model
 
         try {
             // Loop through all floors
-            foreach ($this->floors as $floor) {
-                /** @var $floor Floor */
-                foreach ($floor->enemies as $enemy) {
-                    /** @var $enemy Enemy */
-                    // Keep track which enemy has enemy_forces filled vrs not, we do it like this
-                    // because there can be multiple enemies with the same npc, this prevents those from counting double
-                    if ($enemy->npc !== null) {
-                        $npcs[$enemy->npc_id] = $enemy->npc->enemy_forces >= 0;
-                    }
+            foreach ($this->npcs as $npc) {
+                /** @var $npc Npc */
+                // @TODO Hard coded boss?
+                if ($npc !== null && $npc->classification_id !== 3) {
+                    $npcs[$npc->id] = $npc->enemy_forces >= 0;
                 }
             }
         } catch (Exception $ex) {
@@ -105,6 +101,14 @@ class Dungeon extends Model
     public function dungeonroutes()
     {
         return $this->hasMany('App\Models\DungeonRoute');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function npcs()
+    {
+        return $this->hasMany('App\Models\Npc');
     }
 
     /**
