@@ -16,7 +16,8 @@ class AdminDungeonMap extends DungeonMap {
 
         return [
             new AdminDrawControls(this, drawnItemsLayer),
-            new MapObjectGroupControls(this)
+            new MapObjectGroupControls(this),
+            new FactionDisplayControls(this)
         ]
     }
 

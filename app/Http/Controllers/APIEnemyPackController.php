@@ -16,7 +16,7 @@ class APIEnemyPackController extends Controller
         return EnemyPack::with(['vertices' => function ($query) {
             /** @var $query \Illuminate\Database\Query\Builder */
             $query->select(['enemy_pack_id', 'lat', 'lng']); // must select enemy_pack_id, else it won't return results /sadface
-        }])->where('floor_id', '=', $floorId)->get(['id', 'label']);
+        }])->where('floor_id', '=', $floorId)->get(['id', 'label', 'faction']);
     }
 
     /**
@@ -29,6 +29,7 @@ class APIEnemyPackController extends Controller
         /** @var EnemyPack $enemyPack */
         $enemyPack = EnemyPack::findOrNew($request->get('id'));
 
+        $enemyPack->faction = $request->get('faction', 'any');
         $enemyPack->label = $request->get('label');
         $enemyPack->floor_id = $request->get('floor_id');
 

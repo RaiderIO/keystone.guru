@@ -24,22 +24,24 @@ class AdminEnemy extends Enemy {
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
         // This also cannot be a private function since that'll apparently give different signatures as well.
         let popupOpenFn = function (event) {
-            $("#enemy_edit_popup_teeming_" + self.id).val(self.teeming);
-            $("#enemy_edit_popup_enemy_forces_override_" + self.id).val(self.enemy_forces_override);
-            $("#enemy_edit_popup_npc_" + self.id).val(self.npc_id);
+            $('#enemy_edit_popup_teeming_' + self.id).val(self.teeming);
+            $('#enemy_edit_popup_faction_' + self.id).val(self.faction);
+            $('#enemy_edit_popup_enemy_forces_override_' + self.id).val(self.enemy_forces_override);
+            $('#enemy_edit_popup_npc_' + self.id).val(self.npc_id);
 
             // Refresh all select pickers so they work again
-            let $selectpicker = $(".selectpicker");
+            let $selectpicker = $('.selectpicker');
             $selectpicker.selectpicker('refresh');
             $selectpicker.selectpicker('render');
 
-            let $submitBtn = $("#enemy_edit_popup_submit_" + self.id);
+            let $submitBtn = $('#enemy_edit_popup_submit_' + self.id);
 
             $submitBtn.unbind('click');
             $submitBtn.bind('click', function () {
-                self.teeming = $("#enemy_edit_popup_teeming_" + self.id).val();
-                self.enemy_forces_override = $("#enemy_edit_popup_enemy_forces_override_" + self.id).val();
-                self.npc_id = $("#enemy_edit_popup_npc_" + self.id).val();
+                self.teeming = $('#enemy_edit_popup_teeming_' + self.id).val();
+                self.faction = $('#enemy_edit_popup_faction_' + self.id).val();
+                self.enemy_forces_override = $('#enemy_edit_popup_enemy_forces_override_' + self.id).val();
+                self.npc_id = $('#enemy_edit_popup_npc_' + self.id).val();
 
                 self.edit();
             });
@@ -47,7 +49,7 @@ class AdminEnemy extends Enemy {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, function(event){
-            let customPopupHtml = $("#enemy_edit_popup_template").html();
+            let customPopupHtml = $('#enemy_edit_popup_template').html();
             // Remove template so our
             let template = handlebars.compile(customPopupHtml);
 
@@ -72,7 +74,6 @@ class AdminEnemy extends Enemy {
 
         self.map.leafletMap.on('contextmenu', function(){
             if( self.currentPatrolPolyline !== null ){
-                console.log('currentPatrol: ', self.currentPatrolPolyline);
                 self.map.leafletMap.addLayer(self.currentPatrolPolyline);
                 self.currentPatrolPolyline.disable();
             }
@@ -92,13 +93,14 @@ class AdminEnemy extends Enemy {
                 npc_id: self.npc_id,
                 floor_id: self.map.getCurrentFloor().id,
                 teeming: self.teeming,
+                faction: self.faction,
                 enemy_forces_override: self.enemy_forces_override,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng
             },
             beforeSend: function () {
                 self.editing = true;
-                $("#enemy_edit_popup_submit_" + self.id).attr('disabled', 'disabled');
+                $('#enemy_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
             },
             success: function (json) {
                 self.setSynced(true);
@@ -109,7 +111,7 @@ class AdminEnemy extends Enemy {
                 }
             },
             complete: function () {
-                $("#enemy_edit_popup_submit_" + self.id).removeAttr('disabled');
+                $('#enemy_edit_popup_submit_' + self.id).removeAttr('disabled');
                 self.editing = false;
             },
             error: function () {
@@ -162,6 +164,7 @@ class AdminEnemy extends Enemy {
                 npc_id: self.npc_id,
                 floor_id: self.map.getCurrentFloor().id,
                 teeming: self.teeming,
+                faction: self.faction,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng
             },
@@ -169,7 +172,6 @@ class AdminEnemy extends Enemy {
                 self.saving = true;
             },
             success: function (json) {
-                console.log(json);
                 self.id = json.id;
                 self.setSynced(true);
             },

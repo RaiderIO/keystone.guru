@@ -230,6 +230,7 @@
     <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/drawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/enemyforcescontrols.js') }}"></script>
+    <script src="{{ asset('js/custom/mapcontrols/factiondisplaycontrols.js') }}"></script>
 
     <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>

@@ -24,20 +24,12 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
             color: #234c5e;
         }
 
-        .enemy_edit_popup_npc {
+        .popup_select {
             width: 300px;
         }
 
-        .enemy_edit_popup_teeming {
-            width: 300px;
-        }
-
-        #map_controls .map_controls_custom {
-            width: 50px;
-            background-image: none;
-        }
-
-        #map_controls .map_controls_custom {
+        #map_controls .map_controls_custom,
+        #map_faction_display_controls .map_controls_custom {
             width: 50px;
             background-image: none;
         }
@@ -112,6 +104,24 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
         }
     </script>
 
+    <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
+        <div id="map_faction_display_controls" class="leaflet-draw-section">
+            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
+                @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
+                    <a class="map_faction_display_control map_controls_custom" href="#"
+                       data-faction="{{ strtolower($faction->name) }}"
+                       title="{{ $faction->name }}">
+                        <i class="fas fa-check-square checkbox"
+                           style="width: 15px"></i>
+                        <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
+                             data-toggle="tooltip" title="{{ $faction->name }}"/>
+                    </a>
+                @endforeach
+            </div>
+            <ul class="leaflet-draw-actions"></ul>
+        </div>
+    </script>
+
     <script id="map_controls_template" type="text/x-handlebars-template">
         <div id="map_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
@@ -152,10 +162,10 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
                 <div class="col-7 no-gutters">@{{ base_health }}</div>
             </div>
             @if($isAdmin)
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Pack') }} </div>
-                <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
-            </div>
+                <div class="row">
+                    <div class="col-5 no-gutters">{{ __('Pack') }} </div>
+                    <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
+                </div>
             @endif
         </div>
     </script>
@@ -171,16 +181,59 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
     </script>
 
     @if($isAdmin)
+        @php($factions = ['any' => __('Any'), 'alliance' => __('Alliance'), 'horde' => __('Horde')])
+        <script id="enemy_pack_edit_popup_template" type="text/x-handlebars-template">
+            <div id="enemy_pack_edit_popup_inner" class="popupCustom">
+                <div class="form-group">
+                    <label for="enemy_pack_edit_popup_faction_@{{id}}">{{ __('Faction') }}</label>
+                    <select data-live-search="true" id="enemy_pack_edit_popup_faction_@{{id}}"
+                            name="enemy_pack_edit_popup_faction_@{{id}}"
+                            class="selectpicker popup_select" data-width="300px">
+                        @foreach($factions as $key => $faction)
+                            <option value="{{ $key }}">{{ $faction }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                {!! Form::button(__('Submit'), ['id' => 'enemy_pack_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+            </div>
+        </script>
+
+        <script id="enemy_patrol_edit_popup_template" type="text/x-handlebars-template">
+            <div id="enemy_patrol_edit_popup_inner" class="popupCustom">
+                <div class="form-group">
+                    <label for="enemy_patrol_edit_popup_faction_@{{id}}">{{ __('Faction') }}</label>
+                    <select data-live-search="true" id="enemy_patrol_edit_popup_faction_@{{id}}"
+                            name="enemy_patrol_edit_popup_faction_@{{id}}"
+                            class="selectpicker popup_select" data-width="300px">
+                        @foreach($factions as $key => $faction)
+                            <option value="{{ $key }}">{{ $faction }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                {!! Form::button(__('Submit'), ['id' => 'enemy_patrol_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+            </div>
+        </script>
+
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">
                 <div class="form-group">
                     <label for="enemy_edit_popup_teeming_@{{id}}">{{ __('Teeming') }}</label>
                     <select data-live-search="true" id="enemy_edit_popup_teeming_@{{id}}"
                             name="enemy_edit_popup_teeming_@{{id}}"
-                            class="selectpicker enemy_edit_popup_teeming" data-width="300px">
+                            class="selectpicker popup_select" data-width="300px">
                         <option value="">{{ __('Always visible') }}</option>
                         <option value="visible">{{ __('Visible when Teeming only') }}</option>
                         <option value="hidden">{{ __('Hidden when Teeming only') }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="enemy_edit_popup_faction_@{{id}}">{{ __('Faction') }}</label>
+                    <select data-live-search="true" id="enemy_edit_popup_faction_@{{id}}"
+                            name="enemy_edit_popup_faction_@{{id}}"
+                            class="selectpicker popup_select" data-width="300px">
+                        @foreach($factions as $key => $faction)
+                            <option value="{{ $key }}">{{ $faction }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">
@@ -192,7 +245,7 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
                     <label for="enemy_edit_popup_npc_@{{id}}">{{ __('NPC') }}</label>
                     <select data-live-search="true" id="enemy_edit_popup_npc_@{{id}}"
                             name="enemy_edit_popup_npc_@{{id}}"
-                            class="selectpicker enemy_edit_popup_npc" data-width="300px">
+                            class="selectpicker popup_select" data-width="300px">
                         @foreach($npcs as $npc)
                             <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->id) }}</option>
                         @endforeach

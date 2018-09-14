@@ -20,6 +20,7 @@ class EnemyPatrol extends MapObject {
         this.label = 'EnemyPatrol';
         this.color = null;
         this.decorator = null;
+        this.faction = 'any'; // sensible default
         // console.log(rand);
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 
