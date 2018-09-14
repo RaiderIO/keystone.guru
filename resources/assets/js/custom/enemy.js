@@ -87,10 +87,12 @@ class Enemy extends MapObject {
             } else {
                 enemy_forces = this.npc.enemy_forces;
             }
+
             data = {
                 npc_name: this.npc.name,
                 enemy_forces: enemy_forces,
-                base_health: this.npc.base_health
+                base_health: this.npc.base_health,
+                attached_to_pack: self.enemy_pack_id >= 0 ? 'true (' + self.enemy_pack_id + ')' : 'false'
             };
         }
 

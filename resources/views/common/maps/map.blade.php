@@ -151,6 +151,12 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
                 <div class="col-5 no-gutters">{{ __('Base health') }} </div>
                 <div class="col-7 no-gutters">@{{ base_health }}</div>
             </div>
+            @if($isAdmin)
+            <div class="row">
+                <div class="col-5 no-gutters">{{ __('Pack') }} </div>
+                <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
+            </div>
+            @endif
         </div>
     </script>
 
@@ -167,9 +173,6 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
     @if($isAdmin)
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">
-                <div class="form-group">
-                    <span>{{ __('Attached to pack') }}: </span> <span id="enemy_edit_popup_attached_to_pack_@{{id}}">false</span>
-                </div>
                 <div class="form-group">
                     <label for="enemy_edit_popup_teeming_@{{id}}">{{ __('Teeming') }}</label>
                     <select data-live-search="true" id="enemy_edit_popup_teeming_@{{id}}"
