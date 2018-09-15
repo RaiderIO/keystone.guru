@@ -50,6 +50,7 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/mapcontrols/mapobjectgroupcontrols.js',
         'resources/assets/js/custom/mapcontrols/drawcontrols.js',
         'resources/assets/js/custom/mapcontrols/enemyforcescontrols.js',
+        'resources/assets/js/custom/mapcontrols/factiondisplaycontrols.js',
 
         'resources/assets/js/custom/admin/enemyattaching.js',
         'resources/assets/js/custom/admin/admindungeonmap.js',

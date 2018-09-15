@@ -27,6 +27,7 @@ class APIEnemyPatrolController extends Controller
 
         $enemyPatrol->floor_id = $request->get('floor_id');
         $enemyPatrol->enemy_id = $request->get('enemy_id');
+        $enemyPatrol->faction = $request->get('faction', 'any');
 
         if (!$enemyPatrol->save()) {
             throw new \Exception("Unable to save enemy patrol!");

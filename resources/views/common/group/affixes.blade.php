@@ -20,7 +20,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
         }
 
         .affix_list_row_selected {
-            background-color: #F5F5F5;
+            background-color: #2B3E50;
         }
 
         .affix_list_row_disabled {
@@ -29,7 +29,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
         }
 
         .affix_list_row:hover {
-            background-color: #ddd;
+            background-color: #2B3E50;
             cursor: pointer;
         }
 

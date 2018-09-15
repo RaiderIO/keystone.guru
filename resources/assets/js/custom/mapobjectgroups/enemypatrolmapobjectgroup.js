@@ -49,6 +49,7 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
                         let enemyPatrol = self.createNew(layer);
                         enemyPatrol.id = remoteEnemyPatrol.id;
                         enemyPatrol.enemy_id = remoteEnemyPatrol.enemy_id;
+                        enemyPatrol.faction = remoteEnemyPatrol.faction;
                         // We just downloaded the enemy pack, it's synced alright!
                         enemyPatrol.setSynced(true);
                     }

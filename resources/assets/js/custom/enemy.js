@@ -61,6 +61,7 @@ class Enemy extends MapObject {
         this.divIcon = null;
         // Not actually saved to the enemy, but is used for keeping track of what killzone this enemy is attached to
         this.kill_zone_id = 0;
+        this.faction = 'any'; // sensible default
         this.enemy_forces_override = -1;
         // May be set when loaded from server
         this.npc = null;
@@ -87,10 +88,12 @@ class Enemy extends MapObject {
             } else {
                 enemy_forces = this.npc.enemy_forces;
             }
+
             data = {
                 npc_name: this.npc.name,
                 enemy_forces: enemy_forces,
-                base_health: this.npc.base_health
+                base_health: this.npc.base_health,
+                attached_to_pack: self.enemy_pack_id >= 0 ? 'true (' + self.enemy_pack_id + ')' : 'false'
             };
         }
 

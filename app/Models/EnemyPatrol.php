@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $floor_id
  * @property int $enemy_id
+ * @property string $faction
  * @property \App\Models\Floor $floor
  * @property \App\Models\Enemy $enemy
  * @property \Illuminate\Support\Collection $vertices

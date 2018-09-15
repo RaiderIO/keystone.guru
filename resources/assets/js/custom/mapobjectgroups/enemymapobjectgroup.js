@@ -56,6 +56,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         enemy.enemy_pack_id = remoteEnemy.enemy_pack_id;
                         enemy.floor_id = remoteEnemy.floor_id;
                         enemy.teeming = remoteEnemy.teeming;
+                        enemy.faction = remoteEnemy.faction;
                         enemy.enemy_forces_override = remoteEnemy.enemy_forces_override;
 
                         enemy.setNpc(remoteEnemy.npc);
