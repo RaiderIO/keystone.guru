@@ -36,6 +36,14 @@ class EnemyPatrol extends MapObject {
         this.map.register('map:beforerefresh', this, function () {
             self._cleanDecorator();
         });
+
+        this.register(['object:shown', 'object:hidden'], this, function (event) {
+            if (event.data.visible) {
+                self._rebuildDecorator();
+            } else {
+                self._cleanDecorator();
+            }
+        });
     }
 
     /**
