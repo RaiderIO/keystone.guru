@@ -93,15 +93,29 @@ class MapObjectGroup extends Signalable {
     setMapObjectVisibility(object, visible) {
         console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
 
+        // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
+        // I may or may not want
         if (visible) {
             if (!this.layerGroup.hasLayer(object.layer)) {
                 this.layerGroup.addLayer(object.layer);
+                // Trigger this on the object
+                object.signal('object:shown', {object: object, visible: true});
             }
         } else {
             if (this.layerGroup.hasLayer(object.layer)) {
                 this.layerGroup.removeLayer(object.layer);
+                // Trigger this on the object
+                object.signal('object:hidden', {object: object, visible: false});
             }
         }
+    }
+
+    /**
+     * Checks if a map object is visible on the map or not.
+     * @returns {*|boolean}
+     */
+    isMapObjectVisible(object) {
+        return this.layerGroup.hasLayer(object.layer);
     }
 
     /**

@@ -100,7 +100,7 @@ class EnemyAttaching {
                     if (gju.pointInPolygon({
                         type: 'Point',
                         coordinates: [latLng.lng, latLng.lat]
-                    }, enemyPackPolygon.toGeoJSON().geometry)) {
+                    }, enemyPackPolygon.toGeoJSON().geometry) && enemyMapObjectGroup.isMapObjectVisible(enemy)) {
                         // Only if something changed; we don't want to make unnecessary requests
                         if (enemy.enemy_pack_id !== newEnemyPack.id) {
                             // Bind the enemies
