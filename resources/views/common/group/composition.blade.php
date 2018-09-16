@@ -1,6 +1,6 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
-$factions = \App\Models\Faction::with('iconfile')->get();
+$factions = isset($factions) ? $factions : \App\Models\Faction::with('iconfile')->get();
 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
 $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
 $classes = \App\Models\CharacterClass::with('iconfile')->get();
@@ -11,7 +11,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}    {
+        .{{ strtolower($faction->name) }}     {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -86,7 +86,7 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
         <div class="form-group">
             {!! Form::label('faction_id', __('Faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
-            {!! Form::select('faction_id', \App\Models\Faction::all()->pluck('name', 'id'), 0, ['class' => 'form-control selectpicker']) !!}
+            {!! Form::select('faction_id', $factions->pluck('name', 'id'), 0, ['class' => 'form-control selectpicker']) !!}
         </div>
     </div>
     @isset($dungeonroute)
@@ -132,7 +132,8 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 @foreach( $classes as $class)
     <div id="template_class_dropdown_icon_{{ $class->key }}" style="display: none;">
     <span class="{{ $class->key }}">
-        <img src="{{ Image::url($class->iconfile->getUrl(), 32, 32) }}" class="select_icon class_icon"/> {{ $class->name }}
+        <img src="{{ Image::url($class->iconfile->getUrl(), 32, 32) }}"
+             class="select_icon class_icon"/> {{ $class->name }}
     </span>
     </div>
 @endforeach

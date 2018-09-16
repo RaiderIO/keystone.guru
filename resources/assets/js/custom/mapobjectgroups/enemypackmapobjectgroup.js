@@ -36,6 +36,12 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                 for (let i = 0; i < json.length; i++) {
                     let points = [];
                     let remoteEnemyPack = json[i];
+
+                    if (remoteEnemyPack.faction !== 'any' && dungeonRouteFaction !== 'any' && dungeonRouteFaction !== remoteEnemyPack.faction) {
+                        console.log('Skipping enemy pack that does not belong to the requested faction ', remoteEnemyPack, dungeonRouteFaction);
+                        continue;
+                    }
+
                     for (let j = 0; j < remoteEnemyPack.vertices.length; j++) {
                         let vertex = remoteEnemyPack.vertices[j];
                         // I.. don't really know why this needs to be lng/lat but it needs to be

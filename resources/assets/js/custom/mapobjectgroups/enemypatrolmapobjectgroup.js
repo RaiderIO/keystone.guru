@@ -7,7 +7,7 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-exchange-alt';
     }
 
-    _createObject(layer){
+    _createObject(layer) {
         console.assert(this instanceof EnemyPatrolMapObjectGroup, 'this is not an EnemyPatrolMapObjectGroup');
 
         switch (this.classname) {
@@ -38,6 +38,11 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
                     if (json.hasOwnProperty(index)) {
                         let points = [];
                         let remoteEnemyPatrol = json[index];
+
+                        if (remoteEnemyPatrol.faction !== 'any' && dungeonRouteFaction !== 'any' && dungeonRouteFaction !== remoteEnemyPatrol.faction) {
+                            console.log('Skipping enemy patrol that does not belong to the requested faction ', remoteEnemyPatrol, dungeonRouteFaction);
+                            continue;
+                        }
 
                         for (let j = 0; j < remoteEnemyPatrol.vertices.length; j++) {
                             let vertex = remoteEnemyPatrol.vertices[j];

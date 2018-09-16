@@ -9,6 +9,8 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
 $edit = isset($edit) && $edit ? 'true' : 'false';
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
+// For Siege of Boralus
+$routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
 $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
 ?>
 
@@ -50,12 +52,13 @@ $teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
     @parent
 
     <script>
+        <?php // @TODO Convert this to an object to pass to the DungeonMap instead of multiple parameters? ?>
         // Data of the dungeon(s) we're selecting in the map
         let _dungeonData = {!! $dungeon !!};
         let _switchDungeonFloorSelect = "#map_floor_selection";
         let dungeonRoutePublicKey = '{{ $routePublicKey }}';
         let dungeonRouteEnemyForces = {{ $routeEnemyForces }};
-
+        let dungeonRouteFaction = '{{ $routeFaction }}';
 
         let dungeonMap;
 

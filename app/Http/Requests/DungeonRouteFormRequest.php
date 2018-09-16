@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SiegeOfBoralusFactionRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -32,7 +33,7 @@ class DungeonRouteFormRequest extends FormRequest
             'difficulty' => ['required', Rule::in(config('keystoneguru.dungeonroute_difficulty'))],
             'teeming' => 'nullable|int',
 
-            'faction_id' => ['required', Rule::exists('factions', 'id')],
+            'faction_id' => ['required', Rule::exists('factions', 'id'), new SiegeOfBoralusFactionRule($this->request)],
 
             'race' => 'nullable|array',
             'class' => 'nullable|array',
@@ -42,10 +43,12 @@ class DungeonRouteFormRequest extends FormRequest
 
             'unlisted' => 'nullable|int',
         ];
+
         // Validate demo state, optional or numeric
         if (Auth::user()->hasRole('admin')) {
             $rules['demo'] = 'numeric';
         }
+
         return $rules;
     }
 }

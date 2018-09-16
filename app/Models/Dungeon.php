@@ -80,6 +80,17 @@ class Dungeon extends Model
     }
 
     /**
+     * Checks if this dungeon is Siege of Boralus. It's a bit of a special dungeon because of horde/alliance differences,
+     * hence this function so we can use it differentiate between the two.
+     *
+     * @return bool
+     */
+    public function isSiegeOfBoralus()
+    {
+        return $this->name === 'Siege of Boralus';
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function expansion()
@@ -112,7 +123,18 @@ class Dungeon extends Model
     }
 
     /**
-     * Scope a query to only include active users.
+     * Scope a query to only the Siege of Boralus dungeon.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSiegeOfBoralus($query)
+    {
+        return $query->where('name', 'Siege of Boralus');
+    }
+
+    /**
+     * Scope a query to only include active dungeons.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -123,7 +145,7 @@ class Dungeon extends Model
     }
 
     /**
-     * Scope a query to only include active users.
+     * Scope a query to only include inactive dungeons.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder

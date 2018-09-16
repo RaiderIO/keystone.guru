@@ -350,15 +350,6 @@ class DungeonMap extends Signalable {
         });
 
         // If we confirmed editing something..
-        this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
-            e.layers.eachLayer(function (i, layer) {
-                console.log(i, layer);
-                let mapObject = self.findMapObjectByLayer(layer);
-                console.log(mapObject);
-            });
-            console.log(L.Draw.Event.EDITED, e);
-        });
-
         this.signal('map:refresh', {dungeonmap: this});
 
         for (let i = 0; i < this.mapObjectGroups.length; i++) {

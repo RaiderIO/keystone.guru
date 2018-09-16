@@ -37,6 +37,11 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     if (json.hasOwnProperty(index)) {
                         let remoteEnemy = json[index];
 
+                        if (remoteEnemy.faction !== 'any' && dungeonRouteFaction !== 'any' && dungeonRouteFaction !== remoteEnemy.faction) {
+                            console.log('Skipping enemy that does not belong to the requested faction ', remoteEnemy, dungeonRouteFaction);
+                            continue;
+                        }
+
                         // If the map isn't teeming, but the enemy is teeming..
                         if (!self.map.teeming && remoteEnemy.teeming === 'visible') {
                             console.log('Skipping teeming enemy ' + remoteEnemy.id);
