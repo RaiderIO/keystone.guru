@@ -14,7 +14,7 @@
         "classification_id": 2,
         "name": "Irontide Crackshot",
         "base_health": 264902,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -23,7 +23,7 @@
         "classification_id": 2,
         "name": "Irontide Stormcaller",
         "base_health": 235470,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -32,7 +32,7 @@
         "classification_id": 2,
         "name": "Irontide Corsair",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -41,7 +41,7 @@
         "classification_id": 2,
         "name": "Irontide Officer",
         "base_health": 470936,
-        "enemy_forces": -1,
+        "enemy_forces": 7,
         "aggressiveness": "aggressive"
     },
     {
@@ -50,7 +50,7 @@
         "classification_id": 2,
         "name": "Irontide Oarsman",
         "base_health": 470936,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -59,7 +59,7 @@
         "classification_id": 1,
         "name": "Freehold Barhand",
         "base_health": 44150,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "aggressiveness": "neutral"
     },
     {
@@ -68,7 +68,7 @@
         "classification_id": 2,
         "name": "Irontide Mastiff",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -104,7 +104,7 @@
         "classification_id": 2,
         "name": "Bilge Rat Swabby",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "neutral"
     },
     {
@@ -113,7 +113,7 @@
         "classification_id": 2,
         "name": "Bilge Rat Buccaneer",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -122,7 +122,7 @@
         "classification_id": 2,
         "name": "Blacktooth Scrapper",
         "base_health": 353202,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -131,7 +131,7 @@
         "classification_id": 2,
         "name": "Blacktooth Knuckleduster",
         "base_health": 323769,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -140,7 +140,7 @@
         "classification_id": 2,
         "name": "Blacktooth Brute",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -149,7 +149,7 @@
         "classification_id": 2,
         "name": "Bilge Rat Padfoot",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -158,7 +158,7 @@
         "classification_id": 2,
         "name": "Cutwater Duelist",
         "base_health": 237980,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -167,7 +167,7 @@
         "classification_id": 1,
         "name": "Freehold Pack Mule",
         "base_health": 58867,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "aggressiveness": "neutral"
     },
     {
@@ -176,7 +176,7 @@
         "classification_id": 2,
         "name": "Cutwater Knife Juggler",
         "base_health": 264902,
-        "enemy_forces": -1,
+        "enemy_forces": 3,
         "aggressiveness": "aggressive"
     },
     {
@@ -185,7 +185,7 @@
         "classification_id": 2,
         "name": "Bilge Rat Brinescale",
         "base_health": 188376,
-        "enemy_forces": -1,
+        "enemy_forces": 3,
         "aggressiveness": "aggressive"
     },
     {
@@ -194,7 +194,7 @@
         "classification_id": 2,
         "name": "Cutwater Harpooner",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -203,7 +203,7 @@
         "classification_id": 2,
         "name": "Irontide Enforcer",
         "base_health": 470936,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -221,7 +221,7 @@
         "classification_id": 2,
         "name": "Irontide Bonesaw",
         "base_health": 235470,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -230,7 +230,7 @@
         "classification_id": 2,
         "name": "Irontide Buccaneer",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -239,7 +239,7 @@
         "classification_id": 2,
         "name": "Irontide Ravager",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -248,7 +248,7 @@
         "classification_id": 1,
         "name": "Soggy Shiprat",
         "base_health": 29434,
-        "enemy_forces": -1,
+        "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
     {
@@ -257,7 +257,7 @@
         "classification_id": 2,
         "name": "Irontide Crusher",
         "base_health": 588670,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -266,7 +266,7 @@
         "classification_id": 2,
         "name": "Vermin Trapper",
         "base_health": 470936,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -275,7 +275,7 @@
         "classification_id": 1,
         "name": "Freehold Deckhand",
         "base_health": 58867,
-        "enemy_forces": -1,
+        "enemy_forces": 2,
         "aggressiveness": "neutral"
     },
     {
@@ -284,7 +284,7 @@
         "classification_id": 1,
         "name": "Freehold Shipmate",
         "base_health": 58867,
-        "enemy_forces": -1,
+        "enemy_forces": 2,
         "aggressiveness": "neutral"
     }
 ]

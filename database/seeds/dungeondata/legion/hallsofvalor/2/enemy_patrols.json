@@ -3,6 +3,7 @@
         "id": 4,
         "floor_id": 16,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 4,
@@ -50,6 +51,7 @@
         "id": 5,
         "floor_id": 16,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 12,
@@ -72,6 +74,7 @@
         "id": 6,
         "floor_id": 16,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 15,

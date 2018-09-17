@@ -2,6 +2,7 @@
     {
         "id": 30,
         "floor_id": 17,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -24,6 +25,7 @@
     {
         "id": 31,
         "floor_id": 17,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -46,6 +48,7 @@
     {
         "id": 32,
         "floor_id": 17,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -68,6 +71,7 @@
     {
         "id": 33,
         "floor_id": 17,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -90,6 +94,7 @@
     {
         "id": 34,
         "floor_id": 17,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -112,6 +117,7 @@
     {
         "id": 35,
         "floor_id": 17,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {

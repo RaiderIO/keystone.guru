@@ -5,7 +5,7 @@
         "classification_id": 2,
         "name": "Animated Guardian",
         "base_health": 500370,
-        "enemy_forces": -1,
+        "enemy_forces": 5,
         "aggressiveness": "aggressive"
     },
     {
@@ -14,7 +14,7 @@
         "classification_id": 1,
         "name": "Minion of Zul",
         "base_health": 24,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -23,7 +23,7 @@
         "classification_id": 2,
         "name": "Shadow-Borne Warrior",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -32,7 +32,7 @@
         "classification_id": 2,
         "name": "Shadow-Borne Champion",
         "base_health": 470936,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -41,7 +41,7 @@
         "classification_id": 2,
         "name": "Shadow-Borne Witch Doctor",
         "base_health": 441503,
-        "enemy_forces": -1,
+        "enemy_forces": 5,
         "aggressiveness": "aggressive"
     },
     {
@@ -50,7 +50,16 @@
         "classification_id": 2,
         "name": "Seneschal M'bara",
         "base_health": 470936,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 134331,
+        "dungeon_id": 16,
+        "classification_id": 2,
+        "name": "King Rahu'ai",
+        "base_health": 470936,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -59,7 +68,7 @@
         "classification_id": 2,
         "name": "Purification Construct",
         "base_health": 706404,
-        "enemy_forces": -1,
+        "enemy_forces": 8,
         "aggressiveness": "aggressive"
     },
     {
@@ -72,12 +81,21 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 134994,
+        "dungeon_id": 16,
+        "classification_id": 1,
+        "name": "Spectral Headhunter",
+        "base_health": 95659,
+        "enemy_forces": 1,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 135167,
         "dungeon_id": 16,
         "classification_id": 2,
         "name": "Spectral Berserker",
         "base_health": 353202,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -86,7 +104,7 @@
         "classification_id": 2,
         "name": "Honored Raptor",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -95,7 +113,7 @@
         "classification_id": 2,
         "name": "Spectral Hex Priest",
         "base_health": 264902,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -104,7 +122,7 @@
         "classification_id": 2,
         "name": "Spectral Brute",
         "base_health": 588670,
-        "enemy_forces": -1,
+        "enemy_forces": 8,
         "aggressiveness": "aggressive"
     },
     {
@@ -113,7 +131,7 @@
         "classification_id": 2,
         "name": "Spectral Beastmaster",
         "base_health": 279618,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -122,7 +140,7 @@
         "classification_id": 2,
         "name": "Spectral Witch Doctor",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -158,7 +176,7 @@
         "classification_id": 2,
         "name": "Guard Captain Atu",
         "base_health": 478294,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -167,7 +185,7 @@
         "classification_id": 2,
         "name": "King Timalji",
         "base_health": 470936,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -176,7 +194,7 @@
         "classification_id": 2,
         "name": "Queen Wasi",
         "base_health": 470936,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -185,7 +203,7 @@
         "classification_id": 2,
         "name": "King A'akul",
         "base_health": 765271,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -194,7 +212,7 @@
         "classification_id": 2,
         "name": "Bloodsworn Agent",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -203,7 +221,7 @@
         "classification_id": 2,
         "name": "Queen Patlaa",
         "base_health": 470936,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -212,7 +230,7 @@
         "classification_id": 2,
         "name": "Skeletal Hunting Raptor",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -221,7 +239,16 @@
         "classification_id": 2,
         "name": "Interment Construct",
         "base_health": 588670,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 137989,
+        "dungeon_id": 16,
+        "classification_id": 1,
+        "name": "Embalming Fluid",
+        "base_health": 176601,
+        "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
     {
