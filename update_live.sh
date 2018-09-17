@@ -15,10 +15,14 @@ git pull
 
 # Drop and re-populate all dungeon data, it's designed to do this no worries
 tput setaf 2;
+echo "Refreshing Dungeons..."
+tput sgr0;
+php artisan db:seed --class=DungeonsSeeder --database=migrate
+
+tput setaf 2;
 echo "Refreshing DungeonData..."
 tput sgr0;
 php artisan db:seed --class=DungeonDataSeeder --database=migrate
-php artisan db:seed --class=DungeonsSeeder --database=migrate
 
 # All done!
 php artisan up

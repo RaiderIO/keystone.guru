@@ -641,10 +641,5 @@ class DungeonsSeeder extends Seeder
         DB::table('dungeons')->truncate();
         DB::table('floors')->truncate();
         DB::table('floor_couplings')->truncate();
-        DB::table('dungeon_floor_switch_markers')->truncate();
-        DB::table('dungeon_start_markers')->truncate();
-        DB::table('enemies')->truncate();
-        DB::table('enemy_pack_vertices')->truncate();
-        DB::table('enemy_packs')->truncate();
     }
 }
