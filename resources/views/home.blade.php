@@ -41,10 +41,44 @@
             </div>
         </div>
     @endforeach
+    <p>
+        Enemies whose enemy forces have not been mapped are colored pink on the map. Do you know how many enemy forces
+        these enemies give? Please contact me!
+    </p>
 
     <br>
     <h2>Changelog</h2>
+    <h4>
+        2018/09/17
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            The website now has a dark theme by default. More themes/theme switcher are planned, but only after release
+        </li>
+        <li>
+            A lot of changes to enemies and the enemy forces they give upon death. All dungeons have been mapped, but a
+            handful of enemies don't have their enemy forces yet. Mostly these are enemies that are away from the beaten
+            path and generally aren't killed.
+        </li>
+    </ul>
 
+    Route changes:
+    <ul>
+        <li>
+            When you have selected Siege of Boralus, you are now required to enter a faction. This is because Siege of
+            Boralus is different for Horde and Alliance.
+        </li>
+    </ul>
+
+    Map changes:
+    <ul>
+        <li>
+            Patrols now show a directional arrow and a dotted line to differentiate between your route and enemy patrols.
+        </li>
+    </ul>
+    </p>
 
     <h4>
         2018/09/09
