@@ -604,6 +604,8 @@ class DungeonsSeeder extends Seeder
             $dungeon = new \App\Models\Dungeon();
             $dungeon->expansion_id = $dungeonData['expansion_id'];
             $dungeon->name = $name;
+            $dungeon->enemy_forces_required = $dungeonData['enemy_forces_required'];
+            $dungeon->enemy_forces_required_teeming = $dungeonData['enemy_forces_required_teeming'];
             $dungeon->active = $dungeonData['active'];
 
             $dungeon->save();
