@@ -86,6 +86,39 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Set the visibility of an individual object.
+     * @param object
+     * @param visible
+     */
+    setMapObjectVisibility(object, visible) {
+        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
+
+        // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
+        // I may or may not want
+        if (visible) {
+            if (!this.layerGroup.hasLayer(object.layer)) {
+                this.layerGroup.addLayer(object.layer);
+                // Trigger this on the object
+                object.signal('object:shown', {object: object, visible: true});
+            }
+        } else {
+            if (this.layerGroup.hasLayer(object.layer)) {
+                this.layerGroup.removeLayer(object.layer);
+                // Trigger this on the object
+                object.signal('object:hidden', {object: object, visible: false});
+            }
+        }
+    }
+
+    /**
+     * Checks if a map object is visible on the map or not.
+     * @returns {*|boolean}
+     */
+    isMapObjectVisible(object) {
+        return this.layerGroup.hasLayer(object.layer);
+    }
+
+    /**
      * Finds an object in this map object group by its ID.
      * @param id int
      * @returns {*}
@@ -124,16 +157,19 @@ class MapObjectGroup extends Signalable {
         return object;
     }
 
-    getObjectName() {
-        console.assert(this instanceof MapObjectGroup, this, 'this was not a MapObjectGroup');
-        return this.name;
-    }
-
+    /**
+     * True if the object group is shown, false if it is hidden.
+     * @returns {*|boolean}
+     */
     isShown() {
         console.assert(this instanceof MapObjectGroup, this, 'this was not a MapObjectGroup');
         return this.map.leafletMap.hasLayer(this.layerGroup);
     }
 
+    /**
+     * Sets the visibility of this entire map object group
+     * @param visible
+     */
     setVisibility(visible) {
         console.assert(this instanceof MapObjectGroup, this, 'this was not a MapObjectGroup');
         if (!this.isShown() && visible) {

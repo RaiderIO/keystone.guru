@@ -18,7 +18,6 @@ class DungeonMap extends Signalable {
 
                 // Make sure we know it's editable
                 if (event.data.objectgroup.editable && self.edit) {
-                    console.log('Added editable mapobject!', object);
                     self.drawnItems.addLayer(object.layer);
                 }
             });
@@ -54,7 +53,7 @@ class DungeonMap extends Signalable {
         this.leafletMap.scrollWheelZoom.disable();
 
         // Make sure only control + scroll allows a zoom
-        $("#map").bind('mousewheel DOMMouseScroll', function (event) {
+        $('#map').bind('mousewheel DOMMouseScroll', function (event) {
             event.stopPropagation();
             if (event.ctrlKey === true) {
                 event.preventDefault();
@@ -76,7 +75,7 @@ class DungeonMap extends Signalable {
                 let mapObject = self.findMapObjectByLayer(layer);
                 console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
 
-                // No longer synched
+                // No longer synced
                 mapObject.setSynced(false);
                 if (typeof mapObject.edit === 'function') {
                     mapObject.edit();
@@ -351,15 +350,6 @@ class DungeonMap extends Signalable {
         });
 
         // If we confirmed editing something..
-        this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
-            e.layers.eachLayer(function (i, layer) {
-                console.log(i, layer);
-                let mapObject = self.findMapObjectByLayer(layer);
-                console.log(mapObject);
-            });
-            console.log(L.Draw.Event.EDITED, e);
-        });
-
         this.signal('map:refresh', {dungeonmap: this});
 
         for (let i = 0; i < this.mapObjectGroups.length; i++) {

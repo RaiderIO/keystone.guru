@@ -50,6 +50,7 @@
 
     {!! Form::close() !!}
 
+    <div class="mt-4">
     @isset($model)
         <h3>Enemy placement</h3>
         @include('common.maps.map', [
@@ -60,5 +61,7 @@
         'selectedFloorId' => $model->id
         ])
     @endisset
+
+    </div>
 
 @endsection

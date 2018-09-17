@@ -104,7 +104,7 @@
         "classification_id": 2,
         "name": "T'lonja",
         "base_health": 588670,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -131,7 +131,7 @@
         "classification_id": 2,
         "name": "Monzumi",
         "base_health": 600443,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {
@@ -140,7 +140,7 @@
         "classification_id": 2,
         "name": "Dinomancer Kish'o",
         "base_health": 706404,
-        "enemy_forces": -1,
+        "enemy_forces": 10,
         "aggressiveness": "aggressive"
     },
     {

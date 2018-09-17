@@ -3,6 +3,7 @@
         "id": 68,
         "floor_id": 45,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 357,
@@ -20,6 +21,7 @@
         "id": 69,
         "floor_id": 45,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 359,
@@ -72,6 +74,7 @@
         "id": 70,
         "floor_id": 45,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 368,
@@ -104,6 +107,7 @@
         "id": 71,
         "floor_id": 45,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 373,
@@ -121,6 +125,7 @@
         "id": 72,
         "floor_id": 45,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 379,
@@ -168,6 +173,7 @@
         "id": 73,
         "floor_id": 45,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 392,
@@ -200,6 +206,7 @@
         "id": 74,
         "floor_id": 45,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 397,
@@ -225,6 +232,70 @@
                 "id": 401,
                 "lat": 184.44,
                 "lng": -191.19
+            }
+        ]
+    },
+    {
+        "id": 101,
+        "floor_id": 45,
+        "enemy_id": -1,
+        "faction": "any",
+        "vertices": [
+            {
+                "id": 567,
+                "lat": 210.88,
+                "lng": -85.810000000000002
+            },
+            {
+                "id": 568,
+                "lat": 201.88,
+                "lng": -85.689999999999998
+            },
+            {
+                "id": 569,
+                "lat": 200.19,
+                "lng": -87.5
+            }
+        ]
+    },
+    {
+        "id": 102,
+        "floor_id": 45,
+        "enemy_id": -1,
+        "faction": "any",
+        "vertices": [
+            {
+                "id": 570,
+                "lat": 175.81,
+                "lng": -85.439999999999998
+            },
+            {
+                "id": 571,
+                "lat": 180.81,
+                "lng": -85.560000000000002
+            },
+            {
+                "id": 572,
+                "lat": 187.25,
+                "lng": -81.189999999999998
+            }
+        ]
+    },
+    {
+        "id": 103,
+        "floor_id": 45,
+        "enemy_id": -1,
+        "faction": "any",
+        "vertices": [
+            {
+                "id": 573,
+                "lat": 119,
+                "lng": -127.25
+            },
+            {
+                "id": 574,
+                "lat": 134.19,
+                "lng": -136.31
             }
         ]
     }

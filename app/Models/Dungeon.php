@@ -46,21 +46,16 @@ class Dungeon extends Model
      */
     public function getEnemyForcesMappedStatusAttribute()
     {
-        //
         $result = [];
         $npcs = [];
 
         try {
             // Loop through all floors
-            foreach ($this->floors as $floor) {
-                /** @var $floor Floor */
-                foreach ($floor->enemies as $enemy) {
-                    /** @var $enemy Enemy */
-                    // Keep track which enemy has enemy_forces filled vrs not, we do it like this
-                    // because there can be multiple enemies with the same npc, this prevents those from counting double
-                    if ($enemy->npc !== null) {
-                        $npcs[$enemy->npc_id] = $enemy->npc->enemy_forces >= 0;
-                    }
+            foreach ($this->npcs as $npc) {
+                /** @var $npc Npc */
+                // @TODO Hard coded boss?
+                if ($npc !== null && $npc->classification_id !== 3) {
+                    $npcs[$npc->id] = $npc->enemy_forces >= 0;
                 }
             }
         } catch (Exception $ex) {
@@ -79,9 +74,20 @@ class Dungeon extends Model
         $result['npcs'] = $npcs;
         $result['unmapped'] = $unmappedCount;
         $result['total'] = $total;
-        $result['percent'] = 100 - (($unmappedCount / $total) * 100);
+        $result['percent'] = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
 
         return $result;
+    }
+
+    /**
+     * Checks if this dungeon is Siege of Boralus. It's a bit of a special dungeon because of horde/alliance differences,
+     * hence this function so we can use it differentiate between the two.
+     *
+     * @return bool
+     */
+    public function isSiegeOfBoralus()
+    {
+        return $this->name === 'Siege of Boralus';
     }
 
     /**
@@ -109,7 +115,26 @@ class Dungeon extends Model
     }
 
     /**
-     * Scope a query to only include active users.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function npcs()
+    {
+        return $this->hasMany('App\Models\Npc');
+    }
+
+    /**
+     * Scope a query to only the Siege of Boralus dungeon.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSiegeOfBoralus($query)
+    {
+        return $query->where('name', 'Siege of Boralus');
+    }
+
+    /**
+     * Scope a query to only include active dungeons.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -120,7 +145,7 @@ class Dungeon extends Model
     }
 
     /**
-     * Scope a query to only include active users.
+     * Scope a query to only include inactive dungeons.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder

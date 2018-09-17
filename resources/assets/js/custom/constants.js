@@ -24,11 +24,24 @@ var c = {
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple']
         },
+        enemypack: {
+            colors: {
+                unsaved: '#E25D5D',
+                unsavedBorder: '#7C3434',
+
+                edited: '#E2915D',
+                editedBorder: '#7C5034',
+
+                saved: '#5993D2',
+                savedBorder: '#34577D'
+            }
+        },
         enemypatrol : {
             defaultColor: '#E25D5D'
         },
         route: {
-            defaultColor: '#9dff56'
+            defaultColor: '#9dff56',
+
         },
         killzone: {
             colors: {

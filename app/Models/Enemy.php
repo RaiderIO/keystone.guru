@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $npc_id
  * @property int $floor_id
  * @property string $teeming
+ * @property string $faction
+ * @property string $enemy_forces_override
  * @property double $lat
  * @property double $lng
  * @property \App\Models\EnemyPack $enemyPack

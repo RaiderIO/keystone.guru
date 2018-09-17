@@ -1,6 +1,25 @@
 @extends('layouts.app', ['wide' => true])
 @section('header-title', $headerTitle)
 
+
+@section('scripts')
+    @parent
+
+    <script>
+        $(function () {
+            let $dungeonIdSelect = $('#dungeon_id_select');
+            $dungeonIdSelect.bind('change', function () {
+                let $factionWarning = $('#siege_of_boralus_faction_warning');
+                if (parseInt($dungeonIdSelect.val()) === {{ \App\Models\Dungeon::siegeOfBoralus()->get()->first()->id }} ) {
+                    $factionWarning.show();
+                } else {
+                    $factionWarning.hide();
+                }
+            });
+        })
+    </script>
+@endsection
+
 @section('content')
     @isset($model)
         {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
@@ -17,7 +36,10 @@
         </div>
         <div class="form-group">
             {!! Form::label('dungeon_id', __('Select dungeon') . "*") !!}
-            {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->pluck('name', 'id'), null, ['class' => 'form-control']) !!}
+            {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->pluck('name', 'id'), null, ['id' => 'dungeon_id_select', 'class' => 'form-control']) !!}
+            <div id="siege_of_boralus_faction_warning" class="text-warning" style="display: none;">
+                {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
+            </div>
         </div>
         <div class="form-group">
             {!! Form::label('difficulty', __('Difficulty') . "*") !!}

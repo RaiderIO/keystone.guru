@@ -2,6 +2,7 @@
     {
         "id": 36,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -24,6 +25,7 @@
     {
         "id": 37,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -46,6 +48,7 @@
     {
         "id": 38,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -73,6 +76,7 @@
     {
         "id": 39,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -105,6 +109,7 @@
     {
         "id": 40,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -132,6 +137,7 @@
     {
         "id": 42,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -154,6 +160,7 @@
     {
         "id": 43,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -181,6 +188,7 @@
     {
         "id": 44,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -208,6 +216,7 @@
     {
         "id": 45,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -235,6 +244,7 @@
     {
         "id": 46,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -262,6 +272,7 @@
     {
         "id": 47,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -289,6 +300,7 @@
     {
         "id": 48,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -316,6 +328,7 @@
     {
         "id": 49,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -343,6 +356,7 @@
     {
         "id": 50,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -370,6 +384,7 @@
     {
         "id": 51,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -397,6 +412,7 @@
     {
         "id": 52,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -429,6 +445,7 @@
     {
         "id": 53,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -456,6 +473,7 @@
     {
         "id": 55,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -483,6 +501,7 @@
     {
         "id": 56,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -505,6 +524,7 @@
     {
         "id": 57,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -532,6 +552,7 @@
     {
         "id": 299,
         "floor_id": 41,
+        "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
@@ -553,6 +574,34 @@
                 "id": 1510,
                 "lat": 225.25,
                 "lng": -215.13
+            }
+        ]
+    },
+    {
+        "id": 437,
+        "floor_id": 41,
+        "faction": "any",
+        "label": "Enemy pack",
+        "vertices": [
+            {
+                "id": 2285,
+                "lat": 268.75,
+                "lng": -87
+            },
+            {
+                "id": 2286,
+                "lat": 268.75,
+                "lng": -90.939999999999998
+            },
+            {
+                "id": 2287,
+                "lat": 271.12,
+                "lng": -90.879999999999995
+            },
+            {
+                "id": 2288,
+                "lat": 271.12,
+                "lng": -87.060000000000002
             }
         ]
     }

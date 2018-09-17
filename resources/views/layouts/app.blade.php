@@ -14,6 +14,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    @if (config('app.env') !== 'production')
+    <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
+    @endif
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
@@ -25,7 +28,7 @@
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom border-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -164,45 +167,35 @@
     <div class="container text-center">
         <hr/>
         <div class="row">
-            <div class="col-md-3">
-                <ul class="nav nav-pills flex-column">
-                    <li class="nav-item"><a class="nav-link" href="#">News</a></li>
-                    <li class="nav-item">
-                        <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} </a>
-                    </li>
-                </ul>
+            <div class="col-3">
+                <a class="nav-link" href="#">News</a>
             </div>
-            <div class="col-md-3">
-                <ul class="nav nav-pills flex-column">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('misc.about') }}">About</a></li>
-                    <li class="nav-item">
-                        <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
-                    </li>
-                </ul>
+            <div class="col-3">
+                <a class="nav-link" href="{{ route('misc.about') }}">About</a>
             </div>
-            <div class="col-md-3">
-                <ul class="nav nav-pills flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://discord.gg/2KtWrqw">
-                            <i class="fab fa-discord"></i> Discord
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
-                    </li>
-                </ul>
+            <div class="col-3">
+                <a class="nav-link" href="https://discord.gg/2KtWrqw">
+                    <i class="fab fa-discord"></i> Discord
+                </a>
             </div>
-            <div class="col-md-3">
-                <ul class="nav nav-pills flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://github.com/Wotuu/keystone.guru">
-                            <i class="fab fa-github"></i> Github
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
-                    </li>
-                </ul>
+            <div class="col-3">
+                <a class="nav-link" href="https://github.com/Wotuu/keystone.guru">
+                    <i class="fab fa-github"></i> Github
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} </a>
+            </div>
+            <div class="col-3">
+                <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
+            </div>
+            <div class="col-3">
+                <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
+            </div>
+            <div class="col-3">
+                <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
             </div>
         </div>
     </div>
@@ -237,6 +230,7 @@
     <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/drawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/enemyforcescontrols.js') }}"></script>
+    <script src="{{ asset('js/custom/mapcontrols/factiondisplaycontrols.js') }}"></script>
 
     <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>

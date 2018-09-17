@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $floor_id
+ * @property string $faction
  * @property string $label
  * @property \App\Models\Floor $floor
  * @property \Illuminate\Support\Collection $enemies

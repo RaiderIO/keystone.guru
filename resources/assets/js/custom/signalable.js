@@ -12,14 +12,22 @@ class Signalable {
      */
     register(name, listener, fn) {
         console.assert(this instanceof Signalable, this, 'this is not a Signalable!');
+        console.assert(typeof name === 'string' || Array.isArray(name), name, 'name is not a string|array!');
         console.assert(typeof listener !== 'function', listener, 'listener is not a function! You probably forgot to add the listener');
+        console.assert(typeof fn === 'function', listener, 'fn should be a function');
 
-        // console.log('pushing ', name, fn);
-        this.signals.push({
-            name: name,
-            listener: listener,
-            callback: fn
-        })
+        if (typeof name === 'string') {
+            // Convert to array
+            name = [name];
+        }
+
+        for (let i = 0; i < name.length; i++) {
+            this.signals.push({
+                name: name[i],
+                listener: listener,
+                callback: fn
+            });
+        }
     }
 
     /**

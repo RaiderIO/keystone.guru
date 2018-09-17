@@ -58,7 +58,7 @@
 
     <div class="form-group{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">
         {!! Form::label('enemy_forces', __('Enemy forces (-1 for unknown)')) !!}
-        {!! Form::text('enemy_forces', -1, ['class' => 'form-control']) !!}
+        {!! Form::text('enemy_forces', isset($model) ? $model->enemy_forces : -1, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'enemy_forces'])
     </div>
 

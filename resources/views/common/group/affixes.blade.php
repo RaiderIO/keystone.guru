@@ -20,7 +20,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
         }
 
         .affix_list_row_selected {
-            background-color: #F5F5F5;
+            background-color: #2B3E50;
         }
 
         .affix_list_row_disabled {
@@ -29,7 +29,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
         }
 
         .affix_list_row:hover {
-            background-color: #ddd;
+            background-color: #2B3E50;
             cursor: pointer;
         }
 
@@ -124,7 +124,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
 @endsection
 
 <div class="form-group">
-    {!! Form::label('affixes[]', __('Select affixes') . "*") !!}
+    {!! Form::label('affixes[]', __('Select affixes')) !!}
     {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('id', 'id'),
         !isset($dungeonroute) ? 0 : $dungeonroute->affixgroups->pluck(['affix_group_id']),
         ['id' => 'affixes', 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}

@@ -127,7 +127,8 @@
                         {{ __('Group composition') }}
                     </h3>
 
-                    @include('common.group.composition', ['dungeonroute' => $model])
+                    @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
+                    @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions])
 
                     <h3 class='mt-1'>
                         {{ __('Affixes (optional)') }}

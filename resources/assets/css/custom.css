@@ -53,6 +53,14 @@
     color: #495057;
 }
 
+#map .dropdown-menu {
+    background-color: rgb(224, 224, 224);
+}
+
+#map .dropdown-item:hover, .dropdown-item:focus {
+    color: black;
+}
+
 /** LEAFLET */
 #map {
     height: 940px;
@@ -111,6 +119,10 @@
     background: url("/images/mapicon/unset.png") no-repeat center !important;
 }
 
+.flagged_enemy_icon {
+    background: url("/images/mapicon/flagged.png") no-repeat center !important;
+}
+
 .door_icon {
     background: url("/images/mapicon/door.png") no-repeat center !important;
 }
@@ -132,6 +144,7 @@
 }
 
 #map_enemy_forces {
+    color: black;
     background-color: #fff;
     border: 2px solid rgba(0, 0, 0, 0.2);
     background-clip: padding-box;
@@ -174,7 +187,7 @@
 }
 
 .class_icon {
-    background-color: #1d3131;
+    background-color: #2B3E50;
 }
 
 .default_table {

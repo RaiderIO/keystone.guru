@@ -15,12 +15,61 @@ class Route extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
+        let self = this;
+
         this.label = 'Route';
         this.saving = false;
         this.deleting = false;
+        this.decorator = null;
 
         this.setColor(c.map.route.defaultColor);
         this.setSynced(false);
+
+        this.register('synced', this, function () {
+            self._rebuildDecorator();
+        });
+        this.register('object:deleted', this, function () {
+            self._cleanDecorator();
+        });
+        this.map.register('map:beforerefresh', this, function () {
+            self._cleanDecorator();
+        });
+    }
+
+    /**
+     * Cleans up the decorator of this route, removing it from the map.
+     * @private
+     */
+    _cleanDecorator() {
+        console.assert(this instanceof Route, this, 'this is not an Route');
+
+        if (this.decorator !== null) {
+            this.map.leafletMap.removeLayer(this.decorator);
+        }
+    }
+
+    /**
+     * Rebuild the decorators for this route (directional arrows etc).
+     * @private
+     */
+    _rebuildDecorator() {
+        console.assert(this instanceof Route, this, 'this is not an Route');
+
+        this._cleanDecorator();
+
+        this.decorator = L.polylineDecorator(this.layer, {
+            patterns: [
+                {
+                    offset: 25,
+                    repeat: 100,
+                    symbol: L.Symbol.arrowHead({
+                        pixelSize: 12,
+                        pathOptions: {fillOpacity: 1, weight: 0, color: this.routeColor}
+                    })
+                }
+            ]
+        });
+        this.decorator.addTo(this.map.leafletMap);
     }
 
     setColor(color) {
@@ -35,20 +84,6 @@ class Route extends MapObject {
             savedBorder: color,
             saved: color
         });
-    }
-
-    getContextMenuItems() {
-        console.assert(this instanceof Route, this, 'this was not a Route');
-        // Merge existing context menu items with the admin ones
-        return super.getContextMenuItems().concat([{
-            text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
-            disabled: this.synced || this.saving,
-            callback: (this.save).bind(this)
-        }, '-', {
-            text: '<i class="fas fa-trash"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
-            disabled: !this.synced || this.deleting,
-            callback: (this.delete).bind(this)
-        }]);
     }
 
     edit() {
@@ -148,10 +183,27 @@ class Route extends MapObject {
         console.assert(this instanceof Route, this, 'this is not an Route');
         super.onLayerInit();
 
+        console.log('route on layer init!');
+
         let self = this;
 
         // Only when we're editing
-        if( this.map.edit ){
+        if (this.map.edit) {
+            // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
+            // This also cannot be a private function since that'll apparently give different signatures as well.
+            let popupOpenFn = function (event) {
+                $("#route_edit_popup_color_" + self.id).val(self.routeColor);
+
+                // Prevent multiple binds to click
+                let $submitBtn = $("#route_edit_popup_submit_" + self.id);
+                $submitBtn.unbind('click');
+                $submitBtn.bind('click', function () {
+                    self.setColor($("#route_edit_popup_color_" + self.id).val());
+
+                    self.edit();
+                });
+            };
+
             // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
             self.register('synced', this, function (event) {
                 let customPopupHtml = $("#route_edit_popup_template").html();
@@ -168,21 +220,19 @@ class Route extends MapObject {
                     'minWidth': '300',
                     'className': 'popupCustom'
                 };
+
+                self.layer.unbindPopup();
                 self.layer.bindPopup(customPopupHtml, customOptions);
-                self.layer.on('popupopen', function (event) {
-                    $("#route_edit_popup_color_" + self.id).val(self.routeColor);
 
-                    $("#route_edit_popup_submit_" + self.id).bind('click', function () {
-                        self.setColor($("#route_edit_popup_color_" + self.id).val());
-
-                        self.edit();
-                    });
-                });
+                self.layer.off('popupopen', popupOpenFn);
+                self.layer.on('popupopen', popupOpenFn);
             });
         }
     }
 
     getVertices() {
+        console.assert(this instanceof Route, this, 'this is not an Route');
+
         let coordinates = this.layer.toGeoJSON().geometry.coordinates;
         let result = [];
         for (let i = 0; i < coordinates.length; i++) {

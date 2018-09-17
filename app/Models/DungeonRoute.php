@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\DB;
  * @property $teeming boolean
  * @property $unlisted boolean
  * @property $demo boolean
+ *
+ * @property $setup array
+ * @property $avg_rating double
+ * @property $rating_count int
+ * @property $enemy_forces int
+ *
  * @property $dungeon Dungeon
  * @property $route Route
  * @property $faction Faction

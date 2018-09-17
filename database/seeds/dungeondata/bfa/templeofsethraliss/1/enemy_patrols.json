@@ -3,6 +3,7 @@
         "id": 27,
         "floor_id": 48,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 125,
@@ -30,6 +31,7 @@
         "id": 28,
         "floor_id": 48,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 103,
@@ -57,6 +59,7 @@
         "id": 29,
         "floor_id": 48,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 107,
@@ -124,6 +127,7 @@
         "id": 30,
         "floor_id": 48,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 119,
@@ -141,6 +145,7 @@
         "id": 31,
         "floor_id": 48,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 121,

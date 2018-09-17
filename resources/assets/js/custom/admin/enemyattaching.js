@@ -88,12 +88,10 @@ class EnemyAttaching {
             // Gather some data
             let enemyPack = event.data.object;
 
-            // Preserve the 'this' reference, we gotta couple enemies when we know the enemy pack's ID from the server
-            // Thus bind to the synced function and read the object then.
-            enemyPack.register.call(enemyPack, enemyPack, 'synced', function (syncedEvent) {
+            enemyPack.register('synced', enemyPack, function (syncedEvent) {
 
-                enemyPack = syncedEvent.data.object;
-                let enemyPackPolygon = enemyPack.layer;
+                let newEnemyPack = syncedEvent.context;
+                let enemyPackPolygon = newEnemyPack.layer;
                 // For each enemy we know of
                 $.each(enemyMapObjectGroup.objects, function (i, enemy) {
 
@@ -102,18 +100,16 @@ class EnemyAttaching {
                     if (gju.pointInPolygon({
                         type: 'Point',
                         coordinates: [latLng.lng, latLng.lat]
-                    }, enemyPackPolygon.toGeoJSON().geometry)) {
+                    }, enemyPackPolygon.toGeoJSON().geometry) && enemyMapObjectGroup.isMapObjectVisible(enemy)) {
                         // Only if something changed; we don't want to make unnecessary requests
-                        if( enemy.enemy_pack_id !== enemyPack.id ){
+                        if (enemy.enemy_pack_id !== newEnemyPack.id) {
                             // Bind the enemies
-                            enemy.enemy_pack_id = enemyPack.id;
+                            enemy.enemy_pack_id = newEnemyPack.id;
                             // Save all enemies so their pack connection is never broken
                             enemy.save();
                         }
                     }
                 });
-
-                enemyPack.unregister('synced', self);
             });
         });
     }
@@ -121,10 +117,10 @@ class EnemyAttaching {
     /**
      * Resets the current mouse over layer, if we have it
      */
-    resetCurrentMouseoverLayer(){
+    resetCurrentMouseoverLayer() {
         console.assert(this instanceof EnemyAttaching, this, 'this is not an instance of EnemyAttaching');
 
-        if( this.currentMouseoverLayer !== null ){
+        if (this.currentMouseoverLayer !== null) {
             // No longer in this layer, revert changes
             this.currentMouseoverLayer.setStyle({
                 fillColor: this.currentMouseoverLayerStyle.fillColor,

@@ -3,6 +3,7 @@
         "id": 32,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 129,
@@ -20,6 +21,7 @@
         "id": 33,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 309,
@@ -67,6 +69,7 @@
         "id": 34,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 136,
@@ -84,6 +87,7 @@
         "id": 35,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 326,
@@ -111,6 +115,7 @@
         "id": 36,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 330,
@@ -138,6 +143,7 @@
         "id": 38,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 146,
@@ -160,6 +166,7 @@
         "id": 60,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 272,
@@ -197,6 +204,7 @@
         "id": 61,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 278,
@@ -219,6 +227,7 @@
         "id": 62,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 281,
@@ -236,6 +245,7 @@
         "id": 63,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 299,
@@ -293,6 +303,7 @@
         "id": 64,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 317,
@@ -315,6 +326,7 @@
         "id": 65,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 343,
@@ -337,6 +349,7 @@
         "id": 66,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 348,
@@ -364,6 +377,7 @@
         "id": 67,
         "floor_id": 43,
         "enemy_id": -1,
+        "faction": "any",
         "vertices": [
             {
                 "id": 354,
