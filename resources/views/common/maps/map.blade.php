@@ -1,5 +1,4 @@
 <?php
-
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
 /** @var App\Models\DungeonRoute $dungeonroute */
@@ -11,7 +10,7 @@ $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 // For Siege of Boralus
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
-$teeming = isset($dungeonroute) ? $dungeonroute->isTeeming() : false;
+$teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
 ?>
 
 @section('head')
