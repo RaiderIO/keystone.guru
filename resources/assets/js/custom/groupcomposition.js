@@ -25,7 +25,6 @@ $(function () {
 });
 
 function _refreshSelectPicker() {
-
     let $selectPicker = $('.selectpicker');
 
     $selectPicker.selectpicker('refresh');
@@ -68,6 +67,7 @@ function _isClassPartOfRace(raceId, classId) {
  * @private
  */
 function _factionChanged(event) {
+    console.log('>> _factionChanged', event);
     let newFactionId = parseInt($('#faction_id').val());
 
     // For each race select there is ..
@@ -83,6 +83,7 @@ function _factionChanged(event) {
             $option.show();
         }
     });
+    console.log('OK _factionChanged', event);
 }
 
 /**
@@ -94,7 +95,7 @@ function _raceChanged(event) {
     console.log(event);
 
     // Changed by user
-    if( event.originalEvent ){
+    if (event.originalEvent) {
         let $raceSelect = $(event.target);
         let newRaceId = parseInt($raceSelect.val());
 
@@ -114,6 +115,16 @@ function _raceChanged(event) {
                 $option.show();
             }
         });
+
+        // Change faction to appropriate faction based on faction of race
+        let race = _findRaceById(newRaceId);
+        let raceFactionId = race.faction_id;
+
+        let $faction = $('#faction_id');
+        if( parseInt($faction.val()) !== raceFactionId ) {
+            // Trigger change event
+            $faction.val(raceFactionId).change();
+        }
     }
 }
 

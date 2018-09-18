@@ -71,6 +71,11 @@ class Enemy extends MapObject {
         this.setSynced(true);
     }
 
+    _getPercentageString(enemyForces) {
+        // Do some fuckery to round to two decimal places
+        return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
+    }
+
     bindTooltip() {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         let source = $("#map_enemy_tooltip_template").html();
@@ -80,13 +85,17 @@ class Enemy extends MapObject {
         if (this.npc !== null) {
             // Determine what to show for enemy forces based on override or not
             let enemy_forces = this.npc.enemy_forces;
-            if (this.enemy_forces_override >= 0) {
-                enemy_forces = '<s>' + this.npc.enemy_forces + '</s> ' +
-                    '<span style="color: orange;">' + this.enemy_forces_override + '</span>';
+
+            if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
+
+                if (this.enemy_forces_override >= 0) {
+                    enemy_forces = '<s>' + enemy_forces + '</s> ' +
+                        '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
+                } else if (enemy_forces >= 1) {
+                    enemy_forces += ' ' + this._getPercentageString(enemy_forces);
+                }
             } else if (enemy_forces === -1) {
                 enemy_forces = 'unknown';
-            } else {
-                enemy_forces = this.npc.enemy_forces;
             }
 
             data = {
@@ -112,7 +121,7 @@ class Enemy extends MapObject {
             this.npc = npc;
             this.npc_id = npc.id;
             this.enemy_forces = npc.enemy_forces;
-            if( npc.enemy_forces === -1 ){
+            if (npc.enemy_forces === -1) {
                 this.setIcon('flagged');
             }
             // TODO Hard coded 3 = boss

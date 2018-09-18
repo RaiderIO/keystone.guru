@@ -29,7 +29,6 @@ class EnemyForcesControls extends MapControl {
 
         // Listen for when all enemies are loaded
         this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
-            console.log('mapobjectgroupsfetchsuccess!');
             let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
 
             // For each enemy we've loaded

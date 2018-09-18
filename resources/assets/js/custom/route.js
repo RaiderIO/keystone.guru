@@ -183,8 +183,6 @@ class Route extends MapObject {
         console.assert(this instanceof Route, this, 'this is not an Route');
         super.onLayerInit();
 
-        console.log('route on layer init!');
-
         let self = this;
 
         // Only when we're editing
