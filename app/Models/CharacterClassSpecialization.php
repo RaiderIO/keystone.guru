@@ -1,18 +1,16 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * @property string $name
+ * @property int $character_class_id
+ * @property int $icon_file_id
  * @property \Illuminate\Support\Collection $specializations
  */
-class CharacterSpecialization extends Model
+class CharacterClassSpecialization extends IconFileModel
 {
     public $timestamps = false;
-
-    public $hidden = ['created_at', 'updated_at'];
+    public $hidden = ['icon_file_id', 'pivot'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

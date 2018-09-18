@@ -29,11 +29,16 @@ use Illuminate\Support\Facades\DB;
  * @property $route Route
  * @property $faction Faction
  * @property $author User
- * @property $races \Illuminate\Support\Collection
+ *
+ * @property $specializations \Illuminate\Support\Collection
  * @property $classes \Illuminate\Support\Collection
- * @property $affixgroups \Illuminate\Support\Collection
+ * @property $races \Illuminate\Support\Collection
+ *
+ * @property $playerspecializations \Illuminate\Support\Collection
  * @property $playerclasses \Illuminate\Support\Collection
  * @property $playerraces \Illuminate\Support\Collection
+ *
+ * @property $affixgroups \Illuminate\Support\Collection
  * @property $affixes \Illuminate\Support\Collection
  * @property $ratings \Illuminate\Support\Collection
  */
@@ -109,17 +114,17 @@ class DungeonRoute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function races()
+    public function specializations()
     {
-        return $this->belongsToMany('App\Models\CharacterRace', 'dungeon_route_player_races');
+        return $this->belongsToMany('App\Models\CharacterClassSpecialization', 'dungeon_route_player_specializations');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function playerraces()
+    public function playerspecializations()
     {
-        return $this->hasMany('App\Models\DungeonRoutePlayerRace');
+        return $this->hasMany('App\Models\DungeonRoutePlayerSpecialization');
     }
 
     /**
@@ -136,6 +141,22 @@ class DungeonRoute extends Model
     public function playerclasses()
     {
         return $this->hasMany('App\Models\DungeonRoutePlayerClass');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function races()
+    {
+        return $this->belongsToMany('App\Models\CharacterRace', 'dungeon_route_player_races');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function playerraces()
+    {
+        return $this->hasMany('App\Models\DungeonRoutePlayerRace');
     }
 
     /**
@@ -244,6 +265,7 @@ class DungeonRoute extends Model
     {
         return [
             'faction' => $this->faction,
+            'specializations' => $this->specializations,
             'classes' => $this->classes,
             'races' => $this->races
         ];
