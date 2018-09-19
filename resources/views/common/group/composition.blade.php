@@ -1,10 +1,10 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
 $factions = isset($factions) ? $factions : \App\Models\Faction::with('iconfile')->get();
+$specializations = \App\Models\CharacterClassSpecialization::with('iconfile')->get();
+$classes = \App\Models\CharacterClass::with('specializations')->get();
 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
 $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
-$classes = \App\Models\CharacterClass::with('iconfile')->get();
-$specializations = \App\Models\CharacterClassSpecialization::with('iconfile')->get();
 ?>
 
 @section('head')
@@ -12,11 +12,16 @@ $specializations = \App\Models\CharacterClassSpecialization::with('iconfile')->g
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}          {
+        .{{ strtolower($faction->name) }}              {
             color: {{ $faction->color }};
             font-weight: bold;
         }
+
         @endforeach
+
+        .testtesty {
+
+        }
     </style>
 @endsection
 
@@ -115,7 +120,8 @@ $specializations = \App\Models\CharacterClassSpecialization::with('iconfile')->g
 
         <div class="form-group">
             {!! Form::label('specialization[]', __('Party member #' . $i)) !!}
-            <select data-live-search="true" name="specialization[]" class="form-control selectpicker specializationselect" data-id="{{$i}}">
+            <select data-live-search="true" name="specialization[]"
+                    class="form-control selectpicker specializationselect" data-id="{{$i}}">
 
             </select>
         </div>
@@ -136,8 +142,12 @@ $specializations = \App\Models\CharacterClassSpecialization::with('iconfile')->g
 </div>
 
 <script id="composition_icon_option_template" type="text/x-handlebars-template">
-    <div>
-        <img src="@{{ url }}" class="select_icon class_icon"/> @{{ name }}
+    <div class="testtesty">
+        <div class="class_icon class_icon_@{{ name_lc }}">
+            <div style="margin-left: 26px">
+                @{{ name }}
+            </div>
+        </div>
     </div>
 </script>
 
