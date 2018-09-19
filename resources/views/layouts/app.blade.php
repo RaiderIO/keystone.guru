@@ -17,6 +17,8 @@
     @if (config('app.env') !== 'production')
     <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
     <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/affixes.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
     @endif
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')

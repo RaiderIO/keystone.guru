@@ -12,7 +12,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}              {
+        .{{ strtolower($faction->name) }}               {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -116,7 +116,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 </div>
 <div class="row">
     <?php for($i = 1; $i <= config('keystoneguru.party_size'); $i++){ ?>
-    <div class="col-lg-2{{ $i === 1 ? ' offset-lg-1' : '' }}">
+    <div class="col">
 
         <div class="form-group">
             {!! Form::label('specialization[]', __('Party member #' . $i)) !!}
@@ -142,11 +142,11 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 </div>
 
 <script id="composition_icon_option_template" type="text/x-handlebars-template">
-    <div class="testtesty">
-        <div class="class_icon class_icon_@{{ name_lc }}">
-            <div style="margin-left: 26px">
-                @{{ name }}
-            </div>
+    <div class="row no-gutters">
+        <div class="col-auto select_icon_test class_icon class_icon_@{{ name_lc }}" style="height: 24px;">
+        </div>
+        <div class="col pl-1">
+            @{{ name }}
         </div>
     </div>
 </script>

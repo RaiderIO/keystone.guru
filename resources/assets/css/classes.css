@@ -3,7 +3,7 @@
 .class_icon_deathknight, .class_icon_demonhunter, .class_icon_druid, .class_icon_hunter, .class_icon_mage,
 .class_icon_monk, .class_icon_paladin, .class_icon_priest, .class_icon_rogue, .class_icon_shaman,
 .class_icon_warlock, .class_icon_warrior
-{ max-width: 100%; background-size: 100%; background-image: url('/images/classes/sprite_responsive.png'); }
+{ max-width: 100%; background-size: 100%; background-image: url('/images/classes/classes.png'); }
 
 .class_icon_deathknight { background-position: 0 0%; background-size: 100%; }
 .class_icon_demonhunter { background-position: 0 9.090909%; background-size: 100%; }
