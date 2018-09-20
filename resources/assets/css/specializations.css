@@ -8,7 +8,7 @@
 .spec_icon_rogue-outlaw, .spec_icon_rogue-subtlety, .spec_icon_shaman-elemental, .spec_icon_shaman-enhancement, .spec_icon_shaman-restoration,
 .spec_icon_warlock-affliction, .spec_icon_warlock-demonology, .spec_icon_warlock-destruction, .spec_icon_warrior-arms, .spec_icon_warrior-fury,
 .spec_icon_warrior-protection
-{ max-width: 100%; background-size: 100%; background-image: url('png.png'); }
+{ max-width: 100%; background-size: 100%; background-image: url('/images/specializations/specializations.png'); }
 
 .spec_icon_deathknight-blood { background-position: 0 0%; background-size: 100%; }
 .spec_icon_deathknight-frost { background-position: 0 2.857143%; background-size: 100%; }

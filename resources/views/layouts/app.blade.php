@@ -19,6 +19,7 @@
     <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
     <link href="{{ asset('css/affixes.css') }}" rel="stylesheet">
     <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
     @endif
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')

@@ -23,13 +23,7 @@ $(function () {
         _refreshSelectPicker();
     });
 
-    // Add icons to the faction dropdown
-    $.each($('#faction_id option'), function (index, value) {
-        let faction = _factions[index];
-        let html = $('#template_faction_dropdown_icon_' + faction.name.toLowerCase()).html();
-        $(value).data('content', html);
-    });
-
+    _fillFactions();
     _fillSpecializations();
     _fillClasses();
     _fillRaces();
@@ -42,6 +36,19 @@ function _refreshSelectPicker() {
 
     $selectPicker.selectpicker('refresh');
     $selectPicker.selectpicker('render');
+}
+
+function _findFactionById(id) {
+    let faction = null;
+
+    for (let i = 0; i < _factions.length; i++) {
+        if (_factions[i].id === id) {
+            faction = _factions[i];
+            break;
+        }
+    }
+
+    return faction;
 }
 
 function _findRaceById(id) {
@@ -248,12 +255,24 @@ function _specializationChanged(changeEvent) {
                 $option.hide();
             } else {
                 $option.show();
-                // Exception here, a spec only belongs to one class, force the change here.
-                $classSelect.val(optionClassId);
-                $classSelect.change();
+                // Don't trigger all this when the user has unselected a spec
+                if( newSpecId > 0 ){
+                    // Exception here, a spec only belongs to one class, force the change here.
+                    $classSelect.val(optionClassId);
+                    $classSelect.change();
+                }
             }
         });
     }
+}
+
+function _fillFactions(){
+    let $factionSelect = $('#faction_id');
+
+    // Remove existing options
+    $factionSelect.find('option').remove();
+
+    _addIconOptionToSelect($factionSelect, _factions, 'faction_icon_');
 }
 
 /**
@@ -272,7 +291,10 @@ function _fillSpecializations() {
             text: 'Specialization...'
         }));
 
-        _addIconOptionToSelect($specializationSelect, _specializations);
+        _addIconOptionToSelect($specializationSelect, _specializations, function(item){
+            let classDetails = _findClassById(item.character_class_id);
+            return 'spec_icon_' + classDetails.name.replace(/ /g, '').toLowerCase() + '-' + item.name.replace(/ /g, '').toLowerCase();
+        });
     });
 }
 
@@ -292,7 +314,7 @@ function _fillClasses() {
             text: 'Class...'
         }));
 
-        _addIconOptionToSelect($classSelect, _classDetails);
+        _addIconOptionToSelect($classSelect, _classDetails, 'class_icon_');
     });
 }
 
@@ -312,7 +334,10 @@ function _fillRaces() {
             text: 'Race...'
         }));
 
-        _addIconOptionToSelect($raceSelect, _races);
+        _addIconOptionToSelect($raceSelect, _races, function(item){
+            let raceDetails = _findRaceById(item.id);
+            return 'faction_icon_' + _findFactionById(raceDetails.faction_id).name.replace(/ /g, '').toLowerCase();
+        });
     });
 }
 
@@ -341,9 +366,10 @@ function _fillRaces() {
  * Adds a list of icon options to a select based on an object collection.
  * @param $select
  * @param dataCollection
+ * @param cssPrefix
  * @private
  */
-function _addIconOptionToSelect($select, dataCollection) {
+function _addIconOptionToSelect($select, dataCollection, cssPrefix = '') {
     // Append the rest of the options
     for (let i = 0; i < dataCollection.length; i++) {
         let obj = dataCollection[i];
@@ -356,10 +382,18 @@ function _addIconOptionToSelect($select, dataCollection) {
             text: obj.name
         });
 
+        let currentCssPrefix = '';
+        // Let user decide
+        if( typeof cssPrefix === 'function' ){
+            currentCssPrefix = cssPrefix(obj);
+        } else {
+            // We make something up
+            currentCssPrefix = cssPrefix + obj.name.replace(/ /g, '').toLowerCase();
+        }
+
         let data = {
-            url: obj.iconfile.icon_url,
             name: obj.name,
-            name_lc: obj.name.replace(/ /g, '').toLowerCase()
+            css_class: currentCssPrefix
         };
 
         $select.append(
