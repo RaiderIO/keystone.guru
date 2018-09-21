@@ -16,9 +16,21 @@ class AdminEnemy extends Enemy {
         this.setSynced(false);
     }
 
-    onLayerInit() {
+    onLayerInit(){
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         super.onLayerInit();
+
+        let self = this;
+        self.map.leafletMap.on('contextmenu', function(){
+            if( self.currentPatrolPolyline !== null ){
+                self.map.leafletMap.addLayer(self.currentPatrolPolyline);
+                self.currentPatrolPolyline.disable();
+            }
+        });
+    }
+
+    onPopupInit(){
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         let self = this;
 
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
@@ -70,13 +82,6 @@ class AdminEnemy extends Enemy {
             // Have you tried turning it off and on again?
             self.layer.off('popupopen', popupOpenFn);
             self.layer.on('popupopen', popupOpenFn);
-        });
-
-        self.map.leafletMap.on('contextmenu', function(){
-            if( self.currentPatrolPolyline !== null ){
-                self.map.leafletMap.addLayer(self.currentPatrolPolyline);
-                self.currentPatrolPolyline.disable();
-            }
         });
     }
 

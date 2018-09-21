@@ -182,7 +182,40 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
         </div>
     </script>
 
-    @if($isAdmin)
+    @if(!$isAdmin)
+    <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
+        <div id="enemy_edit_popup_inner" class="popupCustom">
+            <div class="row no-gutters">
+                <div id="raid_marker_star" class="raid_marker_icon raid_marker_icon_star" data-id="1">
+
+                </div>
+                <div id="raid_marker_circle"  class="raid_marker_icon raid_marker_icon_circle" data-id="2">
+
+                </div>
+                <div id="raid_marker_diamond"  class="raid_marker_icon raid_marker_icon_diamond" data-id="3">
+
+                </div>
+                <div id="raid_marker_triangle"  class="raid_marker_icon raid_marker_icon_triangle" data-id="4">
+
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div id="raid_marker_moon"  class="raid_marker_icon raid_marker_icon_moon" data-id="5">
+
+                </div>
+                <div id="raid_marker_square"  class="raid_marker_icon raid_marker_icon_square" data-id="6">
+
+                </div>
+                <div id="raid_marker_cross"  class="raid_marker_icon raid_marker_icon_cross" data-id="7">
+
+                </div>
+                <div id="raid_marker_skull"  class="raid_marker_icon raid_marker_icon_skull" data-id="8">
+
+                </div>
+            </div>
+        </div>
+    </script>
+    @else
         @php($factions = ['any' => __('Any'), 'alliance' => __('Alliance'), 'horde' => __('Horde')])
         <script id="enemy_pack_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_pack_edit_popup_inner" class="popupCustom">

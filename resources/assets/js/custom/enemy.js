@@ -86,16 +86,19 @@ class Enemy extends MapObject {
             // Determine what to show for enemy forces based on override or not
             let enemy_forces = this.npc.enemy_forces;
 
-            if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
+            // Admin maps have 0 enemy forces
+            if( this.map.getEnemyForcesRequired() > 0 ){
+                if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
 
-                if (this.enemy_forces_override >= 0) {
-                    enemy_forces = '<s>' + enemy_forces + '</s> ' +
-                        '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
-                } else if (enemy_forces >= 1) {
-                    enemy_forces += ' ' + this._getPercentageString(enemy_forces);
+                    if (this.enemy_forces_override >= 0) {
+                        enemy_forces = '<s>' + enemy_forces + '</s> ' +
+                            '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
+                    } else if (enemy_forces >= 1) {
+                        enemy_forces += ' ' + this._getPercentageString(enemy_forces);
+                    }
+                } else if (enemy_forces === -1) {
+                    enemy_forces = 'unknown';
                 }
-            } else if (enemy_forces === -1) {
-                enemy_forces = 'unknown';
             }
 
             data = {
@@ -184,7 +187,79 @@ class Enemy extends MapObject {
                 self.signal('killzone:selected');
             }
         });
-        // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
+
+        this.onPopupInit();
+    }
+
+    onPopupInit(){
+        console.assert(this instanceof Enemy, this, 'this was not an Enemy');
+        let self = this;
+
+        // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
+        // This also cannot be a private function since that'll apparently give different signatures as well.
+        let popupOpenFn = function (event) {
+            // $('#enemy_edit_popup_teeming_' + self.id).val(self.teeming);
+            // $('#enemy_edit_popup_faction_' + self.id).val(self.faction);
+            // $('#enemy_edit_popup_enemy_forces_override_' + self.id).val(self.enemy_forces_override);
+            // $('#enemy_edit_popup_npc_' + self.id).val(self.npc_id);
+
+            // Refresh all select pickers so they work again
+            // let $selectpicker = $('.selectpicker');
+            // $selectpicker.selectpicker('refresh');
+            // $selectpicker.selectpicker('render');
+
+            $.each($('.raid_marker_icon'), function(index, value){
+                let $icon = $(value);
+                $icon.unbind('click');
+                $icon.bind('click', function () {
+                    self.assignRaidMarker($icon.data('id'));
+                });
+            });
+
+            let $submitBtn = $('#enemy_edit_popup_submit_' + self.id);
+
+            $submitBtn.unbind('click');
+            $submitBtn.bind('click', function () {
+                // self.teeming = $('#enemy_edit_popup_teeming_' + self.id).val();
+                // self.faction = $('#enemy_edit_popup_faction_' + self.id).val();
+                // self.enemy_forces_override = $('#enemy_edit_popup_enemy_forces_override_' + self.id).val();
+                // self.npc_id = $('#enemy_edit_popup_npc_' + self.id).val();
+
+                self.edit();
+            });
+        };
+
+        // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
+        this.register('synced', this, function(event){
+            let customPopupHtml = $('#enemy_edit_popup_template').html();
+            // Remove template so our
+            let template = handlebars.compile(customPopupHtml);
+
+            let data = {id: self.id};
+
+            // Build the status bar from the template
+            customPopupHtml = template(data);
+
+            let customOptions = {
+                'maxWidth': '128',
+                'minWidth': '128',
+                'className': 'popupCustom'
+            };
+
+            self.layer.unbindPopup();
+            self.layer.bindPopup(customPopupHtml, customOptions);
+
+            // Have you tried turning it off and on again?
+            self.layer.off('popupopen', popupOpenFn);
+            self.layer.on('popupopen', popupOpenFn);
+        });
+
+        self.map.leafletMap.on('contextmenu', function(){
+            if( self.currentPatrolPolyline !== null ){
+                self.map.leafletMap.addLayer(self.currentPatrolPolyline);
+                self.currentPatrolPolyline.disable();
+            }
+        });
     }
 
     isKillZoneSelectable() {
