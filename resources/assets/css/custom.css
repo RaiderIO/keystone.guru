@@ -55,7 +55,7 @@
 
 /* Override this so that long race names fit in their group selection boxes */
 .dropdown-item {
-    padding: 0.25em 1em;
+    padding: 0.25em 0.9em;
 }
 
 /* Fix for selectpickers inside popups inside the map */
@@ -174,12 +174,6 @@
 .select_icon {
     width: 24px;
     border-radius: 12px;
-    max-height: 24px;
-}
-
-.select_icon_test {
-    border-radius: 12px;
-    width: 24px;
     max-height: 24px;
 }
 

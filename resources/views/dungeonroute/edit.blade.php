@@ -37,10 +37,6 @@
             });
 
             $('#save_settings').bind('click', _saveSettings);
-
-            $('.selectpicker').selectpicker({
-                showIcon: true
-            });
         });
 
         function _saveSettings() {
@@ -50,8 +46,8 @@
                 dataType: 'json',
                 data: {
                     faction_id: $('#faction_id').val(),
-                    race:
-                        $('.raceselect select').map(function () {
+                    specialization:
+                        $('.specializationselect select').map(function () {
                             return $(this).val();
                         }).get()
                     ,
@@ -60,10 +56,15 @@
                             return $(this).val();
                         }).get()
                     ,
-                    teeming: $('#teeming').val(),
-                    unlisted: $('#unlisted').val(),
+                    race:
+                        $('.raceselect select').map(function () {
+                            return $(this).val();
+                        }).get()
+                    ,
+                    teeming: $('#teeming').is(':checked') ? 1 : 0,
+                    unlisted: $('#unlisted').is(':checked') ? 1 : 0,
                     @if(Auth::user()->hasRole('admin'))
-                    demo: $('#demo').val(),
+                    demo: $('#demo').is(':checked') ? 1 : 0,
                     @endif
                     affixes: $('#affixes').val(),
                     _method: 'PATCH'
@@ -111,7 +112,7 @@
             </div>
 
 
-            <div id='settings_wrapper' class='col-lg-12'>
+            <div id='settings_wrapper' class='container'>
                 <div id='settings_toggle' class='col-lg-12 text-center btn btn-default' data-toggle='collapse'
                      data-target='#settings'>
                     <h4 class='mb-0'>

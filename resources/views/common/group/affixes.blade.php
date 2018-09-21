@@ -145,7 +145,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                     @php( $number = count($affixGroup->affixes) - 1 === $count ? '3' : '4' )
                     <div class="col-{{ $number }} affix_row">
                         <div class="row no-gutters">
-                            <div class="col-auto select_icon_test class_icon affix_icon_{{ strtolower($affix->name) }}"
+                            <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
                                  data-toggle="tooltip"
                                  title="{{ $affix->name }}"
                                  style="height: 24px;">

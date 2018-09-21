@@ -12,7 +12,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}                {
+        .{{ strtolower($faction->name) }}                 {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -42,7 +42,15 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
                 _loadDungeonRouteDefaults();
             });
 
+
+            // Defined in groupcomposition.js
+            initGroupComposition();
+
             _loadDungeonRouteDefaults();
+
+            // $('.selectpicker').selectpicker({
+            //     showIcon: true
+            // });
         });
 
         function _loadDungeonRouteDefaults() {
@@ -89,10 +97,9 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
                 $raceSelect.trigger('change');
             }
 
-            // Refresh new values and show em properly
-            $('.selectpicker').selectpicker('refresh');
-
             @endisset
+
+            _refreshSelectPicker();
         }
     </script>
 @endsection
@@ -143,7 +150,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 
 <script id="composition_icon_option_template" type="text/x-handlebars-template">
     <div class="row no-gutters">
-        <div class="col-auto select_icon_test class_icon @{{ css_class }}" style="height: 24px;">
+        <div class="col-auto select_icon class_icon @{{ css_class }}" style="height: 24px;">
         </div>
         <div class="col pl-1">
             @{{ name }}

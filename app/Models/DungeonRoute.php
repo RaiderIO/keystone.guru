@@ -315,18 +315,16 @@ class DungeonRoute extends Model
 
         // Update or insert it
         if ($this->save()) {
-            $newRaces = $request->get('race', array());
 
-            if (!empty($newRaces)) {
-                // Remove old races
-                $this->playerraces()->delete();
-
-                // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
-                foreach ($newRaces as $key => $value) {
-                    $drpRace = new DungeonRoutePlayerRace();
-                    $drpRace->character_race_id = $value;
-                    $drpRace->dungeon_route_id = $this->id;
-                    $drpRace->save();
+            $newSpecs = $request->get('specialization', array());
+            if (!empty($newSpecs)) {
+                // Remove old specializations
+                $this->playerspecializations()->delete();
+                foreach ($newSpecs as $key => $value) {
+                    $drpSpec = new DungeonRoutePlayerSpecialization();
+                    $drpSpec->character_class_specialization_id = $value;
+                    $drpSpec->dungeon_route_id = $this->id;
+                    $drpSpec->save();
                 }
             }
 
@@ -339,6 +337,21 @@ class DungeonRoute extends Model
                     $drpClass->character_class_id = $value;
                     $drpClass->dungeon_route_id = $this->id;
                     $drpClass->save();
+                }
+            }
+
+            $newRaces = $request->get('race', array());
+
+            if (!empty($newRaces)) {
+                // Remove old races
+                $this->playerraces()->delete();
+
+                // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
+                foreach ($newRaces as $key => $value) {
+                    $drpRace = new DungeonRoutePlayerRace();
+                    $drpRace->character_race_id = $value;
+                    $drpRace->dungeon_route_id = $this->id;
+                    $drpRace->save();
                 }
             }
 

@@ -1,4 +1,4 @@
-$(function () {
+function initGroupComposition() {
     $('#faction_id').bind('change', function (changeEvent) {
         _factionChanged(changeEvent);
 
@@ -27,10 +27,12 @@ $(function () {
     _fillSpecializations();
     _fillClasses();
     _fillRaces();
+}
 
-    _refreshSelectPicker();
-});
-
+/**
+ * Refreshes the select picker to reflect the current state of the select boxes.
+ * @private
+ */
 function _refreshSelectPicker() {
     let $selectPicker = $('.selectpicker');
 
@@ -38,6 +40,12 @@ function _refreshSelectPicker() {
     $selectPicker.selectpicker('render');
 }
 
+/**
+ * Finds a faction by its ID.
+ * @param id
+ * @returns {*}
+ * @private
+ */
 function _findFactionById(id) {
     let faction = null;
 
@@ -51,6 +59,12 @@ function _findFactionById(id) {
     return faction;
 }
 
+/**
+ * Finds a race by its ID.
+ * @param id
+ * @returns {*}
+ * @private
+ */
 function _findRaceById(id) {
     let race = null;
 
@@ -64,6 +78,12 @@ function _findRaceById(id) {
     return race;
 }
 
+/**
+ * Finds a class by its ID.
+ * @param id
+ * @returns {*}
+ * @private
+ */
 function _findClassById(id) {
     let classDetail = null;
 
@@ -77,6 +97,12 @@ function _findClassById(id) {
     return classDetail;
 }
 
+/**
+ * Finds a spec by its ID.
+ * @param id
+ * @returns {*}
+ * @private
+ */
 function _findSpecById(id) {
     let spec = null;
 
@@ -90,6 +116,13 @@ function _findSpecById(id) {
     return spec;
 }
 
+/**
+ * Checks if a class is part of a race.
+ * @param raceId
+ * @param classId
+ * @returns {boolean}
+ * @private
+ */
 function _isClassPartOfRace(raceId, classId) {
     let race = _findRaceById(raceId);
 
@@ -106,6 +139,13 @@ function _isClassPartOfRace(raceId, classId) {
     return result;
 }
 
+/**
+ * Checks if a spec is part of a class or not.
+ * @param classId
+ * @param specId
+ * @returns {boolean}
+ * @private
+ */
 function _isSpecPartOfClass(classId, specId) {
     let classDetail = _findClassById(classId);
 
@@ -129,23 +169,44 @@ function _isSpecPartOfClass(classId, specId) {
  * @private
  */
 function _factionChanged(changeEvent) {
-    console.log('>> _factionChanged', changeEvent);
     let newFactionId = parseInt($('#faction_id').val());
 
-    // For each race select there is ..
-    $.each($('.raceselect option'), function (index, value) {
-        // Hide those options that aren't part of the faction
-        let $option = $(value);
+    // Keep a list of classselects
+    let $classSelects = $('select.classselect');
 
-        let optionRaceId = parseInt($option.attr('value'));
-        // If it's not the first entry (Race...), this race does not belong to the new faction, and the new faction is NOT unspecified..
-        if (optionRaceId > 0 && _findRaceById(optionRaceId).faction_id !== newFactionId && newFactionId !== 1) {
-            $option.hide();
-        } else {
-            $option.show();
+    // For each race select there is ..
+    $.each($('select.raceselect'), function (index, select) {
+        let $select = $(select);
+        let $classSelect = $($classSelects[index]);
+        let currentClassId = parseInt($classSelect.val());
+
+        // Adjust current selections in race if the faction changed, if faction was Alliance with a bunch
+        // of Alliance races, faction switched to Horde, put all those selects to -1
+        let currentRaceId = parseInt($select.val());
+        let currentRace = _findRaceById(currentRaceId);
+        // Check on null in case nothing was selected yet
+        if (currentRace !== null && currentRace.faction_id !== newFactionId && newFactionId !== 1) {
+            // select the 'Race...' option instead.
+            $select.val(0);
         }
+
+        $.each($select.find('option'), function (index, option) {
+            // Hide those options that aren't part of the faction
+            let $option = $(option);
+
+            let optionRaceId = parseInt($option.attr('value'));
+            // If not the Race... option
+            if (optionRaceId > 0 &&
+                // If the race candidate cannot support the selected class..
+                ((currentClassId > 0 && !_isClassPartOfRace(optionRaceId, currentClassId)) ||
+                    // Race does not belong to the new faction, or new faction was unspecified
+                    _findRaceById(optionRaceId).faction_id !== newFactionId && newFactionId !== 1)) {
+                $option.hide();
+            } else {
+                $option.show();
+            }
+        });
     });
-    console.log('OK _factionChanged', changeEvent);
 }
 
 /**
@@ -154,14 +215,22 @@ function _factionChanged(changeEvent) {
  * @private
  */
 function _raceChanged(changeEvent) {
-    console.log(changeEvent);
-
     // Changed by user
     if (changeEvent.originalEvent) {
         let $raceSelect = $(changeEvent.target);
         let newRaceId = parseInt($raceSelect.val());
 
         let $classSelect = $('.classselect').find("[data-id='" + $raceSelect.data('id') + "']");
+
+        if (newRaceId > 0) {
+            // Check if the current class we've selected is still valid with this new race
+            let currentClassId = parseInt($classSelect.val());
+
+            if (currentClassId > 0 && currentClassId !== 0 && !_isClassPartOfRace(newRaceId, currentClassId)) {
+                // select the 'Class...' option instead.
+                $classSelect.val(0);
+            }
+        }
 
         // For each class select there is ..
         $.each($classSelect.find('option'), function (index, value) {
@@ -178,13 +247,15 @@ function _raceChanged(changeEvent) {
         });
 
         // Change faction to appropriate faction based on faction of race
-        let race = _findRaceById(newRaceId);
-        let raceFactionId = race.faction_id;
+        if (newRaceId > 0) {
+            let race = _findRaceById(newRaceId);
+            let raceFactionId = race.faction_id;
 
-        let $faction = $('#faction_id');
-        if (parseInt($faction.val()) !== raceFactionId) {
-            // Trigger change event
-            $faction.val(raceFactionId).change();
+            let $faction = $('#faction_id');
+            if (parseInt($faction.val()) !== raceFactionId) {
+                // Trigger change event
+                $faction.val(raceFactionId).change();
+            }
         }
     }
 }
@@ -205,8 +276,11 @@ function _classChanged(changeEvent) {
         let $option = $(value);
 
         let optionRaceId = parseInt($option.attr('value'));
-        // If it's not the first entry (Race...), and the candidate race is not part of the new class
-        if (newClassId > 0 && optionRaceId > 0 && !_isClassPartOfRace(optionRaceId, newClassId)) {
+        let optionRace = _findRaceById(optionRaceId);
+
+        let currentFactionId = parseInt($('#faction_id').val());
+        // If it's not the first entry (Race...), and the candidate race is not part of the new class, and if the faction
+        if (optionRaceId > 0 && (newClassId > 0 && !_isClassPartOfRace(optionRaceId, newClassId) || (currentFactionId !== optionRace.faction_id && currentFactionId !== 0))) {
             $option.hide();
         } else {
             $option.show();
@@ -216,6 +290,19 @@ function _classChanged(changeEvent) {
     // Only update specs when updated by user, otherwise this event originated from changing a spec in the first place
     if (changeEvent.originalEvent) {
         let $specSelect = $('.specializationselect').find("[data-id='" + $classSelect.data('id') + "']");
+
+        if (newClassId > 0) {
+            // Adjust current selections in spec if the class changed, if spec was set to Enhancement, and the class was changed
+            // to something other than shaman, that is no longer a valid selection. Revert spec back to 'Specialization...' instead.
+            let currentSpecId = parseInt($specSelect.val());
+
+            // Check on null in case nothing was selected yet
+            if (currentSpecId > 0 && newClassId !== 0 && !_isSpecPartOfClass(newClassId, currentSpecId)) {
+                // select the 'Specialization...' option instead.
+                $specSelect.val(0);
+            }
+        }
+
         // For each spec select there is ..
         $.each($specSelect.find('option'), function (index, value) {
             // Hide those options that aren't part of the class
@@ -238,35 +325,36 @@ function _classChanged(changeEvent) {
  * @private
  */
 function _specializationChanged(changeEvent) {
-    // Changed by user
-    if (changeEvent.originalEvent) {
-        let $specSelect = $(changeEvent.target);
-        let newSpecId = parseInt($specSelect.val());
+    let $specSelect = $(changeEvent.target);
+    let newSpecId = parseInt($specSelect.val());
 
-        let $classSelect = $('.classselect').find("[data-id='" + $specSelect.data('id') + "']");
-        // For each race select there is ..
-        $.each($classSelect.find('option'), function (index, value) {
-            // Hide the classes that do not have this spec (all but one)
-            let $option = $(value);
+    let $classSelect = $('.classselect').find("[data-id='" + $specSelect.data('id') + "']");
+    // For each race select there is ..
+    $.each($classSelect.find('option'), function (index, value) {
+        // Hide the classes that do not have this spec (all but one)
+        let $option = $(value);
 
-            let optionClassId = parseInt($option.attr('value'));
-            // If it's not the first entry (Spec...), and the candidate race is not part of the new class
-            if (newSpecId > 0 && optionClassId > 0 && !_isSpecPartOfClass(optionClassId, newSpecId)) {
-                $option.hide();
-            } else {
-                $option.show();
-                // Don't trigger all this when the user has unselected a spec
-                if( newSpecId > 0 ){
-                    // Exception here, a spec only belongs to one class, force the change here.
-                    $classSelect.val(optionClassId);
-                    $classSelect.change();
-                }
+        let optionClassId = parseInt($option.attr('value'));
+        // If it's not the first entry (Spec...), and the candidate race is not part of the new class
+        if (newSpecId > 0 && (optionClassId === 0 || (optionClassId > 0 && !_isSpecPartOfClass(optionClassId, newSpecId)))) {
+            $option.hide();
+        } else {
+            $option.show();
+            // Don't trigger all this when the user has unselected a spec
+            if (newSpecId > 0) {
+                // Exception here, a spec only belongs to one class, force the change here.
+                $classSelect.val(optionClassId);
+                $classSelect.change();
             }
-        });
-    }
+        }
+    });
 }
 
-function _fillFactions(){
+/**
+ * Fills the factions dropdown with all factions.
+ * @private
+ */
+function _fillFactions() {
     let $factionSelect = $('#faction_id');
 
     // Remove existing options
@@ -280,7 +368,7 @@ function _fillFactions(){
  * @private
  */
 function _fillSpecializations() {
-    $.each($('.specializationselect'), function (index, value) {
+    $.each($('select.specializationselect'), function (index, value) {
         let $specializationSelect = $(value);
 
         // Remove existing options
@@ -291,7 +379,7 @@ function _fillSpecializations() {
             text: 'Specialization...'
         }));
 
-        _addIconOptionToSelect($specializationSelect, _specializations, function(item){
+        _addIconOptionToSelect($specializationSelect, _specializations, function (item) {
             let classDetails = _findClassById(item.character_class_id);
             return 'spec_icon_' + classDetails.name.replace(/ /g, '').toLowerCase() + '-' + item.name.replace(/ /g, '').toLowerCase();
         });
@@ -303,7 +391,7 @@ function _fillSpecializations() {
  * @private
  */
 function _fillClasses() {
-    $.each($('.classselect'), function (index, value) {
+    $.each($('select.classselect'), function (index, value) {
         let $classSelect = $(value);
 
         // Remove existing options
@@ -323,7 +411,7 @@ function _fillClasses() {
  * @private
  */
 function _fillRaces() {
-    $.each($('.raceselect'), function (index, value) {
+    $.each($('select.raceselect'), function (index, value) {
         let $raceSelect = $(value);
 
         // Remove existing options
@@ -334,7 +422,7 @@ function _fillRaces() {
             text: 'Race...'
         }));
 
-        _addIconOptionToSelect($raceSelect, _races, function(item){
+        _addIconOptionToSelect($raceSelect, _races, function (item) {
             let raceDetails = _findRaceById(item.id);
             return 'faction_icon_' + _findFactionById(raceDetails.faction_id).name.replace(/ /g, '').toLowerCase();
         });
@@ -384,7 +472,7 @@ function _addIconOptionToSelect($select, dataCollection, cssPrefix = '') {
 
         let currentCssPrefix = '';
         // Let user decide
-        if( typeof cssPrefix === 'function' ){
+        if (typeof cssPrefix === 'function') {
             currentCssPrefix = cssPrefix(obj);
         } else {
             // We make something up
