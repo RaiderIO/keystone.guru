@@ -305,7 +305,6 @@ class KillZone extends MapObject {
      */
     redrawConnectionsToEnemies() {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
-        console.log('redrawConnectionsToEnemies!');
 
         let self = this;
 
@@ -342,14 +341,12 @@ class KillZone extends MapObject {
     onLayerInit() {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
         super.onLayerInit();
-        console.log('KillZone onLayerInit');
 
         let self = this;
 
         if (this.map.edit) {
             this.layer.on('click', function (event) {
                 if (!self.map.deleteModeActive) {
-                    console.log('killzone clicked!', KillZoneSelectModeEnabled, event);
                     if (KillZoneSelectModeEnabled) {
                         self.cancelSelectMode();
                     } else {

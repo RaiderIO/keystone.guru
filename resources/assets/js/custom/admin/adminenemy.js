@@ -16,9 +16,21 @@ class AdminEnemy extends Enemy {
         this.setSynced(false);
     }
 
-    onLayerInit() {
+    onLayerInit(){
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         super.onLayerInit();
+
+        let self = this;
+        self.map.leafletMap.on('contextmenu', function(){
+            if( self.currentPatrolPolyline !== null ){
+                self.map.leafletMap.addLayer(self.currentPatrolPolyline);
+                self.currentPatrolPolyline.disable();
+            }
+        });
+    }
+
+    onPopupInit(){
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         let self = this;
 
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
@@ -71,18 +83,46 @@ class AdminEnemy extends Enemy {
             self.layer.off('popupopen', popupOpenFn);
             self.layer.on('popupopen', popupOpenFn);
         });
+    }
 
-        self.map.leafletMap.on('contextmenu', function(){
-            if( self.currentPatrolPolyline !== null ){
-                self.map.leafletMap.addLayer(self.currentPatrolPolyline);
-                self.currentPatrolPolyline.disable();
+    edit() {
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        this.save();
+    }
+
+    delete() {
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        let self = this;
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/enemy',
+            dataType: 'json',
+            data: {
+                _method: 'DELETE',
+                id: self.id
+            },
+            beforeSend: function () {
+                self.deleting = true;
+            },
+            success: function (json) {
+                self.signal('object:deleted', {response: json});
+            },
+            complete: function () {
+                self.deleting = false;
+            },
+            error: function () {
+                self.layer.setStyle({
+                    fillColor: c.map.admin.mapobject.colors.unsaved,
+                    color: c.map.admin.mapobject.colors.unsavedBorder
+                });
             }
         });
     }
 
-    edit() {
-        let self = this;
+    save() {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        let self = this;
+
         $.ajax({
             type: 'POST',
             url: '/ajax/enemy',
@@ -113,70 +153,6 @@ class AdminEnemy extends Enemy {
             complete: function () {
                 $('#enemy_edit_popup_submit_' + self.id).removeAttr('disabled');
                 self.editing = false;
-            },
-            error: function () {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-            }
-        });
-    }
-
-    delete() {
-        let self = this;
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/enemy',
-            dataType: 'json',
-            data: {
-                _method: 'DELETE',
-                id: self.id
-            },
-            beforeSend: function () {
-                self.deleting = true;
-            },
-            success: function (json) {
-                self.signal('object:deleted', {response: json});
-            },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
-                self.layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.unsaved,
-                    color: c.map.admin.mapobject.colors.unsavedBorder
-                });
-            }
-        });
-    }
-
-    save() {
-        let self = this;
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
-
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/enemy',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                enemy_pack_id: self.enemy_pack_id,
-                npc_id: self.npc_id,
-                floor_id: self.map.getCurrentFloor().id,
-                teeming: self.teeming,
-                faction: self.faction,
-                lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng
-            },
-            beforeSend: function () {
-                self.saving = true;
-            },
-            success: function (json) {
-                self.id = json.id;
-                self.setSynced(true);
-            },
-            complete: function () {
-                self.saving = false;
             },
             error: function () {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred

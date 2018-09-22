@@ -31,7 +31,7 @@ class CharacterClass extends IconFileModel
      */
     function specializations()
     {
-        return $this->hasMany('App\Models\CharacterSpecialization');
+        return $this->hasMany('App\Models\CharacterClassSpecialization');
     }
 
     /**

@@ -29,11 +29,16 @@ use Illuminate\Support\Facades\DB;
  * @property $route Route
  * @property $faction Faction
  * @property $author User
- * @property $races \Illuminate\Support\Collection
+ *
+ * @property $specializations \Illuminate\Support\Collection
  * @property $classes \Illuminate\Support\Collection
- * @property $affixgroups \Illuminate\Support\Collection
+ * @property $races \Illuminate\Support\Collection
+ *
+ * @property $playerspecializations \Illuminate\Support\Collection
  * @property $playerclasses \Illuminate\Support\Collection
  * @property $playerraces \Illuminate\Support\Collection
+ *
+ * @property $affixgroups \Illuminate\Support\Collection
  * @property $affixes \Illuminate\Support\Collection
  * @property $ratings \Illuminate\Support\Collection
  */
@@ -109,17 +114,17 @@ class DungeonRoute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function races()
+    public function specializations()
     {
-        return $this->belongsToMany('App\Models\CharacterRace', 'dungeon_route_player_races');
+        return $this->belongsToMany('App\Models\CharacterClassSpecialization', 'dungeon_route_player_specializations');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function playerraces()
+    public function playerspecializations()
     {
-        return $this->hasMany('App\Models\DungeonRoutePlayerRace');
+        return $this->hasMany('App\Models\DungeonRoutePlayerSpecialization');
     }
 
     /**
@@ -136,6 +141,22 @@ class DungeonRoute extends Model
     public function playerclasses()
     {
         return $this->hasMany('App\Models\DungeonRoutePlayerClass');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function races()
+    {
+        return $this->belongsToMany('App\Models\CharacterRace', 'dungeon_route_player_races');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function playerraces()
+    {
+        return $this->hasMany('App\Models\DungeonRoutePlayerRace');
     }
 
     /**
@@ -176,6 +197,14 @@ class DungeonRoute extends Model
     public function favorites()
     {
         return $this->hasMany('App\Models\DungeonRouteFavorite');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function enemyraidmarkers()
+    {
+        return $this->hasMany('App\Models\DungeonRouteEnemyRaidMarker');
     }
 
     /**
@@ -244,6 +273,7 @@ class DungeonRoute extends Model
     {
         return [
             'faction' => $this->faction,
+            'specializations' => $this->specializations,
             'classes' => $this->classes,
             'races' => $this->races
         ];
@@ -293,18 +323,16 @@ class DungeonRoute extends Model
 
         // Update or insert it
         if ($this->save()) {
-            $newRaces = $request->get('race', array());
 
-            if (!empty($newRaces)) {
-                // Remove old races
-                $this->playerraces()->delete();
-
-                // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
-                foreach ($newRaces as $key => $value) {
-                    $drpRace = new DungeonRoutePlayerRace();
-                    $drpRace->character_race_id = $value;
-                    $drpRace->dungeon_route_id = $this->id;
-                    $drpRace->save();
+            $newSpecs = $request->get('specialization', array());
+            if (!empty($newSpecs)) {
+                // Remove old specializations
+                $this->playerspecializations()->delete();
+                foreach ($newSpecs as $key => $value) {
+                    $drpSpec = new DungeonRoutePlayerSpecialization();
+                    $drpSpec->character_class_specialization_id = $value;
+                    $drpSpec->dungeon_route_id = $this->id;
+                    $drpSpec->save();
                 }
             }
 
@@ -317,6 +345,21 @@ class DungeonRoute extends Model
                     $drpClass->character_class_id = $value;
                     $drpClass->dungeon_route_id = $this->id;
                     $drpClass->save();
+                }
+            }
+
+            $newRaces = $request->get('race', array());
+
+            if (!empty($newRaces)) {
+                // Remove old races
+                $this->playerraces()->delete();
+
+                // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
+                foreach ($newRaces as $key => $value) {
+                    $drpRace = new DungeonRoutePlayerRace();
+                    $drpRace->character_race_id = $value;
+                    $drpRace->dungeon_route_id = $this->id;
+                    $drpRace->save();
                 }
             }
 
@@ -396,6 +439,7 @@ class DungeonRoute extends Model
             DungeonRoutePlayerRace::where('dungeon_route_id', '=', $item->id)->delete();
             DungeonRoutePlayerClass::where('dungeon_route_id', '=', $item->id)->delete();
             DungeonRouteAffixGroup::where('dungeon_route_id', '=', $item->id)->delete();
+            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', '=', $item->id)->delete();
 
             // Delete routes
             foreach ($item->routes as $route) {

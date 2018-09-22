@@ -182,7 +182,26 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
         </div>
     </script>
 
-    @if($isAdmin)
+    @if(!$isAdmin)
+        <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
+            <div id="enemy_edit_popup_inner" class="popupCustom">
+                @php($raidMarkers = \App\Models\RaidMarker::all())
+                @for($i = 0; $i < $raidMarkers->count(); $i++)
+                    @php($raidMarker = $raidMarkers->get($i))
+                    @if($i % 4 === 0)
+                        <div class="row no-gutters">
+                            @endif
+                            <div id="raid_marker_{{ $raidMarker->name }}"
+                                 class="raid_marker_icon raid_marker_icon_{{ $raidMarker->name }}"
+                                 data-name="{{ $raidMarker->name }}">
+                            </div>
+                            @if($i % 4 === 3)
+                        </div>
+                    @endif
+                @endfor
+            </div>
+        </script>
+    @else
         @php($factions = ['any' => __('Any'), 'alliance' => __('Alliance'), 'horde' => __('Horde')])
         <script id="enemy_pack_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_pack_edit_popup_inner" class="popupCustom">

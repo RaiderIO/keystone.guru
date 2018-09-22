@@ -59,7 +59,7 @@
         "classification_id": 2,
         "name": "Living Current",
         "base_health": 529803,
-        "enemy_forces": -1,
+        "enemy_forces": 13,
         "aggressiveness": "aggressive"
     },
     {
@@ -104,7 +104,7 @@
         "classification_id": 2,
         "name": "Drowned Depthbringer",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
     {
@@ -122,7 +122,7 @@
         "classification_id": 2,
         "name": "Abyssal Cultist",
         "base_health": 294335,
-        "enemy_forces": -1,
+        "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
     {
@@ -185,7 +185,7 @@
         "classification_id": 2,
         "name": "Colossal Tentacle",
         "base_health": 323769,
-        "enemy_forces": -1,
+        "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
     {

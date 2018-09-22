@@ -53,6 +53,12 @@
     color: #495057;
 }
 
+/* Override this so that long race names fit in their group selection boxes */
+.dropdown-item {
+    padding: 0.25em 0.9em;
+}
+
+/* Fix for selectpickers inside popups inside the map */
 #map .dropdown-menu {
     background-color: rgb(224, 224, 224);
 }
@@ -136,6 +142,11 @@
 .killzone_enemy_icon_small {
     margin-left: -10px !important;
     margin-top: -10px !important;
+}
+
+.killzone_enemy_icon_medium {
+    margin-left: -12px !important;
+    margin-top: -12px !important;
 }
 
 .killzone_enemy_icon_big {

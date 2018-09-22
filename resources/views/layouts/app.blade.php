@@ -16,6 +16,11 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     @if (config('app.env') !== 'production')
     <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/affixes.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/raidmarkers.css') }}" rel="stylesheet">
     @endif
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
@@ -203,7 +208,6 @@
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
-<script src="{{ asset('js/lib.js') }}"></script>
 
 @if (config('app.env') === 'production')
     <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>

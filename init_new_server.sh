@@ -42,3 +42,9 @@ echo "Publishing service providers..."
 tput sgr0;
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider"
 php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
+
+# Seeding database
+tput setaf 2;
+echo "Seeding database..."
+tput sgr0;
+./refresh_db_seed.sh

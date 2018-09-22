@@ -138,17 +138,22 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
     <div id="affixes_list_custom" class="affix_list col-lg-12">
         @foreach($affixGroups as $affixGroup)
             <div class="row affix_list_row {{ $affixGroup->isTeeming() ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
-                  {{ $affixGroup->isTeeming() ? 'style="display: none;"' : '' }}
+                 {{ $affixGroup->isTeeming() ? 'style="display: none;"' : '' }}
                  data-id="{{ $affixGroup->id }}">
                 @php( $count = 0 )
                 @foreach($affixGroup->affixes as $affix)
                     @php( $number = count($affixGroup->affixes) - 1 === $count ? '3' : '4' )
-                    <div class="col-xl-{{ $number }} col-lg-{{ $number }} col-md-{{ $number }} col-sm-{{ $number }} col-xs-{{ $number }} affix_row">
-                        <img src="{{ Image::url($affix->iconfile->getUrl(), 32, 32) }}"
-                             class="select_icon affix_icon"
-                             data-toggle="tooltip"
-                             title="{{ $affix->name }}"/>
-                        <span class="hidden-xs-down"> {{ $affix->name }} </span>
+                    <div class="col-{{ $number }} affix_row">
+                        <div class="row no-gutters">
+                            <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
+                                 data-toggle="tooltip"
+                                 title="{{ $affix->name }}"
+                                 style="height: 24px;">
+                            </div>
+                            <div class="col hidden-xs-down pl-1">
+                                {{ $affix->name }}
+                            </div>
+                        </div>
                     </div>
                     @php( $count++ )
                 @endforeach

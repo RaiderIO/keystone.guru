@@ -135,6 +135,7 @@ class DungeonDataSeeder extends Seeder
             // Dungeon route
             new DungeonRouteRoutesRelationParser(),
             new DungeonRouteKillZoneRelationParser(),
+            new DungeonRouteEnemyRaidMarkersRelationParser(),
         ];
 
         // Do some php fuckery to make this a bit cleaner
@@ -200,6 +201,7 @@ class DungeonDataSeeder extends Seeder
 
     protected function _rollback()
     {
+        $this->command->warn('Truncating all relevant data...');
         DB::table('npcs')->truncate();
         DB::table('enemies')->truncate();
         DB::table('enemy_packs')->truncate();

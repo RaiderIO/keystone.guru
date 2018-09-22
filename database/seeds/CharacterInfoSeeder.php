@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Models\CharacterRace;
 use App\Models\CharacterClass;
 use App\Models\CharacterRaceClassCoupling;
-use App\Models\CharacterSpecialization;
+use App\Models\CharacterClassSpecialization;
 use App\Models\File;
 
 class CharacterInfoSeeder extends Seeder
@@ -63,40 +63,43 @@ class CharacterInfoSeeder extends Seeder
 
         $this->command->info('Adding known classes');
 
-        $classes = [new CharacterClass(['name' => 'Warrior', 'color' => '#C79C6E']),
-            new CharacterClass(['name' => 'Hunter', 'color' => '#ABD473']),
-            new CharacterClass(['name' => 'Death Knight', 'color' => '#C41F3B']),
-            new CharacterClass(['name' => 'Mage', 'color' => '#69CCF0']),
-            new CharacterClass(['name' => 'Priest', 'color' => '#FFFFFF']),
-            new CharacterClass(['name' => 'Monk', 'color' => '#00FF96']),
-            new CharacterClass(['name' => 'Rogue', 'color' => '#FFF569']),
-            new CharacterClass(['name' => 'Warlock', 'color' => '#9482C9']),
-            new CharacterClass(['name' => 'Shaman', 'color' => '#0070DE']),
-            new CharacterClass(['name' => 'Paladin', 'color' => '#F58CBA']),
-            new CharacterClass(['name' => 'Druid', 'color' => '#FF7D0A']),
-            new CharacterClass(['name' => 'Demon Hunter', 'color' => '#A330C9'])];
+        // Do NOT change the order of this array!
+        $classes = ['Warrior' => new CharacterClass(['color' => '#C79C6E']),
+            'Hunter' => new CharacterClass(['color' => '#ABD473']),
+            'Death Knight' => new CharacterClass(['color' => '#C41F3B']),
+            'Mage' => new CharacterClass(['color' => '#69CCF0']),
+            'Priest' => new CharacterClass(['color' => '#FFFFFF']),
+            'Monk' => new CharacterClass(['color' => '#00FF96']),
+            'Rogue' => new CharacterClass(['color' => '#FFF569']),
+            'Warlock' => new CharacterClass(['color' => '#9482C9']),
+            'Shaman' => new CharacterClass(['color' => '#0070DE']),
+            'Paladin' => new CharacterClass(['color' => '#F58CBA']),
+            'Druid' => new CharacterClass(['color' => '#FF7D0A']),
+            'Demon Hunter' => new CharacterClass(['color' => '#A330C9'])];
 
-        foreach ($classes as $race) {
+        foreach ($classes as $name => $class) {
+            $class->name = $name;
             // Temp file
-            $race->icon_file_id = -1;
+            $class->icon_file_id = -1;
             /** @var $race \Illuminate\Database\Eloquent\Model */
-            $race->save();
+            $class->save();
 
-            $iconName = strtolower(str_replace(' ', '', $race->name));
+            $iconName = strtolower(str_replace(' ', '', $class->name));
             $icon = new File();
-            $icon->model_id = $race->id;
-            $icon->model_class = get_class($race);
+            $icon->model_id = $class->id;
+            $icon->model_class = get_class($class);
             $icon->disk = 'public';
             $icon->path = sprintf('images/classes/%s.png', $iconName);
             $icon->save();
 
-            $race->icon_file_id = $icon->id;
-            $race->save();
+            $class->icon_file_id = $icon->id;
+            $class->save();
         }
 
         $this->command->info('Adding known race/class combinations');
+        // In order of the way $classes is structured
         // @formatter:off
-        $matrix = [
+        $raceClassMatrix = [
             'Human' =>                  ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' '],
             'Dwarf' =>                  ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
             'Night Elf' =>              ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x'],
@@ -124,12 +127,13 @@ class CharacterInfoSeeder extends Seeder
         ];
         // @formatter:on
 
-        foreach ($matrix as $raceStr => $raceClasses) {
+        foreach ($raceClassMatrix as $raceStr => $raceClasses) {
             $race = $races[$raceStr];
             $i = 0;
             foreach ($raceClasses as $raceClass) {
                 if ($raceClass === 'x') {
-                    $class = $classes[$i];
+                    $keys = array_keys($classes);
+                    $class = $classes[$keys[$i]];
 
                     $raceClassCoupling = new CharacterRaceClassCoupling();
                     $raceClassCoupling->character_race_id = $race->id;
@@ -138,6 +142,54 @@ class CharacterInfoSeeder extends Seeder
                     $raceClassCoupling->save();
                 }
                 $i++;
+            }
+        }
+
+
+        $this->command->info('Adding known class/specialization combinations');
+        // @formatter:off
+        $classSpecializationMatrix = [
+            'Death Knight'  => ['Blood', 'Frost', 'Unholy'],
+            'Demon Hunter'  => ['Havoc', 'Vengeance'],
+            'Druid'         => ['Balance', 'Feral', 'Guardian', 'Restoration'],
+            'Hunter'        => ['Beast Mastery', 'Marksman', 'Survival'],
+            'Mage'          => ['Arcane', 'Fire', 'Frost'],
+            'Monk'          => ['Brewmaster', 'Mistweaver', 'Windwalker'],
+            'Paladin'       => ['Holy', 'Protection', 'Retribution'],
+            'Priest'        => ['Discipline', 'Holy', 'Shadow'],
+            'Rogue'         => ['Assassination', 'Outlaw', 'Subtlety'],
+            'Shaman'        => ['Elemental', 'Enhancement', 'Restoration'],
+            'Warlock'       => ['Affliction', 'Demonology', 'Destruction'],
+            'Warrior'       => ['Arms', 'Fury', 'Protection'],
+        ];
+        // @formatter:on
+
+        // For each class with a bunch of specs
+        foreach ($classSpecializationMatrix as $classStr => $specializations) {
+            // Fetch the class
+            $class = $classes[$classStr];
+            // For each of their specs
+            foreach ($specializations as $specialization) {
+                $characterClassSpecialization = new CharacterClassSpecialization();
+                $characterClassSpecialization->character_class_id = $class->id;
+                $characterClassSpecialization->name = $specialization;
+                // Dummy file ID
+                $characterClassSpecialization->icon_file_id = -1;
+
+                $characterClassSpecialization->save();
+
+                $classKey = strtolower(str_replace(' ', '', $class->name));
+                $specKey = strtolower(str_replace(' ', '', $specialization));
+
+                $icon = new File();
+                $icon->model_id = $characterClassSpecialization->id;
+                $icon->model_class = get_class($characterClassSpecialization);
+                $icon->disk = 'public';
+                $icon->path = sprintf('images/specializations/%s/%s.png', $classKey, $specKey);
+                $icon->save();
+
+                $characterClassSpecialization->icon_file_id = $icon->id;
+                $characterClassSpecialization->save();
             }
         }
     }
@@ -149,5 +201,6 @@ class CharacterInfoSeeder extends Seeder
         DB::table('character_class_specializations')->truncate();
         DB::table('character_race_class_couplings')->truncate();
         DB::table('files')->where('model_class', '=', 'App\Models\CharacterClass')->delete();
+        DB::table('files')->where('model_class', '=', 'App\Models\CharacterClassSpecialization')->delete();
     }
 }

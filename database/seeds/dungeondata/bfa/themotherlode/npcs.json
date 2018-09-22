@@ -248,7 +248,7 @@
         "classification_id": 1,
         "name": "Big Money Crab",
         "base_health": 58867,
-        "enemy_forces": 0,
+        "enemy_forces": 1,
         "aggressiveness": "neutral"
     },
     {
@@ -266,7 +266,7 @@
         "classification_id": 2,
         "name": "Safety Shark",
         "base_health": 1177340,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -293,7 +293,7 @@
         "classification_id": 1,
         "name": "Footbomb Hooligan",
         "base_health": 58867,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {

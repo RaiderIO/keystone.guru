@@ -5,22 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $id
  * @property string $name
- * @property \Illuminate\Support\Collection $specializations
  */
-class CharacterSpecialization extends Model
+class RaidMarker extends Model
 {
     public $timestamps = false;
-
-    public $hidden = ['created_at', 'updated_at'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    function class()
-    {
-        return $this->belongsTo('App\Models\CharacterClass');
-    }
 
     public static function boot()
     {

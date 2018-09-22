@@ -1,9 +1,10 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
 $factions = isset($factions) ? $factions : \App\Models\Faction::with('iconfile')->get();
+$specializations = \App\Models\CharacterClassSpecialization::with('iconfile')->get();
+$classes = \App\Models\CharacterClass::with('specializations')->get();
 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
 $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
-$classes = \App\Models\CharacterClass::with('iconfile')->get();
 ?>
 
 @section('head')
@@ -11,12 +12,16 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}     {
+        .{{ strtolower($faction->name) }}                 {
             color: {{ $faction->color }};
             font-weight: bold;
         }
+
         @endforeach
 
+        .testtesty {
+
+        }
     </style>
 @endsection
 
@@ -25,8 +30,10 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 
     <script>
         let _factions = {!! $factions !!};
-        let _racesClasses = {!! $racesClasses !!};
+        let _specializations = {!! $specializations !!};
+        // Clarity so that _classes is not a thing (conflicts with a programming class etc).
         let _classDetails = {!! $classes !!};
+        let _races = {!! $racesClasses !!};
 
         // Defined in dungeonroutesetup.js
         $(function () {
@@ -35,34 +42,41 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
                 _loadDungeonRouteDefaults();
             });
 
-            // Force population of the race boxes
-            _factionChanged();
+
+            // Defined in groupcomposition.js
+            initGroupComposition();
 
             _loadDungeonRouteDefaults();
+
+            // $('.selectpicker').selectpicker({
+            //     showIcon: true
+            // });
         });
 
         function _loadDungeonRouteDefaults() {
                     @isset($dungeonroute)
 
             let faction = '{{ $dungeonroute->faction_id }}';
-            let races = {!! $dungeonroute->races !!};
+            let specializations = {!! $dungeonroute->specializations !!};
             let classes = {!! $dungeonroute->classes !!};
+            let races = {!! $dungeonroute->races !!};
 
             let $faction = $("#faction_id");
             $faction.val(faction);
             // Have to manually trigger change..
             $faction.trigger('change');
 
+            let $specializationsSelects = $(".specializationselect select");
             let $racesSelects = $(".raceselect select");
             let $classSelects = $(".classselect select");
 
-            // For each race
-            for (let i = 0; i < races.length; i++) {
-                let race = races[i];
-                let $raceSelect = $($racesSelects[i]);
-                $raceSelect.val(race.id);
+            // For each specialization
+            for (let i = 0; i < specializations.length; i++) {
+                let characterSpecialization = specializations[i];
+                let $specializationSelect = $($specializationsSelects[i]);
+                $specializationSelect.val(characterSpecialization.id);
                 // Have to manually trigger change..
-                $raceSelect.trigger('change');
+                $specializationSelect.trigger('change');
             }
 
             // For each class
@@ -74,10 +88,18 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
                 $classSelect.trigger('change');
             }
 
-            // Refresh new values and show em properly
-            $('.selectpicker').selectpicker('refresh');
+            // For each race
+            for (let i = 0; i < races.length; i++) {
+                let race = races[i];
+                let $raceSelect = $($racesSelects[i]);
+                $raceSelect.val(race.id);
+                // Have to manually trigger change..
+                $raceSelect.trigger('change');
+            }
 
             @endisset
+
+            _refreshSelectPicker();
         }
     </script>
 @endsection
@@ -101,18 +123,24 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
 </div>
 <div class="row">
     <?php for($i = 1; $i <= config('keystoneguru.party_size'); $i++){ ?>
-    <div class="col-lg-2{{ $i === 1 ? ' offset-lg-1' : '' }}">
+    <div class="col pl-1 pr-1">
+
         <div class="form-group">
-            {!! Form::label('race[]', __('Party member #' . $i)) !!}
-            <select name="race[]" id="race_{{ $i }}" class="form-control selectpicker raceselect" data-id="{{$i}}">
+            {!! Form::label('specialization[]', __('Party member #' . $i)) !!}
+            <select data-live-search="true" name="specialization[]"
+                    class="form-control selectpicker specializationselect" data-id="{{$i}}">
 
             </select>
         </div>
 
         <div class="form-group">
-            {{--{!! Form::select('class[]', [-1 => __('Class...')], 0,--}}
-            {{--['id' => 'class_' . $i, 'class' => 'form-control selectpicker', 'data-id' => $i]) !!}--}}
             <select name="class[]" class="form-control selectpicker classselect" data-id="{{$i}}">
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <select name="race[]" id="race_{{ $i }}" class="form-control selectpicker raceselect" data-id="{{$i}}">
 
             </select>
         </div>
@@ -120,20 +148,12 @@ $classes = \App\Models\CharacterClass::with('iconfile')->get();
     <?php } ?>
 </div>
 
-@foreach($factions as $faction)
-    <div id="template_faction_dropdown_icon_{{ strtolower($faction->name) }}" style="display: none;">
-        <span class="{{ strtolower($faction->name) }}">
-            <img src="{{ Image::url($faction->iconfile->getUrl(), 32, 32) }}"
-                 class="select_icon faction_icon"/> {{ $faction->name }}
-        </span>
+<script id="composition_icon_option_template" type="text/x-handlebars-template">
+    <div class="row no-gutters">
+        <div class="col-auto select_icon class_icon @{{ css_class }}" style="height: 24px;">
+        </div>
+        <div class="col pl-1">
+            @{{ name }}
+        </div>
     </div>
-@endforeach
-
-@foreach( $classes as $class)
-    <div id="template_class_dropdown_icon_{{ $class->key }}" style="display: none;">
-    <span class="{{ $class->key }}">
-        <img src="{{ Image::url($class->iconfile->getUrl(), 32, 32) }}"
-             class="select_icon class_icon"/> {{ $class->name }}
-    </span>
-    </div>
-@endforeach
+</script>
