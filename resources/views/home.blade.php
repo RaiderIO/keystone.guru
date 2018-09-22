@@ -49,13 +49,29 @@
     <br>
     <h2>Changelog</h2>
     <h4>
+        2018/09/22
+    </h4>
+    <p>
+        Route changes:
+    <ul>
+        <li>
+            Completely reworked the group selection. You can now select specializations and user experience has improved.
+        </li>
+        <li>
+            You can now add raid markers to enemies while constructing your route.
+        </li>
+    </ul>
+    </p>
+
+
+    <h4>
         2018/09/17
     </h4>
     <p>
         General changes:
     <ul>
         <li>
-            The website now has a dark theme by default. More themes/theme switcher are planned, but only after release
+            The website now has a dark theme by default. More themes/theme switcher are planned, but only after release.
         </li>
         <li>
             A lot of changes to enemies and the enemy forces they give upon death. All dungeons have been mapped, but a
