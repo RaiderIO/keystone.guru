@@ -29,7 +29,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             url: '/ajax/enemies',
             dataType: 'json',
             data: {
-                floor_id: floor.id
+                floor_id: floor.id,
+                dungeonroute: dungeonRoutePublicKey
             },
             success: function (json) {
                 // Now draw the enemies on the map
@@ -63,8 +64,13 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         enemy.teeming = remoteEnemy.teeming;
                         enemy.faction = remoteEnemy.faction;
                         enemy.enemy_forces_override = remoteEnemy.enemy_forces_override;
+                        enemy.raid_marker_name = remoteEnemy.raid_marker_name;
 
                         enemy.setNpc(remoteEnemy.npc);
+                        // If actually set..
+                        if (remoteEnemy.raid_marker_name !== null && remoteEnemy.raid_marker_name !== '') {
+                            enemy.setRaidMarkerName(remoteEnemy.raid_marker_name);
+                        }
 
                         // Is probably null if there's no patrol set
                         if (remoteEnemy.patrol !== null) {

@@ -86,8 +86,43 @@ class AdminEnemy extends Enemy {
     }
 
     edit() {
-        let self = this;
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        this.save();
+    }
+
+    delete() {
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        let self = this;
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/enemy',
+            dataType: 'json',
+            data: {
+                _method: 'DELETE',
+                id: self.id
+            },
+            beforeSend: function () {
+                self.deleting = true;
+            },
+            success: function (json) {
+                self.signal('object:deleted', {response: json});
+            },
+            complete: function () {
+                self.deleting = false;
+            },
+            error: function () {
+                self.layer.setStyle({
+                    fillColor: c.map.admin.mapobject.colors.unsaved,
+                    color: c.map.admin.mapobject.colors.unsavedBorder
+                });
+            }
+        });
+    }
+
+    save() {
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        let self = this;
+
         $.ajax({
             type: 'POST',
             url: '/ajax/enemy',
@@ -118,70 +153,6 @@ class AdminEnemy extends Enemy {
             complete: function () {
                 $('#enemy_edit_popup_submit_' + self.id).removeAttr('disabled');
                 self.editing = false;
-            },
-            error: function () {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-            }
-        });
-    }
-
-    delete() {
-        let self = this;
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/enemy',
-            dataType: 'json',
-            data: {
-                _method: 'DELETE',
-                id: self.id
-            },
-            beforeSend: function () {
-                self.deleting = true;
-            },
-            success: function (json) {
-                self.signal('object:deleted', {response: json});
-            },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
-                self.layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.unsaved,
-                    color: c.map.admin.mapobject.colors.unsavedBorder
-                });
-            }
-        });
-    }
-
-    save() {
-        let self = this;
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
-
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/enemy',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                enemy_pack_id: self.enemy_pack_id,
-                npc_id: self.npc_id,
-                floor_id: self.map.getCurrentFloor().id,
-                teeming: self.teeming,
-                faction: self.faction,
-                lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng
-            },
-            beforeSend: function () {
-                self.saving = true;
-            },
-            success: function (json) {
-                self.id = json.id;
-                self.setSynced(true);
-            },
-            complete: function () {
-                self.saving = false;
             },
             error: function () {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred

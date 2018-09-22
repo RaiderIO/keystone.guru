@@ -147,6 +147,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
             Route::post('/enemy', 'APIEnemyController@store');
             Route::delete('/enemy', 'APIEnemyController@delete');
 
+            Route::post('/enemy/raidmarker', 'APIEnemyController@setRaidMarker');
+
             Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
             Route::delete('/enemypatrol', 'APIEnemyPatrolController@delete');
 

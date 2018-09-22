@@ -200,6 +200,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function enemyraidmarkers()
+    {
+        return $this->hasMany('App\Models\DungeonRouteEnemyRaidMarker');
+    }
+
+    /**
      * @return double
      */
     public function getAvgRatingAttribute()
@@ -431,6 +439,7 @@ class DungeonRoute extends Model
             DungeonRoutePlayerRace::where('dungeon_route_id', '=', $item->id)->delete();
             DungeonRoutePlayerClass::where('dungeon_route_id', '=', $item->id)->delete();
             DungeonRouteAffixGroup::where('dungeon_route_id', '=', $item->id)->delete();
+            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', '=', $item->id)->delete();
 
             // Delete routes
             foreach ($item->routes as $route) {

@@ -4,7 +4,7 @@ $(function () {
             TYPE: 'enemy'
         },
         options: {
-            icon: LeafletUnsetEnemyIcon
+            icon: LeafletEnemyIcons['unset']
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
@@ -15,40 +15,46 @@ $(function () {
     });
 });
 
-// CSS class for what icon is what (background)
-let _aggressiveClass = 'aggressive_enemy_icon';
-let _neutralClass = 'neutral_enemy_icon';
-let _unfriendlyClass = 'unfriendly_enemy_icon';
-let _friendlyClass = 'friendly_enemy_icon';
-let _unsetClass = 'unset_enemy_icon';
-let _flaggedClass = 'flagged_enemy_icon';
-let _bossClass = 'boss_enemy_icon';
-
 // Icon sizes
 let _smallIcon = {iconSize: [12, 12]};
+let _mediumIcon = {iconSize: [16, 16]};
 let _bigIcon = {iconSize: [32, 32]};
 
 // Default icons
-let LeafletAggressiveEnemyIcon = new L.divIcon($.extend({className: _aggressiveClass + ' test_padding'}, _smallIcon));
-let LeafletNeutralEnemyIcon = new L.divIcon($.extend({className: _neutralClass}, _smallIcon));
-let LeafletUnfriendlyEnemyIcon = new L.divIcon($.extend({className: _unfriendlyClass}, _smallIcon));
-let LeafletFriendlyEnemyIcon = new L.divIcon($.extend({className: _friendlyClass}, _smallIcon));
-let LeafletUnsetEnemyIcon = new L.divIcon($.extend({className: _unsetClass}, _smallIcon));
-let LeafletFlaggedEnemyIcon = new L.divIcon($.extend({className: _flaggedClass}, _smallIcon));
-let LeafletBossEnemyIcon = new L.divIcon($.extend({className: _bossClass}, _bigIcon));
+let _iconNames = [];
+_iconNames['aggressive'] = _smallIcon;
+_iconNames['neutral'] = _smallIcon;
+_iconNames['unfriendly'] = _smallIcon;
+_iconNames['friendly'] = _smallIcon;
+_iconNames['unset'] = _smallIcon;
+_iconNames['flagged'] = _smallIcon;
+_iconNames['boss'] = _bigIcon;
 
-// Have to extend this as to not override the above icons
-let LeafletAggressiveEnemyIconKillZone = new L.divIcon($.extend({className: _aggressiveClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletNeutralEnemyIconKillZone = new L.divIcon($.extend({className: _neutralClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletUnfriendlyEnemyIconKillZone = new L.divIcon($.extend({className: _unfriendlyClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletFriendlyEnemyIconKillZone = new L.divIcon($.extend({className: _friendlyClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletUnsetEnemyIconKillZone = new L.divIcon($.extend({className: _unsetClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletFlaggedEnemyIconKillZone = new L.divIcon($.extend({className: _flaggedClass + ' killzone_enemy_icon_small leaflet-edit-marker-selected'}, _smallIcon));
-let LeafletBossEnemyIconKillZone = new L.divIcon($.extend({className: _bossClass + ' killzone_enemy_icon_big leaflet-edit-marker-selected'}, _bigIcon));
+_iconNames['star'] = _mediumIcon;
+_iconNames['circle'] = _mediumIcon;
+_iconNames['diamond'] = _mediumIcon;
+_iconNames['triangle'] = _mediumIcon;
+_iconNames['moon'] = _mediumIcon;
+_iconNames['square'] = _mediumIcon;
+_iconNames['cross'] = _mediumIcon;
+_iconNames['skull'] = _mediumIcon;
+
+let LeafletEnemyIcons = [];
+let LeafletEnemyIconsKillZone = [];
+
+// Build a library of icons to use
+for (let key in _iconNames) {
+    LeafletEnemyIcons[key] = new L.divIcon($.extend({className: key + '_enemy_icon'}, _iconNames[key]));
+    LeafletEnemyIconsKillZone[key] = new L.divIcon($.extend({
+        className: key + '_enemy_icon leaflet-edit-marker-selected ' +
+        // ahahahahaha
+        'killzone_enemy_icon_' + (_iconNames[key] === _bigIcon ? 'big' : _iconNames[key] === _mediumIcon ? 'medium' : 'small')
+    }, _iconNames[key]));
+}
 
 let LeafletEnemyMarker = L.Marker.extend({
     options: {
-        icon: LeafletUnsetEnemyIcon
+        icon: LeafletEnemyIcons['unset']
     }
 });
 
@@ -65,6 +71,7 @@ class Enemy extends MapObject {
         this.enemy_forces_override = -1;
         // May be set when loaded from server
         this.npc = null;
+        this.raid_marker_name = '';
         // console.log(rand);
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 
@@ -87,7 +94,7 @@ class Enemy extends MapObject {
             let enemy_forces = this.npc.enemy_forces;
 
             // Admin maps have 0 enemy forces
-            if( this.map.getEnemyForcesRequired() > 0 ){
+            if (this.map.getEnemyForcesRequired() > 0) {
                 if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
 
                     if (this.enemy_forces_override >= 0) {
@@ -143,6 +150,19 @@ class Enemy extends MapObject {
     }
 
     /**
+     * Sets the name of the raid marker and changes the icon on the map to that of the raid marker (allowing).
+     * @param name
+     */
+    setRaidMarkerName(name) {
+        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        // This takes precedence over raid markers
+        if (this.iconName !== 'unset' && this.iconName !== 'flagged' && LeafletEnemyIcons.hasOwnProperty(name)) {
+            this.setIcon(name);
+        }
+        this.raid_marker_name = name;
+    }
+
+    /**
      * Sets the killzone for this enemy.
      * @param killZoneId id
      */
@@ -191,28 +211,18 @@ class Enemy extends MapObject {
         this.onPopupInit();
     }
 
-    onPopupInit(){
+    onPopupInit() {
         console.assert(this instanceof Enemy, this, 'this was not an Enemy');
         let self = this;
 
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
         // This also cannot be a private function since that'll apparently give different signatures as well.
         let popupOpenFn = function (event) {
-            // $('#enemy_edit_popup_teeming_' + self.id).val(self.teeming);
-            // $('#enemy_edit_popup_faction_' + self.id).val(self.faction);
-            // $('#enemy_edit_popup_enemy_forces_override_' + self.id).val(self.enemy_forces_override);
-            // $('#enemy_edit_popup_npc_' + self.id).val(self.npc_id);
-
-            // Refresh all select pickers so they work again
-            // let $selectpicker = $('.selectpicker');
-            // $selectpicker.selectpicker('refresh');
-            // $selectpicker.selectpicker('render');
-
-            $.each($('.raid_marker_icon'), function(index, value){
+            $.each($('.raid_marker_icon'), function (index, value) {
                 let $icon = $(value);
                 $icon.unbind('click');
                 $icon.bind('click', function () {
-                    self.assignRaidMarker($icon.data('id'));
+                    self.assignRaidMarker($icon.data('name'));
                 });
             });
 
@@ -230,7 +240,7 @@ class Enemy extends MapObject {
         };
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, function(event){
+        this.register('synced', this, function (event) {
             let customPopupHtml = $('#enemy_edit_popup_template').html();
             // Remove template so our
             let template = handlebars.compile(customPopupHtml);
@@ -254,14 +264,18 @@ class Enemy extends MapObject {
             self.layer.on('popupopen', popupOpenFn);
         });
 
-        self.map.leafletMap.on('contextmenu', function(){
-            if( self.currentPatrolPolyline !== null ){
+        self.map.leafletMap.on('contextmenu', function () {
+            if (self.currentPatrolPolyline !== null) {
                 self.map.leafletMap.addLayer(self.currentPatrolPolyline);
                 self.currentPatrolPolyline.disable();
             }
         });
     }
 
+    /**
+     * Checks if this enemy is possibly selectable by a kill zone.
+     * @returns {*}
+     */
     isKillZoneSelectable() {
         return this.killZoneSelectable;
     }
@@ -284,38 +298,35 @@ class Enemy extends MapObject {
     setIcon(name) {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
 
-        switch (name) {
-            case 'aggressive':
-                this.divIcon = this.killZoneSelectable ? LeafletAggressiveEnemyIconKillZone : LeafletAggressiveEnemyIcon;
-
-                break;
-            case 'neutral':
-                this.divIcon = this.killZoneSelectable ? LeafletNeutralEnemyIconKillZone : LeafletNeutralEnemyIcon;
-
-                break;
-            case 'unfriendly':
-                this.divIcon = this.killZoneSelectable ? LeafletUnfriendlyEnemyIconKillZone : LeafletUnfriendlyEnemyIcon;
-
-                break;
-            case 'friendly':
-                this.divIcon = this.killZoneSelectable ? LeafletFriendlyEnemyIconKillZone : LeafletFriendlyEnemyIcon;
-
-                break;
-            case 'unset':
-                this.divIcon = this.killZoneSelectable ? LeafletUnsetEnemyIconKillZone : LeafletUnsetEnemyIcon;
-
-                break;
-            case 'flagged':
-                this.divIcon = this.killZoneSelectable ? LeafletFlaggedEnemyIconKillZone : LeafletFlaggedEnemyIcon;
-
-                break;
-            case 'boss':
-                this.divIcon = this.killZoneSelectable ? LeafletBossEnemyIconKillZone : LeafletBossEnemyIcon;
-
-                break;
-        }
-
-        this.layer.setIcon(this.divIcon);
+        this.layer.setIcon(this.killZoneSelectable ? LeafletEnemyIconsKillZone[name] : LeafletEnemyIcons[name]);
         this.iconName = name;
+    }
+
+    /**
+     * Assigns a raid marker to this enemy.
+     * @param raidMarkerName The name of the marker, or empty to unset it
+     */
+    assignRaidMarker(raidMarkerName) {
+        console.assert(this instanceof Enemy, this, 'this was not an Enemy');
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/enemy/raidmarker',
+            dataType: 'json',
+            data: {
+                dungeonroute: dungeonRoutePublicKey,
+                enemy_id: self.id,
+                raid_marker_name: raidMarkerName
+            },
+            success: function (json) {
+                self.setSynced(true);
+                self.map.leafletMap.closePopup();
+                self.setRaidMarkerName(raidMarkerName);
+
+                self.setIcon(raidMarkerName)
+
+            },
+        });
     }
 }
