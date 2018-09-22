@@ -50,7 +50,7 @@
         "classification_id": 2,
         "name": "Dazar'ai Colossus",
         "base_health": 500370,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
     {

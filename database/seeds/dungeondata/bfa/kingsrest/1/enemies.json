@@ -921,5 +921,18 @@
         "npc": {
             "id": 135167
         }
+    },
+    {
+        "id": 2160,
+        "enemy_pack_id": -1,
+        "floor_id": 44,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -69.579999999999998,
+        "lng": 226.75,
+        "npc": {
+            "id": 137969
+        }
     }
 ]

@@ -1056,6 +1056,43 @@
                     }
                 ]
             }
+        ],
+        "enemyraidmarkers": [
+            {
+                "id": 6,
+                "enemy_id": 24,
+                "raid_marker_id": 1
+            },
+            {
+                "id": 9,
+                "enemy_id": 10,
+                "raid_marker_id": 2
+            },
+            {
+                "id": 10,
+                "enemy_id": 12,
+                "raid_marker_id": 8
+            },
+            {
+                "id": 11,
+                "enemy_id": 15,
+                "raid_marker_id": 7
+            },
+            {
+                "id": 13,
+                "enemy_id": 11,
+                "raid_marker_id": 1
+            },
+            {
+                "id": 14,
+                "enemy_id": 14,
+                "raid_marker_id": 3
+            },
+            {
+                "id": 15,
+                "enemy_id": 29,
+                "raid_marker_id": 4
+            }
         ]
     }
 ]
