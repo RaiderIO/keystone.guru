@@ -47,24 +47,9 @@
     text-align: center;
 }
 
-.bootstrap-select .btn {
-    background-color: white;
-    border: 1px solid #ced4da;
-    color: #495057;
-}
-
 /* Override this so that long race names fit in their group selection boxes */
 .dropdown-item {
     padding: 0.25em 0.9em;
-}
-
-/* Fix for selectpickers inside popups inside the map */
-#map .dropdown-menu {
-    background-color: rgb(224, 224, 224);
-}
-
-#map .dropdown-item:hover, .dropdown-item:focus {
-    color: black;
 }
 
 /** LEAFLET */
@@ -230,9 +215,18 @@
     font-size: 30px;
 }
 
+.marker_div_icon_mapcomment {
+    font-size: 16px;
+}
+
 .marker_div_icon_circle_border {
     border: 3px solid;
     border-radius: 15px;
+}
+
+.map_map_comment_tooltip {
+    width: 240px;
+    white-space: normal;
 }
 
 /** DATATABLES */

@@ -17,7 +17,7 @@ class DungeonMap extends Signalable {
                 self.mapObjects.push(object);
 
                 // Make sure we know it's editable
-                if (event.data.objectgroup.editable && self.edit) {
+                if (object.isEditable() && event.data.objectgroup.editable && self.edit) {
                     self.drawnItems.addLayer(object.layer);
                 }
             });
@@ -146,6 +146,7 @@ class DungeonMap extends Signalable {
             new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false),
             new RouteMapObjectGroup(this, 'route', true),
             new KillZoneMapObjectGroup(this, 'killzone', true),
+            new MapCommentMapObjectGroup(this, 'mapcomment', true),
             new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false),
             new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false),
         ];

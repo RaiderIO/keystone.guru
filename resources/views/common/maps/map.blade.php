@@ -182,6 +182,16 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
         </div>
     </script>
 
+    <script id="map_map_comment_edit_popup_template" type="text/x-handlebars-template">
+        <div id="map_map_comment_edit_popup_inner" class="popupCustom">
+            <div class="form-group">
+                {!! Form::label('route_edit_popup_color_@{{id}}', __('Color')) !!}
+                {!! Form::color('route_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+            </div>
+            {!! Form::button(__('Submit'), ['id' => 'route_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+        </div>
+    </script>
+
     @if(!$isAdmin)
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">

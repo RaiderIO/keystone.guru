@@ -33,6 +33,14 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Gets if this map object is editable, default is true. May be overridden.
+     * @returns {boolean}
+     */
+    isEditable(){
+        return true;
+    }
+
+    /**
      * Applies the tooltip to this map object if applicable.
      */
     bindTooltip() {
