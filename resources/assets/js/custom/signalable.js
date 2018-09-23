@@ -34,14 +34,15 @@ class Signalable {
      * Stop listening to a signal.
      * @param name string The name of the event you want to stop listening to.
      * @param listener object Whoever you are and what you used to register yourself with.
+     * @param fn callable|null The function you wish to unregister. Null to remove everything
      */
-    unregister(name, listener) {
+    unregister(name, listener, fn = null) {
         console.assert(this instanceof Signalable, this, 'this is not a Signalable!');
         let toRemove = [];
 
         for (let i = 0; i < this.signals.length; i++) {
             let caller = this.signals[i];
-            if (caller.name === name && caller.listener === listener) {
+            if (caller.name === name && caller.listener === listener && (fn !== null && caller.callback === fn)) {
                 toRemove.push(i);
             }
         }
