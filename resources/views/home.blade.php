@@ -23,11 +23,12 @@
 
     <h2>{{ __('Enemy forces mapping progress') }}</h2>
     @foreach(\App\Models\Dungeon::active()->get() as $dungeon )
+        <?php /** @var $dungeon \App\Models\Dungeon */ ?>
         <div class="row">
             <div class="col-lg-2">
                 {{ $dungeon->name }}
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-4">
                 <div class="progress">
                     @php($percent = $dungeon->enemy_forces_mapped_status['percent'])
                     @php($total = $dungeon->enemy_forces_mapped_status['total'])
@@ -35,9 +36,39 @@
                     <div class="progress-bar" style="width: {{ $percent }}%;" role="progressbar"
                          aria-valuenow="{{ $percent }}" aria-valuemin="0"
                          aria-valuemax="100">
-                        {{ sprintf('%s/%s %d%%', $curr, $total, $percent) }}
+                        <span class="text-left">
+                        {{ __('Enemy forces') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
+                        </span>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="progress">
+                    <?php
+                        $totalEnemies = 0;
+                        $totalUnassignedEnemies = 0;
+                        $hasTeemingEnemy = false;
+                        foreach($dungeon->floors as $floor){
+                            /** @var $floor \App\Models\Floor */
+                            $totalEnemies += $floor->enemies->count();
+                            $totalUnassignedEnemies += $floor->enemies->whereIn('npc_id', [-1, 0])->count();
+                            $hasTeemingEnemy = $hasTeemingEnemy || $floor->enemies->where('teeming', 'visible')->count() > 0;
+                        }
+                    ?>
+                    @php($curr = $totalEnemies - $totalUnassignedEnemies)
+                    @php($percent = ($curr / $totalEnemies) * 100)
+                    @php($total = $totalEnemies)
+                    <div class="progress-bar" style="width: {{ $percent }}%;" role="progressbar"
+                         aria-valuenow="{{ $percent }}" aria-valuemin="0"
+                         aria-valuemax="100">
+                        <span class="text-left">
+                        {{ __('NPCs assigned') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                {{ __('Teeming') }}: {!! Form::checkbox($dungeon->name . '_teeming', 1, $hasTeemingEnemy, ['disabled' => 'disabled']) !!}
             </div>
         </div>
     @endforeach
@@ -55,7 +86,8 @@
         Route changes:
     <ul>
         <li>
-            Completely reworked the group selection. You can now select specializations and user experience has improved.
+            Completely reworked the group selection. You can now select specializations and user experience has
+            improved.
         </li>
         <li>
             You can now add raid markers to enemies while constructing your route.
@@ -91,7 +123,8 @@
     Map changes:
     <ul>
         <li>
-            Patrols now show a directional arrow and a dotted line to differentiate between your route and enemy patrols.
+            Patrols now show a directional arrow and a dotted line to differentiate between your route and enemy
+            patrols.
         </li>
     </ul>
     </p>
