@@ -121,7 +121,7 @@ class KillZone extends MapObject {
             success: function (json) {
                 self.removeExistingConnectionsToEnemies();
                 self.signal('object:deleted', {response: json});
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces})
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
             },
             complete: function () {
                 self.deleting = false;
@@ -154,7 +154,7 @@ class KillZone extends MapObject {
                 self.id = json.id;
 
                 self.setSynced(true);
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces})
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
             },
             complete: function () {
                 self.saving = false;

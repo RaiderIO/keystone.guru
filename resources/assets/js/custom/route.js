@@ -190,13 +190,13 @@ class Route extends MapObject {
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {
-                $("#route_edit_popup_color_" + self.id).val(self.routeColor);
+                $('#route_edit_popup_color_' + self.id).val(self.routeColor);
 
                 // Prevent multiple binds to click
-                let $submitBtn = $("#route_edit_popup_submit_" + self.id);
+                let $submitBtn = $('#route_edit_popup_submit_' + self.id);
                 $submitBtn.unbind('click');
                 $submitBtn.bind('click', function () {
-                    self.setColor($("#route_edit_popup_color_" + self.id).val());
+                    self.setColor($('#route_edit_popup_color_' + self.id).val());
 
                     self.edit();
                 });
@@ -204,7 +204,7 @@ class Route extends MapObject {
 
             // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
             self.register('synced', this, function (event) {
-                let customPopupHtml = $("#route_edit_popup_template").html();
+                let customPopupHtml = $('#route_edit_popup_template').html();
                 // Remove template so our
                 let template = handlebars.compile(customPopupHtml);
 

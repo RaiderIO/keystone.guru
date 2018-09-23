@@ -1,0 +1,20 @@
+.bootstrap-select .btn {
+    background-color: white;
+    border: 1px solid #ced4da;
+    color: #495057;
+}
+
+/* Fix for selectpickers inside popups inside the map */
+#map .dropdown-menu {
+    background-color: rgb(224, 224, 224);
+}
+
+#map .dropdown-item:hover, .dropdown-item:focus {
+    color: black;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    color: rgb(235, 235, 235);
+    background-color: #4E5D6C;
+    opacity: 1;
+}
