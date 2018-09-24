@@ -39,6 +39,13 @@ class MapComment extends MapObject {
         this.setSynced(false);
     }
 
+    _popupSubmitClicked(){
+        console.assert(this instanceof MapComment, this, 'this was not a MapComment');
+        this.comment = $('#map_map_comment_edit_popup_comment_' + this.id).val();
+
+        this.edit();
+    }
+
     getContextMenuItems() {
         console.assert(this instanceof MapComment, this, 'this was not a MapComment');
         // Merge existing context menu items with the admin ones
@@ -150,11 +157,7 @@ class MapComment extends MapObject {
             // Prevent multiple binds to click
             let $submitBtn = $('#map_map_comment_edit_popup_submit_' + self.id);
             $submitBtn.unbind('click');
-            $submitBtn.bind('click', function () {
-                self.comment = $('#map_map_comment_edit_popup_comment_' + self.id).val();
-
-                self.edit();
-            });
+            $submitBtn.bind('click', self._popupSubmitClicked.bind(self));
         };
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.

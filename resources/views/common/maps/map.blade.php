@@ -204,6 +204,11 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
                 {!! Form::label('map_map_comment_edit_popup_comment_@{{id}}', __('Comment')) !!}
                 {!! Form::textarea('map_map_comment_edit_popup_comment_@{{id}}', null, ['class' => 'form-control', 'cols' => '50', 'rows' => '5']) !!}
             </div>
+            <div class="form-group">
+                @if($admin)
+                    {!! Form::hidden('map_map_comment_edit_popup_always_visible_@{{id}}', 1, []) !!}
+                @endif
+            </div>
             {!! Form::button(__('Submit'), ['id' => 'map_map_comment_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
         </div>
     </script>

@@ -61,6 +61,8 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/admin/admindrawcontrols.js',
         'resources/assets/js/custom/admin/admindungeonstartmarker.js',
         'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
+        'resources/assets/js/custom/admin/adminmapcomment.js',
+
         // Include the rest
         'resources/assets/js/custom/groupcomposition.js',
         'resources/assets/js/custom/mapobjectgroup.js',

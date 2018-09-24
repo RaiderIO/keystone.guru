@@ -17,17 +17,19 @@ class APIMapCommentController extends Controller
     {
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute', null);
+        $dungeonRouteId = -1;
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
-
-            $result = MapComment::where('floor_id', $floorId)
-                ->where(function ($query) use ($floorId, $dungeonRoute) {
-                    /** @var $query Builder */
-                    return $query->where('dungeon_route_id', $dungeonRoute->id)->orWhere('always_visible', true);
-                })->get();
+            $dungeonRouteId = $dungeonRoute->id;
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
+
+        $result = MapComment::where('floor_id', $floorId)
+            ->where(function ($query) use ($floorId, $dungeonRouteId) {
+                /** @var $query Builder */
+                return $query->where('dungeon_route_id', $dungeonRouteId)->orWhere('always_visible', true);
+            })->get();
 
         return $result;
     }

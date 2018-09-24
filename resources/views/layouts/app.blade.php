@@ -246,6 +246,7 @@
     <script src="{{ asset('js/custom/admin/admindrawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonstartmarker.js') }}"></script>
     <script src="{{ asset('js/custom/admin/admindungeonfloorswitchmarker.js') }}"></script>
+    <script src="{{ asset('js/custom/admin/adminmapcomment.js') }}"></script>
     <?php // Include the rest ?>
 
     <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>

@@ -1,7 +1,8 @@
 class MapCommentMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, editable){
+    constructor(map, name, classname, editable){
         super(map, name, editable);
 
+        this.classname = classname;
         this.title = 'Hide/show map comments';
         this.fa_class = 'fa-comment';
     }
@@ -9,7 +10,12 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
     _createObject(layer){
         console.assert(this instanceof MapCommentMapObjectGroup, 'this is not an MapCommentMapObjectGroup');
 
-        return new MapComment(this.map, layer);
+        switch (this.classname) {
+            case "AdminMapComment":
+                return new AdminMapComment(this.map, layer);
+            default:
+                return new MapComment(this.map, layer);
+        }
     }
 
 
