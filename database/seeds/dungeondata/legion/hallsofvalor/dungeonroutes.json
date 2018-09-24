@@ -10,62 +10,49 @@
         "unlisted": 1,
         "demo": 1,
         "created_at": "2018-08-23 10:56:42",
-        "updated_at": "2018-09-09 21:57:36",
+        "updated_at": "2018-09-24 11:50:22",
         "playerraces": [
             {
-                "dungeon_route_id": 15,
                 "character_race_id": 15
             },
             {
-                "dungeon_route_id": 15,
                 "character_race_id": 15
             },
             {
-                "dungeon_route_id": 15,
                 "character_race_id": 16
             },
             {
-                "dungeon_route_id": 15,
                 "character_race_id": 14
             },
             {
-                "dungeon_route_id": 15,
                 "character_race_id": 15
             }
         ],
         "playerclasses": [
             {
-                "dungeon_route_id": 15,
                 "character_class_id": 11
             },
             {
-                "dungeon_route_id": 15,
                 "character_class_id": 11
             },
             {
-                "dungeon_route_id": 15,
                 "character_class_id": 7
             },
             {
-                "dungeon_route_id": 15,
                 "character_class_id": 11
             },
             {
-                "dungeon_route_id": 15,
                 "character_class_id": 9
             }
         ],
         "affixgroups": [
             {
-                "dungeon_route_id": 15,
                 "affix_group_id": 2
             },
             {
-                "dungeon_route_id": 15,
                 "affix_group_id": 6
             },
             {
-                "dungeon_route_id": 15,
                 "affix_group_id": 9
             }
         ],
@@ -492,9 +479,9 @@
             },
             {
                 "floor_id": 16,
-                "color": "#9dff56",
+                "color": "#89ff62",
                 "created_at": "2018-09-10 11:36:15",
-                "updated_at": "2018-09-10 11:36:15",
+                "updated_at": "2018-09-24 11:11:22",
                 "vertices": [
                     {
                         "lat": 183.75,
@@ -829,14 +816,6 @@
                 "floor_id": 17,
                 "lat": -88.230000000000004,
                 "lng": 177.38,
-                "created_at": "2018-09-07 11:42:28",
-                "updated_at": "2018-09-07 11:42:28",
-                "killzoneenemies": []
-            },
-            {
-                "floor_id": 17,
-                "lat": -88.230000000000004,
-                "lng": 177.38,
                 "created_at": "2018-09-07 13:42:35",
                 "updated_at": "2018-09-07 11:42:35",
                 "killzoneenemies": [
@@ -855,14 +834,6 @@
                 "floor_id": 17,
                 "lat": -136.34999999999999,
                 "lng": 110.12,
-                "created_at": "2018-09-07 13:42:51",
-                "updated_at": "2018-09-07 11:42:51",
-                "killzoneenemies": []
-            },
-            {
-                "floor_id": 17,
-                "lat": -136.34999999999999,
-                "lng": 110.12,
                 "created_at": "2018-09-07 11:42:48",
                 "updated_at": "2018-09-07 11:42:48",
                 "killzoneenemies": [
@@ -873,14 +844,6 @@
                         "enemy_id": 117
                     }
                 ]
-            },
-            {
-                "floor_id": 17,
-                "lat": -156.97999999999999,
-                "lng": 100,
-                "created_at": "2018-09-07 13:52:15",
-                "updated_at": "2018-09-07 11:52:15",
-                "killzoneenemies": []
             },
             {
                 "floor_id": 17,
@@ -904,14 +867,6 @@
                 "floor_id": 17,
                 "lat": -161.97999999999999,
                 "lng": 118.88,
-                "created_at": "2018-09-07 14:05:29",
-                "updated_at": "2018-09-07 12:05:29",
-                "killzoneenemies": []
-            },
-            {
-                "floor_id": 17,
-                "lat": -161.97999999999999,
-                "lng": 118.88,
                 "created_at": "2018-09-07 12:05:06",
                 "updated_at": "2018-09-07 12:05:06",
                 "killzoneenemies": [
@@ -919,14 +874,6 @@
                         "enemy_id": 119
                     }
                 ]
-            },
-            {
-                "floor_id": 18,
-                "lat": -225.99000000000001,
-                "lng": 205.75,
-                "created_at": "2018-09-07 16:33:56",
-                "updated_at": "2018-09-07 14:33:56",
-                "killzoneenemies": []
             },
             {
                 "floor_id": 18,
@@ -946,27 +893,11 @@
                 "lng": 200.06,
                 "created_at": "2018-09-07 14:34:43",
                 "updated_at": "2018-09-07 14:34:43",
-                "killzoneenemies": []
-            },
-            {
-                "floor_id": 18,
-                "lat": -232.49000000000001,
-                "lng": 200.06,
-                "created_at": "2018-09-07 14:34:43",
-                "updated_at": "2018-09-07 14:34:43",
                 "killzoneenemies": [
                     {
                         "enemy_id": 138
                     }
                 ]
-            },
-            {
-                "floor_id": 18,
-                "lat": -232.61000000000001,
-                "lng": 194.69,
-                "created_at": "2018-09-07 14:34:45",
-                "updated_at": "2018-09-07 14:34:45",
-                "killzoneenemies": []
             },
             {
                 "floor_id": 18,
@@ -979,14 +910,6 @@
                         "enemy_id": 137
                     }
                 ]
-            },
-            {
-                "floor_id": 18,
-                "lat": -226.80000000000001,
-                "lng": 190.5,
-                "created_at": "2018-09-07 14:34:47",
-                "updated_at": "2018-09-07 14:34:47",
-                "killzoneenemies": []
             },
             {
                 "floor_id": 18,
@@ -1042,14 +965,6 @@
                 "lng": 254.12,
                 "created_at": "2018-09-07 14:39:03",
                 "updated_at": "2018-09-07 14:39:03",
-                "killzoneenemies": []
-            },
-            {
-                "floor_id": 17,
-                "lat": -81.849999999999994,
-                "lng": 254.12,
-                "created_at": "2018-09-07 14:39:03",
-                "updated_at": "2018-09-07 14:39:03",
                 "killzoneenemies": [
                     {
                         "enemy_id": 82
@@ -1059,39 +974,41 @@
         ],
         "enemyraidmarkers": [
             {
-                "id": 6,
                 "enemy_id": 24,
                 "raid_marker_id": 1
             },
             {
-                "id": 9,
                 "enemy_id": 10,
                 "raid_marker_id": 2
             },
             {
-                "id": 10,
                 "enemy_id": 12,
                 "raid_marker_id": 8
             },
             {
-                "id": 11,
                 "enemy_id": 15,
                 "raid_marker_id": 7
             },
             {
-                "id": 13,
                 "enemy_id": 11,
                 "raid_marker_id": 1
             },
             {
-                "id": 14,
                 "enemy_id": 14,
                 "raid_marker_id": 3
             },
             {
-                "id": 15,
                 "enemy_id": 29,
                 "raid_marker_id": 4
+            }
+        ],
+        "mapcomments": [
+            {
+                "game_icon_id": -1,
+                "lat": -125.9765625,
+                "lng": 168.875,
+                "always_visible": 0,
+                "comment": "Skip this patrol"
             }
         ]
     }

@@ -221,7 +221,7 @@
         "classification_id": 1,
         "name": "Fanatical Driller",
         "base_health": 176601,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {

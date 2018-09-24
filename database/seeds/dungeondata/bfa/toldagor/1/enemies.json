@@ -401,5 +401,187 @@
         "npc": {
             "id": 127480
         }
+    },
+    {
+        "id": 2236,
+        "enemy_pack_id": 330,
+        "floor_id": 53,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -151,
+        "lng": 214.25,
+        "npc": {
+            "id": 127482
+        }
+    },
+    {
+        "id": 2237,
+        "enemy_pack_id": 330,
+        "floor_id": 53,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -147.88,
+        "lng": 209.62,
+        "npc": {
+            "id": 127482
+        }
+    },
+    {
+        "id": 2240,
+        "enemy_pack_id": 381,
+        "floor_id": 53,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -129.38,
+        "lng": 237.88,
+        "npc": {
+            "id": 127482
+        }
+    },
+    {
+        "id": 2241,
+        "enemy_pack_id": 381,
+        "floor_id": 53,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -130.94,
+        "lng": 241.75,
+        "npc": {
+            "id": 127482
+        }
+    },
+    {
+        "id": 2247,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -119.81,
+        "lng": 189.94,
+        "npc": {
+            "id": 127480
+        }
+    },
+    {
+        "id": 2248,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -119.5,
+        "lng": 191.75,
+        "npc": {
+            "id": 127480
+        }
+    },
+    {
+        "id": 2249,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -121,
+        "lng": 191.81,
+        "npc": {
+            "id": 127480
+        }
+    },
+    {
+        "id": 2250,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -119.63,
+        "lng": 193.25,
+        "npc": {
+            "id": 127480
+        }
+    },
+    {
+        "id": 2251,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -118.13,
+        "lng": 191.25,
+        "npc": {
+            "id": 127480
+        }
+    },
+    {
+        "id": 2252,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -119.81,
+        "lng": 189.94,
+        "npc": {
+            "id": 127480
+        }
+    },
+    {
+        "id": 2253,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -119.5,
+        "lng": 191.75,
+        "npc": {
+            "id": 127480
+        }
+    },
+    {
+        "id": 2254,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -119.63,
+        "lng": 193.25,
+        "npc": {
+            "id": 127480
+        }
+    },
+    {
+        "id": 2255,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -118.13,
+        "lng": 191.25,
+        "npc": {
+            "id": 127480
+        }
+    },
+    {
+        "id": 2256,
+        "enemy_pack_id": 462,
+        "floor_id": 53,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -121,
+        "lng": 191.81,
+        "npc": {
+            "id": 127480
+        }
     }
 ]
