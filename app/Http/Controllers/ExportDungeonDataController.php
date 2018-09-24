@@ -54,24 +54,32 @@ class ExportDungeonDataController extends Controller
                 // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
                 // Thus, remove the IDs from both Routes and KillZones as we need to make new IDs when the DungeonRoute
                 // is imported into the production environment
-                foreach($demoRoute->routes as $route){
-                    /** @var $route Route */
-                    $route->makeHidden(['id', 'dungeon_route_id']);
+                $toHide = new Collection();
+                // No ->merge() :( -> https://medium.com/@tadaspaplauskas/quick-tip-laravel-eloquent-collections-merge-gotcha-moment-e2a56fc95889
+                foreach ($demoRoute->playerraces as $item) {
+                    $toHide->add($item);
                 }
-
-                foreach($demoRoute->killzones as $killzone){
-                    /** @var $killzone KillZone */
-                    $killzone->makeHidden(['id', 'dungeon_route_id']);
+                foreach ($demoRoute->playerclasses as $item) {
+                    $toHide->add($item);
                 }
-
-                foreach($demoRoute->enemyraidmarkers as $enemyraidmarker){
-                    /** @var $enemyraidmarker DungeonRouteEnemyRaidMarker */
-                    $enemyraidmarker->makeHidden(['id', 'dungeon_route_id']);
+                foreach ($demoRoute->affixgroups as $item) {
+                    $toHide->add($item);
                 }
-
-                foreach($demoRoute->mapcomments as $mapcomment){
-                    /** @var $mapcomment MapComment */
-                    $mapcomment->makeHidden(['id', 'dungeon_route_id']);
+                foreach ($demoRoute->routes as $item) {
+                    $toHide->add($item);
+                }
+                foreach ($demoRoute->killzones as $item) {
+                    $toHide->add($item);
+                }
+                foreach ($demoRoute->enemyraidmarkers as $item) {
+                    $toHide->add($item);
+                }
+                foreach ($demoRoute->mapcomments as $item) {
+                    $toHide->add($item);
+                }
+                foreach ($toHide as $item) {
+                    /** @var $item Model */
+                    $item->makeHidden(['id', 'dungeon_route_id']);
                 }
             }
 

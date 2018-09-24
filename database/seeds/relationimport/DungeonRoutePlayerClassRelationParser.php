@@ -31,7 +31,12 @@ class DungeonRoutePlayerClassRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        \App\Models\DungeonRoutePlayerClass::insert($value);
+        foreach ($value as $playerClass) {
+            // We now know the dungeon route ID, set it back to the player class
+            $playerClass['dungeon_route_id'] = $modelData['id'];
+
+            \App\Models\DungeonRoutePlayerClass::insert($playerClass);
+        }
 
         // Didn't really change anything so just return the value.
         return $modelData;
