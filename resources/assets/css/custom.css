@@ -156,6 +156,13 @@
     color: orange;
 }
 
+.map_route_edit_popup_class_color {
+    height: 32px;
+    margin: 2px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;

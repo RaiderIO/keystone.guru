@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\DungeonStartMarker;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Floor;
 use App\Models\KillZone;
+use App\Models\MapComment;
 use App\Models\Npc;
 use App\Models\Route;
 use Illuminate\Database\Eloquent\Collection;
@@ -37,7 +39,7 @@ class ExportDungeonDataController extends Controller
             $rootDirPath = storage_path() . '/dungeondata/' . $dungeon->expansion->shortname . '/' . $dungeon->key;
 
             // Demo routes, load it in a specific way to make it easier to import it back in again
-            $demoRoutes = $dungeon->dungeonroutes->where('demo', '=', true)->values();
+            $demoRoutes = $dungeon->dungeonroutes->where('demo', true)->values();
             foreach ($demoRoutes as $demoRoute) {
                 /** @var $demoRoute Model */
                 unset($demoRoute->relations);
@@ -46,7 +48,7 @@ class ExportDungeonDataController extends Controller
                 // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
                 // for each and every re-import
                 $demoRoute->setHidden(['id']);
-                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups', 'routes', 'killzones', 'enemyraidmarkers']);
+                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups', 'routes', 'killzones', 'enemyraidmarkers', 'mapcomments']);
 
                 // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
                 // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
@@ -61,11 +63,21 @@ class ExportDungeonDataController extends Controller
                     /** @var $killzone KillZone */
                     $killzone->makeHidden(['id', 'dungeon_route_id']);
                 }
+
+                foreach($demoRoute->enemyraidmarkers as $enemyraidmarker){
+                    /** @var $enemyraidmarker DungeonRouteEnemyRaidMarker */
+                    $enemyraidmarker->makeHidden(['id', 'dungeon_route_id']);
+                }
+
+                foreach($demoRoute->mapcomments as $mapcomment){
+                    /** @var $mapcomment MapComment */
+                    $mapcomment->makeHidden(['id', 'dungeon_route_id']);
+                }
             }
 
             $this->_saveData($demoRoutes, $rootDirPath, 'dungeonroutes.json');
 
-            $npcs = Npc::all()->where('dungeon_id', '=', $dungeon->id)->values();
+            $npcs = Npc::all()->where('dungeon_id', $dungeon->id)->values();
 
             // Save NPC data in the root of the dungeon folder
             $this->_saveData($npcs, $rootDirPath, 'npcs.json');
@@ -74,17 +86,19 @@ class ExportDungeonDataController extends Controller
             foreach ($dungeon->floors as $floor) {
                 /** @var Floor $floor */
                 // Only export NPC->id, no need to store the full npc in the enemy
-                $enemies = Enemy::where('floor_id', '=', $floor->id)->without('npc')->with('npc:id')->get()->values();
-                $enemyPacks = EnemyPack::where('floor_id', '=', $floor->id)->get()->values();
-                $enemyPatrols = EnemyPatrol::where('floor_id', '=', $floor->id)->get()->values();
-                $dungeonStartMarkers = DungeonStartMarker::where('floor_id', '=', $floor->id)->get()->values();
-                $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', '=', $floor->id)->get()->values();
+                $enemies = Enemy::where('floor_id', $floor->id)->without('npc')->with('npc:id')->get()->values();
+                $enemyPacks = EnemyPack::where('floor_id', $floor->id)->get()->values();
+                $enemyPatrols = EnemyPatrol::where('floor_id', $floor->id)->get()->values();
+                $dungeonStartMarkers = DungeonStartMarker::where('floor_id', $floor->id)->get()->values();
+                $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', $floor->id)->get()->values();
+                $mapComments = MapComment::where('floor_id', $floor->id)->where('always_visible', true)->get()->values();
 
                 $result['enemies'] = $enemies;
                 $result['enemy_packs'] = $enemyPacks;
                 $result['enemy_patrols'] = $enemyPatrols;
                 $result['dungeon_start_markers'] = $dungeonStartMarkers;
                 $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
+                $result['map_comments'] = $mapComments;
 
                 foreach ($result as $category => $categoryData) {
                     // Save enemies, packs, patrols, markers on a per-floor basis

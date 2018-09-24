@@ -208,6 +208,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mapcomments()
+    {
+        return $this->hasMany('App\Models\MapComment');
+    }
+
+    /**
      * @return double
      */
     public function getAvgRatingAttribute()

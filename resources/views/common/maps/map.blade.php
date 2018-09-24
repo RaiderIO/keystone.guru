@@ -172,23 +172,39 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
         </div>
     </script>
 
-    <script id="route_edit_popup_template" type="text/x-handlebars-template">
-        <div id="route_edit_popup_inner" class="popupCustom">
+    <script id="map_route_edit_popup_template" type="text/x-handlebars-template">
+        <div id="map_route_edit_popup_inner" class="popupCustom">
             <div class="form-group">
-                {!! Form::label('route_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('route_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+                {!! Form::label('map_route_edit_popup_color_@{{id}}', __('Color')) !!}
+                {!! Form::color('map_route_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+
+                @php($classes = \App\Models\CharacterClass::all())
+                @php($half = ($classes->count() / 2))
+                @for($i = 0; $i < $classes->count(); $i++)
+                    @php($class = $classes->get($i))
+                    @if($i % $half === 0)
+                        <div class="row no-gutters pt-1">
+                            @endif
+                            <div class="col map_route_edit_popup_class_color border-dark"
+                                 data-color="{{ $class->color }}"
+                                 style="background-color: {{ $class->color }};">
+                            </div>
+                            @if($i % $half === $half - 1)
+                        </div>
+                    @endif
+                @endfor
             </div>
-            {!! Form::button(__('Submit'), ['id' => 'route_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+            {!! Form::button(__('Submit'), ['id' => 'map_route_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
         </div>
     </script>
 
     <script id="map_map_comment_edit_popup_template" type="text/x-handlebars-template">
         <div id="map_map_comment_edit_popup_inner" class="popupCustom">
             <div class="form-group">
-                {!! Form::label('route_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('route_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+                {!! Form::label('map_map_comment_edit_popup_comment_@{{id}}', __('Comment')) !!}
+                {!! Form::textarea('map_map_comment_edit_popup_comment_@{{id}}', null, ['class' => 'form-control', 'cols' => '50', 'rows' => '5']) !!}
             </div>
-            {!! Form::button(__('Submit'), ['id' => 'route_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+            {!! Form::button(__('Submit'), ['id' => 'map_map_comment_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
         </div>
     </script>
 
