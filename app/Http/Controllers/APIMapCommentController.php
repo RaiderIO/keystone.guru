@@ -17,12 +17,12 @@ class APIMapCommentController extends Controller
     {
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute', null);
-        $dungeonRouteId = -1;
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
             $dungeonRouteId = $dungeonRoute->id;
         } catch (\Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            // this is okay, it can come from admin request
+            $dungeonRouteId = -1;
         }
 
         $result = MapComment::where('floor_id', $floorId)
@@ -47,9 +47,6 @@ class APIMapCommentController extends Controller
         $mapComment = MapComment::findOrNew($request->get('id'));
         $isAdmin = Auth::user()->hasRole('admin');
 
-        // Only admins may make global comments for all routes
-        $mapComment->always_visible = $isAdmin ? $request->get('always_visible', 0) : 0;
-
         $dungeonRouteId = 0;
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
@@ -62,6 +59,8 @@ class APIMapCommentController extends Controller
             }
         }
 
+        // Only admins may make global comments for all routes
+        $mapComment->always_visible = $isAdmin ? $request->get('always_visible', 0) : 0;
         $mapComment->floor_id = $request->get('floor_id');
         $mapComment->dungeon_route_id = $dungeonRouteId;
         $mapComment->game_icon_id = -1;

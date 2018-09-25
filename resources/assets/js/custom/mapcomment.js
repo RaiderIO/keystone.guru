@@ -32,7 +32,7 @@ class MapComment extends MapObject {
 
         this.id = 0;
         this.label = 'MapComment';
-        this.always_visible = false;
+        this.always_visible = 0;
         this.saving = false;
         this.deleting = false;
 
@@ -118,6 +118,7 @@ class MapComment extends MapObject {
                 dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
                 floor_id: self.map.getCurrentFloor().id,
                 comment: self.comment,
+                always_visible: self.always_visible,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng,
             },

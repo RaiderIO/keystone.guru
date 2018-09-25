@@ -205,7 +205,7 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
                 {!! Form::textarea('map_map_comment_edit_popup_comment_@{{id}}', null, ['class' => 'form-control', 'cols' => '50', 'rows' => '5']) !!}
             </div>
             <div class="form-group">
-                @if($admin)
+                @if($isAdmin)
                     {!! Form::hidden('map_map_comment_edit_popup_always_visible_@{{id}}', 1, []) !!}
                 @endif
             </div>
