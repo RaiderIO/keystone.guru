@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<?php
+$numUserReports = \App\Models\UserReport::where('handled', 0)->count();
+?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
@@ -15,13 +17,13 @@
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     @if (config('app.env') !== 'production')
-    <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/affixes.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/raidmarkers.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/affixes.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/raidmarkers.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
     @endif
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
@@ -105,6 +107,12 @@
                                 @if( Auth::user()->hasRole('admin'))
                                     <a class="dropdown-item"
                                        href="{{ route('admin.users') }}">{{__('View users')}}</a>
+                                @endif
+                                @if( Auth::user()->hasRole('admin'))
+                                    <a class="dropdown-item"
+                                       href="{{ route('admin.userreports') }}">{{__('View user reports') }}
+                                        <span class="badge badge-primary badge-pill">{{ $numUserReports }}</span>
+                                    </a>
                                 @endif
                                 <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
                                 <div class="dropdown-divider"></div>

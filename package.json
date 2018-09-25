@@ -22,6 +22,7 @@
     "color-interpolate": "^1.0.2",
     "cross-env": "^5.2.0",
     "datatables": "^1.10.18",
+    "featherlight": "^1.7.13",
     "geojson-utils": "^1.1.0",
     "handlebars": "^4.0.11",
     "jquery-bar-rating": "^1.2.2",

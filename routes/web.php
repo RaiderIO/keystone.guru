@@ -86,6 +86,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         Route::post('admin/user/{user}/makeadmin', 'UserController@makeadmin')->name('admin.user.makeadmin');
         Route::post('admin/user/{user}/makeuser', 'UserController@makeuser')->name('admin.user.makeuser');
 
+        Route::get('admin/userreports', 'UserReportController@list')->name('admin.userreports');
+
         Route::get('admin/datadump/exportdungeondata', 'ExportDungeonDataController@view')->name('admin.datadump.exportdungeondata');
         Route::post('admin/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.datadump.viewexporteddungeondata');
     });
@@ -143,6 +145,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
             Route::post('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
             Route::delete('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
+
+
         });
 
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
@@ -162,6 +166,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
             Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
             Route::delete('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@delete');
+
+            Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
         });
     });
 

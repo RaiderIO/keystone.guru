@@ -80,6 +80,8 @@ if (count($affixes) == 0) {
     </script>
 @endsection
 @section('content')
+    @include('common.userreport.dungeonroute')
+
     <h2 class="text-center">
         {{ __('Details') }}
     </h2>
@@ -192,6 +194,11 @@ if (count($affixes) == 0) {
                         @else
                             {!! Form::checkbox('favorite', 1, $model->isFavoritedByCurrentUser(), ['id' => 'favorite', 'class' => 'form-control left_checkbox']) !!}
                         @endif
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col-6 font-weight-bold">
+                        <i class="fa fa-flag"></i> <a id="featherlight_trigger" href="#" data-featherlight="#userreport_dungeonroute">Report for moderation</a>
                     </div>
                 </div>
             </div>
