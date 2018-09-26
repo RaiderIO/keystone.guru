@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $author_id
  * @property string $context
  * @property string $category
+ * @property string $username For anonymous users
  * @property string $message
  * @property \App\User $author
  */

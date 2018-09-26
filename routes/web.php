@@ -38,6 +38,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
     Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
 
+    Route::post('userreport/new', 'UserReportController@store')->name('userreport.new');
+
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');

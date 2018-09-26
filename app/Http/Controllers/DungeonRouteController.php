@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\UserReport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DungeonRouteController extends Controller
 {
@@ -26,8 +28,20 @@ class DungeonRouteController extends Controller
      */
     public function view(Request $request, DungeonRoute $dungeonroute)
     {
+        $user = Auth::user();
+        $currentReport = null;
+        if ($user !== null) {
+            // Find any currently active report the user has made
+            $currentReport = UserReport::where('author_id', $user->id)
+                ->where('context', $dungeonroute->getReportContext())
+                ->where('category', 'dungeonroute')
+                ->where('handled', 0)
+                ->first();
+        }
+
         return view('dungeonroute.view', [
-            'model' => $dungeonroute
+            'model' => $dungeonroute,
+            'current_report' => $currentReport
         ]);
     }
 

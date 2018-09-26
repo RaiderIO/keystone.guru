@@ -18,6 +18,7 @@ class CreateUserReportsTable extends Migration
             $table->integer('author_id');
             $table->string('context');
             $table->string('category');
+            $table->string('username');
             $table->string('message');
             $table->boolean('handled')->default(0);
             $table->timestamps();

@@ -233,6 +233,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return mixed Get the uniquely identifying context for this route.
+     */
+    public function getReportContext()
+    {
+        return $this->public_key;
+    }
+
+    /**
      * @return integer
      */
     public function getRatingCountAttribute()

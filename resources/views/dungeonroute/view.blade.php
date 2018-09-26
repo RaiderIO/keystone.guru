@@ -80,7 +80,7 @@ if (count($affixes) == 0) {
     </script>
 @endsection
 @section('content')
-    @include('common.userreport.dungeonroute')
+    @include('common.userreport.dungeonroute', ['model' => $model])
 
     <h2 class="text-center">
         {{ __('Details') }}
@@ -125,7 +125,7 @@ if (count($affixes) == 0) {
                     @php($title = 'This indicates what percent of the dungeon has their enemy forces value assigned. Since this information is still partly unknown to the website, it may
                     appear as if the Enemy Forces counter is broken when in reality there\'s simply no value assigned to that NPC. 0% = bad, 100% = good.')
                     <div class="col-6 font-weight-bold" data-toggle="tooltip" title="{{$title}}">
-                        {{ __('Enemy forces assigned to NPCs (TEMP)') }}:
+                        {{ __('Enemy forces assigned (TEMP)') }}:
                     </div>
                     <div class="col-6">
                         @php($status = $model->dungeon->enemy_forces_mapped_status)
@@ -196,9 +196,20 @@ if (count($affixes) == 0) {
                         @endif
                     </div>
                 </div>
+            </div>
+            <div class="col-md-12">
                 <div class="row view_dungeonroute_details_row">
                     <div class="col-6 font-weight-bold">
-                        <i class="fa fa-flag"></i> <a id="featherlight_trigger" href="#" data-featherlight="#userreport_dungeonroute">Report for moderation</a>
+                        @isset($current_report)
+                            <span class="text-warning">
+                                <i class="fa fa-exclamation-triangle"></i> {{ __('You have reported this dungeonroute for moderation.') }}
+                            </span>
+                        @else
+                            <i class="fa fa-flag"></i>
+                            <a id="featherlight_trigger" href="#" data-featherlight="#userreport_dungeonroute">
+                                Report for moderation
+                            </a>
+                        @endisset
                     </div>
                 </div>
             </div>
