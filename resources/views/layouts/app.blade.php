@@ -182,19 +182,19 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
         <hr/>
         <div class="row">
             <div class="col-3">
-                <a class="nav-link" href="#">News</a>
+                <a class="nav-link" href="{{ route('misc.credits') }}">{{ __('Credits') }}</a>
             </div>
             <div class="col-3">
-                <a class="nav-link" href="{{ route('misc.about') }}">About</a>
+                <a class="nav-link" href="{{ route('misc.about') }}">{{ __('About') }}</a>
             </div>
             <div class="col-3">
                 <a class="nav-link" href="https://discord.gg/2KtWrqw">
-                    <i class="fab fa-discord"></i> Discord
+                    <i class="fab fa-discord"></i> {{ __('Discord') }}
                 </a>
             </div>
             <div class="col-3">
                 <a class="nav-link" href="https://github.com/Wotuu/keystone.guru">
-                    <i class="fab fa-github"></i> Github
+                    <i class="fab fa-github"></i> {{ __('Github') }}
                 </a>
             </div>
         </div>
@@ -210,6 +210,12 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
             </div>
             <div class="col-3">
                 <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
+            </div>
+        </div>
+        <div class="row text-center small">
+            <div class="col-12">
+                World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
+                Blizzard Entertainment, Inc. in the U.S. and/or other countries.
             </div>
         </div>
     </div>

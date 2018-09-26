@@ -207,7 +207,7 @@ if (count($affixes) == 0) {
                         @else
                             <i class="fa fa-flag"></i>
                             <a id="featherlight_trigger" href="#" data-featherlight="#userreport_dungeonroute">
-                                Report for moderation
+                                {{ __('Report for moderation') }}
                             </a>
                         @endisset
                     </div>

@@ -15,6 +15,9 @@ Auth::routes();
 
 Route::group(['middleware' => ['viewcachebuster']], function () {
 
+    Route::get('credits', function () {
+        return view('misc.credits');
+    })->name('misc.credits');
 
     Route::get('about', function () {
         return view('misc.about');
