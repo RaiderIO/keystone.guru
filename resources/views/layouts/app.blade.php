@@ -185,7 +185,9 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
                 <a class="nav-link" href="{{ route('misc.credits') }}">{{ __('Credits') }}</a>
             </div>
             <div class="col-3">
-                <a class="nav-link" href="{{ route('misc.about') }}">{{ __('About') }}</a>
+                <a class="nav-link" href="https://www.patreon.com/keystoneguru">
+                    <i class="fab fa-patreon"></i> {{ __('Patreon') }}
+                </a>
             </div>
             <div class="col-3">
                 <a class="nav-link" href="https://discord.gg/2KtWrqw">
@@ -200,7 +202,7 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
         </div>
         <div class="row">
             <div class="col-3">
-                <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} </a>
+                <a class="nav-link" href="{{ route('misc.about') }}">{{ __('About') }}</a>
             </div>
             <div class="col-3">
                 <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
@@ -213,7 +215,10 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
             </div>
         </div>
         <div class="row text-center small">
-            <div class="col-12">
+            <div class="col-6">
+                <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} v.1.0 </a>
+            </div>
+            <div class="col-6">
                 World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
                 Blizzard Entertainment, Inc. in the U.S. and/or other countries.
             </div>
