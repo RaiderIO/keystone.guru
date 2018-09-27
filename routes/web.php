@@ -35,6 +35,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         return view('legal.cookies');
     })->name('legal.cookies');
 
+    Route::get('patreon-link', 'PatreonController@link')->name('legal.cookies');
+
     Route::get('/', 'HomeController@index')->name('home');
 
     // ['auth', 'role:admin|user']
