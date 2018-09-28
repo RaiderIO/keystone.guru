@@ -35,6 +35,7 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         return view('legal.cookies');
     })->name('legal.cookies');
 
+    Route::get('patreon-unlink', 'PatreonController@unlink')->name('patreon.unlink');
     Route::get('patreon-link', 'PatreonController@link')->name('patreon.link');
     Route::get('patreon-oauth', 'PatreonController@oauth_redirect')->name('patreon.oauth.redirect');
 

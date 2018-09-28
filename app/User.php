@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\LaratrustUserTrait;
 
 /**
@@ -11,6 +11,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property $name string
  * @property $email string
  * @property $password string
+ * @property $patreonData PatreonData
  */
 class User extends Authenticatable
 {
@@ -46,11 +47,23 @@ class User extends Authenticatable
     /**
      * Checks if this user has paid for a certain tier one way or the other.
      *
-     * @param $name string
+     * @param $name
+     * @return bool
      */
     function hasPaidTier($name)
     {
+        $result = false;
 
+        if ($this->patreonData !== null) {
+            foreach ($this->patreonData->paidtiers as $tier) {
+                if ($tier->name === $name) {
+                    $result = true;
+                    break;
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**

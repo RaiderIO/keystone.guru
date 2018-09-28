@@ -23,7 +23,17 @@
 
     <div class="mt-4">
         <h3>Patreon</h3>
-        <a class="btn patreon-color text-white" href="{{
+        @isset($user->patreondata)
+            <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank">
+                {{'Unlink from Patreon'}}
+            </a>
+
+            <p class="mt-2">
+                <span class="text-info"><i class="fa fa-check-circle"></i></span>
+                {{ __('Your account is linked to Patreon. Thank you!') }}
+            </p>
+        @else
+            <a class="btn patreon-color text-white" href="{{
             'https://patreon.com/oauth2/authorize?' . http_build_query(
                 ['response_type' => 'code',
                 'client_id' => env('PATREON_CLIENT_ID'),
@@ -32,8 +42,13 @@
                 ])
             }}" target="_blank">{{'Link to Patreon'}}</a>
 
-        <p class="text-primary mt-2">
-            <span class="text-warning"><i class="fa fa-exclamation-triangle"></i></span>
+            <p class="mt-2">
+                <span class="text-info"><i class="fa fa-info"></i></span>
+                {{ __('In order to claim your Patreon rewards, you need to link your Patreon account') }}
+            </p>
+        @endisset
+        <p class="text-warning mt-2">
+            <i class="fa fa-exclamation-triangle"></i>
             {{ __('Patreon implementation is experimental. If your rewards are not available after linking with your Patreon, please contact me directly on Discord and I will fix it for you.') }}
         </p>
     </div>

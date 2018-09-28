@@ -1,5 +1,11 @@
 <?php
 $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
+
+$user = \Illuminate\Support\Facades\Auth::user();
+// Show ads if not set
+$noads = isset($noads) ? $noads : false;
+// If logged in, check if the user has paid for an ad-free website
+$noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -30,7 +36,7 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
 
     @include('common.general.scripts')
     @include('common.thirdparty.cookieconsent')
-    <?php if( (!isset($noads) || (isset($noads) && !$noads)) && config('app.env') === 'production' ){ ?>
+    <?php if( !$noads && config('app.env') === 'production' ){ ?>
     @include('common.thirdparty.adsense')
     <?php } ?>
 </head>

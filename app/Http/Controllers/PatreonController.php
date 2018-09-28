@@ -8,12 +8,36 @@ use App\Models\PatreonTier;
 use Art4\JsonApiClient\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Teapot\StatusCode\Http;
 use Patreon\API;
 use Patreon\OAuth;
 
 class PatreonController extends Controller
 {
+
+    /**
+     * Unlinks the user from Patreon.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function unlink(Request $request)
+    {
+        $user = Auth::user();
+        if ($user !== null) {
+            // If it was linked, delete it
+            if ($user->patreondata !== null) {
+                $user->patreondata->delete();
+            }
+
+            $result = redirect()->route('profile.edit');
+            \Session::flash('status', 'Your Patreon account has successfully been unlinked,');
+        } else {
+            \Session::flash('warning', 'You need to be logged in to view this page.');
+            $result = redirect()->route('home');
+        }
+
+        return $result;
+    }
 
     /**
      * Checks if the incoming request is a save as new request or not.
