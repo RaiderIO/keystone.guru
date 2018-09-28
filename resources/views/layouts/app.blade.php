@@ -171,6 +171,12 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
                             </div>
                         @endif
 
+                        @if (session('warning'))
+                            <div class="alert alert-warning">
+                                {{ session('warning') }}
+                            </div>
+                        @endif
+
                         @yield('content')
                     </div>
                 </div>

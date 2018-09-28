@@ -31,6 +31,11 @@
                 'state' => csrf_token()
                 ])
             }}" target="_blank">{{'Link to Patreon'}}</a>
+
+        <p class="text-primary mt-2">
+            <span class="text-warning"><i class="fa fa-exclamation-triangle"></i></span>
+            {{ __('Patreon implementation is experimental. If your rewards are not available after linking with your Patreon, please contact me directly on Discord and I will fix it for you.') }}
+        </p>
     </div>
 
     {!! Form::close() !!}

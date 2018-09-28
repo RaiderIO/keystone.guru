@@ -42,4 +42,38 @@ class User extends Authenticatable
     {
         return 'name';
     }
+
+    /**
+     * Checks if this user has paid for a certain tier one way or the other.
+     *
+     * @param $name string
+     */
+    function hasPaidTier($name)
+    {
+
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function dungeonroutes()
+    {
+        return $this->hasMany('App\Models\DungeonRoute', 'author_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function reports()
+    {
+        return $this->hasMany('App\Models\UserReports', 'author_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    function patreondata()
+    {
+        return $this->hasOne('App\Models\PatreonData');
+    }
 }
