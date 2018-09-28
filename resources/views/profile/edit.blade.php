@@ -21,6 +21,18 @@
 
     {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
 
+    <div class="mt-4">
+        <h3>Patreon</h3>
+        <a class="btn patreon-color text-white" href="{{
+            'https://patreon.com/oauth2/authorize?' . http_build_query(
+                ['response_type' => 'code',
+                'client_id' => env('PATREON_CLIENT_ID'),
+                'redirect_uri' => $_SERVER['URL_HOST'] . 'patreon-link',
+                'state' => csrf_token()
+                ])
+            }}" target="_blank">{{'Link to Patreon'}}</a>
+    </div>
+
     {!! Form::close() !!}
 
     {{ Form::model($user, ['route' => ['profile.changepassword', $user->name], 'method' => 'patch']) }}

@@ -11,6 +11,7 @@
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.6",
+        "patreon/patreon": "^0.3.1",
         "santigarcor/laratrust": "5.0.*",
         "shrikeh/teapot": "^2.3",
         "yajra/laravel-datatables-oracle": "~8.0"
