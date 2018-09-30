@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\DungeonRoute;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\LaratrustUserTrait;
@@ -52,9 +53,11 @@ class User extends Authenticatable
      */
     function hasPaidTier($name)
     {
-        $result = false;
+        // True for all admins
+        $result = $this->hasRole('admin');
 
-        if ($this->patreonData !== null) {
+        // If we weren't an admin, check patreon data
+        if (!$result && $this->patreonData !== null) {
             foreach ($this->patreonData->paidtiers as $tier) {
                 if ($tier->name === $name) {
                     $result = true;
@@ -64,6 +67,15 @@ class User extends Authenticatable
         }
 
         return $result;
+    }
+
+    /**
+     * Checks if this user can create a dungeon route or not (based on free account limits)
+     */
+    function canCreateDungeonRoute()
+    {
+        return (config('keystoneguru.registered_user_dungeonroute_limit') < DungeonRoute::where('author_id', $this->id)->count() ||
+            $this->hasPaidTier('unlimited-dungeonroutes'));
     }
 
     /**

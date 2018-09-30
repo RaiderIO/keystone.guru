@@ -19,5 +19,13 @@ return [
     /**
      * Some playful names for difficulties. I didn't want to offend anyone (looking at you non-casuals).
      */
-    'dungeonroute_difficulty' => ['Casual', 'Dedicated', 'Hardcore']
+    'dungeonroute_difficulty' => ['Casual', 'Dedicated', 'Hardcore'],
+
+
+    /**
+     * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming)
+     */
+    'registered_user_dungeonroute_limit' => 18,
+
+    ''
 ];

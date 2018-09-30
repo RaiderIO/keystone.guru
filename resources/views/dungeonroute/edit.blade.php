@@ -139,13 +139,15 @@
                         @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming'])
                     </div>
 
-                    <h3>
-                        {{ __('Sharing') }}
-                    </h3>
-                    <div class='form-group'>
-                        {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
-                        {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
-                    </div>
+                    @if(Auth::user()->hasPaidTier('unlisted-routes') )
+                        <h3>
+                            {{ __('Sharing') }}
+                        </h3>
+                        <div class='form-group'>
+                            {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
+                            {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
+                        </div>
+                    @endif
 
                     @if(Auth::user()->hasRole('admin'))
                         <h3>
