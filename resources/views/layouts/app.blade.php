@@ -30,6 +30,7 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
         <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
         <link href="{{ asset('css/raidmarkers.css') }}" rel="stylesheet">
         <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/home.css') }}" rel="stylesheet">
     @endif
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')

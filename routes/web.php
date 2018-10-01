@@ -39,8 +39,12 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
     Route::get('patreon-link', 'PatreonController@link')->name('patreon.link');
     Route::get('patreon-oauth', 'PatreonController@oauth_redirect')->name('patreon.oauth.redirect');
 
-
     Route::get('/', 'HomeController@index')->name('home');
+
+
+    Route::get('landing', function () {
+        return view('landing');
+    })->name('landing');
 
     // ['auth', 'role:admin|user']
 
