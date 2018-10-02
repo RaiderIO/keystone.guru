@@ -141,6 +141,9 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
         </div>
     </nav>
 
+    <?php if( isset($custom) && $custom === true ) { ?>
+        @yield('content')
+    <?php } else { ?>
     <div class="container-fluid">
         <div class="row">
             <div class="<?php echo(isset($wide) && $wide ? "flex-fill ml-3 mr-3" : "col-md-8 offset-md-2"); ?>">
@@ -190,6 +193,7 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
             </div>
         </div>
     </div>
+    <?php } ?>
 
     <div class="container text-center">
         <hr/>
@@ -233,7 +237,8 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
             </div>
             <div class="col-6">
                 World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
-                Blizzard Entertainment, Inc. in the U.S. and/or other countries.
+                Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with
+                Blizzard Entertainment.
             </div>
         </div>
     </div>
@@ -247,6 +252,8 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
     <script src="{{ asset('js/custom.js') }}"></script>
 
 @else
+    <?php // Only used on the home page ?>
+    <script src="{{ asset('js/custom/home.js') }}"></script>
 
     <script src="{{ asset('js/custom/constants.js') }}"></script>
     <?php // Include in proper order ?>

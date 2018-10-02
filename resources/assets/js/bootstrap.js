@@ -40,6 +40,7 @@ window.handlebars = require('handlebars');
 window.barrating = require('jquery-bar-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
 window.featherlight = require('featherlight');
+window.owlCarousel = require('owl.carousel');
 
 require('@fortawesome/fontawesome-free');
 

@@ -1,3 +1,12 @@
+.probootstrap-hero {
+    padding-top: 200px;
+    padding-bottom: 200px;
+}
+
+.probootstrap-section {
+    padding: 7em 0;
+}
+
 .probootstrap-feature-showcase {
     margin-top: 100px;
     position: relative;
@@ -21,36 +30,13 @@
     overflow: hidden;
     width: 100%;
     position: relative;
+    border-radius: 5px;
 }
 
 @media screen and (max-width: 768px) {
     .probootstrap-home-showcase-wrap .probootstrap-home-showcase-inner {
         height: 100%;
     }
-}
-
-.probootstrap-home-showcase-wrap .probootstrap-home-showcase-inner .probootstrap-chrome {
-    background: #dddde0;
-    padding: 15px;
-    border-radius: 5px 5px 0 0;
-    position: relative;
-}
-
-.probootstrap-home-showcase-wrap .probootstrap-home-showcase-inner .probootstrap-chrome > div {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    margin-top: -3px;
-}
-
-.probootstrap-home-showcase-wrap .probootstrap-home-showcase-inner .probootstrap-chrome > div > span {
-    width: 5px;
-    height: 5px;
-    display: block;
-    float: left;
-    margin-right: 4px;
-    background: #898991;
-    border-radius: 50%;
 }
 
 @media screen and (max-width: 768px) {
@@ -96,7 +82,8 @@
 }
 
 .probootstrap-showcase-nav {
-    margin-top: 30px;
+    border-radius: 5px;
+    padding-top: 15px;
 }
 
 .probootstrap-showcase-nav ul {
@@ -123,14 +110,12 @@
 
 .probootstrap-showcase-nav ul li.active {
     padding: 20px;
-    background: #ffffff;
     border-radius: 4px;
     -webkit-box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.08);
     box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.08);
 }
 
 .probootstrap-showcase-nav ul li.active > a {
-    color: #7ed321;
     padding-left: 0px;
     display: block;
 }

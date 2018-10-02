@@ -30,6 +30,8 @@ if (mix.inProduction()) {
     // Custom processing only
     mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css');
     mix.babel([
+        // Home page only
+        'resources/assets/js/custom/home.js',
         // Doesn't depend on anything
         'resources/assets/js/custom/constants.js',
         // Include in proper order
