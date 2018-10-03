@@ -52,7 +52,25 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
     Route::post('userreport/new', 'UserReportController@store')->name('userreport.new');
 
+    Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
+    // View any dungeon route (catch all)
+    Route::get('{dungeonroute}', 'DungeonRouteController@view')
+        ->name('dungeonroute.view');
+
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+        // Must be logged in to create a new dungeon route
+        Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
+        Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
+
+        // Edit your own dungeon routes
+        Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
+            ->middleware('can:edit,dungeonroute')
+            ->name('dungeonroute.edit');
+        // Submit a patch for your own dungeon route
+        Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
+            ->middleware('can:edit,dungeonroute')
+            ->name('dungeonroute.update');
+
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
         Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
@@ -105,23 +123,6 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         Route::get('admin/datadump/exportdungeondata', 'ExportDungeonDataController@view')->name('admin.datadump.exportdungeondata');
         Route::post('admin/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.datadump.viewexporteddungeondata');
     });
-
-    // Put this down below, since it contains a catch all
-    Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
-    Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
-    Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
-
-    // Edit your own dungeon routes
-    Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
-        ->middleware('can:edit,dungeonroute')
-        ->name('dungeonroute.edit');
-    // Submit a patch for your own dungeon route
-    Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
-        ->middleware('can:edit,dungeonroute')
-        ->name('dungeonroute.update');
-    // View any dungeon route
-    Route::get('{dungeonroute}', 'DungeonRouteController@view')
-        ->name('dungeonroute.view');
 
 
     Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {

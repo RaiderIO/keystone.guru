@@ -198,44 +198,44 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
     <div class="container text-center">
         <hr/>
         <div class="row">
-            <div class="col-3">
+            <div class="col-md-3">
                 <a class="nav-link" href="{{ route('misc.credits') }}">{{ __('Credits') }}</a>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <a class="nav-link" href="https://www.patreon.com/keystoneguru">
                     <i class="fab fa-patreon"></i> {{ __('Patreon') }}
                 </a>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <a class="nav-link" href="https://discord.gg/2KtWrqw">
                     <i class="fab fa-discord"></i> {{ __('Discord') }}
                 </a>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <a class="nav-link" href="https://github.com/Wotuu/keystone.guru">
                     <i class="fab fa-github"></i> {{ __('Github') }}
                 </a>
             </div>
         </div>
         <div class="row">
-            <div class="col-3">
+            <div class="col-md-3">
                 <a class="nav-link" href="{{ route('misc.about') }}">{{ __('About') }}</a>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
             </div>
         </div>
         <div class="row text-center small">
-            <div class="col-6">
+            <div class="col-md-6">
                 <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} v.1.0 </a>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
                 World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
                 Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with
                 Blizzard Entertainment.

@@ -39,3 +39,7 @@
 .probootstrap-showcase-nav ul li > a {
     color: #DF691A !important;
 }
+
+.service .icon i {
+    color: #DF691A !important;
+}

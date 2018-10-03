@@ -12,7 +12,7 @@
                     <p>{{ __('This website allows you to plan routes through your Mythic Plus dungeons and share them with the world or your group!') }}</p>
                     <p>
                         <a href="#" class="btn btn-primary btn-lg" role="button">{{ __('Register and start planning') }}</a>
-                        <a href="#" class="btn btn-primary btn-ghost btn-lg" role="button">{{ __('Demo') }}</a>
+                        <a href="#" class="btn btn-primary btn-ghost btn-lg mt-md-0 mt-sm-3" role="button">{{ __('Demo') }}</a>
                     </p>
                     <!-- <p><a href="#"><i class="icon-play2"></i> Watch the video</a></p> -->
                 </div>
@@ -79,77 +79,78 @@
             <div class="row">
                 <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate"
                      data-animate-effect="fadeIn">
-                    <h2>Platform Features</h2>
-                    <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
-                        natus quos quibusdam soluta at.</p>
+                    <h2>{{ __('Additional Features') }}</h2>
+                    <p class="lead">{{ __('Aside from an interactive dungeon map, multiple features of a website allows Keystone.guru to be a hub for all things related to planning your routes with much more to come.') }}</p>
                 </div>
             </div>
             <!-- END row -->
             <div class="row probootstrap-gutter60">
                 <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInLeft">
                     <div class="service text-center">
-                        <div class="icon"><i class="icon-mobile3"></i></div>
+                        <div class="icon"><i class="fa fa-mobile-alt"></i></div>
                         <div class="text">
-                            <h3>Responsive Design</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
-                                natus quos quibusdam soluta at.</p>
+                            <h3>{{ __('Responsive Design') }}</h3>
+                            <p>{{ __('Plan your routes on the go on any device. Keystone.guru is designed with mobility in mind.') }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeIn">
                     <div class="service text-center">
-                        <div class="icon"><i class="icon-presentation"></i></div>
+                        <div class="icon"><i class="fa fa-search"></i></div>
                         <div class="text">
-                            <h3>Business Solutions</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
-                                natus quos quibusdam soluta at.</p>
+                            <h3>{{ __('Route Search') }}</h3>
+                            <p>{{ __('Struggle with a dungeon with specific affixes? Search for an existing route made by others, just like your routes can be found by others*.') }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInRight">
                     <div class="service text-center">
-                        <div class="icon"><i class="icon-circle-compass"></i></div>
+                        <div class="icon"><i class="fa fa-star"></i></div>
                         <div class="text">
-                            <h3>Brand Identity</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
-                                natus quos quibusdam soluta at.</p>
+                            <h3>{{ __('Rating and Favoriting') }}</h3>
+                            <p>{{ __('Saw a route that had some great features or you enjoyed running with your group? Rate it for others to discover and favorite it for easy finding for later on through your Profile page!') }}</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInLeft">
                     <div class="service text-center">
-                        <div class="icon"><i class="icon-lightbulb"></i></div>
+                        <div class="icon"><i class="fa fa-share"></i></div>
                         <div class="text">
-                            <h3>Creative Ideas</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
-                                natus quos quibusdam soluta at.</p>
+                            <h3>{{ __('Easy Sharing') }}</h3>
+                            <p>{{ __('Links to routes on Keystone.guru are short and simple. Share your route with your (pug) party members prior to starting and discuss strategy before you wipe.') }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 probootstrap-animate">
                     <div class="service text-center">
-                        <div class="icon"><i class="icon-magnifying-glass2"></i></div>
+                        <div class="icon"><i class="fab fa-reddit"></i></div>
                         <div class="text">
-                            <h3>Search Engine Friendly</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
-                                natus quos quibusdam soluta at.</p>
+                            <h3>{{ __('Community') }}</h3>
+                            <p>{!! sprintf(__('Join the community on %s or %s for getting in-touch with fellow keystone runners and easy sharing of routes. I will be around to answer any questions you may have.'),
+                                    '<a href="https://reddit.com/r/keystoneguru"><i class="fab fa-reddit"></i> Reddit</a>', '<a href="https://discord.gg/2KtWrqw"><i class="fab fa-discord"></i> Discord</a>') !!}</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInRight">
                     <div class="service text-center">
-                        <div class="icon"><i class="icon-browser2"></i></div>
+                        <div class="icon"><i class="fab fa-osi"></i></div>
                         <div class="text">
-                            <h3>Easy Customization</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
-                                natus quos quibusdam soluta at.</p>
+                            <h3>{{ __('Open Source') }}</h3>
+                            <p>{!! sprintf(__('The full source for the entire website can be found on %s. Interested in helping out or have a kick-ass idea for a new feature? Let me know on Github!'),
+                            '<a href="https://github.com/Wotuu/keystone.guru"><i class="fab fa-github"></i> Github</a>') !!} </p>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12 text-center section-heading probootstrap-animate small">
+                    <p>{!! sprintf(__('*Prefer some privacy? Consider becoming a %s for unlimited private routes and more.'), '<a href="https://www.patreon.com/keystoneguru"><i class="fab fa-patreon"></i> Patron</a>') !!}</p>
+                </div>
+            </div>
         </div>
     </section>
+<!--
 
     <section class="probootstrap-section probootstrap-bg-white probootstrap-zindex-above-showcase">
         <div class="container">
@@ -160,7 +161,6 @@
                         natus quos quibusdam soluta at.</p>
                 </div>
             </div>
-            <!-- END row -->
             <div class="row">
                 <div class="col-md-7 order-md-5 probootstrap-animate" data-animate-effect="fadeInRight">
 
@@ -211,6 +211,7 @@
             </div>
         </div>
     </section>
+    -->
 
 
     <!-- Modal login -->
