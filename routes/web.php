@@ -41,10 +41,13 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
     Route::get('/', 'HomeController@index')->name('home');
 
+    Route::get('changelog', function () {
+        return view('changelog');
+    })->name('changelog');
 
-    Route::get('landing', function () {
-        return view('landing');
-    })->name('landing');
+    Route::get('mapping', function () {
+        return view('mapping');
+    })->name('mapping');
 
     // ['auth', 'role:admin|user']
 
@@ -53,9 +56,6 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
     Route::post('userreport/new', 'UserReportController@store')->name('userreport.new');
 
     Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
-    // View any dungeon route (catch all)
-    Route::get('{dungeonroute}', 'DungeonRouteController@view')
-        ->name('dungeonroute.view');
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
         // Must be logged in to create a new dungeon route
@@ -185,5 +185,9 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
         });
     });
+    
+    // View any dungeon route (catch all)
+    Route::get('{dungeonroute}', 'DungeonRouteController@view')
+        ->name('dungeonroute.view');
 
 });

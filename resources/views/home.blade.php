@@ -1,179 +1,225 @@
-@extends('layouts.app')
+@extends('layouts.app', ['custom' => true])
 
 @section('header-title', __('Welcome to keystone.guru!'))
 
 @section('content')
-    <p>
-        This is a website where players of World of Warcraft can plan their Mythic+ keystone runs in detail. The site is
-        currently under construction,
-        there may be functions missing, broken, or otherwise incomplete. Please check back later if you want to see the
-        finished product!
-
-        <br><br>
-        Registering is optional, as an anonymous user you can view routes freely. Please check it out!
-
-        <br><br>
-        For feedback, please hop on the <a href="https://discord.gg/2KtWrqw"> <i class="fab fa-discord"></i> Discord
-        </a>,
-        visit <a
-                href="https://www.reddit.com/r/CompetitiveWoW/comments/9dfrlt/feedbackhelp_wanted_for_m_route_planning_website/">
-            <i class="fab fa-reddit"></i> Reddit</a>
-        or send an e-mail to feedback@keystone.guru!
-    </p>
-
-    <h2>{{ __('Enemy forces mapping progress') }}</h2>
-    @foreach(\App\Models\Dungeon::active()->get() as $dungeon )
-        <?php /** @var $dungeon \App\Models\Dungeon */ ?>
-        <div class="row">
-            <div class="col-lg-2">
-                {{ $dungeon->name }}
-            </div>
-            <div class="col-lg-4">
-                <div class="progress">
-                    @php($percent = $dungeon->enemy_forces_mapped_status['percent'])
-                    @php($total = $dungeon->enemy_forces_mapped_status['total'])
-                    @php($curr = $total - $dungeon->enemy_forces_mapped_status['unmapped'])
-                    <div class="progress-bar" style="width: {{ $percent }}%;" role="progressbar"
-                         aria-valuenow="{{ $percent }}" aria-valuemin="0"
-                         aria-valuemax="100">
-                        <span class="text-left">
-                        {{ __('Enemy forces') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
-                        </span>
-                    </div>
+    <section class="probootstrap-hero mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2 col-sm-8 offset-sm-2 text-center probootstrap-hero-text pb0 probootstrap-animate"
+                     data-animate-effect="fadeIn">
+                    <h1>{{ __('Welcome to Keystone.guru!') }}</h1>
+                    <p>{{ __('This website allows you to plan routes through your Mythic Plus dungeons and share them with the world or your group!') }}</p>
+                    <p>
+                        @guest
+                            <a href="#" class="btn btn-primary btn-lg" role="button" data-toggle="modal"
+                               data-target="#register_modal">{{ __('Register and start planning') }}</a>
+                        @endguest
+                        <a href="{{ route('dungeonroute.view', ['public_key' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}" class="btn btn-primary btn-ghost btn-lg mt-md-0 mt-sm-3"
+                           role="button">{{ __('Demo') }}</a>
+                    </p>
+                    <!-- <p><a href="#"><i class="icon-play2"></i> Watch the video</a></p> -->
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="progress">
-                    <?php
-                        $totalEnemies = 0;
-                        $totalUnassignedEnemies = 0;
-                        $hasTeemingEnemy = false;
-                        foreach($dungeon->floors as $floor){
-                            /** @var $floor \App\Models\Floor */
-                            $totalEnemies += $floor->enemies->count();
-                            $totalUnassignedEnemies += $floor->enemies->whereIn('npc_id', [-1, 0])->count();
-                            $hasTeemingEnemy = $hasTeemingEnemy || $floor->enemies->where('teeming', 'visible')->count() > 0;
-                        }
-                    ?>
-                    @php($curr = $totalEnemies - $totalUnassignedEnemies)
-                    @php($percent = ($curr / $totalEnemies) * 100)
-                    @php($total = $totalEnemies)
-                    <div class="progress-bar" style="width: {{ $percent }}%;" role="progressbar"
-                         aria-valuenow="{{ $percent }}" aria-valuemin="0"
-                         aria-valuemax="100">
-                        <span class="text-left">
-                        {{ __('NPCs assigned') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
-                        </span>
+
+            <div class="row probootstrap-feature-showcase">
+                <div class="col-md-4 order-md-8 probootstrap-showcase-nav probootstrap-animate bg-secondary">
+                    <ul>
+                        <li class="active">
+                            <a href="#">{{ __('Interactive maps') }}</a>
+                            <p>{{ __('Powered by Leaflet, Keystone.guru features interactive maps with 3 zoom levels and visibility controls.') }}</p>
+                        </li>
+                        <li>
+                            <a href="#">{{ __('All BFA dungeons supported') }}</a>
+                            <p>{{ __('From the depths of The Underrot to the pirate city of Freehold, all current BFA dungeons are supported. In the future, any new dungeons will also be added.') }}</p>
+                        </li>
+                        <li>
+                            <a href="#">{{ __('All enemies added - teeming included') }}</a>
+                            <p>{{ __('Ever wondered what different route you could possibly take while still hitting a 100% enemy forces? All enemies are visible on the map, find the alternative route to make your run a success. Includes all enemies that are added on Teeming weeks, too!') }}</p>
+                        </li>
+                        <li>
+                            <a href="#">{{ __('Define your setup') }}</a>
+                            <p>{{ __('Refine your route and assign races/classes/specializations for each party member and select which affixes the route is for.') }}</p>
+                        </li>
+                        <li>
+                            <a href="#">{{ __('Plan your route') }}</a>
+                            <p>{{ __('Plot your route through the dungeon so there can be no confusion on which route you take, or when to split up the group for maximum performance.') }}</p>
+                        </li>
+                        <li>
+                            <a href="#">{{ __('Perfect your plan') }}</a>
+                            <p>{{ __('Select which enemies to kill and where, add comments for those tricky parts and refine your route to nail the 100% of enemy forces.') }}</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-8 order-md-4 probootstrap-animate" style="position: relative;">
+                    <div class="probootstrap-home-showcase-wrap">
+                        <div class="probootstrap-home-showcase-inner bg-secondary">
+                            <div class="probootstrap-image-showcase">
+                                <ul class="probootstrap-images-list">
+                                    <li class="active">
+                                        <img src="images/home/1.png" alt="Image" class="img-responsive">
+                                    </li>
+                                    <li>
+                                        <img src="images/home/2.png" alt="Image" class="img-responsive">
+                                    </li>
+                                    <li>
+                                        <img src="images/home/3.png" alt="Image" class="img-responsive">
+                                    </li>
+                                    <li>
+                                        <img src="images/home/4.png" alt="Image" class="img-responsive">
+                                    </li>
+                                    <li>
+                                        <img src="images/home/5.png" alt="Image" class="img-responsive">
+                                    </li>
+                                    <li>
+                                        <img src="images/home/6.png" alt="Image" class="img-responsive">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-2">
-                {{ __('Teeming') }}: {!! Form::checkbox($dungeon->name . '_teeming', 1, $hasTeemingEnemy, ['disabled' => 'disabled']) !!}
+
             </div>
         </div>
-    @endforeach
-    <p>
-        Enemies whose enemy forces have not been mapped are colored pink on the map. Do you know how many enemy forces
-        these enemies give? Please contact me!
-    </p>
+    </section>
 
-    <br>
-    <h2>Changelog</h2>
-    <h4>
-        2018/09/22
-    </h4>
-    <p>
-        Route changes:
-    <ul>
-        <li>
-            Completely reworked the group selection. You can now select specializations and user experience has
-            improved.
-        </li>
-        <li>
-            You can now add raid markers to enemies while constructing your route.
-        </li>
-    </ul>
-    </p>
+    <section class="probootstrap-section probootstrap-bg-white probootstrap-zindex-above-showcase bg-secondary">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate"
+                     data-animate-effect="fadeIn">
+                    <h2>{{ __('Additional Features') }}</h2>
+                    <p class="lead">{{ __('Aside from an interactive dungeon map, multiple features of a website allows Keystone.guru to be a hub for all things related to planning your routes with much more to come.') }}</p>
+                </div>
+            </div>
+            <!-- END row -->
+            <div class="row probootstrap-gutter60">
+                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInLeft">
+                    <div class="service text-center">
+                        <div class="icon"><i class="fa fa-mobile-alt"></i></div>
+                        <div class="text">
+                            <h3>{{ __('Responsive Design') }}</h3>
+                            <p>{{ __('Plan your routes on the go on any device. Keystone.guru is designed with mobility in mind.') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeIn">
+                    <div class="service text-center">
+                        <div class="icon"><i class="fa fa-search"></i></div>
+                        <div class="text">
+                            <h3>{{ __('Route Search') }}</h3>
+                            <p>{{ __('Struggle with a dungeon with specific affixes? Search for an existing route made by others, just like your routes can be found by others*.') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInRight">
+                    <div class="service text-center">
+                        <div class="icon"><i class="fa fa-star"></i></div>
+                        <div class="text">
+                            <h3>{{ __('Rating and Favoriting') }}</h3>
+                            <p>{{ __('Saw a route that had some great features or you enjoyed running with your group? Rate it for others to discover and favorite it for easy finding for later on through your Profile page!') }}</p>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInLeft">
+                    <div class="service text-center">
+                        <div class="icon"><i class="fa fa-share"></i></div>
+                        <div class="text">
+                            <h3>{{ __('Easy Sharing') }}</h3>
+                            <p>{{ __('Links to routes on Keystone.guru are short and simple. Share your route with your (pug) party members prior to starting and discuss strategy before you wipe.') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 probootstrap-animate">
+                    <div class="service text-center">
+                        <div class="icon"><i class="fab fa-reddit"></i></div>
+                        <div class="text">
+                            <h3>{{ __('Community') }}</h3>
+                            <p>{!! sprintf(__('Join the community on %s or %s for getting in-touch with fellow keystone runners and easy sharing of routes. I will be around to answer any questions you may have.'),
+                                    '<a href="https://reddit.com/r/keystoneguru"><i class="fab fa-reddit"></i> Reddit</a>', '<a href="https://discord.gg/2KtWrqw"><i class="fab fa-discord"></i> Discord</a>') !!}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInRight">
+                    <div class="service text-center">
+                        <div class="icon"><i class="fab fa-osi"></i></div>
+                        <div class="text">
+                            <h3>{{ __('Open Source') }}</h3>
+                            <p>{!! sprintf(__('The full source for the entire website can be found on %s. Interested in helping out or have a kick-ass idea for a new feature? Let me know on Github!'),
+                            '<a href="https://github.com/Wotuu/keystone.guru"><i class="fab fa-github"></i> Github</a>') !!} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center section-heading probootstrap-animate small">
+                    <p>{!! sprintf(__('*Prefer some privacy? Consider becoming a %s for unlimited private routes and more.'), '<a href="https://www.patreon.com/keystoneguru"><i class="fab fa-patreon"></i> Patron</a>') !!}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--
 
-    <h4>
-        2018/09/17
-    </h4>
-    <p>
-        General changes:
-    <ul>
-        <li>
-            The website now has a dark theme by default. More themes/theme switcher are planned, but only after release.
-        </li>
-        <li>
-            A lot of changes to enemies and the enemy forces they give upon death. All dungeons have been mapped, but a
-            handful of enemies don't have their enemy forces yet. Mostly these are enemies that are away from the beaten
-            path and generally aren't killed.
-        </li>
-    </ul>
+        <section class="probootstrap-section probootstrap-bg-white probootstrap-zindex-above-showcase">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate">
+                        <h2>More Features</h2>
+                        <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
+                            natus quos quibusdam soluta at.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7 order-md-5 probootstrap-animate" data-animate-effect="fadeInRight">
 
-    Route changes:
-    <ul>
-        <li>
-            When you have selected Siege of Boralus, you are now required to enter a faction. This is because Siege of
-            Boralus is different for Horde and Alliance.
-        </li>
-    </ul>
+                        <div class="owl-carousel owl-carousel-fullwidth border-rounded">
+                            <div class="item">
+                                <img src="images/landing/img_showcase_1.jpg"
+                                     alt="Free HTML5 Bootstrap Template by GetTemplates.co">
+                            </div>
+                            <div class="item">
+                                <img src="images/landing/img_showcase_2.jpg"
+                                     alt="Free HTML5 Bootstrap Template by GetTemplates.co">
+                            </div>
+                            <div class="item">
+                                <img src="images/landing/img_showcase_1.jpg"
+                                     alt="Free HTML5 Bootstrap Template by GetTemplates.co">
+                            </div>
+                            <div class="item">
+                                <img src="images/landing/img_showcase_2.jpg"
+                                     alt="Free HTML5 Bootstrap Template by GetTemplates.co">
+                            </div>
+                        </div>
 
-    Map changes:
-    <ul>
-        <li>
-            Patrols now show a directional arrow and a dotted line to differentiate between your route and enemy
-            patrols.
-        </li>
-    </ul>
-    </p>
+                    </div>
 
-    <h4>
-        2018/09/09
-    </h4>
-
-    <p>
-        General changes:
-    <ul>
-        <li>
-            The amount of enemy forces that have been assigned to NPCs are now (temporarily) shown when viewing/editing
-            your route.
-            Not all enemies have their enemy forces added yet, this is a manual job that takes time to process and will
-            be added
-            over the the coming days/weeks. If the percentage is at 0%, the enemy forces counter on the map will not
-            work. If it's
-            below 100%, it may not work properly.
-        </li>
-        <li>
-            The Halls of Valor Demo route is now fully functional, though not completely done yet, it depicts a proper
-            run.
-        </li>
-    </ul>
-
-    Route changes:
-    <ul>
-        <li>
-            You now have to specify whether your route will be for Teeming week or not. You can then select either all
-            possible Teeming affixes or all non-Teeming affixes based on your selection (optional).
-        </li>
-        <li>
-            Goblins can now be Warlocks, and can no longer be Monks (thanks /u/Caderit).
-        </li>
-    </ul>
-
-    Map changes:
-    <ul>
-        <li>
-            Enemy forces counter now works (if enemy forces are available for enemies).
-        </li>
-        <li>
-            Added mouse over tooltip on enemies to display their details.
-        </li>
-        <li>
-            Fixed multiple issues related to switching dungeon floors (killzone lines not being removed etc.)
-        </li>
-    </ul>
-    </p>
-
+                    <div class="col-md-5 order-md-7">
+                        <div class="service left-icon probootstrap-animate" data-animate-effect="fadeInLeft">
+                            <div class="icon"><i class="icon-mobile3"></i></div>
+                            <div class="text">
+                                <h3>Responsive Design</h3>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit iusto provident.</p>
+                            </div>
+                        </div>
+                        <div class="service left-icon probootstrap-animate" data-animate-effect="fadeInLeft">
+                            <div class="icon"><i class="icon-presentation"></i></div>
+                            <div class="text">
+                                <h3>Business Solutions</h3>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit iusto provident.</p>
+                            </div>
+                        </div>
+                        <div class="service left-icon probootstrap-animate" data-animate-effect="fadeInLeft">
+                            <div class="icon"><i class="icon-circle-compass"></i></div>
+                            <div class="text">
+                                <h3>Brand Identity</h3>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit iusto provident.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        -->
 @endsection

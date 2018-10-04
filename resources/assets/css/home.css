@@ -222,3 +222,60 @@
 .service.left-icon p:last-child {
     margin-bottom: 0;
 }
+
+.modal .probootstrap-modal-flex .probootstrap-modal-content {
+    width: 100%;
+    padding: 40px;
+    position: relative;
+}
+
+@media screen and (max-width: 480px) {
+    .modal .probootstrap-modal-flex .probootstrap-modal-content {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .modal .probootstrap-modal-flex .probootstrap-modal-figure,
+    .modal .probootstrap-modal-flex .probootstrap-modal-content {
+        width: 100%;
+    }
+}
+
+.modal .modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    font-size: 26px;
+    color: white;
+}
+
+@media screen and (max-width: 480px) {
+    .modal .modal-content .close {
+        top: 20px;
+        right: 20px;
+    }
+}
+
+.modal .probootstrap-modal-flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
