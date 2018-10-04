@@ -32,8 +32,6 @@ let LeafletKillZoneMarker = L.Marker.extend({
     }
 });
 
-let KillZoneSelectModeEnabled = false;
-
 class KillZone extends MapObject {
     constructor(map, layer) {
         super(map, layer);
@@ -53,7 +51,7 @@ class KillZone extends MapObject {
         // We gotta remove the connections manually since they're self managed here.
         this.map.register('map:beforerefresh', this, function () {
             // In case someone switched dungeons prior to finishing the kill zone edit
-            KillZoneSelectModeEnabled = false;
+            self.map.setSelectModeKillZone(null);
             self.removeExistingConnectionsToEnemies();
         });
     }
@@ -193,9 +191,9 @@ class KillZone extends MapObject {
      * Starts select mode on this KillZone, if no other select mode was enabled already.
      */
     startSelectMode() {
-        if (!KillZoneSelectModeEnabled) {
-            console.assert(this instanceof KillZone, this, 'this is not an KillZone');
-            let self = this;
+        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        let self = this;
+        if (!this.map.isKillZoneSelectModeEnabled()) {
 
             this.layer.setIcon(LeafletKillZoneIconSelected);
 
@@ -217,7 +215,7 @@ class KillZone extends MapObject {
             $('.leaflet-draw-edit-remove').addClass('leaflet-disabled');
 
             // Now killzoning something
-            KillZoneSelectModeEnabled = true;
+            this.map.setSelectModeKillZone(this);
         }
     }
 
@@ -225,9 +223,9 @@ class KillZone extends MapObject {
      * Stops select mode of this KillZone.
      */
     cancelSelectMode() {
-        if (KillZoneSelectModeEnabled) {
-            console.assert(this instanceof KillZone, this, 'this is not an KillZone');
-            KillZoneSelectModeEnabled = false;
+        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        if (this.map.isKillZoneSelectModeEnabled()) {
+            this.map.setSelectModeKillZone(null);
             this.layer.setIcon(LeafletKillZoneIcon);
 
             let self = this;
@@ -347,7 +345,7 @@ class KillZone extends MapObject {
         if (this.map.edit) {
             this.layer.on('click', function (event) {
                 if (!self.map.deleteModeActive) {
-                    if (KillZoneSelectModeEnabled) {
+                    if (self.map.isKillZoneSelectModeEnabled()) {
                         self.cancelSelectMode();
                     } else {
                         self.startSelectMode();

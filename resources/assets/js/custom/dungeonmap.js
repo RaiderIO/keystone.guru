@@ -9,6 +9,8 @@ class DungeonMap extends Signalable {
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroups = this._createMapObjectGroups();
+        //  Whatever killzone is currently in select mode
+        this.currentSelectModeKillZone = null;
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
@@ -430,6 +432,26 @@ class DungeonMap extends Signalable {
         // Let everyone know we're done and you can use all fetched data
         if (this.mapObjectGroupFetchSuccessCount === this.mapObjectGroups.length) {
             this.signal('map:mapobjectgroupsfetchsuccess');
+        }
+    }
+
+    /**
+     * Gets if there is currently a killzone in 'select mode'.
+     * @returns {boolean}
+     */
+    isKillZoneSelectModeEnabled() {
+        return this.currentSelectModeKillZone !== null;
+    }
+
+    /**
+     * Sets the killzone that is currently in 'select mode'
+     * @param killzone
+     */
+    setSelectModeKillZone(killzone = null) {
+        let changed = this.currentSelectModeKillZone !== killzone;
+        this.currentSelectModeKillZone = killzone;
+        if (changed) {
+            this.signal('map:killzoneselectmodechanged', {killzone: killzone});
         }
     }
 }
