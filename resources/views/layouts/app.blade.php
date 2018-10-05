@@ -72,7 +72,10 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('changelog') }}">{{ __('Changelog') }}</a>
+                        <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('misc.changelog') }}">{{ __('Changelog') }}</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">

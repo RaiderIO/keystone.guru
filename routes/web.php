@@ -35,21 +35,25 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         return view('legal.cookies');
     })->name('legal.cookies');
 
-    Route::get('patreon-unlink', 'PatreonController@unlink')->name('patreon.unlink');
-    Route::get('patreon-link', 'PatreonController@link')->name('patreon.link');
-    Route::get('patreon-oauth', 'PatreonController@oauth_redirect')->name('patreon.oauth.redirect');
-
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::get('changelog', function () {
-        return view('changelog');
-    })->name('changelog');
+        return view('misc.changelog');
+    })->name('misc.changelog');
 
     Route::get('mapping', function () {
-        return view('mapping');
-    })->name('mapping');
+        return view('misc.mapping');
+    })->name('misc.mapping');
+
+    Route::get('affixes', function () {
+        return view('misc.affixes');
+    })->name('misc.affixes');
 
     // ['auth', 'role:admin|user']
+
+    Route::get('patreon-unlink', 'PatreonController@unlink')->name('patreon.unlink');
+    Route::get('patreon-link', 'PatreonController@link')->name('patreon.link');
+    Route::get('patreon-oauth', 'PatreonController@oauth_redirect')->name('patreon.oauth.redirect');
 
     Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
 

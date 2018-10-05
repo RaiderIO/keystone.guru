@@ -1,10 +1,23 @@
 .probootstrap-hero {
-    padding-top: 200px;
-    padding-bottom: 200px;
+    padding-top: 9em;
+    padding-bottom: 9em;
+}
+
+@media screen and (max-width: 768px) {
+    .probootstrap-hero {
+        padding-top: 1em;
+        padding-bottom: 4em;
+    }
 }
 
 .probootstrap-section {
     padding: 7em 0;
+}
+
+@media screen and (max-width: 768px) {
+    .probootstrap-section {
+        padding: 4em 0;
+    }
 }
 
 .probootstrap-feature-showcase {

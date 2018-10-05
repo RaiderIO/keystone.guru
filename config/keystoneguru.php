@@ -21,11 +21,14 @@ return [
      */
     'dungeonroute_difficulty' => ['Casual', 'Dedicated', 'Hardcore'],
 
-
     /**
-     * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming)
+     * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming).
      */
     'registered_user_dungeonroute_limit' => 18,
 
-    ''
+
+    /**
+     * Which week the current affix season has started at.
+     */
+    'season_start_week' => 36
 ];

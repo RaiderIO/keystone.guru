@@ -4,6 +4,42 @@
 
 @section('content')
     <h4>
+        2018/10/05
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            Added a brand new home page!
+        </li>
+        <li>
+            Added Patreon support. Unlockable features include:
+            <ul>
+                <li>
+                    Ad-free website.
+                </li>
+                <li>
+                    Allows the creation of unlisted routes.
+                </li>
+                <li>
+                    Removes the limit on the amount of routes you can create.
+                </li>
+                <li>
+                    More to come at a later date!
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <p>
+        Route changes:
+    <ul>
+        <li>
+            Fixed an issue where adding enemies to a killzone would cause the raid markers selection to pop up instead.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         2018/09/22
     </h4>
     <p>

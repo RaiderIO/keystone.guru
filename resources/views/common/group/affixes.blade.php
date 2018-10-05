@@ -142,7 +142,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                  data-id="{{ $affixGroup->id }}">
                 @php( $count = 0 )
                 @foreach($affixGroup->affixes as $affix)
-                    @php( $number = count($affixGroup->affixes) - 1 === $count ? '3' : '4' )
+                    @php( $number = count($affixGroup->affixes) - 1 === $count ? '2' : '3' )
                     <div class="col-{{ $number }} affix_row">
                         <div class="row no-gutters">
                             <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
