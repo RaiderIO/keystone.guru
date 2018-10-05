@@ -43,8 +43,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         };
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.unregister('synced', this);
-        this.register('synced', this, function(event){
+        let syncedFn = function(event){
             let customPopupHtml = $('#enemy_patrol_edit_popup_template').html();
             // Remove template so our
             let template = handlebars.compile(customPopupHtml);
@@ -65,9 +64,8 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 self.decorator,
                 self.layer
             ];
-            console.log(layers);
+
             $.each(layers, function(i, layer){
-                console.log(i, layer);
                 layer.unbindPopup();
                 layer.bindPopup(customPopupHtml, customOptions);
 
@@ -75,7 +73,10 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 layer.off('popupopen', popupOpenFn);
                 layer.on('popupopen', popupOpenFn);
             });
-        });
+        };
+
+        this.unregister('synced', this, syncedFn);
+        this.register('synced', this, syncedFn);
     }
 
     delete() {

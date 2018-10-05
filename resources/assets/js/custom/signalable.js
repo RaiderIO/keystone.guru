@@ -42,7 +42,7 @@ class Signalable {
 
         for (let i = 0; i < this.signals.length; i++) {
             let caller = this.signals[i];
-            if (caller.name === name && caller.listener === listener && (fn !== null && caller.callback === fn)) {
+            if (caller.name === name && caller.listener === listener && (fn === null || (fn !== null && caller.callback === fn))) {
                 toRemove.push(i);
             }
         }

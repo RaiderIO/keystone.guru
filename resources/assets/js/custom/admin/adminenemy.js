@@ -17,7 +17,6 @@ class AdminEnemy extends Enemy {
     }
 
     onLayerInit() {
-        console.log('layer init');
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         super.onLayerInit();
 

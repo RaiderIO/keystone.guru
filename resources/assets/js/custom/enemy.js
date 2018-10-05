@@ -79,7 +79,6 @@ class Enemy extends MapObject {
 
         let self = this;
         this.map.register('map:killzoneselectmodechanged', this, function (event) {
-            console.log('mode', event);
             // Remove the popup
             self.layer.unbindPopup();
             // Unselected a killzone
@@ -148,6 +147,7 @@ class Enemy extends MapObject {
 
         // Have you tried turning it off and on again?
         self.layer.off('popupopen', popupOpenFn);
+        self.layer.on('popupopen', popupOpenFn);
     }
 
     bindTooltip() {

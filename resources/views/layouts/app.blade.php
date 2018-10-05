@@ -81,10 +81,12 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
                 <ul class="navbar-nav">
                     @if (Auth::guest())
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="modal" data-target="#login_modal">{{__('Login')}}</a>
+                            <a class="nav-link" href="#" data-toggle="modal"
+                               data-target="#login_modal">{{__('Login')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="modal" data-target="#register_modal">{{__('Register')}}</a>
+                            <a class="nav-link" href="#" data-toggle="modal"
+                               data-target="#register_modal">{{__('Register')}}</a>
                         </li>
                     @else
                         <li class="nav-item">
@@ -239,6 +241,7 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
         </div>
         <div class="row text-center small">
             <div class="col-md-6">
+                <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>
                 <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} v.1.0 </a>
             </div>
             <div class="col-md-6">
