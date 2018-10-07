@@ -50,7 +50,7 @@
         After all, I had a deadline of releasing before the first Mythic Plus season in Battle for Azeroth. It included
         a lot of learning and integrating existing projects and libraries. At this point in time it's a week before BfA
         hits and I'd really like to do the pre-quests, but I gotta finish the website first. Doh. There's still a lot
-        to be done, so I hope I wrap it all up in-time for a properly release. And that my poor web server handles the traffic.
+        to be done, so I hope I wrap it all up in-time for a proper release. And that my poor web server handles the traffic.
     </p>
     <h5>
         Now
