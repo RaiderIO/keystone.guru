@@ -90,6 +90,15 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 134617,
+        "dungeon_id": 19,
+        "classification_id": 1,
+        "name": "Krolusk Hatchling",
+        "base_health": 3679,
+        "enemy_forces": 1,
+        "aggressiveness": "neutral"
+    },
+    {
         "id": 134629,
         "dungeon_id": 19,
         "classification_id": 2,
@@ -213,7 +222,7 @@
         "name": "Heart Guardian",
         "base_health": 470936,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "neutral"
     },
     {
         "id": 139949,

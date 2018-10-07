@@ -135,6 +135,15 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 133482,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Crawler Mine",
+        "base_health": 17308,
+        "enemy_forces": 1,
+        "aggressiveness": "neutral"
+    },
+    {
         "id": 133593,
         "dungeon_id": 20,
         "classification_id": 2,
