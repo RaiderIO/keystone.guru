@@ -73,7 +73,7 @@
     </a>
 </div>
 
-<table id="admin_dungeon_floor_table" class="tablesorter default_table">
+<table id="admin_dungeon_floor_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
         <th width="10%">{{ __('Id') }}</th>

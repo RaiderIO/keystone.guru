@@ -3,7 +3,7 @@
 @section('header-title', __('Weekly affixes'))
 
 @section('content')
-    <table class="affixes_overview_table" width="100%">
+    <table class="affixes_overview_table table-striped" width="100%">
         <thead>
         <tr>
             <th width="20%">
