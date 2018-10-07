@@ -4,7 +4,7 @@
 
 @section('content')
     <h4>
-        2018/10/05
+        2018/10/07 - We're going live!
     </h4>
     <p>
         General changes:
@@ -29,12 +29,23 @@
                 </li>
             </ul>
         </li>
+        <li>
+            Added try it mode! You can now try the route creator without leaving a trace and without logging in.
+        </li>
     </ul>
     <p>
         Route changes:
     <ul>
         <li>
             Fixed an issue where adding enemies to a killzone would cause the raid markers selection to pop up instead.
+        </li>
+    </ul>
+    </p>
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            Added Teeming for all the dungeons that didn't have data for it yet.
         </li>
     </ul>
     </p>

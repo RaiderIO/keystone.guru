@@ -37,8 +37,11 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
 
     @include('common.general.scripts')
     @include('common.thirdparty.cookieconsent')
-    <?php if( !$noads && config('app.env') === 'production' ){ ?>
-    @include('common.thirdparty.adsense')
+    <?php if(config('app.env') === 'production' ){
+        if(!$noads ) {?>
+            @include('common.thirdparty.adsense')
+    <?php } ?>
+    @include('common.thirdparty.analytics')
     <?php } ?>
 </head>
 <body>
