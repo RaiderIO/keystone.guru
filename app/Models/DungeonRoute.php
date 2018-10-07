@@ -332,7 +332,8 @@ class DungeonRoute extends Model
         $this->dungeon_id = $request->get('dungeon_id', $this->dungeon_id);
         $this->faction_id = $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
-        $this->difficulty = $request->get('difficulty', $this->difficulty);
+        //$this->difficulty = $request->get('difficulty', $this->difficulty);
+        $this->difficulty = 1;
         $this->teeming = $request->get('teeming', 0);
 
         if (Auth::user()->hasPaidTier('unlisted-routes')) {

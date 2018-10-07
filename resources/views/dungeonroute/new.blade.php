@@ -41,11 +41,13 @@
                 {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
             </div>
         </div>
+    <!--
         <div class="form-group">
             {!! Form::label('difficulty', __('Difficulty') . "*") !!}
-            <?php $difficulty = config('keystoneguru.dungeonroute_difficulty'); ?>
-            {!! Form::select('difficulty', array_combine($difficulty, $difficulty), null, ['class' => 'form-control']) !!}
-        </div>
+    <?php $difficulty = config('keystoneguru.dungeonroute_difficulty'); ?>
+    {!! Form::select('difficulty', array_combine($difficulty, $difficulty), null, ['class' => 'form-control']) !!}
+            </div>
+-->
         <div class="form-group">
             {!! Form::label('teeming', __('Teeming (check to change the dungeon to resemble Teeming week)')) !!}
             {!! Form::checkbox('teeming', 1, 0, ['class' => 'form-control left_checkbox']) !!}

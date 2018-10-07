@@ -105,14 +105,14 @@ if (count($affixes) == 0) {
                         {{ $model->dungeon->name }}
                     </div>
                 </div>
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
-                        {{ __('Difficulty') }}:
-                    </div>
-                    <div class="col-6">
-                        {{ $model->difficulty }}
-                    </div>
-                </div>
+                {{--<div class="row view_dungeonroute_details_row">--}}
+                {{--<div class="col-6 font-weight-bold">--}}
+                {{--{{ __('Difficulty') }}:--}}
+                {{--</div>--}}
+                {{--<div class="col-6">--}}
+                {{--{{ $model->difficulty }}--}}
+                {{--</div>--}}
+                {{--</div>--}}
                 <div class="row view_dungeonroute_details_row">
                     <div class="col-6 font-weight-bold">
                         {{ __('Teeming') }}:
@@ -122,22 +122,12 @@ if (count($affixes) == 0) {
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row">
-                    @php($title = 'This indicates what percent of the dungeon has their enemy forces value assigned. Since this information is still partly unknown to the website, it may
-                    appear as if the Enemy Forces counter is broken when in reality there\'s simply no value assigned to that NPC. 0% = bad, 100% = good.')
-                    <div class="col-6 font-weight-bold" data-toggle="tooltip" title="{{$title}}">
-                        {{ __('Enemy forces assigned (TEMP)') }}:
+                    <div class="col-6 font-weight-bold">
+                        {{ __('Group setup') }}:
                     </div>
-                    <div class="col-6">
-                        @php($status = $model->dungeon->enemy_forces_mapped_status)
-                        <span data-toggle="tooltip" title="{{$title}}">
-                            {{ sprintf('%d%% (%s/%s)', $status['percent'], $status['total'] - $status['unmapped'], $status['total']) }}
-                        </span>
+                    <div id="view_dungeonroute_group_setup" class="col-6">
                     </div>
                 </div>
-            </div>
-
-            <!-- Second column -->
-            <div class="col-md-6">
                 <div class="row view_dungeonroute_details_row">
                     <div class="col-6 font-weight-bold">
                         {{ __('Affixes') }}:
@@ -155,13 +145,10 @@ if (count($affixes) == 0) {
                         </div>
                     </div>
                 </div>
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
-                        {{ __('Group setup') }}:
-                    </div>
-                    <div id="view_dungeonroute_group_setup" class="col-6">
-                    </div>
-                </div>
+            </div>
+
+            <!-- Second column -->
+            <div class="col-md-6">
                 <div class="row view_dungeonroute_details_row">
                     <div class="col-6 font-weight-bold">
                         {{ __('Rating') }}:
@@ -196,14 +183,12 @@ if (count($affixes) == 0) {
                         @endif
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12">
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
+                    <div class="col-12 font-weight-bold">
                         @isset($current_report)
                             <span class="text-warning">
-                                <i class="fa fa-exclamation-triangle"></i> {{ __('You have reported this dungeonroute for moderation.') }}
-                            </span>
+                                    <i class="fa fa-exclamation-triangle"></i> {{ __('You have reported this dungeonroute for moderation.') }}
+                                </span>
                         @else
                             <i class="fa fa-flag"></i>
                             <a id="featherlight_trigger" href="#" data-featherlight="#userreport_dungeonroute">

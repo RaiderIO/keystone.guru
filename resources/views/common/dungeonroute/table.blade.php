@@ -43,10 +43,10 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                         'data': 'dungeon.name',
                         'name': 'dungeon_id'
                     },
-                    {
-                        'data': 'difficulty',
-                        'className': 'd-none d-md-table-cell'
-                    },
+                    // {
+                    //     'data': 'difficulty',
+                    //     'className': 'd-none d-md-table-cell'
+                    // },
                     {
                         'data': 'affixes',
                         'name': 'affixes.id',
@@ -132,12 +132,14 @@ $editLinks = isset($edit_links) ? $edit_links : false;
             {!! Form::label('dungeon_id', __('Dungeon')) !!}
             {!! Form::select('dungeon_id', [0 => 'All'] + \App\Models\Dungeon::active()->pluck('name', 'id')->toArray(), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
         </div>
+    <!--
         <div class="col-lg-2">
             {!! Form::label('difficulty', __('Difficulty')) !!}
-            {!! Form::select('difficulty',
-            array_merge([0 => 'All'], array_combine(config('keystoneguru.dungeonroute_difficulty'), config('keystoneguru.dungeonroute_difficulty'))), 0,
-            ['id' => 'difficulty', 'class' => 'form-control']) !!}
-        </div>
+    {!! Form::select('difficulty',
+    array_merge([0 => 'All'], array_combine(config('keystoneguru.dungeonroute_difficulty'), config('keystoneguru.dungeonroute_difficulty'))), 0,
+    ['id' => 'difficulty', 'class' => 'form-control']) !!}
+            </div>
+-->
         <div id="affixgroup_select_container" class="col-lg-2">
             {!! Form::label('affixes[]', __('Affixes') . "*") !!}
             {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('text', 'id'), null,
@@ -160,12 +162,12 @@ $editLinks = isset($edit_links) ? $edit_links : false;
             {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info']) !!}
         </div>
     </div>
-    <table id="routes_table" class="tablesorter default_table dt-responsive nowrap" width="100%">
+    <table id="routes_table" class="tablesorter default_table dt-responsive nowrap table-striped" width="100%">
         <thead>
         <tr>
-            <th width="20%">{{ __('Title') }}</th>
+            <th width="30%">{{ __('Title') }}</th>
             <th width="15%">{{ __('Dungeon') }}</th>
-            <th width="10%" class="d-none d-md-table-cell">{{ __('Difficulty') }}</th>
+        <!-- <th width="10%" class="d-none d-md-table-cell">{{ __('Difficulty') }}</th> -->
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Author') }}</th>
