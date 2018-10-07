@@ -109,14 +109,16 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
     <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
+                @php($i = 0)
                 @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
                     <a class="map_faction_display_control map_controls_custom" href="#"
                        data-faction="{{ strtolower($faction->name) }}"
                        title="{{ $faction->name }}">
-                        <i class="fas fa-check-square checkbox"
+                        <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                            style="width: 15px"></i>
                         <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
                              data-toggle="tooltip" title="{{ $faction->name }}"/>
+                        @php($i++)
                     </a>
                 @endforeach
             </div>

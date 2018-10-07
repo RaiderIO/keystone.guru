@@ -18,18 +18,24 @@ class FactionDisplayControls extends MapControl {
 
                 self.domElement.find('.map_faction_display_control').bind('click', function (e) {
                     let root = $(e.currentTarget);
-                    let checkbox = root.find('.checkbox');
-                    let checked = checkbox.hasClass('fa-check-square');
+                    let allRadios = $('#map_faction_display_controls .radiobutton');
+                    let checkbox = root.find('.radiobutton');
+                    let checked = checkbox.hasClass('fas');
 
-                    if (checked) {
-                        checkbox.removeClass('fa-check-square');
-                        checkbox.addClass('fa-square');
-                    } else {
-                        checkbox.removeClass('fa-square');
-                        checkbox.addClass('fa-check-square');
+                    allRadios.removeClass('fas');
+                    allRadios.addClass('far');
+                    if (!checked) {
+                        checkbox.removeClass('far');
+                        checkbox.addClass('fas');
                     }
 
-                    self._visibilityToggled(root.data('faction'), !checked);
+                    // Disable everything
+                    $.each(allRadios, function(index, el){
+                        self._visibilityToggled($($(el).parent()).data('faction'), false);
+                    });
+
+                    // Re-enable the thing we're supposed to enable
+                    self._visibilityToggled(root.data('faction'), true);
 
                     e.preventDefault();
                     return false;
@@ -40,6 +46,12 @@ class FactionDisplayControls extends MapControl {
                 return self.domElement;
             }
         };
+
+        this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+            // Start as Horde visible
+            self._visibilityToggled('horde', true);
+            self._visibilityToggled('alliance', false);
+        });
     }
 
     _visibilityToggled(faction, visible) {
