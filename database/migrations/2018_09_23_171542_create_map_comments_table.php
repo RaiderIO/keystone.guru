@@ -16,7 +16,7 @@ class CreateMapCommentsTable extends Migration
         Schema::create('map_comments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('floor_id');
-            $table->integer('dungeon_route_id');
+            $table->integer('dungeon_route_id')->default(-1);
             $table->integer('game_icon_id');
             $table->double('lat');
             $table->double('lng');

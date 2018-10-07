@@ -32,8 +32,13 @@ class DungeonRouteMapCommentsRelationParser implements RelationParser
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
         foreach ($value as $mapCommentData) {
-            // We now know the dungeon route ID, set it back to the map comment
-            $mapCommentData['dungeon_route_id'] = $modelData['id'];
+            if ($mapCommentData['always_visible'] === 1) {
+                // Not tied to a dungeon route!
+                $mapCommentData['dungeon_route_id'] = -1;
+            } else {
+                // We now know the dungeon route ID, set it back to the map comment
+                $mapCommentData['dungeon_route_id'] = $modelData['id'];
+            }
 
             \App\Models\MapComment::insert($mapCommentData);
         }

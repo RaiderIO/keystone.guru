@@ -460,6 +460,7 @@ class DungeonRoute extends Model
             DungeonRoutePlayerClass::where('dungeon_route_id', '=', $item->id)->delete();
             DungeonRouteAffixGroup::where('dungeon_route_id', '=', $item->id)->delete();
             DungeonRouteEnemyRaidMarker::where('dungeon_route_id', '=', $item->id)->delete();
+            MapComment::where('dungeon_route_id', '=', $item->id)->delete();
 
             // Delete routes
             foreach ($item->routes as $route) {

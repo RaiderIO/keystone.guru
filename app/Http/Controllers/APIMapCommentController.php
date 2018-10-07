@@ -47,7 +47,7 @@ class APIMapCommentController extends Controller
         $mapComment = MapComment::findOrNew($request->get('id'));
         $isAdmin = Auth::user()->hasRole('admin');
 
-        $dungeonRouteId = 0;
+        $dungeonRouteId = -1;
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
             $dungeonRouteId = $dungeonRoute->id;

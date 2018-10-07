@@ -119,11 +119,6 @@ class DungeonDataSeeder extends Seeder
             // Generic
             new NestedModelRelationParser(),
 
-            // Dungeon route
-            new DungeonRoutePlayerRaceRelationParser(),
-            new DungeonRoutePlayerClassRelationParser(),
-            new DungeonRouteAffixGroupRelationParser(),
-
             // Enemy Pack
             new EnemyPackVerticesRelationParser(),
 
@@ -134,6 +129,10 @@ class DungeonDataSeeder extends Seeder
         // Parse these attributes AFTER the model has been inserted into the database (so we know its ID)
         $postModelSaveAttributeParsers = [
             // Dungeon route
+            new DungeonRoutePlayerRaceRelationParser(),
+            new DungeonRoutePlayerClassRelationParser(),
+            new DungeonRouteAffixGroupRelationParser(),
+
             new DungeonRouteRoutesRelationParser(),
             new DungeonRouteKillZoneRelationParser(),
             new DungeonRouteEnemyRaidMarkersRelationParser(),
@@ -181,7 +180,7 @@ class DungeonDataSeeder extends Seeder
             // Merge the unset relations with the model again so we can parse the model again
             $modelData = $modelData + $unsetRelations;
 
-            foreach($modelData as $key => $value) {
+            foreach ($modelData as $key => $value) {
                 foreach ($postModelSaveAttributeParsers as $attributeParser) {
                     /** @var $attributeParser RelationParser */
                     // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
@@ -212,6 +211,8 @@ class DungeonDataSeeder extends Seeder
         DB::table('enemy_patrol_vertices')->truncate();
         DB::table('dungeon_start_markers')->truncate();
         DB::table('dungeon_floor_switch_markers')->truncate();
+        // Delete all map comments that are always there
+        DB::table('map_comments')->where('dungeon_route_id', -1)->delete();
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
         $demoRoutes = \App\Models\DungeonRoute::all()->where('demo', '=', true);

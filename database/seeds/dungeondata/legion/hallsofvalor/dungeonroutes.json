@@ -1020,6 +1020,7 @@
         ],
         "mapcomments": [
             {
+                "floor_id": 16,
                 "game_icon_id": -1,
                 "lat": -125.9765625,
                 "lng": 168.875,
@@ -1027,6 +1028,7 @@
                 "comment": "Skip this patrol"
             },
             {
+                "floor_id": 16,
                 "game_icon_id": -1,
                 "lat": -180.42578125,
                 "lng": 185.25,
