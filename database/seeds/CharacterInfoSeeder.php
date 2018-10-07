@@ -36,7 +36,6 @@ class CharacterInfoSeeder extends Seeder
             'Void Elf' => new CharacterRace(['faction_id' => $alliance_id]),
             'Lightforged Draenei' => new CharacterRace(['faction_id' => $alliance_id]),
             'Dark Iron Dwarf' => new CharacterRace(['faction_id' => $alliance_id]),
-            'Kul Tiran Human' => new CharacterRace(['faction_id' => $alliance_id]),
 
 
             'Orc' => new CharacterRace(['faction_id' => $horde_id]),
@@ -49,7 +48,9 @@ class CharacterInfoSeeder extends Seeder
             'Nightborne' => new CharacterRace(['faction_id' => $horde_id]),
             'Highmountain Tauren' => new CharacterRace(['faction_id' => $horde_id]),
             'Mag\'har Orc' => new CharacterRace(['faction_id' => $horde_id]),
-            'Zandalari Troll' => new CharacterRace(['faction_id' => $horde_id]),
+
+//            'Kul Tiran Human' => new CharacterRace(['faction_id' => $alliance_id]),
+//            'Zandalari Troll' => new CharacterRace(['faction_id' => $horde_id]),
         ];
 
         foreach ($races as $name => $race) {
@@ -109,7 +110,6 @@ class CharacterInfoSeeder extends Seeder
             'Void Elf' =>               ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
             'Lightforged Draenei' =>    ['x', 'x', ' ', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' '],
             'Dark Iron Dwarf' =>        ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' '],
-            'Kul Tiran Human' =>        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x', ' '],
 
             'PandarenAlliance' =>       ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
             'PandarenHorde' =>          ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
@@ -123,7 +123,9 @@ class CharacterInfoSeeder extends Seeder
             'Nightborne' =>             ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
             'Highmountain Tauren' =>    ['x', 'x', ' ', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' '],
             'Mag\'har Orc' =>           ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
-            'Zandalari Troll' =>        ['x', 'x', ' ', 'x', 'x', ' ', 'x', 'x', 'x', ' ', 'x', ' '],
+
+//            'Kul Tiran Human' =>        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x', ' '],
+//            'Zandalari Troll' =>        ['x', 'x', ' ', 'x', 'x', ' ', 'x', 'x', 'x', ' ', 'x', ' '],
         ];
         // @formatter:on
 

@@ -10,22 +10,22 @@
         "unlisted": 1,
         "demo": 1,
         "created_at": "2018-08-23 10:56:42",
-        "updated_at": "2018-09-24 11:50:22",
+        "updated_at": "2018-10-07 19:51:45",
         "playerraces": [
             {
-                "character_race_id": 15
-            },
-            {
-                "character_race_id": 15
-            },
-            {
-                "character_race_id": 16
+                "character_race_id": 13
             },
             {
                 "character_race_id": 14
             },
             {
                 "character_race_id": 15
+            },
+            {
+                "character_race_id": 13
+            },
+            {
+                "character_race_id": 14
             }
         ],
         "playerclasses": [
@@ -47,13 +47,13 @@
         ],
         "affixgroups": [
             {
-                "affix_group_id": 2
+                "affix_group_id": 3
             },
             {
                 "affix_group_id": 6
             },
             {
-                "affix_group_id": 9
+                "affix_group_id": 11
             }
         ],
         "routes": [
