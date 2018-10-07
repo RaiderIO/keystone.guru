@@ -19,7 +19,7 @@
 @endsection
 
 @section('content')
-    <table id="admin_user_reports_table" class="tablesorter default_table">
+    <table id="admin_user_reports_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
             <th width="10%">{{ __('Id') }}</th>
