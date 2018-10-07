@@ -94,62 +94,79 @@ class Route extends MapObject {
     delete() {
         let self = this;
         console.assert(this instanceof Route, this, 'this was not a Route');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/route',
-            dataType: 'json',
-            data: {
-                _method: 'DELETE',
-                id: self.id
-            },
-            beforeSend: function () {
-                self.deleting = true;
-            },
-            success: function (json) {
-                self.signal('object:deleted', {response: json});
-            },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
-                self.setSynced(false);
-            }
-        });
+
+        let successFn = function (json) {
+            self.signal('object:deleted', {response: json});
+        };
+
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/route',
+                dataType: 'json',
+                data: {
+                    _method: 'DELETE',
+                    id: self.id
+                },
+                beforeSend: function () {
+                    self.deleting = true;
+                },
+                success: successFn,
+                complete: function () {
+                    self.deleting = false;
+                },
+                error: function () {
+                    self.setSynced(false);
+                }
+            });
+        } else {
+            successFn();
+        }
     }
 
     save() {
         let self = this;
         console.assert(this instanceof Route, this, 'this was not a Route');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/route',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
-                floor_id: self.map.getCurrentFloor().id,
-                color: self.routeColor,
-                vertices: self.getVertices(),
-            },
-            beforeSend: function () {
-                self.saving = true;
-                $('#map_route_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
-            },
-            success: function (json) {
-                self.id = json.id;
 
-                self.setSynced(true);
-                self.map.leafletMap.closePopup();
-            },
-            complete: function () {
-                $('#map_route_edit_popup_submit_' + self.id).removeAttr('disabled');
-                self.saving = false;
-            },
-            error: function () {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-            }
-        });
+        let successFn = function (json) {
+            self.id = json.id;
+
+            self.setSynced(true);
+            self.map.leafletMap.closePopup();
+        };
+
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/route',
+                dataType: 'json',
+                data: {
+                    id: self.id,
+                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                    floor_id: self.map.getCurrentFloor().id,
+                    color: self.routeColor,
+                    vertices: self.getVertices(),
+                },
+                beforeSend: function () {
+                    self.saving = true;
+                    $('#map_route_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
+                },
+                success: successFn,
+                complete: function () {
+                    $('#map_route_edit_popup_submit_' + self.id).removeAttr('disabled');
+                    self.saving = false;
+                },
+                error: function () {
+                    // Even if we were synced, make sure user knows it's no longer / an error occurred
+                    self.setSynced(false);
+                }
+            });
+        } else {
+            // We have to supply an ID to keep everything working properly
+            successFn({id: parseInt((Math.random() * 10000000))})
+        }
     }
 
     // To be overridden by any implementing classes
@@ -170,7 +187,7 @@ class Route extends MapObject {
                 // Class color buttons
                 let $classColors = $('.map_route_edit_popup_class_color');
                 $classColors.unbind('click');
-                $classColors.bind('click', function(){
+                $classColors.bind('click', function () {
                     $color.val($(this).data('color'));
                 });
 

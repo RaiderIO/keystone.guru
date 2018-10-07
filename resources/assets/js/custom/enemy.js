@@ -333,23 +333,29 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, this, 'this was not an Enemy');
         let self = this;
 
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/enemy/raidmarker',
-            dataType: 'json',
-            data: {
-                dungeonroute: dungeonRoutePublicKey,
-                enemy_id: self.id,
-                raid_marker_name: raidMarkerName
-            },
-            success: function (json) {
-                self.setSynced(true);
-                self.map.leafletMap.closePopup();
-                self.setRaidMarkerName(raidMarkerName);
+        let successFn = function (json) {
+            self.setSynced(true);
+            self.map.leafletMap.closePopup();
+            self.setRaidMarkerName(raidMarkerName);
 
-                self.setIcon(raidMarkerName)
+            self.setIcon(raidMarkerName);
+        };
 
-            },
-        });
+        // No network traffic!
+        if (this.map.isTryModeEnabled()) {
+            successFn();
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/enemy/raidmarker',
+                dataType: 'json',
+                data: {
+                    dungeonroute: dungeonRoutePublicKey,
+                    enemy_id: self.id,
+                    raid_marker_name: raidMarkerName
+                },
+                success: successFn,
+            });
+        }
     }
 }

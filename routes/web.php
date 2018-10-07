@@ -49,6 +49,9 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         return view('misc.affixes');
     })->name('misc.affixes');
 
+    Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
+    Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
+
     // ['auth', 'role:admin|user']
 
     Route::get('patreon-unlink', 'PatreonController@unlink')->name('patreon.unlink');

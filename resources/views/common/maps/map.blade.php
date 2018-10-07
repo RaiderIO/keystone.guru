@@ -326,6 +326,13 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
 @endsection
 
 <div class="container">
+    <?php
+    if (!isset($model) && $edit) {
+    ?>
+    <div class="alert alert-warning">
+        <i class="fa fa-exclamation-triangle"></i> {{ __('Warning! Any modification you make in tryout mode will not be saved!') }}
+    </div>
+    <?php } ?>
     @if($floorSelection)
         <div class="form-group">
             {!! Form::label('map_floor_selection', __('Select floor')) !!}

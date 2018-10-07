@@ -105,63 +105,79 @@ class KillZone extends MapObject {
     delete() {
         let self = this;
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/killzone',
-            dataType: 'json',
-            data: {
-                _method: 'DELETE',
-                id: self.id
-            },
-            beforeSend: function () {
-                self.deleting = true;
-            },
-            success: function (json) {
-                self.removeExistingConnectionsToEnemies();
-                self.signal('object:deleted', {response: json});
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-            },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
-                self.setSynced(false);
-            }
-        });
+
+        let successFn = function (json) {
+            self.removeExistingConnectionsToEnemies();
+            self.signal('object:deleted', {response: json});
+            self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+        };
+
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/killzone',
+                dataType: 'json',
+                data: {
+                    _method: 'DELETE',
+                    id: self.id
+                },
+                beforeSend: function () {
+                    self.deleting = true;
+                },
+                success: successFn,
+                complete: function () {
+                    self.deleting = false;
+                },
+                error: function () {
+                    self.setSynced(false);
+                }
+            });
+        } else {
+            successFn();
+        }
     }
 
     save() {
         let self = this;
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/killzone',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
-                floor_id: self.map.getCurrentFloor().id,
-                lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng,
-                enemies: self.enemies
-            },
-            beforeSend: function () {
-                self.saving = true;
-            },
-            success: function (json) {
-                self.id = json.id;
 
-                self.setSynced(true);
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-            },
-            complete: function () {
-                self.saving = false;
-            },
-            error: function () {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-            }
-        });
+        let successFn = function (json) {
+            self.id = json.id;
+
+            self.setSynced(true);
+            self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+        };
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/killzone',
+                dataType: 'json',
+                data: {
+                    id: self.id,
+                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                    floor_id: self.map.getCurrentFloor().id,
+                    lat: self.layer.getLatLng().lat,
+                    lng: self.layer.getLatLng().lng,
+                    enemies: self.enemies
+                },
+                beforeSend: function () {
+                    self.saving = true;
+                },
+                success: successFn,
+                complete: function () {
+                    self.saving = false;
+                },
+                error: function () {
+                    // Even if we were synced, make sure user knows it's no longer / an error occurred
+                    self.setSynced(false);
+                }
+            });
+        } else {
+            // We have to supply an ID to keep everything working properly
+            successFn({id: parseInt((Math.random() * 10000000))})
+        }
     }
 
     /**

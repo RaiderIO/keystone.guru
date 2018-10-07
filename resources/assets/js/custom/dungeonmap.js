@@ -170,6 +170,12 @@ class DungeonMap extends Signalable {
 
         result.push(new EnemyForcesControls(this));
         result.push(new MapObjectGroupControls(this));
+
+        //
+        if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
+            result.push(new FactionDisplayControls(this));
+        }
+
         return result;
     }
 
@@ -453,6 +459,14 @@ class DungeonMap extends Signalable {
         if (changed) {
             this.signal('map:killzoneselectmodechanged', {killzone: killzone});
         }
+    }
+
+    /**
+     * Checks if try (hard) mode is currently enabled or not.
+     * @returns {boolean|*}
+     */
+    isTryModeEnabled() {
+        return dungeonRoutePublicKey === '' && this.edit;
     }
 }
 

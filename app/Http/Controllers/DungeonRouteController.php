@@ -11,6 +11,27 @@ use Illuminate\Support\Facades\Auth;
 
 class DungeonRouteController extends Controller
 {
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|null
+     */
+    public function try(Request $request)
+    {
+        $result = null;
+
+        if ($request->has('dungeon_id')) {
+            $result = view('dungeonroute.try', [
+                'headerTitle' => __('Try Keystone.guru'),
+                'dungeon_id' => $request->get('dungeon_id'),
+                'teeming' => $request->get('teeming')
+            ]);
+        } else {
+            $result = view('dungeonroute.try', ['headerTitle' => __('Try Keystone.guru')]);
+        }
+        return $result;
+    }
+
     /**
      * Show a page for creating a new dungeon route.
      *

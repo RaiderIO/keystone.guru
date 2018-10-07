@@ -39,7 +39,7 @@ class MapComment extends MapObject {
         this.setSynced(false);
     }
 
-    _popupSubmitClicked(){
+    _popupSubmitClicked() {
         console.assert(this instanceof MapComment, this, 'this was not a MapComment');
         this.comment = $('#map_map_comment_edit_popup_comment_' + this.id).val();
 
@@ -83,64 +83,81 @@ class MapComment extends MapObject {
     delete() {
         let self = this;
         console.assert(this instanceof MapComment, this, 'this was not a MapComment');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/mapcomment',
-            dataType: 'json',
-            data: {
-                _method: 'DELETE',
-                id: self.id
-            },
-            beforeSend: function () {
-                self.deleting = true;
-            },
-            success: function (json) {
 
-            },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
-                self.setSynced(false);
-            }
-        });
+        let successFn = function (json) {
+            self.signal('object:deleted', {response: json});
+        };
+
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/mapcomment',
+                dataType: 'json',
+                data: {
+                    _method: 'DELETE',
+                    id: self.id
+                },
+                beforeSend: function () {
+                    self.deleting = true;
+                },
+                success: successFn,
+                complete: function () {
+                    self.deleting = false;
+                },
+                error: function () {
+                    self.setSynced(false);
+                }
+            });
+        } else {
+            successFn();
+        }
     }
 
     save() {
         let self = this;
         console.assert(this instanceof MapComment, this, 'this was not a MapComment');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/mapcomment',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
-                floor_id: self.map.getCurrentFloor().id,
-                comment: self.comment,
-                always_visible: self.always_visible,
-                lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng,
-            },
-            beforeSend: function () {
-                self.saving = true;
-                $('#map_map_comment_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
-            },
-            success: function (json) {
-                self.id = json.id;
 
-                self.setSynced(true);
-                self.map.leafletMap.closePopup();
-            },
-            complete: function () {
-                $('#map_map_comment_edit_popup_submit_' + self.id).removeAttr('disabled');
-                self.saving = false;
-            },
-            error: function () {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-            }
-        });
+        let successFn = function (json) {
+            self.id = json.id;
+
+            self.setSynced(true);
+            self.map.leafletMap.closePopup();
+        };
+
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/mapcomment',
+                dataType: 'json',
+                data: {
+                    id: self.id,
+                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                    floor_id: self.map.getCurrentFloor().id,
+                    comment: self.comment,
+                    always_visible: self.always_visible,
+                    lat: self.layer.getLatLng().lat,
+                    lng: self.layer.getLatLng().lng,
+                },
+                beforeSend: function () {
+                    self.saving = true;
+                    $('#map_map_comment_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
+                },
+                success: successFn,
+                complete: function () {
+                    $('#map_map_comment_edit_popup_submit_' + self.id).removeAttr('disabled');
+                    self.saving = false;
+                },
+                error: function () {
+                    // Even if we were synced, make sure user knows it's no longer / an error occurred
+                    self.setSynced(false);
+                }
+            });
+        } else {
+            // We have to supply an ID to keep everything working properly
+            successFn({id: parseInt((Math.random() * 10000000))})
+        }
     }
 
     // To be overridden by any implementing classes

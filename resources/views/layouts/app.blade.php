@@ -80,6 +80,10 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
                 </ul>
                 <ul class="navbar-nav">
                     @if (Auth::guest())
+                        <li class="nav-item mr-2">
+                            <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary text-white"
+                               role="button">{{__('Try it!')}}</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-toggle="modal"
                                data-target="#login_modal">{{__('Login')}}</a>

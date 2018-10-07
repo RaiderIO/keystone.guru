@@ -1,5 +1,5 @@
 class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname, editable){
+    constructor(map, name, classname, editable) {
         super(map, name, editable);
 
         this.classname = classname;
@@ -7,7 +7,7 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-flag';
     }
 
-    _createObject(layer){
+    _createObject(layer) {
         console.assert(this instanceof DungeonStartMarkerMapObjectGroup, 'this is not an DungeonStartMarkerMapObjectGroup');
 
         switch (this.classname) {
@@ -18,7 +18,7 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor, callback){
+    fetchFromServer(floor, callback) {
         // no super call required
         console.assert(this instanceof DungeonStartMarkerMapObjectGroup, this, 'this is not a DungeonStartMarkerMapObjectGroup');
 

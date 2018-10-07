@@ -1,12 +1,12 @@
 class KillZoneMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, editable){
+    constructor(map, name, editable) {
         super(map, name, editable);
 
         this.title = 'Hide/show killzone';
         this.fa_class = 'fa-bullseye';
     }
 
-    _createObject(layer){
+    _createObject(layer) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup');
 
         return new KillZone(this.map, layer);
@@ -19,46 +19,51 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         let self = this;
 
-        $.ajax({
-            type: 'GET',
-            url: '/ajax/killzones',
-            dataType: 'json',
-            data: {
-                dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
-                floor_id: floor.id
-            },
-            success: function (json) {
-                // Now draw the patrols on the map
-                for (let index in json) {
-                    if (json.hasOwnProperty(index)) {
-                        let remoteKillZone = json[index];
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'GET',
+                url: '/ajax/killzones',
+                dataType: 'json',
+                data: {
+                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                    floor_id: floor.id
+                },
+                success: function (json) {
+                    // Now draw the patrols on the map
+                    for (let index in json) {
+                        if (json.hasOwnProperty(index)) {
+                            let remoteKillZone = json[index];
 
-                        let layer = new LeafletKillZoneMarker();
-                        layer.setLatLng(L.latLng(remoteKillZone.lat, remoteKillZone.lng));
+                            let layer = new LeafletKillZoneMarker();
+                            layer.setLatLng(L.latLng(remoteKillZone.lat, remoteKillZone.lng));
 
-                        /** @var KillZone killzone */
-                        let killzone = self.createNew(layer);
-                        killzone.id = remoteKillZone.id;
-                        killzone.floor_id = remoteKillZone.floor_id;
+                            /** @var KillZone killzone */
+                            let killzone = self.createNew(layer);
+                            killzone.id = remoteKillZone.id;
+                            killzone.floor_id = remoteKillZone.floor_id;
 
-                        // Reconstruct the enemies we're coupled with in a format we expect
-                        if( remoteKillZone.killzoneenemies !== null ){
-                            let enemies = [];
-                            for(let i = 0; i < remoteKillZone.killzoneenemies.length; i++ ){
-                                let enemy = remoteKillZone.killzoneenemies[i];
-                                enemies.push(enemy.enemy_id);
+                            // Reconstruct the enemies we're coupled with in a format we expect
+                            if (remoteKillZone.killzoneenemies !== null) {
+                                let enemies = [];
+                                for (let i = 0; i < remoteKillZone.killzoneenemies.length; i++) {
+                                    let enemy = remoteKillZone.killzoneenemies[i];
+                                    enemies.push(enemy.enemy_id);
+                                }
+                                // Restore the enemies, STILL NEED TO CALL SETENEMIES WHEN EVERYTHING'S DONE LOADING
+                                // Should be handled by the killzone itself
+                                killzone.enemies = enemies;
                             }
-                            // Restore the enemies, STILL NEED TO CALL SETENEMIES WHEN EVERYTHING'S DONE LOADING
-                            // Should be handled by the killzone itself
-                            killzone.enemies = enemies;
+                            // We just downloaded the kill zone, it's synced alright!
+                            killzone.setSynced(true);
                         }
-                        // We just downloaded the kill zone, it's synced alright!
-                        killzone.setSynced(true);
                     }
-                }
 
-                callback();
-            }
-        });
+                    callback();
+                }
+            });
+        } else {
+            callback();
+        }
     }
 }

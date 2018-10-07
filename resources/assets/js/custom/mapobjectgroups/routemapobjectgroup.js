@@ -1,12 +1,12 @@
 class RouteMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, editable){
+    constructor(map, name, editable) {
         super(map, name, editable);
 
         this.title = 'Hide/show route';
         this.fa_class = 'fa-route';
     }
 
-    _createObject(layer){
+    _createObject(layer) {
         console.assert(this instanceof RouteMapObjectGroup, 'this is not an RouteMapObjectGroup');
 
         return new Route(this.map, layer);
@@ -19,38 +19,44 @@ class RouteMapObjectGroup extends MapObjectGroup {
 
         let self = this;
 
-        $.ajax({
-            type: 'GET',
-            url: '/ajax/routes',
-            dataType: 'json',
-            data: {
-                dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
-                floor_id: floor.id
-            },
-            success: function (json) {
-                // Now draw the patrols on the map
-                for (let index in json) {
-                    if (json.hasOwnProperty(index)) {
-                        let points = [];
-                        let remoteRoute = json[index];
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'GET',
+                url: '/ajax/routes',
+                dataType: 'json',
+                data: {
+                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                    floor_id: floor.id
+                },
+                success: function (json) {
+                    // Now draw the patrols on the map
+                    for (let index in json) {
+                        if (json.hasOwnProperty(index)) {
+                            let points = [];
+                            let remoteRoute = json[index];
 
-                        for (let j = 0; j < remoteRoute.vertices.length; j++) {
-                            let vertex = remoteRoute.vertices[j];
-                            points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
+                            for (let j = 0; j < remoteRoute.vertices.length; j++) {
+                                let vertex = remoteRoute.vertices[j];
+                                points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
+                            }
+
+                            let layer = L.polyline(points);
+
+                            let route = self.createNew(layer);
+                            route.id = remoteRoute.id;
+                            route.setColor(remoteRoute.color);
+                            // We just downloaded the enemy pack, it's synced alright!
+                            route.setSynced(true);
                         }
-
-                        let layer = L.polyline(points);
-
-                        let route = self.createNew(layer);
-                        route.id = remoteRoute.id;
-                        route.setColor(remoteRoute.color);
-                        // We just downloaded the enemy pack, it's synced alright!
-                        route.setSynced(true);
                     }
-                }
 
-                callback();
-            }
-        });
+                    callback();
+                }
+            });
+        } else {
+            // At least let the map know we're done
+            callback();
+        }
     }
 }

@@ -17,6 +17,8 @@
                         @endguest
                         <a href="{{ route('dungeonroute.view', ['public_key' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}" class="btn btn-primary btn-ghost btn-lg mt-md-0 mt-sm-3"
                            role="button">{{ __('Demo') }}</a>
+                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-ghost btn-lg mt-md-0 mt-sm-3"
+                           role="button">{{ __('Try it!') }}</a>
                     </p>
                     <!-- <p><a href="#"><i class="icon-play2"></i> Watch the video</a></p> -->
                 </div>
