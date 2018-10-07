@@ -47,8 +47,8 @@ for (let key in _iconNames) {
     LeafletEnemyIcons[key] = new L.divIcon($.extend({className: key + '_enemy_icon'}, _iconNames[key]));
     LeafletEnemyIconsKillZone[key] = new L.divIcon($.extend({
         className: key + '_enemy_icon leaflet-edit-marker-selected ' +
-        // ahahahahaha
-        'killzone_enemy_icon_' + (_iconNames[key] === _bigIcon ? 'big' : _iconNames[key] === _mediumIcon ? 'medium' : 'small')
+            // ahahahahaha
+            'killzone_enemy_icon_' + (_iconNames[key] === _bigIcon ? 'big' : _iconNames[key] === _mediumIcon ? 'medium' : 'small')
     }, _iconNames[key]));
 }
 
@@ -76,11 +76,78 @@ class Enemy extends MapObject {
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 
         this.setSynced(true);
+
+        let self = this;
+        this.map.register('map:killzoneselectmodechanged', this, function (event) {
+            // Remove the popup
+            self.layer.unbindPopup();
+            // Unselected a killzone
+            if (event.data.killzone === null) {
+                // Restore it only if necessary
+                self._rebuildPopup(event);
+            }
+        });
     }
 
     _getPercentageString(enemyForces) {
         // Do some fuckery to round to two decimal places
         return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
+    }
+
+    /**
+     * Since the ID may not be known at spawn time, this needs to be callable from when it is known (when it's synced to server).
+     *
+     * @param event
+     * @private
+     */
+    _rebuildPopup(event) {
+        let self = this;
+
+        // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
+        // This also cannot be a private function since that'll apparently give different signatures as well.
+        let popupOpenFn = function (event) {
+            $.each($('.raid_marker_icon'), function (index, value) {
+                let $icon = $(value);
+                $icon.unbind('click');
+                $icon.bind('click', function () {
+                    self.assignRaidMarker($icon.data('name'));
+                });
+            });
+
+            let $submitBtn = $('#enemy_edit_popup_submit_' + self.id);
+
+            $submitBtn.unbind('click');
+            $submitBtn.bind('click', function () {
+                // self.teeming = $('#enemy_edit_popup_teeming_' + self.id).val();
+                // self.faction = $('#enemy_edit_popup_faction_' + self.id).val();
+                // self.enemy_forces_override = $('#enemy_edit_popup_enemy_forces_override_' + self.id).val();
+                // self.npc_id = $('#enemy_edit_popup_npc_' + self.id).val();
+
+                self.edit();
+            });
+        };
+
+        let customPopupHtml = $('#enemy_edit_popup_template').html();
+        // Remove template so our
+        let template = handlebars.compile(customPopupHtml);
+
+        let data = {id: self.id};
+
+        // Build the status bar from the template
+        customPopupHtml = template(data);
+
+        let customOptions = {
+            'maxWidth': '128',
+            'minWidth': '128',
+            'className': 'popupCustom'
+        };
+
+        self.layer.unbindPopup();
+        self.layer.bindPopup(customPopupHtml, customOptions);
+
+        // Have you tried turning it off and on again?
+        self.layer.off('popupopen', popupOpenFn);
+        self.layer.on('popupopen', popupOpenFn);
     }
 
     bindTooltip() {
@@ -96,7 +163,7 @@ class Enemy extends MapObject {
             // Admin maps have 0 enemy forces
             if (this.map.getEnemyForcesRequired() > 0) {
                 if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
-
+                    // @TODO This HTML probably needs to go somewhere else
                     if (this.enemy_forces_override >= 0) {
                         enemy_forces = '<s>' + enemy_forces + '</s> ' +
                             '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
@@ -170,10 +237,9 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         this.kill_zone_id = killZoneId;
 
-        // @TODO Perhaps this should be different? I don't like the dependency on killzone.js
         // We only want to trigger these events when the killzone is actively being edited, not when loading in
         // the connections from the server initially
-        if (KillZoneSelectModeEnabled) {
+        if (this.map.isKillZoneSelectModeEnabled()) {
             if (this.kill_zone_id >= 0) {
                 this.signal('killzone:attached');
             } else {
@@ -215,54 +281,11 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, this, 'this was not an Enemy');
         let self = this;
 
-        // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
-        // This also cannot be a private function since that'll apparently give different signatures as well.
-        let popupOpenFn = function (event) {
-            $.each($('.raid_marker_icon'), function (index, value) {
-                let $icon = $(value);
-                $icon.unbind('click');
-                $icon.bind('click', function () {
-                    self.assignRaidMarker($icon.data('name'));
-                });
-            });
-
-            let $submitBtn = $('#enemy_edit_popup_submit_' + self.id);
-
-            $submitBtn.unbind('click');
-            $submitBtn.bind('click', function () {
-                // self.teeming = $('#enemy_edit_popup_teeming_' + self.id).val();
-                // self.faction = $('#enemy_edit_popup_faction_' + self.id).val();
-                // self.enemy_forces_override = $('#enemy_edit_popup_enemy_forces_override_' + self.id).val();
-                // self.npc_id = $('#enemy_edit_popup_npc_' + self.id).val();
-
-                self.edit();
-            });
-        };
-
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, function (event) {
-            let customPopupHtml = $('#enemy_edit_popup_template').html();
-            // Remove template so our
-            let template = handlebars.compile(customPopupHtml);
-
-            let data = {id: self.id};
-
-            // Build the status bar from the template
-            customPopupHtml = template(data);
-
-            let customOptions = {
-                'maxWidth': '128',
-                'minWidth': '128',
-                'className': 'popupCustom'
-            };
-
-            self.layer.unbindPopup();
-            self.layer.bindPopup(customPopupHtml, customOptions);
-
-            // Have you tried turning it off and on again?
-            self.layer.off('popupopen', popupOpenFn);
-            self.layer.on('popupopen', popupOpenFn);
-        });
+        // Called multiple times, so unreg first
+        this.unregister('synced', this, this._rebuildPopup.bind(this));
+        // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
+        this.register('synced', this, this._rebuildPopup.bind(this));
 
         self.map.leafletMap.on('contextmenu', function () {
             if (self.currentPatrolPolyline !== null) {
@@ -310,23 +333,29 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, this, 'this was not an Enemy');
         let self = this;
 
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/enemy/raidmarker',
-            dataType: 'json',
-            data: {
-                dungeonroute: dungeonRoutePublicKey,
-                enemy_id: self.id,
-                raid_marker_name: raidMarkerName
-            },
-            success: function (json) {
-                self.setSynced(true);
-                self.map.leafletMap.closePopup();
-                self.setRaidMarkerName(raidMarkerName);
+        let successFn = function (json) {
+            self.setSynced(true);
+            self.map.leafletMap.closePopup();
+            self.setRaidMarkerName(raidMarkerName);
 
-                self.setIcon(raidMarkerName)
+            self.setIcon(raidMarkerName);
+        };
 
-            },
-        });
+        // No network traffic!
+        if (this.map.isTryModeEnabled()) {
+            successFn();
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/enemy/raidmarker',
+                dataType: 'json',
+                data: {
+                    dungeonroute: dungeonRoutePublicKey,
+                    enemy_id: self.id,
+                    raid_marker_name: raidMarkerName
+                },
+                success: successFn,
+            });
+        }
     }
 }

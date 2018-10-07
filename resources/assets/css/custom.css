@@ -47,24 +47,9 @@
     text-align: center;
 }
 
-.bootstrap-select .btn {
-    background-color: white;
-    border: 1px solid #ced4da;
-    color: #495057;
-}
-
 /* Override this so that long race names fit in their group selection boxes */
 .dropdown-item {
     padding: 0.25em 0.9em;
-}
-
-/* Fix for selectpickers inside popups inside the map */
-#map .dropdown-menu {
-    background-color: rgb(224, 224, 224);
-}
-
-#map .dropdown-item:hover, .dropdown-item:focus {
-    color: black;
 }
 
 /** LEAFLET */
@@ -126,7 +111,7 @@
 }
 
 .flagged_enemy_icon {
-    background: url("/images/mapicon/flagged.png") no-repeat center !important;
+    background: url("/images/mapicon/neutral.png") no-repeat center !important;
 }
 
 .door_icon {
@@ -169,6 +154,13 @@
 
 .map_enemy_forces_too_much_warning {
     color: orange;
+}
+
+.map_route_edit_popup_class_color {
+    height: 32px;
+    margin: 2px 10px;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 /** GENERAL ICONS */
@@ -230,14 +222,28 @@
     font-size: 30px;
 }
 
+.marker_div_icon_mapcomment {
+    font-size: 16px;
+}
+
 .marker_div_icon_circle_border {
     border: 3px solid;
     border-radius: 15px;
 }
 
+.map_map_comment_tooltip {
+    width: 240px;
+    white-space: normal;
+}
+
 /** DATATABLES */
 #routes_table_filter {
     display: none;
+}
+
+/** INTRO.JS */
+.introjs-tooltip {
+    width: 400px !important;
 }
 
 /** MISC STYLES */
@@ -248,4 +254,50 @@
 #view_dungeonroute_group_setup {
     display: flex;
     align-items: center;
+}
+
+.affixes_overview_table td {
+    padding: 0;
+}
+
+.affixes_overview_table .affix_row {
+    padding: 5px;
+}
+
+.affixes_overview_table .last_column {
+    border-left: orange 3px solid;
+    border-right: orange 3px solid;
+    background-color: #ffa500bb;
+}
+
+.affixes_overview_table .last_column.first_row {
+    border-top: orange 3px solid;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.affixes_overview_table .last_column.last_row {
+    border-bottom: orange 3px solid;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.affixes_overview_table .current_week {
+    border-top: rgb(235, 235, 235) 3px solid;
+    border-bottom: rgb(235, 235, 235) 3px solid;
+    background-color: #2B3E50;
+}
+
+.affixes_overview_table .current_week.first_column {
+    border-left: rgb(235, 235, 235) 3px solid;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.affixes_overview_table .current_week.last_column {
+    border-right: rgb(235, 235, 235) 3px solid;
+    border-left: none; /* Disable overlapping borders when both rows overlap */
+    padding-left: 8px; /* Compensation for the missing border */
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }

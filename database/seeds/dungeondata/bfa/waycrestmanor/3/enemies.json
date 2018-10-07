@@ -167,5 +167,57 @@
         "npc": {
             "id": 135240
         }
+    },
+    {
+        "id": 2926,
+        "enemy_pack_id": 120,
+        "floor_id": 62,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -78.629999999999995,
+        "lng": 240.62,
+        "npc": {
+            "id": 131819
+        }
+    },
+    {
+        "id": 2932,
+        "enemy_pack_id": 120,
+        "floor_id": 62,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -78.5,
+        "lng": 246.62,
+        "npc": {
+            "id": 131818
+        }
+    },
+    {
+        "id": 2938,
+        "enemy_pack_id": 125,
+        "floor_id": 62,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -113.88,
+        "lng": 95.879999999999995,
+        "npc": {
+            "id": 131819
+        }
+    },
+    {
+        "id": 2944,
+        "enemy_pack_id": 125,
+        "floor_id": 62,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -112.38,
+        "lng": 99.5,
+        "npc": {
+            "id": 131666
+        }
     }
 ]

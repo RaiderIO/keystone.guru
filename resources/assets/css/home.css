@@ -1,0 +1,294 @@
+.probootstrap-hero {
+    padding-top: 9em;
+    padding-bottom: 9em;
+}
+
+@media screen and (max-width: 768px) {
+    .probootstrap-hero {
+        padding-top: 1em;
+        padding-bottom: 4em;
+    }
+}
+
+.probootstrap-section {
+    padding: 7em 0;
+}
+
+@media screen and (max-width: 768px) {
+    .probootstrap-section {
+        padding: 4em 0;
+    }
+}
+
+.probootstrap-feature-showcase {
+    margin-top: 100px;
+    position: relative;
+}
+
+@media screen and (max-width: 768px) {
+    .probootstrap-feature-showcase {
+        margin-top: 0px;
+    }
+}
+
+.probootstrap-home-showcase-wrap {
+    width: 100%;
+}
+
+.probootstrap-home-showcase-wrap .probootstrap-home-showcase-inner {
+    -webkit-box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.08);
+    z-index: 1;
+    height: 500px;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    border-radius: 5px;
+}
+
+@media screen and (max-width: 768px) {
+    .probootstrap-home-showcase-wrap .probootstrap-home-showcase-inner {
+        height: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .probootstrap-home-showcase-wrap .probootstrap-image-showcase {
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .probootstrap-home-showcase-wrap .probootstrap-image-showcase {
+        height: 200px;
+    }
+}
+
+.probootstrap-home-showcase-wrap .probootstrap-image-showcase > ul {
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+.probootstrap-home-showcase-wrap .probootstrap-image-showcase > ul > li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: .3s all;
+    transition: .3s all;
+}
+
+.probootstrap-home-showcase-wrap .probootstrap-image-showcase > ul > li img {
+    max-width: 100%;
+}
+
+.probootstrap-home-showcase-wrap .probootstrap-image-showcase > ul > li.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.probootstrap-showcase-nav {
+    border-radius: 5px;
+    padding-top: 15px;
+}
+
+.probootstrap-showcase-nav ul {
+    padding: 0;
+    margin: 0;
+}
+
+.probootstrap-showcase-nav ul li {
+    margin: 0 0 15px 0;
+    padding: 0 0 0 20px;
+    list-style: none;
+}
+
+.probootstrap-showcase-nav ul li > a {
+    color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.probootstrap-showcase-nav ul li p {
+    display: none;
+}
+
+.probootstrap-showcase-nav ul li.active {
+    padding: 20px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.08);
+}
+
+.probootstrap-showcase-nav ul li.active > a {
+    padding-left: 0px;
+    display: block;
+}
+
+.probootstrap-showcase-nav ul li.active p {
+    display: block;
+    font-size: 13px;
+    line-height: 20px;
+    margin-bottom: 0;
+}
+
+.probootstrap-gutter0 > div[class*='col-'] {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+@media screen and (max-width: 480px) {
+    .probootstrap-gutter0 > div[class*='col-'] {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+}
+
+.probootstrap-gutter40 > div[class*='col-'] {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+@media screen and (max-width: 480px) {
+    .probootstrap-gutter40 > div[class*='col-'] {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+}
+
+.probootstrap-gutter60 > div[class*='col-'] {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+@media screen and (max-width: 480px) {
+    .probootstrap-gutter60 > div[class*='col-'] {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+}
+
+.service {
+    margin-bottom: 30px;
+    float: left;
+    width: 100%;
+}
+
+.service .icon {
+    display: block;
+    margin-bottom: 30px;
+}
+
+.service .icon i {
+    font-size: 60px;
+}
+
+.service h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.service p {
+    font-size: 15px;
+}
+
+.service.left-icon {
+    margin-bottom: 20px !important;
+}
+
+.service.left-icon .icon, .service.left-icon .text {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.service.left-icon .icon {
+    width: 80px;
+    position: relative;
+    top: 20px;
+}
+
+.service.left-icon .icon i {
+    font-size: 50px;
+}
+
+.service.left-icon .text {
+    display: table-cell;
+}
+
+.service.left-icon h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.service.left-icon p {
+    font-size: 14px;
+}
+
+.service.left-icon p:last-child {
+    margin-bottom: 0;
+}
+
+.modal .probootstrap-modal-flex .probootstrap-modal-content {
+    width: 100%;
+    padding: 40px;
+    position: relative;
+}
+
+@media screen and (max-width: 480px) {
+    .modal .probootstrap-modal-flex .probootstrap-modal-content {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .modal .probootstrap-modal-flex .probootstrap-modal-figure,
+    .modal .probootstrap-modal-flex .probootstrap-modal-content {
+        width: 100%;
+    }
+}
+
+.modal .modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    font-size: 26px;
+    color: white;
+}
+
+@media screen and (max-width: 480px) {
+    .modal .modal-content .close {
+        top: 20px;
+        right: 20px;
+    }
+}
+
+.modal .probootstrap-modal-flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

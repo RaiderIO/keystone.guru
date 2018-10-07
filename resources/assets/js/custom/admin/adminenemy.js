@@ -16,20 +16,26 @@ class AdminEnemy extends Enemy {
         this.setSynced(false);
     }
 
-    onLayerInit(){
+    onLayerInit() {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         super.onLayerInit();
 
         let self = this;
-        self.map.leafletMap.on('contextmenu', function(){
-            if( self.currentPatrolPolyline !== null ){
+        self.map.leafletMap.on('contextmenu', function () {
+            if (self.currentPatrolPolyline !== null) {
                 self.map.leafletMap.addLayer(self.currentPatrolPolyline);
                 self.currentPatrolPolyline.disable();
             }
         });
     }
 
-    onPopupInit(){
+    /**
+     * Since the ID may not be known at spawn time, this needs to be callable from when it is known (when it's synced to server).
+     *
+     * @param event
+     * @private
+     */
+    _rebuildPopup(event) {
         console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
         let self = this;
 
@@ -59,30 +65,37 @@ class AdminEnemy extends Enemy {
             });
         };
 
+        let customPopupHtml = $('#enemy_edit_popup_template').html();
+        // Remove template so our
+        let template = handlebars.compile(customPopupHtml);
+
+        let data = {id: self.id};
+
+        // Build the status bar from the template
+        customPopupHtml = template(data);
+
+        let customOptions = {
+            'maxWidth': '400',
+            'minWidth': '300',
+            'className': 'popupCustom'
+        };
+
+        self.layer.unbindPopup();
+        self.layer.bindPopup(customPopupHtml, customOptions);
+
+        // Have you tried turning it off and on again?
+        self.layer.off('popupopen', popupOpenFn);
+        self.layer.on('popupopen', popupOpenFn);
+    }
+
+    onPopupInit() {
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        // Don't actually init the popup here since we may not know the ID yet.
+
+        // Called multiple times, so unreg first
+        this.unregister('synced', this, this._rebuildPopup.bind(this));
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, function(event){
-            let customPopupHtml = $('#enemy_edit_popup_template').html();
-            // Remove template so our
-            let template = handlebars.compile(customPopupHtml);
-
-            let data = {id: self.id};
-
-            // Build the status bar from the template
-            customPopupHtml = template(data);
-
-            let customOptions = {
-                'maxWidth': '400',
-                'minWidth': '300',
-                'className': 'popupCustom'
-            };
-
-            self.layer.unbindPopup();
-            self.layer.bindPopup(customPopupHtml, customOptions);
-
-            // Have you tried turning it off and on again?
-            self.layer.off('popupopen', popupOpenFn);
-            self.layer.on('popupopen', popupOpenFn);
-        });
+        this.register('synced', this, this._rebuildPopup.bind(this));
     }
 
     edit() {
@@ -145,6 +158,12 @@ class AdminEnemy extends Enemy {
             success: function (json) {
                 self.setSynced(true);
                 self.map.leafletMap.closePopup();
+                // We just received ID from creating the enemy
+                if (json.hasOwnProperty('id')) {
+                    self.id = json.id;
+                    // ID has changed, rebuild the popup
+                    self._rebuildPopup();
+                }
                 // May be null if not set at all (yet)
                 if (json.hasOwnProperty('npc') && json.npc !== null) {
                     self.setNpc(json.npc);

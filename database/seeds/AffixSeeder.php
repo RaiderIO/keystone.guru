@@ -55,18 +55,18 @@ class AffixSeeder extends Seeder
         }
 
         $groups = [
-            ['Raging', 'Volcanic', 'Tyrannical'],
-            ['Teeming', 'Explosive', 'Fortified'],
-            ['Bolstering', 'Grievous', 'Tyrannical'],
-            ['Sanguine', 'Necrotic', 'Fortified'],
-            ['Bursting', 'Skittish', 'Tyrannical'],
-            ['Teeming', 'Quaking', 'Fortified'],
-            ['Raging', 'Necrotic', 'Tyrannical'],
-            ['Bolstering', 'Skittish', 'Fortified'],
-            ['Teeming', 'Volcanic', 'Tyrannical'],
-            ['Sanguine', 'Grievous', 'Fortified'],
-            ['Bolstering', 'Explosive', 'Tyrannical'],
-            ['Bursting', 'Quaking', 'Fortified']
+            ['Fortified', 'Sanguine', 'Necrotic', 'Infested'],
+            ['Tyrannical', 'Bursting', 'Skittish', 'Infested'],
+            ['Fortified', 'Teeming', 'Quaking', 'Infested'],
+            ['Tyrannical', 'Raging', 'Necrotic', 'Infested'],
+            ['Fortified', 'Bolstering', 'Skittish', 'Infested'],
+            ['Tyrannical', 'Teeming', 'Volcanic', 'Infested'],
+            ['Fortified', 'Sanguine', 'Grievous', 'Infested'],
+            ['Tyrannical', 'Bolstering', 'Explosive', 'Infested'],
+            ['Fortified', 'Bursting', 'Quaking', 'Infested'],
+            ['Tyrannical', 'Raging', 'Volcanic', 'Infested'],
+            ['Fortified', 'Teeming', 'Explosive', 'Infested'],
+            ['Tyrannical', 'Bolstering', 'Grievous', 'Infested'],
         ];
 
         $index = 0;

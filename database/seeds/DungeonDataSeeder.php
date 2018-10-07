@@ -33,6 +33,7 @@ class DungeonDataSeeder extends Seeder
             'enemy_patrols' => '\App\Models\EnemyPatrol',
             'dungeon_floor_switch_markers' => '\App\Models\DungeonFloorSwitchMarker',
             'dungeon_start_markers' => '\App\Models\DungeonStartMarker',
+            'map_comments' => '\App\Models\MapComment'
         ];
 
         $rootDir = base_path() . '/database/seeds/dungeondata/';
@@ -136,6 +137,7 @@ class DungeonDataSeeder extends Seeder
             new DungeonRouteRoutesRelationParser(),
             new DungeonRouteKillZoneRelationParser(),
             new DungeonRouteEnemyRaidMarkersRelationParser(),
+            new DungeonRouteMapCommentsRelationParser()
         ];
 
         // Do some php fuckery to make this a bit cleaner

@@ -11,6 +11,13 @@ class AdminEnemyPatrol extends EnemyPatrol {
     }
 
     onLayerInit(){
+        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        super.onLayerInit();
+
+        this.onPopupInit();
+    }
+
+    onPopupInit(){
         let self = this;
         console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
 
@@ -36,7 +43,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         };
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, function(event){
+        let syncedFn = function(event){
             let customPopupHtml = $('#enemy_patrol_edit_popup_template').html();
             // Remove template so our
             let template = handlebars.compile(customPopupHtml);
@@ -57,6 +64,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 self.decorator,
                 self.layer
             ];
+
             $.each(layers, function(i, layer){
                 layer.unbindPopup();
                 layer.bindPopup(customPopupHtml, customOptions);
@@ -65,7 +73,10 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 layer.off('popupopen', popupOpenFn);
                 layer.on('popupopen', popupOpenFn);
             });
-        });
+        };
+
+        this.unregister('synced', this, syncedFn);
+        this.register('synced', this, syncedFn);
     }
 
     delete() {
@@ -128,6 +139,8 @@ class AdminEnemyPatrol extends EnemyPatrol {
             success: function (json) {
                 self.map.leafletMap.closePopup();
                 self.id = json.id;
+                // ID has changed, rebuild the popup
+                self.onPopupInit();
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.saved,
                     color: c.map.admin.mapobject.colors.savedBorder

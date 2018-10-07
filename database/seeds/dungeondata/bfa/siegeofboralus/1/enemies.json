@@ -831,7 +831,7 @@
     },
     {
         "id": 1852,
-        "enemy_pack_id": 410,
+        "enemy_pack_id": 435,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -844,7 +844,7 @@
     },
     {
         "id": 1853,
-        "enemy_pack_id": 410,
+        "enemy_pack_id": 435,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -857,7 +857,7 @@
     },
     {
         "id": 1854,
-        "enemy_pack_id": 410,
+        "enemy_pack_id": 435,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -883,7 +883,7 @@
     },
     {
         "id": 1856,
-        "enemy_pack_id": 412,
+        "enemy_pack_id": 436,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -896,7 +896,7 @@
     },
     {
         "id": 1857,
-        "enemy_pack_id": 412,
+        "enemy_pack_id": 436,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -909,7 +909,7 @@
     },
     {
         "id": 1858,
-        "enemy_pack_id": 412,
+        "enemy_pack_id": 436,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -922,7 +922,7 @@
     },
     {
         "id": 1859,
-        "enemy_pack_id": 412,
+        "enemy_pack_id": 436,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -935,7 +935,7 @@
     },
     {
         "id": 1860,
-        "enemy_pack_id": 412,
+        "enemy_pack_id": 436,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -948,7 +948,7 @@
     },
     {
         "id": 1861,
-        "enemy_pack_id": 412,
+        "enemy_pack_id": 436,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -961,7 +961,7 @@
     },
     {
         "id": 1862,
-        "enemy_pack_id": 412,
+        "enemy_pack_id": 436,
         "floor_id": 47,
         "teeming": null,
         "faction": "alliance",
@@ -1226,8 +1226,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -120.23,
-        "lng": 237.31,
+        "lat": -120.75,
+        "lng": 235.62,
         "npc": {
             "id": 138247
         }
@@ -1252,8 +1252,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -120.79000000000001,
-        "lng": 235.62,
+        "lat": -120.25,
+        "lng": 237.44,
         "npc": {
             "id": 138254
         }
@@ -1525,8 +1525,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -178.72999999999999,
-        "lng": 205.06,
+        "lat": -176.94,
+        "lng": 207.38,
         "npc": {
             "id": 135245
         }
@@ -1577,8 +1577,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -176.22999999999999,
-        "lng": 208.94,
+        "lat": -174.75,
+        "lng": 208.88,
         "npc": {
             "id": 129367
         }
@@ -1590,8 +1590,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -174.97999999999999,
-        "lng": 208.88,
+        "lat": -175.69,
+        "lng": 208.94,
         "npc": {
             "id": 129366
         }
@@ -1629,8 +1629,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -176.22999999999999,
-        "lng": 217.38,
+        "lat": -175.62,
+        "lng": 218.62,
         "npc": {
             "id": 135241
         }
@@ -1655,8 +1655,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -175.53999999999999,
-        "lng": 218.62,
+        "lat": -176.25,
+        "lng": 217.44,
         "npc": {
             "id": 129366
         }
@@ -2240,8 +2240,8 @@
         "teeming": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -47,
-        "lng": 268.62,
+        "lat": -48.810000000000002,
+        "lng": 269,
         "npc": {
             "id": 141565
         }
@@ -2253,8 +2253,8 @@
         "teeming": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -48,
-        "lng": 268.44,
+        "lat": -47.560000000000002,
+        "lng": 268.56,
         "npc": {
             "id": 141284
         }
@@ -2396,8 +2396,8 @@
         "teeming": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -53.409999999999997,
-        "lng": 239.31,
+        "lat": -54.880000000000003,
+        "lng": 240.62,
         "npc": {
             "id": 141565
         }
@@ -2500,8 +2500,8 @@
         "teeming": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -51.600000000000001,
-        "lng": 237.62,
+        "lat": -54,
+        "lng": 237.06,
         "npc": {
             "id": 141283
         }
@@ -2513,8 +2513,8 @@
         "teeming": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -52.350000000000001,
-        "lng": 237.62,
+        "lat": -53.189999999999998,
+        "lng": 236.44,
         "npc": {
             "id": 132532
         }
@@ -2526,8 +2526,8 @@
         "teeming": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -51.229999999999997,
-        "lng": 238.25,
+        "lat": -52.439999999999998,
+        "lng": 237.12,
         "npc": {
             "id": 141565
         }
@@ -2539,8 +2539,8 @@
         "teeming": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -51.979999999999997,
-        "lng": 238.25,
+        "lat": -53.310000000000002,
+        "lng": 237.81,
         "npc": {
             "id": 141565
         }
@@ -2552,8 +2552,8 @@
         "teeming": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -52.729999999999997,
-        "lng": 238.25,
+        "lat": -53.939999999999998,
+        "lng": 238.44,
         "npc": {
             "id": 141565
         }
@@ -2578,8 +2578,8 @@
         "teeming": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -55.159999999999997,
-        "lng": 235.06,
+        "lat": -54.880000000000003,
+        "lng": 234.25,
         "npc": {
             "id": 141284
         }
@@ -2625,7 +2625,7 @@
     },
     {
         "id": 1995,
-        "enemy_pack_id": 435,
+        "enemy_pack_id": 410,
         "floor_id": 47,
         "teeming": null,
         "faction": "horde",
@@ -2651,7 +2651,7 @@
     },
     {
         "id": 1997,
-        "enemy_pack_id": 435,
+        "enemy_pack_id": 410,
         "floor_id": 47,
         "teeming": null,
         "faction": "horde",
@@ -2677,7 +2677,7 @@
     },
     {
         "id": 1999,
-        "enemy_pack_id": 436,
+        "enemy_pack_id": 412,
         "floor_id": 47,
         "teeming": null,
         "faction": "horde",
@@ -2690,7 +2690,7 @@
     },
     {
         "id": 2000,
-        "enemy_pack_id": 436,
+        "enemy_pack_id": 412,
         "floor_id": 47,
         "teeming": null,
         "faction": "horde",
@@ -2742,7 +2742,7 @@
     },
     {
         "id": 2004,
-        "enemy_pack_id": 436,
+        "enemy_pack_id": 412,
         "floor_id": 47,
         "teeming": null,
         "faction": "horde",
@@ -3271,6 +3271,214 @@
         "lng": 222.94,
         "npc": {
             "id": 135241
+        }
+    },
+    {
+        "id": 2169,
+        "enemy_pack_id": 433,
+        "floor_id": 47,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -41.600000000000001,
+        "lng": 252.19,
+        "npc": {
+            "id": 141283
+        }
+    },
+    {
+        "id": 2170,
+        "enemy_pack_id": 433,
+        "floor_id": 47,
+        "teeming": "visible",
+        "faction": "horde",
+        "enemy_forces_override": -1,
+        "lat": -40.789999999999999,
+        "lng": 252.75,
+        "npc": {
+            "id": 141283
+        }
+    },
+    {
+        "id": 2171,
+        "enemy_pack_id": 433,
+        "floor_id": 47,
+        "teeming": "visible",
+        "faction": "horde",
+        "enemy_forces_override": -1,
+        "lat": -41.600000000000001,
+        "lng": 252.19,
+        "npc": {
+            "id": 141283
+        }
+    },
+    {
+        "id": 2178,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -137.16,
+        "lng": 254,
+        "npc": {
+            "id": 141565
+        }
+    },
+    {
+        "id": 2179,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -139.22999999999999,
+        "lng": 251.62,
+        "npc": {
+            "id": 141565
+        }
+    },
+    {
+        "id": 2180,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -137.41,
+        "lng": 256.62,
+        "npc": {
+            "id": 141565
+        }
+    },
+    {
+        "id": 2181,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -137.59999999999999,
+        "lng": 252.81,
+        "npc": {
+            "id": 141566
+        }
+    },
+    {
+        "id": 2182,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -139.66,
+        "lng": 250.62,
+        "npc": {
+            "id": 141566
+        }
+    },
+    {
+        "id": 2183,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -137.97999999999999,
+        "lng": 255.25,
+        "npc": {
+            "id": 141566
+        }
+    },
+    {
+        "id": 2184,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -137.81,
+        "lng": 255.56,
+        "npc": {
+            "id": 141566
+        }
+    },
+    {
+        "id": 2187,
+        "enemy_pack_id": 419,
+        "floor_id": 47,
+        "teeming": "visible",
+        "faction": "horde",
+        "enemy_forces_override": -1,
+        "lat": -142.16,
+        "lng": 238.69,
+        "npc": {
+            "id": 135263
+        }
+    },
+    {
+        "id": 2188,
+        "enemy_pack_id": 419,
+        "floor_id": 47,
+        "teeming": "visible",
+        "faction": "horde",
+        "enemy_forces_override": -1,
+        "lat": -146.53999999999999,
+        "lng": 240.69,
+        "npc": {
+            "id": 135263
+        }
+    },
+    {
+        "id": 2189,
+        "enemy_pack_id": 419,
+        "floor_id": 47,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -146.53999999999999,
+        "lng": 240.69,
+        "npc": {
+            "id": 135263
+        }
+    },
+    {
+        "id": 2190,
+        "enemy_pack_id": 419,
+        "floor_id": 47,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -142.16,
+        "lng": 238.69,
+        "npc": {
+            "id": 135263
+        }
+    },
+    {
+        "id": 2193,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -161.22999999999999,
+        "lng": 202.62,
+        "npc": {
+            "id": 128969
+        }
+    },
+    {
+        "id": 2194,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -161.72999999999999,
+        "lng": 203.44,
+        "npc": {
+            "id": 128969
         }
     }
 ]

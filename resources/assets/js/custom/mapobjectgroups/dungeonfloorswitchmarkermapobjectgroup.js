@@ -1,5 +1,5 @@
 class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname, editable){
+    constructor(map, name, classname, editable) {
         super(map, name, editable);
 
         this.classname = classname;
@@ -7,7 +7,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-door-open';
     }
 
-    _createObject(layer){
+    _createObject(layer) {
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup');
 
         switch (this.classname) {
@@ -18,7 +18,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor, callback){
+    fetchFromServer(floor, callback) {
         // no super call required
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, this, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup');
 

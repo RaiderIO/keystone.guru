@@ -1,0 +1,50 @@
+.bootstrap-select .btn {
+    background-color: white;
+    border: 1px solid #ced4da;
+    color: #495057;
+}
+
+/* Fix for selectpickers inside popups inside the map */
+#map .dropdown-menu {
+    background-color: rgb(224, 224, 224);
+}
+
+#map .dropdown-item:hover, .dropdown-item:focus {
+    color: black;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    color: rgb(235, 235, 235);
+    background-color: #4E5D6C;
+    opacity: 1;
+}
+
+.featherlight .featherlight-content {
+    background-color: #2B3E50;
+}
+
+.patreon-color {
+    background-color: rgb(250, 118, 100);
+}
+
+/* On home page */
+.probootstrap-showcase-nav ul li.active {
+    background-color: #8d9dad !important;
+}
+
+.probootstrap-showcase-nav ul li.active a {
+    color: rgb(235, 235, 235) !important;
+}
+
+.probootstrap-showcase-nav ul li > a {
+    color: #DF691A !important;
+}
+
+.service .icon i {
+    color: #DF691A !important;
+}
+
+/** INTRO.JS */
+.introjs-button {
+    color: #4E5D6C !important;
+}

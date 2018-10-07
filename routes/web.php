@@ -15,6 +15,9 @@ Auth::routes();
 
 Route::group(['middleware' => ['viewcachebuster']], function () {
 
+    Route::get('credits', function () {
+        return view('misc.credits');
+    })->name('misc.credits');
 
     Route::get('about', function () {
         return view('misc.about');
@@ -34,11 +37,47 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
     Route::get('/', 'HomeController@index')->name('home');
 
+    Route::get('changelog', function () {
+        return view('misc.changelog');
+    })->name('misc.changelog');
+
+    Route::get('mapping', function () {
+        return view('misc.mapping');
+    })->name('misc.mapping');
+
+    Route::get('affixes', function () {
+        return view('misc.affixes');
+    })->name('misc.affixes');
+
+    Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
+    Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
+
     // ['auth', 'role:admin|user']
+
+    Route::get('patreon-unlink', 'PatreonController@unlink')->name('patreon.unlink');
+    Route::get('patreon-link', 'PatreonController@link')->name('patreon.link');
+    Route::get('patreon-oauth', 'PatreonController@oauth_redirect')->name('patreon.oauth.redirect');
 
     Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
 
+    Route::post('userreport/new', 'UserReportController@store')->name('userreport.new');
+
+    Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
+
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+        // Must be logged in to create a new dungeon route
+        Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
+        Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
+
+        // Edit your own dungeon routes
+        Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
+            ->middleware('can:edit,dungeonroute')
+            ->name('dungeonroute.edit');
+        // Submit a patch for your own dungeon route
+        Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
+            ->middleware('can:edit,dungeonroute')
+            ->name('dungeonroute.update');
+
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
         Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
@@ -86,26 +125,11 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         Route::post('admin/user/{user}/makeadmin', 'UserController@makeadmin')->name('admin.user.makeadmin');
         Route::post('admin/user/{user}/makeuser', 'UserController@makeuser')->name('admin.user.makeuser');
 
+        Route::get('admin/userreports', 'UserReportController@list')->name('admin.userreports');
+
         Route::get('admin/datadump/exportdungeondata', 'ExportDungeonDataController@view')->name('admin.datadump.exportdungeondata');
         Route::post('admin/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.datadump.viewexporteddungeondata');
     });
-
-    // Put this down below, since it contains a catch all
-    Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
-    Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
-    Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
-
-    // Edit your own dungeon routes
-    Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
-        ->middleware('can:edit,dungeonroute')
-        ->name('dungeonroute.edit');
-    // Submit a patch for your own dungeon route
-    Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
-        ->middleware('can:edit,dungeonroute')
-        ->name('dungeonroute.update');
-    // View any dungeon route
-    Route::get('{dungeonroute}', 'DungeonRouteController@view')
-        ->name('dungeonroute.view');
 
 
     Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
@@ -121,6 +145,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
         Route::get('/killzones', 'APIKillZoneController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
 
+        Route::get('/mapcomments', 'APIMapCommentController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
+
         Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');
 
         Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
@@ -132,12 +158,17 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
             Route::post('/killzone', 'APIKillZoneController@store');
             Route::delete('/killzone', 'APIKillZoneController@delete');
 
+            Route::post('/mapcomment', 'APIMapCommentController@store');
+            Route::delete('/mapcomment', 'APIMapCommentController@delete');
+
             Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
             Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
             Route::delete('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
 
             Route::post('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
             Route::delete('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
+
+
         });
 
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
@@ -157,7 +188,13 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
             Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
             Route::delete('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@delete');
+
+            Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
         });
     });
+    
+    // View any dungeon route (catch all)
+    Route::get('{dungeonroute}', 'DungeonRouteController@view')
+        ->name('dungeonroute.view');
 
 });

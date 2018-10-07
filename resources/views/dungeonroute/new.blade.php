@@ -41,11 +41,13 @@
                 {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
             </div>
         </div>
+    <!--
         <div class="form-group">
             {!! Form::label('difficulty', __('Difficulty') . "*") !!}
-            <?php $difficulty = config('keystoneguru.dungeonroute_difficulty'); ?>
-            {!! Form::select('difficulty', array_combine($difficulty, $difficulty), null, ['class' => 'form-control']) !!}
-        </div>
+    <?php $difficulty = config('keystoneguru.dungeonroute_difficulty'); ?>
+    {!! Form::select('difficulty', array_combine($difficulty, $difficulty), null, ['class' => 'form-control']) !!}
+            </div>
+-->
         <div class="form-group">
             {!! Form::label('teeming', __('Teeming (check to change the dungeon to resemble Teeming week)')) !!}
             {!! Form::checkbox('teeming', 1, 0, ['class' => 'form-control left_checkbox']) !!}
@@ -62,15 +64,17 @@
 
         @include('common.group.affixes', ['teemingselector' => '#teeming'])
 
-        <h3>
-            {{ __('Sharing') }}
-        </h3>
-        <div class="form-group">
-            {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
-            {!! Form::checkbox('unlisted', 1, 0, ['class' => 'form-control left_checkbox']) !!}
-        </div>
+        @if(Auth::user()->hasPaidTier('unlisted-routes'))
+            <h3>
+                {{ __('Sharing') }}
+            </h3>
+            <div class="form-group">
+                {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
+                {!! Form::checkbox('unlisted', 1, 0, ['class' => 'form-control left_checkbox']) !!}
+            </div>
+        @endif
 
-        @if(Auth::user() !== null && Auth::user()->hasRole('admin'))
+        @if(Auth::user()->hasRole('admin'))
             <h3>
                 {{ __('Admin') }}
             </h3>
@@ -85,6 +89,9 @@
                 {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
             </div>
         </div>
+        @if(!Auth::user()->hasPaidTier('unlimited-routes'))
+            {{ sprintf(__('You may create %s more route(s).'), config('keystoneguru.registered_user_dungeonroute_limit') - \App\Models\DungeonRoute::where('author_id', Auth::user()->id)->count() ) }}
+        @endif
     </div>
 
     {!! Form::close() !!}

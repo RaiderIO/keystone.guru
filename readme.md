@@ -1,38 +1,42 @@
-<!--<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>-->
+## About keystone.guru
 
-## About Laravel
+Keystone.guru is a website where users can build and find their favorite routes for completing in Mythic Plus in World of Warcraft®: Battle for Azeroth™.
+This repository contains the source code of (most parts of) the website. It is built with [Laravel](https://github.com/laravel/laravel) using [jQuery](https://github.com/jquery/jquery), [PHP](http://www.php.net/) and [MySql](https://www.mysql.com/). 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+Currently the website has the following features:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Full interactive Leaflet map of all Battle for Azeroth™ dungeons
+* All known enemies and patrols inside dungeons are mapped and displayed on the map
+* Enemy forces of all different NPCs in both normal and Teeming weeks are catalogued
+* Route planning functions such as
+  * Plotting a route through the dungeon, allowing a route to split up should the need arise
+  * Selecting which enemies to kill
+  * Optional free-form comments to indicate difficult enemies, strategies to use or abilities to use
+* User voting so you can vote for your favorite route
+* Favoriting of routes you liked best for easy reference
+* Search function for looking up routes others have made
+* When not registered, you are free to view any routes found in the search function, or when directly linked by others
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
-
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+## Not included in this repository
+* Map tiles of all dungeons
+* Software used for creating said map tiles (self-made)
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+Contribution can be done in a lot of ways in this project! If you got programming or artist skills and wish to contribute, I could use help! Please raise an issue here or send me a dm on Discord (Wotuu#1937) so I can help you get started on something cool!
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Any security vulnerabilities should be reported directly to myself on Discord (Wotuu#1937) or an e-mail to security@keystone.guru. It is _greatly_ appreciated if you do this prior to mentioning the vulnerability in public.
+
+If you found a security vulnerability, do not abuse the vulnerability for more than is reasonably necessary to confirm the issue exists.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+Currently this project has [no license](https://choosealicense.com/no-permission/) attached to it while I explore the options of licensing. 
+If you have any suggestions for a fitting license please let me know!
+
+## Contact
+
+Found an issue? Want to leave some feedback? Can't figure something out? Please drop by on [Discord](https://discord.gg/2KtWrqw), open an issue on GitHub
+or send an e-mail to support@keystone.guru.

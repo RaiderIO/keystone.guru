@@ -31,7 +31,12 @@ class DungeonRouteAffixGroupRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        \App\Models\DungeonRouteAffixGroup::insert($value);
+        foreach ($value as $affixGroup) {
+            // We now know the dungeon route ID, set it back to the Route
+            $affixGroup['dungeon_route_id'] = $modelData['id'];
+
+            \App\Models\DungeonRouteAffixGroup::insert($affixGroup);
+        }
 
         // Didn't really change anything so just return the value.
         return $modelData;

@@ -35,7 +35,7 @@
 @endsection
 
 @section('content')
-    <table id="admin_npc_table" class="tablesorter default_table">
+    <table id="admin_npc_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
             <th width="15%">{{ __('Id') }}</th>

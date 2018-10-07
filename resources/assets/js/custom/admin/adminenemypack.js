@@ -11,6 +11,11 @@ class AdminEnemyPack extends EnemyPack {
     onLayerInit() {
         console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
         super.onLayerInit();
+        this.onPopupInit();
+    }
+
+    onPopupInit(){
+        console.assert(this instanceof AdminEnemyPack, this, 'this was not an AdminEnemyPack');
         let self = this;
 
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
@@ -35,7 +40,7 @@ class AdminEnemyPack extends EnemyPack {
         };
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, function (event) {
+        let syncedFn = function (event) {
             let customPopupHtml = $('#enemy_pack_edit_popup_template').html();
             // Remove template so our
             let template = handlebars.compile(customPopupHtml);
@@ -57,7 +62,10 @@ class AdminEnemyPack extends EnemyPack {
             // Have you tried turning it off and on again?
             self.layer.off('popupopen', popupOpenFn);
             self.layer.on('popupopen', popupOpenFn);
-        });
+        };
+
+        this.unregister('synced', this, syncedFn);
+        this.register('synced', this, syncedFn);
 
         self.map.leafletMap.on('contextmenu', function () {
             if (self.currentPatrolPolyline !== null) {
@@ -127,6 +135,8 @@ class AdminEnemyPack extends EnemyPack {
             success: function (json) {
                 self.map.leafletMap.closePopup();
                 self.id = json.id;
+                // ID has changed, rebuild the popup
+                self.onPopupInit();
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.saved,
                     color: c.map.admin.mapobject.colors.savedBorder

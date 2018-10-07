@@ -32,8 +32,6 @@ let LeafletKillZoneMarker = L.Marker.extend({
     }
 });
 
-let KillZoneSelectModeEnabled = false;
-
 class KillZone extends MapObject {
     constructor(map, layer) {
         super(map, layer);
@@ -53,7 +51,7 @@ class KillZone extends MapObject {
         // We gotta remove the connections manually since they're self managed here.
         this.map.register('map:beforerefresh', this, function () {
             // In case someone switched dungeons prior to finishing the kill zone edit
-            KillZoneSelectModeEnabled = false;
+            self.map.setSelectModeKillZone(null);
             self.removeExistingConnectionsToEnemies();
         });
     }
@@ -107,63 +105,79 @@ class KillZone extends MapObject {
     delete() {
         let self = this;
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/killzone',
-            dataType: 'json',
-            data: {
-                _method: 'DELETE',
-                id: self.id
-            },
-            beforeSend: function () {
-                self.deleting = true;
-            },
-            success: function (json) {
-                self.removeExistingConnectionsToEnemies();
-                self.signal('object:deleted', {response: json});
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces})
-            },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
-                self.setSynced(false);
-            }
-        });
+
+        let successFn = function (json) {
+            self.removeExistingConnectionsToEnemies();
+            self.signal('object:deleted', {response: json});
+            self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+        };
+
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/killzone',
+                dataType: 'json',
+                data: {
+                    _method: 'DELETE',
+                    id: self.id
+                },
+                beforeSend: function () {
+                    self.deleting = true;
+                },
+                success: successFn,
+                complete: function () {
+                    self.deleting = false;
+                },
+                error: function () {
+                    self.setSynced(false);
+                }
+            });
+        } else {
+            successFn();
+        }
     }
 
     save() {
         let self = this;
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/killzone',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
-                floor_id: self.map.getCurrentFloor().id,
-                lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng,
-                enemies: self.enemies
-            },
-            beforeSend: function () {
-                self.saving = true;
-            },
-            success: function (json) {
-                self.id = json.id;
 
-                self.setSynced(true);
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces})
-            },
-            complete: function () {
-                self.saving = false;
-            },
-            error: function () {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-            }
-        });
+        let successFn = function (json) {
+            self.id = json.id;
+
+            self.setSynced(true);
+            self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+        };
+        // No network traffic if this is enabled!
+        if (!this.map.isTryModeEnabled()) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/killzone',
+                dataType: 'json',
+                data: {
+                    id: self.id,
+                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                    floor_id: self.map.getCurrentFloor().id,
+                    lat: self.layer.getLatLng().lat,
+                    lng: self.layer.getLatLng().lng,
+                    enemies: self.enemies
+                },
+                beforeSend: function () {
+                    self.saving = true;
+                },
+                success: successFn,
+                complete: function () {
+                    self.saving = false;
+                },
+                error: function () {
+                    // Even if we were synced, make sure user knows it's no longer / an error occurred
+                    self.setSynced(false);
+                }
+            });
+        } else {
+            // We have to supply an ID to keep everything working properly
+            successFn({id: parseInt((Math.random() * 10000000))})
+        }
     }
 
     /**
@@ -193,9 +207,9 @@ class KillZone extends MapObject {
      * Starts select mode on this KillZone, if no other select mode was enabled already.
      */
     startSelectMode() {
-        if (!KillZoneSelectModeEnabled) {
-            console.assert(this instanceof KillZone, this, 'this is not an KillZone');
-            let self = this;
+        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        let self = this;
+        if (!this.map.isKillZoneSelectModeEnabled()) {
 
             this.layer.setIcon(LeafletKillZoneIconSelected);
 
@@ -217,7 +231,7 @@ class KillZone extends MapObject {
             $('.leaflet-draw-edit-remove').addClass('leaflet-disabled');
 
             // Now killzoning something
-            KillZoneSelectModeEnabled = true;
+            this.map.setSelectModeKillZone(this);
         }
     }
 
@@ -225,9 +239,9 @@ class KillZone extends MapObject {
      * Stops select mode of this KillZone.
      */
     cancelSelectMode() {
-        if (KillZoneSelectModeEnabled) {
-            console.assert(this instanceof KillZone, this, 'this is not an KillZone');
-            KillZoneSelectModeEnabled = false;
+        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        if (this.map.isKillZoneSelectModeEnabled()) {
+            this.map.setSelectModeKillZone(null);
             this.layer.setIcon(LeafletKillZoneIcon);
 
             let self = this;
@@ -347,7 +361,7 @@ class KillZone extends MapObject {
         if (this.map.edit) {
             this.layer.on('click', function (event) {
                 if (!self.map.deleteModeActive) {
-                    if (KillZoneSelectModeEnabled) {
+                    if (self.map.isKillZoneSelectModeEnabled()) {
                         self.cancelSelectMode();
                     } else {
                         self.startSelectMode();

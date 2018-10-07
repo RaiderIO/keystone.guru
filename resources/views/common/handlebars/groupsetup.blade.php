@@ -17,7 +17,6 @@
      * @returns {*}
      */
     function handlebarsGroupSetupParse(data) {
-        console.log(data);
         let groupSetupHtml = $("#group_setup_template").html();
 
         let template = handlebars.compile(groupSetupHtml);

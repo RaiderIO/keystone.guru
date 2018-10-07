@@ -9,6 +9,8 @@ class DungeonMap extends Signalable {
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroups = this._createMapObjectGroups();
+        //  Whatever killzone is currently in select mode
+        this.currentSelectModeKillZone = null;
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
@@ -17,7 +19,7 @@ class DungeonMap extends Signalable {
                 self.mapObjects.push(object);
 
                 // Make sure we know it's editable
-                if (event.data.objectgroup.editable && self.edit) {
+                if (object.isEditable() && event.data.objectgroup.editable && self.edit) {
                     self.drawnItems.addLayer(object.layer);
                 }
             });
@@ -146,6 +148,7 @@ class DungeonMap extends Signalable {
             new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false),
             new RouteMapObjectGroup(this, 'route', true),
             new KillZoneMapObjectGroup(this, 'killzone', true),
+            new MapCommentMapObjectGroup(this, 'mapcomment', true),
             new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false),
             new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false),
         ];
@@ -167,6 +170,12 @@ class DungeonMap extends Signalable {
 
         result.push(new EnemyForcesControls(this));
         result.push(new MapObjectGroupControls(this));
+
+        //
+        if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
+            result.push(new FactionDisplayControls(this));
+        }
+
         return result;
     }
 
@@ -430,6 +439,34 @@ class DungeonMap extends Signalable {
         if (this.mapObjectGroupFetchSuccessCount === this.mapObjectGroups.length) {
             this.signal('map:mapobjectgroupsfetchsuccess');
         }
+    }
+
+    /**
+     * Gets if there is currently a killzone in 'select mode'.
+     * @returns {boolean}
+     */
+    isKillZoneSelectModeEnabled() {
+        return this.currentSelectModeKillZone !== null;
+    }
+
+    /**
+     * Sets the killzone that is currently in 'select mode'
+     * @param killzone
+     */
+    setSelectModeKillZone(killzone = null) {
+        let changed = this.currentSelectModeKillZone !== killzone;
+        this.currentSelectModeKillZone = killzone;
+        if (changed) {
+            this.signal('map:killzoneselectmodechanged', {killzone: killzone});
+        }
+    }
+
+    /**
+     * Checks if try (hard) mode is currently enabled or not.
+     * @returns {boolean|*}
+     */
+    isTryModeEnabled() {
+        return dungeonRoutePublicKey === '' && this.edit;
     }
 }
 

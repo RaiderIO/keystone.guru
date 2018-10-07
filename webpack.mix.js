@@ -30,6 +30,8 @@ if (mix.inProduction()) {
     // Custom processing only
     mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css');
     mix.babel([
+        // Home page only
+        'resources/assets/js/custom/home.js',
         // Doesn't depend on anything
         'resources/assets/js/custom/constants.js',
         // Include in proper order
@@ -42,6 +44,7 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/enemypack.js',
         'resources/assets/js/custom/route.js',
         'resources/assets/js/custom/killzone.js',
+        'resources/assets/js/custom/mapcomment.js',
         'resources/assets/js/custom/dungeonstartmarker.js',
         'resources/assets/js/custom/dungeonfloorswitchmarker.js',
         'resources/assets/js/custom/hotkeys.js',
@@ -60,6 +63,8 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/admin/admindrawcontrols.js',
         'resources/assets/js/custom/admin/admindungeonstartmarker.js',
         'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
+        'resources/assets/js/custom/admin/adminmapcomment.js',
+
         // Include the rest
         'resources/assets/js/custom/groupcomposition.js',
         'resources/assets/js/custom/mapobjectgroup.js',
@@ -68,6 +73,7 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/routemapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/mapcommentmapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
         // 'resources/assets/js/custom/**/*.js'

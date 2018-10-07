@@ -208,6 +208,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mapcomments()
+    {
+        return $this->hasMany('App\Models\MapComment');
+    }
+
+    /**
      * @return double
      */
     public function getAvgRatingAttribute()
@@ -222,6 +230,14 @@ class DungeonRoute extends Model
         }
 
         return $avg;
+    }
+
+    /**
+     * @return mixed Get the uniquely identifying context for this route.
+     */
+    public function getReportContext()
+    {
+        return $this->public_key;
     }
 
     /**
@@ -316,9 +332,13 @@ class DungeonRoute extends Model
         $this->dungeon_id = $request->get('dungeon_id', $this->dungeon_id);
         $this->faction_id = $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
-        $this->difficulty = $request->get('difficulty', $this->difficulty);
+        //$this->difficulty = $request->get('difficulty', $this->difficulty);
+        $this->difficulty = 1;
         $this->teeming = $request->get('teeming', 0);
-        $this->unlisted = intval($request->get('unlisted', 0)) > 0;
+
+        if (Auth::user()->hasPaidTier('unlisted-routes')) {
+            $this->unlisted = intval($request->get('unlisted', 0)) > 0;
+        }
         $this->demo = intval($request->get('demo', 0)) > 0;
 
         // Update or insert it

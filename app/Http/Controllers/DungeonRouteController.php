@@ -5,10 +5,33 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\UserReport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DungeonRouteController extends Controller
 {
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|null
+     */
+    public function try(Request $request)
+    {
+        $result = null;
+
+        if ($request->has('dungeon_id')) {
+            $result = view('dungeonroute.try', [
+                'headerTitle' => __('Try Keystone.guru'),
+                'dungeon_id' => $request->get('dungeon_id'),
+                'teeming' => $request->get('teeming')
+            ]);
+        } else {
+            $result = view('dungeonroute.try', ['headerTitle' => __('Try Keystone.guru')]);
+        }
+        return $result;
+    }
+
     /**
      * Show a page for creating a new dungeon route.
      *
@@ -16,7 +39,16 @@ class DungeonRouteController extends Controller
      */
     public function new()
     {
-        return view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New dungeonroute')]);
+        $result = null;
+
+        $user = Auth::user();
+        if ($user->canCreateDungeonRoute()) {
+            $result = view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New dungeonroute')]);
+        } else {
+            $result = view('dungeonroute.limitreached', ['headerTitle' => __('Limit reached')]);
+        }
+
+        return $result;
     }
 
     /**
@@ -26,8 +58,20 @@ class DungeonRouteController extends Controller
      */
     public function view(Request $request, DungeonRoute $dungeonroute)
     {
+        $user = Auth::user();
+        $currentReport = null;
+        if ($user !== null) {
+            // Find any currently active report the user has made
+            $currentReport = UserReport::where('author_id', $user->id)
+                ->where('context', $dungeonroute->getReportContext())
+                ->where('category', 'dungeonroute')
+                ->where('handled', 0)
+                ->first();
+        }
+
         return view('dungeonroute.view', [
-            'model' => $dungeonroute
+            'model' => $dungeonroute,
+            'current_report' => $currentReport
         ]);
     }
 

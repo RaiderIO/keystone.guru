@@ -35,6 +35,10 @@ $(function () {
             handler: new L.Draw.KillZone(map, this.options.killzone),
             title: this.options.killzone.title
         }, {
+            enabled: this.options.mapcomment,
+            handler: new L.Draw.MapComment(map, this.options.mapcomment),
+            title: this.options.mapcomment.title
+        }, {
             enabled: this.options.enemypack,
             handler: new L.Draw.EnemyPack(map, this.options.enemypack),
             title: this.options.enemypack.title
@@ -85,6 +89,12 @@ class DrawControls extends MapControl {
                     zIndexOffset: 1000,
                     faClass: 'fa-bullseye',
                     title: 'Draw a killzone'
+                },
+                mapcomment: {
+                    repeatMode: false,
+                    zIndexOffset: 1000,
+                    faClass: 'fa-comment',
+                    title: 'Create a map comment'
                 },
                 enemypack: false,
                 enemypatrol: false,
