@@ -1,40 +1,30 @@
-
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
-
 // Variables
 @import "variables";
-
 // Bootstrap
 @import "~bootstrap-select/dist/css/bootstrap-select.min.css";
-
 // Bootstrap theme (bootstrap should be between these)
 @import "~bootswatch/dist/superhero/variables";
 @import "~bootstrap/scss/bootstrap";
 @import "~bootswatch/dist/superhero/bootswatch";
-
 // Datatables
 @import "~datatables/media/css/jquery.dataTables.min.css";
-
 // Font-Awesome
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/regular.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
-
 // Leaflet
 @import "~leaflet/dist/leaflet.css";
 @import "~leaflet-draw/dist/leaflet.draw.css";
 @import "~leaflet-contextmenu/dist/leaflet.contextmenu.css";
-
 // Bar rating
 @import "~jquery-bar-rating/dist/themes/bars-1to10.css";
-
 // Featherlight
 @import "~featherlight/src/featherlight.css";
-
 // Owl Carousel
 // @import "~owl.carousel/dist/assets/owl.carousel.min.css";
-
 // Intro.js
 @import "~intro.js/minified/introjs.min.css";
+@import "~intro.js/themes/introjs-dark.css";

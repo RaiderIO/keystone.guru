@@ -241,6 +241,11 @@
     display: none;
 }
 
+/** INTRO.JS */
+.introjs-tooltip {
+    width: 400px !important;
+}
+
 /** MISC STYLES */
 .view_dungeonroute_details_row {
     height: 40px;

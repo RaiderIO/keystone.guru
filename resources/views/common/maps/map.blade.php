@@ -11,6 +11,27 @@ $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 // For Siege of Boralus
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
+
+$introTexts = [
+    __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
+    __('This is the dungeon map. This is where you see an overview of enemies, which packs they may belong to, any patrols and your own planning. Click
+    on enemies to assign them a raid marker, hover over them to see quick details about the enemy.'),
+    __('These are the map controls where you can control the map and interact with it.'),
+    __('You can use these controls to zoom the map in or out. You can also use ctrl + scrollwheel if you\'re on a computer'),
+    __('These are your drawing tools.'),
+    __('You can draw routes with this tool. Click it, then draw a route (a line) from A to B, with as many points are you like. Once finished, you can click
+    the line on the map to change its color. You can add as many routes as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
+    or purple for a Warlock Gateway, for example.'),
+    __('This is a \'kill zone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
+    You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
+    Once you have selected enemies your enemy forces (top right) will update to reflect your new enemy forces counter.'),
+    __('Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.'),
+    __('This is the edit button. You can use it to adjust your created routes, move your killzones or comments.'),
+    __('This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
+    that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!'),
+    __('This label indicates your current progress with enemy forces. Remember to use killzones to mark an enemy as killed and see this label updated.'),
+    __('These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.')
+];
 ?>
 
 @section('head')
@@ -83,6 +104,34 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
                 dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
                 dungeonMap.refreshLeafletMap();
             });
+
+            $('#start_virtual_tour').bind('click', function () {
+                console.log('starting virtual tour!');
+                introjs().start();
+            });
+
+            // Bind leaflet virtual tour classes
+            let selectors = [
+                ['.leaflet-top.leaflet-left', 'right'],
+                ['.leaflet-control-zoom.leaflet-bar.leaflet-control', 'right'],
+                ['.leaflet-left .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top', 'right'],
+                ['.leaflet-draw-draw-route', 'right'],
+                ['.leaflet-draw-draw-killzone', 'right'],
+                ['.leaflet-draw-draw-mapcomment', 'right'],
+                ['.leaflet-draw-edit-edit', 'right'],
+                ['.leaflet-draw-edit-remove', 'right'],
+                ['#map_enemy_forces', 'left'],
+                ['.leaflet-right .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top', 'left'],
+            ];
+            let texts = {!! json_encode($introTexts) !!};
+            let offset = 2;
+
+            for (let i = 0; i < selectors.length; i++) {
+                let $selector = $(selectors[i][0]);
+                $selector.attr('data-intro', texts[i + offset]);
+                $selector.attr('data-position', selectors[i][1]);
+                $selector.attr('data-step', i + (offset + 1));
+            }
         });
 
         /**
@@ -331,12 +380,23 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
     <?php
     if (!isset($model) && $edit) {
     ?>
-    <div class="alert alert-warning">
-        <i class="fa fa-exclamation-triangle"></i> {{ __('Warning! Any modification you make in tryout mode will not be saved!') }}
+    <div class="form-group">
+        <div class="alert alert-warning">
+            <i class="fa fa-exclamation-triangle"></i> {{ __('Warning! Any modification you make in tryout mode will not be saved!') }}
+        </div>
+    </div>
+    <div class="form-group">
+        <h4>
+            {{ __('Unsure of what you\'re supposed to do?') }}
+        </h4>
+        <div id="start_virtual_tour" class="btn btn-info">
+            <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
+        </div>
     </div>
     <?php } ?>
     @if($floorSelection)
-        <div class="form-group">
+        <div class="form-group virtual-tour-element" data-intro="{{ $introTexts[0] }}" data-step="1"
+             data-position="bottom-middle-aligned">
             {!! Form::label('map_floor_selection', __('Select floor')) !!}
             {!! Form::select('map_floor_selection', [], 1, ['class' => 'form-control']) !!}
         </div>
@@ -346,5 +406,6 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
 </div>
 
 <div class="form-group">
-    <div id="map" class="col-md-12"></div>
+    <div id="map" class="col-md-12 virtual-tour-element" data-intro="{{ $introTexts[1] }}" data-step="2"
+         data-position="auto"></div>
 </div>

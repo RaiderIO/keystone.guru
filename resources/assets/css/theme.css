@@ -43,3 +43,8 @@
 .service .icon i {
     color: #DF691A !important;
 }
+
+/** INTRO.JS */
+.introjs-button {
+    color: #4E5D6C !important;
+}
