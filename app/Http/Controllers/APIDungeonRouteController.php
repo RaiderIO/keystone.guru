@@ -100,6 +100,29 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
+     * @throws \Exception
+     */
+    function delete(Request $request, DungeonRoute $dungeonroute)
+    {
+        $user = Auth::user();
+
+        // @TODO This should be in a policy?
+        $result = false;
+        if ($dungeonroute->author_id === $user->id || $user->hasRole('admin')) {
+            $result = $dungeonroute->delete();
+        }
+
+        if (!$result) {
+            abort(500, 'Unable to delete dungeonroute');
+        }
+
+        return ['result' => 'success'];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
      */
     function rate(Request $request, DungeonRoute $dungeonroute)
     {

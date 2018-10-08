@@ -1,5 +1,6 @@
 <?php
 $editLinks = isset($edit_links) ? $edit_links : false;
+$showDelete = isset($show_delete) ? $show_delete : false;
 ?>
 
 @section('scripts')
@@ -84,11 +85,24 @@ $editLinks = isset($edit_links) ? $edit_links : false;
                             return result;
                         }
                     }
+                    <?php if(isset($showDelete) && $showDelete){ ?>
+                    ,
+                    {
+                        'render': function (data, type, row, meta) {
+                            // <a href="{{ route('dungeonroute.delete', ['dungeonroute' => '']) }}/' + row.public_key + '" ></a>
+                            return '<div class="btn btn-danger dungeonroute-delete" data-publickey="' + row.public_key + '">{{ __('Delete') }}</div>';
+                        }
+                    }
+                    <?php } ?>
                 ]
             });
 
             _dt.on('draw.dt', function (e, settings, json, xhr) {
                 refreshTooltips();
+
+                let $deleteBtns = $('.dungeonroute-delete');
+                $deleteBtns.unbind('click');
+                $deleteBtns.bind('click', _promptDeleteDungeonKey);
             });
 
             $("#dungeonroute_filter").bind('click', function () {
@@ -114,6 +128,30 @@ $editLinks = isset($edit_links) ? $edit_links : false;
             // Do this asap
             // $("#affixgroup_select_container").html(handlebarsAffixGroupSelectParse({}));
         });
+
+        /**
+         * Prompts the user to delete a route (called by button press)
+         * @param clickEvent
+         * @private
+         */
+        function _promptDeleteDungeonKey(clickEvent) {
+            if (confirm('{{ __('Are you sure you wish to delete this route?') }}')) {
+                let publicKey = $(clickEvent.target).data('publickey');
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/ajax/delete/' + publicKey,
+                    dataType: 'json',
+                    success: function (json) {
+                        $("#dungeonroute_filter").trigger('click');
+                    },
+                    error: function(){
+                        // @TODO Poor man's solution
+                        alert('{{ __('Unable to delete route. Please try again') }}');
+                    }
+                });
+            }
+        }
     </script>
     @include('common.handlebars.groupsetup')
     @include('common.handlebars.affixgroups')
@@ -165,13 +203,16 @@ $editLinks = isset($edit_links) ? $edit_links : false;
     <table id="routes_table" class="tablesorter default_table dt-responsive nowrap table-striped" width="100%">
         <thead>
         <tr>
-            <th width="30%">{{ __('Title') }}</th>
+            <th width="{{ $showDelete ? '20' : '30' }}%">{{ __('Title') }}</th>
             <th width="15%">{{ __('Dungeon') }}</th>
         <!-- <th width="10%" class="d-none d-md-table-cell">{{ __('Difficulty') }}</th> -->
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Author') }}</th>
             <th width="10%">{{ __('Rating') }}</th>
+            <?php if( $showDelete ) { ?>
+            <th width="10%">{{ __('Actions') }}</th>
+            <?php } ?>
         </tr>
         </thead>
 

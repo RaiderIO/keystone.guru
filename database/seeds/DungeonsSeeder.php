@@ -276,7 +276,7 @@ class DungeonsSeeder extends Seeder
             'Atal\'Dazar' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 198,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 237,
                 'active' => true,
                 'floors' => [
                     'Atal\'Dazar' => [
@@ -302,7 +302,7 @@ class DungeonsSeeder extends Seeder
             'Freehold' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 261,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 313,
                 'active' => true,
                 'floors' => [
                     'Freehold' => [
@@ -314,7 +314,7 @@ class DungeonsSeeder extends Seeder
             'Kings\' Rest' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 224,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 270,
                 'active' => true,
                 'floors' => [
                     'Kings\' Rest' => [
@@ -326,7 +326,7 @@ class DungeonsSeeder extends Seeder
             'Shrine of the Storm' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 662,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 794,
                 'active' => true,
                 'floors' => [
                     'Shrine of the Storm' => [
@@ -352,7 +352,7 @@ class DungeonsSeeder extends Seeder
             'Siege of Boralus' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 319,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 383,
                 'active' => true,
                 'floors' => [
                     'Siege of Boralus' => [
@@ -364,7 +364,7 @@ class DungeonsSeeder extends Seeder
             'Temple of Sethraliss' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 220,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 264,
                 'active' => true,
                 'floors' => [
                     'Temple of Sethraliss' => [
@@ -390,7 +390,7 @@ class DungeonsSeeder extends Seeder
             'The MOTHERLODE!!' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 416,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 499,
                 'active' => true,
                 'floors' => [
                     'The Motherlode' => [
@@ -402,7 +402,7 @@ class DungeonsSeeder extends Seeder
             'The Underrot' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 252,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 301,
                 'active' => true,
                 'floors' => [
                     'The Underrot' => [
@@ -428,7 +428,7 @@ class DungeonsSeeder extends Seeder
             'Tol Dagor' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 348,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 417,
                 'active' => true,
                 'floors' => [
                     'Tol Dagor' => [
@@ -529,7 +529,7 @@ class DungeonsSeeder extends Seeder
             'Waycrest Manor' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 289,
-                'enemy_forces_required_teeming' => 0,
+                'enemy_forces_required_teeming' => 346,
                 'active' => true,
                 'floors' => [
                     'Upstairs' => [

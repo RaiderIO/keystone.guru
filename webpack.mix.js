@@ -19,7 +19,7 @@ if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
     full = argv.env.full;
 }
 // npm run dev -- --env.images false
-let images = true;
+let images = false;
 if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
     images = argv.env.images;
 }

@@ -4,6 +4,39 @@
 
 @section('content')
     <h4>
+        2018/10/08
+    </h4>
+    <p>
+        General:
+    <ul>
+        <li>
+            You can now delete any dungeon route you created from your Profile page.
+        </li>
+        <li>
+            Route rating is now rounded to the nearest two decimal spaces.
+        </li>
+    </ul>
+    </p>
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            Removed the 'hold ctrl + scroll to zoom' message and functionality. Your mouse wheel is free!
+        </li>
+    </ul>
+    </p>
+    <p>
+        Bugfixes:
+    <ul>
+        <li>Raid markers can now again be assigned to enemies for your route.</li>
+        <li>Guest viewers of your route can now see the killzones and route you made through the dungeon (view was
+            restricted to author of route).
+        </li>
+        <li>You can no longer select multiple kill zones at once.</li>
+    </ul>
+    </p>
+
+    <h4>
         2018/10/07 - We're going live!
     </h4>
     <p>

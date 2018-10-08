@@ -229,7 +229,7 @@ class DungeonRoute extends Model
             $avg = array_sum($ratingsArr) / count($ratingsArr);
         }
 
-        return $avg;
+        return round($avg, 2);
     }
 
     /**

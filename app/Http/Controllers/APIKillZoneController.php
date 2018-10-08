@@ -20,7 +20,7 @@ class APIKillZoneController extends Controller
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute');
         try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
+            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
             $result = KillZone::where('floor_id', '=', $floorId)->where('dungeon_route_id', '=', $dungeonRoute->id)->get();
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

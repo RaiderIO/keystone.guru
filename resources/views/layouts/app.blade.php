@@ -38,8 +38,8 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
     @include('common.general.scripts')
     @include('common.thirdparty.cookieconsent')
     <?php if(config('app.env') === 'production' ){
-        if(!$noads ) {?>
-            @include('common.thirdparty.adsense')
+    if(!$noads ) {?>
+    @include('common.thirdparty.adsense')
     <?php } ?>
     @include('common.thirdparty.analytics')
     <?php } ?>
@@ -155,6 +155,16 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
             </div>
         </div>
     </nav>
+
+    @if (config('app.env') !== 'production' && (Auth::user() === null || !Auth::user()->hasRole('admin')))
+        <div class="container-fluid alert alert-warning text-center mt-4">
+            {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
+            <br>
+            {{ __('If you got here by accident, I\'d be interested in knowing how you got here! Message me on Discord :)') }}
+            <br>
+            <a href="https://keystone.guru/">{{ __('Take me to the main site!') }}</a>
+        </div>
+    @endif
 
     <?php if( isset($custom) && $custom === true ) { ?>
     @yield('content')

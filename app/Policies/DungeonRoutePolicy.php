@@ -58,7 +58,7 @@ class DungeonRoutePolicy
     public function delete(User $user, DungeonRoute $dungeonRoute)
     {
         // Only the admin may delete routes
-        return $user->hasRole('admin');
+        return ($user !== null && $user->id === $dungeonRoute->author_id) || $user->hasRole('admin');
     }
 
     /**

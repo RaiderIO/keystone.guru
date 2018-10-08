@@ -17,7 +17,9 @@ class PaidTiersSeeder extends Seeder
         $this->command->info('Adding Paid Tiers');
 
         $paidTiers = [
-            new \App\Models\PaidTier(['name' => 'ad-free'])
+            new \App\Models\PaidTier(['name' => 'ad-free']),
+            new \App\Models\PaidTier(['name' => 'unlimited-dungeonroutes']),
+            new \App\Models\PaidTier(['name' => 'unlisted-routes'])
         ];
 
         foreach ($paidTiers as $paidTier) {
