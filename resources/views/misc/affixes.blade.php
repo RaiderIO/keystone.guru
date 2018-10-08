@@ -42,8 +42,13 @@
             ?>
             <td>
                 <div class="affix_row first_column {{ $currentWeekClass }}">
-                    {{ $firstWeek }} + {{ config('keystoneguru.season_start_week') + ($affixGroupIndex + 1) }}
-                    (~{{ date('Y/M/d', $firstWeekTime) }})
+                    <span class="d-xl-block d-none">
+                        {{ $firstWeek }} + {{ config('keystoneguru.season_start_week') + ($affixGroupIndex + 1) }}
+                        (~{{ date('Y/M/d', $firstWeekTime) }})
+                    </span>
+                    <span class="d-xl-none d-block">
+                        ~{{ date('Y/M/d', $firstWeekTime) }}
+                    </span>
                 </div>
             </td>
             <?php
@@ -62,7 +67,7 @@
                              title="{{ $affix->name }}"
                              style="height: 24px;">
                         </div>
-                        <div class="col hidden-xs-down pl-1">
+                        <div class="col d-lg-block d-none pl-1">
                             {{ $affix->name }}
                         </div>
                     </div>

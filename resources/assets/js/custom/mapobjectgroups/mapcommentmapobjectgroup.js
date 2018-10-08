@@ -20,7 +20,6 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
 
 
     fetchFromServer(floor, callback) {
-        console.log('map comment fetching!', this.map.isTryModeEnabled());
         // no super call required
         console.assert(this instanceof MapCommentMapObjectGroup, this, 'this is not a MapCommentMapObjectGroup');
 

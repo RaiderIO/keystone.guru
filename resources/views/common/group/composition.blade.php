@@ -5,6 +5,7 @@ $specializations = \App\Models\CharacterClassSpecialization::with('iconfile')->g
 $classes = \App\Models\CharacterClass::with('specializations')->get();
 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
 $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
+// @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some poin
 ?>
 
 @section('head')
@@ -104,7 +105,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
     </script>
 @endsection
 <div class="row">
-    <div class="col-lg-2 offset-lg-5">
+    <div class="col-xl-2 offset-xl-5">
         <div class="form-group">
             {!! Form::label('faction_id', __('Faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
