@@ -1,0 +1,11 @@
+[
+    {
+        "id": 2,
+        "floor_id": 56,
+        "game_icon_id": -1,
+        "lat": -84.7578125,
+        "lng": 140,
+        "always_visible": 1,
+        "comment": "There's a third holding cell here, the map is incorrect."
+    }
+]

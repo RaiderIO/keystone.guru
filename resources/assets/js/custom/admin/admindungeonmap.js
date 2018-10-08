@@ -11,14 +11,19 @@ class AdminDungeonMap extends DungeonMap {
      * @returns {*[]}
      * @private
      */
-    _createMapControls(drawnItemsLayer){
+    _createMapControls(drawnItemsLayer) {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        return [
+        let result = [
             new AdminDrawControls(this, drawnItemsLayer),
-            new MapObjectGroupControls(this),
-            new FactionDisplayControls(this)
-        ]
+            new MapObjectGroupControls(this)
+        ];
+
+        if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
+            result.push(new FactionDisplayControls(this));
+        }
+
+        return result;
     }
 
     /**
@@ -45,5 +50,13 @@ class AdminDungeonMap extends DungeonMap {
         let self = this;
 
         this.enemyAttaching = new EnemyAttaching(this);
+    }
+
+    /**
+     * There's no try mode for admins, they just know.
+     * @returns {boolean}
+     */
+    isTryModeEnabled() {
+        return false;
     }
 }
