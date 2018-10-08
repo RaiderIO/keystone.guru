@@ -77,10 +77,6 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
             ->middleware('can:edit,dungeonroute')
             ->name('dungeonroute.update');
-        // Submit a patch for your own dungeon route
-        Route::patch('delete/{dungeonroute}', 'DungeonRouteController@delete')
-            ->middleware('can:delete,dungeonroute')
-            ->name('dungeonroute.delete');
 
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
@@ -169,6 +165,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
             Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
             Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
+            // Submit a patch for your own dungeon route
+            Route::delete('/delete/{dungeonroute}', 'APIDungeonRouteController@delete')->name('dungeonroute.delete');
             Route::delete('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
 
             Route::post('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');

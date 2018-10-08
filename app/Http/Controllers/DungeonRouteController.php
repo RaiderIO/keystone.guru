@@ -143,25 +143,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     */
-    function delete(Request $request)
-    {
-        try {
-            /** @var DungeonRoute $dungeonroute */
-            $dungeonroute = DungeonRoute::findOrFail($request->get('id'));
-
-            $dungeonroute->delete();
-            $result = ['result' => 'success'];
-        } catch (\Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
-
-        return $result;
-    }
-
-    /**
      * Handles the viewing of a collection of items in a table.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
