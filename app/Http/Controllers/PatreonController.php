@@ -125,6 +125,11 @@ class PatreonController extends Controller
                  * ]
                  * ]
                  */
+                $user = Auth::user();
+                $user->raw_patreon_response_data = json_encode($responseArray);
+                $user->patreon_data_id = $patreonData->id;
+                $user->save();
+
                 // I pray this works. I have no reason to believe this will work
                 $pledgeData = $responseArray['data']['relationships']['pledges']['data'];
                 foreach ($pledgeData as $key => $item) {
