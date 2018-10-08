@@ -210,7 +210,6 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
         let self = this;
         if (!this.map.isKillZoneSelectModeEnabled()) {
-
             this.layer.setIcon(LeafletKillZoneIconSelected);
 
             let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
@@ -360,7 +359,9 @@ class KillZone extends MapObject {
 
         if (this.map.edit) {
             this.layer.on('click', function (event) {
-                if (!self.map.deleteModeActive) {
+                // Can only interact with select mode if we're the one that is currently being selected
+                if (!self.map.deleteModeActive &&
+                    (self.map.currentSelectModeKillZone === self || self.map.currentSelectModeKillZone === null)) {
                     if (self.map.isKillZoneSelectModeEnabled()) {
                         self.cancelSelectMode();
                     } else {
