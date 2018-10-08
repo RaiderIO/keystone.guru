@@ -247,6 +247,10 @@
 }
 
 /** MISC STYLES */
+#settings_wrapper.container {
+
+}
+
 .view_dungeonroute_details_row {
     height: 40px;
 }

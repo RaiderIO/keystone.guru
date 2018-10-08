@@ -60,7 +60,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
         }
 
         function _affixRowClicked() {
-            console.log(">> _affixRowClicked");
+            // console.log(">> _affixRowClicked");
             let $el = $(this);
             // Convert to string since currentSelection has strings
             let id = $el.data('id') + "";
@@ -82,7 +82,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
 
             $affixRowSelect.val(currentSelection);
             _applyAffixRowSelectionOnList();
-            console.log("OK _affixRowClicked");
+            // console.log("OK _affixRowClicked");
         }
 
         function _applyAffixRowSelectionOnList() {
@@ -150,7 +150,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                                  title="{{ $affix->name }}"
                                  style="height: 24px;">
                             </div>
-                            <div class="col hidden-xs-down pl-1">
+                            <div class="col d-md-block d-none pl-1">
                                 {{ $affix->name }}
                             </div>
                         </div>

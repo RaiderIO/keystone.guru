@@ -37,7 +37,7 @@
             'https://patreon.com/oauth2/authorize?' . http_build_query(
                 ['response_type' => 'code',
                 'client_id' => env('PATREON_CLIENT_ID'),
-                'redirect_uri' => $_SERVER['URL_HOST'] . 'patreon-link',
+                'redirect_uri' => route('patreon.link'),
                 'state' => csrf_token()
                 ])
             }}" target="_blank">{{'Link to Patreon'}}</a>
