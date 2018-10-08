@@ -77,6 +77,10 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
             ->middleware('can:edit,dungeonroute')
             ->name('dungeonroute.update');
+        // Submit a patch for your own dungeon route
+        Route::patch('delete/{dungeonroute}', 'DungeonRouteController@delete')
+            ->middleware('can:delete,dungeonroute')
+            ->name('dungeonroute.delete');
 
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
@@ -161,6 +165,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
             Route::post('/mapcomment', 'APIMapCommentController@store');
             Route::delete('/mapcomment', 'APIMapCommentController@delete');
 
+            Route::post('/enemy/raidmarker', 'APIEnemyController@setRaidMarker');
+
             Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
             Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
             Route::delete('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
@@ -177,8 +183,6 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
 
             Route::post('/enemy', 'APIEnemyController@store');
             Route::delete('/enemy', 'APIEnemyController@delete');
-
-            Route::post('/enemy/raidmarker', 'APIEnemyController@setRaidMarker');
 
             Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
             Route::delete('/enemypatrol', 'APIEnemyPatrolController@delete');

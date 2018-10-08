@@ -86,6 +86,6 @@
     <div class="mt-4">
         <h1>{{ __('My dungeonroutes') }}</h1>
 
-        @include('common.dungeonroute.table', ['edit_links' => true])
+        @include('common.dungeonroute.table', ['edit_links' => true, 'show_delete' => true])
     </div>
 @endsection

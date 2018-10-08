@@ -8,6 +8,7 @@ use App\Models\DungeonRoute;
 use App\Models\UserReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Teapot\StatusCode\Http;
 
 class DungeonRouteController extends Controller
 {
@@ -41,12 +42,12 @@ class DungeonRouteController extends Controller
     {
         $result = null;
 
-        $user = Auth::user();
-        if ($user->canCreateDungeonRoute()) {
+//        $user = Auth::user();
+//        if ($user->canCreateDungeonRoute()) {
             $result = view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New dungeonroute')]);
-        } else {
-            $result = view('dungeonroute.limitreached', ['headerTitle' => __('Limit reached')]);
-        }
+//        } else {
+//            $result = view('dungeonroute.limitreached', ['headerTitle' => __('Limit reached')]);
+//        }
 
         return $result;
     }
@@ -139,6 +140,25 @@ class DungeonRouteController extends Controller
         \Session::flash('status', __('Dungeonroute created'));
 
         return redirect()->route('dungeonroute.edit', ["dungeonroute" => $dungeonroute]);
+    }
+
+    /**
+     * @param Request $request
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    function delete(Request $request)
+    {
+        try {
+            /** @var DungeonRoute $dungeonroute */
+            $dungeonroute = DungeonRoute::findOrFail($request->get('id'));
+
+            $dungeonroute->delete();
+            $result = ['result' => 'success'];
+        } catch (\Exception $ex) {
+            $result = response('Not found', Http::NOT_FOUND);
+        }
+
+        return $result;
     }
 
     /**

@@ -14,7 +14,7 @@ class AddUnlistedColumnToDungeonRoute extends Migration
     public function up()
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
-            $table->boolean('unlisted')->after('title');
+            $table->boolean('unlisted')->default(0)->after('title');
         });
     }
 

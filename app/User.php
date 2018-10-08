@@ -75,7 +75,7 @@ class User extends Authenticatable
      */
     function canCreateDungeonRoute()
     {
-        return (config('keystoneguru.registered_user_dungeonroute_limit') < DungeonRoute::where('author_id', $this->id)->count() ||
+        return (config('keystoneguru.registered_user_dungeonroute_limit' < DungeonRoute::where('author_id', $this->id)->count()) ||
             $this->hasPaidTier('unlimited-dungeonroutes'));
     }
 
