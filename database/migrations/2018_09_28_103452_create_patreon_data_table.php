@@ -23,7 +23,7 @@ class CreatePatreonDataTable extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->addColumn('int', 'patreon_data_id')->nullable()->after('id');
+            $table->addColumn('integer', 'patreon_data_id')->nullable()->after('id');
         });
     }
 
