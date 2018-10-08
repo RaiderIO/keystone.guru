@@ -29,6 +29,7 @@
         $affixGroupIndex = 0;
         $affixGroups = \App\Models\AffixGroup::all();
         $currentWeek = intval(date('W'));
+        $currentDay = intval(date('w'));
         foreach($affixGroups as $affixGroup){
         ?>
         <tr class="table_row">
@@ -37,8 +38,8 @@
             $firstWeekTime = strtotime('2018W' . $firstWeek) + (24 * 3600);
             $nextWeek = config('keystoneguru.season_start_week') + $affixGroupIndex + 1;
             $nextWeekTime = strtotime('2018W' . $nextWeek) + (24 * 3600);
-            $currentWeekTime = strtotime('2018W' . $currentWeek) + (24 * 3600);
-            $currentWeekClass = $currentWeekTime >= $firstWeekTime && $currentWeekTime < $nextWeekTime ? 'current_week ' : '';
+            $currentWeekTime = strtotime('2018W' . $currentWeek) + ((24 * 3600) * $currentDay);
+            $currentWeekClass = $currentWeekTime > $firstWeekTime && $currentWeekTime <= $nextWeekTime ? 'current_week ' : '';
             ?>
             <td>
                 <div class="affix_row first_column {{ $currentWeekClass }}">
