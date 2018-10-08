@@ -15,7 +15,7 @@
         <li>
             Route rating is now rounded to the nearest two decimal spaces.
         </li>
-    </ul>r
+    </ul>
     </p>
     <p>
         Map changes:
