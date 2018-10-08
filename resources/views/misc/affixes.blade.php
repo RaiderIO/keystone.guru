@@ -85,7 +85,7 @@
 
     <div class="mt-4 col-12 text-center">
         <p>
-            {!!  __('For more information about affixes and what they do, please visit <a href="https://mythicpl.us/">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>') !!}
+            {!!  __('For more information about affixes and what they do, please visit <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>') !!}
         </p>
     </div>
 @endsection
