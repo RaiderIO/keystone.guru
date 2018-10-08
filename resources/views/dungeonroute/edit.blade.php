@@ -37,6 +37,16 @@
             });
 
             $('#save_settings').bind('click', _saveSettings);
+
+            // Copy to clipboard functionality
+            $('#map_copy_to_clipboard').bind('click', function () {
+                // https://codepen.io/shaikmaqsood/pen/XmydxJ
+                let $temp = $("<input>");
+                $("body").append($temp);
+                $temp.val($('#map_shareable_link').val()).select();
+                document.execCommand("copy");
+                $temp.remove();
+            })
         });
 
         function _saveSettings() {
@@ -103,6 +113,19 @@
 
     @isset($model)
         <div class='col-lg-12'>
+            <div class="form-group container">
+                {!! Form::label('map_shareable_link', __('Shareable link')) !!}
+                <div class="row">
+                    <div class="col">
+                        {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
+                        ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                    </div>
+                    <div class="col-auto">
+                        {!! Form::button('<i class="far fa-copy"></i> ' . __('Copy to clipboard'), ['id' => 'map_copy_to_clipboard', 'class' => 'btn btn-info']) !!}
+                    </div>
+                </div>
+            </div>
+
             <div id='map_container'>
                 @include('common.maps.map', [
                     'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
