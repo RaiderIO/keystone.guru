@@ -47,6 +47,10 @@
     text-align: center;
 }
 
+.alert.alert-danger ul {
+    margin-bottom: 0;
+}
+
 /* Override this so that long race names fit in their group selection boxes */
 .dropdown-item {
     padding: 0.25em 0.9em;

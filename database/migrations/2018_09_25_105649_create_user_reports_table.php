@@ -16,9 +16,9 @@ class CreateUserReportsTable extends Migration
         Schema::create('user_reports', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('author_id');
+            $table->string('username')->nullable();
             $table->string('context');
             $table->string('category');
-            $table->string('username');
             $table->string('message');
             $table->boolean('handled')->default(0);
             $table->timestamps();

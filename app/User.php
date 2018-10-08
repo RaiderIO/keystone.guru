@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -100,5 +101,17 @@ class User extends Authenticatable
     function patreondata()
     {
         return $this->hasOne('App\Models\PatreonData');
+    }
+
+    /**
+     * Sends the password reset notification.
+     *
+     * @param  string $token
+     *
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new CustomPasswordResetEmail($token));
     }
 }

@@ -140,7 +140,7 @@
                         <div class="text">
                             <h3>{{ __('Community') }}</h3>
                             <p>{!! sprintf(__('Join the community on %s or %s for getting in-touch with fellow keystone runners and easy sharing of routes. I will be around to answer any questions you may have.'),
-                                    '<a href="https://reddit.com/r/keystoneguru"><i class="fab fa-reddit"></i> Reddit</a>', '<a href="https://discord.gg/2KtWrqw"><i class="fab fa-discord"></i> Discord</a>') !!}</p>
+                                    '<a href="https://reddit.com/r/keystoneguru" target="_blank"><i class="fab fa-reddit"></i> Reddit</a>', '<a href="https://discord.gg/2KtWrqw" target="_blank"><i class="fab fa-discord"></i> Discord</a>') !!}</p>
                         </div>
                     </div>
                 </div>
@@ -150,14 +150,15 @@
                         <div class="text">
                             <h3>{{ __('Open Source') }}</h3>
                             <p>{!! sprintf(__('The full source for the entire website can be found on %s. Interested in helping out or have a kick-ass idea for a new feature? Let me know on Github!'),
-                            '<a href="https://github.com/Wotuu/keystone.guru"><i class="fab fa-github"></i> Github</a>') !!} </p>
+                            '<a href="https://github.com/Wotuu/keystone.guru" target="_blank"><i class="fab fa-github"></i> Github</a>') !!} </p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 text-center section-heading probootstrap-animate small">
-                    <p>{!! sprintf(__('*Prefer some privacy? Consider becoming a %s for unlimited private routes and more.'), '<a href="https://www.patreon.com/keystoneguru"><i class="fab fa-patreon"></i> Patron</a>') !!}</p>
+                    <p>{!! sprintf(__('*Prefer some privacy? Consider becoming a %s for unlimited private routes and more.'),
+                    '<a href="https://www.patreon.com/keystoneguru" target="_blank"><i class="fab fa-patreon"></i> Patron</a>') !!}</p>
                 </div>
             </div>
         </div>
