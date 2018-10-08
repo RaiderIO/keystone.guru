@@ -1,5 +1,6 @@
 <?php
 $modal = isset($modal) ? $modal : false;
+$modalClass = $modal ? 'modal-' : '';
 $width = $modal ? '12' : '6';
 ?>
 
@@ -7,40 +8,28 @@ $width = $modal ? '12' : '6';
     {{ csrf_field() }}
 
     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-        <label for="login_email" class="control-label">E-Mail Address</label>
+        <label for="{{ $modalClass }}login_email" class="control-label">E-Mail Address</label>
 
         <div class="col-md-{{ $width }}">
-            <input id="login_email" type="email" class="form-control" name="email" value="{{ old('email') }}" required
+            <input id="{{ $modalClass }}login_email" type="email" class="form-control" name="email" value="{{ old('email') }}" required
                    autofocus>
-
-            @if ($errors->has('email'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('email') }}</strong>
-                </span>
-            @endif
         </div>
     </div>
 
     <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-        <label for="login_password" class="control-label">Password</label>
+        <label for="{{ $modalClass }}login_password" class="control-label">Password</label>
 
         <div class="col-md-{{ $width }}">
-            <input id="login_password" type="password" class="form-control" name="password" required>
-
-            @if ($errors->has('password'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('password') }}</strong>
-                </span>
-            @endif
+            <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password" required>
         </div>
     </div>
 
     <div class="form-group">
         <div class="col-md-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
             <div class="checkbox">
-                <label for="login_remember">
-                    <input id="login_remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                    Remember Me
+                <label for="{{ $modalClass }}login_remember">
+                    <input id="{{ $modalClass }}login_remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                    {{ __('Remember me') }}
                 </label>
             </div>
         </div>
@@ -49,11 +38,11 @@ $width = $modal ? '12' : '6';
     <div class="form-group">
         <div class="col-md-12">
             <button type="submit" class="btn btn-primary">
-                Login
+                {{ __('Login') }}
             </button>
 
             <a class="btn btn-link" href="{{ route('password.request') }}">
-                Forgot Your Password?
+                {{ __('Forgot your password?') }}
             </a>
         </div>
     </div>

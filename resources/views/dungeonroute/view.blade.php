@@ -163,12 +163,12 @@ if (count($affixes) == 0) {
                         {{ __('Your rating') }}:
                     </div>
                     <div class="col-6">
-                        @if(Auth::user() === null )
+                        @guest
                             {{ __('Login to rate this route') }}
                         @else
                             {!! Form::select('your_rating', ['' => '', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
                                                 $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
-                        @endif
+                        @endguest
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row">
@@ -176,13 +176,14 @@ if (count($affixes) == 0) {
                         {{ __('Favorite') }}:
                     </div>
                     <div class="col-6">
-                        @if(Auth::user() === null )
+                        @guest
                             {{ __('Login to favorite this route') }}
                         @else
                             {!! Form::checkbox('favorite', 1, $model->isFavoritedByCurrentUser(), ['id' => 'favorite', 'class' => 'form-control left_checkbox']) !!}
-                        @endif
+                        @endguest
                     </div>
                 </div>
+                @auth
                 <div class="row view_dungeonroute_details_row">
                     <div class="col-12 font-weight-bold">
                         @isset($current_report)
@@ -197,6 +198,7 @@ if (count($affixes) == 0) {
                         @endisset
                     </div>
                 </div>
+                    @endauth
             </div>
         </div>
     </div>

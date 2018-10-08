@@ -29,6 +29,7 @@
         $affixGroupIndex = 0;
         $affixGroups = \App\Models\AffixGroup::all();
         $currentWeek = intval(date('W'));
+        $currentDay = intval(date('w'));
         foreach($affixGroups as $affixGroup){
         ?>
         <tr class="table_row">
@@ -37,8 +38,8 @@
             $firstWeekTime = strtotime('2018W' . $firstWeek) + (24 * 3600);
             $nextWeek = config('keystoneguru.season_start_week') + $affixGroupIndex + 1;
             $nextWeekTime = strtotime('2018W' . $nextWeek) + (24 * 3600);
-            $currentWeekTime = strtotime('2018W' . $currentWeek) + (24 * 3600);
-            $currentWeekClass = $currentWeekTime >= $firstWeekTime && $currentWeekTime < $nextWeekTime ? 'current_week ' : '';
+            $currentWeekTime = strtotime('2018W' . $currentWeek) + ((24 * 3600) * $currentDay);
+            $currentWeekClass = $currentWeekTime > $firstWeekTime && $currentWeekTime <= $nextWeekTime ? 'current_week ' : '';
             ?>
             <td>
                 <div class="affix_row first_column {{ $currentWeekClass }}">
@@ -84,7 +85,7 @@
 
     <div class="mt-4 col-12 text-center">
         <p>
-            {!!  __('For more information about affixes and what they do, please visit <a href="https://mythicpl.us/">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>') !!}
+            {!!  __('For more information about affixes and what they do, please visit <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>') !!}
         </p>
     </div>
 @endsection
