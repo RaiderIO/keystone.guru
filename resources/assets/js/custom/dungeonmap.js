@@ -51,24 +51,33 @@ class DungeonMap extends Signalable {
             // Context menu when right clicking stuff
             contextmenu: true,
             zoomControl: true
-        });  //disable default scroll
-        this.leafletMap.scrollWheelZoom.disable();
-
-        // Make sure only control + scroll allows a zoom
-        $('#map').bind('mousewheel DOMMouseScroll', function (event) {
-            event.stopPropagation();
-            if (event.ctrlKey === true) {
-                event.preventDefault();
-                self.leafletMap.scrollWheelZoom.enable();
-                $('#map').removeClass('map-scroll');
-                setTimeout(function () {
-                    self.leafletMap.scrollWheelZoom.disable();
-                }, 1000);
-            } else {
-                self.leafletMap.scrollWheelZoom.disable();
-                $('#map').addClass('map-scroll');
-            }
         });
+
+        //disable default scroll
+        // this.leafletMap.scrollWheelZoom.disable();
+        // Make sure only control + scroll allows a zoom
+        // $('#map').bind('mousewheel DOMMouseScroll', function (event) {
+        //     event.stopPropagation();
+        //     if (event.ctrlKey === true) {
+        //         event.preventDefault();
+        //         self.leafletMap.scrollWheelZoom.enable();
+        //         $('#map').removeClass('map-scroll');
+        //         setTimeout(function () {
+        //             self.leafletMap.scrollWheelZoom.disable();
+        //         }, 1000);
+        //     } else {
+        //         self.leafletMap.scrollWheelZoom.disable();
+        //         $('#map').addClass('map-scroll');
+        //     }
+        // });
+        //
+        // $(window).bind('mousedown', function (event) {
+        //     $('#map').removeClass('map-scroll');
+        // });
+        //
+        // $(window).bind('mousewheel DOMMouseScroll', function (event) {
+        //     $('#map').removeClass('map-scroll');
+        // });
 
         // Set all edited layers to no longer be synced.
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
@@ -113,14 +122,6 @@ class DungeonMap extends Signalable {
         });
         this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
             self.deleteModeActive = false;
-        });
-
-        $(window).bind('mousedown', function (event) {
-            $('#map').removeClass('map-scroll');
-        });
-
-        $(window).bind('mousewheel DOMMouseScroll', function (event) {
-            $('#map').removeClass('map-scroll');
         });
 
         // Refresh the map; draw the layers on it
