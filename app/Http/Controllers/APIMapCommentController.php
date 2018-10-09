@@ -18,7 +18,7 @@ class APIMapCommentController extends Controller
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute', null);
         try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
+            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
             $dungeonRouteId = $dungeonRoute->id;
         } catch (\Exception $ex) {
             // this is okay, it can come from admin request

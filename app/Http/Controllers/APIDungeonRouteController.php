@@ -55,7 +55,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // If we're not viewing our own routes, only select published routes
-        if(!$mine){
+        if (!$mine) {
             $builder = $builder->where('published', true);
         }
 
@@ -80,8 +80,20 @@ class APIDungeonRouteController extends Controller
             $request->merge(['columns' => $columns]);
         }
 
-        return DataTables::eloquent($builder)
-            ->make(true);
+
+//        $result = DataTables::eloquent($builder)->toArray();
+//
+//        if ($request->has('order')) {
+//            $order = $request->get('order');
+//
+//            if (intval($order[0]['column']) === 5) {
+//                array_multisort(array_column($result['data'], 'avg_rating'), SORT_ASC,  $result['data']);
+//            }
+//        }
+//
+//        return $result;
+
+        return DataTables::eloquent($builder)->make(true);
     }
 
     /**

@@ -4,13 +4,44 @@
 
 @section('content')
     <h4>
+        2018/10/09
+    </h4>
+    <p>
+        General:
+    <ul>
+        <li class="font-weight-bold">
+            Your routes are now unpublished by default. You have to publish them in order to have them show up in the search
+            and to have other people see your route.
+        </li>
+        <li>
+            Route search can no longer sort on rating as it was broken. I will fix this at a later stage.
+        </li>
+    </ul>
+    </p>
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            Fixed some inconsistencies with Saurids in the middle part of the dungeon.
+        </li>
+        <li>
+            Fixed a host of issues in Shrine of the Storm.
+        </li>
+        <li>
+            Fixed map comments not showing up for logged in users.
+        </li>
+    </ul>
+    </p>
+
+
+    <h4>
         2018/10/08
     </h4>
     <p>
         General:
     <ul>
         <li>
-            You can now delete any dungeon route you created from your Profile page.
+            You can now delete any route you created from your Profile page.
         </li>
         <li>
             Route rating is now rounded to the nearest two decimal spaces.
@@ -35,6 +66,8 @@
         <li>You can no longer select multiple kill zones at once.</li>
     </ul>
     </p>
+
+
 
     <h4>
         2018/10/07 - We're going live!
