@@ -22,7 +22,7 @@ trait PublicKeyDungeonRoute
         if( $auth ){
             // @TODO handle this in a policy?
             $user = Auth::user();
-            if ($user !== null && $dungeonRoute->author_id !== $user->id) {
+            if ($user === null || $dungeonRoute->author_id !== $user->id) {
                 throw new Exception('Unauthorized');
             }
         }

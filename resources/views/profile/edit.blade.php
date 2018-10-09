@@ -43,7 +43,7 @@
             }}" target="_blank">{{'Link to Patreon'}}</a>
 
             <p class="mt-2">
-                <span class="text-info"><i class="fa fa-info"></i></span>
+                <span class="text-info"><i class="fa fa-info-circle"></i></span>
                 {{ __('In order to claim your Patreon rewards, you need to link your Patreon account') }}
             </p>
         @endisset

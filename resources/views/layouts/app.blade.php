@@ -166,6 +166,8 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
         </div>
     @endif
 
+    @yield('global-message')
+
     <?php if( isset($custom) && $custom === true ) { ?>
     @yield('content')
     <?php } else { ?>
