@@ -185,7 +185,7 @@
         "classification_id": 2,
         "name": "Colossal Tentacle",
         "base_health": 323769,
-        "enemy_forces": 9,
+        "enemy_forces": 10,
         "aggressiveness": "aggressive"
     },
     {
@@ -221,7 +221,7 @@
         "classification_id": 2,
         "name": "Galecaller Apprentice",
         "base_health": 294335,
-        "enemy_forces": 1,
+        "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
     {
