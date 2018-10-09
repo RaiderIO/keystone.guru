@@ -42,12 +42,12 @@ class DungeonRouteController extends Controller
     {
         $result = null;
 
-//        $user = Auth::user();
-//        if ($user->canCreateDungeonRoute()) {
+        $user = Auth::user();
+        if ($user->canCreateDungeonRoute()) {
             $result = view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New dungeonroute')]);
-//        } else {
-//            $result = view('dungeonroute.limitreached', ['headerTitle' => __('Limit reached')]);
-//        }
+        } else {
+            $result = view('dungeonroute.limitreached', ['headerTitle' => __('Limit reached')]);
+        }
 
         return $result;
     }

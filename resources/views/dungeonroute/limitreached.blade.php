@@ -7,7 +7,7 @@
         config('keystoneguru.registered_user_dungeonroute_limit'))
      }}
     <div class="mt-2 text-center">
-        <a href="https://www.patreon.com/keystoneguru">Become a <i class="fab fa-patreon"></i> Patron!</a>
+        <a href="https://www.patreon.com/keystoneguru">{!!  sprintf(__('Become a %s Patron!'), '<i class="fab fa-patreon"></i>') !!}</a>
     </div>
 @endsection
 
