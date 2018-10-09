@@ -21,7 +21,7 @@ class APIDungeonRouteController extends Controller
     {
         $builder = DungeonRoute::query()->with(['dungeon', 'affixes', 'author']);
         // No unlisted routes!
-        $builder = $builder->where('unlisted', '<>', true);
+        $builder = $builder->where('unlisted', false);
 
         $builder->whereHas('dungeon', function ($query) {
             /** @var $query Builder This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
@@ -29,12 +29,14 @@ class APIDungeonRouteController extends Controller
         });
 
         $user = Auth::user();
+        $mine = false;
 
         // If logged in
         if ($user !== null) {
+            $mine = $request->get('mine', false);
 
             // Filter by our own user if logged in
-            if ($request->get('mine', false)) {
+            if ($mine) {
                 $builder = $builder->where('author_id', '=', $user->id);
             }
 
@@ -51,6 +53,12 @@ class APIDungeonRouteController extends Controller
                 });
             }
         }
+
+        // If we're not viewing our own routes, only select published routes
+        if(!$mine){
+            $builder = $builder->where('published', true);
+        }
+
 
         // Handle searching
         if ($request->has('columns')) {
@@ -114,6 +122,25 @@ class APIDungeonRouteController extends Controller
 
         if (!$result) {
             abort(500, 'Unable to delete dungeonroute');
+        }
+
+        return ['result' => 'success'];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws \Exception
+     */
+    function publish(Request $request, DungeonRoute $dungeonroute)
+    {
+        $user = Auth::user();
+
+        // @TODO This should be in a policy?
+        if ($dungeonroute->author_id === $user->id || $user->hasRole('admin')) {
+            $dungeonroute->published = intval($request->get('published', 0)) === 1;
+            $dungeonroute->save();
         }
 
         return ['result' => 'success'];

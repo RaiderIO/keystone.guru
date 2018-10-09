@@ -400,6 +400,7 @@ $introTexts = [
         </div>
     </div>
     <?php } ?>
+
     @if($floorSelection)
         <div class="form-group virtual-tour-element" data-intro="{{ $introTexts[0] }}" data-step="1"
              data-position="bottom-middle-aligned">

@@ -46,8 +46,40 @@
                 $temp.val($('#map_shareable_link').val()).select();
                 document.execCommand("copy");
                 $temp.remove();
-            })
+            });
+
+            $('#map_route_publish').bind('click', function () {
+                _setPublished(true);
+            });
+
+            $('#map_route_unpublish').bind('click', function () {
+                _setPublished(false);
+            });
         });
+
+        function _setPublished(value){
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('api.dungeonroute.publish', $model->public_key) }}',
+                dataType: 'json',
+                data: {
+                    published: value === true ? 1 : 0
+                },
+                success: function (json) {
+                    if( value ){
+                        // Published
+                        $('#map_route_publish').addClass('d-none');
+                        $('#map_route_unpublish').removeClass('d-none');
+                        $('#map_route_unpublished_info').addClass('d-none')
+                    } else {
+                        // Unpublished
+                        $('#map_route_publish').removeClass('d-none');
+                        $('#map_route_unpublish').addClass('d-none');
+                        $('#map_route_unpublished_info').removeClass('d-none')
+                    }
+                }
+            });
+        }
 
         function _saveSettings() {
             $.ajax({
@@ -113,15 +145,35 @@
 
     @isset($model)
         <div class='col-lg-12'>
-            <div class="form-group container">
-                {!! Form::label('map_shareable_link', __('Shareable link')) !!}
-                <div class="row">
-                    <div class="col">
-                        {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
-                        ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+            <div class="container">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md">
+                            <div id="map_route_unpublished_info" class="alert alert-info {{ $model->published === 1 ? 'd-none' : '' }}">
+                                <i class="fa fa-info-circle"></i> {{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}
+                            </div>
+                        </div>
+                        <div class="col-md-auto">
+                            <div id="map_route_publish" class="btn btn-success {{ $model->published === 1 ? 'd-none' : '' }}">
+                                <i class="fa fa-check-circle"></i> {{ __('Publish route') }}
+                            </div>
+                            <div id="map_route_unpublish" class="btn btn-warning {{ $model->published === 0 ? 'd-none' : '' }}">
+                                <i class="fa fa-times-circle"></i> {{ __('Unpublish route') }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        {!! Form::button('<i class="far fa-copy"></i> ' . __('Copy to clipboard'), ['id' => 'map_copy_to_clipboard', 'class' => 'btn btn-info']) !!}
+                </div>
+
+                <div class="form-group">
+                    {!! Form::label('map_shareable_link', __('Shareable link')) !!}
+                    <div class="row">
+                        <div class="col">
+                            {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
+                            ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                        </div>
+                        <div class="col-auto">
+                            {!! Form::button('<i class="far fa-copy"></i> ' . __('Copy to clipboard'), ['id' => 'map_copy_to_clipboard', 'class' => 'btn btn-info']) !!}
+                        </div>
                     </div>
                 </div>
             </div>

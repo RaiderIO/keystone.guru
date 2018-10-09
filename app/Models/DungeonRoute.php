@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
  * @property $title string
  * @property $difficulty string
  * @property $teeming boolean
+ * @property $published boolean
  * @property $unlisted boolean
  * @property $demo boolean
  *

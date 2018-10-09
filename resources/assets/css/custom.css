@@ -251,8 +251,8 @@
 }
 
 /** MISC STYLES */
-#settings_wrapper.container {
-
+#map_route_unpublished_info {
+    margin-bottom: 0;
 }
 
 .view_dungeonroute_details_row {
