@@ -86,11 +86,17 @@
 
         <div class="col-lg-12">
             <div class="form-group">
-                {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+                {!! Form::submit(__('Create route'), ['class' => 'btn btn-info']) !!}
             </div>
         </div>
         @if(!Auth::user()->hasPaidTier('unlimited-routes'))
-            {{ sprintf(__('You may create %s more route(s).'), config('keystoneguru.registered_user_dungeonroute_limit') - \App\Models\DungeonRoute::where('author_id', Auth::user()->id)->count() ) }}
+            {{ sprintf(__('You may create %s more route(s).'),
+                max(0, config('keystoneguru.registered_user_dungeonroute_limit') - \App\Models\DungeonRoute::where('author_id', Auth::user()->id)->count())
+            ) }}
+
+            <a href="https://www.patreon.com/keystoneguru">
+                <i class="fab fa-patreon"></i> {{ __('Patrons have no limits!') }}
+            </a>
         @endif
     </div>
 
