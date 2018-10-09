@@ -66,7 +66,8 @@ $profile = isset($profile) ? $profile : false;
                     },
                     {
                         'data': 'author.name',
-                        'className': 'd-none d-lg-table-cell'
+                        'className': 'd-none d-lg-table-cell',
+                        'orderable': false
                     },
                     {
                         'render': function (data, type, row, meta) {
@@ -82,7 +83,8 @@ $profile = isset($profile) ? $profile : false;
                             }
 
                             return result;
-                        }
+                        },
+                        'orderable': false
                     }
                     <?php if($profile){ ?>
                     ,{
