@@ -94,6 +94,8 @@ class APIDungeonRouteController extends Controller
 //
 //        return $result;
 
+        // $builder->with(['dungeon:id,name']);
+
         return DataTables::eloquent($builder)->make(true);
     }
 

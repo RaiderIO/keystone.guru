@@ -24,7 +24,7 @@ class Dungeon extends Model
      *
      * @var array
      */
-    protected $appends = ['key', 'enemy_forces_mapped_status'];
+    protected $appends = ['key'];
     public $with = ['expansion'];
 
     public $hidden = ['expansion_id', 'created_at', 'updated_at'];
