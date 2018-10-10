@@ -376,7 +376,7 @@ $introTexts = [
     @endif
 @endsection
 
-<div class="container">
+<div class="container p-0">
     <?php
     if (!isset($model) && $edit) {
     ?>

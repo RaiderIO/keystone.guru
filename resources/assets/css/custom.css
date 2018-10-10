@@ -58,7 +58,7 @@
 
 /** LEAFLET */
 #map {
-    height: 940px;
+    height: 90vh; /* 90% of viewport height */
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -251,10 +251,6 @@
 }
 
 /** MISC STYLES */
-#map_route_unpublished_info {
-    margin-bottom: 0;
-}
-
 .view_dungeonroute_details_row {
     height: 40px;
 }
