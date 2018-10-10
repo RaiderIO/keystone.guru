@@ -451,6 +451,15 @@ class DungeonRoute extends Model
         return $result;
     }
 
+    /**
+     * @return bool
+     */
+    public function isOwnedByCurrentUser()
+    {
+        $user = Auth::user();
+        return $this->author_id === $user->id;
+    }
+
     public static function boot()
     {
         parent::boot();
