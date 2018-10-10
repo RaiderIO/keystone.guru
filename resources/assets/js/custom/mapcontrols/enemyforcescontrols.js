@@ -2,13 +2,13 @@ class EnemyForcesControls extends MapControl {
     constructor(map) {
         super(map);
         console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
-        console.assert(map instanceof DungeonMap, map, 'map is not DungeonMap');
 
         let self = this;
 
         this.map = map;
         // Just the initial enemy forces upon page load.
-        this.enemyForces = dungeonRouteEnemyForces; // Defined in map.blade.php
+        this._setEnemyForces(dungeonRouteEnemyForces); // Defined in map.blade.php
+
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
                 let source = $("#map_enemy_forces_template").html();
@@ -35,24 +35,31 @@ class EnemyForcesControls extends MapControl {
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
                 // Local changes will update the counter
                 enemy.register('killzone:attached', self, function (data) {
-                    console.log('attached to killzone!');
-                    self.enemyForces += data.context.enemy_forces;
-
-                    self.refreshUI();
+                    self._setEnemyForces(self.enemyForces + data.context.enemy_forces);
                 });
                 enemy.register('killzone:detached', self, function (data) {
-                    self.enemyForces -= data.context.enemy_forces;
-
-                    self.refreshUI();
+                    self._setEnemyForces(self.enemyForces - data.context.enemy_forces);
                 });
                 // Remote changes will be the authority when it comes to forces
                 enemy.register('killzone:synced', self, function (data) {
-                    self.enemyForces = data.enemy_forces;
-
-                    self.refreshUI();
+                    self._setEnemyForces(data.enemy_forces);
                 });
             });
         });
+    }
+
+    /**
+     * Sets the enemy forces to a specific value.
+     * @param value
+     * @private
+     */
+    _setEnemyForces(value){
+        console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
+
+        this.enemyForces = value;
+        // @TODO This is a bit of a dirty solution for solving an issue where being in edit mode and switching a floor the enemy_forces counter is reset to 0.
+        dungeonRouteEnemyForces = value;
+        this.refreshUI();
     }
 
     /**
