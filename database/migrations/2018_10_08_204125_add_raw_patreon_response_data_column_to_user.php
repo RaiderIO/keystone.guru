@@ -16,7 +16,7 @@ class AddRawPatreonResponseDataColumnToUser extends Migration
         // I'll remove this soon, but there's no info about the response data. I gotta store it from someone who is a patron.
         // Capture the data, fix the issues, drop the column, everyone happy.
         Schema::table('users', function (Blueprint $table) {
-            $table->longText('raw_patreon_response_data')->after('remember_token');
+            $table->longText('raw_patreon_response_data')->nullable()->after('remember_token');
         });
     }
 
