@@ -16,7 +16,7 @@ class DungeonRouteFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; // \Auth::user()->hasRole(["user", "admin"]);
+        return true; // Auth::user()->hasRole(["user", "admin"]);
     }
 
     /**
@@ -27,7 +27,7 @@ class DungeonRouteFormRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'dungeon_route_title' => 'required|string|min:3|max:255',
+            'dungeon_route_title' => 'required|string|min:3|max:80',
             // Only active dungeons are allowed
             'dungeon_id' => ['required', Rule::exists('dungeons', 'id')->where('active', '1')],
             // 'difficulty' => ['required', Rule::in(config('keystoneguru.dungeonroute_difficulty'))],

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\APIDungeonRouteFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -97,12 +98,12 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param APIDungeonRouteFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @return array
      * @throws \Exception
      */
-    function store(Request $request, DungeonRoute $dungeonroute = null)
+    function store(APIDungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null)
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();

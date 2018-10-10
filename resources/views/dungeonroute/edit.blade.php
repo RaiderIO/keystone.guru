@@ -93,6 +93,7 @@
                 url: '{{ route('api.dungeonroute.update', $model->public_key) }}',
                 dataType: 'json',
                 data: {
+                    dungeon_route_title: $('#dungeon_route_title').val(),
                     faction_id: $('#faction_id').val(),
                     specialization:
                         $('.specializationselect select').map(function () {
@@ -109,7 +110,6 @@
                             return $(this).val();
                         }).get()
                     ,
-                    teeming: $('#teeming').is(':checked') ? 1 : 0,
                     unlisted: $('#unlisted').is(':checked') ? 1 : 0,
                     @if(Auth::user()->hasRole('admin'))
                     demo: $('#demo').is(':checked') ? 1 : 0,
@@ -197,10 +197,16 @@
                 </div>
 
                 <div id='settings' class='col-lg-12 collapse'>
-                    {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox d-none']) !!}
+                    <h3>
+                        {{ __('General') }}
+                    </h3>
+                    <div class="form-group">
+                        {!! Form::label('dungeon_route_title', __('Title')) !!}
+                        {!! Form::text('dungeon_route_title', $model->title, ['class' => 'form-control']) !!}
+                    </div>
 
                     <h3>
-                        {{ __('Group composition') }}
+                        {{ __('Group composition (optional)') }}
                     </h3>
 
                     @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
