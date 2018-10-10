@@ -29,8 +29,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             url: '/ajax/enemies',
             dataType: 'json',
             data: {
-                floor_id: floor.id,
-                dungeonroute: dungeonRoutePublicKey
+                dungeonroute: dungeonRoutePublicKey,
+                floor_id: floor.id
             },
             success: function (json) {
                 // Now draw the enemies on the map
