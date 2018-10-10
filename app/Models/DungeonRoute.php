@@ -456,6 +456,10 @@ class DungeonRoute extends Model
      */
     public function isOwnedByCurrentUser()
     {
+        if (!Auth::check()) {
+            return false;
+        }
+
         $user = Auth::user();
         return $this->author_id === $user->id;
     }
