@@ -58,7 +58,7 @@ if (count($affixes) == 0) {
                 },
                 success: function (json) {
                     // Update the new average rating
-                    $('#rating').barrating('set', json.new_avg_rating);
+                    $('#rating').barrating('set', Math.round(json.new_avg_rating));
                 }
             });
         }
@@ -166,8 +166,12 @@ if (count($affixes) == 0) {
                         @guest
                             {{ __('Login to rate this route') }}
                         @else
-                            {!! Form::select('your_rating', ['' => '', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
-                                                $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
+                            @if($model->author_id === Auth::user()->id)
+                                {{ __('You cannot rate your own route') }}
+                            @else
+                                {!! Form::select('your_rating', ['' => '', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
+                                                    $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
+                            @endif
                         @endguest
                     </div>
                 </div>
@@ -184,21 +188,21 @@ if (count($affixes) == 0) {
                     </div>
                 </div>
                 @auth
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col-12 font-weight-bold">
-                        @isset($current_report)
-                            <span class="text-warning">
+                    <div class="row view_dungeonroute_details_row">
+                        <div class="col-12 font-weight-bold">
+                            @isset($current_report)
+                                <span class="text-warning">
                                     <i class="fa fa-exclamation-triangle"></i> {{ __('You have reported this dungeonroute for moderation.') }}
                                 </span>
-                        @else
-                            <i class="fa fa-flag"></i>
-                            <a id="featherlight_trigger" href="#" data-featherlight="#userreport_dungeonroute">
-                                {{ __('Report for moderation') }}
-                            </a>
-                        @endisset
+                            @else
+                                <i class="fa fa-flag"></i>
+                                <a id="featherlight_trigger" href="#" data-featherlight="#userreport_dungeonroute">
+                                    {{ __('Report for moderation') }}
+                                </a>
+                            @endisset
+                        </div>
                     </div>
-                </div>
-                    @endauth
+                @endauth
             </div>
         </div>
     </div>
