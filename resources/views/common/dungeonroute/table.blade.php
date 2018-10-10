@@ -37,7 +37,8 @@ $profile = isset($profile) ? $profile : false;
                             <?php } else { ?>
                                 return '<a href="{{ route('dungeonroute.view', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
                             <?php } ?>
-                        }
+                        },
+                        'className': 'limit_width'
                     },
                     {
                         'data': 'dungeon.name',

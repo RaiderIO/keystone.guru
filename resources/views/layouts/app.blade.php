@@ -173,7 +173,7 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
     <?php } else { ?>
     <div class="container-fluid">
         <div class="row">
-            <div class="<?php echo(isset($wide) && $wide ? "flex-fill ml-3 mr-3" : "col-md-8 offset-md-2"); ?>">
+            <div class="<?php echo(isset($wide) && $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2"); ?>">
                 <div class="card mt-3 mb-3">
                     <div class="card-header <?php echo(isset($wide) && $wide ? "panel-heading-wide" : ""); ?>">
                         <div class="row">
@@ -203,13 +203,13 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
                         @endif
 
                         @if (session('status'))
-                            <div class="alert alert-success">
+                            <div id="app_session_status_message" class="alert alert-success">
                                 {{ session('status') }}
                             </div>
                         @endif
 
                         @if (session('warning'))
-                            <div class="alert alert-warning">
+                            <div id="app_session_warning_message"  class="alert alert-warning">
                                 {{ session('warning') }}
                             </div>
                         @endif

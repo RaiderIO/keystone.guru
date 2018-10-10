@@ -4,13 +4,45 @@
 
 @section('content')
     <h4>
+        2018/10/10
+    </h4>
+    <p>
+        General:
+    <ul>
+        <li>
+            You can now edit your route's title.
+        </li>
+        <li>
+            You can no longer rate your own routes (I saw you rate your own routes a 10/10!).
+        </li>
+        <li>
+            Polished the layout of the website, mainly focussed on mobile users.
+        </li>
+        <li>
+            There's now some feedback on your actions on the website (success/failure of actions).
+        </li>
+    </ul>
+    </p>
+    <p>
+
+    Map changes:
+    <ul>
+        <li>
+            Height is now auto-adjusted to your device's viewport rather than a fixed value.
+        </li>
+    </ul>
+    </p>
+
+
+    <h4>
         2018/10/09
     </h4>
     <p>
         General:
     <ul>
         <li class="font-weight-bold">
-            Your routes are now unpublished by default. You have to publish them in order to have them show up in the search
+            Your routes are now unpublished by default. You have to publish them in order to have them show up in the
+            search
             and to have other people see your route.
         </li>
         <li>

@@ -245,6 +245,13 @@
     display: none;
 }
 
+#routes_table .limit_width {
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /** INTRO.JS */
 .introjs-tooltip {
     width: 400px !important;

@@ -4,9 +4,28 @@
         // Default error handler
         $.ajaxSetup({
             error: function (xhr, textStatus, errorThrown) {
-                addFixedFooterError("{{ __('An error occurred while performing your request. Please try again.') }} (" + xhr.status + ")");
+                let message = "{{ __('An error occurred while performing your request. Please try again.') }}";
+
+                // If json was set
+                if (typeof xhr.responseJSON === 'object') {
+                    // There were Laravel errors
+                    if (typeof xhr.responseJSON.errors === 'object') {
+                        let errors = xhr.responseJSON.errors
+                        message = '';
+                        // Extract them and put them in the response string.
+                        for (let key in errors) {
+                            if (errors.hasOwnProperty(key)) {
+                                message += errors[key] + ' ';
+                            }
+                        }
+                    }
+                }
+                addFixedFooterError(message + " (" + xhr.status + ")");
             }
         });
+
+        // Fade out success messages. They're not too interesting
+        $("#app_session_status_message").delay(7000).fadeOut(200);
     });
 
     /**
