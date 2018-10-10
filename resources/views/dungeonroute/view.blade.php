@@ -165,6 +165,8 @@ if (count($affixes) == 0) {
                     <div class="col-6">
                         @guest
                             {{ __('Login to rate this route') }}
+                        @elseif( $model->isOwnedByCurrentUser() )
+                            {{ __('You cannot vote on your own routes')  }}
                         @else
                             @if($model->author_id === Auth::user()->id)
                                 {{ __('You cannot rate your own route') }}

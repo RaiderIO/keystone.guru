@@ -168,6 +168,10 @@ class APIDungeonRouteController extends Controller
     {
         $value = $request->get('rating', -1);
 
+        if ($dungeonroute->isOwnedByCurrentUser()) {
+            return response()->setStatusCode(403);
+        }
+
         if ($value > 0) {
             $user = Auth::user();
 
