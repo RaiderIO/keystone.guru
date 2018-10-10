@@ -8,7 +8,6 @@ use App\Models\DungeonRouteRating;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Teapot\StatusCode\Http;
 use Yajra\DataTables\Facades\DataTables;
 
 class APIDungeonRouteController extends Controller
@@ -166,23 +165,18 @@ class APIDungeonRouteController extends Controller
      */
     function rate(Request $request, DungeonRoute $dungeonroute)
     {
-        $value = $request->get('rating', -1);
-
         if ($dungeonroute->isOwnedByCurrentUser()) {
             return response()->setStatusCode(403);
         }
 
+        $value = $request->get('rating', -1);
         if ($value > 0) {
             $user = Auth::user();
 
-            if ($user->id !== $dungeonroute->author_id) {
-                /** @var DungeonRouteRating $dungeonRouteRating */
-                $dungeonRouteRating = DungeonRouteRating::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
-                $dungeonRouteRating->rating = max(1, min(10, $value));
-                $dungeonRouteRating->save();
-            } else {
-                abort(Http::FORBIDDEN, 'You cannot rate your own routes.');
-            }
+            /** @var DungeonRouteRating $dungeonRouteRating */
+            $dungeonRouteRating = DungeonRouteRating::firstOrNew(['dungeon_route_id' => $dungeonroute->id, 'user_id' => $user->id]);
+            $dungeonRouteRating->rating = max(1, min(10, $value));
+            $dungeonRouteRating->save();
         }
 
         $dungeonroute->unsetRelation('ratings');

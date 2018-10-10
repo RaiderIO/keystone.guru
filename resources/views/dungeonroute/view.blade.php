@@ -166,14 +166,10 @@ if (count($affixes) == 0) {
                         @guest
                             {{ __('Login to rate this route') }}
                         @elseif( $model->isOwnedByCurrentUser() )
-                            {{ __('You cannot vote on your own routes')  }}
+                            {{ __('You cannot rate your own route') }}
                         @else
-                            @if($model->author_id === Auth::user()->id)
-                                {{ __('You cannot rate your own route') }}
-                            @else
-                                {!! Form::select('your_rating', ['' => '', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
-                                                    $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
-                            @endif
+                            {!! Form::select('your_rating', ['' => '', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
+                                                $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
                         @endguest
                     </div>
                 </div>
