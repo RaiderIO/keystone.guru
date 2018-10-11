@@ -336,6 +336,10 @@ class DungeonRoute extends Model
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
         $this->teeming = $request->get('teeming', $this->teeming);
+        // @TODO TEMP FIX
+        if($this->teeming === null){
+            $this->teeming = 0;
+        }
 
         if (Auth::user()->hasPaidTier('unlisted-routes')) {
             $this->unlisted = intval($request->get('unlisted', 0)) > 0;

@@ -8,7 +8,7 @@ $width = $modal ? '12' : '6';
     {{ csrf_field() }}
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        <label for="{{ $modalClass }}register_name" class="control-label">{{ __('Name') }}</label>
+        <label for="{{ $modalClass }}register_name" class="control-label">{{ __('Username') }}</label>
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}register_name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
