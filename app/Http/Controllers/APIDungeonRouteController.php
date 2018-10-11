@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\APIDungeonRouteFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -93,16 +94,18 @@ class APIDungeonRouteController extends Controller
 //
 //        return $result;
 
+        // $builder->with(['dungeon:id,name']);
+
         return DataTables::eloquent($builder)->make(true);
     }
 
     /**
-     * @param Request $request
+     * @param APIDungeonRouteFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @return array
      * @throws \Exception
      */
-    function store(Request $request, DungeonRoute $dungeonroute = null)
+    function store(APIDungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null)
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
@@ -165,8 +168,11 @@ class APIDungeonRouteController extends Controller
      */
     function rate(Request $request, DungeonRoute $dungeonroute)
     {
-        $value = $request->get('rating', -1);
+        if ($dungeonroute->isOwnedByCurrentUser()) {
+            return response()->setStatusCode(403);
+        }
 
+        $value = $request->get('rating', -1);
         if ($value > 0) {
             $user = Auth::user();
 

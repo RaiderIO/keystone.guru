@@ -52,7 +52,7 @@ class DungeonRoute extends Model
      */
     protected $appends = ['setup', 'avg_rating', 'rating_count', 'enemy_forces'];
 
-    protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at'];
+    protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at', 'killzones', 'faction'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -335,7 +335,7 @@ class DungeonRoute extends Model
         $this->title = $request->get('dungeon_route_title', $this->title);
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
-        $this->teeming = $request->get('teeming', 0);
+        $this->teeming = $request->get('teeming', $this->teeming);
 
         if (Auth::user()->hasPaidTier('unlisted-routes')) {
             $this->unlisted = intval($request->get('unlisted', 0)) > 0;
@@ -449,6 +449,19 @@ class DungeonRoute extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOwnedByCurrentUser()
+    {
+        if (!Auth::check()) {
+            return false;
+        }
+
+        $user = Auth::user();
+        return $this->author_id === $user->id;
     }
 
     public static function boot()

@@ -37,7 +37,8 @@ $profile = isset($profile) ? $profile : false;
                             <?php } else { ?>
                                 return '<a href="{{ route('dungeonroute.view', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
                             <?php } ?>
-                        }
+                        },
+                        'className': 'limit_width'
                     },
                     {
                         'data': 'dungeon.name',
@@ -66,7 +67,7 @@ $profile = isset($profile) ? $profile : false;
                     },
                     {
                         'data': 'author.name',
-                        'className': 'd-none d-lg-table-cell',
+                        'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}',
                         'orderable': false
                     },
                     {
@@ -84,13 +85,15 @@ $profile = isset($profile) ? $profile : false;
 
                             return result;
                         },
+                        'className': 'd-none d-lg-table-cell',
                         'orderable': false
                     }
                     <?php if($profile){ ?>
-                    ,{
+                    , {
                         'render': function (data, type, row, meta) {
                             return row.published === '1' ? 'Yes' : 'No';
-                        }
+                        },
+                        'className': 'd-none d-lg-table-cell',
                     }, {
                         'render': function (data, type, row, meta) {
                             return '<div class="btn btn-danger dungeonroute-delete" data-publickey="' + row.public_key + '">{{ __('Delete') }}</div>';
@@ -143,14 +146,11 @@ $profile = isset($profile) ? $profile : false;
 
                 $.ajax({
                     type: 'DELETE',
-                    url: '{{ route('dungeonroute.delete', ['dungeonroute' => '']) }}' + publicKey,
+                    url: '{{ route('dungeonroute.delete', ['dungeonroute' => '']) }}/' + publicKey,
                     dataType: 'json',
                     success: function (json) {
+                        addFixedFooterSuccess("{{ __('Route deleted successfully') }}");
                         $("#dungeonroute_filter").trigger('click');
-                    },
-                    error: function(){
-                        // @TODO Poor man's solution
-                        alert('{{ __('Unable to delete route. Please try again') }}');
                     }
                 });
             }
@@ -190,20 +190,20 @@ $profile = isset($profile) ? $profile : false;
                 'data-selected-text-format' => 'count > 1',
                 'data-count-selected-text' => __('{0} affixes selected')]) !!}
         </div>
-        @if(Auth::user() !== null )
-            <div class="col-lg-2">
+        <div class="col-lg-2">
+            @auth
                 {!! Form::label('favorites', __('Favorites')) !!}
                 {!! Form::checkbox('favorites', 1, 0, ['id' => 'favorites', 'class' => 'form-control left_checkbox']) !!}
-            </div>
-        @endif
+            @endauth
+        </div>
         <div class="col-lg-2">
             <div class="mb-2">
                 &nbsp;
             </div>
-            {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info']) !!}
+            {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info col-lg']) !!}
         </div>
     </div>
-    <table id="routes_table" class="tablesorter default_table dt-responsive nowrap table-striped" width="100%">
+    <table id="routes_table" class="tablesorter default_table dt-responsive nowrap table-striped mt-2" width="100%">
         <thead>
         <tr>
             <th width="{{ $profile ? '20' : '30' }}%">{{ __('Title') }}</th>
@@ -211,10 +211,10 @@ $profile = isset($profile) ? $profile : false;
         <!-- <th width="10%" class="d-none d-md-table-cell">{{ __('Difficulty') }}</th> -->
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
-            <th width="15%" class="d-none d-lg-table-cell">{{ __('Author') }}</th>
-            <th width="10%">{{ __('Rating') }}</th>
+            <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
+            <th width="10%" class="d-none d-lg-table-cell">{{ __('Rating') }}</th>
             <?php if( $profile ) { ?>
-            <th width="5%">{{ __('Published') }}</th>
+            <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
             <th width="5%">{{ __('Actions') }}</th>
             <?php } ?>
         </tr>

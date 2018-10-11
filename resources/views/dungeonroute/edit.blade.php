@@ -46,6 +46,8 @@
                 $temp.val($('#map_shareable_link').val()).select();
                 document.execCommand("copy");
                 $temp.remove();
+
+                addFixedFooterInfo("{{ __('Copied to clipboard') }}", 2000);
             });
 
             $('#map_route_publish').bind('click', function () {
@@ -57,7 +59,7 @@
             });
         });
 
-        function _setPublished(value){
+        function _setPublished(value) {
             $.ajax({
                 type: 'POST',
                 url: '{{ route('api.dungeonroute.publish', $model->public_key) }}',
@@ -66,16 +68,20 @@
                     published: value === true ? 1 : 0
                 },
                 success: function (json) {
-                    if( value ){
+                    if (value) {
                         // Published
                         $('#map_route_publish').addClass('d-none');
                         $('#map_route_unpublish').removeClass('d-none');
-                        $('#map_route_unpublished_info').addClass('d-none')
+                        $('#map_route_unpublished_info').addClass('d-none');
+
+                        addFixedFooterSuccess("{{ __('Route published') }}");
                     } else {
                         // Unpublished
                         $('#map_route_publish').removeClass('d-none');
                         $('#map_route_unpublish').addClass('d-none');
-                        $('#map_route_unpublished_info').removeClass('d-none')
+                        $('#map_route_unpublished_info').removeClass('d-none');
+
+                        addFixedFooterWarning("{{ __('Route unpublished') }}");
                     }
                 }
             });
@@ -87,6 +93,7 @@
                 url: '{{ route('api.dungeonroute.update', $model->public_key) }}',
                 dataType: 'json',
                 data: {
+                    dungeon_route_title: $('#dungeon_route_title').val(),
                     faction_id: $('#faction_id').val(),
                     specialization:
                         $('.specializationselect select').map(function () {
@@ -103,7 +110,6 @@
                             return $(this).val();
                         }).get()
                     ,
-                    teeming: $('#teeming').is(':checked') ? 1 : 0,
                     unlisted: $('#unlisted').is(':checked') ? 1 : 0,
                     @if(Auth::user()->hasRole('admin'))
                     demo: $('#demo').is(':checked') ? 1 : 0,
@@ -116,16 +122,7 @@
                     $('#save_settings_saving').show();
                 },
                 success: function (json) {
-                    $('#save_settings_success').show().delay(5000).hide(200);
-                    $('#save_settings_error').hide();
-
-                    $('#save_settings_success').html('{{__('Settings saved successfully')}}');
-                },
-                error: function (response) {
-                    $('#save_settings_success').hide();
-                    $('#save_settings_error').show().delay(5000).hide(200);
-
-                    $('#save_settings_error').html('{{__('An error occurred saving your settings. Please try again.')}}');
+                    addFixedFooterSuccess("{{__('Settings saved successfully')}}");
                 },
                 complete: function () {
                     $('#save_settings').show();
@@ -144,20 +141,23 @@
     @endisset
 
     @isset($model)
-        <div class='col-lg-12'>
-            <div class="container">
+        <div class="col-lg-12 p-0">
+            <div class="container p-0">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md">
-                            <div id="map_route_unpublished_info" class="alert alert-info {{ $model->published === 1 ? 'd-none' : '' }}">
+                            <div id="map_route_unpublished_info"
+                                 class="alert alert-info {{ $model->published === 1 ? 'd-none' : '' }}">
                                 <i class="fa fa-info-circle"></i> {{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}
                             </div>
                         </div>
                         <div class="col-md-auto">
-                            <div id="map_route_publish" class="btn btn-success {{ $model->published === 1 ? 'd-none' : '' }}">
+                            <div id="map_route_publish"
+                                 class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}">
                                 <i class="fa fa-check-circle"></i> {{ __('Publish route') }}
                             </div>
-                            <div id="map_route_unpublish" class="btn btn-warning {{ $model->published === 0 ? 'd-none' : '' }}">
+                            <div id="map_route_unpublish"
+                                 class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
                                 <i class="fa fa-times-circle"></i> {{ __('Unpublish route') }}
                             </div>
                         </div>
@@ -167,12 +167,12 @@
                 <div class="form-group">
                     {!! Form::label('map_shareable_link', __('Shareable link')) !!}
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md">
                             {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
                             ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                         </div>
-                        <div class="col-auto">
-                            {!! Form::button('<i class="far fa-copy"></i> ' . __('Copy to clipboard'), ['id' => 'map_copy_to_clipboard', 'class' => 'btn btn-info']) !!}
+                        <div class="col-md-auto">
+                            {!! Form::button('<i class="far fa-copy"></i> ' . __('Copy to clipboard'), ['id' => 'map_copy_to_clipboard', 'class' => 'btn btn-info col-md']) !!}
                         </div>
                     </div>
                 </div>
@@ -197,10 +197,16 @@
                 </div>
 
                 <div id='settings' class='col-lg-12 collapse'>
-                    {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox d-none']) !!}
+                    <h3>
+                        {{ __('General') }}
+                    </h3>
+                    <div class="form-group">
+                        {!! Form::label('dungeon_route_title', __('Title')) !!}
+                        {!! Form::text('dungeon_route_title', $model->title, ['class' => 'form-control']) !!}
+                    </div>
 
                     <h3>
-                        {{ __('Group composition') }}
+                        {{ __('Group composition (optional)') }}
                     </h3>
 
                     @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
@@ -241,16 +247,6 @@
                         <div id='save_settings_saving' class='offset-lg-5 col-lg-2 btn btn-success disabled'
                              style='display: none;'>
                             <i class='fas fa-circle-notch fa-spin'></i>
-                        </div>
-                    </div>
-
-                    <div class='container'>
-                        <div id='save_settings_success'
-                             class='alert alert-success alert-dismissible fade show text-center'
-                             style='display: none;' role='alert'>
-                        </div>
-                        <div id='save_settings_error' class='alert alert-danger alert-dismissible fade show text-center'
-                             style='display: none;' role='alert'>
                         </div>
                     </div>
                 </div>

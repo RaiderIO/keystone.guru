@@ -60,12 +60,12 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
                         <a class="nav-link" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="demoDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" href="#" id="demo_dropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{ __('Demo') }}
                         </a>
 
-                        <div class="dropdown-menu" aria-labelledby="demoDropdown">
+                        <div class="dropdown-menu" aria-labelledby="demo_dropdown">
                             @foreach(\App\Models\DungeonRoute::where('demo', '=', true)->get() as $route)
                                 <a class="dropdown-item"
                                    href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
@@ -173,7 +173,7 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
     <?php } else { ?>
     <div class="container-fluid">
         <div class="row">
-            <div class="<?php echo(isset($wide) && $wide ? "flex-fill ml-3 mr-3" : "col-md-8 offset-md-2"); ?>">
+            <div class="<?php echo(isset($wide) && $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2"); ?>">
                 <div class="card mt-3 mb-3">
                     <div class="card-header <?php echo(isset($wide) && $wide ? "panel-heading-wide" : ""); ?>">
                         <div class="row">
@@ -203,13 +203,13 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
                         @endif
 
                         @if (session('status'))
-                            <div class="alert alert-success">
+                            <div id="app_session_status_message" class="alert alert-success">
                                 {{ session('status') }}
                             </div>
                         @endif
 
                         @if (session('warning'))
-                            <div class="alert alert-warning">
+                            <div id="app_session_warning_message"  class="alert alert-warning">
                                 {{ session('warning') }}
                             </div>
                         @endif
@@ -221,6 +221,13 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
         </div>
     </div>
     <?php } ?>
+
+    <footer class="fixed-bottom">
+        <div class="row">
+            <div id="fixed_footer_container" class="col-12">
+            </div>
+        </div>
+    </footer>
 
     <div class="container text-center">
         <hr/>
@@ -271,6 +278,12 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
         </div>
     </div>
 </div>
+
+<script id="app_fixed_footer_template" type="text/x-handlebars-template">
+    <div class="alert alert-@{{type}} mb-0 text-center border-secondary border-top m-1">
+        @{{{message}}}
+    </div>
+</script>
 
 @guest
     <!-- Modal login -->

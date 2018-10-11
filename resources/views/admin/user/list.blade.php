@@ -37,7 +37,7 @@
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->name }}</td>
                 <td>{{ implode(', ', $user->roles->pluck('display_name')->toArray())}}</td>
-                <td>{{ $user->created_at }}</td>
+                <td>{{ $user->created_at->setTimezone('Europe/Amsterdam') }}</td>
                 <td>
                     <?php
                     // I really want to be the only one doing this

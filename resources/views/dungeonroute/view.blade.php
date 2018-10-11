@@ -58,7 +58,7 @@ if (count($affixes) == 0) {
                 },
                 success: function (json) {
                     // Update the new average rating
-                    $('#rating').barrating('set', json.new_avg_rating);
+                    $('#rating').barrating('set', Math.round(json.new_avg_rating));
                 }
             });
         }
@@ -85,23 +85,23 @@ if (count($affixes) == 0) {
     <h2 class="text-center">
         {{ __('Details') }}
     </h2>
-    <div class="container">
+    <div class="container p-0">
         <div class="row">
             <!-- First column -->
             <div class="col-md-6">
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
+                    <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Author') }}:
                     </div>
-                    <div class="col-6">
+                    <div class="col-7 col-lg-6">
                         {{ $model->author->name }}
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
+                    <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Dungeon') }}:
                     </div>
-                    <div class="col-6">
+                    <div class="col-7 col-lg-6">
                         {{ $model->dungeon->name }}
                     </div>
                 </div>
@@ -114,25 +114,25 @@ if (count($affixes) == 0) {
                 {{--</div>--}}
                 {{--</div>--}}
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
+                    <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Teeming') }}:
                     </div>
-                    <div class="col-6">
+                    <div class="col-7 col-lg-6">
                         {{ $model->teeming ? __('Yes') : __('No') }}
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
+                    <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Group setup') }}:
                     </div>
-                    <div id="view_dungeonroute_group_setup" class="col-6">
+                    <div id="view_dungeonroute_group_setup" class="col-7 col-lg-6">
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
+                    <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Affixes') }}:
                     </div>
-                    <div class="col-6">
+                    <div class="col-7 col-lg-6">
                         <div id="affixgroup_select_container" style="width: 200px">
                             {!! Form::select('affixes[]', $affixes, $selectedAffixes,
                                 ['id' => 'affixes',
@@ -150,21 +150,23 @@ if (count($affixes) == 0) {
             <!-- Second column -->
             <div class="col-md-6">
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
+                    <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Rating') }}:
                     </div>
-                    <div class="col-6">
+                    <div class="col-7 col-lg-6">
                         {!! Form::select('rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
                                             $model->avg_rating, ['id' => 'rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
+                    <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Your rating') }}:
                     </div>
-                    <div class="col-6">
+                    <div class="col-7 col-lg-6">
                         @guest
                             {{ __('Login to rate this route') }}
+                        @elseif( $model->isOwnedByCurrentUser() )
+                            {{ __('You cannot rate your own route') }}
                         @else
                             {!! Form::select('your_rating', ['' => '', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
                                                 $model->getRatingByCurrentUser(), ['id' => 'your_rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
@@ -172,10 +174,10 @@ if (count($affixes) == 0) {
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col-6 font-weight-bold">
+                    <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Favorite') }}:
                     </div>
-                    <div class="col-6">
+                    <div class="col-7 col-lg-6">
                         @guest
                             {{ __('Login to favorite this route') }}
                         @else
@@ -184,25 +186,25 @@ if (count($affixes) == 0) {
                     </div>
                 </div>
                 @auth
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col-12 font-weight-bold">
-                        @isset($current_report)
-                            <span class="text-warning">
+                    <div class="row view_dungeonroute_details_row">
+                        <div class="col-12 font-weight-bold">
+                            @isset($current_report)
+                                <span class="text-warning">
                                     <i class="fa fa-exclamation-triangle"></i> {{ __('You have reported this dungeonroute for moderation.') }}
                                 </span>
-                        @else
-                            <i class="fa fa-flag"></i>
-                            <a id="featherlight_trigger" href="#" data-featherlight="#userreport_dungeonroute">
-                                {{ __('Report for moderation') }}
-                            </a>
-                        @endisset
+                            @else
+                                <i class="fa fa-flag"></i>
+                                <a id="featherlight_trigger" href="#" data-featherlight="#userreport_dungeonroute">
+                                    {{ __('Report for moderation') }}
+                                </a>
+                            @endisset
+                        </div>
                     </div>
-                </div>
-                    @endauth
+                @endauth
             </div>
         </div>
     </div>
-    <div class="col-lg-12 mt-5">
+    <div class="col-lg-12 p-0 mt-5">
         <div id="map_container">
             @include('common.maps.map', [
                 'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),

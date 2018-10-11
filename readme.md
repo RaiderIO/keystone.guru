@@ -12,7 +12,8 @@ Currently the website has the following features:
   * Plotting a route through the dungeon, allowing a route to split up should the need arise
   * Selecting which enemies to kill
   * Optional free-form comments to indicate difficult enemies, strategies to use or abilities to use
-* User voting so you can vote for your favorite route
+  * Publish your planned route whenever you're ready to share it
+* User voting; increase visibility of your favorite routes
 * Favoriting of routes you liked best for easy reference
 * Search function for looking up routes others have made
 * When not registered, you are free to view any routes found in the search function, or when directly linked by others
