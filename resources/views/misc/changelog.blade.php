@@ -4,6 +4,22 @@
 
 @section('content')
     <h4>
+        2018/10/11 - v2
+    </h4>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            Fixed where switching maps while having a killzone selected would leave you locked out of selecting new killzones.
+        </li>
+        <li>
+            Interacting with the toolbox while having a killzone selected will now disable the selection on the killzone. This led to multiple issues.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         2018/10/11
     </h4>
     <p>

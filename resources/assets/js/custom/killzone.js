@@ -54,6 +54,15 @@ class KillZone extends MapObject {
             self.map.setSelectModeKillZone(null);
             self.removeExistingConnectionsToEnemies();
         });
+
+        // External change (due to delete mode being started, for example)
+        this.map.register('map:killzoneselectmodechanged', this, function (event) {
+            let killzone = event.data.killzone;
+            let previousKillzone = event.data.previousKillzone;
+            if (killzone === null && previousKillzone === self) {
+                self.cancelSelectMode(true);
+            }
+        });
     }
 
     /**
@@ -223,10 +232,12 @@ class KillZone extends MapObject {
     /**
      * Stops select mode of this KillZone.
      */
-    cancelSelectMode() {
+    cancelSelectMode(externalChange = false) {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
-        if (this.map.isKillZoneSelectModeEnabled()) {
-            this.map.setSelectModeKillZone(null);
+        if (this.map.isKillZoneSelectModeEnabled() || externalChange) {
+            if(!externalChange){
+                this.map.setSelectModeKillZone(null);
+            }
             this.layer.setIcon(LeafletKillZoneIcon);
 
             let self = this;

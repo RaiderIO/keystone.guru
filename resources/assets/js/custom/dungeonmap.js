@@ -110,6 +110,10 @@ class DungeonMap extends Signalable {
             });
         });
 
+        this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
+            // If a killzone was selected, unselect it now
+            self.setSelectModeKillZone(null);
+        });
         this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
             self.deleteModeActive = true;
         });
@@ -312,7 +316,10 @@ class DungeonMap extends Signalable {
 
         this.signal('map:beforerefresh', {dungeonmap: this});
 
+        // If a killzone was selected, unselect it now
+        this.setSelectModeKillZone(null);
         this.mapObjectGroupFetchSuccessCount = 0;
+
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
@@ -455,9 +462,10 @@ class DungeonMap extends Signalable {
      */
     setSelectModeKillZone(killzone = null) {
         let changed = this.currentSelectModeKillZone !== killzone;
+        let previousKillzone = this.currentSelectModeKillZone;
         this.currentSelectModeKillZone = killzone;
         if (changed) {
-            this.signal('map:killzoneselectmodechanged', {killzone: killzone});
+            this.signal('map:killzoneselectmodechanged', {previousKillzone: previousKillzone, killzone: killzone});
         }
     }
 
