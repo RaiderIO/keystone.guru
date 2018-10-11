@@ -21,7 +21,7 @@ if (count($affixes) == 0) {
 
         $(function () {
             $("#view_dungeonroute_group_setup").html(
-                handlebarsGroupSetupParse(_dungeonRoute)
+                handlebarsGroupSetupParse(_dungeonRoute.setup)
             );
             $('#rating').barrating({
                 theme: 'bars-1to10',

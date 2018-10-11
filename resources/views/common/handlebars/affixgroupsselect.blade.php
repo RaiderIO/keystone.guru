@@ -5,7 +5,7 @@ if(!isset($affixgroups) ){
 }
 
 ?><script id="affixgroup_select_option_template" type="text/x-handlebars-template">
-    <div class="row">
+    <div class="row affix_row_container">
         @{{#affixes}}
             <div class="col-3 affix_row">
                 <img src="@{{ icon_url }}" class="select_icon affix_icon"/>
