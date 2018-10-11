@@ -4,6 +4,19 @@
 
 @section('content')
     <h4>
+        2018/10/12
+    </h4>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            Deleting a killzone with enemies attached will now allow you to re-attach those enemies to another killzone again.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         2018/10/11 - v2
     </h4>
 

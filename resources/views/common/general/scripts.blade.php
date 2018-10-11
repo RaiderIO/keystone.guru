@@ -3,30 +3,60 @@
     document.addEventListener("DOMContentLoaded", function (event) {
         // Default error handler
         $.ajaxSetup({
-            error: function (xhr, textStatus, errorThrown) {
-                let message = "{{ __('An error occurred while performing your request. Please try again.') }}";
-
-                // If json was set
-                if (typeof xhr.responseJSON === 'object') {
-                    // There were Laravel errors
-                    if (typeof xhr.responseJSON.errors === 'object') {
-                        let errors = xhr.responseJSON.errors
-                        message = '';
-                        // Extract them and put them in the response string.
-                        for (let key in errors) {
-                            if (errors.hasOwnProperty(key)) {
-                                message += errors[key] + ' ';
-                            }
-                        }
-                    }
-                }
-                addFixedFooterError(message + " (" + xhr.status + ")");
-            }
+            error: defaultAjaxErrorFn
         });
 
         // Fade out success messages. They're not too interesting
         $("#app_session_status_message").delay(7000).fadeOut(200);
     });
+
+    /**
+     * The default function that should be called when an ajax request fails (error handler)
+     **/
+    function defaultAjaxErrorFn(xhr, textStatus, errorThrown) {
+        let message = "{{ __('An error occurred while performing your request. Please try again.') }}";
+
+        // If json was set
+        if (typeof xhr.responseJSON === 'object') {
+            // There were Laravel errors
+            if (typeof xhr.responseJSON.errors === 'object') {
+                let errors = xhr.responseJSON.errors
+                message = '';
+                // Extract them and put them in the response string.
+                for (let key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        message += errors[key] + ' ';
+                    }
+                }
+            }
+        }
+        addFixedFooterError(message + " (" + xhr.status + ")");
+    }
+
+    /**
+     * Add a fixed footer with an arbitrary type.
+     * @param type
+     * @param message
+     * @param durationMs
+     * @private
+     */
+    function _addFixedFooter(type, message, durationMs) {
+        let fixedFooterTemplate = $('#app_fixed_footer_template').html();
+
+        let template = handlebars.compile(fixedFooterTemplate);
+
+        let handlebarsData = {
+            type: type,
+            message: message
+        };
+
+        let $message = $(template(handlebarsData));
+        $('#fixed_footer_container').append($message);
+
+        $message.delay(durationMs).fadeOut(200, function () {
+            $(this).remove();
+        });
+    }
 
     /**
      * Refreshes fancy tooltips on all elements that request for them.
@@ -62,30 +92,5 @@
      */
     function addFixedFooterError(message, durationMs = 5000) {
         _addFixedFooter('danger', '<i class="fas fa-times-circle"></i> ' + message, durationMs);
-    }
-
-    /**
-     * Add a fixed footer with an arbitrary type.
-     * @param type
-     * @param message
-     * @param durationMs
-     * @private
-     */
-    function _addFixedFooter(type, message, durationMs) {
-        let fixedFooterTemplate = $('#app_fixed_footer_template').html();
-
-        let template = handlebars.compile(fixedFooterTemplate);
-
-        let handlebarsData = {
-            type: type,
-            message: message
-        };
-
-        let $message = $(template(handlebarsData));
-        $('#fixed_footer_container').append($message);
-
-        $message.delay(durationMs).fadeOut(200, function () {
-            $(this).remove();
-        });
     }
 </script>

@@ -21,7 +21,14 @@ class Signalable {
             name = [name];
         }
 
+
         for (let i = 0; i < name.length; i++) {
+            for (let j = 0; j < this.signals.length; j++) {
+                let signal = this.signals[j];
+                if (signal.name === name && signal.listener === listener && signal.callback === fn) {
+                    console.warn('About to hook the same signal for the 2nd time!', name, listener);
+                }
+            }
             this.signals.push({
                 name: name[i],
                 listener: listener,
