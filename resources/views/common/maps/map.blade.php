@@ -17,7 +17,7 @@ $introTexts = [
     __('This is the dungeon map. This is where you see an overview of enemies, which packs they may belong to, any patrols and your own planning. Click
     on enemies to assign them a raid marker, hover over them to see quick details about the enemy.'),
     __('These are the map controls where you can control the map and interact with it.'),
-    __('You can use these controls to zoom the map in or out. You can also use ctrl + scrollwheel if you\'re on a computer'),
+    __('You can use these controls to zoom the map in or out. You can also use the mouse scrollwheel if you\'re on a computer.'),
     __('These are your drawing tools.'),
     __('You can draw routes with this tool. Click it, then draw a route (a line) from A to B, with as many points are you like. Once finished, you can click
     the line on the map to change its color. You can add as many routes as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
