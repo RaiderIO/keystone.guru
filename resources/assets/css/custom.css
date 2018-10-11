@@ -262,6 +262,17 @@
     height: 40px;
 }
 
+/* #affixgroup_select_container .affix_row_container, */
+.view_dungeonroute_details_row .affix_row_container {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.view_dungeonroute_details_row .affix_row {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 #view_dungeonroute_group_setup {
     display: flex;
     align-items: center;

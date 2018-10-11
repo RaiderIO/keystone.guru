@@ -50,7 +50,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'avg_rating', 'rating_count', 'enemy_forces'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at', 'killzones', 'faction'];
 
