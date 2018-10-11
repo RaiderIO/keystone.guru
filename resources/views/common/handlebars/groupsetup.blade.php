@@ -22,8 +22,8 @@
         let template = handlebars.compile(groupSetupHtml);
 
         let handlebarsData = {
-            css_class: 'faction_icon_' + data.faction.name.toLowerCase(),
-            faction_title: data.faction.name,
+            css_class: 'faction_icon_' + data.setup.faction.name.toLowerCase(),
+            faction_title: data.setup.faction.name,
             classes: []
         };
 
