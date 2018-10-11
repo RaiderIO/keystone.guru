@@ -4,7 +4,7 @@
 
 @section('content')
     <h4>
-        2018/10/10
+        2018/10/11
     </h4>
     <p>
         General:
@@ -21,14 +21,59 @@
         <li>
             There's now some feedback on your actions on the website (success/failure of actions).
         </li>
+        <li>
+            Improved performance of Routes page.
+        </li>
     </ul>
     </p>
-    <p>
 
-    Map changes:
+    <p>
+        Map changes:
     <ul>
         <li>
             Height is now auto-adjusted to your device's viewport rather than a fixed value.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            Atal'Dazar
+            <ul>
+                <li>
+                    Shadowblade Stalker near the beginning is now marked as a patrol.
+                </li>
+                <li>
+                    Added a missing pack of Saurids on the way to Priestess Alun'za.
+                </li>
+                <li>
+                    Gilded Priestesses at Priestess Alun'za are no longer linked.
+                </li>
+            </ul>
+            The MOTHERLODE!!
+            <ul>
+                <li>
+                    Stonefuries before Taskmaster Askari are now linked.
+                </li>
+                <li>
+                    Numerous corrections to The D.M.Z. before the last boss (missing bombs, slightly off locations).
+                </li>
+            </ul>
+            The Underrot
+            <ul>
+                <li>
+                    Added a missing pack of 2 patrolling Diseased Lashes between the first and second boss.
+                </li>
+            </ul>
+            Tol Dagor
+            <ul>
+                <li>
+                    Pack of Stringing Swarmers right after the first boss was duplicated (two mobs inside eachother).
+                    The duplicated enemies have been removed.
+                </li>
+            </ul>
         </li>
     </ul>
     </p>
