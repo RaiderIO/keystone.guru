@@ -24,15 +24,29 @@ class DungeonRoutePolicy
     }
 
     /**
-     * Determine whether the user can create dungeon routes.
+     * Determine whether the user can publish dungeon routes.
      *
      * @param  \App\User $user
+     * @param  \App\Models\DungeonRoute $dungeonroute
      * @return mixed
      */
-    public function create(User $user)
+    public function publish(User $user, DungeonRoute $dungeonroute)
     {
-        // All users may create a dungeon route (non-anons)
-        return true;
+        // Only authors or if the user is an admin
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+    }
+
+
+    /**
+     * Determine whether the user can rate a dungeon route.
+     *
+     * @param  \App\User $user
+     * @param  \App\Models\DungeonRoute $dungeonroute
+     * @return mixed
+     */
+    public function rate(User $user, DungeonRoute $dungeonroute)
+    {
+        return !$dungeonroute->isOwnedByUser();
     }
 
     /**

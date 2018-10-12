@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Route;
@@ -14,6 +15,7 @@ use Teapot\StatusCode\Http;
 class APIRouteController extends Controller
 {
     use PublicKeyDungeonRoute;
+    use ChecksForDuplicates;
 
     function list(Request $request)
     {
@@ -59,6 +61,8 @@ class APIRouteController extends Controller
                     // Assign route to each passed vertex
                     $vertices[$key]['route_id'] = $route->id;
                 }
+
+                $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
 
                 // Bulk insert
                 RouteVertex::insert($vertices);

@@ -337,7 +337,7 @@ class DungeonRoute extends Model
         $this->difficulty = 1;
         $this->teeming = $request->get('teeming', $this->teeming);
         // @TODO TEMP FIX
-        if($this->teeming === null){
+        if ($this->teeming === null) {
             $this->teeming = 0;
         }
 
@@ -456,16 +456,17 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @param null $user
      * @return bool
      */
-    public function isOwnedByCurrentUser()
+    public function isOwnedByUser($user = null)
     {
-        if (!Auth::check()) {
-            return false;
+        // Can't have a function as a default value
+        if ($user === null) {
+            $user = Auth::user();
         }
 
-        $user = Auth::user();
-        return $this->author_id === $user->id;
+        return $user !== null && $this->author_id === $user->id;
     }
 
     public static function boot()
@@ -474,11 +475,15 @@ class DungeonRoute extends Model
 
         // Delete route properly if it gets deleted
         static::deleting(function ($item) {
-            DungeonRoutePlayerRace::where('dungeon_route_id', '=', $item->id)->delete();
-            DungeonRoutePlayerClass::where('dungeon_route_id', '=', $item->id)->delete();
-            DungeonRouteAffixGroup::where('dungeon_route_id', '=', $item->id)->delete();
-            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', '=', $item->id)->delete();
-            MapComment::where('dungeon_route_id', '=', $item->id)->delete();
+            DungeonRouteAffixGroup::where('dungeon_route_id', $item->id)->delete();
+            DungeonRoutePlayerClass::where('dungeon_route_id', $item->id)->delete();
+            DungeonRoutePlayerRace::where('dungeon_route_id', $item->id)->delete();
+            DungeonRoutePlayerSpecialization::where('dungeon_route_id', $item->id)->delete();
+            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $item->id)->delete();
+            DungeonRouteRating::where('dungeon_route_id', $item->id)->delete();
+            // @TODO Do not remove favorites, people ought to know why their favorited dungeon was removed?
+            // DungeonRouteFavorite::where('dungeon_route_id', '=', $item->id)->delete();
+            MapComment::where('dungeon_route_id', $item->id)->delete();
 
             // Delete routes
             foreach ($item->routes as $route) {

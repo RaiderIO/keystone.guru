@@ -11,11 +11,11 @@
     "axios": "^0.15.2",
     "jquery": "^3.1.0",
     "laravel-mix": "^2.1.14",
-    "lodash": "^4.16.2"
+    "lodash": "^4.17.11"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.3.1",
-    "ajv": "^6.5.3",
+    "@fortawesome/fontawesome-free": "^5.4.1",
+    "ajv": "^6.5.4",
     "bootstrap": "^4.1.3",
     "bootstrap-select": "^1.13.2",
     "bootswatch": "^4.1.3",
@@ -24,13 +24,13 @@
     "datatables": "^1.10.18",
     "featherlight": "^1.7.13",
     "geojson-utils": "^1.1.0",
-    "handlebars": "^4.0.11",
+    "handlebars": "^4.0.12",
     "intro.js": "^2.9.3",
     "jquery-bar-rating": "^1.2.2",
     "leaflet": "^1.3.4",
     "leaflet-contextmenu": "^1.4.0",
-    "leaflet-draw": "^1.0.2",
-    "leaflet-editable": "^1.1.0",
+    "leaflet-draw": "^1.0.3",
+    "leaflet-editable": "^1.2.0",
     "leaflet-polylinedecorator": "^1.6.0",
     "owl.carousel": "^2.3.4",
     "popper.js": "^1.14.4"

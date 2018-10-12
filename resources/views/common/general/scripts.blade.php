@@ -16,6 +16,12 @@
     function defaultAjaxErrorFn(xhr, textStatus, errorThrown) {
         let message = "{{ __('An error occurred while performing your request. Please try again.') }}";
 
+        switch (xhr.status) {
+            case 403:
+                message = "{{ __('You are not authorized to perform this request.') }}";
+                break;
+        }
+
         // If json was set
         if (typeof xhr.responseJSON === 'object') {
             // There were Laravel errors
@@ -28,6 +34,8 @@
                         message += errors[key] + ' ';
                     }
                 }
+            } else if (typeof xhr.responseJSON.message === 'string') {
+                message = xhr.responseJSON.message;
             }
         }
         addFixedFooterError(message + " (" + xhr.status + ")");

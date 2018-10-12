@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\DungeonStartMarker;
 use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
 
 class APIDungeonStartMarkerController extends Controller
 {
+    use ChecksForDuplicates;
+
     function list(Request $request)
     {
         $floorId = $request->get('floor_id');
@@ -27,6 +30,9 @@ class APIDungeonStartMarkerController extends Controller
         $dungeonStartMarker->floor_id = $request->get('floor_id');
         $dungeonStartMarker->lat = $request->get('lat');
         $dungeonStartMarker->lng = $request->get('lng');
+
+        // Find out of there is a duplicate
+        $this->checkForDuplicate($dungeonStartMarker);
 
         if (!$dungeonStartMarker->save()) {
             throw new \Exception("Unable to save dungeon start marker!");

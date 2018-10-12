@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\KillZoneEnemy;
@@ -14,6 +15,7 @@ use Teapot\StatusCode\Http;
 class APIKillZoneController extends Controller
 {
     use PublicKeyDungeonRoute;
+    use ChecksForDuplicates;
 
     function list(Request $request)
     {
@@ -47,8 +49,11 @@ class APIKillZoneController extends Controller
             $killZone->lat = $request->get('lat');
             $killZone->lng = $request->get('lng');
 
+            // Find out of there is a duplicate
+            $this->checkForDuplicate($killZone);
+
             if (!$killZone->save()) {
-                throw new \Exception("Unable to save enemy!");
+                throw new \Exception("Unable to save kill zone!");
             } else {
                 $killZone->deleteEnemies();
 

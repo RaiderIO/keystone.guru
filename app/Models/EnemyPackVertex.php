@@ -21,6 +21,8 @@ class EnemyPackVertex extends Model
      */
     public $hidden = ['enemy_pack_id'];
 
+    public $fillable = ['enemy_pack_id', 'lat', 'lng'];
+
     /**
      * @var bool Irrelevant to keep timestamps for each individual vertex when the time is already kept track of by the EnemyPack
      * to which these vertices belong.

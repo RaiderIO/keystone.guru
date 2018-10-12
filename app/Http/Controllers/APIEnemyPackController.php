@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\EnemyPack;
 use App\Models\EnemyPackVertex;
 use Illuminate\Http\Request;
@@ -9,6 +10,8 @@ use Teapot\StatusCode\Http;
 
 class APIEnemyPackController extends Controller
 {
+    use ChecksForDuplicates;
+
     //
     function list(Request $request)
     {
@@ -46,6 +49,8 @@ class APIEnemyPackController extends Controller
                 // Assign route to each passed vertex
                 $vertices[$key]['enemy_pack_id'] = $enemyPack->id;
             }
+
+            $this->checkForDuplicateVertices('App\Models\EnemyPackVertex', $vertices);
 
             // Bulk insert
             EnemyPackVertex::insert($vertices);

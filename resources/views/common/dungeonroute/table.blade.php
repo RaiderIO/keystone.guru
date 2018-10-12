@@ -146,7 +146,7 @@ $profile = isset($profile) ? $profile : false;
 
                 $.ajax({
                     type: 'DELETE',
-                    url: '{{ route('dungeonroute.delete', ['dungeonroute' => '']) }}/' + publicKey,
+                    url: '{{ route('api.dungeonroute.delete', ['dungeonroute' => '']) }}/' + publicKey,
                     dataType: 'json',
                     success: function (json) {
                         addFixedFooterSuccess("{{ __('Route deleted successfully') }}");

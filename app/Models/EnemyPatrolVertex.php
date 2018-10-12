@@ -21,6 +21,8 @@ class EnemyPatrolVertex extends Model
      */
     public $hidden = ['enemy_patrol_id'];
 
+    public $fillable = ['enemy_patrol_id', 'lat', 'lng'];
+
     /**
      * @var bool Irrelevant to keep timestamps for each individual vertex.
      */
