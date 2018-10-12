@@ -1,13 +1,14 @@
-<script id="affixgroups_single_template" type="text/x-handlebars-template">
+<?php
+/** This is the display of affixes in the routes listing */
+?><script id="affixgroups_single_template" type="text/x-handlebars-template">
     <?php // Is only one but keeps the underlying code much simpler to keep that data structure the same ?>
     @{{#affixgroups}}
     <div class="affix_list_row">
         @{{#affixes}}
         <div class="affix_row float-left">
-            <img src="@{{icon_url}}"
-                 class="select_icon affix_icon pr-1"
-                 data-toggle="tooltip"
-                 title="@{{title}}"/>
+            <div class="select_icon affix_icon_@{{ class }} mr-2" style="height: 24px;">
+                &nbsp;
+            </div>
         </div>
         @{{/affixes}}
     </div>
@@ -23,8 +24,9 @@
         <div class="row affix_list_row no-gutters" style="width: 200px">
             @{{#affixes}}
             <div class="affix_row col-md-3">
-                <img src="@{{icon_url}}"
-                     class="select_icon affix_icon"/>
+                <div class="select_icon affix_icon_@{{ class }} mr-2" style="height: 24px;">
+                    &nbsp;
+                </div>
             </div>
             @{{/affixes}}
         </div>
@@ -65,7 +67,8 @@
                         affixes.push({
                             icon_url: affix.iconfile.icon_url,
                             title: affix.name,
-                            name: affix.name
+                            name: affix.name,
+                            class: affix.name.toLowerCase()
                         });
                     }
                 }

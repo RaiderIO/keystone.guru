@@ -1,14 +1,18 @@
 <?php
+/** This is the template for the Affix Selection when using it in a dropdown */
+
 /** @var \App\Models\DungeonRoute $model */
 if(!isset($affixgroups) ){
     $affixgroups = \App\Models\AffixGroup::with('affixes')->get();
 }
 
 ?><script id="affixgroup_select_option_template" type="text/x-handlebars-template">
-    <div class="row affix_row_container">
+    <div class="row affix_row_container no-gutters">
         @{{#affixes}}
-            <div class="col-3 affix_row">
-                <img src="@{{ icon_url }}" class="select_icon affix_icon"/>
+            <div class="col affix_row">
+                <div class="select_icon affix_icon_@{{ class }}" style="height: 24px;">
+                    &nbsp;
+                </div>
             </div>
         @{{/affixes}}
     </div>
@@ -39,7 +43,7 @@ if(!isset($affixgroups) ){
                         let affix = affixGroup.affixes[j];
 
                         affixes.push({
-                            icon_url: affix.iconfile.icon_url
+                            class: affix.name.toLowerCase()
                         });
                     }
                 }
@@ -57,6 +61,16 @@ if(!isset($affixgroups) ){
             }
         }
         $('.selectpicker').selectpicker('refresh');
+        $(".bootstrap-select.affixselect .text")
+
+        // Fix the select, it wraps the entire thing in a SPAN which completely destroys ability to do any form of layout on it
+        // So remove the span
+        $(".bootstrap-select.affixselect .text").each(function(index, el){
+            let $el = $(el);
+            let $ours = $el.children();
+            $el.parent().append($ours);
+            $el.remove();
+        });
 
 
 

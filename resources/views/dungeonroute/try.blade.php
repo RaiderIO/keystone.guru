@@ -35,7 +35,7 @@
     <div class="container mt-5 p-0">
         <div class="form-group">
             <h4>
-                {{ __('Unsure of what you\'re supposed to do?') }}
+                {{ __('Need some help?') }}
             </h4>
             <div id="start_virtual_tour" class="btn btn-info col-md-auto">
                 <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}

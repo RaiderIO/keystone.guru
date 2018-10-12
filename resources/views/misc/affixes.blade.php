@@ -65,7 +65,7 @@
                     <div class="row no-gutters">
                         <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
                              data-toggle="tooltip"
-                             title="{{ $affix->name }}"
+                             title="{{ $affix->description }}"
                              style="height: 24px;">
                         </div>
                         <div class="col d-lg-block d-none pl-1">
