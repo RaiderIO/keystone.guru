@@ -8,12 +8,6 @@
     {{ Form::model($user, ['route' => ['profile.update', $user->name], 'method' => 'patch']) }}
 
     <div class="container">
-        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-            {!! Form::label('name', __('Name')) !!}
-            {!! Form::text('name', null, ['class' => 'form-control']) !!}
-            @include('common.forms.form-error', ['key' => 'name'])
-        </div>
-
         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
             {!! Form::label('email', __('Email')) !!}
             {!! Form::text('email', null, ['class' => 'form-control']) !!}

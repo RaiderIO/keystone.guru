@@ -16,8 +16,6 @@ $profile = isset($profile) ? $profile : false;
                 'ajax': {
                     'url': '{{ route('api.dungeonroutes') }}',
                     'data': function (d) {
-                        // Prevent this variable from busting cache
-                        d.draw = null;
                         d.favorites = $("#favorites").is(':checked') ? 1 : 0;
                         <?php if( $profile ) {?>
                             d.mine = true;
