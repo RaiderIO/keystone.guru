@@ -155,8 +155,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
             Route::post('/route', 'APIRouteController@store');
             Route::delete('/route', 'APIRouteController@delete');
 
-            Route::post('/killzone', 'APIKillZoneController@store');
-            Route::delete('/killzone', 'APIKillZoneController@delete');
+            Route::post('/dungeonroute/{dungeonroute}/killzone', 'APIKillZoneController@store');
+            Route::delete('/dungeonroute/{dungeonroute}/killzone/{killzone}', 'APIKillZoneController@delete');
 
             Route::post('/mapcomment', 'APIMapCommentController@store');
             Route::delete('/mapcomment', 'APIMapCommentController@delete');
@@ -164,11 +164,17 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
             Route::post('/enemy/raidmarker', 'APIEnemyController@setRaidMarker');
 
             Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
-            Route::post('/dungeonroute/{dungeonroute}/publish', 'APIDungeonRouteController@publish')->name('api.dungeonroute.publish');
-            Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
+            Route::post('/dungeonroute/{dungeonroute}/publish', 'APIDungeonRouteController@publish')
+                ->middleware('can:publish,dungeonroute')
+                ->name('api.dungeonroute.publish');
+            Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')
+                ->middleware('can:rate,dungeonroute')
+                ->name('api.dungeonroute.rate');
 
             // Submit a patch for your own dungeon route
-            Route::delete('/delete/{dungeonroute}', 'APIDungeonRouteController@delete')->name('dungeonroute.delete');
+            Route::delete('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@delete')
+                ->middleware('can:delete,dungeonroute')
+                ->name('api.dungeonroute.delete');
             Route::delete('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
 
             Route::post('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
@@ -196,7 +202,7 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
         });
     });
-    
+
     // View any dungeon route (catch all)
     Route::get('{dungeonroute}', 'DungeonRouteController@view')
         ->name('dungeonroute.view');

@@ -30,7 +30,7 @@ class FactionDisplayControls extends MapControl {
                     }
 
                     // Disable everything
-                    $.each(allRadios, function(index, el){
+                    $.each(allRadios, function (index, el) {
                         self._visibilityToggled($($(el).parent()).data('faction'), false);
                     });
 
@@ -87,5 +87,13 @@ class FactionDisplayControls extends MapControl {
         };
 
         this._mapControl = L.control.domElement({position: 'topright'}).addTo(this.map.leafletMap);
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        console.assert(this instanceof FactionDisplayControls, this, 'this is not FactionDisplayControls');
+
+        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
     }
 }

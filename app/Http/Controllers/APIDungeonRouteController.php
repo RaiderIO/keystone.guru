@@ -127,15 +127,7 @@ class APIDungeonRouteController extends Controller
      */
     function delete(Request $request, DungeonRoute $dungeonroute)
     {
-        $user = Auth::user();
-
-        // @TODO This should be in a policy?
-        $result = false;
-        if ($dungeonroute->author_id === $user->id || $user->hasRole('admin')) {
-            $result = $dungeonroute->delete();
-        }
-
-        if (!$result) {
+        if (!$dungeonroute->delete()) {
             abort(500, 'Unable to delete dungeonroute');
         }
 
@@ -150,13 +142,8 @@ class APIDungeonRouteController extends Controller
      */
     function publish(Request $request, DungeonRoute $dungeonroute)
     {
-        $user = Auth::user();
-
-        // @TODO This should be in a policy?
-        if ($dungeonroute->author_id === $user->id || $user->hasRole('admin')) {
-            $dungeonroute->published = intval($request->get('published', 0)) === 1;
-            $dungeonroute->save();
-        }
+        $dungeonroute->published = intval($request->get('published', 0)) === 1;
+        $dungeonroute->save();
 
         return ['result' => 'success'];
     }
@@ -168,10 +155,6 @@ class APIDungeonRouteController extends Controller
      */
     function rate(Request $request, DungeonRoute $dungeonroute)
     {
-        if ($dungeonroute->isOwnedByCurrentUser()) {
-            return response()->setStatusCode(403);
-        }
-
         $value = $request->get('rating', -1);
         if ($value > 0) {
             $user = Auth::user();

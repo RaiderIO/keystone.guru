@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\DungeonFloorSwitchMarker;
 use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
 
 class APIDungeonFloorSwitchMarkerController extends Controller
 {
+    use ChecksForDuplicates;
+
     function list(Request $request)
     {
         $floorId = $request->get('floor_id');
@@ -28,6 +31,9 @@ class APIDungeonFloorSwitchMarkerController extends Controller
         $dungeonFloorSwitchMarker->target_floor_id = $request->get('target_floor_id');
         $dungeonFloorSwitchMarker->lat = $request->get('lat');
         $dungeonFloorSwitchMarker->lng = $request->get('lng');
+
+        // Find out of there is a duplicate
+        $this->checkForDuplicate($dungeonFloorSwitchMarker);
 
         if (!$dungeonFloorSwitchMarker->save()) {
             throw new \Exception("Unable to save dungeon start marker!");

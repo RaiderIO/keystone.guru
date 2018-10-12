@@ -3,6 +3,11 @@
 @section('header-title', __('Welcome to keystone.guru!'))
 
 @section('content')
+    @if (session('status'))
+        <div id="app_session_status_message" class="alert alert-success text-center">
+            {{ session('status') }}
+        </div>
+    @endif
     <section class="probootstrap-hero mt-4">
         <div class="container">
             <div class="row">

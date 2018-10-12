@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\MapComment;
 use Illuminate\Database\Query\Builder;
@@ -12,6 +13,7 @@ use Teapot\StatusCode\Http;
 class APIMapCommentController extends Controller
 {
     use PublicKeyDungeonRoute;
+    use ChecksForDuplicates;
 
     function list(Request $request)
     {
@@ -67,6 +69,8 @@ class APIMapCommentController extends Controller
         $mapComment->comment = $request->get('comment', '');
         $mapComment->lat = $request->get('lat');
         $mapComment->lng = $request->get('lng');
+
+        $this->checkForDuplicate($mapComment);
 
         if (!$mapComment->save()) {
             throw new \Exception("Unable to save map comment!");

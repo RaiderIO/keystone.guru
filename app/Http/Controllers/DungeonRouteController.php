@@ -42,6 +42,7 @@ class DungeonRouteController extends Controller
         $result = null;
 
         $user = Auth::user();
+        // @TODO This should be handled differently imho
         if ($user->canCreateDungeonRoute()) {
             $result = view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New dungeonroute')]);
         } else {
@@ -60,6 +61,7 @@ class DungeonRouteController extends Controller
     {
         $result = null;
 
+        // @TODO This should be handled differently imho
         if (!$dungeonroute->published) {
             $result = view('dungeonroute.unpublished', ['headerTitle' => __('Route unpublished')]);
         } else {

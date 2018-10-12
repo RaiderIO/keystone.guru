@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\Enemy;
 use App\Models\DungeonRouteEnemyRaidMarker;
@@ -15,6 +16,7 @@ use Teapot\StatusCode\Http;
 class APIEnemyController extends Controller
 {
     use PublicKeyDungeonRoute;
+    use ChecksForDuplicates;
 
     function list(Request $request)
     {
@@ -50,7 +52,7 @@ class APIEnemyController extends Controller
             }
         } else {
 //        DB::enableQueryLog();
-            $result = Enemy::where('floor_id', '=', $floorId)->get();
+            $result = Enemy::where('floor_id', $floorId)->get();
 //        dd(DB::getQueryLog());
         }
 
@@ -76,6 +78,9 @@ class APIEnemyController extends Controller
         $enemy->enemy_forces_override = $request->get('enemy_forces_override', -1);
         $enemy->lat = $request->get('lat');
         $enemy->lng = $request->get('lng');
+
+        // Find out of there is a duplicate
+        $this->checkForDuplicate($enemy);
 
         if (!$enemy->save()) {
             throw new \Exception("Unable to save enemy!");

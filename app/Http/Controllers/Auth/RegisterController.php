@@ -104,6 +104,8 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
 
+        \Session::flash('status', __('Registered successfully. Enjoy the website!'));
+
         return $this->registered($request, $user) ?: redirect($this->redirectPath());
     }
 }

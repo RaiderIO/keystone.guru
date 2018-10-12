@@ -1,5 +1,7 @@
 <?php
-$affixGroups = \App\Models\AffixGroup::with(['affixes:affixes.id,affixes.name'])->get();
+/** This is the display of affixes when selecting them when creating a new route */
+
+$affixGroups = \App\Models\AffixGroup::with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
 $affixes = \App\Models\Affix::with('iconfile')->get();
 ?>
 
@@ -147,7 +149,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                         <div class="row no-gutters">
                             <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
                                  data-toggle="tooltip"
-                                 title="{{ $affix->name }}"
+                                 title="{{ $affix->description }}"
                                  style="height: 24px;">
                             </div>
                             <div class="col d-md-block d-none pl-1">

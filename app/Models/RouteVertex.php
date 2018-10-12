@@ -21,6 +21,8 @@ class RouteVertex extends Model
      */
     public $hidden = ['id', 'route_id'];
 
+    public $fillable = ['route_id', 'lat', 'lng'];
+
     /**
      * @var bool Irrelevant to keep timestamps for each individual vertex.
      */

@@ -23,7 +23,6 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->name = $request->get('name');
         $user->email = $request->get('email');
 
         if (!$user->save()) {

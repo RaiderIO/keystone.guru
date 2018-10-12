@@ -59,7 +59,8 @@ class KillZone extends MapObject {
         this.map.register('map:killzoneselectmodechanged', this, function (event) {
             let killzone = event.data.killzone;
             let previousKillzone = event.data.previousKillzone;
-            if (killzone === null && previousKillzone === self) {
+            // Only if the toolbar is active, not when we just de-selected ourselves
+            if (killzone === null && previousKillzone === self && self.map.toolbarActive) {
                 self.cancelSelectMode(true);
             }
         });
@@ -92,6 +93,27 @@ class KillZone extends MapObject {
         }
     }
 
+    /**
+     * Detaches this killzone from all its enemies.
+     * @private
+     */
+    _detachFromEnemies() {
+        console.assert(this instanceof KillZone, this, 'this was not a KillZone');
+
+        this.removeExistingConnectionsToEnemies();
+
+        for (let i = 0; i < this.enemies.length; i++) {
+            let enemyId = this.enemies[i];
+            // Find the enemy
+            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+            // When found, actually detach it
+            if (enemy !== null) {
+                enemy.setKillZone(0);
+            }
+        }
+    }
+
     edit() {
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
         this.save();
@@ -102,6 +124,8 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
 
         let successFn = function (json) {
+            // Detach from all enemies upon deletion
+            self._detachFromEnemies();
             self.removeExistingConnectionsToEnemies();
             self.signal('object:deleted', {response: json});
             self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
@@ -111,11 +135,10 @@ class KillZone extends MapObject {
         if (!this.map.isTryModeEnabled()) {
             $.ajax({
                 type: 'POST',
-                url: '/ajax/killzone',
+                url: '/ajax/dungeonroute/' + dungeonRoutePublicKey + '/killzone/' + self.id,
                 dataType: 'json',
                 data: {
-                    _method: 'DELETE',
-                    id: self.id
+                    _method: 'DELETE'
                 },
                 beforeSend: function () {
                     self.deleting = true;
@@ -143,15 +166,15 @@ class KillZone extends MapObject {
             self.setSynced(true);
             self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
         };
+
         // No network traffic if this is enabled!
         if (!this.map.isTryModeEnabled()) {
             $.ajax({
                 type: 'POST',
-                url: '/ajax/killzone',
+                url: '/ajax/dungeonroute/' + dungeonRoutePublicKey + '/killzone',
                 dataType: 'json',
                 data: {
                     id: self.id,
-                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
                     floor_id: self.map.getCurrentFloor().id,
                     lat: self.layer.getLatLng().lat,
                     lng: self.layer.getLatLng().lng,
@@ -164,9 +187,10 @@ class KillZone extends MapObject {
                 complete: function () {
                     self.saving = false;
                 },
-                error: function () {
+                error: function (xhr) {
                     // Even if we were synced, make sure user knows it's no longer / an error occurred
                     self.setSynced(false);
+                    defaultAjaxErrorFn(xhr);
                 }
             });
         } else {
@@ -235,9 +259,10 @@ class KillZone extends MapObject {
     cancelSelectMode(externalChange = false) {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
         if (this.map.isKillZoneSelectModeEnabled() || externalChange) {
-            if(!externalChange){
+            if (!externalChange) {
                 this.map.setSelectModeKillZone(null);
             }
+
             this.layer.setIcon(LeafletKillZoneIcon);
 
             let self = this;

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
+use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use Illuminate\Http\Request;
-use App\Models\KillZone;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
@@ -14,6 +15,7 @@ use Teapot\StatusCode\Http;
 class APIKillZoneController extends Controller
 {
     use PublicKeyDungeonRoute;
+    use ChecksForDuplicates;
 
     function list(Request $request)
     {
@@ -31,24 +33,28 @@ class APIKillZoneController extends Controller
 
     /**
      * @param Request $request
-     * @return array
+     * @param DungeonRoute $dungeonroute
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      */
-    function store(Request $request)
+    function store(Request $request, DungeonRoute $dungeonroute)
     {
         /** @var KillZone $killZone */
         $killZone = KillZone::findOrNew($request->get('id'));
 
         try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($request->get('dungeonroute'));
-
-            $killZone->dungeon_route_id = $dungeonRoute->id;
+            $killZone->dungeon_route_id = $dungeonroute->id;
             $killZone->floor_id = $request->get('floor_id');
             $killZone->lat = $request->get('lat');
             $killZone->lng = $request->get('lng');
 
+            if (!$killZone->exists) {
+                // Find out of there is a duplicate
+                $this->checkForDuplicate($killZone);
+            }
+
             if (!$killZone->save()) {
-                throw new \Exception("Unable to save enemy!");
+                throw new \Exception("Unable to save kill zone!");
             } else {
                 $killZone->deleteEnemies();
 
@@ -69,7 +75,7 @@ class APIKillZoneController extends Controller
                 KillZoneEnemy::insert($killZoneEnemies);
             }
 
-            $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonRoute->getEnemyForcesAttribute()];
+            $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonroute->getEnemyForcesAttribute()];
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
@@ -77,22 +83,21 @@ class APIKillZoneController extends Controller
         return $result;
     }
 
-    function delete(Request $request)
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param KillZone $killzone
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    function delete(Request $request, DungeonRoute $dungeonroute, KillZone $killzone)
     {
         try {
-            /** @var KillZone $killZone */
-            $killZone = KillZone::findOrFail($request->get('id'));
-
-            // @TODO WTF why does $killZone->dungeonroute not work?? It will NOT load the relation despite everything being OK?
-            $dungeonroute = DungeonRoute::findOrFail($killZone->dungeon_route_id);
-            // If we're not the author, don't delete anything
             // @TODO handle this in a policy?
             if ($dungeonroute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin')) {
                 throw new Exception('Unauthorized');
             }
 
-            $killZone->delete();
-            $killZone->deleteEnemies();
+            $killzone->delete();
 
             // Refresh the killzones relation
             $dungeonroute->load('killzones');

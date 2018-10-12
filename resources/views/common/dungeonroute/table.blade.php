@@ -16,8 +16,6 @@ $profile = isset($profile) ? $profile : false;
                 'ajax': {
                     'url': '{{ route('api.dungeonroutes') }}',
                     'data': function (d) {
-                        // Prevent this variable from busting cache
-                        d.draw = null;
                         d.favorites = $("#favorites").is(':checked') ? 1 : 0;
                         <?php if( $profile ) {?>
                             d.mine = true;
@@ -74,12 +72,12 @@ $profile = isset($profile) ? $profile : false;
                         'render': function (data, type, row, meta) {
                             let result = '-';
 
-                            if (row.avg_rating !== 0) {
+                            if (row.rating_count !== 0) {
                                 result = row.avg_rating;
-                                if (row.rating_count == 0 || row.rating_count > 1) {
-                                    result += ' (' + row.rating_count + ' {{ __('votes') }})';
-                                } else {
+                                if (row.rating_count === 1) {
                                     result += ' (' + row.rating_count + ' {{ __('vote') }})';
+                                } else {
+                                    result += ' (' + row.rating_count + ' {{ __('votes') }})';
                                 }
                             }
 
@@ -146,7 +144,7 @@ $profile = isset($profile) ? $profile : false;
 
                 $.ajax({
                     type: 'DELETE',
-                    url: '{{ route('dungeonroute.delete', ['dungeonroute' => '']) }}/' + publicKey,
+                    url: '{{ route('api.dungeonroute.delete', ['dungeonroute' => '']) }}/' + publicKey,
                     dataType: 'json',
                     success: function (json) {
                         addFixedFooterSuccess("{{ __('Route deleted successfully') }}");

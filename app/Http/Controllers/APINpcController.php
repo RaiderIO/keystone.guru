@@ -26,7 +26,6 @@ class APINpcController extends Controller
 
     public function list(Request $request)
     {
-        return Npc::all()/*with(['vertices'])->*/
-        ->get(['id', 'name']);
+        return Npc::all()->get(['id', 'name']);
     }
 }

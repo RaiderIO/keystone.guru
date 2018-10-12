@@ -30,6 +30,7 @@ class DungeonMap extends Signalable {
         /** @var Array Stores all UI elements that are drawn on the map */
         this.mapControls = [];
         // Keeps track of if we're in edit or delete mode
+        this.toolbarActive = false;
         this.deleteModeActive = false;
         this.editModeActive = false;
 
@@ -98,21 +99,38 @@ class DungeonMap extends Signalable {
 
         this.leafletMap.on(L.Draw.Event.DELETED, function (e) {
             let layers = e.layers;
+            let layersDeleted = 0;
+            let layersLength = 0; // No default function for this
+
+            let layerDeletedFn = function () {
+                layersDeleted++;
+                if (layersDeleted === layersLength) {
+                    // @TODO JS translations?
+                    addFixedFooterSuccess("Objects deleted successfully.");
+                }
+            };
+
             layers.eachLayer(function (layer) {
                 let mapObject = self.findMapObjectByLayer(layer);
                 console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
 
                 if (typeof mapObject.delete === 'function') {
+                    mapObject.register('object:deleted', self, layerDeletedFn);
                     mapObject.delete();
                 } else {
                     console.error(mapObject, ' does not have a delete() function!');
                 }
+                layersLength++;
             });
         });
 
         this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
+            self.toolbarActive = true;
             // If a killzone was selected, unselect it now
             self.setSelectModeKillZone(null);
+        });
+        this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
+            self.toolbarActive = false;
         });
         this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
             self.deleteModeActive = true;
@@ -127,6 +145,79 @@ class DungeonMap extends Signalable {
         this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
             self.deleteModeActive = false;
         });
+
+        // If we created something
+        this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
+            let mapObjectGroup = self.getMapObjectGroupByName(event.layerType);
+            if (mapObjectGroup !== false) {
+                let object = mapObjectGroup.createNew(event.layer);
+                // Save it to server instantly, manually saving is meh
+                object.save();
+            } else {
+                console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
+            }
+        });
+
+        // Not very pretty but needed for debugging
+        let verboseEvents = false;
+        if (verboseEvents) {
+            this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
+                console.log(L.Draw.Event.DRAWSTART, e);
+            });
+
+            this.leafletMap.on('layeradd', function (e) {
+                console.log('layeradd', e);
+            });
+
+            this.leafletMap.on(L.Draw.Event.CREATED, function (e) {
+                console.log(L.Draw.Event.CREATED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
+                console.log(L.Draw.Event.EDITED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DELETED, function (e) {
+                console.log(L.Draw.Event.DELETED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
+                console.log(L.Draw.Event.DRAWSTART, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
+                console.log(L.Draw.Event.DRAWSTOP, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DRAWVERTEX, function (e) {
+                console.log(L.Draw.Event.DRAWVERTEX, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
+                console.log(L.Draw.Event.EDITSTART, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITMOVE, function (e) {
+                console.log(L.Draw.Event.EDITMOVE, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITRESIZE, function (e) {
+                console.log(L.Draw.Event.EDITRESIZE, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITVERTEX, function (e) {
+                console.log(L.Draw.Event.EDITVERTEX, e);
+            });
+            this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
+                console.log(L.Draw.Event.EDITSTOP, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
+                console.log(L.Draw.Event.DELETESTART, e);
+            });
+            this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
+                console.log(L.Draw.Event.DELETESTOP, e);
+            });
+            this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
+                console.log(L.Draw.Event.TOOLBAROPENED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
+                console.log(L.Draw.Event.TOOLBARCLOSED, e);
+            });
+            this.leafletMap.on(L.Draw.Event.MARKERCONTEXT, function (e) {
+                console.log(L.Draw.Event.MARKERCONTEXT, e);
+            });
+        }
 
         // Refresh the map; draw the layers on it
         this.refreshLeafletMap();
@@ -353,84 +444,11 @@ class DungeonMap extends Signalable {
         // Refresh the list of drawn items
         this.leafletMap.addLayer(this.drawnItems);
 
-        // If we created something
-        this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
-            let mapObjectGroup = self.getMapObjectGroupByName(event.layerType);
-            if (mapObjectGroup !== false) {
-                let object = mapObjectGroup.createNew(event.layer);
-                // Save it to server instantly, manually saving is meh
-                object.save();
-            } else {
-                console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
-            }
-        });
-
         // If we confirmed editing something..
         this.signal('map:refresh', {dungeonmap: this});
 
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
             this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor(), this.mapObjectGroupFetchSuccess.bind(this));
-        }
-
-        // Not very pretty but needed for debugging
-        let verboseEvents = false;
-        if (verboseEvents) {
-            this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
-                console.log(L.Draw.Event.DRAWSTART, e);
-            });
-
-            this.leafletMap.on('layeradd', function (e) {
-                console.log('layeradd', e);
-            });
-
-            this.leafletMap.on(L.Draw.Event.CREATED, function (e) {
-                console.log(L.Draw.Event.CREATED, e);
-            });
-            this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
-                console.log(L.Draw.Event.EDITED, e);
-            });
-            this.leafletMap.on(L.Draw.Event.DELETED, function (e) {
-                console.log(L.Draw.Event.DELETED, e);
-            });
-            this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
-                console.log(L.Draw.Event.DRAWSTART, e);
-            });
-            this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
-                console.log(L.Draw.Event.DRAWSTOP, e);
-            });
-            this.leafletMap.on(L.Draw.Event.DRAWVERTEX, function (e) {
-                console.log(L.Draw.Event.DRAWVERTEX, e);
-            });
-            this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
-                console.log(L.Draw.Event.EDITSTART, e);
-            });
-            this.leafletMap.on(L.Draw.Event.EDITMOVE, function (e) {
-                console.log(L.Draw.Event.EDITMOVE, e);
-            });
-            this.leafletMap.on(L.Draw.Event.EDITRESIZE, function (e) {
-                console.log(L.Draw.Event.EDITRESIZE, e);
-            });
-            this.leafletMap.on(L.Draw.Event.EDITVERTEX, function (e) {
-                console.log(L.Draw.Event.EDITVERTEX, e);
-            });
-            this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
-                console.log(L.Draw.Event.EDITSTOP, e);
-            });
-            this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
-                console.log(L.Draw.Event.DELETESTART, e);
-            });
-            this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
-                console.log(L.Draw.Event.DELETESTOP, e);
-            });
-            this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
-                console.log(L.Draw.Event.TOOLBAROPENED, e);
-            });
-            this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
-                console.log(L.Draw.Event.TOOLBARCLOSED, e);
-            });
-            this.leafletMap.on(L.Draw.Event.MARKERCONTEXT, function (e) {
-                console.log(L.Draw.Event.MARKERCONTEXT, e);
-            });
         }
     }
 
