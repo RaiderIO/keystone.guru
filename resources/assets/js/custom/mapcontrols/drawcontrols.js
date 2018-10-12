@@ -112,8 +112,6 @@ class DrawControls extends MapControl {
         this.map.leafletMap.on(L.Draw.Event.CREATED, function (event) {
             let layer = event.layer;
             self.drawnItems.addLayer(layer);
-
-            console.log("DrawControls-> drawn item", event);
         });
 
         this.map.hotkeys.attach('r', 'leaflet-draw-draw-route');
@@ -141,5 +139,11 @@ class DrawControls extends MapControl {
                 }
             }
         }
+    }
+
+    cleanup(){
+        super.cleanup();
+
+        // this.map.leafletMap.off(L.Draw.Event.CREATED);
     }
 }

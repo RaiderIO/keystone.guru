@@ -42,6 +42,9 @@ use Illuminate\Support\Facades\DB;
  * @property $affixgroups \Illuminate\Support\Collection
  * @property $affixes \Illuminate\Support\Collection
  * @property $ratings \Illuminate\Support\Collection
+ *
+ * @property $routes \Illuminate\Support\Collection
+ * @property $killzones \Illuminate\Support\Collection
  */
 class DungeonRoute extends Model
 {

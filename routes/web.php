@@ -155,8 +155,8 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
             Route::post('/route', 'APIRouteController@store');
             Route::delete('/route', 'APIRouteController@delete');
 
-            Route::post('/killzone', 'APIKillZoneController@store');
-            Route::delete('/killzone', 'APIKillZoneController@delete');
+            Route::post('/dungeonroute/{dungeonroute}/killzone', 'APIKillZoneController@store');
+            Route::delete('/dungeonroute/{dungeonroute}/killzone/{killzone}', 'APIKillZoneController@delete');
 
             Route::post('/mapcomment', 'APIMapCommentController@store');
             Route::delete('/mapcomment', 'APIMapCommentController@delete');

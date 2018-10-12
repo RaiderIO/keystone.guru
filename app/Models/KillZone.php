@@ -19,6 +19,8 @@ class KillZone extends Model
     public $with = ['killzoneenemies'];
 
     /**
+     * Get the dungeon route that this killzone is attached to.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     function dungeonroute()
@@ -62,5 +64,16 @@ class KillZone extends Model
             // Kill them off
             KillZoneEnemy::destroy($existingKillZoneEnemiesIds);
         }
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete route properly if it gets deleted
+        static::deleting(function ($item) {
+            /** @var $item KillZone */
+            $item->deleteEnemies();
+        });
     }
 }

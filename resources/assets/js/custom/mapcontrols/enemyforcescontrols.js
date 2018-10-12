@@ -40,12 +40,19 @@ class EnemyForcesControls extends MapControl {
                 enemy.register('killzone:detached', self, function (data) {
                     self._setEnemyForces(self.enemyForces - data.context.enemy_forces);
                 });
-                // Remote changes will be the authority when it comes to forces
-                enemy.register('killzone:synced', self, function (data) {
-                    self._setEnemyForces(data.enemy_forces);
-                });
             });
         });
+
+        let killzoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
+        killzoneMapObjectGroup.register('object:add', this, function (addEvent) {
+            addEvent.data.object.register('killzone:synced', self, self._killzoneSynced.bind(self));
+        });
+    }
+
+    _killzoneSynced(syncedEvent) {
+        console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
+
+        this._setEnemyForces(syncedEvent.data.enemy_forces);
     }
 
     /**
@@ -53,7 +60,7 @@ class EnemyForcesControls extends MapControl {
      * @param value
      * @private
      */
-    _setEnemyForces(value){
+    _setEnemyForces(value) {
         console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
 
         this.enemyForces = value;
@@ -104,4 +111,26 @@ class EnemyForcesControls extends MapControl {
         // Show the default values
         this.refreshUI();
     }
+
+    cleanup() {
+        super.cleanup();
+
+        console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
+        let self = this;
+
+        // Unreg from map
+        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
+        // Unreg killzones
+        let killzoneMapObjectGroup = this.map.getMapObjectGroupByName('killzone');
+        killzoneMapObjectGroup.unregister('object:add', this);
+
+        // Unreg enemies
+        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+            // Unreg
+            enemy.unregister('killzone:attached', self);
+            enemy.unregister('killzone:detached', self);
+        });
+    }
+
 }

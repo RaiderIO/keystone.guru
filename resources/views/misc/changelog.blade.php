@@ -26,6 +26,12 @@
             Deleting a killzone with enemies attached will now allow you to re-attach those enemies to another killzone again.
         </li>
         <li>
+            Switching floors will no longer generate duplicate killzones (also potentially leading to inflated enemy forces counts, these are corrected).
+        </li>
+        <li>
+            Fixed multiple other issues related to switching floors.
+        </li>
+        <li>
             Improved error handling when things go wrong when planning your route.
         </li>
         <li>
