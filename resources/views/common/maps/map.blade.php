@@ -378,22 +378,7 @@ $introTexts = [
 
 <div class="container p-0">
     <?php
-    if (!isset($model) && $edit) {
-    ?>
-    <div class="form-group">
-        <h4>
-            {{ __('Unsure of what you\'re supposed to do?') }}
-        </h4>
-        <div id="start_virtual_tour" class="btn btn-info">
-            <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="alert alert-warning">
-            <i class="fa fa-exclamation-triangle"></i> {{ __('Warning! Any modification you make in tryout mode will not be saved!') }}
-        </div>
-    </div>
-    <?php } else { ?>
+    if (isset($model)) { ?>
     <div class="form-group">
         <div class="alert alert-warning">
             <i class="fa fa-exclamation-triangle"></i> {{ __('Mapping data is a work in progress. Please err on the side of overpulling over exact 100% while I correct any reported mistakes.') }}

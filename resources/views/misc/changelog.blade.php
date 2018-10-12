@@ -8,10 +8,28 @@
     </h4>
 
     <p>
+        General:
+    <ul>
+        <li>
+            Ratings now show as a '-' if no votes have been cast rather than 1 (0 votes).
+        </li>
+        <li>
+            Increased polish all around, mostly minor things.
+        </li>
+    </ul>
+    </p>
+
+    <p>
         Map changes:
     <ul>
         <li>
             Deleting a killzone with enemies attached will now allow you to re-attach those enemies to another killzone again.
+        </li>
+        <li>
+            Improved error handling when things go wrong when planning your route.
+        </li>
+        <li>
+            You are now given feedback when deleting objects has succeeded.
         </li>
     </ul>
     </p>

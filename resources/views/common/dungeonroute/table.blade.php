@@ -72,12 +72,12 @@ $profile = isset($profile) ? $profile : false;
                         'render': function (data, type, row, meta) {
                             let result = '-';
 
-                            if (row.avg_rating !== 0) {
+                            if (row.rating_count !== 0) {
                                 result = row.avg_rating;
-                                if (row.rating_count == 0 || row.rating_count > 1) {
-                                    result += ' (' + row.rating_count + ' {{ __('votes') }})';
-                                } else {
+                                if (row.rating_count === 1) {
                                     result += ' (' + row.rating_count + ' {{ __('vote') }})';
+                                } else {
+                                    result += ' (' + row.rating_count + ' {{ __('votes') }})';
                                 }
                             }
 

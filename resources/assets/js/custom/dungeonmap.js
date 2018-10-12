@@ -98,15 +98,28 @@ class DungeonMap extends Signalable {
 
         this.leafletMap.on(L.Draw.Event.DELETED, function (e) {
             let layers = e.layers;
+            let layersDeleted = 0;
+            let layersLength = 0; // No default function for this
+
+            let layerDeletedFn = function () {
+                layersDeleted++;
+                if (layersDeleted === layersLength) {
+                    // @TODO JS translations?
+                    addFixedFooterSuccess("Objects deleted successfully.");
+                }
+            };
+
             layers.eachLayer(function (layer) {
                 let mapObject = self.findMapObjectByLayer(layer);
                 console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
 
                 if (typeof mapObject.delete === 'function') {
+                    mapObject.register('object:deleted', self, layerDeletedFn);
                     mapObject.delete();
                 } else {
                     console.error(mapObject, ' does not have a delete() function!');
                 }
+                layersLength++;
             });
         });
 
