@@ -52,7 +52,9 @@ class EnemyForcesControls extends MapControl {
     _killzoneSynced(syncedEvent) {
         console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
 
-        this._setEnemyForces(syncedEvent.data.enemy_forces);
+        if (typeof syncedEvent.data.enemy_forces !== 'undefined') {
+            this._setEnemyForces(syncedEvent.data.enemy_forces);
+        }
     }
 
     /**

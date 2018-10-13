@@ -167,40 +167,43 @@ class MapComment extends MapObject {
 
         let self = this;
 
-        // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
-        // This also cannot be a private function since that'll apparently give different signatures as well.
-        let popupOpenFn = function (event) {
-            $('#map_map_comment_edit_popup_comment_' + self.id).val(self.comment);
+        if (this.isEditable() && this.map.edit) {
+            // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
+            // This also cannot be a private function since that'll apparently give different signatures as well.
+            let popupOpenFn = function (event) {
+                $('#map_map_comment_edit_popup_comment_' + self.id).val(self.comment);
 
-            // Prevent multiple binds to click
-            let $submitBtn = $('#map_map_comment_edit_popup_submit_' + self.id);
-            $submitBtn.unbind('click');
-            $submitBtn.bind('click', self._popupSubmitClicked.bind(self));
-        };
-
-        // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, function (event) {
-            let customPopupHtml = $('#map_map_comment_edit_popup_template').html();
-            // Remove template so our
-            let template = handlebars.compile(customPopupHtml);
-
-            let data = {id: self.id};
-
-            // Build the status bar from the template
-            customPopupHtml = template(data);
-
-            let customOptions = {
-                'maxWidth': '400',
-                'minWidth': '300',
-                'className': 'popupCustom'
+                // Prevent multiple binds to click
+                let $submitBtn = $('#map_map_comment_edit_popup_submit_' + self.id);
+                $submitBtn.unbind('click');
+                $submitBtn.bind('click', self._popupSubmitClicked.bind(self));
             };
 
-            self.layer.unbindPopup();
-            self.layer.bindPopup(customPopupHtml, customOptions);
+            // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
+            this.register('synced', this, function (event) {
+                let customPopupHtml = $('#map_map_comment_edit_popup_template').html();
+                // Remove template so our
+                let template = handlebars.compile(customPopupHtml);
 
-            self.layer.off('popupopen', popupOpenFn);
-            self.layer.on('popupopen', popupOpenFn);
-        });
+                let data = {id: self.id};
+
+                // Build the status bar from the template
+                customPopupHtml = template(data);
+
+                let customOptions = {
+                    'maxWidth': '400',
+                    'minWidth': '300',
+                    'className': 'popupCustom'
+                };
+
+                self.layer.unbindPopup();
+                self.layer.bindPopup(customPopupHtml, customOptions);
+
+                self.layer.off('popupopen', popupOpenFn);
+                self.layer.on('popupopen', popupOpenFn);
+            });
+
+        }
     }
 
 }
