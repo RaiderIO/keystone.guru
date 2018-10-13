@@ -58,8 +58,8 @@ class APIKillZoneController extends Controller
             } else {
                 $killZone->deleteEnemies();
 
-                // Get the new enemies
-                $enemies = $request->get('enemies', []);
+                // Get the new enemies, only unique values in case there's some bug allowing selection of the same enemy multiple times
+                $enemies = array_unique($request->get('enemies', []));
 
                 // Store them
                 $killZoneEnemies = [];

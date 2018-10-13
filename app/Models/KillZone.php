@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \App\Models\DungeonRoute $dungeonroute
  * @property \App\Models\Floor $floor
  * @property \Illuminate\Support\Collection $enemies
+ * @property \Illuminate\Support\Collection $killzoneenemies
  */
 class KillZone extends Model
 {
