@@ -33,7 +33,9 @@ class APIDungeonFloorSwitchMarkerController extends Controller
         $dungeonFloorSwitchMarker->lng = $request->get('lng');
 
         // Find out of there is a duplicate
-        $this->checkForDuplicate($dungeonFloorSwitchMarker);
+        if (!$dungeonFloorSwitchMarker->exists) {
+            $this->checkForDuplicate($dungeonFloorSwitchMarker);
+        }
 
         if (!$dungeonFloorSwitchMarker->save()) {
             throw new \Exception("Unable to save dungeon start marker!");

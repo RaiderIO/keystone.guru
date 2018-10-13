@@ -2,6 +2,14 @@
 
 @section('header-title', __('My profile'))
 
+@section('scripts')
+    <script type="text/javascript">
+        $(function () {
+            newPassword('#new_password');
+        });
+    </script>
+@endsection
+
 @section('content')
 
     @php( $user = Auth::getUser() )
@@ -63,7 +71,7 @@
 
             <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
                 {!! Form::label('new_password', __('New password')) !!}
-                {!! Form::password('new_password', ['class' => 'form-control', 'autocomplete' => 'new-password']) !!}
+                {!! Form::password('new_password', ['id' => 'new_password', 'class' => 'form-control', 'autocomplete' => 'new-password']) !!}
                 @include('common.forms.form-error', ['key' => 'new_password'])
             </div>
 

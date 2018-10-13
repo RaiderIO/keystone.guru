@@ -4,6 +4,23 @@
 
 @section('content')
     <h4>
+        2018/10/13
+    </h4>
+
+    <p>
+        Map changes
+    <ul>
+        <li>
+            Viewer: clicking a comment will no longer give you a prompt to edit the comment (which won't work even if
+            you tried).
+        </li>
+        <li>
+            Fixed enemy forces display in tryout mode.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         2018/10/12
     </h4>
 
@@ -23,10 +40,12 @@
         Map changes:
     <ul>
         <li>
-            Deleting a killzone with enemies attached will now allow you to re-attach those enemies to another killzone again.
+            Deleting a killzone with enemies attached will now allow you to re-attach those enemies to another killzone
+            again.
         </li>
         <li>
-            Switching floors will no longer generate duplicate killzones (also potentially leading to inflated enemy forces counts, these are corrected).
+            Switching floors will no longer generate duplicate killzones (also potentially leading to inflated enemy
+            forces counts, these are corrected).
         </li>
         <li>
             Fixed multiple other issues related to switching floors.
@@ -48,10 +67,12 @@
         Map changes:
     <ul>
         <li>
-            Fixed where switching maps while having a killzone selected would leave you locked out of selecting new killzones.
+            Fixed where switching maps while having a killzone selected would leave you locked out of selecting new
+            killzones.
         </li>
         <li>
-            Interacting with the toolbox while having a killzone selected will now disable the selection on the killzone. This led to multiple issues.
+            Interacting with the toolbox while having a killzone selected will now disable the selection on the
+            killzone. This led to multiple issues.
         </li>
     </ul>
     </p>

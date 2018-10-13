@@ -33,6 +33,7 @@
     "leaflet-editable": "^1.2.0",
     "leaflet-polylinedecorator": "^1.6.0",
     "owl.carousel": "^2.3.4",
+    "password-strength-meter": "^1.2.1",
     "popper.js": "^1.14.4"
   }
 }

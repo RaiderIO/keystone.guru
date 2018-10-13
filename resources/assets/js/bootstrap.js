@@ -42,6 +42,7 @@ window.polylinedecorator = require('leaflet-polylinedecorator');
 window.featherlight = require('featherlight');
 // window.owlCarousel = require('owl.carousel');
 window.introjs = require('intro.js');
+window.pwstrengthmeter = require('password-strength-meter');
 
 require('@fortawesome/fontawesome-free');
 
