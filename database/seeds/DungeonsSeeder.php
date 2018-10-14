@@ -314,7 +314,7 @@ class DungeonsSeeder extends Seeder
             'Kings\' Rest' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 224,
-                'enemy_forces_required_teeming' => 270,
+                'enemy_forces_required_teeming' => 260,
                 'active' => true,
                 'floors' => [
                     'Kings\' Rest' => [
@@ -402,7 +402,7 @@ class DungeonsSeeder extends Seeder
             'The Underrot' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 252,
-                'enemy_forces_required_teeming' => 301,
+                'enemy_forces_required_teeming' => 286,
                 'active' => true,
                 'floors' => [
                     'The Underrot' => [
