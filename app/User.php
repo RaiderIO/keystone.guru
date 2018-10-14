@@ -21,6 +21,11 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
+     * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
+     */
+    protected $connection = 'mysql';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -113,5 +118,10 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new CustomPasswordResetEmail($token));
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->hasRole('admin');
     }
 }

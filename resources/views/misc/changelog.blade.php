@@ -4,11 +4,11 @@
 
 @section('content')
     <h4>
-        2018/10/13
+        2018/10/14
     </h4>
 
     <p>
-        Map changes
+        Mapping changes
     <ul>
         <li>
             Viewer: clicking a comment will no longer give you a prompt to edit the comment (which won't work even if
@@ -16,6 +16,19 @@
         </li>
         <li>
             Fixed enemy forces display in tryout mode.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
+        2018/10/13
+    </h4>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            Corrected Teeming enemy forces needed for The Underrot, King's Rest
         </li>
     </ul>
     </p>

@@ -184,6 +184,7 @@ return [
         Laratrust\LaratrustServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Folklore\Image\ImageServiceProvider::class,
+        PragmaRX\Tracker\Vendor\Laravel\ServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
     ],
 
@@ -241,6 +242,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Image' => Folklore\Image\Facades\Image::class,
+        'Tracker' => PragmaRX\Tracker\Vendor\Laravel\Facade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ],
 
