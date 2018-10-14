@@ -70,7 +70,9 @@ class APIMapCommentController extends Controller
         $mapComment->lat = $request->get('lat');
         $mapComment->lng = $request->get('lng');
 
-        $this->checkForDuplicate($mapComment);
+        if (!$mapComment->exists) {
+            $this->checkForDuplicate($mapComment);
+        }
 
         if (!$mapComment->save()) {
             throw new \Exception("Unable to save map comment!");
