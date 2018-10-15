@@ -9,7 +9,6 @@ use App\Models\DungeonRouteRating;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
 
 class APIDungeonRouteController extends Controller
 {
@@ -96,7 +95,8 @@ class APIDungeonRouteController extends Controller
 
         // $builder->with(['dungeon:id,name']);
 
-        return DataTables::eloquent($builder)->make(true);
+        $dt = new \Yajra\DataTables\DataTables();
+        return $dt->eloquent($builder)->make(true);
     }
 
     /**
