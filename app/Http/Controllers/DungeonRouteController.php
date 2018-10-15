@@ -6,6 +6,7 @@ use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\UserReport;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,9 +45,9 @@ class DungeonRouteController extends Controller
         $user = Auth::user();
         // @TODO This should be handled differently imho
         if ($user->canCreateDungeonRoute()) {
-            $result = view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New dungeonroute')]);
+            $result = view('dungeonroute.new', ['dungeons' => Dungeon::all(), 'headerTitle' => __('New route')]);
         } else {
-            $result = view('dungeonroute.limitreached', ['headerTitle' => __('Limit reached')]);
+            $result = view('dungeonroute.limitreached');
         }
 
         return $result;
@@ -99,10 +100,60 @@ class DungeonRouteController extends Controller
 
         // May fail
         if (!$dungeonroute->saveFromRequest($request)) {
-            abort(500, __('Unable to save dungeonroute'));
+            abort(500, __('Unable to save route'));
         }
 
         return $dungeonroute;
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     */
+    function clone(Request $request, DungeonRoute $dungeonroute)
+    {
+        $user = Auth::user();
+
+        if ($user->canCreateDungeonRoute()) {
+            $relations = [
+                $dungeonroute->playerraces,
+                $dungeonroute->playerclasses,
+                $dungeonroute->affixgroups,
+                $dungeonroute->routes,
+                $dungeonroute->killzones,
+                $dungeonroute->enemyraidmarkers,
+                $dungeonroute->mapcomments
+            ];
+
+            // @TODO Add a 'clone of' column to DB
+            $dungeonroute->id = 0;
+            $dungeonroute->exists = false;
+            $dungeonroute->title .= sprintf(' (%s)', __('clone'));
+            $dungeonroute->public_key = DungeonRoute::generateRandomPublicKey();
+            $dungeonroute->published = false;
+            $dungeonroute->save();
+
+            foreach ($relations as $relation) {
+                foreach ($relation as $model) {
+                    /** @var $model Model */
+                    $model->id = 0;
+                    $model->exists = false;
+                    $model->dungeon_route_id = $dungeonroute->id;
+                    $model->save();
+                }
+            }
+
+            if (!Auth::user()->hasPaidTier('unlimited-routes')) {
+                \Session::flash('status', sprintf(__('Route cloned. You can create %s more routes.'), $user->getRemainingRouteCount()));
+            } else {
+                \Session::flash('status', __('Route cloned'));
+            }
+
+            return redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]));
+        } else {
+            return view('dungeonroute.limitreached');
+        }
     }
 
     /**
@@ -112,7 +163,7 @@ class DungeonRouteController extends Controller
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
-        return view('dungeonroute.edit', ['model' => $dungeonroute, 'headerTitle' => __('Edit dungeonroute')]);
+        return view('dungeonroute.edit', ['model' => $dungeonroute, 'headerTitle' => __('Edit route')]);
     }
 
     /**
@@ -146,7 +197,7 @@ class DungeonRouteController extends Controller
         $dungeonroute = $this->store($request);
 
         // Message to the user
-        \Session::flash('status', __('Dungeonroute created'));
+        \Session::flash('status', __('Route created'));
 
         return redirect()->route('dungeonroute.edit', ["dungeonroute" => $dungeonroute]);
     }

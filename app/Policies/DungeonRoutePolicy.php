@@ -36,7 +36,6 @@ class DungeonRoutePolicy
         return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
-
     /**
      * Determine whether the user can rate a dungeon route.
      *
@@ -47,6 +46,18 @@ class DungeonRoutePolicy
     public function rate(User $user, DungeonRoute $dungeonroute)
     {
         return !$dungeonroute->isOwnedByUser();
+    }
+
+    /**
+     * Determine whether the user can clone a dungeon route.
+     *
+     * @param  \App\User $user
+     * @param  \App\Models\DungeonRoute $dungeonroute
+     * @return mixed
+     */
+    public function clone(User $user, DungeonRoute $dungeonroute)
+    {
+        return true;
     }
 
     /**

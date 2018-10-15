@@ -3,6 +3,8 @@
 @section('header-title', __('My profile'))
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
             newPassword('#new_password');
@@ -25,7 +27,7 @@
         {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
 
         <div class="mt-4">
-            <h3>Patreon</h3>
+            <h3>{{ __('Patreon') }}</h3>
             @isset($user->patreondata)
                 <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank">
                     {{'Unlink from Patreon'}}

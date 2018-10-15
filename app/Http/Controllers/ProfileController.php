@@ -24,11 +24,15 @@ class ProfileController extends Controller
     public function update(Request $request, User $user)
     {
         $user->email = $request->get('email');
-
-        if (!$user->save()) {
-            abort(500, __('An unexpected error occurred trying to save your profile'));
+        $exists = User::where('email', $user->email)->where('id', '<>', $user->id)->get()->count() > 0;
+        if (!$exists) {
+            if (!$user->save()) {
+                abort(500, __('An unexpected error occurred trying to save your profile'));
+            } else {
+                \Session::flash('status', __('Profile updated'));
+            }
         } else {
-            \Session::flash('status', __('Profile updated'));
+            \Session::flash('warning', __('That e-mail is already in use.'));
         }
 
         return redirect()->route('profile.edit');
@@ -57,7 +61,7 @@ class ProfileController extends Controller
             // New passwords must match
             if ($newPassword === $newPasswordConfirm) {
                 // But not the same password as he/she had
-                if( $currentPw !== $newPassword ){
+                if ($currentPw !== $newPassword) {
                     $user->password = Hash::make($newPassword);
                     $user->save();
                     \Session::flash('status', __('Password changed'));
