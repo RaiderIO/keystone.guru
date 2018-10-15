@@ -204,7 +204,7 @@ $profile = isset($profile) ? $profile : false;
     <table id="routes_table" class="tablesorter default_table dt-responsive nowrap table-striped mt-2" width="100%">
         <thead>
         <tr>
-            <th width="{{ $profile ? '20' : '30' }}%">{{ __('Title') }}</th>
+            <th class="title_column">{{ __('Title') }}</th>
             <th width="15%">{{ __('Dungeon') }}</th>
         <!-- <th width="10%" class="d-none d-md-table-cell">{{ __('Difficulty') }}</th> -->
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>

@@ -246,10 +246,13 @@
 }
 
 #routes_table .limit_width {
-    max-width: 0;
+    max-width: 400px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+@media (max-width: 12450px) {
+
 }
 
 /** INTRO.JS */
