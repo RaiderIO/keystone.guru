@@ -60,8 +60,9 @@
 
         {!! Form::close() !!}
 
+        {{--$user->email is intended, since that is the actual username--}}
         {{ Form::model($user, ['route' => ['profile.changepassword', $user->name], 'method' => 'patch']) }}
-        {!! Form::hidden('username', $user->name) !!}
+        {!! Form::hidden('username', $user->email) !!}
         <div class="mt-4">
             <h3>{{ __('Change password') }}</h3>
 
