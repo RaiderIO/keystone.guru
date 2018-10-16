@@ -5,7 +5,7 @@ $user = \Illuminate\Support\Facades\Auth::user();
 // Show ads if not set
 $noads = isset($noads) ? $noads : false;
 // If logged in, check if the user has paid for an ad-free website
-$noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
+$noads = $noads || Auth::check() ? $noads : $user->hasPaidTier('ad-free');
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
