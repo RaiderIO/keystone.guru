@@ -4,20 +4,22 @@ $modalClass = $modal ? 'modal-' : '';
 $width = $modal ? '12' : '6';
 ?>
 
-<form class="form-horizontal" method="POST" action="{{ route('login') }}">
+<form class="form-horizontal" method="POST"
+      action="{{ route('login', ['redirect' => Request::get('redirect', Request::getPathInfo())]) }}">
     {{ csrf_field() }}
 
     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-        <label for="{{ $modalClass }}login_email" class="control-label">E-Mail Address</label>
+        <label for="{{ $modalClass }}login_email" class="control-label">{{ __('E-mail address') }}</label>
 
         <div class="col-md-{{ $width }}">
-            <input id="{{ $modalClass }}login_email" type="email" class="form-control" name="email" value="{{ old('email') }}" required
+            <input id="{{ $modalClass }}login_email" type="email" class="form-control" name="email"
+                   value="{{ old('email') }}" required
                    autofocus>
         </div>
     </div>
 
     <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-        <label for="{{ $modalClass }}login_password" class="control-label">Password</label>
+        <label for="{{ $modalClass }}login_password" class="control-label">{{ __('Password') }}</label>
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password" required>
@@ -28,7 +30,8 @@ $width = $modal ? '12' : '6';
         <div class="col-md-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
             <div class="checkbox">
                 <label for="{{ $modalClass }}login_remember">
-                    <input id="{{ $modalClass }}login_remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                    <input id="{{ $modalClass }}login_remember" type="checkbox"
+                           name="remember" {{ old('remember') ? 'checked' : '' }}>
                     {{ __('Remember me') }}
                 </label>
             </div>

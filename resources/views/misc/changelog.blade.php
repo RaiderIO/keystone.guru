@@ -4,11 +4,28 @@
 
 @section('content')
     <h4>
-        2018/10/14
+        2018/10/16
     </h4>
 
     <p>
-        Mapping changes
+        General:
+    <ul>
+        <li>
+            You can now clone your own route or someone else's! You don't need to redo your entire route just to make
+            some small changes between affixes. More routes = better!
+        </li>
+        <li>
+            Added password strength hint; increased minimum password length to 8 (but really, do more characters!)
+        </li>
+        <li>
+            Entering incorrect login credentials will now redirect you to a login page. Upon successful login, you are
+            now redirected to where you came from.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
     <ul>
         <li>
             Viewer: clicking a comment will no longer give you a prompt to edit the comment (which won't work even if
@@ -16,6 +33,23 @@
         </li>
         <li>
             Fixed enemy forces display in tryout mode.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            The Underrot
+            <ul>
+                <li>
+                    Removed an enemy from the pack of 4 just before the third boss which isn't there in-game.
+                </li>
+                <li>
+                    Added a Grotesque Horror that's only there on teeming, removed another that was never there.
+                </li>
+            </ul>
         </li>
     </ul>
     </p>

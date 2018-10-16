@@ -16,7 +16,7 @@ $width = $modal ? '12' : '6';
     </div>
 
     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-        <label for="{{ $modalClass }}register_email" class="control-label">{{ __('E-Mail Address') }}</label>
+        <label for="{{ $modalClass }}register_email" class="control-label">{{ __('E-mail address') }}</label>
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}register_email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
@@ -32,7 +32,7 @@ $width = $modal ? '12' : '6';
     </div>
 
     <div class="form-group">
-        <label for="{{ $modalClass }}register_password-confirm" class="control-label">{{ __('Confirm Password') }}</label>
+        <label for="{{ $modalClass }}register_password-confirm" class="control-label">{{ __('Confirm password') }}</label>
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}register_password-confirm" type="password" class="form-control" name="password_confirmation" required>
