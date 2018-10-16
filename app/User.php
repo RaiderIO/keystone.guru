@@ -21,6 +21,11 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
+     * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
+     */
+    protected $connection = 'mysql';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -80,6 +85,19 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the amount of routes a user may still create.
+     *
+     * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
+     * @return mixed
+     */
+    function getRemainingRouteCount()
+    {
+        return max(0,
+            config('keystoneguru.registered_user_dungeonroute_limit') - \App\Models\DungeonRoute::where('author_id', $this->id)->count()
+        );
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     function dungeonroutes()
@@ -113,5 +131,10 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new CustomPasswordResetEmail($token));
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->hasRole('admin');
     }
 }

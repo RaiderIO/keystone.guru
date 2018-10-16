@@ -2,6 +2,16 @@
 
 @section('header-title', __('My profile'))
 
+@section('scripts')
+    @parent
+
+    <script type="text/javascript">
+        $(function () {
+            newPassword('#new_password');
+        });
+    </script>
+@endsection
+
 @section('content')
 
     @php( $user = Auth::getUser() )
@@ -17,7 +27,7 @@
         {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
 
         <div class="mt-4">
-            <h3>Patreon</h3>
+            <h3>{{ __('Patreon') }}</h3>
             @isset($user->patreondata)
                 <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank">
                     {{'Unlink from Patreon'}}
@@ -50,8 +60,9 @@
 
         {!! Form::close() !!}
 
+        {{--$user->email is intended, since that is the actual username--}}
         {{ Form::model($user, ['route' => ['profile.changepassword', $user->name], 'method' => 'patch']) }}
-        {!! Form::hidden('username', $user->name) !!}
+        {!! Form::hidden('username', $user->email) !!}
         <div class="mt-4">
             <h3>{{ __('Change password') }}</h3>
 
@@ -63,7 +74,7 @@
 
             <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
                 {!! Form::label('new_password', __('New password')) !!}
-                {!! Form::password('new_password', ['class' => 'form-control', 'autocomplete' => 'new-password']) !!}
+                {!! Form::password('new_password', ['id' => 'new_password', 'class' => 'form-control', 'autocomplete' => 'new-password']) !!}
                 @include('common.forms.form-error', ['key' => 'new_password'])
             </div>
 

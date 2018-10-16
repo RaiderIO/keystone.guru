@@ -9,7 +9,7 @@
     {
         "id": 33,
         "floor_id": 55,
-        "target_floor_id": -1,
+        "target_floor_id": 56,
         "lat": -204.38,
         "lng": 132.75
     }

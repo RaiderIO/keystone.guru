@@ -8,7 +8,27 @@
 
         // Fade out success messages. They're not too interesting
         $("#app_session_status_message").delay(7000).fadeOut(200);
+        @guest
+        newPassword('#modal-register_password');
+        @endguest
     });
+
+    /**
+     * Initiates a password checker on a 'enter your password' input.
+     **/
+    function newPassword(selector) {
+        $(selector).password({
+            enterPass: '&nbsp;',
+            shortPass: '{{ __('Minimum password length is 8') }}',
+            badPass: '{{ __('Weak') }}',
+            goodPass: '{{ __('Medium') }}',
+            strongPass: '{{ __('Strong') }}',
+            containsUsername: '{{ __('Password cannot contain your username') }}',
+            showText: true, // shows the text tips
+            animate: false, // whether or not to animate the progress bar on input blur/focus
+            minimumLength: 8
+        })
+    }
 
     /**
      * The default function that should be called when an ajax request fails (error handler)

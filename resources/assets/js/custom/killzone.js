@@ -213,7 +213,7 @@ class KillZone extends MapObject {
             if (enemy !== null) {
                 enemy.setKillZone(self.id);
             } else {
-                console.warn('Unable to find enemy with id ' + id + ' for KZ on floor ' + self.floor_id + ', ' +
+                console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
                     'this enemy was probably removed during a migration?');
             }
         });
@@ -366,7 +366,7 @@ class KillZone extends MapObject {
 
                 self.enemyConnectionsLayerGroup.addLayer(layer);
             } else {
-                console.warn('Unable to find enemy with id ' + id + ' for KZ on floor ' + self.floor_id + ', ' +
+                console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + 'on floor ' + self.floor_id + ', ' +
                     'cannot draw connection, this enemy was probably removed during a migration?');
             }
         });

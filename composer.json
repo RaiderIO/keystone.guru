@@ -4,6 +4,12 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Wotuu/tracker"
+        }
+    ],
     "require": {
         "php": ">=5.6.4",
         "barryvdh/laravel-ide-helper": "^2.4",
@@ -12,6 +18,7 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.6",
         "patreon/patreon": "^0.3.1",
+        "pragmarx/tracker": "dev-wotuu-bugfix",
         "santigarcor/laratrust": "5.0.*",
         "shrikeh/teapot": "^2.3",
         "yajra/laravel-datatables-oracle": "~8.0"

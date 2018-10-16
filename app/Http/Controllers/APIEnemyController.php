@@ -80,7 +80,9 @@ class APIEnemyController extends Controller
         $enemy->lng = $request->get('lng');
 
         // Find out of there is a duplicate
-        $this->checkForDuplicate($enemy);
+        if( !$enemy->exists) {
+            $this->checkForDuplicate($enemy);
+        }
 
         if (!$enemy->save()) {
             throw new \Exception("Unable to save enemy!");

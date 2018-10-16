@@ -15,6 +15,11 @@ Auth::routes();
 
 Route::group(['middleware' => ['viewcachebuster']], function () {
 
+    // Catch for hard-coded /home route in RedirectsUsers.php
+    Route::get('home', function () {
+        return redirect('/');
+    });
+
     Route::get('credits', function () {
         return view('misc.credits');
     })->name('misc.credits');
@@ -69,14 +74,26 @@ Route::group(['middleware' => ['viewcachebuster']], function () {
         Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
         Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
 
+        // Legacy redirects
+        Route::get('edit/{dungeonroute}', function (\App\Models\DungeonRoute $dungeonroute) {
+            return redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]));
+        });
+        Route::patch('edit/{dungeonroute}', function (\App\Models\DungeonRoute $dungeonroute) {
+            return redirect(route('dungeonroute.update', ['dungeonroute' => $dungeonroute->public_key]));
+        });
+
         // Edit your own dungeon routes
-        Route::get('edit/{dungeonroute}', 'DungeonRouteController@edit')
+        Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')
             ->middleware('can:edit,dungeonroute')
             ->name('dungeonroute.edit');
         // Submit a patch for your own dungeon route
-        Route::patch('edit/{dungeonroute}', 'DungeonRouteController@update')
+        Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')
             ->middleware('can:edit,dungeonroute')
             ->name('dungeonroute.update');
+        // Clone a route
+        Route::get('{dungeonroute}/clone', 'DungeonRouteController@clone')
+            ->middleware('can:clone,dungeonroute')
+            ->name('dungeonroute.clone');
 
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');

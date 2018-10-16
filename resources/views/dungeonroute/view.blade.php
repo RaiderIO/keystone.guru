@@ -1,5 +1,4 @@
 @extends('layouts.app', ['wide' => true])
-@section('header-title', $model->title)
 <?php
 /** @var $model \App\Models\DungeonRoute */
 $affixes = $model->affixes->pluck('text', 'id');
@@ -8,8 +7,17 @@ if (count($affixes) == 0) {
     $affixes = [-1 => 'Any'];
     $selectedAffixes = -1;
 }
-?>
 
+// Only add the 'clone of' when the user cloned it from someone else as a form of credit
+$cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $model->clone_of)->where('author_id', Auth::user()->id)->count() === 0 ?
+    sprintf(' (%s %s)',
+        __('clone of'),
+        ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $model->clone_of]) . '">' . $model->clone_of . '</a>)')
+    : '';
+?>
+@section('header-title')
+    {!! $model->title . $cloneTitle !!}
+@endsection
 @section('scripts')
     @parent
 
@@ -17,7 +25,7 @@ if (count($affixes) == 0) {
     @include('common.handlebars.groupsetup')
 
     <script>
-        var _dungeonRoute = {!! $model !!};
+        let _dungeonRoute = {!! $model !!};
 
         $(function () {
             $("#view_dungeonroute_group_setup").html(
@@ -89,23 +97,23 @@ if (count($affixes) == 0) {
         <div class="row">
             <!-- First column -->
             <div class="col-md-6">
-                <div class="row view_dungeonroute_details_row">
+                <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Author') }}:
                     </div>
-                    <div class="col-7 col-lg-6">
+                    <div class="col-7 col-md-6">
                         {{ $model->author->name }}
                     </div>
                 </div>
-                <div class="row view_dungeonroute_details_row">
+                <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Dungeon') }}:
                     </div>
-                    <div class="col-7 col-lg-6">
+                    <div class="col-7 col-md-6">
                         {{ $model->dungeon->name }}
                     </div>
                 </div>
-                {{--<div class="row view_dungeonroute_details_row">--}}
+                {{--<div class="row view_dungeonroute_details_row mt-1 mt-md-0">--}}
                 {{--<div class="col-6 font-weight-bold">--}}
                 {{--{{ __('Difficulty') }}:--}}
                 {{--</div>--}}
@@ -113,26 +121,26 @@ if (count($affixes) == 0) {
                 {{--{{ $model->difficulty }}--}}
                 {{--</div>--}}
                 {{--</div>--}}
-                <div class="row view_dungeonroute_details_row">
+                <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Teeming') }}:
                     </div>
-                    <div class="col-7 col-lg-6">
+                    <div class="col-7 col-md-6">
                         {{ $model->teeming ? __('Yes') : __('No') }}
                     </div>
                 </div>
-                <div class="row view_dungeonroute_details_row">
+                <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Group setup') }}:
                     </div>
-                    <div id="view_dungeonroute_group_setup" class="col-7 col-lg-6">
+                    <div id="view_dungeonroute_group_setup" class="col-7 col-md-6">
                     </div>
                 </div>
-                <div class="row view_dungeonroute_details_row">
+                <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Affixes') }}:
                     </div>
-                    <div class="col-7 col-lg-6">
+                    <div class="col-7 col-md-6">
                         <div id="affixgroup_select_container" style="width: 200px">
                             {!! Form::select('affixes[]', $affixes, $selectedAffixes,
                                 ['id' => 'affixes',
@@ -149,20 +157,20 @@ if (count($affixes) == 0) {
 
             <!-- Second column -->
             <div class="col-md-6">
-                <div class="row view_dungeonroute_details_row">
+                <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Rating') }}:
                     </div>
-                    <div class="col-7 col-lg-6">
+                    <div class="col-7 col-md-6">
                         {!! Form::select('rating', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10],
                                             $model->avg_rating, ['id' => 'rating', 'class' => 'form-control', 'style' => 'width: 200px']) !!}
                     </div>
                 </div>
-                <div class="row view_dungeonroute_details_row">
+                <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Your rating') }}:
                     </div>
-                    <div class="col-7 col-lg-6">
+                    <div class="col-7 col-md-6">
                         @guest
                             {{ __('Login to rate this route') }}
                         @elseif( $model->isOwnedByUser() )
@@ -173,11 +181,11 @@ if (count($affixes) == 0) {
                         @endguest
                     </div>
                 </div>
-                <div class="row view_dungeonroute_details_row">
+                <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Favorite') }}:
                     </div>
-                    <div class="col-7 col-lg-6">
+                    <div class="col-7 col-md-6">
                         @guest
                             {{ __('Login to favorite this route') }}
                         @else
@@ -186,7 +194,18 @@ if (count($affixes) == 0) {
                     </div>
                 </div>
                 @auth
-                    <div class="row view_dungeonroute_details_row">
+                    @if($model->dungeon->active)
+                        <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
+                            <div class="col-12 font-weight-bold">
+                                <i class="fa fa-clone"></i>
+                                <a href="{{ route('dungeonroute.clone', ['dungeonroute' => $model->public_key]) }}"
+                                   target="_blank">
+                                    {{ __('Clone this route') }}
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                    <div class="row view_dungeonroute_details_row mt-1 mt-md-0">
                         <div class="col-12 font-weight-bold">
                             @isset($current_report)
                                 <span class="text-warning">

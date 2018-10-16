@@ -209,7 +209,7 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
                         @endif
 
                         @if (session('warning'))
-                            <div id="app_session_warning_message"  class="alert alert-warning">
+                            <div id="app_session_warning_message" class="alert alert-warning">
                                 {{ session('warning') }}
                             </div>
                         @endif
@@ -287,18 +287,16 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
 
 @guest
     <!-- Modal login -->
-    <div class="modal fadeInUp probootstrap-animated" id="login_modal" tabindex="-1" role="dialog"
+    <div class="modal fade" id="login_modal" tabindex="-1" role="dialog"
          aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="vertical-alignment-helper">
-            <div class="modal-dialog modal-md vertical-align-center">
-                <div class="modal-content">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <div class="probootstrap-modal-flex">
-                        <div class="probootstrap-modal-content">
-                            @include('common.forms.login', ['modal' => true])
-                        </div>
+        <div class="modal-dialog modal-md vertical-align-center">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="probootstrap-modal-flex">
+                    <div class="probootstrap-modal-content">
+                        @include('common.forms.login', ['modal' => true])
                     </div>
                 </div>
             </div>
@@ -307,18 +305,16 @@ $noads = $user === null ? $noads : $user->hasPaidTier('ad-free');
     <!-- END modal login -->
 
     <!-- Modal signup -->
-    <div class="modal fadeInUp probootstrap-animated" id="register_modal" tabindex="-1" role="dialog"
+    <div class="modal fade" id="register_modal" tabindex="-1" role="dialog"
          aria-labelledby="signupModalLabel" aria-hidden="true">
-        <div class="vertical-alignment-helper">
-            <div class="modal-dialog modal-md vertical-align-center">
-                <div class="modal-content">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <div class="probootstrap-modal-flex">
-                        <div class="probootstrap-modal-content">
-                            @include('common.forms.register', ['modal' => true])
-                        </div>
+        <div class="modal-dialog modal-md vertical-align-center">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="probootstrap-modal-flex">
+                    <div class="probootstrap-modal-content">
+                        @include('common.forms.register', ['modal' => true])
                     </div>
                 </div>
             </div>

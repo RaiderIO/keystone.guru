@@ -27,8 +27,8 @@ class ProfileFormRequest extends FormRequest
         return [
             'name' => ['required|alpha_dash|min:3|max:24', Rule::unique('users')->ignore($this->route()->parameter('user'))],
             'email' => 'required|email|unique:users',
-            'current_password' => 'min:6',
-            'new_password' => 'min:6|confirmed'
+            'current_password' => 'min:8',
+            'new_password' => 'min:8|confirmed'
         ];
     }
 }

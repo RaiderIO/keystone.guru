@@ -6,7 +6,7 @@
     <div class="affix_list_row">
         @{{#affixes}}
         <div class="affix_row float-left">
-            <div class="select_icon affix_icon_@{{ class }} mr-2" style="height: 24px;">
+            <div class="select_icon affix_icon_@{{ class }} mr-2" style="height: 24px;" data-toggle="tooltip" title="@{{name}}">
                 &nbsp;
             </div>
         </div>

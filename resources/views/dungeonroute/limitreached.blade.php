@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('header-title', $headerTitle)
+@section('header-title', __('Limit reached'))
 
 @section('content')
     {{ sprintf(

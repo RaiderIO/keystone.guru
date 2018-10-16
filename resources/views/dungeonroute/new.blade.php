@@ -91,7 +91,7 @@
         </div>
         @if(!Auth::user()->hasPaidTier('unlimited-routes'))
             {{ sprintf(__('You may create %s more route(s).'),
-                max(0, config('keystoneguru.registered_user_dungeonroute_limit') - \App\Models\DungeonRoute::where('author_id', Auth::user()->id)->count())
+                Auth::user()->getRemainingRouteCount()
             ) }}
 
             <a href="https://www.patreon.com/keystoneguru">

@@ -94,7 +94,10 @@ $profile = isset($profile) ? $profile : false;
                         'className': 'd-none d-lg-table-cell',
                     }, {
                         'render': function (data, type, row, meta) {
-                            return '<div class="btn btn-danger dungeonroute-delete" data-publickey="' + row.public_key + '">{{ __('Delete') }}</div>';
+                            let actionsHtml = $("#dungeonroute_table_profile_actions_template").html();
+
+                            let template = handlebars.compile(actionsHtml);
+                            return template({public_key: row.public_key});
                         }
                     }
                     <?php } ?>
@@ -103,10 +106,16 @@ $profile = isset($profile) ? $profile : false;
 
             _dt.on('draw.dt', function (e, settings, json, xhr) {
                 refreshTooltips();
-
                 let $deleteBtns = $('.dungeonroute-delete');
                 $deleteBtns.unbind('click');
-                $deleteBtns.bind('click', _promptDeleteDungeonKey);
+                $deleteBtns.bind('click', _promptDeleteDungeonRoute);
+
+                let $cloneBtns = $('.dungeonroute-clone');
+                $cloneBtns.unbind('click');
+                $cloneBtns.bind('click', function (clickEvent) {
+                    let key = $(clickEvent.target).data('publickey');
+                    $("<a>").attr("href", '{{ route('dungeonroute.clone', ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key)).attr("target", "_blank")[0].click();
+                });
             });
 
             $("#dungeonroute_filter").bind('click', function () {
@@ -138,7 +147,7 @@ $profile = isset($profile) ? $profile : false;
          * @param clickEvent
          * @private
          */
-        function _promptDeleteDungeonKey(clickEvent) {
+        function _promptDeleteDungeonRoute(clickEvent) {
             if (confirm('{{ __('Are you sure you wish to delete this route?') }}')) {
                 let publicKey = $(clickEvent.target).data('publickey');
 
@@ -153,6 +162,18 @@ $profile = isset($profile) ? $profile : false;
                 });
             }
         }
+    </script>
+    <script id="dungeonroute_table_profile_actions_template" type="text/x-handlebars-template">
+        <div class="row no-gutters">
+            <div class="col">
+                <div class="btn btn-danger dungeonroute-clone"
+                     data-publickey="@{{ public_key }}">{{ __('Clone') }}</div>
+            </div>
+            <div class="col mt-2 mt-xl-0">
+                <div class="btn btn-danger dungeonroute-delete"
+                     data-publickey="@{{ public_key }}">{{ __('Delete') }}</div>
+            </div>
+        </div>
     </script>
     @include('common.handlebars.groupsetup')
     @include('common.handlebars.affixgroups')
@@ -204,16 +225,16 @@ $profile = isset($profile) ? $profile : false;
     <table id="routes_table" class="tablesorter default_table dt-responsive nowrap table-striped mt-2" width="100%">
         <thead>
         <tr>
-            <th width="{{ $profile ? '20' : '30' }}%">{{ __('Title') }}</th>
+            <th class="title_column">{{ __('Title') }}</th>
             <th width="15%">{{ __('Dungeon') }}</th>
         <!-- <th width="10%" class="d-none d-md-table-cell">{{ __('Difficulty') }}</th> -->
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
             <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
-            <th width="10%" class="d-none d-lg-table-cell">{{ __('Rating') }}</th>
+            <th width="5%" class="d-none d-lg-table-cell">{{ __('Rating') }}</th>
             <?php if( $profile ) { ?>
             <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
-            <th width="5%">{{ __('Actions') }}</th>
+            <th width="10%">{{ __('Actions') }}</th>
             <?php } ?>
         </tr>
         </thead>
