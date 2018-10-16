@@ -1,6 +1,7 @@
 [
     {
         "public_key": "4S4whhi",
+        "clone_of": null,
         "author_id": 1,
         "dungeon_id": 7,
         "faction_id": 2,

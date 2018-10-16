@@ -659,7 +659,7 @@
         "lat": -146.69,
         "lng": 263.19,
         "npc": {
-            "id": 133870
+            "id": 133852
         }
     },
     {
@@ -1725,7 +1725,7 @@
         "lat": -131.38,
         "lng": 264.06,
         "npc": {
-            "id": 133835
+            "id": 130909
         }
     },
     {
@@ -1768,19 +1768,6 @@
         }
     },
     {
-        "id": 2989,
-        "enemy_pack_id": -1,
-        "floor_id": 51,
-        "teeming": "visible",
-        "faction": "any",
-        "enemy_forces_override": -1,
-        "lat": -76.439999999999998,
-        "lng": 260.44,
-        "npc": {
-            "id": 134284
-        }
-    },
-    {
         "id": 2990,
         "enemy_pack_id": -1,
         "floor_id": 51,
@@ -1791,19 +1778,6 @@
         "lng": 261.19,
         "npc": {
             "id": 134284
-        }
-    },
-    {
-        "id": 2991,
-        "enemy_pack_id": -1,
-        "floor_id": 51,
-        "teeming": "visible",
-        "faction": "any",
-        "enemy_forces_override": -1,
-        "lat": -59.5,
-        "lng": 156.06,
-        "npc": {
-            "id": 138187
         }
     },
     {
@@ -1821,28 +1795,41 @@
     },
     {
         "id": 3164,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 493,
         "floor_id": 51,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -164.94,
-        "lng": 255.44,
+        "lat": -167,
+        "lng": 252.81,
         "npc": {
             "id": 133870
         }
     },
     {
         "id": 3165,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 493,
         "floor_id": 51,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -165.56,
-        "lng": 256.81,
+        "lat": -167.88,
+        "lng": 254.06,
         "npc": {
             "id": 133870
+        }
+    },
+    {
+        "id": 3174,
+        "enemy_pack_id": -1,
+        "floor_id": 51,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -65.5,
+        "lng": 200.38,
+        "npc": {
+            "id": 138187
         }
     }
 ]
