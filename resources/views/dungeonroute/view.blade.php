@@ -1,5 +1,4 @@
 @extends('layouts.app', ['wide' => true])
-@section('header-title', $model->title)
 <?php
 /** @var $model \App\Models\DungeonRoute */
 $affixes = $model->affixes->pluck('text', 'id');
@@ -8,8 +7,17 @@ if (count($affixes) == 0) {
     $affixes = [-1 => 'Any'];
     $selectedAffixes = -1;
 }
-?>
 
+// Only add the 'clone of' when the user cloned it from someone else as a form of credit
+$cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $model->clone_of)->where('author_id', Auth::user()->id)->count() === 0 ?
+    sprintf(' (%s %s)',
+        __('clone of'),
+        ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $model->clone_of]) . '">' . $model->clone_of . '</a>)')
+    : '';
+?>
+@section('header-title')
+    {!! $model->title . $cloneTitle !!}
+@endsection
 @section('scripts')
     @parent
 
@@ -17,7 +25,7 @@ if (count($affixes) == 0) {
     @include('common.handlebars.groupsetup')
 
     <script>
-        var _dungeonRoute = {!! $model !!};
+        let _dungeonRoute = {!! $model !!};
 
         $(function () {
             $("#view_dungeonroute_group_setup").html(

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\KillZone;
+use App\Models\Route;
 use App\Models\UserReport;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -126,14 +128,16 @@ class DungeonRouteController extends Controller
                 $dungeonroute->mapcomments
             ];
 
-            // @TODO Add a 'clone of' column to DB
             $dungeonroute->id = 0;
             $dungeonroute->exists = false;
+            $dungeonroute->author_id = Auth::user()->id;
             $dungeonroute->title .= sprintf(' (%s)', __('clone'));
+            $dungeonroute->clone_of = $dungeonroute->public_key;
             $dungeonroute->public_key = DungeonRoute::generateRandomPublicKey();
             $dungeonroute->published = false;
             $dungeonroute->save();
 
+            // Link all relations to their new dungeon route
             foreach ($relations as $relation) {
                 foreach ($relation as $model) {
                     /** @var $model Model */
@@ -141,6 +145,25 @@ class DungeonRouteController extends Controller
                     $model->exists = false;
                     $model->dungeon_route_id = $dungeonroute->id;
                     $model->save();
+
+                    // If it was a route, save the vertices as well
+                    if($model instanceof Route ){
+                        foreach($model->vertices as $vertex){
+                            $vertex->id = 0;
+                            $vertex->exists = false;
+                            $vertex->route_id = $model->id;
+                            $vertex->save();
+                        }
+                    }
+                    // KillZone, save the enemies that were attached to them
+                    else if($model instanceof KillZone ){
+                        foreach($model->killzoneenemies as $enemy){
+                            $enemy->id = 0;
+                            $enemy->exists = false;
+                            $enemy->kill_zone_id = $model->id;
+                            $enemy->save();
+                        }
+                    }
                 }
             }
 

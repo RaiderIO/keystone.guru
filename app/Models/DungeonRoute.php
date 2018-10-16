@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
  * @property $author_id int
  * @property $dungeon_id int
  * @property $faction_id int
+ * @property $clone_of string
  * @property $public_key string
  * @property $title string
  * @property $difficulty string
@@ -31,20 +32,23 @@ use Illuminate\Support\Facades\DB;
  * @property $faction Faction
  * @property $author User
  *
- * @property $specializations \Illuminate\Support\Collection
- * @property $classes \Illuminate\Support\Collection
- * @property $races \Illuminate\Support\Collection
+ * @property \Illuminate\Support\Collection $specializations
+ * @property \Illuminate\Support\Collection $classes
+ * @property \Illuminate\Support\Collection $races
  *
- * @property $playerspecializations \Illuminate\Support\Collection
- * @property $playerclasses \Illuminate\Support\Collection
- * @property $playerraces \Illuminate\Support\Collection
+ * @property \Illuminate\Support\Collection $playerspecializations
+ * @property \Illuminate\Support\Collection $playerclasses
+ * @property \Illuminate\Support\Collection $playerraces
  *
- * @property $affixgroups \Illuminate\Support\Collection
- * @property $affixes \Illuminate\Support\Collection
- * @property $ratings \Illuminate\Support\Collection
+ * @property \Illuminate\Support\Collection $affixgroups
+ * @property \Illuminate\Support\Collection $affixes
+ * @property \Illuminate\Support\Collection $ratings
  *
- * @property $routes \Illuminate\Support\Collection
- * @property $killzones \Illuminate\Support\Collection
+ * @property \Illuminate\Support\Collection $routes
+ * @property \Illuminate\Support\Collection $killzones
+ *
+ * @property \Illuminate\Support\Collection $enemyraidmarkers
+ * @property \Illuminate\Support\Collection $mapcomments
  */
 class DungeonRoute extends Model
 {
