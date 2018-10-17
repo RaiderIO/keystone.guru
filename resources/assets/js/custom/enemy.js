@@ -106,12 +106,21 @@ class Enemy extends MapObject {
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
         // This also cannot be a private function since that'll apparently give different signatures as well.
         let popupOpenFn = function (event) {
-            $.each($('.raid_marker_icon'), function (index, value) {
+            $.each($('.enemy_raid_marker_icon'), function (index, value) {
                 let $icon = $(value);
                 $icon.unbind('click');
                 $icon.bind('click', function () {
                     self.assignRaidMarker($icon.data('name'));
                 });
+            });
+            let $clearMarker = $('#enemy_raid_marker_clear_' + self.id);
+            $clearMarker.bind('click', function () {
+                // self.teeming = $('#enemy_edit_popup_teeming_' + self.id).val();
+                // self.faction = $('#enemy_edit_popup_faction_' + self.id).val();
+                // self.enemy_forces_override = $('#enemy_edit_popup_enemy_forces_override_' + self.id).val();
+                // self.npc_id = $('#enemy_edit_popup_npc_' + self.id).val();
+
+                self.edit();
             });
 
             let $submitBtn = $('#enemy_edit_popup_submit_' + self.id);
@@ -274,7 +283,9 @@ class Enemy extends MapObject {
             }
         });
 
-        this.onPopupInit();
+        if (this.isEditable() && this.map.edit) {
+            this.onPopupInit();
+        }
     }
 
     onPopupInit() {
