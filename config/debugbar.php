@@ -14,7 +14,7 @@ return [
      |
      */
 
-    'enabled' => false, // werkt niet
+    'enabled' => null,
     'except' => [
         //
     ],

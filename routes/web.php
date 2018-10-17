@@ -13,7 +13,7 @@
 
 Auth::routes();
 
-Route::group(['middleware' => ['viewcachebuster']], function () {
+Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function () {
 
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', function () {

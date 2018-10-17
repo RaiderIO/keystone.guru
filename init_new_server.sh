@@ -13,6 +13,7 @@ tput sgr0;
 # cache for image library
 mkdir storage/app/public/imagecache
 mkdir storage/app/public/expansions
+mkdir storage/debugbar
 
 # ensure www-data permissions
 # TODO: log folders writable?

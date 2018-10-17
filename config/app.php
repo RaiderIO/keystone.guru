@@ -181,6 +181,7 @@ return [
          * Custom
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Folklore\Image\ImageServiceProvider::class,
@@ -244,6 +245,7 @@ return [
         'Image' => Folklore\Image\Facades\Image::class,
         'Tracker' => PragmaRX\Tracker\Vendor\Laravel\Facade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];
