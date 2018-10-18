@@ -4,6 +4,51 @@
 
 @section('content')
     <h4>
+        2018/10/19
+    </h4>
+
+    <p>
+        General:
+    <ul>
+        <li>
+
+        </li>
+    </ul>
+    </p>
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            Tol Dagor
+            <ul>
+                <li>
+                    Removed two duplicate enemies in the Overseer's Redoubt.
+                </li>
+                <li>
+                    Added some missing enemies in the Officer Quarters.
+                </li>
+            </ul>
+        </li>
+        <li>
+            The Underrot
+            <ul>
+                <li>
+                    Re-positioned a lot of enemies to their correct location on the map. The map isn't very accurate so
+                    some enemies may look a bit out of place, but it's the best thing to do. Hopefully Blizzard fixes
+                    their map some time so the enemies are correctly placed.
+                </li>
+                <li>
+                    Added flying Feral Bloodswarmers after the second boss.
+                </li>
+                <li>
+                    Added a few missing Grotesque Horrors at the south part after the third boss.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         2018/10/18
     </h4>
 
