@@ -59,5 +59,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'ajax' => \App\Http\Middleware\OnlyAjax::class,
         'viewcachebuster' => \App\Http\Middleware\ViewCacheBuster::class,
+        'admindebugbar' => \App\Http\Middleware\AdminDebugBar::class,
     ];
 }

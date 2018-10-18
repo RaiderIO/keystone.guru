@@ -273,14 +273,14 @@ $introTexts = [
                     @if($i % 4 === 0)
                         <div class="row no-gutters">
                             @endif
-                            <div id="raid_marker_{{ $raidMarker->name }}"
-                                 class="raid_marker_icon raid_marker_icon_{{ $raidMarker->name }}"
+                            <div class="enemy_raid_marker_icon enemy_raid_marker_icon_{{ $raidMarker->name }}"
                                  data-name="{{ $raidMarker->name }}">
                             </div>
                             @if($i % 4 === 3)
                         </div>
                     @endif
                 @endfor
+                <div id="enemy_raid_marker_clear_@{{id}}" class="btn btn-warning col-12 mt-2"><i class="fa fa-times"></i> {{ __('Clear marker') }}</div>
             </div>
         </script>
     @else
