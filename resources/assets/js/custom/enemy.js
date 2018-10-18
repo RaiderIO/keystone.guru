@@ -115,24 +115,8 @@ class Enemy extends MapObject {
             });
             let $clearMarker = $('#enemy_raid_marker_clear_' + self.id);
             $clearMarker.bind('click', function () {
-                // self.teeming = $('#enemy_edit_popup_teeming_' + self.id).val();
-                // self.faction = $('#enemy_edit_popup_faction_' + self.id).val();
-                // self.enemy_forces_override = $('#enemy_edit_popup_enemy_forces_override_' + self.id).val();
-                // self.npc_id = $('#enemy_edit_popup_npc_' + self.id).val();
-
-                self.edit();
-            });
-
-            let $submitBtn = $('#enemy_edit_popup_submit_' + self.id);
-
-            $submitBtn.unbind('click');
-            $submitBtn.bind('click', function () {
-                // self.teeming = $('#enemy_edit_popup_teeming_' + self.id).val();
-                // self.faction = $('#enemy_edit_popup_faction_' + self.id).val();
-                // self.enemy_forces_override = $('#enemy_edit_popup_enemy_forces_override_' + self.id).val();
-                // self.npc_id = $('#enemy_edit_popup_npc_' + self.id).val();
-
-                self.edit();
+                // Empty is unassign
+                self.assignRaidMarker('');
             });
         };
 
@@ -232,7 +216,10 @@ class Enemy extends MapObject {
     setRaidMarkerName(name) {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         // This takes precedence over raid markers
-        if (this.iconName !== 'unset' && this.iconName !== 'flagged' && LeafletEnemyIcons.hasOwnProperty(name)) {
+        if( name === '') {
+            // Re-set the raid marker by re-setting the NPC. This then determines the original icon.
+            this.setNpc(this.npc);
+        } else if (this.iconName !== 'unset' && this.iconName !== 'flagged' && LeafletEnemyIcons.hasOwnProperty(name)) {
             this.setIcon(name);
         }
         this.raid_marker_name = name;
@@ -348,8 +335,6 @@ class Enemy extends MapObject {
             self.setSynced(true);
             self.map.leafletMap.closePopup();
             self.setRaidMarkerName(raidMarkerName);
-
-            self.setIcon(raidMarkerName);
         };
 
         // No network traffic!

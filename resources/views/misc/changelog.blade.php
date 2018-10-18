@@ -4,6 +4,30 @@
 
 @section('content')
     <h4>
+        2018/10/18
+    </h4>
+
+    <p>
+        General:
+    <ul>
+        <li>
+            Increased performance of the website. I'll continue to monitor the performance as the amount of users & routes grow.
+        </li>
+    </ul>
+    </p>
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            You can no longer attempt to assign raid markers while in view mode.
+        </li>
+        <li>
+            Raid markers can now be unassigned from enemies (in edit mode, of course).
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         2018/10/16
     </h4>
 

@@ -280,7 +280,7 @@ $introTexts = [
                         </div>
                     @endif
                 @endfor
-                <div id="enemy_raid_marker_clear_{{ $raidMarker->name }}" class="btn btn-warning col-12 mt-2"><i class="fa fa-times"></i> {{ __('Clear marker') }}</div>
+                <div id="enemy_raid_marker_clear_@{{id}}" class="btn btn-warning col-12 mt-2"><i class="fa fa-times"></i> {{ __('Clear marker') }}</div>
             </div>
         </script>
     @else
