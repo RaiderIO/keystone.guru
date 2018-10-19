@@ -145,7 +145,7 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                 @php( $count = 0 )
                 @foreach($affixGroup->affixes as $affix)
                     @php( $number = count($affixGroup->affixes) - 1 === $count ? '2' : '3' )
-                    <div class="col-{{ $number }} affix_row">
+                    <div class="col col-md-{{ $number }} affix_row">
                         <div class="row no-gutters">
                             <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
                                  data-toggle="tooltip"
@@ -159,8 +159,10 @@ $affixes = \App\Models\Affix::with('iconfile')->get();
                     </div>
                     @php( $count++ )
                 @endforeach
-                <span class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-xs-1 check text-right" style="display: none;">
-                    <i class="fas fa-check"></i>
+                <span class="col col-md-1 text-right pl-0">
+                    <span class="check" style="display: none;">
+                        <i class="fas fa-check"></i>
+                    </span>
                 </span>
             </div>
         @endforeach

@@ -124,7 +124,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 </div>
 <div class="row">
     <?php for($i = 1; $i <= config('keystoneguru.party_size'); $i++){ ?>
-    <div class="col pl-1 pr-1">
+    <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
             {!! Form::label('specialization[]', __('Party member #' . $i)) !!}
