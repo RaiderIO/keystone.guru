@@ -65,7 +65,6 @@
                         let affix = serverAffixGroup.affixes[j];
                         // Push an affix to the list
                         affixes.push({
-                            icon_url: affix.iconfile.icon_url,
                             title: affix.name,
                             name: affix.name,
                             class: affix.name.toLowerCase()

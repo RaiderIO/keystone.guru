@@ -495,8 +495,6 @@ function _addIconOptionToSelect($select, dataCollection, cssPrefix = '') {
  * @private
  */
 function _loadDungeonRouteDefaults() {
-    console.log(">> _loadDungeonRouteDefaults");
-
     let $faction = $("#faction_id");
     $faction.val(_oldFaction);
     // Have to manually trigger change..
@@ -534,5 +532,4 @@ function _loadDungeonRouteDefaults() {
     }
 
     _refreshSelectPicker();
-    console.log("OK _loadDungeonRouteDefaults");
 }

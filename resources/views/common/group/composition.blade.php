@@ -38,7 +38,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
         let _oldClasses;
         let _oldRaces;
 
-        // Defined in dungeonroutesetup.js
+        // Defined in groupcomposition.js
         $(function () {
             $("#reload_button").bind('click', function (e) {
                 e.preventDefault();
@@ -46,7 +46,6 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
             });
 
 
-            // Defined in groupcomposition.js
             initGroupComposition();
             <?php
                 // @formatter:off
