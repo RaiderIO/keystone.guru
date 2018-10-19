@@ -1,65 +1,52 @@
 $(function () {
     L.DrawToolbar.prototype.getModeHandlers = function (map) {
         return [
-        // {
-        //     enabled: this.options.polyline,
-        //     handler: new L.Draw.Polyline(map, this.options.polyline),
-        //     title: this.options.polyline.hasOwnProperty('title') ? this.options.polyline.title : L.drawLocal.draw.toolbar.buttons.polyline
-        // }, {
-        //     enabled: this.options.polygon,
-        //     handler: new L.Draw.Polygon(map, this.options.polygon),
-        //     title: this.options.polygon.hasOwnProperty('title') ? this.options.polygon.title : L.drawLocal.draw.toolbar.buttons.polygon
-        // }, {
-        //     enabled: this.options.rectangle,
-        //     handler: new L.Draw.Rectangle(map, this.options.rectangle),
-        //     title: this.options.rectangle.hasOwnProperty('title') ? this.options.rectangle.title : L.drawLocal.draw.toolbar.buttons.rectangle
-        // }, {
-        //     enabled: this.options.circle,
-        //     handler: new L.Draw.Circle(map, this.options.circle),
-        //     title: this.options.circle.hasOwnProperty('title') ? this.options.circle.title : L.drawLocal.draw.toolbar.buttons.circle
-        // }, {
-        //     enabled: this.options.marker,
-        //     handler: new L.Draw.Marker(map, this.options.marker),
-        //     title: this.options.marker.hasOwnProperty('title') ? this.options.marker.title : L.drawLocal.draw.toolbar.buttons.marker
-        // }, {
-        //     enabled: this.options.circlemarker,
-        //     handler: new L.Draw.CircleMarker(map, this.options.circlemarker),
-        //     title: this.options.circlemarker.hasOwnProperty('title') ? this.options.circlemarker.title : L.drawLocal.draw.toolbar.buttons.circlemarker
-        // },
-        {
-            enabled: this.options.route,
-            handler: new L.Draw.Route(map, this.options.route),
-            title: this.options.route.title
-        }, {
-            enabled: this.options.killzone,
-            handler: new L.Draw.KillZone(map, this.options.killzone),
-            title: this.options.killzone.title
-        }, {
-            enabled: this.options.mapcomment,
-            handler: new L.Draw.MapComment(map, this.options.mapcomment),
-            title: this.options.mapcomment.title
-        }, {
-            enabled: this.options.enemypack,
-            handler: new L.Draw.EnemyPack(map, this.options.enemypack),
-            title: this.options.enemypack.title
-        }, {
-            enabled: this.options.enemy,
-            handler: new L.Draw.Enemy(map, this.options.enemy),
-            title: this.options.enemy.title
-        }, {
-            enabled: this.options.enemypatrol,
-            handler: new L.Draw.EnemyPatrol(map, this.options.enemypatrol),
-            title: this.options.enemypatrol.title
-        }, {
-            enabled: this.options.dungeonstartmarker,
-            handler: new L.Draw.DungeonStartMarker(map, this.options.dungeonstartmarker),
-            title: this.options.dungeonstartmarker.title
-        }, {
-            enabled: this.options.dungeonfloorswitchmarker,
-            handler: new L.Draw.DungeonFloorSwitchMarker(map, this.options.dungeonfloorswitchmarker),
-            title: this.options.dungeonfloorswitchmarker.title
-        }]
+            {
+                enabled: this.options.route,
+                handler: new L.Draw.Route(map, this.options.route),
+                title: this.options.route.title
+            }, {
+                enabled: this.options.killzone,
+                handler: new L.Draw.KillZone(map, this.options.killzone),
+                title: this.options.killzone.title
+            }, {
+                enabled: this.options.mapcomment,
+                handler: new L.Draw.MapComment(map, this.options.mapcomment),
+                title: this.options.mapcomment.title
+            }, {
+                enabled: this.options.enemypack,
+                handler: new L.Draw.EnemyPack(map, this.options.enemypack),
+                title: this.options.enemypack.title
+            }, {
+                enabled: this.options.enemy,
+                handler: new L.Draw.Enemy(map, this.options.enemy),
+                title: this.options.enemy.title
+            }, {
+                enabled: this.options.enemypatrol,
+                handler: new L.Draw.EnemyPatrol(map, this.options.enemypatrol),
+                title: this.options.enemypatrol.title
+            }, {
+                enabled: this.options.dungeonstartmarker,
+                handler: new L.Draw.DungeonStartMarker(map, this.options.dungeonstartmarker),
+                title: this.options.dungeonstartmarker.title
+            }, {
+                enabled: this.options.dungeonfloorswitchmarker,
+                handler: new L.Draw.DungeonFloorSwitchMarker(map, this.options.dungeonfloorswitchmarker),
+                title: this.options.dungeonfloorswitchmarker.title
+            }
+        ];
     };
+
+    // Add some new strings to the draw controls
+    $.extend(L.drawLocal.draw.handlers, {
+        route: {
+            tooltip: {
+                start: 'Click to start drawing route',
+                cont: 'Click to continue drawing route',
+                end: 'Click the \'Finish\' button on the toolbar to complete your route'
+            }
+        }
+    });
 });
 
 class DrawControls extends MapControl {
@@ -82,7 +69,12 @@ class DrawControls extends MapControl {
                     },
                     zIndexOffset: 1000,
                     faClass: 'fa-route',
-                    title: 'Draw a route'
+                    title: 'Draw a route',
+                    tooltip: {
+                        start: 'Click to start drawing line zz1',
+                        cont: 'Click to continue drawing line zz1',
+                        end: 'Click last point to finish line zz1'
+                    }
                 },
                 killzone: {
                     repeatMode: false,
@@ -100,7 +92,18 @@ class DrawControls extends MapControl {
                 enemypatrol: false,
                 enemy: false,
                 dungeonstartmarker: false,
-                dungeonfloorswitchmarker: false
+                dungeonfloorswitchmarker: false,
+
+                // handlers: {
+                //     polyline: {},
+                //     route: {
+                //         tooltip: {
+                //             start: 'Click to start drawing line zz2',
+                //             cont: 'Click to continue drawing line zz2',
+                //             end: 'Click last point to finish line zz2'
+                //         }
+                //     }
+                // }
             },
             edit: {
                 featureGroup: drawnItemsLayer, //REQUIRED!!
@@ -118,6 +121,7 @@ class DrawControls extends MapControl {
         this.map.hotkeys.attach('c', 'leaflet-draw-edit-edit');
         this.map.hotkeys.attach('d', 'leaflet-draw-edit-remove');
     }
+
     /**
      * Adds the control to the map.
      */
@@ -141,7 +145,7 @@ class DrawControls extends MapControl {
         }
     }
 
-    cleanup(){
+    cleanup() {
         super.cleanup();
 
         // this.map.leafletMap.off(L.Draw.Event.CREATED);

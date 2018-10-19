@@ -15,7 +15,16 @@
             non-teeming affixes.
         </li>
         <li>
-            #57 Failing validation for a new route will no longer reset your selected spec/class/race selections.
+            <a href="https://github.com/Wotuu/keystone.guru/issues/57">#57</a> Failing validation for a new route will no longer reset your selected spec/class/race selections.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/42">#42</a> Added new tooltips for creating a route. No longer gives incorrect information.
         </li>
     </ul>
     </p>
