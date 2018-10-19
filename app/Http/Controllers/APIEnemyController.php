@@ -6,10 +6,12 @@ use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\Enemy;
 use App\Models\DungeonRouteEnemyRaidMarker;
+use App\Models\InfestedEnemyVote;
 use App\Models\Npc;
 use App\Models\RaidMarker;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 
@@ -150,4 +152,46 @@ class APIEnemyController extends Controller
 
         return $result;
     }
+
+
+    /**
+     * @param Request $request
+     * @param Enemy $enemy
+     * @return array
+     */
+    function rate(Request $request, Enemy $enemy)
+    {
+        $vote = $request->get('vote', -1);
+        if ($vote > 0) {
+            $user = Auth::user();
+
+            /** @var InfestedEnemyVote $infestedEnemyVote */
+            $infestedEnemyVote = InfestedEnemyVote::firstOrNew(['enemy_id' => $enemy->id, 'user_id' => $user->id]);
+            $infestedEnemyVote->vote = max(1, min(10, $vote));
+            $infestedEnemyVote->save();
+        }
+
+        $enemy->unsetRelation('infestedvotes');
+        return ['is_infested' => $enemy->is_infested];
+    }
+
+//    /**
+//     * @param Request $request
+//     * @param Enemy $enemy
+//     * @return array
+//     * @throws \Exception
+//     */
+//    function rateDelete(Request $request, Enemy $enemy)
+//    {
+//        $user = Auth::user();
+//
+//        /** @var DungeonRouteRating $dungeonRouteRating */
+//        $dungeonRouteRating = DungeonRouteRating::firstOrFail()
+//            ->where('dungeon_route_id', $dungeonroute->id)
+//            ->where('user_id', $user->id);
+//        $dungeonRouteRating->delete();
+//
+//        $dungeonroute->unsetRelation('ratings');
+//        return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
+//    }
 }
