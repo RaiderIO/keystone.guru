@@ -11,7 +11,11 @@
         General:
     <ul>
         <li>
-
+            Editing a dungeon with Teeming selected will now show the proper valid affixes again rather than just
+            non-teeming affixes.
+        </li>
+        <li>
+            #57 Failing validation for a new route will no longer reset your selected spec/class/race selections.
         </li>
     </ul>
     </p>
@@ -56,7 +60,8 @@
         General:
     <ul>
         <li>
-            Increased performance of the website. I'll continue to monitor the performance as the amount of users & routes grow.
+            Increased performance of the website. I'll continue to monitor the performance as the amount of users &
+            routes grow.
         </li>
     </ul>
     </p>

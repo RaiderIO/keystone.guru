@@ -12,12 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class IconFileModel extends Model
 {
-
-    /**
-     * @var array Always eager load the iconfile
-     */
-    protected $with = ['iconfile'];
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
