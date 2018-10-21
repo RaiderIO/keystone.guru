@@ -15,43 +15,6 @@ $(function () {
     });
 });
 
-// Icon sizes
-let _smallIcon = {iconSize: [12, 12]};
-let _mediumIcon = {iconSize: [16, 16]};
-let _bigIcon = {iconSize: [32, 32]};
-
-// Default icons
-let _iconNames = [];
-_iconNames['aggressive'] = _smallIcon;
-_iconNames['neutral'] = _smallIcon;
-_iconNames['unfriendly'] = _smallIcon;
-_iconNames['friendly'] = _smallIcon;
-_iconNames['unset'] = _smallIcon;
-_iconNames['flagged'] = _smallIcon;
-_iconNames['boss'] = _bigIcon;
-
-_iconNames['star'] = _mediumIcon;
-_iconNames['circle'] = _mediumIcon;
-_iconNames['diamond'] = _mediumIcon;
-_iconNames['triangle'] = _mediumIcon;
-_iconNames['moon'] = _mediumIcon;
-_iconNames['square'] = _mediumIcon;
-_iconNames['cross'] = _mediumIcon;
-_iconNames['skull'] = _mediumIcon;
-
-let LeafletEnemyIcons = [];
-let LeafletEnemyIconsKillZone = [];
-
-// Build a library of icons to use
-for (let key in _iconNames) {
-    LeafletEnemyIcons[key] = new L.divIcon($.extend({className: key + '_enemy_icon'}, _iconNames[key]));
-    LeafletEnemyIconsKillZone[key] = new L.divIcon($.extend({
-        className: key + '_enemy_icon leaflet-edit-marker-selected ' +
-            // ahahahahaha
-            'killzone_enemy_icon_' + (_iconNames[key] === _bigIcon ? 'big' : _iconNames[key] === _mediumIcon ? 'medium' : 'small')
-    }, _iconNames[key]));
-}
-
 let LeafletEnemyMarker = L.Marker.extend({
     options: {
         icon: LeafletEnemyIcons['unset']
@@ -63,8 +26,6 @@ class Enemy extends MapObject {
         super(map, layer);
 
         this.label = 'Enemy';
-        this.iconName = '';
-        this.divIcon = null;
         // Not actually saved to the enemy, but is used for keeping track of what killzone this enemy is attached to
         this.kill_zone_id = 0;
         this.faction = 'any'; // sensible default
@@ -72,7 +33,11 @@ class Enemy extends MapObject {
         // May be set when loaded from server
         this.npc = null;
         this.raid_marker_name = '';
-        // console.log(rand);
+
+        // Infested variables
+        this.infested_yes_votes = 0;
+        this.infested_no_votes = 0;
+        this.infested_user_vote = null;
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 
         this.setSynced(true);
@@ -143,6 +108,10 @@ class Enemy extends MapObject {
         self.layer.on('popupopen', popupOpenFn);
     }
 
+    getEnemyForces(){
+        return this.enemy_forces_override >= 0 ? this.enemy_forces_override : (this.npc === null ? 0 : this.npc.enemy_forces);
+    }
+
     bindTooltip() {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         let source = $("#map_enemy_tooltip_template").html();
@@ -185,25 +154,25 @@ class Enemy extends MapObject {
      */
     setNpc(npc) {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        this.npc = npc;
 
         // May be null if not set at all (yet)
         if (npc !== null) {
-            this.npc = npc;
             this.npc_id = npc.id;
             this.enemy_forces = npc.enemy_forces;
             if (npc.enemy_forces === -1) {
-                this.setIcon('flagged');
+                this.visual.setMainIcon('flagged');
             }
             // TODO Hard coded 3 = boss
             else if (npc.classification_id === 3) {
-                this.setIcon('boss');
+                this.visual.setMainIcon('boss');
             } else {
-                this.setIcon(npc.aggressiveness);
+                this.visual.setMainIcon(npc.aggressiveness);
             }
         } else {
             // Not set :(
             this.npc_id = -1;
-            this.setIcon('unset');
+            this.visual.setMainIcon('unset');
         }
 
         this.bindTooltip();
@@ -214,15 +183,18 @@ class Enemy extends MapObject {
      * @param name
      */
     setRaidMarkerName(name) {
+        console.log(">> setRaidMarkerName", name);
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         // This takes precedence over raid markers
-        if( name === '') {
+        if (name === '') {
             // Re-set the raid marker by re-setting the NPC. This then determines the original icon.
             this.setNpc(this.npc);
-        } else if (this.iconName !== 'unset' && this.iconName !== 'flagged' && LeafletEnemyIcons.hasOwnProperty(name)) {
-            this.setIcon(name);
+        } else {
+            this.visual.setModifierIcon(1, name);
         }
         this.raid_marker_name = name;
+
+        console.log("OK setRaidMarkerName", name);
     }
 
     /**
@@ -273,6 +245,9 @@ class Enemy extends MapObject {
         if (this.isEditable() && this.map.edit) {
             this.onPopupInit();
         }
+
+        // Create the visual when the layer is initializing
+        this.visual = new EnemyVisual(this.map, this, this.layer);
     }
 
     onPopupInit() {
@@ -309,18 +284,7 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         this.killZoneSelectable = value;
         // Refresh the icon
-        this.setIcon(this.iconName);
-    }
-
-    /**
-     * Sets the icon of this enemy based on a name
-     * @param name
-     */
-    setIcon(name) {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
-
-        this.layer.setIcon(this.killZoneSelectable ? LeafletEnemyIconsKillZone[name] : LeafletEnemyIcons[name]);
-        this.iconName = name;
+        this.visual.refresh();
     }
 
     /**

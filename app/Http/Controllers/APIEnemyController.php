@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
-use App\Models\Enemy;
 use App\Models\DungeonRouteEnemyRaidMarker;
-use App\Models\InfestedEnemyVote;
+use App\Models\Enemy;
+use App\Models\EnemyInfestedVote;
 use App\Models\Npc;
 use App\Models\RaidMarker;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,24 +23,35 @@ class APIEnemyController extends Controller
     {
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute', null);
+        DB::enableQueryLog();
 
         // If dungeon route was set, fetch the markers as well
         if ($dungeonRoutePublicKey !== null) {
             try {
                 $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-                $result = DB::table('enemies')
-                    ->leftJoin('dungeon_route_enemy_raid_markers', function ($join) use ($dungeonRoute) {
-                        /** @var $join JoinClause */
-                        $join->on('dungeon_route_enemy_raid_markers.enemy_id', '=', 'enemies.id')
-                            ->where('dungeon_route_enemy_raid_markers.dungeon_route_id', $dungeonRoute->id);
-                    })
-                    ->leftJoin('raid_markers', 'dungeon_route_enemy_raid_markers.raid_marker_id', '=', 'raid_markers.id')
-                    ->where('enemies.floor_id', $floorId)
-                    ->select('enemies.*', 'raid_markers.name as raid_marker_name')
-                    ->get();
+                // Eloquent wasn't working with me, raw SQL it is
+                /** @var array $result */
+                $result = DB::select('
+                    select `enemies`.*, `raid_markers`.`name` as `raid_marker_name`,
+                            CAST(SUM(if(`enemy_infested_votes`.`vote` = 1, 1, 0)) as SIGNED) as infested_yes_votes,
+                            CAST(SUM(if(`enemy_infested_votes`.`vote` = 0, 1, 0)) as SIGNED) as infested_no_votes,
+                            if(`enemy_infested_votes`.`user_id` = :userId, `enemy_infested_votes`.`vote`, null) as infested_user_vote
+                    from `enemies`
+                           left join `dungeon_route_enemy_raid_markers`
+                             on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
+                                `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
+                           left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
+                           left join `enemy_infested_votes` on `enemies`.`id` = `enemy_infested_votes`.`enemy_id`
+                    where `enemies`.`floor_id` = :floorId
+                    group by `enemies`.`id`;
+                ', [
+                    'userId' => Auth::check() ? Auth::user()->id : -1,
+                    'routeId' => $dungeonRoute->id,
+                    'floorId' => $floorId
+                ]);
 
                 // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
-                $npcs = DB::table('npcs')->whereIn('id', $result->pluck(['npc_id'])->unique())->get();
+                $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
 
                 foreach ($result as $enemy) {
                     $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
@@ -49,6 +59,7 @@ class APIEnemyController extends Controller
                     })->first();
                     unset($enemy->npc_id);
                 }
+
             } catch (\Exception $ex) {
                 $result = response('Not found', Http::NOT_FOUND);
             }
@@ -82,7 +93,7 @@ class APIEnemyController extends Controller
         $enemy->lng = $request->get('lng');
 
         // Find out of there is a duplicate
-        if( !$enemy->exists) {
+        if (!$enemy->exists) {
             $this->checkForDuplicate($enemy);
         }
 
@@ -158,20 +169,28 @@ class APIEnemyController extends Controller
      * @param Request $request
      * @param Enemy $enemy
      * @return array
+     * @throws \Exception
      */
-    function rate(Request $request, Enemy $enemy)
+    function setInfested(Request $request, Enemy $enemy)
     {
         $vote = $request->get('vote', -1);
-        if ($vote > 0) {
-            $user = Auth::user();
 
-            /** @var InfestedEnemyVote $infestedEnemyVote */
-            $infestedEnemyVote = InfestedEnemyVote::firstOrNew(['enemy_id' => $enemy->id, 'user_id' => $user->id]);
-            $infestedEnemyVote->vote = max(1, min(10, $vote));
+        $user = Auth::user();
+        /** @var EnemyInfestedVote $infestedEnemyVote */
+        $infestedEnemyVote = EnemyInfestedVote::firstOrNew(['enemy_id' => $enemy->id, 'user_id' => $user->id]);
+        // If user wants to vote yes/no
+        if ($vote === 0 || $vote === 1) {
+            // If it's not 0, it's true (yes), otherwise false (no)
+            $infestedEnemyVote->vote = intval($vote) !== 0;
             $infestedEnemyVote->save();
+        } else if ($infestedEnemyVote->exists) {
+            $infestedEnemyVote->delete();
         }
 
+        // Re-load infested relations
         $enemy->unsetRelation('infestedvotes');
+
+        // Return up-to-date state
         return ['is_infested' => $enemy->is_infested];
     }
 

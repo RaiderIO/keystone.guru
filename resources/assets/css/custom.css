@@ -90,6 +90,43 @@
     text-align: center;
 }
 
+/* Remove square background and border around enemies */
+.leaflet-marker-icon.leaflet-div-icon {
+    border: none;
+    background-color: unset;
+}
+
+.aggressive_enemy_icon,
+.neutral_enemy_icon,
+.unfriendly_enemy_icon,
+.friendly_enemy_icon,
+.unset_enemy_icon,
+.flagged_enemy_icon {
+    width: 11px;
+    height: 11px;
+}
+
+.boss_enemy_icon {
+    width: 32px;
+    height: 32px;
+}
+
+.enemy_aggressiveness_correction {
+    margin-top: -6px;
+}
+
+.modifier {
+    width: 16px;
+    height: 16px;
+}
+
+.col-3-5 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 29.1%;
+    flex: 0 0 29.1%;
+    max-width: 29.1%;
+}
+
 .aggressive_enemy_icon {
     background: url("/images/mapicon/aggressive.png") no-repeat center !important;
 }
@@ -129,20 +166,18 @@
 }
 
 .killzone_enemy_icon_small {
-    margin-left: -10px !important;
-    margin-top: -10px !important;
+    margin-top: -4px !important;
 }
 
 .killzone_enemy_icon_medium {
-    margin-left: -12px !important;
-    margin-top: -12px !important;
+    margin-top: -4px !important;
 }
 
 .killzone_enemy_icon_big {
-    margin-left: -20px !important;
-    margin-top: -20px !important;
+    margin-top: -4px !important;
 }
 
+#map_enemy_visuals,
 #map_enemy_forces {
     color: black;
     background-color: #fff;
@@ -150,6 +185,10 @@
     background-clip: padding-box;
     border-radius: 4px;
     padding: 6px;
+}
+
+#map_enemy_visuals {
+    width: 200px;
 }
 
 .map_enemy_forces_too_much {

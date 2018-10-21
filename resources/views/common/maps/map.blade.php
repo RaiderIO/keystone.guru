@@ -155,23 +155,20 @@ $introTexts = [
         }
     </script>
 
-    <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
-        <div id="map_faction_display_controls" class="leaflet-draw-section">
-            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                @php($i = 0)
-                @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
-                    <a class="map_faction_display_control map_controls_custom" href="#"
-                       data-faction="{{ strtolower($faction->name) }}"
-                       title="{{ $faction->name }}">
-                        <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
-                           style="width: 15px"></i>
-                        <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                             data-toggle="tooltip" title="{{ $faction->name }}"/>
-                        @php($i++)
-                    </a>
-                @endforeach
-            </div>
-            <ul class="leaflet-draw-actions"></ul>
+    <script id="map_enemy_forces_template" type="text/x-handlebars-template">
+        <div id="map_enemy_forces" class="leaflet-draw-section">
+            {{ __('Enemy forces')}}:
+            <span id="map_enemy_forces_numbers">
+                <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
+                (<span id="map_enemy_forces_percent">0</span>%)
+            </span>
+        </div>
+    </script>
+
+    <script id="map_enemy_visuals_template" type="text/x-handlebars-template">
+        <div id="map_enemy_visuals" class="leaflet-draw-section">
+            {!! Form::select('map_enemy_visuals_dropdown', ['aggressiveness' => 'Aggressiveness', 'enemy_forces' => 'Enemy forces'], 0,
+            ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
         </div>
     </script>
 
@@ -190,13 +187,23 @@ $introTexts = [
         </div>
     </script>
 
-    <script id="map_enemy_forces_template" type="text/x-handlebars-template">
-        <div id="map_enemy_forces" class="leaflet-draw-section">
-            {{ __('Enemy forces')}}:
-            <span id="map_enemy_forces_numbers">
-                <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
-                (<span id="map_enemy_forces_percent">0</span>%)
-            </span>
+    <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
+        <div id="map_faction_display_controls" class="leaflet-draw-section">
+            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
+                @php($i = 0)
+                @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
+                    <a class="map_faction_display_control map_controls_custom" href="#"
+                       data-faction="{{ strtolower($faction->name) }}"
+                       title="{{ $faction->name }}">
+                        <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
+                           style="width: 15px"></i>
+                        <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
+                             data-toggle="tooltip" title="{{ $faction->name }}"/>
+                        @php($i++)
+                    </a>
+                @endforeach
+            </div>
+            <ul class="leaflet-draw-actions"></ul>
         </div>
     </script>
 
@@ -264,6 +271,29 @@ $introTexts = [
         </div>
     </script>
 
+    <script id="map_enemy_visual_template" type="text/x-handlebars-template">
+        <div style="margin-top: -6px; height: 100%; background-color: transparent;">
+            <div class="row no-gutters">
+                <div class="col modifier @{{modifier_0_classes}}" style="margin-bottom: -3px;">
+
+                </div>
+                <div class="col modifier @{{modifier_1_classes}}" style="margin-bottom: 3px;">
+
+                </div>
+                <div class="col modifier @{{modifier_2_classes}}" style="margin-bottom: -3px;">
+
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="mx-auto p-0">
+                    <div class=" @{{killzone_classes}} @{{main_visual_classes}}">
+                        @{{{main_visual_html}}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
     @if(!$isAdmin)
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">
@@ -280,7 +310,8 @@ $introTexts = [
                         </div>
                     @endif
                 @endfor
-                <div id="enemy_raid_marker_clear_@{{id}}" class="btn btn-warning col-12 mt-2"><i class="fa fa-times"></i> {{ __('Clear marker') }}</div>
+                <div id="enemy_raid_marker_clear_@{{id}}" class="btn btn-warning col-12 mt-2"><i
+                            class="fa fa-times"></i> {{ __('Clear marker') }}</div>
             </div>
         </script>
     @else

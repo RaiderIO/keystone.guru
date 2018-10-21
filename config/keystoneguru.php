@@ -30,5 +30,11 @@ return [
     /**
      * Which week the current affix season has started at.
      */
-    'season_start_week' => 36
+    'season_start_week' => 36,
+
+    /**
+     * We require at least 3 more yes votes than no votes before an enemy is marked as Infested on the map.
+     * This may need to be increased in the future as the site becomes more popular.
+     */
+    'infested_user_vote_threshold' => 3
 ];

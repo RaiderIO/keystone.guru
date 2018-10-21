@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property $id int The ID of this Affix.
- * @property $randomcolumn int
- * @property $affix \Illuminate\Database\Eloquent\Collection
+ * @property int $id
+ * @property int $vote
+ * @property User $user
+ * @property Enemy $enemy
  */
-class InfestedEnemyVote extends Model
+class EnemyInfestedVote extends Model
 {
+    public $fillable = ['enemy_id', 'user_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

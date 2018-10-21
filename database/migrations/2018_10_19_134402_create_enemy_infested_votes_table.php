@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInfestedEnemyVotesTable extends Migration
+class CreateEnemyInfestedVotesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreateInfestedEnemyVotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('infested_enemy_votes', function (Blueprint $table) {
+        Schema::create('enemy_infested_votes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('enemy_id');
             $table->boolean('vote');
+
+            $table->index('user_id');
+            $table->index('enemy_id');
             $table->timestamps();
         });
     }
