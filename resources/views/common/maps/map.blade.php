@@ -275,14 +275,14 @@ $introTexts = [
 
     <script id="map_enemy_visual_template" type="text/x-handlebars-template">
         <div style="margin-top: -6px; height: 100%; background-color: transparent;">
-            <div class="no-gutters">
-                <div class="col modifier @{{modifier_0_classes}}" style="margin-bottom: -3px; float: left;">
+            <div class="row no-gutters">
+                <div class="col modifier @{{modifier_0_classes}}" style="margin-bottom: -3px;">
 
                 </div>
-                <div class="col modifier @{{modifier_1_classes}}" style="margin-bottom: 3px; float: left;">
+                <div class="col modifier @{{modifier_1_classes}}" style="margin-bottom: 3px;">
 
                 </div>
-                <div class="col modifier @{{modifier_2_classes}}" style="margin-bottom: -3px; float: left;">
+                <div class="col modifier @{{modifier_2_classes}}" style="margin-bottom: -3px;">
 
                 </div>
             </div>

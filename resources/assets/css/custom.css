@@ -90,11 +90,14 @@
     text-align: center;
 }
 
-/* Remove square background and border around enemies */
-.leaflet-marker-icon.leaflet-div-icon {
+/* Remove square background and border around enemies, but leave editing drag squares alone */
+.leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon) {
     border: none;
     background-color: unset;
 }
+
+/** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */
+/** leaflet-marker-icon leaflet-div-icon leaflet-editing-icon leaflet-touch-icon leaflet-zoom-animated leaflet-interactive leaflet-marker-draggable */
 
 .aggressive_enemy_icon,
 .neutral_enemy_icon,
