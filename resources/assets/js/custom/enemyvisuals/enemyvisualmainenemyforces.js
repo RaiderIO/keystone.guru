@@ -7,19 +7,14 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     }
 
     _getValidIconNames() {
-        return [
-            'aggressive',
-            'neutral',
-            'unfriendly',
-            'friendly',
-            'unset',
-            'flagged',
-            'boss'];
+        // Nothing is valid, we don't work with icon names. One size fits all!
+        return [];
     }
 
     _getTemplateData() {
         return {
             // Set the main html
+            main_visual_classes: 'badge badge-primary badge-pill badge_enemy_forces',
             main_visual_html: this.enemyvisual.enemy.getEnemyForces()
         };
     }

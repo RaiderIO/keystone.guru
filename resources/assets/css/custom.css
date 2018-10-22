@@ -119,8 +119,44 @@
 }
 
 .modifier {
+    position: absolute;
     width: 16px;
     height: 16px;
+}
+
+.modifier_0 {
+    top: -19px;
+    left: -20px;
+    background-color: red;
+}
+
+.modifier_1 {
+    top: -22px;
+    left: -3px;
+    background-color: green;
+}
+
+.modifier_2 {
+    top: -19px;
+    left: 14px;
+    background-color: blue;
+}
+
+.modifier_0_boss {
+    left: -9px;
+}
+
+.modifier_1_boss {
+    left: 8px;
+}
+
+.modifier_2_boss {
+    left: 25px;
+}
+
+.badge_enemy_forces {
+    font-size: 100%;
+    margin-left: -4px;
 }
 
 .col-3-5 {

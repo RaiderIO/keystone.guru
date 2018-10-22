@@ -1,6 +1,6 @@
 // Icon sizes
-let _smallIcon = {iconSize: [48, 36]};
-let _bigIcon = {iconSize: [48, 57]};
+let _smallIcon = {iconSize: [11, 11]};
+let _bigIcon = {iconSize: [32, 32]};
 
 // Default icons
 let _iconNames = [];
@@ -20,8 +20,9 @@ for (let key in _iconNames) {
 }
 
 
-class EnemyVisual {
+class EnemyVisual extends Signalable {
     constructor(map, enemy, layer) {
+        super();
         console.assert(map instanceof DungeonMap, map, 'map was not a DungeonMap');
         console.assert(enemy instanceof Enemy, enemy, 'enemy was not an Enemy');
 
@@ -75,6 +76,7 @@ class EnemyVisual {
 
         // Set the structure as HTML for the layer
         this.layer.setIcon(this.divIcon);
+        this.signal('enemyvisual:builtvisual', {});
     }
 
     // @TODO Listen to killzone selectable changed event
@@ -98,7 +100,7 @@ class EnemyVisual {
         // Aggressiveness filter. Otherwise they show up as things we don't want them to
         // @TODO Hard coded 3 = boss
         let isBoss = this.enemy.npc !== null && this.enemy.npc.classification_id === 3;
-        if( isBoss ){
+        if (isBoss) {
             name = 'aggressiveness';
         }
 
@@ -114,31 +116,31 @@ class EnemyVisual {
         this._buildVisual();
     }
 
-    /**
-     *
-     * @param name
-     */
-    setMainIcon(name) {
-        console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
-
-        this.mainVisual.setIcon(name);
-        this._buildVisual();
-    }
-
-    /**
-     * Set a modifier's icon name by index. Pass null or an empty string to the name to unset.
-     * @param index
-     * @param name
-     */
-    setModifierIcon(index, name) {
-        console.assert(index >= 0 && index <= 2, this, 'Index is out of bounds!');
-        console.log(">> setModifierIcon", index, name);
-
-        // Find the modifier of the index
-        let modifier = this.modifiers[index];
-        // Let it figure out its own icon by setting the name
-        modifier.setIcon(name);
-        this._buildVisual();
-        console.log("OK setModifierIcon", index, name);
-    }
+    // /**
+    //  *
+    //  * @param name
+    //  */
+    // setMainIcon(name) {
+    //     console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
+    //
+    //     this.mainVisual.setIcon(name);
+    //     this._buildVisual();
+    // }
+    //
+    // /**
+    //  * Set a modifier's icon name by index. Pass null or an empty string to the name to unset.
+    //  * @param index
+    //  * @param name
+    //  */
+    // setModifierIcon(index, name) {
+    //     console.assert(index >= 0 && index <= 2, this, 'Index is out of bounds!');
+    //     console.log(">> setModifierIcon", index, name);
+    //
+    //     // Find the modifier of the index
+    //     let modifier = this.modifiers[index];
+    //     // Let it figure out its own icon by setting the name
+    //     modifier.setIcon(name);
+    //     this._buildVisual();
+    //     console.log("OK setModifierIcon", index, name);
+    // }
 }
