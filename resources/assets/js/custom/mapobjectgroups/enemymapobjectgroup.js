@@ -71,7 +71,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
                         enemy.setNpc(remoteEnemy.npc);
                         // If actually set..
-                        if (remoteEnemy.raid_marker_name !== null && remoteEnemy.raid_marker_name !== '') {
+                        if (remoteEnemy.hasOwnProperty('raid_marker_name') && remoteEnemy.raid_marker_name !== null) {
                             enemy.setRaidMarkerName(remoteEnemy.raid_marker_name);
                         }
 

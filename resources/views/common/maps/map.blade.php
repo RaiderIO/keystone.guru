@@ -30,6 +30,7 @@ $introTexts = [
     __('This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
     that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!'),
     __('This label indicates your current progress with enemy forces. Remember to use killzones to mark an enemy as killed and see this label updated.'),
+    __('Here you can select how you want enemies visualized on the map. You can chose from multiple different visualizations to help you quickly find the information you need.'),
     __('These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.')
 ];
 ?>
@@ -121,6 +122,7 @@ $introTexts = [
                 ['.leaflet-draw-edit-edit', 'right'],
                 ['.leaflet-draw-edit-remove', 'right'],
                 ['#map_enemy_forces', 'left'],
+                ['#map_enemy_visuals', 'left'],
                 ['.leaflet-right .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top', 'left'],
             ];
             let texts = {!! json_encode($introTexts) !!};
@@ -273,14 +275,14 @@ $introTexts = [
 
     <script id="map_enemy_visual_template" type="text/x-handlebars-template">
         <div style="margin-top: -6px; height: 100%; background-color: transparent;">
-            <div class="row no-gutters">
-                <div class="col modifier @{{modifier_0_classes}}" style="margin-bottom: -3px;">
+            <div class="no-gutters">
+                <div class="col modifier @{{modifier_0_classes}}" style="margin-bottom: -3px; float: left;">
 
                 </div>
-                <div class="col modifier @{{modifier_1_classes}}" style="margin-bottom: 3px;">
+                <div class="col modifier @{{modifier_1_classes}}" style="margin-bottom: 3px; float: left;">
 
                 </div>
-                <div class="col modifier @{{modifier_2_classes}}" style="margin-bottom: -3px;">
+                <div class="col modifier @{{modifier_2_classes}}" style="margin-bottom: -3px; float: left;">
 
                 </div>
             </div>

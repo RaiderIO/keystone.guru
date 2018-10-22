@@ -4,7 +4,7 @@
 
 @section('content')
     <h4>
-        2018/10/19
+        2018/10/23
     </h4>
 
     <p>
@@ -15,7 +15,12 @@
             non-teeming affixes.
         </li>
         <li>
-            <a href="https://github.com/Wotuu/keystone.guru/issues/57">#57</a> Failing validation for a new route will no longer reset your selected spec/class/race selections.
+            <a href="https://github.com/Wotuu/keystone.guru/issues/57">#57</a> Failing validation for a new route will
+            no longer reset your selected spec/class/race selections.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/42">#42</a> Adjusted various labels when editing a
+            route away from their defaults to more clear new ones.
         </li>
     </ul>
     </p>
@@ -24,7 +29,12 @@
         Map changes:
     <ul>
         <li>
-            <a href="https://github.com/Wotuu/keystone.guru/issues/42">#42</a> Added new tooltips for creating a route. No longer gives incorrect information.
+            <a href="https://github.com/Wotuu/keystone.guru/issues/62">#62</a> Re-wrote all code related to visualising
+            enemies on the map. The new setup allows me to extend the system and display a lot more information
+            regarding enemies. Look for a new dropdown to the top right of your map to change visualization layers. The
+            options are limited for now, but as soon as I gather more information about enemies this list will fill with
+            more options. Because of this, raid markers no longer completely replace the selected enemy, but place the
+            marker to the top of them instead (just like in-game).
         </li>
     </ul>
     </p>

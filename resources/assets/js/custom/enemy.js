@@ -73,9 +73,19 @@ class Enemy extends MapObject {
         let popupOpenFn = function (event) {
             $.each($('.enemy_raid_marker_icon'), function (index, value) {
                 let $icon = $(value);
+
+                // If we selected this raid marker..
+                if($icon.data('name') === self.raid_marker_name ){
+                    $icon.addClass('enemy_raid_marker_icon_selected');
+                }
+
                 $icon.unbind('click');
                 $icon.bind('click', function () {
                     self.assignRaidMarker($icon.data('name'));
+                    // Deselect current raid markers
+                    $('.enemy_raid_marker_icon_selected').removeClass('enemy_raid_marker_icon_selected');
+                    // Add it to this one
+                    $icon.addClass('enemy_raid_marker_icon_selected');
                 });
             });
             let $clearMarker = $('#enemy_raid_marker_clear_' + self.id);
@@ -95,8 +105,8 @@ class Enemy extends MapObject {
         customPopupHtml = template(data);
 
         let customOptions = {
-            'maxWidth': '128',
-            'minWidth': '128',
+            'maxWidth': '160',
+            'minWidth': '160',
             'className': 'popupCustom'
         };
 
@@ -156,24 +166,17 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         this.npc = npc;
 
+
         // May be null if not set at all (yet)
         if (npc !== null) {
             this.npc_id = npc.id;
             this.enemy_forces = npc.enemy_forces;
-            if (npc.enemy_forces === -1) {
-                this.visual.setMainIcon('flagged');
-            }
-            // TODO Hard coded 3 = boss
-            else if (npc.classification_id === 3) {
-                this.visual.setMainIcon('boss');
-            } else {
-                this.visual.setMainIcon(npc.aggressiveness);
-            }
         } else {
             // Not set :(
             this.npc_id = -1;
-            this.visual.setMainIcon('unset');
         }
+
+        this.signal('enemy:set_npc', {npc: npc});
 
         this.bindTooltip();
     }
@@ -183,18 +186,10 @@ class Enemy extends MapObject {
      * @param name
      */
     setRaidMarkerName(name) {
-        console.log(">> setRaidMarkerName", name);
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
-        // This takes precedence over raid markers
-        if (name === '') {
-            // Re-set the raid marker by re-setting the NPC. This then determines the original icon.
-            this.setNpc(this.npc);
-        } else {
-            this.visual.setModifierIcon(1, name);
-        }
         this.raid_marker_name = name;
-
-        console.log("OK setRaidMarkerName", name);
+        // Trigger a raid marker change event
+        this.signal('enemy:set_raid_marker', {name: name});
     }
 
     /**

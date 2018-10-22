@@ -1,6 +1,6 @@
 // Icon sizes
-let _smallIcon = {iconSize: [46, 36]};
-let _bigIcon = {iconSize: [46, 57]};
+let _smallIcon = {iconSize: [48, 36]};
+let _bigIcon = {iconSize: [48, 57]};
 
 // Default icons
 let _iconNames = [];
@@ -30,19 +30,21 @@ class EnemyVisual {
         this.layer = layer;
         this.divIcon = null;
 
-        this.mainVisual = new EnemyVisualMainAggressiveness(this);
+        this.mainVisual = null;
+
         this.modifiers = [
             new EnemyVisualModifier(this, 0),
             new EnemyVisualModifierRaidMarker(this, 1),
             new EnemyVisualModifier(this, 2),
         ];
 
-        // Build the visual structure
-        // this._buildVisual();
+        // Default visual (after modifiers!)
+        this.setMainVisual('aggressiveness');
     }
 
     /**
-     * Applies the structure to the visual
+     * Constructs the structure for the visuals and re-fetches the main visual's and modifier's data to re-apply to
+     * the interface.
      * @private
      */
     _buildVisual() {
@@ -86,6 +88,20 @@ class EnemyVisual {
      * @param name
      */
     setMainVisual(name) {
+        if (this.mainVisual !== null) {
+            // Let them clean up their mess
+            this.mainVisual.cleanup();
+        }
+
+        // @TODO Create boss visual
+        // Create a new visual based on the requested visual. With one exception, bosses are always shown with the
+        // Aggressiveness filter. Otherwise they show up as things we don't want them to
+        // @TODO Hard coded 3 = boss
+        let isBoss = this.enemy.npc !== null && this.enemy.npc.classification_id === 3;
+        if( isBoss ){
+            name = 'aggressiveness';
+        }
+
         switch (name) {
             case 'aggressiveness':
                 this.mainVisual = new EnemyVisualMainAggressiveness(this);
@@ -94,6 +110,7 @@ class EnemyVisual {
                 this.mainVisual = new EnemyVisualMainEnemyForces(this);
                 break;
         }
+
         this._buildVisual();
     }
 
@@ -115,11 +132,13 @@ class EnemyVisual {
      */
     setModifierIcon(index, name) {
         console.assert(index >= 0 && index <= 2, this, 'Index is out of bounds!');
+        console.log(">> setModifierIcon", index, name);
 
         // Find the modifier of the index
         let modifier = this.modifiers[index];
         // Let it figure out its own icon by setting the name
         modifier.setIcon(name);
         this._buildVisual();
+        console.log("OK setModifierIcon", index, name);
     }
 }
