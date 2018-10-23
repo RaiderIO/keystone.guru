@@ -155,7 +155,10 @@ class Enemy extends MapObject {
             };
         }
 
-        this.layer.bindTooltip(template(data));
+        this.layer.bindTooltip(template(data), {
+            offset: [0, 10],
+            direction: 'bottom'
+        });
     }
 
     /**

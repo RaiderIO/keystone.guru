@@ -347,6 +347,8 @@ $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
     <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmainenemyforces.js') }}"></script>
     <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifier.js') }}"></script>
     <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierraidmarker.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfested.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfestedvote.js') }}"></script>
 
     <script src="{{ asset('js/custom/mapobject.js') }}"></script>
     <script src="{{ asset('js/custom/enemy.js') }}"></script>

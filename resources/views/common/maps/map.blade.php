@@ -169,7 +169,9 @@ $introTexts = [
 
     <script id="map_enemy_visuals_template" type="text/x-handlebars-template">
         <div id="map_enemy_visuals" class="leaflet-draw-section">
-            {!! Form::select('map_enemy_visuals_dropdown', ['aggressiveness' => 'Aggressiveness', 'enemy_forces' => 'Enemy forces'], 0,
+            {!! Form::select('map_enemy_visuals_dropdown',
+            ['aggressiveness' => 'Aggressiveness', 'enemy_forces' => 'Enemy forces', 'infested_vote' => 'Infested Voting'],
+            0,
             ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
         </div>
     </script>
@@ -276,13 +278,13 @@ $introTexts = [
     <script id="map_enemy_visual_template" type="text/x-handlebars-template">
         <div style="position: relative;">
             <div class="modifier modifier_0 @{{modifier_0_classes}}" style="display: none;">
-
+                @{{{modifier_0_html}}}
             </div>
             <div class="modifier modifier_1 @{{modifier_1_classes}}" style="display: none;">
-
+                @{{{modifier_1_html}}}
             </div>
             <div class="modifier modifier_2 @{{modifier_2_classes}}" style="display: none;">
-
+                @{{{modifier_2_html}}}
             </div>
             <div class=" @{{killzone_classes}} @{{main_visual_classes}}">
                 @{{{main_visual_html}}}

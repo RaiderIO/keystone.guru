@@ -35,7 +35,7 @@ class EnemyVisualControls extends MapControl {
         let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             console.assert(enemy instanceof Enemy, this, 'enemy is not an Enemy');
-            enemy.visual.setMainVisual($('#map_enemy_visuals_dropdown').val());
+            enemy.visual.setVisualType($('#map_enemy_visuals_dropdown').val());
         });
     }
 

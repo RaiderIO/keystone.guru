@@ -33,14 +33,10 @@ class EnemyVisual extends Signalable {
 
         this.mainVisual = null;
 
-        this.modifiers = [
-            new EnemyVisualModifier(this, 0),
-            new EnemyVisualModifierRaidMarker(this, 1),
-            new EnemyVisualModifier(this, 2),
-        ];
+        this.modifiers = [];
 
         // Default visual (after modifiers!)
-        this.setMainVisual('aggressiveness');
+        this.setVisualType('aggressiveness');
     }
 
     /**
@@ -86,10 +82,10 @@ class EnemyVisual extends Signalable {
     }
 
     /**
-     * Sets the main visual for this enemy.
+     * Sets the visual type for this enemy.
      * @param name
      */
-    setMainVisual(name) {
+    setVisualType(name) {
         if (this.mainVisual !== null) {
             // Let them clean up their mess
             this.mainVisual.cleanup();
@@ -107,9 +103,30 @@ class EnemyVisual extends Signalable {
         switch (name) {
             case 'aggressiveness':
                 this.mainVisual = new EnemyVisualMainAggressiveness(this);
+
+                this.modifiers = [
+                    new EnemyVisualModifierInfested(this, 0),
+                    new EnemyVisualModifierRaidMarker(this, 1),
+                    new EnemyVisualModifier(this, 2),
+                ];
                 break;
             case 'enemy_forces':
                 this.mainVisual = new EnemyVisualMainEnemyForces(this);
+
+                this.modifiers = [
+                    new EnemyVisualModifierInfested(this, 0),
+                    new EnemyVisualModifierRaidMarker(this, 1),
+                    new EnemyVisualModifier(this, 2),
+                ];
+                break;
+            case 'infested_vote':
+                this.mainVisual = new EnemyVisualMainAggressiveness(this);
+
+                this.modifiers = [
+                    new EnemyVisualModifierInfestedVote(this, 0, false),
+                    new EnemyVisualModifierInfested(this, 1),
+                    new EnemyVisualModifierInfestedVote(this, 2, true),
+                ];
                 break;
         }
 

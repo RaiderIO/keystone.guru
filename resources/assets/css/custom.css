@@ -127,19 +127,19 @@
 .modifier_0 {
     top: -19px;
     left: -20px;
-    background-color: red;
+    /* background-color: red; */
 }
 
 .modifier_1 {
     top: -22px;
     left: -3px;
-    background-color: green;
+    /* background-color: green; */
 }
 
 .modifier_2 {
     top: -19px;
     left: 14px;
-    background-color: blue;
+    /* background-color: blue; */
 }
 
 .modifier_0_boss {
@@ -152,6 +152,26 @@
 
 .modifier_2_boss {
     left: 25px;
+}
+
+.modifier_infested_vote {
+    color: black;
+    background-color: #fffb;
+    border-radius: 20px;
+}
+
+.modifier_infested_enabled {
+    background-color: rgba(0, 255, 0, 0.5);
+    border-radius: 20px;
+}
+
+.modifier_infested_disabled {
+    background-color: rgba(255, 0, 0, 0.5);
+    border-radius: 20px;
+}
+
+.modifier_infested_vote:hover {
+    background-color: #ffa500bb;
 }
 
 .badge_enemy_forces {
