@@ -38,7 +38,10 @@ class Enemy extends Model
         $result = -1;
 
         if (Auth::check()) {
-            $result = $this->thisweeksinfestedvotes->where('user_id', Auth::user()->id)->get('vote', $result);
+            $first = $this->thisweeksinfestedvotes->where('user_id', Auth::user()->id)->first();
+            if($first !== null ){
+                $result = $first->vote;
+            }
         }
 
         return $result;
@@ -50,10 +53,29 @@ class Enemy extends Model
      */
     function getIsInfestedAttribute()
     {
-        $yesVotes = $this->thisweeksinfestedvotes->where('vote', true)->count();
-        $noVotes = $this->thisweeksinfestedvotes->where('vote', false)->count();
+        $yesVotes = $this->getInfestedYesVotesCount();;
+        $noVotes = $this->getInfestedNoVotesCount();
 
-        return ($yesVotes - $noVotes) > config('keystoneguru.infested_user_vote_threshold');
+        return ($yesVotes - $noVotes) >= config('keystoneguru.infested_user_vote_threshold');
+    }
+
+    /**
+     * Get the amount of yes votes of people saying this enemy should be infested.
+     * @return int
+     */
+    function getInfestedYesVotesCount()
+    {
+        return $this->thisweeksinfestedvotes->where('vote', true)->count();
+    }
+
+
+    /**
+     * Get the amount of no votes of people saying this enemy should NOT be infested.
+     * @return int
+     */
+    function getInfestedNoVotesCount()
+    {
+        return $this->thisweeksinfestedvotes->where('vote', false)->count();
     }
 
     /**

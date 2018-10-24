@@ -178,7 +178,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/mapcomment', 'APIMapCommentController@store');
             Route::delete('/mapcomment', 'APIMapCommentController@delete');
 
-            Route::post('/enemy/raidmarker', 'APIEnemyController@setRaidMarker');
+            Route::post('/enemy/{enemy}/raidmarker', 'APIEnemyController@setRaidMarker');
             Route::post('/enemy/{enemy}/infested', 'APIEnemyController@setInfested');
 
             Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');

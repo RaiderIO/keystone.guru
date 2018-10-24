@@ -54,6 +54,7 @@ class APIEnemyController extends Controller
                 $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
 
                 foreach ($result as $enemy) {
+                    $enemy->is_infested = ($enemy->infested_yes_votes - $enemy->infested_no_votes) >= config('keystoneguru.infested_user_vote_threshold');
                     $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
                         return $enemy->npc_id === $item->id;
                     })->first();
@@ -112,25 +113,25 @@ class APIEnemyController extends Controller
 
     /**
      * @param Request $request
+     * @param Enemy $enemy
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    function setRaidMarker(Request $request)
+    function setRaidMarker(Request $request, Enemy $enemy)
     {
         $dungeonRoutePublicKey = $request->get('dungeonroute');
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
             $raidMarkerName = $request->get('raid_marker_name', '');
-            $enemyId = $request->get('enemy_id', 0);
 
             // Delete existing enemy raid marker
-            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemyId)->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonRoute->id)->delete();
 
             // Create a new one, if the user didn't just want to clear it
             if ($raidMarkerName !== null && !empty($raidMarkerName)) {
                 $raidMarker = new DungeonRouteEnemyRaidMarker();
                 $raidMarker->dungeon_route_id = $dungeonRoute->id;
                 $raidMarker->raid_marker_id = RaidMarker::where('name', $raidMarkerName)->first()->id;
-                $raidMarker->enemy_id = $enemyId;
+                $raidMarker->enemy_id = $enemy->id;
                 $raidMarker->save();
 
                 $result = ['name' => $raidMarkerName];
@@ -173,7 +174,7 @@ class APIEnemyController extends Controller
      */
     function setInfested(Request $request, Enemy $enemy)
     {
-        $vote = $request->get('vote', -1);
+        $vote = intval($request->get('vote', -1));
 
         $user = Auth::user();
         /** @var EnemyInfestedVote $infestedEnemyVote */
@@ -181,7 +182,7 @@ class APIEnemyController extends Controller
         // If user wants to vote yes/no
         if ($vote === 0 || $vote === 1) {
             // If it's not 0, it's true (yes), otherwise false (no)
-            $infestedEnemyVote->vote = intval($vote) !== 0;
+            $infestedEnemyVote->vote = $vote;
             $infestedEnemyVote->save();
         } else if ($infestedEnemyVote->exists) {
             $infestedEnemyVote->delete();
@@ -189,9 +190,15 @@ class APIEnemyController extends Controller
 
         // Re-load infested relations
         $enemy->unsetRelation('infestedvotes');
+        $enemy->unsetRelation('thisweeksinfestedvotes');
 
         // Return up-to-date state
-        return ['is_infested' => $enemy->is_infested];
+        return [
+            'infested_yes_votes' => $enemy->getInfestedYesVotesCount(),
+            'infested_no_votes' => $enemy->getInfestedNoVotesCount(),
+            'infested_user_vote' => $enemy->getUserInfestedVoteAttribute(),
+            'is_infested' => $enemy->is_infested
+        ];
     }
 
 //    /**

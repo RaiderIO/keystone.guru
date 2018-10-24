@@ -68,6 +68,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         enemy.infested_yes_votes = remoteEnemy.infested_yes_votes;
                         enemy.infested_no_votes = remoteEnemy.infested_no_votes;
                         enemy.infested_user_vote = remoteEnemy.infested_user_vote;
+                        enemy.is_infested = remoteEnemy.is_infested;
 
                         enemy.setNpc(remoteEnemy.npc);
                         // If actually set..

@@ -158,15 +158,21 @@
     color: black;
     background-color: #fffb;
     border-radius: 20px;
+    cursor: pointer;
+}
+
+.modifier_infested_vote_disabled {
+    background-color: #888b;
+    cursor: not-allowed;
 }
 
 .modifier_infested_enabled {
-    background-color: rgba(0, 255, 0, 0.5);
+    background-color: rgba(72, 166, 72, 0.5);
     border-radius: 20px;
 }
 
 .modifier_infested_disabled {
-    background-color: rgba(255, 0, 0, 0.5);
+    background-color: rgba(166, 71, 71, 0.5);
     border-radius: 20px;
 }
 
@@ -312,7 +318,7 @@
 }
 
 .marker_div_icon_dungeon_start_marker {
-    color: green;
+    color: #48a648;
 }
 
 .marker_div_icon_dungeon_floor_switch_marker {

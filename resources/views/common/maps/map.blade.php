@@ -225,12 +225,23 @@ $introTexts = [
                 <div class="col-5 no-gutters">{{ __('Base health') }} </div>
                 <div class="col-7 no-gutters">@{{ base_health }}</div>
             </div>
-            @if($isAdmin)
-                <div class="row">
-                    <div class="col-5 no-gutters">{{ __('Pack') }} </div>
-                    <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
-                </div>
-            @endif
+            <div class="row">
+                <div class="col-5 no-gutters">{{ __('Infested votes') }} </div>
+                <div class="col-7 no-gutters">@{{ infested_yes_votes }} yes, @{{ infested_no_votes}} no</div>
+            </div>
+            @auth
+                @if(Auth::user()->hasRole('admin'))
+                    <div class="row">
+                        <div class="col-12 font-weight-bold">
+                            {{ __('Admin only') }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('Pack') }} </div>
+                        <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
+                    </div>
+                @endif
+            @endauth
         </div>
     </script>
 

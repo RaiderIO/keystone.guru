@@ -12,6 +12,8 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     }
 
     _getTemplateData() {
+        console.assert(this instanceof EnemyVisualMainEnemyForces, this, 'this is not an EnemyVisualMainEnemyForces!');
+
         return {
             // Set the main html
             main_visual_classes: 'badge badge-primary badge-pill badge_enemy_forces',
@@ -20,6 +22,8 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     }
 
     getSize() {
+        console.assert(this instanceof EnemyVisualMainEnemyForces, this, 'this is not an EnemyVisualMainEnemyForces!');
+
         return this.iconName === 'boss' ? _bigIcon : _smallIcon;
     }
 }

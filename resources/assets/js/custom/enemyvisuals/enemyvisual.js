@@ -86,9 +86,12 @@ class EnemyVisual extends Signalable {
      * @param name
      */
     setVisualType(name) {
+        // Let them clean up their mess
         if (this.mainVisual !== null) {
-            // Let them clean up their mess
             this.mainVisual.cleanup();
+        }
+        for (let i = 0; i < this.modifiers.length; i++) {
+            this.modifiers[i].cleanup();
         }
 
         // @TODO Create boss visual
@@ -99,6 +102,9 @@ class EnemyVisual extends Signalable {
         if (isBoss) {
             name = 'aggressiveness';
         }
+
+        // Remove the popup when voting for infested!
+        this.enemy.setPopupEnabled(name !== 'infested_vote');
 
         switch (name) {
             case 'aggressiveness':
@@ -124,9 +130,10 @@ class EnemyVisual extends Signalable {
 
                 this.modifiers = [
                     new EnemyVisualModifierInfestedVote(this, 0, false),
-                    new EnemyVisualModifierInfested(this, 1),
+                    new EnemyVisualModifierInfested(this, 1, true),
                     new EnemyVisualModifierInfestedVote(this, 2, true),
                 ];
+
                 break;
         }
 

@@ -4,10 +4,10 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
         super(enemyvisual);
 
         this.iconName = 'unset';
+        // Set the icon initially to draw the current npc
+        this._updateIcon();
+        // Listen to changes in the NPC to update the icon and re-draw the visual
         this.enemyvisual.enemy.register('enemy:set_npc', this, this._refreshNpc.bind(this));
-        if( this.enemyvisual.enemy.npc !== null ){
-            this._refreshNpc();
-        }
     }
 
     _getValidIconNames() {
@@ -37,28 +37,38 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
     }
 
     /**
-     * The NPC on the enemy has been refreshed; rebuild the visual to match.
+     * Updates the iconName property based on the enemy's current NPC.
+     * @private
      */
-    _refreshNpc(){
-        console.assert(this instanceof EnemyVisualMainAggressiveness, this, 'this is not an EnemyVisualMainAggressiveness!');
-
+    _updateIcon() {
         let npc = this.enemyvisual.enemy.npc;
-        // console.log(signalEvent, npc);
 
         // May be null if not set at all (yet)
         if (npc !== null) {
             if (npc.enemy_forces === -1) {
-                this.setIcon('flagged');
+                this.iconName = 'flagged';
             }
             // @TODO Hard coded 3 = boss
             else if (npc.classification_id === 3) {
-                this.setIcon('boss');
+                this.iconName = 'boss';
             } else {
-                this.setIcon(npc.aggressiveness);
+                this.iconName = npc.aggressiveness;
             }
         } else {
-            this.setIcon('unset');
+            this.iconName = 'unset';
         }
+    }
+
+    /**
+     * The NPC on the enemy has been refreshed; rebuild the visual to match.
+     */
+    _refreshNpc() {
+        console.assert(this instanceof EnemyVisualMainAggressiveness, this, 'this is not an EnemyVisualMainAggressiveness!');
+
+        // Update the icon to a new icon as necessary
+        this._updateIcon();
+        // Re-draw the visual
+        this.setIcon(this.iconName);
     }
 
     getSize() {
@@ -68,6 +78,8 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
     }
 
     cleanup() {
+        super.cleanup();
+
         console.assert(this instanceof EnemyVisualMainAggressiveness, this, 'this is not an EnemyVisualMainAggressiveness!');
 
         this.enemyvisual.enemy.unregister('enemy:set_npc', this);

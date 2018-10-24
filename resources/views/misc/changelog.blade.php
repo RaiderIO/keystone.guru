@@ -4,7 +4,7 @@
 
 @section('content')
     <h4>
-        2018/10/23
+        2018/10/24
     </h4>
 
     <p>
@@ -35,6 +35,15 @@
             options are limited for now, but as soon as I gather more information about enemies this list will fill with
             more options. Because of this, raid markers no longer completely replace the selected enemy, but place the
             marker to the top of them instead (just like in-game).
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/39">#39</a> With help of the above, you can now vote
+            on all enemies to be Infested or not. Using the new dropdown for visualization selection in the top right
+            you can select a new 'Infested Voting' visualization, which allows you to vote yes or no on each enemy
+            on-screen if they're infested or not. Each enemy
+            requires {{ config('keystoneguru.infested_user_vote_threshold') }} more yes votes than no votes to be marked
+            as Infested on everyone's map. Every reset, the votes are cleared and the voting begins again (Infested
+            enemies change every week).
         </li>
     </ul>
     </p>
