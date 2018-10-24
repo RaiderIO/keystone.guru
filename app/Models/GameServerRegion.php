@@ -21,6 +21,21 @@ class GameServerRegion extends Model
         return strtolower(str_replace(" ", "", $this->name));
     }
 
+    function getThisWeeksAffixGroup()
+    {
+
+        $currentWeek = intval(date('W'));
+        $currentDay = intval(date('w'));
+
+
+        $firstWeek = config('keystoneguru.season_start_week') + $affixGroupIndex;
+        $firstWeekTime = strtotime('2018W' . $firstWeek) + (24 * 3600);
+        $nextWeek = config('keystoneguru.season_start_week') + $affixGroupIndex + 1;
+        $nextWeekTime = strtotime('2018W' . $nextWeek) + (24 * 3600);
+        $currentWeekTime = strtotime('2018W' . $currentWeek) + ((24 * 3600) * $currentDay);
+        $currentWeekClass = $currentWeekTime > $firstWeekTime && $currentWeekTime <= $nextWeekTime ? 'current_week ' : '';
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

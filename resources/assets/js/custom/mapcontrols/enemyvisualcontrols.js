@@ -5,6 +5,9 @@ class EnemyVisualControls extends MapControl {
         let self = this;
 
         this.map = map;
+        this.map.register('map:refresh', this, function(){
+            $('.selectpicker').selectpicker('refresh');
+        });
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
@@ -60,6 +63,6 @@ class EnemyVisualControls extends MapControl {
 
         console.assert(this instanceof EnemyVisualControls, this, 'this is not EnemyVisualControls');
 
-        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
+        this.map.unregister('map:refresh', this);
     }
 }
