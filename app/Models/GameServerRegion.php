@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -19,11 +20,9 @@ class GameServerRegion extends Model
     public $timestamps = false;
 
     /**
-     * Get the affix group that is currently active on this region.
-     *
-     * @return AffixGroup
+     * @return array Helper function for getting some stats related to today.
      */
-    function getCurrentAffixGroup()
+    function _getNow()
     {
         // Gather some data
         $currentYear = intval(date('Y'));
@@ -33,12 +32,133 @@ class GameServerRegion extends Model
 
         // Find the timezone that makes the most sense
         $timezone = config('app.timezone');
+
         // But if logged in, get the user's timezone instead
         if (Auth::check()) {
             $timezone = Auth::user()->timezone;
         }
 
-        return $this->getAffixGroupAtTime($currentYear, $currentMonth, $currentDay, $currentHour, $timezone);
+        return [
+            'year' => $currentYear,
+            'month' => $currentMonth,
+            'day' => $currentDay,
+            'hour' => $currentHour,
+            'timezone' => $timezone
+        ];
+    }
+
+    /**
+     * @return Carbon Get a Carbon date object with the date of the current Season's start.
+     */
+    function _getSeasonStart()
+    {
+        // Setup
+        $startWeek = config('keystoneguru.season_start_week');
+        $startYear = config('keystoneguru.season_start_year');
+        $daySeconds = (24 * 3600);
+
+        return Carbon::createFromTimestamp(
+            strtotime($startYear . 'W' . $startWeek . ' ' . $this->reset_time_offset_utc) +
+            (($this->reset_day_offset - 1) * $daySeconds),
+            // reset_time_offset_utc is in UTC (doh) so this should be UTC too
+            'UTC'
+        );
+    }
+
+    /**
+     * Get the amount of weeks that have passed since the start of the M+ season, on a specific date
+     *
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @param int $hour
+     * @param string $timezone
+     * @return int
+     */
+    function _getWeeksPassedSinceStart($year, $month, $day, $hour, $timezone = null)
+    {
+        // Get the time the season started for this region, correct reset_day_offset since it's 1-based rather than 0-based.
+        $regionFirstWeekTime = $this->_getSeasonStart();
+
+        // Target date
+        $targetTime = Carbon::create($year, $month, $day, $hour, null, null, $timezone);
+
+        // Get the week difference
+        return $regionFirstWeekTime->diffInWeeks($targetTime);
+    }
+
+    /**
+     * @return int Get the amount of full iterations over all affix groups we've done this season.
+     */
+    function getCurrentSeasonAffixGroupIteration()
+    {
+        $now = $this->_getNow();
+
+        $affixGroups = AffixGroup::all();
+
+        $weeksPassed = $this->_getWeeksPassedSinceStart($now['year'], $now['month'], $now['day'], $now['hour'], $now['timezone']);
+
+        // Using the week difference, find the current affix
+        return (int)($weeksPassed / $affixGroups->count());
+    }
+
+    /**
+     * Get the start date of an affix group based on the amount of iterations there's been on the calendar.
+     *
+     * @param $iteration
+     * @param $affixGroup
+     * @return Carbon
+     */
+    function getAffixGroupStartDate($iteration, $affixGroup)
+    {
+        /** @var Collection $affixGroups */
+        $affixGroups = AffixGroup::all();
+
+        $index = 0;
+        for ($i = 0; $i < $affixGroups->count(); $i++) {
+            if ($affixGroups->get($i)->id === $affixGroup->id) {
+                $index = $i;
+                break;
+            }
+        }
+
+        $now = $this->_getNow();
+
+        $weeksPassed = ($iteration * $affixGroups->count()) + $index;
+        return $this->_getSeasonStart()->setTimezone($now['timezone'])->addWeeks($weeksPassed);
+    }
+
+    /**
+     * Get the weeks that the current affix group is active for.
+     *
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @param int $hour
+     * @param string $timezone
+     * @return array
+     */
+    function getCurrentAffixGroupWeeks($year, $month, $day, $hour, $timezone = null)
+    {
+        // Get the time the season started for this region, correct reset_day_offset since it's 1-based rather than 0-based.
+        $regionFirstWeekTime = $this->_getSeasonStart();
+
+        // Get the amount of weeks since the season's start
+        $weeksSinceStart = $this->_getWeeksPassedSinceStart($year, $month, $day, $hour, $timezone);
+
+        return $regionFirstWeekTime->addWeek($weeksSinceStart);
+    }
+
+    /**
+     * Get the affix group that is currently active in the user's timezone (if user timezone was set).
+     *
+     * @return AffixGroup
+     */
+    function getCurrentAffixGroup()
+    {
+        $now = $this->_getNow();
+
+        return $this->getAffixGroupAtTime($now['year'], $now['month'], $now['day'], $now['hour'], $now['timezone']);
     }
 
     /**
@@ -52,25 +172,9 @@ class GameServerRegion extends Model
      */
     function getAffixGroupAtTime($year, $month, $day, $hour, $timezone = null)
     {
-        // Setup
-        $startWeek = config('keystoneguru.season_start_week');
-        $startYear = config('keystoneguru.season_start_year');
-        $daySeconds = (24 * 3600);
         $affixGroups = AffixGroup::all();
 
-        // Get the time the season started for this region, correct reset_day_offset since it's 1-based rather than 0-based.
-        $regionFirstWeekTime = Carbon::createFromTimestamp(
-            strtotime($startYear . 'W' . $startWeek . ' ' . $this->reset_time_offset_utc) +
-            (($this->reset_day_offset - 1) * $daySeconds),
-            // reset_time_offset_utc is in UTC (doh) so this should be UTC too
-            'UTC'
-        );
-
-        // Target date
-        $targetTime = Carbon::create($year, $month, $day, $hour, null, null, $timezone);
-
-        // Get the week difference
-        $weeksPassed = $regionFirstWeekTime->diffInWeeks($targetTime);
+        $weeksPassed = $this->_getWeeksPassedSinceStart($year, $month, $day, $hour, $timezone);
 
         // Using the week difference, find the current affix
         $index = $weeksPassed % $affixGroups->count();
