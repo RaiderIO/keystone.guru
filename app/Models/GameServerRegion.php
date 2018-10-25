@@ -102,11 +102,6 @@ class GameServerRegion extends Model
         return (int)($weeksPassed / $affixGroups->count());
     }
 
-    function getCurrentAffixGroupStartDate()
-    {
-        dd('implement this!');
-    }
-
     /**
      * Get the start date of an affix group based on the amount of iterations there's been on the calendar.
      *

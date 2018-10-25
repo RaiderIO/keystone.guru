@@ -11,6 +11,7 @@ use App\Models\GameServerRegion;
 use App\Models\Npc;
 use App\Models\RaidMarker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
@@ -43,11 +44,15 @@ class APIEnemyController extends Controller
                                 `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
                            left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
                            left join `enemy_infested_votes` on `enemies`.`id` = `enemy_infested_votes`.`enemy_id`
+                                    and `enemy_infested_votes`.affix_group_id = :affixGroupId
+                                                  and `enemy_infested_votes`.updated_at > :minTime
                     where `enemies`.`floor_id` = :floorId
                     group by `enemies`.`id`;
                 ', [
                     'userId' => Auth::check() ? Auth::user()->id : -1,
                     'routeId' => $dungeonRoute->id,
+                    'affixGroupId' => (Auth::check() ? Auth::user()->gameserverregion : GameServerRegion::getDefaultRegion())->getCurrentAffixGroup(),
+                    'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s'),
                     'floorId' => $floorId
                 ]);
 

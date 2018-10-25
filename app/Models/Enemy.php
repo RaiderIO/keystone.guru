@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -89,10 +90,11 @@ class Enemy extends Model
         if (Auth::check()) {
             $region = Auth::user()->gameserverregion;
         }
-        // @TODO Check user's region and fetch appropriate amount of votes here.
+
         return $this->hasMany('App\Models\EnemyInfestedVote')
             ->where('affix_group_id', $region->getCurrentAffixGroup()->id)
-            ->where('created_at', '>', $region->getCurrentAffixGroupStartDate()); // ->where('created_at');
+            // Only votes that are made less than a month ago to prevent counting votes from previous cycle
+            ->where('updated_at', '>', Carbon::now()->subMonth()->format('Y-m-d H:i:s'));
     }
 
     /**

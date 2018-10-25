@@ -182,6 +182,7 @@ class Enemy extends MapObject {
                 base_health: this.npc.base_health,
                 infested_yes_votes: this.infested_yes_votes,
                 infested_no_votes: this.infested_no_votes,
+                id: this.id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false'
             };
         }

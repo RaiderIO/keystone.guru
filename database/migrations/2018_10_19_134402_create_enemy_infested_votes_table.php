@@ -23,6 +23,7 @@ class CreateEnemyInfestedVotesTable extends Migration
             $table->index('user_id');
             $table->index('enemy_id');
             $table->index('affix_group_id');
+            $table->index('updated_at');
             $table->timestamps();
         });
     }
