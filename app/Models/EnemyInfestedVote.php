@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
+ * @property int $affix_group_id
+ * @property int $user_id
  * @property int $vote
  * @property User $user
  * @property Enemy $enemy
@@ -14,6 +16,14 @@ use Illuminate\Database\Eloquent\Model;
 class EnemyInfestedVote extends Model
 {
     public $fillable = ['enemy_id', 'user_id'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function affixgroup()
+    {
+        return $this->belongsTo('App\Models\AffixGroup');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

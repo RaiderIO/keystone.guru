@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\EnemyInfestedVote;
+use App\Models\GameServerRegion;
 use App\Models\Npc;
 use App\Models\RaidMarker;
 use Illuminate\Http\Request;
@@ -177,47 +178,37 @@ class APIEnemyController extends Controller
         $vote = intval($request->get('vote', -1));
 
         $user = Auth::user();
-        /** @var EnemyInfestedVote $infestedEnemyVote */
-        $infestedEnemyVote = EnemyInfestedVote::firstOrNew(['enemy_id' => $enemy->id, 'user_id' => $user->id]);
-        // If user wants to vote yes/no
-        if ($vote === 0 || $vote === 1) {
-            // If it's not 0, it's true (yes), otherwise false (no)
-            $infestedEnemyVote->vote = $vote;
-            $infestedEnemyVote->save();
-        } else if ($infestedEnemyVote->exists) {
-            $infestedEnemyVote->delete();
+
+        if ($user->game_server_region_id > 0) {
+            /** @var EnemyInfestedVote $infestedEnemyVote */
+            $infestedEnemyVote = EnemyInfestedVote::firstOrNew([
+                'enemy_id' => $enemy->id,
+                'user_id' => $user->id,
+                'affix_group_id' => $user->gameserverregion->getCurrentAffixGroup()->id
+            ]);
+
+            // If user wants to vote yes/no
+            if ($vote === 0 || $vote === 1) {
+                // If it's not 0, it's true (yes), otherwise false (no)
+                $infestedEnemyVote->vote = $vote;
+                $infestedEnemyVote->save();
+            } // If vote was an invalid value but a vote existed, get rid of it
+            else if ($infestedEnemyVote->exists) {
+                $infestedEnemyVote->delete();
+            }
+
+            // Re-load infested relations
+            $enemy->unsetRelation('infestedvotes');
+            $enemy->unsetRelation('thisweeksinfestedvotes');
+
+            return [
+                'infested_yes_votes' => $enemy->getInfestedYesVotesCount(),
+                'infested_no_votes' => $enemy->getInfestedNoVotesCount(),
+                'infested_user_vote' => $enemy->getUserInfestedVoteAttribute(),
+                'is_infested' => $enemy->is_infested
+            ];
+        } else {
+            throw new \Exception(__('Region not set. Please visit your profile and set your region before voting on Infested enemies.'));
         }
-
-        // Re-load infested relations
-        $enemy->unsetRelation('infestedvotes');
-        $enemy->unsetRelation('thisweeksinfestedvotes');
-
-        // Return up-to-date state
-        return [
-            'infested_yes_votes' => $enemy->getInfestedYesVotesCount(),
-            'infested_no_votes' => $enemy->getInfestedNoVotesCount(),
-            'infested_user_vote' => $enemy->getUserInfestedVoteAttribute(),
-            'is_infested' => $enemy->is_infested
-        ];
     }
-
-//    /**
-//     * @param Request $request
-//     * @param Enemy $enemy
-//     * @return array
-//     * @throws \Exception
-//     */
-//    function rateDelete(Request $request, Enemy $enemy)
-//    {
-//        $user = Auth::user();
-//
-//        /** @var DungeonRouteRating $dungeonRouteRating */
-//        $dungeonRouteRating = DungeonRouteRating::firstOrFail()
-//            ->where('dungeon_route_id', $dungeonroute->id)
-//            ->where('user_id', $user->id);
-//        $dungeonRouteRating->delete();
-//
-//        $dungeonroute->unsetRelation('ratings');
-//        return ['new_avg_rating' => $dungeonroute->getAvgRatingAttribute()];
-//    }
 }

@@ -11,7 +11,8 @@
         General:
     <ul>
         <li>
-            Editing a dungeon with Teeming selected will now show the proper valid affixes again rather than just
+            <a href="https://github.com/Wotuu/keystone.guru/issues/68">#68</a> Editing a dungeon with Teeming selected
+            will now show the proper valid affixes again rather than just
             non-teeming affixes.
         </li>
         <li>
@@ -21,6 +22,12 @@
         <li>
             <a href="https://github.com/Wotuu/keystone.guru/issues/42">#42</a> Adjusted various labels when editing a
             route away from their defaults to more clear new ones.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/69">#69</a> You can now select your region and
+            timezone in your profile. This will make the Affixes page 100% accurate to your region + timezone. This was
+            also needed to properly implement <a href="https://github.com/Wotuu/keystone.guru/issues/39">#39</a> (see
+            below).
         </li>
     </ul>
     </p>
@@ -44,6 +51,11 @@
             requires {{ config('keystoneguru.infested_user_vote_threshold') }} more yes votes than no votes to be marked
             as Infested on everyone's map. Every reset, the votes are cleared and the voting begins again (Infested
             enemies change every week).
+            <br><br>
+            To vote for Infested enemies, you need to have your region and timezone set in your profile. Why? As a
+            European you can vote for Infested enemies on Tuesday afternoon, while Americas will have a new set of
+            Infested enemies already and they're voting for theirs. You don't want your 'last week' votes messing up
+            the 'new' votes for the next week that are already being voted for in America.
         </li>
     </ul>
     </p>

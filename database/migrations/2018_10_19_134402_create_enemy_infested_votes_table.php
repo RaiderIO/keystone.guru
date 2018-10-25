@@ -17,10 +17,12 @@ class CreateEnemyInfestedVotesTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('enemy_id');
+            $table->integer('affix_group_id');
             $table->boolean('vote');
 
             $table->index('user_id');
             $table->index('enemy_id');
+            $table->index('affix_group_id');
             $table->timestamps();
         });
     }

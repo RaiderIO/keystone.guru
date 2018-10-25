@@ -17,6 +17,8 @@ class CreateGameServerRegionsTable extends Migration
             $table->increments('id');
             $table->string('short');
             $table->string('name');
+            $table->integer('reset_day_offset');
+            $table->string('reset_time_offset_utc');
         });
     }
 

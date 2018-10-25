@@ -28,6 +28,11 @@ return [
 
 
     /**
+     * The year in which the season started.
+     */
+    'season_start_year' => 2018,
+
+    /**
      * Which week the current affix season has started at.
      */
     'season_start_week' => 36,

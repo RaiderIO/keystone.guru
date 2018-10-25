@@ -13,11 +13,12 @@ use Laratrust\Traits\LaratrustUserTrait;
 /**
  * @property int $id
  * @property int $game_server_region_id
+ * @property string $timezone
  * @property string $name
  * @property string $email
  * @property string $password
- * @property PatreonData $patreonData
- * @property GameServerRegion $gameServerRegion
+ * @property PatreonData $patreondata
+ * @property GameServerRegion $gameserverregion
  */
 class User extends Authenticatable
 {
@@ -130,7 +131,8 @@ class User extends Authenticatable
      */
     function gameserverregion()
     {
-        return $this->belongsTo('App\Models\GameServerRegion');
+        // Don't know why it won't work without the foreign key specified..
+        return $this->belongsTo('App\Models\GameServerRegion', 'game_server_region_id');
     }
 
     /**

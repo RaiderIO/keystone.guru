@@ -54,6 +54,10 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return view('misc.affixes');
     })->name('misc.affixes');
 
+    Route::get('timetest', function () {
+        return view('misc.timetest');
+    })->name('misc.timetest');
+
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
 

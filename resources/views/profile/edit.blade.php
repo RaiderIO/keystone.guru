@@ -24,9 +24,12 @@
             @include('common.forms.form-error', ['key' => 'email'])
         </div>
         <div class="form-group{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">
-            {!! Form::label('game_server_region_id', __('Select your region') . "*") !!}
-            {!! Form::select('game_server_region_id', \App\Models\GameServerRegion::all()->pluck('name', 'id'), null, ['class' => 'form-control']) !!}
+            {!! Form::label('game_server_region_id', __('Select your region')) !!}
+            {!! Form::select('game_server_region_id', array_merge(['-1' => 'Select region'], \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()), null, ['class' => 'form-control']) !!}
             @include('common.forms.form-error', ['key' => 'game_server_region_id'])
+        </div>
+        <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }}">
+            @include('common.forms.timezoneselect', ['selected' => $user->timezone])
         </div>
 
         {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
