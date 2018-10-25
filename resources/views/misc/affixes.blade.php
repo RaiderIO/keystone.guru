@@ -5,7 +5,7 @@ $region = null;
 if (Auth::check()) {
     $region = Auth::user()->gameserverregion;
 } else {
-    $region = \App\Models\GameServerRegion::all()->where('short', 'na')->first();
+    $region = \App\Models\GameServerRegion::getDefaultRegion();
 }
 ?>
 

@@ -102,6 +102,11 @@ class GameServerRegion extends Model
         return (int)($weeksPassed / $affixGroups->count());
     }
 
+    function getCurrentAffixGroupStartDate()
+    {
+        dd('implement this!');
+    }
+
     /**
      * Get the start date of an affix group based on the amount of iterations there's been on the calendar.
      *
@@ -126,27 +131,6 @@ class GameServerRegion extends Model
 
         $weeksPassed = ($iteration * $affixGroups->count()) + $index;
         return $this->_getSeasonStart()->setTimezone($now['timezone'])->addWeeks($weeksPassed);
-    }
-
-    /**
-     * Get the weeks that the current affix group is active for.
-     *
-     * @param int $year
-     * @param int $month
-     * @param int $day
-     * @param int $hour
-     * @param string $timezone
-     * @return array
-     */
-    function getCurrentAffixGroupWeeks($year, $month, $day, $hour, $timezone = null)
-    {
-        // Get the time the season started for this region, correct reset_day_offset since it's 1-based rather than 0-based.
-        $regionFirstWeekTime = $this->_getSeasonStart();
-
-        // Get the amount of weeks since the season's start
-        $weeksSinceStart = $this->_getWeeksPassedSinceStart($year, $month, $day, $hour, $timezone);
-
-        return $regionFirstWeekTime->addWeek($weeksSinceStart);
     }
 
     /**
@@ -189,6 +173,14 @@ class GameServerRegion extends Model
     function users()
     {
         return $this->hasMany('App\User');
+    }
+
+    /**
+     * @return mixed Gets the default region.
+     */
+    public static function getDefaultRegion()
+    {
+        return GameServerRegion::all()->where('short', 'na')->first();
     }
 
     public static function boot()

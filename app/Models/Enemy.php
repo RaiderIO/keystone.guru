@@ -39,7 +39,7 @@ class Enemy extends Model
 
         if (Auth::check()) {
             $first = $this->thisweeksinfestedvotes->where('user_id', Auth::user()->id)->first();
-            if($first !== null ){
+            if ($first !== null) {
                 $result = $first->vote;
             }
         }
@@ -85,8 +85,14 @@ class Enemy extends Model
      */
     function thisweeksinfestedvotes()
     {
+        $region = null;
+        if (Auth::check()) {
+            $region = Auth::user()->gameserverregion;
+        }
         // @TODO Check user's region and fetch appropriate amount of votes here.
-        return $this->hasMany('App\Models\EnemyInfestedVote'); // ->where('created_at');
+        return $this->hasMany('App\Models\EnemyInfestedVote')
+            ->where('affix_group_id', $region->getCurrentAffixGroup()->id)
+            ->where('created_at', '>', $region->getCurrentAffixGroupStartDate()); // ->where('created_at');
     }
 
     /**
