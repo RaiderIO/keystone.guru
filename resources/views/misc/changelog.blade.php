@@ -4,6 +4,121 @@
 
 @section('content')
     <h4>
+        2018/10/26
+    </h4>
+
+    <p>
+        General:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/68">#68</a> Editing a dungeon with Teeming selected
+            will now show the proper valid affixes again rather than just
+            non-teeming affixes.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/57">#57</a> Failing validation for a new route will
+            no longer reset your selected spec/class/race selections.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/42">#42</a> Adjusted various labels when editing a
+            route away from their defaults to more clear new ones.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/69">#69</a> You can now select your region and
+            timezone in your profile. This will make the Affixes page 100% accurate to your region + timezone. This was
+            also needed to properly implement <a href="https://github.com/Wotuu/keystone.guru/issues/39">#39</a> (see
+            below).
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/62">#62</a> Re-wrote all code related to visualising
+            enemies on the map. The new setup allows me to extend the system and display a lot more information
+            regarding enemies. Look for a new dropdown to the top right of your map to change visualization layers. The
+            options are limited for now, but as soon as I gather more information about enemies this list will fill with
+            more options. Because of this, raid markers no longer completely replace the selected enemy, but place the
+            marker to the top of them instead (just like in-game).
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/39">#39</a> With help of the above, you can now vote
+            on all enemies to be Infested or not. Using the new dropdown for visualization selection in the top right
+            you can select a new 'Infested Voting' visualization, which allows you to vote yes or no on each enemy
+            on-screen if they're infested or not. Each enemy
+            requires {{ config('keystoneguru.infested_user_vote_threshold') }} more yes votes than no votes to be marked
+            as Infested on everyone's map. Every reset, the votes are cleared and the voting begins again (Infested
+            enemies change every week).
+            <br><br>
+            To vote for Infested enemies, you need to have your region and timezone set in your profile. Why? As a
+            European you can vote for Infested enemies on Tuesday afternoon, while Americas will have a new set of
+            Infested enemies already and they're voting for theirs. You don't want your 'last week' votes messing up
+            the 'new' votes for the next week that are already being voted for in America.
+        </li>
+    </ul>
+    </p>
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            All dungeons
+            <ul>
+                <li>
+                    Due to Infested voting, all enemies which are tightly clustered have been spaced up slightly as to
+                    not impede with the voting process. If this is still an issue I'll consider adding another zoom
+                    level to the maps.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Shrine of the Storm
+            <ul>
+                <li>
+                    Several duplicate enemies on the second floor were removed.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Siege of Boralus
+            <ul>
+                <li>
+                    Several duplicate enemies between the first and second boss were removed.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Tol Dagor
+            <ul>
+                <li>
+                    Removed two duplicate enemies in the Overseer's Redoubt.
+                </li>
+                <li>
+                    Added some missing enemies in the Officer Quarters.
+                </li>
+            </ul>
+        </li>
+        <li>
+            The Underrot
+            <ul>
+                <li>
+                    Re-positioned a lot of enemies to their correct location on the map. The in-game map (and thus the
+                    one on the website) isn't very accurate so some enemies may look a bit out of place, but it's the
+                    best thing to do. Hopefully Blizzard fixes their map some time so the enemies are correctly placed.
+                </li>
+                <li>
+                    Added flying Feral Bloodswarmers after the second boss.
+                </li>
+                <li>
+                    Added a few missing Grotesque Horrors at the south part after the third boss.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         2018/10/18
     </h4>
 
@@ -11,7 +126,8 @@
         General:
     <ul>
         <li>
-            Increased performance of the website. I'll continue to monitor the performance as the amount of users & routes grow.
+            Increased performance of the website. I'll continue to monitor the performance as the amount of users &
+            routes grow.
         </li>
     </ul>
     </p>

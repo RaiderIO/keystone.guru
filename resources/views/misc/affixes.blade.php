@@ -1,13 +1,23 @@
 @extends('layouts.app')
+<?php
 
-@section('header-title', __('Weekly affixes'))
+$region = null;
+if (Auth::check()) {
+    $region = Auth::user()->gameserverregion;
+} else {
+    $region = \App\Models\GameServerRegion::getDefaultRegion();
+}
+?>
+
+@section('header-title', __('Weekly affixes in ' . $region->name))
 
 @section('content')
+
     <table class="affixes_overview_table table-striped" width="100%">
         <thead>
         <tr>
             <th width="20%">
-                {{ __('Week') }}
+                {{ __('Start date') }}
             </th>
             <th width="20%">
                 {{ __('+2') }}
@@ -25,30 +35,24 @@
         </thead>
         <tbody>
         <?php
-        // @TODO This needs to work past one cycle! Ohgodihatetimeandidonthavetimeforthisohtheirony
-        $affixGroupIndex = 0;
+        $currentAffixGroup = $region->getCurrentAffixGroup();
         $affixGroups = \App\Models\AffixGroup::all();
-        $currentWeek = intval(date('W'));
-        $currentDay = intval(date('w'));
         foreach($affixGroups as $affixGroup){
+        $affixGroupIndex = $affixGroup->id - 1;
         ?>
         <tr class="table_row">
             <?php
-            $firstWeek = config('keystoneguru.season_start_week') + $affixGroupIndex;
-            $firstWeekTime = strtotime('2018W' . $firstWeek) + (24 * 3600);
-            $nextWeek = config('keystoneguru.season_start_week') + $affixGroupIndex + 1;
-            $nextWeekTime = strtotime('2018W' . $nextWeek) + (24 * 3600);
-            $currentWeekTime = strtotime('2018W' . $currentWeek) + ((24 * 3600) * $currentDay);
-            $currentWeekClass = $currentWeekTime > $firstWeekTime && $currentWeekTime <= $nextWeekTime ? 'current_week ' : '';
+            // Current week if we found the current affix group for this region
+            $currentWeekClass = $affixGroup->id === $currentAffixGroup->id ? 'current_week ' : '';
             ?>
             <td>
                 <div class="affix_row first_column {{ $currentWeekClass }}">
-                    <span class="d-xl-block d-none">
-                        {{ $firstWeek }} + {{ config('keystoneguru.season_start_week') + ($affixGroupIndex + 1) }}
-                        (~{{ date('Y/M/d', $firstWeekTime) }})
+                    @php($startDate = $region->getAffixGroupStartDate($region->getCurrentSeasonAffixGroupIteration(), $affixGroup))
+                    <span>
+                        {{ $startDate->format('Y/M/d') }})
                     </span>
-                    <span class="d-xl-none d-block">
-                        ~{{ date('Y/M/d', $firstWeekTime) }}
+                    <span class="d-xl-inline d-none">
+                        {{ $startDate->format(' @ H\h') }}
                     </span>
                 </div>
             </td>
@@ -85,7 +89,8 @@
 
     <div class="mt-4 col-12 text-center">
         <p>
-            {!!  __('For more information about affixes and what they do, please visit <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>') !!}
+            {!!  __('For more information about affixes and M+, please visit') !!}
+            <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>
         </p>
     </div>
 @endsection

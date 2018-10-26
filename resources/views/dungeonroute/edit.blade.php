@@ -217,6 +217,7 @@
                     </h3>
 
                     <div class='container mt-1'>
+                        {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox d-none']) !!}
                         @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming'])
                     </div>
 

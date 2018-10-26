@@ -9,6 +9,33 @@ $(function () {
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
+
+    // Copy pasted from https://github.com/Leaflet/Leaflet.draw/blob/develop/src/draw/handler/Draw.Polyline.js#L470
+    // Adjusted so that it uses the correct drawing strings
+    L.Draw.Route.prototype._getTooltipText = function () {
+		var showLength = this.options.showLength,
+			labelText, distanceStr;
+		if (this._markers.length === 0) {
+			labelText = {
+				text: L.drawLocal.draw.handlers.route.tooltip.start
+			};
+		} else {
+			distanceStr = showLength ? this._getMeasurementString() : '';
+
+			if (this._markers.length === 1) {
+				labelText = {
+					text: L.drawLocal.draw.handlers.route.tooltip.cont,
+					subtext: distanceStr
+				};
+			} else {
+				labelText = {
+					text: L.drawLocal.draw.handlers.route.tooltip.end,
+					subtext: distanceStr
+				};
+			}
+		}
+		return labelText;
+    }
 });
 
 class Route extends MapObject {

@@ -16,14 +16,6 @@ class CharacterRace extends Model
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
 
-    public $appends = ['iconfile'];
-
-    public function getIconfileAttribute()
-    {
-        // $this->faction->load('iconfile');
-        return $this->faction->iconfile;
-    }
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

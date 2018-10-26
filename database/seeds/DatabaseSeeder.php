@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(UsersTableSeeder::class);
         $this->call(LaratrustSeeder::class);
 
+        $this->call(GameServerRegionSeeder::class);
+
         $this->call(ExpansionsSeeder::class);
         $this->call(DungeonsSeeder::class);
 

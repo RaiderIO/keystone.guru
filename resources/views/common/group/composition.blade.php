@@ -1,11 +1,11 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
-$factions = isset($factions) ? $factions : \App\Models\Faction::with('iconfile')->get();
-$specializations = \App\Models\CharacterClassSpecialization::with('iconfile')->get();
+$factions = isset($factions) ? $factions : \App\Models\Faction::all();
+$specializations = \App\Models\CharacterClassSpecialization::all();
 $classes = \App\Models\CharacterClass::with('specializations')->get();
 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
 $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
-// @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some poin
+// @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some point
 ?>
 
 @section('head')
@@ -13,30 +13,32 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}                 {
+        .{{ strtolower($faction->name) }}                              {
             color: {{ $faction->color }};
             font-weight: bold;
         }
 
         @endforeach
-
-        .testtesty {
-
-        }
     </style>
 @endsection
 
 @section('scripts')
     @parent
 
-    <script>
+    <script id="test_script">
+
         let _factions = {!! $factions !!};
         let _specializations = {!! $specializations !!};
         // Clarity so that _classes is not a thing (conflicts with a programming class etc).
         let _classDetails = {!! $classes !!};
         let _races = {!! $racesClasses !!};
 
-        // Defined in dungeonroutesetup.js
+        let _oldFaction;
+        let _oldSpecializations;
+        let _oldClasses;
+        let _oldRaces;
+
+        // Defined in groupcomposition.js
         $(function () {
             $("#reload_button").bind('click', function (e) {
                 e.preventDefault();
@@ -44,79 +46,64 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
             });
 
 
-            // Defined in groupcomposition.js
             initGroupComposition();
+            <?php
+                // @formatter:off
+                // This piece of code (which does not format well at all, hence manual formatting) makes sure that if
+                // we had an existing dungeon route we load their defaults, if we submitted something but failed to
+                // validate its contents, we restore the sent data back to the form
+                $oldFactionId = old('faction_id', null);
+                if(isset($dungeonroute) || !is_null($oldFactionId)) {
+                    if( isset($dungeonroute) ){ ?>
 
+                    _oldFaction = '{{ $dungeonroute->faction_id }}';
+                    _oldSpecializations = {!! $dungeonroute->specializations !!};
+                    _oldClasses = {!! $dungeonroute->classes !!};
+                    _oldRaces = {!! $dungeonroute->races !!};
+
+                <?php } else {
+                    // convert old values in a format we can read it in
+                    $newSpecializations = [];
+                    foreach (old('specialization', '') as $oldSpecialization) {
+                        $newSpecializations[] = ['id' => $oldSpecialization];
+                    }
+                    $newClasses = [];
+                    foreach (old('class', '') as $oldClass) {
+                        $newClasses[] = ['id' => $oldClass];
+                    }
+                    $newRaces = [];
+                    foreach (old('race', '') as $oldRace) {
+                        $newRaces[] = ['id' => $oldRace];
+                    }
+                ?>
+
+                    _oldFaction = '{{ old('faction_id', '') }}';
+                    _oldSpecializations = {!! json_encode($newSpecializations)  !!};
+                    _oldClasses = {!! json_encode($newClasses)  !!};
+                    _oldRaces = {!! json_encode($newRaces)  !!};
+
+            <?php } ?>
             _loadDungeonRouteDefaults();
-
-            // $('.selectpicker').selectpicker({
-            //     showIcon: true
-            // });
+            <?php }
+        // @formatter:on
+            ?>
         });
-
-        function _loadDungeonRouteDefaults() {
-                    @isset($dungeonroute)
-
-            let faction = '{{ $dungeonroute->faction_id }}';
-            let specializations = {!! $dungeonroute->specializations !!};
-            let classes = {!! $dungeonroute->classes !!};
-            let races = {!! $dungeonroute->races !!};
-
-            let $faction = $("#faction_id");
-            $faction.val(faction);
-            // Have to manually trigger change..
-            $faction.trigger('change');
-
-            let $specializationsSelects = $(".specializationselect select");
-            let $racesSelects = $(".raceselect select");
-            let $classSelects = $(".classselect select");
-
-            // For each specialization
-            for (let i = 0; i < specializations.length; i++) {
-                let characterSpecialization = specializations[i];
-                let $specializationSelect = $($specializationsSelects[i]);
-                $specializationSelect.val(characterSpecialization.id);
-                // Have to manually trigger change..
-                $specializationSelect.trigger('change');
-            }
-
-            // For each class
-            for (let i = 0; i < classes.length; i++) {
-                let characterClass = classes[i];
-                let $classSelect = $($classSelects[i]);
-                $classSelect.val(characterClass.id);
-                // Have to manually trigger change..
-                $classSelect.trigger('change');
-            }
-
-            // For each race
-            for (let i = 0; i < races.length; i++) {
-                let race = races[i];
-                let $raceSelect = $($racesSelects[i]);
-                $raceSelect.val(race.id);
-                // Have to manually trigger change..
-                $raceSelect.trigger('change');
-            }
-
-            @endisset
-
-            _refreshSelectPicker();
-        }
     </script>
 @endsection
+
 <div class="row">
     <div class="col-xl-2 offset-xl-5">
         <div class="form-group">
             {!! Form::label('faction_id', __('Faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
-            {!! Form::select('faction_id', $factions->pluck('name', 'id'), 0, ['class' => 'form-control selectpicker']) !!}
+            {!! Form::select('faction_id', $factions->pluck('name', 'id'), old('faction_id'), ['class' => 'form-control selectpicker']) !!}
         </div>
     </div>
     @isset($dungeonroute)
         <div class="offset-lg-4 col-lg-1">
             <div class="form-group">
                 <button id="reload_button" class="btn btn-warning">
-                    <i class="fas fa-undo"></i> {{ __('Reset') }}
+                    <i class="fas fa-undo"></i> {{ __('Undo') }}
                 </button>
             </div>
         </div>
@@ -124,7 +111,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 </div>
 <div class="row">
     <?php for($i = 1; $i <= config('keystoneguru.party_size'); $i++){ ?>
-    <div class="col pl-1 pr-1">
+    <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
             {!! Form::label('specialization[]', __('Party member #' . $i)) !!}

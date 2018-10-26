@@ -339,6 +339,17 @@ $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
     <script src="{{ asset('js/custom/util.js') }}"></script>
     <script src="{{ asset('js/custom/signalable.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonmap.js') }}"></script>
+
+    <script src="{{ asset('js/custom/enemyvisuals/enemyvisual.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualicon.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmain.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmainaggressiveness.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmainenemyforces.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifier.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierraidmarker.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfested.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfestedvote.js') }}"></script>
+
     <script src="{{ asset('js/custom/mapobject.js') }}"></script>
     <script src="{{ asset('js/custom/enemy.js') }}"></script>
     <script src="{{ asset('js/custom/enemypatrol.js') }}"></script>
@@ -354,6 +365,7 @@ $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
     <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/drawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/enemyforcescontrols.js') }}"></script>
+    <script src="{{ asset('js/custom/mapcontrols/enemyvisualcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/factiondisplaycontrols.js') }}"></script>
 
     <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>

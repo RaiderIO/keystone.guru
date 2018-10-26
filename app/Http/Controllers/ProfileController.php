@@ -24,6 +24,9 @@ class ProfileController extends Controller
     public function update(Request $request, User $user)
     {
         $user->email = $request->get('email');
+        $user->game_server_region_id = $request->get('game_server_region_id');
+        $user->timezone = $request->get('timezone');
+
         $exists = User::where('email', $user->email)->where('id', '<>', $user->id)->get()->count() > 0;
         if (!$exists) {
             if (!$user->save()) {

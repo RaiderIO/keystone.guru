@@ -16,12 +16,14 @@ class AdminDungeonMap extends DungeonMap {
 
         let result = [
             new AdminDrawControls(this, drawnItemsLayer),
+            new EnemyVisualControls(this),
             new MapObjectGroupControls(this)
         ];
 
-        if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
-            result.push(new FactionDisplayControls(this));
-        }
+        // @TODO This breaks the admin
+        // if (this.dungeonData.name === 'Siege of Boralus') {
+        //     result.push(new FactionDisplayControls(this));
+        // }
 
         return result;
     }

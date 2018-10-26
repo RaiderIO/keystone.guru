@@ -4,16 +4,21 @@ namespace App;
 
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
+use App\Models\GameServerRegion;
+use App\Models\PatreonData;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\LaratrustUserTrait;
 
 /**
- * @property $id int
- * @property $name string
- * @property $email string
- * @property $password string
- * @property $patreonData PatreonData
+ * @property int $id
+ * @property int $game_server_region_id
+ * @property string $timezone
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property PatreonData $patreondata
+ * @property GameServerRegion $gameserverregion
  */
 class User extends Authenticatable
 {
@@ -119,6 +124,15 @@ class User extends Authenticatable
     function patreondata()
     {
         return $this->hasOne('App\Models\PatreonData');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function gameserverregion()
+    {
+        // Don't know why it won't work without the foreign key specified..
+        return $this->belongsTo('App\Models\GameServerRegion', 'game_server_region_id');
     }
 
     /**

@@ -17,15 +17,14 @@
                     <p>{{ __('This website allows you to plan routes through your Mythic Plus dungeons and share them with the world or your group!') }}</p>
                     <p>
                         @guest
-                            <a href="#" class="btn btn-primary btn-lg" role="button" data-toggle="modal"
+                            <a href="#" class="btn btn-primary btn-lg mt-1" role="button" data-toggle="modal"
                                data-target="#register_modal">{{ __('Register and start planning') }}</a>
                         @endguest
-                        <a href="{{ route('dungeonroute.view', ['public_key' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}" class="btn btn-primary btn-ghost btn-lg mt-md-0 mt-sm-3"
+                        <a href="{{ route('dungeonroute.view', ['public_key' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}" class="btn btn-primary btn-ghost btn-lg mt-1"
                            role="button">{{ __('Demo') }}</a>
-                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-ghost btn-lg mt-md-0 mt-sm-3"
+                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-ghost btn-lg mt-1"
                            role="button">{{ __('Try it!') }}</a>
                     </p>
-                    <!-- <p><a href="#"><i class="icon-play2"></i> Watch the video</a></p> -->
                 </div>
             </div>
 
@@ -168,66 +167,4 @@
             </div>
         </div>
     </section>
-    <!--
-
-        <section class="probootstrap-section probootstrap-bg-white probootstrap-zindex-above-showcase">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate">
-                        <h2>More Features</h2>
-                        <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
-                            natus quos quibusdam soluta at.</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-7 order-md-5 probootstrap-animate" data-animate-effect="fadeInRight">
-
-                        <div class="owl-carousel owl-carousel-fullwidth border-rounded">
-                            <div class="item">
-                                <img src="images/landing/img_showcase_1.jpg"
-                                     alt="Free HTML5 Bootstrap Template by GetTemplates.co">
-                            </div>
-                            <div class="item">
-                                <img src="images/landing/img_showcase_2.jpg"
-                                     alt="Free HTML5 Bootstrap Template by GetTemplates.co">
-                            </div>
-                            <div class="item">
-                                <img src="images/landing/img_showcase_1.jpg"
-                                     alt="Free HTML5 Bootstrap Template by GetTemplates.co">
-                            </div>
-                            <div class="item">
-                                <img src="images/landing/img_showcase_2.jpg"
-                                     alt="Free HTML5 Bootstrap Template by GetTemplates.co">
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-5 order-md-7">
-                        <div class="service left-icon probootstrap-animate" data-animate-effect="fadeInLeft">
-                            <div class="icon"><i class="icon-mobile3"></i></div>
-                            <div class="text">
-                                <h3>Responsive Design</h3>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit iusto provident.</p>
-                            </div>
-                        </div>
-                        <div class="service left-icon probootstrap-animate" data-animate-effect="fadeInLeft">
-                            <div class="icon"><i class="icon-presentation"></i></div>
-                            <div class="text">
-                                <h3>Business Solutions</h3>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit iusto provident.</p>
-                            </div>
-                        </div>
-                        <div class="service left-icon probootstrap-animate" data-animate-effect="fadeInLeft">
-                            <div class="icon"><i class="icon-circle-compass"></i></div>
-                            <div class="text">
-                                <h3>Brand Identity</h3>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit iusto provident.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        -->
 @endsection

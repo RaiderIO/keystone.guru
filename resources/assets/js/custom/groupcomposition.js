@@ -489,3 +489,47 @@ function _addIconOptionToSelect($select, dataCollection, cssPrefix = '') {
         );
     }
 }
+
+/**
+ * Load defaults that were set by a dungeon route.
+ * @private
+ */
+function _loadDungeonRouteDefaults() {
+    let $faction = $("#faction_id");
+    $faction.val(_oldFaction);
+    // Have to manually trigger change..
+    $faction.trigger('change');
+
+    let $specializationsSelects = $(".specializationselect select");
+    let $racesSelects = $(".raceselect select");
+    let $classSelects = $(".classselect select");
+
+    // For each specialization
+    for (let i = 0; i < _oldSpecializations.length; i++) {
+        let characterSpecialization = _oldSpecializations[i];
+        let $specializationSelect = $($specializationsSelects[i]);
+        $specializationSelect.val(characterSpecialization.id);
+        // Have to manually trigger change..
+        $specializationSelect.trigger('change');
+    }
+
+    // For each class
+    for (let i = 0; i < _oldClasses.length; i++) {
+        let characterClass = _oldClasses[i];
+        let $classSelect = $($classSelects[i]);
+        $classSelect.val(characterClass.id);
+        // Have to manually trigger change..
+        $classSelect.trigger('change');
+    }
+
+    // For each race
+    for (let i = 0; i < _oldRaces.length; i++) {
+        let race = _oldRaces[i];
+        let $raceSelect = $($racesSelects[i]);
+        $raceSelect.val(race.id);
+        // Have to manually trigger change..
+        $raceSelect.trigger('change');
+    }
+
+    _refreshSelectPicker();
+}

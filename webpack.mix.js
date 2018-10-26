@@ -49,10 +49,19 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/dungeonfloorswitchmarker.js',
         'resources/assets/js/custom/hotkeys.js',
 
+        'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
+        'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
+        'resources/assets/js/custom/enemyvisuals/enemyvisualmain.js',
+        'resources/assets/js/custom/enemyvisuals/enemyvisualmainaggressiveness.js',
+        'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyforces.js',
+        'resources/assets/js/custom/enemyvisuals/modifiers/modifier.js',
+        'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
+
         'resources/assets/js/custom/mapcontrol.js',
         'resources/assets/js/custom/mapcontrols/mapobjectgroupcontrols.js',
         'resources/assets/js/custom/mapcontrols/drawcontrols.js',
         'resources/assets/js/custom/mapcontrols/enemyforcescontrols.js',
+        'resources/assets/js/custom/mapcontrols/enemyvisualcontrols.js',
         'resources/assets/js/custom/mapcontrols/factiondisplaycontrols.js',
 
         'resources/assets/js/custom/admin/enemyattaching.js',

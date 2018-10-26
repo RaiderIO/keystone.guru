@@ -22,7 +22,10 @@ class AffixGroup extends Model
      */
     public function affixes()
     {
-        return $this->belongsToMany('App\Models\Affix', 'affix_group_couplings');
+        // I don't know why this suddenly needs an order by. After adding indexes to the database somehow the order of this was done by affix_id
+        // rather than the normal id. This caused affixes to be misplaced in the Affixes page. But not elsewhere, so it's double strange.
+        // No clue, this works so I'll keep it this way for the time being.
+        return $this->belongsToMany('App\Models\Affix', 'affix_group_couplings')->orderBy('affix_group_couplings.id', 'asc');
     }
 
     /**

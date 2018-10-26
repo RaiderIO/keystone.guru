@@ -26,10 +26,12 @@ class MapObject extends Signalable {
     }
 
     getContextMenuItems() {
-        return [{
-            text: this.label + ' (synced: ' + this.synced + ')',
-            disabled: true
-        }];
+        return [
+        //     {
+        //     text: this.label + ' (synced: ' + this.synced + ')',
+        //     disabled: true
+        // }
+        ];
     }
 
     /**

@@ -65,10 +65,14 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         enemy.faction = remoteEnemy.faction;
                         enemy.enemy_forces_override = remoteEnemy.enemy_forces_override;
                         enemy.raid_marker_name = remoteEnemy.raid_marker_name;
+                        enemy.infested_yes_votes = remoteEnemy.infested_yes_votes;
+                        enemy.infested_no_votes = remoteEnemy.infested_no_votes;
+                        enemy.infested_user_vote = remoteEnemy.infested_user_vote;
+                        enemy.is_infested = remoteEnemy.is_infested;
 
                         enemy.setNpc(remoteEnemy.npc);
                         // If actually set..
-                        if (remoteEnemy.raid_marker_name !== null && remoteEnemy.raid_marker_name !== '') {
+                        if (remoteEnemy.hasOwnProperty('raid_marker_name') && remoteEnemy.raid_marker_name !== null) {
                             enemy.setRaidMarkerName(remoteEnemy.raid_marker_name);
                         }
 

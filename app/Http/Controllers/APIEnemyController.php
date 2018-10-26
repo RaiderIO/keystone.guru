@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
-use App\Models\Enemy;
 use App\Models\DungeonRouteEnemyRaidMarker;
+use App\Models\Enemy;
+use App\Models\EnemyInfestedVote;
+use App\Models\GameServerRegion;
 use App\Models\Npc;
 use App\Models\RaidMarker;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 
@@ -22,31 +25,48 @@ class APIEnemyController extends Controller
     {
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute', null);
+        DB::enableQueryLog();
 
         // If dungeon route was set, fetch the markers as well
         if ($dungeonRoutePublicKey !== null) {
             try {
                 $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-                $result = DB::table('enemies')
-                    ->leftJoin('dungeon_route_enemy_raid_markers', function ($join) use ($dungeonRoute) {
-                        /** @var $join JoinClause */
-                        $join->on('dungeon_route_enemy_raid_markers.enemy_id', '=', 'enemies.id')
-                            ->where('dungeon_route_enemy_raid_markers.dungeon_route_id', $dungeonRoute->id);
-                    })
-                    ->leftJoin('raid_markers', 'dungeon_route_enemy_raid_markers.raid_marker_id', '=', 'raid_markers.id')
-                    ->where('enemies.floor_id', $floorId)
-                    ->select('enemies.*', 'raid_markers.name as raid_marker_name')
-                    ->get();
+                // Eloquent wasn't working with me, raw SQL it is
+                /** @var array $result */
+                $result = DB::select('
+                    select `enemies`.*, `raid_markers`.`name` as `raid_marker_name`,
+                            CAST(SUM(if(`enemy_infested_votes`.`vote` = 1, 1, 0)) as SIGNED) as infested_yes_votes,
+                            CAST(SUM(if(`enemy_infested_votes`.`vote` = 0, 1, 0)) as SIGNED) as infested_no_votes,
+                            if(`enemy_infested_votes`.`user_id` = :userId, `enemy_infested_votes`.`vote`, null) as infested_user_vote
+                    from `enemies`
+                           left join `dungeon_route_enemy_raid_markers`
+                             on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
+                                `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
+                           left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
+                           left join `enemy_infested_votes` on `enemies`.`id` = `enemy_infested_votes`.`enemy_id`
+                                    and `enemy_infested_votes`.affix_group_id = :affixGroupId
+                                                  and `enemy_infested_votes`.updated_at > :minTime
+                    where `enemies`.`floor_id` = :floorId
+                    group by `enemies`.`id`;
+                ', [
+                    'userId' => Auth::check() ? Auth::user()->id : -1,
+                    'routeId' => $dungeonRoute->id,
+                    'affixGroupId' => (Auth::check() ? Auth::user()->gameserverregion : GameServerRegion::getDefaultRegion())->getCurrentAffixGroup(),
+                    'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s'),
+                    'floorId' => $floorId
+                ]);
 
                 // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
-                $npcs = DB::table('npcs')->whereIn('id', $result->pluck(['npc_id'])->unique())->get();
+                $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
 
                 foreach ($result as $enemy) {
+                    $enemy->is_infested = ($enemy->infested_yes_votes - $enemy->infested_no_votes) >= config('keystoneguru.infested_user_vote_threshold');
                     $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
                         return $enemy->npc_id === $item->id;
                     })->first();
                     unset($enemy->npc_id);
                 }
+
             } catch (\Exception $ex) {
                 $result = response('Not found', Http::NOT_FOUND);
             }
@@ -80,7 +100,7 @@ class APIEnemyController extends Controller
         $enemy->lng = $request->get('lng');
 
         // Find out of there is a duplicate
-        if( !$enemy->exists) {
+        if (!$enemy->exists) {
             $this->checkForDuplicate($enemy);
         }
 
@@ -99,25 +119,25 @@ class APIEnemyController extends Controller
 
     /**
      * @param Request $request
+     * @param Enemy $enemy
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    function setRaidMarker(Request $request)
+    function setRaidMarker(Request $request, Enemy $enemy)
     {
         $dungeonRoutePublicKey = $request->get('dungeonroute');
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
             $raidMarkerName = $request->get('raid_marker_name', '');
-            $enemyId = $request->get('enemy_id', 0);
 
             // Delete existing enemy raid marker
-            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemyId)->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonRoute->id)->delete();
 
             // Create a new one, if the user didn't just want to clear it
             if ($raidMarkerName !== null && !empty($raidMarkerName)) {
                 $raidMarker = new DungeonRouteEnemyRaidMarker();
                 $raidMarker->dungeon_route_id = $dungeonRoute->id;
                 $raidMarker->raid_marker_id = RaidMarker::where('name', $raidMarkerName)->first()->id;
-                $raidMarker->enemy_id = $enemyId;
+                $raidMarker->enemy_id = $enemy->id;
                 $raidMarker->save();
 
                 $result = ['name' => $raidMarkerName];
@@ -149,5 +169,54 @@ class APIEnemyController extends Controller
         }
 
         return $result;
+    }
+
+
+    /**
+     * @param Request $request
+     * @param Enemy $enemy
+     * @return array
+     * @throws \Exception
+     */
+    function setInfested(Request $request, Enemy $enemy)
+    {
+        $vote = intval($request->get('vote', -1));
+
+        $user = Auth::user();
+
+        if ($user->game_server_region_id > 0) {
+            $currentAffixId = $user->gameserverregion->getCurrentAffixGroup()->id;
+
+            /** @var EnemyInfestedVote $infestedEnemyVote */
+            $infestedEnemyVote = EnemyInfestedVote::firstOrNew([
+                'enemy_id' => $enemy->id,
+                'user_id' => $user->id,
+                'affix_group_id' => $currentAffixId
+            ]);
+
+            // If user wants to vote yes/no
+            if ($vote === 0 || $vote === 1) {
+                $infestedEnemyVote->affix_group_id = $currentAffixId;
+                // If it's not 0, it's true (yes), otherwise false (no)
+                $infestedEnemyVote->vote = $vote;
+                $infestedEnemyVote->save();
+            } // If vote was an invalid value but a vote existed, get rid of it
+            else if ($infestedEnemyVote->exists) {
+                $infestedEnemyVote->delete();
+            }
+
+            // Re-load infested relations
+            $enemy->unsetRelation('infestedvotes');
+            $enemy->unsetRelation('thisweeksinfestedvotes');
+
+            return [
+                'infested_yes_votes' => $enemy->getInfestedYesVotesCount(),
+                'infested_no_votes' => $enemy->getInfestedNoVotesCount(),
+                'infested_user_vote' => $enemy->getUserInfestedVoteAttribute(),
+                'is_infested' => $enemy->is_infested
+            ];
+        } else {
+            throw new \Exception(__('Region not set. Please visit your profile and set your region before voting on Infested enemies.'));
+        }
     }
 }

@@ -30,6 +30,7 @@ $introTexts = [
     __('This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
     that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!'),
     __('This label indicates your current progress with enemy forces. Remember to use killzones to mark an enemy as killed and see this label updated.'),
+    __('Here you can select how you want enemies visualized on the map. You can chose from multiple different visualizations to help you quickly find the information you need.'),
     __('These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.')
 ];
 ?>
@@ -121,6 +122,7 @@ $introTexts = [
                 ['.leaflet-draw-edit-edit', 'right'],
                 ['.leaflet-draw-edit-remove', 'right'],
                 ['#map_enemy_forces', 'left'],
+                ['#map_enemy_visuals', 'left'],
                 ['.leaflet-right .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top', 'left'],
             ];
             let texts = {!! json_encode($introTexts) !!};
@@ -155,6 +157,40 @@ $introTexts = [
         }
     </script>
 
+    <script id="map_enemy_forces_template" type="text/x-handlebars-template">
+        <div id="map_enemy_forces" class="leaflet-draw-section">
+            {{ __('Enemy forces')}}:
+            <span id="map_enemy_forces_numbers">
+                <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
+                (<span id="map_enemy_forces_percent">0</span>%)
+            </span>
+        </div>
+    </script>
+
+    <script id="map_enemy_visuals_template" type="text/x-handlebars-template">
+        <div id="map_enemy_visuals" class="leaflet-draw-section">
+            {!! Form::select('map_enemy_visuals_dropdown',
+            ['aggressiveness' => 'Aggressiveness', 'enemy_forces' => 'Enemy forces', 'infested_vote' => 'Infested Voting'],
+            0,
+            ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
+        </div>
+    </script>
+
+    <script id="map_controls_template" type="text/x-handlebars-template">
+        <div id="map_controls" class="leaflet-draw-section">
+            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
+                @{{#mapobjectgroups}}
+                <a id='map_controls_hide_@{{name}}' class="map_controls_custom" href="#" title="@{{title}}">
+                    <i id='map_controls_hide_@{{name}}_checkbox' class="fas fa-check-square" style="width: 15px"></i>
+                    <i class="fas @{{fa_class}}" style="width: 15px"></i>
+                    <span class="sr-only">@{{title}}</span>
+                </a>
+                @{{/mapobjectgroups}}
+            </div>
+            <ul class="leaflet-draw-actions"></ul>
+        </div>
+    </script>
+
     <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
@@ -175,31 +211,6 @@ $introTexts = [
         </div>
     </script>
 
-    <script id="map_controls_template" type="text/x-handlebars-template">
-        <div id="map_controls" class="leaflet-draw-section">
-            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                @{{#mapobjectgroups}}
-                <a id='map_controls_hide_@{{name}}' class="map_controls_custom" href="#" title="@{{title}}">
-                    <i id='map_controls_hide_@{{name}}_checkbox' class="fas fa-check-square" style="width: 15px"></i>
-                    <i class="fas @{{fa_class}}" style="width: 15px"></i>
-                    <span class="sr-only">@{{title}}</span>
-                </a>
-                @{{/mapobjectgroups}}
-            </div>
-            <ul class="leaflet-draw-actions"></ul>
-        </div>
-    </script>
-
-    <script id="map_enemy_forces_template" type="text/x-handlebars-template">
-        <div id="map_enemy_forces" class="leaflet-draw-section">
-            {{ __('Enemy forces')}}:
-            <span id="map_enemy_forces_numbers">
-                <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
-                (<span id="map_enemy_forces_percent">0</span>%)
-            </span>
-        </div>
-    </script>
-
     <script id="map_enemy_tooltip_template" type="text/x-handlebars-template">
         <div class="map_enemy_tooltip leaflet-draw-section">
             <div class="row">
@@ -214,12 +225,31 @@ $introTexts = [
                 <div class="col-5 no-gutters">{{ __('Base health') }} </div>
                 <div class="col-7 no-gutters">@{{ base_health }}</div>
             </div>
-            @if($isAdmin)
-                <div class="row">
-                    <div class="col-5 no-gutters">{{ __('Pack') }} </div>
-                    <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
-                </div>
-            @endif
+            <div class="row">
+                <div class="col-5 no-gutters">{{ __('Infested votes') }} </div>
+                <div class="col-7 no-gutters">@{{ infested_yes_votes }} yes, @{{ infested_no_votes}} no</div>
+            </div>
+            @auth
+                @if(Auth::user()->hasRole('admin'))
+                    <div class="row">
+                        <div class="col-12 font-weight-bold">
+                            {{ __('Admin only') }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('ID') }} </div>
+                        <div class="col-7 no-gutters">@{{ id }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('Pack') }} </div>
+                        <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('Visual') }} </div>
+                        <div class="col-7 no-gutters">@{{ visual }}</div>
+                    </div>
+                @endif
+            @endauth
         </div>
     </script>
 
@@ -264,6 +294,23 @@ $introTexts = [
         </div>
     </script>
 
+    <script id="map_enemy_visual_template" type="text/x-handlebars-template">
+        <div style="position: relative;">
+            <div class="modifier modifier_0 @{{modifier_0_classes}}" style="display: none;">
+                @{{{modifier_0_html}}}
+            </div>
+            <div class="modifier modifier_1 @{{modifier_1_classes}}" style="display: none;">
+                @{{{modifier_1_html}}}
+            </div>
+            <div class="modifier modifier_2 @{{modifier_2_classes}}" style="display: none;">
+                @{{{modifier_2_html}}}
+            </div>
+            <div class=" @{{killzone_classes}} @{{main_visual_classes}}">
+                @{{{main_visual_html}}}
+            </div>
+        </div>
+    </script>
+
     @if(!$isAdmin)
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">
@@ -280,7 +327,8 @@ $introTexts = [
                         </div>
                     @endif
                 @endfor
-                <div id="enemy_raid_marker_clear_@{{id}}" class="btn btn-warning col-12 mt-2"><i class="fa fa-times"></i> {{ __('Clear marker') }}</div>
+                <div id="enemy_raid_marker_clear_@{{id}}" class="btn btn-warning col-12 mt-2"><i
+                            class="fa fa-times"></i> {{ __('Clear marker') }}</div>
             </div>
         </script>
     @else
