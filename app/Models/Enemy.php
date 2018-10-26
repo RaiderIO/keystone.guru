@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Auth;
 class Enemy extends Model
 {
     public $with = ['npc'];
-    public $hidden = ['npc_id'];
+    public $hidden = ['npc_id', 'user_infested_vote', 'is_infested', 'thisweeksinfestedvotes'];
     public $timestamps = false;
     public $appends = ['user_infested_vote', 'is_infested'];
 

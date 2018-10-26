@@ -91,7 +91,7 @@
 }
 
 /* Remove square background and border around enemies, but leave editing drag squares alone */
-.leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon) {
+.leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon):not(.leaflet-edit-marker-selected) {
     border: none;
     background-color: unset;
 }

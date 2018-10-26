@@ -63,6 +63,32 @@
         Mapping changes:
     <ul>
         <li>
+            All dungeons
+            <ul>
+                <li>
+                    Due to Infested voting, all enemies which are tightly clustered have been spaced up slightly as to
+                    not impede with the voting process. If this is still an issue I'll consider adding another zoom
+                    level to the maps.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Shrine of the Storm
+            <ul>
+                <li>
+                    Several duplicate enemies on the second floor were removed.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Siege of Boralus
+            <ul>
+                <li>
+                    Several duplicate enemies between the first and second boss were removed.
+                </li>
+            </ul>
+        </li>
+        <li>
             Tol Dagor
             <ul>
                 <li>
