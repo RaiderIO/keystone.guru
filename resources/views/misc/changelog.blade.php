@@ -77,9 +77,9 @@
             The Underrot
             <ul>
                 <li>
-                    Re-positioned a lot of enemies to their correct location on the map. The map isn't very accurate so
-                    some enemies may look a bit out of place, but it's the best thing to do. Hopefully Blizzard fixes
-                    their map some time so the enemies are correctly placed.
+                    Re-positioned a lot of enemies to their correct location on the map. The in-game map (and thus the
+                    one on the website) isn't very accurate so some enemies may look a bit out of place, but it's the
+                    best thing to do. Hopefully Blizzard fixes their map some time so the enemies are correctly placed.
                 </li>
                 <li>
                     Added flying Feral Bloodswarmers after the second boss.
