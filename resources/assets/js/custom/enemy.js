@@ -183,7 +183,8 @@ class Enemy extends MapObject {
                 infested_yes_votes: this.infested_yes_votes,
                 infested_no_votes: this.infested_no_votes,
                 id: this.id,
-                attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false'
+                attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
+                visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
             };
         }
 
@@ -365,7 +366,6 @@ class Enemy extends MapObject {
                 url: '/ajax/enemy/' + self.id + '/infested',
                 dataType: 'json',
                 data: {
-                    dungeonroute: dungeonRoutePublicKey,
                     vote: vote ? '1' : '0'
                 },
                 success: successFn,

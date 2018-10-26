@@ -185,15 +185,18 @@ class APIEnemyController extends Controller
         $user = Auth::user();
 
         if ($user->game_server_region_id > 0) {
+            $currentAffixId = $user->gameserverregion->getCurrentAffixGroup()->id;
+
             /** @var EnemyInfestedVote $infestedEnemyVote */
             $infestedEnemyVote = EnemyInfestedVote::firstOrNew([
                 'enemy_id' => $enemy->id,
                 'user_id' => $user->id,
-                'affix_group_id' => $user->gameserverregion->getCurrentAffixGroup()->id
+                'affix_group_id' => $currentAffixId
             ]);
 
             // If user wants to vote yes/no
             if ($vote === 0 || $vote === 1) {
+                $infestedEnemyVote->affix_group_id = $currentAffixId;
                 // If it's not 0, it's true (yes), otherwise false (no)
                 $infestedEnemyVote->vote = $vote;
                 $infestedEnemyVote->save();
