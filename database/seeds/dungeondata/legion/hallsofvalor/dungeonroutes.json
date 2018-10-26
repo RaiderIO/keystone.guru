@@ -980,28 +980,40 @@
                 "raid_marker_id": 1
             },
             {
-                "enemy_id": 10,
-                "raid_marker_id": 2
-            },
-            {
                 "enemy_id": 12,
                 "raid_marker_id": 8
             },
             {
-                "enemy_id": 15,
-                "raid_marker_id": 7
+                "enemy_id": 29,
+                "raid_marker_id": 4
             },
             {
-                "enemy_id": 11,
+                "enemy_id": 10,
                 "raid_marker_id": 1
             },
             {
+                "enemy_id": 11,
+                "raid_marker_id": 2
+            },
+            {
                 "enemy_id": 14,
+                "raid_marker_id": 7
+            },
+            {
+                "enemy_id": 15,
                 "raid_marker_id": 3
             },
             {
-                "enemy_id": 29,
-                "raid_marker_id": 4
+                "enemy_id": 25,
+                "raid_marker_id": 1
+            },
+            {
+                "enemy_id": 26,
+                "raid_marker_id": 2
+            },
+            {
+                "enemy_id": 7,
+                "raid_marker_id": 8
             }
         ],
         "mapcomments": [

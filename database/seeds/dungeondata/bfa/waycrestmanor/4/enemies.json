@@ -183,7 +183,7 @@
     },
     {
         "id": 568,
-        "enemy_pack_id": 133,
+        "enemy_pack_id": 132,
         "floor_id": 63,
         "teeming": null,
         "faction": "any",
@@ -196,7 +196,7 @@
     },
     {
         "id": 570,
-        "enemy_pack_id": 132,
+        "enemy_pack_id": 133,
         "floor_id": 63,
         "teeming": null,
         "faction": "any",
