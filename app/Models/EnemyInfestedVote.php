@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $affix_group_id
  * @property int $user_id
  * @property int $vote
+ * @property int $vote_weight
  * @property User $user
  * @property Enemy $enemy
  */

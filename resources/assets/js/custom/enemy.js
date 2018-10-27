@@ -1,10 +1,18 @@
+// Icon sizes
+let _smallIcon = {iconSize: [11, 11]};
+let _bigIcon = {iconSize: [32, 32]};
+
+// Default icon; placeholder while placing a new enemy. This can't really use the Visual system, it'd require
+// too much rewrites. Better to just make a small placeholder like this and assign it to the below constructs.
+let DefaultEnemyIcon = new L.divIcon($.extend({className: 'unset_enemy_icon'}, _smallIcon));
+
 $(function () {
     L.Draw.Enemy = L.Draw.Marker.extend({
         statics: {
             TYPE: 'enemy'
         },
         options: {
-            icon: LeafletEnemyIcons['unset']
+            icon: DefaultEnemyIcon
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
@@ -17,7 +25,7 @@ $(function () {
 
 let LeafletEnemyMarker = L.Marker.extend({
     options: {
-        icon: LeafletEnemyIcons['unset']
+        icon: DefaultEnemyIcon
     }
 });
 
@@ -105,6 +113,7 @@ class Enemy extends MapObject {
                 });
             });
             let $clearMarker = $('#enemy_raid_marker_clear_' + self.id);
+            $clearMarker.unbind('click');
             $clearMarker.bind('click', function () {
                 // Empty is unassign
                 self.assignRaidMarker('');
@@ -176,12 +185,14 @@ class Enemy extends MapObject {
                 }
             }
 
+            let netVotes = this.infested_yes_votes - this.infested_no_votes;
             data = {
                 npc_name: this.npc.name,
                 enemy_forces: enemy_forces,
                 base_health: this.npc.base_health,
                 infested_yes_votes: this.infested_yes_votes,
                 infested_no_votes: this.infested_no_votes,
+                infested_net_votes: netVotes >= 0 ? '+' + netVotes : netVotes,
                 id: this.id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
                 visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'

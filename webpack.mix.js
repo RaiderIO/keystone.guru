@@ -54,7 +54,10 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/enemyvisuals/enemyvisualmain.js',
         'resources/assets/js/custom/enemyvisuals/enemyvisualmainaggressiveness.js',
         'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyforces.js',
+
         'resources/assets/js/custom/enemyvisuals/modifiers/modifier.js',
+        'resources/assets/js/custom/enemyvisuals/modifiers/modifierinfested.js',
+        'resources/assets/js/custom/enemyvisuals/modifiers/modifierinfestedvote.js',
         'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
 
         'resources/assets/js/custom/mapcontrol.js',
@@ -77,14 +80,14 @@ if (mix.inProduction()) {
         // Include the rest
         'resources/assets/js/custom/groupcomposition.js',
         'resources/assets/js/custom/mapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
-        'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
-        'resources/assets/js/custom/mapobjectgroups/routemapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/mapcommentmapobjectgroup.js',
-        'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
-        'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/routemapobjectgroup.js',
         // 'resources/assets/js/custom/**/*.js'
     ], 'public/js/custom.js');
 }

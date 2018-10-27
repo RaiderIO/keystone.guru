@@ -173,9 +173,16 @@ class GameServerRegion extends Model
     /**
      * @return mixed Gets the default region.
      */
-    public static function getDefaultRegion()
+    public static function getUserOrDefaultRegion()
     {
-        return GameServerRegion::all()->where('short', 'na')->first();
+        $region = null;
+        if (Auth::check()) {
+            $region = Auth::user()->gameserverregion;
+        }
+        if ($region === null) {
+            $region = GameServerRegion::all()->where('short', 'na')->first();
+        }
+        return $region;
     }
 
     public static function boot()

@@ -227,7 +227,7 @@ $introTexts = [
             </div>
             <div class="row">
                 <div class="col-5 no-gutters">{{ __('Infested votes') }} </div>
-                <div class="col-7 no-gutters">@{{ infested_yes_votes }} yes, @{{ infested_no_votes}} no</div>
+                <div class="col-7 no-gutters">@{{ infested_yes_votes }} yes, @{{ infested_no_votes}} no (@{{ infested_net_votes }}/+{{ config('keystoneguru.infested_user_vote_threshold') }})</div>
             </div>
             @auth
                 @if(Auth::user()->hasRole('admin'))

@@ -1,25 +1,3 @@
-// Icon sizes
-let _smallIcon = {iconSize: [11, 11]};
-let _bigIcon = {iconSize: [32, 32]};
-
-// Default icons
-let _iconNames = [];
-
-_iconNames['unset'] = _smallIcon;
-
-let LeafletEnemyIcons = [];
-let LeafletEnemyIconsKillZone = [];
-
-// Build a library of icons to use
-for (let key in _iconNames) {
-    LeafletEnemyIcons[key] = new L.divIcon($.extend({className: key + '_enemy_icon'}, _iconNames[key]));
-    LeafletEnemyIconsKillZone[key] = new L.divIcon($.extend({
-        className: key + '_enemy_icon leaflet-edit-marker-selected ' +
-            'killzone_enemy_icon_small'
-    }, _iconNames[key]));
-}
-
-
 class EnemyVisual extends Signalable {
     constructor(map, enemy, layer) {
         super();
