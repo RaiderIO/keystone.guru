@@ -183,6 +183,7 @@
 .badge_enemy_forces {
     font-size: 100%;
     margin-left: -4px;
+    background-color: #00f8;
 }
 
 .col-3-5 {
@@ -232,14 +233,17 @@
 
 .killzone_enemy_icon_small {
     margin-top: -4px !important;
+    margin-left: -4px !important;
 }
 
 .killzone_enemy_icon_medium {
     margin-top: -4px !important;
+    margin-left: -4px !important;
 }
 
 .killzone_enemy_icon_big {
     margin-top: -4px !important;
+    margin-left: -4px !important;
 }
 
 #map_enemy_visuals,
