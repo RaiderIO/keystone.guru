@@ -169,10 +169,13 @@ $introTexts = [
 
     <script id="map_enemy_visuals_template" type="text/x-handlebars-template">
         <div id="map_enemy_visuals" class="leaflet-draw-section">
-            {!! Form::select('map_enemy_visuals_dropdown',
-            ['aggressiveness' => 'Aggressiveness', 'enemy_forces' => 'Enemy forces', 'infested_vote' => 'Infested Voting'],
-            0,
-            ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
+            <?php
+            $visuals = ['aggressiveness' => 'Aggressiveness', 'enemy_forces' => 'Enemy forces'];
+            if (Auth::check()) {
+                $visuals['infested_vote'] = 'Infested Voting';
+            }
+            ?>
+            {!! Form::select('map_enemy_visuals_dropdown', $visuals, 0, ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
         </div>
     </script>
 
@@ -227,7 +230,9 @@ $introTexts = [
             </div>
             <div class="row">
                 <div class="col-5 no-gutters">{{ __('Infested votes') }} </div>
-                <div class="col-7 no-gutters">@{{ infested_yes_votes }} yes, @{{ infested_no_votes}} no (@{{ infested_net_votes }}/+{{ config('keystoneguru.infested_user_vote_threshold') }})</div>
+                <div class="col-7 no-gutters">@{{ infested_yes_votes }} yes, @{{ infested_no_votes}} no (@{{
+                    infested_net_votes }}/+{{ config('keystoneguru.infested_user_vote_threshold') }})
+                </div>
             </div>
             @auth
                 @if(Auth::user()->hasRole('admin'))

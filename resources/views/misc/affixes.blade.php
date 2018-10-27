@@ -1,7 +1,13 @@
 @extends('layouts.app')
 <?php
-
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
+$timezone = null;
+if (Auth::check()) {
+    $timezone = Auth::user()->timezone;
+}
+if ($timezone === null) {
+    $timezone = config('app.timezone');
+}
 ?>
 
 @section('header-title', __('Weekly affixes in ' . $region->name))
@@ -12,7 +18,7 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
         <thead>
         <tr>
             <th width="20%">
-                {{ __('Start date') }}
+                {{ __('Start date') . sprintf(' (%s)', $timezone) }}
             </th>
             <th width="20%">
                 {{ __('+2') }}
