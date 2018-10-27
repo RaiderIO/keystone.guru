@@ -1,6 +1,9 @@
 class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
     constructor(enemyvisual, index) {
         super(enemyvisual, index);
+        // If it's loaded already, set it now
+        this.iconName = this.enemyvisual.enemy.raid_marker_name;
+        // If it changed, let us know!
         this.enemyvisual.enemy.register('enemy:set_raid_marker', this, this._refreshRaidMarker.bind(this));
     }
 

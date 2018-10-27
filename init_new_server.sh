@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-#make sure we have the correct versions for everything
-tput setaf 2;
-echo "Updating dependencies..."
-tput sgr0;
-./update_dependencies.sh
-
 # create directories
 tput setaf 2;
 echo "Creating directories..."
@@ -36,6 +30,12 @@ tput setaf 2;
 echo "Ensuring storage link..."
 tput sgr0;
 php artisan storage:link
+
+#make sure we have the correct versions for everything
+tput setaf 2;
+echo "Updating dependencies..."
+tput sgr0;
+./update_dependencies.sh
 
 # This was somehow needed to get the image library to work
 tput setaf 2;

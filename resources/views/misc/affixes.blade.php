@@ -1,12 +1,7 @@
 @extends('layouts.app')
 <?php
 
-$region = null;
-if (Auth::check()) {
-    $region = Auth::user()->gameserverregion;
-} else {
-    $region = \App\Models\GameServerRegion::getDefaultRegion();
-}
+$region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 ?>
 
 @section('header-title', __('Weekly affixes in ' . $region->name))

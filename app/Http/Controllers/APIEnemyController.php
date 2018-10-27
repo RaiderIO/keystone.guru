@@ -31,13 +31,16 @@ class APIEnemyController extends Controller
         if ($dungeonRoutePublicKey !== null) {
             try {
                 $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
+
+                $region = GameServerRegion::getUserOrDefaultRegion();
+
                 // Eloquent wasn't working with me, raw SQL it is
                 /** @var array $result */
-                $result = DB::select('
-                    select `enemies`.*, `raid_markers`.`name` as `raid_marker_name`,
-                            CAST(SUM(if(`enemy_infested_votes`.`vote` = 1, 1, 0)) as SIGNED) as infested_yes_votes,
-                            CAST(SUM(if(`enemy_infested_votes`.`vote` = 0, 1, 0)) as SIGNED) as infested_no_votes,
-                            if(`enemy_infested_votes`.`user_id` = :userId, `enemy_infested_votes`.`vote`, null) as infested_user_vote
+                $result = DB::select($query = '
+                    select `enemies`.*, `raid_markers`.`name`                                     as `raid_marker_name`,
+                           CAST(IFNULL(SUM(if(`vote` = 1, 1, 0) * `vote_weight`), 0) as SIGNED)   as infested_yes_votes,
+                           CAST(IFNULL(SUM(if(`vote` = 0, 1, 0) * `vote_weight`), 0) as SIGNED)   as infested_no_votes,
+                           if(`enemy_infested_votes`.`user_id` = :userId, `vote`, null)           as infested_user_vote
                     from `enemies`
                            left join `dungeon_route_enemy_raid_markers`
                              on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
@@ -48,10 +51,10 @@ class APIEnemyController extends Controller
                                                   and `enemy_infested_votes`.updated_at > :minTime
                     where `enemies`.`floor_id` = :floorId
                     group by `enemies`.`id`;
-                ', [
+                ', $params = [
                     'userId' => Auth::check() ? Auth::user()->id : -1,
                     'routeId' => $dungeonRoute->id,
-                    'affixGroupId' => (Auth::check() ? Auth::user()->gameserverregion : GameServerRegion::getDefaultRegion())->getCurrentAffixGroup(),
+                    'affixGroupId' => $region->getCurrentAffixGroup()->id,
                     'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s'),
                     'floorId' => $floorId
                 ]);
@@ -199,6 +202,11 @@ class APIEnemyController extends Controller
                 $infestedEnemyVote->affix_group_id = $currentAffixId;
                 // If it's not 0, it's true (yes), otherwise false (no)
                 $infestedEnemyVote->vote = $vote;
+                // Admins must be able to have some weight to their votes. They're not to abuse the system. However,
+                // I don't want an 'admin is king' so an admin CAN be overruled by users
+                if ($user->hasRole('admin')) {
+                    $infestedEnemyVote->vote_weight = config('keystoneguru.infested_user_vote_threshold');
+                }
                 $infestedEnemyVote->save();
             } // If vote was an invalid value but a vote existed, get rid of it
             else if ($infestedEnemyVote->exists) {

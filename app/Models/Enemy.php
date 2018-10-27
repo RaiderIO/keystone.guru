@@ -66,7 +66,15 @@ class Enemy extends Model
      */
     function getInfestedYesVotesCount()
     {
-        return $this->thisweeksinfestedvotes->where('vote', true)->count();
+        $result = 0;
+        $votes = $this->thisweeksinfestedvotes->where('vote', true);
+
+        foreach ($votes as $vote) {
+            /** @var EnemyInfestedVote $vote */
+            $result += $vote->vote * $vote->vote_weight;
+        }
+
+        return $result;
     }
 
 
@@ -76,7 +84,15 @@ class Enemy extends Model
      */
     function getInfestedNoVotesCount()
     {
-        return $this->thisweeksinfestedvotes->where('vote', false)->count();
+        $result = 0;
+        $votes = $this->thisweeksinfestedvotes->where('vote', false);
+
+        foreach ($votes as $vote) {
+            /** @var EnemyInfestedVote $vote */
+            $result += $vote->vote * $vote->vote_weight;
+        }
+
+        return $result;
     }
 
     /**
@@ -86,10 +102,7 @@ class Enemy extends Model
      */
     function thisweeksinfestedvotes()
     {
-        $region = null;
-        if (Auth::check()) {
-            $region = Auth::user()->gameserverregion;
-        }
+        $region = GameServerRegion::getUserOrDefaultRegion();
 
         return $this->hasMany('App\Models\EnemyInfestedVote')
             ->where('affix_group_id', $region->getCurrentAffixGroup()->id)
