@@ -21,11 +21,9 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->email = $request->get('email', $user->email);
-        $user->game_server_region_id = $request->get('game_server_region_id', $user->game_server_region_id);
-        $user->timezone = $request->get('timezone', $user->timezone);
-        $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out', $user->analytics_cookie_opt_out);
-        $user->adsense_no_personalized_ads = $request->get('adsense_no_personalized_ads', $user->adsense_no_personalized_ads);
+        $user->email = $request->get('email');
+        $user->game_server_region_id = $request->get('game_server_region_id');
+        $user->timezone = $request->get('timezone');
 
         $exists = User::where('email', $user->email)->where('id', '<>', $user->id)->get()->count() > 0;
         if (!$exists) {
@@ -36,6 +34,25 @@ class ProfileController extends Controller
             }
         } else {
             \Session::flash('warning', __('That e-mail is already in use.'));
+        }
+
+        return redirect()->route('profile.edit');
+    }
+
+    /**
+     * @param Request $request
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updatePrivacy(Request $request, User $user)
+    {
+        $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out');
+        $user->adsense_no_personalized_ads = $request->get('adsense_no_personalized_ads');
+
+        if (!$user->save()) {
+            abort(500, __('An unexpected error occurred trying to save your profile'));
+        } else {
+            \Session::flash('status', __('Privacy settings updated'));
         }
 
         return redirect()->route('profile.edit');
