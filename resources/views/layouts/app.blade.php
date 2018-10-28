@@ -2,6 +2,8 @@
 $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
 
 $user = \Illuminate\Support\Facades\Auth::user();
+// Show the legal modal or not if people didn't agree to it yet
+$showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 // Show ads if not set
 $noads = isset($noads) ? $noads : false;
 // If logged in, check if the user has paid for an ad-free website
@@ -35,7 +37,7 @@ $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
-    @include('common.general.scripts')
+    @include('common.general.scripts', ['showLegalModal' => $showLegalModal])
     @include('common.thirdparty.cookieconsent')
     <?php if(config('app.env') === 'production' ){
     if(!$noads ) {?>
@@ -284,6 +286,34 @@ $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
         @{{{message}}}
     </div>
 </script>
+
+@auth
+    @php($user = Auth::user())
+    @if(!$user->legal_agreed)
+        <div class="modal fade" id="legal_modal" tabindex="-1" role="dialog"
+             aria-labelledby="legalModalLabel" aria-hidden="true"
+             data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-md vertical-align-center">
+                <div class="modal-content">
+                    <div class="probootstrap-modal-flex">
+                        <div class="probootstrap-modal-content">
+                            <div class="form-group">
+                                {!! sprintf(__('Welcome back! In order to proceed, you have to agree to our %s, %s and %s.'),
+                                 '<a href="' . route('legal.terms') . '">terms of service</a>',
+                                 '<a href="' . route('legal.privacy') . '">privacy policy</a>',
+                                 '<a href="' . route('legal.cookies') . '">cookie policy</a>')
+                                 !!}
+                            </div>
+                            <div id="legal_confirm_btn" class="btn btn-primary">
+                                {{ __('I agree') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+@endauth
 
 @guest
     <!-- Modal login -->

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['showLegalModal' => false])
 
 @section('header-title', __('Terms and Conditions'))
 

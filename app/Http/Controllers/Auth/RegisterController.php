@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
-use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Validation\ValidationException;
 
 class RegisterController extends Controller
@@ -55,6 +55,10 @@ class RegisterController extends Controller
             'name' => 'required|alpha_dash|max:32|unique:users',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:8|confirmed',
+            'legal_agreed' => 'required|accepted'
+        ], [
+            'legal_agreed.required' => __('You have to agree to our legal terms to register.'),
+            'legal_agreed.accepted' => __('You have to agree to our legal terms to register. 2')
         ]);
     }
 
@@ -66,7 +70,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-
         // Attach User role to any new user
         $userRole = Role::all()->where('name', '=', 'user')->first();
 
@@ -75,6 +78,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'legal_agreed' => $data['legal_agreed'],
+            'legal_agreed_ms' => intval($data['legal_agreed_ms'])
         ]);
 
         $user->attachRole($userRole);

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 
-class AdminDebugBar
+class LegalAgreed
 {
     /**
      * Handle an incoming request.
@@ -13,10 +13,8 @@ class AdminDebugBar
      */
     public function handle($request, \Closure $next)
     {
-        if (Auth::check() && Auth::user()->hasRole('admin')) {
-            \Debugbar::enable();
-        } else {
-            \Debugbar::disable();
+        if (Auth::check() && !Auth::user()->legal_agreed) {
+            return response('You must agree to the terms for service to proceed.', 403);
         }
 
         return $next($request);

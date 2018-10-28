@@ -1,8 +1,5 @@
 <?php namespace App\Http\Middleware;
 
-/**
- * https://stackoverflow.com/questions/32584700/how-to-prevent-laravel-routes-from-being-accessed-directly-i-e-non-ajax-reques
- */
 class ViewCacheBuster
 {
     /**
