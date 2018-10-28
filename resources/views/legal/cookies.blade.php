@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['showLegalModal' => false])
 
 @section('header-title', __('Cookies Policy'))
 
@@ -68,9 +68,19 @@
         Where can I find more information about cookies?
     </h5>
     <p>
-        You can learn more about cookies by visiting the following third party website:
+        You can learn more about cookies by visiting the following third party websites:
 
-        <a href="https://cookiesandyou.com">Cookiesandyou.com</a>
+    <ul>
+        <li>
+            <a href="https://cookiesandyou.com">Cookiesandyou.com <i class="fas fa-external-link-alt"></i></a>
+        </li>
+        <li>
+            <a href="https://policies.google.com/technologies/cookies?hl=en">How Google uses Cookies <i
+                        class="fas fa-external-link-alt"></i></a>
+        </li>
+    </ul>
+
+
     </p>
 
     This Cookies Policy was created by cookiespolicytemplate.com for https://keystone.guru/

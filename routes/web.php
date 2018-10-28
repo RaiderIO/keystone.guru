@@ -71,7 +71,10 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     Route::post('userreport/new', 'UserReportController@store')->name('userreport.new');
 
-    Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
+    Route::get('dungeonroutes', function (\App\Models\DungeonRoute $dungeonroute) {
+        return redirect(route('dungeonroutes', ['dungeonroute' => $dungeonroute->public_key]));
+    });
+    Route::get('routes', 'DungeonRouteController@list')->name('dungeonroutes');
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
         // Must be logged in to create a new dungeon route
@@ -101,6 +104,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
+        Route::patch('profile/{user}/privacy', 'ProfileController@updatePrivacy')->name('profile.updateprivacy');
         Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
     });
 
@@ -173,6 +177,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
 
         Route::group(['middleware' => ['auth', 'role:user']], function () {
+            Route::post('/profile/legal', 'APIProfileController@legalAgree');
+
             Route::post('/route', 'APIRouteController@store');
             Route::delete('/route', 'APIRouteController@delete');
 

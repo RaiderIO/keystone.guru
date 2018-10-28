@@ -1,4 +1,9 @@
+<?php
+$showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
+?>
 <script>
+
+    let _legalStartTimer = new Date().getTime();
 
     document.addEventListener("DOMContentLoaded", function (event) {
         // Default error handler
@@ -9,9 +14,43 @@
         // Fade out success messages. They're not too interesting
         $("#app_session_status_message").delay(7000).fadeOut(200);
         @guest
+        newPassword('#register_password');
         newPassword('#modal-register_password');
         @endguest
+        @auth
+        // Legal nag so that everyone agrees to the terms, that has registered.
+        @if($showLegalModal && !Auth::user()->legal_agreed)
+        $('#legal_modal').modal('show');
+        $('#legal_confirm_btn').bind('click', _agreeLegalBtnClicked);
+        @endif
+        @endauth
+
+        // Enable tooltips for all elements
+        refreshTooltips();
+
+        // Make sure selectpicker is enabled
+        $(".selectpicker").selectpicker();
     });
+
+    function _agreeLegalBtnClicked() {
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/profile/legal',
+            dataType: 'json',
+            data: {
+                time: new Date().getTime() - _legalStartTimer
+            },
+            beforeSend: function () {
+                $('#legal_confirm_btn').attr('disabled', 'disabled');
+            },
+            success: function () {
+                $('#legal_modal').modal('hide');
+            },
+            complete: function () {
+                $('#legal_confirm_btn').removeAttr('disabled');
+            }
+        });
+    }
 
     /**
      * Initiates a password checker on a 'enter your password' input.
@@ -40,13 +79,16 @@
             case 403:
                 message = "{{ __('You are not authorized to perform this request.') }}";
                 break;
+            case 404:
+                message = "{{ __('The requested resource was not found.') }}";
+                break;
         }
 
         // If json was set
         if (typeof xhr.responseJSON === 'object') {
             // There were Laravel errors
             if (typeof xhr.responseJSON.errors === 'object') {
-                let errors = xhr.responseJSON.errors
+                let errors = xhr.responseJSON.errors;
                 message = '';
                 // Extract them and put them in the response string.
                 for (let key in errors) {
@@ -55,9 +97,12 @@
                     }
                 }
             } else if (typeof xhr.responseJSON.message === 'string') {
-                message = xhr.responseJSON.message;
+                if (xhr.responseJSON.message.length > 0) {
+                    message = xhr.responseJSON.message;
+                }
             }
         }
+
         addFixedFooterError(message + " (" + xhr.status + ")");
     }
 

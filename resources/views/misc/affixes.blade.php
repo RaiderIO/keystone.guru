@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['showLegalModal' => false])
 <?php
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 $timezone = null;
