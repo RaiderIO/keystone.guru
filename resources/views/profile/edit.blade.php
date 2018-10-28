@@ -137,7 +137,7 @@ $user = Auth::getUser();
     </div>
 
     <div class="mt-4">
-        <h3>{{ __('My dungeonroutes') }}</h3>
+        <h3>{{ __('My routes') }}</h3>
 
         @include('common.dungeonroute.table', ['profile' => true])
     </div>

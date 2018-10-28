@@ -71,7 +71,10 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     Route::post('userreport/new', 'UserReportController@store')->name('userreport.new');
 
-    Route::get('dungeonroutes', 'DungeonRouteController@list')->name('dungeonroutes');
+    Route::get('dungeonroutes', function (\App\Models\DungeonRoute $dungeonroute) {
+        return redirect(route('dungeonroutes', ['dungeonroute' => $dungeonroute->public_key]));
+    });
+    Route::get('routes', 'DungeonRouteController@list')->name('dungeonroutes');
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
         // Must be logged in to create a new dungeon route

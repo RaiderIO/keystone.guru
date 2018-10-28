@@ -4,6 +4,30 @@
 
 @section('content')
     <h4>
+        2018/10/28
+    </h4>
+
+    <p>
+        General:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/75">#75</a> Profile page is now tabbed; it looks a
+            lot better now!
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/29">#29</a> Added privacy controls in your Profile
+            for opting out of Google Analytics cookies and disabling Personalized Ads for Google Adsense. With both
+            options enabled, you should have no third-party cookies on your browser from Keystone.guru.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/74">#74</a> Now users now have to explicitly agree
+            to the privacy policy, terms of service and the cookie policy. Existing users have to give their consent to
+            continue using the site.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         2018/10/27
     </h4>
 

@@ -1,7 +1,7 @@
 @extends('layouts.app', ['wide' => true])
 
 @section('header-title')
-    {{ __('View routes') }}
+    {{ __('Route listing') }}
 @endsection
 <?php
 /**
