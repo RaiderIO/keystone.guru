@@ -14,7 +14,10 @@
 
 @section('content')
 
-    @php( $user = Auth::getUser() )
+    <?php
+    /** @var \App\User $user */
+    $user = Auth::getUser();
+    ?>
     {{ Form::model($user, ['route' => ['profile.update', $user->name], 'method' => 'patch']) }}
 
     <div class="container">
@@ -30,6 +33,14 @@
         </div>
         <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }}">
             @include('common.forms.timezoneselect', ['selected' => $user->timezone])
+        </div>
+        <div class="form-group{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">
+            {!! Form::label('analytics_cookie_opt_out', __('Google Analytics cookies opt-out')) !!}
+            {!! Form::checkbox('analytics_cookie_opt_out', 1, $user->analytics_cookie_opt_out, ['class' => 'form-control left_checkbox']) !!}
+        </div>
+        <div class="form-group{{ $errors->has('adsense_no_personalized_ads') ? ' has-error' : '' }}">
+            {!! Form::label('adsense_no_personalized_ads', __('Google Adsense no personalized ads')) !!}
+            {!! Form::checkbox('adsense_no_personalized_ads', 1, $user->adsense_no_personalized_ads, ['class' => 'form-control left_checkbox']) !!}
         </div>
 
         {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}

@@ -94,8 +94,7 @@
             on Teeming week this part can be inaccurate.
         </li>
     </ul>
-    Also see <a
-            href="https://github.com/Wotuu/keystone.guru/issues/33">https://github.com/Wotuu/keystone.guru/issues/33</a>
+    Also see <a href="https://github.com/Wotuu/keystone.guru/issues/33">our Github issue</a>
     for more mapping issues.
     </p>
 @endsection

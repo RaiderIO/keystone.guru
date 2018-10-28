@@ -24,6 +24,12 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
         $('#legal_confirm_btn').bind('click', _agreeLegalBtnClicked);
         @endif
         @endauth
+
+        // Enable tooltips for all elements
+        refreshTooltips();
+
+        // Make sure selectpicker is enabled
+        $(".selectpicker").selectpicker();
     });
 
     function _agreeLegalBtnClicked() {

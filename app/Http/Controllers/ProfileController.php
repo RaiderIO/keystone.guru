@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    //
-
     public function edit(Request $request)
     {
         return view('profile.edit');
@@ -23,9 +21,11 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->email = $request->get('email');
-        $user->game_server_region_id = $request->get('game_server_region_id');
-        $user->timezone = $request->get('timezone');
+        $user->email = $request->get('email', $user->email);
+        $user->game_server_region_id = $request->get('game_server_region_id', $user->game_server_region_id);
+        $user->timezone = $request->get('timezone', $user->timezone);
+        $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out', $user->analytics_cookie_opt_out);
+        $user->adsense_no_personalized_ads = $request->get('adsense_no_personalized_ads', $user->adsense_no_personalized_ads);
 
         $exists = User::where('email', $user->email)->where('id', '<>', $user->id)->get()->count() > 0;
         if (!$exists) {

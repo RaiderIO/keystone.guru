@@ -18,7 +18,9 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property string $email
  * @property string $password
  * @property boolean $legal_agreed
- * @property int legal_agreed_ms
+ * @property int $legal_agreed_ms
+ * @property boolean $analytics_cookie_opt_out
+ * @property boolean $adsense_no_personalized_ads
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
  */

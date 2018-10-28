@@ -7,7 +7,7 @@ $width = $modal ? '12' : '6';
 @section('scripts')
     <script>
         $(function () {
-            $(document).on('submit', '#{{ $modalClass }}register_form ', function () {
+            $(document).on('submit', '#{{ $modalClass }}register_form', function () {
                 // Defined in scripts.blade
                 $('#{{ $modalClass }}legal_agreed_ms').val(new Date().getTime() - _legalStartTimer);
             });

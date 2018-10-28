@@ -19,11 +19,5 @@
                 "href": "/cookies"
             }
         });
-
-        // Enable tooltips for all elements
-        refreshTooltips();
-
-        // Make sure selectpicker is enabled
-        $(".selectpicker").selectpicker();
     });
 </script>
