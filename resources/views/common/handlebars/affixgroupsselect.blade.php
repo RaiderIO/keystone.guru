@@ -50,18 +50,17 @@ if(!isset($affixgroups) ){
 
                 let handlebarsData = {
                     affixes: affixes,
-                    // faction_icon_url: data.faction.iconfile.icon_url,
-                    // faction_title: data.faction.name,
-                    // classes: []
                 };
 
                 let html = template(handlebarsData);
                 let selector = affixSelectSelector + ' option[value=' + affixGroup.id + ']';
-                $(selector).attr('data-content', html);
+                $(selector).data('content', html);
             }
         }
-        $('.selectpicker').selectpicker('refresh');
-        $(".bootstrap-select.affixselect .text")
+
+        let $selectpicker = $('.selectpicker');
+        $selectpicker.selectpicker('refresh');
+        $selectpicker.selectpicker('render');
 
         // Fix the select, it wraps the entire thing in a SPAN which completely destroys ability to do any form of layout on it
         // So remove the span
@@ -71,17 +70,5 @@ if(!isset($affixgroups) ){
             $el.parent().append($ours);
             $el.remove();
         });
-
-
-
-        // for (let i in data.classes) {
-        //     if( data.classes.hasOwnProperty(i) ){
-        //         let playerClass = data.classes[i];
-        //         handlebarsData.classes.push({
-        //             icon_url: playerClass.iconfile.icon_url,
-        //             title: playerClass.name
-        //         })
-        //     }
-        // }
     }
 </script>
