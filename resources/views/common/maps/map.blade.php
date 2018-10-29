@@ -429,28 +429,33 @@ $introTexts = [
     @endif
 @endsection
 
+<!--
 <div class="container p-0">
     <?php
-    if (isset($model)) { ?>
-    <div class="form-group">
-        <div class="alert alert-warning">
-            <i class="fa fa-exclamation-triangle"></i> {{ __('Mapping data is a work in progress. Please err on the side of overpulling over exact 100% while I correct any reported mistakes.') }}
+if (isset($model)) { ?>
+        <div class="form-group">
+            <div class="alert alert-warning">
+                <i class="fa fa-exclamation-triangle"></i> {{ __('Mapping data is a work in progress. Please err on the side of overpulling over exact 100% while I correct any reported mistakes.') }}
         </div>
     </div>
     <?php } ?>
 
-    @if($floorSelection)
-        <div class="form-group virtual-tour-element" data-intro="{{ $introTexts[0] }}" data-step="1"
+@if($floorSelection)
+    <div class="form-group virtual-tour-element" data-intro="{{ $introTexts[0] }}" data-step="1"
              data-position="bottom-middle-aligned">
             {!! Form::label('map_floor_selection', __('Select floor')) !!}
-            {!! Form::select('map_floor_selection', [], 1, ['class' => 'form-control']) !!}
+    {!! Form::select('map_floor_selection', [], 1, ['class' => 'form-control']) !!}
+            </div>
+@else
+    {!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
+@endif
         </div>
-    @else
-        {!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
-    @endif
-</div>
+-->
+{!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
 
-<div class="form-group">
-    <div id="map" class="col-md-12 virtual-tour-element" data-intro="{{ $introTexts[1] }}" data-step="2"
-         data-position="auto"></div>
+<div id="map" class="virtual-tour-element"
+     data-intro="{{ $introTexts[1] }}"
+     data-step="2"
+     data-position="auto">
+
 </div>

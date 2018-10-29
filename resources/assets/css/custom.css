@@ -57,11 +57,15 @@
 }
 
 /** LEAFLET */
-#map {
-    height: 90vh; /* 90% of viewport height */
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+html, body, #map, #app {
+    height: 100%;
+    width: 100%;
 }
 
 #map-controls {

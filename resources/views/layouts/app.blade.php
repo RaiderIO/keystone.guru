@@ -8,6 +8,14 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 $noads = isset($noads) ? $noads : false;
 // If logged in, check if the user has paid for an ad-free website
 $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
+// Floating navbar or not
+$headerFloat = isset($headerFloat) ? $headerFloat : false;
+// Custom content or not
+$custom = isset($custom) ? $custom : false;
+// Wide mode or not (only relevant if custom = false)
+$wide = isset($wide) ? $wide : false;
+// Show footer or not
+$footer = isset($footer) ? $footer : true;
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -48,7 +56,7 @@ $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark {{ $headerFloat ? 'fixed-top' : '' }}">
         <div class="container">
             <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -170,14 +178,14 @@ $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
 
     @yield('global-message')
 
-    <?php if( isset($custom) && $custom === true ) { ?>
+    <?php if( $custom ) { ?>
     @yield('content')
     <?php } else { ?>
     <div class="container-fluid">
         <div class="row">
-            <div class="<?php echo(isset($wide) && $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2"); ?>">
+            <div class="{{ $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2" }}">
                 <div class="card mt-3 mb-3">
-                    <div class="card-header <?php echo(isset($wide) && $wide ? "panel-heading-wide" : ""); ?>">
+                    <div class="card-header {{ $wide ? "panel-heading-wide" : "" }}">
                         <div class="row">
                             @hasSection('header-addition')
                                 <div class="ml-3">
@@ -224,61 +232,63 @@ $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
     </div>
     <?php } ?>
 
-    <footer class="fixed-bottom">
-        <div class="row">
-            <div id="fixed_footer_container" class="col-12">
+    @if( $footer )
+        <footer class="fixed-bottom">
+            <div class="row">
+                <div id="fixed_footer_container" class="col-12">
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
-    <div class="container text-center">
-        <hr/>
-        <div class="row">
-            <div class="col-md-3">
-                <a class="nav-link" href="{{ route('misc.credits') }}">{{ __('Credits') }}</a>
+        <div class="container text-center">
+            <hr/>
+            <div class="row">
+                <div class="col-md-3">
+                    <a class="nav-link" href="{{ route('misc.credits') }}">{{ __('Credits') }}</a>
+                </div>
+                <div class="col-md-3">
+                    <a class="nav-link" href="https://www.patreon.com/keystoneguru" target="_blank">
+                        <i class="fab fa-patreon"></i> {{ __('Patreon') }}
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a class="nav-link" href="https://discord.gg/2KtWrqw" target="_blank">
+                        <i class="fab fa-discord"></i> {{ __('Discord') }}
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a class="nav-link" href="https://github.com/Wotuu/keystone.guru" target="_blank">
+                        <i class="fab fa-github"></i> {{ __('Github') }}
+                    </a>
+                </div>
             </div>
-            <div class="col-md-3">
-                <a class="nav-link" href="https://www.patreon.com/keystoneguru" target="_blank">
-                    <i class="fab fa-patreon"></i> {{ __('Patreon') }}
-                </a>
+            <div class="row">
+                <div class="col-md-3">
+                    <a class="nav-link" href="{{ route('misc.about') }}">{{ __('About') }}</a>
+                </div>
+                <div class="col-md-3">
+                    <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
+                </div>
+                <div class="col-md-3">
+                    <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
+                </div>
+                <div class="col-md-3">
+                    <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
+                </div>
             </div>
-            <div class="col-md-3">
-                <a class="nav-link" href="https://discord.gg/2KtWrqw" target="_blank">
-                    <i class="fab fa-discord"></i> {{ __('Discord') }}
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a class="nav-link" href="https://github.com/Wotuu/keystone.guru" target="_blank">
-                    <i class="fab fa-github"></i> {{ __('Github') }}
-                </a>
+            <div class="row text-center small">
+                <div class="col-md-6">
+                    <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>
+                    <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} v.1.0 </a>
+                </div>
+                <div class="col-md-6">
+                    World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
+                    Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with
+                    Blizzard Entertainment.
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3">
-                <a class="nav-link" href="{{ route('misc.about') }}">{{ __('About') }}</a>
-            </div>
-            <div class="col-md-3">
-                <a class="nav-item nav-link" href="{{ route('legal.terms') }}">{{ __('Terms of Service') }}</a>
-            </div>
-            <div class="col-md-3">
-                <a class="nav-item nav-link" href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
-            </div>
-            <div class="col-md-3">
-                <a class="nav-item nav-link" href="{{ route('legal.cookies') }}">{{ __('Cookies Policy') }}</a>
-            </div>
-        </div>
-        <div class="row text-center small">
-            <div class="col-md-6">
-                <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>
-                <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} v.1.0 </a>
-            </div>
-            <div class="col-md-6">
-                World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
-                Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with
-                Blizzard Entertainment.
-            </div>
-        </div>
-    </div>
+    @endif
 </div>
 
 <script id="app_fixed_footer_template" type="text/x-handlebars-template">
