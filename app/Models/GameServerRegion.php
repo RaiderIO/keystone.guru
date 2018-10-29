@@ -20,6 +20,24 @@ class GameServerRegion extends Model
     public $timestamps = false;
 
     /**
+     * @var null Cached list of affix groups to help speed up calls
+     */
+    private $_affixGroups = null;
+
+    /**
+     * Gets a list of all affix groups (may be cached).
+     *
+     * @return AffixGroup[]|\Illuminate\Database\Eloquent\Collection|null
+     */
+    function _getAllAffixGroups()
+    {
+        if ($this->_affixGroups === null) {
+            $this->_affixGroups = AffixGroup::all();
+        }
+        return $this->_affixGroups;
+    }
+
+    /**
      * @return array Helper function for getting some stats related to today.
      */
     function _getNow()
@@ -94,7 +112,7 @@ class GameServerRegion extends Model
     {
         $now = $this->_getNow();
 
-        $affixGroups = AffixGroup::all();
+        $affixGroups = $this->_getAllAffixGroups();
 
         $weeksPassed = $this->_getWeeksPassedSinceStart($now['year'], $now['month'], $now['day'], $now['hour'], $now['timezone']);
 
@@ -112,7 +130,7 @@ class GameServerRegion extends Model
     function getAffixGroupStartDate($iteration, $affixGroup)
     {
         /** @var Collection $affixGroups */
-        $affixGroups = AffixGroup::all();
+        $affixGroups = $this->_getAllAffixGroups();
 
         $index = 0;
         for ($i = 0; $i < $affixGroups->count(); $i++) {
@@ -151,7 +169,7 @@ class GameServerRegion extends Model
      */
     function getAffixGroupAtTime($year, $month, $day, $hour, $timezone = null)
     {
-        $affixGroups = AffixGroup::all();
+        $affixGroups = $this->_getAllAffixGroups();
 
         $weeksPassed = $this->_getWeeksPassedSinceStart($year, $month, $day, $hour, $timezone);
 
