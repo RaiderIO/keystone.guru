@@ -33,6 +33,7 @@ $footer = isset($footer) ? $footer : true;
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     @if (config('app.env') !== 'production')
+        <link href="{{ asset('css/map.css') }}" rel="stylesheet">
         <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
         <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
         <link href="{{ asset('css/affixes.css') }}" rel="stylesheet">
@@ -56,8 +57,8 @@ $footer = isset($footer) ? $footer : true;
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark {{ $headerFloat ? 'fixed-top' : '' }}">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark {{ $headerFloat ? 'fixed-top' : 'bg-dark' }}">
+        <div class="container {{ $headerFloat ? 'bg-dark header_container_rounded' : '' }}">
             <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

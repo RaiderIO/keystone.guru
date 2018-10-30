@@ -130,6 +130,37 @@
                 }
             });
         }
+
+        $(document).ready(function () {
+            $('#dismiss').on('click', function () {
+            });
+
+            $('#sidebarToggle').on('click', function () {
+                let $sidebar = $('#sidebar');
+                let $sidebarToggle = $('#sidebarToggle');
+                // Dismiss
+                if( $sidebar.hasClass('active') ){
+                    // hide sidebar
+                    $sidebar.removeClass('active');
+                    // Move toggle button back
+                    // $sidebarToggle.removeClass('active');
+                    // Toggle image
+                    $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
+                }
+                // Show
+                else {
+                    // open sidebar
+                    $sidebar.addClass('active');
+                    // Move toggle button
+                    // $sidebarToggle.addClass('active');
+                    // Toggle image
+                    $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
+
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                }
+            });
+        });
     </script>
 @endsection
 
@@ -171,12 +202,25 @@
         {{--</div>--}}
         {{--</div>--}}
         {{--</div>--}}
+        <div class="wrapper">
+            <!-- Sidebar -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Bootstrap Sidebar</h3>
+                </div>
+                <div id="sidebarToggle" title="{{ __('Expand the sidebar') }}">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
 
-        @include('common.maps.map', [
-            'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
-            'dungeonroute' => $model,
-            'edit' => true
-        ])
+                Sidebar content
+            </nav>
+
+            @include('common.maps.map', [
+                'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
+                'dungeonroute' => $model,
+                'edit' => true
+            ])
+        </div>
 
         {{--<div id='settings_wrapper' class='container'>--}}
         {{--<div id='settings_toggle' class='col-lg-12 text-center btn btn-default' data-toggle='collapse'--}}
