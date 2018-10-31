@@ -206,7 +206,7 @@
             <!-- Sidebar -->
             <nav id="sidebar">
                 <div class="sidebar-header">
-                    <h3>Bootstrap Sidebar</h3>
+                    <h3>{{ __('Toolbox') }}</h3>
                 </div>
                 <div id="sidebarToggle" title="{{ __('Expand the sidebar') }}">
                     <i class="fas fa-arrow-right"></i>

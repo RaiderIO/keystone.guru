@@ -18,7 +18,8 @@ html, body, #map, #app, .wrapper {
     z-index: 10000;
     transition: all 0.2s;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-    background-color: #fff;
+    background-color: #4E5D6C;
+    border-right: #2B3E50 solid 1px;
 }
 
 #sidebar.active {
@@ -41,13 +42,14 @@ html, body, #map, #app, .wrapper {
     cursor: pointer;
     z-index: 1050;
 
-    background: #fff;
+    background: #4E5D6C;
     color: #e27c38;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 #sidebarToggle:hover {
     background: #e27c38;
-    color: #fff;
+    color: #4E5D6C;
 }
 
 #dismiss {
@@ -72,7 +74,7 @@ html, body, #map, #app, .wrapper {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #DF691A;
+    background: #2B3E50;
 }
 
 #map-controls {
