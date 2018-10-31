@@ -233,13 +233,14 @@ $footer = isset($footer) ? $footer : true;
     </div>
     <?php } ?>
 
-    @if( $footer )
-        <footer class="fixed-bottom">
-            <div class="row">
-                <div id="fixed_footer_container" class="col-12">
-                </div>
+    <footer class="fixed-bottom">
+        <div class="row">
+            <div id="fixed_footer_container" class="col-12">
             </div>
-        </footer>
+        </div>
+    </footer>
+
+    @if( $footer )
 
         <div class="container text-center">
             <hr/>

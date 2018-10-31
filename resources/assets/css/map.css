@@ -9,13 +9,17 @@ html, body, #map, #app, .wrapper {
     width: 100%;
 }
 
+.modal-lg {
+    max-width: 80%;
+}
+
 #sidebar {
-    width: 360px;
+    width: 300px;
     position: fixed;
     top: 0;
-    left: -360px;
+    left: -300px;
     height: 100vh;
-    z-index: 10000;
+    z-index: 1030;
     transition: all 0.2s;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     background-color: #4E5D6C;
@@ -38,18 +42,18 @@ html, body, #map, #app, .wrapper {
 
     position: relative;
     top: 0;
-    left: 360px;
+    left: 300px;
     cursor: pointer;
     z-index: 1050;
 
     background: #4E5D6C;
-    color: #e27c38;
+    color: #DF691A;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 #sidebarToggle:hover {
-    background: #e27c38;
-    color: #4E5D6C;
+    background: #DF691A;
+    color: #FFF;
 }
 
 #dismiss {
@@ -57,7 +61,7 @@ html, body, #map, #app, .wrapper {
     height: 35px;
     line-height: 35px;
     text-align: center;
-    background: #e27c38;
+    background: #DF691A;
     position: absolute;
     top: 10px;
     right: 10px;
@@ -68,13 +72,56 @@ html, body, #map, #app, .wrapper {
 }
 
 #dismiss:hover {
-    background: #fff;
+    background: #FFF;
     color: #DF691A;
 }
 
 #sidebar .sidebar-header {
     padding: 20px;
     background: #2B3E50;
+}
+
+#sidebar .sidebar-panel {
+    /*padding: 10px;*/
+    /*border: #2B3E50 solid 1px;*/
+    margin: 4px;
+}
+
+#sidebar .draw_icon {
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    background: #DF691A;
+    cursor: pointer;
+    margin: 0 10px;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+#sidebar .draw_icon:hover {
+    background: #FFF;
+    color: #DF691A;
+}
+
+#edit_route_draw_container a {
+    color: #FFF;
+}
+
+#edit_route_draw_container .leaflet-draw-actions {
+    left: 284px;
+    background: #4E5D6C;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+#edit_route_draw_container .leaflet-draw-actions li {
+    line-height: 35px;
+}
+
+#edit_route_draw_container .leaflet-draw-actions a {
+    background: #4E5D6C;
+    color: #DF691A;
+    font-size: 14px;
 }
 
 #map-controls {
@@ -169,7 +216,7 @@ html, body, #map, #app, .wrapper {
 
 .modifier_infested_vote {
     color: black;
-    background-color: #fffb;
+    background-color: #FFFb;
     border-radius: 20px;
     cursor: pointer;
 }
@@ -262,7 +309,7 @@ html, body, #map, #app, .wrapper {
 #map_enemy_visuals,
 #map_enemy_forces {
     color: black;
-    background-color: #fff;
+    background-color: #FFF;
     border: 2px solid rgba(0, 0, 0, 0.2);
     background-clip: padding-box;
     border-radius: 4px;
@@ -271,7 +318,7 @@ html, body, #map, #app, .wrapper {
 }
 
 #map_enemy_visuals {
-    width: 200px;
+    width: 100%;
 }
 
 .map_enemy_forces_too_much {
@@ -287,4 +334,43 @@ html, body, #map, #app, .wrapper {
     margin: 2px 10px;
     border-radius: 3px;
     cursor: pointer;
+}
+
+/* Class that's used for displaying custom markers with a font-awesome icon instead of the default marker */
+.marker_div_icon {
+    width: 30px;
+    height: 30px;
+    text-shadow: 2px 2px #1A1A1A;
+}
+
+.marker_div_icon_font_awesome {
+    text-align: center; /* Horizontally center the text (icon) */
+    line-height: 25px; /* Vertically center the text (icon) */
+}
+
+.marker_div_icon_dungeon_start_marker {
+    color: #48a648;
+}
+
+.marker_div_icon_dungeon_floor_switch_marker {
+    color: lightblue;
+}
+
+.marker_div_icon_killzone {
+    color: #d12600;
+    font-size: 30px;
+}
+
+.marker_div_icon_mapcomment {
+    font-size: 16px;
+}
+
+.marker_div_icon_circle_border {
+    border: 3px solid;
+    border-radius: 15px;
+}
+
+.map_map_comment_tooltip {
+    width: 240px;
+    white-space: normal;
 }

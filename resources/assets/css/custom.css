@@ -25,12 +25,10 @@
 
 .header_container_rounded {
     border: #444 1px solid;
-    border-radius: 10px !important;
+    border-radius: 4px !important;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-}
-
-.leaflet-container {
-
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .navbar-default .navbar-nav > li > .btn-success > a:hover, .navbar-default .navbar-nav > li > .btn-success > a:focus {
@@ -60,6 +58,11 @@
 /* Override this so that long race names fit in their group selection boxes */
 .dropdown-item {
     padding: 0.25em 0.9em;
+}
+
+/* Fixed messages always on top */
+.fixed-bottom {
+    z-index: 10000;
 }
 
 /** GENERAL ICONS */
@@ -94,45 +97,6 @@
 
 .default_table {
     width: 100%;
-}
-
-/* Class that's used for displaying custom markers with a font-awesome icon instead of the default marker */
-.marker_div_icon {
-    width: 30px;
-    height: 30px;
-    text-shadow: 2px 2px #1A1A1A;
-}
-
-.marker_div_icon_font_awesome {
-    text-align: center; /* Horizontally center the text (icon) */
-    line-height: 25px; /* Vertically center the text (icon) */
-}
-
-.marker_div_icon_dungeon_start_marker {
-    color: #48a648;
-}
-
-.marker_div_icon_dungeon_floor_switch_marker {
-    color: lightblue;
-}
-
-.marker_div_icon_killzone {
-    color: #d12600;
-    font-size: 30px;
-}
-
-.marker_div_icon_mapcomment {
-    font-size: 16px;
-}
-
-.marker_div_icon_circle_border {
-    border: 3px solid;
-    border-radius: 15px;
-}
-
-.map_map_comment_tooltip {
-    width: 240px;
-    white-space: normal;
 }
 
 /** DATATABLES */

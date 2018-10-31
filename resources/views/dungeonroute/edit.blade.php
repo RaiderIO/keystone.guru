@@ -1,41 +1,12 @@
 @extends('layouts.app', ['custom' => true, 'footer' => false, 'headerFloat' => true])
 @section('header-title', $headerTitle)
-@section('head')
-    @parent
-
-    <style>
-        #settings_wrapper {
-            border: #d3e0e9 solid 1px;
-
-            -webkit-border-radius: 3px;
-            -moz-border-radius: 3px;
-            border-radius: 3px;
-        }
-
-        #settings_toggle {
-            cursor: pointer;
-        }
-    </style>
-@endsection
 
 @section('scripts')
     @parent
 
     <script>
         $(function () {
-            let $settings = $('#settings');
-            $settings.on('hide.bs.collapse', function (e) {
-                let $caret = $('#settings_caret');
-                $caret.removeClass('fa-caret-up');
-                $caret.addClass('fa-caret-down');
-            });
-
-            $settings.on('show.bs.collapse', function (e) {
-                let $caret = $('#settings_caret');
-                $caret.removeClass('fa-caret-down');
-                $caret.addClass('fa-caret-up');
-            });
-
+            // Save settings in the modal
             $('#save_settings').bind('click', _saveSettings);
 
             // Copy to clipboard functionality
@@ -56,6 +27,13 @@
 
             $('#map_route_unpublish').bind('click', function () {
                 _setPublished(false);
+            });
+
+            $('#edit_route_draw_route').bind('click', function() {
+                // Find the button the user was meaning to press
+                let $routeBtn = $('#edit_route_draw_container').find('.leaflet-draw-draw-route');
+                $routeBtn.click();
+                console.log($routeBtn);
             });
         });
 
@@ -139,7 +117,7 @@
                 let $sidebar = $('#sidebar');
                 let $sidebarToggle = $('#sidebarToggle');
                 // Dismiss
-                if( $sidebar.hasClass('active') ){
+                if ($sidebar.hasClass('active')) {
                     // hide sidebar
                     $sidebar.removeClass('active');
                     // Move toggle button back
@@ -212,7 +190,37 @@
                     <i class="fas fa-arrow-right"></i>
                 </div>
 
-                Sidebar content
+                <div class="sidebar-content">
+                    <div class="container">
+                        <div class="form-group">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ __('Edit route') }}</h5>
+                                    <!-- Draw controls are injected here through drawcontrols.js -->
+                                    <div id="edit_route_draw_container" class="row">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ __('Visibility') }}</h5>
+                                    <div class="row">
+                                        <div id="map_enemy_visuals_container" class="col">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="btn btn-primary col" data-toggle="modal" data-target="#settings_modal">
+                                <i class='fas fa-cog'></i> {{ __('Route settings') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </nav>
 
             @include('common.maps.map', [
@@ -222,71 +230,76 @@
             ])
         </div>
 
-        {{--<div id='settings_wrapper' class='container'>--}}
-        {{--<div id='settings_toggle' class='col-lg-12 text-center btn btn-default' data-toggle='collapse'--}}
-        {{--data-target='#settings'>--}}
-        {{--<h4 class='mb-0'>--}}
-        {{--<i class='fas fa-cog'></i> {{ __('Settings') }} <i id='settings_caret'--}}
-        {{--class='fas fa-caret-down'></i>--}}
-        {{--</h4>--}}
-        {{--</div>--}}
+        <!-- Modal settings -->
+        <div class="modal fade" id="settings_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg vertical-align-center">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="probootstrap-modal-flex">
+                        <div class="probootstrap-modal-content">
 
-        {{--<div id='settings' class='col-lg-12 collapse'>--}}
-        {{--<h3>--}}
-        {{--{{ __('General') }}--}}
-        {{--</h3>--}}
-        {{--<div class="form-group">--}}
-        {{--{!! Form::label('dungeon_route_title', __('Title')) !!}--}}
-        {{--{!! Form::text('dungeon_route_title', $model->title, ['class' => 'form-control']) !!}--}}
-        {{--</div>--}}
+                            <div id='settings' class='col-lg-12'>
+                                <h3>
+                                    {{ __('General') }}
+                                </h3>
+                                <div class="form-group">
+                                    {!! Form::label('dungeon_route_title', __('Title')) !!}
+                                    {!! Form::text('dungeon_route_title', $model->title, ['class' => 'form-control']) !!}
+                                </div>
 
-        {{--<h3>--}}
-        {{--{{ __('Group composition (optional)') }}--}}
-        {{--</h3>--}}
+                                <h3>
+                                    {{ __('Group composition (optional)') }}
+                                </h3>
 
-        {{--@php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)--}}
-        {{--@include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions])--}}
+                                @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
+                                @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions])
 
-        {{--<h3 class='mt-1'>--}}
-        {{--{{ __('Affixes (optional)') }}--}}
-        {{--</h3>--}}
+                                <h3 class='mt-1'>
+                                    {{ __('Affixes (optional)') }}
+                                </h3>
 
-        {{--<div class='container mt-1'>--}}
-        {{--{!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox d-none']) !!}--}}
-        {{--@include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming'])--}}
-        {{--</div>--}}
+                                <div class='container mt-1'>
+                                    {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox d-none']) !!}
+                                    @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming'])
+                                </div>
 
-        {{--@if(Auth::user()->hasPaidTier('unlisted-routes') )--}}
-        {{--<h3>--}}
-        {{--{{ __('Sharing') }}--}}
-        {{--</h3>--}}
-        {{--<div class='form-group'>--}}
-        {{--{!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}--}}
-        {{--{!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}--}}
-        {{--</div>--}}
-        {{--@endif--}}
+                                @if(Auth::user()->hasPaidTier('unlisted-routes') )
+                                    <h3>
+                                        {{ __('Sharing') }}
+                                    </h3>
+                                    <div class='form-group'>
+                                        {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
+                                        {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
+                                    </div>
+                                @endif
 
-        {{--@if(Auth::user()->hasRole('admin'))--}}
-        {{--<h3>--}}
-        {{--{{ __('Admin') }}--}}
-        {{--</h3>--}}
-        {{--<div class='form-group'>--}}
-        {{--{!! Form::label('demo', __('Mark as demo route')) !!}--}}
-        {{--{!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}--}}
-        {{--</div>--}}
-        {{--@endif--}}
+                                @if(Auth::user()->hasRole('admin'))
+                                    <h3>
+                                        {{ __('Admin') }}
+                                    </h3>
+                                    <div class='form-group'>
+                                        {!! Form::label('demo', __('Mark as demo route')) !!}
+                                        {!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}
+                                    </div>
+                                @endif
 
-        {{--<div class='form-group'>--}}
-        {{--<div id='save_settings' class='offset-lg-5 col-lg-2 btn btn-success'>--}}
-        {{--<i class='fas fa-save'></i> {{ __('Save settings') }}--}}
-        {{--</div>--}}
-        {{--<div id='save_settings_saving' class='offset-lg-5 col-lg-2 btn btn-success disabled'--}}
-        {{--style='display: none;'>--}}
-        {{--<i class='fas fa-circle-notch fa-spin'></i>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--</div>--}}
+                                <div class='form-group'>
+                                    <div id='save_settings' class='offset-lg-5 col-lg-2 btn btn-success'>
+                                        <i class='fas fa-save'></i> {{ __('Save settings') }}
+                                    </div>
+                                    <div id='save_settings_saving' class='offset-lg-5 col-lg-2 btn btn-success disabled'
+                                         style='display: none;'>
+                                        <i class='fas fa-circle-notch fa-spin'></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endisset
 @endsection
 

@@ -56,6 +56,11 @@ class EnemyVisualControls extends MapControl {
         };
 
         this._mapControl = L.control.domElement({position: 'topright'}).addTo(this.map.leafletMap);
+
+        // Add the leaflet draw control to the sidebar
+        let container = this._mapControl.getContainer();
+        let $targetContainer = $('#map_enemy_visuals_container');
+        $targetContainer.append(container);
     }
 
     cleanup() {
