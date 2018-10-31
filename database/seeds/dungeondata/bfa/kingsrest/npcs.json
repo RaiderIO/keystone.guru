@@ -254,10 +254,10 @@
     {
         "id": 138489,
         "dungeon_id": 16,
-        "classification_id": 3,
+        "classification_id": 2,
         "name": "Shadow of Zul",
         "base_health": 1000739,
-        "enemy_forces": 0,
+        "enemy_forces": 8,
         "aggressiveness": "aggressive"
     }
 ]

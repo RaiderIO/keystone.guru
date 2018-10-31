@@ -2242,8 +2242,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -129,
-        "lng": 119,
+        "lat": -140.75,
+        "lng": 131.75,
         "npc": {
             "id": 134338
         }
@@ -2766,6 +2766,32 @@
         "lng": 120.06,
         "npc": {
             "id": 134423
+        }
+    },
+    {
+        "id": 3213,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -84.939999999999998,
+        "lng": 211.75,
+        "npc": {
+            "id": 134137
+        }
+    },
+    {
+        "id": 3214,
+        "enemy_pack_id": -1,
+        "floor_id": 45,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -86.560000000000002,
+        "lng": 211.88,
+        "npc": {
+            "id": 134137
         }
     }
 ]
