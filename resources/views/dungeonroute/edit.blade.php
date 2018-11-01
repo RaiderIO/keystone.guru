@@ -98,9 +98,9 @@
         <div class="wrapper">
             @include('common.maps.sidebar', [
                 'show' => [
-                    'shareable-link',
-                    'route-settings',
-                    'route-publish'
+                    'shareable-link' => true,
+                    'route-settings' => true,
+                    'route-publish' => true
                 ]
             ])
 

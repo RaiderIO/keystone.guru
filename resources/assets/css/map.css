@@ -112,6 +112,10 @@ html, body, #map, #app, .wrapper {
     color: #DF691A;
 }
 
+#sidebar .card {
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
 #edit_route_draw_container a {
     color: #FFF;
 }

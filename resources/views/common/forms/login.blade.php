@@ -7,6 +7,9 @@ $width = $modal ? '12' : '6';
 <form class="form-horizontal" method="POST"
       action="{{ route('login', ['redirect' => Request::get('redirect', Request::getPathInfo())]) }}">
     {{ csrf_field() }}
+    <h3>
+        {{ __('Login') }}
+    </h3>
 
     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
         <label for="{{ $modalClass }}login_email" class="control-label">{{ __('E-mail address') }}</label>

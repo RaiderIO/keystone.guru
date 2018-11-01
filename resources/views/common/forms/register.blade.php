@@ -17,6 +17,9 @@ $width = $modal ? '12' : '6';
 
 <form id="{{ $modalClass }}register_form" class="form-horizontal" method="POST" action="{{ route('register') }}">
     {{ csrf_field() }}
+    <h3>
+        {{ __('Register') }}
+    </h3>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
         <label for="{{ $modalClass }}register_name" class="control-label">{{ __('Username') }}</label>

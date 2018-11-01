@@ -69,7 +69,23 @@ $show = isset($show) ? $show : [];
 
     <div class="sidebar-content">
         <div class="container">
-            <!-- Edit route -->
+        @isset($show['virtual-tour'])
+            <!-- Virtual tour -->
+                <div class="form-group">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ __('First time?') }}
+                            </h5>
+                            <div id="start_virtual_tour" class="btn btn-info col">
+                                <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        @endisset
+
+        <!-- Edit route -->
             <div class="form-group">
                 <div class="card">
                     <div class="card-body">
@@ -154,7 +170,7 @@ $show = isset($show) ? $show : [];
 
             @isset($show['no-modifications-warning'])
                 <div class="form-group">
-                    <div class="alert alert-warning">
+                    <div class="alert alert-warning text-center">
                         <i class="fa fa-exclamation-triangle"></i> {{ __('Warning! Any modification you make in tryout mode will not be saved!') }}
                     </div>
                 </div>

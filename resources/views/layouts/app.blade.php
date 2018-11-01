@@ -93,11 +93,11 @@ $footer = isset($footer) ? $footer : true;
                     </li>
                 </ul>
                 <ul class="navbar-nav">
+                    <li class="nav-item mr-2">
+                        <a href="#" class="btn btn-primary text-white"
+                           data-toggle="modal" data-target="#try_modal">{{__('Try it!')}}</a>
+                    </li>
                     @if (Auth::guest())
-                        <li class="nav-item mr-2">
-                            <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary text-white"
-                               role="button">{{__('Try it!')}}</a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-toggle="modal"
                                data-target="#login_modal">{{__('Login')}}</a>
@@ -167,6 +167,10 @@ $footer = isset($footer) ? $footer : true;
         </div>
     </nav>
 
+    <?php if( $custom ) { ?>
+    @yield('content')
+    <?php } else { ?>
+
     @if (config('app.env') !== 'production' && (Auth::user() === null || !Auth::user()->hasRole('admin')))
         <div class="container-fluid alert alert-warning text-center mt-4">
             {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
@@ -178,10 +182,7 @@ $footer = isset($footer) ? $footer : true;
     @endif
 
     @yield('global-message')
-
-    <?php if( $custom ) { ?>
-    @yield('content')
-    <?php } else { ?>
+    
     <div class="container-fluid">
         <div class="row">
             <div class="{{ $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2" }}">
@@ -327,6 +328,23 @@ $footer = isset($footer) ? $footer : true;
     @endif
 @endauth
 
+<!-- Modal try -->
+<div class="modal fade" id="try_modal" tabindex="-1" role="dialog"
+     aria-labelledby="tryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md vertical-align-center">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="probootstrap-modal-flex">
+                <div class="probootstrap-modal-content">
+                    @include('common.forms.try')
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END modal login -->
 @guest
     <!-- Modal login -->
     <div class="modal fade" id="login_modal" tabindex="-1" role="dialog"
