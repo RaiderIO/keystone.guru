@@ -1,4 +1,4 @@
-@extends('layouts.app', ['wide' => true])
+@extends('layouts.app', ['custom' => true, 'footer' => false, 'headerFloat' => true])
 @section('header-title', $headerTitle)
 
 @section('content')
@@ -32,7 +32,17 @@
     {!! Form::close() !!}
     <?php } else { ?>
 
-    <div class="container mt-5 p-0">
+    <div class="wrapper">
+        @include('common.maps.sidebar', [
+            'show' => [
+                'no-modifications-warning'
+            ]
+        ])
+
+        @include('common.maps.map', [
+            'dungeon' => \App\Models\Dungeon::findOrFail($dungeon_id),
+            'edit' => true
+        ])
         <div class="form-group">
             <h4>
                 {{ __('Need some help?') }}
@@ -44,18 +54,6 @@
 
             </div>
         </div>
-        <div class="form-group">
-            <div class="alert alert-warning">
-                <i class="fa fa-exclamation-triangle"></i> {{ __('Warning! Any modification you make in tryout mode will not be saved!') }}
-            </div>
-        </div>
-    </div>
-
-    <div id="map_container">
-        @include('common.maps.map', [
-            'dungeon' => \App\Models\Dungeon::findOrFail($dungeon_id),
-            'edit' => true
-        ])
     </div>
 
     <?php } ?>

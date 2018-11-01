@@ -36,19 +36,23 @@ html, body, #map, #app, .wrapper {
     line-height: 35px;
     text-align: center;
 
-    -webkit-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
 
-    position: relative;
-    top: 0;
-    left: 300px;
+    position: fixed;
+    top: 100px;
+    left: 0;
     cursor: pointer;
     z-index: 1050;
 
     background: #4E5D6C;
     color: #DF691A;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+#sidebarToggle.active {
+    left: 300px;
 }
 
 #sidebarToggle:hover {
@@ -66,9 +70,9 @@ html, body, #map, #app, .wrapper {
     top: 10px;
     right: 10px;
     cursor: pointer;
-    -webkit-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
 }
 
 #dismiss:hover {
@@ -79,6 +83,10 @@ html, body, #map, #app, .wrapper {
 #sidebar .sidebar-header {
     padding: 20px;
     background: #2B3E50;
+}
+
+#sidebar .sidebar-content {
+    padding-top: 15px;
 }
 
 #sidebar .sidebar-panel {
@@ -94,9 +102,9 @@ html, body, #map, #app, .wrapper {
     background: #DF691A;
     cursor: pointer;
     margin: 0 10px;
-    -webkit-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
 }
 
 #sidebar .draw_icon:hover {
@@ -109,9 +117,18 @@ html, body, #map, #app, .wrapper {
 }
 
 #edit_route_draw_container .leaflet-draw-actions {
-    left: 284px;
+    left: 300px;
+    top: 195px !important;
     background: #4E5D6C;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+#edit_route_draw_container .leaflet-draw-actions.inactive {
+    left: 0;
 }
 
 #edit_route_draw_container .leaflet-draw-actions li {

@@ -9,54 +9,12 @@
             // Save settings in the modal
             $('#save_settings').bind('click', _saveSettings);
 
-            // Copy to clipboard functionality
-            $('#map_copy_to_clipboard').bind('click', function () {
-                // https://codepen.io/shaikmaqsood/pen/XmydxJ
-                let $temp = $("<input>");
-                $("body").append($temp);
-                $temp.val($('#map_shareable_link').val()).select();
-                document.execCommand("copy");
-                $temp.remove();
-
-                addFixedFooterInfo("{{ __('Copied to clipboard') }}", 2000);
-            });
-
             $('#map_route_publish').bind('click', function () {
                 _setPublished(true);
             });
 
             $('#map_route_unpublish').bind('click', function () {
                 _setPublished(false);
-            });
-
-            $('#sidebarToggle').on('click', function () {
-                let $sidebar = $('#sidebar');
-                let $sidebarToggle = $('#sidebarToggle');
-                // Dismiss
-                if ($sidebar.hasClass('active')) {
-                    // hide sidebar
-                    $sidebar.removeClass('active');
-                    // Move toggle button back
-                    // $sidebarToggle.removeClass('active');
-                    // Toggle image
-                    $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
-                }
-                // Show
-                else {
-                    // open sidebar
-                    $sidebar.addClass('active');
-                    // Move toggle button
-                    // $sidebarToggle.addClass('active');
-                    // Toggle image
-                    $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
-
-                    $('.collapse.in').toggleClass('in');
-                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                }
-            });
-
-            $("#sidebar").mCustomScrollbar({
-                theme: "minimal"
             });
         });
 
@@ -138,97 +96,13 @@
 
     @isset($model)
         <div class="wrapper">
-            <!-- Sidebar -->
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>{{ __('Toolbox') }}</h3>
-                </div>
-                <div id="sidebarToggle" title="{{ __('Expand the sidebar') }}">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-
-                <div class="sidebar-content">
-                    <div class="container">
-
-                        <!-- Edit route -->
-                        <div class="form-group">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ __('Edit route') }}</h5>
-                                    <!-- Draw controls are injected here through drawcontrols.js -->
-                                    <div id="edit_route_draw_container" class="row">
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Visibility -->
-                        <div class="form-group">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ __('Visibility') }}</h5>
-                                    <div class="row">
-                                        <div id="map_enemy_visuals_container" class="col">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sharable link -->
-                        <div class="form-group">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ __('Shareable link') }}</h5>
-                                    <div class="row">
-                                        <div class="col">
-                                            {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
-                                            ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col mt-2">
-                                            {!! Form::button('<i class="far fa-copy"></i> ' . __('Copy to clipboard'), ['id' => 'map_copy_to_clipboard', 'class' => 'btn btn-info col-md']) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Route settings -->
-                        <div class="form-group">
-                            <div class="btn btn-primary col" data-toggle="modal" data-target="#settings_modal">
-                                <i class='fas fa-cog'></i> {{ __('Route settings') }}
-                            </div>
-                        </div>
-
-                        <!-- Published state -->
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <div id="map_route_unpublished_info"
-                                         class="alert alert-info text-center {{ $model->published === 1 ? 'd-none' : '' }}">
-                                        <i class="fa fa-info-circle"></i> {{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div id="map_route_publish"
-                                         class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}">
-                                        <i class="fa fa-check-circle"></i> {{ __('Publish route') }}
-                                    </div>
-                                    <div id="map_route_unpublish"
-                                         class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
-                                        <i class="fa fa-times-circle"></i> {{ __('Unpublish route') }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+            @include('common.maps.sidebar', [
+                'show' => [
+                    'shareable-link',
+                    'route-settings',
+                    'route-publish'
+                ]
+            ])
 
             @include('common.maps.map', [
                 'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),

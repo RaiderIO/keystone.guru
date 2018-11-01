@@ -121,7 +121,6 @@ class DrawControls extends MapControl {
         // Surely there must be a better way for this but whatever, this works..
         for (let optionName in this.drawControlOptions.draw) {
             if (this.drawControlOptions.draw.hasOwnProperty(optionName)) {
-                console.log(optionName);
                 let option = this.drawControlOptions.draw[optionName];
                 if (option.hasOwnProperty('faClass')) {
                     // Set the FA icon and remove the background image that was initially there
@@ -152,6 +151,7 @@ class DrawControls extends MapControl {
             // Add columns to the buttons
             let $buttons = $parent.find('a');
             $buttons.addClass('col draw_icon');
+            $buttons.attr('data-toggle', 'tooltip');
 
             // The buttons have a parent that shouldn't be there; strip the children from that bad parent!
             $parent.append($buttons);
@@ -169,9 +169,11 @@ class DrawControls extends MapControl {
 
         // Add custom content for the edit and remove buttons
         let $buttons = $editDrawControls.find('a');
-
+        $buttons.attr('data-toggle', 'tooltip');
         $($buttons[0]).html("<i class='fas fa-edit'></i>");
         $($buttons[1]).html("<i class='fas fa-trash'></i>");
+        
+        refreshTooltips();
     }
 
     cleanup() {
