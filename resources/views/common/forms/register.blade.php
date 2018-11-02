@@ -26,7 +26,7 @@ $width = $modal ? '12' : '6';
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}register_name" type="text" class="form-control" name="name"
-                   value="{{ old('name') }}" required autofocus>
+                   value="{{ old('name') }}" required autofocus autocomplete="username">
         </div>
     </div>
 
@@ -44,7 +44,7 @@ $width = $modal ? '12' : '6';
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}register_password" type="password" class="form-control" name="password"
-                   required>
+                   required autocomplete="new-password">
         </div>
     </div>
 
@@ -54,7 +54,7 @@ $width = $modal ? '12' : '6';
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}register_password-confirm" type="password" class="form-control"
-                   name="password_confirmation" required>
+                   name="password_confirmation" required autocomplete="new-password">
         </div>
     </div>
 

@@ -79,20 +79,51 @@ class EnemyForcesControls extends MapControl {
 
         let enemyForcesRequired = this.map.getEnemyForcesRequired();
         let enemyForcesPercent = enemyForcesRequired === 0 ? 0 : ((this.enemyForces / enemyForcesRequired) * 100);
+        let $enemyForces = $('#map_enemy_forces');
         let $numbers = $('#map_enemy_forces_numbers');
-        if (this.enemyForces > enemyForcesRequired) {
-            if (enemyForcesPercent > 110) {
-                $numbers.addClass('map_enemy_forces_too_much');
-            } else {
-                $numbers.addClass('map_enemy_forces_too_much_warning');
+
+        $numbers.removeClass('map_enemy_forces_too_much_warning');
+        $numbers.removeClass('map_enemy_forces_ok');
+        if (this.enemyForces >= enemyForcesRequired) {
+            // When editing the route..
+            if (this.map.edit) {
+                if (enemyForcesPercent > 110) {
+                    $enemyForces.attr('title', 'Warning: your route kills too much enemy forces.');
+                    $numbers.addClass('map_enemy_forces_too_much_warning');
+                    $('#map_enemy_forces_success').hide();
+                    $('#map_enemy_forces_warning').show();
+                } else if (enemyForcesPercent >= 100) {
+                    $enemyForces.attr('title', '');
+                    $numbers.addClass('map_enemy_forces_ok');
+                    $('#map_enemy_forces_success').show();
+                    $('#map_enemy_forces_warning').hide();
+                }
             }
-        } else {
-            $numbers.removeClass('map_enemy_forces_too_much');
-            $numbers.removeClass('map_enemy_forces_too_much_warning');
+            // Only when viewing a route with less than 100% enemy forces
+            else {
+                if (enemyForcesPercent < 100) {
+                    $enemyForces.attr('title', 'Warning: this route does not kill enough enemy forces!');
+                    $numbers.addClass('map_enemy_forces_too_little_warning');
+                    $('#map_enemy_forces_success').hide();
+                    $('#map_enemy_forces_warning').show();
+                } else if (enemyForcesPercent >= 100) {
+                    $enemyForces.attr('title', '');
+                    $numbers.addClass('map_enemy_forces_ok');
+                    $('#map_enemy_forces_success').show();
+                    $('#map_enemy_forces_warning').hide();
+                } else if (enemyForcesPercent > 110) {
+                    $enemyForces.attr('title', 'Warning: this route kills too much enemy forces.');
+                    $numbers.addClass('map_enemy_forces_too_much_warning');
+                    $('#map_enemy_forces_success').hide();
+                    $('#map_enemy_forces_warning').show();
+                }
+            }
         }
 
         $('#map_enemy_forces_count').html(this.enemyForces);
         $('#map_enemy_forces_percent').html(enemyForcesPercent.toFixed(2));
+
+        refreshTooltips();
     }
 
     /**
@@ -108,7 +139,12 @@ class EnemyForcesControls extends MapControl {
             return new L.Control.Statusbar(opts);
         };
 
-        this._mapControl = L.control.statusbar({position: 'topright'}).addTo(this.map.leafletMap);
+        this._mapControl = L.control.statusbar({position: 'bottomhorizontalcenter'}).addTo(this.map.leafletMap);
+
+        // Add the leaflet draw control to the sidebar
+        let container = this._mapControl.getContainer();
+        let $targetContainer = $('#edit_route_enemy_forces_container');
+        $targetContainer.append(container);
 
         // Show the default values
         this.refreshUI();

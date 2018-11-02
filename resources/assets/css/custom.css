@@ -23,14 +23,6 @@
     width: 40px;
 }
 
-.header_container_rounded {
-    border: #444 1px solid;
-    border-radius: 4px !important;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
 .navbar-default .navbar-nav > li > .btn-success > a:hover, .navbar-default .navbar-nav > li > .btn-success > a:focus {
     background-color: #20895e;
 }
@@ -65,6 +57,11 @@
     z-index: 10000;
 }
 
+/* Floating top header should be top, but not too top */
+.fixed-top {
+    z-index: 800 !important;
+}
+
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;
@@ -74,6 +71,10 @@
     width: 24px;
     border-radius: 12px;
     max-height: 24px;
+}
+
+.select_icon {
+    margin-right: 5px;
 }
 
 .display_icon {
@@ -123,11 +124,6 @@
 }
 
 /** MISC STYLES */
-.view_dungeonroute_details_row {
-    height: 40px;
-}
-
-/* #affixgroup_select_container .affix_row_container, */
 .view_dungeonroute_details_row .affix_row_container {
     margin-left: 0;
     margin-right: 0;

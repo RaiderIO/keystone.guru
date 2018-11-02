@@ -79,7 +79,7 @@
                 {{ __('Admin') }}
             </h3>
             <div class="form-group">
-                {!! Form::label('demo', __('Mark as demo route')) !!}
+                {!! Form::label('demo', __('Demo route')) !!}
                 {!! Form::checkbox('demo', 1, 0, ['class' => 'form-control left_checkbox']) !!}
             </div>
         @endif

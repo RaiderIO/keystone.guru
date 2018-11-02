@@ -158,12 +158,17 @@ $introTexts = [
     </script>
 
     <script id="map_enemy_forces_template" type="text/x-handlebars-template">
-        <div id="map_enemy_forces" class="leaflet-draw-section">
-            {{ __('Enemy forces')}}:
-            <span id="map_enemy_forces_numbers">
-                <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
-                (<span id="map_enemy_forces_percent">0</span>%)
-            </span>
+        <div id="map_enemy_forces" class="font-weight-bold" data-toggle="tooltip">
+            <div class="row">
+                <div class="col">
+                    <span id="map_enemy_forces_numbers">
+                        <i id="map_enemy_forces_success" class="fas fa-check-circle" style="display: none;"></i>
+                        <i id="map_enemy_forces_warning" class="fas fa-exclamation-triangle" style="display: none;"></i>
+                        <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
+                        (<span id="map_enemy_forces_percent">0</span>%)
+                    </span>
+                </div>
+            </div>
         </div>
     </script>
 

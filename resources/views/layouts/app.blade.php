@@ -8,12 +8,12 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 $noads = isset($noads) ? $noads : false;
 // If logged in, check if the user has paid for an ad-free website
 $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
-// Floating navbar or not
-$headerFloat = isset($headerFloat) ? $headerFloat : false;
 // Custom content or not
 $custom = isset($custom) ? $custom : false;
 // Wide mode or not (only relevant if custom = false)
 $wide = isset($wide) ? $wide : false;
+// Show header or not
+$header = isset($header) ? $header : true;
 // Show footer or not
 $footer = isset($footer) ? $footer : true;
 ?><!DOCTYPE html>
@@ -57,182 +57,187 @@ $footer = isset($footer) ? $footer : true;
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark {{ $headerFloat ? 'fixed-top' : 'bg-dark' }}">
-        <div class="container {{ $headerFloat ? 'bg-dark header_container_rounded' : '' }}">
-            <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    @if($header)
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="demo_dropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ __('Demo') }}
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="demo_dropdown">
-                            @foreach(\App\Models\DungeonRoute::where('demo', '=', true)->get() as $route)
-                                <a class="dropdown-item"
-                                   href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
-                                    {{ $route->dungeon->name }}
-                                </a>
-                            @endforeach
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('misc.changelog') }}">{{ __('Changelog') }}</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item mr-2">
-                        <a href="#" class="btn btn-primary text-white"
-                           data-toggle="modal" data-target="#try_modal">{{__('Try it!')}}</a>
-                    </li>
-                    @if (Auth::guest())
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="modal"
-                               data-target="#login_modal">{{__('Login')}}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="modal"
-                               data-target="#register_modal">{{__('Register')}}</a>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
-                               role="button"><i class="fas fa-plus"></i> {{__('Create route')}}</a>
+                            <a class="nav-link" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            <a class="nav-link dropdown-toggle" href="#" id="demo_dropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <div class="user_icon float-left">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <div class="float-left">
-                                    {{ Auth::user()->name }}
-                                </div>
+                                {{ __('Demo') }}
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @if( Auth::user()->can('read-expansions') )
+
+                            <div class="dropdown-menu" aria-labelledby="demo_dropdown">
+                                @foreach(\App\Models\DungeonRoute::where('demo', '=', true)->get() as $route)
                                     <a class="dropdown-item"
-                                       href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
-                                @endif
-                                @if( Auth::user()->can('read-dungeons') )
-                                    <a class="dropdown-item"
-                                       href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
-                                @endif
-                                @if( Auth::user()->can('read-npcs') )
-                                    <a class="dropdown-item" href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
-                                @endif
-                                @if( Auth::user()->hasRole('admin'))
-                                    <a class="dropdown-item"
-                                       href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
-                                @endif
-                                @if( Auth::user()->hasRole('admin'))
-                                    <a class="dropdown-item"
-                                       href="{{ route('admin.users') }}">{{__('View users')}}</a>
-                                @endif
-                                @if( Auth::user()->hasRole('admin'))
-                                    <a class="dropdown-item"
-                                       href="{{ route('admin.userreports') }}">{{__('View user reports') }}
-                                        <span class="badge badge-primary badge-pill">{{ $numUserReports }}</span>
+                                       href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
+                                        {{ $route->dungeon->name }}
                                     </a>
-                                @endif
-                                <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
-                                <div class="dropdown-divider"></div>
-
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                      style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
+                                @endforeach
                             </div>
                         </li>
-                    @endif
-                </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('misc.changelog') }}">{{ __('Changelog') }}</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item mr-2">
+                            <a href="#" class="btn btn-primary text-white"
+                               data-toggle="modal" data-target="#try_modal">{{__('Try it!')}}</a>
+                        </li>
+                        @if (Auth::guest())
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="modal"
+                                   data-target="#login_modal">{{__('Login')}}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="modal"
+                                   data-target="#register_modal">{{__('Register')}}</a>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
+                                   role="button"><i class="fas fa-plus"></i> {{__('Create route')}}</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div class="user_icon float-left">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="float-left">
+                                        {{ Auth::user()->name }}
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @if( Auth::user()->can('read-expansions') )
+                                        <a class="dropdown-item"
+                                           href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
+                                    @endif
+                                    @if( Auth::user()->can('read-dungeons') )
+                                        <a class="dropdown-item"
+                                           href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
+                                    @endif
+                                    @if( Auth::user()->can('read-npcs') )
+                                        <a class="dropdown-item"
+                                           href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
+                                    @endif
+                                    @if( Auth::user()->hasRole('admin'))
+                                        <a class="dropdown-item"
+                                           href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
+                                    @endif
+                                    @if( Auth::user()->hasRole('admin'))
+                                        <a class="dropdown-item"
+                                           href="{{ route('admin.users') }}">{{__('View users')}}</a>
+                                    @endif
+                                    @if( Auth::user()->hasRole('admin'))
+                                        <a class="dropdown-item"
+                                           href="{{ route('admin.userreports') }}">{{__('View user reports') }}
+                                            <span class="badge badge-primary badge-pill">{{ $numUserReports }}</span>
+                                        </a>
+                                    @endif
+                                    <a class="dropdown-item"
+                                       href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                          style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                </div>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-
-    <?php if( $custom ) { ?>
-    @yield('content')
-    <?php } else { ?>
-
-    @if (config('app.env') !== 'production' && (Auth::user() === null || !Auth::user()->hasRole('admin')))
-        <div class="container-fluid alert alert-warning text-center mt-4">
-            {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
-            <br>
-            {{ __('If you got here by accident, I\'d be interested in knowing how you got here! Message me on Discord :)') }}
-            <br>
-            <a href="https://keystone.guru/">{{ __('Take me to the main site!') }}</a>
-        </div>
+        </nav>
     @endif
 
-    @yield('global-message')
-    
-    <div class="container-fluid">
-        <div class="row">
-            <div class="{{ $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2" }}">
-                <div class="card mt-3 mb-3">
-                    <div class="card-header {{ $wide ? "panel-heading-wide" : "" }}">
-                        <div class="row">
-                            @hasSection('header-addition')
-                                <div class="ml-3">
-                                    <h4>@yield('header-title')</h4>
-                                </div>
-                                <div class="ml-auto">
-                                    @yield('header-addition')
-                                </div>
-                            @else
-                                <div class="col-lg-12 text-center">
-                                    <h4>@yield('header-title')</h4>
+    @if($custom)
+        @yield('content')
+    @else
+
+        @if (config('app.env') !== 'production' && (Auth::user() === null || !Auth::user()->hasRole('admin')))
+            <div class="container-fluid alert alert-warning text-center mt-4">
+                {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
+                <br>
+                {{ __('If you got here by accident, I\'d be interested in knowing how you got here! Message me on Discord :)') }}
+                <br>
+                <a href="https://keystone.guru/">{{ __('Take me to the main site!') }}</a>
+            </div>
+        @endif
+
+        @yield('global-message')
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="{{ $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2" }}">
+                    <div class="card mt-3 mb-3">
+                        <div class="card-header {{ $wide ? "panel-heading-wide" : "" }}">
+                            <div class="row">
+                                @hasSection('header-addition')
+                                    <div class="ml-3">
+                                        <h4>@yield('header-title')</h4>
+                                    </div>
+                                    <div class="ml-auto">
+                                        @yield('header-addition')
+                                    </div>
+                                @else
+                                    <div class="col-lg-12 text-center">
+                                        <h4>@yield('header-title')</h4>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             @endif
+
+                            @if (session('status'))
+                                <div id="app_session_status_message" class="alert alert-success">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+
+                            @if (session('warning'))
+                                <div id="app_session_warning_message" class="alert alert-warning">
+                                    {{ session('warning') }}
+                                </div>
+                            @endif
+
+                            @yield('content')
                         </div>
-                    </div>
-                    <div class="card-body">
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        @if (session('status'))
-                            <div id="app_session_status_message" class="alert alert-success">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
-                        @if (session('warning'))
-                            <div id="app_session_warning_message" class="alert alert-warning">
-                                {{ session('warning') }}
-                            </div>
-                        @endif
-
-                        @yield('content')
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <?php } ?>
+    @endif
 
     <footer class="fixed-bottom">
         <div class="row">
@@ -338,7 +343,7 @@ $footer = isset($footer) ? $footer : true;
             </button>
             <div class="probootstrap-modal-flex">
                 <div class="probootstrap-modal-content">
-                    @include('common.forms.try')
+                    @include('common.forms.try', ['modal' => true])
                 </div>
             </div>
         </div>

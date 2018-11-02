@@ -41,7 +41,7 @@ html, body, #map, #app, .wrapper {
     transition: all 0.2s;
 
     position: fixed;
-    top: 100px;
+    top: 156px;
     left: 0;
     cursor: pointer;
     z-index: 1050;
@@ -60,29 +60,16 @@ html, body, #map, #app, .wrapper {
     color: #FFF;
 }
 
-#dismiss {
-    width: 35px;
-    height: 35px;
-    line-height: 35px;
-    text-align: center;
-    background: #DF691A;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    -webkit-transition: all 0.2s;
-    -o-transition: all 0.2s;
-    transition: all 0.2s;
-}
-
-#dismiss:hover {
-    background: #FFF;
-    color: #DF691A;
-}
-
 #sidebar .sidebar-header {
     padding: 20px;
     background: #2B3E50;
+}
+
+/* Force reserve height */
+#sidebar .sidebar-header h4 {
+    height: 2.4em;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 
 #sidebar .sidebar-content {
@@ -112,8 +99,19 @@ html, body, #map, #app, .wrapper {
     color: #DF691A;
 }
 
+.floating_panel,
 #sidebar .card {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+#sidebar .dropdown.bootstrap-select {
+    background-color: #4E5D6C;
+}
+
+#sidebar .dropdown.bootstrap-select .btn {
+    background-color: #4E5D6C;
+    color: #FFF;
+    border: 1px solid #2B3E5066;
 }
 
 #edit_route_draw_container a {
@@ -175,6 +173,30 @@ html, body, #map, #app, .wrapper {
 .leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon):not(.leaflet-edit-marker-selected) {
     border: none;
     background-color: unset;
+}
+
+.leaflet-verticalcenter {
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+    top: 50%; /* possible because the placeholder's parent is the map */
+    transform: translateY(-50%); /* using the CSS3 Transform technique */
+}
+
+.leaflet-verticalcenter .leaflet-control {
+    margin-bottom: 10px;
+}
+
+.leaflet-horizontalcenter {
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+    left: 50%; /* possible because the placeholder's parent is the map */
+    transform: translateX(-50%); /* using the CSS3 Transform technique */
+}
+
+.leaflet-horizontalcenter .leaflet-control {
+    margin-right: 10px;
 }
 
 /** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */
@@ -327,27 +349,26 @@ html, body, #map, #app, .wrapper {
     margin-left: -4px !important;
 }
 
-#map_enemy_visuals,
-#map_enemy_forces {
-    color: black;
-    background-color: #FFF;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    background-clip: padding-box;
-    border-radius: 4px;
-    padding: 6px;
-    z-index: 1000;
+#map_enemy_forces h5 {
+    margin-bottom: 0;
 }
 
-#map_enemy_visuals {
+/* When in the sidebar, spread it out fully */
+#sidebar #map_enemy_visuals {
     width: 100%;
 }
 
-.map_enemy_forces_too_much {
-    color: red;
+#map_enemy_visuals {
+    width: 200px;
 }
 
+.map_enemy_forces_too_little_warning,
 .map_enemy_forces_too_much_warning {
-    color: orange;
+    color: #f0ad4e;
+}
+
+.map_enemy_forces_ok {
+    color: #5cb85c;
 }
 
 .map_route_edit_popup_class_color {

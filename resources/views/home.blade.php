@@ -14,16 +14,16 @@
                 <div class="col-md-8 offset-md-2 col-sm-8 offset-sm-2 text-center probootstrap-hero-text pb0 probootstrap-animate"
                      data-animate-effect="fadeIn">
                     <h1>{{ __('Welcome to Keystone.guru!') }}</h1>
-                    <p>{{ __('This website allows you to plan routes through your Mythic Plus dungeons and share them with the world or your group!') }}</p>
+                    <p>{{ __('This website allows you to plan routes through your Mythic Plus dungeons and share them with your group and the world!') }}</p>
                     <p>
+                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-ghost btn-lg mt-1"
+                           data-toggle="modal" data-target="#try_modal">{{ __('Try it!') }}</a>
+                        <a href="{{ route('dungeonroute.view', ['public_key' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}" class="btn btn-primary btn-ghost btn-lg mt-1"
+                           role="button">{{ __('Demo') }}</a>
                         @guest
                             <a href="#" class="btn btn-primary btn-lg mt-1" role="button" data-toggle="modal"
                                data-target="#register_modal">{{ __('Register and start planning') }}</a>
                         @endguest
-                        <a href="{{ route('dungeonroute.view', ['public_key' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}" class="btn btn-primary btn-ghost btn-lg mt-1"
-                           role="button">{{ __('Demo') }}</a>
-                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-ghost btn-lg mt-1"
-                           role="button">{{ __('Try it!') }}</a>
                     </p>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                         </li>
                         <li>
                             <a href="#">{{ __('All enemies added - teeming included') }}</a>
-                            <p>{{ __('Ever wondered what different route you could possibly take while still hitting a 100% enemy forces? All enemies are visible on the map, find the alternative route to make your run a success. Includes all enemies that are added on Teeming weeks, too!') }}</p>
+                            <p>{{ __('Ever wondered what different route you could possibly take while still hitting a 100% enemy forces? All enemies are visible on the map, find the alternative route to make your run a success. Includes all enemies that are added on Teeming weeks!') }}</p>
                         </li>
                         <li>
                             <a href="#">{{ __('Define your setup') }}</a>

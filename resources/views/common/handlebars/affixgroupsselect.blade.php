@@ -10,9 +10,7 @@ if(!isset($affixgroups) ){
     <div class="row affix_row_container no-gutters">
         @{{#affixes}}
             <div class="col affix_row">
-                <div class="select_icon affix_icon_@{{ class }}" style="height: 24px;">
-                    &nbsp;
-                </div>
+                <div class="select_icon affix_icon_@{{ class }}" style="height: 24px;"> </div>
             </div>
         @{{/affixes}}
     </div>
@@ -43,7 +41,8 @@ if(!isset($affixgroups) ){
                         let affix = affixGroup.affixes[j];
 
                         affixes.push({
-                            class: affix.name.toLowerCase()
+                            class: affix.name.toLowerCase(),
+                            name: affix.name
                         });
                     }
                 }
