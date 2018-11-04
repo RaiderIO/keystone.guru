@@ -28,9 +28,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
             $('#enemy_patrol_edit_popup_faction_' + self.id).val(self.faction);
 
             // Refresh all select pickers so they work again
-            let $selectpicker = $('.selectpicker');
-            $selectpicker.selectpicker('refresh');
-            $selectpicker.selectpicker('render');
+            refreshSelectPickers();
 
             let $submitBtn = $('#enemy_patrol_edit_popup_submit_' + self.id);
 

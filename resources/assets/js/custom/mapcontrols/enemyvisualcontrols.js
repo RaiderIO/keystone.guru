@@ -6,7 +6,7 @@ class EnemyVisualControls extends MapControl {
 
         this.map = map;
         this.map.register('map:refresh', this, function(){
-            $('.selectpicker').selectpicker('refresh');
+            refreshSelectPickers();
         });
 
         this.mapControlOptions = {

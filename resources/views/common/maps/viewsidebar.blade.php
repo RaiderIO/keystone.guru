@@ -1,4 +1,7 @@
 <?php
+/** @var \App\Models\DungeonRoute $model */
+$floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->floors->count() !== 1;
+
 // Only add the 'clone of' when the user cloned it from someone else as a form of credit
 $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $model->clone_of)->where('author_id', $model->author_id)->count() === 0 ?
     sprintf('%s %s',
@@ -237,6 +240,35 @@ $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public
                         </div>
                     </div>
                 @endauth
+            </div>
+        </div>
+    </div>
+
+    <!-- Visibility -->
+    <div class="form-group visibility_tools">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ __('Visibility') }}</h5>
+                <div class="row">
+                    <div id="map_enemy_visuals_container" class="col">
+                    </div>
+                </div>
+
+                @if($floorSelection)
+                    <div class="row view_dungeonroute_details_row">
+                        <div class="col font-weight-bold">
+                            {{ __('Floor') }}:
+                        </div>
+                    </div>
+                    <div class="row view_dungeonroute_details_row mt-2">
+                        <div class="col floor_selection">
+                            <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+                            {!! Form::select('map_floor_selection', [__('Select floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
+                        </div>
+                    </div>
+                @else
+                    {!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
+                @endif
             </div>
         </div>
     </div>

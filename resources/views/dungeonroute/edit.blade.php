@@ -1,4 +1,4 @@
-@extends('layouts.app', ['custom' => true, 'footer' => false, 'headerFloat' => true])
+@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false])
 @section('header-title', $headerTitle)
 
 @section('scripts')
@@ -94,18 +94,18 @@
 
 @section('content')
     <div class="wrapper">
+        @include('common.maps.map', [
+            'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors'),
+            'dungeonroute' => $model,
+            'edit' => true
+        ])
+
         @include('common.maps.editsidebar', [
             'show' => [
                 'shareable-link' => true,
                 'route-settings' => true,
                 'route-publish' => true
             ]
-        ])
-
-        @include('common.maps.map', [
-            'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id),
-            'dungeonroute' => $model,
-            'edit' => true
         ])
     </div>
 

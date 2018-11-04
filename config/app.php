@@ -187,6 +187,7 @@ return [
         Folklore\Image\ImageServiceProvider::class,
         PragmaRX\Tracker\Vendor\Laravel\ServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
     ],
 
     /*
@@ -246,6 +247,7 @@ return [
         'Tracker' => PragmaRX\Tracker\Vendor\Laravel\Facade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
     ],
 
 ];

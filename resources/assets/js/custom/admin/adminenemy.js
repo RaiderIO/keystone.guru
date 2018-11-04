@@ -48,9 +48,7 @@ class AdminEnemy extends Enemy {
             $('#enemy_edit_popup_npc_' + self.id).val(self.npc_id);
 
             // Refresh all select pickers so they work again
-            let $selectpicker = $('.selectpicker');
-            $selectpicker.selectpicker('refresh');
-            $selectpicker.selectpicker('render');
+            refreshSelectPickers();
 
             let $submitBtn = $('#enemy_edit_popup_submit_' + self.id);
 

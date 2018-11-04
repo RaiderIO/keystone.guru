@@ -14,7 +14,7 @@
                 <div class="col-md-8 offset-md-2 col-sm-8 offset-sm-2 text-center probootstrap-hero-text pb0 probootstrap-animate"
                      data-animate-effect="fadeIn">
                     <h1>{{ __('Welcome to Keystone.guru!') }}</h1>
-                    <p>{{ __('This website allows you to plan routes through your Mythic Plus dungeons and share them with your group and the world!') }}</p>
+                    <p>{{ __('Plan your World of Warcraft Mythic Plus routes and share them with your group and the world!') }}</p>
                     <p>
                         <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-ghost btn-lg mt-1"
                            data-toggle="modal" data-target="#try_modal">{{ __('Try it!') }}</a>

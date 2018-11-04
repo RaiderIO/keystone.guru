@@ -1,6 +1,6 @@
 <script id="group_setup_template" type="text/x-handlebars-template">
     <div class="row no-gutters">
-        <div class="col select_icon @{{ css_class }}" style="height: 24px;" data-toggle="tooltip"
+        <div class="col-auto select_icon @{{ css_class }}" style="height: 24px;" data-toggle="tooltip"
              title="@{{faction_title}}">
         </div>
         <div style="margin-right: 5px;">

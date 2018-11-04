@@ -44,7 +44,7 @@ class DungeonMap extends Signalable {
         this.leafletMap = L.map(mapid, {
             center: [0, 0],
             minZoom: 1,
-            maxZoom: 4,
+            maxZoom: 5,
             // We use a custom draw control, so don't use this
             // drawControl: true,
             // Simple 1:1 coordinates to meters, don't use Mercator or anything like that
@@ -416,12 +416,12 @@ class DungeonMap extends Signalable {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
         this.leafletMap.setView([-128, 192], 2);
-        let southWest = this.leafletMap.unproject([0, 4096], this.leafletMap.getMaxZoom());
-        let northEast = this.leafletMap.unproject([6144, 0], this.leafletMap.getMaxZoom());
+        let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
+        let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
 
         this.mapTileLayer = L.tileLayer('/images/tiles/' + this.dungeonData.expansion.shortname + '/' + this.dungeonData.key + '/' + this.getCurrentFloor().index + '/{z}/{x}_{y}.png', {
-            maxZoom: 4,
+            maxZoom: 5,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: L.point(384, 256),
             noWrap: true,

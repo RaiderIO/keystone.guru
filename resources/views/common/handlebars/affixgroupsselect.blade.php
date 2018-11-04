@@ -57,9 +57,7 @@ if(!isset($affixgroups) ){
             }
         }
 
-        let $selectpicker = $('.selectpicker');
-        $selectpicker.selectpicker('refresh');
-        $selectpicker.selectpicker('render');
+        refreshSelectPickers();
 
         // Fix the select, it wraps the entire thing in a SPAN which completely destroys ability to do any form of layout on it
         // So remove the span

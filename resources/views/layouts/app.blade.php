@@ -299,6 +299,14 @@ $footer = isset($footer) ? $footer : true;
     @endif
 </div>
 
+<script id="app_fixed_footer_small_template" type="text/x-handlebars-template">
+    <div class="text-center m-1">
+        <span class="alert alert-@{{type}} border-secondary mb-0">
+            @{{{message}}}
+        </span>
+    </div>
+</script>
+
 <script id="app_fixed_footer_template" type="text/x-handlebars-template">
     <div class="alert alert-@{{type}} mb-0 text-center border-secondary border-top m-1">
         @{{{message}}}

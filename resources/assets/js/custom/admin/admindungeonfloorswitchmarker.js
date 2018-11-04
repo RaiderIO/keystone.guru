@@ -54,9 +54,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
             $("#dungeon_floor_switch_edit_popup_target_floor").val(self.target_floor_id);
 
             // Refresh all select pickers so they work again
-            let $selectpicker = $(".selectpicker");
-            $selectpicker.selectpicker('refresh');
-            $selectpicker.selectpicker('render');
+            refreshSelectPickers();
 
             let $submitBtn = $("#dungeon_floor_switch_edit_popup_submit");
             $submitBtn.unbind('click');

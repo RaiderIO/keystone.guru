@@ -5,6 +5,8 @@ class EnemyForcesControls extends MapControl {
 
         let self = this;
 
+        this.loaded = false;
+        this.lastFooterMessage = null;
         this.map = map;
         // Just the initial enemy forces upon page load.
         this._setEnemyForces(dungeonRouteEnemyForces); // Defined in map.blade.php
@@ -47,6 +49,7 @@ class EnemyForcesControls extends MapControl {
         killzoneMapObjectGroup.register('object:add', this, function (addEvent) {
             addEvent.data.object.register('killzone:synced', self, self._killzoneSynced.bind(self));
         });
+        this.loaded = true;
     }
 
     _killzoneSynced(syncedEvent) {
@@ -69,6 +72,15 @@ class EnemyForcesControls extends MapControl {
         // @TODO This is a bit of a dirty solution for solving an issue where being in edit mode and switching a floor the enemy_forces counter is reset to 0.
         dungeonRouteEnemyForces = value;
         this.refreshUI();
+
+        // Don't trigger this when loading in the route
+        if (this.loaded) {
+            // Remove any previous footer messages
+            if (this.lastFooterMessage !== null) {
+                this.lastFooterMessage.remove();
+            }
+            this.lastFooterMessage = addFixedFooterSmall($('#map_enemy_forces_numbers').text());
+        }
     }
 
     /**
@@ -87,26 +99,21 @@ class EnemyForcesControls extends MapControl {
         if (this.enemyForces >= enemyForcesRequired) {
             // When editing the route..
             if (this.map.edit) {
-                if (enemyForcesPercent > 110) {
-                    $enemyForces.attr('title', 'Warning: your route kills too much enemy forces.');
-                    $numbers.addClass('map_enemy_forces_too_much_warning');
-                    $('#map_enemy_forces_success').hide();
-                    $('#map_enemy_forces_warning').show();
-                } else if (enemyForcesPercent >= 100) {
+                if (enemyForcesPercent >= 100) {
                     $enemyForces.attr('title', '');
                     $numbers.addClass('map_enemy_forces_ok');
                     $('#map_enemy_forces_success').show();
                     $('#map_enemy_forces_warning').hide();
+                } else if (enemyForcesPercent > 110) {
+                    $enemyForces.attr('title', 'Warning: your route kills too much enemy forces.');
+                    $numbers.addClass('map_enemy_forces_too_much_warning');
+                    $('#map_enemy_forces_success').hide();
+                    $('#map_enemy_forces_warning').show();
                 }
             }
             // Only when viewing a route with less than 100% enemy forces
             else {
-                if (enemyForcesPercent < 100) {
-                    $enemyForces.attr('title', 'Warning: this route does not kill enough enemy forces!');
-                    $numbers.addClass('map_enemy_forces_too_little_warning');
-                    $('#map_enemy_forces_success').hide();
-                    $('#map_enemy_forces_warning').show();
-                } else if (enemyForcesPercent >= 100) {
+                if (enemyForcesPercent >= 100) {
                     $enemyForces.attr('title', '');
                     $numbers.addClass('map_enemy_forces_ok');
                     $('#map_enemy_forces_success').show();
@@ -114,6 +121,16 @@ class EnemyForcesControls extends MapControl {
                 } else if (enemyForcesPercent > 110) {
                     $enemyForces.attr('title', 'Warning: this route kills too much enemy forces.');
                     $numbers.addClass('map_enemy_forces_too_much_warning');
+                    $('#map_enemy_forces_success').hide();
+                    $('#map_enemy_forces_warning').show();
+                }
+            }
+        } else {
+            // Only on view
+            if (!this.map.edit) {
+                if (enemyForcesPercent < 100) {
+                    $enemyForces.attr('title', 'Warning: this route does not kill enough enemy forces!');
+                    $numbers.addClass('map_enemy_forces_too_little_warning');
                     $('#map_enemy_forces_success').hide();
                     $('#map_enemy_forces_warning').show();
                 }

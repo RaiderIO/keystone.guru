@@ -111,10 +111,11 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
      * @param type
      * @param message
      * @param durationMs
+     * @param small
      * @private
      */
-    function _addFixedFooter(type, message, durationMs) {
-        let fixedFooterTemplate = $('#app_fixed_footer_template').html();
+    function _addFixedFooter(type, message, durationMs, small = false) {
+        let fixedFooterTemplate = $('#app_fixed_footer_' + (small ? 'small_' : '') + 'template').html();
 
         let template = handlebars.compile(fixedFooterTemplate);
 
@@ -129,41 +130,75 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
         $message.delay(durationMs).fadeOut(200, function () {
             $(this).remove();
         });
+
+        return $message;
     }
 
     /**
      * Refreshes fancy tooltips on all elements that request for them.
      */
     function refreshTooltips() {
-        $('[data-toggle="tooltip"]').tooltip('_fixTitle').tooltip();
+        // Do not do tooltips on touch enabled devices, they tend to bug out
+        //if (false === ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch)) {
+        if (!isMobile()) {
+            $('[data-toggle="tooltip"]').tooltip('_fixTitle').tooltip();
+        }
         // $('[data-toggle="tooltip"]').tooltip({trigger: 'manual'}).tooltip('show');
     }
 
     /**
+     * Refreshes all select pickers on-screen
+     **/
+    function refreshSelectPickers() {
+        let $selectpicker = $('.selectpicker');
+        $selectpicker.selectpicker('refresh');
+        $selectpicker.selectpicker('render');
+    }
+
+    /**
+     * Checks if the current user is on a mobile device or not.
+     **/
+    function isMobile() {
+        return {{ (new \Jenssegers\Agent\Agent())->isMobile() ? 'true' : 'false' }};
+    }
+
+    /**
+     * Add a small fixed footer which only wraps the content in a background.
+     * @returns The created footer element.
+     **/
+    function addFixedFooterSmall(message, durationMs = 5000) {
+        return _addFixedFooter('info', '<i class="fas fa-info-circle"></i> ' + message, durationMs, true);
+    }
+
+    /**
      * Adds a fixed info footer with a message and a duration to the bottom of the screen.
+     * @returns The created footer element.
      */
     function addFixedFooterInfo(message, durationMs = 5000) {
-        _addFixedFooter('info', '<i class="fas fa-info-circle"></i> ' + message, durationMs);
+        return _addFixedFooter('info', '<i class="fas fa-info-circle"></i> ' + message, durationMs);
     }
 
     /**
      * Adds a fixed success footer with a message and a duration to the bottom of the screen.
+     * @returns The created footer element.
      */
     function addFixedFooterSuccess(message, durationMs = 5000) {
-        _addFixedFooter('success', '<i class="fas fa-check-circle"></i> ' + message, durationMs);
+        return _addFixedFooter('success', '<i class="fas fa-check-circle"></i> ' + message, durationMs);
     }
 
     /**
      * Adds a fixed warning footer with a message and a duration to the bottom of the screen.
+     * @returns The created footer element.
      */
     function addFixedFooterWarning(message, durationMs = 5000) {
-        _addFixedFooter('warning', '<i class="fas fa-exclamation-triangle"></i> ' + message, durationMs);
+        return _addFixedFooter('warning', '<i class="fas fa-exclamation-triangle"></i> ' + message, durationMs);
     }
 
     /**
      * Adds a fixed error footer with a message and a duration to the bottom of the screen.
+     * @returns The created footer element.
      */
     function addFixedFooterError(message, durationMs = 5000) {
-        _addFixedFooter('danger', '<i class="fas fa-times-circle"></i> ' + message, durationMs);
+        return _addFixedFooter('danger', '<i class="fas fa-times-circle"></i> ' + message, durationMs);
     }
 </script>

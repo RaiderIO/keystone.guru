@@ -4,7 +4,6 @@ $isAdmin = isset($admin) && $admin;
 /** @var App\Models\DungeonRoute $dungeonroute */
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
-$floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 $edit = isset($edit) && $edit ? 'true' : 'false';
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
@@ -13,24 +12,28 @@ $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) 
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
 
 $introTexts = [
-    __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
-    __('This is the dungeon map. This is where you see an overview of enemies, which packs they may belong to, any patrols and your own planning. Click
-    on enemies to assign them a raid marker, hover over them to see quick details about the enemy.'),
-    __('These are the map controls where you can control the map and interact with it.'),
-    __('You can use these controls to zoom the map in or out. You can also use the mouse scrollwheel if you\'re on a computer.'),
-    __('These are your drawing tools.'),
+    __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
+    __('You can use this button to hide or show the sidebar.'),
+    __('This label indicates the current progress with enemy forces. Remember to use killzones to mark an enemy as killed and see this label updated.'),
+
+    __('These are your route manipulation tools.'),
     __('You can draw routes with this tool. Click it, then draw a route (a line) from A to B, with as many points are you like. Once finished, you can click
     the line on the map to change its color. You can add as many routes as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
     or purple for a Warlock Gateway, for example.'),
-    __('This is a \'kill zone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
+    __('This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
     You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
     Once you have selected enemies your enemy forces (top right) will update to reflect your new enemy forces counter.'),
     __('Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.'),
     __('This is the edit button. You can use it to adjust your created routes, move your killzones or comments.'),
     __('This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
     that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!'),
-    __('This label indicates your current progress with enemy forces. Remember to use killzones to mark an enemy as killed and see this label updated.'),
-    __('Here you can select how you want enemies visualized on the map. You can chose from multiple different visualizations to help you quickly find the information you need.'),
+
+    __('Here you can select different visualization options.'),
+    __('You can chose from multiple different visualizations to help you quickly find the information you need. You can also use this dropdown to vote for Infested enemies every week.'),
+
+    __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
+
+    __('You can use these controls to zoom the map in or out. You can also use the mouse scrollwheel if you\'re on a computer.'),
     __('These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.')
 ];
 ?>
@@ -76,7 +79,6 @@ $introTexts = [
         <?php // @TODO Convert this to an object to pass to the DungeonMap instead of multiple parameters? ?>
         // Data of the dungeon(s) we're selecting in the map
         let _dungeonData = {!! $dungeon !!};
-        let _switchDungeonFloorSelect = "#map_floor_selection";
         let dungeonRoutePublicKey = '{{ $routePublicKey }}';
         let dungeonRouteEnemyForces = {{ $routeEnemyForces }};
         let dungeonRouteFaction = '{{ $routeFaction }}';
@@ -84,20 +86,10 @@ $introTexts = [
         let dungeonMap;
 
         $(function () {
-
-            @if(!isset($manualInit) || !$manualInit)
-            // Make sure that the select options have a valid value
-            _refreshFloorSelect();
-
-            @isset($selectedFloorId)
-            $(_switchDungeonFloorSelect).val({{$selectedFloorId}});
-            @endisset
-
-                    @if($isAdmin)
-                dungeonMap = new AdminDungeonMap('map', _dungeonData, $(_switchDungeonFloorSelect).val(), {{ $edit }});
+            @if($isAdmin)
+                dungeonMap = new AdminDungeonMap('map', _dungeonData, _dungeonData.floors[0].id, {{ $edit }});
             @else
-                dungeonMap = new DungeonMap('map', _dungeonData, $(_switchDungeonFloorSelect).val(), {{ $edit }}, {{ $teeming }});
-            @endif
+                dungeonMap = new DungeonMap('map', _dungeonData, _dungeonData.floors[0].id, {{ $edit }}, {{ $teeming }});
             @endif
 
             $(_switchDungeonFloorSelect).change(function () {
@@ -107,54 +99,51 @@ $introTexts = [
             });
 
             $('#start_virtual_tour').bind('click', function () {
-                console.log('starting virtual tour!');
                 introjs().start();
             });
 
             // Bind leaflet virtual tour classes
             let selectors = [
-                ['.leaflet-top.leaflet-left', 'right'],
-                ['.leaflet-control-zoom.leaflet-bar.leaflet-control', 'right'],
-                ['.leaflet-left .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top', 'right'],
+                ['#sidebar', 'right'],
+                ['#sidebarToggle', 'right'],
+                ['.enemy_forces_container', 'right'],
+
+                ['.route_manipulation_tools', 'right'],
                 ['.leaflet-draw-draw-route', 'right'],
                 ['.leaflet-draw-draw-killzone', 'right'],
                 ['.leaflet-draw-draw-mapcomment', 'right'],
                 ['.leaflet-draw-edit-edit', 'right'],
                 ['.leaflet-draw-edit-remove', 'right'],
-                ['#map_enemy_forces', 'left'],
-                ['#map_enemy_visuals', 'left'],
-                ['.leaflet-right .leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top', 'left'],
+
+                ['.visibility_tools', 'right'],
+                ['#map_enemy_visuals', 'right'],
+                ['.floor_selection', 'right'],
+
+                ['.leaflet-control-zoom', 'left'],
+                ['#map_controls .leaflet-draw-toolbar', 'left'],
             ];
             let texts = {!! json_encode($introTexts) !!};
-            let offset = 2;
-
             for (let i = 0; i < selectors.length; i++) {
                 let $selector = $(selectors[i][0]);
-                $selector.attr('data-intro', texts[i + offset]);
+                $selector.attr('data-intro', texts[i]);
                 $selector.attr('data-position', selectors[i][1]);
-                $selector.attr('data-step', i + (offset + 1));
+                $selector.attr('data-step', i + 1);
             }
-        });
 
-        /**
-         * Refreshes the floor select and fills it with the floors that fit the currently selected dungeon.
-         * @private
-         */
-        function _refreshFloorSelect() {
-            let $switchDungeonFloorSelect = $(_switchDungeonFloorSelect);
-            if ($switchDungeonFloorSelect.is("select")) {
-                // Clear of all options
-                $switchDungeonFloorSelect.find('option').remove();
-                // Add each new floor to the select
-                $.each(_dungeonData.floors, function (index, floor) {
-                    // Reconstruct the dungeon floor select
-                    $switchDungeonFloorSelect.append($('<option>', {
-                        text: floor.name,
-                        value: floor.id
-                    }));
+            // If the map is opened on mobile hide the sidebar
+            if (isMobile()) {
+                dungeonMap.register('map:refresh', null, function () {
+                    let fn = function () {
+                        if (typeof _hideSidebar === 'function') {
+                            // @TODO This introduces a dependency on sidebar, but sidebar loads before dungeonMap is instantiated
+                            _hideSidebar();
+                        }
+                    };
+                    dungeonMap.leafletMap.off('move', fn);
+                    dungeonMap.leafletMap.on('move', fn);
                 });
             }
-        }
+        });
     </script>
 
     <script id="map_enemy_forces_template" type="text/x-handlebars-template">
@@ -434,33 +423,7 @@ $introTexts = [
     @endif
 @endsection
 
-<!--
-<div class="container p-0">
-    <?php
-if (isset($model)) { ?>
-        <div class="form-group">
-            <div class="alert alert-warning">
-                <i class="fa fa-exclamation-triangle"></i> {{ __('Mapping data is a work in progress. Please err on the side of overpulling over exact 100% while I correct any reported mistakes.') }}
-        </div>
-    </div>
-    <?php } ?>
-
-@if($floorSelection)
-    <div class="form-group virtual-tour-element" data-intro="{{ $introTexts[0] }}" data-step="1"
-             data-position="bottom-middle-aligned">
-            {!! Form::label('map_floor_selection', __('Select floor')) !!}
-    {!! Form::select('map_floor_selection', [], 1, ['class' => 'form-control']) !!}
-            </div>
-@else
-    {!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
-@endif
-        </div>
--->
-{!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
-
 <div id="map" class="virtual-tour-element"
-     data-intro="{{ $introTexts[1] }}"
-     data-step="2"
      data-position="auto">
 
 </div>
