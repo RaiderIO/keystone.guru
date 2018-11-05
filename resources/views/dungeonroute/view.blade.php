@@ -1,4 +1,4 @@
-@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false])
+@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $model->title])
 <?php
 /** @var $model \App\Models\DungeonRoute */
 $affixes = $model->affixes->pluck('text', 'id');

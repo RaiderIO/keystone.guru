@@ -1,4 +1,4 @@
-@extends('layouts.app', ['noads' => true])
+@extends('layouts.app', ['noads' => true, 'title' => __('Expansion listing')])
 
 @section('header-title')
     <div class="row">

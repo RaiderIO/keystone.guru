@@ -1,4 +1,4 @@
-@extends('layouts.app', ['wide' => true])
+@extends('layouts.app', ['wide' => true, 'title' => __('New route')])
 @section('header-title', $headerTitle)
 
 

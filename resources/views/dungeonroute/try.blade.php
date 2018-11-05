@@ -1,5 +1,5 @@
 @php($custom = isset($dungeon_id))
-@extends('layouts.app', ['custom' => $custom, 'footer' => !$custom, 'header' => !$custom])
+@extends('layouts.app', ['custom' => $custom, 'footer' => !$custom, 'header' => !$custom, 'title' => __('Try')])
 @section('header-title', $headerTitle)
 
 @section('content')

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['title' => __('Unpublished route')])
 @section('header-title', $headerTitle)
 
 @section('content')

@@ -16,6 +16,8 @@ $wide = isset($wide) ? $wide : false;
 $header = isset($header) ? $header : true;
 // Show footer or not
 $footer = isset($footer) ? $footer : true;
+// Setup the title
+$title = isset($title) ? $title . ' - ' : '';
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -26,7 +28,7 @@ $footer = isset($footer) ? $footer : true;
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $title . config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">

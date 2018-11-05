@@ -1,11 +1,20 @@
-@extends('layouts.app', ['showLegalModal' => false])
+@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Changelog')])
 
 @section('header-title', __('Changelog'))
 
 @section('content')
     <h4>
-        2018/11/04
+        2018/11/05
     </h4>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            Added titles for all pages on the website. This will aid multi browser-tab usage.
+        </li>
+    </ul>
+    </p>
 
     <p>
         Map changes:

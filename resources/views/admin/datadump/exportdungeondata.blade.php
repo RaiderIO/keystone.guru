@@ -1,4 +1,4 @@
-@extends('layouts.app', ['noads' => true])
+@extends('layouts.app', ['noads' => true, 'title' => __('Export dungeon data')])
 
 @section('header-title', __('Dump dungeon data'))
 
