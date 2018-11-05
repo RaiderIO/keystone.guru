@@ -307,7 +307,7 @@ class DungeonMap extends Signalable {
         for (let i = 0; i < this.mapObjects.length; i++) {
             let mapObject = this.mapObjects[i];
             let popup = mapObject.layer.getPopup();
-            if (typeof popup !== 'undefined' && popup.isOpen()) {
+            if (typeof popup !== 'undefined' && popup !== null && popup.isOpen()) {
                 result = true;
                 break;
             }

@@ -72,6 +72,15 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 131670,
+        "dungeon_id": 23,
+        "classification_id": 2,
+        "name": "Heartsbane Vinetwister",
+        "base_health": 470936,
+        "enemy_forces": 6,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 131677,
         "dungeon_id": 23,
         "classification_id": 2,
@@ -203,7 +212,7 @@
         "classification_id": 2,
         "name": "Dreadwing Raven",
         "base_health": 176601,
-        "enemy_forces": -1,
+        "enemy_forces": 3,
         "aggressiveness": "aggressive"
     },
     {

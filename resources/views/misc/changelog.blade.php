@@ -28,6 +28,71 @@
         </li>
     </ul>
     </p>
+    
+        2018/10/30
+    </h4>
+
+    <p>
+        Mapping changes (most thanks to /u/VTSVirus):
+    <ul>
+        <li>
+            Atal'Dazar
+            <ul>
+                <li>
+                    Added a missing pack of 5 before the south boss, when going south from the start. They pop in once
+                    you get close, hence me missing those.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Kings' Rest
+            <ul>
+                <li>
+                    Added Minions of Zul. They do not give trash %-age, but they are a non-trivial enemy so they should
+                    be included.
+                </li>
+                <li>
+                    Added Shadow of Zul. Same as above, though he does give some %-age (I never realised due to always
+                    being at 100% prior to reaching him).
+                </li>
+                <li>
+                    Spectral Brute now patrols the entire hallway before the third boss.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Shrine of the Storm
+            <ul>
+                <li>
+                    Added to Template Attendants on the far right before the first boss.
+                </li>
+                <li>
+                    Corrected patrol of Tidesage Enforcer after the second boss (prior to the room with tentacles).
+                </li>
+            </ul>
+        </li>
+        <li>
+            Temple of Sethraliss
+            <ul>
+                <li>
+                    Moved a pack of Agitated Nimbus and Imbued Stormcallers a bit further north before the third boss.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Waycrest Manor
+            <ul>
+                <li>
+                    Added Dreadwing Ravens to the Upstairs floor.
+                </li>
+                <li>
+                    Updated some patrols on Upstairs floor, added dungeon floor switches.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </p>
+    
     <h4>
         2018/10/28
     </h4>

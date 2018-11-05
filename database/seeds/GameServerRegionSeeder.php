@@ -23,7 +23,8 @@ class GameServerRegionSeeder extends Seeder
             // Copy paste from America, I couldn't find info for these regions
             new GameServerRegion(['short' => 'cn', 'name' => 'China', 'reset_day_offset' => 2, 'reset_time_offset_utc' => '15:00:00']),
             new GameServerRegion(['short' => 'tw', 'name' => 'Taiwan', 'reset_day_offset' => 2, 'reset_time_offset_utc' => '15:00:00']),
-            new GameServerRegion(['short' => 'kr', 'name' => 'Korea', 'reset_day_offset' => 2, 'reset_time_offset_utc' => '15:00:00']),
+            // https://www.reddit.com/r/wow/comments/9sbujc/korean_wow_user_back_brought_some_korean_wow/e8ntkck/?context=3
+            new GameServerRegion(['short' => 'kr', 'name' => 'Korea', 'reset_day_offset' => 3, 'reset_time_offset_utc' => '23:00:00']),
         ];
 
         foreach ($gameServerRegions as $gameServerRegion) {
