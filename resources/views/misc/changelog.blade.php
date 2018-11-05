@@ -8,7 +8,7 @@
     </h4>
 
     <p>
-        Map changes:
+        General changes:
     <ul>
         <li>
             Added titles for all pages on the website. This will aid multi browser-tab usage.
