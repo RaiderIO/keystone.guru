@@ -25,58 +25,53 @@ class APIEnemyController extends Controller
     {
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute', null);
-        DB::enableQueryLog();
 
+        $routeId = -1;
         // If dungeon route was set, fetch the markers as well
         if ($dungeonRoutePublicKey !== null) {
             try {
-                $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-
-                $region = GameServerRegion::getUserOrDefaultRegion();
-
-                // Eloquent wasn't working with me, raw SQL it is
-                /** @var array $result */
-                $result = DB::select($query = '
-                    select `enemies`.*, `raid_markers`.`name`                                     as `raid_marker_name`,
-                           CAST(IFNULL(SUM(if(`vote` = 1, 1, 0) * `vote_weight`), 0) as SIGNED)   as infested_yes_votes,
-                           CAST(IFNULL(SUM(if(`vote` = 0, 1, 0) * `vote_weight`), 0) as SIGNED)   as infested_no_votes,
-                           if(`enemy_infested_votes`.`user_id` = :userId, `vote`, null)           as infested_user_vote
-                    from `enemies`
-                           left join `dungeon_route_enemy_raid_markers`
-                             on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
-                                `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
-                           left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
-                           left join `enemy_infested_votes` on `enemies`.`id` = `enemy_infested_votes`.`enemy_id`
-                                    and `enemy_infested_votes`.affix_group_id = :affixGroupId
-                                                  and `enemy_infested_votes`.updated_at > :minTime
-                    where `enemies`.`floor_id` = :floorId
-                    group by `enemies`.`id`;
-                ', $params = [
-                    'userId' => Auth::check() ? Auth::user()->id : -1,
-                    'routeId' => $dungeonRoute->id,
-                    'affixGroupId' => $region->getCurrentAffixGroup()->id,
-                    'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s'),
-                    'floorId' => $floorId
-                ]);
-
-                // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
-                $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
-
-                foreach ($result as $enemy) {
-                    $enemy->is_infested = ($enemy->infested_yes_votes - $enemy->infested_no_votes) >= config('keystoneguru.infested_user_vote_threshold');
-                    $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
-                        return $enemy->npc_id === $item->id;
-                    })->first();
-                    unset($enemy->npc_id);
-                }
-
+                $routeId = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false)->id;
             } catch (\Exception $ex) {
-                $result = response('Not found', Http::NOT_FOUND);
+                return response('Not found', Http::NOT_FOUND);
             }
-        } else {
-//        DB::enableQueryLog();
-            $result = Enemy::where('floor_id', $floorId)->get();
-//        dd(DB::getQueryLog());
+        }
+
+        $region = GameServerRegion::getUserOrDefaultRegion();
+
+        // Eloquent wasn't working with me, raw SQL it is
+        /** @var array $result */
+        $result = DB::select($query = '
+                select `enemies`.*, `raid_markers`.`name`                                     as `raid_marker_name`,
+                       CAST(IFNULL(SUM(if(`vote` = 1, 1, 0) * `vote_weight`), 0) as SIGNED)   as infested_yes_votes,
+                       CAST(IFNULL(SUM(if(`vote` = 0, 1, 0) * `vote_weight`), 0) as SIGNED)   as infested_no_votes,
+                       if(`enemy_infested_votes`.`user_id` = :userId, `vote`, null)           as infested_user_vote
+                from `enemies`
+                       left join `dungeon_route_enemy_raid_markers`
+                         on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
+                            `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
+                       left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
+                       left join `enemy_infested_votes` on `enemies`.`id` = `enemy_infested_votes`.`enemy_id`
+                                and `enemy_infested_votes`.affix_group_id = :affixGroupId
+                                              and `enemy_infested_votes`.updated_at > :minTime
+                where `enemies`.`floor_id` = :floorId
+                group by `enemies`.`id`;
+                ', $params = [
+            'userId' => Auth::check() ? Auth::user()->id : -1,
+            'routeId' => $routeId,
+            'affixGroupId' => $region->getCurrentAffixGroup()->id,
+            'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s'),
+            'floorId' => $floorId
+        ]);
+
+        // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
+        $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
+
+        foreach ($result as $enemy) {
+            $enemy->is_infested = ($enemy->infested_yes_votes - $enemy->infested_no_votes) >= config('keystoneguru.infested_user_vote_threshold');
+            $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
+                return $enemy->npc_id === $item->id;
+            })->first();
+            unset($enemy->npc_id);
         }
 
         return $result;

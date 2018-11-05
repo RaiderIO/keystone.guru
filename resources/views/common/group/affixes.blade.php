@@ -2,7 +2,7 @@
 /** This is the display of affixes when selecting them when creating a new route */
 
 $affixGroups = \App\Models\AffixGroup::with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
-$affixes = \App\Models\Affix::with('iconfile')->get();
+$affixes = \App\Models\Affix::all();
 ?>
 
 @section('head')

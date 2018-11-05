@@ -23,10 +23,6 @@
     width: 40px;
 }
 
-.leaflet-container {
-
-}
-
 .navbar-default .navbar-nav > li > .btn-success > a:hover, .navbar-default .navbar-nav > li > .btn-success > a:focus {
     background-color: #20895e;
 }
@@ -56,224 +52,14 @@
     padding: 0.25em 0.9em;
 }
 
-/** LEAFLET */
-#map {
-    height: 90vh; /* 90% of viewport height */
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+/* Fixed messages always on top */
+.fixed-bottom {
+    z-index: 10000;
 }
 
-#map-controls {
-    height: 700px;
-}
-
-.map-scroll:before {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    content: '';
-    background: #00000061;
-    z-index: 999;
-}
-
-.map-scroll:after {
-    content: 'Use ctrl + scroll to zoom the map';
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    z-index: 999;
-    font-size: 34px;
-    color: #eaeaea;
-    text-align: center;
-}
-
-/* Remove square background and border around enemies, but leave editing drag squares alone */
-.leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon):not(.leaflet-edit-marker-selected) {
-    border: none;
-    background-color: unset;
-}
-
-/** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */
-/** leaflet-marker-icon leaflet-div-icon leaflet-editing-icon leaflet-touch-icon leaflet-zoom-animated leaflet-interactive leaflet-marker-draggable */
-
-.aggressive_enemy_icon,
-.neutral_enemy_icon,
-.unfriendly_enemy_icon,
-.friendly_enemy_icon,
-.unset_enemy_icon,
-.flagged_enemy_icon {
-    width: 11px;
-    height: 11px;
-}
-
-.boss_enemy_icon {
-    width: 32px;
-    height: 32px;
-}
-
-.enemy_aggressiveness_correction {
-    margin-top: -6px;
-}
-
-.modifier {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-}
-
-.modifier_0 {
-    top: -19px;
-    left: -20px;
-    /* background-color: red; */
-}
-
-.modifier_1 {
-    top: -22px;
-    left: -3px;
-    /* background-color: green; */
-}
-
-.modifier_2 {
-    top: -19px;
-    left: 14px;
-    /* background-color: blue; */
-}
-
-.modifier_0_boss {
-    left: -9px;
-}
-
-.modifier_1_boss {
-    left: 8px;
-}
-
-.modifier_2_boss {
-    left: 25px;
-}
-
-.modifier_infested_vote {
-    color: black;
-    background-color: #fffb;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-.modifier_infested_vote_disabled {
-    background-color: #888b;
-    cursor: not-allowed;
-}
-
-.modifier_infested_enabled {
-    background-color: rgba(72, 166, 72, 0.5);
-    border-radius: 20px;
-}
-
-.modifier_infested_disabled {
-    background-color: rgba(166, 71, 71, 0.5);
-    border-radius: 20px;
-}
-
-.modifier_infested_vote:hover {
-    background-color: #ffa500bb;
-}
-
-.badge_enemy_forces {
-    font-size: 100%;
-    margin-left: -4px;
-    background-color: #00f8;
-}
-
-.col-3-5 {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 29.1%;
-    flex: 0 0 29.1%;
-    max-width: 29.1%;
-}
-
-.aggressive_enemy_icon {
-    background: url("/images/mapicon/aggressive.png") no-repeat center !important;
-}
-
-.neutral_enemy_icon {
-    background: url("/images/mapicon/neutral.png") no-repeat center !important;
-}
-
-.unfriendly_enemy_icon {
-    background: url("/images/mapicon/unfriendly.png") no-repeat center !important;
-}
-
-.friendly_enemy_icon {
-    background: url("/images/mapicon/friendly.png") no-repeat center !important;
-}
-
-.boss_enemy_icon {
-    background: url("/images/mapicon/boss.png") no-repeat center !important;
-}
-
-.unset_enemy_icon {
-    background: url("/images/mapicon/unset.png") no-repeat center !important;
-}
-
-.flagged_enemy_icon {
-    background: url("/images/mapicon/neutral.png") no-repeat center !important;
-}
-
-.door_icon {
-    background: url("/images/mapicon/door.png") no-repeat center !important;
-}
-
-.killzone_icon_big {
-    margin-left: -19px !important;
-    margin-top: -19px !important;
-    border-color: yellow !important;
-}
-
-.killzone_enemy_icon_small {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
-}
-
-.killzone_enemy_icon_medium {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
-}
-
-.killzone_enemy_icon_big {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
-}
-
-#map_enemy_visuals,
-#map_enemy_forces {
-    color: black;
-    background-color: #fff;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    background-clip: padding-box;
-    border-radius: 4px;
-    padding: 6px;
-    z-index: 1000;
-}
-
-#map_enemy_visuals {
-    width: 200px;
-}
-
-.map_enemy_forces_too_much {
-    color: red;
-}
-
-.map_enemy_forces_too_much_warning {
-    color: orange;
-}
-
-.map_route_edit_popup_class_color {
-    height: 32px;
-    margin: 2px 10px;
-    border-radius: 3px;
-    cursor: pointer;
+/* Floating top header should be top, but not too top */
+.fixed-top {
+    z-index: 800 !important;
 }
 
 /** GENERAL ICONS */
@@ -285,6 +71,10 @@
     width: 24px;
     border-radius: 12px;
     max-height: 24px;
+}
+
+.select_icon {
+    margin-right: 5px;
 }
 
 .display_icon {
@@ -308,45 +98,6 @@
 
 .default_table {
     width: 100%;
-}
-
-/* Class that's used for displaying custom markers with a font-awesome icon instead of the default marker */
-.marker_div_icon {
-    width: 30px;
-    height: 30px;
-    text-shadow: 2px 2px #1A1A1A;
-}
-
-.marker_div_icon_font_awesome {
-    text-align: center; /* Horizontally center the text (icon) */
-    line-height: 25px; /* Vertically center the text (icon) */
-}
-
-.marker_div_icon_dungeon_start_marker {
-    color: #48a648;
-}
-
-.marker_div_icon_dungeon_floor_switch_marker {
-    color: lightblue;
-}
-
-.marker_div_icon_killzone {
-    color: #d12600;
-    font-size: 30px;
-}
-
-.marker_div_icon_mapcomment {
-    font-size: 16px;
-}
-
-.marker_div_icon_circle_border {
-    border: 3px solid;
-    border-radius: 15px;
-}
-
-.map_map_comment_tooltip {
-    width: 240px;
-    white-space: normal;
 }
 
 /** DATATABLES */
@@ -373,11 +124,6 @@
 }
 
 /** MISC STYLES */
-.view_dungeonroute_details_row {
-    height: 40px;
-}
-
-/* #affixgroup_select_container .affix_row_container, */
 .view_dungeonroute_details_row .affix_row_container {
     margin-left: 0;
     margin-right: 0;

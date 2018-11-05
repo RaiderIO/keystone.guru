@@ -7,14 +7,16 @@ $width = $modal ? '12' : '6';
 <form class="form-horizontal" method="POST"
       action="{{ route('login', ['redirect' => Request::get('redirect', Request::getPathInfo())]) }}">
     {{ csrf_field() }}
+    <h3>
+        {{ __('Login') }}
+    </h3>
 
     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
         <label for="{{ $modalClass }}login_email" class="control-label">{{ __('E-mail address') }}</label>
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}login_email" type="email" class="form-control" name="email"
-                   value="{{ old('email') }}" required
-                   autofocus>
+                   value="{{ old('email') }}" required autofocus autocomplete="username email">
         </div>
     </div>
 
@@ -22,7 +24,7 @@ $width = $modal ? '12' : '6';
         <label for="{{ $modalClass }}login_password" class="control-label">{{ __('Password') }}</label>
 
         <div class="col-md-{{ $width }}">
-            <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password" required>
+            <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password" autocomplete="current-password" required>
         </div>
     </div>
 
