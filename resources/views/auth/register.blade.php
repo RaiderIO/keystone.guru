@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['title' => __('Register')])
 
 @section('header-title', 'Register')
 @section('content')

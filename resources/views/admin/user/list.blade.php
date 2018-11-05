@@ -1,4 +1,4 @@
-@extends('layouts.app', ['noads' => true])
+@extends('layouts.app', ['noads' => true, 'title' => __('User list')])
 
 @section('header-title')
     {{ __('View Users') }}

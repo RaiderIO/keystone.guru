@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['title' => __('Limit reached')])
 @section('header-title', __('Limit reached'))
 
 @section('content')

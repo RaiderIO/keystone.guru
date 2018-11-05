@@ -17,13 +17,16 @@ $width = $modal ? '12' : '6';
 
 <form id="{{ $modalClass }}register_form" class="form-horizontal" method="POST" action="{{ route('register') }}">
     {{ csrf_field() }}
+    <h3>
+        {{ __('Register') }}
+    </h3>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
         <label for="{{ $modalClass }}register_name" class="control-label">{{ __('Username') }}</label>
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}register_name" type="text" class="form-control" name="name"
-                   value="{{ old('name') }}" required autofocus>
+                   value="{{ old('name') }}" required autofocus autocomplete="username">
         </div>
     </div>
 
@@ -41,7 +44,7 @@ $width = $modal ? '12' : '6';
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}register_password" type="password" class="form-control" name="password"
-                   required>
+                   required autocomplete="new-password">
         </div>
     </div>
 
@@ -51,7 +54,7 @@ $width = $modal ? '12' : '6';
 
         <div class="col-md-{{ $width }}">
             <input id="{{ $modalClass }}register_password-confirm" type="password" class="form-control"
-                   name="password_confirmation" required>
+                   name="password_confirmation" required autocomplete="new-password">
         </div>
     </div>
 

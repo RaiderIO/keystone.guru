@@ -3,7 +3,7 @@
 $user = Auth::getUser();
 ?>
 
-@extends('layouts.app', ['wide' => true])
+@extends('layouts.app', ['wide' => true, 'title' => __('Profile')])
 
 @section('header-title', sprintf(__('%s\'s profile'), $user->name))
 

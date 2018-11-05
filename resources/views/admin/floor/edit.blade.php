@@ -1,4 +1,4 @@
-@extends('layouts.app', ['wide' => isset($model), 'noads' => true])
+@extends('layouts.app', ['wide' => isset($model), 'noads' => true, 'title' => __('Edit floor')])
 @section('header-title')
     {{ $headerTitle }}
 @endsection

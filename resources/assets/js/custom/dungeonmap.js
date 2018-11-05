@@ -44,7 +44,7 @@ class DungeonMap extends Signalable {
         this.leafletMap = L.map(mapid, {
             center: [0, 0],
             minZoom: 1,
-            maxZoom: 4,
+            maxZoom: 5,
             // We use a custom draw control, so don't use this
             // drawControl: true,
             // Simple 1:1 coordinates to meters, don't use Mercator or anything like that
@@ -53,32 +53,10 @@ class DungeonMap extends Signalable {
             contextmenu: true,
             zoomControl: true
         });
-
-        //disable default scroll
-        // this.leafletMap.scrollWheelZoom.disable();
-        // Make sure only control + scroll allows a zoom
-        // $('#map').bind('mousewheel DOMMouseScroll', function (event) {
-        //     event.stopPropagation();
-        //     if (event.ctrlKey === true) {
-        //         event.preventDefault();
-        //         self.leafletMap.scrollWheelZoom.enable();
-        //         $('#map').removeClass('map-scroll');
-        //         setTimeout(function () {
-        //             self.leafletMap.scrollWheelZoom.disable();
-        //         }, 1000);
-        //     } else {
-        //         self.leafletMap.scrollWheelZoom.disable();
-        //         $('#map').addClass('map-scroll');
-        //     }
-        // });
-        //
-        // $(window).bind('mousedown', function (event) {
-        //     $('#map').removeClass('map-scroll');
-        // });
-        //
-        // $(window).bind('mousewheel DOMMouseScroll', function (event) {
-        //     $('#map').removeClass('map-scroll');
-        // });
+        // Make sure we can place things in the center of the map
+        this._createAdditionalControlPlaceholders();
+        // Top left is reserved for the sidebar
+        this.leafletMap.zoomControl.setPosition('topright');
 
         // Set all edited layers to no longer be synced.
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
@@ -228,6 +206,28 @@ class DungeonMap extends Signalable {
 
     _getHotkeys() {
         return new Hotkeys(this);
+    }
+
+    /**
+     * https://stackoverflow.com/questions/33614912/how-to-locate-leaflet-zoom-control-in-a-desired-position/33621034
+     * @private
+     */
+    _createAdditionalControlPlaceholders() {
+        let corners = this.leafletMap._controlCorners,
+            l = 'leaflet-',
+            container = this.leafletMap._controlContainer;
+
+        function createCorner(vSide, hSide) {
+            let className = l + vSide + ' ' + l + hSide;
+
+            corners[vSide + hSide] = L.DomUtil.create('div', className, container);
+        }
+
+        createCorner('verticalcenter', 'left');
+        createCorner('verticalcenter', 'right');
+
+        createCorner('top', 'horizontalcenter');
+        createCorner('bottom', 'horizontalcenter');
     }
 
     /**
@@ -416,12 +416,12 @@ class DungeonMap extends Signalable {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
         this.leafletMap.setView([-128, 192], 2);
-        let southWest = this.leafletMap.unproject([0, 4096], this.leafletMap.getMaxZoom());
-        let northEast = this.leafletMap.unproject([6144, 0], this.leafletMap.getMaxZoom());
+        let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
+        let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
 
         this.mapTileLayer = L.tileLayer('/images/tiles/' + this.dungeonData.expansion.shortname + '/' + this.dungeonData.key + '/' + this.getCurrentFloor().index + '/{z}/{x}_{y}.png', {
-            maxZoom: 4,
+            maxZoom: 5,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: L.point(384, 256),
             noWrap: true,

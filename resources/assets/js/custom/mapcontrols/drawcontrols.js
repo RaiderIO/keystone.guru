@@ -38,6 +38,7 @@ $(function () {
     };
 
     // Add some new strings to the draw controls
+    // https://github.com/Leaflet/Leaflet.draw#customizing-language-and-text-in-leafletdraw
     $.extend(L.drawLocal.draw.handlers, {
         route: {
             tooltip: {
@@ -69,12 +70,7 @@ class DrawControls extends MapControl {
                     },
                     zIndexOffset: 1000,
                     faClass: 'fa-route',
-                    title: 'Draw a route',
-                    tooltip: {
-                        start: 'Click to start drawing line zz1',
-                        cont: 'Click to continue drawing line zz1',
-                        end: 'Click last point to finish line zz1'
-                    }
+                    title: 'Draw a route'
                 },
                 killzone: {
                     repeatMode: false,
@@ -93,17 +89,6 @@ class DrawControls extends MapControl {
                 enemy: false,
                 dungeonstartmarker: false,
                 dungeonfloorswitchmarker: false,
-
-                // handlers: {
-                //     polyline: {},
-                //     route: {
-                //         tooltip: {
-                //             start: 'Click to start drawing line zz2',
-                //             cont: 'Click to continue drawing line zz2',
-                //             end: 'Click last point to finish line zz2'
-                //         }
-                //     }
-                // }
             },
             edit: {
                 featureGroup: drawnItemsLayer, //REQUIRED!!
@@ -143,6 +128,50 @@ class DrawControls extends MapControl {
                 }
             }
         }
+
+        // Add the leaflet draw control to the sidebar
+        let container = this._mapControl.getContainer();
+        let $targetContainer = $('#edit_route_draw_container');
+        $targetContainer.append(container);
+
+        // Now that the container is added, modify it to look the way we want it to
+        let $container = $(container);
+        // remove all classes
+        $container.removeClass();
+        $container.addClass('container');
+
+        $.each($container.children(), function (i, child) {
+            let $child = $(child);
+
+            // Clear of classes, add a row
+            let $parent = $child.removeClass().addClass('row');
+
+            // Add columns to the buttons
+            let $buttons = $parent.find('a');
+            $buttons.addClass('col draw_icon');
+            $buttons.attr('data-toggle', 'tooltip');
+
+            // The buttons have a parent that shouldn't be there; strip the children from that bad parent!
+            $parent.append($buttons);
+        });
+
+        // Custom controls
+        // let $customDrawControls = $($container.children()[0]);
+
+
+        // Edit the built-in draw controls
+        let $editDrawControls = $($container.children()[1]);
+
+        // Add some padding for the above custom controls
+        $editDrawControls.addClass('mt-2');
+
+        // Add custom content for the edit and remove buttons
+        let $buttons = $editDrawControls.find('a');
+        $buttons.attr('data-toggle', 'tooltip');
+        $($buttons[0]).html("<i class='fas fa-edit'></i>");
+        $($buttons[1]).html("<i class='fas fa-trash'></i>");
+        
+        refreshTooltips();
     }
 
     cleanup() {

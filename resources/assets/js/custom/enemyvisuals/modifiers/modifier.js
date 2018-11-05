@@ -6,12 +6,12 @@ class EnemyVisualModifier extends EnemyVisualIcon {
     }
 
     /**
-     * Checks if this modifier is visible. May be overriden by implementing classes.
+     * Checks if this modifier is visible. May be overridden by implementing classes.
      * @returns {boolean}
      * @private
      */
     _isVisible() {
-        return this.iconName !== '';
+        return this.iconName !== '' && this.iconName !== null;
     }
 
     /**

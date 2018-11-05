@@ -1,4 +1,4 @@
-@extends('layouts.app', ['noads' => true])
+@extends('layouts.app', ['noads' => true, 'title' => __('Dungeon listing')])
 
 @section('header-title')
     {{ __('View dungeons') }}

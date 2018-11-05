@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showLegalModal' => false])
+@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Affixes')])
 <?php
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 $timezone = null;

@@ -3,7 +3,9 @@
         <div class="col-auto select_icon @{{ css_class }}" style="height: 24px;" data-toggle="tooltip"
              title="@{{faction_title}}">
         </div>
-        |
+        <div style="margin-right: 5px;">
+            |
+        </div>
         @{{#classes}}
         <div class="col-auto select_icon class_icon @{{ css_class }}" style="height: 24px;" data-toggle="tooltip"
              title="@{{title}}">

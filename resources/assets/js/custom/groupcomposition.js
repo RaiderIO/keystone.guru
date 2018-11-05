@@ -2,42 +2,31 @@ function initGroupComposition() {
     $('#faction_id').bind('change', function (changeEvent) {
         _factionChanged(changeEvent);
 
-        _refreshSelectPicker();
+        refreshSelectPickers();
     });
 
     $('.raceselect').bind('change', function (changeEvent) {
         _raceChanged(changeEvent);
 
-        _refreshSelectPicker();
+        refreshSelectPickers();
     });
 
     $('.classselect').bind('change', function (changeEvent) {
         _classChanged(changeEvent);
 
-        _refreshSelectPicker();
+        refreshSelectPickers();
     });
 
     $('.specializationselect').bind('change', function (changeEvent) {
         _specializationChanged(changeEvent);
 
-        _refreshSelectPicker();
+        refreshSelectPickers();
     });
 
     _fillFactions();
     _fillSpecializations();
     _fillClasses();
     _fillRaces();
-}
-
-/**
- * Refreshes the select picker to reflect the current state of the select boxes.
- * @private
- */
-function _refreshSelectPicker() {
-    let $selectPicker = $('.selectpicker');
-
-    $selectPicker.selectpicker('refresh');
-    $selectPicker.selectpicker('render');
 }
 
 /**
@@ -531,5 +520,5 @@ function _loadDungeonRouteDefaults() {
         $raceSelect.trigger('change');
     }
 
-    _refreshSelectPicker();
+    refreshSelectPickers();
 }

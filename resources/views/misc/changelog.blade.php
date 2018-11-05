@@ -1,8 +1,43 @@
-@extends('layouts.app', ['showLegalModal' => false])
+@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Changelog')])
 
 @section('header-title', __('Changelog'))
 
 @section('content')
+    <h4>
+        2018/11/05
+    </h4>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            Added titles for all pages on the website. This will aid multi browser-tab usage.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/40">#40</a> The view and edit pages for routes are
+            completely reworked. The map is now full screen, a toggleable sidebar holds all interaction/information.
+            Because of the increased screen real-estate for the map, a new zoom level has been added.
+        </li>
+        <li>
+            Fixed an issue where Infested Voting information was not available on the tryout version. Voting is still
+            not possible if you're not logged in.
+        </li>
+        <li>
+            Fixed an issue where you could attempt to assign raid markers to enemies in view mode (didn't work, but
+            still). I also think I re-introduced this bug so hopefully it stays gone for a while now.
+        </li>
+        <li>
+            Many small changes and improvements to the mapping experience.
+        </li>
+    </ul>
+    </p>
+
     <h4>
         2018/10/30
     </h4>
@@ -67,7 +102,7 @@
         </li>
     </ul>
     </p>
-
+    
     <h4>
         2018/10/28
     </h4>

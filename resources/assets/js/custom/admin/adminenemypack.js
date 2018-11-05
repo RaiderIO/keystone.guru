@@ -25,9 +25,7 @@ class AdminEnemyPack extends EnemyPack {
             $('#enemy_pack_edit_popup_faction_' + self.id).val(self.faction);
 
             // Refresh all select pickers so they work again
-            let $selectpicker = $('.selectpicker');
-            $selectpicker.selectpicker('refresh');
-            $selectpicker.selectpicker('render');
+            refreshSelectPickers();
 
             let $submitBtn = $('#enemy_pack_edit_popup_submit_' + self.id);
 

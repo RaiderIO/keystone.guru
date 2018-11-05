@@ -1,13 +1,13 @@
-@extends('layouts.app', ['showLegalModal' => false])
+@extends('layouts.app', ['showLegalModal' => false, 'title' => __('About')])
 
-@section('header-title', __('About Keystone Guru'))
+@section('header-title', __('About Keystone.guru'))
 
 @section('content')
     <h5>
         Hello!
     </h5>
     <p>
-        My name is Wouter from the Netherlands, author of Keystone Guru. I'm a software developer with some 10 years experience
+        My name is Wouter from the Netherlands, author of Keystone.guru. I'm a software developer with some 10 years experience
         working in various parts of the field. World of Warcraft player for longer. I'm pleased to see you're visiting my website
         and hopefully contributing something nice, or use it to help coordinate your Mythic Plus keystones between your
         friends or PUGs. I truly hope it improves the quality of your playtime, I have had a lot of fun and learnt a LOT
@@ -25,7 +25,7 @@
         good, nor will I claim we are to this day, but we're trying! One thing that always bothered us was a lack of proper
         communication. We never quite had the same group of people online to do the dungeons we wanted to, so sometimes
         we had unsuccessful runs because of miscommunication, differences in strategies (oh we always go left here!),
-        people completely new to the dungeons/fights etc. Nevermind joining a pug, it was - as I'm sure you are aware of -
+        people completely new to the dungeons/fights etc. Never mind joining a pug, it was - as I'm sure you are aware of -
         hit and miss.
     </p>
     <p>
