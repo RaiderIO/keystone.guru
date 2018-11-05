@@ -68,13 +68,15 @@ class EnemyForcesControls extends MapControl {
     _setEnemyForces(value) {
         console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
 
+        let oldEnemyForces = this.enemyForces;
+
         this.enemyForces = value;
         // @TODO This is a bit of a dirty solution for solving an issue where being in edit mode and switching a floor the enemy_forces counter is reset to 0.
         dungeonRouteEnemyForces = value;
         this.refreshUI();
 
-        // Don't trigger this when loading in the route
-        if (this.loaded) {
+        // Don't trigger this when loading in the route and the value actually changed
+        if (this.loaded && this.enemyForces !== oldEnemyForces) {
             // Remove any previous footer messages
             if (this.lastFooterMessage !== null) {
                 this.lastFooterMessage.remove();

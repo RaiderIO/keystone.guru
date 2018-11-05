@@ -8,7 +8,7 @@
     </h4>
 
     <p>
-        Map changes
+        Map changes:
     <ul>
         <li>
             <a href="https://github.com/Wotuu/keystone.guru/issues/40">#40</a> The view and edit pages for routes are
@@ -22,6 +22,9 @@
         <li>
             Fixed an issue where you could attempt to assign raid markers to enemies in view mode (didn't work, but
             still). I also think I re-introduced this bug so hopefully it stays gone for a while now.
+        </li>
+        <li>
+            Many small changes and improvements to the mapping experience.
         </li>
     </ul>
     </p>
