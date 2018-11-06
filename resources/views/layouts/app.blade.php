@@ -93,6 +93,9 @@ $title = isset($title) ? $title . ' - ' : '';
                             <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('misc.infested') }}">{{ __('Infested') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('misc.changelog') }}">{{ __('Changelog') }}</a>
                         </li>
                     </ul>

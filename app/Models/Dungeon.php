@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 
 /**
@@ -153,5 +155,34 @@ class Dungeon extends Model
     public function scopeInactive($query)
     {
         return $query->where('active', 0);
+    }
+
+    /**
+     * Get all yes and no votes for all dungeons.
+     * @param $affixGroupId
+     * @return array
+     */
+    public static function getInfestedEnemyStatus($affixGroupId)
+    {
+        $result = DB::select($query = '
+                SELECT `dungeons`.`id`,
+                       `dungeons`.`name`,
+                       COUNT(`enemies`.`id`) as enemies_marked,
+                       CAST(IFNULL(SUM(if(`vote` = 1, 1, 0) * `vote_weight`), 0) as SIGNED) as infested_yes_votes,
+                       CAST(IFNULL(SUM(if(`vote` = 0, 1, 0) * `vote_weight`), 0) as SIGNED) as infested_no_votes
+                FROM `enemies`
+                       LEFT JOIN `floors` ON `floors`.`id` = `enemies`.`floor_id`
+                       LEFT JOIN `dungeons` ON `dungeons`.`id` = `floors`.`dungeon_id`
+                       LEFT JOIN `enemy_infested_votes` ON `enemies`.`id` = `enemy_infested_votes`.`enemy_id`
+                                                             AND `enemy_infested_votes`.affix_group_id = :affixGroupId
+                                                             AND `enemy_infested_votes`.updated_at > :minTime
+                GROUP BY `dungeons`.`id`
+                ', $params = [
+            'affixGroupId' => $affixGroupId,
+            // Of the last month only
+            'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s')
+        ]);
+
+        return $result;
     }
 }
