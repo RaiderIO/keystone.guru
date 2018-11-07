@@ -35,18 +35,21 @@ $currentAffixGroup = $region->getCurrentAffixGroup();
             <tr>
                 <th width="55%">{{ __('Dungeon') }}</th>
                 <th width="15%">{{ __('Infested enemies') }}</th>
-                <th width="15%">{{ __('No votes cast') }}</th>
                 <th width="15%">{{ __('Yes votes cast') }}</th>
+                <th width="15%">{{ __('No votes cast') }}</th>
             </tr>
             </thead>
 
             <tbody>
-            @foreach(\App\Models\Dungeon::getInfestedEnemyStatus($currentAffixGroup->id) as $infestedEnemyStatus )
+            @php($infestedEnemyStatus = \App\Models\Dungeon::getInfestedEnemyStatus($currentAffixGroup->id))
+            @foreach(\App\Models\Dungeon::active()->get() as $dungeon )
+                @php( $hasData = isset($infestedEnemyStatus[$dungeon->id]) )
+                @php( $data = $hasData ? $infestedEnemyStatus[$dungeon->id] : [] )
                 <tr>
-                    <td>{{ $infestedEnemyStatus->name }}</td>
-                    <td>0</td>
-                    <td>{{ $infestedEnemyStatus->infested_no_votes }}</td>
-                    <td>{{ $infestedEnemyStatus->infested_yes_votes }}</td>
+                    <td>{{ $dungeon->name }}</td>
+                    <td>{{ number_format($hasData ? $data->infested_enemies : 0, 0) }}</td>
+                    <td>{{ number_format($hasData ? $data->infested_yes_votes : 0, 0) }}</td>
+                    <td>{{ number_format($hasData ? $data->infested_no_votes : 0, 0) }}</td>
                 </tr>
             @endforeach
             </tbody>
@@ -58,18 +61,52 @@ $currentAffixGroup = $region->getCurrentAffixGroup();
         <table id="infested_mapping_user_hall_of_fame_table" class="tablesorter default_table table-striped">
             <thead>
             <tr>
-                <th width="55%">{{ __('User') }}</th>
-                <th width="15%">{{ __('Votes cast') }}</th>
-                <th width="15%">{{ __('Enemies marked as infested') }}</th>
+                <th width="70%">{{ __('User') }}</th>
+                <th width="15%">{{ __('Yes votes cast') }}</th>
+                <th width="15%">{{ __('No votes cast') }}</th>
+                {{--<th width="15%">{{ __('Enemies marked as infested') }}</th>--}}
             </tr>
             </thead>
 
+            @php($voteHoF = \App\User::getInfestedEnemyHoF($currentAffixGroup->id))
             <tbody>
+            @foreach($voteHoF as $userVote )
+                @if($userVote->infested_yes_votes > 0)
+                <tr>
+                    <td>{{ $userVote->name }}</td>
+                    <td>{{ number_format($userVote->infested_yes_votes) }}</td>
+                    <td>{{ number_format($userVote->infested_no_votes) }}</td>
+                </tr>
+                @endif
+            @endforeach
             </tbody>
         </table>
     </div>
 
     <div class="form-group">
-        <h2>{{ __('User vote hall of fame (all time)') }}</h2>
+        <h2>{{ __('User vote hall of fame (current season)') }}</h2>
+        <table id="infested_mapping_user_hall_of_fame_table" class="tablesorter default_table table-striped">
+            <thead>
+            <tr>
+                <th width="70%">{{ __('User') }}</th>
+                <th width="15%">{{ __('Yes votes cast') }}</th>
+                <th width="15%">{{ __('No votes cast') }}</th>
+                {{--<th width="15%">{{ __('Enemies marked as infested') }}</th>--}}
+            </tr>
+            </thead>
+
+            @php($voteHoF = \App\User::getInfestedEnemyHoF())
+            <tbody>
+            @foreach($voteHoF as $userVote )
+                @if($userVote->infested_yes_votes > 0)
+                <tr>
+                    <td>{{ $userVote->name }}</td>
+                    <td>{{ number_format($userVote->infested_yes_votes) }}</td>
+                    <td>{{ number_format($userVote->infested_no_votes) }}</td>
+                </tr>
+                @endif
+            @endforeach
+            </tbody>
+        </table>
     </div>
 @endsection

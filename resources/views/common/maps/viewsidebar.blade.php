@@ -78,8 +78,6 @@ $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public
 @endsection
 
 @section('sidebar-content')
-    @include('common.userreport.dungeonroute', ['model' => $model])
-
     <!-- Enemy forces -->
     <div class="form-group">
         <div class="card">
@@ -232,8 +230,8 @@ $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public
                                 </span>
                             @else
                                 <i class="fa fa-flag"></i>
-                                <a id="featherlight_trigger" href="#"
-                                   data-featherlight="#userreport_dungeonroute">
+                                <a id="featherlight_trigger" href="#" data-toggle="modal"
+                                   data-target="#userreport_dungeonroute_modal">
                                     {{ __('Report for moderation') }}
                                 </a>
                             @endisset
@@ -273,5 +271,21 @@ $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public
         </div>
     </div>
 @endsection
+
+<div class="modal fade" id="userreport_dungeonroute_modal" tabindex="-1" role="dialog"
+     aria-labelledby="userReportDungeonRouteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md vertical-align-center">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="probootstrap-modal-flex">
+                <div class="probootstrap-modal-content">
+                    @include('common.userreport.dungeonroute')
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $cloneTitle])

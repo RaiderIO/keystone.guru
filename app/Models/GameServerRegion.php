@@ -68,7 +68,7 @@ class GameServerRegion extends Model
     /**
      * @return Carbon Get a Carbon date object with the date of the current Season's start.
      */
-    function _getSeasonStart()
+    function _getMythicPlusStart()
     {
         // Setup
         $startWeek = config('keystoneguru.season_start_week');
@@ -93,16 +93,34 @@ class GameServerRegion extends Model
      * @param string $timezone
      * @return int
      */
-    function _getWeeksPassedSinceStart($year, $month, $day, $hour, $timezone = null)
+    function _getWeeksPassedSinceMythicPlusStart($year, $month, $day, $hour, $timezone = null)
     {
         // Get the time the season started for this region, correct reset_day_offset since it's 1-based rather than 0-based.
-        $regionFirstWeekTime = $this->_getSeasonStart();
+        $regionFirstWeekTime = $this->_getMythicPlusStart();
 
         // Target date
         $targetTime = Carbon::create($year, $month, $day, $hour, null, null, $timezone);
 
         // Get the week difference
         return $regionFirstWeekTime->diffInWeeks($targetTime);
+    }
+
+    /**
+     * Get the date at which the current season has started.
+     * @return Carbon
+     */
+    function getCurrentSeasonStart()
+    {
+        // Baseline start date
+        $mythicPlusStart = $this->_getMythicPlusStart();
+
+        // Amount of iterations
+        $iterations = $this->getCurrentSeasonAffixGroupIteration();
+
+        // Affix group counts
+        $affixGroups = $this->_getAllAffixGroups();
+
+        return $mythicPlusStart->addWeeks($affixGroups->count() * $iterations);
     }
 
     /**
@@ -114,7 +132,7 @@ class GameServerRegion extends Model
 
         $affixGroups = $this->_getAllAffixGroups();
 
-        $weeksPassed = $this->_getWeeksPassedSinceStart($now['year'], $now['month'], $now['day'], $now['hour'], $now['timezone']);
+        $weeksPassed = $this->_getWeeksPassedSinceMythicPlusStart($now['year'], $now['month'], $now['day'], $now['hour'], $now['timezone']);
 
         // Using the week difference, find the current affix
         return (int)($weeksPassed / $affixGroups->count());
@@ -143,7 +161,7 @@ class GameServerRegion extends Model
         $now = $this->_getNow();
 
         $weeksPassed = ($iteration * $affixGroups->count()) + $index;
-        return $this->_getSeasonStart()->setTimezone($now['timezone'])->addWeeks($weeksPassed);
+        return $this->getCurrentSeasonStart()->setTimezone($now['timezone'])->addWeeks($weeksPassed);
     }
 
     /**
@@ -171,7 +189,7 @@ class GameServerRegion extends Model
     {
         $affixGroups = $this->_getAllAffixGroups();
 
-        $weeksPassed = $this->_getWeeksPassedSinceStart($year, $month, $day, $hour, $timezone);
+        $weeksPassed = $this->_getWeeksPassedSinceMythicPlusStart($year, $month, $day, $hour, $timezone);
 
         // Using the week difference, find the current affix
         $index = $weeksPassed % $affixGroups->count();
