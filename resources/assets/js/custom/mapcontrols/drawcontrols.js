@@ -148,7 +148,7 @@ class DrawControls extends MapControl {
 
             // Add columns to the buttons
             let $buttons = $parent.find('a');
-            $buttons.addClass('col draw_icon');
+            $buttons.addClass('col draw_icon mt-2');
             $buttons.attr('data-toggle', 'tooltip');
 
             // The buttons have a parent that shouldn't be there; strip the children from that bad parent!

@@ -23,6 +23,39 @@
             'infested voting' option, this is now done through a special page and not through view/editing of routes.
         </li>
     </ul>
+
+        Mapping changes:
+    <ul>
+        <li>
+            Atal'Dazar
+            <ul>
+                <li>
+                    Re-added Reanimation Totems to specific packs on the north side of the dungeon.
+                </li>
+            </ul>
+            Freehold
+            <ul>
+                <li>
+                    Added two missing Freehold Mules right after the second boss.
+                </li>
+                <li>
+                    Corrected some enemy NPCs around the Ring of Booty.
+                </li>
+            </ul>
+            Temple of Sethraliss
+            <ul>
+                <li>
+                    Removed Teeming status from two packs in the beginning; they show up on non-Teeming weeks as well.
+                </li>
+                <li>
+                    Added a missing Shrouded Fang that patrols around the first boss.
+                </li>
+                <li>
+                    Removed a duplicate Scale Krolusk Rider right after the cavern with Mature Krolusks.
+                </li>
+            </ul>
+        </li>
+    </ul>
     </p>
 
 
