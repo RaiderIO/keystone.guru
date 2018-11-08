@@ -31,7 +31,7 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
                 url: '/ajax/mapcomments',
                 dataType: 'json',
                 data: {
-                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                    dungeonroute: this.map.getDungeonRoute().publicKey, // defined in map.blade.php
                     floor_id: floor.id
                 },
                 success: function (json) {

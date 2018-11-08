@@ -345,7 +345,7 @@ class Enemy extends MapObject {
                 url: '/ajax/enemy/' + self.id + '/raidmarker',
                 dataType: 'json',
                 data: {
-                    dungeonroute: dungeonRoutePublicKey,
+                    dungeonroute: this.map.getDungeonRoute().publicKey,
                     raid_marker_name: raidMarkerName
                 },
                 success: successFn,

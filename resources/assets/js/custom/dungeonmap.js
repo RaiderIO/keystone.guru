@@ -1,10 +1,17 @@
 class DungeonMap extends Signalable {
 
-    constructor(mapid, dungeonData, floorID, edit, teeming) {
+    constructor(mapid, dungeonData, options) { // floorID, edit, teeming
         super();
         let self = this;
 
         this.dungeonData = dungeonData;
+
+        this.options = options;
+        this.currentFloorId = options.floorId;
+        this.edit = options.edit;
+        this.teeming = options.teeming;
+        this.dungeonroute = options.dungeonroute;
+        this.visualType = options.defaultEnemyVisualType;
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -33,10 +40,6 @@ class DungeonMap extends Signalable {
         this.toolbarActive = false;
         this.deleteModeActive = false;
         this.editModeActive = false;
-
-        this.currentFloorId = floorID;
-        this.edit = edit;
-        this.teeming = teeming;
 
         this.mapTileLayer = null;
 
@@ -238,16 +241,23 @@ class DungeonMap extends Signalable {
     _createMapObjectGroups() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        return [
+        let result = [
             new EnemyMapObjectGroup(this, 'enemy', 'Enemy', false),
             new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol', false),
-            new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false),
-            new RouteMapObjectGroup(this, 'route', true),
-            new KillZoneMapObjectGroup(this, 'killzone', true),
-            new MapCommentMapObjectGroup(this, 'mapcomment', true),
-            new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false),
-            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false),
+            new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false)
         ];
+
+        // Only add these two if they're worth fetching
+        if ( this.getDungeonRoute().publicKey !== '') {
+            result.push(new RouteMapObjectGroup(this, 'route', true));
+            result.push(new KillZoneMapObjectGroup(this, 'killzone', true));
+        }
+
+        result.push(new MapCommentMapObjectGroup(this, 'mapcomment', true));
+        result.push(new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false));
+        result.push(new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false));
+
+        return result;
     }
 
     /**
@@ -264,7 +274,10 @@ class DungeonMap extends Signalable {
             result.push(new DrawControls(this, drawnItemsLayer));
         }
 
-        result.push(new EnemyForcesControls(this));
+        // Only when enemy forces are relevant in their display
+        if (this.getDungeonRoute().publicKey !== '') {
+            result.push(new EnemyForcesControls(this));
+        }
         result.push(new EnemyVisualControls(this));
         result.push(new MapObjectGroupControls(this));
 
@@ -493,7 +506,31 @@ class DungeonMap extends Signalable {
      * @returns {boolean|*}
      */
     isTryModeEnabled() {
-        return dungeonRoutePublicKey === '' && this.edit;
+        return this.getDungeonRoute().publicKey === '' && this.edit;
+    }
+
+    /**
+     * Get data related to the dungeon route we're displaying (may be a dummy/empty dungeon route)
+     * @returns {*}
+     */
+    getDungeonRoute() {
+        return this.options.dungeonroute;
+    }
+
+    /**
+     * Sets the visual type that is currently being displayed.
+     * @param visualType
+     */
+    setVisualType(visualType) {
+        this.visualType = visualType;
+    }
+
+    /**
+     * Get the default visual to display for all enemies.
+     * @returns {string}
+     */
+    getVisualType() {
+        return this.visualType;
     }
 }
 

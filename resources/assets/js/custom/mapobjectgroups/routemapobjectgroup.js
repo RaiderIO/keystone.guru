@@ -26,7 +26,7 @@ class RouteMapObjectGroup extends MapObjectGroup {
                 url: '/ajax/routes',
                 dataType: 'json',
                 data: {
-                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                    dungeonroute: this.map.getDungeonRoute().publicKey,
                     floor_id: floor.id
                 },
                 success: function (json) {

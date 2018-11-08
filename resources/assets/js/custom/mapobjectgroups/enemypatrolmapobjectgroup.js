@@ -39,8 +39,9 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
                         let points = [];
                         let remoteEnemyPatrol = json[index];
 
-                        if (remoteEnemyPatrol.faction !== 'any' && dungeonRouteFaction !== 'any' && dungeonRouteFaction !== remoteEnemyPatrol.faction) {
-                            console.log('Skipping enemy patrol that does not belong to the requested faction ', remoteEnemyPatrol, dungeonRouteFaction);
+                        let faction = self.map.getDungeonRoute().faction;
+                        if (remoteEnemyPatrol.faction !== 'any' && faction !== 'any' && faction !== remoteEnemyPatrol.faction) {
+                            console.log('Skipping enemy patrol that does not belong to the requested faction ', remoteEnemyPatrol, faction);
                             continue;
                         }
 
