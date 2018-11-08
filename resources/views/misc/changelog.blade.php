@@ -4,6 +4,29 @@
 
 @section('content')
     <h4>
+        2018/11/08
+    </h4>
+
+    <p>
+        General changes:
+    <ul>
+        <li>
+            Added a dedicated page for Infested Voting and a way to summon a dungeon of your choice to do the voting on.
+            You can find the page in the top navigation bar, it contains instructions and a button to get started.
+        </li>
+    </ul>
+
+        Map changes:
+    <ul>
+        <li>
+            Selected enemy visualisation will no longer reset to 'aggressiveness' when changing floors. Removed
+            'infested voting' option, this is now done through a special page and not through view/editing of routes.
+        </li>
+    </ul>
+    </p>
+
+
+    <h4>
         2018/11/05
     </h4>
 
@@ -102,7 +125,7 @@
         </li>
     </ul>
     </p>
-    
+
     <h4>
         2018/10/28
     </h4>

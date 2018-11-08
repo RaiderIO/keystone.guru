@@ -362,7 +362,8 @@ $title = isset($title) ? $title . ' - ' : '';
         </div>
     </div>
 </div>
-<!-- END modal login -->
+<!-- END modal try -->
+
 @guest
     <!-- Modal login -->
     <div class="modal fade" id="login_modal" tabindex="-1" role="dialog"

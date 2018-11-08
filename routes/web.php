@@ -65,6 +65,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
 
+    Route::get('infestedvoting', 'DungeonRouteController@infestedvoting')->name('dungeonroute.infestedvoting');
+    Route::post('infestedvoting', 'DungeonRouteController@infestedvoting')->name('dungeonroute.infestedvoting.post');
+
     // ['auth', 'role:admin|user']
 
     Route::get('patreon-unlink', 'PatreonController@unlink')->name('patreon.unlink');
