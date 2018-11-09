@@ -761,14 +761,6 @@
                 "raid_marker_id": 8
             },
             {
-                "enemy_id": 275,
-                "raid_marker_id": 8
-            },
-            {
-                "enemy_id": 279,
-                "raid_marker_id": 8
-            },
-            {
                 "enemy_id": 3102,
                 "raid_marker_id": 8
             },
@@ -782,6 +774,18 @@
             },
             {
                 "enemy_id": 264,
+                "raid_marker_id": 8
+            },
+            {
+                "enemy_id": 280,
+                "raid_marker_id": 8
+            },
+            {
+                "enemy_id": 275,
+                "raid_marker_id": 8
+            },
+            {
+                "enemy_id": 261,
                 "raid_marker_id": 8
             }
         ],
