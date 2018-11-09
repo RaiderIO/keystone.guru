@@ -1,8 +1,7 @@
 class AdminDungeonMap extends DungeonMap {
 
-    constructor(mapid, dungeonData, floorID, edit) {
-        // Always teeming on admin!
-        super(mapid, dungeonData, floorID, edit, true);
+    constructor(mapid, dungeonData, options) {
+        super(mapid, dungeonData, options);
     }
 
     /**

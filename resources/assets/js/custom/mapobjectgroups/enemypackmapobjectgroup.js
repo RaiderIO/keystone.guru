@@ -37,8 +37,10 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                     let points = [];
                     let remoteEnemyPack = json[i];
 
-                    if (remoteEnemyPack.faction !== 'any' && dungeonRouteFaction !== 'any' && dungeonRouteFaction !== remoteEnemyPack.faction) {
-                        console.log('Skipping enemy pack that does not belong to the requested faction ', remoteEnemyPack, dungeonRouteFaction);
+                    let faction = self.map.getDungeonRoute().faction;
+
+                    if (remoteEnemyPack.faction !== 'any' && faction !== 'any' && faction !== remoteEnemyPack.faction) {
+                        console.log('Skipping enemy pack that does not belong to the requested faction ', remoteEnemyPack, faction);
                         continue;
                     }
 

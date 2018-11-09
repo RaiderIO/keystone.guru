@@ -132,13 +132,13 @@ class MapComment extends MapObject {
                 url: '/ajax/mapcomment',
                 dataType: 'json',
                 data: {
-                    id: self.id,
-                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
-                    floor_id: self.map.getCurrentFloor().id,
-                    comment: self.comment,
-                    always_visible: self.always_visible,
-                    lat: self.layer.getLatLng().lat,
-                    lng: self.layer.getLatLng().lng,
+                    id: this.id,
+                    dungeonroute: this.map.getDungeonRoute().publicKey, // defined in map.blade.php
+                    floor_id: this.map.getCurrentFloor().id,
+                    comment: this.comment,
+                    always_visible: this.always_visible,
+                    lat: this.layer.getLatLng().lat,
+                    lng: this.layer.getLatLng().lng,
                 },
                 beforeSend: function () {
                     self.saving = true;

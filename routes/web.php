@@ -54,12 +54,18 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return view('misc.affixes');
     })->name('misc.affixes');
 
+    Route::get('infested', function () {
+        return view('misc.infested');
+    })->name('misc.infested');
+
     Route::get('timetest', function () {
         return view('misc.timetest');
     })->name('misc.timetest');
 
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
+
+    Route::get('infestedvoting', 'DungeonRouteController@infestedvoting')->name('dungeonroute.infestedvoting');
 
     // ['auth', 'role:admin|user']
 
@@ -80,6 +86,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         // Must be logged in to create a new dungeon route
         Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
         Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
+
+        // Must be logged in to vote for infested enemies
+        Route::post('infestedvoting', 'DungeonRouteController@infestedvoting')->name('dungeonroute.infestedvoting.post');
 
         // Legacy redirects
         Route::get('edit/{dungeonroute}', function (\App\Models\DungeonRoute $dungeonroute) {

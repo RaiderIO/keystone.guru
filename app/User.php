@@ -8,6 +8,7 @@ use App\Models\GameServerRegion;
 use App\Models\PatreonData;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laratrust\Traits\LaratrustUserTrait;
 
 /**
@@ -58,6 +59,11 @@ class User extends Authenticatable
     public function getRouteKeyName()
     {
         return 'name';
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->hasRole('admin');
     }
 
     /**
@@ -151,8 +157,43 @@ class User extends Authenticatable
         $this->notify(new CustomPasswordResetEmail($token));
     }
 
-    public function getIsAdminAttribute()
+    /**
+     * Get a list of Infested votes per user for displaying in a Hall of Fame.
+     * @param int $affixGroupId
+     * @return array
+     */
+    public static function getInfestedEnemyHoF($affixGroupId = -1)
     {
-        return $this->hasRole('admin');
+        /** @var GameServerRegion $region */
+        $region = GameServerRegion::getUserOrDefaultRegion();
+
+        // Build some variables
+        $affixGroupQuery = '';
+        $params = [
+            // Of the last month only
+            'seasonStartTime' => $region->getCurrentSeasonStart()->format('Y-m-d H:i:s')
+        ];
+
+        // User wants to restrict on affix group, make it so
+        if ($affixGroupId > 0) {
+            $params['affixGroupId'] = $affixGroupId;
+            // If affix group is set, add a restriction, otherwise don't restrict
+            $affixGroupQuery = ' AND `enemy_infested_votes`.affix_group_id = :affixGroupId ';
+        }
+
+        $result = DB::select($query = '
+                SELECT `users`.`name`,
+                       CAST(SUM(if(`vote` = 1, 1, 0)) as SIGNED) as infested_yes_votes,
+                       CAST(SUM(if(`vote` = 0, 1, 0)) as SIGNED) as infested_no_votes
+                FROM `users`
+                       LEFT JOIN `enemy_infested_votes` ON `enemy_infested_votes`.`user_id` = `users`.`id`
+                                                             ' . $affixGroupQuery . '
+                                                             AND `enemy_infested_votes`.updated_at > :seasonStartTime
+                GROUP BY `users`.`id`
+                LIMIT 10;
+                ', $params);
+
+        // Set the ID column as a key for easy isset() usage later
+        return $result;
     }
 }

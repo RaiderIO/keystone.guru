@@ -9,12 +9,15 @@ $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 // For Siege of Boralus
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
-$teeming = isset($dungeonroute) ? $dungeonroute->teeming : false;
+// Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
+$teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? 'true' : 'false';
+$showInfestedVoting = isset($showInfestedVoting) ? $showInfestedVoting : false;
+$enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
 
 $introTexts = [
     __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
     __('You can use this button to hide or show the sidebar.'),
-    __('This label indicates the current progress with enemy forces. Remember to use killzones to mark an enemy as killed and see this label updated.'),
+    __('This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).'),
 
     __('These are your route manipulation tools.'),
     __('You can draw routes with this tool. Click it, then draw a route (a line) from A to B, with as many points are you like. Once finished, you can click
@@ -76,20 +79,29 @@ $introTexts = [
     @parent
 
     <script>
-        <?php // @TODO Convert this to an object to pass to the DungeonMap instead of multiple parameters? ?>
         // Data of the dungeon(s) we're selecting in the map
         let _dungeonData = {!! $dungeon !!};
-        let dungeonRoutePublicKey = '{{ $routePublicKey }}';
         let dungeonRouteEnemyForces = {{ $routeEnemyForces }};
-        let dungeonRouteFaction = '{{ $routeFaction }}';
 
         let dungeonMap;
 
         $(function () {
+            // Options for the dungeonmap object
+            let options = {
+                floorId: _dungeonData.floors[0].id,
+                edit: {{ $edit }},
+                dungeonroute: {
+                    publicKey: '{{ $routePublicKey }}',
+                    faction: '{{ $routeFaction }}'
+                },
+                defaultEnemyVisualType: '{{ $enemyVisualType }}',
+                teeming: {{ $teeming }}
+            };
+
             @if($isAdmin)
-                dungeonMap = new AdminDungeonMap('map', _dungeonData, _dungeonData.floors[0].id, {{ $edit }});
+                dungeonMap = new AdminDungeonMap('map', _dungeonData, options);
             @else
-                dungeonMap = new DungeonMap('map', _dungeonData, _dungeonData.floors[0].id, {{ $edit }}, {{ $teeming }});
+                dungeonMap = new DungeonMap('map', _dungeonData, options);
             @endif
 
             $(_switchDungeonFloorSelect).change(function () {
@@ -164,10 +176,12 @@ $introTexts = [
     <script id="map_enemy_visuals_template" type="text/x-handlebars-template">
         <div id="map_enemy_visuals" class="leaflet-draw-section">
             <?php
-            $visuals = ['aggressiveness' => 'Aggressiveness', 'enemy_forces' => 'Enemy forces'];
-            if (Auth::check()) {
-                $visuals['infested_vote'] = 'Infested Voting';
+            $visuals = [];
+            if (Auth::check() && $showInfestedVoting) {
+                $visuals['infested_vote'] = __('Infested Voting');
             }
+            $visuals['aggressiveness'] = __('Aggressiveness');
+            $visuals['enemy_forces'] = __('Enemy forces');
             ?>
             {!! Form::select('map_enemy_visuals_dropdown', $visuals, 0, ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
         </div>

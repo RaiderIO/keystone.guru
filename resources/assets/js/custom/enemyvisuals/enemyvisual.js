@@ -14,7 +14,7 @@ class EnemyVisual extends Signalable {
         this.modifiers = [];
 
         // Default visual (after modifiers!)
-        this.setVisualType('aggressiveness');
+        this.setVisualType(this.map.getVisualType());
     }
 
     /**

@@ -93,6 +93,9 @@ $title = isset($title) ? $title . ' - ' : '';
                             <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('misc.infested') }}">{{ __('Infested') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('misc.changelog') }}">{{ __('Changelog') }}</a>
                         </li>
                     </ul>
@@ -180,6 +183,7 @@ $title = isset($title) ? $title . ' - ' : '';
 
         @if (config('app.env') !== 'production' && (Auth::user() === null || !Auth::user()->hasRole('admin')))
             <div class="container-fluid alert alert-warning text-center mt-4">
+                <i class="fa fa-exclamation-triangle"></i>
                 {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
                 <br>
                 {{ __('If you got here by accident, I\'d be interested in knowing how you got here! Message me on Discord :)') }}
@@ -359,7 +363,8 @@ $title = isset($title) ? $title . ' - ' : '';
         </div>
     </div>
 </div>
-<!-- END modal login -->
+<!-- END modal try -->
+
 @guest
     <!-- Modal login -->
     <div class="modal fade" id="login_modal" tabindex="-1" role="dialog"

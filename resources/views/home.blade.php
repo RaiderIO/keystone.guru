@@ -8,6 +8,15 @@
             {{ session('status') }}
         </div>
     @endif
+    @if((new Jenssegers\Agent\Agent())->browser() === 'IE')
+        <div class="container-fluid alert alert-warning text-center mt-4">
+            <div class="container">
+            {{ __('It appears you\'re browsing Keystone.guru using Internet Explorer. Unfortunately Internet Explorer is
+             not a supported browser. No really, it really do not work at all. Please try either Google Chrome, Mozilla
+             Firefox or Microsoft Edge. My apologies.') }}
+            </div>
+        </div>
+    @endif
     <section class="probootstrap-hero mt-4">
         <div class="container">
             <div class="row">
@@ -18,7 +27,8 @@
                     <p>
                         <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-ghost btn-lg mt-1"
                            data-toggle="modal" data-target="#try_modal">{{ __('Try it!') }}</a>
-                        <a href="{{ route('dungeonroute.view', ['public_key' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}" class="btn btn-primary btn-ghost btn-lg mt-1"
+                        <a href="{{ route('dungeonroute.view', ['public_key' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}"
+                           class="btn btn-primary btn-ghost btn-lg mt-1"
                            role="button">{{ __('Demo') }}</a>
                         @guest
                             <a href="#" class="btn btn-primary btn-lg mt-1" role="button" data-toggle="modal"

@@ -4,11 +4,76 @@
 
 @section('content')
     <h4>
+        2018/11/08
+    </h4>
+
+    <p>
+        General changes:
+    <ul>
+        <li>
+            Added a dedicated page for Infested Voting and a way to summon a dungeon of your choice to do the voting on.
+            You can find the page in the top navigation bar (or at https://dev.keystone.guru/infested), it contains
+            instructions on how to get started.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            Selected enemy visualisation will no longer reset to 'aggressiveness' when changing floors. Removed
+            'infested voting' option, this is now done through a special page and not through view/editing of routes
+            which was confusing and generally not very well done (see above).
+        </li>
+        <li>
+            Fixed Enemy Forces display in Microsoft Edge.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            Atal'Dazar
+            <ul>
+                <li>
+                    Re-added Reanimation Totems to specific packs on the north side of the dungeon.
+                </li>
+            </ul>
+            Freehold
+            <ul>
+                <li>
+                    Added two missing Freehold Mules right after the second boss.
+                </li>
+                <li>
+                    Corrected some enemy NPCs around the Ring of Booty.
+                </li>
+            </ul>
+            Temple of Sethraliss
+            <ul>
+                <li>
+                    Removed Teeming status from two packs in the beginning; they show up on non-Teeming weeks as well.
+                </li>
+                <li>
+                    Added a missing Shrouded Fang that patrols around the first boss.
+                </li>
+                <li>
+                    Removed a duplicate Scale Krolusk Rider right after the cavern with Mature Krolusks.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </p>
+
+
+    <h4>
         2018/11/05
     </h4>
 
     <p>
-        Map changes:
+        General changes:
     <ul>
         <li>
             Added titles for all pages on the website. This will aid multi browser-tab usage.
@@ -102,7 +167,7 @@
         </li>
     </ul>
     </p>
-    
+
     <h4>
         2018/10/28
     </h4>

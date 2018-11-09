@@ -165,6 +165,11 @@ class EnemyForcesControls extends MapControl {
         let $targetContainer = $('#edit_route_enemy_forces_container');
         $targetContainer.append(container);
 
+        // Fix for Edge prioritizing float: left; from leaflet-control, leading to the div having 1 pixel width rather
+        // than the full width. Removing the leaflet-control class fixes this.
+        let $enemyForces = $('#map_enemy_forces');
+        $enemyForces.removeClass('leaflet-control');
+
         // Show the default values
         this.refreshUI();
     }

@@ -29,7 +29,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             url: '/ajax/enemies',
             dataType: 'json',
             data: {
-                dungeonroute: dungeonRoutePublicKey,
+                dungeonroute: this.map.getDungeonRoute().publicKey,
                 floor_id: floor.id
             },
             success: function (json) {
@@ -38,8 +38,10 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     if (json.hasOwnProperty(index)) {
                         let remoteEnemy = json[index];
 
-                        if (remoteEnemy.faction !== 'any' && dungeonRouteFaction !== 'any' && dungeonRouteFaction !== remoteEnemy.faction) {
-                            console.log('Skipping enemy that does not belong to the requested faction ', remoteEnemy, dungeonRouteFaction);
+                        let faction = self.map.getDungeonRoute().faction;
+
+                        if (remoteEnemy.faction !== 'any' && faction !== 'any' && faction !== remoteEnemy.faction) {
+                            console.log('Skipping enemy that does not belong to the requested faction ', remoteEnemy, faction);
                             continue;
                         }
 

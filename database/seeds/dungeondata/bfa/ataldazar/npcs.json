@@ -54,6 +54,15 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 127315,
+        "dungeon_id": 14,
+        "classification_id": 1,
+        "name": "Reanimation Totem",
+        "base_health": 58867,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 127757,
         "dungeon_id": 14,
         "classification_id": 2,

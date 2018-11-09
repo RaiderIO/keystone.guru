@@ -171,7 +171,7 @@ class Route extends MapObject {
                 dataType: 'json',
                 data: {
                     id: self.id,
-                    dungeonroute: dungeonRoutePublicKey, // defined in map.blade.php
+                    dungeonroute: this.map.getDungeonRoute().publicKey,
                     floor_id: self.map.getCurrentFloor().id,
                     color: self.routeColor,
                     vertices: self.getVertices(),

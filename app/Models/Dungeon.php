@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 
 /**
@@ -153,5 +155,38 @@ class Dungeon extends Model
     public function scopeInactive($query)
     {
         return $query->where('active', 0);
+    }
+
+    /**
+     * Get all yes and no votes for all dungeons.
+     * @param $affixGroupId
+     * @return array
+     */
+    public static function getInfestedEnemyStatus($affixGroupId)
+    {
+        $result = DB::select($query = '
+                SELECT `dungeons`.`id`,
+                       CAST(SUM(if(`vote` = 1, 1, 0)) as SIGNED)               as infested_yes_votes,
+                       CAST(SUM(if(`vote` = 0, 1, 0)) as SIGNED)               as infested_no_votes,
+                       CAST(SUM(if(
+                             IFNULL(if(`vote` = 1, 1, 0) * `vote_weight`, 0) -
+                             IFNULL(if(`vote` = 0, 1, 0) * `vote_weight`, 0) >= :infestedThreshold, 1, 0)) as SIGNED) as infested_enemies
+                FROM `enemy_infested_votes`
+                       LEFT JOIN `enemies` ON `enemies`.`id` = `enemy_infested_votes`.`enemy_id`
+                       LEFT JOIN `floors` ON `floors`.`id` = `enemies`.`floor_id`
+                       INNER JOIN `dungeons` ON `dungeons`.`id` = `floors`.`dungeon_id`
+                WHERE `enemy_infested_votes`.affix_group_id = :affixGroupId
+                AND `enemy_infested_votes`.updated_at > :minTime
+                AND `dungeons`.`active` = 1
+                GROUP BY `dungeons`.`id`;
+                ', $params = [
+            'infestedThreshold' => config('keystoneguru.infested_user_vote_threshold'),
+            'affixGroupId' => $affixGroupId,
+            // Of the last month only
+            'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s')
+        ]);
+
+        // Set the ID column as a key for easy isset() usage later
+        return array_combine(array_column($result, 'id'), $result);
     }
 }
