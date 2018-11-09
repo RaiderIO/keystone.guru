@@ -12,18 +12,24 @@
     <ul>
         <li>
             Added a dedicated page for Infested Voting and a way to summon a dungeon of your choice to do the voting on.
-            You can find the page in the top navigation bar, it contains instructions and a button to get started.
+            You can find the page in the top navigation bar (or at https://dev.keystone.guru/infested), it contains
+            instructions on how to get started.
         </li>
     </ul>
+    </p>
 
+    <p>
         Map changes:
     <ul>
         <li>
             Selected enemy visualisation will no longer reset to 'aggressiveness' when changing floors. Removed
-            'infested voting' option, this is now done through a special page and not through view/editing of routes.
+            'infested voting' option, this is now done through a special page and not through view/editing of routes
+            which was confusing and generally not very well done (see above).
         </li>
     </ul>
+    </p>
 
+    <p>
         Mapping changes:
     <ul>
         <li>

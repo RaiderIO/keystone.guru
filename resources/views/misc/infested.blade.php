@@ -9,7 +9,8 @@ $currentAffixGroup = $region->getCurrentAffixGroup();
 
 @section('content')
     <div class="container">
-        <a class="btn btn-primary text-white w-100" role="button" data-toggle="modal" data-target="#infested_voting_modal">
+        <a class="btn btn-primary text-white w-100" role="button" data-toggle="modal"
+           data-target="#infested_voting_modal">
             <i class="fas fa-vote-yea"></i> {{__('Start voting!')}}
         </a>
         <h2 class="mt-4">
@@ -29,10 +30,10 @@ $currentAffixGroup = $region->getCurrentAffixGroup();
         </h2>
         <p>
             I have written a guide on
-            <a href="https://www.reddit.com/r/KeystoneGuru/comments/9t8ctx/the_site_has_infested_support_heres_how_to_use_it/">Reddit</a>
-            on how to contribute to the Infested mapping. I will continue to improve the system so that it's the easiest
-            it
-            can be for people to contribute to the mapping.
+            <a href="https://www.reddit.com/r/KeystoneGuru/comments/9t8ctx/the_site_has_infested_support_heres_how_to_use_it/">Reddit
+                <i class="fas fa-external-link-alt"></i></a> on how to contribute to the Infested mapping. I will
+            continue to improve the system so that it's the easiest it can be for people to contribute to the mapping.
+            If you have feedback please let me know!
         </p>
 
         <div class="form-group">
@@ -117,7 +118,16 @@ $currentAffixGroup = $region->getCurrentAffixGroup();
             </table>
         </div>
 
-        <a class="btn btn-primary text-white w-100 mt-4" role="button" data-toggle="modal" data-target="#infested_voting_modal">
+        <div class="form-group">
+            <h2>{{ __('Resources') }}</h2>
+            {!!  sprintf(
+            __('%s runs an amazing stream running mostly M+ in which a lot of information can be found (including
+            Infested enemies).'),
+            '<a href="https://www.twitch.tv/shakibdh/">shakibdh <i class="fas fa-external-link-alt"></i></a>') !!}
+        </div>
+
+        <a class="btn btn-primary text-white w-100 mt-4" role="button" data-toggle="modal"
+           data-target="#infested_voting_modal">
             <i class="fas fa-vote-yea"></i> {{__('Start voting!')}}
         </a>
     </div>
