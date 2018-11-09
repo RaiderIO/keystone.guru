@@ -26,6 +26,9 @@
             'infested voting' option, this is now done through a special page and not through view/editing of routes
             which was confusing and generally not very well done (see above).
         </li>
+        <li>
+            Fixed Enemy Forces display in Microsoft Edge.
+        </li>
     </ul>
     </p>
 
