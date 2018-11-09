@@ -12,7 +12,7 @@
     <ul>
         <li>
             Added a dedicated page for Infested Voting and a way to summon a dungeon of your choice to do the voting on.
-            You can find the page in the top navigation bar (or at https://dev.keystone.guru/infested), it contains
+            You can find the page in the top navigation bar (or at https://keystone.guru/infested), it contains
             instructions on how to get started.
         </li>
     </ul>

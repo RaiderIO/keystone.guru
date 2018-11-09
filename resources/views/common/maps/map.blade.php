@@ -13,6 +13,8 @@ $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) 
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? 'true' : 'false';
 $showInfestedVoting = isset($showInfestedVoting) ? $showInfestedVoting : false;
 $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
+// Show ads or not
+$noads = isset($noads) ? !Auth::check() ? $noads : Auth::user()->hasPaidTier('ad-free') : false;
 
 $introTexts = [
     __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
@@ -323,6 +325,15 @@ $introTexts = [
             </div>
         </div>
     </script>
+
+    <!-- Keep this wrapper regardless of ad state -->
+    <div id="map_ad_template" style="display: none;">
+        @if(!$noads)
+            <div class="bg-primary">
+                @include('common.thirdparty.adunit', ['type' => 'mapsmall'])
+            </div>
+        @endif
+    </div>
 
     @if(!$isAdmin)
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">

@@ -7,7 +7,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 // Show ads if not set
 $noads = isset($noads) ? $noads : false;
 // If logged in, check if the user has paid for an ad-free website
-$noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
+$noads = false; // $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
 // Custom content or not
 $custom = isset($custom) ? $custom : false;
 // Wide mode or not (only relevant if custom = false)
@@ -194,6 +194,12 @@ $title = isset($title) ? $title . ' - ' : '';
 
         @yield('global-message')
 
+        @if( !$noads )
+            <div align="center">
+                @include('common.thirdparty.adunit', ['type' => 'header'])
+            </div>
+        @endif
+
         <div class="container-fluid">
             <div class="row">
                 <div class="{{ $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2" }}">
@@ -242,6 +248,12 @@ $title = isset($title) ? $title . ' - ' : '';
                     </div>
                 </div>
             </div>
+        </div>
+    @endif
+
+    @if( !$noads )
+        <div align="center" class="mt-4">
+            @include('common.thirdparty.adunit', ['type' => 'footer'])
         </div>
     @endif
 
@@ -442,6 +454,7 @@ $title = isset($title) ? $title . ' - ' : '';
     <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
 
     <script src="{{ asset('js/custom/mapcontrol.js') }}"></script>
+    <script src="{{ asset('js/custom/mapcontrols/addisplaycontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/drawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/enemyforcescontrols.js') }}"></script>

@@ -61,6 +61,7 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
 
         'resources/assets/js/custom/mapcontrol.js',
+        'resources/assets/js/custom/mapcontrols/addisplaycontrols.js',
         'resources/assets/js/custom/mapcontrols/mapobjectgroupcontrols.js',
         'resources/assets/js/custom/mapcontrols/drawcontrols.js',
         'resources/assets/js/custom/mapcontrols/enemyforcescontrols.js',
