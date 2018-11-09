@@ -9,10 +9,12 @@ $currentAffixGroup = $region->getCurrentAffixGroup();
 
 @section('content')
     <div class="container">
-        <a class="btn btn-primary text-white w-100" role="button" data-toggle="modal"
-           data-target="#infested_voting_modal">
-            <i class="fas fa-vote-yea"></i> {{__('Start voting!')}}
-        </a>
+        @auth
+            <a class="btn btn-primary text-white w-100" role="button" data-toggle="modal"
+               data-target="#infested_voting_modal">
+                <i class="fas fa-vote-yea"></i> {{__('Start voting!')}}
+            </a>
+        @endauth
         <h2 class="mt-4">
             {{ __('What is this page?') }}
         </h2>
@@ -126,30 +128,34 @@ $currentAffixGroup = $region->getCurrentAffixGroup();
             '<a href="https://www.twitch.tv/shakibdh/">shakibdh <i class="fas fa-external-link-alt"></i></a>') !!}
         </div>
 
-        <a class="btn btn-primary text-white w-100 mt-4" role="button" data-toggle="modal"
-           data-target="#infested_voting_modal">
-            <i class="fas fa-vote-yea"></i> {{__('Start voting!')}}
-        </a>
+        @auth
+            <a class="btn btn-primary text-white w-100 mt-4" role="button" data-toggle="modal"
+               data-target="#infested_voting_modal">
+                <i class="fas fa-vote-yea"></i> {{__('Start voting!')}}
+            </a>
+        @endauth
     </div>
 
 
-    <!-- Modal infested voting -->
-    <div class="modal fade" id="infested_voting_modal" tabindex="-1" role="dialog"
-         aria-hidden="true">
-        <div class="modal-dialog modal-md vertical-align-center">
-            <div class="modal-content">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    <i class="fas fa-times"></i>
-                </button>
-                <div class="probootstrap-modal-flex">
-                    <div class="probootstrap-modal-content">
-                        <div class="container">
-                            @include('common.forms.infestedvoting')
+    @auth
+        <!-- Modal infested voting -->
+        <div class="modal fade" id="infested_voting_modal" tabindex="-1" role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog modal-md vertical-align-center">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="probootstrap-modal-flex">
+                        <div class="probootstrap-modal-content">
+                            <div class="container">
+                                @include('common.forms.infestedvoting')
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- END modal infested voting -->
+        <!-- END modal infested voting -->
+    @endauth
 @endsection

@@ -247,8 +247,8 @@ class DungeonMap extends Signalable {
             new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false)
         ];
 
-        // Only add these two if they're worth fetching
-        if ( this.getDungeonRoute().publicKey !== '') {
+        // Only add these two if they're worth fetching (not in a view + no route (infested voting))
+        if ( this.getDungeonRoute().publicKey !== '' || this.edit) {
             result.push(new RouteMapObjectGroup(this, 'route', true));
             result.push(new KillZoneMapObjectGroup(this, 'killzone', true));
         }
@@ -274,8 +274,8 @@ class DungeonMap extends Signalable {
             result.push(new DrawControls(this, drawnItemsLayer));
         }
 
-        // Only when enemy forces are relevant in their display
-        if (this.getDungeonRoute().publicKey !== '') {
+        // Only when enemy forces are relevant in their display (not in a view + no route (infested voting))
+        if (this.getDungeonRoute().publicKey !== '' || this.edit) {
             result.push(new EnemyForcesControls(this));
         }
         result.push(new EnemyVisualControls(this));
