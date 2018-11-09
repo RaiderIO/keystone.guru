@@ -183,6 +183,7 @@ $title = isset($title) ? $title . ' - ' : '';
 
         @if (config('app.env') !== 'production' && (Auth::user() === null || !Auth::user()->hasRole('admin')))
             <div class="container-fluid alert alert-warning text-center mt-4">
+                <i class="fa fa-exclamation-triangle"></i>
                 {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
                 <br>
                 {{ __('If you got here by accident, I\'d be interested in knowing how you got here! Message me on Discord :)') }}
