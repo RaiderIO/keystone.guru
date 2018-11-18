@@ -8,12 +8,20 @@ class AdDisplayControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let source = $('#map_ad_template').html();
+                console.log('');
+
+                let source = '\n' +
+                    '    <ins class="adsbygoogle"\n' +
+                    '         style="display:inline-block;width:120px;height:240px"\n' +
+                    '         data-ad-client="ca-pub-2985471802502246"\n' +
+                    '         data-ad-slot="6343511996"></ins>';
 
                 // Build the status bar from the template
                 self.domElement = $(source);
 
                 self.domElement = self.domElement[0];
+
+                (adsbygoogle = window.adsbygoogle || []).push({});
 
                 return self.domElement;
             }

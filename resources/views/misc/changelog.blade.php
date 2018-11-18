@@ -3,6 +3,25 @@
 @section('header-title', __('Changelog'))
 
 @section('content')
+
+
+    <h4>
+        2018/11/10
+    </h4>
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            Kings' Rest
+            <ul>
+                <li>
+                    Added three missing Embalming Fluids in the chamber at the second boss.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </p>
+
     <h4>
         2018/11/08
     </h4>

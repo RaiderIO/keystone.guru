@@ -2,14 +2,20 @@
 $type = isset($type) ? $type : 'responsive';
 ?>
 
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
 @if( $type === 'responsive' )
     <!-- Responsive ad unit -->
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-2985471802502246"
          data-ad-slot="8565107382"
+         data-ad-format="link"
+         data-full-width-responsive="true"></ins>
+@elseif( $type === 'responsive_small' )
+    <!-- Map footer responsive mobile -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-2985471802502246"
+         data-ad-slot="4949242104"
          data-ad-format="link"
          data-full-width-responsive="true"></ins>
 @elseif( $type === 'header' )
@@ -36,7 +42,14 @@ $type = isset($type) ? $type : 'responsive';
          style="display:inline-block;width:120px;height:240px"
          data-ad-client="ca-pub-2985471802502246"
          data-ad-slot="6343511996"></ins>
+@elseif( $type === 'mapsmall_horizontal' )
+    <!-- Map footer mobile -->
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:320px;height:50px"
+         data-ad-client="ca-pub-2985471802502246"
+         data-ad-slot="9959818213"></ins>
 @endif
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
 <script>
     (adsbygoogle = window.adsbygoogle || []).push({});

@@ -9,6 +9,32 @@ html, body, #map, #app, .wrapper {
     width: 100%;
 }
 
+/* css to customize Leaflet default styles  */
+.popupCustom .leaflet-popup-tip,
+.popupCustom .leaflet-popup-content-wrapper {
+    background: #e0e0e0;
+    color: #234c5e;
+}
+
+.popup_select {
+    width: 300px;
+}
+
+#map_controls .map_controls_custom,
+#map_faction_display_controls .map_controls_custom {
+    width: 50px;
+    background-image: none;
+}
+
+.map_enemy_tooltip {
+    width: 240px;
+    white-space: normal;
+}
+
+.leaflet-container {
+    background-color: #2B3E50;
+}
+
 .modal-lg {
     max-width: 80%;
 }
@@ -415,4 +441,20 @@ html, body, #map, #app, .wrapper {
 .map_map_comment_tooltip {
     width: 240px;
     white-space: normal;
+}
+
+#map_ad_horizontal,
+#map_ad_vertical {
+    position: fixed;
+    bottom: 0;
+    z-index: 1020;
+    margin-bottom: 16px;
+}
+
+#map_ad_horizontal {
+    width: 100vw;
+}
+
+#map_ad_vertical {
+    right: 0;
 }

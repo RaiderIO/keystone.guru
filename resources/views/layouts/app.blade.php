@@ -50,12 +50,14 @@ $title = isset($title) ? $title . ' - ' : '';
 
     @include('common.general.scripts', ['showLegalModal' => $showLegalModal])
     @include('common.thirdparty.cookieconsent')
-    <?php if(config('app.env') === 'production' ){
+    <?php if(config('app.env') !== 'production' ){
     if(!$noads ) {?>
     @include('common.thirdparty.adsense')
     <?php } ?>
     @include('common.thirdparty.analytics')
     <?php } ?>
+    @if(!$noads)
+    @endif
 </head>
 <body>
 <div id="app">
@@ -251,12 +253,6 @@ $title = isset($title) ? $title . ' - ' : '';
         </div>
     @endif
 
-    @if( !$noads )
-        <div align="center" class="mt-4">
-            @include('common.thirdparty.adunit', ['type' => 'footer'])
-        </div>
-    @endif
-
     <footer class="fixed-bottom">
         <div class="row">
             <div id="fixed_footer_container" class="col-12">
@@ -265,6 +261,12 @@ $title = isset($title) ? $title . ' - ' : '';
     </footer>
 
     @if( $footer )
+
+        @if( !$noads )
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['type' => 'footer'])
+            </div>
+        @endif
 
         <div class="container text-center">
             <hr/>
@@ -417,6 +419,8 @@ $title = isset($title) ? $title . ' - ' : '';
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
+@if(!$noads)
+@endif
 
 @if (config('app.env') === 'production')
     <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>

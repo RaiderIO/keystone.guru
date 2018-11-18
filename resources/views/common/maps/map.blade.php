@@ -43,39 +43,6 @@ $introTexts = [
 ];
 ?>
 
-@section('head')
-    {{-- Make sure we don't override the head of the page this thing is included in --}}
-    @parent
-
-    <style>
-        /* css to customize Leaflet default styles  */
-        .popupCustom .leaflet-popup-tip,
-        .popupCustom .leaflet-popup-content-wrapper {
-            background: #e0e0e0;
-            color: #234c5e;
-        }
-
-        .popup_select {
-            width: 300px;
-        }
-
-        #map_controls .map_controls_custom,
-        #map_faction_display_controls .map_controls_custom {
-            width: 50px;
-            background-image: none;
-        }
-
-        .map_enemy_tooltip {
-            width: 240px;
-            white-space: normal;
-        }
-
-        .leaflet-container {
-            background-color: #2B3E50;
-        }
-    </style>
-@endsection
-
 @section('scripts')
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
@@ -157,6 +124,9 @@ $introTexts = [
                     dungeonMap.leafletMap.on('move', fn);
                 });
             }
+
+            // Refresh the map; draw the layers on it
+            dungeonMap.refreshLeafletMap();
         });
     </script>
 
@@ -326,15 +296,6 @@ $introTexts = [
         </div>
     </script>
 
-    <!-- Keep this wrapper regardless of ad state -->
-    <div id="map_ad_template" style="display: none;">
-        @if(!$noads)
-            <div class="bg-primary">
-                @include('common.thirdparty.adunit', ['type' => 'mapsmall'])
-            </div>
-        @endif
-    </div>
-
     @if(!$isAdmin)
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">
@@ -452,3 +413,17 @@ $introTexts = [
      data-position="auto">
 
 </div>
+
+<!-- Keep this wrapper regardless of ad state -->
+@if(!$noads)
+    @php($isMobile = (new \Jenssegers\Agent\Agent())->isMobile())
+    @if($isMobile)
+        <div id="map_ad_horizontal">
+            @include('common.thirdparty.adunit', ['type' => 'mapsmall_horizontal'])
+        </div>
+    @else
+        <div id="map_ad_vertical">
+            @include('common.thirdparty.adunit', ['type' => 'mapsmall'])
+        </div>
+    @endif
+@endif
