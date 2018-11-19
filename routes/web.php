@@ -174,6 +174,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::get('/enemypatrols', 'APIEnemyPatrolController@list');
 
         Route::get('/dungeonroutes', 'APIDungeonRouteController@list')->name('api.dungeonroutes');
+        Route::get('/dungeonroutesdt', 'APIDungeonRouteController@listdt')->name('api.dungeonroutesdt');
 
         Route::get('/routes', 'APIRouteController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
 

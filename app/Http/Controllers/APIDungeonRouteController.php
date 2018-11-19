@@ -12,6 +12,55 @@ use Illuminate\Support\Facades\Auth;
 
 class APIDungeonRouteController extends Controller
 {
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \Exception
+     */
+    function listdt(Request $request)
+    {
+        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author'])
+            ->where('unlisted', false)
+            ->where('demo', false)
+            ->whereHas('dungeon', function ($query) {
+                /** @var $query Builder This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
+                $query->active();
+            });
+
+        $user = Auth::user();
+        $mine = false;
+
+        // If logged in
+        if ($user !== null) {
+            $mine = $request->get('mine', false);
+
+            // Filter by our own user if logged in
+            if ($mine) {
+                $routes = $routes->where('author_id', '=', $user->id);
+            }
+
+            // Never show demo routes here
+            if (!$user->hasRole('admin')) {
+                $routes = $routes->where('demo', '=', '0');
+            }
+
+            // Handle favorites
+            if ($request->get('favorites', false)) {
+                $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
+                    /** @var $query Builder */
+                    $query->where('dungeon_route_favorites.user_id', '=', $user->id);
+                });
+            }
+        }
+
+        if (!$mine) {
+            $routes = $routes->where('published', true);
+        }
+
+        return \Yajra\DataTables\Datatables::of($routes)->make(true);
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

@@ -14,7 +14,7 @@ $profile = isset($profile) ? $profile : false;
                 'serverSide': true,
                 'responsive': true,
                 'ajax': {
-                    'url': '{{ route('api.dungeonroutes') }}',
+                    'url': '{{ route('api.dungeonroutesdt') }}',
                     'data': function (d) {
                         d.favorites = $("#favorites").is(':checked') ? 1 : 0;
                         <?php if( $profile ) {?>
