@@ -27,33 +27,16 @@ $profile = isset($profile) ? $profile : false;
                 'bLengthChange': false,
                 'columns': [
                     {
-                        'data': 'title',
-                        'name': 'title',
-                        'render': function (data, type, row, meta) {
-                            <?php if( $profile ) { ?>
-                                return '<a href="{{ route('dungeonroute.edit', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
-                            <?php } else { ?>
-                                return '<a href="{{ route('dungeonroute.view', ['dungeonroute' => '']) }}/' + row.public_key + '" >' + data + '</a>';
-                            <?php } ?>
-                        },
-                        'className': 'limit_width'
-                    },
-                    {
                         'data': 'dungeon.name',
                         'name': 'dungeon_id'
                     },
-                    // {
-                    //     'data': 'difficulty',
-                    //     'className': 'd-none d-md-table-cell'
-                    // },
                     {
                         'data': 'affixes',
                         'name': 'affixes.id',
                         'render': function (data, type, row, meta) {
                             return handlebarsAffixGroupsParse(data);
                         },
-                        'className': 'd-none d-md-table-cell',
-                        'orderable': false
+                        'className': 'd-none d-md-table-cell'
                     },
                     {
                         'data': 'setup',
@@ -83,8 +66,7 @@ $profile = isset($profile) ? $profile : false;
 
                             return result;
                         },
-                        'className': 'd-none d-lg-table-cell',
-                        'orderable': false
+                        'className': 'd-none d-lg-table-cell'
                     }
                     <?php if($profile){ ?>
                     , {
@@ -121,21 +103,14 @@ $profile = isset($profile) ? $profile : false;
             $("#dungeonroute_filter").bind('click', function () {
 
                 // Build the search parameters
-                let title = $("#dungeonroute_search_title").val();
                 let dungeonId = $("#dungeonroute_search_dungeon_id").val();
                 if (parseInt(dungeonId) < 1) {
                     dungeonId = '';
                 }
                 let affixes = $("#affixes").val();
-                let difficulty = $("#difficulty").val();
-                if (parseInt(difficulty) < 1) {
-                    difficulty = '';
-                }
 
-                _dt.column(0).search(title);
-                _dt.column(1).search(dungeonId);
-                _dt.column(2).search(difficulty);
-                _dt.column(3).search(affixes);
+                _dt.column(0).search(dungeonId);
+                _dt.column(1).search(affixes);
                 _dt.draw();
             });
             // Do this asap
@@ -185,21 +160,9 @@ $profile = isset($profile) ? $profile : false;
 
     <div class="row">
         <div class="col-lg-2">
-            {!! Form::label('title', __('Title')) !!}
-            {!! Form::text('title', null, ['id' => 'dungeonroute_search_title', 'class' => 'form-control']) !!}
-        </div>
-        <div class="col-lg-2">
             {!! Form::label('dungeon_id', __('Dungeon')) !!}
             {!! Form::select('dungeon_id', [0 => 'All'] + \App\Models\Dungeon::active()->pluck('name', 'id')->toArray(), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
         </div>
-    <!--
-        <div class="col-lg-2">
-            {!! Form::label('difficulty', __('Difficulty')) !!}
-    {!! Form::select('difficulty',
-    array_merge([0 => 'All'], array_combine(config('keystoneguru.dungeonroute_difficulty'), config('keystoneguru.dungeonroute_difficulty'))), 0,
-    ['id' => 'difficulty', 'class' => 'form-control']) !!}
-            </div>
--->
         <div id="affixgroup_select_container" class="col-lg-2">
             {!! Form::label('affixes[]', __('Affixes') . "*") !!}
             {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('text', 'id'), null,
@@ -225,9 +188,7 @@ $profile = isset($profile) ? $profile : false;
     <table id="routes_table" class="tablesorter default_table dt-responsive nowrap table-striped mt-2" width="100%">
         <thead>
         <tr>
-            <th class="title_column">{{ __('Title') }}</th>
             <th width="15%">{{ __('Dungeon') }}</th>
-        <!-- <th width="10%" class="d-none d-md-table-cell">{{ __('Difficulty') }}</th> -->
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
             <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>

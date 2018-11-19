@@ -64,7 +64,7 @@ class APIDungeonRouteController extends Controller
         if ($request->has('columns')) {
             $columns = $request->get('columns');
 
-            $affixes = $columns[3]['search']['value'];
+            $affixes = $columns[1]['search']['value'];
             if (!empty($affixes)) {
                 $affixIds = explode(',', $affixes);
 
@@ -75,7 +75,7 @@ class APIDungeonRouteController extends Controller
             }
 
             // Unset the search value, we already filtered it and I don't know how to convince DT to do the above for me
-            $columns[3]['search']['value'] = '';
+            $columns[1]['search']['value'] = '';
             // Apply to request parameters
             $request->merge(['columns' => $columns]);
         }
