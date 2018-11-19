@@ -7,7 +7,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 // Show ads if not set
 $noads = isset($noads) ? $noads : false;
 // If logged in, check if the user has paid for an ad-free website
-$noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
+$noads = false; // $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
 // Custom content or not
 $custom = isset($custom) ? $custom : false;
 // Wide mode or not (only relevant if custom = false)
@@ -50,12 +50,14 @@ $title = isset($title) ? $title . ' - ' : '';
 
     @include('common.general.scripts', ['showLegalModal' => $showLegalModal])
     @include('common.thirdparty.cookieconsent')
-    <?php if(config('app.env') === 'production' ){
+    <?php if(config('app.env') !== 'production' ){
     if(!$noads ) {?>
     @include('common.thirdparty.adsense')
     <?php } ?>
     @include('common.thirdparty.analytics')
     <?php } ?>
+    @if(!$noads)
+    @endif
 </head>
 <body>
 <div id="app">
@@ -194,6 +196,12 @@ $title = isset($title) ? $title . ' - ' : '';
 
         @yield('global-message')
 
+        @if( !$noads )
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['type' => 'header'])
+            </div>
+        @endif
+
         <div class="container-fluid">
             <div class="row">
                 <div class="{{ $wide ? "flex-fill ml-lg-3 mr-lg-3" : "col-md-8 offset-md-2" }}">
@@ -253,6 +261,12 @@ $title = isset($title) ? $title . ' - ' : '';
     </footer>
 
     @if( $footer )
+
+        @if( !$noads )
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['type' => 'footer'])
+            </div>
+        @endif
 
         <div class="container text-center">
             <hr/>
@@ -405,6 +419,8 @@ $title = isset($title) ? $title . ' - ' : '';
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
+@if(!$noads)
+@endif
 
 @if (config('app.env') === 'production')
     <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
@@ -442,6 +458,7 @@ $title = isset($title) ? $title . ' - ' : '';
     <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
 
     <script src="{{ asset('js/custom/mapcontrol.js') }}"></script>
+    <script src="{{ asset('js/custom/mapcontrols/addisplaycontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/drawcontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/enemyforcescontrols.js') }}"></script>

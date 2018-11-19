@@ -13,6 +13,8 @@ $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) 
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? 'true' : 'false';
 $showInfestedVoting = isset($showInfestedVoting) ? $showInfestedVoting : false;
 $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
+// Show ads or not
+$noads = isset($noads) ? !Auth::check() ? $noads : Auth::user()->hasPaidTier('ad-free') : false;
 
 $introTexts = [
     __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
@@ -40,39 +42,6 @@ $introTexts = [
     __('These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.')
 ];
 ?>
-
-@section('head')
-    {{-- Make sure we don't override the head of the page this thing is included in --}}
-    @parent
-
-    <style>
-        /* css to customize Leaflet default styles  */
-        .popupCustom .leaflet-popup-tip,
-        .popupCustom .leaflet-popup-content-wrapper {
-            background: #e0e0e0;
-            color: #234c5e;
-        }
-
-        .popup_select {
-            width: 300px;
-        }
-
-        #map_controls .map_controls_custom,
-        #map_faction_display_controls .map_controls_custom {
-            width: 50px;
-            background-image: none;
-        }
-
-        .map_enemy_tooltip {
-            width: 240px;
-            white-space: normal;
-        }
-
-        .leaflet-container {
-            background-color: #2B3E50;
-        }
-    </style>
-@endsection
 
 @section('scripts')
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
@@ -155,6 +124,9 @@ $introTexts = [
                     dungeonMap.leafletMap.on('move', fn);
                 });
             }
+
+            // Refresh the map; draw the layers on it
+            dungeonMap.refreshLeafletMap();
         });
     </script>
 
@@ -441,3 +413,17 @@ $introTexts = [
      data-position="auto">
 
 </div>
+
+<!-- Keep this wrapper regardless of ad state -->
+@if(!$noads)
+    @php($isMobile = (new \Jenssegers\Agent\Agent())->isMobile())
+    @if($isMobile)
+        <div id="map_ad_horizontal">
+            @include('common.thirdparty.adunit', ['type' => 'mapsmall_horizontal'])
+        </div>
+    @else
+        <div id="map_ad_vertical">
+            @include('common.thirdparty.adunit', ['type' => 'mapsmall'])
+        </div>
+    @endif
+@endif

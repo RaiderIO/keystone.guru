@@ -54,12 +54,12 @@ class DungeonMap extends Signalable {
             crs: L.CRS.Simple,
             // Context menu when right clicking stuff
             contextmenu: true,
-            zoomControl: true
+            zoomControl: false
         });
         // Make sure we can place things in the center of the map
         this._createAdditionalControlPlaceholders();
         // Top left is reserved for the sidebar
-        this.leafletMap.zoomControl.setPosition('topright');
+        // this.leafletMap.zoomControl.setPosition('topright');
 
         // Set all edited layers to no longer be synced.
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
@@ -200,9 +200,6 @@ class DungeonMap extends Signalable {
             });
         }
 
-        // Refresh the map; draw the layers on it
-        this.refreshLeafletMap();
-
         this.leafletMap.on('zoomend', (this._adjustZoomForLayers).bind(this));
         this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
@@ -248,7 +245,7 @@ class DungeonMap extends Signalable {
         ];
 
         // Only add these two if they're worth fetching (not in a view + no route (infested voting))
-        if ( this.getDungeonRoute().publicKey !== '' || this.edit) {
+        if (this.getDungeonRoute().publicKey !== '' || this.edit) {
             result.push(new RouteMapObjectGroup(this, 'route', true));
             result.push(new KillZoneMapObjectGroup(this, 'killzone', true));
         }
@@ -284,6 +281,8 @@ class DungeonMap extends Signalable {
         if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
             result.push(new FactionDisplayControls(this));
         }
+
+        // result.push(new AdDisplayControls(this));
 
         return result;
     }
@@ -417,7 +416,6 @@ class DungeonMap extends Signalable {
      */
     refreshLeafletMap() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-        let self = this;
 
         this.signal('map:beforerefresh', {dungeonmap: this});
 
