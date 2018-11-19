@@ -197,7 +197,7 @@ $title = isset($title) ? $title . ' - ' : '';
         @yield('global-message')
 
         @if( !$noads )
-            <div align="center">
+            <div align="center" class="mt-4">
                 @include('common.thirdparty.adunit', ['type' => 'header'])
             </div>
         @endif
