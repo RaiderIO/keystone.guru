@@ -7,7 +7,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 // Show ads if not set
 $noads = isset($noads) ? $noads : false;
 // If logged in, check if the user has paid for an ad-free website
-$noads = false; // $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
+$noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
 // Custom content or not
 $custom = isset($custom) ? $custom : false;
 // Wide mode or not (only relevant if custom = false)
