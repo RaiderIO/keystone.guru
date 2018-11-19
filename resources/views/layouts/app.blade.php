@@ -8,6 +8,8 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 $noads = isset($noads) ? $noads : false;
 // If logged in, check if the user has paid for an ad-free website
 $noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
+// If we're showing ads and we're NOT on production, hide them anyways
+$noads = $noads || config('app.env') === 'production' ? $noads : true;
 // Custom content or not
 $custom = isset($custom) ? $custom : false;
 // Wide mode or not (only relevant if custom = false)
@@ -50,13 +52,12 @@ $title = isset($title) ? $title . ' - ' : '';
 
     @include('common.general.scripts', ['showLegalModal' => $showLegalModal])
     @include('common.thirdparty.cookieconsent')
-    <?php if(config('app.env') !== 'production' ){
-    if(!$noads ) {?>
-    @include('common.thirdparty.adsense')
-    <?php } ?>
-    @include('common.thirdparty.analytics')
-    <?php } ?>
-    @if(!$noads)
+
+    @if(!$noads )
+        @include('common.thirdparty.adsense')
+    @endif
+    @if(config('app.env') === 'production')
+        @include('common.thirdparty.analytics')
     @endif
 </head>
 <body>
