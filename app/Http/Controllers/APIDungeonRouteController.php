@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\APIDungeonRouteFormRequest;
+use App\Logic\DatatablesColumnHandler;
+use App\Logic\DatatablesHandler;
+use App\Logic\DungeonRouteAffixesColumnHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -21,6 +24,8 @@ class APIDungeonRouteController extends Controller
     function listdt(Request $request)
     {
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author'])
+            // ->setAppends(['dungeon', 'affixes', 'author'])
+            // ->select(['dungeon_routes.*', 'affix_groups.*'])
             ->where('unlisted', false)
             ->where('demo', false)
             ->whereHas('dungeon', function ($query) {
@@ -58,7 +63,12 @@ class APIDungeonRouteController extends Controller
             $routes = $routes->where('published', true);
         }
 
-        return \Yajra\DataTables\Datatables::of($routes)->make(true);
+        $dtHandler = new DatatablesHandler($request);
+
+        return $dtHandler->setBuilder($routes)->addColumnHandler([
+            // Handles any searching/filtering based on DR Affixes
+            // new DungeonRouteAffixesColumnHandler($dtHandler)
+        ])->applyRequestToBuilder()->getResult();
     }
 
     /**
