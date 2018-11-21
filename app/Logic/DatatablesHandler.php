@@ -37,6 +37,7 @@ class DatatablesHandler
     public function __construct(Request $request)
     {
         $this->_request = $request;
+        $this->_columnHandlers = [];
     }
 
     /**
@@ -90,7 +91,7 @@ class DatatablesHandler
     public function applyRequestToBuilder()
     {
         $this->_builder->offset((int)$this->_request->get('start'));
-        $this->_builder->limit((int)$this->_request->get('limit'));
+        $this->_builder->limit((int)$this->_request->get('length'));
 
         foreach ($this->_columnHandlers as $columnHandler) {
             $columnHandler->applyToBuilder();
@@ -106,8 +107,10 @@ class DatatablesHandler
     {
         $result = [
             'draw' => (int)$this->_request->get('draw'),
+            // Initial amount of records
             'recordsTotal' => $this->_recordsTotal,
-            'recordsFiltered' => $this->_recordsTotal - $this->_builder->count(),
+            // The amount of records after filtering
+            'recordsFiltered' => $this->_builder->count(),
             'data' => $this->_builder->get(),
             'input' => $this->_request->toArray()
         ];

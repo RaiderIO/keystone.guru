@@ -67,7 +67,7 @@ class APIDungeonRouteController extends Controller
 
         return $dtHandler->setBuilder($routes)->addColumnHandler([
             // Handles any searching/filtering based on DR Affixes
-            // new DungeonRouteAffixesColumnHandler($dtHandler)
+            new DungeonRouteAffixesColumnHandler($dtHandler)
         ])->applyRequestToBuilder()->getResult();
     }
 

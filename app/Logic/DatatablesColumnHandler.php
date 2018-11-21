@@ -45,7 +45,7 @@ abstract class DatatablesColumnHandler
         }
 
         $columns = $request->get('columns');
-        $order = $request->get('order');
+        $order = ($request->get('order', []))[0];
 
         // Find the column we should handle
         $column = null;

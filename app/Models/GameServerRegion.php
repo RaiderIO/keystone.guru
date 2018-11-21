@@ -207,7 +207,7 @@ class GameServerRegion extends Model
     }
 
     /**
-     * @return mixed Gets the default region.
+     * @return GameServerRegion Gets the default region.
      */
     public static function getUserOrDefaultRegion()
     {
