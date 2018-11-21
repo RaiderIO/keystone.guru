@@ -101,6 +101,14 @@
 }
 
 /** DATATABLES */
+#routes_table tbody tr {
+    cursor: pointer;
+}
+
+#routes_table .selected {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
 #routes_table_filter {
     display: none;
 }

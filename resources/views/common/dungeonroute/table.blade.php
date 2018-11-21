@@ -9,7 +9,8 @@ $profile = isset($profile) ? $profile : false;
         let _dt;
 
         $(function () {
-            _dt = $('#routes_table').DataTable({
+            let $routesTable = $('#routes_table');
+            _dt = $routesTable.DataTable({
                 'processing': true,
                 'serverSide': true,
                 'responsive': true,
@@ -21,7 +22,10 @@ $profile = isset($profile) ? $profile : false;
                             d.mine = true;
                         <?php } ?>
                     }, <?php // Enable caching when in production mode, disable it when developing ?>
-                    'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}'
+                    'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}',
+                },
+                'fnInitComplete': function (oSettings, json) {
+                    console.log(oSettings, json);
                 },
                 'lengthMenu': [25],
                 'bLengthChange': false,
@@ -98,6 +102,21 @@ $profile = isset($profile) ? $profile : false;
                     let key = $(clickEvent.target).data('publickey');
                     $("<a>").attr("href", '{{ route('dungeonroute.clone', ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key)).attr("target", "_blank")[0].click();
                 });
+            });
+
+            $routesTable.on('click', 'tbody tr', function () {
+                window.open('{{ route('dungeonroute.' . ($profile ? 'edit' : 'view'), ['dungeonroute' => '']) }}/' + row.public_key);
+            });
+
+            $routesTable.on('mouseenter', 'tbody tr', function () {
+                _dt.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            });
+
+            $routesTable.on('mouseleave', 'tbody tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
             });
 
             $("#dungeonroute_filter").bind('click', function () {
