@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\APIDungeonRouteFormRequest;
-use App\Logic\DatatablesColumnHandler;
-use App\Logic\DatatablesHandler;
-use App\Logic\DungeonRouteAffixesColumnHandler;
+use App\Logic\Datatables\AuthorNameColumnHandler;
+use App\Logic\Datatables\DatatablesHandler;
+use App\Logic\Datatables\DungeonRouteAffixesColumnHandler;
+use App\Logic\Datatables\RatingColumnHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -25,7 +26,7 @@ class APIDungeonRouteController extends Controller
     {
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author'])
             // ->setAppends(['dungeon', 'affixes', 'author'])
-            // ->select(['dungeon_routes.*', 'affix_groups.*'])
+            ->select(['dungeon_routes.*'])
             ->where('unlisted', false)
             ->where('demo', false)
             ->whereHas('dungeon', function ($query) {
@@ -67,7 +68,11 @@ class APIDungeonRouteController extends Controller
 
         return $dtHandler->setBuilder($routes)->addColumnHandler([
             // Handles any searching/filtering based on DR Affixes
-            new DungeonRouteAffixesColumnHandler($dtHandler)
+            new DungeonRouteAffixesColumnHandler($dtHandler),
+            // Allow sorting by author name
+            new AuthorNameColumnHandler($dtHandler),
+            // Allow sorting by rating
+            new RatingColumnHandler($dtHandler)
         ])->applyRequestToBuilder()->getResult();
     }
 

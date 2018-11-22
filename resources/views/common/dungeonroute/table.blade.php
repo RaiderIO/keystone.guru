@@ -25,10 +25,14 @@ $profile = isset($profile) ? $profile : false;
                     'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}',
                 },
                 'fnInitComplete': function (oSettings, json) {
-                    console.log(oSettings, json);
+                    $.each($routesTable.find('tbody tr'), function (index, value) {
+                        $(value).data('publickey', json.data[index].public_key);
+                    });
                 },
                 'lengthMenu': [25],
                 'bLengthChange': false,
+                // Order by affixes by default
+                "order": [[ 1, "asc" ]],
                 'columns': [
                     {
                         'data': 'dungeon.name',
@@ -52,10 +56,11 @@ $profile = isset($profile) ? $profile : false;
                     },
                     {
                         'data': 'author.name',
-                        'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}',
-                        'orderable': false
+                        'name': 'author.name',
+                        'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
                     },
                     {
+                        'name': 'rating',
                         'render': function (data, type, row, meta) {
                             let result = '-';
 
@@ -104,8 +109,10 @@ $profile = isset($profile) ? $profile : false;
                 });
             });
 
-            $routesTable.on('click', 'tbody tr', function () {
-                window.open('{{ route('dungeonroute.' . ($profile ? 'edit' : 'view'), ['dungeonroute' => '']) }}/' + row.public_key);
+            $routesTable.on('click', 'tbody tr', function (clickEvent) {
+                let key = $(clickEvent.currentTarget).data('publickey');
+
+                window.open('{{ route('dungeonroute.' . ($profile ? 'edit' : 'view'), ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key));
             });
 
             $routesTable.on('mouseenter', 'tbody tr', function () {

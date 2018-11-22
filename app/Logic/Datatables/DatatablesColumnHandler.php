@@ -6,7 +6,7 @@
  * Time: 15:22
  */
 
-namespace App\Logic;
+namespace App\Logic\Datatables;
 
 use Illuminate\Database\Eloquent\Builder;
 
@@ -31,6 +31,14 @@ abstract class DatatablesColumnHandler
     }
 
     protected abstract function _applyFilter(Builder $builder, $columnData, $order);
+
+    /**
+     * @return string Gets the column name of the handler.
+     */
+    public function getColumnName()
+    {
+        return $this->_columnName;
+    }
 
     /**
      * @return $this
