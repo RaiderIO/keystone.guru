@@ -33,23 +33,14 @@ class RatingColumnHandler extends DatatablesColumnHandler
 
         // Only order
         if ($order !== null) {
-            // weighted rating (WR) = (v ÷ (v+m)) × R + (m ÷ (v+m)) × C , where:
-            //
-            //* R = average for the movie (mean) = (Rating)
-            //* v = number of votes for the movie = (votes)
-            //* m = minimum votes required to be listed in the Top 250 (currently 3000)
-            //* C = the mean vote across the whole report (currently 6.9)
-            $builder->addSelect(DB::raw('AVG(dungeon_route_ratings.rating) as avg_rating'));
+            // https://stackoverflow.com/a/1881185/771270
+            // I divided by 2 to reduce the impact of single 10 votes when there's not a lot of voting (which is the case now)
+            // This may have to be revisited once the site gains some more traction and votes start pouring in
+            $builder->addSelect(DB::raw('(AVG(dungeon_route_ratings.rating) / 2) + LOG(COUNT(dungeon_route_ratings.id)) as weighted_rating'));
 
             $builder->leftJoin('dungeon_route_ratings', 'dungeon_route_id', '=', 'dungeon_routes.id');
             $builder->groupBy(DB::raw('dungeon_routes.id'));
-            $builder->orderBy('avg_rating', $order['dir'] === 'asc' ? 'asc' : 'desc');
+            $builder->orderBy('weighted_rating', $order['dir'] === 'asc' ? 'asc' : 'desc');
         }
-//
-//        DB::enableQueryLog();
-//
-//        $builder->get();
-//
-//        dd(DB::getQueryLog());
     }
 }
