@@ -189,4 +189,14 @@ class Dungeon extends Model
         // Set the ID column as a key for easy isset() usage later
         return array_combine(array_column($result, 'id'), $result);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // This model may NOT be deleted, it's read only!
+        static::deleting(function ($someModel) {
+            return false;
+        });
+    }
 }

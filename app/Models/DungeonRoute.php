@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -27,10 +28,10 @@ use Illuminate\Support\Facades\DB;
  * @property $rating_count int
  * @property $enemy_forces int
  *
- * @property $dungeon Dungeon
- * @property $route Route
- * @property $faction Faction
- * @property $author User
+ * @property Dungeon $dungeon
+ * @property Route $route
+ * @property Faction $faction
+ * @property User $author
  *
  * @property \Illuminate\Support\Collection $specializations
  * @property \Illuminate\Support\Collection $classes
@@ -136,6 +137,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function routeattributesraw()
+    {
+        return $this->hasMany('App\Models\DungeonRouteAttribute');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function classes()
@@ -221,6 +230,14 @@ class DungeonRoute extends Model
     public function mapcomments()
     {
         return $this->hasMany('App\Models\MapComment');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function routeattributes()
+    {
+        return $this->belongsToMany('App\Models\RouteAttribute', 'dungeon_route_attributes');
     }
 
     /**
@@ -356,6 +373,18 @@ class DungeonRoute extends Model
         // Update or insert it
         if ($this->save()) {
 
+            $newAttributes = $request->get('attributes', array());
+            if (!empty($newAttributes)) {
+                // Remove old attributes
+                $this->routeattributesraw()->delete();
+                foreach ($newAttributes as $key => $value) {
+                    $drAttribute = new DungeonRouteAttribute();
+                    $drAttribute->dungeon_route_id = $this->id;
+                    $drAttribute->route_attribute_id = $value;
+                    $drAttribute->save();
+                }
+            }
+
             $newSpecs = $request->get('specialization', array());
             if (!empty($newSpecs)) {
                 // Remove old specializations
@@ -381,7 +410,6 @@ class DungeonRoute extends Model
             }
 
             $newRaces = $request->get('race', array());
-
             if (!empty($newRaces)) {
                 // Remove old races
                 $this->playerraces()->delete();

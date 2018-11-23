@@ -1,5 +1,7 @@
 @extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
-
+<?php
+/** @var $model \App\Models\DungeonRoute */
+?>
 @section('scripts')
     @parent
 
@@ -52,6 +54,7 @@
                 dataType: 'json',
                 data: {
                     dungeon_route_title: $('#dungeon_route_title').val(),
+                    attributes: $('#attributes').val(),
                     faction_id: $('#faction_id').val(),
                     specialization:
                         $('.specializationselect select').map(function () {
@@ -125,6 +128,28 @@
                             <div class="form-group">
                                 {!! Form::label('dungeon_route_title', __('Title')) !!}
                                 {!! Form::text('dungeon_route_title', $model->title, ['class' => 'form-control']) !!}
+                            </div>
+                            <div class="form-group">
+                                {!! Form::label('attributes', __('Attributes')) !!}
+                                <?php
+                                /** @var \Illuminate\Support\Collection $attributes */
+                                $attributes = \App\Models\RouteAttribute::all()->groupBy('category');
+                                /** @var \Illuminate\Support\Collection $routeAttributes */
+                                $routeAttributes = $model->routeattributes;
+                                ?>
+                                <select multiple name="attributes" id="attributes" class="form-control"
+                                        size="{{ \App\Models\RouteAttribute::all()->count() + $attributes->count() }}">
+                                    @foreach ($attributes as $category => $categoryAttributes)
+                                        <optgroup label="{{ ucfirst($category) }}">
+                                            @foreach ($categoryAttributes as $attribute) {
+                                            <option value="{{ $attribute->id }}"
+                                                    {{ $routeAttributes->contains('id', $attribute->id) ? 'selected' : '' }}>
+                                                {{ $attribute->name }}
+                                            </option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <h3>
