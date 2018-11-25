@@ -17,6 +17,7 @@ class CreateRouteAttributesTable extends Migration
             $table->increments('id');
             $table->string('category');
             $table->string('name');
+            $table->string('description');
         });
 
         // Fill the table

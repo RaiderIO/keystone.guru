@@ -129,28 +129,7 @@
                                 {!! Form::label('dungeon_route_title', __('Title')) !!}
                                 {!! Form::text('dungeon_route_title', $model->title, ['class' => 'form-control']) !!}
                             </div>
-                            <div class="form-group">
-                                {!! Form::label('attributes', __('Attributes')) !!}
-                                <?php
-                                /** @var \Illuminate\Support\Collection $attributes */
-                                $attributes = \App\Models\RouteAttribute::all()->groupBy('category');
-                                /** @var \Illuminate\Support\Collection $routeAttributes */
-                                $routeAttributes = $model->routeattributes;
-                                ?>
-                                <select multiple name="attributes" id="attributes" class="form-control"
-                                        size="{{ \App\Models\RouteAttribute::all()->count() + $attributes->count() }}">
-                                    @foreach ($attributes as $category => $categoryAttributes)
-                                        <optgroup label="{{ ucfirst($category) }}">
-                                            @foreach ($categoryAttributes as $attribute) {
-                                            <option value="{{ $attribute->id }}"
-                                                    {{ $routeAttributes->contains('id', $attribute->id) ? 'selected' : '' }}>
-                                                {{ $attribute->name }}
-                                            </option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
-                            </div>
+                            @include('common.dungeonroute.attributes', ['label' => __(''), 'dungeonroute' => $model])
 
                             <h3>
                                 {{ __('Group composition (optional)') }}

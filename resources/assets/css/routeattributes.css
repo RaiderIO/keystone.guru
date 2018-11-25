@@ -1,0 +1,24 @@
+.route_attribute-warlock-gate-skip, .route_attribute-rogue-shroud-skip, .route_attribute-mage-slow-fall-skip,
+.route_attribute-invisibility-potion,
+.route_attribute-death-skip
+{ max-width: 100%; background-size: 100%; background-image: url('/images/routeattributes/routeattributes.png'); }
+
+.route_attribute-warlock-gate-skip{
+    background-position: 0 0;
+}
+
+.route_attribute-rogue-shroud-skip {
+    background-position: 0 33.33%;
+}
+
+.route_attribute-mage-slow-fall-skip {
+    background-position: 0 66.66%;
+}
+
+.route_attribute-invisibility-potion {
+    background-position: 33.33% 0;
+}
+
+.route_attribute-death-skip {
+    background-position: 66.66% 0;
+}

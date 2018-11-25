@@ -24,7 +24,7 @@ class APIDungeonRouteController extends Controller
      */
     function list(Request $request)
     {
-        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author'])
+        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
             // ->setAppends(['dungeon', 'affixes', 'author'])
             ->select(['dungeon_routes.*'])
             ->where('unlisted', false)

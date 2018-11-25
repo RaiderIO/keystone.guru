@@ -32,7 +32,7 @@ $profile = isset($profile) ? $profile : false;
                 'lengthMenu': [25],
                 'bLengthChange': false,
                 // Order by affixes by default
-                "order": [[ 1, "asc" ]],
+                "order": [[1, "asc"]],
                 'columns': [
                     {
                         'data': 'dungeon.name',
@@ -134,9 +134,11 @@ $profile = isset($profile) ? $profile : false;
                     dungeonId = '';
                 }
                 let affixes = $("#affixes").val();
+                let attributes = $("#attributes").val();
 
                 _dt.column(0).search(dungeonId);
                 _dt.column(1).search(affixes);
+                _dt.column(2).search(attributes);
                 _dt.draw();
             });
             // Do this asap
@@ -197,6 +199,9 @@ $profile = isset($profile) ? $profile : false;
                 'multiple' => 'multiple',
                 'data-selected-text-format' => 'count > 1',
                 'data-count-selected-text' => __('{0} affixes selected')]) !!}
+        </div>
+        <div class="col-lg-2">
+            @include('common.dungeonroute.attributes', ['selectedIds' => \App\Models\RouteAttribute::all()->pluck('id')->toArray()])
         </div>
         <div class="col-lg-2">
             @auth

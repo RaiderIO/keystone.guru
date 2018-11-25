@@ -9,10 +9,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $category
  * @property string $name
+ * @property string $description
  */
 class RouteAttribute extends Model
 {
     public $timestamps = false;
+
+    public $hidden = ['id', 'pivot'];
 
     public static function boot()
     {

@@ -13,23 +13,28 @@ class RouteAttributesSeeder extends Seeder
     {
         $this->_rollback();
 
-        $this->command->info('Adding route options');
+        $this->command->info('Adding route attributes');
 
         $routeAttributesData = [
             [
-                'name' => 'Rogue Shroud skip',
+                'name' => 'rogue-shroud-skip',
+                'description' => 'Rogue Shroud skip',
                 'category' => 'class'
             ], [
-                'name' => 'Warlock Gate skip',
+                'name' => 'warlock-gate-skip',
+                'description' => 'Warlock Gate skip',
                 'category' => 'class'
             ], [
-                'name' => 'Mage Slow Fall skip',
+                'name' => 'mage-slow-fall-skip',
+                'description' => 'Mage Slow Fall skip',
                 'category' => 'class'
             ], [
-                'name' => 'Invisibility Potion',
+                'name' => 'invisibility-potion',
+                'description' => 'Invisibility Potion',
                 'category' => 'item'
             ], [
-                'name' => 'Death skip',
+                'name' => 'death-skip',
+                'description' => 'Death skip',
                 'category' => 'misc'
             ]
         ];
@@ -37,8 +42,9 @@ class RouteAttributesSeeder extends Seeder
         // Based on above data, insert into the database
         foreach ($routeAttributesData as $attributeData) {
             $attribute = new \App\Models\RouteAttribute();
-            $attribute->name = $attributeData['name'];
             $attribute->category = $attributeData['category'];
+            $attribute->name = $attributeData['name'];
+            $attribute->description = $attributeData['description'];
             $attribute->save();
         }
     }
