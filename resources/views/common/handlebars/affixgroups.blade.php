@@ -35,7 +35,7 @@
 </script>
 <script>
     /**
-     * Converts a received setup from a dungeon route (setup property) to a parsed handlebars template.
+     * Converts a received affix group list from a dungeon route to a parsed handlebars template.
      * @returns {*}
      */
     function handlebarsAffixGroupsParse(data) {

@@ -44,6 +44,7 @@ $title = isset($title) ? $title . ' - ' : '';
         <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
         <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
         <link href="{{ asset('css/raidmarkers.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/routeattributes.css') }}" rel="stylesheet">
         <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
         <link href="{{ asset('css/home.css') }}" rel="stylesheet">
     @endif

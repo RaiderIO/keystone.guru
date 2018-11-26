@@ -47,6 +47,14 @@ $profile = isset($profile) ? $profile : false;
                         'className': 'd-none d-md-table-cell'
                     },
                     {
+                        'data': 'routeattributes',
+                        'name': 'routeattributes.name',
+                        'render': function (data, type, row, meta) {
+                            return handlebarsRouteAttributesParse(data);
+                        },
+                        'className': 'd-none d-md-table-cell'
+                    },
+                    {
                         'data': 'setup',
                         'render': function (data, type, row, meta) {
                             return handlebarsGroupSetupParse(data);
@@ -180,6 +188,7 @@ $profile = isset($profile) ? $profile : false;
     </script>
     @include('common.handlebars.groupsetup')
     @include('common.handlebars.affixgroups')
+    @include('common.handlebars.routeattributes')
     @include('common.handlebars.affixgroupsselect')
 @endsection
 
@@ -221,6 +230,7 @@ $profile = isset($profile) ? $profile : false;
         <tr>
             <th width="15%">{{ __('Dungeon') }}</th>
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
+            <th width="15%" class="d-none d-md-table-cell">{{ __('Attributes') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
             <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
             <th width="5%" class="d-none d-lg-table-cell">{{ __('Rating') }}</th>
