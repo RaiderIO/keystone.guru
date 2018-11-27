@@ -6,13 +6,23 @@ $label = isset($label) ? $label : __('Attributes');
 <div class="form-group">
     {!! Form::label('attributes', $label) !!}
     <?php
+    $allAttributes = \App\Models\RouteAttribute::all();
+    $allAttributeCount = $allAttributes->count();
     /** @var \Illuminate\Support\Collection $attributes */
-    $attributes = \App\Models\RouteAttribute::all()->groupBy('category');
+    $attributes = $allAttributes->groupBy('category');
+
+    // Create a dummy attribute which users can tick on/off to include routes with no attributes.
+    $noAttributes = new \App\Models\RouteAttribute();
+    $noAttributes->id = -1;
+    $noAttributes->name = 'no-attributes';
+    $noAttributes->description = 'No attributes';
+
+    $attributes['meta'] = new \Illuminate\Support\Collection([$noAttributes]);
     /** @var \Illuminate\Support\Collection $routeAttributes */
     $selectedIds = isset($selectedIds) ? $selectedIds : $dungeonroute->routeattributes->pluck('id');
     ?>
     <select multiple name="attributes" id="attributes" class="form-control selectpicker"
-            size="{{ \App\Models\RouteAttribute::all()->count() + $attributes->count() }}">
+            size="{{ $allAttributeCount + $attributes->count() }}">
         @foreach ($attributes as $category => $categoryAttributes)
             <optgroup label="{{ ucfirst($category) }}">
                 @foreach ($categoryAttributes as $attribute) {
