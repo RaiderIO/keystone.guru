@@ -1,6 +1,7 @@
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
 $label = isset($label) ? $label : __('Attributes');
+$showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
 ?>
 
 <div class="form-group">
@@ -11,15 +12,18 @@ $label = isset($label) ? $label : __('Attributes');
     /** @var \Illuminate\Support\Collection $attributes */
     $attributes = $allAttributes->groupBy('category');
 
-    // Create a dummy attribute which users can tick on/off to include routes with no attributes.
-    $noAttributes = new \App\Models\RouteAttribute();
-    $noAttributes->id = -1;
-    $noAttributes->name = 'no-attributes';
-    $noAttributes->description = 'No attributes';
+    if ($showNoAttributes) {
+        // Create a dummy attribute which users can tick on/off to include routes with no attributes.
+        $noAttributes = new \App\Models\RouteAttribute();
+        $noAttributes->id = -1;
+        $noAttributes->name = 'no-attributes';
+        $noAttributes->description = 'No attributes';
 
-    $attributes['meta'] = new \Illuminate\Support\Collection([$noAttributes]);
+        $attributes['meta'] = new \Illuminate\Support\Collection([$noAttributes]);
+    }
+
     /** @var \Illuminate\Support\Collection $routeAttributes */
-    $selectedIds = isset($selectedIds) ? $selectedIds : $dungeonroute->routeattributes->pluck('id');
+    $selectedIds = isset($selectedIds) ? $selectedIds : $dungeonroute->routeattributes->pluck('id')->toArray();
     ?>
     <select multiple name="attributes" id="attributes" class="form-control selectpicker"
             size="{{ $allAttributeCount + $attributes->count() }}">

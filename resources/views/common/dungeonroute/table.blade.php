@@ -210,7 +210,9 @@ $profile = isset($profile) ? $profile : false;
                 'data-count-selected-text' => __('{0} affixes selected')]) !!}
         </div>
         <div class="col-lg-2">
-            @include('common.dungeonroute.attributes', ['selectedIds' => \App\Models\RouteAttribute::all()->pluck('id')->toArray()])
+            @include('common.dungeonroute.attributes', [
+            'selectedIds' => array_merge( [-1], \App\Models\RouteAttribute::all()->pluck('id')->toArray() ),
+            'showNoAttributes' => true])
         </div>
         <div class="col-lg-2">
             @auth

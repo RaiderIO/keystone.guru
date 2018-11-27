@@ -33,13 +33,14 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
         if (!empty($routeattributes)) {
             $routeAttributeIds = explode(',', $routeattributes);
 
+            // If we should account for dungeon routes having no attributes
+            if( in_array(-1, $routeAttributeIds) ){
+                $builder->whereHas('routeattributes', null, '=', 0);
+            }
+
             $builder->whereHas('routeattributes', function ($query) use (&$routeAttributeIds) {
                 /** @var $query Builder */
                 $query->whereIn('route_attributes.id', $routeAttributeIds);
-
-                if( in_array(-1, $routeAttributeIds) ){
-                    $query->orWhere('route_attributes.id', '=', null);
-                }
             });
         }
 
@@ -48,8 +49,8 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
             $builder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
         }
 
-//        DB::enableQueryLog();
-//        $builder->get();
-//        dd(DB::getQueryLog());
+        DB::enableQueryLog();
+        $builder->get();
+        dd(DB::getQueryLog());
     }
 }
