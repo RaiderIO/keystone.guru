@@ -39,8 +39,6 @@
             }
         }
 
-        let result = template(handlebarsData);
-        console.log(result);
-        return result;
+        return template(handlebarsData);
     }
 </script>

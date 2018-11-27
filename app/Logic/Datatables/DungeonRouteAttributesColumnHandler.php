@@ -8,8 +8,8 @@
 
 namespace App\Logic\Datatables;
 
+use App\Models\RouteAttribute;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
 {
@@ -31,26 +31,38 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
 
         // If filtering
         if (!empty($routeattributes)) {
+            $allRouteAttributeIds = RouteAttribute::all()->pluck('id')->toArray();
             $routeAttributeIds = explode(',', $routeattributes);
 
+            // Compute the attribute IDs that the user does NOT want
+            $invalidAttributeIds = array_diff($allRouteAttributeIds, $routeAttributeIds);
+
+            $filterFn = function ($query) use (&$invalidAttributeIds, &$routeAttributeIds) {
+                /** @var $query Builder */
+                $query->whereIn('dungeon_route_attributes.route_attribute_id', $invalidAttributeIds);
+            };
+
             // If we should account for dungeon routes having no attributes
-            if( in_array(-1, $routeAttributeIds) ){
-                $builder->whereHas('routeattributes', null, '=', 0);
+            if (in_array(-1, $routeAttributeIds)) {
+                // Wrap this in a where so both these statements get brackets around them
+                $builder->where(function ($query) use (&$filterFn) {
+                    /** @var $query Builder */
+                    // May not have attributes at all
+                    $query->whereHas('routeattributes', null, '=', 0);
+                    $query->orWhereHas('routeattributes', $filterFn, '=', 0);
+                });
+            } else {
+                // Must have attributes
+                $builder->whereHas('routeattributes');
+                // But may not have some specific attributes
+                $builder->whereHas('routeattributes', $filterFn, '=', 0);
             }
 
-            $builder->whereHas('routeattributes', function ($query) use (&$routeAttributeIds) {
-                /** @var $query Builder */
-                $query->whereIn('route_attributes.id', $routeAttributeIds);
-            });
         }
 
         // If ordering
         if ($order !== null) {
             $builder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
         }
-
-        DB::enableQueryLog();
-        $builder->get();
-        dd(DB::getQueryLog());
     }
 }

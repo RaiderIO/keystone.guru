@@ -124,28 +124,24 @@ class DatatablesHandler
      */
     public function getResult()
     {
+        $isDev = config('app.env') !== 'production';
+        if ($isDev) {
+            DB::enableQueryLog();
+        }
 
-        // @TODO Fix this workaround. This is done because doing a count when sorting for ratings gives an SQL error
-        // The count SQL (imho) incorrectly adds a order by which does not exist because it deletes the column that it's
-        // sorting on when injecting its borked COUNT statement in the select.
-        // The solution in this case is to temporarily remove the order by statement from the builder, do the count,
-        // and then restore it. The error was:
-        // SQLSTATE[42S22]: Column not found: 1054 Unknown column 'avg_rating' in 'order clause' (SQL: select count(*) as aggregate from `dungeon_routes` left join `dungeon_route_ratings` on `dungeon_route_id` = `dungeon_routes`.`id` where `unlisted` = 0 and `demo` = 0 and exists (select * from `dungeons` where `dungeon_routes`.`dungeon_id` = `dungeons`.`id` and `active` = 1) and `published` = 1 group by dungeon_routes.id order by `avg_rating` asc limit 25 offset 0)
-
-        $query = $this->_builder->getQuery();
-        $oldOrders = $query->orders;
-        $query->orders = null;
-        $count = $this->_builder->count();
-        $query->orders = $oldOrders;
+        // Fetch the data here so we can get a count
+        $data = $this->_builder->get();
 
         $result = [
             'draw' => (int)$this->_request->get('draw'),
             // Initial amount of records
             'recordsTotal' => $this->_recordsTotal,
             // The amount of records after filtering
-            'recordsFiltered' => $count,
-            'data' => $this->_builder->get(),
-            'input' => $this->_request->toArray()
+            'recordsFiltered' => $data->count(),
+            'data' => $data,
+            // Only show this info in dev instance
+            'input' => $isDev ? $this->_request->toArray() : [],
+            'queries' => $isDev ? DB::getQueryLog() : []
         ];
 
         return $result;

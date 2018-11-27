@@ -38,7 +38,7 @@ class RatingColumnHandler extends DatatablesColumnHandler
             // This may have to be revisited once the site gains some more traction and votes start pouring in
             $builder->addSelect(DB::raw('(AVG(dungeon_route_ratings.rating) / 2) + LOG(COUNT(dungeon_route_ratings.id)) as weighted_rating'));
 
-            $builder->leftJoin('dungeon_route_ratings', 'dungeon_route_id', '=', 'dungeon_routes.id');
+            $builder->leftJoin('dungeon_route_ratings', 'dungeon_route_ratings.dungeon_route_id', '=', 'dungeon_routes.id');
             $builder->groupBy(DB::raw('dungeon_routes.id'));
             $builder->orderBy('weighted_rating', $order['dir'] === 'asc' ? 'asc' : 'desc');
         }
