@@ -24,10 +24,13 @@ $profile = isset($profile) ? $profile : false;
                     }, <?php // Enable caching when in production mode, disable it when developing ?>
                     'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}',
                 },
-                'fnInitComplete': function (oSettings, json) {
-                    $.each($routesTable.find('tbody tr'), function (index, value) {
-                        $(value).data('publickey', json.data[index].public_key);
-                    });
+                'drawCallback': function (settings) {
+                    // Don't do anything when the message "no data available" is showing
+                    if (settings.json.data.length > 0) {
+                        $.each($routesTable.find('tbody tr'), function (index, value) {
+                            $(value).data('publickey', settings.json.data[index].public_key);
+                        });
+                    }
                 },
                 'lengthMenu': [25],
                 'bLengthChange': false,
@@ -88,7 +91,7 @@ $profile = isset($profile) ? $profile : false;
                     <?php if($profile){ ?>
                     , {
                         'render': function (data, type, row, meta) {
-                            return row.published === '1' ? 'Yes' : 'No';
+                            return row.published === 1 ? 'Yes' : 'No';
                         },
                         'className': 'd-none d-lg-table-cell',
                     }, {
@@ -201,7 +204,7 @@ $profile = isset($profile) ? $profile : false;
             {!! Form::select('dungeon_id', [0 => 'All'] + \App\Models\Dungeon::active()->pluck('name', 'id')->toArray(), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
         </div>
         <div id="affixgroup_select_container" class="col-lg-2">
-            {!! Form::label('affixes[]', __('Affixes') . "*") !!}
+            {!! Form::label('affixes[]', __('Affixes')) !!}
             {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('text', 'id'), null,
                 ['id' => 'affixes',
                 'class' => 'form-control affixselect selectpicker',
