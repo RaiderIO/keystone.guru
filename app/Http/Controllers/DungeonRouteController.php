@@ -6,6 +6,7 @@ use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\KillZone;
+use App\Models\PageView;
 use App\Models\Route;
 use App\Models\UserReport;
 use Illuminate\Database\Eloquent\Model;
@@ -98,6 +99,8 @@ class DungeonRouteController extends Controller
                     ->first();
             }
 
+            PageView::trackPageView($dungeonroute->id, get_class($dungeonroute));
+
             $result = view('dungeonroute.view', [
                 'model' => $dungeonroute,
                 'current_report' => $currentReport
@@ -166,17 +169,16 @@ class DungeonRouteController extends Controller
                     $model->save();
 
                     // If it was a route, save the vertices as well
-                    if($model instanceof Route ){
-                        foreach($model->vertices as $vertex){
+                    if ($model instanceof Route) {
+                        foreach ($model->vertices as $vertex) {
                             $vertex->id = 0;
                             $vertex->exists = false;
                             $vertex->route_id = $model->id;
                             $vertex->save();
                         }
-                    }
-                    // KillZone, save the enemies that were attached to them
-                    else if($model instanceof KillZone ){
-                        foreach($model->killzoneenemies as $enemy){
+                    } // KillZone, save the enemies that were attached to them
+                    else if ($model instanceof KillZone) {
+                        foreach ($model->killzoneenemies as $enemy) {
                             $enemy->id = 0;
                             $enemy->exists = false;
                             $enemy->kill_zone_id = $model->id;

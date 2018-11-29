@@ -50,6 +50,7 @@ use Illuminate\Support\Facades\DB;
  *
  * @property \Illuminate\Support\Collection $enemyraidmarkers
  * @property \Illuminate\Support\Collection $mapcomments
+ * @property \Illuminate\Support\Collection $pageviews
  */
 class DungeonRoute extends Model
 {
@@ -58,7 +59,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'avg_rating', 'rating_count'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count', 'views'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at', 'killzones', 'faction'];
 
@@ -241,6 +242,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pageviews()
+    {
+        return $this->hasMany('App\Models\PageView', 'model_id')->where('model_class', get_class($this));
+    }
+
+    /**
      * @return double
      */
     public function getAvgRatingAttribute()
@@ -255,6 +264,13 @@ class DungeonRoute extends Model
         }
 
         return round($avg, 2);
+    }
+
+    /**
+     * @return int
+     */
+    public function getViewsAttribute(){
+        return $this->pageviews->count();
     }
 
     /**

@@ -87,6 +87,11 @@ $profile = isset($profile) ? $profile : false;
                             return result;
                         },
                         'className': 'd-none d-lg-table-cell'
+                    },
+                    {
+                        'data': 'views',
+                        'name': 'views',
+                        'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
                     }
                     <?php if($profile){ ?>
                     , {
@@ -239,6 +244,7 @@ $profile = isset($profile) ? $profile : false;
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
             <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
             <th width="5%" class="d-none d-lg-table-cell">{{ __('Rating') }}</th>
+            <th width="5%" class="d-none d-lg-table-cell">{{ __('Views') }}</th>
             <?php if( $profile ) { ?>
             <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
             <th width="10%">{{ __('Actions') }}</th>
