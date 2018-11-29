@@ -22,11 +22,13 @@
     <table id="admin_user_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="10%">{{ __('Id') }}</th>
+            <th width="5%">{{ __('Id') }}</th>
             <th width="20%">{{ __('Name') }}</th>
-            <th width="20%">{{ __('Roles') }}</th>
-            <th width="20%">{{ __('Registered') }}</th>
-            <th width="30%">{{ __('Actions') }}</th>
+            <th width="10%">{{ __('Roles') }}</th>
+            <th width="15%">{{ __('Registered') }}</th>
+            <th width="15%">{{ __('Last action') }}</th>
+            <th width="15%">{{ __('# routes') }}</th>
+            <th width="20%">{{ __('Actions') }}</th>
         </tr>
         </thead>
 
@@ -38,6 +40,8 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ implode(', ', $user->roles->pluck('display_name')->toArray())}}</td>
                 <td>{{ $user->created_at->setTimezone('Europe/Amsterdam') }}</td>
+                <td>{{ $user->updated_at->setTimezone('Europe/Amsterdam') }}</td>
+                <td>{{ $user->dungeonroutes->count() }}</td>
                 <td>
                     <?php
                     // I really want to be the only one doing this
@@ -51,7 +55,10 @@
                         {!! Form::submit(__('Make user'), ['class' => 'btn btn-info ml-1', 'name' => 'submit', 'value' => 'submit']) !!}
                         {!! Form::close() !!}
                     </div>
-                    <?php } ?>
+                    <?php } else {
+                        echo _('Please login as "Admin"');
+                    }
+                    ?>
                 </td>
             </tr>
         @endforeach
