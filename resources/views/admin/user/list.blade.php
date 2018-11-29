@@ -24,10 +24,10 @@
         <tr>
             <th width="5%">{{ __('Id') }}</th>
             <th width="20%">{{ __('Name') }}</th>
+            <th width="15%">{{ __('# routes') }}</th>
             <th width="10%">{{ __('Roles') }}</th>
             <th width="15%">{{ __('Registered') }}</th>
             <th width="15%">{{ __('Last action') }}</th>
-            <th width="15%">{{ __('# routes') }}</th>
             <th width="20%">{{ __('Actions') }}</th>
         </tr>
         </thead>
@@ -38,10 +38,10 @@
             <tr>
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->name }}</td>
+                <td>{{ $user->dungeonroutes->count() }}</td>
                 <td>{{ implode(', ', $user->roles->pluck('display_name')->toArray())}}</td>
                 <td>{{ $user->created_at->setTimezone('Europe/Amsterdam') }}</td>
                 <td>{{ $user->updated_at->setTimezone('Europe/Amsterdam') }}</td>
-                <td>{{ $user->dungeonroutes->count() }}</td>
                 <td>
                     <?php
                     // I really want to be the only one doing this
