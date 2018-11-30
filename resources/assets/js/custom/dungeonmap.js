@@ -12,6 +12,7 @@ class DungeonMap extends Signalable {
         this.teeming = options.teeming;
         this.dungeonroute = options.dungeonroute;
         this.visualType = options.defaultEnemyVisualType;
+        this.noUI = options.noUI;
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -267,22 +268,26 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         let result = [];
-        if (this.edit) {
-            result.push(new DrawControls(this, drawnItemsLayer));
-        }
 
-        // Only when enemy forces are relevant in their display (not in a view + no route (infested voting))
-        if (this.getDungeonRoute().publicKey !== '' || this.edit) {
-            result.push(new EnemyForcesControls(this));
-        }
-        result.push(new EnemyVisualControls(this));
-        result.push(new MapObjectGroupControls(this));
+        // No UI = no map controls at all
+        if (!this.noUI) {
+            if (this.edit) {
+                result.push(new DrawControls(this, drawnItemsLayer));
+            }
 
-        if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
-            result.push(new FactionDisplayControls(this));
-        }
+            // Only when enemy forces are relevant in their display (not in a view + no route (infested voting))
+            if (this.getDungeonRoute().publicKey !== '' || this.edit) {
+                result.push(new EnemyForcesControls(this));
+            }
+            result.push(new EnemyVisualControls(this));
+            result.push(new MapObjectGroupControls(this));
 
-        // result.push(new AdDisplayControls(this));
+            if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
+                result.push(new FactionDisplayControls(this));
+            }
+
+            // result.push(new AdDisplayControls(this));
+        }
 
         return result;
     }

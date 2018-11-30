@@ -88,11 +88,10 @@ class DungeonRouteController extends Controller
         if (!$dungeonroute->published) {
             $result = view('dungeonroute.unpublished', ['headerTitle' => __('Route unpublished')]);
         } else {
-            $user = Auth::user();
             $currentReport = null;
-            if ($user !== null) {
+            if (Auth::check()) {
                 // Find any currently active report the user has made
-                $currentReport = UserReport::where('author_id', $user->id)
+                $currentReport = UserReport::where('author_id', Auth::id())
                     ->where('context', $dungeonroute->getReportContext())
                     ->where('category', 'dungeonroute')
                     ->where('handled', 0)
@@ -104,6 +103,27 @@ class DungeonRouteController extends Controller
             $result = view('dungeonroute.view', [
                 'model' => $dungeonroute,
                 'current_report' => $currentReport
+            ]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function preview(Request $request, DungeonRoute $dungeonroute)
+    {
+        $result = null;
+
+        // @TODO This should be handled differently imho
+        if (!$dungeonroute->published) {
+            $result = view('dungeonroute.unpublished', ['headerTitle' => __('Route unpublished')]);
+        } else {
+            $result = view('dungeonroute.preview', [
+                'model' => $dungeonroute
             ]);
         }
 

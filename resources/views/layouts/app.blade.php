@@ -20,6 +20,11 @@ $header = isset($header) ? $header : true;
 $footer = isset($footer) ? $footer : true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
+// Show cookie consent
+$cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
+
+// Easy switch
+$isProduction = true; // config('app.env') === 'production';
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -36,7 +41,7 @@ $title = isset($title) ? $title . ' - ' : '';
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-    @if (config('app.env') !== 'production')
+    @if (!$isProduction)
         <link href="{{ asset('css/map.css') }}" rel="stylesheet">
         <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
         <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
@@ -52,12 +57,17 @@ $title = isset($title) ? $title . ' - ' : '';
     @yield('head')
 
     @include('common.general.scripts', ['showLegalModal' => $showLegalModal])
+    @if(!$custom)
+        @include('common.general.sitescripts')
+    @endif
+    @if($cookieConsent)
     @include('common.thirdparty.cookieconsent')
+    @endif
 
-    @if(!$noads )
+    @if(!$noads && $isProduction)
         @include('common.thirdparty.adsense')
     @endif
-    @if(config('app.env') === 'production')
+    @if($isProduction)
         @include('common.thirdparty.analytics')
     @endif
 </head>
@@ -185,7 +195,7 @@ $title = isset($title) ? $title . ' - ' : '';
         @yield('content')
     @else
 
-        @if (config('app.env') !== 'production' && (Auth::user() === null || !Auth::user()->hasRole('admin')))
+        @if (!$isProduction && (Auth::user() === null || !Auth::user()->hasRole('admin')))
             <div class="container-fluid alert alert-warning text-center mt-4">
                 <i class="fa fa-exclamation-triangle"></i>
                 {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
@@ -424,7 +434,7 @@ $title = isset($title) ? $title . ' - ' : '';
 @if(!$noads)
 @endif
 
-@if (config('app.env') === 'production')
+@if ($isProduction)
     <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
     <script src="{{ asset('js/custom.js') }}"></script>
 
