@@ -54,8 +54,7 @@ $profile = isset($profile) ? $profile : false;
                         'name': 'routeattributes.name',
                         'render': function (data, type, row, meta) {
                             return handlebarsRouteAttributesParse(data);
-                        },
-                        'className': 'd-none d-md-table-cell'
+                        }
                     },
                     {
                         'data': 'setup',
@@ -68,6 +67,11 @@ $profile = isset($profile) ? $profile : false;
                     {
                         'data': 'author.name',
                         'name': 'author.name',
+                        'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
+                    },
+                    {
+                        'data': 'views',
+                        'name': 'views',
                         'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
                     },
                     {
@@ -85,13 +89,7 @@ $profile = isset($profile) ? $profile : false;
                             }
 
                             return result;
-                        },
-                        'className': 'd-none d-lg-table-cell'
-                    },
-                    {
-                        'data': 'views',
-                        'name': 'views',
-                        'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
+                        }
                     }
                     <?php if($profile){ ?>
                     , {
@@ -240,11 +238,11 @@ $profile = isset($profile) ? $profile : false;
         <tr>
             <th width="15%">{{ __('Dungeon') }}</th>
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
-            <th width="15%" class="d-none d-md-table-cell">{{ __('Attributes') }}</th>
+            <th width="15%">{{ __('Attributes') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
             <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
-            <th width="5%" class="d-none d-lg-table-cell">{{ __('Rating') }}</th>
-            <th width="5%" class="d-none d-lg-table-cell">{{ __('Views') }}</th>
+            <th width="5%" class="d-none d-md-table-cell">{{ __('Views') }}</th>
+            <th width="5%">{{ __('Rating') }}</th>
             <?php if( $profile ) { ?>
             <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
             <th width="10%">{{ __('Actions') }}</th>

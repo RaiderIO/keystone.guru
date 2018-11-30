@@ -72,15 +72,12 @@ class PageView extends Model
         $userId = Auth::id();
         // PHP session ID for keeping track of guests
         $sessionId = Session::getId();
-        DB::enableQueryLog();
 
         /** @var Collection $existingPageViews */
         $existingPageViews = PageView::where('user_id', $userId)
             ->where('model_id', $modelId)
             ->where('model_class', $modelClass)
             ->where('session_id', $sessionId)->get();
-
-        dd(DB::getQueryLog());
 
         return $existingPageViews->first();
     }

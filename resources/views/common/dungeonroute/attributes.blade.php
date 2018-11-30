@@ -5,7 +5,13 @@ $showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
 ?>
 
 <div class="form-group">
-    {!! Form::label('attributes', $label) !!}
+    <label for="attributes">
+        {{ $label }}
+        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+        __('Attributes describe what features your route has that others may not be able to complete due to composition ' .
+            'differences or skill. Marking attributes properly enables others to find your route more easily.')
+         }}"></i>
+    </label>
     <?php
     $allAttributes = \App\Models\RouteAttribute::all();
     $allAttributeCount = $allAttributes->count();
@@ -23,7 +29,7 @@ $showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
     }
 
     /** @var \Illuminate\Support\Collection $routeAttributes */
-    $selectedIds = isset($selectedIds) ? $selectedIds : $dungeonroute->routeattributes->pluck('id')->toArray();
+    $selectedIds = isset($selectedIds) ? $selectedIds : (!isset($dungeonroute) ? [] : $dungeonroute->routeattributes->pluck('id')->toArray());
     ?>
     <select multiple name="attributes" id="attributes" class="form-control selectpicker"
             size="{{ $allAttributeCount + $attributes->count() }}">
