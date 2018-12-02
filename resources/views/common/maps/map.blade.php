@@ -16,7 +16,9 @@ $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness'
 // Show ads or not
 $noads = isset($noads) ? !Auth::check() ? $noads : Auth::user()->hasPaidTier('ad-free') : false;
 // No UI on the map
-$noUI = isset($noUI) ? $noUI : false;
+$noUI = isset($noUI) && $noUI ? 'true' : 'false';
+// By default hidden elements
+$hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
 
 $introTexts = [
     __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
@@ -66,7 +68,8 @@ $introTexts = [
             },
             defaultEnemyVisualType: '{{ $enemyVisualType }}',
             teeming: {{ $teeming }},
-            noUI: {{ $noUI }}
+            noUI: {{ $noUI }},
+            hiddenMapObjectGroups: {!!  json_encode($hiddenMapObjectGroups) !!}
         };
 
         $(function () {

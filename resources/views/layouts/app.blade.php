@@ -22,9 +22,8 @@ $footer = isset($footer) ? $footer : true;
 $title = isset($title) ? $title . ' - ' : '';
 // Show cookie consent
 $cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
-
 // Easy switch
-$isProduction = true; // config('app.env') === 'production';
+$isProduction = config('app.env') === 'production';
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>

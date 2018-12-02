@@ -11,10 +11,6 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 
         // Fade out success messages. They're not too interesting
         $("#app_session_status_message").delay(7000).fadeOut(200);
-        @guest
-        newPassword('#register_password');
-        newPassword('#modal-register_password');
-        @endguest
 
         // Enable tooltips for all elements
         refreshTooltips();

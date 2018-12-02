@@ -40,7 +40,7 @@ class PageView extends Model
      */
     public static function trackPageView($modelId, $modelClass)
     {
-        $userId = Auth::id();
+        $userId = Auth::id() ?: -1;
         // PHP session ID for keeping track of guests
         $sessionId = Session::getId();
 

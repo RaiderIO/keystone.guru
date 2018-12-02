@@ -13,6 +13,7 @@ class DungeonMap extends Signalable {
         this.dungeonroute = options.dungeonroute;
         this.visualType = options.defaultEnemyVisualType;
         this.noUI = options.noUI;
+        this.hiddenMapObjectGroups = options.hiddenMapObjectGroups;
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -239,21 +240,37 @@ class DungeonMap extends Signalable {
     _createMapObjectGroups() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        let result = [
-            new EnemyMapObjectGroup(this, 'enemy', 'Enemy', false),
-            new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol', false),
-            new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false)
-        ];
+        let result = [];
+
+        if (this.hiddenMapObjectGroups.indexOf('enemy') < 0) {
+            result.push(new EnemyMapObjectGroup(this, 'enemy', 'Enemy', false));
+        }
+        if (this.hiddenMapObjectGroups.indexOf('enemypatrol') < 0) {
+            result.push(new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol', false));
+        }
+        if (this.hiddenMapObjectGroups.indexOf('enemypack') < 0) {
+            result.push(new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false));
+        }
 
         // Only add these two if they're worth fetching (not in a view + no route (infested voting))
         if (this.getDungeonRoute().publicKey !== '' || this.edit) {
-            result.push(new RouteMapObjectGroup(this, 'route', true));
-            result.push(new KillZoneMapObjectGroup(this, 'killzone', true));
+            if (this.hiddenMapObjectGroups.indexOf('route') < 0) {
+                result.push(new RouteMapObjectGroup(this, 'route', true));
+            }
+            if (this.hiddenMapObjectGroups.indexOf('killzone') < 0) {
+                result.push(new KillZoneMapObjectGroup(this, 'killzone', true));
+            }
         }
 
-        result.push(new MapCommentMapObjectGroup(this, 'mapcomment', true));
-        result.push(new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false));
-        result.push(new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false));
+        if (this.hiddenMapObjectGroups.indexOf('mapcomment') < 0) {
+            result.push(new MapCommentMapObjectGroup(this, 'mapcomment', true));
+        }
+        if (this.hiddenMapObjectGroups.indexOf('dungeonstartmarker') < 0) {
+            result.push(new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false));
+        }
+        if (this.hiddenMapObjectGroups.indexOf('dungeonfloorswitchmarker') < 0) {
+            result.push(new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false));
+        }
 
         return result;
     }
