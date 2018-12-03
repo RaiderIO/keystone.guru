@@ -14,6 +14,7 @@ class DungeonMap extends Signalable {
         this.visualType = options.defaultEnemyVisualType;
         this.noUI = options.noUI;
         this.hiddenMapObjectGroups = options.hiddenMapObjectGroups;
+        this.defaultZoom = options.hasOwnProperty('defaultZoom') ? options.defaultZoom : 2;
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -448,7 +449,7 @@ class DungeonMap extends Signalable {
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
-        this.leafletMap.setView([-128, 192], 2);
+        this.leafletMap.setView([-128, 192], this.defaultZoom);
         let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 

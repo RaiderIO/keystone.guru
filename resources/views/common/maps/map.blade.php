@@ -17,6 +17,8 @@ $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness'
 $noads = isset($noads) ? !Auth::check() ? $noads : Auth::user()->hasPaidTier('ad-free') : false;
 // No UI on the map
 $noUI = isset($noUI) && $noUI ? 'true' : 'false';
+// Default zoom for the map
+$defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
 
@@ -69,7 +71,8 @@ $introTexts = [
             defaultEnemyVisualType: '{{ $enemyVisualType }}',
             teeming: {{ $teeming }},
             noUI: {{ $noUI }},
-            hiddenMapObjectGroups: {!!  json_encode($hiddenMapObjectGroups) !!}
+            hiddenMapObjectGroups: {!!  json_encode($hiddenMapObjectGroups) !!},
+            defaultZoom: {{ $defaultZoom }}
         };
 
         $(function () {

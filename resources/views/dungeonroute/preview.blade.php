@@ -12,12 +12,13 @@ $dungeon->load('floors');
         'dungeonroute' => $model,
         'edit' => false,
         'noUI' => true,
+        'defaultZoom' => 1,
         'hiddenMapObjectGroups' => [
             'enemy',
             'enemypatrol',
             'enemypack',
             'mapcomment',
-            'dungeonfloorswitchmarker'
+            'dungeonfloorswitchmarker',
         ]
     ])
 @endsection
