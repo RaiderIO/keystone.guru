@@ -8,8 +8,7 @@
 
 namespace App\Logic\Scheduler;
 
-use App\Jobs\ProcessRouteThumbnails;
-use App\Models\Dungeon;
+use App\Jobs\ProcessRouteThumbnail;
 use App\Models\DungeonRoute;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Carbon;
@@ -41,7 +40,7 @@ class FindOutdatedThumbnails
                 // Updated at is greater than the thumbnail updated at (don't keep updating thumbnails..
                 $updatedAt->greaterThan($thumbnailUpdatedAt)) {
                 // Set it for processing in a queue
-                ProcessRouteThumbnails::dispatch($dungeonRoute);
+                ProcessRouteThumbnail::dispatch($dungeonRoute);
             }
         }
     }

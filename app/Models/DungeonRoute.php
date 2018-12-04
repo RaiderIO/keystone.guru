@@ -28,6 +28,10 @@ use Illuminate\Support\Facades\DB;
  * @property $rating_count int
  * @property $enemy_forces int
  *
+ * @property $thumbnail_updated_at string
+ * @property $updated_at string
+ * @property $created_at string
+ *
  * @property Dungeon $dungeon
  * @property Route $route
  * @property Faction $faction

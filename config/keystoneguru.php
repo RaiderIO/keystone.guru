@@ -48,5 +48,10 @@ return [
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
      * the view is counted for a second time.
      */
-    'view_time_threshold_mins' => 30
+    'view_time_threshold_mins' => 30,
+
+    /**
+     * The amount of time to give the route thumbnail processor to complete its processing.
+     */
+    'route_thumbnail_virtual_time_budget' => 10000
 ];

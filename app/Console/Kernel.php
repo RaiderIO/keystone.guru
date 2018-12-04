@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Jobs\ProcessRouteThumbnails;
+use App\Jobs\ProcessRouteThumbnail;
 use App\Logic\Scheduler\FindOutdatedThumbnails;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
