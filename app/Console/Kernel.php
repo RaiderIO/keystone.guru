@@ -2,10 +2,10 @@
 
 namespace App\Console;
 
-use App\Jobs\ProcessRouteThumbnail;
 use App\Logic\Scheduler\FindOutdatedThumbnails;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,9 +26,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        Log::channel('scheduler')->debug("Starting scheduler");
+
         // $schedule->command('inspire')
         //          ->hourly();
-        // $schedule->call(new FindOutdatedThumbnails($schedule))->everyFiveMinutes();
+        $schedule->call(new FindOutdatedThumbnails);
+        Log::channel('scheduler')->debug("Finished scheduler");
     }
 
     /**

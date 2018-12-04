@@ -43,7 +43,7 @@ return [
         ],
         'discord' => [
             'driver' => 'custom',
-            'url' => 'https://discordapp.com/api/webhooks/' . env(''),
+            'url' => 'https://discordapp.com/api/webhooks/' . env('APP_LOG_DISCORD_WEBHOOK'),
             'via' => App\Logging\CreateDiscordLogger::class,
             'level' => 'error',
         ],
