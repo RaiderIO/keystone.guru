@@ -39,26 +39,47 @@ class ProcessRouteThumbnail implements ShouldQueue
     {
         Log::channel('scheduler')->info(sprintf('Started processing %s', $this->dungeonRoute->public_key));
 
+//        $result = [];
+//        $resultCode = -1;
+//        $cmd = sprintf('/usr/bin/chromium-browser --headless --disable-gpu --window-size=768,512 --screenshot=%s
+//            --no-sandbox --run-all-compositor-stages-before-draw --virtual-time-budget=%s %s',
+//            storage_path('route_thumbnails') . DIRECTORY_SEPARATOR . $this->dungeonRoute->public_key . '.png',
+//            config('keystoneguru.route_thumbnail_virtual_time_budget'),
+//            sprintf('https://dev.keystone.guru/%s/preview', $this->dungeonRoute->public_key)
+//        );
+//
+//        Log::channel('scheduler')->info($cmd);
+//        exec(
+//            $cmd,
+//            $result,
+//            $resultCode
+//        );
+//
+//        Log::channel('scheduler')->info('Finished @ ' . $resultCode);
+//        foreach ($result as $line) {
+//            Log::channel('scheduler')->info($line);
+//        }
+
         // chromium-browser
         $process = new Process(['chromium-browser',
-            sprintf(
-                '--headless 
-                --disable-gpu 
-                --window-size=768,512 
-                --screenshot="%s"
-                --no-sandbox 
-                --run-all-compositor-stages-before-draw 
-                --virtual-time-budget=%s 
-                https://dev.keystone.guru/%s/preview',
-                storage_path('route_thumbnails') . DIRECTORY_SEPARATOR . $this->dungeonRoute->public_key . '.png',
-                config('keystoneguru.route_thumbnail_virtual_time_budget'),
-                $this->dungeonRoute->public_key
-            )
+            '--headless',
+            '--disable-gpu',
+            '--window-size=768,512',
+            '--screenshot=' . storage_path('route_thumbnails') . DIRECTORY_SEPARATOR . $this->dungeonRoute->public_key . '.png',
+            '--no-sandbox',
+            '--run-all-compositor-stages-before-draw',
+            '--virtual-time-budget=' . config('keystoneguru.route_thumbnail_virtual_time_budget'),
+            sprintf('https://dev.keystone.guru/%s/preview', $this->dungeonRoute->public_key)
         ]);
 
-        $process->run();
 
-        // Log errors to the error output
+
+         Log::channel('scheduler')->info($process->getCommandLine());
+
+        $process->run(function(){
+            Log::channel('scheduler')->info('Callback!');
+        });
+
         if ($process->isSuccessful()) {
             // We've updated the thumbnail; make sure the route is updated so it doesn't get updated anymore
             $this->dungeonRoute->thumbnail_updated_at = Carbon::now()->toDateTimeString();

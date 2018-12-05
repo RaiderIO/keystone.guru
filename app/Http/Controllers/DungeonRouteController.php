@@ -116,16 +116,9 @@ class DungeonRouteController extends Controller
      */
     public function preview(Request $request, DungeonRoute $dungeonroute)
     {
-        $result = null;
-
-        // @TODO This should be handled differently imho
-        if (!$dungeonroute->published) {
-            $result = view('dungeonroute.unpublished', ['headerTitle' => __('Route unpublished')]);
-        } else {
-            $result = view('dungeonroute.preview', [
-                'model' => $dungeonroute
-            ]);
-        }
+        $result = view('dungeonroute.preview', [
+            'model' => $dungeonroute
+        ]);
 
         return $result;
     }

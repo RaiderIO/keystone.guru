@@ -14,7 +14,7 @@ class AddThumbnailUpdatedAtColumnToDungeonRoutes extends Migration
     public function up()
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
-            $table->timestamp('thumbnail_updated_at')->after('demo');
+            $table->timestamp('thumbnail_updated_at')->default('1970-01-01 12:00:00')->after('demo');
         });
     }
 
