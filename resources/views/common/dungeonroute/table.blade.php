@@ -6,6 +6,7 @@ $profile = isset($profile) ? $profile : false;
     @parent
 
     <script type="text/javascript">
+        let _viewMode = 'biglist';
         let _dt;
 
         $(function () {
@@ -36,77 +37,7 @@ $profile = isset($profile) ? $profile : false;
                 'bLengthChange': false,
                 // Order by affixes by default
                 "order": [[1, "asc"]],
-                'columns': [
-                    {
-                        'data': 'dungeon.name',
-                        'name': 'dungeon_id'
-                    },
-                    {
-                        'data': 'affixes',
-                        'name': 'affixes.id',
-                        'render': function (data, type, row, meta) {
-                            return handlebarsAffixGroupsParse(data);
-                        },
-                        'className': 'd-none d-md-table-cell'
-                    },
-                    {
-                        'data': 'routeattributes',
-                        'name': 'routeattributes.name',
-                        'render': function (data, type, row, meta) {
-                            return handlebarsRouteAttributesParse(data);
-                        }
-                    },
-                    {
-                        'data': 'setup',
-                        'render': function (data, type, row, meta) {
-                            return handlebarsGroupSetupParse(data);
-                        },
-                        'className': 'd-none d-lg-table-cell',
-                        'orderable': false
-                    },
-                    {
-                        'data': 'author.name',
-                        'name': 'author.name',
-                        'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
-                    },
-                    {
-                        'data': 'views',
-                        'name': 'views',
-                        'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
-                    },
-                    {
-                        'name': 'rating',
-                        'render': function (data, type, row, meta) {
-                            let result = '-';
-
-                            if (row.rating_count !== 0) {
-                                result = row.avg_rating;
-                                if (row.rating_count === 1) {
-                                    result += ' (' + row.rating_count + ' {{ __('vote') }})';
-                                } else {
-                                    result += ' (' + row.rating_count + ' {{ __('votes') }})';
-                                }
-                            }
-
-                            return result;
-                        }
-                    }
-                    <?php if($profile){ ?>
-                    , {
-                        'render': function (data, type, row, meta) {
-                            return row.published === 1 ? 'Yes' : 'No';
-                        },
-                        'className': 'd-none d-lg-table-cell',
-                    }, {
-                        'render': function (data, type, row, meta) {
-                            let actionsHtml = $("#dungeonroute_table_profile_actions_template").html();
-
-                            let template = handlebars.compile(actionsHtml);
-                            return template({public_key: row.public_key});
-                        }
-                    }
-                    <?php } ?>
-                ]
+                'columns': _getColumns()
             });
 
             _dt.on('draw.dt', function (e, settings, json, xhr) {
@@ -158,14 +89,113 @@ $profile = isset($profile) ? $profile : false;
             // Do this asap
             // $("#affixgroup_select_container").html(handlebarsAffixGroupSelectParse({}));
 
-            $('#table_list_btn').bind('click', function(){
+            $('.table_list_view_toggle').bind('click', _tableListViewClicked);
+        });
 
+        /**
+         * Get the columns based on the current view for the table.
+         **/
+        function _getColumns() {
+
+            let columns = [];
+
+            columns.push({
+                'data': 'dungeon.name',
+                'name': 'dungeon_id',
+                'render': function (data, type, row, meta) {
+                    let result = data;
+                    switch (_viewMode) {
+                        case 'biglist':
+                            let url = "{{ sprintf('/images/route_thumbnails/replace_me_%s.png', 1) }}";
+                            result = '<div><img src="' + url.replace('replace_me', row.public_key) + '"></img></div>';
+                            break;
+                    }
+                    return result;
+                },
             });
 
-            $('#table_list_big_btn').bind('click', function(){
+            columns.push({
+                'data': 'affixes',
+                'name': 'affixes.id',
+                'render': function (data, type, row, meta) {
+                    return handlebarsAffixGroupsParse(data);
+                },
+                'className': 'd-none d-md-table-cell'
+            });
+            columns.push({
+                'data': 'routeattributes',
+                'name': 'routeattributes.name',
+                'render': function (data, type, row, meta) {
+                    return handlebarsRouteAttributesParse(data);
+                }
+            });
+            columns.push({
+                'data': 'setup',
+                'render': function (data, type, row, meta) {
+                    return handlebarsGroupSetupParse(data);
+                },
+                'className': 'd-none d-lg-table-cell',
+                'orderable': false
+            });
+            columns.push({
+                'data': 'author.name',
+                'name': 'author.name',
+                'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
+            });
+            columns.push({
+                'data': 'views',
+                'name': 'views',
+                'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
+            });
+            columns.push({
+                'name': 'rating',
+                'render': function (data, type, row, meta) {
+                    let result = '-';
 
-            })
-        });
+                    if (row.rating_count !== 0) {
+                        result = row.avg_rating;
+                        if (row.rating_count === 1) {
+                            result += ' (' + row.rating_count + ' {{ __('vote') }})';
+                        } else {
+                            result += ' (' + row.rating_count + ' {{ __('votes') }})';
+                        }
+                    }
+
+                    return result;
+                }
+            });
+
+            <?php if($profile){ ?>
+            columns.push({
+                'render': function (data, type, row, meta) {
+                    return row.published === 1 ? 'Yes' : 'No';
+                },
+                'className': 'd-none d-lg-table-cell',
+            });
+
+            columns.push({
+                'render': function (data, type, row, meta) {
+                    let actionsHtml = $("#dungeonroute_table_profile_actions_template").html();
+
+                    let template = handlebars.compile(actionsHtml);
+                    return template({public_key: row.public_key});
+                }
+            });
+            <?php } ?>
+
+                return columns;
+        }
+
+        function _tableListViewClicked() {
+            // Reset to default
+            $('.table_list_view_toggle').removeClass('btn-default').removeClass('btn-primary').addClass('btn-default');
+
+            // This is now the selected button
+            $(this).removeClass('btn-default').addClass('btn-primary');
+
+            _viewMode = $(this).data('viewmode');
+            _dt.draw();
+        }
 
         /**
          * Prompts the user to delete a route (called by button press)
@@ -245,11 +275,11 @@ $profile = isset($profile) ? $profile : false;
                 &nbsp;
             </div>
             <div class="mb-2 text-right">
-                <div id="table_list_btn" class="btn btn-primary">
-                    <i class="fas fa-list"></i>
-                </div>
-                <div id="table_list_big_btn" class="btn btn-default">
+                <div id="table_list_big_btn" class="btn btn-primary table_list_view_toggle" data-viewmode="biglist">
                     <i class="fas fa-th-list"></i>
+                </div>
+                <div id="table_list_btn" class="btn btn-default table_list_view_toggle" data-viewmode="list">
+                    <i class="fas fa-list"></i>
                 </div>
             </div>
         </div>
