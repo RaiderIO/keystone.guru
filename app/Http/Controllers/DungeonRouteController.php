@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\PageView;
 use App\Models\Route;
@@ -112,12 +113,14 @@ class DungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
+     * @param int $floorindex
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function preview(Request $request, DungeonRoute $dungeonroute)
+    public function preview(Request $request, DungeonRoute $dungeonroute, int $floorindex)
     {
         $result = view('dungeonroute.preview', [
-            'model' => $dungeonroute
+            'model' => $dungeonroute,
+            'floorId' => Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first()->id
         ]);
 
         return $result;

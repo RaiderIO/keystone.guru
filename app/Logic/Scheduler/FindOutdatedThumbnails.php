@@ -8,19 +8,26 @@
 
 namespace App\Logic\Scheduler;
 
-use App\Jobs\ProcessRouteThumbnail;
+use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute;
+use App\Models\Floor;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class FindOutdatedThumbnails
 {
+    use ChecksForDuplicateJobs;
+
     function __invoke()
     {
-        Log::channel('scheduler')->debug(sprintf('Checking %s routes for thumbnails', DungeonRoute::all()->count()));
+        /** @var Builder $routes */
+        $routes = DungeonRoute::all();
+        Log::channel('scheduler')->debug(sprintf('Checking %s routes for thumbnails', $routes->count()));
 
         $processed = 0;
-        foreach (DungeonRoute::all() as $dungeonRoute) {
+        foreach ($routes as $dungeonRoute) {
+            /** @var DungeonRoute $dungeonRoute */
             $updatedAt = Carbon::createFromTimeString($dungeonRoute->updated_at);
             $thumbnailUpdatedAt = Carbon::createFromTimeString($dungeonRoute->thumbnail_updated_at);
 
@@ -28,11 +35,18 @@ class FindOutdatedThumbnails
             if ($updatedAt->addMinute(30)->isPast() &&
                 // Updated at is greater than the thumbnail updated at (don't keep updating thumbnails..
                 $updatedAt->greaterThan($thumbnailUpdatedAt)) {
-                // Set it for processing in a queue
-                ProcessRouteThumbnail::dispatch($dungeonRoute);
 
-                $processed++;
-                break;
+                if (!$this->isJobQueuedForModel('App\Jobs\ProcessRouteFloorThumbnail', $dungeonRoute)) {
+                    Log::channel('scheduler')->debug(sprintf('Queueing job for route %s (%s floors)', $dungeonRoute->public_key, $dungeonRoute->dungeon->floors->count()));
+
+                    foreach ($dungeonRoute->dungeon->floors as $floor) {
+                        /** @var Floor $floor */
+                        // Set it for processing in a queue
+                        ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index);
+                    }
+
+                    $processed++;
+                }
             }
         }
 

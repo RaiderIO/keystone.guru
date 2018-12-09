@@ -244,7 +244,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('{dungeonroute}', 'DungeonRouteController@view')
         ->name('dungeonroute.view');
     // Preview of a route for image capturing library
-    Route::get('{dungeonroute}/preview', 'DungeonRouteController@preview')
+    Route::get('{dungeonroute}/preview/{floorindex}', 'DungeonRouteController@preview')
         ->name('dungeonroute.preview');
 
 });

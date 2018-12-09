@@ -28,12 +28,7 @@ class APIDungeonRouteController extends Controller
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
             // ->setAppends(['dungeon', 'affixes', 'author'])
             ->select(['dungeon_routes.*'])
-            ->where('unlisted', false)
-            ->where('demo', false)
-            ->whereHas('dungeon', function ($query) {
-                /** @var $query Builder This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
-                $query->active();
-            });
+            ->visible();
 
         $user = Auth::user();
         $mine = false;

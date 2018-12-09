@@ -55,6 +55,8 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $enemyraidmarkers
  * @property \Illuminate\Support\Collection $mapcomments
  * @property \Illuminate\Support\Collection $pageviews
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder visible()
  */
 class DungeonRoute extends Model
 {
@@ -254,6 +256,22 @@ class DungeonRoute extends Model
     }
 
     /**
+     * Scope a query to only include active dungeons.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVisible($query)
+    {
+        return $query->where('unlisted', false)
+            ->where('demo', false)
+            ->whereHas('dungeon', function ($dungeon) {
+                /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
+                $dungeon->active();
+            });
+    }
+
+    /**
      * @return double
      */
     public function getAvgRatingAttribute()
@@ -273,7 +291,8 @@ class DungeonRoute extends Model
     /**
      * @return int
      */
-    public function getViewsAttribute(){
+    public function getViewsAttribute()
+    {
         return $this->pageviews->count();
     }
 

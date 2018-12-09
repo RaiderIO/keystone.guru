@@ -21,6 +21,8 @@ $noUI = isset($noUI) && $noUI ? 'true' : 'false';
 $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
+// Floor id to display (bit ugly with JS, but it works)
+$floorId = isset($floorId) ? $floorId : '_dungeonData.floors[0].id';
 
 $introTexts = [
     __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
@@ -62,7 +64,7 @@ $introTexts = [
 
         // Options for the dungeonmap object
         var options = {
-            floorId: _dungeonData.floors[0].id,
+            floorId: {{ $floorId }},
             edit: {{ $edit }},
             dungeonroute: {
                 publicKey: '{{ $routePublicKey }}',
@@ -84,7 +86,7 @@ $introTexts = [
             @endif
 
             // Support not having a sidebar (preview map)
-            if (typeof(_switchDungeonFloorSelect) !== 'undefined') {
+            if (typeof (_switchDungeonFloorSelect) !== 'undefined') {
                 $(_switchDungeonFloorSelect).change(function () {
                     // Pass the new floor ID to the map
                     dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
