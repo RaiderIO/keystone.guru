@@ -23,6 +23,8 @@ $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
 // Floor id to display (bit ugly with JS, but it works)
 $floorId = isset($floorId) ? $floorId : '_dungeonData.floors[0].id';
+// Show the attribution
+$showAttribution = isset($showAttribution) && !$showAttribution ? 'false' : 'true';
 
 $introTexts = [
     __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
@@ -74,7 +76,8 @@ $introTexts = [
             teeming: {{ $teeming }},
             noUI: {{ $noUI }},
             hiddenMapObjectGroups: {!!  json_encode($hiddenMapObjectGroups) !!},
-            defaultZoom: {{ $defaultZoom }}
+            defaultZoom: {{ $defaultZoom }},
+            showAttribution: {{ $showAttribution }}
         };
 
         $(function () {

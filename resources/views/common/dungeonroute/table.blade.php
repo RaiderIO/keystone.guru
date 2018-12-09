@@ -7,69 +7,13 @@ $profile = isset($profile) ? $profile : false;
 
     <script type="text/javascript">
         let _viewMode = 'biglist';
-        let _dt;
+        let _dt = {};
 
         $(function () {
-            let $routesTable = $('#routes_table');
-            _dt = $routesTable.DataTable({
-                'processing': true,
-                'serverSide': true,
-                'responsive': true,
-                'ajax': {
-                    'url': '{{ route('api.dungeonroutes') }}',
-                    'data': function (d) {
-                        d.favorites = $("#favorites").is(':checked') ? 1 : 0;
-                        <?php if( $profile ) {?>
-                            d.mine = true;
-                        <?php } ?>
-                    }, <?php // Enable caching when in production mode, disable it when developing ?>
-                    'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}',
-                },
-                'drawCallback': function (settings) {
-                    // Don't do anything when the message "no data available" is showing
-                    if (settings.json.data.length > 0) {
-                        $.each($routesTable.find('tbody tr'), function (index, value) {
-                            $(value).data('publickey', settings.json.data[index].public_key);
-                        });
-                    }
-                },
-                'lengthMenu': [25],
-                'bLengthChange': false,
-                // Order by affixes by default
-                "order": [[1, "asc"]],
-                'columns': _getColumns()
-            });
-
-            _dt.on('draw.dt', function (e, settings, json, xhr) {
-                refreshTooltips();
-                let $deleteBtns = $('.dungeonroute-delete');
-                $deleteBtns.unbind('click');
-                $deleteBtns.bind('click', _promptDeleteDungeonRoute);
-
-                let $cloneBtns = $('.dungeonroute-clone');
-                $cloneBtns.unbind('click');
-                $cloneBtns.bind('click', function (clickEvent) {
-                    let key = $(clickEvent.target).data('publickey');
-                    $("<a>").attr("href", '{{ route('dungeonroute.clone', ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key)).attr("target", "_blank")[0].click();
-                });
-            });
-
-            $routesTable.on('click', 'tbody tr', function (clickEvent) {
-                let key = $(clickEvent.currentTarget).data('publickey');
-
-                window.open('{{ route('dungeonroute.' . ($profile ? 'edit' : 'view'), ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key));
-            });
-
-            $routesTable.on('mouseenter', 'tbody tr', function () {
-                _dt.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
-            });
-
-            $routesTable.on('mouseleave', 'tbody tr', function () {
-                if ($(this).hasClass('selected')) {
-                    $(this).removeClass('selected');
-                }
-            });
+            // Default display
+            _setViewMode('biglist');
+            // Do this asap
+            // $("#affixgroup_select_container").html(handlebarsAffixGroupSelectParse({}));
 
             $("#dungeonroute_filter").bind('click', function () {
 
@@ -81,16 +25,96 @@ $profile = isset($profile) ? $profile : false;
                 let affixes = $("#affixes").val();
                 let attributes = $("#attributes").val();
 
-                _dt.column(0).search(dungeonId);
-                _dt.column(1).search(affixes);
-                _dt.column(2).search(attributes);
-                _dt.draw();
+                let offset = _viewMode === 'biglist' ? 1 : 0;
+                _dt[_viewMode].column(0 + offset).search(dungeonId);
+                _dt[_viewMode].column(1 + offset).search(affixes);
+                _dt[_viewMode].column(2 + offset).search(attributes);
+                _dt[_viewMode].draw();
             });
-            // Do this asap
-            // $("#affixgroup_select_container").html(handlebarsAffixGroupSelectParse({}));
 
             $('.table_list_view_toggle').bind('click', _tableListViewClicked);
         });
+
+        /**
+         * Binds a datatables instance to a jquery element.
+         **/
+        function _setViewMode(viewMode) {
+            _viewMode = viewMode;
+
+            let $element = $('#routes_table_' + _viewMode);
+
+            // Hide all wrappers
+            $('.routes_table_wrapper').hide();
+
+            // Show the appropriate wrapper
+            $('#routes_table_' + _viewMode + '_wrapper').show();
+
+            // If not initialized
+            if (!_dt.hasOwnProperty(_viewMode)) {
+                _dt[_viewMode] = $element.DataTable({
+                    'processing': true,
+                    'serverSide': true,
+                    'responsive': true,
+                    'ajax': {
+                        'url': '{{ route('api.dungeonroutes') }}',
+                        'data': function (d) {
+                            d.favorites = $("#favorites").is(':checked') ? 1 : 0;
+                            <?php if( $profile ) {?>
+                                d.mine = true;
+                            <?php } ?>
+                        }, <?php // Enable caching when in production mode, disable it when developing ?>
+                        'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}',
+                    },
+                    'drawCallback': function (settings) {
+                        // Don't do anything when the message "no data available" is showing
+                        if (settings.json.data.length > 0) {
+                            $.each(_dt[_viewMode].$('tbody tr'), function (index, value) {
+                                $(value).data('publickey', settings.json.data[index].public_key);
+                            });
+                        }
+                    },
+                    'lengthMenu': [25],
+                    'bLengthChange': false,
+                    // Order by affixes by default
+                    "order": [[1, "asc"]],
+                    'columns': _getColumns()
+                });
+
+                _dt[_viewMode].on('draw.dt', function (e, settings, json, xhr) {
+                    refreshTooltips();
+                    let $deleteBtns = $('.dungeonroute-delete');
+                    $deleteBtns.unbind('click');
+                    $deleteBtns.bind('click', _promptDeleteDungeonRoute);
+
+                    let $cloneBtns = $('.dungeonroute-clone');
+                    $cloneBtns.unbind('click');
+                    $cloneBtns.bind('click', function (clickEvent) {
+                        let key = $(clickEvent.target).data('publickey');
+                        $("<a>").attr("href", '{{ route('dungeonroute.clone', ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key)).attr("target", "_blank")[0].click();
+                    });
+                });
+
+                _dt[_viewMode].on('click', 'tbody tr', function (clickEvent) {
+                    let key = $(clickEvent.currentTarget).data('publickey');
+
+                    window.open('{{ route('dungeonroute.' . ($profile ? 'edit' : 'view'), ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key));
+                });
+
+                _dt[_viewMode].on('mouseenter', 'tbody tr', function () {
+                    _dt[_viewMode].$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                });
+
+                _dt[_viewMode].on('mouseleave', 'tbody tr', function () {
+                    if ($(this).hasClass('selected')) {
+                        $(this).removeClass('selected');
+                    }
+                });
+            } else {
+                // Refresh the table
+                _dt[_viewMode].draw();
+            }
+        }
 
         /**
          * Get the columns based on the current view for the table.
@@ -99,36 +123,67 @@ $profile = isset($profile) ? $profile : false;
 
             let columns = [];
 
+            if (_viewMode === 'biglist') {
+                columns.push({
+                    'data': 'dungeon.id',
+                    'name': 'dungeon_id',
+                    'render': function (data, type, row, meta) {
+                        let url = "{{ sprintf('/images/route_thumbnails/replace_me_%s.png', 1) }}";
+                        return '<div class="route_thumbnail"><img src="' + url.replace('replace_me', row.public_key) + '"/></div>';
+                    },
+                    'orderable': false
+                });
+            }
+
             columns.push({
                 'data': 'dungeon.name',
                 'name': 'dungeon_id',
                 'render': function (data, type, row, meta) {
-                    let result = data;
-                    switch (_viewMode) {
-                        case 'biglist':
-                            let url = "{{ sprintf('/images/route_thumbnails/replace_me_%s.png', 1) }}";
-                            result = '<div><img src="' + url.replace('replace_me', row.public_key) + '"></img></div>';
-                            break;
-                    }
-                    return result;
+                    return data;
                 },
             });
 
-            columns.push({
-                'data': 'affixes',
-                'name': 'affixes.id',
-                'render': function (data, type, row, meta) {
-                    return handlebarsAffixGroupsParse(data);
-                },
-                'className': 'd-none d-md-table-cell'
-            });
+            if (_viewMode === 'biglist') {
+                columns.push({
+                    'data': 'affixes',
+                    'name': 'affixes.id',
+                    'render': function (data, type, row, meta) {
+                        let result = '<div>';
+                        result += "<div class=''>{{ __('Affixes:') }}</div>";
+                        result += handlebarsAffixGroupsParse(row.affixes);
+
+                        if (row.routeattributes.length > 0) {
+                            result += "<div class=''>{{ __('Attributes:') }}</div>";
+                            result += handlebarsRouteAttributesParse(row.routeattributes);
+                        }
+
+                        result += '</div>';
+                        return result;
+                    },
+                    'className': 'd-none d-md-table-cell',
+                });
+            } else {
+                columns.push({
+                    'data': 'affixes',
+                    'name': 'affixes.id',
+                    'render': function (data, type, row, meta) {
+                        return handlebarsAffixGroupsParse(data);
+                    },
+                    'className': 'd-none d-md-table-cell'
+                });
+            }
+
             columns.push({
                 'data': 'routeattributes',
                 'name': 'routeattributes.name',
                 'render': function (data, type, row, meta) {
                     return handlebarsRouteAttributesParse(data);
-                }
+                },
+                // Hide this column when in big list mode; we can't remove it since we need it in order for the filtering
+                // to work on the server-side
+                'className': _viewMode === 'biglist' ? 'd-none' : ''
             });
+
             columns.push({
                 'data': 'setup',
                 'render': function (data, type, row, meta) {
@@ -186,6 +241,9 @@ $profile = isset($profile) ? $profile : false;
                 return columns;
         }
 
+        /**
+         * User wants to change view mode of the table.
+         **/
         function _tableListViewClicked() {
             // Reset to default
             $('.table_list_view_toggle').removeClass('btn-default').removeClass('btn-primary').addClass('btn-default');
@@ -193,8 +251,8 @@ $profile = isset($profile) ? $profile : false;
             // This is now the selected button
             $(this).removeClass('btn-default').addClass('btn-primary');
 
-            _viewMode = $(this).data('viewmode');
-            _dt.draw();
+            // Display the correct table
+            _setViewMode($(this).data('viewmode'));
         }
 
         /**
@@ -284,24 +342,54 @@ $profile = isset($profile) ? $profile : false;
             </div>
         </div>
     </div>
-    <table id="routes_table" class="tablesorter default_table dt-responsive nowrap table-striped mt-2" width="100%">
-        <thead>
-        <tr>
-            <th width="15%">{{ __('Dungeon') }}</th>
-            <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
-            <th width="15%">{{ __('Attributes') }}</th>
-            <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
-            <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
-            <th width="5%" class="d-none d-md-table-cell">{{ __('Views') }}</th>
-            <th width="5%">{{ __('Rating') }}</th>
-            <?php if( $profile ) { ?>
-            <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
-            <?php } ?>
-        </tr>
-        </thead>
+    <div id="routes_table_biglist_wrapper" class="routes_table_wrapper">
+        <table id="routes_table_biglist" data-viewmode="biglist"
+               class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
+               width="100%">
+            <thead>
+            <tr>
+                <th width="15%">{{ __('Preview') }}</th>
+                <th width="15%">{{ __('Dungeon') }}</th>
+                <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
+                <!-- Dummy header to allow for filtering based on attributes -->
+                <th width="15%" class="d-none">{{ __('Attributes') }}</th>
+                <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
+                <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
+                <th width="5%" class="d-none d-md-table-cell">{{ __('Views') }}</th>
+                <th width="5%">{{ __('Rating') }}</th>
+                <?php if( $profile ) { ?>
+                <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
+                <th width="10%">{{ __('Actions') }}</th>
+                <?php } ?>
+            </tr>
+            </thead>
 
-        <tbody>
-        </tbody>
-    </table>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div id="routes_table_list_wrapper" class="routes_table_wrapper" style="display: none;">
+        <table id="routes_table_list" data-viewmode="list"
+               class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
+               width="100%">
+            <thead>
+            <tr>
+                <th width="15%">{{ __('Dungeon') }}</th>
+                <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
+                <th width="15%">{{ __('Attributes') }}</th>
+                <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
+                <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
+                <th width="5%" class="d-none d-md-table-cell">{{ __('Views') }}</th>
+                <th width="5%">{{ __('Rating') }}</th>
+                <?php if( $profile ) { ?>
+                <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
+                <th width="10%">{{ __('Actions') }}</th>
+                <?php } ?>
+            </tr>
+            </thead>
+
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 @endsection

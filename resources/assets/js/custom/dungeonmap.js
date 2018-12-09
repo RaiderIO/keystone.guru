@@ -14,7 +14,7 @@ class DungeonMap extends Signalable {
         this.visualType = options.defaultEnemyVisualType;
         this.noUI = options.noUI;
         this.hiddenMapObjectGroups = options.hiddenMapObjectGroups;
-        this.defaultZoom = options.hasOwnProperty('defaultZoom') ? options.defaultZoom : 2;
+        this.defaultZoom = options.defaultZoom;
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -484,6 +484,11 @@ class DungeonMap extends Signalable {
 
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
             this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor(), this.mapObjectGroupFetchSuccess.bind(this));
+        }
+
+        // Show/hide the attribution
+        if (!this.options.showAttribution) {
+            $('.leaflet-control-attribution').hide();
         }
     }
 

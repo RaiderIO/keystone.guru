@@ -101,19 +101,24 @@
 }
 
 /** DATATABLES */
-#routes_table tbody tr {
+.routes_table tbody tr {
     cursor: pointer;
 }
 
-#routes_table .selected {
+.routes_table .selected {
     background-color: rgba(255, 255, 255, 0.15);
 }
 
-#routes_table_filter {
+.routes_table_wrapper .dataTables_filter {
     display: none;
 }
 
-#routes_table .limit_width {
+.routes_table_wrapper .route_thumbnail {
+    width: 192px;
+    height: 128px;
+}
+
+.routes_table .limit_width {
     max-width: 400px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -121,7 +126,7 @@
 }
 
 @media (max-width: 600px) {
-    #routes_table .limit_width {
+    .routes_table .limit_width {
         max-width: 200px;
     }
 }

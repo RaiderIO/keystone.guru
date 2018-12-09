@@ -15,6 +15,7 @@ $dungeon->load('floors');
         'noUI' => true,
         'defaultZoom' => 1,
         'floorId' => $floorId,
+        'showAttribution' => false,
         'hiddenMapObjectGroups' => [
             'enemy',
             'enemypatrol',
