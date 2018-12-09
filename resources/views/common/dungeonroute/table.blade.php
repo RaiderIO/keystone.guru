@@ -157,6 +157,14 @@ $profile = isset($profile) ? $profile : false;
             });
             // Do this asap
             // $("#affixgroup_select_container").html(handlebarsAffixGroupSelectParse({}));
+
+            $('#table_list_btn').bind('click', function(){
+
+            });
+
+            $('#table_list_big_btn').bind('click', function(){
+
+            })
         });
 
         /**
@@ -231,6 +239,19 @@ $profile = isset($profile) ? $profile : false;
                 &nbsp;
             </div>
             {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info col-lg']) !!}
+        </div>
+        <div class="col-lg-2">
+            <div class="mb-2">
+                &nbsp;
+            </div>
+            <div class="mb-2 text-right">
+                <div id="table_list_btn" class="btn btn-primary">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div id="table_list_big_btn" class="btn btn-default">
+                    <i class="fas fa-th-list"></i>
+                </div>
+            </div>
         </div>
     </div>
     <table id="routes_table" class="tablesorter default_table dt-responsive nowrap table-striped mt-2" width="100%">
