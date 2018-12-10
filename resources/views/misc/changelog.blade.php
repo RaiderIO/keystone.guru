@@ -5,7 +5,7 @@
 @section('content')
 
     <h4>
-        2018/11/29
+        2018/12/11
     </h4>
     <p>
         Update from me: due to some unfortunate and unexpected circumstances I haven't had much time to work on the
@@ -25,10 +25,14 @@
             will consider adding them.
         </li>
         <li>
+            Added a bigger list view option for the Routes page. This allows you to see a preview thumbnail of a Route
+            for easy identification if the route suits your needs.
+        </li>
+        <li>
             The Routes page has been updated with new sorting mechanisms for affixes, attributes, author and rating.
         </li>
         <li>
-            Route page now shows the views a route has gotten.
+            The Route page now shows the views a route has gotten.
         </li>
     </ul>
     </p>
