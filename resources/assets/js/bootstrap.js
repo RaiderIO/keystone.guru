@@ -44,6 +44,7 @@ window.introjs = require('intro.js');
 window.pwstrengthmeter = require('password-strength-meter');
 window.jqueryMousewheel = require('jquery-mousewheel');
 window.mCustomScrollbar = require('malihu-custom-scrollbar-plugin');
+window.Cookies = require('js-cookie');
 
 require('@fortawesome/fontawesome-free');
 

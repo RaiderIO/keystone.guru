@@ -65,6 +65,78 @@
     </p>
 
     <h5>
+        Exact cookies placed for functionality on the site
+    </h5>
+    <p>
+        Removal of any of the following cookies will cause certain features to stop working.
+    <table width="100%">
+        <tr>
+            <th>
+                Cookie name
+            </th>
+            <th>
+                Purpose
+            </th>
+        </tr>
+        <tr>
+            <td>
+                __cfduid
+            </td>
+            <td>
+                Uniquely identifies you as a secure user in an insecure environment, for more information visit the
+                <a href="https://support.cloudflare.com/hc/en-us/articles/200170156-What-does-the-Cloudflare-cfduid-cookie-do-">
+                    <i class="fas fa-external-link"></i> Cloudflare Support Article</a>.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                PHPSESSID
+            </td>
+            <td>
+                Your session when logged into the website. Removal of this cookie causes you to be logged out
+                immediately. Anyone having access to the value of this cookie will be instantly logged in as you.
+                Never share this value with anyone. Blocking this cookie causes you to not be able to log in properly.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                XSRF-TOKEN
+            </td>
+            <td>
+                Prevents
+                <a href="https://en.wikipedia.org/wiki/Cross-site_request_forgery">
+                    <i class="fas fa-external-link"></i> Cross-site request forgery</a>.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                cookieconsent_status
+            </td>
+            <td>
+                Keeps track of whether to show you your rights for cookies or not (the "cookie bar").
+            </td>
+        </tr>
+        <tr>
+            <td>
+                laravel_session
+            </td>
+            <td>
+                Placed when you log into the site and keeps you logged in when you selected "remember me".
+            </td>
+        </tr>
+        <tr>
+            <td>
+                routes_viewmode
+            </td>
+            <td>
+                Keeps track of whether to display the Routes page in "biglist" or "list" mode upon navigation.
+            </td>
+        </tr>
+
+    </table>
+    </p>
+
+    <h5>
         Where can I find more information about cookies?
     </h5>
     <p>

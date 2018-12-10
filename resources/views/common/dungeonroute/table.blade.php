@@ -1,19 +1,20 @@
 <?php
 $profile = isset($profile) ? $profile : false;
+// Whitelist
+$cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
+($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ? $_COOKIE['routes_viewmode'] : 'biglist';
 ?>
 
 @section('scripts')
     @parent
 
     <script type="text/javascript">
-        let _viewMode = 'biglist';
+        let _viewMode = "{{ $cookieViewMode }}";
         let _dt = {};
 
         $(function () {
             // Default display
-            _setViewMode('biglist');
-            // Do this asap
-            // $("#affixgroup_select_container").html(handlebarsAffixGroupSelectParse({}));
+            _setViewMode(_viewMode);
 
             $("#dungeonroute_filter").bind('click', function () {
 
@@ -40,6 +41,8 @@ $profile = isset($profile) ? $profile : false;
          **/
         function _setViewMode(viewMode) {
             _viewMode = viewMode;
+            // Send cookie only on the current page
+            Cookies.set('routes_viewmode', _viewMode, {path: ''});
 
             let $element = $('#routes_table_' + _viewMode);
 
@@ -48,6 +51,12 @@ $profile = isset($profile) ? $profile : false;
 
             // Show the appropriate wrapper
             $('#routes_table_' + _viewMode + '_wrapper').show();
+
+            // Set buttons to the correct state
+            $('.table_list_view_toggle').removeClass('btn-default').removeClass('btn-primary').addClass('btn-default');
+
+            // This is now the selected button
+            $('#table_' + _viewMode + '_btn').removeClass('btn-default').addClass('btn-primary');
 
             // If not initialized
             if (!_dt.hasOwnProperty(_viewMode)) {
@@ -262,12 +271,6 @@ $profile = isset($profile) ? $profile : false;
          * User wants to change view mode of the table.
          **/
         function _tableListViewClicked() {
-            // Reset to default
-            $('.table_list_view_toggle').removeClass('btn-default').removeClass('btn-primary').addClass('btn-default');
-
-            // This is now the selected button
-            $(this).removeClass('btn-default').addClass('btn-primary');
-
             // Display the correct table
             _setViewMode($(this).data('viewmode'));
         }
@@ -350,10 +353,14 @@ $profile = isset($profile) ? $profile : false;
                 &nbsp;
             </div>
             <div class="mb-2 text-right">
-                <div id="table_list_big_btn" class="btn btn-primary table_list_view_toggle" data-viewmode="biglist">
+                <div id="table_biglist_btn"
+                     class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} table_list_view_toggle"
+                     data-viewmode="biglist">
                     <i class="fas fa-th-list"></i>
                 </div>
-                <div id="table_list_btn" class="btn btn-default table_list_view_toggle" data-viewmode="list">
+                <div id="table_list_btn"
+                     class="btn {{ $cookieViewMode === 'list' ? 'btn-primary' : 'btn-default' }}  table_list_view_toggle"
+                     data-viewmode="list">
                     <i class="fas fa-list"></i>
                 </div>
             </div>
@@ -386,7 +393,7 @@ $profile = isset($profile) ? $profile : false;
             </table>
         </div>
     </div>
-    <div id="routes_table_list_wrapper" class="routes_table_wrapper col-md-8 offset-md-2" style="display: none;">
+    <div id="routes_table_list_wrapper" class="routes_table_wrapper" style="display: none;">
         <table id="routes_table_list" data-viewmode="list"
                class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
                width="100%">
