@@ -111,8 +111,8 @@ $profile = isset($profile) ? $profile : false;
                     }
                 });
             } else {
-                // Refresh the table
-                _dt[_viewMode].draw();
+                // Force a click on the filter button to refresh the table
+                $("#dungeonroute_filter").click();
             }
         }
 
@@ -141,6 +141,7 @@ $profile = isset($profile) ? $profile : false;
                 'render': function (data, type, row, meta) {
                     return data;
                 },
+                'className': _viewMode === 'biglist' ? 'd-none d-md-table-cell' : '',
             });
 
             if (_viewMode === 'biglist') {
@@ -149,18 +150,32 @@ $profile = isset($profile) ? $profile : false;
                     'name': 'affixes.id',
                     'render': function (data, type, row, meta) {
                         let result = '<div>';
-                        result += "<div class=''>{{ __('Affixes:') }}</div>";
-                        result += handlebarsAffixGroupsParse(row.affixes);
+                        result += '<div class="row no-gutters mt-1">' +
+                            '<div class="col-xl-5">{{ __('Affixes:') }}</div>' +
+                            '<div class="col-xl-7">' +
+                            handlebarsAffixGroupsParse(row.affixes) +
+                            '</div>' +
+                            '</div>';
 
                         if (row.routeattributes.length > 0) {
-                            result += "<div class=''>{{ __('Attributes:') }}</div>";
-                            result += handlebarsRouteAttributesParse(row.routeattributes);
+                            result += '<div class="row no-gutters mt-1">' +
+                                '<div class="col-xl-5">{{ __('Attributes:') }}</div>' +
+                                '<div class="col-xl-7">' +
+                                handlebarsRouteAttributesParse(row.routeattributes) +
+                                '</div>' +
+                                '</div>';
                         }
+
+                        result += '<div class="row no-gutters mt-1">' +
+                            '<div class="col-xl-5">{{ __('Setup:') }}</div>' +
+                            '<div class="col-xl-7">' +
+                            handlebarsGroupSetupParse(row.setup) +
+                            '</div>' +
+                            '</div>';
 
                         result += '</div>';
                         return result;
                     },
-                    'className': 'd-none d-md-table-cell',
                 });
             } else {
                 columns.push({
@@ -184,14 +199,16 @@ $profile = isset($profile) ? $profile : false;
                 'className': _viewMode === 'biglist' ? 'd-none' : ''
             });
 
-            columns.push({
-                'data': 'setup',
-                'render': function (data, type, row, meta) {
-                    return handlebarsGroupSetupParse(data);
-                },
-                'className': 'd-none d-lg-table-cell',
-                'orderable': false
-            });
+            if (_viewMode === 'list') {
+                columns.push({
+                    'data': 'setup',
+                    'render': function (data, type, row, meta) {
+                        return handlebarsGroupSetupParse(data);
+                    },
+                    'className': 'd-none d-lg-table-cell',
+                    'orderable': false
+                });
+            }
             columns.push({
                 'data': 'author.name',
                 'name': 'author.name',
@@ -200,7 +217,7 @@ $profile = isset($profile) ? $profile : false;
             columns.push({
                 'data': 'views',
                 'name': 'views',
-                'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
+                // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
             });
             columns.push({
                 'name': 'rating',
@@ -342,33 +359,34 @@ $profile = isset($profile) ? $profile : false;
             </div>
         </div>
     </div>
-    <div id="routes_table_biglist_wrapper" class="routes_table_wrapper">
-        <table id="routes_table_biglist" data-viewmode="biglist"
-               class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
-               width="100%">
-            <thead>
-            <tr>
-                <th width="15%">{{ __('Preview') }}</th>
-                <th width="15%">{{ __('Dungeon') }}</th>
-                <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
-                <!-- Dummy header to allow for filtering based on attributes -->
-                <th width="15%" class="d-none">{{ __('Attributes') }}</th>
-                <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
-                <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
-                <th width="5%" class="d-none d-md-table-cell">{{ __('Views') }}</th>
-                <th width="5%">{{ __('Rating') }}</th>
-                <?php if( $profile ) { ?>
-                <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
-                <th width="10%">{{ __('Actions') }}</th>
-                <?php } ?>
-            </tr>
-            </thead>
+    <div id="routes_table_biglist_wrapper" class="row routes_table_wrapper">
+        <div class="col-xl-8 offset-xl-2">
+            <table id="routes_table_biglist" data-viewmode="biglist"
+                   class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
+                   width="100%">
+                <thead>
+                <tr>
+                    <th width="15%">{{ __('Preview') }}</th>
+                    <th width="10%" class="d-none d-md-table-cell">{{ __('Dungeon') }}</th>
+                    <th width="25%">{{ __('Features') }}</th>
+                    <!-- Dummy header to allow for filtering based on attributes -->
+                    <th width="15%" class="d-none">{{ __('Attributes') }}</th>
+                    <th width="10%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
+                    <th width="5%">{{ __('Views') }}</th>
+                    <th width="5%">{{ __('Rating') }}</th>
+                    <?php if( $profile ) { ?>
+                    <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
+                    <th width="10%">{{ __('Actions') }}</th>
+                    <?php } ?>
+                </tr>
+                </thead>
 
-            <tbody>
-            </tbody>
-        </table>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div id="routes_table_list_wrapper" class="routes_table_wrapper" style="display: none;">
+    <div id="routes_table_list_wrapper" class="routes_table_wrapper col-md-8 offset-md-2" style="display: none;">
         <table id="routes_table_list" data-viewmode="list"
                class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
                width="100%">

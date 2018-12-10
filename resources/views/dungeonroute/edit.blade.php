@@ -125,12 +125,15 @@
                             <h3>
                                 {{ __('General') }}
                             </h3>
-                            <label for="dungeon_route_title">
-                                {{ __('Title') }}*
-                                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                            <div class='form-group'>
+                                <label for="dungeon_route_title">
+                                    {{ __('Title') }}*
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                                 __('Choose a title that will uniquely identify the route for you over other similar routes you may create.')
                                  }}"></i>
-                            </label>
+                                </label>
+                                {!! Form::text('dungeon_route_title', $model->title, ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
+                            </div>
                             @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
 
                             <h3>

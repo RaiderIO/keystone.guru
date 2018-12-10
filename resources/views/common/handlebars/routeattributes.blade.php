@@ -2,7 +2,7 @@
 /** This is the display of affixes in the routes listing */
 ?>
 <script id="routeattributes_row_template" type="text/x-handlebars-template">
-    <div class="row">
+    <div class="row no-gutters">
         @{{#attributes}}
         <div class="float-left">
             <div class="select_icon route_attribute-@{{ name }} mr-2" style="height: 24px;" data-toggle="tooltip"
