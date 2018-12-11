@@ -79,23 +79,6 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return string Generates a random public key that is displayed to the user in the URL.
-     */
-    public static function generateRandomPublicKey()
-    {
-        do {
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $charactersLength = strlen($characters);
-            $newKey = '';
-            for ($i = 0; $i < 7; $i++) {
-                $newKey .= $characters[rand(0, $charactersLength - 1)];
-            }
-        } while (DungeonRoute::all()->where('public_key', '=', $newKey)->count() > 0);
-
-        return $newKey;
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function dungeon()
@@ -529,6 +512,8 @@ class DungeonRoute extends Model
         return $result;
     }
 
+
+
     /**
      * @param null $user
      * @return bool
@@ -541,6 +526,23 @@ class DungeonRoute extends Model
         }
 
         return $user !== null && $this->author_id === $user->id;
+    }
+
+    /**
+     * @return string Generates a random public key that is displayed to the user in the URL.
+     */
+    public static function generateRandomPublicKey()
+    {
+        do {
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $charactersLength = strlen($characters);
+            $newKey = '';
+            for ($i = 0; $i < 7; $i++) {
+                $newKey .= $characters[rand(0, $charactersLength - 1)];
+            }
+        } while (DungeonRoute::all()->where('public_key', '=', $newKey)->count() > 0);
+
+        return $newKey;
     }
 
     public static function boot()

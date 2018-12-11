@@ -51,7 +51,7 @@ return [
     'view_time_threshold_mins' => 30,
 
     /**
-     * The amount of time to give the route thumbnail processor to complete its processing.
+     * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
      */
-    'route_thumbnail_virtual_time_budget' => 10000
+    'thumbnail_refresh_min' => 30
 ];

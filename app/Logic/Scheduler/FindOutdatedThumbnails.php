@@ -31,10 +31,13 @@ class FindOutdatedThumbnails
             $updatedAt = Carbon::createFromTimeString($dungeonRoute->updated_at);
             $thumbnailUpdatedAt = Carbon::createFromTimeString($dungeonRoute->thumbnail_updated_at);
 
-            // If the route has been updated in the past 30 minutes...
-            if ($updatedAt->addMinute(30)->isPast() &&
-                // Updated at is greater than the thumbnail updated at (don't keep updating thumbnails..
-                $updatedAt->greaterThan($thumbnailUpdatedAt)) {
+            if ((// Updated at is greater than the thumbnail updated at (don't keep updating thumbnails..)
+                    $updatedAt->greaterThan($thumbnailUpdatedAt) &&
+                    // If the route has been updated in the past x minutes...
+                    $updatedAt->addMinute(config('keystoneguru.thumbnail_refresh_min'))->isPast())
+                ||
+                // Update every month regardless
+                $updatedAt->addMonth(1)->isPast()) {
 
                 if (!$this->isJobQueuedForModel('App\Jobs\ProcessRouteFloorThumbnail', $dungeonRoute)) {
                     Log::channel('scheduler')->debug(sprintf('Queueing job for route %s (%s floors)', $dungeonRoute->public_key, $dungeonRoute->dungeon->floors->count()));

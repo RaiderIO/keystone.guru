@@ -73,6 +73,9 @@ class APIKillZoneController extends Controller
 
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
+
+                // Touch the route so that the thumbnail gets updated
+                $dungeonroute->touch();
             }
 
             $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonroute->getEnemyForcesAttribute()];
@@ -101,6 +104,9 @@ class APIKillZoneController extends Controller
 
             // Refresh the killzones relation
             $dungeonroute->load('killzones');
+
+            // Touch the route so that the thumbnail gets updated
+            $dungeonroute->touch();
 
             $result = ['result' => 'success', 'enemy_forces' => $dungeonroute->getEnemyForcesAttribute()];
         } catch (\Exception $ex) {
