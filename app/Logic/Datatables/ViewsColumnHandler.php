@@ -35,12 +35,12 @@ class ViewsColumnHandler extends DatatablesColumnHandler
         if ($order !== null) {
             $builder->addSelect(DB::raw('COUNT(page_views.id) as views'));
 
-            $builder->leftJoin('dungeon_route_ratings', function ($join) {
+            $builder->leftJoin('page_views', function ($join) {
                 /** @var $join JoinClause */
                 $join->on('page_views.model_id', '=', 'dungeon_routes.id');
-                $join->on('page_views.model_class', '=', DungeonRoute::class);
+                $join->where('page_views.model_class', '=', DungeonRoute::class);
             });
-            $builder->groupBy(DB::raw('page_views.model_id'));
+            $builder->groupBy(DB::raw('dungeon_routes.id'));
             $builder->orderBy('views', $order['dir'] === 'asc' ? 'asc' : 'desc');
         }
     }
