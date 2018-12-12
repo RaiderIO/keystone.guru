@@ -15,7 +15,7 @@ use Symfony\Component\Process\Process;
 
 class ProcessRouteFloorThumbnail implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, CompressesImages;
 
     /** @var DungeonRoute $model */
     public $model;
@@ -37,9 +37,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     }
 
     /**
-     * Execute the job.
-     *
-     * @return void
+     * @throws \Exception
      */
     public function handle()
     {
@@ -52,6 +50,9 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         $filename = sprintf('%s_%s.png', $this->model->public_key, $this->floorIndex);
 
         $tmpFile = sprintf('/tmp/%s', $filename);
+        $tmpScaledFile = sprintf('/tmp/scaled_%s', $filename);
+        $publicPath = public_path('images/route_thumbnails/');
+        $target = sprintf('%s/%s', $publicPath, $filename);
 
         // puppeteer chromium-browser
         $process = new Process(['node',
@@ -68,23 +69,36 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         $process->run();
 
         if ($process->isSuccessful()) {
-            // We've updated the thumbnail; make sure the route is updated so it doesn't get updated anymore
-            $this->model->thumbnail_updated_at = Carbon::now()->toDateTimeString();
-            // Do not update the timestamps of the route! Otherwise we'll just keep on updating the timestamp
-            $this->model->timestamps = false;
-            $this->model->save();
+            try {
+                // We've updated the thumbnail; make sure the route is updated so it doesn't get updated anymore
+                $this->model->thumbnail_updated_at = Carbon::now()->toDateTimeString();
+                // Do not update the timestamps of the route! Otherwise we'll just keep on updating the timestamp
+                $this->model->timestamps = false;
+                $this->model->save();
 
-            // Ensure our write path exists
-            $publicPath = public_path('images/route_thumbnails/');
-            if (!is_dir($publicPath)) {
-                mkdir($publicPath, 0755, true);
+                // Ensure our write path exists
+                if (!is_dir($publicPath)) {
+                    mkdir($publicPath, 0755, true);
+                }
+
+                // Rescale it
+                Log::channel('scheduler')->info('Scaling image..');
+                Image::make($tmpFile, [
+                    'width' => 192,
+                    'height' => 128
+                ])->save($tmpScaledFile);
+
+                Log::channel('scheduler')->info('Removing previous image..');
+                unlink($target);
+                // Image now exists in target location; compress it and move it to the target location
+                Log::channel('scheduler')->info('Compressing image..');
+                $this->compressPng($tmpScaledFile, $target);
+            } finally {
+                // Cleanup
+                unlink($tmpFile);
+                unlink($tmpScaledFile);
+                Log::channel('scheduler')->info('Done');
             }
-
-            // Image now exists in target location; rescale it and save to public
-            Image::make($tmpFile, [
-                'width' => 192,
-                'height' => 128
-            ])->save(sprintf('%s/%s', $publicPath, $filename));
         }
 
         // Log any errors that may have occurred

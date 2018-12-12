@@ -67,6 +67,7 @@ git checkout -b v3.3.7+1
 cd ../../..
 
 sudo apt-get install supervisor
+sudo apt-get install pngquant
 
 # Seeding database
 tput setaf 2;

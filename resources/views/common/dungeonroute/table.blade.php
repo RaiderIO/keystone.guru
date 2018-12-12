@@ -97,10 +97,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 
                     let $cloneBtns = $('.dungeonroute-clone');
                     $cloneBtns.unbind('click');
-                    $cloneBtns.bind('click', function (clickEvent) {
-                        let key = $(clickEvent.target).data('publickey');
-                        $("<a>").attr("href", '{{ route('dungeonroute.clone', ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key)).attr("target", "_blank")[0].click();
-                    });
+                    $cloneBtns.bind('click', _cloneDungeonRoute);
                 });
 
                 _dt[_viewMode].on('click', 'tbody tr', function (clickEvent) {
@@ -294,6 +291,25 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     }
                 });
             }
+
+            // Prevent clicking delete from opening the route after it returns
+            clickEvent.preventDefault();
+            return false;
+        }
+
+        /**
+         * Clones a dungeon route.
+         * @param clickEvent
+         * @returns {boolean}
+         * @private
+         */
+        function _cloneDungeonRoute(clickEvent) {
+            let key = $(clickEvent.target).data('publickey');
+            $("<a>").attr("href", '{{ route('dungeonroute.clone', ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key)).attr("target", "_blank")[0].click();
+
+            // Prevent clicking delete from opening the route after it returns
+            clickEvent.preventDefault();
+            return false;
         }
     </script>
     <script id="dungeonroute_table_profile_actions_template" type="text/x-handlebars-template">
@@ -366,8 +382,8 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             </div>
         </div>
     </div>
-    <div id="routes_table_biglist_wrapper" class="row routes_table_wrapper">
-        <div class="col-xl-8 offset-xl-2">
+    <div id="routes_table_biglist_wrapper" class="{{ !$profile ? 'row' : '' }} routes_table_wrapper">
+        <div class="{{ !$profile ? 'col-xl-8 offset-xl-2' : '' }}">
             <table id="routes_table_biglist" data-viewmode="biglist"
                    class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
                    width="100%">

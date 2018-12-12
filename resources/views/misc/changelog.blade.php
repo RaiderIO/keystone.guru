@@ -5,7 +5,7 @@
 @section('content')
 
     <h4>
-        2018/12/11
+        2018/12/12
     </h4>
     <p>
         Update from me: due to some unfortunate and unexpected circumstances I haven't had much time to work on the

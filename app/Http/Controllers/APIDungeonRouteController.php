@@ -8,6 +8,7 @@ use App\Logic\Datatables\DatatablesHandler;
 use App\Logic\Datatables\DungeonRouteAffixesColumnHandler;
 use App\Logic\Datatables\DungeonRouteAttributesColumnHandler;
 use App\Logic\Datatables\RatingColumnHandler;
+use App\Logic\Datatables\ViewsColumnHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -69,6 +70,8 @@ class APIDungeonRouteController extends Controller
             new DungeonRouteAttributesColumnHandler($dtHandler),
             // Allow sorting by author name
             new AuthorNameColumnHandler($dtHandler),
+            // Allow sorting by views
+            new ViewsColumnHandler($dtHandler),
             // Allow sorting by rating
             new RatingColumnHandler($dtHandler)
         ])->applyRequestToBuilder()->getResult();

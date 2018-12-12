@@ -37,9 +37,9 @@ class FindOutdatedThumbnails
                     $updatedAt->addMinute(config('keystoneguru.thumbnail_refresh_min'))->isPast())
                 ||
                 // Update every month regardless
-                $updatedAt->addMonth(1)->isPast()) {
+                $thumbnailUpdatedAt->addMonth(1)->isPast()) {
 
-                if (!$this->isJobQueuedForModel('App\Jobs\ProcessRouteFloorThumbnail', $dungeonRoute)) {
+                if (!$this->isJobQueuedForModel(\App\Jobs\ProcessRouteFloorThumbnail::class, $dungeonRoute)) {
                     Log::channel('scheduler')->debug(sprintf('Queueing job for route %s (%s floors)', $dungeonRoute->public_key, $dungeonRoute->dungeon->floors->count()));
 
                     foreach ($dungeonRoute->dungeon->floors as $floor) {

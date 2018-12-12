@@ -23,6 +23,8 @@ class CreatePageViewsTable extends Migration
             $table->index('user_id');
             $table->index('model_id');
             $table->index('model_class');
+            // Speed up searching when searching views for a specific model
+            $table->index(['model_id', 'model_class']);
             // Speed up searching when finding a very specific page view
             $table->index(['user_id', 'model_id', 'model_class', 'session_id']);
 
