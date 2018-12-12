@@ -27,7 +27,7 @@ class Dungeon extends Model
      *
      * @var array
      */
-    protected $appends = ['key'];
+    protected $appends = ['key', 'floor_count'];
     public $with = ['expansion'];
 
     public $hidden = ['expansion_id', 'created_at', 'updated_at'];
@@ -42,6 +42,14 @@ class Dungeon extends Model
         $string = str_replace(' ', '', strtolower($this->name)); // Replaces all spaces with hyphens.
 
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+    }
+
+    /**
+     * @return int The amount of floors this dungeon has.
+     */
+    public function getFloorCountAttribute()
+    {
+        return $this->floors->count();
     }
 
     /**

@@ -98,6 +98,14 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     let $cloneBtns = $('.dungeonroute-clone');
                     $cloneBtns.unbind('click');
                     $cloneBtns.bind('click', _cloneDungeonRoute);
+
+                    $('.owl-carousel').owlCarousel({
+                        nav: true,
+                        dots: false,
+                        lazyLoad: true,
+                        lazyLoadEager: 1,
+                        items: 1
+                    });
                 });
 
                 _dt[_viewMode].on('click', 'tbody tr', function (clickEvent) {
@@ -134,8 +142,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     'data': 'dungeon.id',
                     'name': 'dungeon_id',
                     'render': function (data, type, row, meta) {
-                        let url = "{{ sprintf('/images/route_thumbnails/replace_me_%s.png', 1) }}";
-                        return '<div class="route_thumbnail"><img src="' + url.replace('replace_me', row.public_key) + '"/></div>';
+                        return handlebarsThumbnailCarouselParse(row);
                     },
                     'orderable': false
                 });
@@ -155,32 +162,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     'data': 'affixes',
                     'name': 'affixes.id',
                     'render': function (data, type, row, meta) {
-                        let result = '<div>';
-                        result += '<div class="row no-gutters mt-1">' +
-                            '<div class="col-xl-5">{{ __('Affixes:') }}</div>' +
-                            '<div class="col-xl-7">' +
-                            handlebarsAffixGroupsParse(row.affixes) +
-                            '</div>' +
-                            '</div>';
-
-                        if (row.routeattributes.length > 0) {
-                            result += '<div class="row no-gutters mt-1">' +
-                                '<div class="col-xl-5">{{ __('Attributes:') }}</div>' +
-                                '<div class="col-xl-7">' +
-                                handlebarsRouteAttributesParse(row.routeattributes) +
-                                '</div>' +
-                                '</div>';
-                        }
-
-                        result += '<div class="row no-gutters mt-1">' +
-                            '<div class="col-xl-5">{{ __('Setup:') }}</div>' +
-                            '<div class="col-xl-7">' +
-                            handlebarsGroupSetupParse(row.setup) +
-                            '</div>' +
-                            '</div>';
-
-                        result += '</div>';
-                        return result;
+                        return handlebarsBiglistFeaturesParse(row);
                     },
                 });
             } else {
@@ -328,17 +310,20 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
     @include('common.handlebars.affixgroups')
     @include('common.handlebars.routeattributes')
     @include('common.handlebars.affixgroupsselect')
+    @include('common.handlebars.biglistfeatures')
+    @include('common.handlebars.thumbnailcarousel')
 @endsection
 
 @section('content')
     @parent
 
     <div class="row">
-        <div class="col-lg-2">
+        <div class="col-lg-2"></div>
+        <div id="affixgroup_select_container" class="col-lg-2">
             {!! Form::label('dungeon_id', __('Dungeon')) !!}
             {!! Form::select('dungeon_id', [0 => 'All'] + \App\Models\Dungeon::active()->pluck('name', 'id')->toArray(), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
         </div>
-        <div id="affixgroup_select_container" class="col-lg-2">
+        <div class="col-lg-2">
             {!! Form::label('affixes[]', __('Affixes')) !!}
             {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('text', 'id'), null,
                 ['id' => 'affixes',
@@ -353,16 +338,20 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             'showNoAttributes' => true])
         </div>
         <div class="col-lg-2">
-            @auth
-                {!! Form::label('favorites', __('Favorites')) !!}
-                {!! Form::checkbox('favorites', 1, 0, ['id' => 'favorites', 'class' => 'form-control left_checkbox']) !!}
-            @endauth
-        </div>
-        <div class="col-lg-2">
-            <div class="mb-2">
-                &nbsp;
+            <div class="row">
+                <div class="col">
+                    @auth
+                        {!! Form::label('favorites', __('Favorites')) !!}
+                        {!! Form::checkbox('favorites', 1, 0, ['id' => 'favorites', 'class' => 'form-control left_checkbox']) !!}
+                    @endauth
+                </div>
+                <div class="col">
+                    <div class="mb-2">
+                        &nbsp;
+                    </div>
+                    {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info col-lg']) !!}
+                </div>
             </div>
-            {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info col-lg']) !!}
         </div>
         <div class="col-lg-2">
             <div class="mb-2">

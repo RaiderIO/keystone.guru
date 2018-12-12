@@ -11,8 +11,8 @@ namespace App\Logic\Scheduler;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class FindOutdatedThumbnails
@@ -21,8 +21,9 @@ class FindOutdatedThumbnails
 
     function __invoke()
     {
-        /** @var Builder $routes */
-        $routes = DungeonRoute::all();
+        /** @var Collection $routes */
+        // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
+        $routes = DungeonRoute::orderBy('published', 'desc')->get();
         Log::channel('scheduler')->debug(sprintf('Checking %s routes for thumbnails', $routes->count()));
 
         $processed = 0;
