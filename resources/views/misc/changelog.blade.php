@@ -5,7 +5,7 @@
 @section('content')
 
     <h4>
-        2018/12/12
+        2018/12/14
     </h4>
     <p>
         Update from me: due to some unfortunate and unexpected circumstances I haven't had much time to work on the
@@ -26,7 +26,8 @@
         </li>
         <li>
             Added a bigger list view option for the Routes page. This allows you to see a preview thumbnail of a Route
-            for easy identification if the route suits your needs.
+            for easy identification if the route suits your needs. You can scroll through all floors using your mouse
+            (drag the image) or using touch in touch-enabled devices.
         </li>
         <li>
             The Routes page has been updated with new sorting mechanisms for affixes, attributes, author and rating.

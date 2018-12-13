@@ -2,7 +2,7 @@
 
 ?>
 <script id="thumbnailcarousel_template" type="text/x-handlebars-template">
-    <div class="owl-carousel owl-theme" style="width: 192px; height: 128px">
+    <div class="owl-carousel owl-theme">
         @{{#items}}
         <img src="@{{src}}"/>
         @{{/items}}

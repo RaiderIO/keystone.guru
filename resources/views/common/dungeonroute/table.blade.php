@@ -75,10 +75,15 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                         'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}',
                     },
                     'drawCallback': function (settings) {
+                        console.log(settings);
                         // Don't do anything when the message "no data available" is showing
                         if (settings.json.data.length > 0) {
-                            $.each(_dt[_viewMode].$('tbody tr'), function (index, value) {
-                                $(value).data('publickey', settings.json.data[index].public_key);
+                            // For each row in the body
+                            $.each(_dt[_viewMode].$('tbody tr'), function (trIndex, trValue) {
+                                // For each td in the row
+                                $.each($(trValue).find('td'), function (tdIndex, tdValue) {
+                                    $(tdValue).data('publickey', settings.json.data[trIndex].public_key);
+                                });
                             });
                         }
                     },
@@ -100,7 +105,9 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     $cloneBtns.bind('click', _cloneDungeonRoute);
 
                     $('.owl-carousel').owlCarousel({
-                        nav: true,
+                        // True to enable overlayed buttons (custom styled, wasted time :( )
+                        nav: false,
+                        loop: true,
                         dots: false,
                         lazyLoad: true,
                         lazyLoadEager: 1,
@@ -108,7 +115,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     });
                 });
 
-                _dt[_viewMode].on('click', 'tbody tr', function (clickEvent) {
+                _dt[_viewMode].on('click', 'tbody td:not(:first-child)', function (clickEvent) {
                     let key = $(clickEvent.currentTarget).data('publickey');
 
                     window.open('{{ route('dungeonroute.' . ($profile ? 'edit' : 'view'), ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key));
@@ -339,14 +346,14 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         </div>
         <div class="col-lg-2">
             <div class="row">
-                <div class="col">
-                    @auth
+                @auth
+                    <div class="col">
                         {!! Form::label('favorites', __('Favorites')) !!}
                         {!! Form::checkbox('favorites', 1, 0, ['id' => 'favorites', 'class' => 'form-control left_checkbox']) !!}
-                    @endauth
-                </div>
+                    </div>
+                @endauth
                 <div class="col">
-                    <div class="mb-2">
+                    <div class="d-none d-md-flex mb-2">
                         &nbsp;
                     </div>
                     {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info col-lg']) !!}
