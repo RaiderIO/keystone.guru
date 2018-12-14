@@ -34,6 +34,7 @@ return [
      */
     'do_not_track_routes' => [
         'tracker.stats.*',
+        'dungeonroute.preview', // This is crawled, don't track this
     ],
 
     /*
@@ -41,6 +42,8 @@ return [
      */
     'do_not_track_paths' => [
         'api/*',
+        'ajax/*', // Don't care for tracking ajax
+        'images/*', // Nor images
     ],
 
     /*

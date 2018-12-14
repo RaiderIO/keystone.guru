@@ -10,14 +10,14 @@ tput sgr0;
 npm install
 
 tput setaf 2;
-echo "Updating composer..."
-tput sgr0;
-composer update
-
-tput setaf 2;
 echo "Fixing vulnerabilities..."
 tput sgr0;
 npm audit fix
+
+tput setaf 2;
+echo "Updating composer..."
+tput sgr0;
+composer update
 
 ./ide_helper_regen.sh
 

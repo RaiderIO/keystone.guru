@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -27,10 +28,14 @@ use Illuminate\Support\Facades\DB;
  * @property $rating_count int
  * @property $enemy_forces int
  *
- * @property $dungeon Dungeon
- * @property $route Route
- * @property $faction Faction
- * @property $author User
+ * @property $thumbnail_updated_at string
+ * @property $updated_at string
+ * @property $created_at string
+ *
+ * @property Dungeon $dungeon
+ * @property Route $route
+ * @property Faction $faction
+ * @property User $author
  *
  * @property \Illuminate\Support\Collection $specializations
  * @property \Illuminate\Support\Collection $classes
@@ -49,6 +54,9 @@ use Illuminate\Support\Facades\DB;
  *
  * @property \Illuminate\Support\Collection $enemyraidmarkers
  * @property \Illuminate\Support\Collection $mapcomments
+ * @property \Illuminate\Support\Collection $pageviews
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder visible()
  */
 class DungeonRoute extends Model
 {
@@ -57,7 +65,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'avg_rating', 'rating_count'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count', 'views'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at', 'killzones', 'faction'];
 
@@ -68,23 +76,6 @@ class DungeonRoute extends Model
     public function getRouteKeyName()
     {
         return 'public_key';
-    }
-
-    /**
-     * @return string Generates a random public key that is displayed to the user in the URL.
-     */
-    public static function generateRandomPublicKey()
-    {
-        do {
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $charactersLength = strlen($characters);
-            $newKey = '';
-            for ($i = 0; $i < 7; $i++) {
-                $newKey .= $characters[rand(0, $charactersLength - 1)];
-            }
-        } while (DungeonRoute::all()->where('public_key', '=', $newKey)->count() > 0);
-
-        return $newKey;
     }
 
     /**
@@ -133,6 +124,14 @@ class DungeonRoute extends Model
     public function playerspecializations()
     {
         return $this->hasMany('App\Models\DungeonRoutePlayerSpecialization');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function routeattributesraw()
+    {
+        return $this->hasMany('App\Models\DungeonRouteAttribute');
     }
 
     /**
@@ -224,6 +223,38 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function routeattributes()
+    {
+        return $this->belongsToMany('App\Models\RouteAttribute', 'dungeon_route_attributes');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pageviews()
+    {
+        return $this->hasMany('App\Models\PageView', 'model_id')->where('model_class', get_class($this));
+    }
+
+    /**
+     * Scope a query to only include active dungeons.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVisible($query)
+    {
+        return $query->where('unlisted', false)
+            ->where('demo', false)
+            ->whereHas('dungeon', function ($dungeon) {
+                /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
+                $dungeon->active();
+            });
+    }
+
+    /**
      * @return double
      */
     public function getAvgRatingAttribute()
@@ -238,6 +269,14 @@ class DungeonRoute extends Model
         }
 
         return round($avg, 2);
+    }
+
+    /**
+     * @return int
+     */
+    public function getViewsAttribute()
+    {
+        return $this->pageviews->count();
     }
 
     /**
@@ -356,6 +395,18 @@ class DungeonRoute extends Model
         // Update or insert it
         if ($this->save()) {
 
+            $newAttributes = $request->get('attributes', array());
+            if (!empty($newAttributes)) {
+                // Remove old attributes
+                $this->routeattributesraw()->delete();
+                foreach ($newAttributes as $key => $value) {
+                    $drAttribute = new DungeonRouteAttribute();
+                    $drAttribute->dungeon_route_id = $this->id;
+                    $drAttribute->route_attribute_id = $value;
+                    $drAttribute->save();
+                }
+            }
+
             $newSpecs = $request->get('specialization', array());
             if (!empty($newSpecs)) {
                 // Remove old specializations
@@ -381,7 +432,6 @@ class DungeonRoute extends Model
             }
 
             $newRaces = $request->get('race', array());
-
             if (!empty($newRaces)) {
                 // Remove old races
                 $this->playerraces()->delete();
@@ -462,6 +512,8 @@ class DungeonRoute extends Model
         return $result;
     }
 
+
+
     /**
      * @param null $user
      * @return bool
@@ -474,6 +526,23 @@ class DungeonRoute extends Model
         }
 
         return $user !== null && $this->author_id === $user->id;
+    }
+
+    /**
+     * @return string Generates a random public key that is displayed to the user in the URL.
+     */
+    public static function generateRandomPublicKey()
+    {
+        do {
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $charactersLength = strlen($characters);
+            $newKey = '';
+            for ($i = 0; $i < 7; $i++) {
+                $newKey .= $characters[rand(0, $charactersLength - 1)];
+            }
+        } while (DungeonRoute::all()->where('public_key', '=', $newKey)->count() > 0);
+
+        return $newKey;
     }
 
     public static function boot()

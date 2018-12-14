@@ -33,17 +33,18 @@ window.leaflet = require('leaflet');
 window.leafletdraw = require('leaflet-draw');
 // window.leafleteditable = require('leaflet-editable');
 window.leafletcontextmenu = require('leaflet-contextmenu');
-window.interpolate = require('color-interpolate');
+// window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
 window.bootstrapselect = require('bootstrap-select');
 window.handlebars = require('handlebars');
 window.barrating = require('jquery-bar-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
-// window.owlCarousel = require('owl.carousel');
+window.owlCarousel = require('owl.carousel');
 window.introjs = require('intro.js');
 window.pwstrengthmeter = require('password-strength-meter');
 window.jqueryMousewheel = require('jquery-mousewheel');
 window.mCustomScrollbar = require('malihu-custom-scrollbar-plugin');
+window.Cookies = require('js-cookie');
 
 require('@fortawesome/fontawesome-free');
 

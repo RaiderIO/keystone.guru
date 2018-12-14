@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function list()
     {
-        return view('admin.user.list', ['models' => User::with('roles')->get()]);
+        return view('admin.user.list', ['models' => User::with('roles', 'dungeonroutes')->get()]);
     }
 
     /**

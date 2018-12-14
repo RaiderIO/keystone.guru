@@ -120,12 +120,16 @@ if (images) {
         // Allow import of pure JS
         // mix.copy('resources/assets/js/custom', 'public/js/custom', false);
 
-        mix.copy('resources/assets/images/icon', 'public/images/icon', false);
-        mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
-        mix.copy('resources/assets/images/lib', 'public/images/lib', false);
-        mix.copy('resources/assets/images/classes', 'public/images/classes', false);
-        mix.copy('resources/assets/images/factions', 'public/images/factions', false);
         mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
+        mix.copy('resources/assets/images/classes', 'public/images/classes', false);
         mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
+        mix.copy('resources/assets/images/factions', 'public/images/factions', false);
+        mix.copy('resources/assets/images/home', 'public/images/home', false);
+        mix.copy('resources/assets/images/icon', 'public/images/icon', false);
+        mix.copy('resources/assets/images/lib', 'public/images/lib', false);
+        mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
+        mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);
+        mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes', false);
+        mix.copy('resources/assets/images/specializations', 'public/images/specializations', false);
     }
 }

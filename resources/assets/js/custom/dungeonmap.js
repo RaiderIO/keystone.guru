@@ -12,6 +12,9 @@ class DungeonMap extends Signalable {
         this.teeming = options.teeming;
         this.dungeonroute = options.dungeonroute;
         this.visualType = options.defaultEnemyVisualType;
+        this.noUI = options.noUI;
+        this.hiddenMapObjectGroups = options.hiddenMapObjectGroups;
+        this.defaultZoom = options.defaultZoom;
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -238,21 +241,37 @@ class DungeonMap extends Signalable {
     _createMapObjectGroups() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        let result = [
-            new EnemyMapObjectGroup(this, 'enemy', 'Enemy', false),
-            new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol', false),
-            new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false)
-        ];
+        let result = [];
+
+        if (this.hiddenMapObjectGroups.indexOf('enemy') < 0) {
+            result.push(new EnemyMapObjectGroup(this, 'enemy', 'Enemy', false));
+        }
+        if (this.hiddenMapObjectGroups.indexOf('enemypatrol') < 0) {
+            result.push(new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol', false));
+        }
+        if (this.hiddenMapObjectGroups.indexOf('enemypack') < 0) {
+            result.push(new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false));
+        }
 
         // Only add these two if they're worth fetching (not in a view + no route (infested voting))
         if (this.getDungeonRoute().publicKey !== '' || this.edit) {
-            result.push(new RouteMapObjectGroup(this, 'route', true));
-            result.push(new KillZoneMapObjectGroup(this, 'killzone', true));
+            if (this.hiddenMapObjectGroups.indexOf('route') < 0) {
+                result.push(new RouteMapObjectGroup(this, 'route', true));
+            }
+            if (this.hiddenMapObjectGroups.indexOf('killzone') < 0) {
+                result.push(new KillZoneMapObjectGroup(this, 'killzone', true));
+            }
         }
 
-        result.push(new MapCommentMapObjectGroup(this, 'mapcomment', true));
-        result.push(new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false));
-        result.push(new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false));
+        if (this.hiddenMapObjectGroups.indexOf('mapcomment') < 0) {
+            result.push(new MapCommentMapObjectGroup(this, 'mapcomment', true));
+        }
+        if (this.hiddenMapObjectGroups.indexOf('dungeonstartmarker') < 0) {
+            result.push(new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false));
+        }
+        if (this.hiddenMapObjectGroups.indexOf('dungeonfloorswitchmarker') < 0) {
+            result.push(new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false));
+        }
 
         return result;
     }
@@ -267,22 +286,26 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         let result = [];
-        if (this.edit) {
-            result.push(new DrawControls(this, drawnItemsLayer));
-        }
 
-        // Only when enemy forces are relevant in their display (not in a view + no route (infested voting))
-        if (this.getDungeonRoute().publicKey !== '' || this.edit) {
-            result.push(new EnemyForcesControls(this));
-        }
-        result.push(new EnemyVisualControls(this));
-        result.push(new MapObjectGroupControls(this));
+        // No UI = no map controls at all
+        if (!this.noUI) {
+            if (this.edit) {
+                result.push(new DrawControls(this, drawnItemsLayer));
+            }
 
-        if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
-            result.push(new FactionDisplayControls(this));
-        }
+            // Only when enemy forces are relevant in their display (not in a view + no route (infested voting))
+            if (this.getDungeonRoute().publicKey !== '' || this.edit) {
+                result.push(new EnemyForcesControls(this));
+            }
+            result.push(new EnemyVisualControls(this));
+            result.push(new MapObjectGroupControls(this));
 
-        // result.push(new AdDisplayControls(this));
+            if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
+                result.push(new FactionDisplayControls(this));
+            }
+
+            // result.push(new AdDisplayControls(this));
+        }
 
         return result;
     }
@@ -426,7 +449,7 @@ class DungeonMap extends Signalable {
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
-        this.leafletMap.setView([-128, 192], 2);
+        this.leafletMap.setView([-128, 192], this.defaultZoom);
         let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
@@ -461,6 +484,11 @@ class DungeonMap extends Signalable {
 
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
             this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor(), this.mapObjectGroupFetchSuccess.bind(this));
+        }
+
+        // Show/hide the attribution
+        if (!this.options.showAttribution) {
+            $('.leaflet-control-attribution').hide();
         }
     }
 

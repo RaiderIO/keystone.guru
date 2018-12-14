@@ -4,6 +4,44 @@
 
 @section('content')
 
+    <h4>
+        2018/12/14
+    </h4>
+    <p>
+        Update from me: due to some unfortunate and unexpected circumstances I haven't had much time to work on the
+        website the past few weeks. I have slowly started working on the website again though, and I remain dedicated
+        to improving Keystone.guru. Please stay tuned!
+    </p>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            Introduced a new feature called 'attributes'. A Route can be coupled to one or more attributes which
+            describe certain characteristics of a Route. Does the route contain Warlock Demonic Gateway skips, but you
+            can't do these because your group does not run with a Warlock? If the author has flagged their Route with
+            the appropriate attributes you can now filter out Routes that contain a Warlock Demonic Gateway skip.
+            There are currently attributes for Rogue Shroud, Warlock Gate skips, Mage Slow Fall skip (Shrine of the
+            Storm), Invisibility Potion and Death skip. If you have more ideas for attributes please let me know and I
+            will consider adding them.
+        </li>
+        <li>
+            Added a bigger list view option for the Routes page. This allows you to see a preview thumbnail of a Route
+            for easy identification if the route suits your needs. You can scroll through all floors using your mouse
+            (drag the image) or using touch in touch-enabled devices.
+        </li>
+        <li>
+            The Routes page has been updated with new sorting mechanisms for affixes, attributes, author and rating.
+        </li>
+        <li>
+            The Route page now shows the views a route has gotten.
+        </li>
+        <li>
+            The Affixes page no longer accidentally counted past seasons double, leading to incorrect dates for the
+            affixes per week.
+        </li>
+    </ul>
+    </p>
+
 
     <h4>
         2018/11/10

@@ -10,7 +10,6 @@ mkdir storage/app/public/expansions
 mkdir storage/debugbar
 
 # ensure www-data permissions
-# TODO: log folders writable?
 tput setaf 2;
 echo "Setting www-data ownership to some folders..."
 tput sgr0;
@@ -24,6 +23,11 @@ tput sgr0;
 chmod 755 *.sh
 chmod -R 755 storage
 chmod -R 755 bootstrap/cache
+
+# make sure setfacl is installed on the server
+sudo apt-get install acl
+# Give www-data user permissing to write in this folder regardless of ownership. See https://stackoverflow.com/a/29882246/771270
+setfacl -d -m g:www-data:rwx storage/logs
 
 # ensure any uploaded file may be accessed directly (symlinks public/storage to storage/app/public)
 tput setaf 2;
@@ -54,12 +58,16 @@ php artisan tracker:tables
 # Run migrate again to fix the tracker
 ./migrate.sh
 
+# Install some packages
 git clone https://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git public/templates/sb-admin-2
 cd public/templates/sb-admin-2
 git checkout tags/v3.3.7+1
 git checkout -b v3.3.7+1
 # Back to where we came from
 cd ../../..
+
+sudo apt-get install supervisor
+sudo apt-get install pngquant
 
 # Seeding database
 tput setaf 2;

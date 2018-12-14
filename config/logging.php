@@ -30,12 +30,28 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['daily', 'discord'],
+        ],
+        'scheduler' => [
+            'driver' => 'stack',
+            'channels' => ['scheduler_file', 'discord'],
         ],
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
+        ],
+        'discord' => [
+            'driver' => 'custom',
+            'url' => 'https://discordapp.com/api/webhooks/' . env('APP_LOG_DISCORD_WEBHOOK'),
+            'via' => App\Logging\CreateDiscordLogger::class,
+            'level' => 'error',
+        ],
+        'scheduler_file' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/scheduler.log'),
+            'level' => 'debug',
+            'days' => 14,
         ],
         'daily' => [
             'driver' => 'daily',

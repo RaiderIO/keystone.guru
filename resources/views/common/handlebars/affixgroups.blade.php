@@ -3,7 +3,7 @@
 ?><script id="affixgroups_single_template" type="text/x-handlebars-template">
     <?php // Is only one but keeps the underlying code much simpler to keep that data structure the same ?>
     @{{#affixgroups}}
-    <div class="affix_list_row">
+    <div class="affix_list_row row no-gutters">
         @{{#affixes}}
         <div class="affix_row float-left">
             <div class="select_icon affix_icon_@{{ class }} mr-2" style="height: 24px;" data-toggle="tooltip" title="@{{name}}">
@@ -35,7 +35,7 @@
 </script>
 <script>
     /**
-     * Converts a received setup from a dungeon route (setup property) to a parsed handlebars template.
+     * Converts a received affix group list from a dungeon route to a parsed handlebars template.
      * @returns {*}
      */
     function handlebarsAffixGroupsParse(data) {

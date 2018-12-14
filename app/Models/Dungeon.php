@@ -8,16 +8,17 @@ use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 
 /**
- * @property $id int The ID of this Dungeon.
- * @property $expansion_id int The linked expansion to this dungeon.
- * @property $name string The name of the dungeon.
- * @property $enemy_forces_required int The amount of total enemy forces required to complete the dungeon.
- * @property $enemy_forces_required_teeming int The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
- * @property $active boolean True if this dungeon is active, false if it is not.
- * @property $expansion \Expansion
- * @property $floors \Illuminate\Support\Collection
- * @property $dungeonroutes \Illuminate\Support\Collection
- * @function active
+ * @property int $id The ID of this Dungeon.
+ * @property int $expansion_id The linked expansion to this dungeon.
+ * @property string $name The name of the dungeon.
+ * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
+ * @property int $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
+ * @property boolean $active True if this dungeon is active, false if it is not.
+ * @property Expansion $expansion
+ * @property \Illuminate\Support\Collection $floors
+ * @property \Illuminate\Support\Collection $dungeonroutes
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder active()
  */
 class Dungeon extends Model
 {
@@ -26,7 +27,7 @@ class Dungeon extends Model
      *
      * @var array
      */
-    protected $appends = ['key'];
+    protected $appends = ['key', 'floor_count'];
     public $with = ['expansion'];
 
     public $hidden = ['expansion_id', 'created_at', 'updated_at'];
@@ -41,6 +42,14 @@ class Dungeon extends Model
         $string = str_replace(' ', '', strtolower($this->name)); // Replaces all spaces with hyphens.
 
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+    }
+
+    /**
+     * @return int The amount of floors this dungeon has.
+     */
+    public function getFloorCountAttribute()
+    {
+        return $this->floors->count();
     }
 
     /**
@@ -188,5 +197,15 @@ class Dungeon extends Model
 
         // Set the ID column as a key for easy isset() usage later
         return array_combine(array_column($result, 'id'), $result);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // This model may NOT be deleted, it's read only!
+        static::deleting(function ($someModel) {
+            return false;
+        });
     }
 }

@@ -66,6 +66,9 @@ class APIRouteController extends Controller
 
                 // Bulk insert
                 RouteVertex::insert($vertices);
+
+                // Touch the route so that the thumbnail gets updated
+                $dungeonRoute->touch();
             }
 
             $result = ['id' => $route->id];
@@ -82,15 +85,19 @@ class APIRouteController extends Controller
             $route = Route::findOrFail($request->get('id'));
 
             // @TODO WTF why does $route->dungeonroute not work?? It will NOT load the relation despite everything being OK?
-            $dungeonroute = DungeonRoute::findOrFail($route->dungeon_route_id);
+            $dungeonRoute = DungeonRoute::findOrFail($route->dungeon_route_id);
             // If we're not the author, don't delete anything
             // @TODO handle this in a policy?
-            if ($dungeonroute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin')) {
+            if ($dungeonRoute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin')) {
                 throw new Exception('Unauthorized');
             }
 
             $route->delete();
             $route->deleteVertices();
+
+            // Touch the route so that the thumbnail gets updated
+            $dungeonRoute->touch();
+
             $result = ['result' => 'success'];
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

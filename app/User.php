@@ -45,12 +45,12 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be visible for outsiders.
      *
      * @var array
      */
-    protected $hidden = [
-        'id', 'email', 'password', 'remember_token', 'patreon_data_id', 'raw_patreon_response_data', 'created_at', 'updated_at'
+    protected $visible = [
+        'name'
     ];
 
     /**

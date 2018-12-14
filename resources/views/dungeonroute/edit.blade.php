@@ -1,5 +1,7 @@
 @extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
-
+<?php
+/** @var $model \App\Models\DungeonRoute */
+?>
 @section('scripts')
     @parent
 
@@ -52,6 +54,7 @@
                 dataType: 'json',
                 data: {
                     dungeon_route_title: $('#dungeon_route_title').val(),
+                    attributes: $('#attributes').val(),
                     faction_id: $('#faction_id').val(),
                     specialization:
                         $('.specializationselect select').map(function () {
@@ -122,10 +125,16 @@
                             <h3>
                                 {{ __('General') }}
                             </h3>
-                            <div class="form-group">
-                                {!! Form::label('dungeon_route_title', __('Title')) !!}
-                                {!! Form::text('dungeon_route_title', $model->title, ['class' => 'form-control']) !!}
+                            <div class='form-group'>
+                                <label for="dungeon_route_title">
+                                    {{ __('Title') }}*
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                                __('Choose a title that will uniquely identify the route for you over other similar routes you may create.')
+                                 }}"></i>
+                                </label>
+                                {!! Form::text('dungeon_route_title', $model->title, ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
                             </div>
+                            @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
 
                             <h3>
                                 {{ __('Group composition (optional)') }}

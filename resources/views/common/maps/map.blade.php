@@ -15,6 +15,16 @@ $showInfestedVoting = isset($showInfestedVoting) ? $showInfestedVoting : false;
 $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
 // Show ads or not
 $noads = isset($noads) ? !Auth::check() ? $noads : Auth::user()->hasPaidTier('ad-free') : false;
+// No UI on the map
+$noUI = isset($noUI) && $noUI ? 'true' : 'false';
+// Default zoom for the map
+$defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
+// By default hidden elements
+$hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
+// Floor id to display (bit ugly with JS, but it works)
+$floorId = isset($floorId) ? $floorId : '_dungeonData.floors[0].id';
+// Show the attribution
+$showAttribution = isset($showAttribution) && !$showAttribution ? 'false' : 'true';
 
 $introTexts = [
     __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
@@ -49,23 +59,28 @@ $introTexts = [
 
     <script>
         // Data of the dungeon(s) we're selecting in the map
-        let _dungeonData = {!! $dungeon !!};
-        let dungeonRouteEnemyForces = {{ $routeEnemyForces }};
+        var _dungeonData = {!! $dungeon !!};
+        var dungeonRouteEnemyForces = {{ $routeEnemyForces }};
 
-        let dungeonMap;
+        var dungeonMap;
+
+        // Options for the dungeonmap object
+        var options = {
+            floorId: {{ $floorId }},
+            edit: {{ $edit }},
+            dungeonroute: {
+                publicKey: '{{ $routePublicKey }}',
+                faction: '{{ $routeFaction }}'
+            },
+            defaultEnemyVisualType: '{{ $enemyVisualType }}',
+            teeming: {{ $teeming }},
+            noUI: {{ $noUI }},
+            hiddenMapObjectGroups: {!!  json_encode($hiddenMapObjectGroups) !!},
+            defaultZoom: {{ $defaultZoom }},
+            showAttribution: {{ $showAttribution }}
+        };
 
         $(function () {
-            // Options for the dungeonmap object
-            let options = {
-                floorId: _dungeonData.floors[0].id,
-                edit: {{ $edit }},
-                dungeonroute: {
-                    publicKey: '{{ $routePublicKey }}',
-                    faction: '{{ $routeFaction }}'
-                },
-                defaultEnemyVisualType: '{{ $enemyVisualType }}',
-                teeming: {{ $teeming }}
-            };
 
             @if($isAdmin)
                 dungeonMap = new AdminDungeonMap('map', _dungeonData, options);
@@ -73,18 +88,21 @@ $introTexts = [
                 dungeonMap = new DungeonMap('map', _dungeonData, options);
             @endif
 
-            $(_switchDungeonFloorSelect).change(function () {
-                // Pass the new floor ID to the map
-                dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
-                dungeonMap.refreshLeafletMap();
-            });
+            // Support not having a sidebar (preview map)
+            if (typeof (_switchDungeonFloorSelect) !== 'undefined') {
+                $(_switchDungeonFloorSelect).change(function () {
+                    // Pass the new floor ID to the map
+                    dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
+                    dungeonMap.refreshLeafletMap();
+                });
+            }
 
             $('#start_virtual_tour').bind('click', function () {
                 introjs().start();
             });
 
             // Bind leaflet virtual tour classes
-            let selectors = [
+            var selectors = [
                 ['#sidebar', 'right'],
                 ['#sidebarToggle', 'right'],
                 ['.enemy_forces_container', 'right'],
@@ -103,9 +121,9 @@ $introTexts = [
                 ['.leaflet-control-zoom', 'left'],
                 ['#map_controls .leaflet-draw-toolbar', 'left'],
             ];
-            let texts = {!! json_encode($introTexts) !!};
-            for (let i = 0; i < selectors.length; i++) {
-                let $selector = $(selectors[i][0]);
+            var texts = {!! json_encode($introTexts) !!};
+            for (var i = 0; i < selectors.length; i++) {
+                var $selector = $(selectors[i][0]);
                 $selector.attr('data-intro', texts[i]);
                 $selector.attr('data-position', selectors[i][1]);
                 $selector.attr('data-step', i + 1);
@@ -114,7 +132,7 @@ $introTexts = [
             // If the map is opened on mobile hide the sidebar
             if (isMobile()) {
                 dungeonMap.register('map:refresh', null, function () {
-                    let fn = function () {
+                    var fn = function () {
                         if (typeof _hideSidebar === 'function') {
                             // @TODO This introduces a dependency on sidebar, but sidebar loads before dungeonMap is instantiated
                             _hideSidebar();

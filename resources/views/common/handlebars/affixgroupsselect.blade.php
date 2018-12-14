@@ -27,7 +27,7 @@ if(!isset($affixgroups) ){
      * @returns {*}
      */
     function handlebarsLoadAffixGroupSelect(affixSelectSelector) {
-
+        // @TODO make one template with multiple options, rather than calling this template N amount of times?
         for( let i in _affixGroups ){
             if( _affixGroups.hasOwnProperty(i) ){
                 let affixGroup = _affixGroups[i];

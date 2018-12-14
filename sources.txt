@@ -3,3 +3,5 @@ crossed swords https://thenounproject.com/term/crossed-swords/152699/
 expansion colors https://www.deviantart.com/the-beats/art/WOW-5-Icon-Set-Mac-and-Win-118501481
 image upscaling http://a-sharper-scaling.com/
 game icon pack https://barrens.chat/viewtopic.php?f=5&t=63&p=1726#p1726
+
+download and install https://wkhtmltopdf.org/downloads.html for image previews of routes

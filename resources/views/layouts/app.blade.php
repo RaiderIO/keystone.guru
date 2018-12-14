@@ -7,7 +7,9 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 // Show ads if not set
 $noads = isset($noads) ? $noads : false;
 // If logged in, check if the user has paid for an ad-free website
-$noads = false; // $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
+$noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
+// If we're showing ads and we're NOT on production, hide them anyways
+$noads = $noads || config('app.env') === 'production' ? $noads : true;
 // Custom content or not
 $custom = isset($custom) ? $custom : false;
 // Wide mode or not (only relevant if custom = false)
@@ -18,6 +20,10 @@ $header = isset($header) ? $header : true;
 $footer = isset($footer) ? $footer : true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
+// Show cookie consent
+$cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
+// Easy switch
+$isProduction = config('app.env') === 'production';
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -34,7 +40,7 @@ $title = isset($title) ? $title . ' - ' : '';
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-    @if (config('app.env') !== 'production')
+    @if (!$isProduction)
         <link href="{{ asset('css/map.css') }}" rel="stylesheet">
         <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
         <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
@@ -42,6 +48,7 @@ $title = isset($title) ? $title . ' - ' : '';
         <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
         <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
         <link href="{{ asset('css/raidmarkers.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/routeattributes.css') }}" rel="stylesheet">
         <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
         <link href="{{ asset('css/home.css') }}" rel="stylesheet">
     @endif
@@ -49,14 +56,18 @@ $title = isset($title) ? $title . ' - ' : '';
     @yield('head')
 
     @include('common.general.scripts', ['showLegalModal' => $showLegalModal])
+    @if(!$custom)
+        @include('common.general.sitescripts')
+    @endif
+    @if($cookieConsent)
     @include('common.thirdparty.cookieconsent')
-    <?php if(config('app.env') !== 'production' ){
-    if(!$noads ) {?>
-    @include('common.thirdparty.adsense')
-    <?php } ?>
-    @include('common.thirdparty.analytics')
-    <?php } ?>
-    @if(!$noads)
+    @endif
+
+    @if(!$noads && $isProduction)
+        @include('common.thirdparty.adsense')
+    @endif
+    @if($isProduction)
+        @include('common.thirdparty.analytics')
     @endif
 </head>
 <body>
@@ -183,7 +194,7 @@ $title = isset($title) ? $title . ' - ' : '';
         @yield('content')
     @else
 
-        @if (config('app.env') !== 'production' && (Auth::user() === null || !Auth::user()->hasRole('admin')))
+        @if (!$isProduction && (Auth::user() === null || !Auth::user()->hasRole('admin')))
             <div class="container-fluid alert alert-warning text-center mt-4">
                 <i class="fa fa-exclamation-triangle"></i>
                 {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
@@ -422,7 +433,7 @@ $title = isset($title) ? $title . ' - ' : '';
 @if(!$noads)
 @endif
 
-@if (config('app.env') === 'production')
+@if ($isProduction)
     <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
     <script src="{{ asset('js/custom.js') }}"></script>
 

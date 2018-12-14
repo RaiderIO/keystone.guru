@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\APIDungeonRouteFormRequest;
+use App\Logic\Datatables\AuthorNameColumnHandler;
+use App\Logic\Datatables\DatatablesHandler;
+use App\Logic\Datatables\DungeonRouteAffixesColumnHandler;
+use App\Logic\Datatables\DungeonRouteAttributesColumnHandler;
+use App\Logic\Datatables\RatingColumnHandler;
+use App\Logic\Datatables\ViewsColumnHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -12,21 +18,18 @@ use Illuminate\Support\Facades\Auth;
 
 class APIDungeonRouteController extends Controller
 {
+
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return mixed
      * @throws \Exception
      */
     function list(Request $request)
     {
-        $builder = DungeonRoute::query()->with(['dungeon', 'affixes', 'author']);
-        // No unlisted routes!
-        $builder = $builder->where('unlisted', false);
-
-        $builder->whereHas('dungeon', function ($query) {
-            /** @var $query Builder This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
-            $query->active();
-        });
+        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
+            // ->setAppends(['dungeon', 'affixes', 'author'])
+            ->select(['dungeon_routes.*'])
+            ->visible();
 
         $user = Auth::user();
         $mine = false;
@@ -37,66 +40,41 @@ class APIDungeonRouteController extends Controller
 
             // Filter by our own user if logged in
             if ($mine) {
-                $builder = $builder->where('author_id', '=', $user->id);
+                $routes = $routes->where('author_id', '=', $user->id);
             }
 
             // Never show demo routes here
             if (!$user->hasRole('admin')) {
-                $builder = $builder->where('demo', '=', '0');
+                $routes = $routes->where('demo', '=', '0');
             }
 
             // Handle favorites
             if ($request->get('favorites', false)) {
-                $builder->whereHas('favorites', function ($query) use (&$user) {
+                $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', '=', $user->id);
                 });
             }
         }
 
-        // If we're not viewing our own routes, only select published routes
         if (!$mine) {
-            $builder = $builder->where('published', true);
+            $routes = $routes->where('published', true);
         }
 
+        $dtHandler = new DatatablesHandler($request);
 
-        // Handle searching
-        if ($request->has('columns')) {
-            $columns = $request->get('columns');
-
-            $affixes = $columns[3]['search']['value'];
-            if (!empty($affixes)) {
-                $affixIds = explode(',', $affixes);
-
-                $builder->whereHas('affixes', function ($query) use (&$affixIds) {
-                    /** @var $query Builder */
-                    $query->whereIn('affix_groups.id', $affixIds);
-                });
-            }
-
-            // Unset the search value, we already filtered it and I don't know how to convince DT to do the above for me
-            $columns[3]['search']['value'] = '';
-            // Apply to request parameters
-            $request->merge(['columns' => $columns]);
-        }
-
-
-//        $result = DataTables::eloquent($builder)->toArray();
-//
-//        if ($request->has('order')) {
-//            $order = $request->get('order');
-//
-//            if (intval($order[0]['column']) === 5) {
-//                array_multisort(array_column($result['data'], 'avg_rating'), SORT_ASC,  $result['data']);
-//            }
-//        }
-//
-//        return $result;
-
-        // $builder->with(['dungeon:id,name']);
-
-        $dt = new \Yajra\DataTables\DataTables();
-        return $dt->eloquent($builder)->make(true);
+        return $dtHandler->setBuilder($routes)->addColumnHandler([
+            // Handles any searching/filtering based on DR Affixes
+            new DungeonRouteAffixesColumnHandler($dtHandler),
+            // Sort by the amount of attributes
+            new DungeonRouteAttributesColumnHandler($dtHandler),
+            // Allow sorting by author name
+            new AuthorNameColumnHandler($dtHandler),
+            // Allow sorting by views
+            new ViewsColumnHandler($dtHandler),
+            // Allow sorting by rating
+            new RatingColumnHandler($dtHandler)
+        ])->applyRequestToBuilder()->getResult();
     }
 
     /**

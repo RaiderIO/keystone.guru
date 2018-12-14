@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Floor;
 use App\Models\KillZone;
+use App\Models\PageView;
 use App\Models\Route;
 use App\Models\UserReport;
 use Illuminate\Database\Eloquent\Model;
@@ -87,22 +89,39 @@ class DungeonRouteController extends Controller
         if (!$dungeonroute->published) {
             $result = view('dungeonroute.unpublished', ['headerTitle' => __('Route unpublished')]);
         } else {
-            $user = Auth::user();
             $currentReport = null;
-            if ($user !== null) {
+            if (Auth::check()) {
                 // Find any currently active report the user has made
-                $currentReport = UserReport::where('author_id', $user->id)
+                $currentReport = UserReport::where('author_id', Auth::id())
                     ->where('context', $dungeonroute->getReportContext())
                     ->where('category', 'dungeonroute')
                     ->where('handled', 0)
                     ->first();
             }
 
+            PageView::trackPageView($dungeonroute->id, get_class($dungeonroute));
+
             $result = view('dungeonroute.view', [
                 'model' => $dungeonroute,
                 'current_report' => $currentReport
             ]);
         }
+
+        return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param int $floorindex
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function preview(Request $request, DungeonRoute $dungeonroute, int $floorindex)
+    {
+        $result = view('dungeonroute.preview', [
+            'model' => $dungeonroute,
+            'floorId' => Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first()->id
+        ]);
 
         return $result;
     }
@@ -166,17 +185,16 @@ class DungeonRouteController extends Controller
                     $model->save();
 
                     // If it was a route, save the vertices as well
-                    if($model instanceof Route ){
-                        foreach($model->vertices as $vertex){
+                    if ($model instanceof Route) {
+                        foreach ($model->vertices as $vertex) {
                             $vertex->id = 0;
                             $vertex->exists = false;
                             $vertex->route_id = $model->id;
                             $vertex->save();
                         }
-                    }
-                    // KillZone, save the enemies that were attached to them
-                    else if($model instanceof KillZone ){
-                        foreach($model->killzoneenemies as $enemy){
+                    } // KillZone, save the enemies that were attached to them
+                    else if ($model instanceof KillZone) {
+                        foreach ($model->killzoneenemies as $enemy) {
                             $enemy->id = 0;
                             $enemy->exists = false;
                             $enemy->kill_zone_id = $model->id;

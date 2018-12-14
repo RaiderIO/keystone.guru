@@ -24,5 +24,8 @@ echo "Refreshing DungeonData..."
 tput sgr0;
 php artisan db:seed --class=DungeonDataSeeder --database=migrate
 
+# Restart queue processors
+php artisan queue:restart
+
 # All done!
 php artisan up
