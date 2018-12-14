@@ -141,11 +141,10 @@ class GameServerRegion extends Model
     /**
      * Get the start date of an affix group based on the amount of iterations there's been on the calendar.
      *
-     * @param $iteration
-     * @param $affixGroup
+     * @param $affixGroup AffixGroup
      * @return Carbon
      */
-    function getAffixGroupStartDate($iteration, $affixGroup)
+    function getAffixGroupStartDate($affixGroup)
     {
         /** @var Collection $affixGroups */
         $affixGroups = $this->_getAllAffixGroups();
@@ -159,9 +158,7 @@ class GameServerRegion extends Model
         }
 
         $now = $this->_getNow();
-
-        $weeksPassed = ($iteration * $affixGroups->count()) + $index;
-        return $this->getCurrentSeasonStart()->setTimezone($now['timezone'])->addWeeks($weeksPassed);
+        return $this->getCurrentSeasonStart()->setTimezone($now['timezone'])->addWeeks($index);
     }
 
     /**

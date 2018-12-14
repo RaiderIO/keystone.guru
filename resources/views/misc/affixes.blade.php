@@ -48,7 +48,7 @@ if ($timezone === null) {
             ?>
             <td>
                 <div class="affix_row first_column {{ $currentWeekClass }}">
-                    @php($startDate = $region->getAffixGroupStartDate($region->getCurrentSeasonAffixGroupIteration(), $affixGroup))
+                    @php($startDate = $region->getAffixGroupStartDate($affixGroup))
                     <span>
                         {{ $startDate->format('Y/M/d') }})
                     </span>

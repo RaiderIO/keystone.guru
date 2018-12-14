@@ -35,6 +35,10 @@
         <li>
             The Route page now shows the views a route has gotten.
         </li>
+        <li>
+            The Affixes page no longer accidentally counted past seasons double, leading to incorrect dates for the
+            affixes per week.
+        </li>
     </ul>
     </p>
 
