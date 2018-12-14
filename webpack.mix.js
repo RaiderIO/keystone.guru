@@ -128,8 +128,6 @@ if (images) {
         mix.copy('resources/assets/images/icon', 'public/images/icon', false);
         mix.copy('resources/assets/images/lib', 'public/images/lib', false);
         mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
-        mix.copy('resources/assets/images/patreon', 'public/images/patreon', false);
-        mix.copy('resources/assets/images/races', 'public/images/races', false);
         mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);
         mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes', false);
         mix.copy('resources/assets/images/specializations', 'public/images/specializations', false);
