@@ -35,6 +35,11 @@ class DatatablesHandler
      */
     private $_recordsTotal = 0;
 
+    /**
+     * @var int
+     */
+    private $_recordsFiltered = 0;
+
     public function __construct(Request $request)
     {
         $this->_request = $request;
@@ -115,7 +120,6 @@ class DatatablesHandler
             }
         }
 
-
         return $this;
     }
 
@@ -137,8 +141,8 @@ class DatatablesHandler
             // Initial amount of records
             'recordsTotal' => $this->_recordsTotal,
             // The amount of records after filtering
-            'recordsFiltered' => $data->count(),
             'data' => $data,
+            'recordsFiltered' => DB::selectOne(DB::raw('SELECT FOUND_ROWS() as recordsFiltered'))->recordsFiltered,
             // Only show this info in dev instance
             'input' => $isDev ? $this->_request->toArray() : [],
             'queries' => $isDev ? DB::getQueryLog() : []

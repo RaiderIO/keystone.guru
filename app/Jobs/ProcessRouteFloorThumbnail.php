@@ -86,17 +86,16 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 Image::make($tmpFile, [
                     'width' => 192,
                     'height' => 128
-                ])->save($tmpScaledFile);
+                ])->save($target);
 
                 Log::channel('scheduler')->info('Removing previous image..');
-                unlink($target);
                 // Image now exists in target location; compress it and move it to the target location
-                Log::channel('scheduler')->info('Compressing image..');
-                $this->compressPng($tmpScaledFile, $target);
+                // Log::channel('scheduler')->info('Compressing image..');
+                // $this->compressPng($tmpScaledFile, $target);
             } finally {
                 // Cleanup
                 unlink($tmpFile);
-                unlink($tmpScaledFile);
+                // unlink($tmpScaledFile);
                 Log::channel('scheduler')->info('Done');
             }
         }

@@ -28,7 +28,7 @@ class APIDungeonRouteController extends Controller
     {
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
             // ->setAppends(['dungeon', 'affixes', 'author'])
-            ->select(['dungeon_routes.*'])
+            ->selectRaw('SQL_CALC_FOUND_ROWS dungeon_routes.*')
             ->visible();
 
         $user = Auth::user();

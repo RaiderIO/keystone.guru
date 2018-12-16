@@ -27,7 +27,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                 let attributes = $("#attributes").val();
 
                 let offset = _viewMode === 'biglist' ? 1 : 0;
-                _dt[_viewMode].column(0 + offset).search(dungeonId);
+                _dt[_viewMode].column(offset).search(dungeonId);
                 _dt[_viewMode].column(1 + offset).search(affixes);
                 _dt[_viewMode].column(2 + offset).search(attributes);
                 _dt[_viewMode].draw();
@@ -75,7 +75,6 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                         'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}',
                     },
                     'drawCallback': function (settings) {
-                        console.log(settings);
                         // Don't do anything when the message "no data available" is showing
                         if (settings.json.data.length > 0) {
                             // For each row in the body
@@ -146,8 +145,8 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 
             if (_viewMode === 'biglist') {
                 columns.push({
-                    'data': 'dungeon.id',
-                    'name': 'dungeon_id',
+                    'data': 'public_key',
+                    'name': 'public_key',
                     'render': function (data, type, row, meta) {
                         return handlebarsThumbnailCarouselParse(row);
                     },
