@@ -98,6 +98,7 @@ class DatatablesHandler
      */
     public function applyRequestToBuilder()
     {
+        // Set limits
         $this->_builder->offset((int)$this->_request->get('start'));
         $this->_builder->limit((int)$this->_request->get('length'));
 
@@ -133,7 +134,22 @@ class DatatablesHandler
             DB::enableQueryLog();
         }
 
-        // Fetch the data here so we can get a count
+        // Count without limit first
+        // I tried with SQL_CALC_FOUND_ROWS but that doesn't really work with Laravel pumping out more queries,
+        // then FOUND_ROWS() would return the result from the wrong function, rather annoying that is.
+        // Bit of a hack, but for now the only way to reliably get the pre-limit count.
+        $countResults = $this->_builder->getQuery()
+            ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
+            ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate'))
+            ->get();
+
+        // Returns an array with numbers, sum the entries to get the actual count. Again, a hack but it works for now.
+        $count = 0;
+        foreach ($countResults as $countResult) {
+            $count += $countResult->aggregate;
+        }
+
+        // Fetch the datak
         $data = $this->_builder->get();
 
         $result = [
@@ -142,9 +158,11 @@ class DatatablesHandler
             'recordsTotal' => $this->_recordsTotal,
             // The amount of records after filtering
             'data' => $data,
-            'recordsFiltered' => DB::selectOne(DB::raw('SELECT FOUND_ROWS() as recordsFiltered'))->recordsFiltered,
+            // The amount of rows there would have been, if it were not for the limits
+            'recordsFiltered' => $count,
             // Only show this info in dev instance
             'input' => $isDev ? $this->_request->toArray() : [],
+            // Debug sql queries for optimization
             'queries' => $isDev ? DB::getQueryLog() : []
         ];
 
