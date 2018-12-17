@@ -27,7 +27,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                 let attributes = $("#attributes").val();
 
                 let offset = _viewMode === 'biglist' ? 1 : 0;
-                _dt[_viewMode].column(0 + offset).search(dungeonId);
+                _dt[_viewMode].column(offset).search(dungeonId);
                 _dt[_viewMode].column(1 + offset).search(affixes);
                 _dt[_viewMode].column(2 + offset).search(attributes);
                 _dt[_viewMode].draw();
@@ -75,7 +75,6 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                         'cache': '{{ env('APP_DEBUG', true) ? 'false' : 'true' }}',
                     },
                     'drawCallback': function (settings) {
-                        console.log(settings);
                         // Don't do anything when the message "no data available" is showing
                         if (settings.json.data.length > 0) {
                             // For each row in the body
@@ -90,7 +89,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     'lengthMenu': [25],
                     'bLengthChange': false,
                     // Order by affixes by default
-                    "order": [[1, "asc"]],
+                    "order": [[1 + (_viewMode === 'biglist' ? 1 : 0), "asc"]],
                     'columns': _getColumns()
                 });
 
@@ -115,7 +114,10 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     });
                 });
 
-                _dt[_viewMode].on('click', 'tbody td:not(:first-child)', function (clickEvent) {
+                // When in biglist, the first entry does not trigger the click events
+                let notFirst = _viewMode === 'biglist' ? ':not(:first-child)' : '';
+
+                _dt[_viewMode].on('click', 'tbody td' + notFirst, function (clickEvent) {
                     let key = $(clickEvent.currentTarget).data('publickey');
 
                     window.open('{{ route('dungeonroute.' . ($profile ? 'edit' : 'view'), ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key));
@@ -146,8 +148,8 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 
             if (_viewMode === 'biglist') {
                 columns.push({
-                    'data': 'dungeon.id',
-                    'name': 'dungeon_id',
+                    'data': 'public_key',
+                    'name': 'public_key',
                     'render': function (data, type, row, meta) {
                         return handlebarsThumbnailCarouselParse(row);
                     },

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\DungeonRoute;
+use App\Models\Floor;
 use Folklore\Image\Facades\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,6 +38,27 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     }
 
     /**
+     * @param DungeonRoute $dungeonRoute
+     * @param int $floorIndex
+     * @return string Get the name of the file this job is generating (without a path!).
+     */
+    private static function _getFilename($dungeonRoute, $floorIndex)
+    {
+        return sprintf('%s_%s.png', $dungeonRoute->public_key, $floorIndex);
+    }
+
+    /**
+     * @param DungeonRoute $dungeonRoute
+     * @param int $floorIndex
+     * @return string The eventual path to the file that this job generates.
+     */
+    private static function _getTargetFilePath($dungeonRoute, $floorIndex)
+    {
+        $publicPath = public_path('images/route_thumbnails/');
+        return sprintf('%s/%s', $publicPath, self::_getFilename($dungeonRoute, $floorIndex));
+    }
+
+    /**
      * @throws \Exception
      */
     public function handle()
@@ -47,12 +69,12 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
         // 3. Moved to public folder
 
-        $filename = sprintf('%s_%s.png', $this->model->public_key, $this->floorIndex);
+        $filename = self::_getFilename($this->model, $this->floorIndex);
 
         $tmpFile = sprintf('/tmp/%s', $filename);
         $tmpScaledFile = sprintf('/tmp/scaled_%s', $filename);
         $publicPath = public_path('images/route_thumbnails/');
-        $target = sprintf('%s/%s', $publicPath, $filename);
+        $target = self::_getTargetFilePath($this->model, $this->floorIndex);
 
         // puppeteer chromium-browser
         $process = new Process(['node',
@@ -86,17 +108,16 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 Image::make($tmpFile, [
                     'width' => 192,
                     'height' => 128
-                ])->save($tmpScaledFile);
+                ])->save($target);
 
                 Log::channel('scheduler')->info('Removing previous image..');
-                unlink($target);
                 // Image now exists in target location; compress it and move it to the target location
-                Log::channel('scheduler')->info('Compressing image..');
-                $this->compressPng($tmpScaledFile, $target);
+                // Log::channel('scheduler')->info('Compressing image..');
+                // $this->compressPng($tmpScaledFile, $target);
             } finally {
                 // Cleanup
                 unlink($tmpFile);
-                unlink($tmpScaledFile);
+                // unlink($tmpScaledFile);
                 Log::channel('scheduler')->info('Done');
             }
         }
@@ -109,5 +130,29 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
 
         // Finished!
         Log::channel('scheduler')->info(sprintf('Finished processing %s:%s', $this->model->public_key, $this->floorIndex));
+    }
+
+    /**
+     * @param DungeonRoute $dungeonRoute
+     * @return bool
+     */
+    public static function thumbnailsExistsForRoute(DungeonRoute $dungeonRoute)
+    {
+        $result = true;
+        // Check for every floor
+        foreach ($dungeonRoute->dungeon->floors as $floor) {
+            /** @var $floor Floor */
+            // If the file does not actually exist where we expect it to be
+            if (!file_exists(self::_getTargetFilePath($dungeonRoute, $floor->index))) {
+                Log::channel('scheduler')->info(
+                    sprintf('Unable to find thumbnail for %s:%s, re-scheduling for processing!', $dungeonRoute->public_key, $floor->index)
+                );
+                // Does not exist and stop searching
+                $result = false;
+                break;
+            }
+        }
+
+        return $result;
     }
 }

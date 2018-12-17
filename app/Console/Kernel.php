@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
 
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->call(new FindOutdatedThumbnails)->everyFiveMinutes();
+        $schedule->call(new FindOutdatedThumbnails);
         Log::channel('scheduler')->debug("Finished scheduler");
     }
 

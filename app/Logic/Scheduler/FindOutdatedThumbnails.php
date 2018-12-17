@@ -21,6 +21,7 @@ class FindOutdatedThumbnails
 
     function __invoke()
     {
+        Log::channel('scheduler')->debug('>> Finding thumbnails');
         /** @var Collection $routes */
         // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
         $routes = DungeonRoute::orderBy('published', 'desc')->get();
@@ -38,7 +39,11 @@ class FindOutdatedThumbnails
                     $updatedAt->addMinute(config('keystoneguru.thumbnail_refresh_min'))->isPast())
                 ||
                 // Update every month regardless
-                $thumbnailUpdatedAt->addMonth(1)->isPast()) {
+                $thumbnailUpdatedAt->addMonth(1)->isPast()
+                ||
+                // Thumbnail does not exist in the folder it should
+                !ProcessRouteFloorThumbnail::thumbnailsExistsForRoute($dungeonRoute)
+                ) {
 
                 if (!$this->isJobQueuedForModel(\App\Jobs\ProcessRouteFloorThumbnail::class, $dungeonRoute)) {
                     Log::channel('scheduler')->debug(sprintf('Queueing job for route %s (%s floors)', $dungeonRoute->public_key, $dungeonRoute->dungeon->floors->count()));
@@ -55,5 +60,6 @@ class FindOutdatedThumbnails
         }
 
         Log::channel('scheduler')->debug(sprintf('Scheduled processing for %s routes', $processed));
+        Log::channel('scheduler')->debug('OK Finding thumbnails');
     }
 }

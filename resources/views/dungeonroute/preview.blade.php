@@ -1,4 +1,4 @@
-@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'cookieConsent' => false, 'title' => $model->title])
+@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'cookieConsent' => false, 'title' => $model->title, 'noads' => true])
 <?php
 /** @var \App\Models\DungeonRoute $model */
 /** @var int $floorId */

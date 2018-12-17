@@ -32,7 +32,7 @@ $showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
     /** @var \Illuminate\Support\Collection $routeAttributes */
     $selectedIds = isset($selectedIds) ? $selectedIds : (!isset($dungeonroute) ? [] : $dungeonroute->routeattributes->pluck('id')->toArray());
     ?>
-    <select multiple name="attributes" id="attributes" class="form-control selectpicker"
+    <select multiple name="attributes[]" id="attributes" class="form-control selectpicker"
             size="{{ $allAttributeCount + $attributes->count() }}">
         @foreach ($attributes as $category => $categoryAttributes)
             <optgroup label="{{ ucfirst($category) }}">

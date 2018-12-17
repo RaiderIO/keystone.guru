@@ -5,6 +5,23 @@
 @section('content')
 
     <h4>
+        2018/12/17
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by dungeon.
+        </li>
+        <li>
+            Fixed some route thumbnails not being generated.
+        </li>
+        <li>
+            Fixed creating a new route with Attributes assigned from the start giving a 500 server error.
+        </li>
+    </ul>
+
+    <h4>
         2018/12/14
     </h4>
     <p>

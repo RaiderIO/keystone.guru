@@ -27,5 +27,7 @@ php artisan db:seed --class=DungeonDataSeeder --database=migrate
 # Restart queue processors
 php artisan queue:restart
 
+./sh/start_supervisor.sh
+
 # All done!
 php artisan up
