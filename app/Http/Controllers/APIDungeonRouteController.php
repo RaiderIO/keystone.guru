@@ -28,8 +28,7 @@ class APIDungeonRouteController extends Controller
     {
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
             // ->setAppends(['dungeon', 'affixes', 'author'])
-            ->selectRaw('SQL_CALC_FOUND_ROWS dungeon_routes.*')
-            ->visible();
+            ->selectRaw('SQL_CALC_FOUND_ROWS dungeon_routes.*');
 
         $user = Auth::user();
         $mine = false;
@@ -60,6 +59,9 @@ class APIDungeonRouteController extends Controller
         if (!$mine) {
             $routes = $routes->where('published', true);
         }
+
+        // Visible here to allow proper usage of indexes
+        $routes->visible();
 
         $dtHandler = new DatatablesHandler($request);
 
