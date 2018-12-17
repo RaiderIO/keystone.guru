@@ -2,8 +2,6 @@
 
 namespace App\Logic\Scheduler;
 
-use Illuminate\Support\Facades\Log;
-
 trait ChecksForDuplicateJobs
 {
     protected function isJobQueuedForModel($jobClassName, $model)

@@ -89,7 +89,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     'lengthMenu': [25],
                     'bLengthChange': false,
                     // Order by affixes by default
-                    "order": [[1, "asc"]],
+                    "order": [[1 + (_viewMode === 'biglist' ? 1 : 0), "asc"]],
                     'columns': _getColumns()
                 });
 
@@ -114,7 +114,10 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     });
                 });
 
-                _dt[_viewMode].on('click', 'tbody td:not(:first-child)', function (clickEvent) {
+                // When in biglist, the first entry does not trigger the click events
+                let notFirst = _viewMode === 'biglist' ? ':not(:first-child)' : '';
+
+                _dt[_viewMode].on('click', 'tbody td' + notFirst, function (clickEvent) {
                     let key = $(clickEvent.currentTarget).data('publickey');
 
                     window.open('{{ route('dungeonroute.' . ($profile ? 'edit' : 'view'), ['dungeonroute' => 'replace_me']) }}'.replace('replace_me', key));
