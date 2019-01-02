@@ -353,12 +353,15 @@ class KillZone extends MapObject {
 
         // Add connections from each enemy to our location
         let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
+        let latLngs = [];
         $.each(this.enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
+            let latLng = enemy.layer.getLatLng();
+            latLngs.push(latLng);
 
             if (enemy !== null) {
                 let layer = L.polyline([
-                    enemy.layer.getLatLng(),
+                    latLng,
                     self.layer.getLatLng()
                 ], c.map.killzone.polylineOptions);
                 // do not prevent clicking on anything else
@@ -370,6 +373,11 @@ class KillZone extends MapObject {
                     'cannot draw connection, this enemy was probably removed during a migration?');
             }
         });
+
+
+        // Alpha shapes
+        console.log("Latlngs: " + latLngs);
+        console.log("Alpha shape: ", hull(latLngs, 100, ['.lng', '.lat']));
     }
 
     // To be overridden by any implementing classes
