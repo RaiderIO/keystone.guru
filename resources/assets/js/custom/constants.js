@@ -56,7 +56,15 @@ var c = {
             polylineOptions: {
                 color: 'red',
                 weight: 1
-            }
+            },
+            polygonOptions: {
+                color: 'hotpink',
+                weight: 1,
+                fillOpacity: 0.3,
+                opacity: 1
+            },
+            arcSegments: 7,
+            margin: 1
         },
         placeholderColors: {}
     }

@@ -356,18 +356,10 @@ class KillZone extends MapObject {
         let latLngs = [];
         $.each(this.enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
-            let latLng = enemy.layer.getLatLng();
-            latLngs.push(latLng);
 
             if (enemy !== null) {
-                let layer = L.polyline([
-                    latLng,
-                    self.layer.getLatLng()
-                ], c.map.killzone.polylineOptions);
-                // do not prevent clicking on anything else
-                self.enemyConnectionsLayerGroup.setZIndex(-1000);
-
-                self.enemyConnectionsLayerGroup.addLayer(layer);
+                let latLng = enemy.layer.getLatLng();
+                latLngs.push([latLng.lat, latLng.lng]);
             } else {
                 console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + 'on floor ' + self.floor_id + ', ' +
                     'cannot draw connection, this enemy was probably removed during a migration?');
@@ -376,8 +368,22 @@ class KillZone extends MapObject {
 
 
         // Alpha shapes
-        console.log("Latlngs: " + latLngs);
-        console.log("Alpha shape: ", hull(latLngs, 100, ['.lng', '.lat']));
+        let p = hull(latLngs, 100);
+
+        if (p.length > 1) {
+            console.log("Latlngs: " + latLngs);
+            console.log("Alpha shape: ", p);
+
+            let offset = new Offset();
+            p = offset.data(p).arcSegments(c.map.killzone.arcSegments).margin(c.map.killzone.margin);
+
+            let layer = L.polygon(p, c.map.killzone.polygonOptions);
+
+            // do not prevent clicking on anything else
+            self.enemyConnectionsLayerGroup.setZIndex(-1000);
+
+            self.enemyConnectionsLayerGroup.addLayer(layer);
+        }
     }
 
     // To be overridden by any implementing classes
