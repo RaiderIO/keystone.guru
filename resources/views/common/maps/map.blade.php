@@ -282,6 +282,16 @@ $introTexts = [
         </div>
     </script>
 
+    <script id="map_killzone_edit_popup_template" type="text/x-handlebars-template">
+        <div id="map_killzone_edit_popup_inner" class="popupCustom">
+            <div class="form-group">
+                {!! Form::label('map_killzone_edit_popup_color_@{{id}}', __('Color')) !!}
+                {!! Form::color('map_killzone_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+            </div>
+            {!! Form::button(__('Submit'), ['id' => 'map_killzone_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+        </div>
+    </script>
+
     <script id="map_map_comment_edit_popup_template" type="text/x-handlebars-template">
         <div id="map_map_comment_edit_popup_inner" class="popupCustom">
             <div class="form-group">
@@ -432,7 +442,6 @@ $introTexts = [
 
 </div>
 
-<!-- Keep this wrapper regardless of ad state -->
 @if(!$noads)
     @php($isMobile = (new \Jenssegers\Agent\Agent())->isMobile())
     @if($isMobile)

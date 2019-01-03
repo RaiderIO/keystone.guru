@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $dungeon_route_id
  * @property int $floor_id
+ * @property string $color
  * @property double $lat
  * @property double $lng
  * @property \App\Models\DungeonRoute $dungeonroute
