@@ -5,6 +5,21 @@
 @section('content')
 
     <h4>
+        v1.6 (2019/01/04)
+    </h4>
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/93">#93</a>
+            A killzone and its selected enemies is now displayed as a polygon instead of a target with lines coming out
+            of it. This should be prettier way of displaying the information on screen from the way it used to be. You
+            can also change the color of the polygon by clicking it after creation and editing its color. Note: be sure
+            to use the visibility toggles on the top right to enable/disable any overlapping layers.
+        </li>
+    </ul>
+
+    <h4>
         v1.5.1 (2018/12/17)
     </h4>
     <p>
