@@ -5,7 +5,7 @@
 @section('content')
 
     <h4>
-        2018/12/17
+        v1.5.1 (2018/12/17)
     </h4>
     <p>
         General changes:
@@ -22,7 +22,7 @@
     </ul>
 
     <h4>
-        2018/12/14
+        v1.5 (2018/12/14)
     </h4>
     <p>
         Update from me: due to some unfortunate and unexpected circumstances I haven't had much time to work on the
@@ -33,6 +33,7 @@
         General changes:
     <ul>
         <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/90">#90</a>
             Introduced a new feature called 'attributes'. A Route can be coupled to one or more attributes which
             describe certain characteristics of a Route. Does the route contain Warlock Demonic Gateway skips, but you
             can't do these because your group does not run with a Warlock? If the author has flagged their Route with
@@ -42,43 +43,29 @@
             will consider adding them.
         </li>
         <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/84">#84</a>
             Added a bigger list view option for the Routes page. This allows you to see a preview thumbnail of a Route
             for easy identification if the route suits your needs. You can scroll through all floors using your mouse
             (drag the image) or using touch in touch-enabled devices.
         </li>
         <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/65">#65</a>
             The Routes page has been updated with new sorting mechanisms for affixes, attributes, author and rating.
         </li>
         <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/52">#52</a>
             The Route page now shows the views a route has gotten.
         </li>
         <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/90">#90</a>
             The Affixes page no longer accidentally counted past seasons double, leading to incorrect dates for the
             affixes per week.
         </li>
     </ul>
     </p>
 
-
     <h4>
-        2018/11/10
-    </h4>
-    <p>
-        Mapping changes:
-    <ul>
-        <li>
-            Kings' Rest
-            <ul>
-                <li>
-                    Added three missing Embalming Fluids in the chamber at the second boss.
-                </li>
-            </ul>
-        </li>
-    </ul>
-    </p>
-
-    <h4>
-        2018/11/08
+        v1.4.1 (2018/11/08)
     </h4>
 
     <p>
@@ -125,6 +112,12 @@
                     Corrected some enemy NPCs around the Ring of Booty.
                 </li>
             </ul>
+            Kings' Rest
+            <ul>
+                <li>
+                    Added three missing Embalming Fluids in the chamber at the second boss.
+                </li>
+            </ul>
             Temple of Sethraliss
             <ul>
                 <li>
@@ -143,7 +136,7 @@
 
 
     <h4>
-        2018/11/05
+        v1.4 (2018/11/05)
     </h4>
 
     <p>
@@ -178,7 +171,7 @@
     </p>
 
     <h4>
-        2018/10/30
+        v1.3.1 (2018/10/30)
     </h4>
 
     <p>
@@ -243,7 +236,7 @@
     </p>
 
     <h4>
-        2018/10/28
+        v1.3 (2018/10/28)
     </h4>
 
     <p>
@@ -267,7 +260,7 @@
     </p>
 
     <h4>
-        2018/10/27
+        v1.2 (2018/10/27)
     </h4>
 
     <p>
@@ -382,7 +375,7 @@
     </p>
 
     <h4>
-        2018/10/18
+        v1.1.1 (2018/10/18)
     </h4>
 
     <p>
@@ -407,7 +400,7 @@
     </p>
 
     <h4>
-        2018/10/16
+        v1.1 (2018/10/16)
     </h4>
 
     <p>
@@ -458,20 +451,20 @@
     </p>
 
     <h4>
-        2018/10/13
+        v1.0.5.1 (2018/10/13)
     </h4>
 
     <p>
         Map changes:
     <ul>
         <li>
-            Corrected Teeming enemy forces needed for The Underrot, King's Rest
+            Corrected Teeming enemy forces needed for The Underrot, King's Rest.
         </li>
     </ul>
     </p>
 
     <h4>
-        2018/10/12
+        v1.0.5 (2018/10/12)
     </h4>
 
     <p>
@@ -510,7 +503,7 @@
     </p>
 
     <h4>
-        2018/10/11 - v2
+        v1.0.4 (2018/10/11)
     </h4>
 
     <p>
@@ -528,7 +521,7 @@
     </p>
 
     <h4>
-        2018/10/11
+        v1.0.3 (2018/10/11)
     </h4>
     <p>
         General:
@@ -604,7 +597,7 @@
 
 
     <h4>
-        2018/10/09
+        v1.0.2 (2018/10/09)
     </h4>
     <p>
         General:
@@ -636,7 +629,7 @@
 
 
     <h4>
-        2018/10/08
+        v1.0.1 (2018/10/08)
     </h4>
     <p>
         General:
@@ -671,7 +664,7 @@
 
 
     <h4>
-        2018/10/07 - We're going live!
+        v1.0 (2018/10/07)
     </h4>
     <p>
         General changes:
