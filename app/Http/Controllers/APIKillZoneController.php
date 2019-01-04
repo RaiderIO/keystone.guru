@@ -45,6 +45,7 @@ class APIKillZoneController extends Controller
         try {
             $killZone->dungeon_route_id = $dungeonroute->id;
             $killZone->floor_id = $request->get('floor_id');
+            $killZone->color = $request->get('color');
             $killZone->lat = $request->get('lat');
             $killZone->lng = $request->get('lng');
 

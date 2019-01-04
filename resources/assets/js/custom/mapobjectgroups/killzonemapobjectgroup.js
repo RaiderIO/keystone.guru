@@ -42,6 +42,10 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                             let killzone = self.createNew(layer);
                             killzone.id = remoteKillZone.id;
                             killzone.floor_id = remoteKillZone.floor_id;
+                            // Use default if not set
+                            if (remoteKillZone.color !== '') {
+                                killzone.color = remoteKillZone.color;
+                            }
 
                             // Reconstruct the enemies we're coupled with in a format we expect
                             if (remoteKillZone.killzoneenemies !== null) {

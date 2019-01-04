@@ -138,10 +138,11 @@ class DatatablesHandler
         // I tried with SQL_CALC_FOUND_ROWS but that doesn't really work with Laravel pumping out more queries,
         // then FOUND_ROWS() would return the result from the wrong function, rather annoying that is.
         // Bit of a hack, but for now the only way to reliably get the pre-limit count.
-        $countResults = $this->_builder->getQuery()
+        $query = $this->_builder->getQuery()
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
-            ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate'))
-            ->get();
+            ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate'));
+        $query->orders = null;
+        $countResults = $query->get();
 
         // Returns an array with numbers, sum the entries to get the actual count. Again, a hack but it works for now.
         $count = 0;

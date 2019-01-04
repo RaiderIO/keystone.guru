@@ -40,8 +40,7 @@ var c = {
             defaultColor: '#E25D5D'
         },
         route: {
-            defaultColor: '#9dff56',
-
+            defaultColor: '#9DFF56',
         },
         killzone: {
             colors: {
@@ -54,9 +53,19 @@ var c = {
                 mouseoverAddObject: '#5993D2',
             },
             polylineOptions: {
-                color: 'red',
+                color: '#FF0000',
                 weight: 1
-            }
+            },
+            polygonOptions: {
+                color: '#FF0000',
+                weight: 2,
+                fillOpacity: 0.3,
+                opacity: 1
+            },
+            arcSegments: function(nr){
+                return Math.max(3, 12 - nr);
+            },
+            margin: 1
         },
         placeholderColors: {}
     }
