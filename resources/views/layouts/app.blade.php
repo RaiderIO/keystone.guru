@@ -60,7 +60,7 @@ $isProduction = config('app.env') === 'production';
         @include('common.general.sitescripts')
     @endif
     @if($cookieConsent)
-    @include('common.thirdparty.cookieconsent')
+        @include('common.thirdparty.cookieconsent')
     @endif
 
     @if(!$noads && $isProduction)
@@ -114,22 +114,36 @@ $isProduction = config('app.env') === 'production';
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item mr-2">
-                            <a href="#" class="btn btn-primary text-white"
-                               data-toggle="modal" data-target="#try_modal">{{__('Try it!')}}</a>
+                            <a href="#" class="btn btn-primary text-white" data-toggle="modal" data-target="#try_modal">
+                                {{__('Try it!')}}
+                            </a>
                         </li>
                         @if (Auth::guest())
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal"
-                                   data-target="#login_modal">{{__('Login')}}</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#login_modal">
+                                    {{__('Login')}}
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal"
-                                   data-target="#register_modal">{{__('Register')}}</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#register_modal">
+                                    {{__('Register')}}
+                                </a>
                             </li>
                         @else
-                            <li class="nav-item">
-                                <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
-                                   role="button"><i class="fas fa-plus"></i> {{__('Create route')}}</a>
+                            <li class="nav-item mr-2">
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle" type="button"
+                                            id="newRouteDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                        <i class="fas fa-plus"></i> {{__('Create route')}}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="newRouteDropdownMenuButton">
+                                        <a class="dropdown-item"
+                                           href="{{ route('dungeonroute.new') }}">{{ __('New route') }}</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal"
+                                           data-target="#mdt_import_modal">{{__('Import from MDT')}}</a>
+                                    </div>
+                                </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -390,6 +404,35 @@ $isProduction = config('app.env') === 'production';
 </div>
 <!-- END modal try -->
 
+<!-- Modal MDT import -->
+<div class="modal fade" id="mdt_import_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md vertical-align-center">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="probootstrap-modal-flex">
+                <div class="probootstrap-modal-content">
+                    <h3>
+                        {{ __('Import from MDT string') }}
+                    </h3>
+                    <div class="form-group">
+                        {!! Form::label('mdt_import', __('Method Dungeon Tools export string')) !!}
+                        {{ Form::textarea('mdt_import', '', ['class' => 'form-control']) }}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto']) !!}
+                        <div class="col-md">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END modal signup -->
+
 @guest
     <!-- Modal login -->
     <div class="modal fade" id="login_modal" tabindex="-1" role="dialog"
@@ -410,8 +453,7 @@ $isProduction = config('app.env') === 'production';
     <!-- END modal login -->
 
     <!-- Modal signup -->
-    <div class="modal fade" id="register_modal" tabindex="-1" role="dialog"
-         aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal fade" id="register_modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md vertical-align-center">
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
