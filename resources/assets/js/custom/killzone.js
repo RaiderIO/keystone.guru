@@ -198,7 +198,7 @@ class KillZone extends MapObject {
             });
         } else {
             // We have to supply an ID to keep everything working properly
-            successFn({id: parseInt((Math.random() * 10000000))})
+            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id });
         }
     }
 
@@ -396,13 +396,13 @@ class KillZone extends MapObject {
             p = offset.data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
 
             let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color });
-            console.log(opts);
+
             let polygon = L.polygon(p, opts);
 
             // do not prevent clicking on anything else
-            self.enemyConnectionsLayerGroup.setZIndex(-1000);
+            this.enemyConnectionsLayerGroup.setZIndex(-1000);
 
-            self.enemyConnectionsLayerGroup.addLayer(polygon);
+            this.enemyConnectionsLayerGroup.addLayer(polygon);
 
             // Only add popup to the killzone
             if (this.isEditable() && this.map.edit) {
