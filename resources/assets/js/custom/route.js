@@ -192,7 +192,7 @@ class Route extends MapObject {
             });
         } else {
             // We have to supply an ID to keep everything working properly
-            successFn({id: parseInt((Math.random() * 10000000))})
+            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id })
         }
     }
 
