@@ -233,7 +233,8 @@ html, body, #map, #app, .wrapper {
 .unfriendly_enemy_icon,
 .friendly_enemy_icon,
 .unset_enemy_icon,
-.flagged_enemy_icon {
+.flagged_enemy_icon,
+.mdt_enemy_icon {
     width: 11px;
     height: 11px;
 }
@@ -348,6 +349,10 @@ html, body, #map, #app, .wrapper {
 
 .flagged_enemy_icon {
     background: url("/images/mapicon/neutral.png") no-repeat center !important;
+}
+
+.mdt_enemy_icon {
+    background: url("/images/mapicon/mdt.png") no-repeat center !important;
 }
 
 .door_icon {

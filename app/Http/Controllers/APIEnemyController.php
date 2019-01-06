@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Logic\MDT\IO\MDTDungeon;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\EnemyInfestedVote;
+use App\Models\Floor;
 use App\Models\GameServerRegion;
 use App\Models\Npc;
 use App\Models\RaidMarker;
@@ -25,12 +27,21 @@ class APIEnemyController extends Controller
     {
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute', null);
+        $showMdtEnemies = false;
 
-        $routeId = -1;
+        // Only admins are allowed to see this
+        if (Auth::check()) {
+            if (Auth::user()->hasRole('admin')) {
+                // Only fetch it now
+                $showMdtEnemies = $request->get('show_mdt_enemies', false);
+            }
+        }
+
+        $dungeonRoute = null;
         // If dungeon route was set, fetch the markers as well
         if ($dungeonRoutePublicKey !== null) {
             try {
-                $routeId = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false)->id;
+                $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
             } catch (\Exception $ex) {
                 return response('Not found', Http::NOT_FOUND);
             }
@@ -57,7 +68,7 @@ class APIEnemyController extends Controller
                 group by `enemies`.`id`;
                 ', $params = [
             'userId' => Auth::check() ? Auth::user()->id : -1,
-            'routeId' => $routeId,
+            'routeId' => isset($dungeonRoute) ? $dungeonRoute->id : -1,
             'affixGroupId' => $region->getCurrentAffixGroup()->id,
             'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s'),
             'floorId' => $floorId
@@ -74,7 +85,17 @@ class APIEnemyController extends Controller
             unset($enemy->npc_id);
         }
 
-        return $result;
+        $mdtEnemies = [];
+
+        // Only if we should show MDT enemies
+        if ($showMdtEnemies) {
+            /** @var Floor $floor */
+            $floor = Floor::where('id', $floorId)->first();
+
+            $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($floor->dungeon->name))->getClonesAsEnemies($floor);
+        }
+
+        return ['enemies' => $result, 'mdt_enemies' => $mdtEnemies];
     }
 
     /**

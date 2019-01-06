@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Auth;
  * @property \App\Models\EnemyPack $enemyPack
  * @property \App\Models\Npc $npc
  * @property \App\Models\Floor $floor
- * @property \Illuminate\Support\Collection $vertices
  * @property \Illuminate\Support\Collection $thisweeksinfestedvotes
  */
 class Enemy extends Model

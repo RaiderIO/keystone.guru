@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Logic\MDT\ImportString;
+use App\Logic\MDT\IO\ImportString;
 use Illuminate\Http\Request;
 
 class MDTImportController extends Controller

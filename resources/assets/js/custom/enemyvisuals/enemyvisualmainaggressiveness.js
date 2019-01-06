@@ -18,7 +18,8 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
             'friendly',
             'unset',
             'flagged',
-            'boss'
+            'boss',
+            'mdt'
         ];
     }
 
@@ -41,21 +42,25 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
      * @private
      */
     _updateIcon() {
-        let npc = this.enemyvisual.enemy.npc;
-
-        // May be null if not set at all (yet)
-        if (npc !== null) {
-            if (npc.enemy_forces === -1) {
-                this.iconName = 'flagged';
-            }
-            // @TODO Hard coded 3 = boss
-            else if (npc.classification_id === 3) {
-                this.iconName = 'boss';
-            } else {
-                this.iconName = npc.aggressiveness;
-            }
+        if( this.enemyvisual.enemy.is_mdt ){
+            this.iconName = 'mdt';
         } else {
-            this.iconName = 'unset';
+            let npc = this.enemyvisual.enemy.npc;
+
+            // May be null if not set at all (yet)
+            if (npc !== null) {
+                if (npc.enemy_forces === -1) {
+                    this.iconName = 'flagged';
+                }
+                // @TODO Hard coded 3 = boss
+                else if (npc.classification_id === 3) {
+                    this.iconName = 'boss';
+                } else {
+                    this.iconName = npc.aggressiveness;
+                }
+            } else {
+                this.iconName = 'unset';
+            }
         }
     }
 

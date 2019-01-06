@@ -6,16 +6,13 @@
  * Time: 20:49
  */
 
-namespace App\Logic\MDT;
+namespace App\Logic\MDT\IO;
 
 
-use App\Huffman;
 use App\Models\DungeonRoute;
 
 /**
- * Class ImportString. This file was created as a sort of copy of https://github.com/nnogga/MethodDungeonTools/blob/master/Transmission.lua
- * All rights belong to their respective owners, I did write this but I did not make this up.  I merely translated the LUA
- * to PHP to allow for importing of the exported strings.
+ * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
  * @package App\Logic\MDT
  * @author Wouter
  * @since 05/01/2019
@@ -45,7 +42,8 @@ class ImportString
     private function _getLua()
     {
         $lua = new \Lua();
-        // $lua->assign("php_var", array(1=>1, 2, 3)); //lua table index begin with 1
+
+        // Load libraries (yeah can do this with ->library function as well)
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')));
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibCompress.lua')));
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/AceSerializer.lua')));
