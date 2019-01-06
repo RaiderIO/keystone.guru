@@ -413,12 +413,13 @@ $isProduction = config('app.env') === 'production';
             </button>
             <div class="probootstrap-modal-flex">
                 <div class="probootstrap-modal-content">
+                    {{ Form::open(['route' => 'dungeonroute.new.mdtimport']) }}
                     <h3>
                         {{ __('Import from MDT string') }}
                     </h3>
                     <div class="form-group">
-                        {!! Form::label('mdt_import', __('Method Dungeon Tools export string')) !!}
-                        {{ Form::textarea('mdt_import', '', ['class' => 'form-control']) }}
+                        {!! Form::label('import_string', __('Method Dungeon Tools export string')) !!}
+                        {{ Form::textarea('import_string', '', ['class' => 'form-control']) }}
                     </div>
                     <div class="form-group">
                         {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto']) !!}
@@ -426,6 +427,7 @@ $isProduction = config('app.env') === 'production';
 
                         </div>
                     </div>
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>
