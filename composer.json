@@ -8,6 +8,18 @@
         {
             "type": "vcs",
             "url": "https://github.com/Wotuu/tracker"
+        },
+        {
+            "type":"package",
+            "package": {
+                "name": "nnogga/MethodDungeonTools",
+                "version": "2.2.53",
+                "source": {
+                    "url": "https://github.com/nnogga/MethodDungeonTools.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
         }
     ],
     "require": {
@@ -23,7 +35,8 @@
         "pragmarx/tracker": "dev-wotuu-bugfix",
         "santigarcor/laratrust": "5.0.*",
         "shrikeh/teapot": "^2.3",
-        "yajra/laravel-datatables-oracle": "~8.0"
+        "yajra/laravel-datatables-oracle": "~8.0",
+        "nnogga/MethodDungeonTools": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",
