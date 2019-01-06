@@ -65,19 +65,19 @@ if (isset($model)) {
                 @endisset
 
                 <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
-                    {!! Form::label('index', __('Index')) !!}
+                    {!! Form::label('index', __('Index'), ['class' => 'font-weight-bold']) !!}:
                     {!! Form::text('index', null, ['class' => 'form-control']) !!}
                     @include('common.forms.form-error', ['key' => 'index'])
                 </div>
 
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                    {!! Form::label('name', __('Floor name')) !!}
+                    {!! Form::label('name', __('Floor name'), ['class' => 'font-weight-bold']) !!}:
                     {!! Form::text('name', null, ['class' => 'form-control']) !!}
                     @include('common.forms.form-error', ['key' => 'name'])
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('connectedfloors[]', __('Connected floors')) !!}
+                    {!! Form::label('connectedfloors[]', __('Connected floors'), ['class' => 'font-weight-bold']) !!}:
                     {!! Form::select('connectedfloors[]', $floors->pluck('name', 'id'), isset($model) ? $model->connectedFloors()->pluck('id')->all() : null,
                         ['multiple' => 'multiple', 'class' => 'form-control']) !!}
                 </div>

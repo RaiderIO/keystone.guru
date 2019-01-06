@@ -165,15 +165,26 @@ $introTexts = [
 
     <script id="map_enemy_visuals_template" type="text/x-handlebars-template">
         <div id="map_enemy_visuals" class="leaflet-draw-section">
-            <?php
-            $visuals = [];
-            if (Auth::check() && $showInfestedVoting) {
-                $visuals['infested_vote'] = __('Infested Voting');
-            }
-            $visuals['aggressiveness'] = __('Aggressiveness');
-            $visuals['enemy_forces'] = __('Enemy forces');
-            ?>
-            {!! Form::select('map_enemy_visuals_dropdown', $visuals, 0, ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
+            <div class="form-group">
+                <?php
+                $visuals = [];
+                if (Auth::check() && $showInfestedVoting) {
+                    $visuals['infested_vote'] = __('Infested Voting');
+                }
+                $visuals['aggressiveness'] = __('Aggressiveness');
+                $visuals['enemy_forces'] = __('Enemy forces');
+                ?>
+                {!! Form::select('map_enemy_visuals_dropdown', $visuals, 0, ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
+            </div>
+            @if($isAdmin)
+                <div class="form-group">
+                    <div class="font-weight-bold">
+                        {{ __('MDT enemy mapping') }}:
+                    </div>
+                    {!! Form::checkbox('map_enemy_visuals_map_mdt_clones_to_enemies', 1, false,
+                        ['id' => 'map_enemy_visuals_map_mdt_clones_to_enemies', 'class' => 'form-control left_checkbox']) !!}
+                </div>
+            @endif
         </div>
     </script>
 
