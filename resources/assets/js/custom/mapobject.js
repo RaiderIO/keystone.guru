@@ -8,6 +8,7 @@ class MapObject extends Signalable {
     constructor(map, layer) {
         super();
         console.assert(map instanceof DungeonMap, map, 'Passed map is not a DungeonMap!');
+        let self = this;
 
         this.synced = false;
         this.map = map;
@@ -15,6 +16,57 @@ class MapObject extends Signalable {
 
         this.id = 0;
         this.label = 'default label';
+        this.decorator = null;
+
+        this.register('synced', this, function () {
+            self._rebuildDecorator();
+        });
+        this.register('object:deleted', this, function () {
+            self._cleanDecorator();
+        });
+        this.map.register('map:beforerefresh', this, function () {
+            self._cleanDecorator();
+        });
+
+        this.register(['object:shown', 'object:hidden'], this, function (event) {
+            if (event.data.visible) {
+                self._rebuildDecorator();
+            } else {
+                self._cleanDecorator();
+            }
+        });
+    }
+
+    /**
+     * Cleans up the decorator of this route, removing it from the map.
+     * @private
+     */
+    _cleanDecorator() {
+        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
+
+        if (this.decorator !== null) {
+            this.map.leafletMap.removeLayer(this.decorator);
+        }
+    }
+
+    /**
+     * Rebuild the decorators for this route (directional arrows etc).
+     * @private
+     */
+    _rebuildDecorator() {
+        console.assert(this instanceof MapObject, this, 'this is not an MapObject');
+
+        this._cleanDecorator();
+
+        this.decorator = this._getDecorator();
+        // Only if set after the getter finished
+        if( this.decorator !== null ){
+            this.decorator.addTo(this.map.leafletMap);
+        }
+    }
+
+    _getDecorator(){
+        return null;
     }
 
     _updateContextMenuOptions() {

@@ -22,19 +22,10 @@ class EnemyVisual extends Signalable {
             if (event.data.visible) {
                 self._buildVisual();
             } else {
-                self._destroyVisual();
+                // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
+                // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
             }
         });
-    }
-
-    /**
-     * Destroys the currently displayed visual.
-     * @private
-     */
-    _destroyVisual(){
-        // Set the structure as HTML for the layer
-        this.layer.setIcon(null);
-        this.signal('enemyvisual:destroyedvisual', {});
     }
 
     /**

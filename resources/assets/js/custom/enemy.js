@@ -29,6 +29,12 @@ let LeafletEnemyMarker = L.Marker.extend({
     }
 });
 
+let LeafletMDTEnemyMarkerSelected = L.Marker.extend({
+    options: {
+        icon: DefaultEnemyIcon
+    }
+});
+
 class Enemy extends MapObject {
     constructor(map, layer) {
         super(map, layer);
@@ -47,7 +53,9 @@ class Enemy extends MapObject {
         this.infested_no_votes = 0;
         this.infested_user_vote = null;
         this.is_infested = false;
-        // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
+
+        // MDT
+        this.mdt_id = -1;
 
         this.setSynced(true);
 

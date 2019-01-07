@@ -2,6 +2,7 @@ class AdminDungeonMap extends DungeonMap {
 
     constructor(mapid, dungeonData, options) {
         super(mapid, dungeonData, options);
+        this.currentMDTEnemyMappingEnemy = null;
     }
 
     /**
@@ -13,18 +14,16 @@ class AdminDungeonMap extends DungeonMap {
     _createMapControls(drawnItemsLayer) {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        let result = [
-            new AdminDrawControls(this, drawnItemsLayer),
-            new EnemyVisualControls(this),
-            new MapObjectGroupControls(this)
-        ];
-
         // @TODO This breaks the admin
         // if (this.dungeonData.name === 'Siege of Boralus') {
         //     result.push(new FactionDisplayControls(this));
         // }
 
-        return result;
+        return [
+            new AdminDrawControls(this, drawnItemsLayer),
+            new EnemyVisualControls(this),
+            new MapObjectGroupControls(this)
+        ];
     }
 
     /**
@@ -51,6 +50,29 @@ class AdminDungeonMap extends DungeonMap {
         let self = this;
 
         this.enemyAttaching = new EnemyAttaching(this);
+    }
+
+    /**
+     * Gets if there is currently an MDT enemy being mapped to a Keystone.guru enemy.
+     * @returns {boolean}
+     */
+    isMDTEnemyMappingModeEnabled() {
+        return this.currentMDTEnemyMappingEnemy !== null;
+    }
+
+    /**
+     * Sets the MDT enemy that is currently being mapped to a Keystone.guru enemy.
+     * @param enemy
+     */
+    setMDTEnemyMappingEnemy(enemy = null) {
+        console.assert(enemy.is_mdt, enemy, 'setMDTEnemyMappingEnemy enemy is not an MDT enemy');
+
+        let changed = this.currentMDTEnemyMappingEnemy !== enemy;
+        let previousEnemy = this.currentMDTEnemyMappingEnemy;
+        this.currentMDTEnemyMappingEnemy = enemy;
+        if (changed) {
+            this.signal('map:mdtenemymappingenenemychanged', {previousEnemy: previousEnemy, enemy: enemy});
+        }
     }
 
     /**
