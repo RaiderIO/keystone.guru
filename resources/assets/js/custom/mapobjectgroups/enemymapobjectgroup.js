@@ -84,15 +84,17 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                             // Exception for MDT enemies
                             enemy.is_mdt = remoteEnemy.hasOwnProperty('is_mdt') ? remoteEnemy.is_mdt : false;
 
+                            // After synced when the visual has been built, can't do that before here since some funky
+                            // things would go wrong with the visuals
+                            if(remoteEnemy.hasOwnProperty('is_mdt')) {
+                                // Hide MDT objects initially
+                                self.setMapObjectVisibility(enemy, false);
+                            }
+
                             enemy.setNpc(remoteEnemy.npc);
                             // If actually set..
                             if (remoteEnemy.hasOwnProperty('raid_marker_name') && remoteEnemy.raid_marker_name !== null) {
                                 enemy.setRaidMarkerName(remoteEnemy.raid_marker_name);
-                            }
-
-                            // Is probably null if there's no patrol set
-                            if (remoteEnemy.patrol !== null) {
-
                             }
 
                             // We just downloaded the enemy pack, it's synced alright!

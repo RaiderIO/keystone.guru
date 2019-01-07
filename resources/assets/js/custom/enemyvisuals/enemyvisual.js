@@ -15,6 +15,26 @@ class EnemyVisual extends Signalable {
 
         // Default visual (after modifiers!)
         this.setVisualType(this.map.getVisualType());
+
+        let self = this;
+        // Build and/or destroy the visual based on visibility
+        this.enemy.register(['object:shown', 'object:hidden'], this, function (event) {
+            if (event.data.visible) {
+                self._buildVisual();
+            } else {
+                self._destroyVisual();
+            }
+        });
+    }
+
+    /**
+     * Destroys the currently displayed visual.
+     * @private
+     */
+    _destroyVisual(){
+        // Set the structure as HTML for the layer
+        this.layer.setIcon(null);
+        this.signal('enemyvisual:destroyedvisual', {});
     }
 
     /**
@@ -24,33 +44,38 @@ class EnemyVisual extends Signalable {
      */
     _buildVisual() {
         console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
-        // Prepare the template
-        let iconHtml = $('#map_enemy_visual_template').html();
-        // Remove template so our
-        let template = handlebars.compile(iconHtml);
 
-        let data = {};
+        // If the object is invisible, don't build the visual
+        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        if(enemyMapObjectGroup.isMapObjectVisible(this.enemy)){
+            // Prepare the template
+            let iconHtml = $('#map_enemy_visual_template').html();
+            // Remove template so our
+            let template = handlebars.compile(iconHtml);
 
-        if (this.enemy.isKillZoneSelectable()) {
-            data = {
-                killzone_classes: 'leaflet-edit-marker-selected'
-            };
+            let data = {};
+
+            if (this.enemy.isKillZoneSelectable()) {
+                data = {
+                    killzone_classes: 'leaflet-edit-marker-selected'
+                };
+            }
+
+            data = $.extend(data, this.mainVisual._getTemplateData());
+            for (let i = 0; i < this.modifiers.length; i++) {
+                data = $.extend(data, this.modifiers[i]._getTemplateData());
+            }
+
+            // Build the status bar from the template
+            iconHtml = template(data);
+
+            // Create a new div icon (the entire structure)
+            this.divIcon = new L.divIcon($.extend({html: iconHtml}, this.mainVisual.getSize()));
+
+            // Set the structure as HTML for the layer
+            this.layer.setIcon(this.divIcon);
+            this.signal('enemyvisual:builtvisual', {});
         }
-
-        data = $.extend(data, this.mainVisual._getTemplateData());
-        for (let i = 0; i < this.modifiers.length; i++) {
-            data = $.extend(data, this.modifiers[i]._getTemplateData());
-        }
-
-        // Build the status bar from the template
-        iconHtml = template(data);
-
-        // Create a new div icon (the entire structure)
-        this.divIcon = new L.divIcon($.extend({html: iconHtml}, this.mainVisual.getSize()));
-
-        // Set the structure as HTML for the layer
-        this.layer.setIcon(this.divIcon);
-        this.signal('enemyvisual:builtvisual', {});
     }
 
     // @TODO Listen to killzone selectable changed event
