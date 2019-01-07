@@ -512,6 +512,8 @@ $isProduction = config('app.env') === 'production';
     <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
     <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
 
+    <script src="{{ asset('js/custom/enemyselection/enemyselection.js') }}"></script>
+
     <script src="{{ asset('js/custom/mapcontrol.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/addisplaycontrols.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
