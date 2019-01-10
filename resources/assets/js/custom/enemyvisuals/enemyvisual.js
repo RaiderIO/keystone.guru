@@ -46,7 +46,7 @@ class EnemyVisual extends Signalable {
 
             let data = {};
 
-            if (this.enemy.isKillZoneSelectable()) {
+            if (this.enemy.isSelectable()) {
                 data = {
                     killzone_classes: 'leaflet-edit-marker-selected'
                 };

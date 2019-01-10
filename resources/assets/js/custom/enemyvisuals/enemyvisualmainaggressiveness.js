@@ -30,7 +30,7 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
             // Set the main icon
             main_visual_classes: (this.iconName + '_enemy_icon ') +
                 // If we're in kill zone mode..
-                (this.enemyvisual.enemy.isKillZoneSelectable() ?
+                (this.enemyvisual.enemy.isSelectable() ?
                     // Adjust the size of the icon based on whether we're going big or small
                     'killzone_enemy_icon_' + (this.iconName === 'boss' ? 'big' : 'small')
                     : '')

@@ -33,7 +33,7 @@ class APIEnemyController extends Controller
         if (Auth::check()) {
             if (Auth::user()->hasRole('admin')) {
                 // Only fetch it now
-                $showMdtEnemies = $request->get('show_mdt_enemies', false);
+                $showMdtEnemies = intval($request->get('show_mdt_enemies', 0)) === 1;
             }
         }
 

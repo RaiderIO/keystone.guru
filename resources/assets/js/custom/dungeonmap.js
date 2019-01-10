@@ -19,6 +19,9 @@ class DungeonMap extends Signalable {
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroups = this._createMapObjectGroups();
+
+        // The current enemy selection class in-use. Used for selecting enemies for whatever reason
+        this.currentEnemySelection = null;
         //  Whatever killzone is currently in select mode
         this.currentSelectModeKillZone = null;
 
@@ -111,7 +114,9 @@ class DungeonMap extends Signalable {
         this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
             self.toolbarActive = true;
             // If a killzone was selected, unselect it now
-            self.setSelectModeKillZone(null);
+            if (self.isEnemySelectionEnabled()) {
+                self.finishEnemySelection();
+            }
         });
         this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
             self.toolbarActive = false;
@@ -442,8 +447,10 @@ class DungeonMap extends Signalable {
 
         this.signal('map:beforerefresh', {dungeonmap: this});
 
-        // If a killzone was selected, unselect it now
-        this.setSelectModeKillZone(null);
+        // If we were selecting enemies, stop doing that now
+        if (this.isEnemySelectionEnabled()) {
+            this.finishEnemySelection();
+        }
         this.mapObjectGroupFetchSuccessCount = 0;
 
         if (this.mapTileLayer !== null) {
@@ -506,24 +513,32 @@ class DungeonMap extends Signalable {
         }
     }
 
-    /**
-     * Gets if there is currently a killzone in 'select mode'.
-     * @returns {boolean}
-     */
-    isKillZoneSelectModeEnabled() {
-        return this.currentSelectModeKillZone !== null;
+    isEnemySelectionEnabled() {
+        return this.currentEnemySelection !== null;
     }
 
-    /**
-     * Sets the killzone that is currently in 'select mode'
-     * @param killzone
-     */
-    setSelectModeKillZone(killzone = null) {
-        let changed = this.currentSelectModeKillZone !== killzone;
-        let previousKillzone = this.currentSelectModeKillZone;
-        this.currentSelectModeKillZone = killzone;
-        if (changed) {
-            this.signal('map:killzoneselectmodechanged', {previousKillzone: previousKillzone, killzone: killzone});
+    getEnemySelection() {
+        return this.currentEnemySelection;
+    }
+
+    startEnemySelection(enemySelection) {
+        console.assert(enemySelection instanceof EnemySelection, this, 'enemySelection is not an EnemySelection');
+        if (this.currentEnemySelection === null) {
+            this.currentEnemySelection = enemySelection;
+            this.signal('map:enemyselectionmodechanged', {enemySelection: this.currentEnemySelection, finished: false});
+            this.currentEnemySelection.startSelectMode();
+        } else {
+            console.error('Unable to assign enemy selection when we\'re already selecting enemies!', this.currentEnemySelection, enemySelection);
+        }
+    }
+
+    finishEnemySelection() {
+        if (this.currentEnemySelection !== null) {
+            this.currentEnemySelection.cancelSelectMode();
+            this.signal('map:enemyselectionmodechanged', {enemySelection: this.currentEnemySelection, finished: true});
+            this.currentEnemySelection = null;
+        } else {
+            console.error('Unable to finish enemy selection; we\'re currently not selecting any enemies now');
         }
     }
 

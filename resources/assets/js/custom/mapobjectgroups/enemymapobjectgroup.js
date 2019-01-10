@@ -32,7 +32,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 dungeonroute: this.map.getDungeonRoute().publicKey,
                 floor_id: floor.id,
                 // Admin = show mdt enemies, otherwise don't
-                show_mdt_enemies: this.classname === 'AdminEnemy'
+                show_mdt_enemies: this.classname === 'AdminEnemy' ? 1 : 0
             },
             success: function (json) {
                 let enemies = [

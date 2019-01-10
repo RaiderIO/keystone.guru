@@ -60,11 +60,11 @@ class Enemy extends MapObject {
         this.setSynced(true);
 
         let self = this;
-        this.map.register('map:killzoneselectmodechanged', this, function (event) {
+        this.map.register('map:enemyselectionmodechanged', this, function (event) {
             // Remove the popup
             self.layer.unbindPopup();
             // Unselected a killzone
-            if (event.data.killzone === null) {
+            if (event.data.finished) {
                 // Restore it only if necessary
                 self._rebuildPopup(event);
             }
@@ -166,6 +166,10 @@ class Enemy extends MapObject {
         }
     }
 
+    /**
+     * Get the amount of enemy forces that this enemy gives when killed.
+     * @returns {number}
+     */
     getEnemyForces() {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         return this.enemy_forces_override >= 0 ? this.enemy_forces_override : (this.npc === null ? 0 : this.npc.enemy_forces);
@@ -260,7 +264,7 @@ class Enemy extends MapObject {
 
         // We only want to trigger these events when the killzone is actively being edited, not when loading in
         // the connections from the server initially
-        if (this.map.isKillZoneSelectModeEnabled()) {
+        if (this.map.isEnemySelectionEnabled()) {
             if (this.kill_zone_id >= 0) {
                 this.signal('killzone:attached');
             } else {
@@ -269,6 +273,10 @@ class Enemy extends MapObject {
         }
     }
 
+    /**
+     * Get the color of an enemy based on rated difficulty by users.
+     * @param difficulty
+     */
     getDifficultyColor(difficulty) {
         let palette = window.interpolate(c.map.enemy.colors);
         // let rand = Math.random();
@@ -290,8 +298,8 @@ class Enemy extends MapObject {
 
         // Show a permanent tooltip for the pack's name
         this.layer.on('click', function () {
-            if (self.killZoneSelectable) {
-                self.signal('killzone:selected');
+            if (self.selectable) {
+                self.signal('enemy:selected');
             }
         });
 
@@ -313,20 +321,20 @@ class Enemy extends MapObject {
     }
 
     /**
-     * Checks if this enemy is possibly selectable by a kill zone.
+     * Checks if this enemy is possibly selectable when selecting enemies.
      * @returns {*}
      */
-    isKillZoneSelectable() {
-        return this.killZoneSelectable;
+    isSelectable() {
+        return this.selectable;
     }
 
     /**
-     * Set this enemy to be selectable whenever a KillZone wants to possibly kill this enemy.
-     * @param value
+     * Set this enemy to be selectable whenever the user wants to select enemies.
+     * @param value boolean True or false
      */
-    setKillZoneSelectable(value) {
+    setSelectable(value) {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
-        this.killZoneSelectable = value;
+        this.selectable = value;
         // Refresh the icon
         this.visual.refresh();
     }
@@ -399,6 +407,6 @@ class Enemy extends MapObject {
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));
-        this.map.unregister('map:killzoneselectmodechanged', this);
+        this.map.unregister('map:enemyselectionmodechanged', this);
     }
 }
