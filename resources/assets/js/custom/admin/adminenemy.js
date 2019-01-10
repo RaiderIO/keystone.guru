@@ -10,10 +10,140 @@ class AdminEnemy extends Enemy {
         // Filled when we're currently drawing a patrol line
         this.currentPatrolPolyline = null;
 
+        // From MDT enemy to enemy
+        this.connected_enemy_id = 0;
+
         this.saving = false;
         this.deleting = false;
         this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
+
+        this.enemyConnectionLayerGroup = null;
+    }
+
+    /**
+     * Called when enemy selection for this enemy has changed (started/finished)
+     * @param selectionEvent
+     * @private
+     */
+    _enemySelectionChanged(selectionEvent) {
+        console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
+
+        // Redraw any changes as necessary
+        this.redrawConnectionToEnemy();
+
+        if (selectionEvent.data.finished) {
+            // May save when nothing has changed, but that's okay
+            this.save();
+
+            // We're done with this event now (after finishing! otherwise we won't process the result)
+            this.map.unregister('map:enemyselectionmodechanged', this);
+        }
+    }
+
+    /**
+     * Get the MDT enemy that is attached to this enemy. NOT the other way around.
+     * @private
+     */
+    _getMDTEnemy() {
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(!this.is_mdt, this, 'this was an MDT Enemy, it should not be!');
+
+        let result = null;
+        if (this.mdt_id > 0) {
+            let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
+            $.each(enemyMapObjectGroup.objects, function (i, mdtEnemy) {
+                // Only MDT enemies, mdtEnemy.id is actually the clone index for MDT, combined with npc_id this gives us
+                // a unique ID
+                if (mdtEnemy.is_mdt && self.mdt_id === mdtEnemy.id && self.npc_id === mdtEnemy.npc_id) {
+                    result = mdtEnemy;
+                    return false;
+                }
+            });
+        }
+
+        return result;
+    }
+
+    /**
+     * Triggered when an enemy was selected by the user when edit mode was enabled.
+     * @param enemy The enemy that was selected (or de-selected). Will add/remove the enemy to the list to be redrawn.
+     */
+    enemySelected(enemy) {
+        console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
+        console.assert(enemy instanceof AdminEnemy, enemy, 'enemy is not an AdminEnemy');
+
+        // let index = $.inArray(enemy.id, this.enemies);
+        // // Already exists, user wants to deselect the enemy
+        // let removed = index >= 0;
+        //
+        // // If the enemy was part of a pack..
+        // if (enemy.enemy_pack_id > 0) {
+        //     let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        //     for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+        //         let enemyCandidate = enemyMapObjectGroup.objects[i];
+        //         // If we should couple the enemy in addition to our own..
+        //         if (enemyCandidate.enemy_pack_id === enemy.enemy_pack_id) {
+        //             // Remove it too if we should
+        //             if (removed) {
+        //                 this._removeEnemy(enemyCandidate);
+        //             }
+        //             // Or add it too if we need
+        //             else {
+        //                 this._addEnemy(enemyCandidate);
+        //             }
+        //         }
+        //     }
+        // } else {
+        //     if (removed) {
+        //         this._removeEnemy(enemy);
+        //     } else {
+        //         this._addEnemy(enemy);
+        //     }
+        // }
+
+        this.redrawConnectionToEnemy();
+    }
+
+    /**
+     * Removes any existing UI connections to enemies.
+     */
+    removeExistingConnectionToEnemy() {
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+
+        // Remove previous layers if it's needed
+        if (this.enemyConnectionLayerGroup !== null) {
+            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            enemyMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionLayerGroup);
+        }
+    }
+
+    /**
+     * Redraw connections to the enemy
+     */
+    redrawConnectionToEnemy() {
+        this.removeExistingConnectionToEnemy();
+
+        // If this enemy is connected to an MDT enemy
+        let mdtEnemy = this._getMDTEnemy();
+        if (mdtEnemy !== null) {
+            // Create & add new layer
+            this.enemyConnectionLayerGroup = new L.LayerGroup();
+
+            // Add the layer to the map
+            let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
+            enemyMapObjectGroup.layerGroup.addLayer(this.enemyConnectionLayerGroup);
+
+            // Draw a line to the MDT enemy
+            let layer = L.polyline([
+                mdtEnemy.layer.getLatLng(),
+                self.layer.getLatLng()
+            ], c.map.killzone.polylineOptions);
+
+            // do not prevent clicking on anything else
+            self.enemyConnectionLayerGroup.setZIndex(-1000);
+            self.enemyConnectionLayerGroup.addLayer(layer);
+        }
     }
 
     onLayerInit() {
@@ -25,6 +155,31 @@ class AdminEnemy extends Enemy {
             if (self.currentPatrolPolyline !== null) {
                 self.map.leafletMap.addLayer(self.currentPatrolPolyline);
                 self.currentPatrolPolyline.disable();
+            }
+        });
+
+        // Show a permanent tooltip for the pack's name
+        self.layer.on('click', function () {
+            console.log(self);
+            // When deleting, we shouldn't have these interactions
+            // Only when we're an MDT enemy!
+            if (self.is_mdt && !self.map.deleteModeActive) {
+                let enemySelection = self.map.getEnemySelection();
+                // Can only interact with select mode if we're the one that is currently being selected
+                if (enemySelection === null) {
+                    let mdtEnemySelection = new MDTEnemySelection(self.map, self);
+                    mdtEnemySelection.register('enemyselection:enemyselected', this, function (selectedEvent) {
+                        self.enemySelected(selectedEvent.data.enemy);
+                    });
+
+                    // Register for changes to the selection event
+                    self.map.register('map:enemyselectionmodechanged', self, self._enemySelectionChanged.bind(self));
+
+                    // Start selecting enemies
+                    self.map.startEnemySelection(mdtEnemySelection);
+                } else if (enemySelection.getMapObject() === self) {
+                    self.map.finishEnemySelection();
+                }
             }
         });
     }

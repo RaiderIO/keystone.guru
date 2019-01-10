@@ -284,12 +284,12 @@ class KillZone extends MapObject {
 
         let self = this;
 
-        let killZoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
-
         this.removeExistingConnectionsToEnemies();
 
         // Create & add new layer
         this.enemyConnectionsLayerGroup = new L.LayerGroup();
+
+        let killZoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
         killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
 
         // Add connections from each enemy to our location
@@ -391,7 +391,7 @@ class KillZone extends MapObject {
      * @private
      */
     _enemySelectionChanged(selectionEvent) {
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        console.assert(this instanceof KillZone, this, 'this is not a KillZone');
 
         // Redraw any changes as necessary
         this.redrawConnectionsToEnemies();
@@ -406,7 +406,7 @@ class KillZone extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        console.assert(this instanceof KillZone, this, 'this is not a KillZone');
         super.onLayerInit();
 
         let self = this;

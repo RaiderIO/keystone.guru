@@ -296,7 +296,7 @@ class Enemy extends MapObject {
 
         let self = this;
 
-        // Show a permanent tooltip for the pack's name
+        // Show a permanent tooltip for the enemy's name
         this.layer.on('click', function () {
             if (self.selectable) {
                 self.signal('enemy:selected');

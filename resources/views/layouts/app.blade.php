@@ -514,6 +514,7 @@ $isProduction = config('app.env') === 'production';
 
     <script src="{{ asset('js/custom/enemyselection/enemyselection.js') }}"></script>
     <script src="{{ asset('js/custom/enemyselection/killzoneenemyselection.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyselection/mdtenemyselection.js') }}"></script>
 
     <script src="{{ asset('js/custom/mapcontrol.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/addisplaycontrols.js') }}"></script>
