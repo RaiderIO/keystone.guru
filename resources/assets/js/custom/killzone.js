@@ -417,19 +417,19 @@ class KillZone extends MapObject {
                 if (!self.map.deleteModeActive) {
                     let enemySelection = self.map.getEnemySelection();
                     // Can only interact with select mode if we're the one that is currently being selected
-                    if (enemySelection.getMapObject() === self) {
-                        self.map.finishEnemySelection();
-                    } else if (enemySelection === null) {
+                    if (enemySelection === null) {
                         let kzEnemySelection = new KillZoneEnemySelection(self.map, self);
                         kzEnemySelection.register('enemyselection:enemyselected', this, function (selectedEvent) {
                             self.enemySelected(selectedEvent.data.enemy);
                         });
 
                         // Register for changes to the selection event
-                        this.map.register('map:enemyselectionmodechanged', this, self._enemySelectionChanged.bind(self));
+                        self.map.register('map:enemyselectionmodechanged', self, self._enemySelectionChanged.bind(self));
 
                         // Start selecting enemies
                         self.map.startEnemySelection(kzEnemySelection);
+                    } else if (enemySelection.getMapObject() === self) {
+                        self.map.finishEnemySelection();
                     }
                 }
             });

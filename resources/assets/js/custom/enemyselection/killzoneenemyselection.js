@@ -11,6 +11,8 @@ class KillZoneEnemySelection extends EnemySelection {
      * @protected
      */
     _filter(source, enemyCandidate){
+        console.assert(source instanceof KillZone, source, 'source is not a KillZone');
+        console.assert(enemyCandidate instanceof Enemy, enemyCandidate, 'enemyCandidate is not an Enemy');
         return enemyCandidate.kill_zone_id <= 0 || enemyCandidate.kill_zone_id === source.id;
     }
 

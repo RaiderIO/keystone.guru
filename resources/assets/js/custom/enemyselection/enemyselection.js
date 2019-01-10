@@ -1,8 +1,8 @@
 class EnemySelection extends Signalable {
     constructor(map, sourceMapObject) {
         super();
-        console.assert(map instanceof Map, this, 'map is not a Map');
-        console.assert(sourceMapObject instanceof MapObject, this, 'sourceMapObject is not a MapObject');
+        console.assert(map instanceof DungeonMap, map, 'map is not a Map');
+        console.assert(sourceMapObject instanceof MapObject, sourceMapObject, 'sourceMapObject is not a MapObject');
 
         this.map = map;
         this.sourceMapObject = sourceMapObject;
@@ -52,16 +52,16 @@ class EnemySelection extends Signalable {
         let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             // Check if we should set this enemy to be selectable or not
-            if (self._filter(this.sourceMapObject, enemy)) {
+            if (self._filter(self.sourceMapObject, enemy)) {
                 enemy.setSelectable(!enemy.isSelectable());
             }
 
             enemy.register('enemy:selected', self, function (data) {
                 let enemy = data.context;
                 console.assert(enemy instanceof Enemy, enemy, 'enemy is not an Enemy');
-                console.assert(this instanceof EnemySelection, this, 'this is not an EnemySelection');
+                console.assert(self instanceof EnemySelection, self, 'this is not an EnemySelection');
 
-                this.signal('enemyselection:enemyselected', {enemy: enemy});
+                self.signal('enemyselection:enemyselected', {enemy: enemy});
             });
         });
 
@@ -75,7 +75,7 @@ class EnemySelection extends Signalable {
      * Stops selecting enemies.
      */
     cancelSelectMode() {
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        console.assert(this instanceof EnemySelection, this, 'this is not an EnemySelection');
         let self = this;
 
         // Restore the previous icon

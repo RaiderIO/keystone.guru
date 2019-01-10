@@ -49,6 +49,9 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/dungeonfloorswitchmarker.js',
         'resources/assets/js/custom/hotkeys.js',
 
+        'resources/assets/js/custom/enemyselection/enemyselection.js',
+        'resources/assets/js/custom/enemyselection/killzoneenemyselection.js',
+
         'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
         'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
         'resources/assets/js/custom/enemyvisuals/enemyvisualmain.js',
