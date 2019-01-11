@@ -25,6 +25,6 @@ class MDTEnemySelection extends EnemySelection {
      * @protected
      */
     _getLayerIcon(){
-        return LeafletKillZoneIconSelected;
+        return MDTEnemyIconSelected;
     }
 }

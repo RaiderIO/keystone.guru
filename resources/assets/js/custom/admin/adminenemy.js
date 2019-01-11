@@ -73,34 +73,9 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
         console.assert(enemy instanceof AdminEnemy, enemy, 'enemy is not an AdminEnemy');
 
-        // let index = $.inArray(enemy.id, this.enemies);
-        // // Already exists, user wants to deselect the enemy
-        // let removed = index >= 0;
-        //
-        // // If the enemy was part of a pack..
-        // if (enemy.enemy_pack_id > 0) {
-        //     let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
-        //     for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-        //         let enemyCandidate = enemyMapObjectGroup.objects[i];
-        //         // If we should couple the enemy in addition to our own..
-        //         if (enemyCandidate.enemy_pack_id === enemy.enemy_pack_id) {
-        //             // Remove it too if we should
-        //             if (removed) {
-        //                 this._removeEnemy(enemyCandidate);
-        //             }
-        //             // Or add it too if we need
-        //             else {
-        //                 this._addEnemy(enemyCandidate);
-        //             }
-        //         }
-        //     }
-        // } else {
-        //     if (removed) {
-        //         this._removeEnemy(enemy);
-        //     } else {
-        //         this._addEnemy(enemy);
-        //     }
-        // }
+        // We couple the enemy to ourselves (MDT enemy), not the other way around
+        // This helps with drawing the lines
+        enemy.mdt_id = this.id;
 
         this.redrawConnectionToEnemy();
     }

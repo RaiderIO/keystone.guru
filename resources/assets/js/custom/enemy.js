@@ -5,6 +5,7 @@ let _bigIcon = {iconSize: [32, 32]};
 // Default icon; placeholder while placing a new enemy. This can't really use the Visual system, it'd require
 // too much rewrites. Better to just make a small placeholder like this and assign it to the below constructs.
 let DefaultEnemyIcon = new L.divIcon($.extend({className: 'unset_enemy_icon'}, _smallIcon));
+let MDTEnemyIconSelected = new L.divIcon($.extend({className: 'mdt_enemy_icon leaflet-edit-marker-selected'}, _smallIcon));
 
 $(function () {
     L.Draw.Enemy = L.Draw.Marker.extend({
@@ -24,12 +25,6 @@ $(function () {
 });
 
 let LeafletEnemyMarker = L.Marker.extend({
-    options: {
-        icon: DefaultEnemyIcon
-    }
-});
-
-let LeafletMDTEnemyMarkerSelected = L.Marker.extend({
     options: {
         icon: DefaultEnemyIcon
     }
