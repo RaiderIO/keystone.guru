@@ -138,6 +138,7 @@ class MDTDungeon
             $enemy->enemy_pack_id = -1;
             $enemy->npc_id = (int)$clone['npcId'];
             $enemy->mdt_id = (int)$clone['mdtId'];
+            $enemy->enemy_id = -1;
             $enemy->is_infested = false;
             $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
             $enemy->faction = isset($clone['faction']) ? ($clone['faction'] === 1 ? 'alliance' : 'horde') : 'any';

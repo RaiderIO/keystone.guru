@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Auth;
  * @property int $enemy_pack_id
  * @property int $npc_id
  * @property int $floor_id
+ * @property int $mdt_id The ID in MDT (clone index) that this enemy is coupled to
+ * @property int $enemy_id Only used for temp MDT enemies
+ * @property bool $is_mdt Only used for temp MDT enemies
  * @property bool $is_infested
  * @property string $teeming
  * @property string $faction

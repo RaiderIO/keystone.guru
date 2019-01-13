@@ -10,21 +10,21 @@ class MDTEnemySelection extends EnemySelection {
      * @returns {boolean}
      * @protected
      */
-    _filter(source, enemyCandidate){
+    _filter(source, enemyCandidate) {
         console.assert(source instanceof Enemy, source, 'source is not an Enemy');
-        console.assert(source.is_mdt , source, 'source not an MDT Enemy');
+        console.assert(source.is_mdt, source, 'source not an MDT Enemy');
         console.assert(enemyCandidate instanceof Enemy, enemyCandidate, 'enemyCandidate is not an Enemy');
 
         return !enemyCandidate.is_mdt &&
-            (enemyCandidate.mdt_id === source.mdt_id || enemyCandidate.mdt_id === -1) &&
-            enemyCandidate.npc_id === source.npc_id;
+            (enemyCandidate.mdt_id === source.mdt_id ||
+                enemyCandidate.npc_id === source.npc_id);
     }
 
     /**
      * The way the icon looks when an enemy may be selected.
      * @protected
      */
-    _getLayerIcon(){
+    _getLayerIcon() {
         return MDTEnemyIconSelected;
     }
 }

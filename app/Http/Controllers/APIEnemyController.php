@@ -77,22 +77,33 @@ class APIEnemyController extends Controller
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
         $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
 
-        foreach ($result as $enemy) {
-            $enemy->is_infested = ($enemy->infested_yes_votes - $enemy->infested_no_votes) >= config('keystoneguru.infested_user_vote_threshold');
-            $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
-                return $enemy->npc_id === $item->id;
-            })->first();
-            unset($enemy->npc_id);
-        }
-
-        $mdtEnemies = [];
-
         // Only if we should show MDT enemies
+        $mdtEnemies = [];
         if ($showMdtEnemies) {
             /** @var Floor $floor */
             $floor = Floor::where('id', $floorId)->first();
 
             $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($floor->dungeon->name))->getClonesAsEnemies($floor);
+        }
+
+        foreach ($result as $enemy) {
+            $enemy->is_infested = ($enemy->infested_yes_votes - $enemy->infested_no_votes) >= config('keystoneguru.infested_user_vote_threshold');
+            $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
+                return $enemy->npc_id === $item->id;
+            })->first();
+
+            // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
+            foreach ($mdtEnemies as $mdtEnemy) {
+                // Match them
+                if ($mdtEnemy->mdt_id === $enemy->mdt_id && $mdtEnemy->npc_id === $enemy->npc_id) {
+                    // Match found
+                    $mdtEnemy->enemy_id = $enemy->id;
+                    break;
+                }
+            }
+
+            // Can be found in the npc object
+            unset($enemy->npc_id);
         }
 
         return ['enemies' => $result, 'mdt_enemies' => $mdtEnemies];
@@ -111,6 +122,9 @@ class APIEnemyController extends Controller
         $enemy->enemy_pack_id = $request->get('enemy_pack_id');
         $npcId = $request->get('npc_id', -1);
         $enemy->npc_id = $npcId === null ? -1 : $npcId;
+        // Only when set, otherwise default of -1
+        $mdtId = $request->get('mdt_id', -1);
+        $enemy->mdt_id = $mdtId === null ? -1 : $mdtId;
         $enemy->floor_id = $request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');

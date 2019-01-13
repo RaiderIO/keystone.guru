@@ -255,8 +255,24 @@ $introTexts = [
                         <div class="col-7 no-gutters">@{{ id }}</div>
                     </div>
                     <div class="row">
+                        <div class="col-5 no-gutters">{{ __('NPC_ID') }} </div>
+                        <div class="col-7 no-gutters">@{{ npc_id }} (@{{ npc_id_type }})</div>
+                    </div>
+                    <div class="row">
                         <div class="col-5 no-gutters">{{ __('Pack') }} </div>
                         <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('MDT') }} </div>
+                        <div class="col-7 no-gutters">@{{ is_mdt }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('MDT_ID') }} </div>
+                        <div class="col-7 no-gutters">@{{ mdt_id }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('ENEMY_ID') }} </div>
+                        <div class="col-7 no-gutters">@{{ enemy_id }}</div>
                     </div>
                     <div class="row">
                         <div class="col-5 no-gutters">{{ __('Visual') }} </div>

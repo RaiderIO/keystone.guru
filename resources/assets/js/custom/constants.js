@@ -24,6 +24,12 @@ var c = {
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple']
         },
+        adminenemy: {
+            mdtPolylineOptions: {
+                color: '#0000FF',
+                weight: 1
+            }
+        },
         enemypack: {
             colors: {
                 unsaved: '#E25D5D',

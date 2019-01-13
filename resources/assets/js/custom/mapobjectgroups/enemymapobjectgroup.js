@@ -81,21 +81,25 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                             enemy.infested_no_votes = remoteEnemy.infested_no_votes;
                             enemy.infested_user_vote = remoteEnemy.infested_user_vote;
                             enemy.is_infested = remoteEnemy.is_infested;
-                            // Exception for MDT enemies
-                            enemy.is_mdt = remoteEnemy.hasOwnProperty('is_mdt') ? remoteEnemy.is_mdt : false;
+                            // MDT id is always set
+                            enemy.mdt_id = remoteEnemy.mdt_id;
+                            enemy.is_mdt = false;
 
-                            // After synced when the visual has been built, can't do that before here since some funky
-                            // things would go wrong with the visuals
-                            if(remoteEnemy.hasOwnProperty('is_mdt')) {
+                            if (remoteEnemy.hasOwnProperty('is_mdt')) {
+                                // Exception for MDT enemies
+                                enemy.is_mdt = remoteEnemy.is_mdt;
+                                // Whatever enemy this MDT enemy is linked to
+                                enemy.enemy_id = remoteEnemy.enemy_id;
                                 // Hide MDT objects initially
                                 self.setMapObjectVisibility(enemy, false);
                             }
-
-                            enemy.setNpc(remoteEnemy.npc);
                             // If actually set..
                             if (remoteEnemy.hasOwnProperty('raid_marker_name') && remoteEnemy.raid_marker_name !== null) {
                                 enemy.setRaidMarkerName(remoteEnemy.raid_marker_name);
                             }
+
+                            // Do this last
+                            enemy.setNpc(remoteEnemy.npc);
 
                             // We just downloaded the enemy pack, it's synced alright!
                             enemy.setSynced(true);

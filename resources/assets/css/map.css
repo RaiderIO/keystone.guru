@@ -239,6 +239,10 @@ html, body, #map, #app, .wrapper {
     height: 11px;
 }
 
+.mdt_enemy_icon.leaflet-edit-marker-selected {
+    border-color: yellow !important;
+}
+
 .boss_enemy_icon {
     width: 32px;
     height: 32px;

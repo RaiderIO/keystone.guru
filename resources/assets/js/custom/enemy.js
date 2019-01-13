@@ -83,6 +83,9 @@ class Enemy extends MapObject {
 
         // Create the visual now that we know all data to construct it properly
         this.visual = new EnemyVisual(this.map, this, this.layer);
+
+        // Recreate the tooltip
+        this.bindTooltip();
     }
 
     /**
@@ -204,11 +207,18 @@ class Enemy extends MapObject {
                 infested_no_votes: this.infested_no_votes,
                 infested_net_votes: netVotes >= 0 ? '+' + netVotes : netVotes,
                 id: this.id,
+                npc_id: this.npc_id,
+                npc_id_type: typeof this.npc_id,
+                is_mdt: this.is_mdt,
+                mdt_id: this.mdt_id,
+                enemy_id: this.enemy_id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
                 visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
             };
         }
 
+        // Remove any previous tooltip
+        this.layer.unbindTooltip();
         this.layer.bindTooltip(template(data), {
             offset: [0, 10],
             direction: 'bottom'
@@ -234,8 +244,6 @@ class Enemy extends MapObject {
         }
 
         this.signal('enemy:set_npc', {npc: npc});
-
-        this.bindTooltip();
     }
 
     /**
@@ -402,6 +410,7 @@ class Enemy extends MapObject {
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));
+        console.log('unreg -> enemy->cleanup()');
         this.map.unregister('map:enemyselectionmodechanged', this);
     }
 }
