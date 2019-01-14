@@ -28,6 +28,7 @@ class MDTImportController extends Controller
         $importString = new ImportString();
         
         $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute();
+        dd($dungeonRoute);
 
 
         return view('home');

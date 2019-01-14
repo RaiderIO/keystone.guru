@@ -105,56 +105,67 @@ class MDTDungeon
 
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
-     * @param $floor Floor The floor you're looking for.
+     * @param $floors Floor|array The floor you're looking for.
      * @return array
      */
-    public function getClonesAsEnemies($floor)
+    public function getClonesAsEnemies($floors)
     {
+        // Ensure floors is an array
+        if (!is_array($floors)) {
+            $floors = [$floors];
+        }
+
         $mdtNpcs = $this->_getMDTNPCs();
 
         // Find the enemy in a list of enemies
         $clones = [];
-        foreach ($mdtNpcs as $mdtNpc) {
+        foreach ($mdtNpcs as $mdtNpcIndex => $mdtNpc) {
             foreach ($mdtNpc['clones'] as $mdtId => $clone) {
                 //Only clones that are on the same floor
-                if ((int)$clone['sublevel'] === $floor->index) {
-                    // Set some additional props that come in handy when converting to an enemy
-                    $clone['npcId'] = (int)$mdtNpc['id'];
-                    $clone['mdtId'] = (int)$mdtId;
-                    $clones[] = $clone;
+                foreach ($floors as $floor) {
+                    if ((int)$clone['sublevel'] === $floor->index) {
+                        // Set some additional props that come in handy when converting to an enemy
+                        $clone['mdtNpcIndex'] = (int)$mdtNpcIndex;
+                        $clone['npcId'] = (int)$mdtNpc['id'];
+                        $clone['mdtId'] = (int)$mdtId;
+                        $clones[] = $clone;
+                    }
                 }
             }
         }
 
         // We now know a list of clones that we want to display, convert those clones to TEMP enemies
         $enemies = [];
-        /** @var Collection $npcs */
-        $npcs = Npc::where('dungeon_id', $floor->dungeon->id)->get();
-        foreach ($clones as $npcId => $clone) {
-            $enemy = new Enemy();
-            // Dummy so we can ID them later on
-            $enemy->is_mdt = true;
-            $enemy->floor_id = $floor->id;
-            $enemy->enemy_pack_id = -1;
-            $enemy->npc_id = (int)$clone['npcId'];
-            $enemy->mdt_id = (int)$clone['mdtId'];
-            $enemy->enemy_id = -1;
-            $enemy->is_infested = false;
-            $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
-            $enemy->faction = isset($clone['faction']) ? ($clone['faction'] === 1 ? 'alliance' : 'horde') : 'any';
-            $enemy->enemy_forces_override = -1;
-            // This seems to match my coordinate system for about 99%. Sometimes it's a bit off but I can work around that.
-            $enemy->lat = ($clone['y'] / 2.2);
-            $enemy->lng = ($clone['x'] / 2.2);
-            $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
+        foreach ($floors as $floor) {
+            /** @var Collection $npcs */
+            $npcs = Npc::where('dungeon_id', $floor->dungeon->id)->get();
+            foreach ($clones as $npcId => $clone) {
+                $enemy = new Enemy();
+                // Dummy so we can ID them later on
+                $enemy->is_mdt = true;
+                $enemy->floor_id = $floor->id;
+                $enemy->enemy_pack_id = -1;
+                $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
+                $enemy->npc_id = (int)$clone['npcId'];
+                $enemy->mdt_id = (int)$clone['mdtId'];
+                $enemy->enemy_id = -1;
+                $enemy->is_infested = false;
+                $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
+                $enemy->faction = isset($clone['faction']) ? ($clone['faction'] === 1 ? 'alliance' : 'horde') : 'any';
+                $enemy->enemy_forces_override = -1;
+                // This seems to match my coordinate system for about 99%. Sometimes it's a bit off but I can work around that.
+                $enemy->lat = ($clone['y'] / 2.2);
+                $enemy->lng = ($clone['x'] / 2.2);
+                $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
 
-            // Some properties which are dynamic on a normal enemy but static here
-            $enemy->raid_marker_name = null;
-            $enemy->infested_yes_votes = 0;
-            $enemy->infested_no_votes = 0;
-            $enemy->infested_user_vote = null;
+                // Some properties which are dynamic on a normal enemy but static here
+                $enemy->raid_marker_name = null;
+                $enemy->infested_yes_votes = 0;
+                $enemy->infested_no_votes = 0;
+                $enemy->infested_user_vote = null;
 
-            $enemies[] = $enemy;
+                $enemies[] = $enemy;
+            }
         }
 
         return $enemies;

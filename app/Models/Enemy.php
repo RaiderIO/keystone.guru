@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
  * @property int $npc_id
  * @property int $floor_id
  * @property int $mdt_id The ID in MDT (clone index) that this enemy is coupled to
+ * @property int $mdt_npc_index The index of the NPC in MDT
  * @property int $enemy_id Only used for temp MDT enemies
  * @property bool $is_mdt Only used for temp MDT enemies
  * @property bool $is_infested
