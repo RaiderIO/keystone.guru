@@ -1,0 +1,73 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: wouterk
+ * Date: 15-1-2019
+ * Time: 16:34
+ */
+
+namespace App\Logic\MDT;
+
+class Conversion
+{
+    private static $dungeonNameMapping = [
+        'Atal\'Dazar' => 'AtalDazar',
+        'Freehold' => 'Freehold',
+        'Kings\' Rest' => 'KingsRest',
+        'Shrine of the Storm' => 'ShrineoftheStorm',
+        'Siege of Boralus' => 'SiegeofBoralus',
+        'Temple of Sethraliss' => 'TempleofSethraliss',
+        'The MOTHERLODE!!' => 'TheMotherlode',
+        'The Underrot' => 'TheUnderrot',
+        'Tol Dagor' => 'TolDagor',
+        'Waycrest Manor' => 'WaycrestManor'
+    ];
+
+    /**
+     * @param $dungeonName string
+     * @return mixed Gets the MDT version of a dungeon name.
+     */
+    public static function getMDTDungeonName($dungeonName)
+    {
+        return self::$dungeonNameMapping[$dungeonName];
+    }
+
+    /**
+     * Converts a MDT Dungeon ID to a Keystone.guru ID.
+     * @param $mdtDungeonId int
+     * @return int
+     * @throws \Exception An exception if the found dungeon ID was incorrect/not supported.
+     */
+    public static function convertMDTDungeonID($mdtDungeonId)
+    {
+        // May be a double, convert it first
+        $mdtDungeonId = (int)$mdtDungeonId;
+        // BFA, there's 10 valid dungeons
+        if ($mdtDungeonId >= 15 && $mdtDungeonId <= 24) {
+            return $mdtDungeonId - 1;
+        } else {
+            throw new \Exception('Unsupported dungeon found.');
+        }
+    }
+
+    /**
+     * Converts an array with x/y keys set to an array with lat/lng set, converted to our own coordinate system.
+     * @param $xy array
+     * @return array
+     */
+    public static function convertMDTCoordinateToLatLng($xy)
+    {
+        // This seems to match my coordinate system for about 99%. Needs some more refinement but it should be very minor.
+        return ['lat' => $xy['y'] / 2.2, 'lng' => $xy['x'] / 2.2];
+    }
+
+    /**
+     * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
+     * @param $latLng array
+     * @return array
+     */
+    public static function convertLatLngToMDTCoordinate($latLng)
+    {
+        return ['y' => $latLng['lat'] * 2.2, 'x' => $latLng['lng'] * 2.2];
+    }
+}

@@ -20,13 +20,15 @@ class MDTImportController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
      */
     public function import(Request $request)
     {
         $string = $request->get('import_string');
 
         $importString = new ImportString();
-        
+
+        // @TODO improve exception handling
         $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute();
         dd($dungeonRoute);
 

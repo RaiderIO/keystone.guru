@@ -28,7 +28,7 @@ class MapObject extends Signalable {
             self._cleanDecorator();
         });
 
-        this.register(['object:shown', 'object:hidden'], this, function (event) {
+        this.register(['shown', 'hidden'], this, function (event) {
             if (event.data.visible) {
                 self._rebuildDecorator();
             } else {

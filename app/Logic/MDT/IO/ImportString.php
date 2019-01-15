@@ -9,8 +9,11 @@
 namespace App\Logic\MDT\IO;
 
 
+use App\Logic\MDT\Conversion;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
+use App\Models\KillZone;
+use App\Models\Npc;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -69,6 +72,7 @@ class ImportString
     /**
      * Gets the dungeon route based on the currently encoded string.
      * @return DungeonRoute|bool DungeonRoute if the route could be constructed, false if the string was invalid.
+     * @throws \Exception
      */
     public function getDungeonRoute()
     {
@@ -84,12 +88,15 @@ class ImportString
             // Create a dungeon route
             $dungeonRoute = new DungeonRoute();
             $dungeonRoute->author_id = Auth::id();
-            $dungeonRoute->dungeon_id = $decoded['value']['currentDungeonIdx'];
+            $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
             $dungeonRoute->faction_id = 1; // Default faction
             $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
             $dungeonRoute->teeming = $decoded['value']['teeming'];
-            $dungeonRoute->title = '';
+            $dungeonRoute->title = 'MDT import test!';
             $dungeonRoute->difficulty = 'Casual';
+
+            // Pre-emptively save the route
+            // $dungeonRoute->save();
 
             // Create killzones and attach enemies
             /**
@@ -108,25 +115,59 @@ class ImportString
              * ]
              */
             $floors = $dungeonRoute->dungeon->floors;
-            $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']));
+            $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
 
             // Fetch all enemies of this
-            $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors->toArray());
-            dd($enemies);
+            $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
 
             foreach ($decoded['value']['pulls'] as $pull) {
                 foreach ($pull as $key => $stringMdtEnemies) {
+                    $killZone = new KillZone();
+                    // $killZone->save();
+                    $kzLat = 0;
+                    $kzLng = 0;
                     foreach ($stringMdtEnemies as $npcIndex => $clones) {
                         foreach ($clones as $index => $cloneIndex) {
-                            $npc = null;
-                            // TODO complete this
-
-                            // Find the NPC that these clones are attached to
-                            foreach ($mdtEnemies as $mdtEnemy) {
-                                if( $mdtEnemy->mdt_npc_index === $npcIndex ) {
-                                    $enemy = $mdtEnemy;
+                            // Find the matching enemy of the clones
+                            /** @var Enemy $mdtEnemy */
+                            $mdtEnemy = null;
+                            foreach ($mdtEnemies as $mdtEnemyCandidate) {
+                                // NPC and clone index make for unique ID
+                                if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && $mdtEnemyCandidate->mdt_id === $cloneIndex) {
+                                    // Found it
+                                    $mdtEnemy = $mdtEnemyCandidate;
+                                    break;
                                 }
                             }
+
+                            if ($mdtEnemy === null) {
+                                echo "Unable to find MDT enemy!";
+                                dd($stringMdtEnemies);
+                            }
+
+                            // We now know the MDT enemy that the user was trying to import. However, we need to know
+                            // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
+                            /** @var Enemy $enemy */
+                            $enemy = null;
+                            foreach ($enemies as $enemyCandidate) {
+                                if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
+                                    $enemy = $enemyCandidate;
+                                    break;
+                                }
+                            }
+
+                            if ($enemy === null) {
+                                echo "Unable to find enemy!";
+                                dd($stringMdtEnemies);
+                            }
+
+                            $kzLat += $enemy->lat;
+                            $kzLng += $enemy->lng;
+
+                            dd($enemy);
+
+                            $kzEnemy = new KillZoneEnemy();
+                            // $kzEnemy->kill
                         }
                     }
                 }

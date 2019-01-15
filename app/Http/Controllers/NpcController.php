@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\NpcFormRequest;
+use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\NpcClassification;
 use Illuminate\Http\Request;
@@ -28,9 +29,12 @@ class NpcController extends Controller
      */
     public function store(NpcFormRequest $request, Npc $npc = null)
     {
+        $oldId = -1;
         // If we're saving as new, make a new NPC and save that instead
         if ($npc === null || $this->isSaveAsNew($request)) {
             $npc = new Npc();
+        } else {
+            $oldId = $npc->id;
         }
 
         $npc->id = $request->get('id');
@@ -45,6 +49,10 @@ class NpcController extends Controller
 
         if (!$npc->save()) {
             abort(500, 'Unable to save npc!');
+        }
+        // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
+        else if ($oldId > 0) {
+            Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
         }
 
         return $npc;
@@ -86,7 +94,7 @@ class NpcController extends Controller
      */
     public function update(NpcFormRequest $request, Npc $npc)
     {
-        if($this->isSaveAsNew($request)){
+        if ($this->isSaveAsNew($request)) {
             return $this->savenew($request);
         } else {
             // Store it and show the edit page again

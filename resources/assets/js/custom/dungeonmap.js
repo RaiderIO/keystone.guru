@@ -27,13 +27,34 @@ class DungeonMap extends Signalable {
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
-            this.mapObjectGroups[i].register('object:add', this, function (event) {
-                let object = event.data.object;
+            this.mapObjectGroups[i].register('object:add', this, function (addEvent) {
+                let object = addEvent.data.object;
                 self.mapObjects.push(object);
 
                 // Make sure we know it's editable
-                if (object.isEditable() && event.data.objectgroup.editable && self.edit) {
+                if (object.isEditable() && addEvent.data.objectgroup.editable && self.edit) {
                     self.drawnItems.addLayer(object.layer);
+                }
+            });
+
+            // Make sure we don't try to edit layers that aren't visible because they're hidden
+            // If we don't do this and we have a hidden object, editing layers will break the moment you try to use it
+            this.mapObjectGroups[i].register(['object:shown', 'object:hidden'], this, function (visibilityEvent) {
+                let object = visibilityEvent.data.object;
+                // If it's visible now and the layer is not added already
+                if (visibilityEvent.data.visible && !self.drawnItems.hasLayer(object.layer)) {
+                    // Only if we may add the layer
+                    if( object.isEditable() && visibilityEvent.data.objectgroup.editable && self.edit ){
+                        // Add it
+                        self.drawnItems.addLayer(object.layer);
+                        console.log('re-adding object to drawnItems');
+                    }
+                }
+                // If it should not be visible but it's visible now
+                else if (!visibilityEvent.data.visible && self.drawnItems.hasLayer(object.layer)) {
+                    // Remove it from the layer
+                    self.drawnItems.removeLayer(object.layer);
+                    console.log('removing object from drawnItems');
                 }
             });
         }

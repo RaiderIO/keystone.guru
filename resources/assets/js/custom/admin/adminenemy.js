@@ -27,7 +27,7 @@ class AdminEnemy extends Enemy {
         this.enemyConnectionLayerGroup = null;
 
         // When we're synced, connect to our connected enemy
-        this.register(['object:shown', 'object:hidden'], this, function (hiddenEvent) {
+        this.register(['shown', 'hidden'], this, function (hiddenEvent) {
             if (self.mdt_id > 0) {
                 if (hiddenEvent.data.visible) {
                     self.redrawConnectionToEnemy();
@@ -50,31 +50,39 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
 
         // Redraw any changes as necessary
-        this.redrawConnectionToEnemy();
+        // this.redrawConnectionToEnemy();
 
         // Get whatever object is handling the enemy selection
         let enemySelection = this.map.getEnemySelection();
 
         // Only if we were the enemy that initiated the selection
-        if (selectionEvent.data.finished && enemySelection.getMapObject() === this) {
-            // May save when nothing has changed, but that's okay
-            let connectedEnemy = this._getConnectedEnemy();
-            if (connectedEnemy !== null) {
-                // Save them, not us
-                connectedEnemy.save();
-            }
+        if (selectionEvent.data.finished) {
+            // Attach tooltip again
+            this.bindTooltip();
 
-            if (this._previousConnectedEnemyId > 0) {
-                let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
-                let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
-                // Must be found..
-                if (previousEnemy !== null) {
-                    previousEnemy.save();
+            if (enemySelection.getMapObject() === this) {
+                // May save when nothing has changed, but that's okay
+                let connectedEnemy = this._getConnectedEnemy();
+                if (connectedEnemy !== null) {
+                    // Save them, not us
+                    connectedEnemy.save();
                 }
-            }
 
-            // Reset it for the next time
-            this._previousConnectedEnemyId = -1;
+                if (this._previousConnectedEnemyId > 0) {
+                    let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+                    let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
+                    // Must be found..
+                    if (previousEnemy !== null) {
+                        previousEnemy.save();
+                    }
+                }
+
+                // Reset it for the next time
+                this._previousConnectedEnemyId = -1;
+            }
+        } else {
+            // Remove tooltip whilst actively coupling. It gets in the way
+            this.layer.unbindTooltip();
         }
     }
 
@@ -120,6 +128,15 @@ class AdminEnemy extends Enemy {
     }
 
     /**
+     * May only edit when we're not an MDT enemy
+     * @returns {boolean}
+     */
+    isEditable() {
+        console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
+        return !this.is_mdt;
+    }
+
+    /**
      * Triggered when an enemy was selected by the user when edit mode was enabled.
      * @param enemy The enemy that was selected (or de-selected). Will add/remove the enemy to the list to be redrawn.
      */
@@ -144,7 +161,11 @@ class AdminEnemy extends Enemy {
         enemy.mdt_id = this.mdt_id;
         this.enemy_id = enemy.id;
 
+        // Redraw ourselves
         this.redrawConnectionToEnemy();
+
+        // Finish the selection, we generally don't want to make changes multiple times. We can always restart the procedure
+        this.map.finishEnemySelection();
     }
 
     /**
@@ -164,11 +185,18 @@ class AdminEnemy extends Enemy {
      * Redraw connections to the enemy
      */
     redrawConnectionToEnemy() {
+        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+
         this.removeExistingConnectionToEnemy();
 
         // If this enemy is connected to an MDT enemy
         let connectedEnemy = this._getConnectedEnemy();
-        if (connectedEnemy !== null) {
+        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+
+        // Only when we should..
+        if (connectedEnemy !== null &&
+            enemyMapObjectGroup.isMapObjectVisible(this) &&
+            enemyMapObjectGroup.isMapObjectVisible(connectedEnemy)) {
             // Create & add new layer
             this.enemyConnectionLayerGroup = new L.LayerGroup();
 
@@ -215,10 +243,22 @@ class AdminEnemy extends Enemy {
 
                     // Start selecting enemies
                     self.map.startEnemySelection(mdtEnemySelection);
-                } else if (enemySelection.getMapObject() === self) {
+                }
+                // User clicks the object again to cancel the procedure
+                else if (enemySelection.getMapObject() === self) {
                     // Do not unregister enemyselectionmodechanged here; it may be changed externally as well
                     self.map.finishEnemySelection();
                 }
+            }
+        });
+
+        // When we're moved, keep drawing the connections anew
+        self.layer.on('move', function () {
+            self.redrawConnectionToEnemy();
+
+            let connectedEnemy = self._getConnectedEnemy();
+            if (connectedEnemy !== null) {
+                connectedEnemy.redrawConnectionToEnemy();
             }
         });
     }

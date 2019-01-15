@@ -86,6 +86,7 @@ class APIEnemyController extends Controller
             $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($floor->dungeon->name))->getClonesAsEnemies($floor);
         }
 
+        // Post process enemies
         foreach ($result as $enemy) {
             $enemy->is_infested = ($enemy->infested_yes_votes - $enemy->infested_no_votes) >= config('keystoneguru.infested_user_vote_threshold');
             $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
@@ -96,7 +97,7 @@ class APIEnemyController extends Controller
             foreach ($mdtEnemies as $mdtEnemy) {
                 // Match them
                 if ($mdtEnemy->mdt_id === $enemy->mdt_id && $mdtEnemy->npc_id === $enemy->npc_id) {
-                    // Match found
+                    // Match found, assign and quit
                     $mdtEnemy->enemy_id = $enemy->id;
                     break;
                 }

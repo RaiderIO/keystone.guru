@@ -16,8 +16,7 @@ class MDTEnemySelection extends EnemySelection {
         console.assert(enemyCandidate instanceof Enemy, enemyCandidate, 'enemyCandidate is not an Enemy');
 
         return !enemyCandidate.is_mdt &&
-            (enemyCandidate.mdt_id === source.mdt_id ||
-                enemyCandidate.npc_id === source.npc_id);
+            enemyCandidate.npc_id === source.npc_id;
     }
 
     /**

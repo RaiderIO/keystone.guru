@@ -18,7 +18,7 @@ class EnemyVisual extends Signalable {
 
         let self = this;
         // Build and/or destroy the visual based on visibility
-        this.enemy.register(['object:shown', 'object:hidden'], this, function (event) {
+        this.enemy.register(['shown', 'hidden'], this, function (event) {
             if (event.data.visible) {
                 self._buildVisual();
             } else {

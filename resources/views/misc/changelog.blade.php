@@ -5,6 +5,34 @@
 @section('content')
 
     <h4>
+        v2.0 (2019/01/04)
+    </h4>
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/93">#95</a>
+            Due to synchronizing MDT enemies with Keystone.guru enemies, I've had to ensure any differences between MDT
+            and Keystone.guru were ironed out. The changes were as follows:
+        </li>
+        <li>
+            Atal'dazar
+            <ul>
+                <li>
+                    Added two missing Shieldbearer of Zul in the first pack that you reach when going to the south east.
+                </li>
+                <li>
+                    Added two missing Dazar'ai Colossi to the south east which were missing on Teeming weeks.
+                </li>
+                <li>
+                    Added missing Reanimation Totem to accompany the Reanimated Honor Guard when going towards the north
+                    from the start.
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>
         v1.6 (2019/01/04)
     </h4>
     <p>
@@ -26,7 +54,8 @@
         General changes:
     <ul>
         <li>
-            Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by dungeon.
+            Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by
+            dungeon.
         </li>
         <li>
             Fixed some route thumbnails not being generated.
@@ -118,6 +147,8 @@
                     Re-added Reanimation Totems to specific packs on the north side of the dungeon.
                 </li>
             </ul>
+        </li>
+        <li>
             Freehold
             <ul>
                 <li>
@@ -127,12 +158,15 @@
                     Corrected some enemy NPCs around the Ring of Booty.
                 </li>
             </ul>
+        </li>
+        <li>
             Kings' Rest
             <ul>
                 <li>
                     Added three missing Embalming Fluids in the chamber at the second boss.
                 </li>
             </ul>
+        <li>
             Temple of Sethraliss
             <ul>
                 <li>
@@ -584,6 +618,8 @@
                     Gilded Priestesses at Priestess Alun'za are no longer linked.
                 </li>
             </ul>
+        </li>
+        <li>
             The MOTHERLODE!!
             <ul>
                 <li>
@@ -593,12 +629,16 @@
                     Numerous corrections to The D.M.Z. before the last boss (missing bombs, slightly off locations).
                 </li>
             </ul>
+        </li>
+        <li>
             The Underrot
             <ul>
                 <li>
                     Added a missing pack of 2 patrolling Diseased Lashes between the first and second boss.
                 </li>
             </ul>
+        </li>
+        <li>
             Tol Dagor
             <ul>
                 <li>

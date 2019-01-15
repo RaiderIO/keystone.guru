@@ -241,6 +241,8 @@ html, body, #map, #app, .wrapper {
 
 .mdt_enemy_icon.leaflet-edit-marker-selected {
     border-color: yellow !important;
+    margin-top: -9px !important;
+    margin-left: -9px !important;
 }
 
 .boss_enemy_icon {

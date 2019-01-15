@@ -9,6 +9,7 @@
 namespace App\Logic\MDT\Data;
 
 
+use App\Logic\MDT\Conversion;
 use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\Npc;
@@ -24,18 +25,6 @@ use Illuminate\Support\Collection;
  */
 class MDTDungeon
 {
-    private static $dungeonNameMapping = [
-        'Atal\'Dazar' => 'AtalDazar',
-        'Freehold' => 'Freehold',
-        'Kings\' Rest' => 'KingsRest',
-        'Shrine of the Storm' => 'ShrineoftheStorm',
-        'Siege of Boralus' => 'SiegeofBoralus',
-        'Temple of Sethraliss' => 'TempleofSethraliss',
-        'The MOTHERLODE!!' => 'TheMotherlode',
-        'The Underrot' => 'TheUnderrot',
-        'Tol Dagor' => 'TolDagor',
-        'Waycrest Manor' => 'WaycrestManor'
-    ];
 
     /** @var string The Dungeon's name (Keystone.guru style). Can be converted using self::$dungeonMapping */
     private $_dungeonName;
@@ -43,16 +32,7 @@ class MDTDungeon
 
     function __construct($dungeonName)
     {
-        assert(array_key_exists($dungeonName, self::$dungeonNameMapping));
         $this->_dungeonName = $dungeonName;
-    }
-
-    /**
-     * @return mixed Gets the MDT version of a dungeon name.
-     */
-    private function _getMDTDungeonName()
-    {
-        return self::$dungeonNameMapping[$this->_dungeonName];
     }
 
     /**
@@ -69,7 +49,7 @@ class MDTDungeon
             MethodDungeonTools.scaleMultiplier = {}
             ' .
             file_get_contents(
-                base_path('vendor/nnogga/MethodDungeonTools/BattleForAzeroth/' . $this->_getMDTDungeonName() . '.lua')
+                base_path('vendor/nnogga/MethodDungeonTools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
             ) .
             // Insert dummy function to get what we need
             '
@@ -105,14 +85,14 @@ class MDTDungeon
 
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
-     * @param $floors Floor|array The floor you're looking for.
-     * @return array
+     * @param $floors Collection The floors that you want to get the clones for.
+     * @return Enemy[]
      */
     public function getClonesAsEnemies($floors)
     {
-        // Ensure floors is an array
-        if (!is_array($floors)) {
-            $floors = [$floors];
+        // Ensure floors is a collection
+        if (!($floors instanceof Collection)) {
+            $floors = new Collection($floors);
         }
 
         $mdtNpcs = $this->_getMDTNPCs();
@@ -153,9 +133,11 @@ class MDTDungeon
                 $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
                 $enemy->faction = isset($clone['faction']) ? ($clone['faction'] === 1 ? 'alliance' : 'horde') : 'any';
                 $enemy->enemy_forces_override = -1;
-                // This seems to match my coordinate system for about 99%. Sometimes it's a bit off but I can work around that.
-                $enemy->lat = ($clone['y'] / 2.2);
-                $enemy->lng = ($clone['x'] / 2.2);
+
+                $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
+                $enemy->lat = $latLng['lat'];
+                $enemy->lng = $latLng['lng'];
+
                 $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
 
                 // Some properties which are dynamic on a normal enemy but static here

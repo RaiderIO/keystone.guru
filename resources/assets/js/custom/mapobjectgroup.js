@@ -86,6 +86,20 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Called whenever an object we created has finished wrapping up and is now synced
+     * @param data
+     * @private
+     */
+    _onObjectSynced(data){
+        let object = data.context;
+
+        // We only use this trigger once to fire the object:add event, so unregister..
+        object.unregister('synced', this);
+        // Fire the event
+        this.signal('object:add', {object: object, objectgroup: this});
+    }
+
+    /**
      * Set the visibility of an individual object.
      * @param object
      * @param visible
@@ -99,13 +113,15 @@ class MapObjectGroup extends Signalable {
             if (!this.layerGroup.hasLayer(object.layer)) {
                 this.layerGroup.addLayer(object.layer);
                 // Trigger this on the object
-                object.signal('object:shown', {object: object, visible: true});
+                object.signal('shown', {object: object, visible: true});
+                this.signal('object:shown', {object: object, visible: true});
             }
         } else {
             if (this.layerGroup.hasLayer(object.layer)) {
                 this.layerGroup.removeLayer(object.layer);
                 // Trigger this on the object
-                object.signal('object:hidden', {object: object, visible: false});
+                object.signal('hidden', {object: object, visible: false});
+                this.signal('object:hidden', {object: object, visible: false});
             }
         }
     }
@@ -152,7 +168,7 @@ class MapObjectGroup extends Signalable {
         object.onLayerInit();
 
         object.register('object:deleted', this, (this._onObjectDeleted).bind(this));
-        this.signal('object:add', {object: object, objectgroup: this});
+        object.register('synced', this, (this._onObjectSynced).bind(this));
 
         return object;
     }
