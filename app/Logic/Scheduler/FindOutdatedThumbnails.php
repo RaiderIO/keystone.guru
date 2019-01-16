@@ -48,12 +48,7 @@ class FindOutdatedThumbnails
                 if (!$this->isJobQueuedForModel(\App\Jobs\ProcessRouteFloorThumbnail::class, $dungeonRoute)) {
                     Log::channel('scheduler')->debug(sprintf('Queueing job for route %s (%s floors)', $dungeonRoute->public_key, $dungeonRoute->dungeon->floors->count()));
 
-                    foreach ($dungeonRoute->dungeon->floors as $floor) {
-                        /** @var Floor $floor */
-                        // Set it for processing in a queue
-                        ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index);
-                    }
-
+                    $dungeonRoute->queueRefreshThumbnails();
                     $processed++;
                 }
             }

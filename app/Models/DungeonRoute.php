@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\ProcessRouteFloorThumbnail;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -372,7 +373,8 @@ class DungeonRoute extends Model
         $result = false;
 
         // Overwrite the author_id if it's not been set yet
-        if (!isset($this->id)) {
+        $new = !isset($this->id);
+        if ($new) {
             $this->author_id = \Auth::user()->id;
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
@@ -465,6 +467,12 @@ class DungeonRoute extends Model
                     $drAffixGroup->save();
                 }
             }
+
+            // Instantly generate a placeholder thumbnail for new routes.
+            if ($new) {
+                $this->queueRefreshThumbnails();
+            }
+
             $result = true;
         }
 
@@ -513,6 +521,17 @@ class DungeonRoute extends Model
         return $result;
     }
 
+    /**
+     * Queues this dungeon route for refreshing of the thumbnails as soon as possible.
+     */
+    public function queueRefreshThumbnails()
+    {
+        foreach ($this->dungeon->floors as $floor) {
+            /** @var Floor $floor */
+            // Set it for processing in a queue
+            ProcessRouteFloorThumbnail::dispatch($this, $floor->index);
+        }
+    }
 
 
     /**
