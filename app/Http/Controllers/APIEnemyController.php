@@ -81,7 +81,7 @@ class APIEnemyController extends Controller
         $mdtEnemies = [];
         if ($showMdtEnemies) {
             /** @var Floor $floor */
-            $floor = Floor::where('id', $floorId)->first();
+            $floor = Floor::find($floorId);
 
             $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($floor->dungeon->name))->getClonesAsEnemies($floor);
         }

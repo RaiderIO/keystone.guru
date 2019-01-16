@@ -85,14 +85,14 @@ class MDTDungeon
 
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
-     * @param $floors Collection The floors that you want to get the clones for.
+     * @param $floors Floor|Collection The floors that you want to get the clones for.
      * @return Enemy[]
      */
     public function getClonesAsEnemies($floors)
     {
         // Ensure floors is a collection
         if (!($floors instanceof Collection)) {
-            $floors = new Collection($floors);
+            $floors = [$floors];
         }
 
         $mdtNpcs = $this->_getMDTNPCs();
