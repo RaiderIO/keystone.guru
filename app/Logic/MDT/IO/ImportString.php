@@ -10,7 +10,9 @@ namespace App\Logic\MDT\IO;
 
 
 use App\Logic\MDT\Conversion;
+use App\Models\AffixGroup;
 use App\Models\DungeonRoute;
+use App\Models\DungeonRouteAffixGroup;
 use App\Models\Enemy;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
@@ -91,29 +93,23 @@ class ImportString
             $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
             $dungeonRoute->faction_id = 1; // Default faction
             $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
-            $dungeonRoute->teeming = $decoded['value']['teeming'];
-            $dungeonRoute->title = 'MDT import test!';
+            $dungeonRoute->teeming = boolval($decoded['value']['teeming']);
+            $dungeonRoute->title = $decoded['text'];
             $dungeonRoute->difficulty = 'Casual';
 
-            // Pre-emptively save the route
+            // Preemptively save the route
             $dungeonRoute->save();
 
+            // Set the affix for this route
+            $affixGroup = Conversion::convertWeekToAffixGroup($decoded['week']);
+            if ($affixGroup instanceof AffixGroup) {
+                $dungeonAffixGroup = new DungeonRouteAffixGroup();
+                $dungeonAffixGroup->dungeon_route_id = $dungeonRoute->id;
+                $dungeonAffixGroup->affix_group_id = $affixGroup->id;
+                $dungeonAffixGroup->save();
+            }
+
             // Create killzones and attach enemies
-            /**
-             * "pulls" => array:2 [
-             * 1 => array:2 [ // Pull ID
-             * 4 => array:5 [ // NPC Index
-             * 1 => 5.0 // Clone index
-             * 2 => 1.0
-             * 3 => 2.0
-             * 4 => 4.0
-             * 5 => 3.0
-             * ]
-             * 3 => array:1 [
-             * 1 => 3.0
-             * ]
-             * ]
-             */
             $floors = $dungeonRoute->dungeon->floors;
             $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
 

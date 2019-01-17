@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\DB;
  * @property Route $route
  * @property Faction $faction
  * @property User $author
+ * @property MDTImport $mdtImport
  *
  * @property \Illuminate\Support\Collection $specializations
  * @property \Illuminate\Support\Collection $classes
@@ -238,6 +239,15 @@ class DungeonRoute extends Model
     public function pageviews()
     {
         return $this->hasMany('App\Models\PageView', 'model_id')->where('model_class', get_class($this));
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mdtImport()
+    {
+        // Only set if the route was imported through an MDT string
+        return $this->hasMany('App\Models\MDTImport');
     }
 
     /**

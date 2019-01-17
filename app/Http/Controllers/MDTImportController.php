@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Logic\MDT\IO\ImportString;
+use App\Models\MDTImport;
 use Illuminate\Http\Request;
 
 class MDTImportController extends Controller
@@ -30,6 +31,13 @@ class MDTImportController extends Controller
 
         // @TODO improve exception handling
         $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute();
+
+        // Keep track of the import
+        $mdtImport = new MDTImport();
+        $mdtImport->dungeon_route_id = $dungeonRoute->id;
+        $mdtImport->import_string = $string;
+        $mdtImport->save();
+
         dd($dungeonRoute);
 
 
