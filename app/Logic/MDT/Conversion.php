@@ -8,6 +8,8 @@
 
 namespace App\Logic\MDT;
 
+use App\Models\AffixGroup;
+
 class Conversion
 {
     private static $dungeonNameMapping = [
@@ -69,5 +71,17 @@ class Conversion
     public static function convertLatLngToMDTCoordinate($latLng)
     {
         return ['y' => $latLng['lat'] * 2.2, 'x' => $latLng['lng'] * 2.2];
+    }
+
+    /**
+     * Convert a MDT week to a matching affix group
+     * @param $mdtWeek int
+     * @return AffixGroup
+     */
+    public static function convertWeekToAffixGroup($mdtWeek)
+    {
+        $mdtWeek = (int)$mdtWeek;
+        // Weeks neatly match the IDs in our database
+        return AffixGroup::find($mdtWeek);
     }
 }

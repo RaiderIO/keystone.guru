@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\ProcessRouteFloorThumbnail;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -36,6 +37,7 @@ use Illuminate\Support\Facades\DB;
  * @property Route $route
  * @property Faction $faction
  * @property User $author
+ * @property MDTImport $mdtImport
  *
  * @property \Illuminate\Support\Collection $specializations
  * @property \Illuminate\Support\Collection $classes
@@ -240,6 +242,15 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mdtImport()
+    {
+        // Only set if the route was imported through an MDT string
+        return $this->hasMany('App\Models\MDTImport');
+    }
+
+    /**
      * Scope a query to only include active dungeons.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -372,7 +383,8 @@ class DungeonRoute extends Model
         $result = false;
 
         // Overwrite the author_id if it's not been set yet
-        if (!isset($this->id)) {
+        $new = !isset($this->id);
+        if ($new) {
             $this->author_id = \Auth::user()->id;
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
@@ -465,6 +477,12 @@ class DungeonRoute extends Model
                     $drAffixGroup->save();
                 }
             }
+
+            // Instantly generate a placeholder thumbnail for new routes.
+            if ($new) {
+                $this->queueRefreshThumbnails();
+            }
+
             $result = true;
         }
 
@@ -513,6 +531,17 @@ class DungeonRoute extends Model
         return $result;
     }
 
+    /**
+     * Queues this dungeon route for refreshing of the thumbnails as soon as possible.
+     */
+    public function queueRefreshThumbnails()
+    {
+        foreach ($this->dungeon->floors as $floor) {
+            /** @var Floor $floor */
+            // Set it for processing in a queue
+            ProcessRouteFloorThumbnail::dispatch($this, $floor->index);
+        }
+    }
 
 
     /**
