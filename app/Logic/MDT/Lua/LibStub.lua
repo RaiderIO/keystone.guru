@@ -28,3 +28,7 @@ if not LibStub or LibStub.minor < LIBSTUB_MINOR then
 	function LibStub:IterateLibraries() return pairs(self.libs) end
 	setmetatable(LibStub, { __call = LibStub.GetLibrary })
 end
+
+-- WOTUU: Dummy AceGUI library
+local ACEGUI_MAJOR, ACEGUI_MINOR = "AceGUI-3.0", 34
+local AceGUI, oldminor = LibStub:NewLibrary(ACEGUI_MAJOR, ACEGUI_MINOR)
