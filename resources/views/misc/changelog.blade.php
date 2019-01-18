@@ -5,7 +5,7 @@
 @section('content')
 
     <h4>
-        v2.0 (2019/01/04)
+        v2.0 (2019/01/xx)
     </h4>
     <p>
         Mapping changes:
@@ -27,6 +27,28 @@
                 <li>
                     Added missing Reanimation Totem to accompany the Reanimated Honor Guard when going towards the north
                     from the start.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Freehold
+            <ul>
+                <li>
+                    Added missing Irontide Bonesaw on Teeming week before Skycap'n Kragg.
+                </li>
+                <li>
+                    Added missing Irontide Crusher on Teeming week before Ring of Booty.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Kings' Rest
+            <ul>
+                <li>
+                    Added missing Shadow-Borne Witch Doctor on Teeming week before The Golden Serpent.
+                </li>
+                <li>
+                    Added missing Irontide Crusher on Teeming week before Ring of Booty.
                 </li>
             </ul>
         </li>

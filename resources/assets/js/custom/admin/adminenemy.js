@@ -55,12 +55,23 @@ class AdminEnemy extends Enemy {
         // Get whatever object is handling the enemy selection
         let enemySelection = this.map.getEnemySelection();
 
+        let selectedMapObject = enemySelection.getMapObject();
+
+        // We calculate this because tooltip binding is expensive for 100s of enemies on screen. Generally a MDT
+        // enemy is close to the enemy we're selecting, so we only really need to disable tooltips for the enemies that
+        // are close by. If they're far away, we don't really care if we get a tooltip for the odd time it happens
+        // Advantage is that this dramatically speeds up the JS.
+        // 100 = 10 distance
+        let closeEnough = getDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) < 100;
+        // console.log(closeEnough);
         // Only if we were the enemy that initiated the selection
         if (selectionEvent.data.finished) {
-            // Attach tooltip again
-            this.bindTooltip();
+            if (closeEnough) {
+                // Attach tooltip again
+                this.bindTooltip();
+            }
 
-            if (enemySelection.getMapObject() === this) {
+            if (selectedMapObject === this) {
                 // May save when nothing has changed, but that's okay
                 let connectedEnemy = this._getConnectedEnemy();
                 if (connectedEnemy !== null) {
@@ -74,13 +85,16 @@ class AdminEnemy extends Enemy {
                     // Must be found..
                     if (previousEnemy !== null) {
                         previousEnemy.save();
+                        previousEnemy.bindTooltip();
+                    } else {
+                        console.error('Unable to find previous enemy', this._previousConnectedEnemyId);
                     }
                 }
 
                 // Reset it for the next time
                 this._previousConnectedEnemyId = -1;
             }
-        } else {
+        } else if (closeEnough) {
             // Remove tooltip whilst actively coupling. It gets in the way
             this.layer.unbindTooltip();
         }
@@ -143,6 +157,8 @@ class AdminEnemy extends Enemy {
     enemySelected(enemy) {
         console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
         console.assert(enemy instanceof AdminEnemy, enemy, 'enemy is not an AdminEnemy');
+
+        console.log('enemySelected');
 
         // Keep track of what we had
         this._previousConnectedEnemyId = this.enemy_id;
