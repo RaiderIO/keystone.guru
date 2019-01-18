@@ -19,6 +19,7 @@ $user = Auth::getUser();
 
 @section('content')
 
+    <profilevue></profilevue>
     <div class="container">
         <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
             <li class="nav-item">

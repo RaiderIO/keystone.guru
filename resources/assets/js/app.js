@@ -11,13 +11,10 @@ require('./bootstrap');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.component('profilevue', require('./components/Profile.vue'));
+Vue.component('profilevue', require('./components/Profile.vue').default);
 
 const app = new Vue({
-    el: '#app',
-    data: {
-        'username': 'test'
-    }
+    el: '#app'
 });
 
 // Prepare ajax to always use the CSRF token

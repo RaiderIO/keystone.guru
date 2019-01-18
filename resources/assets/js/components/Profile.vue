@@ -6,7 +6,7 @@
                     <div class="panel-heading">Example Component</div>
 
                     <div class="panel-body">
-                        I'm an example component! {{ test }}
+                        I'm an example component! {{ test3 }}
                     </div>
                 </div>
             </div>
@@ -18,6 +18,12 @@
     export default {
         mounted() {
             console.log('Component mounted.')
+        },
+        data() {
+            return {
+                'username': 'test',
+                'test3': 'asdf'
+            }
         }
     }
 </script>
