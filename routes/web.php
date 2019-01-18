@@ -112,6 +112,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             ->name('dungeonroute.clone');
 
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
+        Route::get('profilevue', function(){
+            return view('profile.vue');
+        })->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
         Route::patch('profile/{user}/privacy', 'ProfileController@updatePrivacy')->name('profile.updateprivacy');
         Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
