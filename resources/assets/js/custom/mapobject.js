@@ -19,8 +19,6 @@ class MapObject extends Signalable {
         this.decorator = null;
 
         this.register('synced', this, function () {
-            // Refresh the tooltip
-            self.bindTooltip();
             self._rebuildDecorator();
         });
         this.register('object:deleted', this, function () {
@@ -171,6 +169,9 @@ class MapObject extends Signalable {
             // Changed = gone out of sync
             self.setSynced(false);
         });
+
+        // Refresh the tooltip
+        self.bindTooltip();
     }
 
     cleanup() {

@@ -21,6 +21,14 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         };
     }
 
+    /**
+     * Called whenever the NPC of the enemy has been refreshed.
+     */
+    _refreshNpc(){
+        // Re-draw the visual
+        this.setIcon(this.iconName);
+    }
+
     getSize() {
         console.assert(this instanceof EnemyVisualMainEnemyForces, this, 'this is not an EnemyVisualMainEnemyForces!');
 

@@ -26,7 +26,11 @@ var c = {
         },
         adminenemy: {
             mdtPolylineOptions: {
-                color: '#0000FF',
+                color: '#00FF00',
+                weight: 1
+            },
+            mdtPolylineMismatchOptions: {
+                color: '#FFA500',
                 weight: 1
             }
         },

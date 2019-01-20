@@ -133,7 +133,7 @@ class MDTDungeon
                 $enemy->enemy_id = -1;
                 $enemy->is_infested = false;
                 $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
-                $enemy->faction = isset($clone['faction']) ? ($clone['faction'] === 1 ? 'alliance' : 'horde') : 'any';
+                $enemy->faction = isset($clone['faction']) ? ($clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
                 $enemy->enemy_forces_override = -1;
 
                 $latLng = Conversion::convertMDTCoordinateToLatLng($clone);

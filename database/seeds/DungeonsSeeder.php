@@ -532,11 +532,11 @@ class DungeonsSeeder extends Seeder
                 'enemy_forces_required_teeming' => 346,
                 'active' => true,
                 'floors' => [
-                    'Upstairs' => [
-                        'index' => 2
-                    ],
                     'The Grand Foyer' => [
                         'index' => 1
+                    ],
+                    'Upstairs' => [
+                        'index' => 2
                     ],
                     'The Cellar' => [
                         'index' => 3

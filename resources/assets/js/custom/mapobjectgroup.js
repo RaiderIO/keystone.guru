@@ -114,14 +114,14 @@ class MapObjectGroup extends Signalable {
                 this.layerGroup.addLayer(object.layer);
                 // Trigger this on the object
                 object.signal('shown', {object: object, visible: true});
-                this.signal('object:shown', {object: object, visible: true});
+                this.signal('object:shown', {object: object, objectgroup: this, visible: true});
             }
         } else {
             if (this.layerGroup.hasLayer(object.layer)) {
                 this.layerGroup.removeLayer(object.layer);
                 // Trigger this on the object
                 object.signal('hidden', {object: object, visible: false});
-                this.signal('object:hidden', {object: object, visible: false});
+                this.signal('object:hidden', {object: object, objectgroup: this, visible: false});
             }
         }
     }

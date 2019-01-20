@@ -52,6 +52,52 @@
                 </li>
             </ul>
         </li>
+        <li>
+            Shrine of the Storm
+            <ul>
+                <li>
+                    Added missing Abyss Dweller that appear in the room with the two Drowned Depthbringers.
+                </li>
+                <li>
+                    Added missing Irontide Crusher on Teeming week before Ring of Booty.
+                </li>
+            </ul>
+        </li>
+        <li>
+            The MOTHERLODE!!
+            <ul>
+                <li>
+                    Added a bunch of missing Crawler Mines in The V.M.Z, also updated mines to have correct Teeming
+                    appearance.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Tol Dagor
+            <ul>
+                <li>
+                    Moved the first pack of Stinging Parasites to the The Drain. Your routes are auto-converted; if you
+                    killed the pack, it'll now be killed on the second floor instead.
+                </li>
+                <li>
+                    Added two missing packs of Stinging Parasites in The Drain.
+                </li>
+                <li>
+                    Added missing Sewer Vicejaw, removed Teeming Sewer Vicejaw in The Drain.
+                </li>
+                <li>
+                    Added a few missing Despondent Scallywags in The Brig.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Waycrest Manor
+            <ul>
+                <li>
+                    Corrected an issue where Upstairs was marked as the first floor rather than The Grand Foyer.
+                </li>
+            </ul>
+        </li>
     </ul>
 
     <h4>

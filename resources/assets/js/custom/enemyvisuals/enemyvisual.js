@@ -48,7 +48,7 @@ class EnemyVisual extends Signalable {
 
             if (this.enemy.isSelectable()) {
                 data = {
-                    killzone_classes: 'leaflet-edit-marker-selected'
+                    selection_classes_base: 'leaflet-edit-marker-selected selected_enemy_icon'
                 };
             }
 
@@ -72,7 +72,9 @@ class EnemyVisual extends Signalable {
     // @TODO Listen to killzone selectable changed event
     refresh() {
         console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
-        this._buildVisual();
+
+        // Refresh the visual completely
+        this.setVisualType(this.map.getVisualType());
     }
 
     /**

@@ -260,6 +260,10 @@ $introTexts = [
                         <div class="col-7 no-gutters">@{{ id }}</div>
                     </div>
                     <div class="row">
+                        <div class="col-5 no-gutters">{{ __('Faction') }} </div>
+                        <div class="col-7 no-gutters">@{{ faction }}</div>
+                    </div>
+                    <div class="row">
                         <div class="col-5 no-gutters">{{ __('NPC_ID') }} </div>
                         <div class="col-7 no-gutters">@{{ npc_id }} (@{{ npc_id_type }})</div>
                     </div>
@@ -350,8 +354,10 @@ $introTexts = [
             <div class="modifier modifier_2 @{{modifier_2_classes}}" style="display: none;">
                 @{{{modifier_2_html}}}
             </div>
-            <div class=" @{{killzone_classes}} @{{main_visual_classes}}">
-                @{{{main_visual_html}}}
+            <div class="@{{selection_classes_base}} @{{selection_classes}}">
+                <div class="@{{main_visual_classes}}">
+                    @{{{main_visual_html}}}
+                </div>
             </div>
         </div>
     </script>
