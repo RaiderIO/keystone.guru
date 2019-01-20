@@ -19,14 +19,15 @@
             Atal'dazar
             <ul>
                 <li>
-                    Added two missing Shieldbearer of Zul in the first pack that you reach when going to the south east.
-                </li>
-                <li>
                     Added two missing Dazar'ai Colossi to the south east which were missing on Teeming weeks.
                 </li>
                 <li>
                     Added missing Reanimation Totem to accompany the Reanimated Honor Guard when going towards the north
                     from the start.
+                </li>
+                <li>
+                    A Feasting Skyscreamer in the middle of the dungeon was incorrectly marked as Alliance only, this
+                    has been rectified to be visible for everyone.
                 </li>
             </ul>
         </li>
@@ -34,10 +35,19 @@
             Freehold
             <ul>
                 <li>
+                    Unmarked an Irontide Bonesaw as Teeming before Skycap'n Kragg.
+                </li>
+                <li>
                     Added missing Irontide Bonesaw on Teeming week before Skycap'n Kragg.
                 </li>
                 <li>
+                    Added missing pack of an Irontide Enforcer, Crackshot and two Bonesaws After Skycap'n Kragg.
+                </li>
+                <li>
                     Added missing Irontide Crusher on Teeming week before Ring of Booty.
+                </li>
+                <li>
+                    Added various missing Cutwater Knife Jugglers/Harpooner to various packs before Ring of Booty.
                 </li>
             </ul>
         </li>
@@ -48,7 +58,23 @@
                     Added missing Shadow-Borne Witch Doctor on Teeming week before The Golden Serpent.
                 </li>
                 <li>
+                    Added missing Shadow-Borne Champion on non-Teeming weeks in The Golden Serpent's room just before
+                    going to the next room. Also removed Teeming enemies from that same pack.
+                </li>
+                <li>
+                    Removed various Teeming enemies in the room with the mini bosses.
+                </li>
+                <li>
+                    Removed a Teeming Purification Construct prior to Mchimba the Embalmer.
+                </li>
+                <li>
                     Added missing Irontide Crusher on Teeming week before Ring of Booty.
+                </li>
+                <li>
+                    Removed a Teeming Spectral Beastmaster prior to The Council of Tribes.
+                </li>
+                <li>
+                    Removed a Teeming Spectral Brute prior to The Council of Tribes.
                 </li>
             </ul>
         </li>
@@ -56,7 +82,17 @@
             Shrine of the Storm
             <ul>
                 <li>
-                    Added missing Abyss Dweller that appear in the room with the two Drowned Depthbringers.
+                    Removed a Teeming Tidesage Spiritualist that was patrolling on the first set of stairs.
+                </li>
+                <li>
+                    Removed a Teeming Shrine Templar on the pack right before crossing the first bridge (after
+                    mini-bosses).
+                </li>
+                <li>
+                    Added missing Abyss Dweller that appears in the room with the two Drowned Depthbringers.
+                </li>
+                <li>
+                    In the same room, added a missing  Abyss Dweller on Teeming weeks.
                 </li>
                 <li>
                     Added missing Irontide Crusher on Teeming week before Ring of Booty.
