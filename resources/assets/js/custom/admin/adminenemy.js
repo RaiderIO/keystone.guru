@@ -8,7 +8,6 @@ class AdminEnemy extends Enemy {
         this.npc_id = 0;
         // Init to an empty value
         this.enemy_pack_id = -1;
-        this.teeming = '';
         // Filled when we're currently drawing a patrol line
         this.currentPatrolPolyline = null;
 

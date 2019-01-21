@@ -42,6 +42,7 @@ class Enemy extends MapObject {
         // May be set when loaded from server
         this.npc = null;
         this.raid_marker_name = '';
+        this.teeming = null;
 
         // Infested variables
         this.infested_yes_votes = 0;

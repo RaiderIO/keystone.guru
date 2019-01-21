@@ -92,10 +92,33 @@
                     Added missing Abyss Dweller that appears in the room with the two Drowned Depthbringers.
                 </li>
                 <li>
-                    In the same room, added a missing  Abyss Dweller on Teeming weeks.
+                    In the same room, added a missing Abyss Dweller on Teeming weeks.
                 </li>
                 <li>
                     Added missing Irontide Crusher on Teeming week before Ring of Booty.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Temple of Sethraliss
+            <ul>
+                <li>
+                    Removed two Sandfury Stonefists from the pack when going right from the beginning.
+                </li>
+                <li>
+                    The patrolling Sandfury Stonefist between the second set of packs is now Teeming only.
+                </li>
+                <li>
+                    Updated various Teeming and non-Teeming enemies around the first bosses.
+                </li>
+                <li>
+                    Added missing Teeming pack of Shrouded Fangs and Krolusk Hatchlings in the cave with the Krolusks.
+                </li>
+                <li>
+                    Fixed enemy NPCs of various enemies in the same room.
+                </li>
+                <li>
+                    Removed three Teeming Crazed Incubators around Merektha.
                 </li>
             </ul>
         </li>
@@ -105,6 +128,30 @@
                 <li>
                     Added a bunch of missing Crawler Mines in The V.M.Z, also updated mines to have correct Teeming
                     appearance.
+                </li>
+            </ul>
+        </li>
+        <li>
+            The Underrot
+            <ul>
+                <li>
+                    Unmarked two Chosen Matrons on the left pack after the first bridge as Teeming.
+                </li>
+                <li>
+                    The patrol on the right side of the bridge now has two Devout Blood Priests.
+                </li>
+                <li>
+                    Removed two Chosen Matrons the right pack after the first bridge.
+                </li>
+                <li>
+                    Lots of reconfiguration around Cragmaw the Infested. Added various new enemies, removed invalid
+                    ones, re-marked and un-marked Teeming enemies.
+                </li>
+                <li>
+                    Unmarked one Reanimated Guardian as Teeming, in the patrolling pack of 5 before Sporecaller Zancha.
+                </li>
+                <li>
+                    Removed the Fallen Deathspeaker + adds that patrols after Sporecaller Zancha.
                 </li>
             </ul>
         </li>
