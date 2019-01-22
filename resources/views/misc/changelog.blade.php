@@ -171,6 +171,17 @@
                 <li>
                     Added a few missing Despondent Scallywags in The Brig.
                 </li>
+                <li>
+                    Removed a Cutwater Striker from the first pack you encounter when entering the Detention Block,
+                    fixed Teeming enemies for said pack as well.
+                </li>
+                <li>
+                    Removed a Teeming Cutwater Striker from the pack with the Block Warden.
+                </li>
+                <li>
+                    Added two missing Teeming Ashvane Marines and an Ashvane Officer in the Officers Quarters on the
+                    left side of the area.
+                </li>
             </ul>
         </li>
         <li>
@@ -178,6 +189,38 @@
             <ul>
                 <li>
                     Corrected an issue where Upstairs was marked as the first floor rather than The Grand Foyer.
+                </li>
+                <li>
+                    Removed middle pack of Soul Essences upon entering the dungeon.
+                </li>
+                <li>
+                    Added a Heartsbane Runeweaver after taking a left initially, then right again.
+                </li>
+                <li>
+                    Unmarked a Heartsbane Runeweaver as Teeming in the room north of the Sister bosses.
+                </li>
+                <li>
+                    Removed Heartsbane Runeweaver in The Hunting Lodge.
+                </li>
+                <li>
+                    Converted a Maddened Survivalist to a Diseased Mastiff in the upper pack in The Hunting Lodge (yes,
+                    this must've hurt).
+                </li>
+                <li>
+                    Converted a Maddened Survivalist to a Crazed Marksman in the lower pack in The Hunting Lodge (this
+                    didn't really hurt).
+                </li>
+                <li>
+                    Updated a lot of enemies around the Banquet Hall. Most of the packs, in fact.
+                </li>
+                <li>
+                    Upstairs: Converted a Maddened Survivalist to a Crazed Marksman in the pack near the Hunting Lodge.
+                </li>
+                <li>
+                    Removed a Teeming Marked Sister in The Cellar in the pack on the top right.
+                </li>
+                <li>
+                    Removed a Teeming Coven Thornshaper in The Cellar in the pack on the top left.
                 </li>
             </ul>
         </li>

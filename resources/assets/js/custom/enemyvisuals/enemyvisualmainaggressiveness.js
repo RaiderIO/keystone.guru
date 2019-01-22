@@ -48,7 +48,9 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
     _updateIconName() {
         if (this.enemyvisual.enemy.is_mdt) {
             this.iconName = 'mdt';
-            if (this.enemyvisual.enemy.getConnectedEnemy() !== null) {
+            if (this.enemyvisual.enemy.npc === null) {
+                this.iconName += '_mismatched';
+            } else if (this.enemyvisual.enemy.getConnectedEnemy() !== null) {
                 this.iconName += this.enemyvisual.enemy.isMismatched() ? '_mismatched' : '_ok';
             }
         } else {

@@ -16,7 +16,7 @@ class MoveTolDagorEnemiesToDifferentFloor extends Migration
     {
         // These IDs moved to a different floor altogether (because MDT). So we have to migrate all killzones that use
         // this pack (all of them) to the different floor to prevent breaking them all.
-        $ids = [2247, 2248, 2249, 2250, 2251];
+        $ids = [2076, 2077];
 
         // Select all killzones that need updating
         $killZones = DB::table('kill_zone_enemies')
@@ -47,9 +47,9 @@ class MoveTolDagorEnemiesToDifferentFloor extends Migration
                 }
             } else {
                 // Move the killzone to the next floor and set a decent position for it
-                $killZone->floor_id = 54;
-                $killZone->lat = -128.76;
-                $killZone->lng = 260;
+                $killZone->floor_id = 61;
+                $killZone->lat = -60;
+                $killZone->lng = 122.38;
                 $killZone->save();
             }
         }

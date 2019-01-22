@@ -172,7 +172,8 @@ class AdminEnemy extends Enemy {
         let connectedEnemy = this.getConnectedEnemy();
 
         return connectedEnemy.faction !== this.faction ||
-            connectedEnemy.teeming !== this.teeming;
+            ((connectedEnemy.teeming === 'visible' && this.teeming === 'hidden') ||
+                (connectedEnemy.teeming === 'hidden' && this.teeming === 'visible'));
     }
 
     /**
