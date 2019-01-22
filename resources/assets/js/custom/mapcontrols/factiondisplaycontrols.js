@@ -66,7 +66,8 @@ class FactionDisplayControls extends MapControl {
         $.each(enemyMapObjectGroups, function (i, enemyMapObjectGroup) {
             // For each object in the group
             $.each(enemyMapObjectGroup.objects, function (index, mapObject) {
-                if (mapObject.faction === faction) {
+                // One or either or any faction
+                if (mapObject.faction === faction || mapObject.faction === 'any') {
                     enemyMapObjectGroup.setMapObjectVisibility(mapObject, visible);
                 }
             });

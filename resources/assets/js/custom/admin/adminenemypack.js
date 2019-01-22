@@ -58,7 +58,7 @@ class AdminEnemyPack extends EnemyPack {
             self.layer.bindPopup(customPopupHtml, customOptions);
 
             // Have you tried turning it off and on again?
-            self.layer.off('popupopen', popupOpenFn);
+            self.layer.off('popupopen');
             self.layer.on('popupopen', popupOpenFn);
         };
 

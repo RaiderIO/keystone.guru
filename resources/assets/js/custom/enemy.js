@@ -148,7 +148,7 @@ class Enemy extends MapObject {
             self.layer.bindPopup(customPopupHtml, customOptions);
 
             // Have you tried turning it off and on again?
-            self.layer.off('popupopen', popupOpenFn);
+            self.layer.off('popupopen');
             self.layer.on('popupopen', popupOpenFn);
         }
     }
@@ -304,7 +304,8 @@ class Enemy extends MapObject {
 
         // Show a permanent tooltip for the enemy's name
         this.layer.on('click', function () {
-            if (self.selectable) {
+            if (self.map.isEnemySelectionEnabled() && self.selectable) {
+                console.log('enemy:selected fired!');
                 self.signal('enemy:selected');
             }
         });

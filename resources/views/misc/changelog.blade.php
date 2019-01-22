@@ -79,6 +79,31 @@
             </ul>
         </li>
         <li>
+            Siege of Boralus (Shared)
+            <ul>
+                <li>
+                    Added missing Irontide Marauder around Dread Captain Lockwood.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Siege of Boralus (Horde)
+            <ul>
+                <li>
+                    Marked a Scrimshaw Gutter and Kul Tiran Footman in the beginning at the end of the dock as
+                    Horde-only as was intended.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Siege of Boralus (Alliance)
+            <ul>
+                <li>
+                    Added missing Irontide Marauder around Dread Captain Lockwood.
+                </li>
+            </ul>
+        </li>
+        <li>
             Shrine of the Storm
             <ul>
                 <li>
@@ -120,11 +145,35 @@
                 <li>
                     Removed three Teeming Crazed Incubators around Merektha.
                 </li>
+                <li>
+                    Added two Eyes of Sethraliss which grant 12 enemy forces each upon completing the eye throwing
+                    event.
+                </li>
             </ul>
         </li>
         <li>
             The MOTHERLODE!!
             <ul>
+                <li>
+                    Added some missing Venture Co. Longshoreman on the dock in the beginning (though they give 0
+                    forces).
+                </li>
+                <li>
+                    Removed a Teeming Addled Thug and Hired Assassin in the pack prior to the first boss.
+                </li>
+                <li>
+                    Added a missing patrolling Venture Co. Mastermind before Rixxa Fluxflame.
+                </li>
+                <li>
+                    Added a Teeming Venture Co. Alchemist in a pack before Rixxa Fluxflame.
+                </li>
+                <li>
+                    Re-did the south pack just before the last pack before Rixxa Fluxflame (get it?).
+                </li>
+                <li>
+                    Removed a Teeming Venture Co. Alchemist and a Weapons Tester in the pack right before Rixxa
+                    Fluxflame.
+                </li>
                 <li>
                     Added a bunch of missing Crawler Mines in The V.M.Z, also updated mines to have correct Teeming
                     appearance.

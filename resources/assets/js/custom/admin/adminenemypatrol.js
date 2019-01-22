@@ -68,7 +68,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 layer.bindPopup(customPopupHtml, customOptions);
 
                 // Have you tried turning it off and on again?
-                layer.off('popupopen', popupOpenFn);
+                layer.off('popupopen');
                 layer.on('popupopen', popupOpenFn);
             });
         };

@@ -172,8 +172,8 @@ class AdminEnemy extends Enemy {
         let connectedEnemy = this.getConnectedEnemy();
 
         return connectedEnemy.faction !== this.faction ||
-            ((connectedEnemy.teeming === 'visible' && this.teeming === 'hidden') ||
-                (connectedEnemy.teeming === 'hidden' && this.teeming === 'visible'));
+            ((connectedEnemy.teeming === 'visible' && this.teeming !== 'visible') ||
+                (connectedEnemy.teeming === 'hidden' && this.teeming !== 'hidden'));
     }
 
     /**
@@ -370,7 +370,7 @@ class AdminEnemy extends Enemy {
             self.layer.bindPopup(customPopupHtml, customOptions);
 
             // Have you tried turning it off and on again?
-            self.layer.off('popupopen', popupOpenFn);
+            self.layer.off('popupopen');
             self.layer.on('popupopen', popupOpenFn);
         }
     }

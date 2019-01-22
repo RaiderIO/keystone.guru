@@ -199,7 +199,7 @@ class MapComment extends MapObject {
                 self.layer.unbindPopup();
                 self.layer.bindPopup(customPopupHtml, customOptions);
 
-                self.layer.off('popupopen', popupOpenFn);
+                self.layer.off('popupopen');
                 self.layer.on('popupopen', popupOpenFn);
             });
 

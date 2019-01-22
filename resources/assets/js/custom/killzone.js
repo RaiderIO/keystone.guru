@@ -379,7 +379,7 @@ class KillZone extends MapObject {
                 polygon.unbindPopup();
                 polygon.bindPopup(customPopupHtml, customOptions);
 
-                polygon.off('popupopen', popupOpenFn);
+                polygon.off('popupopen');
                 polygon.on('popupopen', popupOpenFn);
             }
         }

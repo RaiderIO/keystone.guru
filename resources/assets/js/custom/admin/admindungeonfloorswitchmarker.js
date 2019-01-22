@@ -65,7 +65,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
             });
         };
 
-        this.layer.off('popupopen', fn);
+        this.layer.off('popupopen');
         this.layer.on('popupopen', fn);
     }
 

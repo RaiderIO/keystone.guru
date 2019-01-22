@@ -99,20 +99,38 @@ class MDTDungeon
 
         $mdtNpcs = $this->_getMDTNPCs();
 
+        // NPC_ID => list of clones
+        $npcClones = [];
         // Find the enemy in a list of enemies
-        $clones = [];
         foreach ($mdtNpcs as $mdtNpcIndex => $mdtNpc) {
-            foreach ($mdtNpc['clones'] as $mdtId => $clone) {
+            $cloneCount = 0;
+            foreach ($mdtNpc['clones'] as $mdtCloneIndex => $clone) {
                 //Only clones that are on the same floor
                 foreach ($floors as $floor) {
                     if ((int)$clone['sublevel'] === $floor->index) {
                         // Set some additional props that come in handy when converting to an enemy
                         $clone['mdtNpcIndex'] = (int)$mdtNpcIndex;
-                        $clone['npcId'] = (int)$mdtNpc['id'];
-                        $clone['mdtId'] = (int)$mdtId;
-                        $clones[] = $clone;
+                        // Group ID
+                        $clone['g'] = isset($clone['g']) ? $clone['g'] : -1;
+
+                        $npcId = (int)$mdtNpc['id'];
+                        // Make sure array is set
+                        if (!isset($npcClones[$npcId])) {
+                            $npcClones[$npcId] = [];
+                        }
+                        // Gets funky here. There's instances where MDT has defined an NPC with the same NPC_ID twice
+                        // This fucks with the assignment below this if, because it'll overwrite the NPCs there.
+                        // We don't want this; instead append it at the end of the current array at the proper index
+                        // We calculate that at the hand of the current index in the second array ($cloneCount).
+                        if (isset($npcClones[$npcId][$mdtCloneIndex])) {
+                            $mdtCloneIndex += (count($npcClones[$npcId]) - $cloneCount);
+                        }
+                        // Append this clone to the array
+                        $npcClones[$npcId][$mdtCloneIndex] = $clone;
                     }
                 }
+
+                $cloneCount++;
             }
         }
 
@@ -121,34 +139,37 @@ class MDTDungeon
         foreach ($floors as $floor) {
             /** @var Collection $npcs */
             $npcs = Npc::where('dungeon_id', $floor->dungeon->id)->get();
-            foreach ($clones as $npcId => $clone) {
-                $enemy = new Enemy();
-                // Dummy so we can ID them later on
-                $enemy->is_mdt = true;
-                $enemy->floor_id = $floor->id;
-                $enemy->enemy_pack_id = -1;
-                $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
-                $enemy->npc_id = (int)$clone['npcId'];
-                $enemy->mdt_id = (int)$clone['mdtId'];
-                $enemy->enemy_id = -1;
-                $enemy->is_infested = false;
-                $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
-                $enemy->faction = isset($clone['faction']) ? ($clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
-                $enemy->enemy_forces_override = -1;
+            foreach ($npcClones as $npcId => $clones) {
+                foreach ($clones as $mdtCloneIndex => $clone) {
+                    $enemy = new Enemy();
+                    // Dummy so we can ID them later on
+                    $enemy->is_mdt = true;
+                    $enemy->floor_id = $floor->id;
+                    $enemy->enemy_pack_id = (int)$clone['g'];
+                    $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
+                    $enemy->npc_id = $npcId;
+                    // All MDT_IDs are 1-indexed, because LUA
+                    $enemy->mdt_id = $mdtCloneIndex;
+                    $enemy->enemy_id = -1;
+                    $enemy->is_infested = false;
+                    $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
+                    $enemy->faction = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
+                    $enemy->enemy_forces_override = -1;
 
-                $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
-                $enemy->lat = $latLng['lat'];
-                $enemy->lng = $latLng['lng'];
+                    $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
+                    $enemy->lat = $latLng['lat'];
+                    $enemy->lng = $latLng['lng'];
 
-                $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
+                    $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
 
-                // Some properties which are dynamic on a normal enemy but static here
-                $enemy->raid_marker_name = null;
-                $enemy->infested_yes_votes = 0;
-                $enemy->infested_no_votes = 0;
-                $enemy->infested_user_vote = null;
+                    // Some properties which are dynamic on a normal enemy but static here
+                    $enemy->raid_marker_name = null;
+                    $enemy->infested_yes_votes = 0;
+                    $enemy->infested_no_votes = 0;
+                    $enemy->infested_user_vote = null;
 
-                $enemies[] = $enemy;
+                    $enemies[] = $enemy;
+                }
             }
         }
 
