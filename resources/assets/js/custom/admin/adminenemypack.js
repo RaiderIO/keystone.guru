@@ -21,7 +21,6 @@ class AdminEnemyPack extends EnemyPack {
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
         // This also cannot be a private function since that'll apparently give different signatures as well.
         let popupOpenFn = function (event) {
-            console.log(self.faction);
             $('#enemy_pack_edit_popup_faction_' + self.id).val(self.faction);
 
             // Refresh all select pickers so they work again

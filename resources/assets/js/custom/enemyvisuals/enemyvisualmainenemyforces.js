@@ -16,7 +16,8 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
 
         return {
             // Set the main html
-            main_visual_classes: 'badge badge-primary badge-pill badge_enemy_forces',
+            main_visual_classes: 'badge badge-primary badge-pill badge_enemy_forces ' +
+                ((this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') ? 'teeming' : ''),
             main_visual_html: this.enemyvisual.enemy.getEnemyForces()
         };
     }

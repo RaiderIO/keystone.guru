@@ -31,7 +31,8 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
 
         return {
             // Set the main icon
-            main_visual_classes: 'enemy_icon ' + (this.iconName + '_enemy_icon '),
+            main_visual_classes: 'enemy_icon ' + (this.iconName + '_enemy_icon ') + ' ' +
+                ((this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') ? 'teeming' : ''),
             selection_classes:
             // If we're in kill zone mode..
                 (this.enemyvisual.enemy.isSelectable() ?

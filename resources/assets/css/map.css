@@ -333,6 +333,10 @@ html, body, #map, #app, .wrapper {
     background-blend-mode: hard-light;
 }
 
+.teeming {
+    border: 1px solid red;
+}
+
 .aggressive_enemy_icon {
     background-color: #dc3c3c !important;
 }

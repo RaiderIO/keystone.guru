@@ -8,6 +8,16 @@
         v2.0 (2019/01/xx)
     </h4>
     <p>
+        Map changes:
+
+    <ul>
+        <li>
+            Teeming enemies are now displayed with a red border around them to help see what changed from a 'normal'
+            week.
+        </li>
+    </ul>
+    </p>
+    <p>
         Mapping changes:
     <ul>
         <li>
@@ -93,13 +103,63 @@
                     Marked a Scrimshaw Gutter and Kul Tiran Footman in the beginning at the end of the dock as
                     Horde-only as was intended.
                 </li>
+                <li>
+                    Adds for Sergeant Bainbridge are now displayed.
+                </li>
+                <li>
+                    Fixed various Scrimshaw Gutters and Kul Tiran Footmen marked as 'any' to Horde right after the
+                    broken ship, before Dread Captain Lockwood.
+                </li>
+                <li>
+                    Removed one solo Scrimshaw Gutter right after the broken ship, before Dread Captain Lockwood.
+                </li>
+                <li>
+                    Removed two Teeming Ashvane Spotters in the big pack right after the broken ship, before Dread
+                    Captain Lockwood.
+                </li>
             </ul>
         </li>
         <li>
             Siege of Boralus (Alliance)
             <ul>
                 <li>
-                    Added missing Irontide Marauder around Dread Captain Lockwood.
+                    Added various enemies that exist below the docks at the start.
+                </li>
+                <li>
+                    Added missing pack of two Blacktar Bombers in the initial Docks section.
+                </li>
+                <li>
+                    Added missing pack of five Scrimshaw Gutters and a Scrimshaw Enforcer in the initial Docks section.
+                </li>
+                <li>
+                    Added missing Scrimshaw Gutter in the pack in the corner after the initial Docks section, when going
+                    down the stairs.
+                </li>
+                <li>
+                    Added a missing pack of two Snarling Dockhounds at the gallows before Chopper Redhook.
+                </li>
+                <li>
+                    Merged two packs at the gallows before Chopper Redhook; converted two Scrimshaw Gutters to Blacktar
+                    Bombers to complete the new pack.
+                </li>
+                <li>
+                    Converted an Irontide Enforcer to an Irontide Raider in one of the first packs on the square with
+                    Chopper Redhook.
+                </li>
+                <li>
+                    Added Chopper Redhook and his adds.
+                </li>
+                <li>
+                    Added a pack of seven Irontide Marauders on the docks right before the broken ship.
+                </li>
+                <li>
+                    Added two Irontide Marauders on the docks right after the broken ship.
+                </li>
+                <li>
+                    Added two Irontide Marauder around Dread Captain Lockwood.
+                </li>
+                <li>
+                    Removed a pack of six enemies as the last pack before Viq'Goth.
                 </li>
             </ul>
         </li>
