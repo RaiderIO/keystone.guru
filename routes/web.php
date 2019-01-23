@@ -187,6 +187,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
 
+        Route::post('/mdt/details', 'MDTImportController@details')->name('mdt.details');
+
         Route::group(['middleware' => ['auth', 'role:user']], function () {
             Route::post('/profile/legal', 'APIProfileController@legalAgree');
 

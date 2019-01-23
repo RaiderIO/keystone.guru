@@ -19,6 +19,26 @@ class MDTImportController extends Controller
     }
 
     /**
+     * Returns some details about the passed string.
+     * @param Request $request
+     * @return array
+     * @throws \Exception
+     */
+    public function details(Request $request)
+    {
+        $string = $request->get('import_string');
+
+        $importString = new ImportString();
+
+        // @TODO improve exception handling
+        $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute();
+
+        return [
+            'dungeon' => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon')
+        ];
+    }
+
+    /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
