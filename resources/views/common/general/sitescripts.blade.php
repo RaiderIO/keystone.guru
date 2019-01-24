@@ -17,8 +17,6 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
         $('#legal_confirm_btn').bind('click', _agreeLegalBtnClicked);
         @endif
         @endauth
-
-        $('#import_string').bind('change', _importStringChanged);
     });
 
     /**
@@ -40,21 +38,6 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
             },
             complete: function () {
                 $('#legal_confirm_btn').removeAttr('disabled');
-            }
-        });
-    }
-
-    function _importStringChanged(){
-        // @TODO Make sure if people start typing here it doesn't keep firing events
-        $.ajax({
-            type: 'POST',
-            url: '{{ route('mdt.details') }}',
-            dataType: 'json',
-            success: function () {
-
-            },
-            error: function() {
-                addFixedFooterError('Error!');
             }
         });
     }

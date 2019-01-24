@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Logic\MDT\IO\ImportString;
+use App\Models\AffixGroup;
 use App\Models\MDTImport;
 use Illuminate\Http\Request;
 
@@ -30,12 +31,27 @@ class MDTImportController extends Controller
 
         $importString = new ImportString();
 
-        // @TODO improve exception handling
-        $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute();
+        try {
+            $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(false);
 
-        return [
-            'dungeon' => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon')
-        ];
+            $affixes = [];
+            foreach ($dungeonRoute->affixes as $affixGroup) {
+                /** @var $affixGroup AffixGroup */
+                $affixes[] = $affixGroup->getTextAttribute();
+            }
+
+            $result = [
+                'dungeon' => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon'),
+                'affixes' => $affixes,
+                'pulls' => $dungeonRoute->killzones->count(),
+                'enemy_forces' => $dungeonRoute->getEnemyForcesAttribute(),
+                'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required
+            ];
+
+            return $result;
+        } catch (\Exception $ex) {
+            abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+        }
     }
 
     /**
@@ -50,15 +66,13 @@ class MDTImportController extends Controller
         $importString = new ImportString();
 
         // @TODO improve exception handling
-        $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute();
+        $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(true);
 
         // Keep track of the import
         $mdtImport = new MDTImport();
         $mdtImport->dungeon_route_id = $dungeonRoute->id;
         $mdtImport->import_string = $string;
         $mdtImport->save();
-
-        dd($dungeonRoute);
 
 
         return view('home');

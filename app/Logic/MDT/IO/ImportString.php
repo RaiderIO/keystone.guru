@@ -16,6 +16,7 @@ use App\Models\DungeonRouteAffixGroup;
 use App\Models\Enemy;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -73,10 +74,11 @@ class ImportString
 
     /**
      * Gets the dungeon route based on the currently encoded string.
+     * @param $save boolean True to save the route and all associated models, false to not save & couple.
      * @return DungeonRoute|bool DungeonRoute if the route could be constructed, false if the string was invalid.
      * @throws \Exception
      */
-    public function getDungeonRoute()
+    public function getDungeonRoute($save = false)
     {
         // @TODO This needs a "table" to dungeon route conversion first
         $lua = $this->_getLua();
@@ -97,16 +99,27 @@ class ImportString
             $dungeonRoute->title = $decoded['text'];
             $dungeonRoute->difficulty = 'Casual';
 
-            // Preemptively save the route
-            $dungeonRoute->save();
+            if ($save) {
+                // Preemptively save the route
+                $dungeonRoute->save();
+            } else {
+                $dungeonRoute->killzones = new Collection();
+            }
 
             // Set the affix for this route
             $affixGroup = Conversion::convertWeekToAffixGroup($decoded['week']);
             if ($affixGroup instanceof AffixGroup) {
-                $dungeonAffixGroup = new DungeonRouteAffixGroup();
-                $dungeonAffixGroup->dungeon_route_id = $dungeonRoute->id;
-                $dungeonAffixGroup->affix_group_id = $affixGroup->id;
-                $dungeonAffixGroup->save();
+                if ($save) {
+                    // Something we can save to the database
+                    $dungeonAffixGroup = new DungeonRouteAffixGroup();
+                    $dungeonAffixGroup->affix_group_id = $affixGroup->id;
+                    $dungeonAffixGroup->dungeon_route_id = $dungeonRoute->id;
+                    $dungeonAffixGroup->save();
+                } else {
+                    // Something we can just return and have the user read
+                    $dungeonRoute->affixes = new Collection();
+                    $dungeonRoute->affixes->push($affixGroup);
+                }
             }
 
             // Create killzones and attach enemies
@@ -120,9 +133,13 @@ class ImportString
             foreach ($decoded['value']['pulls'] as $pullIndex => $pull) {
                 // Create a killzone
                 $killZone = new KillZone();
-                $killZone->dungeon_route_id = $dungeonRoute->id;
-                // Save it so we have an ID that we can use later on
-                $killZone->save();
+                if ($save) {
+                    $killZone->dungeon_route_id = $dungeonRoute->id;
+                    // Save it so we have an ID that we can use later on
+                    $killZone->save();
+                } else {
+                    $killZone->enemies = new Collection();
+                }
 
                 // Init some variables
                 $totalEnemiesKilled = 0;
@@ -173,10 +190,14 @@ class ImportString
                         $kzLng += $enemy->lng;
 
                         // Couple the KillZoneEnemy to its KillZone
-                        $kzEnemy = new KillZoneEnemy();
-                        $kzEnemy->kill_zone_id = $killZone->id;
-                        $kzEnemy->enemy_id = $enemy->id;
-                        $kzEnemy->save();
+                        if ($save) {
+                            $kzEnemy = new KillZoneEnemy();
+                            $kzEnemy->enemy_id = $enemy->id;
+                            $kzEnemy->kill_zone_id = $killZone->id;
+                            $kzEnemy->save();
+                        } else {
+                            $killZone->enemies->push($enemy);
+                        }
 
                         // Should be the same floor_id all the time, but we need it anyways
                         $floorId = $enemy->floor_id;
@@ -189,13 +210,15 @@ class ImportString
                 $killZone->floor_id = $floorId;
                 $killZone->lat = $kzLat / $totalEnemiesKilled;
                 $killZone->lng = $kzLng / $totalEnemiesKilled;
-                $killZone->save();
+
+
+                if ($save) {
+                    $killZone->save();
+                } else {
+                    $dungeonRoute->killzones->push($killZone);
+                }
             }
         }
-
-        echo "Finished importing!";
-        dd($decoded);
-
 
         return $dungeonRoute;
     }

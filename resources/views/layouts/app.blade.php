@@ -346,11 +346,11 @@ $isProduction = config('app.env') === 'production';
 
 <script id="import_string_details_template" type="text/x-handlebars-template">
     @{{#details}}
-    <div class="row">
-        <div class="col font-weight-bold">
-            @{{key}}
+    <div class="row no-gutters">
+        <div class="col-4 font-weight-bold">
+            @{{key}}:
         </div>
-        <div class="col">
+        <div class="col-8">
             @{{value}}
         </div>
     </div>
@@ -421,16 +421,17 @@ $isProduction = config('app.env') === 'production';
                         {{ Form::textarea('import_string', '', ['class' => 'form-control']) }}
                     </div>
                     <div class="form-group">
-                        {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto']) !!}
+                        <div id="import_string_details">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
                         <div class="col-md">
 
                         </div>
                     </div>
                     {{ Form::close() }}
-
-                    <div id="import_string_details">
-
-                    </div>
                 </div>
             </div>
         </div>

@@ -17,7 +17,48 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 
         // Make sure selectpicker is enabled
         $(".selectpicker").selectpicker();
+
+        $('#import_string').bind('change', _importStringChanged);
     });
+
+    function _importStringChanged() {
+        // @TODO Make sure if people start typing here it doesn't keep firing events
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('mdt.details') }}',
+            dataType: 'json',
+            data: {
+                'import_string': $('#import_string').val()
+            },
+            success: function (responseData) {
+                var templateHtml = $('#import_string_details_template').html();
+
+                var template = handlebars.compile(templateHtml);
+
+                var data = {
+                    details: [
+                        {key: "{{ __('Dungeon') }}", value: responseData.dungeon},
+                        {key: "{{ __('Affixes') }}", value: responseData.affixes.join('<br>')},
+                        {key: "{{ __('Pulls') }}", value: responseData.pulls},
+                        {
+                            key: "{{ __('Enemy forces') }}",
+                            value: responseData.enemy_forces + '/' + responseData.enemy_forces_max
+                        }
+                    ]
+                };
+
+                // Build the preview from the template
+                $("#import_string_details").html(template(data));
+
+                $('#mdt_import_modal input[type="submit"]').prop('disabled', false);
+            }, error: function (xhr, textStatus, errorThrown) {
+                $("#import_string_details").html('');
+
+                $('#mdt_import_modal input[type="submit"]').prop('disabled', true);
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+            }
+        });
+    }
 
     /**
      * The default function that should be called when an ajax request fails (error handler)
