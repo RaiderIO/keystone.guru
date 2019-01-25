@@ -18,17 +18,20 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
         // Make sure selectpicker is enabled
         $(".selectpicker").selectpicker();
 
-        $('#import_string').bind('change', _importStringChanged);
+        $('#import_string').bind('paste', _importStringPasted);
     });
 
-    function _importStringChanged() {
-        // @TODO Make sure if people start typing here it doesn't keep firing events
+    /**
+     * Called whenever the MDT import string has been pasted into the text area.
+     **/
+    function _importStringPasted(typedEvent) {
+        // https://stackoverflow.com/questions/686995/catch-paste-input
         $.ajax({
             type: 'POST',
             url: '{{ route('mdt.details') }}',
             dataType: 'json',
             data: {
-                'import_string': $('#import_string').val()
+                'import_string': typedEvent.originalEvent.clipboardData.getData('text')
             },
             success: function (responseData) {
                 var templateHtml = $('#import_string_details_template').html();
@@ -50,6 +53,8 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
                 // Build the preview from the template
                 $("#import_string_details").html(template(data));
 
+                // Can no longer edit it
+                $('#import_string').prop('disabled', true);
                 $('#mdt_import_modal input[type="submit"]').prop('disabled', false);
             }, error: function (xhr, textStatus, errorThrown) {
                 $("#import_string_details").html('');

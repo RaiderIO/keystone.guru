@@ -13,7 +13,7 @@
             "type":"package",
             "package": {
                 "name": "nnogga/MethodDungeonTools",
-                "version": "2.2.53",
+                "version": "2.3.1",
                 "source": {
                     "url": "https://github.com/nnogga/MethodDungeonTools.git",
                     "type": "git",
