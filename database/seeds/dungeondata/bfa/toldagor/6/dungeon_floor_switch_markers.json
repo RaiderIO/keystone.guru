@@ -1,12 +1,5 @@
 [
     {
-        "id": 39,
-        "floor_id": 58,
-        "target_floor_id": -1,
-        "lat": -72.260000000000005,
-        "lng": 207.75
-    },
-    {
         "id": 40,
         "floor_id": 58,
         "target_floor_id": 57,

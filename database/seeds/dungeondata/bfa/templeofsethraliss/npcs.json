@@ -1,5 +1,14 @@
 [
     {
+        "id": 68819,
+        "dungeon_id": 19,
+        "classification_id": 1,
+        "name": "Eye of Sethraliss",
+        "base_health": 1,
+        "enemy_forces": 12,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 133379,
         "dungeon_id": 19,
         "classification_id": 3,
@@ -42,15 +51,6 @@
         "name": "Faithless Tender",
         "base_health": 294335,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 134390,
-        "dungeon_id": 19,
-        "classification_id": 2,
-        "name": "Sand-crusted Striker",
-        "base_health": 117734,
-        "enemy_forces": 2,
         "aggressiveness": "aggressive"
     },
     {
@@ -162,6 +162,15 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 135846,
+        "dungeon_id": 19,
+        "classification_id": 2,
+        "name": "Sand-crusted Striker",
+        "base_health": 117734,
+        "enemy_forces": 2,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 135971,
         "dungeon_id": 19,
         "classification_id": 2,
@@ -221,7 +230,7 @@
         "classification_id": 2,
         "name": "Heart Guardian",
         "base_health": 470936,
-        "enemy_forces": 6,
+        "enemy_forces": 4,
         "aggressiveness": "neutral"
     },
     {

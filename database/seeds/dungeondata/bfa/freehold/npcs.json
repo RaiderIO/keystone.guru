@@ -1,10 +1,28 @@
 [
     {
+        "id": 126845,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Captain Jolly",
+        "base_health": 2590016,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 126847,
         "dungeon_id": 15,
         "classification_id": 3,
         "name": "Captain Raoul",
-        "base_health": 1,
+        "base_health": 2590016,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 126848,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Captain Eudora",
+        "base_health": 2590016,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -36,6 +54,24 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 126969,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Trothak",
+        "base_health": 2119104,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 126983,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "name": "Harlan Sweete",
+        "base_health": 2943200,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 127106,
         "dungeon_id": 15,
         "classification_id": 2,
@@ -54,6 +90,15 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 127119,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "name": "Freehold Deckhand",
+        "base_health": 58867,
+        "enemy_forces": 2,
+        "aggressiveness": "neutral"
+    },
+    {
         "id": 127124,
         "dungeon_id": 15,
         "classification_id": 1,
@@ -69,33 +114,6 @@
         "name": "Irontide Mastiff",
         "base_health": 294335,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 129431,
-        "dungeon_id": 15,
-        "classification_id": 3,
-        "name": "Captain Eudora",
-        "base_health": 1,
-        "enemy_forces": 0,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 129432,
-        "dungeon_id": 15,
-        "classification_id": 3,
-        "name": "Captain Jolly",
-        "base_health": 1,
-        "enemy_forces": 0,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 129440,
-        "dungeon_id": 15,
-        "classification_id": 3,
-        "name": "Harlan Sweete",
-        "base_health": 1,
-        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -207,11 +225,20 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 129699,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Ludwig Von Tortollan",
+        "base_health": 1177340,
+        "enemy_forces": 4,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 129732,
         "dungeon_id": 15,
         "classification_id": 3,
         "name": "Skycap'n Kragg",
-        "base_health": 1,
+        "base_health": 2060345,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -268,15 +295,6 @@
         "base_health": 470936,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
-    },
-    {
-        "id": 130521,
-        "dungeon_id": 15,
-        "classification_id": 1,
-        "name": "Freehold Deckhand",
-        "base_health": 58867,
-        "enemy_forces": 2,
-        "aggressiveness": "neutral"
     },
     {
         "id": 130522,

@@ -1,9 +1,36 @@
 [
     {
+        "id": 129214,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Coin-Operated Crowd Pummeler",
+        "base_health": 3414112,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 129227,
         "dungeon_id": 20,
         "classification_id": 3,
         "name": "Azerokk",
+        "base_health": 1,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 129231,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Rixxa Fluxflame",
+        "base_health": 1,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 129232,
+        "dungeon_id": 20,
+        "classification_id": 3,
+        "name": "Mogul Razdunk",
         "base_health": 1,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
@@ -45,6 +72,15 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 130485,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "name": "Mechanized Peacekeeper",
+        "base_health": 470936,
+        "enemy_forces": 12,
+        "aggressiveness": "neutral"
+    },
+    {
         "id": 130488,
         "dungeon_id": 20,
         "classification_id": 2,
@@ -78,15 +114,6 @@
         "name": "Venture Co. Earthshaper",
         "base_health": 294335,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 131227,
-        "dungeon_id": 20,
-        "classification_id": 3,
-        "name": "Mogul Razdunk",
-        "base_health": 1,
-        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -189,6 +216,15 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 135975,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "name": "Off-Duty Laborer",
+        "base_health": 117734,
+        "enemy_forces": 1,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 136006,
         "dungeon_id": 20,
         "classification_id": 1,
@@ -288,7 +324,7 @@
         "aggressiveness": "neutral"
     },
     {
-        "id": 138063,
+        "id": 138064,
         "dungeon_id": 20,
         "classification_id": 1,
         "name": "Posh Vacationer",
@@ -302,24 +338,6 @@
         "classification_id": 1,
         "name": "Footbomb Hooligan",
         "base_health": 58867,
-        "enemy_forces": 0,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 139273,
-        "dungeon_id": 20,
-        "classification_id": 3,
-        "name": "Rixxa Fluxflame",
-        "base_health": 1,
-        "enemy_forces": 0,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 139904,
-        "dungeon_id": 20,
-        "classification_id": 3,
-        "name": "Coin-Operated Crowd Pummeler",
-        "base_health": 1,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },

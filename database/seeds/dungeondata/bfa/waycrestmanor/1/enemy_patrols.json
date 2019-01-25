@@ -1,45 +1,45 @@
 [
     {
         "id": 20,
-        "floor_id": 61,
+        "floor_id": 60,
         "enemy_id": -1,
         "faction": "any",
         "vertices": [
             {
-                "id": 74,
-                "lat": 145.25,
-                "lng": -187.38
+                "id": 802,
+                "lat": 145.62,
+                "lng": -187.5
             },
             {
-                "id": 75,
-                "lat": 146,
+                "id": 803,
+                "lat": 145.5,
                 "lng": -139.25
             }
         ]
     },
     {
         "id": 21,
-        "floor_id": 61,
+        "floor_id": 60,
         "enemy_id": -1,
         "faction": "any",
         "vertices": [
             {
-                "id": 738,
+                "id": 808,
                 "lat": 142.5,
                 "lng": -110.75
             },
             {
-                "id": 739,
+                "id": 809,
                 "lat": 142.25,
                 "lng": -131.5
             },
             {
-                "id": 740,
+                "id": 810,
                 "lat": 152.88,
-                "lng": -132
+                "lng": -131.62
             },
             {
-                "id": 741,
+                "id": 811,
                 "lat": 152.88,
                 "lng": -110.5
             }
@@ -47,7 +47,7 @@
     },
     {
         "id": 22,
-        "floor_id": 61,
+        "floor_id": 60,
         "enemy_id": -1,
         "faction": "any",
         "vertices": [
@@ -65,7 +65,7 @@
     },
     {
         "id": 23,
-        "floor_id": 61,
+        "floor_id": 60,
         "enemy_id": -1,
         "faction": "any",
         "vertices": [
@@ -118,7 +118,7 @@
     },
     {
         "id": 24,
-        "floor_id": 61,
+        "floor_id": 60,
         "enemy_id": -1,
         "faction": "any",
         "vertices": [
@@ -136,7 +136,7 @@
     },
     {
         "id": 76,
-        "floor_id": 61,
+        "floor_id": 60,
         "enemy_id": -1,
         "faction": "any",
         "vertices": [
@@ -189,7 +189,7 @@
     },
     {
         "id": 100,
-        "floor_id": 61,
+        "floor_id": 60,
         "enemy_id": -1,
         "faction": "any",
         "vertices": [

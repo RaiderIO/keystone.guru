@@ -14,8 +14,17 @@
         "classification_id": 2,
         "name": "Saltwater Snapper",
         "base_health": 353202,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "aggressiveness": "neutral"
+    },
+    {
+        "id": 127479,
+        "dungeon_id": 22,
+        "classification_id": 3,
+        "name": "The Sand Queen",
+        "base_health": 2060240,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
     },
     {
         "id": 127480,
@@ -69,6 +78,15 @@
         "name": "Ashvane Flamecaster",
         "base_health": 412069,
         "enemy_forces": 7,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 127490,
+        "dungeon_id": 22,
+        "classification_id": 3,
+        "name": "Knight Captain Valyri",
+        "base_health": 2060240,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -126,15 +144,6 @@
         "aggressiveness": "aggressive"
     },
     {
-        "id": 130087,
-        "dungeon_id": 22,
-        "classification_id": 2,
-        "name": "Irontide Raider",
-        "base_health": 176601,
-        "enemy_forces": 4,
-        "aggressiveness": "aggressive"
-    },
-    {
         "id": 130582,
         "dungeon_id": 22,
         "classification_id": 1,
@@ -142,15 +151,6 @@
         "base_health": 88301,
         "enemy_forces": 0,
         "aggressiveness": "neutral"
-    },
-    {
-        "id": 130646,
-        "dungeon_id": 22,
-        "classification_id": 3,
-        "name": "Knight Captain Valyri",
-        "base_health": 1,
-        "enemy_forces": 0,
-        "aggressiveness": "aggressive"
     },
     {
         "id": 131112,
@@ -171,12 +171,12 @@
         "aggressiveness": "aggressive"
     },
     {
-        "id": 134927,
+        "id": 135254,
         "dungeon_id": 22,
-        "classification_id": 3,
-        "name": "The Sand Queen",
-        "base_health": 1,
-        "enemy_forces": 0,
+        "classification_id": 2,
+        "name": "Irontide Raider",
+        "base_health": 176601,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -195,6 +195,15 @@
         "name": "Ashvane Jailer",
         "base_health": 470936,
         "enemy_forces": 7,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 135706,
+        "dungeon_id": 22,
+        "classification_id": 2,
+        "name": "Bilge Rat Looter",
+        "base_health": 176601,
+        "enemy_forces": 3,
         "aggressiveness": "aggressive"
     },
     {

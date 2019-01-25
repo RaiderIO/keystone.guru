@@ -76,7 +76,7 @@
         "dungeon_id": 16,
         "classification_id": 3,
         "name": "Mchimba the Embalmer",
-        "base_health": 1,
+        "base_health": 2060240,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -148,7 +148,7 @@
         "dungeon_id": 16,
         "classification_id": 3,
         "name": "The Golden Serpent",
-        "base_health": 1,
+        "base_health": 2060240,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -157,7 +157,25 @@
         "dungeon_id": 16,
         "classification_id": 3,
         "name": "Aka'ali the Conqueror",
-        "base_health": 1,
+        "base_health": 1059552,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 135472,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "Zanazal the Wise",
+        "base_health": 1059606,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 135475,
+        "dungeon_id": 16,
+        "classification_id": 3,
+        "name": "Kula the Butcher",
+        "base_health": 1059606,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },

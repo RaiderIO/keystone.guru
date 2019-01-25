@@ -1,7 +1,7 @@
 [
     {
         "id": 87,
-        "floor_id": 60,
+        "floor_id": 61,
         "faction": "any",
         "label": "Enemy pack",
         "vertices": [
@@ -24,35 +24,45 @@
     },
     {
         "id": 89,
-        "floor_id": 60,
+        "floor_id": 61,
         "faction": "any",
         "label": "Enemy pack",
         "vertices": [
             {
-                "id": 3041,
-                "lat": 70.5,
-                "lng": -126.26000000000001
+                "id": 3223,
+                "lat": 70.310000000000002,
+                "lng": -127.25
             },
             {
-                "id": 3042,
-                "lat": 70.25,
-                "lng": -143.75999999999999
+                "id": 3224,
+                "lat": 70.379999999999995,
+                "lng": -138.44
             },
             {
-                "id": 3043,
-                "lat": 84,
-                "lng": -133.25999999999999
+                "id": 3225,
+                "lat": 70.379999999999995,
+                "lng": -138.38
             },
             {
-                "id": 3044,
-                "lat": 70.5,
-                "lng": -126.25
+                "id": 3226,
+                "lat": 84.689999999999998,
+                "lng": -138.5
+            },
+            {
+                "id": 3227,
+                "lat": 84.75,
+                "lng": -127.5
+            },
+            {
+                "id": 3228,
+                "lat": 84.75,
+                "lng": -127.44
             }
         ]
     },
     {
         "id": 118,
-        "floor_id": 60,
+        "floor_id": 61,
         "faction": "any",
         "label": "Enemy pack",
         "vertices": [
@@ -80,7 +90,7 @@
     },
     {
         "id": 119,
-        "floor_id": 60,
+        "floor_id": 61,
         "faction": "any",
         "label": "Enemy pack",
         "vertices": [
@@ -107,8 +117,36 @@
         ]
     },
     {
+        "id": 446,
+        "floor_id": 61,
+        "faction": "any",
+        "label": "Enemy pack",
+        "vertices": [
+            {
+                "id": 3287,
+                "lat": 119.62,
+                "lng": -60.880000000000003
+            },
+            {
+                "id": 3288,
+                "lat": 119.5,
+                "lng": -68.379999999999995
+            },
+            {
+                "id": 3289,
+                "lat": 124.38,
+                "lng": -68.379999999999995
+            },
+            {
+                "id": 3290,
+                "lat": 124.25,
+                "lng": -60.880000000000003
+            }
+        ]
+    },
+    {
         "id": 495,
-        "floor_id": 60,
+        "floor_id": 61,
         "faction": "any",
         "label": "Enemy pack",
         "vertices": [
