@@ -39,6 +39,7 @@
         "nnogga/MethodDungeonTools": "*"
     },
     "require-dev": {
+        "filp/whoops": "^2.0",
         "barryvdh/laravel-debugbar": "^3.1",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "^1.0",
