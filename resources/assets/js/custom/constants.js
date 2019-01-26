@@ -52,6 +52,9 @@ var c = {
         route: {
             defaultColor: '#9DFF56',
         },
+        brushline: {
+            defaultColor: '#9DFF56',
+        },
         killzone: {
             colors: {
                 unsavedBorder: '#E25D5D',

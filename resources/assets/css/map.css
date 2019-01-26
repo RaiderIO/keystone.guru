@@ -120,9 +120,14 @@ html, body, #map, #app, .wrapper {
     transition: all 0.2s;
 }
 
+#sidebar .draw_icon.leaflet-draw-toolbar-button-enabled,
 #sidebar .draw_icon:hover {
-    background: #FFF;
+    background: rgb(235, 235, 235);
     color: #DF691A;
+}
+
+#sidebar .draw_icon.leaflet-draw-toolbar-button-enabled {
+    border: 2px solid #DF691A;
 }
 
 .floating_panel,
@@ -426,7 +431,7 @@ html, body, #map, #app, .wrapper {
     color: #5cb85c;
 }
 
-.map_route_edit_popup_class_color {
+.map_polyline_edit_popup_class_color {
     height: 32px;
     margin: 2px 10px;
     border-radius: 3px;

@@ -15,6 +15,12 @@
             Teeming enemies are now displayed with a red border around them to help see what changed from a 'normal'
             week.
         </li>
+        <li>
+            Newly drawn Routes are no longer half-transparent before a refresh of the map.
+        </li>
+        <li>
+            Currently selected drawing tool is now highlighted for the duration of the drawing.
+        </li>
     </ul>
     </p>
     <p>

@@ -529,6 +529,7 @@ $isProduction = config('app.env') === 'production';
     <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
     <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
+    <script src="{{ asset('js/custom/brushline.js') }}"></script>
 
     <script src="{{ asset('js/custom/enemyselection/enemyselection.js') }}"></script>
     <script src="{{ asset('js/custom/enemyselection/killzoneenemyselection.js') }}"></script>
@@ -555,14 +556,15 @@ $isProduction = config('app.env') === 'production';
 
     <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/brushlinemapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/enemymapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/enemypackmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/killzonemapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/mapcommentmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
 
 @endif
 @yield('scripts')

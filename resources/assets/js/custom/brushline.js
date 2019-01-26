@@ -1,55 +1,30 @@
 $(function () {
-    L.Draw.Route = L.Draw.Polyline.extend({
+    L.Draw.BrushLine = L.Draw.Polyline.extend({
         statics: {
-            TYPE: 'route'
+            TYPE: 'brushline'
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.Route.TYPE;
+            this.type = L.Draw.BrushLine.TYPE;
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
-
-    // Copy pasted from https://github.com/Leaflet/Leaflet.draw/blob/develop/src/draw/handler/Draw.Polyline.js#L470
-    // Adjusted so that it uses the correct drawing strings
-    L.Draw.Route.prototype._getTooltipText = function () {
-		var showLength = this.options.showLength,
-			labelText, distanceStr;
-		if (this._markers.length === 0) {
-			labelText = {
-				text: L.drawLocal.draw.handlers.route.tooltip.start
-			};
-		} else {
-			distanceStr = showLength ? this._getMeasurementString() : '';
-
-			if (this._markers.length === 1) {
-				labelText = {
-					text: L.drawLocal.draw.handlers.route.tooltip.cont,
-					subtext: distanceStr
-				};
-			} else {
-				labelText = {
-					text: L.drawLocal.draw.handlers.route.tooltip.end,
-					subtext: distanceStr
-				};
-			}
-		}
-		return labelText;
-    }
 });
 
-class Route extends MapObject {
+class BrushLine extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
         let self = this;
 
-        this.label = 'Route';
+        this.label = 'BrushLine';
+        this.type = 'brushline';
+        this.weight = 3;
         this.saving = false;
         this.deleting = false;
         this.decorator = null;
 
-        this.setColor(c.map.route.defaultColor);
+        this.setColor(c.map.brushline.defaultColor);
         this.setSynced(false);
 
         this.register('synced', this, function () {
@@ -63,44 +38,8 @@ class Route extends MapObject {
         });
     }
 
-    /**
-     * Cleans up the decorator of this route, removing it from the map.
-     * @private
-     */
-    _cleanDecorator() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
-
-        if (this.decorator !== null) {
-            this.map.leafletMap.removeLayer(this.decorator);
-        }
-    }
-
-    /**
-     * Rebuild the decorators for this route (directional arrows etc).
-     * @private
-     */
-    _rebuildDecorator() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
-
-        this._cleanDecorator();
-
-        this.decorator = L.polylineDecorator(this.layer, {
-            patterns: [
-                {
-                    offset: 25,
-                    repeat: 100,
-                    symbol: L.Symbol.arrowHead({
-                        pixelSize: 12,
-                        pathOptions: {fillOpacity: 1, weight: 0, color: this.routeColor}
-                    })
-                }
-            ]
-        });
-        this.decorator.addTo(this.map.leafletMap);
-    }
-
     setColor(color) {
-        this.routeColor = color;
+        this.brushlineColor = color;
         this.setColors({
             unsavedBorder: color,
             unsaved: color,
@@ -113,14 +52,21 @@ class Route extends MapObject {
         });
     }
 
+    setWeight(weight){
+        this.weight = weight;
+        this.layer.setStyle({
+            weight: this.weight
+        })
+    }
+
     edit() {
-        console.assert(this instanceof Route, this, 'this was not a Route');
+        console.assert(this instanceof BrushLine, this, 'this was not a BrushLine');
         this.save();
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof Route, this, 'this was not a Route');
+        console.assert(this instanceof BrushLine, this, 'this was not a BrushLine');
 
         let successFn = function (json) {
             self.signal('object:deleted', {response: json});
@@ -130,7 +76,7 @@ class Route extends MapObject {
         if (!this.map.isTryModeEnabled()) {
             $.ajax({
                 type: 'POST',
-                url: '/ajax/route',
+                url: '/ajax/polyline',
                 dataType: 'json',
                 data: {
                     _method: 'DELETE',
@@ -154,7 +100,7 @@ class Route extends MapObject {
 
     save() {
         let self = this;
-        console.assert(this instanceof Route, this, 'this was not a Route');
+        console.assert(this instanceof BrushLine, this, 'this was not a BrushLine');
 
         let successFn = function (json) {
             self.id = json.id;
@@ -167,22 +113,24 @@ class Route extends MapObject {
         if (!this.map.isTryModeEnabled()) {
             $.ajax({
                 type: 'POST',
-                url: '/ajax/route',
+                url: '/ajax/polyline',
                 dataType: 'json',
                 data: {
                     id: self.id,
                     dungeonroute: this.map.getDungeonRoute().publicKey,
                     floor_id: self.map.getCurrentFloor().id,
-                    color: self.routeColor,
+                    type: self.type,
+                    color: self.brushlineColor,
+                    weight: self.weight,
                     vertices: self.getVertices(),
                 },
                 beforeSend: function () {
                     self.saving = true;
-                    $('#map_route_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
+                    $('#map_brushline_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
                 },
                 success: successFn,
                 complete: function () {
-                    $('#map_route_edit_popup_submit_' + self.id).removeAttr('disabled');
+                    $('#map_brushline_edit_popup_submit_' + self.id).removeAttr('disabled');
                     self.saving = false;
                 },
                 error: function () {
@@ -198,7 +146,7 @@ class Route extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
+        console.assert(this instanceof BrushLine, this, 'this is not an BrushLine');
         super.onLayerInit();
 
         let self = this;
@@ -208,21 +156,21 @@ class Route extends MapObject {
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {
-                let $color = $('#map_route_edit_popup_color_' + self.id);
-                $color.val(self.routeColor);
+                let $color = $('#map_brushline_edit_popup_color_' + self.id);
+                $color.val(self.brushlineColor);
 
                 // Class color buttons
-                let $classColors = $('.map_polyline_edit_popup_class_color ');
+                let $classColors = $('.map_polyline_edit_popup_class_color');
                 $classColors.unbind('click');
                 $classColors.bind('click', function () {
                     $color.val($(this).data('color'));
                 });
 
                 // Prevent multiple binds to click
-                let $submitBtn = $('#map_route_edit_popup_submit_' + self.id);
+                let $submitBtn = $('#map_brushline_edit_popup_submit_' + self.id);
                 $submitBtn.unbind('click');
                 $submitBtn.bind('click', function () {
-                    self.setColor($('#map_route_edit_popup_color_' + self.id).val());
+                    self.setColor($('#map_brushline_edit_popup_color_' + self.id).val());
 
                     self.edit();
                 });
@@ -230,7 +178,7 @@ class Route extends MapObject {
 
             // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
             self.register('synced', this, function (event) {
-                let customPopupHtml = $('#map_route_edit_popup_template').html();
+                let customPopupHtml = $('#map_brushline_edit_popup_template').html();
                 // Remove template so our
                 let template = handlebars.compile(customPopupHtml);
 
@@ -255,7 +203,7 @@ class Route extends MapObject {
     }
 
     getVertices() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
+        console.assert(this instanceof BrushLine, this, 'this is not an BrushLine');
 
         let coordinates = this.layer.toGeoJSON().geometry.coordinates;
         let result = [];

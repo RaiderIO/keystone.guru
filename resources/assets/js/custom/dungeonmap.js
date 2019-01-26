@@ -289,6 +289,9 @@ class DungeonMap extends Signalable {
             }
         }
 
+        if (this.hiddenMapObjectGroups.indexOf('route') < 0) {
+            result.push(new BrushLineMapObjectGroup(this, 'brushline', true));
+        }
         if (this.hiddenMapObjectGroups.indexOf('mapcomment') < 0) {
             result.push(new MapCommentMapObjectGroup(this, 'mapcomment', true));
         }

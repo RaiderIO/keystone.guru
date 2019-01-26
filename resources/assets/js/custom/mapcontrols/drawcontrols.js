@@ -14,6 +14,16 @@ $(function () {
                 handler: new L.Draw.MapComment(map, this.options.mapcomment),
                 title: this.options.mapcomment.title
             }, {
+                enabled: this.options.brushline,
+                handler: new L.Draw.BrushLine(map, this.options.brushline),
+                title: this.options.brushline.title
+            },
+            // {
+            //     enabled: this.options.line,
+            //     handler: new L.Draw.Line(map, this.options.line),
+            //     title: this.options.line.title
+            // },
+            {
                 enabled: this.options.enemypack,
                 handler: new L.Draw.EnemyPack(map, this.options.enemypack),
                 title: this.options.enemypack.title
@@ -66,7 +76,8 @@ class DrawControls extends MapControl {
                 route: {
                     shapeOptions: {
                         color: 'green',
-                        weight: 3
+                        weight: 3,
+                        opacity: 1.0
                     },
                     zIndexOffset: 1000,
                     faClass: 'fa-route',
@@ -83,6 +94,26 @@ class DrawControls extends MapControl {
                     zIndexOffset: 1000,
                     faClass: 'fa-comment',
                     title: 'Create a map comment'
+                },
+                brushline: {
+                    shapeOptions: {
+                        color: 'red',
+                        weight: 3,
+                        opacity: 1.0
+                    },
+                    zIndexOffset: 1000,
+                    faClass: 'fa-paint-brush',
+                    title: 'Draw a line using a brush'
+                },
+                line: {
+                    shapeOptions: {
+                        color: 'blue',
+                        weight: 3,
+                        opacity: 1.0
+                    },
+                    zIndexOffset: 1000,
+                    faClass: 'fa-pencil-ruler',
+                    title: 'Draw a line'
                 },
                 enemypack: false,
                 enemypatrol: false,
