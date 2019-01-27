@@ -26,6 +26,16 @@ class Conversion
     ];
 
     /**
+     * Rounds a number to the nearest two decimals.
+     * @param $nr
+     * @return float|int
+     */
+    private static function _round($nr)
+    {
+        return (int)($nr * 100) / 100;
+    }
+
+    /**
      * @param $dungeonName string
      * @return mixed Gets the MDT version of a dungeon name.
      */
@@ -60,7 +70,8 @@ class Conversion
     public static function convertMDTCoordinateToLatLng($xy)
     {
         // This seems to match my coordinate system for about 99%. Needs some more refinement but it should be very minor.
-        return ['lat' => $xy['y'] / 2.2, 'lng' => $xy['x'] / 2.2];
+        // Yes I know about php's round() function but it gives floating point rounding errors.
+        return ['lat' => self::_round($xy['y'] / 2.185), 'lng' => self::_round($xy['x'] / 2.185)];
     }
 
     /**
@@ -70,7 +81,7 @@ class Conversion
      */
     public static function convertLatLngToMDTCoordinate($latLng)
     {
-        return ['y' => $latLng['lat'] * 2.2, 'x' => $latLng['lng'] * 2.2];
+        return ['y' => $latLng['lat'] * 2.185, 'x' => $latLng['lng'] * 2.185];
     }
 
     /**

@@ -18,7 +18,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
         // Make sure selectpicker is enabled
         $(".selectpicker").selectpicker();
 
-        $('#import_string').bind('paste', _importStringPasted);
+        $('#import_string_textarea').bind('paste', _importStringPasted);
     });
 
     /**
@@ -43,6 +43,8 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
                         {key: "{{ __('Dungeon') }}", value: responseData.dungeon},
                         {key: "{{ __('Affixes') }}", value: responseData.affixes.join('<br>')},
                         {key: "{{ __('Pulls') }}", value: responseData.pulls},
+                        {key: "{{ __('Drawn lines') }}", value: responseData.lines},
+                        {key: "{{ __('Notes') }}", value: responseData.notes},
                         {
                             key: "{{ __('Enemy forces') }}",
                             value: responseData.enemy_forces + '/' + responseData.enemy_forces_max
@@ -54,7 +56,10 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
                 $("#import_string_details").html(template(data));
 
                 // Can no longer edit it
-                $('#import_string').prop('disabled', true);
+                var $importString = $('#import_string_textarea');
+                $importString.prop('disabled', true);
+
+                $('#import_string').val($importString.val());
                 $('#mdt_import_modal input[type="submit"]').prop('disabled', false);
             }, error: function (xhr, textStatus, errorThrown) {
                 $("#import_string_details").html('');

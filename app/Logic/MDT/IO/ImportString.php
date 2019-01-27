@@ -14,8 +14,11 @@ use App\Models\AffixGroup;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
 use App\Models\Enemy;
+use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
+use App\Models\MapComment;
+use App\Models\Polyline;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -61,6 +64,217 @@ class ImportString
     }
 
     /**
+     * Parse the $decoded['value']['pulls'] value and put it in the $dungeonRoute object, optionally $save'ing the
+     * values to the database.
+     * @param $decoded array
+     * @param $dungeonRoute DungeonRoute
+     * @param $save boolean
+     * @throws \Exception
+     */
+    private function _parseValuePulls($decoded, $dungeonRoute, $save)
+    {
+        $floors = $dungeonRoute->dungeon->floors;
+        $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
+
+        // Fetch all enemies of this
+        $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
+
+        // For each pull the user created
+        foreach ($decoded['value']['pulls'] as $pullIndex => $pull) {
+            // Create a killzone
+            $killZone = new KillZone();
+            if ($save) {
+                $killZone->dungeon_route_id = $dungeonRoute->id;
+                // Save it so we have an ID that we can use later on
+                $killZone->save();
+            } else {
+                $killZone->enemies = new Collection();
+            }
+
+            // Init some variables
+            $totalEnemiesKilled = 0;
+            $kzLat = 0;
+            $kzLng = 0;
+            $floorId = -1;
+
+            // For each NPC that is killed in this pull (and their clones)
+            foreach ($pull as $npcIndex => $mdtClones) {
+                // Only if filled
+                $enemyCount = count($mdtClones);
+                foreach ($mdtClones as $index => $cloneIndex) {
+                    // This comes in through as a double, cast to int
+                    $cloneIndex = (int)$cloneIndex;
+
+                    // Find the matching enemy of the clones
+                    /** @var Enemy $mdtEnemy */
+                    $mdtEnemy = null;
+                    foreach ($mdtEnemies as $mdtEnemyCandidate) {
+                        // NPC and clone index make for unique ID
+                        if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && $mdtEnemyCandidate->mdt_id === $cloneIndex) {
+                            // Found it
+                            $mdtEnemy = $mdtEnemyCandidate;
+                            break;
+                        }
+                    }
+
+                    if ($mdtEnemy === null) {
+                        throw new \Exception("Unable to find MDT enemy for index {$cloneIndex}!");
+                    }
+
+                    // We now know the MDT enemy that the user was trying to import. However, we need to know
+                    // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
+                    /** @var Enemy $enemy */
+                    $enemy = null;
+                    foreach ($enemies as $enemyCandidate) {
+                        if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
+                            $enemy = $enemyCandidate;
+                            break;
+                        }
+                    }
+
+                    if ($enemy === null) {
+                        throw new \Exception("Unable to find enemy for mdt_id {$mdtEnemy->mdt_id}, npc_id {$mdtEnemy->npc_id}!");
+                    }
+
+                    $kzLat += $enemy->lat;
+                    $kzLng += $enemy->lng;
+
+                    // Couple the KillZoneEnemy to its KillZone
+                    if ($save) {
+                        $kzEnemy = new KillZoneEnemy();
+                        $kzEnemy->enemy_id = $enemy->id;
+                        $kzEnemy->kill_zone_id = $killZone->id;
+                        $kzEnemy->save();
+                    } else {
+                        $killZone->enemies->push($enemy);
+                    }
+
+                    // Should be the same floor_id all the time, but we need it anyways
+                    $floorId = $enemy->floor_id;
+                }
+
+                $totalEnemiesKilled += $enemyCount;
+            }
+
+            // KillZones at the average position of all killed enemies
+            $killZone->floor_id = $floorId;
+            $killZone->lat = $kzLat / $totalEnemiesKilled;
+            $killZone->lng = $kzLng / $totalEnemiesKilled;
+
+            // Do not place them right on top of each other
+            if( $totalEnemiesKilled === 1 ){
+                $killZone->lat += 1;
+            }
+
+
+            if ($save) {
+                $killZone->save();
+            } else {
+                $dungeonRoute->killzones->push($killZone);
+            }
+        }
+    }
+
+    /**
+     * Parse any saved objects from the MDT string to a $dungeonRoute, optionally $save'ing the objects to the database.
+     * @param $decoded array
+     * @param $dungeonRoute DungeonRoute
+     * @param $save boolean
+     */
+    private function _parseObjects($decoded, $dungeonRoute, $save)
+    {
+        $floors = $dungeonRoute->dungeon->floors;
+
+        if (isset($decoded['objects'])) {
+            // Pre-init
+            $dungeonRoute->polylines = new Collection();
+            $dungeonRoute->mapcomments = new Collection();
+
+            foreach ($decoded['objects'] as $objectIndex => $object) {
+                /*
+                 * Note
+                 * 1 = x (size in case of line)
+                 * 2 = y (smooth in case of line)
+                 * 3 = sublevel
+                 * 4 = enabled/visible?
+                 * 5 = text (color in case of line)
+                 *
+                 * Line
+                 *
+                 * 1 = size
+                 * 2 = linefactor (weight?)
+                 * 3 = sublevel
+                 * 4 = enabled/visible?
+                 * 5 = color
+                 * 6 = layer sublevel
+                 * 7 = smooth
+                 */
+                $details = $object['d'];
+
+                // Get the proper index of the floor, validated for length
+                $floorIndex = ((int)$details['3']) - 1;
+                $floorIndex = ($floorIndex < $floors->count() ? $floorIndex : 0);
+                /** @var Floor $floor */
+                $floor = ($floors->all())[$floorIndex];
+
+                // If it's a line
+                // MethodDungeonTools.lua:2529
+                if (isset($object['l'])) {
+                    $line = $object['l'];
+
+                    $polyline = new Polyline();
+                    // Assign the proper ID
+                    $polyline->floor_id = $floor->id;
+                    $polyline->type = 'brushline';
+                    $polyline->color = '#' . $details['5'];
+                    $polyline->weight = (int)$details['1'];
+
+                    $vertices = [];
+                    for ($i = 1; $i < count($line); $i += 2) {
+                        $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i + 1]), 'y' => doubleval($line[$i])]);
+                    }
+
+                    $polyline->vertices_json = json_encode($vertices);
+
+                    if ($save) {
+                        // Only assign when saving
+                        $polyline->dungeon_route_id = $dungeonRoute->id;
+                        $polyline->save();
+                    } else {
+                        // Otherwise inject
+                        $dungeonRoute->polylines->push($polyline);
+                    }
+                }
+                // Map comment (n = note)
+                // MethodDungeonTools.lua:2523
+                else if (isset($object['n']) && $object['n']) {
+                    $mapComment = new MapComment();
+                    $mapComment->floor_id = $floor->id;
+                    $mapComment->comment = $details['5'];
+
+                    $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details['1'], 'y' => $details['2']]);
+                    $mapComment->lat = $latLng['lat'];
+                    $mapComment->lng = $latLng['lng'];
+
+                    if ($save) {
+                        // Save
+                        $mapComment->dungeon_route_id = $dungeonRoute->id;
+                        $mapComment->save();
+                    } else {
+                        // Inject
+                        $dungeonRoute->mapcomments->push($mapComment);
+                    }
+                }
+                // Triangles (t = triangle)
+                // MethodDungeonTools.lua:2554
+                else if (isset($object['t']) && $object['t']) {
+
+                }
+            }
+        }
+    }
+
+    /**
      * Gets the MDT encoded string based on the currently set DungeonRoute.
      * @return string
      */
@@ -98,12 +312,14 @@ class ImportString
             $dungeonRoute->teeming = boolval($decoded['value']['teeming']);
             $dungeonRoute->title = $decoded['text'];
             $dungeonRoute->difficulty = 'Casual';
+            $dungeonRoute->published = 0; // Needs to be explicit otherwise redirect to edit will not have this value
 
             if ($save) {
                 // Preemptively save the route
                 $dungeonRoute->save();
             } else {
                 $dungeonRoute->killzones = new Collection();
+                $dungeonRoute->polylines = new Collection();
             }
 
             // Set the affix for this route
@@ -123,101 +339,10 @@ class ImportString
             }
 
             // Create killzones and attach enemies
-            $floors = $dungeonRoute->dungeon->floors;
-            $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
+            $this->_parseValuePulls($decoded, $dungeonRoute, $save);
 
-            // Fetch all enemies of this
-            $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
-
-            // For each pull the user created
-            foreach ($decoded['value']['pulls'] as $pullIndex => $pull) {
-                // Create a killzone
-                $killZone = new KillZone();
-                if ($save) {
-                    $killZone->dungeon_route_id = $dungeonRoute->id;
-                    // Save it so we have an ID that we can use later on
-                    $killZone->save();
-                } else {
-                    $killZone->enemies = new Collection();
-                }
-
-                // Init some variables
-                $totalEnemiesKilled = 0;
-                $kzLat = 0;
-                $kzLng = 0;
-                $floorId = -1;
-
-                // For each NPC that is killed in this pull (and their clones)
-                foreach ($pull as $npcIndex => $mdtClones) {
-                    // Only if filled
-                    $enemyCount = count($mdtClones);
-                    foreach ($mdtClones as $index => $cloneIndex) {
-                        // This comes in through as a double, cast to int
-                        $cloneIndex = (int)$cloneIndex;
-
-                        // Find the matching enemy of the clones
-                        /** @var Enemy $mdtEnemy */
-                        $mdtEnemy = null;
-                        foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                            // NPC and clone index make for unique ID
-                            if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && $mdtEnemyCandidate->mdt_id === $cloneIndex) {
-                                // Found it
-                                $mdtEnemy = $mdtEnemyCandidate;
-                                break;
-                            }
-                        }
-
-                        if ($mdtEnemy === null) {
-                            throw new \Exception("Unable to find MDT enemy for index {$cloneIndex}!");
-                        }
-
-                        // We now know the MDT enemy that the user was trying to import. However, we need to know
-                        // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
-                        /** @var Enemy $enemy */
-                        $enemy = null;
-                        foreach ($enemies as $enemyCandidate) {
-                            if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
-                                $enemy = $enemyCandidate;
-                                break;
-                            }
-                        }
-
-                        if ($enemy === null) {
-                            throw new \Exception("Unable to find enemy for mdt_id {$mdtEnemy->mdt_id}, npc_id {$mdtEnemy->npc_id}!");
-                        }
-
-                        $kzLat += $enemy->lat;
-                        $kzLng += $enemy->lng;
-
-                        // Couple the KillZoneEnemy to its KillZone
-                        if ($save) {
-                            $kzEnemy = new KillZoneEnemy();
-                            $kzEnemy->enemy_id = $enemy->id;
-                            $kzEnemy->kill_zone_id = $killZone->id;
-                            $kzEnemy->save();
-                        } else {
-                            $killZone->enemies->push($enemy);
-                        }
-
-                        // Should be the same floor_id all the time, but we need it anyways
-                        $floorId = $enemy->floor_id;
-                    }
-
-                    $totalEnemiesKilled += $enemyCount;
-                }
-
-                // KillZones at the average position of all killed enemies
-                $killZone->floor_id = $floorId;
-                $killZone->lat = $kzLat / $totalEnemiesKilled;
-                $killZone->lng = $kzLng / $totalEnemiesKilled;
-
-
-                if ($save) {
-                    $killZone->save();
-                } else {
-                    $dungeonRoute->killzones->push($killZone);
-                }
-            }
+            // For each object the user created
+            $this->_parseObjects($decoded, $dungeonRoute, $save);
         }
 
         return $dungeonRoute;

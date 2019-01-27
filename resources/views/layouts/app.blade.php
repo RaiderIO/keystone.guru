@@ -432,7 +432,8 @@ $isProduction = config('app.env') === 'production';
                     </h3>
                     <div class="form-group">
                         {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
-                        {{ Form::textarea('import_string', '', ['class' => 'form-control']) }}
+                        {{ Form::textarea('import_string_textarea', '', ['id' => 'import_string_textarea', 'class' => 'form-control']) }}
+                        {{ Form::hidden('import_string', '') }}
                     </div>
                     <div class="form-group">
                         <div id="import_string_details">

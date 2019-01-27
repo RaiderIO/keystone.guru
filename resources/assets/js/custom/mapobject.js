@@ -60,12 +60,12 @@ class MapObject extends Signalable {
 
         this.decorator = this._getDecorator();
         // Only if set after the getter finished
-        if( this.decorator !== null ){
+        if (this.decorator !== null) {
             this.decorator.addTo(this.map.leafletMap);
         }
     }
 
-    _getDecorator(){
+    _getDecorator() {
         return null;
     }
 
@@ -79,10 +79,10 @@ class MapObject extends Signalable {
 
     getContextMenuItems() {
         return [
-        //     {
-        //     text: this.label + ' (synced: ' + this.synced + ')',
-        //     disabled: true
-        // }
+            //     {
+            //     text: this.label + ' (synced: ' + this.synced + ')',
+            //     disabled: true
+            // }
         ];
     }
 
@@ -90,7 +90,7 @@ class MapObject extends Signalable {
      * Gets if this map object is editable, default is true. May be overridden.
      * @returns {boolean}
      */
-    isEditable(){
+    isEditable() {
         return true;
     }
 
@@ -145,6 +145,9 @@ class MapObject extends Signalable {
 
         // If we're synced, trigger the synced event
         if (value) {
+            // Refresh the tooltip
+            this.bindTooltip();
+
             this.signal('synced');
         }
 
@@ -169,9 +172,6 @@ class MapObject extends Signalable {
             // Changed = gone out of sync
             self.setSynced(false);
         });
-
-        // Refresh the tooltip
-        self.bindTooltip();
     }
 
     cleanup() {

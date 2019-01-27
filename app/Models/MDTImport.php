@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class MDTImport extends Model
 {
     /** @var string Prevent MDT being translated to m_d_t */
-    protected $table = 'mdt_import';
+    protected $table = 'mdt_imports';
 
     /**
      * Get the dungeon route that this import created.

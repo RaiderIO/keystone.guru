@@ -53,6 +53,7 @@ use Illuminate\Support\Facades\DB;
  *
  * @property \Illuminate\Support\Collection $routes
  * @property \Illuminate\Support\Collection $killzones
+ * @property \Illuminate\Support\Collection $polylines
  *
  * @property \Illuminate\Support\Collection $enemyraidmarkers
  * @property \Illuminate\Support\Collection $mapcomments
@@ -191,6 +192,14 @@ class DungeonRoute extends Model
     public function killzones()
     {
         return $this->hasMany('App\Models\KillZone');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function polylines()
+    {
+        return $this->hasMany('App\Models\Polyline');
     }
 
     /**

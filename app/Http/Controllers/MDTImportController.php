@@ -44,6 +44,8 @@ class MDTImportController extends Controller
                 'dungeon' => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon'),
                 'affixes' => $affixes,
                 'pulls' => $dungeonRoute->killzones->count(),
+                'lines' => $dungeonRoute->polylines->count(),
+                'notes' => $dungeonRoute->mapcomments->count(),
                 'enemy_forces' => $dungeonRoute->getEnemyForcesAttribute(),
                 'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required
             ];
@@ -75,6 +77,6 @@ class MDTImportController extends Controller
         $mdtImport->save();
 
 
-        return view('home');
+        return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]);
     }
 }

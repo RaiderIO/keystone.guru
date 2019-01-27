@@ -414,7 +414,6 @@ class Enemy extends MapObject {
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));
-        console.log('unreg -> enemy->cleanup()');
         this.map.unregister('map:enemyselectionmodechanged', this);
     }
 }

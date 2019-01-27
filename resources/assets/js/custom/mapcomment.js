@@ -142,7 +142,7 @@ class MapComment extends MapObject {
             });
         } else {
             // We have to supply an ID to keep everything working properly
-            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id })
+            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id})
         }
     }
 
