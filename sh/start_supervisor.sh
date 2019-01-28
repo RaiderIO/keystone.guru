@@ -12,3 +12,6 @@ sudo supervisorctl start laravel-worker-staging:*
 
 sudo supervisorctl stop laravel-worker-live:*
 sudo supervisorctl start laravel-worker-live:*
+
+sudo supervisorctl stop laravel-echo-server-dev:*
+sudo supervisorctl start laravel-echo-server-dev:*
