@@ -1,5 +1,5 @@
 {
-	"authHost": "http://localhost",
+	"authHost": "127.0.0.1",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [],
 	"database": "redis",
@@ -10,13 +10,13 @@
 		}
 	},
 	"devMode": true,
-	"host": "127.0.0.1",
+	"host": "0.0.0.0",
 	"port": "6001",
 	"protocol": "https",
 	"socketio": {},
 	"sslCertPath": "/etc/letsencrypt/live/dev.keystone.guru/cert.pem",
 	"sslKeyPath": "/etc/letsencrypt/live/dev.keystone.guru/privkey.pem",
-	"sslCertChainPath": "/etc/letsencrypt/live/dev.keystone.guru/fullchain.pem",
+	"sslCertChainPath": "/etc/letsencrypt/live/dev.keystone.guru/chain.pem",
 	"sslPassphrase": "",
 	"subscribers": {
 		"http": true,
