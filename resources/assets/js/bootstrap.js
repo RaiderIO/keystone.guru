@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 
 /**
@@ -30,6 +29,11 @@ window.Echo = new Echo({
     broadcaster: 'socket.io',
     host: window.location.hostname + ':6001'
 });
+
+window.Echo.channel('test-event')
+    .listen('ExampleEvent', (e) => {
+        console.log(e);
+    });
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

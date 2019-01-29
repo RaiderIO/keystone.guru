@@ -10,13 +10,11 @@ Make sure it's running:
 
 `service redis start`
 
-Should be sorted already, but make sure you have predis (PHP redis).
-
-`composer require predis/predis`
-
 ###Run Laravel Echo Server
 
 Supervisor handles running echo server.
+
+`laravel-echo-server start --config="<config.json>"`
 
 ###Modify .env
 
