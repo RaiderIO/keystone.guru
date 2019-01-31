@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property $id int The ID of this Affix.
- * @property $randomcolumn int
+ * @property $enabled boolean
  * @property $affix \Illuminate\Database\Eloquent\Collection
  */
 class AffixGroup extends Model
 {
-
     public $timestamps = false;
     public $with = ['affixes'];
     public $hidden = ['pivot'];

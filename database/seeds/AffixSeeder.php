@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Models\Affix;
 use App\Models\AffixGroup;
-use App\Models\File;
 use App\Models\AffixGroupCoupling;
+use App\Models\File;
+use Illuminate\Database\Seeder;
 
 class AffixSeeder extends Seeder
 {
@@ -36,6 +36,7 @@ class AffixSeeder extends Seeder
             new Affix(['name' => 'Teeming', 'icon_file_id' => -1, 'description' => 'Additional non-boss enemies are present throughout the dungeon.']),
             new Affix(['name' => 'Tyrannical', 'icon_file_id' => -1, 'description' => 'Boss enemies have 40% more health and inflict up to 15% increased damage.']),
             new Affix(['name' => 'Volcanic', 'icon_file_id' => -1, 'description' => 'While in combat, enemies periodically cause gouts of flame to erupt beneath the feet of distant players.']),
+            new Affix(['name' => 'Reaping', 'icon_file_id' => -1, 'description' => 'Non-boss enemies are empowered by Bwonsamdi and periodically seek vengeance from beyond the grave.']),
         ];
 
         foreach ($affixes as $affix) {
@@ -55,27 +56,39 @@ class AffixSeeder extends Seeder
         }
 
         $groups = [
-            ['Fortified', 'Sanguine', 'Necrotic', 'Infested'],
-            ['Tyrannical', 'Bursting', 'Skittish', 'Infested'],
-            ['Fortified', 'Teeming', 'Quaking', 'Infested'],
-            ['Tyrannical', 'Raging', 'Necrotic', 'Infested'],
-            ['Fortified', 'Bolstering', 'Skittish', 'Infested'],
-            ['Tyrannical', 'Teeming', 'Volcanic', 'Infested'],
-            ['Fortified', 'Sanguine', 'Grievous', 'Infested'],
-            ['Tyrannical', 'Bolstering', 'Explosive', 'Infested'],
-            ['Fortified', 'Bursting', 'Quaking', 'Infested'],
-            ['Tyrannical', 'Raging', 'Volcanic', 'Infested'],
-            ['Fortified', 'Teeming', 'Explosive', 'Infested'],
-            ['Tyrannical', 'Bolstering', 'Grievous', 'Infested'],
+            ['enabled' => false, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Infested']],
+            ['enabled' => false, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Infested']],
+
+            ['enabled' => true, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Reaping']],
+            ['enabled' => true, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Reaping']],
         ];
 
-        $index = 0;
         foreach ($groups as $groupArr) {
             $group = new AffixGroup();
-            $group->randomcolumn = $index++;
+            $group->enabled = $groupArr['enabled'];
             $group->save();
 
-            foreach ($groupArr as $affixName) {
+            foreach ($groupArr['affixes'] as $affixName) {
                 $affix = $this->_findAffix($affixes, $affixName);
 
                 $groupCoupling = new AffixGroupCoupling();
