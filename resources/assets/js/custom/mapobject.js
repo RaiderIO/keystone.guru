@@ -10,6 +10,7 @@ class MapObject extends Signalable {
         console.assert(map instanceof DungeonMap, map, 'Passed map is not a DungeonMap!');
         let self = this;
 
+        this._defaultVisible = true;
         this.synced = false;
         this.map = map;
         this.layer = layer;
@@ -95,6 +96,31 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Gets if this map object is deleteable, default is true. May be overridden.
+     * @returns {boolean}
+     */
+    isDeleteable() {
+        return true;
+    }
+
+    /**
+     * Sets this enemy to be visible by default or not. Note: only read/used at initial load in!
+     * @param value boolean
+     */
+    setDefaultVisible(value) {
+        this._defaultVisible = value;
+    }
+
+    /**
+     * Checks if this object is visible by default.
+     * @returns {boolean}
+     */
+    isDefaultVisible() {
+        return this._defaultVisible;
+    }
+
+
+    /**
      * Applies the tooltip to this map object if applicable.
      */
     bindTooltip() {
@@ -106,6 +132,7 @@ class MapObject extends Signalable {
      * @param colors object The colors object as found in the constants.js file.
      */
     setColors(colors) {
+        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
         this.colors = colors;
     }
 

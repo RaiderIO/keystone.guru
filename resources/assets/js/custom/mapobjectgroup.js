@@ -97,6 +97,11 @@ class MapObjectGroup extends Signalable {
         object.unregister('synced', this);
         // Fire the event
         this.signal('object:add', {object: object, objectgroup: this});
+
+        // Hide the objects if they're not visible by default
+        if( !object.isDefaultVisible() ){
+            this.setMapObjectVisibility(object, false);
+        }
     }
 
     /**

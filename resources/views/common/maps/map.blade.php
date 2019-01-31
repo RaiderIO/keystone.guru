@@ -340,6 +340,11 @@ $introTexts = [
                     @endif
                 @endfor
             </div>
+            <div class="form-group">
+                {!! Form::label('map_brushline_edit_popup_weight_@{{id}}', __('Weight')) !!}
+                {!! Form::select('map_brushline_edit_popup_weight_@{{id}}', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6], 3,
+                ['id' => 'map_brushline_edit_popup_weight_@{{id}}', 'class' => 'form-control selectpicker']) !!}
+            </div>
             {!! Form::button(__('Submit'), ['id' => 'map_brushline_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
         </div>
     </script>

@@ -4,11 +4,39 @@ $(function () {
             TYPE: 'brushline'
         },
         initialize: function (map, options) {
+            options.showLength = false;
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
             this.type = L.Draw.BrushLine.TYPE;
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
+
+    // Copy pasted from https://github.com/Leaflet/Leaflet.draw/blob/develop/src/draw/handler/Draw.Polyline.js#L470
+    // Adjusted so that it uses the correct drawing strings
+    L.Draw.BrushLine.prototype._getTooltipText = function () {
+		var showLength = this.options.showLength,
+			labelText, distanceStr;
+		if (this._markers.length === 0) {
+			labelText = {
+				text: L.drawLocal.draw.handlers.brushline.tooltip.start
+			};
+		} else {
+			distanceStr = showLength ? this._getMeasurementString() : '';
+
+			if (this._markers.length === 1) {
+				labelText = {
+					text: L.drawLocal.draw.handlers.brushline.tooltip.cont,
+					subtext: distanceStr
+				};
+			} else {
+				labelText = {
+					text: L.drawLocal.draw.handlers.brushline.tooltip.end,
+					subtext: distanceStr
+				};
+			}
+		}
+		return labelText;
+    }
 });
 
 class BrushLine extends MapObject {
@@ -19,7 +47,7 @@ class BrushLine extends MapObject {
 
         this.label = 'BrushLine';
         this.type = 'brushline';
-        this.weight = 3;
+        this.weight = c.map.brushline.defaultWeight;
         this.saving = false;
         this.deleting = false;
         this.decorator = null;
@@ -38,7 +66,13 @@ class BrushLine extends MapObject {
         });
     }
 
+    isEditable() {
+        return false;
+    }
+
     setColor(color) {
+        console.assert(this instanceof BrushLine, this, 'this was not a BrushLine');
+
         this.brushlineColor = color;
         this.setColors({
             unsavedBorder: color,
@@ -53,6 +87,8 @@ class BrushLine extends MapObject {
     }
 
     setWeight(weight){
+        console.assert(this instanceof BrushLine, this, 'this was not a BrushLine');
+
         this.weight = weight;
         this.layer.setStyle({
             weight: this.weight
@@ -151,11 +187,15 @@ class BrushLine extends MapObject {
 
         let self = this;
 
+        // Apply weight to layer
+        this.setWeight(this.weight);
+
         // Only when we're editing
         if (this.map.edit) {
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {
+                // Color
                 let $color = $('#map_brushline_edit_popup_color_' + self.id);
                 $color.val(self.brushlineColor);
 
@@ -166,11 +206,20 @@ class BrushLine extends MapObject {
                     $color.val($(this).data('color'));
                 });
 
+                // Weight
+                let $weight = $('#map_brushline_edit_popup_weight_' + self.id);
+                // Convert weight to index
+                $weight.val(self.weight);
+
+                // Refresh all select pickers so they work again
+                refreshSelectPickers();
+
                 // Prevent multiple binds to click
                 let $submitBtn = $('#map_brushline_edit_popup_submit_' + self.id);
                 $submitBtn.unbind('click');
                 $submitBtn.bind('click', function () {
                     self.setColor($('#map_brushline_edit_popup_color_' + self.id).val());
+                    self.setWeight($('#map_brushline_edit_popup_weight_' + self.id).val());
 
                     self.edit();
                 });

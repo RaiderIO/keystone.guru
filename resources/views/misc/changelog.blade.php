@@ -21,6 +21,13 @@
         <li>
             Currently selected drawing tool is now highlighted for the duration of the drawing.
         </li>
+        <li>
+            You can now free draw lines with a color and weight of your choice.
+        </li>
+        <li>
+            Added color and weight selection to draw controls which affects newly generated Routes, drawn lines and
+            Killzones.
+        </li>
     </ul>
     </p>
     <p>

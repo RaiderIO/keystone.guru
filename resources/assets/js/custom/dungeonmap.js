@@ -30,10 +30,11 @@ class DungeonMap extends Signalable {
             this.mapObjectGroups[i].register('object:add', this, function (addEvent) {
                 let object = addEvent.data.object;
                 self.mapObjects.push(object);
+                self.drawnLayers.addLayer(object.layer);
 
                 // Make sure we know it's editable
                 if (object.isEditable() && addEvent.data.objectgroup.editable && self.edit) {
-                    self.drawnItems.addLayer(object.layer);
+                    self.editableLayers.addLayer(object.layer);
                 }
             });
 
@@ -42,19 +43,19 @@ class DungeonMap extends Signalable {
             this.mapObjectGroups[i].register(['object:shown', 'object:hidden'], this, function (visibilityEvent) {
                 let object = visibilityEvent.data.object;
                 // If it's visible now and the layer is not added already
-                if (visibilityEvent.data.visible && !self.drawnItems.hasLayer(object.layer)) {
+                if (visibilityEvent.data.visible && !self.drawnLayers.hasLayer(object.layer)) {
+                    // Add it
+                    self.drawnLayers.addLayer(object.layer);
                     // Only if we may add the layer
-                    if( object.isEditable() && visibilityEvent.data.objectgroup.editable && self.edit ){
-                        // Add it
-                        self.drawnItems.addLayer(object.layer);
-                        console.log('re-adding object to drawnItems');
+                    if (object.isEditable() && visibilityEvent.data.objectgroup.editable && self.edit) {
+                        self.editableLayers.addLayer(object.layer);
                     }
                 }
                 // If it should not be visible but it's visible now
-                else if (!visibilityEvent.data.visible && self.drawnItems.hasLayer(object.layer)) {
+                else if (!visibilityEvent.data.visible && self.drawnLayers.hasLayer(object.layer)) {
                     // Remove it from the layer
-                    self.drawnItems.removeLayer(object.layer);
-                    console.log('removing object from drawnItems');
+                    self.drawnLayers.removeLayer(object.layer);
+                    self.editableLayers.removeLayer(object.layer);
                 }
             });
         }
@@ -88,6 +89,21 @@ class DungeonMap extends Signalable {
         // Top left is reserved for the sidebar
         // this.leafletMap.zoomControl.setPosition('topright');
 
+        // Special handling for brush drawing
+        this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
+            // If it's brushline, disable, otherwise enable
+            if (e.layerType === 'brushline') {
+                self._startBrushlineDrawing();
+            }
+        });
+        this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
+            if (e.layerType === 'brushline') {
+                self._stopBrushlineDrawing();
+            }
+
+            // After adding, there may be layers when there were none. Fix the edit/delete tooltips
+            refreshTooltips();
+        });
         // Set all edited layers to no longer be synced.
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
             let layers = e.layers;
@@ -128,8 +144,16 @@ class DungeonMap extends Signalable {
                 } else {
                     console.error(mapObject, ' does not have a delete() function!');
                 }
+
+                // Remove from both layers
+                self.drawnLayers.removeLayer(layer);
+                self.editableLayers.removeLayer(layer);
+
                 layersLength++;
             });
+
+            // After deleting, there may be no layers left. Fix the edit/delete tooltips
+            refreshTooltips();
         });
 
         this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
@@ -144,16 +168,34 @@ class DungeonMap extends Signalable {
         });
         this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
             self.deleteModeActive = true;
+            // Loop through each element to see if they are NOT editable, but ARE deleteable.
+            // If so, we have to add them to the 'can delete this' list, and remove them after
+            $.each(self.mapObjects, function (index, mapObject) {
+                if (!mapObject.isEditable() && mapObject.isDeleteable()) {
+                    self.editableLayers.addLayer(mapObject.layer);
+                }
+            });
         });
         this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
             self.deleteModeActive = false;
+
+            // Now we make them un-editable again.
+            $.each(self.mapObjects, function (index, mapObject) {
+                if (!mapObject.isEditable() && mapObject.isDeleteable()) {
+                    self.editableLayers.removeLayer(mapObject.layer);
+                }
+            });
+
+            // Fix an issue where it'd remove all layers just because it got removed from the editable layers. Strange.
+            self.leafletMap.removeLayer(self.drawnLayers);
+            self.leafletMap.addLayer(self.drawnLayers);
         });
 
         this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
-            self.deleteModeActive = true;
+            self.editModeActive = true;
         });
         this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
-            self.deleteModeActive = false;
+            self.editModeActive = false;
         });
 
         // If we created something
@@ -171,10 +213,6 @@ class DungeonMap extends Signalable {
         // Not very pretty but needed for debugging
         let verboseEvents = false;
         if (verboseEvents) {
-            this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
-                console.log(L.Draw.Event.DRAWSTART, e);
-            });
-
             this.leafletMap.on('layeradd', function (e) {
                 console.log('layeradd', e);
             });
@@ -233,7 +271,119 @@ class DungeonMap extends Signalable {
         this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
 
+    /**
+     * Should be called when the brushline drawing has started by the user.
+     * @private
+     */
+    _startBrushlineDrawing() {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        let self = this;
+
+        this._setMapInteraction(false);
+
+        let workingLayer = null;
+        let lastMouseX, lastMouseY;
+
+        // Fn for when a layer is first added after starting the brushline drawing.
+        let layerAddFn = function (mouseEvent) {
+            // Only if the layer is the made polyline!
+            if (workingLayer === null && mouseEvent.layer.hasOwnProperty('_latlngs')) {
+                workingLayer = mouseEvent.layer;
+                // Unsub
+                self.leafletMap.off('layeradd', layerAddFn);
+            }
+            // Initial click on the map
+            // else {
+            //     let el = document.getElementById('map');
+            //     let ev = document.createEvent("MouseEvent");
+            //
+            //     ev.initMouseEvent(
+            //         "click",
+            //         true /* bubble */, true /* cancelable */,
+            //         window, null,
+            //         lastMouseX, lastMouseY, 0, 0, /* coordinates */
+            //         false, false, false, false, /* modifier keys */
+            //         0 /*left*/, null
+            //     );
+            //     el.dispatchEvent(ev);
+            // }
+        };
+        this.leafletMap.on('layeradd', layerAddFn);
+
+        this.leafletMap.on('mousemove', function (mouseEvent) {
+            lastMouseX = mouseEvent.layerPoint.x;
+            lastMouseY = mouseEvent.layerPoint.y;
+
+            // Only when a button is pressed
+            if (mouseEvent.originalEvent.buttons === 1 && workingLayer !== null) {
+                let latLngs = workingLayer.getLatLngs();
+
+                let mayAdd = true;
+                if (latLngs.length > 0) {
+                    let lastLatLng = latLngs[latLngs.length - 1];
+
+                    if (getDistanceSquared(lastLatLng, mouseEvent.latlng) < c.map.brushline.minDrawDistanceSquared) {
+                        mayAdd = false;
+                    }
+                }
+
+                if (mayAdd) {
+                    workingLayer.addLatLng(mouseEvent.latlng);
+                }
+            }
+        });
+    }
+
+    /**
+     * Should be called when the brushline drawing is stopped by the user.
+     * @private
+     */
+    _stopBrushlineDrawing() {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
+        this._setMapInteraction(true);
+
+        this.leafletMap.off('mousemove');
+    }
+
+    /**
+     * Set the map to be interactive or not. https://gis.stackexchange.com/a/54925
+     * @param enabled
+     * @private
+     */
+    _setMapInteraction(enabled) {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.log('_setMapInteraction', enabled);
+
+        if (enabled) {
+            this.leafletMap.dragging.enable();
+            this.leafletMap.touchZoom.enable();
+            this.leafletMap.doubleClickZoom.enable();
+            this.leafletMap.scrollWheelZoom.enable();
+            this.leafletMap.boxZoom.enable();
+            this.leafletMap.keyboard.enable();
+            if (this.leafletMap.tap) this.leafletMap.tap.enable();
+            document.getElementById('map').style.cursor = 'grab';
+        } else {
+            this.leafletMap.dragging.disable();
+            this.leafletMap.touchZoom.disable();
+            this.leafletMap.doubleClickZoom.disable();
+            this.leafletMap.scrollWheelZoom.disable();
+            this.leafletMap.boxZoom.disable();
+            this.leafletMap.keyboard.disable();
+            if (this.leafletMap.tap) this.leafletMap.tap.disable();
+            document.getElementById('map').style.cursor = 'default';
+        }
+    }
+
+    /**
+     * Get the current HotKeys object used for binding actions to hotkeys.
+     * @returns {Hotkeys}
+     * @private
+     */
     _getHotkeys() {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
         return new Hotkeys(this);
     }
 
@@ -242,6 +392,8 @@ class DungeonMap extends Signalable {
      * @private
      */
     _createAdditionalControlPlaceholders() {
+        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+
         let corners = this.leafletMap._controlCorners,
             l = 'leaflet-',
             container = this.leafletMap._controlContainer;
@@ -307,11 +459,11 @@ class DungeonMap extends Signalable {
 
     /**
      * Create instances of all controls that will be added to the map (UI on the map itself)
-     * @param drawnItemsLayer
+     * @param editableLayers
      * @returns {*[]}
      * @private
      */
-    _createMapControls(drawnItemsLayer) {
+    _createMapControls(editableLayers) {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         let result = [];
@@ -319,7 +471,7 @@ class DungeonMap extends Signalable {
         // No UI = no map controls at all
         if (!this.noUI) {
             if (this.edit) {
-                result.push(new DrawControls(this, drawnItemsLayer));
+                result.push(new DrawControls(this, editableLayers));
             }
 
             // Only when enemy forces are relevant in their display (not in a view + no route (infested voting))
@@ -499,8 +651,8 @@ class DungeonMap extends Signalable {
             this.mapControls[i].cleanup();
         }
 
-        this.drawnItems = new L.FeatureGroup();
-        this.mapControls = this._createMapControls(this.drawnItems);
+        this.editableLayers = new L.FeatureGroup();
+        this.mapControls = this._createMapControls(this.editableLayers);
 
         // Add new controls
         for (let i = 0; i < this.mapControls.length; i++) {
@@ -508,7 +660,9 @@ class DungeonMap extends Signalable {
         }
 
         // Refresh the list of drawn items
-        this.leafletMap.addLayer(this.drawnItems);
+        this.drawnLayers = new L.FeatureGroup();
+        this.leafletMap.addLayer(this.drawnLayers);
+        this.leafletMap.addLayer(this.editableLayers);
 
         // If we confirmed editing something..
         this.signal('map:refresh', {dungeonmap: this});
@@ -534,17 +688,32 @@ class DungeonMap extends Signalable {
         // Let everyone know we're done and you can use all fetched data
         if (this.mapObjectGroupFetchSuccessCount === this.mapObjectGroups.length) {
             this.signal('map:mapobjectgroupsfetchsuccess');
+
+            // All layers have been fetched, refresh tooltips to update "No layers to edit" state
+            refreshTooltips();
         }
     }
 
+    /**
+     * Gets if enemy selection is enabled or not.
+     * @returns {boolean}
+     */
     isEnemySelectionEnabled() {
         return this.currentEnemySelection !== null;
     }
 
+    /**
+     * Gets the current enemy selection instance.
+     * @returns {null}
+     */
     getEnemySelection() {
         return this.currentEnemySelection;
     }
 
+    /**
+     * Start the enemy selection
+     * @param enemySelection The instance of an EnemySelection object which defines what may be selected.
+     */
     startEnemySelection(enemySelection) {
         console.assert(enemySelection instanceof EnemySelection, this, 'enemySelection is not an EnemySelection');
         if (this.currentEnemySelection === null) {
@@ -556,6 +725,9 @@ class DungeonMap extends Signalable {
         }
     }
 
+    /**
+     * Finishes the current enemy selection, if there's one going on at the moment.
+     */
     finishEnemySelection() {
         if (this.currentEnemySelection !== null) {
             this.currentEnemySelection.cancelSelectMode();

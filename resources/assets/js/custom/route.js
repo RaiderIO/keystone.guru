@@ -4,6 +4,7 @@ $(function () {
             TYPE: 'route'
         },
         initialize: function (map, options) {
+            options.showLength = false;
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
             this.type = L.Draw.Route.TYPE;
             L.Draw.Feature.prototype.initialize.call(this, map, options);

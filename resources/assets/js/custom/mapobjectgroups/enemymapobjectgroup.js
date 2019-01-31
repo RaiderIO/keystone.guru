@@ -90,8 +90,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                                 enemy.is_mdt = remoteEnemy.is_mdt;
                                 // Whatever enemy this MDT enemy is linked to
                                 enemy.enemy_id = remoteEnemy.enemy_id;
-                                // Hide MDT objects initially
-                                self.setMapObjectVisibility(enemy, false);
+                                // Hide this enemy by default
+                                enemy.setDefaultVisible(false);
                             }
                             // If actually set..
                             if (remoteEnemy.hasOwnProperty('raid_marker_name') && remoteEnemy.raid_marker_name !== null) {
