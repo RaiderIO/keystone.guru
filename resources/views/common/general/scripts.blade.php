@@ -40,6 +40,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 
                 var data = {
                     details: [
+                        {key: "{{ __('Faction') }}", value: responseData.faction},
                         {key: "{{ __('Dungeon') }}", value: responseData.dungeon},
                         {key: "{{ __('Affixes') }}", value: responseData.affixes.join('<br>')},
                         {key: "{{ __('Pulls') }}", value: responseData.pulls},

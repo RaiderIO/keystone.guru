@@ -106,13 +106,21 @@ class DrawControls extends MapControl {
     /**
      * Gets the newly generated options for the drawing control.
      * @returns object
-     * @private
+     * @protected
      */
     _getDrawControlOptions() {
         console.assert(this instanceof DrawControls, this, 'this was not a DrawControls');
 
         let color = $('#edit_route_freedraw_options_color').val();
         let weight = $('#edit_route_freedraw_options_weight').val();
+
+        if( typeof color === 'undefined' ){
+            color = '#9DFF56';
+        }
+
+        if( typeof weight === 'undefined' ){
+            weight = 3;
+        }
 
         return {
             position: 'topleft',

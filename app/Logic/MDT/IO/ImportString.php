@@ -99,6 +99,7 @@ class ImportString
 
             // For each NPC that is killed in this pull (and their clones)
             foreach ($pull as $npcIndex => $mdtClones) {
+                $npcIndex = (int)$npcIndex;
                 // Only if filled
                 $enemyCount = count($mdtClones);
                 foreach ($mdtClones as $index => $cloneIndex) {
@@ -109,8 +110,11 @@ class ImportString
                     /** @var Enemy $mdtEnemy */
                     $mdtEnemy = null;
                     foreach ($mdtEnemies as $mdtEnemyCandidate) {
+                        // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
+                        // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
+                        $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
                         // NPC and clone index make for unique ID
-                        if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && $mdtEnemyCandidate->mdt_id === $cloneIndex) {
+                        if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
                             // Found it
                             $mdtEnemy = $mdtEnemyCandidate;
                             break;
@@ -118,7 +122,7 @@ class ImportString
                     }
 
                     if ($mdtEnemy === null) {
-                        throw new \Exception("Unable to find MDT enemy for index {$cloneIndex}!");
+                        throw new \Exception("Unable to find MDT enemy for index {$cloneIndex} and npc index {$npcIndex}!");
                     }
 
                     // We now know the MDT enemy that the user was trying to import. However, we need to know
@@ -162,7 +166,7 @@ class ImportString
             $killZone->lng = $kzLng / $totalEnemiesKilled;
 
             // Do not place them right on top of each other
-            if( $totalEnemiesKilled === 1 ){
+            if ($totalEnemiesKilled === 1) {
                 $killZone->lat += 1;
             }
 
@@ -307,7 +311,8 @@ class ImportString
             $dungeonRoute = new DungeonRoute();
             $dungeonRoute->author_id = Auth::id();
             $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
-            $dungeonRoute->faction_id = 1; // Default faction
+            // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
+            $dungeonRoute->faction_id = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
             $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
             $dungeonRoute->teeming = boolval($decoded['value']['teeming']);
             $dungeonRoute->title = $decoded['text'];

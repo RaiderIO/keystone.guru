@@ -2,10 +2,23 @@ class AdminDrawControls extends DrawControls {
     constructor(map, drawnItemsLayer) {
         super(map, drawnItemsLayer);
 
-        // Add to the existing options
-        $.extend(true, this.drawControlOptions, {
+        this.map.hotkeys.attach('e', 'leaflet-draw-draw-enemy');
+        this.map.hotkeys.attach('a', 'leaflet-draw-draw-enemypack');
+        this.map.hotkeys.attach('p', 'leaflet-draw-draw-enemypatrol');
+    }
+
+    /**
+     *
+     * @returns
+     * @protected
+     */
+    _getDrawControlOptions() {
+        let options = super._getDrawControlOptions();
+
+        options = $.extend(true, options, {
             draw: {
-                polyline: false,
+                killzone: false,
+                brushline: false,
                 route: false,
                 enemypack: {
                     allowIntersection: false, // Restricts shapes to simple polygons
@@ -46,8 +59,8 @@ class AdminDrawControls extends DrawControls {
             }
         });
 
-        this.map.hotkeys.attach('e', 'leaflet-draw-draw-enemy');
-        this.map.hotkeys.attach('a', 'leaflet-draw-draw-enemypack');
-        this.map.hotkeys.attach('p', 'leaflet-draw-draw-enemypatrol');
+        console.log(options);
+
+        return options;
     }
 }

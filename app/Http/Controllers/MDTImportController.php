@@ -41,6 +41,8 @@ class MDTImportController extends Controller
             }
 
             $result = [
+                // Siege of Boralus faction
+                'faction' => $dungeonRoute->faction->name,
                 'dungeon' => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon'),
                 'affixes' => $affixes,
                 'pulls' => $dungeonRoute->killzones->count(),

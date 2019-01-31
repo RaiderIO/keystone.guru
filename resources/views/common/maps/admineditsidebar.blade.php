@@ -11,12 +11,12 @@ if (isset($model)) {
 
 @section('sidebar-content')
 
-    <!-- Edit route -->
+    <!-- Edit dungeon -->
     <div class="form-group route_manipulation_tools">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Edit route') }}</h5>
-                <!-- Draw controls are injected here through drawcontrols.js -->
+                <h5 class="card-title">{{ __('Edit dungeon') }}</h5>
+                <!-- Draw controls are injected here through admindrawcontrols.js -->
                 <div id="edit_route_draw_container" class="row">
 
                 </div>
