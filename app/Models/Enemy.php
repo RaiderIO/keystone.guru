@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Auth;
  * @property int $enemy_pack_id
  * @property int $npc_id
  * @property int $floor_id
+ * @property int $mdt_id The ID in MDT (clone index) that this enemy is coupled to
+ * @property int $mdt_npc_index The index of the NPC in MDT
+ * @property int $enemy_id Only used for temp MDT enemies
+ * @property bool $is_mdt Only used for temp MDT enemies
  * @property bool $is_infested
  * @property string $teeming
  * @property string $faction
@@ -20,7 +24,6 @@ use Illuminate\Support\Facades\Auth;
  * @property \App\Models\EnemyPack $enemyPack
  * @property \App\Models\Npc $npc
  * @property \App\Models\Floor $floor
- * @property \Illuminate\Support\Collection $vertices
  * @property \Illuminate\Support\Collection $thisweeksinfestedvotes
  */
 class Enemy extends Model

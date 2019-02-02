@@ -11,7 +11,7 @@ class EnemyVisualModifier extends EnemyVisualIcon {
      * @private
      */
     _isVisible() {
-        return this.iconName !== '' && this.iconName !== null;
+        return this.enemyvisual.layer._icon instanceof Element && this.iconName !== '' && this.iconName !== null;
     }
 
     /**
@@ -20,9 +20,12 @@ class EnemyVisualModifier extends EnemyVisualIcon {
      */
     _visualBuilt() {
         console.assert(this instanceof EnemyVisualModifier, this, 'this is not an EnemyVisualModifier!');
-        let element = this.enemyvisual.layer._icon;
-        console.assert(element instanceof Element, this, 'element is not an Element! (Leaflet changed their internal structure?)');
-        this.onVisualBuilt(element);
+        // Only build our visual when we ourselves are visible
+        if( this._isVisible() ){
+            let element = this.enemyvisual.layer._icon;
+            console.assert(element instanceof Element, this, 'element is not an Element! (Leaflet changed their internal structure?)');
+            this.onVisualBuilt(element);
+        }
     }
 
     /**

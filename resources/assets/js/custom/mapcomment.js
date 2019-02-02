@@ -46,20 +46,6 @@ class MapComment extends MapObject {
         this.edit();
     }
 
-    getContextMenuItems() {
-        console.assert(this instanceof MapComment, this, 'this was not a MapComment');
-        // Merge existing context menu items with the admin ones
-        return super.getContextMenuItems().concat([{
-            text: '<i class="fas fa-save"></i> ' + (this.saving ? "Saving.." : "Save"),
-            disabled: this.synced || this.saving,
-            callback: (this.save).bind(this)
-        }, '-', {
-            text: '<i class="fas fa-trash"></i> ' + (this.deleting ? "Deleting.." : "Delete"),
-            disabled: !this.synced || this.deleting,
-            callback: (this.delete).bind(this)
-        }]);
-    }
-
     isEditable() {
         console.assert(this instanceof MapComment, this, 'this is not a MapComment');
         return !this.always_visible;
@@ -156,7 +142,7 @@ class MapComment extends MapObject {
             });
         } else {
             // We have to supply an ID to keep everything working properly
-            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id })
+            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id})
         }
     }
 
@@ -199,7 +185,7 @@ class MapComment extends MapObject {
                 self.layer.unbindPopup();
                 self.layer.bindPopup(customPopupHtml, customOptions);
 
-                self.layer.off('popupopen', popupOpenFn);
+                self.layer.off('popupopen');
                 self.layer.on('popupopen', popupOpenFn);
             });
 

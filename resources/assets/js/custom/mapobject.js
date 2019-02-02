@@ -8,13 +8,66 @@ class MapObject extends Signalable {
     constructor(map, layer) {
         super();
         console.assert(map instanceof DungeonMap, map, 'Passed map is not a DungeonMap!');
+        let self = this;
 
+        this._defaultVisible = true;
         this.synced = false;
         this.map = map;
         this.layer = layer;
 
         this.id = 0;
         this.label = 'default label';
+        this.decorator = null;
+
+        this.register('synced', this, function () {
+            self._rebuildDecorator();
+        });
+        this.register('object:deleted', this, function () {
+            self._cleanDecorator();
+        });
+        this.map.register('map:beforerefresh', this, function () {
+            self._cleanDecorator();
+        });
+
+        this.register(['shown', 'hidden'], this, function (event) {
+            if (event.data.visible) {
+                self._rebuildDecorator();
+            } else {
+                self._cleanDecorator();
+            }
+        });
+    }
+
+    /**
+     * Cleans up the decorator of this route, removing it from the map.
+     * @private
+     */
+    _cleanDecorator() {
+        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
+
+        if (this.decorator !== null) {
+            this.map.leafletMap.removeLayer(this.decorator);
+        }
+    }
+
+    /**
+     * Rebuild the decorators for this route (directional arrows etc).
+     * @private
+     */
+    _rebuildDecorator() {
+        console.assert(this instanceof MapObject, this, 'this is not an MapObject');
+
+        this._cleanDecorator();
+
+        this.decorator = this._getDecorator();
+        // Only if set after the getter finished
+        if (this.decorator !== null) {
+            this.decorator.addTo(this.map.leafletMap);
+        }
+    }
+
+    _getDecorator() {
+        return null;
     }
 
     _updateContextMenuOptions() {
@@ -27,10 +80,10 @@ class MapObject extends Signalable {
 
     getContextMenuItems() {
         return [
-        //     {
-        //     text: this.label + ' (synced: ' + this.synced + ')',
-        //     disabled: true
-        // }
+            //     {
+            //     text: this.label + ' (synced: ' + this.synced + ')',
+            //     disabled: true
+            // }
         ];
     }
 
@@ -38,9 +91,34 @@ class MapObject extends Signalable {
      * Gets if this map object is editable, default is true. May be overridden.
      * @returns {boolean}
      */
-    isEditable(){
+    isEditable() {
         return true;
     }
+
+    /**
+     * Gets if this map object is deleteable, default is true. May be overridden.
+     * @returns {boolean}
+     */
+    isDeleteable() {
+        return true;
+    }
+
+    /**
+     * Sets this enemy to be visible by default or not. Note: only read/used at initial load in!
+     * @param value boolean
+     */
+    setDefaultVisible(value) {
+        this._defaultVisible = value;
+    }
+
+    /**
+     * Checks if this object is visible by default.
+     * @returns {boolean}
+     */
+    isDefaultVisible() {
+        return this._defaultVisible;
+    }
+
 
     /**
      * Applies the tooltip to this map object if applicable.
@@ -54,6 +132,7 @@ class MapObject extends Signalable {
      * @param colors object The colors object as found in the constants.js file.
      */
     setColors(colors) {
+        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
         this.colors = colors;
     }
 
@@ -95,6 +174,7 @@ class MapObject extends Signalable {
         if (value) {
             // Refresh the tooltip
             this.bindTooltip();
+
             this.signal('synced');
         }
 
@@ -119,7 +199,6 @@ class MapObject extends Signalable {
             // Changed = gone out of sync
             self.setSynced(false);
         });
-        self.bindTooltip();
     }
 
     cleanup() {

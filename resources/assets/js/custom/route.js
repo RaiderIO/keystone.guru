@@ -4,6 +4,7 @@ $(function () {
             TYPE: 'route'
         },
         initialize: function (map, options) {
+            options.showLength = false;
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
             this.type = L.Draw.Route.TYPE;
             L.Draw.Feature.prototype.initialize.call(this, map, options);
@@ -212,7 +213,7 @@ class Route extends MapObject {
                 $color.val(self.routeColor);
 
                 // Class color buttons
-                let $classColors = $('.map_route_edit_popup_class_color');
+                let $classColors = $('.map_polyline_edit_popup_class_color ');
                 $classColors.unbind('click');
                 $classColors.bind('click', function () {
                     $color.val($(this).data('color'));
@@ -248,7 +249,7 @@ class Route extends MapObject {
                 self.layer.unbindPopup();
                 self.layer.bindPopup(customPopupHtml, customOptions);
 
-                self.layer.off('popupopen', popupOpenFn);
+                self.layer.off('popupopen');
                 self.layer.on('popupopen', popupOpenFn);
             });
         }

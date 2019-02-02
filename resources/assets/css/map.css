@@ -120,9 +120,14 @@ html, body, #map, #app, .wrapper {
     transition: all 0.2s;
 }
 
+#sidebar .draw_icon.leaflet-draw-toolbar-button-enabled,
 #sidebar .draw_icon:hover {
-    background: #FFF;
+    background: rgb(235, 235, 235);
     color: #DF691A;
+}
+
+#sidebar .draw_icon.leaflet-draw-toolbar-button-enabled {
+    border: 2px solid #DF691A;
 }
 
 .floating_panel,
@@ -134,6 +139,7 @@ html, body, #map, #app, .wrapper {
     background-color: #4E5D6C;
 }
 
+#edit_route_freedraw_options_color,
 #sidebar .dropdown.bootstrap-select .btn {
     background-color: #4E5D6C;
     color: #FFF;
@@ -228,14 +234,17 @@ html, body, #map, #app, .wrapper {
 /** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */
 /** leaflet-marker-icon leaflet-div-icon leaflet-editing-icon leaflet-touch-icon leaflet-zoom-animated leaflet-interactive leaflet-marker-draggable */
 
-.aggressive_enemy_icon,
-.neutral_enemy_icon,
-.unfriendly_enemy_icon,
-.friendly_enemy_icon,
-.unset_enemy_icon,
-.flagged_enemy_icon {
+.selected_enemy_icon,
+.enemy_icon {
     width: 11px;
     height: 11px;
+}
+
+.mdt_enemy_icon.leaflet-edit-marker-selected {
+    border-color: yellow !important;
+    margin-top: -9px !important;
+    margin-left: -9px !important;
+    border-radius: 4px !important; /* Fixes weird border */
 }
 
 .boss_enemy_icon {
@@ -322,20 +331,32 @@ html, body, #map, #app, .wrapper {
     max-width: 29.1%;
 }
 
+.enemy_icon {
+    background-image: url("/images/mapicon/unset.png") !important; /* no-repeat center !important; */
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 6px;
+    background-blend-mode: hard-light;
+}
+
+.teeming {
+    border: 1px solid red;
+}
+
 .aggressive_enemy_icon {
-    background: url("/images/mapicon/aggressive.png") no-repeat center !important;
+    background-color: #dc3c3c !important;
 }
 
 .neutral_enemy_icon {
-    background: url("/images/mapicon/neutral.png") no-repeat center !important;
+    background-color: #cccc2d !important;
 }
 
 .unfriendly_enemy_icon {
-    background: url("/images/mapicon/unfriendly.png") no-repeat center !important;
+    background-color: #ff9900 !important;
 }
 
 .friendly_enemy_icon {
-    background: url("/images/mapicon/friendly.png") no-repeat center !important;
+    background-color: #15c415 !important;
 }
 
 .boss_enemy_icon {
@@ -343,11 +364,23 @@ html, body, #map, #app, .wrapper {
 }
 
 .unset_enemy_icon {
-    background: url("/images/mapicon/unset.png") no-repeat center !important;
+
 }
 
 .flagged_enemy_icon {
-    background: url("/images/mapicon/neutral.png") no-repeat center !important;
+    background-color: #cccc2d !important;
+}
+
+.mdt_enemy_icon {
+    background-color: #4444ff !important;
+}
+
+.mdt_mismatched_enemy_icon {
+    background-color: #ff9900 !important;
+}
+
+.mdt_ok_enemy_icon {
+    background-color: #15c415 !important;
 }
 
 .door_icon {
@@ -360,19 +393,21 @@ html, body, #map, #app, .wrapper {
     border-color: yellow !important;
 }
 
-.killzone_enemy_icon_small {
+.selected_enemy_icon_small {
     margin-top: -4px !important;
     margin-left: -4px !important;
 }
 
-.killzone_enemy_icon_medium {
+.selected_enemy_icon_medium {
     margin-top: -4px !important;
     margin-left: -4px !important;
 }
 
-.killzone_enemy_icon_big {
+.selected_enemy_icon_big {
     margin-top: -4px !important;
     margin-left: -4px !important;
+    width: 32px !important;
+    height: 32px !important;
 }
 
 #map_enemy_forces h5 {
@@ -397,7 +432,7 @@ html, body, #map, #app, .wrapper {
     color: #5cb85c;
 }
 
-.map_route_edit_popup_class_color {
+.map_polyline_edit_popup_class_color {
     height: 32px;
     margin: 2px 10px;
     border-radius: 3px;

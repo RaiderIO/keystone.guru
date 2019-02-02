@@ -1,4 +1,4 @@
-const {mix} = require('laravel-mix');
+const mix = require('laravel-mix');
 const argv = require('yargs').argv;
 
 /*
@@ -48,6 +48,11 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/dungeonstartmarker.js',
         'resources/assets/js/custom/dungeonfloorswitchmarker.js',
         'resources/assets/js/custom/hotkeys.js',
+        'resources/assets/js/custom/brushline.js',
+
+        'resources/assets/js/custom/enemyselection/enemyselection.js',
+        'resources/assets/js/custom/enemyselection/killzoneenemyselection.js',
+        'resources/assets/js/custom/enemyselection/mdtenemyselection.js',
 
         'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
         'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
@@ -81,6 +86,7 @@ if (mix.inProduction()) {
         // Include the rest
         'resources/assets/js/custom/groupcomposition.js',
         'resources/assets/js/custom/mapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',

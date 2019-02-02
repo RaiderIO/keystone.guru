@@ -2,7 +2,8 @@
     {
         "id": 441,
         "enemy_pack_id": 495,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -15,7 +16,8 @@
     {
         "id": 443,
         "enemy_pack_id": 495,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -28,7 +30,8 @@
     {
         "id": 445,
         "enemy_pack_id": 87,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 4,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -41,7 +44,8 @@
     {
         "id": 447,
         "enemy_pack_id": 87,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 4,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -54,7 +58,8 @@
     {
         "id": 448,
         "enemy_pack_id": 89,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -67,7 +72,8 @@
     {
         "id": 450,
         "enemy_pack_id": 89,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 3,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -80,7 +86,8 @@
     {
         "id": 453,
         "enemy_pack_id": 89,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 3,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -93,7 +100,8 @@
     {
         "id": 526,
         "enemy_pack_id": 118,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 4,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -106,20 +114,22 @@
     {
         "id": 527,
         "enemy_pack_id": 118,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 3,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -153.25,
         "lng": 285.56,
         "npc": {
-            "id": 131849
+            "id": 131850
         }
     },
     {
         "id": 528,
         "enemy_pack_id": 118,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 3,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -132,7 +142,8 @@
     {
         "id": 529,
         "enemy_pack_id": -1,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -145,7 +156,8 @@
     {
         "id": 530,
         "enemy_pack_id": 119,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 2,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -158,7 +170,8 @@
     {
         "id": 531,
         "enemy_pack_id": 119,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 5,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -169,27 +182,43 @@
         }
     },
     {
-        "id": 532,
-        "enemy_pack_id": -1,
-        "floor_id": 60,
+        "id": 2076,
+        "enemy_pack_id": 446,
+        "floor_id": 61,
+        "mdt_id": 6,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -123.88,
-        "lng": 283.69,
+        "lat": -63,
+        "lng": 122.12,
         "npc": {
-            "id": 131677
+            "id": 131585
+        }
+    },
+    {
+        "id": 2077,
+        "enemy_pack_id": 446,
+        "floor_id": 61,
+        "mdt_id": 3,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -67,
+        "lng": 122.38,
+        "npc": {
+            "id": 131587
         }
     },
     {
         "id": 3049,
         "enemy_pack_id": -1,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -146,
-        "lng": 294,
+        "lat": -124,
+        "lng": 284.62,
         "npc": {
             "id": 131812
         }
@@ -197,7 +226,8 @@
     {
         "id": 3210,
         "enemy_pack_id": -1,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 2,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -210,7 +240,8 @@
     {
         "id": 3211,
         "enemy_pack_id": -1,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -223,7 +254,8 @@
     {
         "id": 3212,
         "enemy_pack_id": -1,
-        "floor_id": 60,
+        "floor_id": 61,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -231,6 +263,48 @@
         "lng": 87.5,
         "npc": {
             "id": 131670
+        }
+    },
+    {
+        "id": 3386,
+        "enemy_pack_id": 89,
+        "floor_id": 61,
+        "mdt_id": 6,
+        "teeming": "visible",
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -133.81,
+        "lng": 79.939999999999998,
+        "npc": {
+            "id": 131818
+        }
+    },
+    {
+        "id": 3387,
+        "enemy_pack_id": -1,
+        "floor_id": 61,
+        "mdt_id": 2,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -179.38,
+        "lng": 280.62,
+        "npc": {
+            "id": 131670
+        }
+    },
+    {
+        "id": 3388,
+        "enemy_pack_id": -1,
+        "floor_id": 61,
+        "mdt_id": 2,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -152.5,
+        "lng": 147,
+        "npc": {
+            "id": 131677
         }
     }
 ]

@@ -49,22 +49,20 @@ class KillZone extends MapObject {
         this.setColors(c.map.killzone.colors);
         this.setSynced(false);
 
-        // We gotta remove the connections manually since they're self managed here.
-        this.map.register('map:beforerefresh', this, function () {
-            // In case someone switched dungeons prior to finishing the kill zone edit
-            self.map.setSelectModeKillZone(null);
-            self.removeExistingConnectionsToEnemies();
-        });
-
-        // External change (due to delete mode being started, for example)
-        this.map.register('map:killzoneselectmodechanged', this, function (event) {
-            let killzone = event.data.killzone;
-            let previousKillzone = event.data.previousKillzone;
-            // Only if the toolbar is active, not when we just de-selected ourselves
-            if (killzone === null && previousKillzone === self && self.map.toolbarActive) {
-                self.cancelSelectMode(true);
-            }
-        });
+        // // We gotta remove the connections manually since they're self managed here.
+        // this.map.register('map:beforerefresh', this, function () {
+        //     // In case someone switched dungeons prior to finishing the kill zone edit
+        //     self.map.setSelectModeKillZone(null);
+        //     self.removeExistingConnectionsToEnemies();
+        // });
+        //
+        // // External change (due to delete mode being started, for example)
+        // this.map.register('map:enemyselectionmodechanged', this, function (event) {
+        //     // Only if the toolbar is active, not when we just de-selected ourselves
+        //     if(event.data.finished && event.data.enemySelection instanceof KillZoneEnemySelection && self.map.toolbarActive){
+        //         self.cancelSelectMode(true);
+        //     }
+        // });
     }
 
     /**
@@ -198,7 +196,7 @@ class KillZone extends MapObject {
             });
         } else {
             // We have to supply an ID to keep everything working properly
-            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id });
+            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id});
         }
     }
 
@@ -223,69 +221,6 @@ class KillZone extends MapObject {
 
         this.enemies = enemies;
         this.redrawConnectionsToEnemies();
-    }
-
-    /**
-     * Starts select mode on this KillZone, if no other select mode was enabled already.
-     */
-    startSelectMode() {
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
-        let self = this;
-        if (!this.map.isKillZoneSelectModeEnabled()) {
-            this.layer.setIcon(LeafletKillZoneIconSelected);
-
-            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
-            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-                // We cannot kill an enemy twice, but can deselect once we have selected it
-                if (enemy.kill_zone_id <= 0 || enemy.kill_zone_id === self.id) {
-                    enemy.setKillZoneSelectable(!enemy.isKillZoneSelectable());
-                }
-
-                enemy.register('killzone:selected', self, function (data) {
-                    self.enemySelected(data.context);
-                })
-            });
-
-            // Cannot start editing things while we're doing this.
-            // @TODO https://stackoverflow.com/questions/40414970/disable-leaflet-draw-delete-button
-            $('.leaflet-draw-edit-edit').addClass('leaflet-disabled');
-            $('.leaflet-draw-edit-remove').addClass('leaflet-disabled');
-
-            // Now killzoning something
-            this.map.setSelectModeKillZone(this);
-
-            this.redrawConnectionsToEnemies();
-        }
-    }
-
-    /**
-     * Stops select mode of this KillZone.
-     */
-    cancelSelectMode(externalChange = false) {
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
-        if (this.map.isKillZoneSelectModeEnabled() || externalChange) {
-            if (!externalChange) {
-                this.map.setSelectModeKillZone(null);
-            }
-
-            this.layer.setIcon(LeafletKillZoneIcon);
-
-            let self = this;
-
-            // Revert all things we did to enemies
-            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
-            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-                enemy.setKillZoneSelectable(false);
-                enemy.unregister('killzone:selected', self);
-            });
-
-            // Ok we're clear, may edit again (there's always something to edit because this KillZone exists)
-            $('.leaflet-draw-edit-edit').removeClass('leaflet-disabled');
-            $('.leaflet-draw-edit-remove').removeClass('leaflet-disabled');
-
-            this.redrawConnectionsToEnemies();
-            this.save();
-        }
     }
 
     /**
@@ -349,12 +284,12 @@ class KillZone extends MapObject {
 
         let self = this;
 
-        let killZoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
-
         this.removeExistingConnectionsToEnemies();
 
         // Create & add new layer
         this.enemyConnectionsLayerGroup = new L.LayerGroup();
+
+        let killZoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
         killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
 
         // Add connections from each enemy to our location
@@ -395,7 +330,7 @@ class KillZone extends MapObject {
             let offset = new Offset();
             p = offset.data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
 
-            let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color });
+            let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color});
 
             let polygon = L.polygon(p, opts);
 
@@ -444,28 +379,57 @@ class KillZone extends MapObject {
                 polygon.unbindPopup();
                 polygon.bindPopup(customPopupHtml, customOptions);
 
-                polygon.off('popupopen', popupOpenFn);
+                polygon.off('popupopen');
                 polygon.on('popupopen', popupOpenFn);
             }
         }
     }
 
+    /**
+     * Called when enemy selection for this killzone has changed (started/finished)
+     * @param selectionEvent
+     * @private
+     */
+    _enemySelectionChanged(selectionEvent) {
+        console.assert(this instanceof KillZone, this, 'this is not a KillZone');
+
+        // Redraw any changes as necessary
+        this.redrawConnectionsToEnemies();
+        if (selectionEvent.data.finished) {
+            // May save when nothing has changed, but that's okay
+            this.save();
+
+            // We're done with this event now (after finishing! otherwise we won't process the result)
+            this.map.unregister('map:enemyselectionmodechanged', this);
+        }
+    }
+
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        console.assert(this instanceof KillZone, this, 'this is not a KillZone');
         super.onLayerInit();
 
         let self = this;
 
         if (this.map.edit) {
-            this.layer.on('click', function (event) {
-                // Can only interact with select mode if we're the one that is currently being selected
-                if (!self.map.deleteModeActive &&
-                    (self.map.currentSelectModeKillZone === self || self.map.currentSelectModeKillZone === null)) {
-                    if (self.map.isKillZoneSelectModeEnabled()) {
-                        self.cancelSelectMode();
-                    } else {
-                        self.startSelectMode();
+            this.layer.on('click', function (clickEvent) {
+                // When deleting, we shouldn't have these interactions
+                if (!self.map.deleteModeActive) {
+                    let enemySelection = self.map.getEnemySelection();
+                    // Can only interact with select mode if we're the one that is currently being selected
+                    if (enemySelection === null) {
+                        let kzEnemySelection = new KillZoneEnemySelection(self.map, self);
+                        kzEnemySelection.register('enemyselection:enemyselected', this, function (selectedEvent) {
+                            self.enemySelected(selectedEvent.data.enemy);
+                        });
+
+                        // Register for changes to the selection event
+                        self.map.register('map:enemyselectionmodechanged', self, self._enemySelectionChanged.bind(self));
+
+                        // Start selecting enemies
+                        self.map.startEnemySelection(kzEnemySelection);
+                    } else if (enemySelection.getMapObject() === self) {
+                        self.map.finishEnemySelection();
                     }
                 }
             });
@@ -479,7 +443,6 @@ class KillZone extends MapObject {
 
         // When we have all data, redraw the connections. Not sooner or otherwise we may not have the enemies back yet
         this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
-            console.log('success!', self.map.noUI);
             // The enemies data has been set, but not properly propagated to all enemies that they're attached to a killzone
             // Couldn't do that because enemies may not have been loaded at that point. Now we're sure the enemies have been
             // loaded so we can inject ourselves in the enemy
@@ -530,8 +493,8 @@ class KillZone extends MapObject {
 
         let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-            enemy.setKillZoneSelectable(false);
-            enemy.unregister('killzone:selected', self);
+            enemy.setSelectable(false);
+            enemy.unregister('enemy:selected', self);
         });
 
         super.cleanup();

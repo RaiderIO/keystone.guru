@@ -49,7 +49,7 @@ class APIRouteController extends Controller
             $route->color = $request->get('color');
 
             if (!$route->save()) {
-                throw new \Exception("Unable to save enemy patrol!");
+                throw new \Exception("Unable to save route!");
             } else {
                 $route->deleteVertices();
 

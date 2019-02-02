@@ -17,7 +17,7 @@
             'edit' => true,
             'dungeon' => $dungeon,
             'npcs' => $npcs,
-            'selectedFloorId' => $model->id
+            'floorId' => $model->id
         ])
 
         @include('common.maps.admineditsidebar', [

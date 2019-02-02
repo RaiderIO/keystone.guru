@@ -4,7 +4,7 @@
         "dungeon_id": 17,
         "classification_id": 3,
         "name": "Aqu'sirr",
-        "base_health": 1,
+        "base_health": 2354560,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -18,11 +18,20 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 134060,
+        "dungeon_id": 17,
+        "classification_id": 3,
+        "name": "Lord Stormsong",
+        "base_health": 2060240,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 134063,
         "dungeon_id": 17,
         "classification_id": 3,
         "name": "Brother Ironhull",
-        "base_health": 1,
+        "base_health": 1545180,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -31,7 +40,7 @@
         "dungeon_id": 17,
         "classification_id": 3,
         "name": "Vol'zith the Whisperer",
-        "base_health": 1,
+        "base_health": 2060240,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -195,15 +204,6 @@
         "name": "Dredged Sailor",
         "base_health": 14717,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 139737,
-        "dungeon_id": 17,
-        "classification_id": 3,
-        "name": "Lord Stormsong",
-        "base_health": 1,
-        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {

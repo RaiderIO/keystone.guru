@@ -165,15 +165,26 @@ $introTexts = [
 
     <script id="map_enemy_visuals_template" type="text/x-handlebars-template">
         <div id="map_enemy_visuals" class="leaflet-draw-section">
-            <?php
-            $visuals = [];
-            if (Auth::check() && $showInfestedVoting) {
-                $visuals['infested_vote'] = __('Infested Voting');
-            }
-            $visuals['aggressiveness'] = __('Aggressiveness');
-            $visuals['enemy_forces'] = __('Enemy forces');
-            ?>
-            {!! Form::select('map_enemy_visuals_dropdown', $visuals, 0, ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
+            <div class="form-group">
+                <?php
+                $visuals = [];
+                if (Auth::check() && $showInfestedVoting) {
+                    $visuals['infested_vote'] = __('Infested Voting');
+                }
+                $visuals['aggressiveness'] = __('Aggressiveness');
+                $visuals['enemy_forces'] = __('Enemy forces');
+                ?>
+                {!! Form::select('map_enemy_visuals_dropdown', $visuals, 0, ['id' => 'map_enemy_visuals_dropdown', 'class' => 'form-control selectpicker']) !!}
+            </div>
+            @if($isAdmin)
+                <div class="form-group">
+                    <div class="font-weight-bold">
+                        {{ __('MDT enemy mapping') }}:
+                    </div>
+                    {!! Form::checkbox('map_enemy_visuals_map_mdt_clones_to_enemies', 1, false,
+                        ['id' => 'map_enemy_visuals_map_mdt_clones_to_enemies', 'class' => 'form-control left_checkbox']) !!}
+                </div>
+            @endif
         </div>
     </script>
 
@@ -232,6 +243,11 @@ $introTexts = [
                     infested_net_votes }}/+{{ config('keystoneguru.infested_user_vote_threshold') }})
                 </div>
             </div>
+            <div class="row">
+                <div class="col-5 no-gutters">{{ __('Teeming') }} </div>
+                <div class="col-7 no-gutters">@{{ teeming }}
+                </div>
+            </div>
             @auth
                 @if(Auth::user()->hasRole('admin'))
                     <div class="row">
@@ -244,8 +260,28 @@ $introTexts = [
                         <div class="col-7 no-gutters">@{{ id }}</div>
                     </div>
                     <div class="row">
+                        <div class="col-5 no-gutters">{{ __('Faction') }} </div>
+                        <div class="col-7 no-gutters">@{{ faction }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('NPC_ID') }} </div>
+                        <div class="col-7 no-gutters">@{{ npc_id }} (@{{ npc_id_type }})</div>
+                    </div>
+                    <div class="row">
                         <div class="col-5 no-gutters">{{ __('Pack') }} </div>
                         <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('MDT') }} </div>
+                        <div class="col-7 no-gutters">@{{ is_mdt }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('MDT_ID') }} </div>
+                        <div class="col-7 no-gutters">@{{ mdt_id }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 no-gutters">{{ __('ENEMY_ID') }} </div>
+                        <div class="col-7 no-gutters">@{{ enemy_id }}</div>
                     </div>
                     <div class="row">
                         <div class="col-5 no-gutters">{{ __('Visual') }} </div>
@@ -269,7 +305,7 @@ $introTexts = [
                     @if($i % $half === 0)
                         <div class="row no-gutters pt-1">
                             @endif
-                            <div class="col map_route_edit_popup_class_color border-dark"
+                            <div class="col map_polyline_edit_popup_class_color border-dark"
                                  data-color="{{ $class->color }}"
                                  style="background-color: {{ $class->color }};">
                             </div>
@@ -281,6 +317,39 @@ $introTexts = [
             {!! Form::button(__('Submit'), ['id' => 'map_route_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
         </div>
     </script>
+
+    <script id="map_brushline_edit_popup_template" type="text/x-handlebars-template">
+        <div id="map_brushline_edit_popup_inner" class="popupCustom">
+            <div class="form-group">
+                {!! Form::label('map_brushline_edit_popup_color_@{{id}}', __('Color')) !!}
+                {!! Form::color('map_brushline_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+
+                @php($classes = \App\Models\CharacterClass::all())
+                @php($half = ($classes->count() / 2))
+                @for($i = 0; $i < $classes->count(); $i++)
+                    @php($class = $classes->get($i))
+                    @if($i % $half === 0)
+                        <div class="row no-gutters pt-1">
+                            @endif
+                            <div class="col map_polyline_edit_popup_class_color border-dark"
+                                 data-color="{{ $class->color }}"
+                                 style="background-color: {{ $class->color }};">
+                            </div>
+                            @if($i % $half === $half - 1)
+                        </div>
+                    @endif
+                @endfor
+            </div>
+            <div class="form-group">
+                {!! Form::label('map_brushline_edit_popup_weight_@{{id}}', __('Weight')) !!}
+                {!! Form::select('map_brushline_edit_popup_weight_@{{id}}', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6], 3,
+                ['id' => 'map_brushline_edit_popup_weight_@{{id}}', 'class' => 'form-control selectpicker']) !!}
+            </div>
+            {!! Form::button(__('Submit'), ['id' => 'map_brushline_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+        </div>
+    </script>
+    
+    
 
     <script id="map_killzone_edit_popup_template" type="text/x-handlebars-template">
         <div id="map_killzone_edit_popup_inner" class="popupCustom">
@@ -318,8 +387,10 @@ $introTexts = [
             <div class="modifier modifier_2 @{{modifier_2_classes}}" style="display: none;">
                 @{{{modifier_2_html}}}
             </div>
-            <div class=" @{{killzone_classes}} @{{main_visual_classes}}">
-                @{{{main_visual_html}}}
+            <div class="@{{selection_classes_base}} @{{selection_classes}}">
+                <div class="@{{main_visual_classes}}">
+                    @{{{main_visual_html}}}
+                </div>
             </div>
         </div>
     </script>

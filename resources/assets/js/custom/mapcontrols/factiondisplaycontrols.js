@@ -54,6 +54,12 @@ class FactionDisplayControls extends MapControl {
         });
     }
 
+    /**
+     * Called whenever the visibility has been toggled to display another faction.
+     * @param faction
+     * @param visible
+     * @private
+     */
     _visibilityToggled(faction, visible) {
         console.assert(this instanceof FactionDisplayControls, this, 'this is not FactionDisplayControls');
 
@@ -66,7 +72,8 @@ class FactionDisplayControls extends MapControl {
         $.each(enemyMapObjectGroups, function (i, enemyMapObjectGroup) {
             // For each object in the group
             $.each(enemyMapObjectGroup.objects, function (index, mapObject) {
-                if (mapObject.faction === faction) {
+                // One or either or any faction
+                if (mapObject.faction === faction && mapObject.faction !== 'any') {
                     enemyMapObjectGroup.setMapObjectVisibility(mapObject, visible);
                 }
             });

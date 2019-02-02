@@ -43,7 +43,7 @@ class EnemyPack extends MapObject {
      * @private
      */
     _cleanDecorator() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
+        console.assert(this instanceof EnemyPack, this, 'this is not an EnemyPack');
 
         if (this.decorator !== null) {
             this.map.leafletMap.removeLayer(this.decorator);
@@ -55,7 +55,7 @@ class EnemyPack extends MapObject {
      * @private
      */
     _rebuildDecorator() {
-        console.assert(this instanceof EnemyPack, this, 'this is not an Route');
+        console.assert(this instanceof EnemyPack, this, 'this is not an EnemyPack');
 
         // Not sure if this really adds anything but I'll keep it here in case I want to do something with it
         // this._cleanDecorator();

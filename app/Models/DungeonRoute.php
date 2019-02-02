@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\ProcessRouteFloorThumbnail;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -36,6 +37,7 @@ use Illuminate\Support\Facades\DB;
  * @property Route $route
  * @property Faction $faction
  * @property User $author
+ * @property MDTImport $mdtImport
  *
  * @property \Illuminate\Support\Collection $specializations
  * @property \Illuminate\Support\Collection $classes
@@ -51,6 +53,7 @@ use Illuminate\Support\Facades\DB;
  *
  * @property \Illuminate\Support\Collection $routes
  * @property \Illuminate\Support\Collection $killzones
+ * @property \Illuminate\Support\Collection $polylines
  *
  * @property \Illuminate\Support\Collection $enemyraidmarkers
  * @property \Illuminate\Support\Collection $mapcomments
@@ -194,6 +197,14 @@ class DungeonRoute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function polylines()
+    {
+        return $this->hasMany('App\Models\Polyline');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function ratings()
     {
         return $this->hasMany('App\Models\DungeonRouteRating');
@@ -237,6 +248,15 @@ class DungeonRoute extends Model
     public function pageviews()
     {
         return $this->hasMany('App\Models\PageView', 'model_id')->where('model_class', get_class($this));
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mdtImport()
+    {
+        // Only set if the route was imported through an MDT string
+        return $this->hasMany('App\Models\MDTImport');
     }
 
     /**
@@ -372,7 +392,8 @@ class DungeonRoute extends Model
         $result = false;
 
         // Overwrite the author_id if it's not been set yet
-        if (!isset($this->id)) {
+        $new = !isset($this->id);
+        if ($new) {
             $this->author_id = \Auth::user()->id;
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
@@ -401,10 +422,13 @@ class DungeonRoute extends Model
                 // Remove old attributes
                 $this->routeattributesraw()->delete();
                 foreach ($newAttributes as $key => $value) {
-                    $drAttribute = new DungeonRouteAttribute();
-                    $drAttribute->dungeon_route_id = $this->id;
-                    $drAttribute->route_attribute_id = $value;
-                    $drAttribute->save();
+                    // Only if they exist
+                    if (RouteAttribute::where('id', $value)->exists()) {
+                        $drAttribute = new DungeonRouteAttribute();
+                        $drAttribute->dungeon_route_id = $this->id;
+                        $drAttribute->route_attribute_id = $value;
+                        $drAttribute->save();
+                    }
                 }
             }
 
@@ -413,10 +437,13 @@ class DungeonRoute extends Model
                 // Remove old specializations
                 $this->playerspecializations()->delete();
                 foreach ($newSpecs as $key => $value) {
-                    $drpSpec = new DungeonRoutePlayerSpecialization();
-                    $drpSpec->character_class_specialization_id = $value;
-                    $drpSpec->dungeon_route_id = $this->id;
-                    $drpSpec->save();
+                    // Only if they exist
+                    if (CharacterClassSpecialization::where('id', $value)->exists()) {
+                        $drpSpec = new DungeonRoutePlayerSpecialization();
+                        $drpSpec->character_class_specialization_id = $value;
+                        $drpSpec->dungeon_route_id = $this->id;
+                        $drpSpec->save();
+                    }
                 }
             }
 
@@ -425,10 +452,12 @@ class DungeonRoute extends Model
                 // Remove old classes
                 $this->playerclasses()->delete();
                 foreach ($newClasses as $key => $value) {
-                    $drpClass = new DungeonRoutePlayerClass();
-                    $drpClass->character_class_id = $value;
-                    $drpClass->dungeon_route_id = $this->id;
-                    $drpClass->save();
+                    if (CharacterClass::where('id', $value)->exists()) {
+                        $drpClass = new DungeonRoutePlayerClass();
+                        $drpClass->character_class_id = $value;
+                        $drpClass->dungeon_route_id = $this->id;
+                        $drpClass->save();
+                    }
                 }
             }
 
@@ -455,7 +484,7 @@ class DungeonRoute extends Model
                     $affixGroup = AffixGroup::findOrNew($value);
 
                     // Do not add affixes that do not belong to our Teeming selection
-                    if ($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) {
+                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) || $affixGroup->inactive()) {
                         continue;
                     }
 
@@ -465,6 +494,12 @@ class DungeonRoute extends Model
                     $drAffixGroup->save();
                 }
             }
+
+            // Instantly generate a placeholder thumbnail for new routes.
+            if ($new) {
+                $this->queueRefreshThumbnails();
+            }
+
             $result = true;
         }
 
@@ -513,6 +548,17 @@ class DungeonRoute extends Model
         return $result;
     }
 
+    /**
+     * Queues this dungeon route for refreshing of the thumbnails as soon as possible.
+     */
+    public function queueRefreshThumbnails()
+    {
+        foreach ($this->dungeon->floors as $floor) {
+            /** @var Floor $floor */
+            // Set it for processing in a queue
+            ProcessRouteFloorThumbnail::dispatch($this, $floor->index);
+        }
+    }
 
 
     /**

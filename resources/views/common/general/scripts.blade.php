@@ -17,7 +17,59 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 
         // Make sure selectpicker is enabled
         $(".selectpicker").selectpicker();
+
+        $('#import_string_textarea').bind('paste', _importStringPasted);
     });
+
+    /**
+     * Called whenever the MDT import string has been pasted into the text area.
+     **/
+    function _importStringPasted(typedEvent) {
+        // https://stackoverflow.com/questions/686995/catch-paste-input
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('mdt.details') }}',
+            dataType: 'json',
+            data: {
+                'import_string': typedEvent.originalEvent.clipboardData.getData('text')
+            },
+            success: function (responseData) {
+                var templateHtml = $('#import_string_details_template').html();
+
+                var template = handlebars.compile(templateHtml);
+
+                var data = {
+                    details: [
+                        {key: "{{ __('Faction') }}", value: responseData.faction},
+                        {key: "{{ __('Dungeon') }}", value: responseData.dungeon},
+                        {key: "{{ __('Affixes') }}", value: responseData.affixes.join('<br>')},
+                        {key: "{{ __('Pulls') }}", value: responseData.pulls},
+                        {key: "{{ __('Drawn lines') }}", value: responseData.lines},
+                        {key: "{{ __('Notes') }}", value: responseData.notes},
+                        {
+                            key: "{{ __('Enemy forces') }}",
+                            value: responseData.enemy_forces + '/' + responseData.enemy_forces_max
+                        }
+                    ]
+                };
+
+                // Build the preview from the template
+                $("#import_string_details").html(template(data));
+
+                // Can no longer edit it
+                var $importString = $('#import_string_textarea');
+                $importString.prop('disabled', true);
+
+                $('#import_string').val($importString.val());
+                $('#mdt_import_modal input[type="submit"]').prop('disabled', false);
+            }, error: function (xhr, textStatus, errorThrown) {
+                $("#import_string_details").html('');
+
+                $('#mdt_import_modal input[type="submit"]').prop('disabled', true);
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+            }
+        });
+    }
 
     /**
      * The default function that should be called when an ajax request fails (error handler)
