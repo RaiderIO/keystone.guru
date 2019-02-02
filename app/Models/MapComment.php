@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MapComment extends Model
 {
-    protected $hidden = ['dungeon_route_id', 'created_at', 'updated_at'];
+    protected $hidden = ['id', 'dungeon_route_id', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
