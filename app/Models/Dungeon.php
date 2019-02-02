@@ -17,8 +17,8 @@ use Mockery\Exception;
  * @property Expansion $expansion
  * @property \Illuminate\Support\Collection $floors
  * @property \Illuminate\Support\Collection $dungeonroutes
- *
  * @method static \Illuminate\Database\Eloquent\Builder active()
+ * @method static \Illuminate\Database\Eloquent\Builder inactive()
  */
 class Dungeon extends Model
 {

@@ -32,7 +32,7 @@ class GameServerRegion extends Model
     function _getAllAffixGroups()
     {
         if ($this->_affixGroups === null) {
-            $this->_affixGroups = AffixGroup::all();
+            $this->_affixGroups = AffixGroup::active()->get();
         }
         return $this->_affixGroups;
     }

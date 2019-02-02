@@ -139,6 +139,7 @@ html, body, #map, #app, .wrapper {
     background-color: #4E5D6C;
 }
 
+#edit_route_freedraw_options_color,
 #sidebar .dropdown.bootstrap-select .btn {
     background-color: #4E5D6C;
     color: #FFF;

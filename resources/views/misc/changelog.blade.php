@@ -64,7 +64,11 @@
                     Added missing Irontide Bonesaw on Teeming week before Skycap'n Kragg.
                 </li>
                 <li>
-                    Added missing pack of an Irontide Enforcer, Crackshot and two Bonesaws After Skycap'n Kragg.
+                    Added missing pack of an Irontide Enforcer, Crackshot and two Bonesaws after Skycap'n Kragg.
+                </li>
+                <li>
+                    Added missing Blacktooth Scrappers and Blacktooth Brutes right after the first rope bridge, around
+                    the center of the square.
                 </li>
                 <li>
                     Added missing Irontide Crusher on Teeming week before Ring of Booty.

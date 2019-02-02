@@ -59,8 +59,6 @@ class AdminDrawControls extends DrawControls {
             }
         });
 
-        console.log(options);
-
         return options;
     }
 }

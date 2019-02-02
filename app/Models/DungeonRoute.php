@@ -422,10 +422,13 @@ class DungeonRoute extends Model
                 // Remove old attributes
                 $this->routeattributesraw()->delete();
                 foreach ($newAttributes as $key => $value) {
-                    $drAttribute = new DungeonRouteAttribute();
-                    $drAttribute->dungeon_route_id = $this->id;
-                    $drAttribute->route_attribute_id = $value;
-                    $drAttribute->save();
+                    // Only if they exist
+                    if (RouteAttribute::where('id', $value)->exists()) {
+                        $drAttribute = new DungeonRouteAttribute();
+                        $drAttribute->dungeon_route_id = $this->id;
+                        $drAttribute->route_attribute_id = $value;
+                        $drAttribute->save();
+                    }
                 }
             }
 
@@ -434,10 +437,13 @@ class DungeonRoute extends Model
                 // Remove old specializations
                 $this->playerspecializations()->delete();
                 foreach ($newSpecs as $key => $value) {
-                    $drpSpec = new DungeonRoutePlayerSpecialization();
-                    $drpSpec->character_class_specialization_id = $value;
-                    $drpSpec->dungeon_route_id = $this->id;
-                    $drpSpec->save();
+                    // Only if they exist
+                    if (CharacterClassSpecialization::where('id', $value)->exists()) {
+                        $drpSpec = new DungeonRoutePlayerSpecialization();
+                        $drpSpec->character_class_specialization_id = $value;
+                        $drpSpec->dungeon_route_id = $this->id;
+                        $drpSpec->save();
+                    }
                 }
             }
 
@@ -446,10 +452,12 @@ class DungeonRoute extends Model
                 // Remove old classes
                 $this->playerclasses()->delete();
                 foreach ($newClasses as $key => $value) {
-                    $drpClass = new DungeonRoutePlayerClass();
-                    $drpClass->character_class_id = $value;
-                    $drpClass->dungeon_route_id = $this->id;
-                    $drpClass->save();
+                    if (CharacterClass::where('id', $value)->exists()) {
+                        $drpClass = new DungeonRoutePlayerClass();
+                        $drpClass->character_class_id = $value;
+                        $drpClass->dungeon_route_id = $this->id;
+                        $drpClass->save();
+                    }
                 }
             }
 
@@ -476,7 +484,7 @@ class DungeonRoute extends Model
                     $affixGroup = AffixGroup::findOrNew($value);
 
                     // Do not add affixes that do not belong to our Teeming selection
-                    if ($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) {
+                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) || $affixGroup->inactive()) {
                         continue;
                     }
 

@@ -334,7 +334,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         </div>
         <div class="col-lg-2">
             {!! Form::label('affixes[]', __('Affixes')) !!}
-            {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('text', 'id'), null,
+            {!! Form::select('affixes[]', \App\Models\AffixGroup::active()->get()->pluck('text', 'id'), null,
                 ['id' => 'affixes',
                 'class' => 'form-control affixselect selectpicker',
                 'multiple' => 'multiple',

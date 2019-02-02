@@ -36,9 +36,9 @@ class FixWaycrestManorFloorOrder extends Migration
         }
 
         // Re-seed; this will set the upstairs and grand foyer to their correct IDs again
-        Artisan::call('db:seed', array('--class' => 'DungeonsSeeder', '--database' => 'migrate', '--force'));
+        Artisan::call('db:seed', array('--class' => 'DungeonsSeeder', '--database' => 'migrate', '--force' => true));
         // Re-seed the enemies, their IDs are already fixed and just need to be re-imported
-        Artisan::call('db:seed', array('--class' => 'DungeonDataSeeder', '--database' => 'migrate', '--force'));
+        Artisan::call('db:seed', array('--class' => 'DungeonDataSeeder', '--database' => 'migrate', '--force' => true));
     }
 
     /**
