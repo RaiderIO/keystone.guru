@@ -19,7 +19,7 @@ if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
     full = argv.env.full;
 }
 // npm run dev -- --env.images false
-let images = false;
+let images = true;
 if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
     images = argv.env.images;
 }
@@ -119,10 +119,10 @@ if (full || mix.inProduction()) {
 mix.sourceMaps();
 
 if (images) {
-    if (mix.inProduction()) {
+    // if (mix.inProduction()) {
         // Copies all tiles as well which takes a while
-        mix.copy('resources/assets/images', 'public/images', false);
-    } else {
+        // mix.copy('resources/assets/images', 'public/images', false);
+    // } else {
         // Allow import of pure JS
         // mix.copy('resources/assets/js/custom', 'public/js/custom', false);
 
@@ -137,5 +137,5 @@ if (images) {
         mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);
         mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes', false);
         mix.copy('resources/assets/images/specializations', 'public/images/specializations', false);
-    }
+    // }
 }
