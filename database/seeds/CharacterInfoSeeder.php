@@ -187,7 +187,7 @@ class CharacterInfoSeeder extends Seeder
                 $icon->model_id = $characterClassSpecialization->id;
                 $icon->model_class = get_class($characterClassSpecialization);
                 $icon->disk = 'public';
-                $icon->path = sprintf('images/specializations/%s/%s_%s.png', $classKey, $specKey);
+                $icon->path = sprintf('images/specializations/%s/%s_%s.png', $classKey, $classKey, $specKey);
                 $icon->save();
 
                 $characterClassSpecialization->icon_file_id = $icon->id;

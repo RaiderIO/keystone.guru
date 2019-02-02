@@ -5,7 +5,7 @@ class EnemyVisualControls extends MapControl {
         let self = this;
 
         this.map = map;
-        this.map.register('map:refresh', this, function(){
+        this.map.register('map:refresh', this, function () {
             refreshSelectPickers();
         });
 
@@ -18,13 +18,34 @@ class EnemyVisualControls extends MapControl {
 
                 // Build the status bar from the template
                 self.domElement = $(template(data));
-                self.domElement.bind('change', self._enemyVisualChanged.bind(self));
+                let $domElement = $(self.domElement);
+                $domElement.find('#map_enemy_visuals_dropdown').bind('change', self._enemyVisualChanged.bind(self));
+                $domElement.find('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', self._mdtEnemyMappingChanged.bind(self));
 
                 self.domElement = self.domElement[0];
 
                 return self.domElement;
             }
         };
+    }
+
+    /**
+     * Called whenever the MDT enemy mapping checkbox' value has changed.
+     * @param changedEvent
+     * @private
+     */
+    _mdtEnemyMappingChanged(changedEvent) {
+        console.assert(this instanceof EnemyVisualControls, this, 'this is not EnemyVisualControls');
+
+        let mdtEnemiesEnabled = $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(":checked");
+
+        // Hide or show any MDT enemies
+        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        $.each(enemyMapObjectGroup.objects, function (index, value) {
+            if (value.is_mdt) {
+                enemyMapObjectGroup.setMapObjectVisibility(value, mdtEnemiesEnabled);
+            }
+        });
     }
 
     /**

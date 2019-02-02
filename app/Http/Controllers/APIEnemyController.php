@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Logic\MDT\IO\MDTDungeon;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\EnemyInfestedVote;
+use App\Models\Floor;
 use App\Models\GameServerRegion;
 use App\Models\Npc;
 use App\Models\RaidMarker;
@@ -25,12 +27,21 @@ class APIEnemyController extends Controller
     {
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute', null);
+        $showMdtEnemies = false;
 
-        $routeId = -1;
+        // Only admins are allowed to see this
+        if (Auth::check()) {
+            if (Auth::user()->hasRole('admin')) {
+                // Only fetch it now
+                $showMdtEnemies = intval($request->get('show_mdt_enemies', 0)) === 1;
+            }
+        }
+
+        $dungeonRoute = null;
         // If dungeon route was set, fetch the markers as well
         if ($dungeonRoutePublicKey !== null) {
             try {
-                $routeId = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false)->id;
+                $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
             } catch (\Exception $ex) {
                 return response('Not found', Http::NOT_FOUND);
             }
@@ -57,7 +68,7 @@ class APIEnemyController extends Controller
                 group by `enemies`.`id`;
                 ', $params = [
             'userId' => Auth::check() ? Auth::user()->id : -1,
-            'routeId' => $routeId,
+            'routeId' => isset($dungeonRoute) ? $dungeonRoute->id : -1,
             'affixGroupId' => $region->getCurrentAffixGroup()->id,
             'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s'),
             'floorId' => $floorId
@@ -66,15 +77,37 @@ class APIEnemyController extends Controller
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
         $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
 
+        // Only if we should show MDT enemies
+        $mdtEnemies = [];
+        if ($showMdtEnemies) {
+            /** @var Floor $floor */
+            $floor = Floor::find($floorId);
+
+            $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($floor->dungeon->name))->getClonesAsEnemies($floor);
+        }
+
+        // Post process enemies
         foreach ($result as $enemy) {
             $enemy->is_infested = ($enemy->infested_yes_votes - $enemy->infested_no_votes) >= config('keystoneguru.infested_user_vote_threshold');
             $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
                 return $enemy->npc_id === $item->id;
             })->first();
+
+            // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
+            foreach ($mdtEnemies as $mdtEnemy) {
+                // Match them
+                if ($mdtEnemy->mdt_id === $enemy->mdt_id && $mdtEnemy->npc_id === $enemy->npc_id) {
+                    // Match found, assign and quit
+                    $mdtEnemy->enemy_id = $enemy->id;
+                    break;
+                }
+            }
+
+            // Can be found in the npc object
             unset($enemy->npc_id);
         }
 
-        return $result;
+        return ['enemies' => $result, 'mdt_enemies' => $mdtEnemies];
     }
 
     /**
@@ -90,6 +123,9 @@ class APIEnemyController extends Controller
         $enemy->enemy_pack_id = $request->get('enemy_pack_id');
         $npcId = $request->get('npc_id', -1);
         $enemy->npc_id = $npcId === null ? -1 : $npcId;
+        // Only when set, otherwise default of -1
+        $mdtId = $request->get('mdt_id', -1);
+        $enemy->mdt_id = $mdtId === null ? -1 : $mdtId;
         $enemy->floor_id = $request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');

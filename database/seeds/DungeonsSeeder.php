@@ -389,7 +389,7 @@ class DungeonsSeeder extends Seeder
             ],
             'The MOTHERLODE!!' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 416,
+                'enemy_forces_required' => 384,
                 'enemy_forces_required_teeming' => 499,
                 'active' => true,
                 'floors' => [
@@ -532,11 +532,11 @@ class DungeonsSeeder extends Seeder
                 'enemy_forces_required_teeming' => 346,
                 'active' => true,
                 'floors' => [
-                    'Upstairs' => [
-                        'index' => 2
-                    ],
                     'The Grand Foyer' => [
                         'index' => 1
+                    ],
+                    'Upstairs' => [
+                        'index' => 2
                     ],
                     'The Cellar' => [
                         'index' => 3

@@ -131,7 +131,34 @@
         "classification_id": 1,
         "name": "Faceless Maiden",
         "base_health": 176601,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 131823,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Sister Malady",
+        "base_health": 1147907,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 131824,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Sister Solena",
+        "base_health": 1147907,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 131825,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Sister Briar",
+        "base_health": 1147907,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -176,6 +203,15 @@
         "classification_id": 3,
         "name": "Raal the Gluttonous",
         "base_health": 1,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 131864,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Gorak Tul",
+        "base_health": 1883744,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -225,15 +261,6 @@
         "aggressiveness": "aggressive"
     },
     {
-        "id": 135195,
-        "dungeon_id": 23,
-        "classification_id": 2,
-        "name": "Drustvar Villager",
-        "base_health": 294335,
-        "enemy_forces": -1,
-        "aggressiveness": "aggressive"
-    },
-    {
         "id": 135234,
         "dungeon_id": 23,
         "classification_id": 1,
@@ -258,15 +285,6 @@
         "name": "Matron Bryndle",
         "base_health": 706404,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 135360,
-        "dungeon_id": 23,
-        "classification_id": 3,
-        "name": "Sister Briar",
-        "base_health": 1,
-        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -303,15 +321,6 @@
         "name": "Gloom Horror",
         "base_health": 294335,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 144324,
-        "dungeon_id": 23,
-        "classification_id": 3,
-        "name": "Gorak Tul",
-        "base_health": 1,
-        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     }
 ]

@@ -87,6 +87,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
         Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
 
+        Route::post('new/mdtimport', 'MDTImportController@import')->name('dungeonroute.new.mdtimport');
+
         // Must be logged in to vote for infested enemies
         Route::post('infestedvoting', 'DungeonRouteController@infestedvoting')->name('dungeonroute.infestedvoting.post');
 
@@ -185,11 +187,18 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
 
+        Route::get('/polylines', 'APIPolylineController@list')->where(['floor_id' => '[0-9]+']);
+
+        Route::post('/mdt/details', 'MDTImportController@details')->name('mdt.details');
+
         Route::group(['middleware' => ['auth', 'role:user']], function () {
             Route::post('/profile/legal', 'APIProfileController@legalAgree');
 
             Route::post('/route', 'APIRouteController@store');
             Route::delete('/route', 'APIRouteController@delete');
+
+            Route::post('/polyline', 'APIPolylineController@store');
+            Route::delete('/polyline', 'APIPolylineController@delete');
 
             Route::post('/dungeonroute/{dungeonroute}/killzone', 'APIKillZoneController@store');
             Route::delete('/dungeonroute/{dungeonroute}/killzone/{killzone}', 'APIKillZoneController@delete');

@@ -50,8 +50,8 @@
                 </div>
             </div>
             <div class="col-lg-2">
-                {{ __('Teeming') }}
-                : {!! Form::checkbox($dungeon->name . '_teeming', 1, $hasTeemingEnemy, ['disabled' => 'disabled']) !!}
+                {{ __('Teeming') }}:
+                {!! Form::checkbox($dungeon->name . '_teeming', 1, $hasTeemingEnemy, ['disabled' => 'disabled']) !!}
             </div>
         </div>
     @endforeach
@@ -77,21 +77,6 @@
             technical solution for this, I'll have to make something for this. Infected Peasants currently give 6 enemy
             forces (4 from the initial kill, 2 are implied with Devouring Maggot kills that spawn from them). Compensate
             for 1 more Maggot per Peasant kill.
-        </li>
-    </ul>
-    <h3>The MOTHERLODE!!</h3>
-    <ul>
-        <li>
-            The last part of the dungeon is a bit shoddy. The map completely misaligns with the real layout and that
-            made it very hard to map the area. I also could not get there by myself due to stealth-seeing mobs. I'll
-            have to go in there some time with a friend and 1:1 it with the in-game map.
-        </li>
-    </ul>
-    <h3>The Underrot</h3>
-    <ul>
-        <li>
-            The area around the second boss has a lot of wandering/loose mobs which made it hard to map them. Especially
-            on Teeming week this part can be inaccurate.
         </li>
     </ul>
     Also see <a href="https://github.com/Wotuu/keystone.guru/issues/33">our Github issue</a>

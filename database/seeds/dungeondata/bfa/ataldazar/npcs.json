@@ -1,5 +1,32 @@
 [
     {
+        "id": 122965,
+        "dungeon_id": 14,
+        "classification_id": 3,
+        "name": "Vol'kaal",
+        "base_health": 1883648,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 122967,
+        "dungeon_id": 14,
+        "classification_id": 3,
+        "name": "Priestess Alun'za",
+        "base_health": 2648880,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 122968,
+        "dungeon_id": 14,
+        "classification_id": 3,
+        "name": "Yazma",
+        "base_health": 1,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 122969,
         "dungeon_id": 14,
         "classification_id": 2,
@@ -117,24 +144,6 @@
         "aggressiveness": "aggressive"
     },
     {
-        "id": 129399,
-        "dungeon_id": 14,
-        "classification_id": 3,
-        "name": "Vol'kaal",
-        "base_health": 1,
-        "enemy_forces": 0,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 129412,
-        "dungeon_id": 14,
-        "classification_id": 3,
-        "name": "Yazma",
-        "base_health": 1,
-        "enemy_forces": 0,
-        "aggressiveness": "aggressive"
-    },
-    {
         "id": 129552,
         "dungeon_id": 14,
         "classification_id": 2,
@@ -153,15 +162,6 @@
         "aggressiveness": "aggressive"
     },
     {
-        "id": 129614,
-        "dungeon_id": 14,
-        "classification_id": 3,
-        "name": "Priestess Alun'za",
-        "base_health": 1,
-        "enemy_forces": 0,
-        "aggressiveness": "aggressive"
-    },
-    {
         "id": 132126,
         "dungeon_id": 14,
         "classification_id": 2,
@@ -175,7 +175,7 @@
         "dungeon_id": 14,
         "classification_id": 3,
         "name": "Rezan",
-        "base_health": 904737,
+        "base_health": 2060240,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     }

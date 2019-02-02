@@ -50,7 +50,7 @@ $user = Auth::getUser();
                 </div>
                 <div class="form-group{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">
                     {!! Form::label('game_server_region_id', __('Select your region')) !!}
-                    {!! Form::select('game_server_region_id', array_merge(['-1' => 'Select region'], \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()), null, ['class' => 'form-control']) !!}
+                    {!! Form::select('game_server_region_id', array_merge(['-1' => __('Select region')], \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()), null, ['class' => 'form-control']) !!}
                     @include('common.forms.form-error', ['key' => 'game_server_region_id'])
                 </div>
                 <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }}">
@@ -64,7 +64,7 @@ $user = Auth::getUser();
             <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">
                 @isset($user->patreondata)
                     <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}" target="_blank">
-                        {{'Unlink from Patreon'}}
+                        {{ __('Unlink from Patreon') }}
                     </a>
 
                     <p class="mt-2">
@@ -79,7 +79,7 @@ $user = Auth::getUser();
                             'redirect_uri' => route('patreon.link'),
                             'state' => csrf_token()
                             ])
-                        }}" target="_blank">{{'Link to Patreon'}}</a>
+                        }}" target="_blank">{{ __('Link to Patreon') }}</a>
 
                     <p class="mt-2">
                         <span class="text-info"><i class="fa fa-info-circle"></i></span>

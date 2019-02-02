@@ -1,7 +1,7 @@
 <?php
 /** This is the display of affixes when selecting them when creating a new route */
 
-$affixGroups = \App\Models\AffixGroup::with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
+$affixGroups = \App\Models\AffixGroup::active()->with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
 $affixes = \App\Models\Affix::all();
 ?>
 
@@ -127,7 +127,7 @@ $affixes = \App\Models\Affix::all();
 
 <div class="form-group">
     {!! Form::label('affixes[]', __('Select affixes')) !!}
-    {!! Form::select('affixes[]', \App\Models\AffixGroup::all()->pluck('id', 'id'),
+    {!! Form::select('affixes[]', \App\Models\AffixGroup::active()->get()->pluck('id', 'id'),
         !isset($dungeonroute) ? 0 : $dungeonroute->affixgroups->pluck(['affix_group_id']),
         ['id' => 'affixes', 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
     {{--<select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple--}}

@@ -37,7 +37,7 @@ if ($timezone === null) {
         <tbody>
         <?php
         $currentAffixGroup = $region->getCurrentAffixGroup();
-        $affixGroups = \App\Models\AffixGroup::all();
+        $affixGroups = \App\Models\AffixGroup::active()->get();
         foreach($affixGroups as $affixGroup){
         $affixGroupIndex = $affixGroup->id - 1;
         ?>

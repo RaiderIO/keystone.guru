@@ -60,7 +60,7 @@ $isProduction = config('app.env') === 'production';
         @include('common.general.sitescripts')
     @endif
     @if($cookieConsent)
-    @include('common.thirdparty.cookieconsent')
+        @include('common.thirdparty.cookieconsent')
     @endif
 
     @if(!$noads && $isProduction)
@@ -114,22 +114,36 @@ $isProduction = config('app.env') === 'production';
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item mr-2">
-                            <a href="#" class="btn btn-primary text-white"
-                               data-toggle="modal" data-target="#try_modal">{{__('Try it!')}}</a>
+                            <a href="#" class="btn btn-primary text-white" data-toggle="modal" data-target="#try_modal">
+                                {{__('Try it!')}}
+                            </a>
                         </li>
                         @if (Auth::guest())
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal"
-                                   data-target="#login_modal">{{__('Login')}}</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#login_modal">
+                                    {{__('Login')}}
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal"
-                                   data-target="#register_modal">{{__('Register')}}</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#register_modal">
+                                    {{__('Register')}}
+                                </a>
                             </li>
                         @else
-                            <li class="nav-item">
-                                <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
-                                   role="button"><i class="fas fa-plus"></i> {{__('Create route')}}</a>
+                            <li class="nav-item mr-2">
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle" type="button"
+                                            id="newRouteDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                        <i class="fas fa-plus"></i> {{__('Create route')}}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="newRouteDropdownMenuButton">
+                                        <a class="dropdown-item"
+                                           href="{{ route('dungeonroute.new') }}">{{ __('New route') }}</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal"
+                                           data-target="#mdt_import_modal">{{__('Import from MDT')}}</a>
+                                    </div>
+                                </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -344,6 +358,19 @@ $isProduction = config('app.env') === 'production';
     </div>
 </script>
 
+<script id="import_string_details_template" type="text/x-handlebars-template">
+    @{{#details}}
+    <div class="row no-gutters">
+        <div class="col-4 font-weight-bold">
+            @{{key}}:
+        </div>
+        <div class="col-8">
+            @{{value}}
+        </div>
+    </div>
+    @{{/details}}
+</script>
+
 @auth
     @php($user = Auth::user())
     @if(!$user->legal_agreed)
@@ -390,6 +417,43 @@ $isProduction = config('app.env') === 'production';
 </div>
 <!-- END modal try -->
 
+<!-- Modal MDT import -->
+<div class="modal fade" id="mdt_import_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md vertical-align-center">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="probootstrap-modal-flex">
+                <div class="probootstrap-modal-content">
+                    {{ Form::open(['route' => 'dungeonroute.new.mdtimport']) }}
+                    <h3>
+                        {{ __('Import from MDT string') }}
+                    </h3>
+                    <div class="form-group">
+                        {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
+                        {{ Form::textarea('import_string_textarea', '', ['id' => 'import_string_textarea', 'class' => 'form-control']) }}
+                        {{ Form::hidden('import_string', '') }}
+                    </div>
+                    <div class="form-group">
+                        <div id="import_string_details">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
+                        <div class="col-md">
+
+                        </div>
+                    </div>
+                    {{ Form::close() }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END modal signup -->
+
 @guest
     <!-- Modal login -->
     <div class="modal fade" id="login_modal" tabindex="-1" role="dialog"
@@ -410,8 +474,7 @@ $isProduction = config('app.env') === 'production';
     <!-- END modal login -->
 
     <!-- Modal signup -->
-    <div class="modal fade" id="register_modal" tabindex="-1" role="dialog"
-         aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal fade" id="register_modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md vertical-align-center">
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -467,6 +530,11 @@ $isProduction = config('app.env') === 'production';
     <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
     <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
     <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
+    <script src="{{ asset('js/custom/brushline.js') }}"></script>
+
+    <script src="{{ asset('js/custom/enemyselection/enemyselection.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyselection/killzoneenemyselection.js') }}"></script>
+    <script src="{{ asset('js/custom/enemyselection/mdtenemyselection.js') }}"></script>
 
     <script src="{{ asset('js/custom/mapcontrol.js') }}"></script>
     <script src="{{ asset('js/custom/mapcontrols/addisplaycontrols.js') }}"></script>
@@ -489,14 +557,15 @@ $isProduction = config('app.env') === 'production';
 
     <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/brushlinemapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/enemymapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/enemypackmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/killzonemapobjectgroup.js') }}"></script>
     <script src="{{ asset('js/custom/mapobjectgroups/mapcommentmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
+    <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
 
 @endif
 @yield('scripts')

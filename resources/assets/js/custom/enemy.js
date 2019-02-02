@@ -4,7 +4,8 @@ let _bigIcon = {iconSize: [32, 32]};
 
 // Default icon; placeholder while placing a new enemy. This can't really use the Visual system, it'd require
 // too much rewrites. Better to just make a small placeholder like this and assign it to the below constructs.
-let DefaultEnemyIcon = new L.divIcon($.extend({className: 'unset_enemy_icon'}, _smallIcon));
+let DefaultEnemyIcon = new L.divIcon($.extend({className: 'enemy_icon unset_enemy_icon'}, _smallIcon));
+let MDTEnemyIconSelected = new L.divIcon($.extend({className: 'enemy_icon mdt_enemy_icon leaflet-edit-marker-selected'}, _smallIcon));
 
 $(function () {
     L.Draw.Enemy = L.Draw.Marker.extend({
@@ -41,22 +42,25 @@ class Enemy extends MapObject {
         // May be set when loaded from server
         this.npc = null;
         this.raid_marker_name = '';
+        this.teeming = null;
 
         // Infested variables
         this.infested_yes_votes = 0;
         this.infested_no_votes = 0;
         this.infested_user_vote = null;
         this.is_infested = false;
-        // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
+
+        // MDT
+        this.mdt_id = -1;
 
         this.setSynced(true);
 
         let self = this;
-        this.map.register('map:killzoneselectmodechanged', this, function (event) {
+        this.map.register('map:enemyselectionmodechanged', this, function (event) {
             // Remove the popup
             self.layer.unbindPopup();
             // Unselected a killzone
-            if (event.data.killzone === null) {
+            if (event.data.finished) {
                 // Restore it only if necessary
                 self._rebuildPopup(event);
             }
@@ -80,6 +84,9 @@ class Enemy extends MapObject {
 
         // Create the visual now that we know all data to construct it properly
         this.visual = new EnemyVisual(this.map, this, this.layer);
+
+        // Recreate the tooltip
+        this.bindTooltip();
     }
 
     /**
@@ -141,7 +148,7 @@ class Enemy extends MapObject {
             self.layer.bindPopup(customPopupHtml, customOptions);
 
             // Have you tried turning it off and on again?
-            self.layer.off('popupopen', popupOpenFn);
+            self.layer.off('popupopen');
             self.layer.on('popupopen', popupOpenFn);
         }
     }
@@ -158,6 +165,10 @@ class Enemy extends MapObject {
         }
     }
 
+    /**
+     * Get the amount of enemy forces that this enemy gives when killed.
+     * @returns {number}
+     */
     getEnemyForces() {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         return this.enemy_forces_override >= 0 ? this.enemy_forces_override : (this.npc === null ? 0 : this.npc.enemy_forces);
@@ -193,15 +204,24 @@ class Enemy extends MapObject {
                 npc_name: this.npc.name,
                 enemy_forces: enemy_forces,
                 base_health: this.npc.base_health,
+                teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')) + ' (' + this.teeming + ')',
                 infested_yes_votes: this.infested_yes_votes,
                 infested_no_votes: this.infested_no_votes,
                 infested_net_votes: netVotes >= 0 ? '+' + netVotes : netVotes,
                 id: this.id,
+                faction: this.faction,
+                npc_id: this.npc_id,
+                npc_id_type: typeof this.npc_id,
+                is_mdt: this.is_mdt,
+                mdt_id: this.mdt_id,
+                enemy_id: this.enemy_id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
                 visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
             };
         }
 
+        // Remove any previous tooltip
+        this.layer.unbindTooltip();
         this.layer.bindTooltip(template(data), {
             offset: [0, 10],
             direction: 'bottom'
@@ -227,8 +247,6 @@ class Enemy extends MapObject {
         }
 
         this.signal('enemy:set_npc', {npc: npc});
-
-        this.bindTooltip();
     }
 
     /**
@@ -252,7 +270,7 @@ class Enemy extends MapObject {
 
         // We only want to trigger these events when the killzone is actively being edited, not when loading in
         // the connections from the server initially
-        if (this.map.isKillZoneSelectModeEnabled()) {
+        if (this.map.isEnemySelectionEnabled()) {
             if (this.kill_zone_id >= 0) {
                 this.signal('killzone:attached');
             } else {
@@ -261,6 +279,10 @@ class Enemy extends MapObject {
         }
     }
 
+    /**
+     * Get the color of an enemy based on rated difficulty by users.
+     * @param difficulty
+     */
     getDifficultyColor(difficulty) {
         let palette = window.interpolate(c.map.enemy.colors);
         // let rand = Math.random();
@@ -280,10 +302,11 @@ class Enemy extends MapObject {
 
         let self = this;
 
-        // Show a permanent tooltip for the pack's name
+        // Show a permanent tooltip for the enemy's name
         this.layer.on('click', function () {
-            if (self.killZoneSelectable) {
-                self.signal('killzone:selected');
+            if (self.map.isEnemySelectionEnabled() && self.selectable) {
+                console.log('enemy:selected fired!');
+                self.signal('enemy:selected');
             }
         });
 
@@ -305,20 +328,20 @@ class Enemy extends MapObject {
     }
 
     /**
-     * Checks if this enemy is possibly selectable by a kill zone.
+     * Checks if this enemy is possibly selectable when selecting enemies.
      * @returns {*}
      */
-    isKillZoneSelectable() {
-        return this.killZoneSelectable;
+    isSelectable() {
+        return this.selectable;
     }
 
     /**
-     * Set this enemy to be selectable whenever a KillZone wants to possibly kill this enemy.
-     * @param value
+     * Set this enemy to be selectable whenever the user wants to select enemies.
+     * @param value boolean True or false
      */
-    setKillZoneSelectable(value) {
+    setSelectable(value) {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
-        this.killZoneSelectable = value;
+        this.selectable = value;
         // Refresh the icon
         this.visual.refresh();
     }
@@ -391,6 +414,6 @@ class Enemy extends MapObject {
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));
-        this.map.unregister('map:killzoneselectmodechanged', this);
+        this.map.unregister('map:enemyselectionmodechanged', this);
     }
 }

@@ -3,7 +3,7 @@
 
 /** @var \App\Models\DungeonRoute $model */
 if(!isset($affixgroups) ){
-    $affixgroups = \App\Models\AffixGroup::with('affixes')->get();
+    $affixgroups = \App\Models\AffixGroup::active()->with('affixes')->get();
 }
 
 ?><script id="affixgroup_select_option_template" type="text/x-handlebars-template">

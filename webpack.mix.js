@@ -1,4 +1,4 @@
-const {mix} = require('laravel-mix');
+const mix = require('laravel-mix');
 const argv = require('yargs').argv;
 
 /*
@@ -19,7 +19,7 @@ if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
     full = argv.env.full;
 }
 // npm run dev -- --env.images false
-let images = false;
+let images = true;
 if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
     images = argv.env.images;
 }
@@ -48,6 +48,11 @@ if (mix.inProduction()) {
         'resources/assets/js/custom/dungeonstartmarker.js',
         'resources/assets/js/custom/dungeonfloorswitchmarker.js',
         'resources/assets/js/custom/hotkeys.js',
+        'resources/assets/js/custom/brushline.js',
+
+        'resources/assets/js/custom/enemyselection/enemyselection.js',
+        'resources/assets/js/custom/enemyselection/killzoneenemyselection.js',
+        'resources/assets/js/custom/enemyselection/mdtenemyselection.js',
 
         'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
         'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
@@ -81,6 +86,7 @@ if (mix.inProduction()) {
         // Include the rest
         'resources/assets/js/custom/groupcomposition.js',
         'resources/assets/js/custom/mapobjectgroup.js',
+        'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
         'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
@@ -113,10 +119,10 @@ if (full || mix.inProduction()) {
 mix.sourceMaps();
 
 if (images) {
-    if (mix.inProduction()) {
+    // if (mix.inProduction()) {
         // Copies all tiles as well which takes a while
-        mix.copy('resources/assets/images', 'public/images', false);
-    } else {
+        // mix.copy('resources/assets/images', 'public/images', false);
+    // } else {
         // Allow import of pure JS
         // mix.copy('resources/assets/js/custom', 'public/js/custom', false);
 
@@ -131,5 +137,5 @@ if (images) {
         mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);
         mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes', false);
         mix.copy('resources/assets/images/specializations', 'public/images/specializations', false);
-    }
+    // }
 }
