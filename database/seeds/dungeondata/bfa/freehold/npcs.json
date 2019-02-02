@@ -304,5 +304,14 @@
         "base_health": 58867,
         "enemy_forces": 2,
         "aggressiveness": "neutral"
+    },
+    {
+        "id": 129547000,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "name": "Blacktooth Knuckleduster",
+        "base_health": 323769,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
     }
 ]

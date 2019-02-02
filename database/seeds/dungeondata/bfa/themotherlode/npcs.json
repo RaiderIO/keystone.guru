@@ -113,7 +113,7 @@
         "classification_id": 2,
         "name": "Venture Co. Earthshaper",
         "base_health": 294335,
-        "enemy_forces": 8,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {

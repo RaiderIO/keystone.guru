@@ -87,7 +87,7 @@
         "id": 1602,
         "enemy_pack_id": 343,
         "floor_id": 56,
-        "mdt_id": -1,
+        "mdt_id": 7,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,

@@ -230,7 +230,7 @@
         "classification_id": 2,
         "name": "Heart Guardian",
         "base_health": 470936,
-        "enemy_forces": 4,
+        "enemy_forces": 6,
         "aggressiveness": "neutral"
     },
     {
