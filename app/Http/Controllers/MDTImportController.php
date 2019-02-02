@@ -6,6 +6,7 @@ use App\Logic\MDT\IO\ImportString;
 use App\Models\AffixGroup;
 use App\Models\MDTImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MDTImportController extends Controller
 {
@@ -54,7 +55,7 @@ class MDTImportController extends Controller
 
             return $result;
         } catch (\Exception $ex) {
-            abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+            return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
         }
     }
 
@@ -65,20 +66,31 @@ class MDTImportController extends Controller
      */
     public function import(Request $request)
     {
-        $string = $request->get('import_string');
+        $user = Auth::user();
 
-        $importString = new ImportString();
+        // @TODO This should be handled differently imho
+        if ($user->canCreateDungeonRoute()) {
+            $string = $request->get('import_string');
+            $importString = new ImportString();
 
-        // @TODO improve exception handling
-        $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(true);
+            try {
+                // @TODO improve exception handling
+                $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(true);
 
-        // Keep track of the import
-        $mdtImport = new MDTImport();
-        $mdtImport->dungeon_route_id = $dungeonRoute->id;
-        $mdtImport->import_string = $string;
-        $mdtImport->save();
+                // Keep track of the import
+                $mdtImport = new MDTImport();
+                $mdtImport->dungeon_route_id = $dungeonRoute->id;
+                $mdtImport->import_string = $string;
+                $mdtImport->save();
+            } catch (\Exception $ex) {
+                abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+            }
 
+            $result = redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]);
+        } else {
+            $result = view('dungeonroute.limitreached');
+        }
 
-        return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]);
+        return $result;
     }
 }
