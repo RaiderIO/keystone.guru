@@ -5,6 +5,8 @@ $width = $modal ? '12' : '6';
 ?>
 
 @section('scripts')
+    @parent
+
     <script>
         $(function () {
             $(document).on('submit', '#{{ $modalClass }}register_form', function () {
