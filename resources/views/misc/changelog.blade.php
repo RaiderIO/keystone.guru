@@ -5,12 +5,26 @@
 @section('content')
 
     <h4>
-        v2.0 (2019/01/xx)
+        v2.0 (2019/02/03)
     </h4>
+    <p>
+        General changes:
+
+    <ul>
+        <li>
+            You can now create a new route from a Method Dungeon Tools export string! Keystone.guru will import your
+            pulls, affix, free-drawn shapes and notes from your string.
+        </li>
+    </ul>
+    </p>
+
     <p>
         Map changes:
 
     <ul>
+        <li>
+            You can now free draw lines with a color and weight of your choice.
+        </li>
         <li>
             Teeming enemies are now displayed with a red border around them to help see what changed from a 'normal'
             week.
@@ -20,9 +34,6 @@
         </li>
         <li>
             Currently selected drawing tool is now highlighted for the duration of the drawing.
-        </li>
-        <li>
-            You can now free draw lines with a color and weight of your choice.
         </li>
         <li>
             Added color and weight selection to draw controls which affects newly generated Routes, drawn lines and
