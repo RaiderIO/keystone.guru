@@ -54,10 +54,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return view('misc.affixes');
     })->name('misc.affixes');
 
-    Route::get('infested', function () {
-        return view('misc.infested');
-    })->name('misc.infested');
-
     Route::get('timetest', function () {
         return view('misc.timetest');
     })->name('misc.timetest');

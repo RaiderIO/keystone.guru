@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property $id int The ID of this Affix.
- * @property $enabled boolean
+ * @property $active boolean
  * @property $affix \Illuminate\Database\Eloquent\Collection
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
