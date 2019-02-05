@@ -5,6 +5,22 @@
 @section('content')
 
     <h4>
+        v2.0.2 (2019/02/05)
+    </h4>
+    <p>
+        General changes:
+
+    <ul>
+        <li>
+            Fixed Virtual Tour not working properly.
+        </li>
+        <li>
+            Assigned raid markers are now displayed properly again.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         v2.0 (2019/02/03)
     </h4>
     <p>

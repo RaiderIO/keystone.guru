@@ -39,12 +39,16 @@ $introTexts = [
     You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
     Once you have selected enemies your enemy forces (top right) will update to reflect your new enemy forces counter.'),
     __('Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.'),
+    __('Use this control to free draw lines on your route.'),
+
     __('This is the edit button. You can use it to adjust your created routes, move your killzones or comments.'),
     __('This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
     that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!'),
 
+    __('The color and weight selection affect newly placed free drawn lines and routes. Killzones get the selected color by default.'),
+
     __('Here you can select different visualization options.'),
-    __('You can chose from multiple different visualizations to help you quickly find the information you need. You can also use this dropdown to vote for Infested enemies every week.'),
+    __('You can chose from multiple different visualizations to help you quickly find the information you need.'),
 
     __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
 
@@ -111,8 +115,12 @@ $introTexts = [
                 ['.leaflet-draw-draw-route', 'right'],
                 ['.leaflet-draw-draw-killzone', 'right'],
                 ['.leaflet-draw-draw-mapcomment', 'right'],
+                ['.leaflet-draw-draw-brushline', 'right'],
+
                 ['.leaflet-draw-edit-edit', 'right'],
                 ['.leaflet-draw-edit-remove', 'right'],
+
+                ['#edit_route_freedraw_options_container', 'right'],
 
                 ['.visibility_tools', 'right'],
                 ['#map_enemy_visuals', 'right'],
@@ -122,16 +130,18 @@ $introTexts = [
                 ['#map_controls .leaflet-draw-toolbar', 'left'],
             ];
             var texts = {!! json_encode($introTexts) !!};
-            for (var i = 0; i < selectors.length; i++) {
-                var $selector = $(selectors[i][0]);
-                $selector.attr('data-intro', texts[i]);
-                $selector.attr('data-position', selectors[i][1]);
-                $selector.attr('data-step', i + 1);
-            }
 
-            // If the map is opened on mobile hide the sidebar
-            if (isMobile()) {
-                dungeonMap.register('map:refresh', null, function () {
+            dungeonMap.register('map:refresh', null, function () {
+                // Upon map refresh, re-init the tutorial selectors
+                for (var i = 0; i < selectors.length; i++) {
+                    var $selector = $(selectors[i][0]);
+                    $selector.attr('data-intro', texts[i]);
+                    $selector.attr('data-position', selectors[i][1]);
+                    $selector.attr('data-step', i + 1);
+                }
+
+                // If the map is opened on mobile hide the sidebar
+                if (isMobile()) {
                     var fn = function () {
                         if (typeof _hideSidebar === 'function') {
                             // @TODO This introduces a dependency on sidebar, but sidebar loads before dungeonMap is instantiated
@@ -140,8 +150,8 @@ $introTexts = [
                     };
                     dungeonMap.leafletMap.off('move', fn);
                     dungeonMap.leafletMap.on('move', fn);
-                });
-            }
+                }
+            });
 
             // Refresh the map; draw the layers on it
             dungeonMap.refreshLeafletMap();
@@ -348,8 +358,8 @@ $introTexts = [
             {!! Form::button(__('Submit'), ['id' => 'map_brushline_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
         </div>
     </script>
-    
-    
+
+
 
     <script id="map_killzone_edit_popup_template" type="text/x-handlebars-template">
         <div id="map_killzone_edit_popup_inner" class="popupCustom">

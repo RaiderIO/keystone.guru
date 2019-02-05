@@ -25,7 +25,7 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
         console.assert(this instanceof EnemyVisualModifierRaidMarker, this, 'this is not an EnemyVisualModifierRaidMarker!');
 
         let result = [];
-        result['modifier_' + this.index + '_classes'] = this.iconName === '' || this.iconName === null ? '' : this.iconName + '_enemy_icon enemy_icon';
+        result['modifier_' + this.index + '_classes'] = this.iconName === '' || this.iconName === null ? '' : this.iconName + '_enemy_icon';
         return result;
     }
 
