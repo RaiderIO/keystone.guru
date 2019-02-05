@@ -140,7 +140,7 @@ $introTexts = [
                     $selector.attr('data-step', i + 1);
                 }
 
-            // If the map is opened on mobile hide the sidebar
+                // If the map is opened on mobile hide the sidebar
                 if (isMobile()) {
                     var fn = function () {
                         if (typeof _hideSidebar === 'function') {

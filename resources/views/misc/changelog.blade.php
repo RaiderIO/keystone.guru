@@ -14,6 +14,9 @@
         <li>
             Fixed Virtual Tour not working properly.
         </li>
+        <li>
+            Assigned raid markers are now displayed properly again.
+        </li>
     </ul>
     </p>
 
