@@ -18,7 +18,9 @@ class FixWaycrestManorFloorOrder extends Migration
         $grandFoyer = \App\Models\Floor::find(61);
 
         // Verify we're dealing with the real deal (really swapped, not fixed already)
-        if ($upstairs->index === 2 && $grandFoyer->index === 1) {
+        if ($upstairs instanceof \Illuminate\Database\Eloquent\Model &&
+            $grandFoyer instanceof \Illuminate\Database\Eloquent\Model &&
+            $upstairs->index === 2 && $grandFoyer->index === 1) {
             // Move existing user generated items away
             DB::table('map_comments')->where('floor_id', $upstairs->id)->update(['floor_id' => 999]);
             DB::table('routes')->where('floor_id', $upstairs->id)->update(['floor_id' => 999]);

@@ -14,8 +14,12 @@ class AddActiveColumnToAffixGroupsTable extends Migration
     public function up()
     {
         Schema::table('affix_groups', function (Blueprint $table) {
-            $table->dropColumn('randomcolumn');
-            $table->boolean('active')->default(true);
+            // May already have the column, I had to adjust the initial database creation table otherwise the seeder
+            // couldn't run. Clean run this won't run, when really migrating this will run
+            if (!Schema::hasColumn('affix_groups', 'active')) {
+                $table->dropColumn('randomcolumn');
+                $table->boolean('active')->default(true);
+            }
         });
 
         // Re-seed the affixes

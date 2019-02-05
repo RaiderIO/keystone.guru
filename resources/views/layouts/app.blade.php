@@ -40,18 +40,6 @@ $isProduction = config('app.env') === 'production';
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-    @if (!$isProduction)
-        <link href="{{ asset('css/map.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/affixes.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/raidmarkers.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/routeattributes.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/home.css') }}" rel="stylesheet">
-    @endif
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
@@ -490,81 +478,8 @@ $isProduction = config('app.env') === 'production';
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
-@if(!$noads)
-@endif
-
-@if ($isProduction)
-    <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
-    <script src="{{ asset('js/custom.js') }}"></script>
-
-@else
-    <?php // Only used on the home page ?>
-    <script src="{{ asset('js/custom/home.js') }}"></script>
-
-    <script src="{{ asset('js/custom/constants.js') }}"></script>
-    <?php // Include in proper order ?>
-    <script src="{{ asset('js/custom/util.js') }}"></script>
-    <script src="{{ asset('js/custom/signalable.js') }}"></script>
-    <script src="{{ asset('js/custom/dungeonmap.js') }}"></script>
-
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisual.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualicon.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmain.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmainaggressiveness.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmainenemyforces.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifier.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierraidmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfested.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfestedvote.js') }}"></script>
-
-    <script src="{{ asset('js/custom/mapobject.js') }}"></script>
-    <script src="{{ asset('js/custom/enemy.js') }}"></script>
-    <script src="{{ asset('js/custom/enemypatrol.js') }}"></script>
-    <script src="{{ asset('js/custom/enemypack.js') }}"></script>
-    <script src="{{ asset('js/custom/route.js') }}"></script>
-    <script src="{{ asset('js/custom/killzone.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcomment.js') }}"></script>
-    <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
-    <script src="{{ asset('js/custom/brushline.js') }}"></script>
-
-    <script src="{{ asset('js/custom/enemyselection/enemyselection.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyselection/killzoneenemyselection.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyselection/mdtenemyselection.js') }}"></script>
-
-    <script src="{{ asset('js/custom/mapcontrol.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/addisplaycontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/drawcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/enemyforcescontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/enemyvisualcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/factiondisplaycontrols.js') }}"></script>
-
-    <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminenemy.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminenemypatrol.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminenemypack.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindrawcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindungeonstartmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindungeonfloorswitchmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminmapcomment.js') }}"></script>
-    <?php // Include the rest ?>
-
-    <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/brushlinemapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemymapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemypackmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/killzonemapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/mapcommentmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
-
-@endif
+<?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
+<script src="{{ asset('js/custom.js') }}"></script>
 @yield('scripts')
 </body>
 </html>

@@ -55,6 +55,9 @@ echo "Setting up tracker..."
 tput sgr0;
 php artisan tracker:tables
 
+# Generate encryption key
+php artisan key:generate
+
 # Run migrate again to fix the tracker
 ./migrate.sh
 
