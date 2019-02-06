@@ -1,4 +1,4 @@
-@extends('layouts.app', ['noads' => true, 'title' => __('Npc listing')])
+@extends('layouts.app', ['showAds' => false, 'title' => __('Npc listing')])
 
 @section('header-title')
     {{ __('View NPCs') }}

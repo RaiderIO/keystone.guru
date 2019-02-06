@@ -4,12 +4,6 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
 $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
-// Show ads if not set
-$noads = isset($noads) ? $noads : false;
-// If logged in, check if the user has paid for an ad-free website
-$noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
-// If we're showing ads and we're NOT on production, hide them anyways
-$noads = $noads || config('app.env') === 'production' ? $noads : true;
 // Custom content or not
 $custom = isset($custom) ? $custom : false;
 // Wide mode or not (only relevant if custom = false)
@@ -24,6 +18,15 @@ $title = isset($title) ? $title . ' - ' : '';
 $cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
 // Easy switch
 $isProduction = config('app.env') === 'production';
+// Show ads if not set
+$showAds = isset($showAds) ? $showAds : true;
+// If we should show ads, are logged in, user has paid for no ads, or we're not in production..
+if ($showAds && Auth::check() && ($user->hasPaidTier('ad-free') || !$isProduction)) {
+    // No ads
+    $showAds = false;
+}
+// Analytics or not, default = $isProduction
+$analytics = isset($analytics) ? $analytics : $isProduction;
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -40,18 +43,6 @@ $isProduction = config('app.env') === 'production';
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-    @if (!$isProduction)
-        <link href="{{ asset('css/map.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/affixes.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/raidmarkers.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/routeattributes.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/home.css') }}" rel="stylesheet">
-    @endif
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
@@ -63,10 +54,10 @@ $isProduction = config('app.env') === 'production';
         @include('common.thirdparty.cookieconsent')
     @endif
 
-    @if(!$noads && $isProduction)
+    @if($showAds)
         @include('common.thirdparty.adsense')
     @endif
-    @if($isProduction)
+    @if($analytics)
         @include('common.thirdparty.analytics')
     @endif
 </head>
@@ -218,7 +209,7 @@ $isProduction = config('app.env') === 'production';
 
         @yield('global-message')
 
-        @if( !$noads )
+        @if( $showAds )
             <div align="center" class="mt-4">
                 @include('common.thirdparty.adunit', ['type' => 'header'])
             </div>
@@ -284,7 +275,7 @@ $isProduction = config('app.env') === 'production';
 
     @if( $footer )
 
-        @if( !$noads )
+        @if( $showAds )
             <div align="center" class="mt-4">
                 @include('common.thirdparty.adunit', ['type' => 'footer'])
             </div>
@@ -329,7 +320,7 @@ $isProduction = config('app.env') === 'production';
             <div class="row text-center small">
                 <div class="col-md-6">
                     <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>
-                    <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} v.1.0 </a>
+                    <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ \Tremby\LaravelGitVersion\GitVersionHelper::getNameAndVersion() }} </a>
                 </div>
                 <div class="col-md-6">
                     World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
@@ -490,81 +481,8 @@ $isProduction = config('app.env') === 'production';
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
-@if(!$noads)
-@endif
-
-@if ($isProduction)
-    <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
-    <script src="{{ asset('js/custom.js') }}"></script>
-
-@else
-    <?php // Only used on the home page ?>
-    <script src="{{ asset('js/custom/home.js') }}"></script>
-
-    <script src="{{ asset('js/custom/constants.js') }}"></script>
-    <?php // Include in proper order ?>
-    <script src="{{ asset('js/custom/util.js') }}"></script>
-    <script src="{{ asset('js/custom/signalable.js') }}"></script>
-    <script src="{{ asset('js/custom/dungeonmap.js') }}"></script>
-
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisual.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualicon.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmain.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmainaggressiveness.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmainenemyforces.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifier.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierraidmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfested.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfestedvote.js') }}"></script>
-
-    <script src="{{ asset('js/custom/mapobject.js') }}"></script>
-    <script src="{{ asset('js/custom/enemy.js') }}"></script>
-    <script src="{{ asset('js/custom/enemypatrol.js') }}"></script>
-    <script src="{{ asset('js/custom/enemypack.js') }}"></script>
-    <script src="{{ asset('js/custom/route.js') }}"></script>
-    <script src="{{ asset('js/custom/killzone.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcomment.js') }}"></script>
-    <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
-    <script src="{{ asset('js/custom/brushline.js') }}"></script>
-
-    <script src="{{ asset('js/custom/enemyselection/enemyselection.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyselection/killzoneenemyselection.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyselection/mdtenemyselection.js') }}"></script>
-
-    <script src="{{ asset('js/custom/mapcontrol.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/addisplaycontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/drawcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/enemyforcescontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/enemyvisualcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/factiondisplaycontrols.js') }}"></script>
-
-    <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminenemy.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminenemypatrol.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminenemypack.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindrawcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindungeonstartmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindungeonfloorswitchmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminmapcomment.js') }}"></script>
-    <?php // Include the rest ?>
-
-    <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/brushlinemapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemymapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemypackmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/killzonemapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/mapcommentmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
-
-@endif
+<?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
+<script src="{{ asset('js/custom.js') }}"></script>
 @yield('scripts')
 </body>
 </html>

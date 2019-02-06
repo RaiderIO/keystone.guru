@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAffixGroupsTable extends Migration
+class AddUserRoleToAdminUser extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateAffixGroupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('affix_groups', function (Blueprint $table) {
-            $table->increments('id');
-            $table->boolean('active')->default(true);
-        });
+        // May have already been done
+        try {
+            DB::table('role_user')->insert(['role_id' => 2, 'user_id' => 1, 'user_type' => 'App\User']);
+        } catch (Exception $ex) {
+            // Doesn't matter!
+        }
     }
 
     /**
@@ -26,6 +28,6 @@ class CreateAffixGroupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('affix_groups');
+        // Eh
     }
 }

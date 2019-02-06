@@ -6,6 +6,7 @@
 /resouces/assets/images/tiles
 /storage/*.key
 /vendor
+/version
 /.idea
 /.vagrant
 Homestead.json

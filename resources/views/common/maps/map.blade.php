@@ -14,7 +14,11 @@ $teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && 
 $showInfestedVoting = isset($showInfestedVoting) ? $showInfestedVoting : false;
 $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
 // Show ads or not
-$noads = isset($noads) ? !Auth::check() ? $noads : Auth::user()->hasPaidTier('ad-free') : false;
+$showAds = isset($showAds) ? $showAds : true;
+// Hide ads if this page shows them, but the user has ad-free tier
+if ($showAds && Auth::check() && Auth::user()->hasPaidTier('ad-free')) {
+    $showAds = false;
+}
 // No UI on the map
 $noUI = isset($noUI) && $noUI ? 'true' : 'false';
 // Default zoom for the map
@@ -523,7 +527,7 @@ $introTexts = [
 
 </div>
 
-@if(!$noads)
+@if($showAds)
     @php($isMobile = (new \Jenssegers\Agent\Agent())->isMobile())
     @if($isMobile)
         <div id="map_ad_horizontal">

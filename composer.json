@@ -31,12 +31,13 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.6",
         "miraris/monolog-discord-handler": "^0.2.0",
+        "nnogga/MethodDungeonTools": "*",
         "patreon/patreon": "^0.3.1",
         "pragmarx/tracker": "dev-wotuu-bugfix",
         "santigarcor/laratrust": "5.0.*",
         "shrikeh/teapot": "^2.3",
-        "yajra/laravel-datatables-oracle": "~8.0",
-        "nnogga/MethodDungeonTools": "*"
+        "tremby/laravel-git-version": "^1.1",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

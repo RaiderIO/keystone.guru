@@ -41,32 +41,33 @@ class DungeonDataSeeder extends Seeder
 
         // For each expansion
         foreach ($rootDirIterator as $expansionShortnameDir) {
-            $this->command->info('Expansion ' . basename($expansionShortnameDir));
-            $expansionDirIterator = new FilesystemIterator($expansionShortnameDir);
+            $expansionShortnameBasename = basename($expansionShortnameDir);
 
-            // For each dungeon inside an expansion dir
-            foreach ($expansionDirIterator as $dungeonKeyDir) {
-                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
+            // Only folders which have the correct shortname
+            if (\App\Models\Expansion::where('shortname', $expansionShortnameBasename)->first() !== null) {
+                $this->command->info('Expansion ' . $expansionShortnameBasename);
+                $expansionDirIterator = new FilesystemIterator($expansionShortnameDir);
 
-//                if( basename($dungeonKeyDir) !== 'hallsofvalor' ){
-//                    continue;
-//                }
+                // For each dungeon inside an expansion dir
+                foreach ($expansionDirIterator as $dungeonKeyDir) {
+                    $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
 
-                $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
-                // For each floor inside a dungeon dir
-                foreach ($floorDirIterator as $floorDirFile) {
-                    // Parse loose files
-                    if (!is_dir($floorDirFile)) {
-                        // npcs, dungeon_routes
-                        $this->_parseRawFile($rootDir, $floorDirFile, $nameMapping, 2);
-                    } // Parse floor dir
-                    else {
-                        $this->command->info('-- Importing floor ' . basename($floorDirFile));
+                    $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
+                    // For each floor inside a dungeon dir
+                    foreach ($floorDirIterator as $floorDirFile) {
+                        // Parse loose files
+                        if (!is_dir($floorDirFile)) {
+                            // npcs, dungeon_routes
+                            $this->_parseRawFile($rootDir, $floorDirFile, $nameMapping, 2);
+                        } // Parse floor dir
+                        else {
+                            $this->command->info('-- Importing floor ' . basename($floorDirFile));
 
-                        $importFileIterator = new FilesystemIterator($floorDirFile);
-                        // For each file inside a floor
-                        foreach ($importFileIterator as $importFile) {
-                            $this->_parseRawFile($rootDir, $importFile, $nameMapping, 3);
+                            $importFileIterator = new FilesystemIterator($floorDirFile);
+                            // For each file inside a floor
+                            foreach ($importFileIterator as $importFile) {
+                                $this->_parseRawFile($rootDir, $importFile, $nameMapping, 3);
+                            }
                         }
                     }
                 }

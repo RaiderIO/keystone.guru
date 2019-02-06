@@ -1,4 +1,4 @@
-@extends('layouts.app', ['custom' => true, 'noads' => true])
+@extends('layouts.app', ['custom' => true, 'showAds' => false])
 
 @section('header-title', __('Welcome to keystone.guru!'))
 

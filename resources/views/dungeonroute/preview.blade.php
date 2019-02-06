@@ -1,4 +1,4 @@
-@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'cookieConsent' => false, 'title' => $model->title, 'noads' => true])
+@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'cookieConsent' => false, 'title' => $model->title, 'showAds' => false, 'analytics' => false])
 <?php
 /** @var \App\Models\DungeonRoute $model */
 /** @var int $floorId */
@@ -24,7 +24,7 @@ $dungeon->load('floors');
     @include('common.maps.map', [
         'dungeon' => $dungeon,
         'dungeonroute' => $model,
-        'noads' => true,
+        'showAds' => false,
         'edit' => false,
         'noUI' => true,
         'defaultZoom' => 1,
