@@ -26,7 +26,7 @@ chmod -R 755 bootstrap/cache
 
 # make sure setfacl is installed on the server
 sudo apt-get install acl
-# Give www-data user permissing to write in this folder regardless of ownership. See https://stackoverflow.com/a/29882246/771270
+# Give www-data user permission to write in this folder regardless of ownership. See https://stackoverflow.com/a/29882246/771270
 setfacl -d -m g:www-data:rwx storage/logs
 
 # ensure any uploaded file may be accessed directly (symlinks public/storage to storage/app/public)

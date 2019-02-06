@@ -203,5 +203,6 @@ class MapObject extends Signalable {
 
     cleanup() {
         this._cleanupSignals();
+        this._cleanDecorator();
     }
 }
