@@ -4,12 +4,6 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
 $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
-// Show ads if not set
-$noads = isset($noads) ? $noads : false;
-// If logged in, check if the user has paid for an ad-free website
-$noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
-// If we're showing ads and we're NOT on production, hide them anyways
-$noads = $noads || config('app.env') === 'production' ? $noads : true;
 // Custom content or not
 $custom = isset($custom) ? $custom : false;
 // Wide mode or not (only relevant if custom = false)
@@ -24,6 +18,15 @@ $title = isset($title) ? $title . ' - ' : '';
 $cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
 // Easy switch
 $isProduction = config('app.env') === 'production';
+// Show ads if not set
+$showAds = isset($showAds) ? $showAds : true;
+// If we should show ads, are logged in, user has paid for no ads, or we're not in production..
+if ($showAds && Auth::check() && ($user->hasPaidTier('ad-free') || !$isProduction)) {
+    // No ads
+    $showAds = false;
+}
+// Analytics or not, default = $isProduction
+$analytics = isset($analytics) ? $analytics : $isProduction;
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -51,10 +54,10 @@ $isProduction = config('app.env') === 'production';
         @include('common.thirdparty.cookieconsent')
     @endif
 
-    @if(!$noads && $isProduction)
+    @if($showAds)
         @include('common.thirdparty.adsense')
     @endif
-    @if($isProduction)
+    @if($analytics)
         @include('common.thirdparty.analytics')
     @endif
 </head>
@@ -206,7 +209,7 @@ $isProduction = config('app.env') === 'production';
 
         @yield('global-message')
 
-        @if( !$noads )
+        @if( $showAds )
             <div align="center" class="mt-4">
                 @include('common.thirdparty.adunit', ['type' => 'header'])
             </div>
@@ -272,7 +275,7 @@ $isProduction = config('app.env') === 'production';
 
     @if( $footer )
 
-        @if( !$noads )
+        @if( $showAds )
             <div align="center" class="mt-4">
                 @include('common.thirdparty.adunit', ['type' => 'footer'])
             </div>
@@ -317,7 +320,7 @@ $isProduction = config('app.env') === 'production';
             <div class="row text-center small">
                 <div class="col-md-6">
                     <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>
-                    <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} v.1.0 </a>
+                    <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ \Tremby\LaravelGitVersion\GitVersionHelper::getNameAndVersion() }} </a>
                 </div>
                 <div class="col-md-6">
                     World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
