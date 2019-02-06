@@ -107,6 +107,16 @@ See https://stackoverflow.com/a/23789879/771270 for more info.
 
 Now that you've installed PHPMyAdmin, reboot the VM so that all changes are applied. Can't hurt to run `vagrant provision` as well.
 
+## Update crontab
+
+Add this line to your crontab:
+
+``` 
+*   * *   *   *   root php /home/vagrant/Git/keystone.guru/artisan schedule:run 
+```
+
+This will call the above command every minute, which Laravel requires in order to run scheduled tasks (refreshing of the route thumbnails).
+
 ## Setup database
 Go to `http://phpmyadmin.test` and log in using `homestead//password`. If you get `no input file specified` you need to either run `vagrant provision` and/or verify your file mapping in your Homestead.yaml is 100% correct.
 
@@ -153,3 +163,12 @@ Contact me for a link to the map tiles, and extract those to `keystone.guru/publ
 ## Running the site
 By now it should work. Navigate to `keystone.test` and you should see the website. But that's probably wishful thinking that it works now.
 At least these are MOST of the steps you need to do to get it running from a clean start.
+
+## SFTP access to your VM
+```
+Host: 127.0.0.1
+Port: 2222
+Type: normal
+Username: vagrant
+Password: vagrant
+```
