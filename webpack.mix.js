@@ -28,7 +28,7 @@ mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts
 
 // Custom processing only
 mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css');
-mix.babel([
+let scripts = [
     // Home page only
     'resources/assets/js/custom/home.js',
     // Doesn't depend on anything
@@ -92,8 +92,14 @@ mix.babel([
     'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapcommentmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/routemapobjectgroup.js',
-    // 'resources/assets/js/custom/**/*.js'
-], 'public/js/custom.js');
+];
+
+// Do not translate in development
+if( mix.inProduction() ){
+    mix.babel(scripts, 'public/js/custom.js');
+} else {
+    mix.scripts(scripts, 'public/js/custom.js');
+}
 
 // Handlebars has a bug which requires this: https://github.com/wycats/handlebars.js/issues/1174
 mix.webpackConfig({

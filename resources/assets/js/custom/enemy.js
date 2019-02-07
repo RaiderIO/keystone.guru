@@ -50,14 +50,9 @@ class Enemy extends MapObject {
         this.setSynced(true);
 
         let self = this;
-        this.map.register('map:enemyselectionmodechanged', this, function (event) {
-            // Remove the popup
-            self.layer.unbindPopup();
-            // Unselected a killzone
-            if (event.data.finished) {
-                // Restore it only if necessary
-                self._rebuildPopup(event);
-            }
+        this.map.register('map:enemyselectionmodechanged', this, function (selectionModeChangedEvent) {
+            // Remove/enable the popup
+            self.setPopupEnabled(selectionModeChangedEvent.data.finished);
         });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
@@ -152,6 +147,7 @@ class Enemy extends MapObject {
      * @param enabled True to enable, false to disable.
      */
     setPopupEnabled(enabled) {
+        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         if (enabled) {
             this._rebuildPopup();
         } else {
@@ -295,7 +291,6 @@ class Enemy extends MapObject {
         // Show a permanent tooltip for the enemy's name
         this.layer.on('click', function () {
             if (self.map.isEnemySelectionEnabled() && self.selectable) {
-                console.log('enemy:selected fired!');
                 self.signal('enemy:selected');
             }
         });
@@ -367,6 +362,7 @@ class Enemy extends MapObject {
     }
 
     cleanup() {
+        console.assert(this instanceof Enemy, this, 'this was not an Enemy');
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));
