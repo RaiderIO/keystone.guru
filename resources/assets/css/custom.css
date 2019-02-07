@@ -139,15 +139,6 @@
     max-height: 32px;
 }
 
-.user_icon {
-    width: 24px;
-    color: white;
-    text-align: center;
-    background-color: gray;
-    border-radius: 12px;
-    margin-right: 5px;
-}
-
 .class_icon {
     background-color: #2B3E50;
 }

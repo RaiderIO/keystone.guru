@@ -18,7 +18,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor, callback) {
+    fetchFromServer(floor) {
         // no super call required
         console.assert(this instanceof EnemyPackMapObjectGroup, this, 'this is not a EnemyPackMapObjectGroup');
 
@@ -29,7 +29,10 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
             url: '/ajax/enemypacks',
             dataType: 'json',
             data: {
-                floor_id: floor.id
+                floor_id: floor.id,
+                // Non-admin = get enemy locations instead
+                vertices: self.map.constructor.name === 'AdminDungeonMap' ? 1 : 0,
+                teeming: self.map.teeming ? 1 : 0
             },
             success: function (json) {
                 // Now draw the packs on the map
@@ -44,13 +47,38 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                         continue;
                     }
 
-                    for (let j = 0; j < remoteEnemyPack.vertices.length; j++) {
-                        let vertex = remoteEnemyPack.vertices[j];
-                        // I.. don't really know why this needs to be lng/lat but it needs to be
-                        points.push([vertex.lng, vertex.lat]);
+                    // Fetch the correct location for the vertices
+                    let isVertices = typeof remoteEnemyPack.vertices !== 'undefined';
+                    let vertices = isVertices ? remoteEnemyPack.vertices : remoteEnemyPack.enemies;
+
+                    for (let j = 0; j < vertices.length; j++) {
+                        let vertex = vertices[j];
+                        if (isVertices) {
+                            // I.. don't really know why this needs to be lng/lat but it needs to be
+                            points.push([vertex.lng, vertex.lat]);
+                        } else {
+                            points.push([vertex.lat, vertex.lng]);
+                        }
                     }
 
-                    let layer = L.polygon(points);
+                    // Build a layer based off a hull if we're supposed to
+                    let layer = null;
+                    if (!isVertices) {
+                        let p = hull(points, 100);
+                        // Only if we can actually make an offset
+                        if (p.length > 1) {
+                            let offset = new Offset();
+                            p = offset.data(p).arcSegments(c.map.enemypack.arcSegments(p.length)).margin(c.map.enemypack.margin);
+
+                            layer = L.polygon(p, c.map.enemypack.polygonOptions);
+                        }
+                    }
+
+                    // If a layer wasn't created before
+                    if (layer === null) {
+                        // Make one now with those exact points
+                        layer = L.polygon(points);
+                    }
 
                     let enemyPack = self.createNew(layer);
                     enemyPack.id = remoteEnemyPack.id;
@@ -59,7 +87,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                     enemyPack.setSynced(true);
                 }
 
-                callback();
+                self.signal('fetchsuccess');
             }
         });
     }

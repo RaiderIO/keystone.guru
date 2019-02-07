@@ -45,7 +45,17 @@ var c = {
 
                 saved: '#5993D2',
                 savedBorder: '#34577D'
-            }
+            },
+            margin: 1,
+            arcSegments: function (nr) {
+                return Math.max(3, 9 - nr);
+            },
+            polygonOptions: {
+                color: '#9DFF56',
+                weight: 1,
+                fillOpacity: 0.3,
+                opacity: 1
+            },
         },
         enemypatrol: {
             defaultColor: '#E25D5D'

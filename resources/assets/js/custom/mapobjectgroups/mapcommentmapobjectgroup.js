@@ -19,7 +19,7 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
     }
 
 
-    fetchFromServer(floor, callback) {
+    fetchFromServer(floor) {
         // no super call required
         console.assert(this instanceof MapCommentMapObjectGroup, this, 'this is not a MapCommentMapObjectGroup');
 
@@ -58,11 +58,11 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
                         }
                     }
 
-                    callback();
+                    self.signal('fetchsuccess');
                 }
             });
         } else {
-            callback();
+            self.signal('fetchsuccess');
         }
     }
 }

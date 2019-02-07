@@ -99,15 +99,12 @@ class EnemyVisual extends Signalable {
             name = 'aggressiveness';
         }
 
-        // Remove the popup when voting for infested!
-        this.enemy.setPopupEnabled(name !== 'infested_vote');
-
         switch (name) {
             case 'aggressiveness':
                 this.mainVisual = new EnemyVisualMainAggressiveness(this);
 
                 this.modifiers = [
-                    new EnemyVisualModifierInfested(this, 0),
+                    new EnemyVisualModifier(this, 0),
                     new EnemyVisualModifierRaidMarker(this, 1),
                     new EnemyVisualModifier(this, 2),
                 ];
@@ -116,20 +113,10 @@ class EnemyVisual extends Signalable {
                 this.mainVisual = new EnemyVisualMainEnemyForces(this);
 
                 this.modifiers = [
-                    new EnemyVisualModifierInfested(this, 0),
+                    new EnemyVisualModifier(this, 0),
                     new EnemyVisualModifierRaidMarker(this, 1),
                     new EnemyVisualModifier(this, 2),
                 ];
-                break;
-            case 'infested_vote':
-                this.mainVisual = new EnemyVisualMainAggressiveness(this);
-
-                this.modifiers = [
-                    new EnemyVisualModifierInfestedVote(this, 0, false),
-                    new EnemyVisualModifierInfested(this, 1, true),
-                    new EnemyVisualModifierInfestedVote(this, 2, true),
-                ];
-
                 break;
         }
 

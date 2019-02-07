@@ -431,7 +431,7 @@ class DungeonMap extends Signalable {
             result.push(new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false));
         }
 
-        // Only add these two if they're worth fetching (not in a view + no route (infested voting))
+        // Only add these two if they're worth fetching (not in a view)
         if (this.getDungeonRoute().publicKey !== '' || this.edit) {
             if (this.hiddenMapObjectGroups.indexOf('route') < 0) {
                 result.push(new RouteMapObjectGroup(this, 'route', true));
@@ -474,7 +474,7 @@ class DungeonMap extends Signalable {
                 result.push(new DrawControls(this, editableLayers));
             }
 
-            // Only when enemy forces are relevant in their display (not in a view + no route (infested voting))
+            // Only when enemy forces are relevant in their display (not in a view)
             if (this.getDungeonRoute().publicKey !== '' || this.edit) {
                 result.push(new EnemyForcesControls(this));
             }
@@ -627,7 +627,7 @@ class DungeonMap extends Signalable {
         if (this.isEnemySelectionEnabled()) {
             this.finishEnemySelection();
         }
-        this.mapObjectGroupFetchSuccessCount = 0;
+        this._mapObjectGroupFetchSuccessCount = 0;
 
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
@@ -668,7 +668,9 @@ class DungeonMap extends Signalable {
         this.signal('map:refresh', {dungeonmap: this});
 
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
-            this.mapObjectGroups[i].fetchFromServer(this.getCurrentFloor(), this.mapObjectGroupFetchSuccess.bind(this));
+            let mapObjectGroup = this.mapObjectGroups[i];
+            mapObjectGroup.register('fetchsuccess', this, this._mapObjectGroupFetchSuccess.bind(this));
+            mapObjectGroup.fetchFromServer(this.getCurrentFloor());
         }
 
         // Show/hide the attribution
@@ -681,12 +683,12 @@ class DungeonMap extends Signalable {
      * Called whenever a map object group has claimed success over their AJAX request.
      * Once all map object groups have returned, this will fire an event that the data is ready to use in the map.
      */
-    mapObjectGroupFetchSuccess() {
+    _mapObjectGroupFetchSuccess() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        this.mapObjectGroupFetchSuccessCount++;
+        this._mapObjectGroupFetchSuccessCount++;
         // Let everyone know we're done and you can use all fetched data
-        if (this.mapObjectGroupFetchSuccessCount === this.mapObjectGroups.length) {
+        if (this._mapObjectGroupFetchSuccessCount === this.mapObjectGroups.length) {
             this.signal('map:mapobjectgroupsfetchsuccess');
 
             // All layers have been fetched, refresh tooltips to update "No layers to edit" state

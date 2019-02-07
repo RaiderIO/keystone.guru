@@ -11,7 +11,6 @@ $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? 'true' : 'false';
-$showInfestedVoting = isset($showInfestedVoting) ? $showInfestedVoting : false;
 $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
@@ -182,9 +181,6 @@ $introTexts = [
             <div class="form-group">
                 <?php
                 $visuals = [];
-                if (Auth::check() && $showInfestedVoting) {
-                    $visuals['infested_vote'] = __('Infested Voting');
-                }
                 $visuals['aggressiveness'] = __('Aggressiveness');
                 $visuals['enemy_forces'] = __('Enemy forces');
                 ?>
@@ -250,12 +246,6 @@ $introTexts = [
             <div class="row">
                 <div class="col-5 no-gutters">{{ __('Base health') }} </div>
                 <div class="col-7 no-gutters">@{{ base_health }}</div>
-            </div>
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Infested votes') }} </div>
-                <div class="col-7 no-gutters">@{{ infested_yes_votes }} yes, @{{ infested_no_votes}} no (@{{
-                    infested_net_votes }}/+{{ config('keystoneguru.infested_user_vote_threshold') }})
-                </div>
             </div>
             <div class="row">
                 <div class="col-5 no-gutters">{{ __('Teeming') }} </div>

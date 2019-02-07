@@ -44,26 +44,15 @@ class Enemy extends MapObject {
         this.raid_marker_name = '';
         this.teeming = null;
 
-        // Infested variables
-        this.infested_yes_votes = 0;
-        this.infested_no_votes = 0;
-        this.infested_user_vote = null;
-        this.is_infested = false;
-
         // MDT
         this.mdt_id = -1;
 
         this.setSynced(true);
 
         let self = this;
-        this.map.register('map:enemyselectionmodechanged', this, function (event) {
-            // Remove the popup
-            self.layer.unbindPopup();
-            // Unselected a killzone
-            if (event.data.finished) {
-                // Restore it only if necessary
-                self._rebuildPopup(event);
-            }
+        this.map.register('map:enemyselectionmodechanged', this, function (selectionModeChangedEvent) {
+            // Remove/enable the popup
+            self.setPopupEnabled(selectionModeChangedEvent.data.finished);
         });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
@@ -158,6 +147,7 @@ class Enemy extends MapObject {
      * @param enabled True to enable, false to disable.
      */
     setPopupEnabled(enabled) {
+        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         if (enabled) {
             this._rebuildPopup();
         } else {
@@ -199,15 +189,11 @@ class Enemy extends MapObject {
                 }
             }
 
-            let netVotes = this.infested_yes_votes - this.infested_no_votes;
             data = {
                 npc_name: this.npc.name,
                 enemy_forces: enemy_forces,
                 base_health: this.npc.base_health,
                 teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')) + ' (' + this.teeming + ')',
-                infested_yes_votes: this.infested_yes_votes,
-                infested_no_votes: this.infested_no_votes,
-                infested_net_votes: netVotes >= 0 ? '+' + netVotes : netVotes,
                 id: this.id,
                 faction: this.faction,
                 npc_id: this.npc_id,
@@ -305,7 +291,6 @@ class Enemy extends MapObject {
         // Show a permanent tooltip for the enemy's name
         this.layer.on('click', function () {
             if (self.map.isEnemySelectionEnabled() && self.selectable) {
-                console.log('enemy:selected fired!');
                 self.signal('enemy:selected');
             }
         });
@@ -376,41 +361,8 @@ class Enemy extends MapObject {
         }
     }
 
-    /**
-     * Lets the current user vote for infested enemies.
-     * @param vote boolean True to vote yes, false to vote no.
-     */
-    voteInfested(vote) {
-        console.assert(this instanceof Enemy, this, 'this was not an Enemy');
-        let self = this;
-
-        let successFn = function (json) {
-            self.infested_yes_votes = json.infested_yes_votes;
-            self.infested_no_votes = json.infested_no_votes;
-            self.infested_user_vote = json.infested_user_vote;
-            self.is_infested = json.is_infested;
-            self.bindTooltip();
-            self.signal('enemy:infested_vote', json);
-        };
-
-        // No network traffic!
-        if (this.map.isTryModeEnabled()) {
-            // User makes infested as they please
-            successFn({'is_infested': vote});
-        } else {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/enemy/' + self.id + '/infested',
-                dataType: 'json',
-                data: {
-                    vote: vote ? '1' : '0'
-                },
-                success: successFn,
-            });
-        }
-    }
-
     cleanup() {
+        console.assert(this instanceof Enemy, this, 'this was not an Enemy');
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));

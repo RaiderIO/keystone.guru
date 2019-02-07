@@ -151,7 +151,6 @@ class MDTDungeon
                     // All MDT_IDs are 1-indexed, because LUA
                     $enemy->mdt_id = $mdtCloneIndex;
                     $enemy->enemy_id = -1;
-                    $enemy->is_infested = false;
                     $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
                     $enemy->faction = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
                     $enemy->enemy_forces_override = -1;
@@ -164,9 +163,6 @@ class MDTDungeon
 
                     // Some properties which are dynamic on a normal enemy but static here
                     $enemy->raid_marker_name = null;
-                    $enemy->infested_yes_votes = 0;
-                    $enemy->infested_no_votes = 0;
-                    $enemy->infested_user_vote = null;
 
                     $enemies[] = $enemy;
                 }

@@ -13,7 +13,7 @@ class BrushLineMapObjectGroup extends MapObjectGroup {
     }
 
 
-    fetchFromServer(floor, callback) {
+    fetchFromServer(floor) {
         // no super call required
         console.assert(this instanceof BrushLineMapObjectGroup, this, 'this is not a BrushLineMapObjectGroup');
 
@@ -54,12 +54,12 @@ class BrushLineMapObjectGroup extends MapObjectGroup {
                         }
                     }
 
-                    callback();
+                    self.signal('fetchsuccess');
                 }
             });
         } else {
             // At least let the map know we're done
-            callback();
+            self.signal('fetchsuccess');
         }
     }
 }

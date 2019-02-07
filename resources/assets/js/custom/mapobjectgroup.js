@@ -203,7 +203,7 @@ class MapObjectGroup extends Signalable {
     /**
      * Refreshes the objects that are displayed on the map based on the current dungeon & selected floor.
      */
-    fetchFromServer(floor, callback) {
+    fetchFromServer(floor) {
         console.warn('call to empty fetchFromServer()');
     }
 }

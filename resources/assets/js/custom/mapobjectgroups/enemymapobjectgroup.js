@@ -18,7 +18,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor, callback) {
+    fetchFromServer(floor) {
         // no super call required
         console.assert(this instanceof EnemyMapObjectGroup, this, 'this is not a EnemyMapObjectGroup');
 
@@ -39,6 +39,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     json.enemies,
                     json.mdt_enemies
                 ];
+
                 // For each set of enemies..
                 for (let i = 0; i < enemies.length; i++) {
                     let enemySet = enemies[i];
@@ -77,10 +78,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                             enemy.faction = remoteEnemy.faction;
                             enemy.enemy_forces_override = remoteEnemy.enemy_forces_override;
                             enemy.raid_marker_name = remoteEnemy.raid_marker_name;
-                            enemy.infested_yes_votes = remoteEnemy.infested_yes_votes;
-                            enemy.infested_no_votes = remoteEnemy.infested_no_votes;
-                            enemy.infested_user_vote = remoteEnemy.infested_user_vote;
-                            enemy.is_infested = remoteEnemy.is_infested;
                             // MDT id is always set
                             enemy.mdt_id = remoteEnemy.mdt_id;
                             enemy.is_mdt = false;
@@ -106,7 +103,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         }
                     }
                 }
-                callback();
+
+                self.signal('fetchsuccess');
             }
         });
     }

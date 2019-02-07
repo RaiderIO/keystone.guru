@@ -13,7 +13,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     }
 
 
-    fetchFromServer(floor, callback) {
+    fetchFromServer(floor) {
         // no super call required
         console.assert(this instanceof KillZoneMapObjectGroup, this, 'this is not a KillZoneMapObjectGroup');
 
@@ -63,11 +63,11 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                         }
                     }
 
-                    callback();
+                    self.signal('fetchsuccess');
                 }
             });
         } else {
-            callback();
+            self.signal('fetchsuccess');
         }
     }
 }
