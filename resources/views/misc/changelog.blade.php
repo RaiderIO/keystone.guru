@@ -5,6 +5,41 @@
 @section('content')
 
     <h4>
+        v2.0.4 (2019/02/07)
+    </h4>
+    <p>
+        General changes:
+
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/124">#124</a>
+            The menu on mobile now aligns to the center, rather than right. Also added some more color & made the buttons
+            wider
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/121">#121</a>
+            Infested code & references have been removed with the finishing of season 1.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/125">#125</a>
+            Assigning an enemy to a killzone no longer pops up the raid marker selection screen.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/105">#105</a>
+            Cloning a route now also clones its Attributes.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/106">#106</a>
+            Enemy packs are now rendered in a much more pretty way.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/125">#125</a>
+            Assigning an enemy to a killzone will no longer pop up the raid marker selection.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         v2.0.2 (2019/02/05)
     </h4>
     <p>
@@ -61,7 +96,7 @@
         Mapping changes:
     <ul>
         <li>
-            <a href="https://github.com/Wotuu/keystone.guru/issues/93">#95</a>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/95">#95</a>
             Due to synchronizing MDT enemies with Keystone.guru enemies, I've had to ensure any differences between MDT
             and Keystone.guru were ironed out. The changes were as follows:
         </li>
