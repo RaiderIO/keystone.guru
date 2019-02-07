@@ -143,7 +143,8 @@ class DungeonRouteController extends Controller
                 $dungeonroute->routes,
                 $dungeonroute->killzones,
                 $dungeonroute->enemyraidmarkers,
-                $dungeonroute->mapcomments
+                $dungeonroute->mapcomments,
+                $dungeonroute->routeattributes
             ];
 
             $dungeonroute->id = 0;

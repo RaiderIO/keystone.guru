@@ -59,6 +59,8 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $mapcomments
  * @property \Illuminate\Support\Collection $pageviews
  *
+ * @property \Illuminate\Support\Collection $routeattributes
+ *
  * @method static \Illuminate\Database\Eloquent\Builder visible()
  */
 class DungeonRoute extends Model
