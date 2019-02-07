@@ -60,8 +60,6 @@ mix.babel([
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyforces.js',
 
     'resources/assets/js/custom/enemyvisuals/modifiers/modifier.js',
-    'resources/assets/js/custom/enemyvisuals/modifiers/modifierinfested.js',
-    'resources/assets/js/custom/enemyvisuals/modifiers/modifierinfestedvote.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
 
     'resources/assets/js/custom/mapcontrol.js',

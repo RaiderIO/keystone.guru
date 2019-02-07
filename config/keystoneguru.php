@@ -38,12 +38,6 @@ return [
     'season_start_week' => 36,
 
     /**
-     * We require at least 2 more yes votes than no votes before an enemy is marked as Infested on the map.
-     * This may need to be increased in the future as the site becomes more popular.
-     */
-    'infested_user_vote_threshold' => 2,
-
-    /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
      * the view is counted for a second time.

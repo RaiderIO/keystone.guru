@@ -37,26 +37,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|null
-     */
-    public function infestedvoting(Request $request)
-    {
-        $result = null;
-
-        if ($request->has('dungeon_id')) {
-            $result = view('dungeonroute.infestedvoting', [
-                'dungeon_id' => $request->get('dungeon_id'),
-                'teeming' => $request->get('teeming')
-            ]);
-        } else {
-            $result = view('dungeonroute.infestedvoting', ['headerTitle' => __('Infested voting')]);
-        }
-
-        return $result;
-    }
-
-    /**
      * Show a page for creating a new dungeon route.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

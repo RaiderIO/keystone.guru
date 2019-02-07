@@ -7,7 +7,6 @@ use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Logic\MDT\IO\MDTDungeon;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
-use App\Models\EnemyInfestedVote;
 use App\Models\Floor;
 use App\Models\GameServerRegion;
 use App\Models\Npc;
@@ -52,25 +51,16 @@ class APIEnemyController extends Controller
         // Eloquent wasn't working with me, raw SQL it is
         /** @var array $result */
         $result = DB::select($query = '
-                select `enemies`.*, `raid_markers`.`name`                                     as `raid_marker_name`,
-                       CAST(IFNULL(SUM(if(`vote` = 1, 1, 0) * `vote_weight`), 0) as SIGNED)   as infested_yes_votes,
-                       CAST(IFNULL(SUM(if(`vote` = 0, 1, 0) * `vote_weight`), 0) as SIGNED)   as infested_no_votes,
-                       if(`enemy_infested_votes`.`user_id` = :userId, `vote`, null)           as infested_user_vote
+                select `enemies`.*, `raid_markers`.`name`                                     as `raid_marker_name`
                 from `enemies`
                        left join `dungeon_route_enemy_raid_markers`
                          on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
                             `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
                        left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
-                       left join `enemy_infested_votes` on `enemies`.`id` = `enemy_infested_votes`.`enemy_id`
-                                and `enemy_infested_votes`.affix_group_id = :affixGroupId
-                                              and `enemy_infested_votes`.updated_at > :minTime
                 where `enemies`.`floor_id` = :floorId
                 group by `enemies`.`id`;
                 ', $params = [
-            'userId' => Auth::check() ? Auth::user()->id : -1,
             'routeId' => isset($dungeonRoute) ? $dungeonRoute->id : -1,
-            'affixGroupId' => $region->getCurrentAffixGroup()->id,
-            'minTime' => Carbon::now()->subMonth()->format('Y-m-d H:i:s'),
             'floorId' => $floorId
         ]);
 
@@ -88,7 +78,6 @@ class APIEnemyController extends Controller
 
         // Post process enemies
         foreach ($result as $enemy) {
-            $enemy->is_infested = ($enemy->infested_yes_votes - $enemy->infested_no_votes) >= config('keystoneguru.infested_user_vote_threshold');
             $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
                 return $enemy->npc_id === $item->id;
             })->first();
@@ -203,59 +192,5 @@ class APIEnemyController extends Controller
         }
 
         return $result;
-    }
-
-
-    /**
-     * @param Request $request
-     * @param Enemy $enemy
-     * @return array
-     * @throws \Exception
-     */
-    function setInfested(Request $request, Enemy $enemy)
-    {
-        $vote = intval($request->get('vote', -1));
-
-        $user = Auth::user();
-
-        if ($user->game_server_region_id > 0) {
-            $currentAffixId = $user->gameserverregion->getCurrentAffixGroup()->id;
-
-            /** @var EnemyInfestedVote $infestedEnemyVote */
-            $infestedEnemyVote = EnemyInfestedVote::firstOrNew([
-                'enemy_id' => $enemy->id,
-                'user_id' => $user->id,
-                'affix_group_id' => $currentAffixId
-            ]);
-
-            // If user wants to vote yes/no
-            if ($vote === 0 || $vote === 1) {
-                $infestedEnemyVote->affix_group_id = $currentAffixId;
-                // If it's not 0, it's true (yes), otherwise false (no)
-                $infestedEnemyVote->vote = $vote;
-                // Admins must be able to have some weight to their votes. They're not to abuse the system. However,
-                // I don't want an 'admin is king' so an admin CAN be overruled by users
-                if ($user->hasRole('admin')) {
-                    $infestedEnemyVote->vote_weight = config('keystoneguru.infested_user_vote_threshold');
-                }
-                $infestedEnemyVote->save();
-            } // If vote was an invalid value but a vote existed, get rid of it
-            else if ($infestedEnemyVote->exists) {
-                $infestedEnemyVote->delete();
-            }
-
-            // Re-load infested relations
-            $enemy->unsetRelation('infestedvotes');
-            $enemy->unsetRelation('thisweeksinfestedvotes');
-
-            return [
-                'infested_yes_votes' => $enemy->getInfestedYesVotesCount(),
-                'infested_no_votes' => $enemy->getInfestedNoVotesCount(),
-                'infested_user_vote' => $enemy->getUserInfestedVoteAttribute(),
-                'is_infested' => $enemy->is_infested
-            ];
-        } else {
-            throw new \Exception(__('Region not set. Please visit your profile and set your region before voting on Infested enemies.'));
-        }
     }
 }

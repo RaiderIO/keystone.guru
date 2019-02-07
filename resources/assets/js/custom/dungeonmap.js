@@ -431,7 +431,7 @@ class DungeonMap extends Signalable {
             result.push(new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false));
         }
 
-        // Only add these two if they're worth fetching (not in a view + no route (infested voting))
+        // Only add these two if they're worth fetching (not in a view)
         if (this.getDungeonRoute().publicKey !== '' || this.edit) {
             if (this.hiddenMapObjectGroups.indexOf('route') < 0) {
                 result.push(new RouteMapObjectGroup(this, 'route', true));
@@ -474,7 +474,7 @@ class DungeonMap extends Signalable {
                 result.push(new DrawControls(this, editableLayers));
             }
 
-            // Only when enemy forces are relevant in their display (not in a view + no route (infested voting))
+            // Only when enemy forces are relevant in their display (not in a view)
             if (this.getDungeonRoute().publicKey !== '' || this.edit) {
                 result.push(new EnemyForcesControls(this));
             }

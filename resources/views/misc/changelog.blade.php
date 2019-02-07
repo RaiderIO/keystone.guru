@@ -700,7 +700,7 @@
             users can now vote on all enemies to be Infested or not. Using the new dropdown for visualization selection
             in the top right you can select a new 'Infested Voting' visualization, which allows you to vote yes or no on
             each enemy on-screen if they're infested or not. Each enemy requires
-            {{ config('keystoneguru.infested_user_vote_threshold') }} more yes votes than no votes to be marked
+            {{ config('keystoneguru.infested_user_vote_threshold', 3) }} more yes votes than no votes to be marked
             as Infested on everyone's map. Every reset, the votes are cleared and the voting begins again (Infested
             enemies change every week).
             <br><br>

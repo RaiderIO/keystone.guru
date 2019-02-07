@@ -61,8 +61,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
 
-    Route::get('infestedvoting', 'DungeonRouteController@infestedvoting')->name('dungeonroute.infestedvoting');
-
     // ['auth', 'role:admin|user']
 
     Route::get('patreon-unlink', 'PatreonController@unlink')->name('patreon.unlink');
@@ -84,9 +82,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
 
         Route::post('new/mdtimport', 'MDTImportController@import')->name('dungeonroute.new.mdtimport');
-
-        // Must be logged in to vote for infested enemies
-        Route::post('infestedvoting', 'DungeonRouteController@infestedvoting')->name('dungeonroute.infestedvoting.post');
 
         // Legacy redirects
         Route::get('edit/{dungeonroute}', function (\App\Models\DungeonRoute $dungeonroute) {
@@ -203,7 +198,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::delete('/mapcomment', 'APIMapCommentController@delete');
 
             Route::post('/enemy/{enemy}/raidmarker', 'APIEnemyController@setRaidMarker');
-            Route::post('/enemy/{enemy}/infested', 'APIEnemyController@setInfested');
 
             Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
             Route::post('/dungeonroute/{dungeonroute}/publish', 'APIDungeonRouteController@publish')
