@@ -18,7 +18,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor, callback) {
+    fetchFromServer(floor) {
         // no super call required
         console.assert(this instanceof EnemyMapObjectGroup, this, 'this is not a EnemyMapObjectGroup');
 
@@ -39,6 +39,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     json.enemies,
                     json.mdt_enemies
                 ];
+
                 // For each set of enemies..
                 for (let i = 0; i < enemies.length; i++) {
                     let enemySet = enemies[i];
@@ -102,7 +103,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         }
                     }
                 }
-                callback();
+
+                self.signal('fetchsuccess');
             }
         });
     }

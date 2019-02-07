@@ -18,7 +18,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    fetchFromServer(floor, callback) {
+    fetchFromServer(floor) {
         // no super call required
         console.assert(this instanceof EnemyPackMapObjectGroup, this, 'this is not a EnemyPackMapObjectGroup');
 
@@ -86,7 +86,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                     enemyPack.setSynced(true);
                 }
 
-                callback();
+                self.signal('fetchsuccess');
             }
         });
     }
