@@ -31,7 +31,8 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
             data: {
                 floor_id: floor.id,
                 // Non-admin = get enemy locations instead
-                vertices: self.map.constructor.name === 'AdminDungeonMap' ? 1 : 0
+                vertices: self.map.constructor.name === 'AdminDungeonMap' ? 1 : 0,
+                teeming: self.map.teeming ? 1 : 0
             },
             success: function (json) {
                 // Now draw the packs on the map
