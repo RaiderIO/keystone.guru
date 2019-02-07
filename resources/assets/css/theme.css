@@ -4,6 +4,10 @@
     color: #495057;
 }
 
+.dropdown .dropdown-menu {
+    background-color: #58697A;
+}
+
 /* Fix for selectpickers inside popups inside the map */
 #map .dropdown-menu {
     background-color: rgb(224, 224, 224);

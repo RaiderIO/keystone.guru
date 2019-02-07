@@ -73,7 +73,7 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse text-center text-lg-left" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
@@ -84,9 +84,9 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
                                 {{ __('Demo') }}
                             </a>
 
-                            <div class="dropdown-menu" aria-labelledby="demo_dropdown">
+                            <div class="dropdown-menu text-center text-lg-left" aria-labelledby="demo_dropdown">
                                 @foreach(\App\Models\DungeonRoute::where('demo', '=', true)->get() as $route)
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item test-dropdown-menu"
                                        href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
                                         {{ $route->dungeon->name }}
                                     </a>
@@ -101,8 +101,8 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        <li class="nav-item mr-2">
-                            <a href="#" class="btn btn-primary text-white" data-toggle="modal" data-target="#try_modal">
+                        <li class="nav-item mr-lg-2">
+                            <a href="#" class="btn btn-primary text-white col-lg-auto" data-toggle="modal" data-target="#try_modal">
                                 {{__('Try it!')}}
                             </a>
                         </li>
@@ -118,14 +118,14 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
                                 </a>
                             </li>
                         @else
-                            <li class="nav-item mr-2">
+                            <li class="nav-item mr-lg-2 mt-1 mt-lg-0">
                                 <div class="dropdown">
-                                    <button class="btn btn-success dropdown-toggle" type="button"
+                                    <button class="btn btn-success dropdown-toggle col-lg-auto" type="button"
                                             id="newRouteDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="false">
                                         <i class="fas fa-plus"></i> {{__('Create route')}}
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="newRouteDropdownMenuButton">
+                                    <div class="dropdown-menu text-center text-lg-left" aria-labelledby="newRouteDropdownMenuButton">
                                         <a class="dropdown-item"
                                            href="{{ route('dungeonroute.new') }}">{{ __('New route') }}</a>
                                         <a class="dropdown-item" href="#" data-toggle="modal"
@@ -136,14 +136,9 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <div class="user_icon float-left">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div class="float-left">
-                                        {{ Auth::user()->name }}
-                                    </div>
+                                    <i class="fas fa-user"></i> {{ Auth::user()->name }}
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
                                     @if( Auth::user()->can('read-expansions') )
                                         <a class="dropdown-item"
                                            href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
