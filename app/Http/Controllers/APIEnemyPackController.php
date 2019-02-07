@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\EnemyPack;
 use App\Models\EnemyPackVertex;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
 class APIEnemyPackController extends Controller
@@ -16,10 +18,26 @@ class APIEnemyPackController extends Controller
     function list(Request $request)
     {
         $floorId = $request->get('floor_id');
-        return EnemyPack::with(['vertices' => function ($query) {
+        $vertices = $request->get('vertices', false);
+
+        // If logged in, and we're NOT an admin
+        if( Auth::check() && !Auth::user()->hasRole('admin') ){
+            // Don't expose vertices
+            $vertices = false;
+        }
+
+        /** @var Builder $result */
+        $result = EnemyPack::with([$vertices ? 'vertices' : 'enemies' => function ($query) {
             /** @var $query \Illuminate\Database\Query\Builder */
             $query->select(['enemy_pack_id', 'lat', 'lng']); // must select enemy_pack_id, else it won't return results /sadface
-        }])->where('floor_id', '=', $floorId)->get(['id', 'label', 'faction']);
+        }]);
+
+        // Don't need this now!
+        if( !$vertices ){
+            $result->without('vertices');
+        }
+
+        return $result->where('floor_id', '=', $floorId)->get(['id', 'label', 'faction']);
     }
 
     /**
