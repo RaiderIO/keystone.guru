@@ -16,6 +16,11 @@ $footer = isset($footer) ? $footer : true;
 $title = isset($title) ? $title . ' - ' : '';
 // Show cookie consent
 $cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
+// If user already approved of the cookie..
+if (isset($_COOKIE['cookieconsent_status']) && $_COOKIE['cookieconsent_status'] === 'dismiss') {
+    // Don't bother the user with it anymore
+    $cookieConsent = false;
+}
 // Easy switch
 $isProduction = config('app.env') === 'production';
 // Show ads if not set
@@ -41,7 +46,6 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
@@ -102,7 +106,8 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item mr-lg-2">
-                            <a href="#" class="btn btn-primary text-white col-lg-auto" data-toggle="modal" data-target="#try_modal">
+                            <a href="#" class="btn btn-primary text-white col-lg-auto"
+                               data-toggle="modal" data-target="#try_modal">
                                 {{__('Try it!')}}
                             </a>
                         </li>
@@ -125,7 +130,8 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
                                             aria-expanded="false">
                                         <i class="fas fa-plus"></i> {{__('Create route')}}
                                     </button>
-                                    <div class="dropdown-menu text-center text-lg-left" aria-labelledby="newRouteDropdownMenuButton">
+                                    <div class="dropdown-menu text-center text-lg-left"
+                                         aria-labelledby="newRouteDropdownMenuButton">
                                         <a class="dropdown-item"
                                            href="{{ route('dungeonroute.new') }}">{{ __('New route') }}</a>
                                         <a class="dropdown-item" href="#" data-toggle="modal"
@@ -315,7 +321,9 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
             <div class="row text-center small">
                 <div class="col-md-6">
                     <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>
-                    <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ \Tremby\LaravelGitVersion\GitVersionHelper::getNameAndVersion() }} </a>
+                    <a class="nav-item nav-link" href="/">
+                        ©{{ date('Y') }} {{ \Tremby\LaravelGitVersion\GitVersionHelper::getNameAndVersion() }}
+                    </a>
                 </div>
                 <div class="col-md-6">
                     World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
