@@ -77,7 +77,7 @@
                 "affix_group_id": 12
             }
         ],
-        "routes": [
+        "paths": [
             {
                 "floor_id": 41,
                 "color": "#0070de",

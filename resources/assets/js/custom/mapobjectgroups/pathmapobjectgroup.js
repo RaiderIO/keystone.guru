@@ -1,4 +1,4 @@
-class RouteMapObjectGroup extends MapObjectGroup {
+class PathMapObjectGroup extends MapObjectGroup {
     constructor(map, name, editable) {
         super(map, name, editable);
 
@@ -7,15 +7,15 @@ class RouteMapObjectGroup extends MapObjectGroup {
     }
 
     _createObject(layer) {
-        console.assert(this instanceof RouteMapObjectGroup, 'this is not an RouteMapObjectGroup');
+        console.assert(this instanceof PathMapObjectGroup, 'this is not an PathMapObjectGroup');
 
-        return new Route(this.map, layer);
+        return new Path(this.map, layer);
     }
 
 
     fetchFromServer(floor) {
         // no super call required
-        console.assert(this instanceof RouteMapObjectGroup, this, 'this is not a RouteMapObjectGroup');
+        console.assert(this instanceof PathMapObjectGroup, this, 'this is not a PathMapObjectGroup');
 
         let self = this;
 
@@ -23,7 +23,7 @@ class RouteMapObjectGroup extends MapObjectGroup {
         if (!this.map.isTryModeEnabled()) {
             $.ajax({
                 type: 'GET',
-                url: '/ajax/routes',
+                url: '/ajax/paths',
                 dataType: 'json',
                 data: {
                     dungeonroute: this.map.getDungeonRoute().publicKey,

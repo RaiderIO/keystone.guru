@@ -35,8 +35,8 @@ $introTexts = [
     __('This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).'),
 
     __('These are your route manipulation tools.'),
-    __('You can draw routes with this tool. Click it, then draw a route (a line) from A to B, with as many points are you like. Once finished, you can click
-    the line on the map to change its color. You can add as many routes as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
+    __('You can draw paths with this tool. Click it, then draw a path (a line) from A to B, with as many points are you like. Once finished, you can click
+    the line on the map to change its color. You can add as many paths as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
     or purple for a Warlock Gateway, for example.'),
     __('This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
     You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
@@ -115,7 +115,7 @@ $introTexts = [
                 ['.enemy_forces_container', 'right'],
 
                 ['.route_manipulation_tools', 'right'],
-                ['.leaflet-draw-draw-route', 'right'],
+                ['.leaflet-draw-draw-path', 'right'],
                 ['.leaflet-draw-draw-killzone', 'right'],
                 ['.leaflet-draw-draw-mapcomment', 'right'],
                 ['.leaflet-draw-draw-brushline', 'right'],
@@ -296,11 +296,11 @@ $introTexts = [
         </div>
     </script>
 
-    <script id="map_route_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_route_edit_popup_inner" class="popupCustom">
+    <script id="map_path_edit_popup_template" type="text/x-handlebars-template">
+        <div id="map_path_edit_popup_inner" class="popupCustom">
             <div class="form-group">
-                {!! Form::label('map_route_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('map_route_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+                {!! Form::label('map_path_edit_popup_color_@{{id}}', __('Color')) !!}
+                {!! Form::color('map_path_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
 
                 @php($classes = \App\Models\CharacterClass::all())
                 @php($half = ($classes->count() / 2))
@@ -318,7 +318,7 @@ $introTexts = [
                     @endif
                 @endfor
             </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_route_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+            {!! Form::button(__('Submit'), ['id' => 'map_path_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
         </div>
     </script>
 

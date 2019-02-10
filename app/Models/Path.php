@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $dungeonroute DungeonRoute
  * @property \Illuminate\Support\Collection $vertices
  */
-class Route extends Model
+class Path extends Model
 {
     public $with = ['vertices'];
 
@@ -31,7 +31,7 @@ class Route extends Model
      */
     function vertices()
     {
-        return $this->hasMany('App\Models\RouteVertex');
+        return $this->hasMany('App\Models\PathVertex');
     }
 
     /**
@@ -44,7 +44,7 @@ class Route extends Model
         // Only if there's vertices to destroy
         if (count($existingVerticesIds) > 0) {
             // Kill them off
-            RouteVertex::destroy($existingVerticesIds);
+            PathVertex::destroy($existingVerticesIds);
         }
     }
 }

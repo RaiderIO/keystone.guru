@@ -168,7 +168,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::get('/dungeonroutes', 'APIDungeonRouteController@list')->name('api.dungeonroutes');
 
-        Route::get('/routes', 'APIRouteController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
+        Route::get('/paths', 'APIPathController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
 
         Route::get('/killzones', 'APIKillZoneController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
 
@@ -185,8 +185,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::group(['middleware' => ['auth', 'role:user']], function () {
             Route::post('/profile/legal', 'APIProfileController@legalAgree');
 
-            Route::post('/route', 'APIRouteController@store');
-            Route::delete('/route', 'APIRouteController@delete');
+            Route::post('/path', 'APIPathController@store');
+            Route::delete('/path', 'APIPathController@delete');
 
             Route::post('/polyline', 'APIPolylineController@store');
             Route::delete('/polyline', 'APIPolylineController@delete');

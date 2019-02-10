@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\DB;
  * @property $created_at string
  *
  * @property Dungeon $dungeon
- * @property Route $route
+ * @property Path $route
  * @property Faction $faction
  * @property User $author
  * @property MDTImport $mdtImport
@@ -51,7 +51,7 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $affixes
  * @property \Illuminate\Support\Collection $ratings
  *
- * @property \Illuminate\Support\Collection $routes
+ * @property \Illuminate\Support\Collection $paths
  * @property \Illuminate\Support\Collection $killzones
  * @property \Illuminate\Support\Collection $polylines
  *
@@ -95,9 +95,9 @@ class DungeonRoute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function routes()
+    public function paths()
     {
-        return $this->hasMany('App\Models\Route');
+        return $this->hasMany('App\Models\Path');
     }
 
     /**
@@ -612,7 +612,7 @@ class DungeonRoute extends Model
 
             // Delete routes
             foreach ($item->routes as $route) {
-                /** @var $route \App\Models\Route */
+                /** @var $route \App\Models\Path */
                 $route->deleteVertices();
                 $route->delete();
             }

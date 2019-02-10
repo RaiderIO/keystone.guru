@@ -13,7 +13,7 @@ use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\MapComment;
 use App\Models\Npc;
-use App\Models\Route;
+use App\Models\Path;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

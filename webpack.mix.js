@@ -41,7 +41,7 @@ let scripts = [
     'resources/assets/js/custom/enemy.js',
     'resources/assets/js/custom/enemypatrol.js',
     'resources/assets/js/custom/enemypack.js',
-    'resources/assets/js/custom/route.js',
+    'resources/assets/js/custom/path.js',
     'resources/assets/js/custom/killzone.js',
     'resources/assets/js/custom/mapcomment.js',
     'resources/assets/js/custom/dungeonstartmarker.js',
@@ -90,8 +90,8 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapcommentmapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/routemapobjectgroup.js',
 ];
 
 // Do not translate in development

@@ -172,3 +172,12 @@ Type: normal
 Username: vagrant
 Password: vagrant
 ```
+
+## Increasing the speed of the VM
+By default it's rather slow to be honest. Try the following:
+
+```bash
+vagrant plugin install vagrant-winnfsd
+```
+
+Then add `type: "nfs"` to your folder mapping under your `to:` directive. Provision the machine again and it will speed up the machine by a few factors.

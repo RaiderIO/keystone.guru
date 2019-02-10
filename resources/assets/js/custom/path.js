@@ -1,19 +1,19 @@
 $(function () {
-    L.Draw.Route = L.Draw.Polyline.extend({
+    L.Draw.Path = L.Draw.Polyline.extend({
         statics: {
             TYPE: 'route'
         },
         initialize: function (map, options) {
             options.showLength = false;
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.Route.TYPE;
+            this.type = L.Draw.Path.TYPE;
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
 
     // Copy pasted from https://github.com/Leaflet/Leaflet.draw/blob/develop/src/draw/handler/Draw.Polyline.js#L470
     // Adjusted so that it uses the correct drawing strings
-    L.Draw.Route.prototype._getTooltipText = function () {
+    L.Draw.Path.prototype._getTooltipText = function () {
 		var showLength = this.options.showLength,
 			labelText, distanceStr;
 		if (this._markers.length === 0) {
@@ -39,18 +39,18 @@ $(function () {
     }
 });
 
-class Route extends MapObject {
+class Path extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
         let self = this;
 
-        this.label = 'Route';
+        this.label = 'Path';
         this.saving = false;
         this.deleting = false;
         this.decorator = null;
 
-        this.setColor(c.map.route.defaultColor);
+        this.setColor(c.map.path.defaultColor);
         this.setSynced(false);
 
         this.register('synced', this, function () {
@@ -69,7 +69,7 @@ class Route extends MapObject {
      * @private
      */
     _cleanDecorator() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
+        console.assert(this instanceof Path, this, 'this is not an Route');
 
         if (this.decorator !== null) {
             this.map.leafletMap.removeLayer(this.decorator);
@@ -81,7 +81,7 @@ class Route extends MapObject {
      * @private
      */
     _rebuildDecorator() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
+        console.assert(this instanceof Path, this, 'this is not an Route');
 
         this._cleanDecorator();
 
@@ -115,13 +115,13 @@ class Route extends MapObject {
     }
 
     edit() {
-        console.assert(this instanceof Route, this, 'this was not a Route');
+        console.assert(this instanceof Path, this, 'this was not a Route');
         this.save();
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof Route, this, 'this was not a Route');
+        console.assert(this instanceof Path, this, 'this was not a Route');
 
         let successFn = function (json) {
             self.signal('object:deleted', {response: json});
@@ -131,7 +131,7 @@ class Route extends MapObject {
         if (!this.map.isTryModeEnabled()) {
             $.ajax({
                 type: 'POST',
-                url: '/ajax/route',
+                url: '/ajax/path',
                 dataType: 'json',
                 data: {
                     _method: 'DELETE',
@@ -155,7 +155,7 @@ class Route extends MapObject {
 
     save() {
         let self = this;
-        console.assert(this instanceof Route, this, 'this was not a Route');
+        console.assert(this instanceof Path, this, 'this was not a Route');
 
         let successFn = function (json) {
             self.id = json.id;
@@ -168,7 +168,7 @@ class Route extends MapObject {
         if (!this.map.isTryModeEnabled()) {
             $.ajax({
                 type: 'POST',
-                url: '/ajax/route',
+                url: '/ajax/path',
                 dataType: 'json',
                 data: {
                     id: self.id,
@@ -179,11 +179,11 @@ class Route extends MapObject {
                 },
                 beforeSend: function () {
                     self.saving = true;
-                    $('#map_route_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
+                    $('#map_path_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
                 },
                 success: successFn,
                 complete: function () {
-                    $('#map_route_edit_popup_submit_' + self.id).removeAttr('disabled');
+                    $('#map_path_edit_popup_submit_' + self.id).removeAttr('disabled');
                     self.saving = false;
                 },
                 error: function () {
@@ -199,7 +199,7 @@ class Route extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
+        console.assert(this instanceof Path, this, 'this is not an Route');
         super.onLayerInit();
 
         let self = this;
@@ -209,7 +209,7 @@ class Route extends MapObject {
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {
-                let $color = $('#map_route_edit_popup_color_' + self.id);
+                let $color = $('#map_path_edit_popup_color_' + self.id);
                 $color.val(self.routeColor);
 
                 // Class color buttons
@@ -220,10 +220,10 @@ class Route extends MapObject {
                 });
 
                 // Prevent multiple binds to click
-                let $submitBtn = $('#map_route_edit_popup_submit_' + self.id);
+                let $submitBtn = $('#map_path_edit_popup_submit_' + self.id);
                 $submitBtn.unbind('click');
                 $submitBtn.bind('click', function () {
-                    self.setColor($('#map_route_edit_popup_color_' + self.id).val());
+                    self.setColor($('#map_path_edit_popup_color_' + self.id).val());
 
                     self.edit();
                 });
@@ -231,7 +231,7 @@ class Route extends MapObject {
 
             // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
             self.register('synced', this, function (event) {
-                let customPopupHtml = $('#map_route_edit_popup_template').html();
+                let customPopupHtml = $('#map_path_edit_popup_template').html();
                 // Remove template so our
                 let template = handlebars.compile(customPopupHtml);
 
@@ -256,7 +256,7 @@ class Route extends MapObject {
     }
 
     getVertices() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
+        console.assert(this instanceof Path, this, 'this is not an Route');
 
         let coordinates = this.layer.toGeoJSON().geometry.coordinates;
         let result = [];

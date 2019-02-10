@@ -76,7 +76,7 @@ if (isset($model)) {
                     </div>
                     <div class="row">
                         <div class="col">
-                            <?php /* The default color here should be matched with those in c.map.route.defaultColor etc */ ?>
+                            <?php /* The default color here should be matched with those in c.map.path.defaultColor etc */ ?>
                             {!! Form::color('edit_route_freedraw_options_color', '#9DFF56', ['id' => 'edit_route_freedraw_options_color', 'class' => 'form-control']) !!}
                         </div>
                         <div class="col">

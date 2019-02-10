@@ -1,7 +1,7 @@
 <?php
 
 
-class DungeonRouteRoutesRelationParser implements RelationParser
+class DungeonRoutePathsRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -19,7 +19,7 @@ class DungeonRouteRoutesRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'routes' && is_array($value);
+        return $name === 'paths' && is_array($value);
     }
 
     /**
@@ -42,17 +42,17 @@ class DungeonRouteRoutesRelationParser implements RelationParser
 
             if( count($vertices) > 0 ){
                 // Gotta save the Route in order to get an ID
-                $route = new \App\Models\Route($routeData);
+                $route = new \App\Models\Path($routeData);
                 $route->save();
 
                 foreach ($vertices as $key => $vertex) {
                     // Make sure the vertex's relation with the route is restored.
                     // Do not use $vertex since that would create a new copy and we'd lose our changes
-                    $vertices[$key]['route_id'] = $route->id;
+                    $vertices[$key]['path_id'] = $route->id;
                 }
 
                 // Insert vertices
-                \App\Models\RouteVertex::insert($vertices);
+                \App\Models\PathVertex::insert($vertices);
             }
         }
 

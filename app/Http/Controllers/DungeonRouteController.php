@@ -8,7 +8,7 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\PageView;
-use App\Models\Route;
+use App\Models\Path;
 use App\Models\UserReport;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -166,7 +166,7 @@ class DungeonRouteController extends Controller
                     $model->save();
 
                     // If it was a route, save the vertices as well
-                    if ($model instanceof Route) {
+                    if ($model instanceof Path) {
                         foreach ($model->vertices as $vertex) {
                             $vertex->id = 0;
                             $vertex->exists = false;

@@ -61,7 +61,7 @@ var c = {
             defaultColor: '#E25D5D'
         },
         /* These colors may be overriden by drawcontrols.js */
-        route: {
+        path: {
             defaultColor: '#9DFF56',
         },
         brushline: {

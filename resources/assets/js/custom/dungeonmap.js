@@ -434,7 +434,7 @@ class DungeonMap extends Signalable {
         // Only add these two if they're worth fetching (not in a view)
         if (this.getDungeonRoute().publicKey !== '' || this.edit) {
             if (this.hiddenMapObjectGroups.indexOf('route') < 0) {
-                result.push(new RouteMapObjectGroup(this, 'route', true));
+                result.push(new PathMapObjectGroup(this, 'route', true));
             }
             if (this.hiddenMapObjectGroups.indexOf('killzone') < 0) {
                 result.push(new KillZoneMapObjectGroup(this, 'killzone', true));

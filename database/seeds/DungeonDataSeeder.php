@@ -133,8 +133,8 @@ class DungeonDataSeeder extends Seeder
             new DungeonRoutePlayerRaceRelationParser(),
             new DungeonRoutePlayerClassRelationParser(),
             new DungeonRouteAffixGroupRelationParser(),
-
-            new DungeonRouteRoutesRelationParser(),
++
+            new DungeonRoutePathsRelationParser(),
             new DungeonRouteKillZoneRelationParser(),
             new DungeonRouteEnemyRaidMarkersRelationParser(),
             new DungeonRouteMapCommentsRelationParser()
