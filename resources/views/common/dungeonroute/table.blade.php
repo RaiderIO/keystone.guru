@@ -246,7 +246,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                 'render': function (data, type, row, meta) {
                     let actionsHtml = $("#dungeonroute_table_profile_actions_template").html();
 
-                    let template = handlebars.compile(actionsHtml);
+                    let template = Handlebars.compile(actionsHtml);
                     return template({public_key: row.public_key});
                 }
             });

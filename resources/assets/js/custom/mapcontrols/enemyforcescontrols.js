@@ -13,8 +13,7 @@ class EnemyForcesControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let source = $("#map_enemy_forces_template").html();
-                let template = handlebars.compile(source);
+                let template = Handlebars.templates['map_enemy_forces_template'];
 
                 let data = {
                     enemy_forces_total: self.map.getEnemyForcesRequired()

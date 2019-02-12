@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 const argv = require('yargs').argv;
+const WebpackShellPlugin = require('webpack-shell-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -28,11 +29,26 @@ mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts
 
 // Custom processing only
 mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css');
+
+let precompile = [
+    // Translations
+    'resources/assets/js/messages.js'
+];
+
+mix.js(precompile, 'resources/assets/js/precompile.js');
+
 let scripts = [
+    // Include the precompiled scripts
+    'resources/assets/js/precompile.js',
+
     // Home page only
     'resources/assets/js/custom/home.js',
     // Doesn't depend on anything
     'resources/assets/js/custom/constants.js',
+
+    // Pre-compiled handlebars
+    'resources/assets/js/handlebars.js',
+
     // Include in proper order
     'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/signalable.js',
@@ -95,7 +111,7 @@ let scripts = [
 ];
 
 // Do not translate in development
-if( mix.inProduction() ){
+if (mix.inProduction()) {
     mix.babel(scripts, 'public/js/custom.js');
 } else {
     mix.scripts(scripts, 'public/js/custom.js');
@@ -107,7 +123,22 @@ mix.webpackConfig({
         alias: {
             handlebars: 'handlebars/dist/handlebars.min.js'
         }
-    }
+    },
+    // Translations
+    module: {
+        rules: [{
+                // Matches all PHP or JSON files in `resources/lang` directory.
+                test: /resources[\\\/]lang.+\.(php|json)$/,
+                loader: 'laravel-localization-loader',
+            }
+        ]
+    },
+    plugins: [
+        // Compile handlebars
+        mix.inProduction() ?
+            new WebpackShellPlugin({onBuildStart: ['handlebars -m resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'], onBuildEnd: []}) :
+            new WebpackShellPlugin({onBuildStart: ['handlebars resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'], onBuildEnd: []})
+    ]
 });
 mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/app.scss', 'public/css')

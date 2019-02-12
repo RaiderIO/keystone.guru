@@ -23,7 +23,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
 
         let customPopupHtml = $("#dungeon_floor_switch_edit_popup_template").html();
         // Remove template so our
-        let template = handlebars.compile(customPopupHtml);
+        let template = Handlebars.compile(customPopupHtml);
 
         let data = {
             floors: []

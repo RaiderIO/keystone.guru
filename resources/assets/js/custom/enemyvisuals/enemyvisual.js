@@ -42,7 +42,7 @@ class EnemyVisual extends Signalable {
             // Prepare the template
             let iconHtml = $('#map_enemy_visual_template').html();
             // Remove template so our
-            let template = handlebars.compile(iconHtml);
+            let template = Handlebars.compile(iconHtml);
 
             let data = {};
 

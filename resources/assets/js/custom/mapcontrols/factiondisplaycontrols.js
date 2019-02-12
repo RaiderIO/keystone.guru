@@ -9,7 +9,7 @@ class FactionDisplayControls extends MapControl {
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
                 let source = $('#map_faction_display_controls_template').html();
-                let template = handlebars.compile(source);
+                let template = Handlebars.compile(source);
 
                 let data = {};
 

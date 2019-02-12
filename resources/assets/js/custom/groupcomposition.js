@@ -452,7 +452,7 @@ function _addIconOptionToSelect($select, dataCollection, cssPrefix = '') {
         let obj = dataCollection[i];
 
         let source = $('#composition_icon_option_template').html();
-        let template = handlebars.compile(source);
+        let template = Handlebars.compile(source);
 
         let option = jQuery('<option>', {
             value: obj.id,

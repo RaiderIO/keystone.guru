@@ -33,7 +33,7 @@ if(!isset($affixgroups) ){
                 let affixGroup = _affixGroups[i];
 
                 let optionTemplate = $("#affixgroup_select_option_template").html();
-                let template = handlebars.compile(optionTemplate);
+                let template = Handlebars.compile(optionTemplate);
 
                 let affixes = [];
                 for( let j in affixGroup.affixes ){

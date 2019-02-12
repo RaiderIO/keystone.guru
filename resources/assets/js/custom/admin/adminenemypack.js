@@ -40,7 +40,7 @@ class AdminEnemyPack extends EnemyPack {
         let syncedFn = function (event) {
             let customPopupHtml = $('#enemy_pack_edit_popup_template').html();
             // Remove template so our
-            let template = handlebars.compile(customPopupHtml);
+            let template = Handlebars.compile(customPopupHtml);
 
             let data = {id: self.id};
 

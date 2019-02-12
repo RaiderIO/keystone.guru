@@ -120,7 +120,7 @@ class Enemy extends MapObject {
 
             let customPopupHtml = $('#enemy_edit_popup_template').html();
             // Remove template so our
-            let template = handlebars.compile(customPopupHtml);
+            let template = Handlebars.compile(customPopupHtml);
 
             let data = {id: self.id};
 
@@ -166,8 +166,7 @@ class Enemy extends MapObject {
 
     bindTooltip() {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
-        let source = $("#map_enemy_tooltip_template").html();
-        let template = handlebars.compile(source);
+        let template = Handlebars.templates['map_enemy_tooltip_template'];
 
         let data = {};
         if (this.npc !== null) {
@@ -189,7 +188,7 @@ class Enemy extends MapObject {
                 }
             }
 
-            data = {
+            data = $.extend({
                 npc_name: this.npc.name,
                 enemy_forces: enemy_forces,
                 base_health: this.npc.base_health,
@@ -203,7 +202,7 @@ class Enemy extends MapObject {
                 enemy_id: this.enemy_id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
                 visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
-            };
+            }, getHandlebarsTranslations());
         }
 
         // Remove any previous tooltip

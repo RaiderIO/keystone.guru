@@ -32,7 +32,7 @@
      */
     function handlebarsBiglistFeaturesParse(row) {
         let featureTemplate = $('#biglistfeatures_template').html();
-        let template = handlebars.compile(featureTemplate);
+        let template = Handlebars.compile(featureTemplate);
 
         let handlebarsData = {
             affixes: handlebarsAffixGroupsParse(row.affixes),

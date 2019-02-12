@@ -36,7 +36,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
             success: function (responseData) {
                 var templateHtml = $('#import_string_details_template').html();
 
-                var template = handlebars.compile(templateHtml);
+                var template = Handlebars.compile(templateHtml);
 
                 var data = {
                     details: [
@@ -119,7 +119,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
     function _addFixedFooter(type, message, durationMs, small = false) {
         var fixedFooterTemplate = $('#app_fixed_footer_' + (small ? 'small_' : '') + 'template').html();
 
-        var template = handlebars.compile(fixedFooterTemplate);
+        var template = Handlebars.compile(fixedFooterTemplate);
 
         var handlebarsData = {
             type: type,

@@ -12,7 +12,7 @@ class EnemyVisualControls extends MapControl {
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
                 let source = $('#map_enemy_visuals_template').html();
-                let template = handlebars.compile(source);
+                let template = Handlebars.compile(source);
 
                 let data = {};
 

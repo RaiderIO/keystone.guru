@@ -46,7 +46,7 @@
             groupSetupHtml = $("#affixgroups_complex_template").html();
         }
 
-        let template = handlebars.compile(groupSetupHtml);
+        let template = Handlebars.compile(groupSetupHtml);
 
         let handlebarsData = {
             count: data.length,

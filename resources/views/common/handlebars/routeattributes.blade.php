@@ -21,7 +21,7 @@
     function handlebarsRouteAttributesParse(data) {
         let groupSetupHtml = $('#routeattributes_row_template').html();
 
-        let template = handlebars.compile(groupSetupHtml);
+        let template = Handlebars.compile(groupSetupHtml);
 
         let handlebarsData = {
             attributes: []

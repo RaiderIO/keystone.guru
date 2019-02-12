@@ -363,7 +363,7 @@ class KillZone extends MapObject {
 
                 let customPopupHtml = $('#map_killzone_edit_popup_template').html();
                 // Remove template so our
-                let template = handlebars.compile(customPopupHtml);
+                let template = Handlebars.compile(customPopupHtml);
 
                 let data = {id: self.id};
 
@@ -461,7 +461,7 @@ class KillZone extends MapObject {
 
             // let customPopupHtml = $("#killzone_edit_popup_template").html();
             // // Remove template so our
-            // let template = handlebars.compile(customPopupHtml);
+            // let template = Handlebars.compile(customPopupHtml);
             //
             // let data = {id: self.id};
             //

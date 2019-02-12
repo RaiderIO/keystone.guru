@@ -353,7 +353,7 @@ class AdminEnemy extends Enemy {
 
             let customPopupHtml = $('#enemy_edit_popup_template').html();
             // Remove template so our
-            let template = handlebars.compile(customPopupHtml);
+            let template = Handlebars.compile(customPopupHtml);
 
             let data = {id: self.id};
 

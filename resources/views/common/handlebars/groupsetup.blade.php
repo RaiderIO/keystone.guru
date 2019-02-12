@@ -18,7 +18,7 @@
     function handlebarsGroupSetupParse(data) {
         let groupSetupHtml = $("#group_setup_template").html();
 
-        let template = handlebars.compile(groupSetupHtml);
+        let template = Handlebars.compile(groupSetupHtml);
 
         let handlebarsData = {
             css_class: 'faction_icon_' + data.faction.name.toLowerCase(),

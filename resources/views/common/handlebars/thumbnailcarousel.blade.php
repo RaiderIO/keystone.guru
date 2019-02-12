@@ -15,7 +15,7 @@
      */
     function handlebarsThumbnailCarouselParse(row) {
         let thumbnailTemplate = $('#thumbnailcarousel_template').html();
-        let template = handlebars.compile(thumbnailTemplate);
+        let template = Handlebars.compile(thumbnailTemplate);
 
         let items = [];
 

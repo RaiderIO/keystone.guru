@@ -12,10 +12,13 @@ $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) 
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? 'true' : 'false';
 $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
+
+// Easy switch
+$isProduction = config('app.env') === 'production';
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
-// Hide ads if this page shows them, but the user has ad-free tier
-if ($showAds && Auth::check() && Auth::user()->hasPaidTier('ad-free')) {
+// If we should show ads, are logged in, user has paid for no ads, or we're not in production..
+if (($showAds && Auth::check() && $user->hasPaidTier('ad-free')) || !$isProduction) {
     $showAds = false;
 }
 // No UI on the map
@@ -161,21 +164,6 @@ $introTexts = [
         });
     </script>
 
-    <script id="map_enemy_forces_template" type="text/x-handlebars-template">
-        <div id="map_enemy_forces" class="font-weight-bold" data-toggle="tooltip">
-            <div class="row">
-                <div class="col">
-                    <span id="map_enemy_forces_numbers">
-                        <i id="map_enemy_forces_success" class="fas fa-check-circle" style="display: none;"></i>
-                        <i id="map_enemy_forces_warning" class="fas fa-exclamation-triangle" style="display: none;"></i>
-                        <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
-                        (<span id="map_enemy_forces_percent">0</span>%)
-                    </span>
-                </div>
-            </div>
-        </div>
-    </script>
-
     <script id="map_enemy_visuals_template" type="text/x-handlebars-template">
         <div id="map_enemy_visuals" class="leaflet-draw-section">
             <div class="form-group">
@@ -234,66 +222,6 @@ $introTexts = [
     </script>
 
     <script id="map_enemy_tooltip_template" type="text/x-handlebars-template">
-        <div class="map_enemy_tooltip leaflet-draw-section">
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Name') }} </div>
-                <div class="col-7 no-gutters">@{{ npc_name }}</div>
-            </div>
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Enemy forces') }} </div>
-                <div class="col-7 no-gutters">@{{{ enemy_forces }}}</div>
-            </div>
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Base health') }} </div>
-                <div class="col-7 no-gutters">@{{ base_health }}</div>
-            </div>
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Teeming') }} </div>
-                <div class="col-7 no-gutters">@{{ teeming }}
-                </div>
-            </div>
-            @auth
-                @if(Auth::user()->hasRole('admin'))
-                    <div class="row">
-                        <div class="col-12 font-weight-bold">
-                            {{ __('Admin only') }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('ID') }} </div>
-                        <div class="col-7 no-gutters">@{{ id }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('Faction') }} </div>
-                        <div class="col-7 no-gutters">@{{ faction }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('NPC_ID') }} </div>
-                        <div class="col-7 no-gutters">@{{ npc_id }} (@{{ npc_id_type }})</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('Pack') }} </div>
-                        <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('MDT') }} </div>
-                        <div class="col-7 no-gutters">@{{ is_mdt }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('MDT_ID') }} </div>
-                        <div class="col-7 no-gutters">@{{ mdt_id }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('ENEMY_ID') }} </div>
-                        <div class="col-7 no-gutters">@{{ enemy_id }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('Visual') }} </div>
-                        <div class="col-7 no-gutters">@{{ visual }}</div>
-                    </div>
-                @endif
-            @endauth
-        </div>
     </script>
 
     <script id="map_path_edit_popup_template" type="text/x-handlebars-template">

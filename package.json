@@ -12,17 +12,19 @@
   "devDependencies": {
     "axios": "^0.18",
     "jquery": "^3.1.0",
+    "laravel-localization-loader": "^1.0.5",
     "laravel-mix": "^4.0.7",
     "lodash": "^4.17.11",
     "resolve-url-loader": "^2.3.1",
     "sass": "^1.17.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.3"
+    "vue-template-compiler": "^2.6.3",
+    "webpack-shell-plugin": "^0.5.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.1",
-    "ajv": "^6.8.1",
-    "bootstrap": "^4.2.1",
+    "ajv": "^6.9.1",
+    "bootstrap": "^4.3.0",
     "bootstrap-select": "^1.13.4",
     "bootswatch": "^4.2.1",
     "color-interpolate": "^1.0.4",
@@ -36,6 +38,7 @@
     "jquery-bar-rating": "^1.2.2",
     "jquery-mousewheel": "^3.1.13",
     "js-cookie": "^2.2.0",
+    "lang.js": "^1.1.14",
     "leaflet": "^1.4.0",
     "leaflet-contextmenu": "^1.4.0",
     "leaflet-draw": "^1.0.4",
