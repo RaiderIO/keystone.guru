@@ -1,7 +1,8 @@
 ## Intro
 This tutorial is for developers who would like to contribute to Keystone.guru and want to setup a local version of the site so they can start developing.
 
-The local environment will use Homestead/Vagrant and have a pre-configured version of Keystone.guru with everything in-place.
+This is a step-by-step guide of starting from scratch and installing a working local development environment. Once I figure everything out myself,
+I will provide a fully working Vagrant box which you can just start up and everything will work (bar a few things which I will explain).
 
 PLEASE FOLLOW THE STEPS CLOSELY. IF THERE'S ANY ERROR PLEASE CONTACT ME. I'M PRETTY SURE I FORGOT THINGS OR CAN OTHERWISE HELP YOU GET SETUP.
 
@@ -85,6 +86,25 @@ databases:
     - homestead
 ```
 
+
+## Vagrantfile
+
+Edit your `Vagrantfile` file to contain the following:
+
+```yaml
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    (...)
+
+	config.vm.provider "virtualbox" do |v|
+		v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
+	end
+	
+end
+```
+
+The three lines at the end should simply be placed there. Any other lines must remain where they are. If you don't do this, you will not be able to run `npm` from your Vagrant machine.
+
 Note: change the `PATH_TO_PRIVATE_KEY` to your SSH private key. If you don't know what this is, Google how to create a ssh keypair. You can possibly remove the entire block and I think they'll generate temporary keys for you but not 100% sure.
 
 ## Add to hosts
@@ -96,7 +116,7 @@ Open up `C:\Windows\system32\drivers\etc\hosts` file in an elevated notepad. Add
 ```
 
 ## Start your Vagrant box
-`cd` to where you checked out Homestead, and run `vagrant up`. This should boot up your VM. If you get any errors at this point, hit me up.
+In an elevated command prompt (run as administrator) `cd` to where you checked out Homestead, and run `vagrant up`. This should boot up your VM. If you get any errors at this point, hit me up.
 
 ## Once you're in
 Run this bash to install PhpMyAdmin (skip if you use MySQLWorkbench or anything else to manage your database)

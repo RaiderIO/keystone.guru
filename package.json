@@ -24,7 +24,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
     "ajv": "^6.9.1",
-    "bootstrap": "^4.3.0",
+    "bootstrap": "^4.3.1",
     "bootstrap-select": "^1.13.4",
     "bootswatch": "^4.2.1",
     "color-interpolate": "^1.0.4",
