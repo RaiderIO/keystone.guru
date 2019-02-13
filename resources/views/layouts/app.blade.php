@@ -335,33 +335,6 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
     @endif
 </div>
 
-<script id="app_fixed_footer_small_template" type="text/x-handlebars-template">
-    <div class="text-center m-1">
-        <span class="alert alert-@{{type}} border-secondary mb-0">
-            @{{{message}}}
-        </span>
-    </div>
-</script>
-
-<script id="app_fixed_footer_template" type="text/x-handlebars-template">
-    <div class="alert alert-@{{type}} mb-0 text-center border-secondary border-top m-1">
-        @{{{message}}}
-    </div>
-</script>
-
-<script id="import_string_details_template" type="text/x-handlebars-template">
-    @{{#details}}
-    <div class="row no-gutters">
-        <div class="col-4 font-weight-bold">
-            @{{key}}:
-        </div>
-        <div class="col-8">
-            @{{value}}
-        </div>
-    </div>
-    @{{/details}}
-</script>
-
 @auth
     @php($user = Auth::user())
     @if(!$user->legal_agreed)

@@ -1,4 +1,5 @@
 <?php
+$user = Auth::user();
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
 /** @var App\Models\DungeonRoute $dungeonroute */
@@ -71,6 +72,8 @@ $introTexts = [
         // Data of the dungeon(s) we're selecting in the map
         var _dungeonData = {!! $dungeon !!};
         var dungeonRouteEnemyForces = {{ $routeEnemyForces }};
+        var isAdmin = {{ $isAdmin ? 'true' : 'false' }};
+        var isUserAdmin = {{ Auth::check() && $user->hasRole('admin') ? 'true' : 'false' }};
 
         var dungeonMap;
 
@@ -186,21 +189,6 @@ $introTexts = [
         </div>
     </script>
 
-    <script id="map_controls_template" type="text/x-handlebars-template">
-        <div id="map_controls" class="leaflet-draw-section">
-            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                @{{#mapobjectgroups}}
-                <a id='map_controls_hide_@{{name}}' class="map_controls_custom" href="#" title="@{{title}}">
-                    <i id='map_controls_hide_@{{name}}_checkbox' class="fas fa-check-square" style="width: 15px"></i>
-                    <i class="fas @{{fa_class}}" style="width: 15px"></i>
-                    <span class="sr-only">@{{title}}</span>
-                </a>
-                @{{/mapobjectgroups}}
-            </div>
-            <ul class="leaflet-draw-actions"></ul>
-        </div>
-    </script>
-
     <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
@@ -219,9 +207,6 @@ $introTexts = [
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
-    </script>
-
-    <script id="map_enemy_tooltip_template" type="text/x-handlebars-template">
     </script>
 
     <script id="map_path_edit_popup_template" type="text/x-handlebars-template">
@@ -281,18 +266,6 @@ $introTexts = [
         </div>
     </script>
 
-
-
-    <script id="map_killzone_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_killzone_edit_popup_inner" class="popupCustom">
-            <div class="form-group">
-                {!! Form::label('map_killzone_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('map_killzone_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
-            </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_killzone_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
-    </script>
-
     <script id="map_map_comment_edit_popup_template" type="text/x-handlebars-template">
         <div id="map_map_comment_edit_popup_inner" class="popupCustom">
             <div class="form-group">
@@ -305,25 +278,6 @@ $introTexts = [
                 @endif
             </div>
             {!! Form::button(__('Submit'), ['id' => 'map_map_comment_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
-    </script>
-
-    <script id="map_enemy_visual_template" type="text/x-handlebars-template">
-        <div style="position: relative;">
-            <div class="modifier modifier_0 @{{modifier_0_classes}}" style="display: none;">
-                @{{{modifier_0_html}}}
-            </div>
-            <div class="modifier modifier_1 @{{modifier_1_classes}}" style="display: none;">
-                @{{{modifier_1_html}}}
-            </div>
-            <div class="modifier modifier_2 @{{modifier_2_classes}}" style="display: none;">
-                @{{{modifier_2_html}}}
-            </div>
-            <div class="@{{selection_classes_base}} @{{selection_classes}}">
-                <div class="@{{main_visual_classes}}">
-                    @{{{main_visual_html}}}
-                </div>
-            </div>
         </div>
     </script>
 

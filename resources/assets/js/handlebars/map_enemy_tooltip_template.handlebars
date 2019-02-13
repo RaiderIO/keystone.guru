@@ -15,6 +15,7 @@
         <div class="col-5 no-gutters">{{ teeming_label }}</div>
         <div class="col-7 no-gutters">{{ teeming }}</div>
     </div>
+    {{#if is_user_admin}}
     <div class="row">
         <div class="col-12 font-weight-bold">{{ admin_only_label }}</div>
     </div>
@@ -50,4 +51,5 @@
         <div class="col-5 no-gutters">{{ visual_label }}</div>
         <div class="col-7 no-gutters">{{ visual }}</div>
     </div>
+    {{/if}}
 </div>

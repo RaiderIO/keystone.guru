@@ -244,10 +244,8 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 
             columns.push({
                 'render': function (data, type, row, meta) {
-                    let actionsHtml = $("#dungeonroute_table_profile_actions_template").html();
-
-                    let template = Handlebars.compile(actionsHtml);
-                    return template({public_key: row.public_key});
+                    let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
+                    return template($.extend({public_key: row.public_key}, getHandlebarsTranslations()));
                 }
             });
             <?php } ?>
@@ -302,18 +300,6 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             clickEvent.preventDefault();
             return false;
         }
-    </script>
-    <script id="dungeonroute_table_profile_actions_template" type="text/x-handlebars-template">
-        <div class="row no-gutters">
-            <div class="col">
-                <div class="btn btn-danger dungeonroute-clone"
-                     data-publickey="@{{ public_key }}">{{ __('Clone') }}</div>
-            </div>
-            <div class="col mt-2 mt-xl-0">
-                <div class="btn btn-danger dungeonroute-delete"
-                     data-publickey="@{{ public_key }}">{{ __('Delete') }}</div>
-            </div>
-        </div>
     </script>
     @include('common.handlebars.groupsetup')
     @include('common.handlebars.affixgroups')

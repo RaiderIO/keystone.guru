@@ -5,16 +5,7 @@
 if(!isset($affixgroups) ){
     $affixgroups = \App\Models\AffixGroup::active()->with('affixes')->get();
 }
-
-?><script id="affixgroup_select_option_template" type="text/x-handlebars-template">
-    <div class="row affix_row_container no-gutters">
-        @{{#affixes}}
-            <div class="col affix_row">
-                <div class="select_icon affix_icon_@{{ class }}" style="height: 24px;"> </div>
-            </div>
-        @{{/affixes}}
-    </div>
-</script>
+?>
 <script>
     let _affixGroups = {!! $affixgroups !!};
 
@@ -31,9 +22,7 @@ if(!isset($affixgroups) ){
         for( let i in _affixGroups ){
             if( _affixGroups.hasOwnProperty(i) ){
                 let affixGroup = _affixGroups[i];
-
-                let optionTemplate = $("#affixgroup_select_option_template").html();
-                let template = Handlebars.compile(optionTemplate);
+                let template = Handlebars.templates['affixgroup_select_option_template'];
 
                 let affixes = [];
                 for( let j in affixGroup.affixes ){

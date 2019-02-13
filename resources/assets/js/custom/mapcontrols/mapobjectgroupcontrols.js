@@ -8,8 +8,7 @@ class MapObjectGroupControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let source = $("#map_controls_template").html();
-                let template = Handlebars.compile(source);
+                let template = Handlebars.templates['map_controls_template'];
 
                 let data = {
                     mapobjectgroups: []

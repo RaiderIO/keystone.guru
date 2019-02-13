@@ -1,24 +1,11 @@
-<script id="group_setup_template" type="text/x-handlebars-template">
-    <div class="row no-gutters">
-        <div class="col-auto select_icon mr-2 @{{ css_class }}" style="height: 24px;" data-toggle="tooltip"
-             title="@{{faction_title}}">
-        </div>
-        @{{#classes}}
-        <div class="col-auto select_icon mr-2 class_icon @{{ css_class }}" style="height: 24px;" data-toggle="tooltip"
-             title="@{{title}}">
-        </div>
-        @{{/classes}}
-    </div>
-</script>
+<?php //See group_setup_template.handlebars for handlebars ?>
 <script>
     /**
      * Converts a received setup from a dungeon route (setup property) to a parsed handlebars template.
      * @returns {*}
      */
     function handlebarsGroupSetupParse(data) {
-        let groupSetupHtml = $("#group_setup_template").html();
-
-        let template = Handlebars.compile(groupSetupHtml);
+        let template = Handlebars.templates['group_setup_template'];
 
         let handlebarsData = {
             css_class: 'faction_icon_' + data.faction.name.toLowerCase(),

@@ -361,23 +361,17 @@ class KillZone extends MapObject {
                     });
                 };
 
-                let customPopupHtml = $('#map_killzone_edit_popup_template').html();
-                // Remove template so our
-                let template = Handlebars.compile(customPopupHtml);
+                let template = Handlebars.templates['map_killzone_edit_popup_template'];
 
-                let data = {id: self.id};
+                let data = $.extend({id: self.id}, getHandlebarsTranslations());
 
                 // Build the status bar from the template
-                customPopupHtml = template(data);
-
-                let customOptions = {
+                polygon.unbindPopup();
+                polygon.bindPopup(template(data), {
                     'maxWidth': '400',
                     'minWidth': '300',
                     'className': 'popupCustom'
-                };
-
-                polygon.unbindPopup();
-                polygon.bindPopup(customPopupHtml, customOptions);
+                });
 
                 polygon.off('popupopen');
                 polygon.on('popupopen', popupOpenFn);

@@ -1,21 +1,10 @@
-<?php
-
-?>
-<script id="thumbnailcarousel_template" type="text/x-handlebars-template">
-    <div class="owl-carousel owl-theme">
-        @{{#items}}
-        <img src="@{{src}}"/>
-        @{{/items}}
-    </div>
-</script>
 <script>
     /**
      * Converts a received row to a carousel of thumbnail images.
      * @returns {*}
      */
     function handlebarsThumbnailCarouselParse(row) {
-        let thumbnailTemplate = $('#thumbnailcarousel_template').html();
-        let template = Handlebars.compile(thumbnailTemplate);
+        let template = Handlebars.templates['thumbnailcarousel_template'];
 
         let items = [];
 

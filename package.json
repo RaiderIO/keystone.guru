@@ -18,11 +18,11 @@
     "resolve-url-loader": "^2.3.1",
     "sass": "^1.17.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.3",
+    "vue-template-compiler": "^2.6.6",
     "webpack-shell-plugin": "^0.5.0"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.7.1",
+    "@fortawesome/fontawesome-free": "^5.7.2",
     "ajv": "^6.9.1",
     "bootstrap": "^4.3.0",
     "bootstrap-select": "^1.13.4",

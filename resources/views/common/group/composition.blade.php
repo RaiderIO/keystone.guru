@@ -135,13 +135,3 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
     </div>
     <?php } ?>
 </div>
-
-<script id="composition_icon_option_template" type="text/x-handlebars-template">
-    <div class="row no-gutters">
-        <div class="col-auto select_icon class_icon @{{ css_class }}" style="height: 24px;">
-        </div>
-        <div class="col pl-1">
-            @{{ name }}
-        </div>
-    </div>
-</script>

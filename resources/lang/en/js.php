@@ -27,4 +27,14 @@ return [
     'enemy_id_label' => 'ENEMY_ID',
     'visual_label' => 'Visual',
 
+    'color_label' => 'Color',
+
+    'clone_label' => 'Clone',
+    'delete_label' => 'Delete',
+
+    'selected_label' => 'selected',
+
+    'affixes_label' => 'Affixes',
+    'attributes_label' => 'Attributes',
+    'setup_label' => 'Setup'
 ];
