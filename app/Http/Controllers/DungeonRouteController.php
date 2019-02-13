@@ -140,11 +140,11 @@ class DungeonRouteController extends Controller
                 $dungeonroute->playerraces,
                 $dungeonroute->playerclasses,
                 $dungeonroute->affixgroups,
-                $dungeonroute->routes,
+                $dungeonroute->paths,
                 $dungeonroute->killzones,
                 $dungeonroute->enemyraidmarkers,
                 $dungeonroute->mapcomments,
-                $dungeonroute->routeattributes
+                $dungeonroute->routeattributesraw
             ];
 
             $dungeonroute->id = 0;
@@ -170,7 +170,7 @@ class DungeonRouteController extends Controller
                         foreach ($model->vertices as $vertex) {
                             $vertex->id = 0;
                             $vertex->exists = false;
-                            $vertex->route_id = $model->id;
+                            $vertex->path_id = $model->id;
                             $vertex->save();
                         }
                     } // KillZone, save the enemies that were attached to them

@@ -60,6 +60,7 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $pageviews
  *
  * @property \Illuminate\Support\Collection $routeattributes
+ * @property \Illuminate\Support\Collection $routeattributesraw
  *
  * @method static \Illuminate\Database\Eloquent\Builder visible()
  */
