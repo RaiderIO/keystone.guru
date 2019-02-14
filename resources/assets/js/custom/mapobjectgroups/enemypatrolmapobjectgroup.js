@@ -45,8 +45,10 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
                             continue;
                         }
 
-                        for (let j = 0; j < remoteEnemyPatrol.vertices.length; j++) {
-                            let vertex = remoteEnemyPatrol.vertices[j];
+                        let vertices = JSON.parse(remoteEnemyPatrol.vertices_json);
+
+                        for (let j = 0; j < vertices.length; j++) {
+                            let vertex = vertices[j];
                             points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
                         }
 

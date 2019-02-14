@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $floor_id
  * @property int $enemy_id
  * @property string $faction
+ * @property string $vertices_json
  * @property \App\Models\Floor $floor
  * @property \App\Models\Enemy $enemy
  * @property \Illuminate\Support\Collection $vertices
  */
 class EnemyPatrol extends Model
 {
-    public $with = ['vertices'];
     public $timestamps = false;
 
     /**
@@ -32,28 +32,5 @@ class EnemyPatrol extends Model
     function enemy()
     {
         return $this->belongsTo('App\Models\Enemy');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    function vertices()
-    {
-        return $this->hasMany('App\Models\EnemyPatrolVertex');
-    }
-
-
-    /**
-     * Deletes all vertices that are related to this EnemyPatrol.
-     */
-    function deleteVertices()
-    {
-        // Load the existing vertices from the pack
-        $existingVerticesIds = $this->vertices->pluck('id')->all();
-        // Only if there's vertices to destroy
-        if (count($existingVerticesIds) > 0) {
-            // Kill them off
-            EnemyPatrolVertex::destroy($existingVerticesIds);
-        }
     }
 }

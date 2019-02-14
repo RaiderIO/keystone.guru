@@ -165,16 +165,8 @@ class DungeonRouteController extends Controller
                     $model->dungeon_route_id = $dungeonroute->id;
                     $model->save();
 
-                    // If it was a route, save the vertices as well
-                    if ($model instanceof Path) {
-                        foreach ($model->vertices as $vertex) {
-                            $vertex->id = 0;
-                            $vertex->exists = false;
-                            $vertex->path_id = $model->id;
-                            $vertex->save();
-                        }
-                    } // KillZone, save the enemies that were attached to them
-                    else if ($model instanceof KillZone) {
+                    // KillZone, save the enemies that were attached to them
+                    if ($model instanceof KillZone) {
                         foreach ($model->killzoneenemies as $enemy) {
                             $enemy->id = 0;
                             $enemy->exists = false;

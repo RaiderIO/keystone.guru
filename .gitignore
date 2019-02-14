@@ -4,6 +4,8 @@
 /public/css
 /public/js
 /resouces/assets/images/tiles
+# Generated file only used for temp output step for inclusion in compiled file
+/resouces/js/handlebars.js
 /storage/*.key
 /vendor
 /version
