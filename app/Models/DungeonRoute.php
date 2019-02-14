@@ -487,7 +487,7 @@ class DungeonRoute extends Model
                     $affixGroup = AffixGroup::findOrNew($value);
 
                     // Do not add affixes that do not belong to our Teeming selection
-                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) || $affixGroup->inactive()) {
+                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) || !$affixGroup->active) {
                         continue;
                     }
 
