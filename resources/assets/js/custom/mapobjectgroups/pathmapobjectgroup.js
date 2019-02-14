@@ -35,9 +35,10 @@ class PathMapObjectGroup extends MapObjectGroup {
                         if (json.hasOwnProperty(index)) {
                             let points = [];
                             let remoteRoute = json[index];
+                            let vertices = JSON.parse(remoteRoute.vertices_json);
 
-                            for (let j = 0; j < remoteRoute.vertices.length; j++) {
-                                let vertex = remoteRoute.vertices[j];
+                            for (let j = 0; j < vertices.length; j++) {
+                                let vertex = vertices[j];
                                 points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
                             }
 

@@ -82,6 +82,9 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
             case 404:
                 message = "{{ __('The requested resource was not found.') }}";
                 break;
+            case 419:
+                message = "{{ __('Your session has expired. Refresh the page.') }}";
+                break;
         }
 
         // If json was set

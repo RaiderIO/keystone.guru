@@ -9,13 +9,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property $dungeon_route_id int
  * @property $floor_id int
  * @property $color string
+ * @property $vertices_json string
  * @property $dungeonroute DungeonRoute
- * @property \Illuminate\Support\Collection $vertices
  */
 class Path extends Model
 {
-    public $with = ['vertices'];
-
     /**
      * Get the dungeon route that this route is attached to.
      *
@@ -24,27 +22,5 @@ class Path extends Model
     function dungeonroute()
     {
         return $this->belongsTo('App\Models\DungeonRoute');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    function vertices()
-    {
-        return $this->hasMany('App\Models\PathVertex');
-    }
-
-    /**
-     * Deletes all vertices that are related to this Route.
-     */
-    function deleteVertices()
-    {
-        // Load the existing vertices from the pack
-        $existingVerticesIds = $this->vertices->pluck('id')->all();
-        // Only if there's vertices to destroy
-        if (count($existingVerticesIds) > 0) {
-            // Kill them off
-            PathVertex::destroy($existingVerticesIds);
-        }
     }
 }

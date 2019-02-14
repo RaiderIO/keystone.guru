@@ -6,7 +6,6 @@ use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Path;
-use App\Models\PathVertex;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
@@ -47,26 +46,11 @@ class APIPathController extends Controller
             $path->dungeon_route_id = $dungeonRoute->id;
             $path->floor_id = $request->get('floor_id');
             $path->color = $request->get('color');
+            $path->vertices_json = json_encode($request->get('vertices'));
 
             if (!$path->save()) {
                 throw new \Exception("Unable to save path!");
             } else {
-                $path->deleteVertices();
-
-                // Get the new vertices
-                $vertices = $request->get('vertices');
-
-                // Store them
-                foreach ($vertices as $key => $vertex) {
-                    // Assign route to each passed vertex
-                    $vertices[$key]['path_id'] = $path->id;
-                }
-
-                $this->checkForDuplicateVertices('App\Models\PathVertex', $vertices);
-
-                // Bulk insert
-                PathVertex::insert($vertices);
-
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();
             }
@@ -94,7 +78,6 @@ class APIPathController extends Controller
             }
 
             $path->delete();
-            $path->deleteVertices();
 
             // Touch the route so that the thumbnail gets updated
             $dungeonRoute->touch();
