@@ -115,7 +115,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
      * @private
      */
     function _addFixedFooter(type, message, durationMs, small = false) {
-        var template = Handlebars.templates['#app_fixed_footer_' + (small ? 'small_' : '') + 'template'];
+        var template = Handlebars.templates['app_fixed_footer_' + (small ? 'small_' : '') + 'template'];
 
         var handlebarsData = {
             type: type,
