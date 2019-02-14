@@ -25,7 +25,7 @@ class DeleteUnusedThumbnails extends Migration
             // If it does not exist..
             if( \App\Models\DungeonRoute::where('public_key', $publicKey)->count() === 0 ){
                 // Remove it, @ because we don't care for failures
-                @unlink($image);
+                @unlink($publicPath . $image);
             }
         }
     }
