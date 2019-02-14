@@ -192,7 +192,7 @@ class Enemy extends MapObject {
                 npc_name: this.npc.name,
                 enemy_forces: enemy_forces,
                 base_health: this.npc.base_health,
-                teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')) + ' (' + this.teeming + ')',
+                teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
                 is_user_admin: isUserAdmin,
                 id: this.id,
                 faction: this.faction,

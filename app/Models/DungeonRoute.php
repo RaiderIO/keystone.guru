@@ -601,6 +601,15 @@ class DungeonRoute extends Model
 
         // Delete route properly if it gets deleted
         static::deleting(function ($item) {
+            /** @var $item DungeonRoute */
+
+            // Delete thumbnails
+            $publicPath = public_path('images/route_thumbnails/');
+            foreach($item->dungeon->floors as $floor){
+                // @ because we don't care if it fails
+                @unlink(sprintf('%s/%s_%s.png', $publicPath, $item->public_key, $floor->index));
+            }
+
             DungeonRouteAffixGroup::where('dungeon_route_id', $item->id)->delete();
             DungeonRoutePlayerClass::where('dungeon_route_id', $item->id)->delete();
             DungeonRoutePlayerRace::where('dungeon_route_id', $item->id)->delete();
@@ -612,10 +621,10 @@ class DungeonRoute extends Model
             MapComment::where('dungeon_route_id', $item->id)->delete();
 
             // Delete routes
-            foreach ($item->routes as $route) {
+            foreach ($item->paths as $path) {
                 /** @var $route \App\Models\Path */
-                $route->deleteVertices();
-                $route->delete();
+                $path->deleteVertices();
+                $path->delete();
             }
 
             // Delete kill zones
