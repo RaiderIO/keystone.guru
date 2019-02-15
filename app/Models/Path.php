@@ -23,4 +23,12 @@ class Path extends Model
     {
         return $this->belongsTo('App\Models\DungeonRoute');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function polyline()
+    {
+        return $this->hasMany('App\Models\Polyline');
+    }
 }
