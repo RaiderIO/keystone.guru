@@ -73,7 +73,13 @@ class APIEnemyController extends Controller
             /** @var Floor $floor */
             $floor = Floor::find($floorId);
 
-            $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($floor->dungeon->name))->getClonesAsEnemies($floor);
+            try {
+                $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($floor->dungeon->name))->getClonesAsEnemies($floor);
+            }
+            // Thrown when Lua hasn't been configured
+            catch (\Error $ex) {
+
+            }
         }
 
         // Post process enemies
