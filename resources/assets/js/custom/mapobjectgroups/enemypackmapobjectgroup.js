@@ -38,6 +38,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                 // Now draw the packs on the map
                 for (let i = 0; i < json.length; i++) {
                     let points = [];
+                    let layer = null;
                     let remoteEnemyPack = json[i];
 
                     let faction = self.map.getDungeonRoute().faction;
@@ -47,23 +48,27 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                         continue;
                     }
 
-                    // Fetch the correct location for the vertices
-                    let isVertices = typeof remoteEnemyPack.vertices !== 'undefined';
-                    let vertices = isVertices ? remoteEnemyPack.vertices : remoteEnemyPack.enemies;
+                    // Create a polygon from the vertices as normal
+                    if( typeof remoteEnemyPack.vertices_json !== 'undefined' ){
+                        let vertices = JSON.parse(remoteEnemyPack.vertices_json);
 
-                    for (let j = 0; j < vertices.length; j++) {
-                        let vertex = vertices[j];
-                        if (isVertices) {
-                            // I.. don't really know why this needs to be lng/lat but it needs to be
-                            points.push([vertex.lng, vertex.lat]);
-                        } else {
+                        for (let j = 0; j < vertices.length; j++) {
+                            let vertex = vertices[j];
+                            points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
+                        }
+
+                        layer = L.polygon(points);
+                    }
+                    // Create a polygon based on a hull of points from the enemies in this pack
+                    else {
+                        let vertices = remoteEnemyPack.enemies;
+
+                        for (let j = 0; j < vertices.length; j++) {
+                            let vertex = vertices[j];
                             points.push([vertex.lat, vertex.lng]);
                         }
-                    }
 
-                    // Build a layer based off a hull if we're supposed to
-                    let layer = null;
-                    if (!isVertices) {
+                        // Build a layer based off a hull if we're supposed to
                         let p = hull(points, 100);
                         // Only if we can actually make an offset
                         if (p.length > 1) {
@@ -72,12 +77,6 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
 
                             layer = L.polygon(p, c.map.enemypack.polygonOptions);
                         }
-                    }
-
-                    // If a layer wasn't created before
-                    if (layer === null) {
-                        // Make one now with those exact points
-                        layer = L.polygon(points);
                     }
 
                     let enemyPack = self.createNew(layer);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPackVertex;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,6 +33,7 @@ class APIEnemyPackController extends Controller
         $fields = ['id', 'label', 'faction'];
         if ($vertices) {
             $fields[] = 'vertices_json';
+            $result = EnemyPack::query();
         } else {
             $result = EnemyPack::with(['enemies' => function ($query) use ($teeming) {
                 /** @var $query \Illuminate\Database\Query\Builder */
