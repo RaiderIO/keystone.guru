@@ -54,6 +54,8 @@ let scripts = [
     'resources/assets/js/custom/signalable.js',
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/mapobject.js',
+    'resources/assets/js/custom/polyline.js',
+
     'resources/assets/js/custom/enemy.js',
     'resources/assets/js/custom/enemypatrol.js',
     'resources/assets/js/custom/enemypack.js',

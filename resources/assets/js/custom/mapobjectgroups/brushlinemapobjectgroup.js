@@ -1,21 +1,21 @@
-class BrushLineMapObjectGroup extends MapObjectGroup {
+class BrushlineMapObjectGroup extends MapObjectGroup {
     constructor(map, name, editable) {
         super(map, name, editable);
 
-        this.title = 'Hide/show brush lines';
+        this.title = 'Hide/show brushlines';
         this.fa_class = 'fa-paint-brush';
     }
 
     _createObject(layer) {
-        console.assert(this instanceof BrushLineMapObjectGroup, 'this is not an BrushLineMapObjectGroup');
+        console.assert(this instanceof BrushlineMapObjectGroup, 'this is not an BrushlineMapObjectGroup');
 
-        return new BrushLine(this.map, layer);
+        return new Brushline(this.map, layer);
     }
 
 
     fetchFromServer(floor) {
         // no super call required
-        console.assert(this instanceof BrushLineMapObjectGroup, this, 'this is not a BrushLineMapObjectGroup');
+        console.assert(this instanceof BrushlineMapObjectGroup, this, 'this is not a BrushlineMapObjectGroup');
 
         let self = this;
 
@@ -23,20 +23,22 @@ class BrushLineMapObjectGroup extends MapObjectGroup {
         if (!this.map.isTryModeEnabled()) {
             $.ajax({
                 type: 'GET',
-                url: '/ajax/polylines',
+                url: '/ajax/brushlines',
                 dataType: 'json',
                 data: {
                     dungeonroute: this.map.getDungeonRoute().publicKey,
-                    floor_id: floor.id,
-                    type: 'brushline'
+                    floor_id: floor.id
                 },
                 success: function (json) {
                     // Now draw the patrols on the map
                     for (let index in json) {
                         if (json.hasOwnProperty(index)) {
                             let points = [];
-                            let remoteBrushLine = json[index];
-                            let vertices = JSON.parse(remoteBrushLine.vertices_json);
+                            let remoteBrushline = json[index];
+
+                            // Create the polyline first
+                            let polyline = remoteBrushline.polyline;
+                            let vertices = JSON.parse(polyline.vertices_json);
 
                             for (let j = 0; j < vertices.length; j++) {
                                 let vertex = vertices[j];
@@ -45,11 +47,13 @@ class BrushLineMapObjectGroup extends MapObjectGroup {
 
                             let layer = L.polyline(points);
 
+                            // Now that we have the layer, create the brushline
                             let brushLine = self.createNew(layer);
-                            brushLine.id = remoteBrushLine.id;
-                            brushLine.setColor(remoteBrushLine.color);
-                            brushLine.setWeight(remoteBrushLine.weight);
-                            // We just downloaded the enemy pack, it's synced alright!
+                            brushLine.id = remoteBrushline.id;
+                            brushLine.setColor(polyline.color);
+                            brushLine.setWeight(polyline.weight);
+
+                            // We just downloaded the brushline, make it synced
                             brushLine.setSynced(true);
                         }
                     }

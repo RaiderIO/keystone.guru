@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Models\Brushline;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Polyline;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
-class APIPolylineController extends Controller
+class APIBrushlineController extends Controller
 {
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
@@ -23,7 +24,10 @@ class APIPolylineController extends Controller
         $dungeonRoutePublicKey = $request->get('dungeonroute');
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-            $result = Polyline::where('floor_id', '=', $floorId)->where('dungeon_route_id', '=', $dungeonRoute->id)->get();
+            $result = Brushline::with('polyline')
+                ->where('dungeon_route_id', '=', $dungeonRoute->id)
+                ->where('floor_id', '=', $floorId)
+                ->get();
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
@@ -38,23 +42,38 @@ class APIPolylineController extends Controller
      */
     function store(Request $request)
     {
-        /** @var Polyline $polyline */
-        $polyline = Polyline::findOrNew($request->get('id'));
+        /** @var Brushline $brushline */
+        $brushline = Brushline::findOrNew($request->get('id'));
 
         try {
             /** @var DungeonRoute $dungeonRoute */
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($request->get('dungeonroute'));
 
-            $polyline->dungeon_route_id = $dungeonRoute->id;
-            $polyline->floor_id = $request->get('floor_id');
-            $polyline->type = $request->get('type');
-            $polyline->color = $request->get('color');
-            $polyline->weight = $request->get('weight');
-            $polyline->vertices_json = json_encode($request->get('vertices'));
+            $brushline->dungeon_route_id = $dungeonRoute->id;
+            $brushline->floor_id = $request->get('floor_id');
 
-            if (!$polyline->save()) {
-                throw new \Exception("Unable to save polyline!");
+            // Init to a default value if new
+            if (!$brushline->exists) {
+                $brushline->polyline_id = -1;
+            }
+
+            if (!$brushline->save()) {
+                throw new \Exception("Unable to save brushline!");
             } else {
+                // Create a new polyline and save it
+                /** @var Polyline $polyline */
+                $polyline = Polyline::findOrNew($brushline->polyline_id);
+                $polyline->model_id = $brushline->id;
+                $polyline->model_class = get_class($brushline);
+                $polyline->color = $request->get('color');
+                $polyline->weight = $request->get('weight');
+                $polyline->vertices_json = json_encode($request->get('vertices'));
+                $polyline->save();
+
+
+                $brushline->polyline_id = $polyline->id;
+                $brushline->save();
+
                 // @TODO fix this?
                 // $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
 
@@ -62,7 +81,7 @@ class APIPolylineController extends Controller
                 $dungeonRoute->touch();
             }
 
-            $result = ['id' => $polyline->id];
+            $result = ['id' => $brushline->id];
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
@@ -72,8 +91,8 @@ class APIPolylineController extends Controller
     function delete(Request $request)
     {
         try {
-            /** @var Polyline $brushLine */
-            $brushLine = Polyline::findOrFail($request->get('id'));
+            /** @var Brushline $brushLine */
+            $brushLine = Brushline::findOrFail($request->get('id'));
 
             // @TODO WTF why does $route->dungeonroute not work?? It will NOT load the relation despite everything being OK?
             /** @var Dungeon $dungeonRoute */
@@ -84,6 +103,7 @@ class APIPolylineController extends Controller
                 throw new Exception('Unauthorized');
             }
 
+            $brushLine->polyline->delete();
             $brushLine->delete();
 
             // Touch the route so that the thumbnail gets updated

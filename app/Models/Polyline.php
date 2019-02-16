@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 class Polyline extends Model
 {
     public $timestamps = false;
+    public $visible = ['color', 'weight', 'vertices_json'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

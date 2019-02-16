@@ -178,7 +178,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
 
-        Route::get('/polylines', 'APIPolylineController@list')->where(['floor_id' => '[0-9]+']);
+        Route::get('/brushlines', 'APIBrushlineController@list')->where(['floor_id' => '[0-9]+']);
 
         Route::post('/mdt/details', 'MDTImportController@details')->name('mdt.details');
 
@@ -188,8 +188,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/path', 'APIPathController@store');
             Route::delete('/path', 'APIPathController@delete');
 
-            Route::post('/polyline', 'APIPolylineController@store');
-            Route::delete('/polyline', 'APIPolylineController@delete');
+            Route::post('/brushline', 'APIBrushlineController@store');
+            Route::delete('/brushline', 'APIBrushlineController@delete');
 
             Route::post('/dungeonroute/{dungeonroute}/killzone', 'APIKillZoneController@store');
             Route::delete('/dungeonroute/{dungeonroute}/killzone/{killzone}', 'APIKillZoneController@delete');

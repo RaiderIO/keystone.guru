@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Brushline extends Model
 {
+    public $visible = ['id', 'polyline'];
+
     /**
      * Get the dungeon route that this brushline is attached to.
      *

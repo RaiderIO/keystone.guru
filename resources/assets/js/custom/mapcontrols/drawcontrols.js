@@ -15,7 +15,7 @@ $(function () {
                 title: this.options.mapcomment.title
             }, {
                 enabled: this.options.brushline,
-                handler: new L.Draw.BrushLine(map, this.options.brushline),
+                handler: new L.Draw.Brushline(map, this.options.brushline),
                 title: this.options.brushline.title
             },
             // {
