@@ -11,12 +11,11 @@ $(function () {
     });
 });
 
-class EnemyPatrol extends MapObject {
+class EnemyPatrol extends Polyline {
     constructor(map, layer) {
         super(map, layer);
 
         this.label = 'EnemyPatrol';
-        this.color = null;
         this.faction = 'any'; // sensible default
         // console.log(rand);
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
@@ -46,42 +45,10 @@ class EnemyPatrol extends MapObject {
                     repeat: 50,
                     symbol: L.Symbol.arrowHead({
                         pixelSize: 12,
-                        pathOptions: {fillOpacity: 1, weight: 0, color: this.color}
+                        pathOptions: {fillOpacity: 1, weight: 0, color: this.polylineColor}
                     })
                 }
             ]
         });
-    }
-
-    setColor(color) {
-        this.color = color;
-        this.setColors({
-            unsavedBorder: color,
-            unsaved: color,
-
-            editedBorder: color,
-            edited: color,
-
-            savedBorder: color,
-            saved: color
-        });
-    }
-
-    // To be overridden by any implementing classes
-    onLayerInit() {
-        console.assert(this instanceof EnemyPatrol, this, 'this is not an EnemyPatrol');
-        super.onLayerInit();
-
-        // Show a permanent tooltip for the pack's name
-        // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
-    }
-
-    getVertices() {
-        let coordinates = this.layer.toGeoJSON().geometry.coordinates;
-        let result = [];
-        for (let i = 0; i < coordinates.length; i++) {
-            result.push({lat: coordinates[i][0], lng: coordinates[i][1]});
-        }
-        return result;
     }
 }

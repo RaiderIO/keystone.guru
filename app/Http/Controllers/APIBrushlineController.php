@@ -45,46 +45,43 @@ class APIBrushlineController extends Controller
         /** @var Brushline $brushline */
         $brushline = Brushline::findOrNew($request->get('id'));
 
-        try {
-            /** @var DungeonRoute $dungeonRoute */
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($request->get('dungeonroute'));
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = $this->_getDungeonRouteFromPublicKey($request->get('dungeonroute'));
 
-            $brushline->dungeon_route_id = $dungeonRoute->id;
-            $brushline->floor_id = $request->get('floor_id');
+        $brushline->dungeon_route_id = $dungeonRoute->id;
+        $brushline->floor_id = $request->get('floor_id');
 
-            // Init to a default value if new
-            if (!$brushline->exists) {
-                $brushline->polyline_id = -1;
-            }
-
-            if (!$brushline->save()) {
-                throw new \Exception("Unable to save brushline!");
-            } else {
-                // Create a new polyline and save it
-                /** @var Polyline $polyline */
-                $polyline = Polyline::findOrNew($brushline->polyline_id);
-                $polyline->model_id = $brushline->id;
-                $polyline->model_class = get_class($brushline);
-                $polyline->color = $request->get('color');
-                $polyline->weight = $request->get('weight');
-                $polyline->vertices_json = json_encode($request->get('vertices'));
-                $polyline->save();
-
-
-                $brushline->polyline_id = $polyline->id;
-                $brushline->save();
-
-                // @TODO fix this?
-                // $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
-
-                // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
-            }
-
-            $result = ['id' => $brushline->id];
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+        // Init to a default value if new
+        if (!$brushline->exists) {
+            $brushline->polyline_id = -1;
         }
+
+        if (!$brushline->save()) {
+            throw new \Exception("Unable to save brushline!");
+        } else {
+            // Create a new polyline and save it
+            /** @var Polyline $polyline */
+            $polyline = Polyline::findOrNew($brushline->polyline_id);
+            $polyline->model_id = $brushline->id;
+            $polyline->model_class = get_class($brushline);
+            $polyline->color = $request->get('color');
+            $polyline->weight = $request->get('weight');
+            $polyline->vertices_json = json_encode($request->get('vertices'));
+            $polyline->save();
+
+            // Couple the brushline to the polyline
+            $brushline->polyline_id = $polyline->id;
+            $brushline->save();
+
+            // @TODO fix this?
+            // $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
+
+            // Touch the route so that the thumbnail gets updated
+            $dungeonRoute->touch();
+        }
+
+        $result = ['id' => $brushline->id];
+
         return $result;
     }
 

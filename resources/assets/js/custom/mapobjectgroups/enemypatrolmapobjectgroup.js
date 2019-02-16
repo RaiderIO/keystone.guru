@@ -45,7 +45,9 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
                             continue;
                         }
 
-                        let vertices = JSON.parse(remoteEnemyPatrol.vertices_json);
+                        // Create the polyline first
+                        let polyline = remoteEnemyPatrol.polyline;
+                        let vertices = JSON.parse(polyline.vertices_json);
 
                         for (let j = 0; j < vertices.length; j++) {
                             let vertex = vertices[j];
@@ -58,7 +60,8 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
                         enemyPatrol.id = remoteEnemyPatrol.id;
                         enemyPatrol.enemy_id = remoteEnemyPatrol.enemy_id;
                         enemyPatrol.faction = remoteEnemyPatrol.faction;
-                        // We just downloaded the enemy pack, it's synced alright!
+
+                        // We just downloaded the enemy patrol, it's synced alright!
                         enemyPatrol.setSynced(true);
                     }
                 }

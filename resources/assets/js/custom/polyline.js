@@ -12,7 +12,6 @@ class Polyline extends MapObject {
      */
     setColor(color) {
         console.assert(this instanceof Polyline, this, 'this was not a Polyline');
-        console.log('setting color to ' + color);
 
         this.polylineColor = color;
         this.setColors({

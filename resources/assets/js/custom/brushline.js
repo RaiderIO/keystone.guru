@@ -14,28 +14,28 @@ $(function () {
     // Copy pasted from https://github.com/Leaflet/Leaflet.draw/blob/develop/src/draw/handler/Draw.Polyline.js#L470
     // Adjusted so that it uses the correct drawing strings
     L.Draw.Brushline.prototype._getTooltipText = function () {
-		var showLength = this.options.showLength,
-			labelText, distanceStr;
-		if (this._markers.length === 0) {
-			labelText = {
-				text: L.drawLocal.draw.handlers.brushline.tooltip.start
-			};
-		} else {
-			distanceStr = showLength ? this._getMeasurementString() : '';
+        var showLength = this.options.showLength,
+            labelText, distanceStr;
+        if (this._markers.length === 0) {
+            labelText = {
+                text: L.drawLocal.draw.handlers.brushline.tooltip.start
+            };
+        } else {
+            distanceStr = showLength ? this._getMeasurementString() : '';
 
-			if (this._markers.length === 1) {
-				labelText = {
-					text: L.drawLocal.draw.handlers.brushline.tooltip.cont,
-					subtext: distanceStr
-				};
-			} else {
-				labelText = {
-					text: L.drawLocal.draw.handlers.brushline.tooltip.end,
-					subtext: distanceStr
-				};
-			}
-		}
-		return labelText;
+            if (this._markers.length === 1) {
+                labelText = {
+                    text: L.drawLocal.draw.handlers.brushline.tooltip.cont,
+                    subtext: distanceStr
+                };
+            } else {
+                labelText = {
+                    text: L.drawLocal.draw.handlers.brushline.tooltip.end,
+                    subtext: distanceStr
+                };
+            }
+        }
+        return labelText;
     }
 });
 
@@ -136,7 +136,7 @@ class Brushline extends Polyline {
             });
         } else {
             // We have to supply an ID to keep everything working properly
-            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id })
+            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id})
         }
     }
 
@@ -145,13 +145,10 @@ class Brushline extends Polyline {
         console.assert(this instanceof Brushline, this, 'this is not an Brushline');
         super.onLayerInit();
 
-        let self = this;
-
-        // Apply weight to layer
-        this.setWeight(this.weight);
-
         // Only when we're editing
         if (this.map.edit) {
+            let self = this;
+
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {

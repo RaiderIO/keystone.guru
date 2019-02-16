@@ -8,14 +8,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $floor_id
  * @property int $enemy_id
+ * @property int $polyline_id
  * @property string $faction
- * @property string $vertices_json
  * @property \App\Models\Floor $floor
  * @property \App\Models\Enemy $enemy
+ * @property \App\Models\Polyline $polyline
  * @property \Illuminate\Support\Collection $vertices
  */
 class EnemyPatrol extends Model
 {
+    public $visible = ['id', 'faction', 'polyline'];
     public $timestamps = false;
 
     /**
@@ -32,5 +34,15 @@ class EnemyPatrol extends Model
     function enemy()
     {
         return $this->belongsTo('App\Models\Enemy');
+    }
+
+    /**
+     * Get the dungeon route that this brushline is attached to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    function polyline()
+    {
+        return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
     }
 }
