@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Models\EnemyPatrol;
+use App\Models\Path;
 use App\Models\Polyline;
 
-class ConvertEnemyPatrolsToPolylines extends Migration
+class ConvertPathsToPolylines extends Migration
 {
     /**
      * Run the migrations.
@@ -16,30 +16,31 @@ class ConvertEnemyPatrolsToPolylines extends Migration
     public function up()
     {
         // Create a new polyline for each patrol
-        EnemyPatrol::all()->each(function($item, $key){
-            /** @var EnemyPatrol $item */
+        Path::all()->each(function($item, $key){
+            /** @var Path $item */
             $polyline = new Polyline();
             $polyline->model_id = $item->id;
             $polyline->model_class = get_class($item);
-            $polyline->color = '#E25D5D';
-            $polyline->weight = 2;
+            $polyline->color = $item->color;
+            $polyline->weight = 3;
             $polyline->vertices_json = $item->vertices_json;
 
             $polyline->save();
         });
 
         // Convert the patrols table
-        Schema::table('enemy_patrols', function (Blueprint $table) {
+        Schema::table('paths', function (Blueprint $table) {
+            $table->dropColumn('color');
             $table->dropColumn('vertices_json');
-            $table->integer('polyline_id')->after('enemy_id');
+            $table->integer('polyline_id')->after('floor_id');
         });
 
         // Couple the polylines to the enemy patrols
-        App\Models\Polyline::where('model_class', 'App\Models\EnemyPatrol')->each(function($item, $key){
-            /** @var EnemyPatrol $enemyPatrol */
-            $enemyPatrol = App\Models\EnemyPatrol::findOrFail($item->model_id);
-            $enemyPatrol->polyline_id = $item->id;
-            $enemyPatrol->save();
+        App\Models\Polyline::where('model_class', 'App\Models\Path')->each(function($item, $key){
+            /** @var Path $path */
+            $path = App\Models\Path::findOrFail($item->model_id);
+            $path->polyline_id = $item->id;
+            $path->save();
         });
     }
 

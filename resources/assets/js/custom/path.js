@@ -14,36 +14,34 @@ $(function () {
     // Copy pasted from https://github.com/Leaflet/Leaflet.draw/blob/develop/src/draw/handler/Draw.Polyline.js#L470
     // Adjusted so that it uses the correct drawing strings
     L.Draw.Path.prototype._getTooltipText = function () {
-		var showLength = this.options.showLength,
-			labelText, distanceStr;
-		if (this._markers.length === 0) {
-			labelText = {
-				text: L.drawLocal.draw.handlers.route.tooltip.start
-			};
-		} else {
-			distanceStr = showLength ? this._getMeasurementString() : '';
+        var showLength = this.options.showLength,
+            labelText, distanceStr;
+        if (this._markers.length === 0) {
+            labelText = {
+                text: L.drawLocal.draw.handlers.route.tooltip.start
+            };
+        } else {
+            distanceStr = showLength ? this._getMeasurementString() : '';
 
-			if (this._markers.length === 1) {
-				labelText = {
-					text: L.drawLocal.draw.handlers.route.tooltip.cont,
-					subtext: distanceStr
-				};
-			} else {
-				labelText = {
-					text: L.drawLocal.draw.handlers.route.tooltip.end,
-					subtext: distanceStr
-				};
-			}
-		}
-		return labelText;
+            if (this._markers.length === 1) {
+                labelText = {
+                    text: L.drawLocal.draw.handlers.route.tooltip.cont,
+                    subtext: distanceStr
+                };
+            } else {
+                labelText = {
+                    text: L.drawLocal.draw.handlers.route.tooltip.end,
+                    subtext: distanceStr
+                };
+            }
+        }
+        return labelText;
     }
 });
 
-class Path extends MapObject {
+class Path extends Polyline {
     constructor(map, layer) {
         super(map, layer);
-
-        let self = this;
 
         this.label = 'Path';
         this.saving = false;
@@ -52,76 +50,36 @@ class Path extends MapObject {
 
         this.setColor(c.map.path.defaultColor);
         this.setSynced(false);
-
-        this.register('synced', this, function () {
-            self._rebuildDecorator();
-        });
-        this.register('object:deleted', this, function () {
-            self._cleanDecorator();
-        });
-        this.map.register('map:beforerefresh', this, function () {
-            self._cleanDecorator();
-        });
-    }
-
-    /**
-     * Cleans up the decorator of this route, removing it from the map.
-     * @private
-     */
-    _cleanDecorator() {
-        console.assert(this instanceof Path, this, 'this is not an Route');
-
-        if (this.decorator !== null) {
-            this.map.leafletMap.removeLayer(this.decorator);
-        }
     }
 
     /**
      * Rebuild the decorators for this route (directional arrows etc).
      * @private
      */
-    _rebuildDecorator() {
-        console.assert(this instanceof Path, this, 'this is not an Route');
-
-        this._cleanDecorator();
-
-        this.decorator = L.polylineDecorator(this.layer, {
+    _getDecorator() {
+        console.assert(this instanceof Path, this, 'this is not a Path');
+        return L.polylineDecorator(this.layer, {
             patterns: [
                 {
                     offset: 25,
                     repeat: 100,
                     symbol: L.Symbol.arrowHead({
                         pixelSize: 12,
-                        pathOptions: {fillOpacity: 1, weight: 0, color: this.routeColor}
+                        pathOptions: {fillOpacity: 1, weight: 0, color: this.polylineColor}
                     })
                 }
             ]
         });
-        this.decorator.addTo(this.map.leafletMap);
-    }
-
-    setColor(color) {
-        this.routeColor = color;
-        this.setColors({
-            unsavedBorder: color,
-            unsaved: color,
-
-            editedBorder: color,
-            edited: color,
-
-            savedBorder: color,
-            saved: color
-        });
     }
 
     edit() {
-        console.assert(this instanceof Path, this, 'this was not a Route');
+        console.assert(this instanceof Path, this, 'this was not a Path');
         this.save();
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof Path, this, 'this was not a Route');
+        console.assert(this instanceof Path, this, 'this was not a Path');
 
         let successFn = function (json) {
             self.signal('object:deleted', {response: json});
@@ -155,7 +113,7 @@ class Path extends MapObject {
 
     save() {
         let self = this;
-        console.assert(this instanceof Path, this, 'this was not a Route');
+        console.assert(this instanceof Path, this, 'this was not a Path');
 
         let successFn = function (json) {
             self.id = json.id;
@@ -174,7 +132,8 @@ class Path extends MapObject {
                     id: self.id,
                     dungeonroute: this.map.getDungeonRoute().publicKey,
                     floor_id: self.map.getCurrentFloor().id,
-                    color: self.routeColor,
+                    color: self.polylineColor,
+                    weight: self.weight,
                     vertices: self.getVertices(),
                 },
                 beforeSend: function () {
@@ -199,7 +158,7 @@ class Path extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof Path, this, 'this is not an Route');
+        console.assert(this instanceof Path, this, 'this is not a Path');
         super.onLayerInit();
 
         let self = this;
@@ -210,7 +169,7 @@ class Path extends MapObject {
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {
                 let $color = $('#map_path_edit_popup_color_' + self.id);
-                $color.val(self.routeColor);
+                $color.val(self.polylineColor);
 
                 // Class color buttons
                 let $classColors = $('.map_polyline_edit_popup_class_color ');
@@ -253,16 +212,5 @@ class Path extends MapObject {
                 self.layer.on('popupopen', popupOpenFn);
             });
         }
-    }
-
-    getVertices() {
-        console.assert(this instanceof Path, this, 'this is not an Route');
-
-        let coordinates = this.layer.toGeoJSON().geometry.coordinates;
-        let result = [];
-        for (let i = 0; i < coordinates.length; i++) {
-            result.push({lat: coordinates[i][0], lng: coordinates[i][1]});
-        }
-        return result;
     }
 }

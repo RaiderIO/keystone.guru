@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Path;
+use App\Models\Polyline;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
@@ -22,7 +23,7 @@ class APIPathController extends Controller
         $dungeonRoutePublicKey = $request->get('dungeonroute');
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-            $result = Path::where('floor_id', '=', $floorId)->where('dungeon_route_id', '=', $dungeonRoute->id)->get();
+            $result = Path::with('polyline')->where('dungeon_route_id', $dungeonRoute->id)->where('floor_id', $floorId)->get();
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
@@ -45,12 +46,29 @@ class APIPathController extends Controller
 
             $path->dungeon_route_id = $dungeonRoute->id;
             $path->floor_id = $request->get('floor_id');
-            $path->color = $request->get('color');
-            $path->vertices_json = json_encode($request->get('vertices'));
+
+            // Init to a default value if new
+            if (!$path->exists) {
+                $path->polyline_id = -1;
+            }
 
             if (!$path->save()) {
                 throw new \Exception("Unable to save path!");
             } else {
+                // Create a new polyline and save it
+                /** @var Polyline $polyline */
+                $polyline = Polyline::findOrNew($path->polyline_id);
+                $polyline->model_id = $path->id;
+                $polyline->model_class = get_class($path);
+                $polyline->color = $request->get('color');
+                $polyline->weight = $request->get('weight');
+                $polyline->vertices_json = json_encode($request->get('vertices'));
+                $polyline->save();
+
+                // Couple the path to the polyline
+                $path->polyline_id = $polyline->id;
+                $path->save();
+
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();
             }
@@ -73,10 +91,11 @@ class APIPathController extends Controller
             $dungeonRoute = DungeonRoute::findOrFail($path->dungeon_route_id);
             // If we're not the author, don't delete anything
             // @TODO handle this in a policy?
-            if ($dungeonRoute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin')) {
+            if (!Auth::check() || ($dungeonRoute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin'))) {
                 throw new Exception('Unauthorized');
             }
 
+            $path->polyline->delete();
             $path->delete();
 
             // Touch the route so that the thumbnail gets updated

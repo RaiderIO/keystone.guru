@@ -97,7 +97,7 @@ class APIKillZoneController extends Controller
     {
         try {
             // @TODO handle this in a policy?
-            if ($dungeonroute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin')) {
+            if (!Auth::check() || ($dungeonroute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin'))) {
                 throw new Exception('Unauthorized');
             }
 

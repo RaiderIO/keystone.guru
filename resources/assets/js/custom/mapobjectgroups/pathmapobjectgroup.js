@@ -7,7 +7,7 @@ class PathMapObjectGroup extends MapObjectGroup {
     }
 
     _createObject(layer) {
-        console.assert(this instanceof PathMapObjectGroup, 'this is not an PathMapObjectGroup');
+        console.assert(this instanceof PathMapObjectGroup, this, 'this is not an PathMapObjectGroup');
 
         return new Path(this.map, layer);
     }
@@ -34,8 +34,11 @@ class PathMapObjectGroup extends MapObjectGroup {
                     for (let index in json) {
                         if (json.hasOwnProperty(index)) {
                             let points = [];
-                            let remoteRoute = json[index];
-                            let vertices = JSON.parse(remoteRoute.vertices_json);
+                            let remotePath = json[index];
+
+                            // Create the polyline first
+                            let polyline = remotePath.polyline;
+                            let vertices = JSON.parse(polyline.vertices_json);
 
                             for (let j = 0; j < vertices.length; j++) {
                                 let vertex = vertices[j];
@@ -45,8 +48,10 @@ class PathMapObjectGroup extends MapObjectGroup {
                             let layer = L.polyline(points);
 
                             let route = self.createNew(layer);
-                            route.id = remoteRoute.id;
-                            route.setColor(remoteRoute.color);
+                            route.id = remotePath.id;
+                            route.setColor(polyline.color);
+                            route.setWeight(polyline.weight);
+
                             // We just downloaded the enemy pack, it's synced alright!
                             route.setSynced(true);
                         }

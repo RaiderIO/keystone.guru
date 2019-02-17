@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property $id int
  * @property $dungeon_route_id int
  * @property $floor_id int
- * @property $color string
- * @property $vertices_json string
- * @property $dungeonroute DungeonRoute
+ * @property $polyline_id int
+ * @property DungeonRoute $dungeonroute
+ * @property \App\Models\Polyline $polyline
  */
 class Path extends Model
 {
+    public $visible = ['id', 'polyline'];
+
     /**
      * Get the dungeon route that this route is attached to.
      *
@@ -25,10 +27,10 @@ class Path extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     function polyline()
     {
-        return $this->hasMany('App\Models\Polyline');
+        return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
     }
 }
