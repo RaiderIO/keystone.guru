@@ -22,6 +22,8 @@ class DungeonMap extends Signalable {
         this.mapObjectGroupManager.register('fetchsuccess', this, function () {
             // All layers have been fetched, refresh tooltips to update "No layers to edit" state
             refreshTooltips();
+
+            self.signal('map:mapobjectgroupsfetchsuccess');
         });
 
         // The current enemy selection class in-use. Used for selecting enemies for whatever reason
