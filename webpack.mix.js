@@ -52,6 +52,23 @@ let scripts = [
     // Include in proper order
     'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/signalable.js',
+
+    // Map object groups
+    'resources/assets/js/custom/mapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/mapcommentmapobjectgroup.js',
+
+    // Depends on the above
+    'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
+
+    // Depends on map object groups
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/mapobject.js',
     'resources/assets/js/custom/polyline.js',
@@ -100,16 +117,6 @@ let scripts = [
 
     // Include the rest
     'resources/assets/js/custom/groupcomposition.js',
-    'resources/assets/js/custom/mapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/mapcommentmapobjectgroup.js',
 ];
 
 // Do not translate in development

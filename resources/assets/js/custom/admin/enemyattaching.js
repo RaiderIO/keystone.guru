@@ -71,7 +71,7 @@ class EnemyAttaching {
         });
 
         // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         enemyMapObjectGroup.register('object:add', this, function (addEvent) {
             if (self.currentMouseoverLayer !== null) {
                 let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
@@ -82,7 +82,7 @@ class EnemyAttaching {
         });
 
         // When a pack is created, own all objects that it was placed under
-        let enemyPackMapObjectGroup = this.map.getMapObjectGroupByName('enemypack');
+        let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
         // When an enemy pack is added..
         enemyPackMapObjectGroup.register('object:add', this, function (event) {
             // Gather some data

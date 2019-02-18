@@ -104,7 +104,7 @@ class KillZone extends MapObject {
         for (let i = 0; i < this.enemies.length; i++) {
             let enemyId = this.enemies[i];
             // Find the enemy
-            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             // When found, actually detach it
             if (enemy !== null) {
@@ -208,7 +208,7 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, this, 'this is not an KillZone');
         let self = this;
 
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
             if (enemy !== null) {
@@ -237,7 +237,7 @@ class KillZone extends MapObject {
 
         // If the enemy was part of a pack..
         if (enemy.enemy_pack_id > 0) {
-            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
                 let enemyCandidate = enemyMapObjectGroup.objects[i];
                 // If we should couple the enemy in addition to our own..
@@ -271,7 +271,7 @@ class KillZone extends MapObject {
 
         // Remove previous layers if it's needed
         if (this.enemyConnectionsLayerGroup !== null) {
-            let killZoneMapObjectGroup = this.map.getMapObjectGroupByName('killzone');
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             killZoneMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionsLayerGroup);
         }
     }
@@ -289,11 +289,11 @@ class KillZone extends MapObject {
         // Create & add new layer
         this.enemyConnectionsLayerGroup = new L.LayerGroup();
 
-        let killZoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
+        let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
 
         // Add connections from each enemy to our location
-        let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         let latLngs = [];
         $.each(this.enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
@@ -444,7 +444,7 @@ class KillZone extends MapObject {
 
             // Hide the killzone layer when in preview mode
             if (self.map.noUI) {
-                let killZoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
+                let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
                 killZoneMapObjectGroup.setMapObjectVisibility(self, false);
             }
         });
@@ -485,7 +485,7 @@ class KillZone extends MapObject {
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
         this.map.unregister('map:beforerefresh', this);
 
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             enemy.setSelectable(false);
             enemy.unregister('enemy:selected', self);

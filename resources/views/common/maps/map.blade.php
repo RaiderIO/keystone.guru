@@ -7,6 +7,9 @@ $isAdmin = isset($admin) && $admin;
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? 'true' : 'false';
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
+// Set the key to 'try' if try mode is enabled
+$routePublicKey = isset($tryMode) && $tryMode ? 'try' : $routePublicKey;
+// Set the enemy forces of the current route. May not be set if just editing the route from admin
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 // For Siege of Boralus
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';

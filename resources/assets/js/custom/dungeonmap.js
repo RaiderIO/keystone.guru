@@ -18,7 +18,11 @@ class DungeonMap extends Signalable {
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
-        this.mapObjectGroups = this._createMapObjectGroups();
+        this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());
+        this.mapObjectGroupManager.register('fetchsuccess', this, function () {
+            // All layers have been fetched, refresh tooltips to update "No layers to edit" state
+            refreshTooltips();
+        });
 
         // The current enemy selection class in-use. Used for selecting enemies for whatever reason
         this.currentEnemySelection = null;
@@ -26,8 +30,10 @@ class DungeonMap extends Signalable {
         this.currentSelectModeKillZone = null;
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
-        for (let i = 0; i < this.mapObjectGroups.length; i++) {
-            this.mapObjectGroups[i].register('object:add', this, function (addEvent) {
+        for (let i = 0; i < this.mapObjectGroupManager.mapObjectGroups.length; i++) {
+            let mapObjectGroup = this.mapObjectGroupManager.mapObjectGroups[i];
+
+            mapObjectGroup.register('object:add', this, function (addEvent) {
                 let object = addEvent.data.object;
                 self.mapObjects.push(object);
                 self.drawnLayers.addLayer(object.layer);
@@ -40,7 +46,7 @@ class DungeonMap extends Signalable {
 
             // Make sure we don't try to edit layers that aren't visible because they're hidden
             // If we don't do this and we have a hidden object, editing layers will break the moment you try to use it
-            this.mapObjectGroups[i].register(['object:shown', 'object:hidden'], this, function (visibilityEvent) {
+            mapObjectGroup.register(['object:shown', 'object:hidden'], this, function (visibilityEvent) {
                 let object = visibilityEvent.data.object;
                 // If it's visible now and the layer is not added already
                 if (visibilityEvent.data.visible && !self.drawnLayers.hasLayer(object.layer)) {
@@ -200,7 +206,8 @@ class DungeonMap extends Signalable {
 
         // If we created something
         this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
-            let mapObjectGroup = self.getMapObjectGroupByName(event.layerType);
+            // Find the corresponding map object group
+            let mapObjectGroup = self.mapObjectGroupManager.getByName(event.layerType);
             if (mapObjectGroup !== false) {
                 let object = mapObjectGroup.createNew(event.layer);
                 // Save it to server instantly, manually saving is meh
@@ -416,45 +423,19 @@ class DungeonMap extends Signalable {
      * @returns {[]}
      * @protected
      */
-    _createMapObjectGroups() {
+    _getMapObjectGroupNames() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        let result = [];
+        // @TODO Fix this? See commit diff
+        // Only add these two if they're worth fetching (not in a preview)
+        // if (isAdmin) {
+        //     this.hiddenMapObjectGroups.push('path');
+        //     this.hiddenMapObjectGroups.push('killzone');
+        //     this.hiddenMapObjectGroups.push('brushline');
+        // }
 
-        if (this.hiddenMapObjectGroups.indexOf('enemy') < 0) {
-            result.push(new EnemyMapObjectGroup(this, 'enemy', 'Enemy', false));
-        }
-        if (this.hiddenMapObjectGroups.indexOf('enemypatrol') < 0) {
-            result.push(new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'EnemyPatrol', false));
-        }
-        if (this.hiddenMapObjectGroups.indexOf('enemypack') < 0) {
-            result.push(new EnemyPackMapObjectGroup(this, 'enemypack', 'EnemyPack', false));
-        }
-
-        // Only add these two if they're worth fetching (not in a view)
-        if (this.getDungeonRoute().publicKey !== '' || this.edit) {
-            if (this.hiddenMapObjectGroups.indexOf('route') < 0) {
-                result.push(new PathMapObjectGroup(this, 'route', true));
-            }
-            if (this.hiddenMapObjectGroups.indexOf('killzone') < 0) {
-                result.push(new KillZoneMapObjectGroup(this, 'killzone', true));
-            }
-        }
-
-        if (this.hiddenMapObjectGroups.indexOf('route') < 0) {
-            result.push(new BrushlineMapObjectGroup(this, 'brushline', true));
-        }
-        if (this.hiddenMapObjectGroups.indexOf('mapcomment') < 0) {
-            result.push(new MapCommentMapObjectGroup(this, 'mapcomment', true));
-        }
-        if (this.hiddenMapObjectGroups.indexOf('dungeonstartmarker') < 0) {
-            result.push(new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'DungeonStartMarker', false));
-        }
-        if (this.hiddenMapObjectGroups.indexOf('dungeonfloorswitchmarker') < 0) {
-            result.push(new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'DungeonFloorSwitchMarker', false));
-        }
-
-        return result;
+        // Remove the hidden groups from the list of available groups
+        return _.difference(MAP_OBJECT_GROUP_NAMES, this.hiddenMapObjectGroups);
     }
 
     /**
@@ -528,24 +509,6 @@ class DungeonMap extends Signalable {
                 break;
             }
         }
-        return result;
-    }
-
-    /**
-     * Retrieves a map object group by its name.
-     * @param name
-     * @returns {boolean}|{MapObjectGroup}
-     */
-    getMapObjectGroupByName(name) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        let result = false;
-        for (let i = 0; i < this.mapObjectGroups.length; i++) {
-            if (this.mapObjectGroups[i].name === name) {
-                result = this.mapObjectGroups[i];
-            }
-        }
-
         return result;
     }
 
@@ -627,7 +590,6 @@ class DungeonMap extends Signalable {
         if (this.isEnemySelectionEnabled()) {
             this.finishEnemySelection();
         }
-        this._mapObjectGroupFetchSuccessCount = 0;
 
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
@@ -667,32 +629,9 @@ class DungeonMap extends Signalable {
         // If we confirmed editing something..
         this.signal('map:refresh', {dungeonmap: this});
 
-        for (let i = 0; i < this.mapObjectGroups.length; i++) {
-            let mapObjectGroup = this.mapObjectGroups[i];
-            mapObjectGroup.register('fetchsuccess', this, this._mapObjectGroupFetchSuccess.bind(this));
-            mapObjectGroup.fetchFromServer(this.getCurrentFloor());
-        }
-
         // Show/hide the attribution
         if (!this.options.showAttribution) {
             $('.leaflet-control-attribution').hide();
-        }
-    }
-
-    /**
-     * Called whenever a map object group has claimed success over their AJAX request.
-     * Once all map object groups have returned, this will fire an event that the data is ready to use in the map.
-     */
-    _mapObjectGroupFetchSuccess() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        this._mapObjectGroupFetchSuccessCount++;
-        // Let everyone know we're done and you can use all fetched data
-        if (this._mapObjectGroupFetchSuccessCount === this.mapObjectGroups.length) {
-            this.signal('map:mapobjectgroupsfetchsuccess');
-
-            // All layers have been fetched, refresh tooltips to update "No layers to edit" state
-            refreshTooltips();
         }
     }
 
@@ -745,7 +684,7 @@ class DungeonMap extends Signalable {
      * @returns {boolean|*}
      */
     isTryModeEnabled() {
-        return this.getDungeonRoute().publicKey === '' && this.edit;
+        return this.getDungeonRoute().publicKey === 'try' && this.edit;
     }
 
     /**

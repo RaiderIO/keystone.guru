@@ -1,7 +1,7 @@
 $(function () {
     L.Draw.Path = L.Draw.Polyline.extend({
         statics: {
-            TYPE: 'route'
+            TYPE: 'path'
         },
         initialize: function (map, options) {
             options.showLength = false;

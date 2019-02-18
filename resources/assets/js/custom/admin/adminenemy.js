@@ -81,7 +81,7 @@ class AdminEnemy extends Enemy {
                 }
 
                 if (this._previousConnectedEnemyId > 0) {
-                    let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+                    let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                     let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
                     // Must be found..
                     if (previousEnemy !== null) {
@@ -111,7 +111,7 @@ class AdminEnemy extends Enemy {
         if (this._connectedEnemy === null) {
             let self = this;
 
-            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             // We're an enemy, we need to find an MDT enemy instead
             if (!this.is_mdt && this.mdt_id > 0) {
                 $.each(enemyMapObjectGroup.objects, function (i, mdtEnemy) {
@@ -190,7 +190,7 @@ class AdminEnemy extends Enemy {
 
         // Unset any previously connected enemy; detach them from this MDT enemy, it no longer wants you (sorry :c)
         if (this._previousConnectedEnemyId > 0) {
-            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
             previousEnemy.detachConnectedEnemy();
             // Remove its visual connection, probably better served using events but that'd add too much complexity for now
@@ -221,7 +221,7 @@ class AdminEnemy extends Enemy {
 
         // Remove previous layers if it's needed
         if (this.enemyConnectionLayerGroup !== null) {
-            let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             enemyMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionLayerGroup);
         }
     }
@@ -236,7 +236,7 @@ class AdminEnemy extends Enemy {
 
         // If this enemy is connected to an MDT enemy
         let connectedEnemy = this.getConnectedEnemy();
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
         // Only when we should..
         if (connectedEnemy !== null) {
@@ -246,7 +246,7 @@ class AdminEnemy extends Enemy {
                 this.enemyConnectionLayerGroup = new L.LayerGroup();
 
                 // Add the layer to the map
-                let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                 enemyMapObjectGroup.layerGroup.addLayer(this.enemyConnectionLayerGroup);
 
                 // Different options for different things

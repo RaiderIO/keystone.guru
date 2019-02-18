@@ -22,7 +22,8 @@
 
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'edit' => true
+            'edit' => true,
+            'tryMode' => true
         ])
     </div>
 
