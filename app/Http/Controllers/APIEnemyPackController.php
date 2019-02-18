@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
-use App\Models\Enemy;
+use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Models\EnemyPack;
-use App\Models\EnemyPackVertex;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
@@ -14,41 +12,23 @@ use Teapot\StatusCode\Http;
 class APIEnemyPackController extends Controller
 {
     use ChecksForDuplicates;
+    use ListsEnemyPacks;
 
     //
     function list(Request $request)
     {
         $floorId = $request->get('floor_id');
+        $enemies = $request->get('enemies', true);
         $teeming = $request->get('teeming', false);
-        $vertices = $request->get('vertices', false);
 
         // If logged in, and we're NOT an admin
         if (Auth::check() && !Auth::user()->hasRole('admin')) {
             // Don't expose vertices
-            $vertices = false;
+            $enemies = true;
         }
 
-        /** @var Builder $result */
-        $result = null;
-        $fields = ['id', 'label', 'faction'];
-        if ($vertices) {
-            $fields[] = 'vertices_json';
-            $result = EnemyPack::query();
-        } else {
-            $result = EnemyPack::with(['enemies' => function ($query) use ($teeming) {
-                /** @var $query \Illuminate\Database\Query\Builder */
-                // Only include teeming enemies when requested
-                if (!$teeming) {
-                    $query->where('teeming', null);
-                }
-                $query->select(['enemy_pack_id', 'lat', 'lng']); // must select enemy_pack_id, else it won't return results /sadface
-            }]);
-        }
 
-        $enemyPacks = $result->where('floor_id', '=', $floorId)->get($fields);
-        $enemyPacks->makeHidden('enemy_pack_id');
-
-        return $enemyPacks;
+        return $this->listEnemyPacks($floorId, $enemies, $teeming);
     }
 
     /**

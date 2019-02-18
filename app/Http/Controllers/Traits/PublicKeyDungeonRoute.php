@@ -17,7 +17,7 @@ trait PublicKeyDungeonRoute
     function _getDungeonRouteFromPublicKey($publicKey, $auth = true)
     {
         /** @var DungeonRoute $dungeonRoute */
-        $dungeonRoute = DungeonRoute::where('public_key', '=', $publicKey)->firstOrFail();
+        $dungeonRoute = DungeonRoute::where('public_key', $publicKey)->firstOrFail();
 
         if ($auth) {
             // @TODO handle this in a policy?

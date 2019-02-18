@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Models\EnemyPatrol;
 use App\Models\EnemyPatrolVertex;
 use App\Models\Polyline;
@@ -12,11 +13,12 @@ use Teapot\StatusCode\Http;
 class APIEnemyPatrolController extends Controller
 {
     use ChecksForDuplicates;
+    use ListsEnemyPatrols;
 
     function list(Request $request)
     {
         $floorId = $request->get('floor_id');
-        return EnemyPatrol::with('polyline')->where('floor_id', '=', $floorId)->get();
+        return $this->listEnemyPatrols($floorId);
     }
 
     /**

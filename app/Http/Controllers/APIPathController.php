@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Path;
@@ -16,19 +17,14 @@ class APIPathController extends Controller
 {
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
+    use ListsPaths;
 
     function list(Request $request)
     {
         $floorId = $request->get('floor_id');
         $dungeonRoutePublicKey = $request->get('dungeonroute');
-        try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-            $result = Path::with('polyline')->where('dungeon_route_id', $dungeonRoute->id)->where('floor_id', $floorId)->get();
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
 
-        return $result;
+        return $this->listPaths($floorId, $dungeonRoutePublicKey);
     }
 
     /**

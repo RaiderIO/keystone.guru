@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ListsEnemies;
+use App\Http\Controllers\Traits\ListsEnemyPacks;
+use App\Http\Controllers\Traits\ListsEnemyPatrols;
+use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\APIDungeonRouteFormRequest;
 use App\Logic\Datatables\AuthorNameColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
@@ -18,6 +22,11 @@ use Illuminate\Support\Facades\Auth;
 
 class APIDungeonRouteController extends Controller
 {
+
+    use PublicKeyDungeonRoute;
+    use ListsEnemies;
+    use ListsEnemyPacks;
+    use ListsEnemyPatrols;
 
     /**
      * @param Request $request
@@ -202,5 +211,66 @@ class APIDungeonRouteController extends Controller
         $dungeonRouteFavorite->delete();
 
         return ['result' => 'success'];
+    }
+
+    /**
+     * @param Request $request
+     * @param string $publickey
+     * @return array
+     * @throws \Exception
+     */
+    function data(Request $request, $publickey)
+    {
+        // Init the fields we should get for this request
+        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapcomment,dungeonstartmarker,dungeonfloorswitchmarker']);
+        $fields = explode(',', $fields);
+
+        // Show enemies or raw data when fetching enemy packs
+        $enemies = $request->get('enemies', true);
+        // May be set if a DungeonRoute is passed
+        $teeming = false;
+
+
+        // Start parsing
+        $result = [];
+        if ($publickey === 'try') {
+            // Delete it so we don't fetch stuff we shouldn't!
+            $publickey = null;
+        } else {
+            // Fetch dungeon route specific properties
+            /** @var DungeonRoute $dungeonroute */
+            $dungeonroute = DungeonRoute::findOrFail($publickey);
+            $teeming = $dungeonroute->teeming;
+        }
+
+        // Enemies
+        if (in_array('enemy', $fields)) {
+            $showMdtEnemies = false;
+            // Only admins are allowed to see this
+            if (Auth::check() && Auth::user()->hasRole('admin')) {
+                // Only fetch it now
+                $showMdtEnemies = intval($request->get('show_mdt_enemies', 0)) === 1;
+            }
+
+            $result['enemy'] = $this->listEnemies($request->get('floor'), $showMdtEnemies, $publickey);
+        }
+
+        // Enemy packs
+        if (in_array('enemypack', $fields)) {
+            $result['enemypack'] = $this->listEnemyPacks($request->get('floor'), $enemies, $teeming);
+        }
+
+        // Enemy patrols
+        if (in_array('enemypatrol', $fields)) {
+            $result['enemypatrol'] = $this->listEnemyPatrols($request->get('floor'));
+        }
+
+        // Paths
+        if (in_array('path', $fields)) {
+            $result['path'] = $this->listEnemyPatrols($request->get('floor'));
+        }
+
+
+        return $result;
     }
 }
