@@ -126,6 +126,8 @@ class MapObjectGroupManager extends Signalable {
     _fetchFromServer() {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
 
+        let self = this;
+
         $.ajax({
             type: 'GET',
             url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/data',
@@ -135,7 +137,7 @@ class MapObjectGroupManager extends Signalable {
                 floor: this.map.getCurrentFloor().id
             },
             success: function (json) {
-                // self.signal('fetchsuccess');
+                self.signal('fetchsuccess', {response: json});
             }
         });
     }

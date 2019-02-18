@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\Brushline;
 use App\Models\Dungeon;
@@ -17,22 +18,14 @@ class APIBrushlineController extends Controller
 {
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
+    use ListsBrushlines;
 
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        $dungeonRoutePublicKey = $request->get('dungeonroute');
-        try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-            $result = Brushline::with('polyline')
-                ->where('dungeon_route_id', '=', $dungeonRoute->id)
-                ->where('floor_id', '=', $floorId)
-                ->get();
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
-
-        return $result;
+        return $this->listBrushlines(
+            $request->get('floor_id'),
+            $request->get('dungeonroute')
+        );
     }
 
     /**

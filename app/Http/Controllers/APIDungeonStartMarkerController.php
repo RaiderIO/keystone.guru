@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Controllers\Traits\ListsDungeonStartMarkers;
 use App\Models\DungeonStartMarker;
 use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
@@ -10,11 +11,11 @@ use Teapot\StatusCode\Http;
 class APIDungeonStartMarkerController extends Controller
 {
     use ChecksForDuplicates;
+    use ListsDungeonStartMarkers;
 
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        return DungeonStartMarker::all()->where('floor_id', '=', $floorId);
+        return $this->listDungeonStartMarkers($request->get('floor_id'));
     }
 
     /**

@@ -1,6 +1,6 @@
 class EnemyPackMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname, editable) {
-        super(map, name, editable);
+    constructor(manager, name, classname, editable) {
+        super(manager, name, editable);
 
         this.classname = classname;
         this.title = 'Hide/show enemy packs';
@@ -12,82 +12,69 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
 
         switch (this.classname) {
             case "AdminEnemyPack":
-                return new AdminEnemyPack(this.map, layer);
+                return new AdminEnemyPack(this.manager.map, layer);
             default:
-                return new EnemyPack(this.map, layer);
+                return new EnemyPack(this.manager.map, layer);
         }
     }
 
-    fetchFromServer(floor) {
+    _fetchSuccess(response) {
+        super._fetchSuccess(response);
+
         // no super call required
         console.assert(this instanceof EnemyPackMapObjectGroup, this, 'this is not a EnemyPackMapObjectGroup');
 
-        let self = this;
+        let enemyPacks = response.enemypack;
 
-        $.ajax({
-            type: 'GET',
-            url: '/ajax/enemypacks',
-            dataType: 'json',
-            data: {
-                floor_id: floor.id,
-                // Non-admin = get enemy locations instead
-                vertices: isAdmin ? 1 : 0,
-                teeming: self.map.teeming ? 1 : 0
-            },
-            success: function (json) {
-                // Now draw the packs on the map
-                for (let i = 0; i < json.length; i++) {
-                    let points = [];
-                    let layer = null;
-                    let remoteEnemyPack = json[i];
+        // Now draw the packs on the map
+        for (let i = 0; i < enemyPacks.length; i++) {
+            let points = [];
+            let layer = null;
+            let remoteEnemyPack = enemyPacks[i];
 
-                    let faction = self.map.getDungeonRoute().faction;
+            let faction = this.manager.map.getDungeonRoute().faction;
 
-                    if (remoteEnemyPack.faction !== 'any' && faction !== 'any' && faction !== remoteEnemyPack.faction) {
-                        console.log('Skipping enemy pack that does not belong to the requested faction ', remoteEnemyPack, faction);
-                        continue;
-                    }
+            if (remoteEnemyPack.faction !== 'any' && faction !== 'any' && faction !== remoteEnemyPack.faction) {
+                console.log('Skipping enemy pack that does not belong to the requested faction ', remoteEnemyPack, faction);
+                continue;
+            }
 
-                    // Create a polygon from the vertices as normal
-                    if( typeof remoteEnemyPack.vertices_json !== 'undefined' ){
-                        let vertices = JSON.parse(remoteEnemyPack.vertices_json);
+            // Create a polygon from the vertices as normal
+            if (typeof remoteEnemyPack.vertices_json !== 'undefined') {
+                let vertices = JSON.parse(remoteEnemyPack.vertices_json);
 
-                        for (let j = 0; j < vertices.length; j++) {
-                            let vertex = vertices[j];
-                            points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
-                        }
-
-                        layer = L.polygon(points);
-                    }
-                    // Create a polygon based on a hull of points from the enemies in this pack
-                    else {
-                        let vertices = remoteEnemyPack.enemies;
-
-                        for (let j = 0; j < vertices.length; j++) {
-                            let vertex = vertices[j];
-                            points.push([vertex.lat, vertex.lng]);
-                        }
-
-                        // Build a layer based off a hull if we're supposed to
-                        let p = hull(points, 100);
-                        // Only if we can actually make an offset
-                        if (p.length > 1) {
-                            let offset = new Offset();
-                            p = offset.data(p).arcSegments(c.map.enemypack.arcSegments(p.length)).margin(c.map.enemypack.margin);
-
-                            layer = L.polygon(p, c.map.enemypack.polygonOptions);
-                        }
-                    }
-
-                    let enemyPack = self.createNew(layer);
-                    enemyPack.id = remoteEnemyPack.id;
-                    enemyPack.faction = remoteEnemyPack.faction;
-                    // We just downloaded the enemy pack, it's synced alright!
-                    enemyPack.setSynced(true);
+                for (let j = 0; j < vertices.length; j++) {
+                    let vertex = vertices[j];
+                    points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
                 }
 
-                self.signal('fetchsuccess');
+                layer = L.polygon(points);
             }
-        });
+            // Create a polygon based on a hull of points from the enemies in this pack
+            else {
+                let vertices = remoteEnemyPack.enemies;
+
+                for (let j = 0; j < vertices.length; j++) {
+                    let vertex = vertices[j];
+                    points.push([vertex.lat, vertex.lng]);
+                }
+
+                // Build a layer based off a hull if we're supposed to
+                let p = hull(points, 100);
+                // Only if we can actually make an offset
+                if (p.length > 1) {
+                    let offset = new Offset();
+                    p = offset.data(p).arcSegments(c.map.enemypack.arcSegments(p.length)).margin(c.map.enemypack.margin);
+
+                    layer = L.polygon(p, c.map.enemypack.polygonOptions);
+                }
+            }
+
+            let enemyPack = this.createNew(layer);
+            enemyPack.id = remoteEnemyPack.id;
+            enemyPack.faction = remoteEnemyPack.faction;
+            // We just downloaded the enemy pack, it's synced alright!
+            enemyPack.setSynced(true);
+        }
     }
 }

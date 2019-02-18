@@ -163,23 +163,14 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::get('/{publickey}/data', 'APIDungeonRouteController@data');
 
 //        Route::get('/enemypacks', 'APIEnemyPackController@list');
-//
 //        Route::get('/enemies', 'APIEnemyController@list');
-//
 //        Route::get('/enemypatrols', 'APIEnemyPatrolController@list');
-//
-//        Route::get('/dungeonroutes', 'APIDungeonRouteController@list')->name('api.dungeonroutes');
-//
+        Route::get('/dungeonroutes', 'APIDungeonRouteController@list')->name('api.dungeonroutes');
 //        Route::get('/paths', 'APIPathController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
-//
 //        Route::get('/killzones', 'APIKillZoneController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
-//
 //        Route::get('/mapcomments', 'APIMapCommentController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
-//
 //        Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');
-//
 //        Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
-//
 //        Route::get('/brushlines', 'APIBrushlineController@list')->where(['floor_id' => '[0-9]+']);
 
         Route::post('/mdt/details', 'MDTImportController@details')->name('mdt.details');

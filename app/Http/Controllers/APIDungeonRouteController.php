@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
+use App\Http\Controllers\Traits\ListsKillzones;
+use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Http\Controllers\Traits\ListsMapComments;
+use App\Http\Controllers\Traits\ListsDungeonStartMarkers;
+use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Http\Requests\APIDungeonRouteFormRequest;
 use App\Logic\Datatables\AuthorNameColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
@@ -27,6 +33,12 @@ class APIDungeonRouteController extends Controller
     use ListsEnemies;
     use ListsEnemyPacks;
     use ListsEnemyPatrols;
+    use ListsPaths;
+    use ListsKillzones;
+    use ListsBrushlines;
+    use ListsMapComments;
+    use ListsDungeonStartMarkers;
+    use ListsDungeonFloorSwitchMarkers;
 
     /**
      * @param Request $request
@@ -239,8 +251,23 @@ class APIDungeonRouteController extends Controller
         } else {
             // Fetch dungeon route specific properties
             /** @var DungeonRoute $dungeonroute */
-            $dungeonroute = DungeonRoute::findOrFail($publickey);
+            $dungeonroute = DungeonRoute::where('public_key', $publickey)->firstOrFail();
             $teeming = $dungeonroute->teeming;
+
+            // Paths
+            if (in_array('path', $fields)) {
+                $result['path'] = $this->listPaths($request->get('floor'), $publickey);
+            }
+
+            // Killzone
+            if (in_array('killzone', $fields)) {
+                $result['killzone'] = $this->listKillzones($request->get('floor'), $publickey);
+            }
+
+            // Brushline
+            if (in_array('brushline', $fields)) {
+                $result['brushline'] = $this->listBrushlines($request->get('floor'), $publickey);
+            }
         }
 
         // Enemies
@@ -265,9 +292,19 @@ class APIDungeonRouteController extends Controller
             $result['enemypatrol'] = $this->listEnemyPatrols($request->get('floor'));
         }
 
-        // Paths
-        if (in_array('path', $fields)) {
-            $result['path'] = $this->listEnemyPatrols($request->get('floor'));
+        // Map comments
+        if (in_array('mapcomment', $fields)) {
+            $result['mapcomment'] = $this->listMapComments($request->get('floor'), $publickey);
+        }
+
+        // Enemy patrols
+        if (in_array('dungeonstartmarker', $fields)) {
+            $result['dungeonstartmarker'] = $this->listDungeonStartMarkers($request->get('floor'));
+        }
+
+        // Enemy patrols
+        if (in_array('dungeonfloorswitchmarker', $fields)) {
+            $result['dungeonfloorswitchmarker'] = $this->listDungeonFloorSwitchMarkers($request->get('floor'));
         }
 
 

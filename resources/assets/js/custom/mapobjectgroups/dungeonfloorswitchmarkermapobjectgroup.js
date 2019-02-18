@@ -1,6 +1,6 @@
 class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname, editable) {
-        super(map, name, editable);
+    constructor(manager, name, classname, editable) {
+        super(manager, name, editable);
 
         this.classname = classname;
         this.title = 'Hide/show floor switch markers';
@@ -12,45 +12,34 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
 
         switch (this.classname) {
             case "AdminDungeonFloorSwitchMarker":
-                return new AdminDungeonFloorSwitchMarker(this.map, layer);
+                return new AdminDungeonFloorSwitchMarker(this.manager.map, layer);
             default:
-                return new DungeonFloorSwitchMarker(this.map, layer);
+                return new DungeonFloorSwitchMarker(this.manager.map, layer);
         }
     }
 
-    fetchFromServer(floor) {
+    _fetchSuccess(response) {
+        super._fetchSuccess(response);
         // no super call required
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, this, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup');
 
-        let self = this;
+        let floorSwitchMarkers = response.dungeonfloorswitchmarker;
 
-        $.ajax({
-            type: 'GET',
-            url: '/ajax/dungeonfloorswitchmarkers',
-            dataType: 'json',
-            data: {
-                floor_id: floor.id
-            },
-            success: function (json) {
-                // Now draw the enemies on the map
-                for (let index in json) {
-                    if (json.hasOwnProperty(index)) {
-                        let remoteDungeonFloorSwitchMarker = json[index];
+        // Now draw the enemies on the map
+        for (let index in floorSwitchMarkers) {
+            if (floorSwitchMarkers.hasOwnProperty(index)) {
+                let remoteDungeonFloorSwitchMarker = floorSwitchMarkers[index];
 
-                        let layer = new LeafletDungeonFloorSwitchMarker();
-                        layer.setLatLng(L.latLng(remoteDungeonFloorSwitchMarker.lat, remoteDungeonFloorSwitchMarker.lng));
+                let layer = new LeafletDungeonFloorSwitchMarker();
+                layer.setLatLng(L.latLng(remoteDungeonFloorSwitchMarker.lat, remoteDungeonFloorSwitchMarker.lng));
 
-                        let dungeonFloorSwitchMarker = self.createNew(layer);
-                        dungeonFloorSwitchMarker.id = remoteDungeonFloorSwitchMarker.id;
-                        dungeonFloorSwitchMarker.floor_id = remoteDungeonFloorSwitchMarker.floor_id;
-                        dungeonFloorSwitchMarker.target_floor_id = remoteDungeonFloorSwitchMarker.target_floor_id;
-                        // We just downloaded the enemy pack, it's synced alright!
-                        dungeonFloorSwitchMarker.setSynced(true);
-                    }
-                }
-
-                self.signal('fetchsuccess');
+                let dungeonFloorSwitchMarker = this.createNew(layer);
+                dungeonFloorSwitchMarker.id = remoteDungeonFloorSwitchMarker.id;
+                dungeonFloorSwitchMarker.floor_id = remoteDungeonFloorSwitchMarker.floor_id;
+                dungeonFloorSwitchMarker.target_floor_id = remoteDungeonFloorSwitchMarker.target_floor_id;
+                // We just downloaded the enemy pack, it's synced alright!
+                dungeonFloorSwitchMarker.setSynced(true);
             }
-        });
+        }
     }
 }

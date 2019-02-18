@@ -21,10 +21,10 @@ class APIPathController extends Controller
 
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        $dungeonRoutePublicKey = $request->get('dungeonroute');
-
-        return $this->listPaths($floorId, $dungeonRoutePublicKey);
+        return $this->listPaths(
+            $request->get('floor_id'),
+            $request->get('dungeonroute')
+        );
     }
 
     /**

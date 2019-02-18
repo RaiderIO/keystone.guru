@@ -17,8 +17,7 @@ class APIEnemyPatrolController extends Controller
 
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        return $this->listEnemyPatrols($floorId);
+        return $this->listEnemyPatrols($request->get('floor_id'));
     }
 
     /**
