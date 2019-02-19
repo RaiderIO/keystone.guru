@@ -1,8 +1,7 @@
 class EnemyPatrolMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, classname, editable) {
+    constructor(manager, name, editable) {
         super(manager, name, editable);
 
-        this.classname = classname;
         this.title = 'Hide/show enemy patrol routes';
         this.fa_class = 'fa-exchange-alt';
     }
@@ -10,11 +9,10 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof EnemyPatrolMapObjectGroup, 'this is not an EnemyPatrolMapObjectGroup');
 
-        switch (this.classname) {
-            case "AdminEnemyPatrol":
-                return new AdminEnemyPatrol(this.manager.map, layer);
-            default:
-                return new EnemyPatrol(this.manager.map, layer);
+        if (isAdmin) {
+            return new AdminEnemyPatrol(this.manager.map, layer);
+        } else {
+            return new EnemyPatrol(this.manager.map, layer);
         }
     }
 

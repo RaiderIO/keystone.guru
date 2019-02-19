@@ -47,8 +47,6 @@ class Enemy extends MapObject {
         // MDT
         this.mdt_id = -1;
 
-        this.setSynced(true);
-
         let self = this;
         this.map.register('map:enemyselectionmodechanged', this, function (selectionModeChangedEvent) {
             // Remove/enable the popup

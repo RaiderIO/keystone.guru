@@ -1,8 +1,7 @@
 class EnemyPackMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, classname, editable) {
+    constructor(manager, name, editable) {
         super(manager, name, editable);
 
-        this.classname = classname;
         this.title = 'Hide/show enemy packs';
         this.fa_class = 'fa-draw-polygon';
     }
@@ -10,11 +9,10 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof EnemyPackMapObjectGroup, 'this is not an EnemyPackMapObjectGroup');
 
-        switch (this.classname) {
-            case "AdminEnemyPack":
-                return new AdminEnemyPack(this.manager.map, layer);
-            default:
-                return new EnemyPack(this.manager.map, layer);
+        if (isAdmin) {
+            return new AdminEnemyPack(this.manager.map, layer);
+        } else {
+            return new EnemyPack(this.manager.map, layer);
         }
     }
 
@@ -70,11 +68,16 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                 }
             }
 
-            let enemyPack = this.createNew(layer);
-            enemyPack.id = remoteEnemyPack.id;
-            enemyPack.faction = remoteEnemyPack.faction;
-            // We just downloaded the enemy pack, it's synced alright!
-            enemyPack.setSynced(true);
+            if (layer !== null) {
+                let enemyPack = this.createNew(layer);
+                enemyPack.id = remoteEnemyPack.id;
+                enemyPack.faction = remoteEnemyPack.faction;
+
+                // We just downloaded the enemy pack, it's synced alright!
+                enemyPack.setSynced(true);
+            } else {
+                console.error('Unable to create layer for enemypack ' + remoteEnemyPack.id + '; not enough data points');
+            }
         }
     }
 }

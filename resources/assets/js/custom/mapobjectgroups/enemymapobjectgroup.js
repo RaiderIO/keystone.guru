@@ -1,8 +1,7 @@
 class EnemyMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, classname, editable) {
+    constructor(manager, name, editable) {
         super(manager, name, editable);
 
-        this.classname = classname;
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
     }
@@ -10,11 +9,10 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not an EnemyMapObjectGroup');
 
-        switch (this.classname) {
-            case "AdminEnemy":
-                return new AdminEnemy(this.manager.map, layer);
-            default:
-                return new Enemy(this.manager.map, layer);
+        if (isAdmin) {
+            return new AdminEnemy(this.manager.map, layer);
+        } else {
+            return new Enemy(this.manager.map, layer);
         }
     }
 
@@ -86,7 +84,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     // Do this last
                     enemy.setNpc(remoteEnemy.npc);
 
-                    // We just downloaded the enemy pack, it's synced alright!
+                    // We just downloaded the enemy, it's synced alright!
                     enemy.setSynced(true);
                 }
             }

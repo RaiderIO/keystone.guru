@@ -42,7 +42,6 @@ trait ListsEnemyPacks
         }
 
         $enemyPacks = $result->where('floor_id', '=', $floorId)->get($fields);
-        $enemyPacks->makeHidden('enemy_pack_id');
 
         return $enemyPacks;
     }

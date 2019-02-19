@@ -1,8 +1,7 @@
 class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, classname, editable) {
+    constructor(manager, name, editable) {
         super(manager, name, editable);
 
-        this.classname = classname;
         this.title = 'Hide/show dungeon start';
         this.fa_class = 'fa-flag';
     }
@@ -10,11 +9,10 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof DungeonStartMarkerMapObjectGroup, 'this is not an DungeonStartMarkerMapObjectGroup');
 
-        switch (this.classname) {
-            case "AdminDungeonStartMarker":
-                return new AdminDungeonStartMarker(this.manager.map, layer);
-            default:
-                return new DungeonStartMarker(this.manager.map, layer);
+        if (isAdmin) {
+            return new AdminDungeonStartMarker(this.manager.map, layer);
+        } else {
+            return new DungeonStartMarker(this.manager.map, layer);
         }
     }
 
@@ -36,7 +34,8 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
                 let dungeonStartMarker = this.createNew(layer);
                 dungeonStartMarker.id = remoteDungeonStartMarker.id;
                 dungeonStartMarker.floor_id = remoteDungeonStartMarker.floor_id;
-                // We just downloaded the enemy pack, it's synced alright!
+
+                // We just downloaded the start marker, it's synced alright!
                 dungeonStartMarker.setSynced(true);
             }
         }

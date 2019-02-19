@@ -239,20 +239,17 @@ class APIDungeonRouteController extends Controller
 
         // Show enemies or raw data when fetching enemy packs
         $enemies = $request->get('enemies', true);
-        // May be set if a DungeonRoute is passed
-        $teeming = false;
-
+        $teeming = $request->get('teeming', false);
 
         // Start parsing
         $result = [];
-        if ($publickey === 'try') {
+        if ($publickey === 'try' || $publickey === 'admin') {
             // Delete it so we don't fetch stuff we shouldn't!
             $publickey = null;
         } else {
             // Fetch dungeon route specific properties
             /** @var DungeonRoute $dungeonroute */
             $dungeonroute = DungeonRoute::where('public_key', $publickey)->firstOrFail();
-            $teeming = $dungeonroute->teeming;
 
             // Paths
             if (in_array('path', $fields)) {
@@ -284,6 +281,11 @@ class APIDungeonRouteController extends Controller
 
         // Enemy packs
         if (in_array('enemypack', $fields)) {
+            // If logged in, and we're NOT an admin
+            if (Auth::check() && !Auth::user()->hasRole('admin')) {
+                // Don't expose vertices
+                $enemies = true;
+            }
             $result['enemypack'] = $this->listEnemyPacks($request->get('floor'), $enemies, $teeming);
         }
 

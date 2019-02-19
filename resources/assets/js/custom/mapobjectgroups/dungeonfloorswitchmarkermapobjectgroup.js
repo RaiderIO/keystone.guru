@@ -1,8 +1,7 @@
 class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, classname, editable) {
+    constructor(manager, name, editable) {
         super(manager, name, editable);
 
-        this.classname = classname;
         this.title = 'Hide/show floor switch markers';
         this.fa_class = 'fa-door-open';
     }
@@ -10,11 +9,10 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup');
 
-        switch (this.classname) {
-            case "AdminDungeonFloorSwitchMarker":
-                return new AdminDungeonFloorSwitchMarker(this.manager.map, layer);
-            default:
-                return new DungeonFloorSwitchMarker(this.manager.map, layer);
+        if (isAdmin) {
+            return new AdminDungeonFloorSwitchMarker(this.manager.map, layer);
+        } else {
+            return new DungeonFloorSwitchMarker(this.manager.map, layer);
         }
     }
 
@@ -37,7 +35,8 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
                 dungeonFloorSwitchMarker.id = remoteDungeonFloorSwitchMarker.id;
                 dungeonFloorSwitchMarker.floor_id = remoteDungeonFloorSwitchMarker.floor_id;
                 dungeonFloorSwitchMarker.target_floor_id = remoteDungeonFloorSwitchMarker.target_floor_id;
-                // We just downloaded the enemy pack, it's synced alright!
+
+                // We just downloaded the floor switch marker, it's synced alright!
                 dungeonFloorSwitchMarker.setSynced(true);
             }
         }

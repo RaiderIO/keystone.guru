@@ -428,14 +428,6 @@ class DungeonMap extends Signalable {
     _getMapObjectGroupNames() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        // @TODO Fix this? See commit diff
-        // Only add these two if they're worth fetching (not in a preview)
-        // if (isAdmin) {
-        //     this.hiddenMapObjectGroups.push('path');
-        //     this.hiddenMapObjectGroups.push('killzone');
-        //     this.hiddenMapObjectGroups.push('brushline');
-        // }
-
         // Remove the hidden groups from the list of available groups
         return _.difference(MAP_OBJECT_GROUP_NAMES, this.hiddenMapObjectGroups);
     }

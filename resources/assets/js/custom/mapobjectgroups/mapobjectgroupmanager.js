@@ -46,11 +46,11 @@ class MapObjectGroupManager extends Signalable {
         let result = null;
 
         if (name === MAP_OBJECT_GROUP_ENEMY) {
-            result = new EnemyMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY, 'Enemy', isAdmin);
+            result = new EnemyMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY, isAdmin);
         } else if (name === MAP_OBJECT_GROUP_ENEMY_PATROL) {
-            result = new EnemyPatrolMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PATROL, 'EnemyPatrol', isAdmin);
+            result = new EnemyPatrolMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PATROL, isAdmin);
         } else if (name === MAP_OBJECT_GROUP_ENEMY_PACK) {
-            result = new EnemyPackMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PACK, 'EnemyPack', isAdmin);
+            result = new EnemyPackMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PACK, isAdmin);
         } else if (name === MAP_OBJECT_GROUP_PATH) {
             result = new PathMapObjectGroup(this, MAP_OBJECT_GROUP_PATH, !isAdmin);
         } else if (name === MAP_OBJECT_GROUP_KILLZONE) {
@@ -60,9 +60,9 @@ class MapObjectGroupManager extends Signalable {
         } else if (name === MAP_OBJECT_GROUP_MAPCOMMENT) {
             result = new MapCommentMapObjectGroup(this, MAP_OBJECT_GROUP_MAPCOMMENT, !isAdmin);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_START_MARKER) {
-            result = new DungeonStartMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_START_MARKER, 'DungeonStartMarker', isAdmin);
+            result = new DungeonStartMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_START_MARKER, isAdmin);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER) {
-            result = new DungeonFloorSwitchMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, 'DungeonFloorSwitchMarker', isAdmin);
+            result = new DungeonFloorSwitchMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, isAdmin);
         }
 
         console.assert(result !== null, 'Unable to find map object group ' + name, this);
@@ -128,13 +128,22 @@ class MapObjectGroupManager extends Signalable {
 
         let self = this;
 
+        // @TODO This should probably be different but atm I can't think of a better way
+        let publicKey = this.map.getDungeonRoute().publicKey;
+        if (isAdmin) {
+            publicKey = 'admin';
+        }
+
         $.ajax({
             type: 'GET',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/data',
+            url: '/ajax/' + publicKey + '/data',
             dataType: 'json',
             data: {
                 fields: this._getLoadedNames().join(','),
-                floor: this.map.getCurrentFloor().id
+                floor: this.map.getCurrentFloor().id,
+                show_mdt_enemies: isAdmin ? 1 : 0,
+                enemies: isAdmin ? 0 : 1,
+                teeming: self.map.teeming ? 1 : 0
             },
             success: function (json) {
                 self.signal('fetchsuccess', {response: json});

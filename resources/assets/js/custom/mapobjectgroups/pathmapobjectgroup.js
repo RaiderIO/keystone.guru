@@ -38,13 +38,13 @@ class PathMapObjectGroup extends MapObjectGroup {
 
                 let layer = L.polyline(points);
 
-                let route = this.createNew(layer);
-                route.id = remotePath.id;
-                route.setColor(polyline.color);
-                route.setWeight(polyline.weight);
+                let path = this.createNew(layer);
+                path.id = remotePath.id;
+                path.setColor(polyline.color);
+                path.setWeight(polyline.weight);
 
-                // We just downloaded the enemy pack, it's synced alright!
-                route.setSynced(true);
+                // We just downloaded the path, it's synced alright!
+                path.setSynced(true);
             }
         }
     }

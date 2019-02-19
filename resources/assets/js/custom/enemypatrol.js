@@ -21,7 +21,6 @@ class EnemyPatrol extends Polyline {
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 
         this.setColor(c.map.enemypatrol.defaultColor);
-        this.setSynced(true);
     }
 
     /**

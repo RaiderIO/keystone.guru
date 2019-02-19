@@ -17,25 +17,11 @@ class EnemyPack extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
-        // let self = this;
-
         this.label = 'Enemy pack';
         this.setColors(c.map.enemypack.colors);
 
         this.color = null;
-        this.faction = 'any'; // sensible default
-        // this.decorator = null;
-        this.setSynced(true);
-        //
-        // this.register('synced', this, function () {
-        //     self._rebuildDecorator();
-        // });
-        // this.register('object:deleted', this, function () {
-        //     self._cleanDecorator();
-        // });
-        // this.map.register('map:beforerefresh', this, function () {
-        //     self._cleanDecorator();
-        // });
+        this.faction = 'any';
     }
 
     /**

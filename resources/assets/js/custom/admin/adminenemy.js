@@ -330,6 +330,8 @@ class AdminEnemy extends Enemy {
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {
+                console.log('popupOpenFn');
+
                 $('#enemy_edit_popup_teeming_' + self.id).val(self.teeming);
                 $('#enemy_edit_popup_faction_' + self.id).val(self.faction);
                 $('#enemy_edit_popup_enemy_forces_override_' + self.id).val(self.enemy_forces_override);
