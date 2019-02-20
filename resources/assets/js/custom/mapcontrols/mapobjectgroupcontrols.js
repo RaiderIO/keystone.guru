@@ -8,14 +8,16 @@ class MapObjectGroupControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let source = $("#map_controls_template").html();
-                let template = handlebars.compile(source);
+                let template = Handlebars.templates['map_controls_template'];
 
                 let data = {
                     mapobjectgroups: []
                 };
-                for(let i in self.map.mapObjectGroups){
-                    let group = self.map.mapObjectGroups[i];
+
+                let mapObjectGroups = self.map.mapObjectGroupManager.mapObjectGroups;
+
+                for(let i in mapObjectGroups){
+                    let group = mapObjectGroups[i];
                     data.mapobjectgroups.push({
                         name: group.name,
                         title: group.title,
@@ -27,8 +29,8 @@ class MapObjectGroupControls extends MapControl {
                 self.statusbar = $(template(data));
 
 
-                for (let i in self.map.mapObjectGroups) {
-                    let group = self.map.mapObjectGroups[i];
+                for (let i in mapObjectGroups) {
+                    let group = mapObjectGroups[i];
                     self.statusbar.find('#map_controls_hide_' + group.name).bind('click', function (e) {
                         let checkbox = $(self.statusbar).find('#map_controls_hide_' + group.name + '_checkbox');
                         let shown = !group.isShown();

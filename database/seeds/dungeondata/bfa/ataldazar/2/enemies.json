@@ -7,7 +7,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -153.75999999999999,
+        "lat": -153.76,
         "lng": 147,
         "npc": {
             "id": 143577

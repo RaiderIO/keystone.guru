@@ -11,6 +11,7 @@ use Mockery\Exception;
  * @property int $id The ID of this Dungeon.
  * @property int $expansion_id The linked expansion to this dungeon.
  * @property string $name The name of the dungeon.
+ * @property string $key Shorthand key of the dungeon
  * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
  * @property int $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
  * @property boolean $active True if this dungeon is active, false if it is not.

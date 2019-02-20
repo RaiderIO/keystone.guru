@@ -1,57 +1,23 @@
 <?php
 /** This is the display of affixes in the routes listing */
-?><script id="affixgroups_single_template" type="text/x-handlebars-template">
-    <?php // Is only one but keeps the underlying code much simpler to keep that data structure the same ?>
-    @{{#affixgroups}}
-    <div class="affix_list_row row no-gutters">
-        @{{#affixes}}
-        <div class="affix_row float-left">
-            <div class="select_icon affix_icon_@{{ class }} mr-2" style="height: 24px;" data-toggle="tooltip" title="@{{name}}">
-                &nbsp;
-            </div>
-        </div>
-        @{{/affixes}}
-    </div>
-    @{{/affixgroups}}
-</script>
-<script id="affixgroups_complex_template" type="text/x-handlebars-template">
-    <span class="target_tooltip" data-toggle="tooltip" data-html="true">
-        @{{count}} {{ __('selected') }}
-    </span>
-    <?php // Wrapper so we can put all this in the tooltip of the above span. I'm not cramming that in a tiny attribute manually ?>
-    <div class="affix_list_row_container">
-        @{{#affixgroups}}
-        <div class="row affix_list_row no-gutters" style="width: 200px">
-            @{{#affixes}}
-            <div class="affix_row col-md-3">
-                <div class="select_icon affix_icon_@{{ class }} mr-2" style="height: 24px;">
-                    &nbsp;
-                </div>
-            </div>
-            @{{/affixes}}
-        </div>
-        @{{/affixgroups}}
-    </div>
-</script>
+/** See affixgroups_single_template.handlebars and affixgroups_complex_template.handlebars */
+?>
 <script>
     /**
      * Converts a received affix group list from a dungeon route to a parsed handlebars template.
      * @returns {*}
      */
     function handlebarsAffixGroupsParse(data) {
-        let groupSetupHtml = '';
+        let template = null;
         if (data.length === 1) {
-            groupSetupHtml = $("#affixgroups_single_template").html();
+            template = Handlebars.templates['affixgroups_single_template'];
         } else {
-            groupSetupHtml = $("#affixgroups_complex_template").html();
+            template = Handlebars.templates['affixgroups_complex_template'];
         }
-
-        let template = handlebars.compile(groupSetupHtml);
-
-        let handlebarsData = {
+        let handlebarsData = $.extend({
             count: data.length,
             affixgroups: []
-        };
+        }, getHandlebarsTranslations());
 
         // Data contains affix groups
         for (let i in data) {

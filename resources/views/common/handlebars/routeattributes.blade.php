@@ -1,27 +1,14 @@
 <?php
 /** This is the display of affixes in the routes listing */
+/** See routeattributes_row_template.handlebars for handlebars template */
 ?>
-<script id="routeattributes_row_template" type="text/x-handlebars-template">
-    <div class="row no-gutters">
-        @{{#attributes}}
-        <div class="float-left">
-            <div class="select_icon route_attribute-@{{ name }} mr-2" style="height: 24px;" data-toggle="tooltip"
-                 title="@{{ description }}">
-                &nbsp;
-            </div>
-        </div>
-        @{{/attributes}}
-    </div>
-</script>
 <script type="text/javascript">
     /**
      * Converts a received list of route attributes from a dungeon route to a parsed handlebars template.
      * @returns {*}
      */
     function handlebarsRouteAttributesParse(data) {
-        let groupSetupHtml = $('#routeattributes_row_template').html();
-
-        let template = handlebars.compile(groupSetupHtml);
+        let template = Handlebars.templates['routeattributes_row_template'];
 
         let handlebarsData = {
             attributes: []

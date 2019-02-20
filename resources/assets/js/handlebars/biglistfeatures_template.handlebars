@@ -1,0 +1,22 @@
+<div class="row no-gutters mt-1">
+    <div class="col-xl-5 d-none d-md-flex">{{affixes_label}}:</div>
+    <div class="col-xl-7">
+        {{{affixes}}}
+    </div>
+</div>
+
+{{#if showAttributes}}
+    <div class="row no-gutters mt-1 d-none d-md-flex">
+        <div class="col-xl-5">{{attributes_label}}:</div>
+        <div class="col-xl-7">
+            {{{attributes}}}
+        </div>
+    </div>
+    {{/if}}
+<?php /*Hidden on smaller screens*/ ?>
+<div class="row no-gutters mt-1 d-none d-lg-flex">
+    <div class="col-xl-5">{{setup_label}}:</div>
+    <div class="col-xl-7">
+        {{{setup}}}
+    </div>
+</div>

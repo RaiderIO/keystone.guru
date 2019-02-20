@@ -3,100 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
-use App\Logic\MDT\IO\MDTDungeon;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
-use App\Models\Floor;
-use App\Models\GameServerRegion;
 use App\Models\Npc;
 use App\Models\RaidMarker;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 
 class APIEnemyController extends Controller
 {
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
+    use ListsEnemies;
 
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        $dungeonRoutePublicKey = $request->get('dungeonroute', null);
         $showMdtEnemies = false;
 
         // Only admins are allowed to see this
-        if (Auth::check()) {
-            if (Auth::user()->hasRole('admin')) {
-                // Only fetch it now
-                $showMdtEnemies = intval($request->get('show_mdt_enemies', 0)) === 1;
-            }
+        if (Auth::check() && Auth::user()->hasRole('admin')) {
+            // Only fetch it now
+            $showMdtEnemies = intval($request->get('show_mdt_enemies', 0)) === 1;
         }
 
-        $dungeonRoute = null;
-        // If dungeon route was set, fetch the markers as well
-        if ($dungeonRoutePublicKey !== null) {
-            try {
-                $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-            } catch (\Exception $ex) {
-                return response('Not found', Http::NOT_FOUND);
-            }
-        }
-
-        $region = GameServerRegion::getUserOrDefaultRegion();
-
-        // Eloquent wasn't working with me, raw SQL it is
-        /** @var array $result */
-        $result = DB::select($query = '
-                select `enemies`.*, `raid_markers`.`name`                                     as `raid_marker_name`
-                from `enemies`
-                       left join `dungeon_route_enemy_raid_markers`
-                         on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
-                            `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
-                       left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
-                where `enemies`.`floor_id` = :floorId
-                group by `enemies`.`id`;
-                ', $params = [
-            'routeId' => isset($dungeonRoute) ? $dungeonRoute->id : -1,
-            'floorId' => $floorId
-        ]);
-
-        // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
-        $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
-
-        // Only if we should show MDT enemies
-        $mdtEnemies = [];
-        if ($showMdtEnemies) {
-            /** @var Floor $floor */
-            $floor = Floor::find($floorId);
-
-            $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($floor->dungeon->name))->getClonesAsEnemies($floor);
-        }
-
-        // Post process enemies
-        foreach ($result as $enemy) {
-            $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
-                return $enemy->npc_id === $item->id;
-            })->first();
-
-            // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
-            foreach ($mdtEnemies as $mdtEnemy) {
-                // Match them
-                if ($mdtEnemy->mdt_id === $enemy->mdt_id && $mdtEnemy->npc_id === $enemy->npc_id) {
-                    // Match found, assign and quit
-                    $mdtEnemy->enemy_id = $enemy->id;
-                    break;
-                }
-            }
-
-            // Can be found in the npc object
-            unset($enemy->npc_id);
-        }
-
-        return ['enemies' => $result, 'mdt_enemies' => $mdtEnemies];
+        return $this->listEnemies(
+            $request->get('floorId'),
+            $showMdtEnemies,
+            $request->get('dungeonroute', null)
+        );
     }
 
     /**

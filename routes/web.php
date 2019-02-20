@@ -160,36 +160,29 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
 
     Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
-        Route::get('/enemypacks', 'APIEnemyPackController@list');
+        Route::get('/{publickey}/data', 'APIDungeonRouteController@data');
 
-        Route::get('/enemies', 'APIEnemyController@list');
-
-        Route::get('/enemypatrols', 'APIEnemyPatrolController@list');
-
+//        Route::get('/enemypacks', 'APIEnemyPackController@list');
+//        Route::get('/enemies', 'APIEnemyController@list');
+//        Route::get('/enemypatrols', 'APIEnemyPatrolController@list');
         Route::get('/dungeonroutes', 'APIDungeonRouteController@list')->name('api.dungeonroutes');
-
-        Route::get('/routes', 'APIRouteController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
-
-        Route::get('/killzones', 'APIKillZoneController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
-
-        Route::get('/mapcomments', 'APIMapCommentController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
-
-        Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');
-
-        Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
-
-        Route::get('/polylines', 'APIPolylineController@list')->where(['floor_id' => '[0-9]+']);
+//        Route::get('/paths', 'APIPathController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
+//        Route::get('/killzones', 'APIKillZoneController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
+//        Route::get('/mapcomments', 'APIMapCommentController@list')->where(['dungeonroute' => '[a-zA-Z0-9]+'])->where(['floor_id' => '[0-9]+']);
+//        Route::get('/dungeonstartmarkers', 'APIDungeonStartMarkerController@list');
+//        Route::get('/dungeonfloorswitchmarkers', 'APIDungeonFloorSwitchMarkerController@list')->where(['floor_id' => '[0-9]+']);
+//        Route::get('/brushlines', 'APIBrushlineController@list')->where(['floor_id' => '[0-9]+']);
 
         Route::post('/mdt/details', 'MDTImportController@details')->name('mdt.details');
 
         Route::group(['middleware' => ['auth', 'role:user']], function () {
             Route::post('/profile/legal', 'APIProfileController@legalAgree');
 
-            Route::post('/route', 'APIRouteController@store');
-            Route::delete('/route', 'APIRouteController@delete');
+            Route::post('/path', 'APIPathController@store');
+            Route::delete('/path', 'APIPathController@delete');
 
-            Route::post('/polyline', 'APIPolylineController@store');
-            Route::delete('/polyline', 'APIPolylineController@delete');
+            Route::post('/brushline', 'APIBrushlineController@store');
+            Route::delete('/brushline', 'APIBrushlineController@delete');
 
             Route::post('/dungeonroute/{dungeonroute}/killzone', 'APIKillZoneController@store');
             Route::delete('/dungeonroute/{dungeonroute}/killzone/{killzone}', 'APIKillZoneController@delete');

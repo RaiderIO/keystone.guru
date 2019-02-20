@@ -1,8 +1,7 @@
 class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
-    constructor(map, name, classname, editable) {
-        super(map, name, editable);
+    constructor(manager, name, editable) {
+        super(manager, name, editable);
 
-        this.classname = classname;
         this.title = 'Hide/show dungeon start';
         this.fa_class = 'fa-flag';
     }
@@ -10,46 +9,35 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof DungeonStartMarkerMapObjectGroup, 'this is not an DungeonStartMarkerMapObjectGroup');
 
-        switch (this.classname) {
-            case "AdminDungeonStartMarker":
-                return new AdminDungeonStartMarker(this.map, layer);
-            default:
-                return new DungeonStartMarker(this.map, layer);
+        if (isAdmin) {
+            return new AdminDungeonStartMarker(this.manager.map, layer);
+        } else {
+            return new DungeonStartMarker(this.manager.map, layer);
         }
     }
 
-    fetchFromServer(floor) {
+    _fetchSuccess(response) {
+        super._fetchSuccess(response);
         // no super call required
         console.assert(this instanceof DungeonStartMarkerMapObjectGroup, this, 'this is not a DungeonStartMarkerMapObjectGroup');
 
-        let self = this;
+        let startMarkers = response.dungeonstartmarker;
 
-        $.ajax({
-            type: 'GET',
-            url: '/ajax/dungeonstartmarkers',
-            dataType: 'json',
-            data: {
-                floor_id: floor.id
-            },
-            success: function (json) {
-                // Now draw the enemies on the map
-                for (let index in json) {
-                    if (json.hasOwnProperty(index)) {
-                        let remoteDungeonStartMarker = json[index];
+        // Now draw the enemies on the map
+        for (let index in startMarkers) {
+            if (startMarkers.hasOwnProperty(index)) {
+                let remoteDungeonStartMarker = startMarkers[index];
 
-                        let layer = new LeafletDungeonStartMarker();
-                        layer.setLatLng(L.latLng(remoteDungeonStartMarker.lat, remoteDungeonStartMarker.lng));
+                let layer = new LeafletDungeonStartMarker();
+                layer.setLatLng(L.latLng(remoteDungeonStartMarker.lat, remoteDungeonStartMarker.lng));
 
-                        let dungeonStartMarker = self.createNew(layer);
-                        dungeonStartMarker.id = remoteDungeonStartMarker.id;
-                        dungeonStartMarker.floor_id = remoteDungeonStartMarker.floor_id;
-                        // We just downloaded the enemy pack, it's synced alright!
-                        dungeonStartMarker.setSynced(true);
-                    }
-                }
+                let dungeonStartMarker = this.createNew(layer);
+                dungeonStartMarker.id = remoteDungeonStartMarker.id;
+                dungeonStartMarker.floor_id = remoteDungeonStartMarker.floor_id;
 
-                self.signal('fetchsuccess');
+                // We just downloaded the start marker, it's synced alright!
+                dungeonStartMarker.setSynced(true);
             }
-        });
+        }
     }
 }

@@ -169,7 +169,7 @@ class MapComment extends MapObject {
             this.register('synced', this, function (event) {
                 let customPopupHtml = $('#map_map_comment_edit_popup_template').html();
                 // Remove template so our
-                let template = handlebars.compile(customPopupHtml);
+                let template = Handlebars.compile(customPopupHtml);
 
                 let data = {id: self.id};
 

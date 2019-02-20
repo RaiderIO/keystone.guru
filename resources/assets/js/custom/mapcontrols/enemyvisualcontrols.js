@@ -12,7 +12,7 @@ class EnemyVisualControls extends MapControl {
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
                 let source = $('#map_enemy_visuals_template').html();
-                let template = handlebars.compile(source);
+                let template = Handlebars.compile(source);
 
                 let data = {};
 
@@ -40,7 +40,7 @@ class EnemyVisualControls extends MapControl {
         let mdtEnemiesEnabled = $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(":checked");
 
         // Hide or show any MDT enemies
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (index, value) {
             if (value.is_mdt) {
                 enemyMapObjectGroup.setMapObjectVisibility(value, mdtEnemiesEnabled);
@@ -56,7 +56,7 @@ class EnemyVisualControls extends MapControl {
     _enemyVisualChanged(changedEvent) {
         console.assert(this instanceof EnemyVisualControls, this, 'this is not EnemyVisualControls');
 
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         let visualType = $('#map_enemy_visuals_dropdown').val();
 
         // Keep track of the visual type

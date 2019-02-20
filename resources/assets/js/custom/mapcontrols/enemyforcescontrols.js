@@ -13,8 +13,7 @@ class EnemyForcesControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let source = $("#map_enemy_forces_template").html();
-                let template = handlebars.compile(source);
+                let template = Handlebars.templates['map_enemy_forces_template'];
 
                 let data = {
                     enemy_forces_total: self.map.getEnemyForcesRequired()
@@ -31,7 +30,7 @@ class EnemyForcesControls extends MapControl {
 
         // Listen for when all enemies are loaded
         this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
-            let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
+            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
             // For each enemy we've loaded
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
@@ -45,7 +44,7 @@ class EnemyForcesControls extends MapControl {
             });
         });
 
-        let killzoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
+        let killzoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.register('object:add', this, function (addEvent) {
             addEvent.data.object.register('killzone:synced', self, self._killzoneSynced.bind(self));
         });
@@ -183,11 +182,11 @@ class EnemyForcesControls extends MapControl {
         // Unreg from map
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
         // Unreg killzones
-        let killzoneMapObjectGroup = this.map.getMapObjectGroupByName('killzone');
+        let killzoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.unregister('object:add', this);
 
         // Unreg enemies
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             // Unreg
             enemy.unregister('killzone:attached', self);

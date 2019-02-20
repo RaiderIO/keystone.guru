@@ -84,7 +84,7 @@ class Signalable {
 
     /**
      * DROPS ALL LISTENERS FROM ALL SIGNALS OF THIS INSTANCE. May fuck your shit up.
-     * @private
+     * @protected
      */
     _cleanupSignals() {
         // Should be enough to get rid of all signals

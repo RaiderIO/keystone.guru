@@ -1,4 +1,5 @@
 <?php
+$user = Auth::user();
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
 /** @var App\Models\DungeonRoute $dungeonroute */
@@ -6,16 +7,22 @@ $isAdmin = isset($admin) && $admin;
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? 'true' : 'false';
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
+// Set the key to 'try' if try mode is enabled
+$routePublicKey = isset($tryMode) && $tryMode ? 'try' : $routePublicKey;
+// Set the enemy forces of the current route. May not be set if just editing the route from admin
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 // For Siege of Boralus
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? 'true' : 'false';
 $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
+
+// Easy switch
+$isProduction = config('app.env') === 'production';
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
-// Hide ads if this page shows them, but the user has ad-free tier
-if ($showAds && Auth::check() && Auth::user()->hasPaidTier('ad-free')) {
+// If we should show ads, are logged in, user has paid for no ads, or we're not in production..
+if (($showAds && Auth::check() && $user->hasPaidTier('ad-free')) || !$isProduction) {
     $showAds = false;
 }
 // No UI on the map
@@ -35,8 +42,8 @@ $introTexts = [
     __('This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).'),
 
     __('These are your route manipulation tools.'),
-    __('You can draw routes with this tool. Click it, then draw a route (a line) from A to B, with as many points are you like. Once finished, you can click
-    the line on the map to change its color. You can add as many routes as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
+    __('You can draw paths with this tool. Click it, then draw a path (a line) from A to B, with as many points are you like. Once finished, you can click
+    the line on the map to change its color. You can add as many paths as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
     or purple for a Warlock Gateway, for example.'),
     __('This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
     You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
@@ -55,7 +62,6 @@ $introTexts = [
 
     __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
 
-    __('You can use these controls to zoom the map in or out. You can also use the mouse scrollwheel if you\'re on a computer.'),
     __('These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.')
 ];
 ?>
@@ -68,6 +74,8 @@ $introTexts = [
         // Data of the dungeon(s) we're selecting in the map
         var _dungeonData = {!! $dungeon !!};
         var dungeonRouteEnemyForces = {{ $routeEnemyForces }};
+        var isAdmin = {{ $isAdmin ? 'true' : 'false' }};
+        var isUserAdmin = {{ Auth::check() && $user->hasRole('admin') ? 'true' : 'false' }};
 
         var dungeonMap;
 
@@ -115,7 +123,7 @@ $introTexts = [
                 ['.enemy_forces_container', 'right'],
 
                 ['.route_manipulation_tools', 'right'],
-                ['.leaflet-draw-draw-route', 'right'],
+                ['.leaflet-draw-draw-path', 'right'],
                 ['.leaflet-draw-draw-killzone', 'right'],
                 ['.leaflet-draw-draw-mapcomment', 'right'],
                 ['.leaflet-draw-draw-brushline', 'right'],
@@ -129,7 +137,6 @@ $introTexts = [
                 ['#map_enemy_visuals', 'right'],
                 ['.floor_selection', 'right'],
 
-                ['.leaflet-control-zoom', 'left'],
                 ['#map_controls .leaflet-draw-toolbar', 'left'],
             ];
             var texts = {!! json_encode($introTexts) !!};
@@ -138,9 +145,12 @@ $introTexts = [
                 // Upon map refresh, re-init the tutorial selectors
                 for (var i = 0; i < selectors.length; i++) {
                     var $selector = $(selectors[i][0]);
-                    $selector.attr('data-intro', texts[i]);
-                    $selector.attr('data-position', selectors[i][1]);
-                    $selector.attr('data-step', i + 1);
+                    // Floor selection may not exist
+                    if( $selector.length > 0 ){
+                        $selector.attr('data-intro', texts[i]);
+                        $selector.attr('data-position', selectors[i][1]);
+                        $selector.attr('data-step', i + 1);
+                    }
                 }
 
                 // If the map is opened on mobile hide the sidebar
@@ -159,21 +169,6 @@ $introTexts = [
             // Refresh the map; draw the layers on it
             dungeonMap.refreshLeafletMap();
         });
-    </script>
-
-    <script id="map_enemy_forces_template" type="text/x-handlebars-template">
-        <div id="map_enemy_forces" class="font-weight-bold" data-toggle="tooltip">
-            <div class="row">
-                <div class="col">
-                    <span id="map_enemy_forces_numbers">
-                        <i id="map_enemy_forces_success" class="fas fa-check-circle" style="display: none;"></i>
-                        <i id="map_enemy_forces_warning" class="fas fa-exclamation-triangle" style="display: none;"></i>
-                        <span id="map_enemy_forces_count">0</span>/@{{ enemy_forces_total }}
-                        (<span id="map_enemy_forces_percent">0</span>%)
-                    </span>
-                </div>
-            </div>
-        </div>
     </script>
 
     <script id="map_enemy_visuals_template" type="text/x-handlebars-template">
@@ -198,21 +193,6 @@ $introTexts = [
         </div>
     </script>
 
-    <script id="map_controls_template" type="text/x-handlebars-template">
-        <div id="map_controls" class="leaflet-draw-section">
-            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                @{{#mapobjectgroups}}
-                <a id='map_controls_hide_@{{name}}' class="map_controls_custom" href="#" title="@{{title}}">
-                    <i id='map_controls_hide_@{{name}}_checkbox' class="fas fa-check-square" style="width: 15px"></i>
-                    <i class="fas @{{fa_class}}" style="width: 15px"></i>
-                    <span class="sr-only">@{{title}}</span>
-                </a>
-                @{{/mapobjectgroups}}
-            </div>
-            <ul class="leaflet-draw-actions"></ul>
-        </div>
-    </script>
-
     <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
@@ -233,74 +213,11 @@ $introTexts = [
         </div>
     </script>
 
-    <script id="map_enemy_tooltip_template" type="text/x-handlebars-template">
-        <div class="map_enemy_tooltip leaflet-draw-section">
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Name') }} </div>
-                <div class="col-7 no-gutters">@{{ npc_name }}</div>
-            </div>
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Enemy forces') }} </div>
-                <div class="col-7 no-gutters">@{{{ enemy_forces }}}</div>
-            </div>
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Base health') }} </div>
-                <div class="col-7 no-gutters">@{{ base_health }}</div>
-            </div>
-            <div class="row">
-                <div class="col-5 no-gutters">{{ __('Teeming') }} </div>
-                <div class="col-7 no-gutters">@{{ teeming }}
-                </div>
-            </div>
-            @auth
-                @if(Auth::user()->hasRole('admin'))
-                    <div class="row">
-                        <div class="col-12 font-weight-bold">
-                            {{ __('Admin only') }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('ID') }} </div>
-                        <div class="col-7 no-gutters">@{{ id }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('Faction') }} </div>
-                        <div class="col-7 no-gutters">@{{ faction }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('NPC_ID') }} </div>
-                        <div class="col-7 no-gutters">@{{ npc_id }} (@{{ npc_id_type }})</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('Pack') }} </div>
-                        <div class="col-7 no-gutters">@{{ attached_to_pack }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('MDT') }} </div>
-                        <div class="col-7 no-gutters">@{{ is_mdt }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('MDT_ID') }} </div>
-                        <div class="col-7 no-gutters">@{{ mdt_id }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('ENEMY_ID') }} </div>
-                        <div class="col-7 no-gutters">@{{ enemy_id }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 no-gutters">{{ __('Visual') }} </div>
-                        <div class="col-7 no-gutters">@{{ visual }}</div>
-                    </div>
-                @endif
-            @endauth
-        </div>
-    </script>
-
-    <script id="map_route_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_route_edit_popup_inner" class="popupCustom">
+    <script id="map_path_edit_popup_template" type="text/x-handlebars-template">
+        <div id="map_path_edit_popup_inner" class="popupCustom">
             <div class="form-group">
-                {!! Form::label('map_route_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('map_route_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
+                {!! Form::label('map_path_edit_popup_color_@{{id}}', __('Color')) !!}
+                {!! Form::color('map_path_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
 
                 @php($classes = \App\Models\CharacterClass::all())
                 @php($half = ($classes->count() / 2))
@@ -318,7 +235,7 @@ $introTexts = [
                     @endif
                 @endfor
             </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_route_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
+            {!! Form::button(__('Submit'), ['id' => 'map_path_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
         </div>
     </script>
 
@@ -353,18 +270,6 @@ $introTexts = [
         </div>
     </script>
 
-
-
-    <script id="map_killzone_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_killzone_edit_popup_inner" class="popupCustom">
-            <div class="form-group">
-                {!! Form::label('map_killzone_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('map_killzone_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
-            </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_killzone_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
-    </script>
-
     <script id="map_map_comment_edit_popup_template" type="text/x-handlebars-template">
         <div id="map_map_comment_edit_popup_inner" class="popupCustom">
             <div class="form-group">
@@ -377,25 +282,6 @@ $introTexts = [
                 @endif
             </div>
             {!! Form::button(__('Submit'), ['id' => 'map_map_comment_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
-    </script>
-
-    <script id="map_enemy_visual_template" type="text/x-handlebars-template">
-        <div style="position: relative;">
-            <div class="modifier modifier_0 @{{modifier_0_classes}}" style="display: none;">
-                @{{{modifier_0_html}}}
-            </div>
-            <div class="modifier modifier_1 @{{modifier_1_classes}}" style="display: none;">
-                @{{{modifier_1_html}}}
-            </div>
-            <div class="modifier modifier_2 @{{modifier_2_classes}}" style="display: none;">
-                @{{{modifier_2_html}}}
-            </div>
-            <div class="@{{selection_classes_base}} @{{selection_classes}}">
-                <div class="@{{main_visual_classes}}">
-                    @{{{main_visual_html}}}
-                </div>
-            </div>
         </div>
     </script>
 

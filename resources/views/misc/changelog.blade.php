@@ -5,36 +5,72 @@
 @section('content')
 
     <h4>
-        v2.0.4 (2019/02/07)
+        v2.1 (2019/02/20)
     </h4>
     <p>
-        General changes:
+        Description: <br>
+        This release focuses on improving the codebase, increasing performance and tying up some loose ends in the code.
+        There will be some improvements and bugfixes but no major new features. I will be focussing on that in next
+        releases now that the codebase is much stronger than before.
 
+    </p>
+    <p>
+        General changes:
     <ul>
         <li>
+            Fixed Virtual Tour not working for dungeons with just one floor.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/115">#115</a>
+            Changed the internal structure of all line-based objects. This results in a good performance increase now
+            and especially going into the future as the amount user-generated Routes keep growing.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/85">#85</a>
+            Reduced the amount of requests upon startup, increasing the speed at which the page loads, especially for
+            those not situated in Europe.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/110">#110</a>
+            Pre-compiled most Handlebars templates. Increases performance and reduces load on the local machine.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/132">#132</a>
+            Any new Route that you create would not save its affixes; this has been resolved (some time ago already,
+            but it's in this release now).
+        </li>
+        <li>
             <a href="https://github.com/Wotuu/keystone.guru/issues/124">#124</a>
-            The menu on mobile now aligns to the center, rather than right. Also added some more color & made the buttons
-            wider
+            Revamped the menu while on mobile. It looks a lot better now.
         </li>
         <li>
-            <a href="https://github.com/Wotuu/keystone.guru/issues/121">#121</a>
-            Infested code & references have been removed with the finishing of season 1.
+            <a href="https://github.com/Wotuu/keystone.guru/issues/133">#133</a>
+            When you delete a Route it's now cleaned up more thoroughly.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/88">#88</a>
+            Routes are now called Paths. The term 'Route' was ambiguous with your entire run, which is also called a
+            Route. Now the entire plannable dungeon is called a Route, the path which you take is comprised of Paths.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            Various packs that enemies can be part of have been corrected. Some enemies were not part of a pack when
+            they should've been, or were part of the wrong pack.
         </li>
         <li>
-            <a href="https://github.com/Wotuu/keystone.guru/issues/125">#125</a>
-            Assigning an enemy to a killzone no longer pops up the raid marker selection screen.
-        </li>
-        <li>
-            <a href="https://github.com/Wotuu/keystone.guru/issues/105">#105</a>
-            Cloning a route now also clones its Attributes.
-        </li>
-        <li>
-            <a href="https://github.com/Wotuu/keystone.guru/issues/106">#106</a>
-            Enemy packs are now rendered in a much more pretty way.
-        </li>
-        <li>
-            <a href="https://github.com/Wotuu/keystone.guru/issues/125">#125</a>
-            Assigning an enemy to a killzone will no longer pop up the raid marker selection.
+            Fixed an issue in Waycrest Manor in The Catacombs that caused Javascript errors, leading to potentially
+            unresponsive pages.
         </li>
     </ul>
     </p>

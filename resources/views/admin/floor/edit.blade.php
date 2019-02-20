@@ -17,7 +17,12 @@
             'edit' => true,
             'dungeon' => $dungeon,
             'npcs' => $npcs,
-            'floorId' => $model->id
+            'floorId' => $model->id,
+            'hiddenMapObjectGroups' => [
+                'brushline',
+                'path',
+                'killzone'
+            ]
         ])
 
         @include('common.maps.admineditsidebar', [

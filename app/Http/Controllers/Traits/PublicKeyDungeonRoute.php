@@ -17,12 +17,11 @@ trait PublicKeyDungeonRoute
     function _getDungeonRouteFromPublicKey($publicKey, $auth = true)
     {
         /** @var DungeonRoute $dungeonRoute */
-        $dungeonRoute = DungeonRoute::where('public_key', '=', $publicKey)->firstOrFail();
+        $dungeonRoute = DungeonRoute::where('public_key', $publicKey)->firstOrFail();
 
-        if( $auth ){
+        if ($auth) {
             // @TODO handle this in a policy?
-            $user = Auth::user();
-            if ($user === null || $dungeonRoute->author_id !== $user->id) {
+            if (!Auth::check() || $dungeonRoute->author_id !== Auth::user()->id) {
                 throw new Exception('Unauthorized');
             }
         }

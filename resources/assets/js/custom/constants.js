@@ -61,12 +61,14 @@ var c = {
             defaultColor: '#E25D5D'
         },
         /* These colors may be overriden by drawcontrols.js */
-        route: {
+        path: {
             defaultColor: '#9DFF56',
         },
-        brushline: {
+        polyline: {
             defaultColor: '#9DFF56',
             defaultWeight: 3,
+        },
+        brushline: {
             /**
              * The minimum distance (squared) that a point must have before it's added to the line from the previous
              * point. This is to prevent points from being too close to eachother and reducing performance, increasing

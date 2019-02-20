@@ -8,14 +8,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $floor_id
  * @property int $enemy_id
+ * @property int $polyline_id
  * @property string $faction
  * @property \App\Models\Floor $floor
  * @property \App\Models\Enemy $enemy
- * @property \Illuminate\Support\Collection $vertices
+ * @property \App\Models\Polyline $polyline
+ *
+ * @mixin \Eloquent
  */
 class EnemyPatrol extends Model
 {
-    public $with = ['vertices'];
+    public $visible = ['id', 'floor_id', 'faction', 'polyline'];
+    public $with = ['polyline'];
     public $timestamps = false;
 
     /**
@@ -35,25 +39,23 @@ class EnemyPatrol extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get the dungeon route that this brushline is attached to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    function vertices()
+    function polyline()
     {
-        return $this->hasMany('App\Models\EnemyPatrolVertex');
+        return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
     }
 
-
-    /**
-     * Deletes all vertices that are related to this EnemyPatrol.
-     */
-    function deleteVertices()
+    public static function boot()
     {
-        // Load the existing vertices from the pack
-        $existingVerticesIds = $this->vertices->pluck('id')->all();
-        // Only if there's vertices to destroy
-        if (count($existingVerticesIds) > 0) {
-            // Kill them off
-            EnemyPatrolVertex::destroy($existingVerticesIds);
-        }
+        parent::boot();
+
+        // Delete patrol properly if it gets deleted
+        static::deleting(function ($item) {
+            /** @var $item EnemyPatrol */
+            $item->polyline->delete();
+        });
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Controllers\Traits\ListsMapComments;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\MapComment;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
@@ -14,26 +14,14 @@ class APIMapCommentController extends Controller
 {
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
+    use ListsMapComments;
 
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        $dungeonRoutePublicKey = $request->get('dungeonroute', null);
-        try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-            $dungeonRouteId = $dungeonRoute->id;
-        } catch (\Exception $ex) {
-            // this is okay, it can come from admin request
-            $dungeonRouteId = -1;
-        }
-
-        $result = MapComment::where('floor_id', $floorId)
-            ->where(function ($query) use ($floorId, $dungeonRouteId) {
-                /** @var $query Builder */
-                return $query->where('dungeon_route_id', $dungeonRouteId)->orWhere('always_visible', true);
-            })->get();
-
-        return $result;
+        return $this->listMapComments(
+            $request->get('floor_id'),
+            $request->get('dungeonroute', null)
+        );
     }
 
     /**

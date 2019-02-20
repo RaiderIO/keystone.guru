@@ -34,9 +34,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
                 'import_string': typedEvent.originalEvent.clipboardData.getData('text')
             },
             success: function (responseData) {
-                var templateHtml = $('#import_string_details_template').html();
-
-                var template = handlebars.compile(templateHtml);
+                var template = Handlebars.templates['import_string_details_template'];
 
                 var data = {
                     details: [
@@ -84,6 +82,9 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
             case 404:
                 message = "{{ __('The requested resource was not found.') }}";
                 break;
+            case 419:
+                message = "{{ __('Your session has expired. Refresh the page.') }}";
+                break;
         }
 
         // If json was set
@@ -117,9 +118,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
      * @private
      */
     function _addFixedFooter(type, message, durationMs, small = false) {
-        var fixedFooterTemplate = $('#app_fixed_footer_' + (small ? 'small_' : '') + 'template').html();
-
-        var template = handlebars.compile(fixedFooterTemplate);
+        var template = Handlebars.templates['app_fixed_footer_' + (small ? 'small_' : '') + 'template'];
 
         var handlebarsData = {
             type: type,

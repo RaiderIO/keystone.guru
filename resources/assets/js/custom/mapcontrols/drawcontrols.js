@@ -2,9 +2,9 @@ $(function () {
     L.DrawToolbar.prototype.getModeHandlers = function (map) {
         return [
             {
-                enabled: this.options.route,
-                handler: new L.Draw.Route(map, this.options.route),
-                title: this.options.route.title
+                enabled: this.options.path,
+                handler: new L.Draw.Path(map, this.options.path),
+                title: this.options.path.title
             }, {
                 enabled: this.options.killzone,
                 handler: new L.Draw.KillZone(map, this.options.killzone),
@@ -15,7 +15,7 @@ $(function () {
                 title: this.options.mapcomment.title
             }, {
                 enabled: this.options.brushline,
-                handler: new L.Draw.BrushLine(map, this.options.brushline),
+                handler: new L.Draw.Brushline(map, this.options.brushline),
                 title: this.options.brushline.title
             },
             // {
@@ -52,9 +52,9 @@ $(function () {
     $.extend(L.drawLocal.draw.handlers, {
         route: {
             tooltip: {
-                start: 'Click to start drawing route.',
-                cont: 'Click to continue drawing route.',
-                end: 'Click the \'Finish\' button on the toolbar to complete your route.'
+                start: 'Click to start drawing path.',
+                cont: 'Click to continue drawing path.',
+                end: 'Click the \'Finish\' button on the toolbar to complete your path.'
             }
         },
         brushline: {
@@ -85,7 +85,7 @@ class DrawControls extends MapControl {
             self.editableItemsLayer.addLayer(layer);
         });
 
-        this.map.hotkeys.attach('r', 'leaflet-draw-draw-route');
+        this.map.hotkeys.attach('r', 'leaflet-draw-draw-path');
         this.map.hotkeys.attach('c', 'leaflet-draw-edit-edit');
         this.map.hotkeys.attach('d', 'leaflet-draw-edit-remove');
 
@@ -93,7 +93,7 @@ class DrawControls extends MapControl {
         $('#edit_route_freedraw_options_color').bind('change', function (changeEvent) {
             self.addControl();
             c.map.brushline.defaultColor = $(this).val();
-            c.map.route.defaultColor = $(this).val();
+            c.map.path.defaultColor = $(this).val();
             c.map.killzone.polylineOptions.color = $(this).val();
             c.map.killzone.polygonOptions.color = $(this).val();
         });
@@ -125,7 +125,7 @@ class DrawControls extends MapControl {
         return {
             position: 'topleft',
             draw: {
-                route: {
+                path: {
                     shapeOptions: {
                         color: color,
                         weight: weight,

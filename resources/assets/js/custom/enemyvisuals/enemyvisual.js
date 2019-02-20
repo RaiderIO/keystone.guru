@@ -37,12 +37,9 @@ class EnemyVisual extends Signalable {
         console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
 
         // If the object is invisible, don't build the visual
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         if(enemyMapObjectGroup.isMapObjectVisible(this.enemy)){
-            // Prepare the template
-            let iconHtml = $('#map_enemy_visual_template').html();
-            // Remove template so our
-            let template = handlebars.compile(iconHtml);
+            let template = Handlebars.templates['map_enemy_visual_template'];
 
             let data = {};
 
@@ -57,11 +54,8 @@ class EnemyVisual extends Signalable {
                 data = $.extend(data, this.modifiers[i]._getTemplateData());
             }
 
-            // Build the status bar from the template
-            iconHtml = template(data);
-
             // Create a new div icon (the entire structure)
-            this.divIcon = new L.divIcon($.extend({html: iconHtml}, this.mainVisual.getSize()));
+            this.divIcon = new L.divIcon($.extend({html: template(data)}, this.mainVisual.getSize()));
 
             // Set the structure as HTML for the layer
             this.layer.setIcon(this.divIcon);

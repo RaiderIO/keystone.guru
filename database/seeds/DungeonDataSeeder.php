@@ -5,11 +5,6 @@ use Illuminate\Database\Seeder;
 class DungeonDataSeeder extends Seeder
 {
     /**
-     * @var \App\Models\Dungeon The current dungeon.
-     */
-    private $_dungeon;
-
-    /**
      * Run the database seeds.
      *
      * @return void
@@ -24,16 +19,16 @@ class DungeonDataSeeder extends Seeder
 
         $nameMapping = [
             // Loose files
-            'npcs' => '\App\Models\Npc',
-            'dungeonroutes' => '\App\Models\DungeonRoute',
+            'npcs' => 'App\Models\Npc',
+            'dungeonroutes' => 'App\Models\DungeonRoute',
 
             // Files inside floor folder
-            'enemies' => '\App\Models\Enemy',
-            'enemy_packs' => '\App\Models\EnemyPack',
-            'enemy_patrols' => '\App\Models\EnemyPatrol',
-            'dungeon_floor_switch_markers' => '\App\Models\DungeonFloorSwitchMarker',
-            'dungeon_start_markers' => '\App\Models\DungeonStartMarker',
-            'map_comments' => '\App\Models\MapComment'
+            'enemies' => 'App\Models\Enemy',
+            'enemy_packs' => 'App\Models\EnemyPack',
+            'enemy_patrols' => 'App\Models\EnemyPatrol',
+            'dungeon_floor_switch_markers' => 'App\Models\DungeonFloorSwitchMarker',
+            'dungeon_start_markers' => 'App\Models\DungeonStartMarker',
+            'map_comments' => 'App\Models\MapComment'
         ];
 
         $rootDir = base_path() . '/database/seeds/dungeondata/';
@@ -120,11 +115,8 @@ class DungeonDataSeeder extends Seeder
             // Generic
             new NestedModelRelationParser(),
 
-            // Enemy Pack
-            new EnemyPackVerticesRelationParser(),
-
-            // Enemy Patrol
-            new EnemyPatrolVerticesRelationParser()
+            // Enemy Patrols, Paths and Brushlines
+            new EnemyPatrolPolylineRelationParser(),
         ];
 
         // Parse these attributes AFTER the model has been inserted into the database (so we know its ID)
@@ -132,11 +124,16 @@ class DungeonDataSeeder extends Seeder
             // Dungeon route
             new DungeonRoutePlayerRaceRelationParser(),
             new DungeonRoutePlayerClassRelationParser(),
+
             new DungeonRouteAffixGroupRelationParser(),
 
-            new DungeonRouteRoutesRelationParser(),
+            new DungeonRouteBrushlinesRelationParser(),
+            new DungeonRoutePathsRelationParser(),
+
             new DungeonRouteKillZoneRelationParser(),
+
             new DungeonRouteEnemyRaidMarkersRelationParser(),
+
             new DungeonRouteMapCommentsRelationParser()
         ];
 
@@ -207,18 +204,19 @@ class DungeonDataSeeder extends Seeder
         DB::table('npcs')->truncate();
         DB::table('enemies')->truncate();
         DB::table('enemy_packs')->truncate();
-        DB::table('enemy_pack_vertices')->truncate();
         DB::table('enemy_patrols')->truncate();
-        DB::table('enemy_patrol_vertices')->truncate();
         DB::table('dungeon_start_markers')->truncate();
         DB::table('dungeon_floor_switch_markers')->truncate();
         // Delete all map comments that are always there
         DB::table('map_comments')->where('dungeon_route_id', -1)->delete();
+        // Delete polylines related to enemy patrols
+        DB::table('polylines')->where('model_class', 'App\Models\EnemyPatrol')->delete();
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
-        $demoRoutes = \App\Models\DungeonRoute::all()->where('demo', '=', true);
+        $demoRoutes = \App\Models\DungeonRoute::all()->where('demo', true);
 
         // Delete each found route that was a demo (controlled by me only)
+        // This will remove all killzones, brushlines, paths etc related to the route.
         foreach ($demoRoutes as $demoRoute) {
             /** @var $demoRoute \App\Models\DungeonRoute */
             try {

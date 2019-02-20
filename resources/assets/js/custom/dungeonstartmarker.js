@@ -33,8 +33,6 @@ class DungeonStartMarker extends MapObject {
         super(map, layer);
 
         this.label = 'DungeonStartMarker';
-
-        this.setSynced(true);
     }
 
 

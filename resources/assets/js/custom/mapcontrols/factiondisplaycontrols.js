@@ -9,7 +9,7 @@ class FactionDisplayControls extends MapControl {
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
                 let source = $('#map_faction_display_controls_template').html();
-                let template = handlebars.compile(source);
+                let template = Handlebars.compile(source);
 
                 let data = {};
 
@@ -64,10 +64,11 @@ class FactionDisplayControls extends MapControl {
         console.assert(this instanceof FactionDisplayControls, this, 'this is not FactionDisplayControls');
 
         let enemyMapObjectGroups = [
-            this.map.getMapObjectGroupByName('enemy'),
-            this.map.getMapObjectGroupByName('enemypack'),
-            this.map.getMapObjectGroupByName('enemypatrol')
+            this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY),
+            this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK),
+            this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL)
         ];
+
         // For each group
         $.each(enemyMapObjectGroups, function (i, enemyMapObjectGroup) {
             // For each object in the group

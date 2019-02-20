@@ -1,7 +1,8 @@
 ## Intro
 This tutorial is for developers who would like to contribute to Keystone.guru and want to setup a local version of the site so they can start developing.
 
-The local environment will use Homestead/Vagrant and have a pre-configured version of Keystone.guru with everything in-place.
+This is a step-by-step guide of starting from scratch and installing a working local development environment. Once I figure everything out myself,
+I will provide a fully working Vagrant box which you can just start up and everything will work (bar a few things which I will explain).
 
 PLEASE FOLLOW THE STEPS CLOSELY. IF THERE'S ANY ERROR PLEASE CONTACT ME. I'M PRETTY SURE I FORGOT THINGS OR CAN OTHERWISE HELP YOU GET SETUP.
 
@@ -72,7 +73,7 @@ keys:
     - PATH_TO_PRIVATE_KEY
 
 folders:
-    - map: C:/
+    - map: C:/Git
       to: /home/vagrant/Git/
 
 sites:
@@ -87,6 +88,26 @@ databases:
 
 Note: change the `PATH_TO_PRIVATE_KEY` to your SSH private key. If you don't know what this is, Google how to create a ssh keypair. You can possibly remove the entire block and I think they'll generate temporary keys for you but not 100% sure.
 
+
+## Vagrantfile
+
+Edit your `Vagrantfile` file to contain the following:
+
+```yaml
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    (...)
+
+    config.vm.provider "virtualbox" do |v|
+        v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
+    end
+	
+end
+```
+
+The three lines at the end should simply be placed there. Any other lines must remain where they are. If you don't do this, you will not be able to run `npm` from your Vagrant machine. 
+NPM requires symbolic links to be created which is something Vagrant doesn't enable by default due to security concerns.
+
 ## Add to hosts
 Open up `C:\Windows\system32\drivers\etc\hosts` file in an elevated notepad. Add the following two lines:
 
@@ -96,7 +117,7 @@ Open up `C:\Windows\system32\drivers\etc\hosts` file in an elevated notepad. Add
 ```
 
 ## Start your Vagrant box
-`cd` to where you checked out Homestead, and run `vagrant up`. This should boot up your VM. If you get any errors at this point, hit me up.
+In an elevated command prompt (run as administrator) `cd` to where you checked out Homestead, and run `vagrant up`. This should boot up your VM. If you get any errors at this point, hit me up.
 
 ## Once you're in
 Run this bash to install PhpMyAdmin (skip if you use MySQLWorkbench or anything else to manage your database)
@@ -117,6 +138,10 @@ Add this line to your crontab:
 
 This will call the above command every minute, which Laravel requires in order to run scheduled tasks (refreshing of the route thumbnails).
 
+<aside class="warning">
+Warning! Make sure your `crontab` file ends with an empty line! Otherwise it won't work at all. Be sure to adjust the file path in there as necessary for your installation.
+</aside>
+
 ## Setup database
 Go to `http://phpmyadmin.test` and log in using `homestead//password`. If you get `no input file specified` you need to either run `vagrant provision` and/or verify your file mapping in your Homestead.yaml is 100% correct.
 
@@ -127,10 +152,10 @@ Create another database for the statistics tracker.
 Go to the folder where you installed Keystone.guru and make a copy of `.env.example` and rename it `.env`. Fill it out for as far as you can. 
 You probably don't need most of it. But you do need things like the database and its users.
 
-Open a (Git) bash terminal on your Windows machine and run the following:
+Open a SSH connection to your vagrant machine and run the following:
 
 ```bash
-cd C:\Git\keystone.guru
+cd /home/vagrant/Git/keystone.guru
 ./update_dependencies.sh
 ```
 
@@ -172,3 +197,17 @@ Type: normal
 Username: vagrant
 Password: vagrant
 ```
+
+## Increasing the speed of the VM
+By default it's rather slow to be honest. Try the following:
+
+```bash
+vagrant plugin install vagrant-winnfsd
+```
+
+Then add `type: "nfs"` to your folder mapping under your `to:` directive. `vagrant provision` the machine again and it will speed up the machine by a few factors.
+
+It may also be a good idea to add your sources folder to the excluded list for Windows Defender.
+
+Search windows for `Virus & threat protection`. Open that app, then click on `Virus & threat protection settings`. Scroll down a bit, and in the part where it says `Exclusions` add an exclusion of the Folder type. 
+Browse to your sources (in my case C:\Git) and add it. This will further speed up your VM and NPM/Composer installations.

@@ -8,7 +8,7 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\PageView;
-use App\Models\Route;
+use App\Models\Path;
 use App\Models\UserReport;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -140,11 +140,11 @@ class DungeonRouteController extends Controller
                 $dungeonroute->playerraces,
                 $dungeonroute->playerclasses,
                 $dungeonroute->affixgroups,
-                $dungeonroute->routes,
+                $dungeonroute->paths,
                 $dungeonroute->killzones,
                 $dungeonroute->enemyraidmarkers,
                 $dungeonroute->mapcomments,
-                $dungeonroute->routeattributes
+                $dungeonroute->routeattributesraw
             ];
 
             $dungeonroute->id = 0;
@@ -165,16 +165,8 @@ class DungeonRouteController extends Controller
                     $model->dungeon_route_id = $dungeonroute->id;
                     $model->save();
 
-                    // If it was a route, save the vertices as well
-                    if ($model instanceof Route) {
-                        foreach ($model->vertices as $vertex) {
-                            $vertex->id = 0;
-                            $vertex->exists = false;
-                            $vertex->route_id = $model->id;
-                            $vertex->save();
-                        }
-                    } // KillZone, save the enemies that were attached to them
-                    else if ($model instanceof KillZone) {
+                    // KillZone, save the enemies that were attached to them
+                    if ($model instanceof KillZone) {
                         foreach ($model->killzoneenemies as $enemy) {
                             $enemy->id = 0;
                             $enemy->exists = false;

@@ -6,23 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property $id int
- * @property $dungeon_route_id int
- * @property $floor_id int
- * @property $type string
+ * @property $model_id int
+ * @property $model_class string
  * @property $color string
  * @property $weight int
- * @property $dungeonroute DungeonRoute
+ * @property $model Model
  * @property $vertices_json string JSON encoded vertices
+ *
+ * @mixin \Eloquent
  */
 class Polyline extends Model
 {
+    public $timestamps = false;
+    public $visible = ['color', 'weight', 'vertices_json'];
+
     /**
-     * Get the dungeon route that this polyline is attached to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    function dungeonroute()
+    function model()
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->hasOne($this->model_class, 'model_id');
     }
 }

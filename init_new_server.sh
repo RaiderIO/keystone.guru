@@ -47,7 +47,7 @@ echo "Publishing service providers..."
 tput sgr0;
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider"
 php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
-php artisan vendor:publish --provider="PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider"
+php artisan vendor:publish --provider="PragmaRX\Tracker\Vendor\Laravel\ServiceProvider"
 
 # In case Tracker is not working, check this -> https://github.com/antonioribeiro/tracker#installing
 tput setaf 2;
@@ -66,9 +66,11 @@ git clone https://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git publ
 cd public/templates/sb-admin-2
 git checkout tags/v3.3.7+1
 git checkout -b v3.3.7+1
+
 # Back to where we came from
 cd ../../..
 
+sudo npm install handlebars -g
 sudo apt-get install supervisor
 sudo apt-get install pngquant
 

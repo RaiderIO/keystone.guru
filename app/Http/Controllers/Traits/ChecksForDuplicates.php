@@ -56,6 +56,11 @@ trait ChecksForDuplicates
         abort(\Teapot\StatusCode\Http::BAD_REQUEST, 'This object already exists. Please refresh the page.');
     }
 
+    /**
+     * Checks a list of vertices for duplicates.
+     * @param $className
+     * @param $verticesArray
+     */
     function checkForDuplicateVertices($className, $verticesArray)
     {
         // Store them

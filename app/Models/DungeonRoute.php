@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\DB;
  * @property $created_at string
  *
  * @property Dungeon $dungeon
- * @property Route $route
+ * @property Path $route
  * @property Faction $faction
  * @property User $author
  * @property MDTImport $mdtImport
@@ -51,7 +51,8 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $affixes
  * @property \Illuminate\Support\Collection $ratings
  *
- * @property \Illuminate\Support\Collection $routes
+ * @property \Illuminate\Support\Collection $brushlines
+ * @property \Illuminate\Support\Collection $paths
  * @property \Illuminate\Support\Collection $killzones
  * @property \Illuminate\Support\Collection $polylines
  *
@@ -60,6 +61,7 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $pageviews
  *
  * @property \Illuminate\Support\Collection $routeattributes
+ * @property \Illuminate\Support\Collection $routeattributesraw
  *
  * @method static \Illuminate\Database\Eloquent\Builder visible()
  */
@@ -95,9 +97,17 @@ class DungeonRoute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function routes()
+    public function brushlines()
     {
-        return $this->hasMany('App\Models\Route');
+        return $this->hasMany('App\Models\Brushline');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function paths()
+    {
+        return $this->hasMany('App\Models\Path');
     }
 
     /**
@@ -486,7 +496,7 @@ class DungeonRoute extends Model
                     $affixGroup = AffixGroup::findOrNew($value);
 
                     // Do not add affixes that do not belong to our Teeming selection
-                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) || $affixGroup->inactive()) {
+                    if (($affixGroup->id > 0 && $this->teeming != $affixGroup->isTeeming()) || !$affixGroup->active) {
                         continue;
                     }
 
@@ -600,6 +610,15 @@ class DungeonRoute extends Model
 
         // Delete route properly if it gets deleted
         static::deleting(function ($item) {
+            /** @var $item DungeonRoute */
+
+            // Delete thumbnails
+            $publicPath = public_path('images/route_thumbnails/');
+            foreach($item->dungeon->floors as $floor){
+                // @ because we don't care if it fails
+                @unlink(sprintf('%s/%s_%s.png', $publicPath, $item->public_key, $floor->index));
+            }
+
             DungeonRouteAffixGroup::where('dungeon_route_id', $item->id)->delete();
             DungeonRoutePlayerClass::where('dungeon_route_id', $item->id)->delete();
             DungeonRoutePlayerRace::where('dungeon_route_id', $item->id)->delete();
@@ -610,11 +629,16 @@ class DungeonRoute extends Model
             // DungeonRouteFavorite::where('dungeon_route_id', '=', $item->id)->delete();
             MapComment::where('dungeon_route_id', $item->id)->delete();
 
-            // Delete routes
-            foreach ($item->routes as $route) {
-                /** @var $route \App\Models\Route */
-                $route->deleteVertices();
-                $route->delete();
+            // Delete brushlines
+            foreach ($item->brushlines as $brushline) {
+                /** @var $brushline \App\Models\Brushline */
+                $brushline->delete();
+            }
+
+            // Delete paths
+            foreach ($item->paths as $path) {
+                /** @var $path \App\Models\Path */
+                $path->delete();
             }
 
             // Delete kill zones

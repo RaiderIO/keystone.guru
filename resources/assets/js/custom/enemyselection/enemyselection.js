@@ -49,7 +49,7 @@ class EnemySelection extends Signalable {
         this._oldMapObjectIcon = this.sourceMapObject.layer.options.icon;
         this.sourceMapObject.layer.setIcon(this._getLayerIcon());
 
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             // Check if we should set this enemy to be selectable or not
             if (self._filter(self.sourceMapObject, enemy)) {
@@ -82,7 +82,7 @@ class EnemySelection extends Signalable {
         this.sourceMapObject.layer.setIcon(this._oldMapObjectIcon);
 
         // Revert all things we did to enemies
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             // Enemies no longer present themselves as selectable
             enemy.setSelectable(false);

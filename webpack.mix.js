@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 const argv = require('yargs').argv;
+const WebpackShellPlugin = require('webpack-shell-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -28,20 +29,54 @@ mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts
 
 // Custom processing only
 mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css');
+
+let precompile = [
+    // Translations
+    'resources/assets/js/messages.js'
+];
+
+mix.js(precompile, 'resources/assets/js/precompile.js');
+
 let scripts = [
+    // Include the precompiled scripts
+    'resources/assets/js/precompile.js',
+
     // Home page only
     'resources/assets/js/custom/home.js',
     // Doesn't depend on anything
     'resources/assets/js/custom/constants.js',
+
+    // Pre-compiled handlebars
+    'resources/assets/js/handlebars.js',
+
     // Include in proper order
     'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/signalable.js',
+
+    // Map object groups
+    'resources/assets/js/custom/mapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/mapcommentmapobjectgroup.js',
+
+    // Depends on the above
+    'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
+
+    // Depends on map object groups
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/mapobject.js',
+    'resources/assets/js/custom/polyline.js',
+
     'resources/assets/js/custom/enemy.js',
     'resources/assets/js/custom/enemypatrol.js',
     'resources/assets/js/custom/enemypack.js',
-    'resources/assets/js/custom/route.js',
+    'resources/assets/js/custom/path.js',
     'resources/assets/js/custom/killzone.js',
     'resources/assets/js/custom/mapcomment.js',
     'resources/assets/js/custom/dungeonstartmarker.js',
@@ -82,20 +117,10 @@ let scripts = [
 
     // Include the rest
     'resources/assets/js/custom/groupcomposition.js',
-    'resources/assets/js/custom/mapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/mapcommentmapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/routemapobjectgroup.js',
 ];
 
 // Do not translate in development
-if( mix.inProduction() ){
+if (mix.inProduction()) {
     mix.babel(scripts, 'public/js/custom.js');
 } else {
     mix.scripts(scripts, 'public/js/custom.js');
@@ -107,7 +132,22 @@ mix.webpackConfig({
         alias: {
             handlebars: 'handlebars/dist/handlebars.min.js'
         }
-    }
+    },
+    // Translations
+    module: {
+        rules: [{
+                // Matches all PHP or JSON files in `resources/lang` directory.
+                test: /resources[\\\/]lang.+\.(php|json)$/,
+                loader: 'laravel-localization-loader',
+            }
+        ]
+    },
+    plugins: [
+        // Compile handlebars
+        mix.inProduction() ?
+            new WebpackShellPlugin({onBuildStart: ['handlebars -m resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'], onBuildEnd: []}) :
+            new WebpackShellPlugin({onBuildStart: ['handlebars resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'], onBuildEnd: []})
+    ]
 });
 mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/app.scss', 'public/css')
