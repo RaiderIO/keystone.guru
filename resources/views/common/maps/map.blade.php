@@ -62,7 +62,6 @@ $introTexts = [
 
     __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
 
-    __('You can use these controls to zoom the map in or out. You can also use the mouse scrollwheel if you\'re on a computer.'),
     __('These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.')
 ];
 ?>
@@ -138,7 +137,6 @@ $introTexts = [
                 ['#map_enemy_visuals', 'right'],
                 ['.floor_selection', 'right'],
 
-                ['.leaflet-control-zoom', 'left'],
                 ['#map_controls .leaflet-draw-toolbar', 'left'],
             ];
             var texts = {!! json_encode($introTexts) !!};
@@ -147,9 +145,12 @@ $introTexts = [
                 // Upon map refresh, re-init the tutorial selectors
                 for (var i = 0; i < selectors.length; i++) {
                     var $selector = $(selectors[i][0]);
-                    $selector.attr('data-intro', texts[i]);
-                    $selector.attr('data-position', selectors[i][1]);
-                    $selector.attr('data-step', i + 1);
+                    // Floor selection may not exist
+                    if( $selector.length > 0 ){
+                        $selector.attr('data-intro', texts[i]);
+                        $selector.attr('data-position', selectors[i][1]);
+                        $selector.attr('data-step', i + 1);
+                    }
                 }
 
                 // If the map is opened on mobile hide the sidebar
