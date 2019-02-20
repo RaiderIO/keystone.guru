@@ -21,7 +21,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -53.619999999999997,
+        "lat": -53.62,
         "lng": 184.62,
         "npc": {
             "id": 127486
@@ -35,7 +35,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -49.119999999999997,
+        "lat": -49.12,
         "lng": 180.62,
         "npc": {
             "id": 130027
@@ -63,7 +63,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -86.379999999999995,
+        "lat": -86.38,
         "lng": 152,
         "npc": {
             "id": 130027

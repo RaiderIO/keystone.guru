@@ -7,7 +7,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -100.76000000000001,
+        "lat": -100.76,
         "lng": 93.25,
         "npc": {
             "id": 134063
@@ -35,7 +35,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -17.379999999999999,
+        "lat": -17.38,
         "lng": 198.38,
         "npc": {
             "id": 136347
@@ -49,7 +49,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -19.129999999999999,
+        "lat": -19.13,
         "lng": 198.5,
         "npc": {
             "id": 136347
@@ -133,7 +133,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -16.629999999999999,
+        "lat": -16.63,
         "lng": 197,
         "npc": {
             "id": 136347
@@ -147,7 +147,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -25.879999999999999,
+        "lat": -25.88,
         "lng": 184.75,
         "npc": {
             "id": 136347
@@ -203,7 +203,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -30.379999999999999,
+        "lat": -30.38,
         "lng": 188.5,
         "npc": {
             "id": 136347
@@ -217,7 +217,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -22.190000000000001,
+        "lat": -22.19,
         "lng": 193.5,
         "npc": {
             "id": 134139
@@ -245,7 +245,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -44.880000000000003,
+        "lat": -44.88,
         "lng": 194.19,
         "npc": {
             "id": 134137
@@ -259,7 +259,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -54.560000000000002,
+        "lat": -54.56,
         "lng": 182.44,
         "npc": {
             "id": 136186
@@ -273,7 +273,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -54.689999999999998,
+        "lat": -54.69,
         "lng": 203.44,
         "npc": {
             "id": 136186
@@ -301,7 +301,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -60.810000000000002,
+        "lat": -60.81,
         "lng": 194.62,
         "npc": {
             "id": 134137
@@ -315,7 +315,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -45.909999999999997,
+        "lat": -45.91,
         "lng": 182.88,
         "npc": {
             "id": 134139
@@ -343,7 +343,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -64.689999999999998,
+        "lat": -64.69,
         "lng": 204.81,
         "npc": {
             "id": 136186
@@ -357,7 +357,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -67.310000000000002,
+        "lat": -67.31,
         "lng": 204.94,
         "npc": {
             "id": 136186
@@ -371,7 +371,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -82.810000000000002,
+        "lat": -82.81,
         "lng": 202.06,
         "npc": {
             "id": 136186
@@ -385,7 +385,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -80.439999999999998,
+        "lat": -80.44,
         "lng": 186.62,
         "npc": {
             "id": 134144
@@ -399,7 +399,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -79.379999999999995,
+        "lat": -79.38,
         "lng": 188.12,
         "npc": {
             "id": 134137
@@ -427,7 +427,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -83.939999999999998,
+        "lat": -83.94,
         "lng": 176,
         "npc": {
             "id": 136186
@@ -441,7 +441,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -84.810000000000002,
+        "lat": -84.81,
         "lng": 173.25,
         "npc": {
             "id": 134137
@@ -469,7 +469,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -79.810000000000002,
+        "lat": -79.81,
         "lng": 201.75,
         "npc": {
             "id": 136186
@@ -525,7 +525,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -97.629999999999995,
+        "lat": -97.63,
         "lng": 160.81,
         "npc": {
             "id": 136347
@@ -539,7 +539,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -97.379999999999995,
+        "lat": -97.38,
         "lng": 157.81,
         "npc": {
             "id": 136214
@@ -553,7 +553,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -97.560000000000002,
+        "lat": -97.56,
         "lng": 154.56,
         "npc": {
             "id": 136347
@@ -567,7 +567,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -95.629999999999995,
+        "lat": -95.63,
         "lng": 155.75,
         "npc": {
             "id": 136347
@@ -581,7 +581,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -89.689999999999998,
+        "lat": -89.69,
         "lng": 154,
         "npc": {
             "id": 136347
@@ -595,7 +595,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -88.810000000000002,
+        "lat": -88.81,
         "lng": 156,
         "npc": {
             "id": 136347
@@ -609,7 +609,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -87.189999999999998,
+        "lat": -87.19,
         "lng": 155.06,
         "npc": {
             "id": 136347
@@ -623,7 +623,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -88.120000000000005,
+        "lat": -88.12,
         "lng": 153.06,
         "npc": {
             "id": 136347
@@ -637,7 +637,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -83.129999999999995,
+        "lat": -83.13,
         "lng": 150.75,
         "npc": {
             "id": 139799
@@ -651,7 +651,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -82.060000000000002,
+        "lat": -82.06,
         "lng": 153.69,
         "npc": {
             "id": 139799
@@ -665,7 +665,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -67.560000000000002,
+        "lat": -67.56,
         "lng": 153.81,
         "npc": {
             "id": 139800
@@ -679,7 +679,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -66.129999999999995,
+        "lat": -66.13,
         "lng": 153.81,
         "npc": {
             "id": 134137
@@ -707,7 +707,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -53.439999999999998,
+        "lat": -53.44,
         "lng": 144,
         "npc": {
             "id": 139799
@@ -721,7 +721,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -52.119999999999997,
+        "lat": -52.12,
         "lng": 145.5,
         "npc": {
             "id": 134137
@@ -735,7 +735,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -52.880000000000003,
+        "lat": -52.88,
         "lng": 147.5,
         "npc": {
             "id": 139800
@@ -749,7 +749,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -55.189999999999998,
+        "lat": -55.19,
         "lng": 145.31,
         "npc": {
             "id": 139799
@@ -763,7 +763,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -67.620000000000005,
+        "lat": -67.62,
         "lng": 141.5,
         "npc": {
             "id": 136347
@@ -791,7 +791,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -64.879999999999995,
+        "lat": -64.88,
         "lng": 141.06,
         "npc": {
             "id": 134150
@@ -819,7 +819,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -62.119999999999997,
+        "lat": -62.12,
         "lng": 140.19,
         "npc": {
             "id": 136347
@@ -833,7 +833,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -77.530000000000001,
+        "lat": -77.53,
         "lng": 129.06,
         "npc": {
             "id": 139799
@@ -847,7 +847,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -77.340000000000003,
+        "lat": -77.34,
         "lng": 127.75,
         "npc": {
             "id": 139800
@@ -861,7 +861,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -76.159999999999997,
+        "lat": -76.16,
         "lng": 126.94,
         "npc": {
             "id": 139800
@@ -875,7 +875,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -74.840000000000003,
+        "lat": -74.84,
         "lng": 126.91,
         "npc": {
             "id": 139799
@@ -889,7 +889,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -81.689999999999998,
+        "lat": -81.69,
         "lng": 124.44,
         "npc": {
             "id": 136249
@@ -903,7 +903,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -85.189999999999998,
+        "lat": -85.19,
         "lng": 113.44,
         "npc": {
             "id": 134137
@@ -931,7 +931,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -86.310000000000002,
+        "lat": -86.31,
         "lng": 113.56,
         "npc": {
             "id": 134137
@@ -959,7 +959,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -97.310000000000002,
+        "lat": -97.31,
         "lng": 127.44,
         "npc": {
             "id": 139800
@@ -973,7 +973,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -94.189999999999998,
+        "lat": -94.19,
         "lng": 124.25,
         "npc": {
             "id": 139800
@@ -1001,7 +1001,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -92.060000000000002,
+        "lat": -92.06,
         "lng": 106.44,
         "npc": {
             "id": 136347
@@ -1015,7 +1015,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -92.879999999999995,
+        "lat": -92.88,
         "lng": 107.5,
         "npc": {
             "id": 136347
@@ -1029,7 +1029,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -93.560000000000002,
+        "lat": -93.56,
         "lng": 108.5,
         "npc": {
             "id": 136347
@@ -1043,7 +1043,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -94.189999999999998,
+        "lat": -94.19,
         "lng": 109.44,
         "npc": {
             "id": 136347
@@ -1057,7 +1057,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -96.189999999999998,
+        "lat": -96.19,
         "lng": 111.88,
         "npc": {
             "id": 136347
@@ -1071,7 +1071,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -94.560000000000002,
+        "lat": -94.56,
         "lng": 112.12,
         "npc": {
             "id": 139799
@@ -1085,7 +1085,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -93.810000000000002,
+        "lat": -93.81,
         "lng": 112.94,
         "npc": {
             "id": 139800
@@ -1113,7 +1113,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -98.560000000000002,
+        "lat": -98.56,
         "lng": 111.62,
         "npc": {
             "id": 136347
@@ -1127,7 +1127,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -99.189999999999998,
+        "lat": -99.19,
         "lng": 110.81,
         "npc": {
             "id": 136347
@@ -1198,7 +1198,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -107.06,
-        "lng": 94.560000000000002,
+        "lng": 94.56,
         "npc": {
             "id": 136347
         }
@@ -1212,7 +1212,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -106.63,
-        "lng": 95.810000000000002,
+        "lng": 95.81,
         "npc": {
             "id": 136347
         }
@@ -1226,7 +1226,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -106,
-        "lng": 97.120000000000005,
+        "lng": 97.12,
         "npc": {
             "id": 136347
         }
@@ -1240,7 +1240,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -105,
-        "lng": 98.189999999999998,
+        "lng": 98.19,
         "npc": {
             "id": 136347
         }
@@ -1254,7 +1254,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -100.94,
-        "lng": 99.439999999999998,
+        "lng": 99.44,
         "npc": {
             "id": 136347
         }
@@ -1267,8 +1267,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -99.439999999999998,
-        "lng": 99.620000000000005,
+        "lat": -99.44,
+        "lng": 99.62,
         "npc": {
             "id": 136347
         }
@@ -1281,8 +1281,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -97.879999999999995,
-        "lng": 99.310000000000002,
+        "lat": -97.88,
+        "lng": 99.31,
         "npc": {
             "id": 136347
         }
@@ -1295,8 +1295,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -96.689999999999998,
-        "lng": 98.560000000000002,
+        "lat": -96.69,
+        "lng": 98.56,
         "npc": {
             "id": 136347
         }
@@ -1309,7 +1309,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -91.810000000000002,
+        "lat": -91.81,
         "lng": 99.25,
         "npc": {
             "id": 136347
@@ -1323,7 +1323,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -91.189999999999998,
+        "lat": -91.19,
         "lng": 100.5,
         "npc": {
             "id": 136347
@@ -1337,7 +1337,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -90.560000000000002,
+        "lat": -90.56,
         "lng": 101.69,
         "npc": {
             "id": 136347
@@ -1351,7 +1351,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -89.689999999999998,
+        "lat": -89.69,
         "lng": 102.94,
         "npc": {
             "id": 136347
@@ -1365,8 +1365,8 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -98.629999999999995,
-        "lng": 92.810000000000002,
+        "lat": -98.63,
+        "lng": 92.81,
         "npc": {
             "id": 134058
         }
@@ -1659,7 +1659,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -44.939999999999998,
+        "lat": -44.94,
         "lng": 189.75,
         "npc": {
             "id": 134173
@@ -1687,7 +1687,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -42.560000000000002,
+        "lat": -42.56,
         "lng": 190.62,
         "npc": {
             "id": 134173
@@ -1701,7 +1701,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -41.439999999999998,
+        "lat": -41.44,
         "lng": 192,
         "npc": {
             "id": 134173
@@ -1729,7 +1729,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -42.310000000000002,
+        "lat": -42.31,
         "lng": 195.62,
         "npc": {
             "id": 134173
@@ -1743,7 +1743,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -43.439999999999998,
+        "lat": -43.44,
         "lng": 196.25,
         "npc": {
             "id": 134173
@@ -1757,7 +1757,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -44.439999999999998,
+        "lat": -44.44,
         "lng": 196.44,
         "npc": {
             "id": 134173
@@ -1771,7 +1771,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -43.810000000000002,
+        "lat": -43.81,
         "lng": 193.19,
         "npc": {
             "id": 134173
@@ -1785,7 +1785,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -42.560000000000002,
+        "lat": -42.56,
         "lng": 193.25,
         "npc": {
             "id": 134173
@@ -1799,7 +1799,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -62.810000000000002,
+        "lat": -62.81,
         "lng": 190.06,
         "npc": {
             "id": 134173
@@ -1813,7 +1813,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -63.560000000000002,
+        "lat": -63.56,
         "lng": 189.31,
         "npc": {
             "id": 134173
@@ -1827,7 +1827,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -64.189999999999998,
+        "lat": -64.19,
         "lng": 190.5,
         "npc": {
             "id": 134173
@@ -1841,7 +1841,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -64.879999999999995,
+        "lat": -64.88,
         "lng": 189.81,
         "npc": {
             "id": 134173
@@ -1883,7 +1883,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -71.879999999999995,
+        "lat": -71.88,
         "lng": 190,
         "npc": {
             "id": 134137
@@ -1897,7 +1897,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -71.879999999999995,
+        "lat": -71.88,
         "lng": 191,
         "npc": {
             "id": 134137
@@ -1911,7 +1911,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -85.810000000000002,
+        "lat": -85.81,
         "lng": 211,
         "npc": {
             "id": 134139
@@ -1925,7 +1925,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -87.310000000000002,
+        "lat": -87.31,
         "lng": 201.81,
         "npc": {
             "id": 134137
@@ -1939,7 +1939,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -88.810000000000002,
+        "lat": -88.81,
         "lng": 200.56,
         "npc": {
             "id": 134137
@@ -1953,7 +1953,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -87.379999999999995,
+        "lat": -87.38,
         "lng": 191.44,
         "npc": {
             "id": 134173
@@ -1967,7 +1967,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -87.120000000000005,
+        "lat": -87.12,
         "lng": 192.75,
         "npc": {
             "id": 134173
@@ -1981,7 +1981,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -86.560000000000002,
+        "lat": -86.56,
         "lng": 193.88,
         "npc": {
             "id": 134173
@@ -1995,7 +1995,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -86.310000000000002,
+        "lat": -86.31,
         "lng": 191.25,
         "npc": {
             "id": 134173
@@ -2009,7 +2009,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -85.689999999999998,
+        "lat": -85.69,
         "lng": 192.38,
         "npc": {
             "id": 134173
@@ -2023,7 +2023,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -85.439999999999998,
+        "lat": -85.44,
         "lng": 193.75,
         "npc": {
             "id": 134173
@@ -2037,7 +2037,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -84.939999999999998,
+        "lat": -84.94,
         "lng": 181.81,
         "npc": {
             "id": 134139
@@ -2051,7 +2051,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -97.060000000000002,
+        "lat": -97.06,
         "lng": 171.25,
         "npc": {
             "id": 134173
@@ -2093,7 +2093,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -96.379999999999995,
+        "lat": -96.38,
         "lng": 172.94,
         "npc": {
             "id": 134173
@@ -2121,7 +2121,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -99.189999999999998,
+        "lat": -99.19,
         "lng": 174.56,
         "npc": {
             "id": 134173
@@ -2149,7 +2149,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -97.060000000000002,
+        "lat": -97.06,
         "lng": 175.69,
         "npc": {
             "id": 134173
@@ -2163,7 +2163,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -98.379999999999995,
+        "lat": -98.38,
         "lng": 176.5,
         "npc": {
             "id": 134173
@@ -2191,7 +2191,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -96.310000000000002,
+        "lat": -96.31,
         "lng": 177.25,
         "npc": {
             "id": 134173
@@ -2219,7 +2219,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -88.379999999999995,
+        "lat": -88.38,
         "lng": 166.81,
         "npc": {
             "id": 134173
@@ -2233,7 +2233,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -89.689999999999998,
+        "lat": -89.69,
         "lng": 167.5,
         "npc": {
             "id": 134173
@@ -2247,7 +2247,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -87.379999999999995,
+        "lat": -87.38,
         "lng": 168.06,
         "npc": {
             "id": 134173
@@ -2275,7 +2275,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -91.120000000000005,
+        "lat": -91.12,
         "lng": 168.25,
         "npc": {
             "id": 134173
@@ -2289,7 +2289,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -90.310000000000002,
+        "lat": -90.31,
         "lng": 169.62,
         "npc": {
             "id": 134173
@@ -2317,7 +2317,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -85.620000000000005,
+        "lat": -85.62,
         "lng": 176.69,
         "npc": {
             "id": 134173
@@ -2331,7 +2331,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -86.810000000000002,
+        "lat": -86.81,
         "lng": 177.44,
         "npc": {
             "id": 134173
@@ -2345,7 +2345,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -86.120000000000005,
+        "lat": -86.12,
         "lng": 178.56,
         "npc": {
             "id": 134173
@@ -2359,7 +2359,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -88.060000000000002,
+        "lat": -88.06,
         "lng": 178.12,
         "npc": {
             "id": 134173
@@ -2373,7 +2373,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -87.310000000000002,
+        "lat": -87.31,
         "lng": 179.5,
         "npc": {
             "id": 134173
@@ -2401,7 +2401,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -90.379999999999995,
+        "lat": -90.38,
         "lng": 197.38,
         "npc": {
             "id": 134137
@@ -2709,7 +2709,7 @@
         "teeming": "visible",
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -46.280000000000001,
+        "lat": -46.28,
         "lng": 184.09,
         "npc": {
             "id": 136186
@@ -2723,7 +2723,7 @@
         "teeming": "visible",
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -79.689999999999998,
+        "lat": -79.69,
         "lng": 190.06,
         "npc": {
             "id": 134139
@@ -2737,7 +2737,7 @@
         "teeming": "visible",
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -77.219999999999999,
+        "lat": -77.22,
         "lng": 131.16,
         "npc": {
             "id": 136186
@@ -2793,7 +2793,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -31.559999999999999,
+        "lat": -31.56,
         "lng": 188.88,
         "npc": {
             "id": 136347
@@ -2821,7 +2821,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -43.310000000000002,
+        "lat": -43.31,
         "lng": 194.62,
         "npc": {
             "id": 134173
@@ -2961,7 +2961,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -84.939999999999998,
+        "lat": -84.94,
         "lng": 211.75,
         "npc": {
             "id": 134137
@@ -2975,7 +2975,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -86.560000000000002,
+        "lat": -86.56,
         "lng": 211.88,
         "npc": {
             "id": 134137

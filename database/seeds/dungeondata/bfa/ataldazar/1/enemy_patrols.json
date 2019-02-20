@@ -2,127 +2,71 @@
     {
         "id": 8,
         "floor_id": 41,
-        "enemy_id": -1,
         "faction": "any",
-        "vertices": [
-            {
-                "id": 612,
-                "lat": 251.25,
-                "lng": -73.120000000000005
-            },
-            {
-                "id": 613,
-                "lat": 263.62,
-                "lng": -83.25
-            }
-        ]
+        "polyline": {
+            "color": "#E25D5D",
+            "weight": 2,
+            "vertices_json": "[{\"lat\":251.25,\"lng\":-73.12},{\"lat\":263.62,\"lng\":-83.25}]"
+        }
     },
     {
         "id": 9,
         "floor_id": 41,
-        "enemy_id": -1,
         "faction": "any",
-        "vertices": [
-            {
-                "id": 24,
-                "lat": 204.81,
-                "lng": -124.25
-            },
-            {
-                "id": 25,
-                "lat": 218.44,
-                "lng": -124.25
-            }
-        ]
+        "polyline": {
+            "color": "#E25D5D",
+            "weight": 2,
+            "vertices_json": "[{\"lat\":204.81,\"lng\":-124.25},{\"lat\":218.44,\"lng\":-124.25}]"
+        }
     },
     {
         "id": 10,
         "floor_id": 41,
-        "enemy_id": -1,
         "faction": "any",
-        "vertices": [
-            {
-                "id": 26,
-                "lat": 254.38,
-                "lng": -179.63
-            },
-            {
-                "id": 27,
-                "lat": 265.5,
-                "lng": -179.63
-            }
-        ]
+        "polyline": {
+            "color": "#E25D5D",
+            "weight": 2,
+            "vertices_json": "[{\"lat\":254.38,\"lng\":-179.63},{\"lat\":265.5,\"lng\":-179.63}]"
+        }
     },
     {
         "id": 11,
         "floor_id": 41,
-        "enemy_id": -1,
         "faction": "any",
-        "vertices": [
-            {
-                "id": 28,
-                "lat": 235.12,
-                "lng": -177.63
-            },
-            {
-                "id": 29,
-                "lat": 249,
-                "lng": -177.69
-            }
-        ]
+        "polyline": {
+            "color": "#E25D5D",
+            "weight": 2,
+            "vertices_json": "[{\"lat\":235.12,\"lng\":-177.63},{\"lat\":249,\"lng\":-177.69}]"
+        }
     },
     {
         "id": 108,
         "floor_id": 41,
-        "enemy_id": -1,
         "faction": "any",
-        "vertices": [
-            {
-                "id": 608,
-                "lat": 264.5,
-                "lng": -117.5
-            },
-            {
-                "id": 609,
-                "lat": 264.62,
-                "lng": -101.5
-            }
-        ]
+        "polyline": {
+            "color": "#E25D5D",
+            "weight": 2,
+            "vertices_json": "[{\"lat\":264.5,\"lng\":-117.5},{\"lat\":264.62,\"lng\":-101.5}]"
+        }
     },
     {
         "id": 109,
         "floor_id": 41,
-        "enemy_id": -1,
         "faction": "any",
-        "vertices": [
-            {
-                "id": 606,
-                "lat": 211,
-                "lng": -76.129999999999995
-            },
-            {
-                "id": 607,
-                "lat": 211.12,
-                "lng": -60.880000000000003
-            }
-        ]
+        "polyline": {
+            "color": "#E25D5D",
+            "weight": 2,
+            "vertices_json": "[{\"lat\":211,\"lng\":-76.13},{\"lat\":211.12,\"lng\":-60.88}]"
+        }
     },
     {
         "id": 110,
         "floor_id": 41,
-        "enemy_id": -1,
         "faction": "any",
-        "vertices": [
-            {
-                "id": 614,
-                "lat": 238.75,
-                "lng": -66.439999999999998
-            },
-            {
-                "id": 615,
-                "lat": 250.19,
-                "lng": -74.129999999999995
-            }
-        ]
+        "polyline": {
+            "color": "#E25D5D",
+            "weight": 2,
+            "vertices_json": "[{\"lat\":238.75,\"lng\":-66.44},{\"lat\":250.19,\"lng\":-74.13}]"
+        }
     }
 ]
