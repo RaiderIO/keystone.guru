@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property $weight int
  * @property $model Model
  * @property $vertices_json string JSON encoded vertices
+ *
+ * @mixin \Eloquent
  */
 class Polyline extends Model
 {

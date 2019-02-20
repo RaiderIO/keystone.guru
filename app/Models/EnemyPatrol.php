@@ -13,10 +13,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property \App\Models\Floor $floor
  * @property \App\Models\Enemy $enemy
  * @property \App\Models\Polyline $polyline
+ *
+ * @mixin \Eloquent
  */
 class EnemyPatrol extends Model
 {
-    public $visible = ['id', 'faction', 'polyline'];
+    public $visible = ['id', 'floor_id', 'faction', 'polyline'];
+    public $with = ['polyline'];
     public $timestamps = false;
 
     /**
@@ -43,5 +46,16 @@ class EnemyPatrol extends Model
     function polyline()
     {
         return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete patrol properly if it gets deleted
+        static::deleting(function ($item) {
+            /** @var $item EnemyPatrol */
+            $item->polyline->delete();
+        });
     }
 }

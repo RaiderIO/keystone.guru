@@ -1,7 +1,7 @@
 <?php
 
 
-class EnemyPatrolVerticesRelationParser implements RelationParser
+class EnemyPatrolPolylineRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -9,7 +9,7 @@ class EnemyPatrolVerticesRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === '\App\Models\EnemyPatrol';
+        return $modelClassName === 'App\Models\EnemyPatrol';
     }
 
     /**
@@ -19,7 +19,7 @@ class EnemyPatrolVerticesRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'vertices' && is_array($value);
+        return $name === 'polyline';
     }
 
     /**
@@ -31,13 +31,11 @@ class EnemyPatrolVerticesRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $key => $vertex) {
-            // Make sure the vertex's relation with the enemy patrol is restored.
-            // Do not use $vertex since that would create a new copy and we'd lose our changes
-            $value[$key]['enemy_patrol_id'] = $modelData['id'];
-        }
+        // Make sure the polyline's relation with the model is restored.
+        $value['model_class'] = $modelClassName;
+        $value['model_id'] = $modelData['id'];
 
-        \App\Models\EnemyPatrolVertex::insert($value);
+        $modelData['polyline_id'] = \App\Models\Polyline::insertGetId($value);
 
         // Didn't really change anything so just return the value.
         return $modelData;

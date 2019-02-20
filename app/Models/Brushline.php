@@ -18,12 +18,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property $updated_at string
  * @property $created_at string
  *
- * @property $dungeonroute DungeonRoute
- * @property $polyline Polyline
+ * @property DungeonRoute $dungeonroute
+ * @property Polyline $polyline
  */
 class Brushline extends Model
 {
     public $visible = ['id', 'polyline'];
+    public $with = ['polyline'];
 
     /**
      * Get the dungeon route that this brushline is attached to.
@@ -53,5 +54,16 @@ class Brushline extends Model
     function polyline()
     {
         return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete Path properly if it gets deleted
+        static::deleting(function ($item) {
+            /** @var $item Brushline */
+            $item->polyline->delete();
+        });
     }
 }

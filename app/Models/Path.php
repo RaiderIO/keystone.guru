@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 class Path extends Model
 {
     public $visible = ['id', 'polyline'];
+    public $with = ['polyline'];
 
     /**
      * Get the dungeon route that this route is attached to.
@@ -32,5 +33,16 @@ class Path extends Model
     function polyline()
     {
         return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete Path properly if it gets deleted
+        static::deleting(function ($item) {
+            /** @var $item Path */
+            $item->polyline->delete();
+        });
     }
 }

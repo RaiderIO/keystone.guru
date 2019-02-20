@@ -51,6 +51,7 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $affixes
  * @property \Illuminate\Support\Collection $ratings
  *
+ * @property \Illuminate\Support\Collection $brushlines
  * @property \Illuminate\Support\Collection $paths
  * @property \Illuminate\Support\Collection $killzones
  * @property \Illuminate\Support\Collection $polylines
@@ -91,6 +92,14 @@ class DungeonRoute extends Model
     public function dungeon()
     {
         return $this->belongsTo('App\Models\Dungeon');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function brushlines()
+    {
+        return $this->hasMany('App\Models\Brushline');
     }
 
     /**
@@ -620,10 +629,15 @@ class DungeonRoute extends Model
             // DungeonRouteFavorite::where('dungeon_route_id', '=', $item->id)->delete();
             MapComment::where('dungeon_route_id', $item->id)->delete();
 
-            // Delete routes
+            // Delete brushlines
+            foreach ($item->brushlines as $brushline) {
+                /** @var $brushline \App\Models\Brushline */
+                $brushline->delete();
+            }
+
+            // Delete paths
             foreach ($item->paths as $path) {
-                /** @var $route \App\Models\Path */
-                $path->deleteVertices();
+                /** @var $path \App\Models\Path */
                 $path->delete();
             }
 
