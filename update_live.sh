@@ -9,9 +9,9 @@ git checkout .
 # now update
 git pull
 
-./migrate.sh
-
 ./update_dependencies.sh production
+
+./migrate.sh
 
 # Drop and re-populate all dungeon data, it's designed to do this no worries
 tput setaf 2;
