@@ -12,17 +12,16 @@ class ConvertEnemyPackVerticesToVerticesJson extends Migration
     public function up()
     {
         // Convert all paths to the new structure
-        foreach (\App\Models\EnemyPack::all() as $enemyPack) {
-            $vertices = DB::table('enemy_pack_vertices')->where('enemy_pack_id', $enemyPack->id)->get();
+        DB::table('enemy_packs')->get()->each(function ($packData, $key) {
+            $vertices = DB::table('enemy_pack_vertices')->where('enemy_pack_id', $packData->id)->get();
 
             $objs = [];
             foreach ($vertices as $vertex) {
                 $objs[] = ['lat' => $vertex->lat, 'lng' => $vertex->lng];
             }
 
-            $enemyPack->vertices_json = json_encode($objs);
-            $enemyPack->save();
-        }
+            DB::table('enemy_packs')->where('id', $packData->id)->update(['vertices_json' => json_encode($objs)]);
+        });
     }
 
     /**
