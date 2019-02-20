@@ -22,7 +22,7 @@ class MapObjectGroup extends Signalable {
 
             if (self.layerGroup !== null) {
                 // Remove ourselves from the map prior to refreshing
-                self.map.leafletMap.removeLayer(self.layerGroup);
+                self.manager.map.leafletMap.removeLayer(self.layerGroup);
             }
 
             for (let i = self.objects.length - 1; i >= 0; i--) {

@@ -2,9 +2,9 @@ $(function () {
     L.DrawToolbar.prototype.getModeHandlers = function (map) {
         return [
             {
-                enabled: this.options.route,
-                handler: new L.Draw.Path(map, this.options.route),
-                title: this.options.route.title
+                enabled: this.options.path,
+                handler: new L.Draw.Path(map, this.options.path),
+                title: this.options.path.title
             }, {
                 enabled: this.options.killzone,
                 handler: new L.Draw.KillZone(map, this.options.killzone),
@@ -125,7 +125,7 @@ class DrawControls extends MapControl {
         return {
             position: 'topleft',
             draw: {
-                route: {
+                path: {
                     shapeOptions: {
                         color: color,
                         weight: weight,

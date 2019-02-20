@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ListsBrushlines;
+use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
+use App\Http\Controllers\Traits\ListsDungeonStartMarkers;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsKillzones;
+use App\Http\Controllers\Traits\ListsMapComments;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
-use App\Http\Controllers\Traits\ListsMapComments;
-use App\Http\Controllers\Traits\ListsDungeonStartMarkers;
-use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Http\Requests\APIDungeonRouteFormRequest;
 use App\Logic\Datatables\AuthorNameColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
@@ -238,8 +238,8 @@ class APIDungeonRouteController extends Controller
         $fields = explode(',', $fields);
 
         // Show enemies or raw data when fetching enemy packs
-        $enemies = $request->get('enemies', true);
-        $teeming = $request->get('teeming', false);
+        $enemies = (int)$request->get('enemies', true) === 1;
+        $teeming = (int)$request->get('teeming', false) === 1;
 
         // Start parsing
         $result = [];
@@ -248,9 +248,6 @@ class APIDungeonRouteController extends Controller
             $publickey = null;
         } else {
             // Fetch dungeon route specific properties
-            /** @var DungeonRoute $dungeonroute */
-            $dungeonroute = DungeonRoute::where('public_key', $publickey)->firstOrFail();
-
             // Paths
             if (in_array('path', $fields)) {
                 $result['path'] = $this->listPaths($request->get('floor'), $publickey);
@@ -273,7 +270,7 @@ class APIDungeonRouteController extends Controller
             // Only admins are allowed to see this
             if (Auth::check() && Auth::user()->hasRole('admin')) {
                 // Only fetch it now
-                $showMdtEnemies = intval($request->get('show_mdt_enemies', 0)) === 1;
+                $showMdtEnemies = (int)$request->get('show_mdt_enemies', 0) === 1;
             }
 
             $result['enemy'] = $this->listEnemies($request->get('floor'), $showMdtEnemies, $publickey);
