@@ -32,6 +32,8 @@ if (($showAds && Auth::check() && $user->hasPaidTier('ad-free')) || !$isProducti
 }
 // Analytics or not, default = $isProduction
 $analytics = isset($analytics) ? $analytics : $isProduction;
+// Current Git version
+$version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -45,8 +47,8 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
     <title>{{ $title . config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app-' . $version . '.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom-' . $version . '.css') }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
@@ -456,9 +458,9 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
 @endguest
 
 <!-- Scripts -->
-<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/app-' . $version . '.js') }}"></script>
 <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
-<script src="{{ asset('js/custom.js') }}"></script>
+<script src="{{ asset('js/custom-' . $version . '.js') }}"></script>
 @yield('scripts')
 </body>
 </html>

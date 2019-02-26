@@ -3,11 +3,13 @@
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->floors->count() !== 1;
 
 // Only add the 'clone of' when the user cloned it from someone else as a form of credit
-$cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $model->clone_of)->where('author_id', $model->author_id)->count() === 0 ?
-    sprintf('%s %s',
-        __('Clone of'),
-        ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $model->clone_of]) . '">' . $model->clone_of . '</a>')
-    : '';
+if( isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $model->clone_of)->where('author_id', $model->author_id)->count() === 0 ){
+    $subTitle = sprintf('%s %s', __('Clone of'),
+            ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $model->clone_of]) . '">' . $model->clone_of . '</a>'
+    );
+} else {
+    $subTitle = sprintf(__('By %s'), $model->author->name);
+}
 ?>
 
 @section('scripts')
@@ -97,15 +99,6 @@ $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ __('Details') }}</h5>
-
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col-5 col-md-6 font-weight-bold">
-                        {{ __('Author') }}:
-                    </div>
-                    <div class="col-7 col-md-6">
-                        {{ $model->author->name }}
-                    </div>
-                </div>
                 <div class="row view_dungeonroute_details_row mt-2">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Dungeon') }}:
@@ -288,4 +281,4 @@ $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public
     </div>
 </div>
 
-@include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $cloneTitle])
+@include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $subTitle])
