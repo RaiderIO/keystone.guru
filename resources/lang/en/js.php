@@ -11,6 +11,7 @@ return [
     |
     */
 
+    // Handlebars
     'npc_name_label' => 'Name',
     'enemy_forces_label' => 'Enemy forces',
     'base_health_label' => 'Base health',
@@ -36,5 +37,13 @@ return [
 
     'affixes_label' => 'Affixes',
     'attributes_label' => 'Attributes',
-    'setup_label' => 'Setup'
+    'setup_label' => 'Setup',
+
+    // Route edit tools
+    'path' => 'Path',
+    'killzone' => 'Killzone',
+    'mapcomment' => 'Comment',
+    'brushline' => 'Brushline',
+    'edit' => 'Edit',
+    'delete' => 'Delete'
 ];

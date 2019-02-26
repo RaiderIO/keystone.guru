@@ -362,7 +362,6 @@ class DungeonMap extends Signalable {
      */
     _setMapInteraction(enabled) {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-        console.log('_setMapInteraction', enabled);
 
         if (enabled) {
             this.leafletMap.dragging.enable();

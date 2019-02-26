@@ -146,7 +146,7 @@ $introTexts = [
                 for (var i = 0; i < selectors.length; i++) {
                     var $selector = $(selectors[i][0]);
                     // Floor selection may not exist
-                    if( $selector.length > 0 ){
+                    if ($selector.length > 0) {
                         $selector.attr('data-intro', texts[i]);
                         $selector.attr('data-position', selectors[i][1]);
                         $selector.attr('data-step', i + 1);
@@ -402,6 +402,15 @@ $introTexts = [
      data-position="auto">
 
 </div>
+
+<footer class="fixed-bottom route_manipulation_tools">
+    <div class="container">
+        <!-- Draw controls are injected here through drawcontrols.js -->
+        <div id="edit_route_draw_container" class="row">
+
+        </div>
+    </div>
+</footer>
 
 @if($showAds)
     @php($isMobile = (new \Jenssegers\Agent\Agent())->isMobile())

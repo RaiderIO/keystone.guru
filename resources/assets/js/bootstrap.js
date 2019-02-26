@@ -74,3 +74,10 @@ window.axios.defaults.headers.common = {
  */
 import messages from './messages';
 window.lang = new Lang({ messages });
+
+// https://stackoverflow.com/questions/13046401/how-to-set-selected-select-option-in-handlebars-template
+window.Handlebars.registerHelper('select', function( value, options ){
+    var $el = $('<select />').html( options.fn(this) );
+    $el.find('[value="' + value + '"]').attr({'selected':'selected'});
+    return $el.html();
+});

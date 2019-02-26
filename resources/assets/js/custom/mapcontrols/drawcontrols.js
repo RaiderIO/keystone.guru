@@ -70,14 +70,15 @@ $(function () {
 class DrawControls extends MapControl {
     constructor(map, editableItemsLayer) {
         super(map);
-        console.assert(this instanceof DrawControls, this, 'this is not DrawControls');
-        console.assert(map instanceof DungeonMap, map, 'map is not DungeonMap');
+        console.assert(this instanceof DrawControls, 'this is not DrawControls', this);
+        console.assert(map instanceof DungeonMap, 'map is not DungeonMap', map);
 
         let self = this;
 
         this._mapControl = null;
         this.editableItemsLayer = editableItemsLayer;
         this.drawControlOptions = {};
+        this.initialized = false;
 
         // Add a created item to the list of drawn items
         this.map.leafletMap.on(L.Draw.Event.CREATED, function (event) {
@@ -88,19 +89,6 @@ class DrawControls extends MapControl {
         this.map.hotkeys.attach('r', 'leaflet-draw-draw-path');
         this.map.hotkeys.attach('c', 'leaflet-draw-edit-edit');
         this.map.hotkeys.attach('d', 'leaflet-draw-edit-remove');
-
-        // Handle changes
-        $('#edit_route_freedraw_options_color').bind('change', function (changeEvent) {
-            self.addControl();
-            c.map.brushline.defaultColor = $(this).val();
-            c.map.path.defaultColor = $(this).val();
-            c.map.killzone.polylineOptions.color = $(this).val();
-            c.map.killzone.polygonOptions.color = $(this).val();
-        });
-        $('#edit_route_freedraw_options_weight').bind('change', function (changeEvent) {
-            self.addControl();
-            c.map.brushline.defaultWeight = $('#edit_route_freedraw_options_weight :selected').val();
-        });
     }
 
     /**
@@ -109,17 +97,17 @@ class DrawControls extends MapControl {
      * @protected
      */
     _getDrawControlOptions() {
-        console.assert(this instanceof DrawControls, this, 'this was not a DrawControls');
+        console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
 
         let color = $('#edit_route_freedraw_options_color').val();
         let weight = $('#edit_route_freedraw_options_weight').val();
 
-        if( typeof color === 'undefined' ){
-            color = '#9DFF56';
+        if (typeof color === 'undefined') {
+            color = c.map.polyline.defaultColor;
         }
 
-        if( typeof weight === 'undefined' ){
-            weight = 3;
+        if (typeof weight === 'undefined') {
+            weight = c.map.polyline.defaultWeight;
         }
 
         return {
@@ -181,10 +169,30 @@ class DrawControls extends MapControl {
     }
 
     /**
+     * Get HTML that should be placed inside a button that is used for interaction with the route.
+     * @param faIconClass
+     * @param text
+     * @returns {string}
+     * @private
+     */
+    _getButtonHtml(faIconClass, text) {
+        let template = Handlebars.templates['map_controls_route_edit_button_template'];
+
+        let data = {
+            fa_class: faIconClass,
+            text: text
+        };
+
+        return template(data);
+    }
+
+    /**
      * Adds the control to the map.
      */
     addControl() {
-        console.assert(this instanceof DrawControls, this, 'this was not a DrawControls');
+        console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
+
+        let self = this;
 
         // Remove if exists
         if (this._mapControl !== null) {
@@ -204,7 +212,7 @@ class DrawControls extends MapControl {
                 if (option.hasOwnProperty('faClass')) {
                     // Set the FA icon and remove the background image that was initially there
                     $(".leaflet-draw-draw-" + optionName)
-                        .html("<i class='fas " + option.faClass + "'></i>")
+                        .html(this._getButtonHtml(option.faClass, lang.get('messages.' + optionName)))
                         .css('background-image', 'none');
                 }
             }
@@ -236,23 +244,53 @@ class DrawControls extends MapControl {
             $parent.append($buttons);
         });
 
-        // Custom controls
-        // let $customDrawControls = $($container.children()[0]);
-
-
         // Edit the built-in draw controls
-        let $editDrawControls = $($container.children()[1]);
+        let $buttonContainer = $($container.children()[0]);
+        let $editRouteControls = $($container.children()[1]);
 
         // Add some padding for the above custom controls
-        $editDrawControls.addClass('mt-2');
+        $editRouteControls.remove();
 
         // Add custom content for the edit and remove buttons
-        let $buttons = $editDrawControls.find('a');
+        let $buttons = $editRouteControls.find('a');
         $buttons.attr('data-toggle', 'tooltip');
-        $($buttons[0]).html("<i class='fas fa-edit'></i>");
-        $($buttons[1]).html("<i class='fas fa-trash'></i>");
+        $($buttons[0]).html(this._getButtonHtml('fa-edit', lang.get('messages.edit')));
+        $($buttons[1]).html(this._getButtonHtml('fa-trash', lang.get('messages.delete')));
+
+        // Remove from the second row, inject in the first row
+        $buttonContainer.append($buttons);
+
+        // Move the free draw controls next to the buttons
+        let template = Handlebars.templates['map_controls_route_edit_freedraw_template'];
+
+        let data = {
+            color: c.map.polyline.defaultColor,
+            weight: c.map.polyline.defaultWeight
+        };
+        $buttonContainer.append(template(data));
+
+        // Handle changes
+        $('#edit_route_freedraw_options_color').bind('change', function (changeEvent) {
+            let color = $(this).val();
+
+            c.map.polyline.defaultColor = color;
+            c.map.killzone.polylineOptions.color = color;
+            c.map.killzone.polygonOptions.color = color;
+
+            self.addControl();
+        });
+
+        let $weight = $('#edit_route_freedraw_options_weight');
+        $weight.bind('change', function (changeEvent) {
+            c.map.polyline.defaultWeight = $('#edit_route_freedraw_options_weight :selected').val()
+
+            self.addControl();
+        });
 
         refreshTooltips();
+        refreshSelectPickers();
+
+        this.initialized = true;
     }
 
     cleanup() {
