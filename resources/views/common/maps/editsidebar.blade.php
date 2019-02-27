@@ -148,7 +148,7 @@ if (isset($model)) {
     @isset($show['no-modifications-warning'])
         <div class="form-group">
             <div class="alert alert-warning text-center">
-                <i class="fa fa-exclamation-triangle"></i> {{ __('Warning! Any modification you make in tryout mode will not be saved!') }}
+                <i class="fa fa-exclamation-triangle"></i> {{ __('Any modification you make in tryout mode will not be saved!') }}
             </div>
         </div>
     @endisset

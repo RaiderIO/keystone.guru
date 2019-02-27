@@ -48,6 +48,8 @@ window.Cookies = require('js-cookie');
 window.hull = require('hull.js'); // Find the 'hull' of a random set of points
 window.Offset = require('polygon-offset'); // Offsetting polygons to get a smooth padding around them
 window.Lang = require('lang.js'); // Javascript translations
+window.d3 = require('d3'); // v3.5.14 since Pather uses an out-of-date version
+window.Pather = require('leaflet-pather');
 
 require('@fortawesome/fontawesome-free');
 

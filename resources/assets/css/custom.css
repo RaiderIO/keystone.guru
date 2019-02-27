@@ -114,7 +114,7 @@
 
 /* Fixed messages always on top */
 .fixed-bottom {
-    z-index: 10000;
+    z-index: 1000;
 }
 
 /* Floating top header should be top, but not too top */

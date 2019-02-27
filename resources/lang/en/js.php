@@ -43,7 +43,9 @@ return [
     'path' => 'Path',
     'killzone' => 'Killzone',
     'mapcomment' => 'Comment',
-    'brushline' => 'Brushline',
+    'brushline' => 'Free draw',
     'edit' => 'Edit',
-    'delete' => 'Delete'
+    'delete' => 'Delete',
+    'finish' => 'Finish',
+    'finish_drawing' => 'Finish drawing'
 ];
