@@ -133,8 +133,7 @@ class DungeonMap extends Signalable {
             let layerDeletedFn = function () {
                 layersDeleted++;
                 if (layersDeleted === layersLength) {
-                    // @TODO JS translations?
-                    addFixedFooterSuccess("Objects deleted successfully.");
+                    addFixedFooterSuccess(lang.get('messages.object.deleted'), 1500);
                 }
             };
 
@@ -216,7 +215,7 @@ class DungeonMap extends Signalable {
         });
 
         // Not very pretty but needed for debugging
-        let verboseEvents = true;
+        let verboseEvents = false;
         if (verboseEvents) {
             this.leafletMap.on('layeradd', function (e) {
                 console.log('layeradd', e);

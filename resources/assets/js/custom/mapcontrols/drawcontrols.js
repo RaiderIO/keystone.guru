@@ -18,11 +18,6 @@ $(function () {
                 handler: new L.Draw.Brushline(map, this.options.brushline),
                 title: this.options.brushline.title
             },
-            // {
-            //     enabled: this.options.line,
-            //     handler: new L.Draw.Line(map, this.options.line),
-            //     title: this.options.line.title
-            // },
             {
                 enabled: this.options.enemypack,
                 handler: new L.Draw.EnemyPack(map, this.options.enemypack),
@@ -127,6 +122,8 @@ class DrawControls extends MapControl {
 
         return {
             position: 'topleft',
+            // This now shows/hides the brushline icon
+            brushline: true,
             draw: {
                 path: {
                     shapeOptions: {
@@ -162,16 +159,6 @@ class DrawControls extends MapControl {
                 //     faClass: 'fa-paint-brush',
                 //     title: 'Draw a line using a brush'
                 // },
-                line: {
-                    shapeOptions: {
-                        color: color,
-                        weight: weight,
-                        opacity: 1.0
-                    },
-                    zIndexOffset: 1000,
-                    faClass: 'fa-pencil-ruler',
-                    title: 'Draw a line'
-                },
                 enemypack: false,
                 enemypatrol: false,
                 enemy: false,
@@ -390,12 +377,16 @@ class DrawControls extends MapControl {
         this._addControlSetupBottomBar();
 
         // Setup the brushline button, it's a custom contraption
-        this._addControlSetupBrushlineButton();
+        if (this.drawControlOptions.brushline !== false) {
+            this._addControlSetupBrushlineButton();
+        }
 
         // Edit and delete buttons need to be moved to the same container as the other buttons
         this._addControlSetupEditDeleteButtons();
 
-        this._addControlSetupPolylineOptions();
+        if (this.drawControlOptions.brushline !== false) {
+            this._addControlSetupPolylineOptions();
+        }
 
         // Refresh some basics that need to be regenerated when html gets changed
         refreshTooltips();
@@ -405,7 +396,7 @@ class DrawControls extends MapControl {
     cleanup() {
         super.cleanup();
 
-        this.map.unregister('map:pathertoggled');
+        this.map.unregister('map:pathertoggled', this);
         // this.map.leafletMap.off(L.Draw.Event.CREATED);
     }
 }

@@ -16,6 +16,8 @@ class AdminDrawControls extends DrawControls {
         let options = super._getDrawControlOptions();
 
         options = $.extend(true, options, {
+            // This now shows/hides the brushline icon
+            brushline: false,
             draw: {
                 killzone: false,
                 brushline: false,

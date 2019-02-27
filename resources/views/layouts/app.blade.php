@@ -271,7 +271,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 
     <footer class="fixed-bottom">
         <div class="row">
-            <div id="fixed_footer_container" class="col-12">
+            <div id="fixed_footer_container" class="col-6 m-auto">
             </div>
         </div>
     </footer>

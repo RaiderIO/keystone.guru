@@ -123,11 +123,11 @@ if (isset($model)) {
                 <div class="col">
                     <div id="map_route_publish"
                          class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}">
-                        <i class="fa fa-check-circle"></i> {{ __('Publish route') }}
+                        <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
                     </div>
                     <div id="map_route_unpublish"
                          class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
-                        <i class="fa fa-times-circle"></i> {{ __('Unpublish route') }}
+                        <i class="fa fa-plane-arrival"></i> {{ __('Unpublish route') }}
                     </div>
                 </div>
             </div>
@@ -140,6 +140,24 @@ if (isset($model)) {
                          class="alert alert-info text-center {{ $model->published === 1 ? 'd-none' : '' }}">
                         <i class="fa fa-info-circle"></i> {{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="m-auto col-6">
+                    <ul id="test">
+                        <li><a href="#"><div class="enemy_icon aggressive_enemy_icon"></div></a></li>
+                        <li><a href="#"><div class="star_enemy_icon" style=""></div></a></li>
+                        <li><a href="#"><div class="circle_enemy_icon" style=""></div></a></li>
+                        <li><a href="#"><div class="diamond_enemy_icon" style=""></div></a></li>
+                        <li><a href="#"><div class="triangle_enemy_icon" style=""></div></a></li>
+                        <li><a href="#"><div class="moon_enemy_icon" style=""></div></a></li>
+                        <li><a href="#"><div class="square_enemy_icon" style=""></div></a></li>
+                        <li><a href="#"><div class="cross_enemy_icon" style=""></div></a></li>
+                        <li><a href="#"><div class="skull_enemy_icon" style=""></div></a></li>
+                    </ul>
                 </div>
             </div>
         </div>

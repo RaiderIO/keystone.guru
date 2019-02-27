@@ -19,6 +19,25 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
         $(".selectpicker").selectpicker();
 
         $('#import_string_textarea').bind('paste', _importStringPasted);
+
+        $('#test').circleMenu({
+            direction: 'full',
+            trigger: 'click',
+            circle_radius: 40,
+            speed: 200,
+            open: function () {
+                console.log('menu opened');
+            },
+            close: function () {
+                console.log('menu closed');
+            },
+            init: function () {
+                console.log('menu initialized');
+            },
+            select: function (evt, index) {
+                console.log(evt, index)
+            }
+        });
     });
 
     /**

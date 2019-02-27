@@ -43,9 +43,19 @@ return [
     'path' => 'Path',
     'killzone' => 'Killzone',
     'mapcomment' => 'Comment',
-    'brushline' => 'Free draw',
+    'brushline' => 'Draw',
     'edit' => 'Edit',
     'delete' => 'Delete',
     'finish' => 'Finish',
-    'finish_drawing' => 'Finish drawing'
+    'finish_drawing' => 'Finish drawing',
+
+    'enemypack' => 'Pack',
+    'enemy' => 'Enemy',
+    'enemypatrol' => 'Patrol',
+    'dungeonstartmarker' => 'Start',
+    'dungeonfloorswitchmarker' => 'Floor',
+
+
+    // Admin
+    'object.deleted' => 'Objects deleted successfully.'
 ];
