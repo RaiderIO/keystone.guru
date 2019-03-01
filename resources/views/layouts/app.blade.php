@@ -269,6 +269,13 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
         </div>
     @endif
 
+    <header class="fixed-top">
+        <div class="row">
+            <div id="fixed_header_container" class="col-6 m-auto">
+            </div>
+        </div>
+    </header>
+
     <footer class="fixed-bottom">
         <div class="row">
             <div id="fixed_footer_container" class="col-6 m-auto">

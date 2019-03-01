@@ -80,7 +80,7 @@ class EnemyForcesControls extends MapControl {
             if (this.lastFooterMessage !== null) {
                 this.lastFooterMessage.remove();
             }
-            this.lastFooterMessage = addFixedFooterSmall($('#map_enemy_forces_numbers').text());
+            this.lastFooterMessage = addFixedHeaderSmall($('#map_enemy_forces_numbers').text());
         }
     }
 

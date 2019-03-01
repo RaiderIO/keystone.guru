@@ -110,32 +110,6 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
     }
 
     /**
-     * Add a fixed footer with an arbitrary type.
-     * @param type
-     * @param message
-     * @param durationMs
-     * @param small
-     * @private
-     */
-    function _addFixedFooter(type, message, durationMs, small = false) {
-        var template = Handlebars.templates['app_fixed_footer_' + (small ? 'small_' : '') + 'template'];
-
-        var handlebarsData = {
-            type: type,
-            message: message
-        };
-
-        var $message = $(template(handlebarsData));
-        $('#fixed_footer_container').append($message);
-
-        $message.delay(durationMs).fadeOut(200, function () {
-            $(this).remove();
-        });
-
-        return $message;
-    }
-
-    /**
      * Refreshes fancy tooltips on all elements that request for them.
      */
     function refreshTooltips() {
@@ -161,6 +135,65 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
      **/
     function isMobile() {
         return {{ (new \Jenssegers\Agent\Agent())->isMobile() ? 'true' : 'false' }};
+    }
+
+    /**
+     * Add a fixed message to a container with an arbitrary type.
+     * @param containerSelector
+     * @param type
+     * @param message
+     * @param durationMs
+     * @param small
+     * @private
+     */
+    function _addFixedMessage(containerSelector, type, message, durationMs, small = false) {
+        var template = Handlebars.templates['app_fixed_message_' + (small ? 'small_' : '') + 'template'];
+
+        var handlebarsData = {
+            type: type,
+            message: message
+        };
+
+        var $message = $(template(handlebarsData));
+        $(containerSelector).append($message);
+
+        $message.delay(durationMs).fadeOut(200, function () {
+            $(this).remove();
+        });
+
+        return $message;
+    }
+
+    /**
+     * Add a fixed footer message with an arbitrary type.
+     * @param type
+     * @param message
+     * @param durationMs
+     * @param small
+     * @private
+     */
+    function _addFixedFooter(type, message, durationMs, small = false) {
+        return _addFixedMessage('#fixed_footer_container', type, message, durationMs, small);
+    }
+
+    /**
+     * Add a fixed header with an arbitrary type.
+     * @param type
+     * @param message
+     * @param durationMs
+     * @param small
+     * @private
+     */
+    function _addFixedHeader(type, message, durationMs, small = false) {
+        return _addFixedMessage('#fixed_header_container', type, message, durationMs, small);
+    }
+
+    /**
+     * Add a small fixed header which only wraps the content in a background.
+     * @returns The created header element.
+     **/
+    function addFixedHeaderSmall(message, durationMs = 5000) {
+        return _addFixedHeader('info', '<i class="fas fa-info-circle"></i> ' + message, durationMs, true);
     }
 
     /**
