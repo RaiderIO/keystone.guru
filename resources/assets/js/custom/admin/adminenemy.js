@@ -97,7 +97,7 @@ class AdminEnemy extends Enemy {
             }
         } else if (closeEnough) {
             // Remove tooltip whilst actively coupling. It gets in the way
-            this.layer.unbindTooltip();
+            this.unbindTooltip();
         }
     }
 

@@ -86,58 +86,58 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, this, 'this is not an Enemy');
         let self = this;
 
-        // Popup should only be created when we're in edit mode
-        if (this.map.edit) {
-            // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
-            // This also cannot be a private function since that'll apparently give different signatures as well.
-            let popupOpenFn = function (event) {
-                $.each($('.enemy_raid_marker_icon'), function (index, value) {
-                    let $icon = $(value);
-
-                    // If we selected this raid marker..
-                    if ($icon.data('name') === self.raid_marker_name) {
-                        $icon.addClass('enemy_raid_marker_icon_selected');
-                    }
-
-                    $icon.unbind('click');
-                    $icon.bind('click', function () {
-                        self.assignRaidMarker($icon.data('name'));
-                        // Deselect current raid markers
-                        $('.enemy_raid_marker_icon_selected').removeClass('enemy_raid_marker_icon_selected');
-                        // Add it to this one
-                        $icon.addClass('enemy_raid_marker_icon_selected');
-                    });
-                });
-                let $clearMarker = $('#enemy_raid_marker_clear_' + self.id);
-                $clearMarker.unbind('click');
-                $clearMarker.bind('click', function () {
-                    // Empty is unassign
-                    self.assignRaidMarker('');
-                });
-            };
-
-            let customPopupHtml = $('#enemy_edit_popup_template').html();
-            // Remove template so our
-            let template = Handlebars.compile(customPopupHtml);
-
-            let data = {id: self.id};
-
-            // Build the status bar from the template
-            customPopupHtml = template(data);
-
-            let customOptions = {
-                'maxWidth': '160',
-                'minWidth': '160',
-                'className': 'popupCustom'
-            };
-
-            self.layer.unbindPopup();
-            self.layer.bindPopup(customPopupHtml, customOptions);
-
-            // Have you tried turning it off and on again?
-            self.layer.off('popupopen');
-            self.layer.on('popupopen', popupOpenFn);
-        }
+        // // Popup should only be created when we're in edit mode
+        // if (this.map.edit) {
+        //     // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
+        //     // This also cannot be a private function since that'll apparently give different signatures as well.
+        //     let popupOpenFn = function (event) {
+        //         $.each($('.enemy_raid_marker_icon'), function (index, value) {
+        //             let $icon = $(value);
+        //
+        //             // If we selected this raid marker..
+        //             if ($icon.data('name') === self.raid_marker_name) {
+        //                 $icon.addClass('enemy_raid_marker_icon_selected');
+        //             }
+        //
+        //             $icon.unbind('click');
+        //             $icon.bind('click', function () {
+        //                 self.assignRaidMarker($icon.data('name'));
+        //                 // Deselect current raid markers
+        //                 $('.enemy_raid_marker_icon_selected').removeClass('enemy_raid_marker_icon_selected');
+        //                 // Add it to this one
+        //                 $icon.addClass('enemy_raid_marker_icon_selected');
+        //             });
+        //         });
+        //         let $clearMarker = $('#enemy_raid_marker_clear_' + self.id);
+        //         $clearMarker.unbind('click');
+        //         $clearMarker.bind('click', function () {
+        //             // Empty is unassign
+        //             self.assignRaidMarker('');
+        //         });
+        //     };
+        //
+        //     let customPopupHtml = $('#enemy_edit_popup_template').html();
+        //     // Remove template so our
+        //     let template = Handlebars.compile(customPopupHtml);
+        //
+        //     let data = {id: self.id};
+        //
+        //     // Build the status bar from the template
+        //     customPopupHtml = template(data);
+        //
+        //     let customOptions = {
+        //         'maxWidth': '160',
+        //         'minWidth': '160',
+        //         'className': 'popupCustom'
+        //     };
+        //
+        //     self.layer.unbindPopup();
+        //     self.layer.bindPopup(customPopupHtml, customOptions);
+        //
+        //     // Have you tried turning it off and on again?
+        //     self.layer.off('popupopen');
+        //     self.layer.on('popupopen', popupOpenFn);
+        // }
     }
 
     /**
@@ -205,7 +205,7 @@ class Enemy extends MapObject {
         }
 
         // Remove any previous tooltip
-        this.layer.unbindTooltip();
+        this.unbindTooltip();
         this.layer.bindTooltip(template(data), {
             offset: [0, 10],
             direction: 'bottom'

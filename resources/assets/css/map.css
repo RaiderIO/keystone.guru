@@ -281,6 +281,14 @@ html, body, #map, #app, .wrapper {
 /** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */
 /** leaflet-marker-icon leaflet-div-icon leaflet-editing-icon leaflet-touch-icon leaflet-zoom-animated leaflet-interactive leaflet-marker-draggable */
 
+.circleMenu-closed {
+    opacity: 0;
+}
+
+.circleMenu-open {
+    opacity: 1;
+}
+
 .selected_enemy_icon,
 .enemy_icon {
     width: 11px;
