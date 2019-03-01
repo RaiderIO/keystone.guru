@@ -143,24 +143,6 @@ if (isset($model)) {
                 </div>
             </div>
         </div>
-
-        <div class="form-group">
-            <div class="row">
-                <div class="m-auto col-6">
-                    <ul id="test">
-                        <li><a href="#"><div class="enemy_icon aggressive_enemy_icon"></div></a></li>
-                        <li><a href="#"><div class="star_enemy_icon" style=""></div></a></li>
-                        <li><a href="#"><div class="circle_enemy_icon" style=""></div></a></li>
-                        <li><a href="#"><div class="diamond_enemy_icon" style=""></div></a></li>
-                        <li><a href="#"><div class="triangle_enemy_icon" style=""></div></a></li>
-                        <li><a href="#"><div class="moon_enemy_icon" style=""></div></a></li>
-                        <li><a href="#"><div class="square_enemy_icon" style=""></div></a></li>
-                        <li><a href="#"><div class="cross_enemy_icon" style=""></div></a></li>
-                        <li><a href="#"><div class="skull_enemy_icon" style=""></div></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
     @endisset
 
     @isset($show['no-modifications-warning'])

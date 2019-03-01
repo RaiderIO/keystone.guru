@@ -44,6 +44,7 @@ return [
     'killzone' => 'Killzone',
     'mapcomment' => 'Comment',
     'brushline' => 'Draw',
+    'brushline_title' => 'Draw a line',
     'edit' => 'Edit',
     'delete' => 'Delete',
     'finish' => 'Finish',
@@ -54,6 +55,17 @@ return [
     'enemypatrol' => 'Patrol',
     'dungeonstartmarker' => 'Start',
     'dungeonfloorswitchmarker' => 'Floor',
+
+    // Raid markers
+    'title_raid_marker_no_selection' => 'No raid marker',
+    'title_raid_marker_star' => 'Star',
+    'title_raid_marker_circle' => 'Circle',
+    'title_raid_marker_diamond' => 'Diamond',
+    'title_raid_marker_triangle' => 'Triangle',
+    'title_raid_marker_moon' => 'Moon',
+    'title_raid_marker_square' => 'Square',
+    'title_raid_marker_cross' => 'Cross',
+    'title_raid_marker_skull' => 'Skull',
 
 
     // Admin

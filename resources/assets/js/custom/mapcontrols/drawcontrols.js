@@ -228,8 +228,9 @@ class DrawControls extends MapControl {
             class: 'leaflet-draw-draw-brushline col draw_icon mt-2' +
                 // If pather was enabled, make sure it stays active
                 (self.map.isPatherActive() ? ' leaflet-draw-toolbar-button-enabled' : ''),
-            'data-toggle': 'tooltip',
             href: '#',
+            'data-toggle': 'tooltip',
+            title: lang.get('messages.brushline_title'),
         });
         $brushlineButton.html(
             this._getButtonHtml('fa-paint-brush', lang.get('messages.brushline'))
