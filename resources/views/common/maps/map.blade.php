@@ -405,6 +405,10 @@ $introTexts = [
 
 <footer class="fixed-bottom route_manipulation_tools">
     <div class="container">
+        <!-- Enemy forces are injected here through enemyforcescontrols.js -->
+        <div id="edit_route_enemy_forces_container" class="row">
+
+        </div>
         <!-- Draw controls are injected here through drawcontrols.js -->
         <div id="edit_route_draw_container" class="row">
 
