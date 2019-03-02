@@ -524,8 +524,6 @@ html, body, #map, #app, .wrapper {
 }
 
 
-
-
 #map.mode-create {
     cursor: crosshair;
 }
@@ -553,4 +551,18 @@ html, body, #map, #app, .wrapper {
 #map svg {
     position: absolute;
     z-index: 1001;
+}
+
+.flash {
+    animation-name: flash-animation;
+    animation-duration: 0.75s;
+}
+
+@keyframes flash-animation {
+    from {
+        color: #9DFF56;
+    }
+    to {
+        color: inherit;
+    }
 }
