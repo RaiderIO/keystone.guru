@@ -208,7 +208,7 @@ html, body, #map, #app, .wrapper {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 69px;
+    bottom: 94px;
     top: unset !important;
 }
 
