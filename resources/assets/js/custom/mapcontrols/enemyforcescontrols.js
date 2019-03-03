@@ -13,11 +13,11 @@ class EnemyForcesControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let template = Handlebars.templates['map_enemy_forces_template'];
+                let template = Handlebars.templates['map_enemy_forces_template' + (!map.edit ? '_view' : '')];
 
-                let data = {
+                let data = $.extend({
                     enemy_forces_total: self.map.getEnemyForcesRequired()
-                };
+                }, getHandlebarsTranslations());
 
                 // Build the status bar from the template
                 self.statusbar = $(template(data));
@@ -76,11 +76,14 @@ class EnemyForcesControls extends MapControl {
 
         // Don't trigger this when loading in the route and the value actually changed
         if (this.loaded && this.enemyForces !== oldEnemyForces) {
-            // Remove any previous footer messages
-            if (this.lastFooterMessage !== null) {
-                this.lastFooterMessage.remove();
-            }
-            this.lastFooterMessage = addFixedHeaderSmall($('#map_enemy_forces_numbers').text());
+            let $enemyForces = $('#map_enemy_forces');
+            // Show a short flash of green using the flash class
+            $enemyForces.addClass('update');
+
+            $enemyForces.addClass('flash');
+            setTimeout(function () {
+                $enemyForces.removeClass('flash');
+            }, 1000);
         }
     }
 

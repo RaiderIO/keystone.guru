@@ -5,7 +5,7 @@ $isAdmin = isset($admin) && $admin;
 /** @var App\Models\DungeonRoute $dungeonroute */
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
-$edit = isset($edit) && $edit ? 'true' : 'false';
+$edit = isset($edit) && $edit ? true : false;
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
 // Set the key to 'try' if try mode is enabled
 $routePublicKey = isset($tryMode) && $tryMode ? 'try' : $routePublicKey;
@@ -39,7 +39,6 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? 'false' : 'tru
 $introTexts = [
     __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
     __('You can use this button to hide or show the sidebar.'),
-    __('This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).'),
 
     __('Here you can select different visualization options.'),
     __('You can chose from multiple different visualizations to help you quickly find the information you need.'),
@@ -47,6 +46,7 @@ $introTexts = [
     __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
 
     __('These are your route manipulation tools.'),
+    __('This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).'),
     __('You can draw paths with this tool. Click it, then draw a path (a line) from A to B, with as many points are you like. Once finished, you can click
     the line on the map to change its color. You can add as many paths as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
     or purple for a Warlock Gateway, for example.'),
@@ -82,7 +82,7 @@ $introTexts = [
         // Options for the dungeonmap object
         var options = {
             floorId: {{ $floorId }},
-            edit: {{ $edit }},
+            edit: {{ $edit ? 'true' : 'false'}},
             dungeonroute: {
                 publicKey: '{{ $routePublicKey }}',
                 faction: '{{ $routeFaction }}'
@@ -120,13 +120,13 @@ $introTexts = [
             var selectors = [
                 ['#sidebar', 'right'],
                 ['#sidebarToggle', 'right'],
-                ['.enemy_forces_container', 'right'],
 
                 ['.visibility_tools', 'right'],
                 ['#map_enemy_visuals', 'right'],
                 ['.floor_selection', 'right'],
 
                 ['.route_manipulation_tools', 'top'],
+                ['#map_enemy_forces_numbers', 'top'],
                 ['.leaflet-draw-draw-path', 'top'],
                 ['.leaflet-draw-draw-killzone', 'top'],
                 ['.leaflet-draw-draw-mapcomment', 'top'],
@@ -403,14 +403,21 @@ $introTexts = [
 
 </div>
 
-<footer class="fixed-bottom route_manipulation_tools">
-    <div class="container">
-        <!-- Draw controls are injected here through drawcontrols.js -->
-        <div id="edit_route_draw_container" class="row">
+@if($edit)
+    <footer class="fixed-bottom route_manipulation_tools">
+        <div class="container">
+            <!-- Draw controls are injected here through enemyforces.js -->
+            <div id="edit_route_enemy_forces_container" class="row col-6 m-auto text-center">
 
+            </div>
+
+            <!-- Draw controls are injected here through drawcontrols.js -->
+            <div id="edit_route_draw_container" class="row">
+
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
+@endif
 
 @if($showAds)
     @php($isMobile = (new \Jenssegers\Agent\Agent())->isMobile())

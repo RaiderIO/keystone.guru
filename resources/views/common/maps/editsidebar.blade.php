@@ -43,19 +43,6 @@ if (isset($model)) {
         </div>
     @endisset
 
-    <!-- Enemy forces -->
-    <div class="form-group enemy_forces_container">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Enemy forces') }}</h5>
-                <!-- Draw controls are injected here through drawcontrols.js -->
-                <div id="edit_route_enemy_forces_container">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
     @isset($show['shareable-link'])
         <!-- Shareable link -->
         <div class="form-group">
