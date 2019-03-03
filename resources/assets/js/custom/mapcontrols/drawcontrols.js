@@ -18,11 +18,6 @@ $(function () {
                 handler: new L.Draw.Brushline(map, this.options.brushline),
                 title: this.options.brushline.title
             },
-            // {
-            //     enabled: this.options.line,
-            //     handler: new L.Draw.Line(map, this.options.line),
-            //     title: this.options.line.title
-            // },
             {
                 enabled: this.options.enemypack,
                 handler: new L.Draw.EnemyPack(map, this.options.enemypack),
@@ -70,8 +65,8 @@ $(function () {
 class DrawControls extends MapControl {
     constructor(map, editableItemsLayer) {
         super(map);
-        console.assert(this instanceof DrawControls, this, 'this is not DrawControls');
-        console.assert(map instanceof DungeonMap, map, 'map is not DungeonMap');
+        console.assert(this instanceof DrawControls, 'this is not DrawControls', this);
+        console.assert(map instanceof DungeonMap, 'map is not DungeonMap', map);
 
         let self = this;
 
@@ -85,22 +80,25 @@ class DrawControls extends MapControl {
             self.editableItemsLayer.addLayer(layer);
         });
 
+        // Make sure that when pather is toggled, the button changes state accordingly
+        this.map.register('map:pathertoggled', this, function (toggleEvent) {
+            let $brushlineButton = $('.leaflet-draw-draw-brushline');
+
+            // Show or hide draw actions depending on what was needed
+            let $drawActions = $('.leaflet-draw-actions-pather');
+            $drawActions.toggle(toggleEvent.data.enabled);
+
+            // Enable/disable the button accordingly
+            if (toggleEvent.data.enabled) {
+                $brushlineButton.addClass('leaflet-draw-toolbar-button-enabled');
+            } else {
+                $brushlineButton.removeClass('leaflet-draw-toolbar-button-enabled');
+            }
+        });
+
         this.map.hotkeys.attach('r', 'leaflet-draw-draw-path');
         this.map.hotkeys.attach('c', 'leaflet-draw-edit-edit');
         this.map.hotkeys.attach('d', 'leaflet-draw-edit-remove');
-
-        // Handle changes
-        $('#edit_route_freedraw_options_color').bind('change', function (changeEvent) {
-            self.addControl();
-            c.map.brushline.defaultColor = $(this).val();
-            c.map.path.defaultColor = $(this).val();
-            c.map.killzone.polylineOptions.color = $(this).val();
-            c.map.killzone.polygonOptions.color = $(this).val();
-        });
-        $('#edit_route_freedraw_options_weight').bind('change', function (changeEvent) {
-            self.addControl();
-            c.map.brushline.defaultWeight = $('#edit_route_freedraw_options_weight :selected').val();
-        });
     }
 
     /**
@@ -109,21 +107,23 @@ class DrawControls extends MapControl {
      * @protected
      */
     _getDrawControlOptions() {
-        console.assert(this instanceof DrawControls, this, 'this was not a DrawControls');
+        console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
 
         let color = $('#edit_route_freedraw_options_color').val();
         let weight = $('#edit_route_freedraw_options_weight').val();
 
-        if( typeof color === 'undefined' ){
-            color = '#9DFF56';
+        if (typeof color === 'undefined') {
+            color = c.map.polyline.defaultColor;
         }
 
-        if( typeof weight === 'undefined' ){
-            weight = 3;
+        if (typeof weight === 'undefined') {
+            weight = c.map.polyline.defaultWeight;
         }
 
         return {
             position: 'topleft',
+            // This now shows/hides the brushline icon
+            brushline: true,
             draw: {
                 path: {
                     shapeOptions: {
@@ -147,26 +147,18 @@ class DrawControls extends MapControl {
                     faClass: 'fa-comment',
                     title: 'Create a map comment'
                 },
-                brushline: {
-                    shapeOptions: {
-                        color: color,
-                        weight: weight,
-                        opacity: 1.0
-                    },
-                    zIndexOffset: 1000,
-                    faClass: 'fa-paint-brush',
-                    title: 'Draw a line using a brush'
-                },
-                line: {
-                    shapeOptions: {
-                        color: color,
-                        weight: weight,
-                        opacity: 1.0
-                    },
-                    zIndexOffset: 1000,
-                    faClass: 'fa-pencil-ruler',
-                    title: 'Draw a line'
-                },
+                brushline: false,
+                // Brushlines are added in a custom way since I'm using Pather for this
+                // brushline: {
+                //     shapeOptions: {
+                //         color: color,
+                //         weight: weight,
+                //         opacity: 1.0
+                //     },
+                //     zIndexOffset: 1000,
+                //     faClass: 'fa-paint-brush',
+                //     title: 'Draw a line using a brush'
+                // },
                 enemypack: false,
                 enemypatrol: false,
                 enemy: false,
@@ -181,36 +173,24 @@ class DrawControls extends MapControl {
     }
 
     /**
-     * Adds the control to the map.
+     * Get HTML that should be placed inside a button that is used for interaction with the route.
+     * @param faIconClass
+     * @param text
+     * @returns {string}
+     * @private
      */
-    addControl() {
-        console.assert(this instanceof DrawControls, this, 'this was not a DrawControls');
+    _getButtonHtml(faIconClass, text) {
+        let template = Handlebars.templates['map_controls_route_edit_button_template'];
 
-        // Remove if exists
-        if (this._mapControl !== null) {
-            this.map.leafletMap.removeControl(this._mapControl);
-        }
+        let data = {
+            fa_class: faIconClass,
+            text: text
+        };
 
-        // Add the control to the map
-        this.drawControlOptions = this._getDrawControlOptions(this.editableItemsLayer);
-        this._mapControl = new L.Control.Draw(this.drawControlOptions);
-        this.map.leafletMap.addControl(this._mapControl);
+        return template(data);
+    }
 
-        // If the option wants, render it with a font-awesome icon instead.
-        // Surely there must be a better way for this but whatever, this works..
-        for (let optionName in this.drawControlOptions.draw) {
-            if (this.drawControlOptions.draw.hasOwnProperty(optionName)) {
-                let option = this.drawControlOptions.draw[optionName];
-                if (option.hasOwnProperty('faClass')) {
-                    // Set the FA icon and remove the background image that was initially there
-                    $(".leaflet-draw-draw-" + optionName)
-                        .html("<i class='fas " + option.faClass + "'></i>")
-                        .css('background-image', 'none');
-                }
-            }
-        }
-
-        // Add the leaflet draw control to the sidebar
+    _addControlSetupBottomBar() {
         let container = this._mapControl.getContainer();
         let $targetContainer = $('#edit_route_draw_container');
         $targetContainer.append(container);
@@ -235,29 +215,189 @@ class DrawControls extends MapControl {
             // The buttons have a parent that shouldn't be there; strip the children from that bad parent!
             $parent.append($buttons);
         });
+    }
 
-        // Custom controls
-        // let $customDrawControls = $($container.children()[0]);
+    _addControlSetupBrushlineButton() {
+        let self = this;
+
+        let $container = $(this._mapControl.getContainer());
+        let $buttonContainer = $($container.children()[0]);
+
+        // Add a special button for the Brushline
+        let $brushlineButton = $('<a>', {
+            class: 'leaflet-draw-draw-brushline col draw_icon mt-2' +
+                // If pather was enabled, make sure it stays active
+                (self.map.isPatherActive() ? ' leaflet-draw-toolbar-button-enabled' : ''),
+            href: '#',
+            'data-toggle': 'tooltip',
+            title: lang.get('messages.brushline_title'),
+        });
+        $brushlineButton.html(
+            this._getButtonHtml('fa-paint-brush', lang.get('messages.brushline'))
+        );
+        $brushlineButton.bind('click', function (clickEvent) {
+            // Check if it's enabled now
+            let wasEnabled = self.map.isPatherActive();
+            // Enable it now
+            if (!wasEnabled) {
+                self.map.togglePather(true);
+            }
+
+            // Check if we were drawing anything else at this point, otherwise click the cancel button
+            let $mainDrawActions = $('.leaflet-draw-actions:not(.leaflet-draw-actions-pather):visible');
+            // Physically click the button
+            let $a = $mainDrawActions.find('a');
+            if ($a.length > 0) {
+                // Cancel is always the last button
+                $a.last()[0].click();
+            }
+        });
+        $buttonContainer.append($brushlineButton);
 
 
-        // Edit the built-in draw controls
-        let $editDrawControls = $($container.children()[1]);
+        // // Cancel button container
+        let $drawActions = $('<ul>', {
+            class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom',
+            style: 'top: 7px;'
+        });
+        // Add as the first child
+        $buttonContainer.prepend($drawActions);
+        // Remove all previous entries
+        $drawActions.empty();
+        // Create the button
+        let $button = $('<a>', {
+            href: '#',
+            title: lang.get('messages.finish_drawing'),
+            text: lang.get('messages.finish')
+        });
+        // On click, disable pather
+        $button.bind('click', function () {
+            self.map.togglePather(false);
+        });
+
+        // Build the draw actions
+        $drawActions.append($('<li>').append($button));
+
+        // Re-set pather to the same enabled state so all events are fired and UI is put back in a proper state
+        this.map.togglePather(this.map.isPatherActive());
+    }
+
+    _addControlSetupEditDeleteButtons() {
+        let $container = $(this._mapControl.getContainer());
+        let $buttonContainer = $($container.children()[0]);
+        let $editRouteControls = $($container.children()[1]);
 
         // Add some padding for the above custom controls
-        $editDrawControls.addClass('mt-2');
+        $editRouteControls.css('height', '0');
 
         // Add custom content for the edit and remove buttons
-        let $buttons = $editDrawControls.find('a');
+        let $buttons = $editRouteControls.find('a');
         $buttons.attr('data-toggle', 'tooltip');
-        $($buttons[0]).html("<i class='fas fa-edit'></i>");
-        $($buttons[1]).html("<i class='fas fa-trash'></i>");
+        $($buttons[0]).html(this._getButtonHtml('fa-edit', lang.get('messages.edit')));
+        $($buttons[1]).html(this._getButtonHtml('fa-trash', lang.get('messages.delete')));
 
+        // Remove from the second row, inject in the first row
+        $buttonContainer.append($buttons);
+    }
+
+    _addControlSetupPolylineOptions() {
+        let self = this;
+
+        let $container = $(this._mapControl.getContainer());
+        let $buttonContainer = $($container.children()[0]);
+
+        // Move the free draw controls next to the buttons
+        let template = Handlebars.templates['map_controls_route_edit_freedraw_template'];
+
+        let data = {
+            color: c.map.polyline.defaultColor,
+            weight: c.map.polyline.defaultWeight
+        };
+        $buttonContainer.append(template(data));
+
+        // Handle changes
+        $('#edit_route_freedraw_options_color').bind('change', function (changeEvent) {
+            let color = $(this).val();
+
+            c.map.polyline.defaultColor = color;
+            c.map.killzone.polylineOptions.color = color;
+            c.map.killzone.polygonOptions.color = color;
+
+            Cookies.set('polyline_default_color', color);
+
+            self.map.refreshPather();
+
+            self.addControl();
+        });
+
+        let $weight = $('#edit_route_freedraw_options_weight');
+        $weight.bind('change', function (changeEvent) {
+            let weight = $('#edit_route_freedraw_options_weight :selected').val();
+
+            c.map.polyline.defaultWeight = weight;
+
+            Cookies.set('polyline_default_weight', weight);
+
+            self.map.refreshPather();
+
+            self.addControl();
+        });
+    }
+
+    /**
+     * Adds the control to the map.
+     */
+    addControl() {
+        console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
+
+        // Remove if exists
+        if (this._mapControl !== null) {
+            this.map.leafletMap.removeControl(this._mapControl);
+        }
+
+        // Add the control to the map
+        this.drawControlOptions = this._getDrawControlOptions(this.editableItemsLayer);
+        this._mapControl = new L.Control.Draw(this.drawControlOptions);
+        this.map.leafletMap.addControl(this._mapControl);
+
+        // If the option wants, render it with a font-awesome icon instead.
+        // Surely there must be a better way for this but whatever, this works..
+        for (let optionName in this.drawControlOptions.draw) {
+            if (this.drawControlOptions.draw.hasOwnProperty(optionName)) {
+                let option = this.drawControlOptions.draw[optionName];
+                if (option.hasOwnProperty('faClass')) {
+                    // Set the FA icon and remove the background image that was initially there
+                    $(".leaflet-draw-draw-" + optionName)
+                        .html(this._getButtonHtml(option.faClass, lang.get('messages.' + optionName)))
+                        .css('background-image', 'none');
+                }
+            }
+        }
+
+        // Add the leaflet draw control to the bottom bar
+        this._addControlSetupBottomBar();
+
+        // Setup the brushline button, it's a custom contraption
+        if (this.drawControlOptions.brushline !== false) {
+            this._addControlSetupBrushlineButton();
+        }
+
+        // Edit and delete buttons need to be moved to the same container as the other buttons
+        this._addControlSetupEditDeleteButtons();
+
+        if (this.drawControlOptions.brushline !== false) {
+            this._addControlSetupPolylineOptions();
+        }
+
+        // Refresh some basics that need to be regenerated when html gets changed
         refreshTooltips();
+        refreshSelectPickers();
     }
 
     cleanup() {
         super.cleanup();
 
+        this.map.unregister('map:pathertoggled', this);
         // this.map.leafletMap.off(L.Draw.Event.CREATED);
     }
 }

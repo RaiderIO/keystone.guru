@@ -46,9 +46,6 @@ class AdminDungeonMap extends DungeonMap {
     refreshLeafletMap() {
         super.refreshLeafletMap();
 
-
-        let self = this;
-
         this.enemyAttaching = new EnemyAttaching(this);
     }
 

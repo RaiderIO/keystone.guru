@@ -43,52 +43,6 @@ if (isset($model)) {
         </div>
     @endisset
 
-    <!-- Enemy forces -->
-    <div class="form-group enemy_forces_container">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Enemy forces') }}</h5>
-                <!-- Draw controls are injected here through drawcontrols.js -->
-                <div id="edit_route_enemy_forces_container">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit route -->
-    <div class="form-group route_manipulation_tools">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Edit route') }}</h5>
-                <!-- Draw controls are injected here through drawcontrols.js -->
-                <div id="edit_route_draw_container" class="row">
-
-                </div>
-                <div id="edit_route_freedraw_options_container" class="mt-2">
-                    <div class="row">
-                        <div class="col">
-                            {!! Form::label('edit_route_freedraw_options_color', __('Color'), ['class' => 'font-weight-bold']) !!}
-                        </div>
-                        <div class="col">
-                            {!! Form::label('edit_route_freedraw_options_weight', __('Weight'), ['class' => 'font-weight-bold']) !!}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <?php /* The default color here should be matched with those in c.map.path.defaultColor etc */ ?>
-                            {!! Form::color('edit_route_freedraw_options_color', '#9DFF56', ['id' => 'edit_route_freedraw_options_color', 'class' => 'form-control']) !!}
-                        </div>
-                        <div class="col">
-                            {!! Form::select('edit_route_freedraw_options_weight', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6], 3,
-                            ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @isset($show['shareable-link'])
         <!-- Shareable link -->
         <div class="form-group">
@@ -156,11 +110,11 @@ if (isset($model)) {
                 <div class="col">
                     <div id="map_route_publish"
                          class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}">
-                        <i class="fa fa-check-circle"></i> {{ __('Publish route') }}
+                        <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
                     </div>
                     <div id="map_route_unpublish"
                          class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
-                        <i class="fa fa-times-circle"></i> {{ __('Unpublish route') }}
+                        <i class="fa fa-plane-arrival"></i> {{ __('Unpublish route') }}
                     </div>
                 </div>
             </div>
@@ -181,7 +135,7 @@ if (isset($model)) {
     @isset($show['no-modifications-warning'])
         <div class="form-group">
             <div class="alert alert-warning text-center">
-                <i class="fa fa-exclamation-triangle"></i> {{ __('Warning! Any modification you make in tryout mode will not be saved!') }}
+                <i class="fa fa-exclamation-triangle"></i> {{ __('Any modification you make in tryout mode will not be saved!') }}
             </div>
         </div>
     @endisset

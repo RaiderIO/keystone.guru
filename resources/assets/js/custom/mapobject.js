@@ -119,6 +119,12 @@ class MapObject extends Signalable {
         return this._defaultVisible;
     }
 
+    /**
+     * Unbinds the tooltip from this map object.
+     */
+    unbindTooltip() {
+        this.layer.unbindTooltip();
+    }
 
     /**
      * Applies the tooltip to this map object if applicable.

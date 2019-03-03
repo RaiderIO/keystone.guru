@@ -5,14 +5,66 @@
 @section('content')
 
     <h4>
+        v2.2 (2019/03/04)
+    </h4>
+    <p>
+        Description: <br>
+        This release focuses on improving some user interface elements. I'm not done yet with the changes, but this
+        should be a good improvement already regardless.
+    </p>
+
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/137">#137</a>
+            Assets are now versioned; this means your cached version of Keystone.guru will be invalidated whenever I
+            push an update. This should prevent errors from occurring when taking an old website (your cached version)
+            and having it talk to the new back-end (should there be such breaking changes).
+        </li>
+    </ul>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/118">#118</a>
+            The (buggy) free drawing tool has been replaced by a new tool. This one should be bug-free and offer a much
+            better user experience. Draw away!
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/140">#140</a>
+            The drawing tools are no longer located in the sidebar. Instead, they are now found in a new floating bar
+            that lives on the lower side of your screen. This should reduce the amount of travel your mouse has to do,
+            and puts all items in a more convenient place. This also aids mobile users in creating their routes. In the
+            future I will be looking at adding more elements to this bar so that the sidebar should no longer be needed
+            for general usage, or can be removed entirely.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/141">#141</a>
+            Removed the popup to select a raid marker when clicking on an enemy. Instead, a circle menu pops out and
+            allows you to select the raid marker that way. This should make the process a tad quicker and more
+            aesthetically pleasing.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/142">#142</a>
+            Enemy forces are now displayed in the above mentioned floating bar.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/143">#143</a>
+            Updating your enemy forces (through adding enemies to a Killzone) will now briefly flash the enemy forces
+            display with a green color, rather than showing a small popup.
+        </li>
+    </ul>
+
+    <h4>
         v2.1 (2019/02/20)
     </h4>
     <p>
         Description: <br>
         This release focuses on improving the codebase, increasing performance and tying up some loose ends in the code.
-        There will be some improvements and bugfixes but no major new features. I will be focussing on that in next
+        There will be some improvements and bug fixes but no major new features. I will be focussing on that in next
         releases now that the codebase is much stronger than before.
-
     </p>
     <p>
         General changes:

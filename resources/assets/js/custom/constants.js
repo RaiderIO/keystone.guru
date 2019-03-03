@@ -1,4 +1,15 @@
-var c = {
+if( typeof Cookies.get('polyline_default_color') === 'undefined' ){
+    Cookies.set('polyline_default_color', '#9DFF56');
+}
+if( typeof Cookies.get('polyline_default_weight') === 'undefined' ){
+    Cookies.set('polyline_default_weight', 3);
+}
+
+Cookies.defaults = $.extend(Cookies.defaults, {
+    polyline_default_color: '#9DFF56',
+});
+
+let c = {
     map: {
         admin: {
             mapobject: {
@@ -62,11 +73,11 @@ var c = {
         },
         /* These colors may be overriden by drawcontrols.js */
         path: {
-            defaultColor: '#9DFF56',
+            defaultColor: Cookies.get('polyline_default_color'),
         },
         polyline: {
-            defaultColor: '#9DFF56',
-            defaultWeight: 3,
+            defaultColor: Cookies.get('polyline_default_color'),
+            defaultWeight: Cookies.get('polyline_default_weight'),
         },
         brushline: {
             /**
@@ -87,11 +98,11 @@ var c = {
                 mouseoverAddObject: '#5993D2',
             },
             polylineOptions: {
-                color: '#9DFF56',
+                color: Cookies.get('polyline_default_color'),
                 weight: 1
             },
             polygonOptions: {
-                color: '#9DFF56',
+                color: Cookies.get('polyline_default_color'),
                 weight: 2,
                 fillOpacity: 0.3,
                 opacity: 1

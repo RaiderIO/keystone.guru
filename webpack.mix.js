@@ -1,6 +1,50 @@
 const mix = require('laravel-mix');
 const argv = require('yargs').argv;
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
+let gitRevisionPlugin = null; // Init in the config below
+
+mix.webpackConfig({
+    watchOptions: {
+        ignored: ['node_modules', 'vendor'],
+        poll: 1000 // Check for changes every second
+    },
+    // Handlebars has a bug which requires this: https://github.com/wycats/handlebars.js/issues/1174
+    resolve: {
+        alias: {
+            handlebars: 'handlebars/dist/handlebars.min.js'
+        }
+    },
+    // Translations
+    module: {
+        rules: [{
+            // Matches all PHP or JSON files in `resources/lang` directory.
+            test: /resources[\\\/]lang.+\.(php|json)$/,
+            loader: 'laravel-localization-loader',
+        }]
+    },
+    plugins: [
+        // Use git version to output our files
+        gitRevisionPlugin = new GitRevisionPlugin({
+            versionCommand: 'tag | tail -n1'
+        }),
+
+        // // Compile handlebars
+        new WebpackShellPlugin({
+            onBuildStart: [
+                // Update version file. Required by PHP version library to get the proper version
+                // See https://stackoverflow.com/a/39611938/771270
+                // As for the platform switch, it stopped working at some point.. linux won't do without -l anymore,
+                // windows doesn't work with it.
+                process.platform === 'win32' ?  'git tag | tail -n1 > version' : 'git tag | tail -n1 -l > version',
+                // Compile handlebars
+                'handlebars ' + (mix.inProduction() ? '-m ' : '') +
+                'resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'
+            ],
+            onBuildEnd: []
+        })
+    ]
+});
 
 /*
  |--------------------------------------------------------------------------
@@ -26,9 +70,6 @@ if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
 }
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
-
-// Custom processing only
-mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom.css');
 
 let precompile = [
     // Translations
@@ -119,41 +160,23 @@ let scripts = [
     'resources/assets/js/custom/groupcomposition.js',
 ];
 
+// Output of files
+
+// Custom processing only
+mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom-' + gitRevisionPlugin.version() + '.css');
+
 // Do not translate in development
 if (mix.inProduction()) {
-    mix.babel(scripts, 'public/js/custom.js');
+    mix.babel(scripts, 'public/js/custom-' + gitRevisionPlugin.version() + '.js');
 } else {
-    mix.scripts(scripts, 'public/js/custom.js');
+    mix.scripts(scripts, 'public/js/custom-' + gitRevisionPlugin.version() + '.js');
 }
 
-// Handlebars has a bug which requires this: https://github.com/wycats/handlebars.js/issues/1174
-mix.webpackConfig({
-    resolve: {
-        alias: {
-            handlebars: 'handlebars/dist/handlebars.min.js'
-        }
-    },
-    // Translations
-    module: {
-        rules: [{
-                // Matches all PHP or JSON files in `resources/lang` directory.
-                test: /resources[\\\/]lang.+\.(php|json)$/,
-                loader: 'laravel-localization-loader',
-            }
-        ]
-    },
-    plugins: [
-        // Compile handlebars
-        mix.inProduction() ?
-            new WebpackShellPlugin({onBuildStart: ['handlebars -m resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'], onBuildEnd: []}) :
-            new WebpackShellPlugin({onBuildStart: ['handlebars resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'], onBuildEnd: []})
-    ]
-});
-mix.js('resources/assets/js/app.js', 'public/js')
-    .sass('resources/assets/sass/app.scss', 'public/css')
+mix.js('resources/assets/js/app.js', 'public/js/app-' + gitRevisionPlugin.version() + '.js')
+    .sass('resources/assets/sass/app.scss', 'public/css/app-' + gitRevisionPlugin.version() + '.css')
     // Lib processing
-    .styles(['resources/assets/lib/**/*.css'], 'public/css/lib.css')
-    .babel('resources/assets/lib/**/*.js', 'public/js/lib.js');
+    .styles(['resources/assets/lib/**/*.css'], 'public/css/lib-' + gitRevisionPlugin.version() + '.css')
+    .babel('resources/assets/lib/**/*.js', 'public/js/lib-' + gitRevisionPlugin.version() + '.js');
 
 mix.sourceMaps();
 

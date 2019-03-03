@@ -30,6 +30,8 @@ class DungeonMap extends Signalable {
         this.currentEnemySelection = null;
         //  Whatever killzone is currently in select mode
         this.currentSelectModeKillZone = null;
+        // Pather instance
+        this.pather = null;
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i = 0; i < this.mapObjectGroupManager.mapObjectGroups.length; i++) {
@@ -98,17 +100,11 @@ class DungeonMap extends Signalable {
         // this.leafletMap.zoomControl.setPosition('topright');
 
         // Special handling for brush drawing
-        this.leafletMap.on(L.Draw.Event.DRAWSTART, function (e) {
-            // If it's brushline, disable, otherwise enable
-            if (e.layerType === 'brushline') {
-                self._startBrushlineDrawing();
-            }
+        this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function (e) {
+            // Disable pather if we were doing it
+            self.togglePather(false);
         });
         this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
-            if (e.layerType === 'brushline') {
-                self._stopBrushlineDrawing();
-            }
-
             // After adding, there may be layers when there were none. Fix the edit/delete tooltips
             refreshTooltips();
         });
@@ -137,8 +133,7 @@ class DungeonMap extends Signalable {
             let layerDeletedFn = function () {
                 layersDeleted++;
                 if (layersDeleted === layersLength) {
-                    // @TODO JS translations?
-                    addFixedFooterSuccess("Objects deleted successfully.");
+                    addFixedFooterSuccess(lang.get('messages.object.deleted'), 1500);
                 }
             };
 
@@ -281,88 +276,12 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Should be called when the brushline drawing has started by the user.
-     * @private
-     */
-    _startBrushlineDrawing() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-        let self = this;
-
-        this._setMapInteraction(false);
-
-        let workingLayer = null;
-        let lastMouseX, lastMouseY;
-
-        // Fn for when a layer is first added after starting the brushline drawing.
-        let layerAddFn = function (mouseEvent) {
-            // Only if the layer is the made polyline!
-            if (workingLayer === null && mouseEvent.layer.hasOwnProperty('_latlngs')) {
-                workingLayer = mouseEvent.layer;
-                // Unsub
-                self.leafletMap.off('layeradd', layerAddFn);
-            }
-            // Initial click on the map
-            // else {
-            //     let el = document.getElementById('map');
-            //     let ev = document.createEvent("MouseEvent");
-            //
-            //     ev.initMouseEvent(
-            //         "click",
-            //         true /* bubble */, true /* cancelable */,
-            //         window, null,
-            //         lastMouseX, lastMouseY, 0, 0, /* coordinates */
-            //         false, false, false, false, /* modifier keys */
-            //         0 /*left*/, null
-            //     );
-            //     el.dispatchEvent(ev);
-            // }
-        };
-        this.leafletMap.on('layeradd', layerAddFn);
-
-        this.leafletMap.on('mousemove', function (mouseEvent) {
-            lastMouseX = mouseEvent.layerPoint.x;
-            lastMouseY = mouseEvent.layerPoint.y;
-
-            // Only when a button is pressed
-            if (mouseEvent.originalEvent.buttons === 1 && workingLayer !== null) {
-                let latLngs = workingLayer.getLatLngs();
-
-                let mayAdd = true;
-                if (latLngs.length > 0) {
-                    let lastLatLng = latLngs[latLngs.length - 1];
-
-                    if (getDistanceSquared(lastLatLng, mouseEvent.latlng) < c.map.brushline.minDrawDistanceSquared) {
-                        mayAdd = false;
-                    }
-                }
-
-                if (mayAdd) {
-                    workingLayer.addLatLng(mouseEvent.latlng);
-                }
-            }
-        });
-    }
-
-    /**
-     * Should be called when the brushline drawing is stopped by the user.
-     * @private
-     */
-    _stopBrushlineDrawing() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        this._setMapInteraction(true);
-
-        this.leafletMap.off('mousemove');
-    }
-
-    /**
      * Set the map to be interactive or not. https://gis.stackexchange.com/a/54925
      * @param enabled
      * @private
      */
     _setMapInteraction(enabled) {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-        console.log('_setMapInteraction', enabled);
 
         if (enabled) {
             this.leafletMap.dragging.enable();
@@ -578,6 +497,8 @@ class DungeonMap extends Signalable {
     refreshLeafletMap() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
+        let self = this;
+
         this.signal('map:beforerefresh', {dungeonmap: this});
 
         // If we were selecting enemies, stop doing that now
@@ -627,6 +548,40 @@ class DungeonMap extends Signalable {
         if (!this.options.showAttribution) {
             $('.leaflet-control-attribution').hide();
         }
+
+        // Pather for drawing lines
+        if (this.pather !== null) {
+            this.leafletMap.removeLayer(this.pather);
+        }
+
+        this.pather = new L.Pather();
+        this.pather.on('created', function (patherEvent) {
+            // Add the newly created polyline to our system
+            let mapObjectGroup = self.mapObjectGroupManager.getByName('brushline');
+
+            // Create a new brushline
+            let points = [];
+
+            // Convert the latlngs into something the polyline constructor understands
+            let vertices = patherEvent.latLngs;
+            for (let i = 0; i < vertices.length; i++) {
+                let vertex = vertices[i];
+                points.push([vertex.lat, vertex.lng]);
+            }
+
+            let layer = L.polyline(points);
+
+            let object = mapObjectGroup.createNew(layer);
+            object.save();
+
+            // Remove it from Pather, we only use Pather for creating the actual layer
+            self.pather.removePath(patherEvent.polyline);
+        });
+        this.leafletMap.addLayer(this.pather);
+        // Set its options properly
+        this.refreshPather();
+        // Not enabled at this time
+        this.togglePather(false);
     }
 
     /**
@@ -703,6 +658,47 @@ class DungeonMap extends Signalable {
      */
     getVisualType() {
         return this.visualType;
+    }
+
+    /**
+     * Checks if pather is currently active or not.
+     * @returns {boolean}
+     */
+    isPatherActive() {
+        return this.pather !== null && this.pather.getMode() === L.Pather.MODE.CREATE;
+    }
+
+    /**
+     * Toggle pather to be enabled or not.
+     * @param enabled
+     */
+    togglePather(enabled) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        // May be null when initializing
+        if (this.pather !== null) {
+            //  When enabled, add to the map
+            if (enabled) {
+                this.pather.setMode(L.Pather.MODE.CREATE);
+            } else {
+                this.pather.setMode(L.Pather.MODE.VIEW);
+            }
+
+            this.signal('map:pathertoggled', {enabled: enabled});
+        }
+    }
+
+    /**
+     *
+     */
+    refreshPather() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+        console.assert(this.pather instanceof L.Pather, 'this.pather is not a L.Pather', this.pather);
+        this.pather.setOptions({
+            strokeWidth: c.map.polyline.defaultWeight,
+            smoothFactor: 5,
+            pathColour: c.map.polyline.defaultColor
+        });
     }
 }
 

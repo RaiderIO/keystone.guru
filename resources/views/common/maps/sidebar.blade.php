@@ -42,8 +42,6 @@
             // Move toggle button back
             $sidebarToggle.removeClass('active');
             $sidebarToggle.attr('title', "{{ __('Expand the sidebar') }}");
-            // Move draw actions (inverted from other buttons since we can't add active class by default easily)
-            $drawActions.addClass('inactive');
             // Toggle image
             $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
         }
@@ -59,8 +57,6 @@
             // Move toggle button
             $sidebarToggle.addClass('active');
             $sidebarToggle.attr('title', "{{ __('Collapse the sidebar') }}");
-            // Move draw actions
-            $drawActions.removeClass('inactive');
             // Toggle image
             $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
         }
@@ -97,12 +93,10 @@
 <!-- Sidebar -->
 <nav id="sidebar" class="{{ $isMobile ? '' : 'active' }}">
     <div class="sidebar-header">
-        <h4>{!! $header !!}</h4>
-        <div style="min-height: 25px;">
+        <h4 title="{!! $header !!}" data-toggle="tooltip">{!! $header !!}</h4>
+        <div class="sidebar-header-subtitle">
             @isset($subHeader)
                 {!! $subHeader !!}
-            @else
-                &nbsp;
             @endisset
         </div>
         <span>

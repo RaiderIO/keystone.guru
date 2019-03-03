@@ -67,7 +67,7 @@ html, body, #map, #app, .wrapper {
     transition: all 0.2s;
 
     position: fixed;
-    top: 156px;
+    top: 106px;
     left: 0;
     cursor: pointer;
     z-index: 1050;
@@ -87,19 +87,34 @@ html, body, #map, #app, .wrapper {
 }
 
 #sidebar .sidebar-header {
-    padding: 20px;
+    padding: 10px 20px;
     background: #2B3E50;
 }
 
 /* Force reserve height */
 #sidebar .sidebar-header h4 {
-    height: 2.4em;
     -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap
+}
+
+#sidebar .sidebar-header-subtitle {
+    padding-left: 10px;
+    min-height: 25px;
+    color: #C1C1C1;
+}
+
+#sidebar .sidebar-content .container {
+    padding: 0 15px;
 }
 
 #sidebar .sidebar-content {
-    padding-top: 15px;
+    padding-top: 10px;
+}
+
+#sidebar .sidebar-content .card-body {
+    padding: 0.75rem 1.25rem;
 }
 
 #sidebar .sidebar-panel {
@@ -108,11 +123,27 @@ html, body, #map, #app, .wrapper {
     margin: 4px;
 }
 
-#sidebar .draw_icon {
-    height: 35px;
-    line-height: 35px;
+
+.route_manipulation_tools {
+    background-color: rgba(78, 93, 108, 0.75);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    border-left: #2B3E50 solid 1px;
+    border-top: #2B3E50 solid 1px;
+    border-right: #2B3E50 solid 1px;
+
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+@media screen and (min-width: 1000px) {
+    .route_manipulation_tools {
+        width: 1000px;
+    }
+}
+
+.route_manipulation_tools .draw_icon {
     text-align: center;
-    background: #DF691A;
+    background: #5bc0de;
     cursor: pointer;
     margin: 0 10px;
     -webkit-transition: all 0.2s;
@@ -120,14 +151,29 @@ html, body, #map, #app, .wrapper {
     transition: all 0.2s;
 }
 
-#sidebar .draw_icon.leaflet-draw-toolbar-button-enabled,
-#sidebar .draw_icon:hover {
-    background: rgb(235, 235, 235);
-    color: #DF691A;
+.route_manipulation_tools .draw_element {
+    text-align: center;
+    margin-top: 8px;
 }
 
-#sidebar .draw_icon.leaflet-draw-toolbar-button-enabled {
-    border: 2px solid #DF691A;
+.route_manipulation_tools .draw_element .bootstrap-select,
+.route_manipulation_tools .draw_element button,
+.route_manipulation_tools .draw_element input {
+    height: 100%;
+}
+
+.route_manipulation_tools .draw_icon.leaflet-disabled,
+.route_manipulation_tools .draw_icon.leaflet-disabled:hover {
+    background: gray;
+    color: inherit;
+    text-decoration: unset;
+    cursor: default;
+}
+
+.route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled,
+.route_manipulation_tools .draw_icon:hover {
+    background: #DF691A;
+    color: rgb(235, 235, 235) !important;
 }
 
 .floating_panel,
@@ -140,7 +186,9 @@ html, body, #map, #app, .wrapper {
 }
 
 #edit_route_freedraw_options_color,
-#sidebar .dropdown.bootstrap-select .btn {
+#sidebar .dropdown.bootstrap-select .btn,
+.route_manipulation_tools .dropdown.bootstrap-select,
+.route_manipulation_tools .dropdown.bootstrap-select .btn {
     background-color: #4E5D6C;
     color: #FFF;
     border: 1px solid #2B3E5066;
@@ -151,18 +199,17 @@ html, body, #map, #app, .wrapper {
 }
 
 #edit_route_draw_container .leaflet-draw-actions {
-    left: 300px;
-    top: 195px !important;
-    background: #4E5D6C;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-    position: fixed;
+    background-color: rgb(78, 93, 108);
+    box-shadow: 3px 0 3px rgba(0, 0, 0, 0.2);
     -webkit-transition: all 0.2s;
     -o-transition: all 0.2s;
     transition: all 0.2s;
-}
 
-#edit_route_draw_container .leaflet-draw-actions.inactive {
-    left: 0;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 94px;
+    top: unset !important;
 }
 
 #edit_route_draw_container .leaflet-draw-actions li {
@@ -170,7 +217,7 @@ html, body, #map, #app, .wrapper {
 }
 
 #edit_route_draw_container .leaflet-draw-actions a {
-    background: #4E5D6C;
+    background: inherit;
     color: #DF691A;
     font-size: 14px;
 }
@@ -233,6 +280,14 @@ html, body, #map, #app, .wrapper {
 
 /** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */
 /** leaflet-marker-icon leaflet-div-icon leaflet-editing-icon leaflet-touch-icon leaflet-zoom-animated leaflet-interactive leaflet-marker-draggable */
+
+.circleMenu-closed {
+    opacity: 0;
+}
+
+.circleMenu-open {
+    opacity: 1;
+}
 
 .selected_enemy_icon,
 .enemy_icon {
@@ -466,4 +521,48 @@ html, body, #map, #app, .wrapper {
 
 #map_ad_vertical {
     right: 0;
+}
+
+
+#map.mode-create {
+    cursor: crosshair;
+}
+
+#map div.elbow {
+    transition: background-color .25s;
+    border: 2px solid white;
+    outline: none;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .1);
+    border-radius: 50%;
+    pointer-events: none;
+    background-color: #555;
+}
+
+#map.mode-edit div.elbow {
+    cursor: move;
+    pointer-events: all;
+    background-color: orangered;
+}
+
+#map.mode-delete:not(.mode-append) path {
+    cursor: not-allowed;
+}
+
+#map svg {
+    position: absolute;
+    z-index: 1001;
+}
+
+.flash {
+    animation-name: flash-animation;
+    animation-duration: 0.75s;
+}
+
+@keyframes flash-animation {
+    from {
+        color: #9DFF56;
+    }
+    to {
+        color: inherit;
+    }
 }

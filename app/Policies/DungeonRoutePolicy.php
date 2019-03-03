@@ -14,10 +14,10 @@ class DungeonRoutePolicy
      * Determine whether the user can view the dungeon route.
      *
      * @param  \App\User $user
-     * @param  \App\Models\DungeonRoute $dungeonRoute
+     * @param  \App\Models\DungeonRoute $dungeonroute
      * @return mixed
      */
-    public function view()
+    public function view(User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
         return true;
@@ -57,7 +57,7 @@ class DungeonRoutePolicy
      */
     public function clone(User $user, DungeonRoute $dungeonroute)
     {
-        return true;
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**
@@ -70,43 +70,43 @@ class DungeonRoutePolicy
     public function edit(User $user, DungeonRoute $dungeonroute)
     {
         // Only authors or if the user is an admin
-        return $user->id === $dungeonroute->author_id || $user->hasRole('admin');
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**
      * Determine whether the user can delete the dungeon route.
      *
      * @param  \App\User $user
-     * @param  \App\Models\DungeonRoute $dungeonRoute
+     * @param  \App\Models\DungeonRoute $dungeonroute
      * @return mixed
      */
-    public function delete(User $user, DungeonRoute $dungeonRoute)
+    public function delete(User $user, DungeonRoute $dungeonroute)
     {
         // Only the admin may delete routes
-        return ($user !== null && $user->id === $dungeonRoute->author_id) || $user->hasRole('admin');
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**
      * Determine whether the user can restore the dungeon route.
      *
      * @param  \App\User $user
-     * @param  \App\Models\DungeonRoute $dungeonRoute
+     * @param  \App\Models\DungeonRoute $dungeonroute
      * @return mixed
      */
-    public function restore(User $user, DungeonRoute $dungeonRoute)
+    public function restore(User $user, DungeonRoute $dungeonroute)
     {
         // Only authors or if the user is an admin
-        return $user->id === $dungeonRoute->author_id || $user->hasRole('admin');
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**
      * Determine whether the user can permanently delete the dungeon route.
      *
      * @param  \App\User $user
-     * @param  \App\Models\DungeonRoute $dungeonRoute
+     * @param  \App\Models\DungeonRoute $dungeonroute
      * @return mixed
      */
-    public function forceDelete(User $user, DungeonRoute $dungeonRoute)
+    public function forceDelete(User $user, DungeonRoute $dungeonroute)
     {
         //
         return $user->hasRole('admin');

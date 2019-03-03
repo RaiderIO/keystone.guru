@@ -5,7 +5,7 @@ $isAdmin = isset($admin) && $admin;
 /** @var App\Models\DungeonRoute $dungeonroute */
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
-$edit = isset($edit) && $edit ? 'true' : 'false';
+$edit = isset($edit) && $edit ? true : false;
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
 // Set the key to 'try' if try mode is enabled
 $routePublicKey = isset($tryMode) && $tryMode ? 'try' : $routePublicKey;
@@ -39,9 +39,14 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? 'false' : 'tru
 $introTexts = [
     __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
     __('You can use this button to hide or show the sidebar.'),
-    __('This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).'),
+
+    __('Here you can select different visualization options.'),
+    __('You can chose from multiple different visualizations to help you quickly find the information you need.'),
+
+    __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
 
     __('These are your route manipulation tools.'),
+    __('This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).'),
     __('You can draw paths with this tool. Click it, then draw a path (a line) from A to B, with as many points are you like. Once finished, you can click
     the line on the map to change its color. You can add as many paths as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
     or purple for a Warlock Gateway, for example.'),
@@ -51,16 +56,11 @@ $introTexts = [
     __('Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.'),
     __('Use this control to free draw lines on your route.'),
 
-    __('This is the edit button. You can use it to adjust your created routes, move your killzones or comments.'),
+    __('This is the edit button. You can use it to adjust your created routes, move your killzones, comments or free drawn lines.'),
     __('This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
     that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!'),
 
     __('The color and weight selection affect newly placed free drawn lines and routes. Killzones get the selected color by default.'),
-
-    __('Here you can select different visualization options.'),
-    __('You can chose from multiple different visualizations to help you quickly find the information you need.'),
-
-    __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
 
     __('These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.')
 ];
@@ -82,7 +82,7 @@ $introTexts = [
         // Options for the dungeonmap object
         var options = {
             floorId: {{ $floorId }},
-            edit: {{ $edit }},
+            edit: {{ $edit ? 'true' : 'false'}},
             dungeonroute: {
                 publicKey: '{{ $routePublicKey }}',
                 faction: '{{ $routeFaction }}'
@@ -120,22 +120,22 @@ $introTexts = [
             var selectors = [
                 ['#sidebar', 'right'],
                 ['#sidebarToggle', 'right'],
-                ['.enemy_forces_container', 'right'],
-
-                ['.route_manipulation_tools', 'right'],
-                ['.leaflet-draw-draw-path', 'right'],
-                ['.leaflet-draw-draw-killzone', 'right'],
-                ['.leaflet-draw-draw-mapcomment', 'right'],
-                ['.leaflet-draw-draw-brushline', 'right'],
-
-                ['.leaflet-draw-edit-edit', 'right'],
-                ['.leaflet-draw-edit-remove', 'right'],
-
-                ['#edit_route_freedraw_options_container', 'right'],
 
                 ['.visibility_tools', 'right'],
                 ['#map_enemy_visuals', 'right'],
                 ['.floor_selection', 'right'],
+
+                ['.route_manipulation_tools', 'top'],
+                ['#map_enemy_forces_numbers', 'top'],
+                ['.leaflet-draw-draw-path', 'top'],
+                ['.leaflet-draw-draw-killzone', 'top'],
+                ['.leaflet-draw-draw-mapcomment', 'top'],
+                ['.leaflet-draw-draw-brushline', 'top'],
+
+                ['.leaflet-draw-edit-edit', 'top'],
+                ['.leaflet-draw-edit-remove', 'top'],
+
+                ['#edit_route_freedraw_options_container', 'right'],
 
                 ['#map_controls .leaflet-draw-toolbar', 'left'],
             ];
@@ -146,7 +146,7 @@ $introTexts = [
                 for (var i = 0; i < selectors.length; i++) {
                     var $selector = $(selectors[i][0]);
                     // Floor selection may not exist
-                    if( $selector.length > 0 ){
+                    if ($selector.length > 0) {
                         $selector.attr('data-intro', texts[i]);
                         $selector.attr('data-position', selectors[i][1]);
                         $selector.attr('data-step', i + 1);
@@ -402,6 +402,22 @@ $introTexts = [
      data-position="auto">
 
 </div>
+
+@if($edit)
+    <footer class="fixed-bottom route_manipulation_tools">
+        <div class="container">
+            <!-- Draw controls are injected here through enemyforces.js -->
+            <div id="edit_route_enemy_forces_container" class="row col-6 m-auto text-center">
+
+            </div>
+
+            <!-- Draw controls are injected here through drawcontrols.js -->
+            <div id="edit_route_draw_container" class="row">
+
+            </div>
+        </div>
+    </footer>
+@endif
 
 @if($showAds)
     @php($isMobile = (new \Jenssegers\Agent\Agent())->isMobile())

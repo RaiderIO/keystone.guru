@@ -114,12 +114,16 @@
 
 /* Fixed messages always on top */
 .fixed-bottom {
-    z-index: 10000;
+    z-index: 1000;
 }
 
 /* Floating top header should be top, but not too top */
 .fixed-top {
     z-index: 800 !important;
+}
+
+.alert_fixed_footer {
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 /** GENERAL ICONS */
