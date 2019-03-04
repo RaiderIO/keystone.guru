@@ -5,6 +5,19 @@
 @section('content')
 
     <h4>
+        v2.2.1 (2019/03/04)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/146">#146</a>
+            Fixed an error that occurred MDT Importer when your imported routes had any drawn lines.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         v2.2 (2019/03/04)
     </h4>
     <p>
@@ -23,6 +36,7 @@
             and having it talk to the new back-end (should there be such breaking changes).
         </li>
     </ul>
+    </p>
 
     <p>
         Map changes:
@@ -56,6 +70,7 @@
             display with a green color, rather than showing a small popup.
         </li>
     </ul>
+    </p>
 
     <h4>
         v2.1 (2019/02/20)
@@ -501,6 +516,7 @@
             </ul>
         </li>
     </ul>
+    </p>
 
     <h4>
         v1.6 (2019/01/04)
