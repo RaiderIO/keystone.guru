@@ -34,9 +34,7 @@ mix.webpackConfig({
             onBuildStart: [
                 // Update version file. Required by PHP version library to get the proper version
                 // See https://stackoverflow.com/a/39611938/771270
-                // As for the platform switch, it stopped working at some point.. linux won't do without -l anymore,
-                // windows doesn't work with it.
-                process.platform === 'win32' ?  'git tag | tail -n1 > version' : 'git tag | tail -n1 -l > version',
+                'git tag | tail -n1 > version',
                 // Compile handlebars
                 'handlebars ' + (mix.inProduction() ? '-m ' : '') +
                 'resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'

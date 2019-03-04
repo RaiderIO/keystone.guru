@@ -63,7 +63,9 @@ class Brushline extends Model
         // Delete Path properly if it gets deleted
         static::deleting(function ($item) {
             /** @var $item Brushline */
-            $item->polyline->delete();
+            if ($item->polyline !== null) {
+                $item->polyline->delete();
+            }
         });
     }
 }
