@@ -11,6 +11,7 @@ namespace App\Logic\MDT\IO;
 
 use App\Logic\MDT\Conversion;
 use App\Models\AffixGroup;
+use App\Models\Brushline;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
 use App\Models\Enemy;
@@ -226,10 +227,12 @@ class ImportString
                 if (isset($object['l'])) {
                     $line = $object['l'];
 
-                    $polyline = new Polyline();
+                    $brushline = new Brushline();
                     // Assign the proper ID
-                    $polyline->floor_id = $floor->id;
-                    $polyline->type = 'brushline';
+                    $brushline->floor_id = $floor->id;
+                    $brushline->polyline_id = -1;
+
+                    $polyline = new Polyline();
                     $polyline->color = '#' . $details['5'];
                     $polyline->weight = (int)$details['1'];
 
@@ -242,11 +245,16 @@ class ImportString
 
                     if ($save) {
                         // Only assign when saving
-                        $polyline->dungeon_route_id = $dungeonRoute->id;
+                        $brushline->dungeon_route_id = $dungeonRoute->id;
+                        $brushline->save();
+
+                        $polyline->model_id = $brushline->id;
+                        $polyline->model_class = get_class($brushline);
                         $polyline->save();
                     } else {
                         // Otherwise inject
-                        $dungeonRoute->polylines->push($polyline);
+                        $brushline->polyline = $polyline;
+                        $dungeonRoute->brushlines->push($brushline);
                     }
                 }
                 // Map comment (n = note)
