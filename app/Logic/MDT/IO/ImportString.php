@@ -67,12 +67,13 @@ class ImportString
     /**
      * Parse the $decoded['value']['pulls'] value and put it in the $dungeonRoute object, optionally $save'ing the
      * values to the database.
+     * @param $warnings Collection A Collection of Warnings that this parsing may produce.
      * @param $decoded array
      * @param $dungeonRoute DungeonRoute
      * @param $save boolean
      * @throws \Exception
      */
-    private function _parseValuePulls($decoded, $dungeonRoute, $save)
+    private function _parseValuePulls(&$warnings, $decoded, $dungeonRoute, $save)
     {
         $floors = $dungeonRoute->dungeon->floors;
         $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
@@ -98,67 +99,77 @@ class ImportString
             $kzLng = 0;
             $floorId = -1;
 
-            // For each NPC that is killed in this pull (and their clones)
-            foreach ($pull as $npcIndex => $mdtClones) {
-                $npcIndex = (int)$npcIndex;
-                // Only if filled
-                $enemyCount = count($mdtClones);
-                foreach ($mdtClones as $index => $cloneIndex) {
-                    // This comes in through as a double, cast to int
-                    $cloneIndex = (int)$cloneIndex;
+            try {
+                // For each NPC that is killed in this pull (and their clones)
+                foreach ($pull as $npcIndex => $mdtClones) {
+                    $npcIndex = (int)$npcIndex;
+                    // Only if filled
+                    $enemyCount = count($mdtClones);
+                    foreach ($mdtClones as $index => $cloneIndex) {
+                        // This comes in through as a double, cast to int
+                        $cloneIndex = (int)$cloneIndex;
 
-                    // Find the matching enemy of the clones
-                    /** @var Enemy $mdtEnemy */
-                    $mdtEnemy = null;
-                    foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                        // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
-                        // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
-                        $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
-                        // NPC and clone index make for unique ID
-                        if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
-                            // Found it
-                            $mdtEnemy = $mdtEnemyCandidate;
-                            break;
+                        // Find the matching enemy of the clones
+                        /** @var Enemy $mdtEnemy */
+                        $mdtEnemy = null;
+                        foreach ($mdtEnemies as $mdtEnemyCandidate) {
+                            // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
+                            // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
+                            $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
+                            // NPC and clone index make for unique ID
+                            if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
+                                // Found it
+                                $mdtEnemy = $mdtEnemyCandidate;
+                                break;
+                            }
                         }
-                    }
 
-                    if ($mdtEnemy === null) {
-                        throw new \Exception("Unable to find MDT enemy for index {$cloneIndex} and npc index {$npcIndex}!");
-                    }
-
-                    // We now know the MDT enemy that the user was trying to import. However, we need to know
-                    // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
-                    /** @var Enemy $enemy */
-                    $enemy = null;
-                    foreach ($enemies as $enemyCandidate) {
-                        if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
-                            $enemy = $enemyCandidate;
-                            break;
+                        if ($mdtEnemy === null) {
+                            throw new ImportWarning('pull',
+                                sprintf('Unable to find MDT enemy for clone index %s and npc index %s.', $cloneIndex, $npcIndex),
+                                ['details' => 'This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.']
+                            );
                         }
+
+                        // We now know the MDT enemy that the user was trying to import. However, we need to know
+                        // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
+                        /** @var Enemy $enemy */
+                        $enemy = null;
+                        foreach ($enemies as $enemyCandidate) {
+                            if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
+                                $enemy = $enemyCandidate;
+                                break;
+                            }
+                        }
+
+                        if ($enemy === null) {
+                            throw new ImportWarning('pull',
+                                sprintf('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC id %s', $mdtEnemy->mdt_id, $mdtEnemy->npc_id),
+                                ['details' => 'This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.']
+                            );
+                        }
+
+                        $kzLat += $enemy->lat;
+                        $kzLng += $enemy->lng;
+
+                        // Couple the KillZoneEnemy to its KillZone
+                        if ($save) {
+                            $kzEnemy = new KillZoneEnemy();
+                            $kzEnemy->enemy_id = $enemy->id;
+                            $kzEnemy->kill_zone_id = $killZone->id;
+                            $kzEnemy->save();
+                        } else {
+                            $killZone->enemies->push($enemy);
+                        }
+
+                        // Should be the same floor_id all the time, but we need it anyways
+                        $floorId = $enemy->floor_id;
                     }
 
-                    if ($enemy === null) {
-                        throw new \Exception("Unable to find enemy for mdt_id {$mdtEnemy->mdt_id}, npc_id {$mdtEnemy->npc_id}!");
-                    }
-
-                    $kzLat += $enemy->lat;
-                    $kzLng += $enemy->lng;
-
-                    // Couple the KillZoneEnemy to its KillZone
-                    if ($save) {
-                        $kzEnemy = new KillZoneEnemy();
-                        $kzEnemy->enemy_id = $enemy->id;
-                        $kzEnemy->kill_zone_id = $killZone->id;
-                        $kzEnemy->save();
-                    } else {
-                        $killZone->enemies->push($enemy);
-                    }
-
-                    // Should be the same floor_id all the time, but we need it anyways
-                    $floorId = $enemy->floor_id;
+                    $totalEnemiesKilled += $enemyCount;
                 }
-
-                $totalEnemiesKilled += $enemyCount;
+            } catch (ImportWarning $warning) {
+                $warnings->push($warning);
             }
 
             // KillZones at the average position of all killed enemies
@@ -300,11 +311,12 @@ class ImportString
 
     /**
      * Gets the dungeon route based on the currently encoded string.
+     * @param $warnings Collection Collection that is passed by reference in which any warnings are stored.
      * @param $save boolean True to save the route and all associated models, false to not save & couple.
      * @return DungeonRoute|bool DungeonRoute if the route could be constructed, false if the string was invalid.
      * @throws \Exception
      */
-    public function getDungeonRoute($save = false)
+    public function getDungeonRoute(&$warnings, $save = false)
     {
         // @TODO This needs a "table" to dungeon route conversion first
         $lua = $this->_getLua();
@@ -332,7 +344,7 @@ class ImportString
                 $dungeonRoute->save();
             } else {
                 $dungeonRoute->killzones = new Collection();
-                $dungeonRoute->polylines = new Collection();
+                $dungeonRoute->brushlines = new Collection();
             }
 
             // Set the affix for this route
