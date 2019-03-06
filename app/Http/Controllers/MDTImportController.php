@@ -6,6 +6,7 @@ use App\Logic\MDT\IO\ImportString;
 use App\Models\AffixGroup;
 use App\Models\MDTImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class MDTImportController extends Controller
@@ -33,7 +34,8 @@ class MDTImportController extends Controller
         $importString = new ImportString();
 
         try {
-            $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(false);
+            $warnings = new Collection();
+            $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, false);
 
             $affixes = [];
             foreach ($dungeonRoute->affixes as $affixGroup) {
@@ -50,7 +52,8 @@ class MDTImportController extends Controller
                 'lines' => $dungeonRoute->brushlines->count(),
                 'notes' => $dungeonRoute->mapcomments->count(),
                 'enemy_forces' => $dungeonRoute->getEnemyForcesAttribute(),
-                'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required
+                'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
+                'warnings' => $warnings->toArray()
             ];
 
             return $result;

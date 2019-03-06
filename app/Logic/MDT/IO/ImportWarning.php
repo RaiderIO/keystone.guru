@@ -17,7 +17,6 @@ namespace App\Logic\MDT\IO;
 class ImportWarning extends \Exception
 {
     private $_category;
-    private $_message;
     private $_data;
 
     function __construct($category, $message, $data = [])
@@ -25,7 +24,6 @@ class ImportWarning extends \Exception
         parent::__construct($message);
 
         $this->_category = $category;
-        $this->_message = $message;
         $this->_data = $data;
     }
 
@@ -35,14 +33,6 @@ class ImportWarning extends \Exception
     public function getCategory()
     {
         return $this->_category;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMessage()
-    {
-        return $this->_message;
     }
 
     /**
