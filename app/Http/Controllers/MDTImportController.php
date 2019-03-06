@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Logic\MDT\IO\ImportString;
+use App\Logic\MDT\IO\ImportWarning;
 use App\Models\AffixGroup;
 use App\Models\MDTImport;
 use Illuminate\Http\Request;
@@ -33,33 +34,39 @@ class MDTImportController extends Controller
 
         $importString = new ImportString();
 
-        try {
-            $warnings = new Collection();
-            $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, false);
+//        try {
+        $warnings = new Collection();
+        $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, false);
 
-            $affixes = [];
-            foreach ($dungeonRoute->affixes as $affixGroup) {
-                /** @var $affixGroup AffixGroup */
-                $affixes[] = $affixGroup->getTextAttribute();
-            }
-
-            $result = [
-                // Siege of Boralus faction
-                'faction' => $dungeonRoute->faction->name,
-                'dungeon' => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon'),
-                'affixes' => $affixes,
-                'pulls' => $dungeonRoute->killzones->count(),
-                'lines' => $dungeonRoute->brushlines->count(),
-                'notes' => $dungeonRoute->mapcomments->count(),
-                'enemy_forces' => $dungeonRoute->getEnemyForcesAttribute(),
-                'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
-                'warnings' => $warnings->toArray()
-            ];
-
-            return $result;
-        } catch (\Exception $ex) {
-            return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+        $affixes = [];
+        foreach ($dungeonRoute->affixes as $affixGroup) {
+            /** @var $affixGroup AffixGroup */
+            $affixes[] = $affixGroup->getTextAttribute();
         }
+
+        $warningResult = [];
+        foreach ($warnings as $warning) {
+            /** @var $warning ImportWarning */
+            $warningResult[] = $warning->toArray();
+        }
+
+        $result = [
+            // Siege of Boralus faction
+            'faction' => $dungeonRoute->faction->name,
+            'dungeon' => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon'),
+            'affixes' => $affixes,
+            'pulls' => $dungeonRoute->killzones->count(),
+            'lines' => $dungeonRoute->brushlines->count(),
+            'notes' => $dungeonRoute->mapcomments->count(),
+            'enemy_forces' => $dungeonRoute->getEnemyForcesAttribute(),
+            'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
+            'warnings' => $warningResult
+        ];
+
+        return $result;
+//        } catch (\Exception $ex) {
+//            return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+//        }
     }
 
     /**

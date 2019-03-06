@@ -126,8 +126,8 @@ class ImportString
 
                         if ($mdtEnemy === null) {
                             throw new ImportWarning('pull',
-                                sprintf('Unable to find MDT enemy for clone index %s and npc index %s.', $cloneIndex, $npcIndex),
-                                ['details' => 'This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.']
+                                sprintf(__('Unable to find MDT enemy for clone index %s and npc index %s.'), $cloneIndex, $npcIndex),
+                                ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
                             );
                         }
 
@@ -144,8 +144,8 @@ class ImportString
 
                         if ($enemy === null) {
                             throw new ImportWarning('pull',
-                                sprintf('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC id %s', $mdtEnemy->mdt_id, $mdtEnemy->npc_id),
-                                ['details' => 'This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.']
+                                sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC id %s'), $mdtEnemy->mdt_id, $mdtEnemy->npc_id),
+                                ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
                             );
                         }
 
@@ -168,25 +168,32 @@ class ImportString
 
                     $totalEnemiesKilled += $enemyCount;
                 }
+
+                if ($totalEnemiesKilled > 0) {
+                    // KillZones at the average position of all killed enemies
+                    $killZone->floor_id = $floorId;
+                    $killZone->lat = $kzLat / $totalEnemiesKilled;
+                    $killZone->lng = $kzLng / $totalEnemiesKilled;
+
+                    // Do not place them right on top of each other
+                    if ($totalEnemiesKilled === 1) {
+                        $killZone->lat += 1;
+                    }
+
+
+                    if ($save) {
+                        $killZone->save();
+                    } else {
+                        $dungeonRoute->killzones->push($killZone);
+                    }
+                } else {
+                    throw new ImportWarning('pull',
+                        __('Failure to find enemies resulted in a pull being skipped'),
+                        ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
+                    );
+                }
             } catch (ImportWarning $warning) {
                 $warnings->push($warning);
-            }
-
-            // KillZones at the average position of all killed enemies
-            $killZone->floor_id = $floorId;
-            $killZone->lat = $kzLat / $totalEnemiesKilled;
-            $killZone->lng = $kzLng / $totalEnemiesKilled;
-
-            // Do not place them right on top of each other
-            if ($totalEnemiesKilled === 1) {
-                $killZone->lat += 1;
-            }
-
-
-            if ($save) {
-                $killZone->save();
-            } else {
-                $dungeonRoute->killzones->push($killZone);
             }
         }
     }

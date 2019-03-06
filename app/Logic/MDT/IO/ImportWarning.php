@@ -42,4 +42,17 @@ class ImportWarning extends \Exception
     {
         return $this->_data;
     }
+
+    /**
+     * Get the data that is supposed to be echoed to the end user.
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'category' => $this->_category,
+            'message' => $this->getMessage(),
+            'data' => $this->_data
+        ];
+    }
 }
