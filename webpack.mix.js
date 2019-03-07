@@ -26,7 +26,7 @@ mix.webpackConfig({
     plugins: [
         // Use git version to output our files
         gitRevisionPlugin = new GitRevisionPlugin({
-            versionCommand: 'tag | tail -n1'
+            versionCommand: 'tag | (tail -n 1)'
         }),
 
         // // Compile handlebars
@@ -34,7 +34,8 @@ mix.webpackConfig({
             onBuildStart: [
                 // Update version file. Required by PHP version library to get the proper version
                 // See https://stackoverflow.com/a/39611938/771270
-                'git tag | tail -n1 > version',
+                // This is now handled by ./compile.sh, it was either missing -l or saying it doesn't exist as an option
+                // 'git tag | (tail -n 1) > version',
                 // Compile handlebars
                 'handlebars ' + (mix.inProduction() ? '-m ' : '') +
                 'resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'
