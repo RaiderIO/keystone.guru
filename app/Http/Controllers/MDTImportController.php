@@ -91,7 +91,8 @@ class MDTImportController extends Controller
 
             try {
                 // @TODO improve exception handling
-                $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(true);
+                $warnings = new Collection();
+                $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, true);
 
                 // Keep track of the import
                 $mdtImport = new MDTImport();
