@@ -5,6 +5,20 @@
 @section('content')
 
     <h4>
+        v2.2.2 (2019/03/07)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/149">#149</a>
+            The MDT importer will now show warnings when something isn't right, rather than outright failing. Also
+            updated the UI to be more user friendly.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         v2.2.1 (2019/03/04)
     </h4>
     <p>
