@@ -409,7 +409,18 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                         {{ Form::hidden('import_string', '') }}
                     </div>
                     <div class="form-group">
+                        <div id="import_string_loader" class="bg-info p-1" style="display: none;">
+                            <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>
+                            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Parsing your string...') }}
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div id="import_string_details">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="import_string_warnings">
 
                         </div>
                     </div>

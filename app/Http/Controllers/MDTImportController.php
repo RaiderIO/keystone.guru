@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Logic\MDT\IO\ImportString;
+use App\Logic\MDT\IO\ImportWarning;
 use App\Models\AffixGroup;
 use App\Models\MDTImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class MDTImportController extends Controller
@@ -33,12 +35,19 @@ class MDTImportController extends Controller
         $importString = new ImportString();
 
         try {
-            $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute(false);
+            $warnings = new Collection();
+            $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, false);
 
             $affixes = [];
             foreach ($dungeonRoute->affixes as $affixGroup) {
                 /** @var $affixGroup AffixGroup */
                 $affixes[] = $affixGroup->getTextAttribute();
+            }
+
+            $warningResult = [];
+            foreach ($warnings as $warning) {
+                /** @var $warning ImportWarning */
+                $warningResult[] = $warning->toArray();
             }
 
             $result = [
@@ -50,12 +59,19 @@ class MDTImportController extends Controller
                 'lines' => $dungeonRoute->brushlines->count(),
                 'notes' => $dungeonRoute->mapcomments->count(),
                 'enemy_forces' => $dungeonRoute->getEnemyForcesAttribute(),
-                'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required
+                'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
+                'warnings' => $warningResult
             ];
 
             return $result;
         } catch (\Exception $ex) {
-            return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+            // Different message based on our deployment settings
+            if (config('app.debug')) {
+                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
+            } else {
+                $message = __('Invalid MDT string');
+            }
+            return abort(400, $message);
         }
     }
 

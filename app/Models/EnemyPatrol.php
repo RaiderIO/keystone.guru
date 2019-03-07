@@ -55,7 +55,9 @@ class EnemyPatrol extends Model
         // Delete patrol properly if it gets deleted
         static::deleting(function ($item) {
             /** @var $item EnemyPatrol */
-            $item->polyline->delete();
+            if ($item->polyline !== null) {
+                $item->polyline->delete();
+            }
         });
     }
 }

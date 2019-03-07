@@ -67,12 +67,13 @@ class ImportString
     /**
      * Parse the $decoded['value']['pulls'] value and put it in the $dungeonRoute object, optionally $save'ing the
      * values to the database.
+     * @param $warnings Collection A Collection of Warnings that this parsing may produce.
      * @param $decoded array
      * @param $dungeonRoute DungeonRoute
      * @param $save boolean
      * @throws \Exception
      */
-    private function _parseValuePulls($decoded, $dungeonRoute, $save)
+    private function _parseValuePulls($warnings, $decoded, $dungeonRoute, $save)
     {
         $floors = $dungeonRoute->dungeon->floors;
         $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
@@ -98,189 +99,211 @@ class ImportString
             $kzLng = 0;
             $floorId = -1;
 
-            // For each NPC that is killed in this pull (and their clones)
-            foreach ($pull as $npcIndex => $mdtClones) {
-                $npcIndex = (int)$npcIndex;
-                // Only if filled
-                $enemyCount = count($mdtClones);
-                foreach ($mdtClones as $index => $cloneIndex) {
-                    // This comes in through as a double, cast to int
-                    $cloneIndex = (int)$cloneIndex;
+            try {
+                // For each NPC that is killed in this pull (and their clones)
+                foreach ($pull as $npcIndex => $mdtClones) {
+                    $npcIndex = (int)$npcIndex;
+                    // Only if filled
+                    $enemyCount = count($mdtClones);
+                    foreach ($mdtClones as $index => $cloneIndex) {
+                        // This comes in through as a double, cast to int
+                        $cloneIndex = (int)$cloneIndex;
 
-                    // Find the matching enemy of the clones
-                    /** @var Enemy $mdtEnemy */
-                    $mdtEnemy = null;
-                    foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                        // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
-                        // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
-                        $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
-                        // NPC and clone index make for unique ID
-                        if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
-                            // Found it
-                            $mdtEnemy = $mdtEnemyCandidate;
-                            break;
+                        // Find the matching enemy of the clones
+                        /** @var Enemy $mdtEnemy */
+                        $mdtEnemy = null;
+                        foreach ($mdtEnemies as $mdtEnemyCandidate) {
+                            // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
+                            // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
+                            $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
+                            // NPC and clone index make for unique ID
+                            if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
+                                // Found it
+                                $mdtEnemy = $mdtEnemyCandidate;
+                                break;
+                            }
                         }
-                    }
 
-                    if ($mdtEnemy === null) {
-                        throw new \Exception("Unable to find MDT enemy for index {$cloneIndex} and npc index {$npcIndex}!");
-                    }
-
-                    // We now know the MDT enemy that the user was trying to import. However, we need to know
-                    // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
-                    /** @var Enemy $enemy */
-                    $enemy = null;
-                    foreach ($enemies as $enemyCandidate) {
-                        if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
-                            $enemy = $enemyCandidate;
-                            break;
+                        if ($mdtEnemy === null) {
+                            throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                                sprintf(__('Unable to find MDT enemy for clone index %s and npc index %s.'), $cloneIndex, $npcIndex),
+                                ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
+                            );
                         }
+
+                        // We now know the MDT enemy that the user was trying to import. However, we need to know
+                        // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
+                        /** @var Enemy $enemy */
+                        $enemy = null;
+                        foreach ($enemies as $enemyCandidate) {
+                            if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
+                                $enemy = $enemyCandidate;
+                                break;
+                            }
+                        }
+
+                        if ($enemy === null) {
+                            throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                                sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC id %s.'), $mdtEnemy->mdt_id, $mdtEnemy->npc_id),
+                                ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
+                            );
+                        }
+
+                        $kzLat += $enemy->lat;
+                        $kzLng += $enemy->lng;
+
+                        // Couple the KillZoneEnemy to its KillZone
+                        if ($save) {
+                            $kzEnemy = new KillZoneEnemy();
+                            $kzEnemy->enemy_id = $enemy->id;
+                            $kzEnemy->kill_zone_id = $killZone->id;
+                            $kzEnemy->save();
+                        } else {
+                            $killZone->enemies->push($enemy);
+                        }
+
+                        // Should be the same floor_id all the time, but we need it anyways
+                        $floorId = $enemy->floor_id;
                     }
 
-                    if ($enemy === null) {
-                        throw new \Exception("Unable to find enemy for mdt_id {$mdtEnemy->mdt_id}, npc_id {$mdtEnemy->npc_id}!");
-                    }
-
-                    $kzLat += $enemy->lat;
-                    $kzLng += $enemy->lng;
-
-                    // Couple the KillZoneEnemy to its KillZone
-                    if ($save) {
-                        $kzEnemy = new KillZoneEnemy();
-                        $kzEnemy->enemy_id = $enemy->id;
-                        $kzEnemy->kill_zone_id = $killZone->id;
-                        $kzEnemy->save();
-                    } else {
-                        $killZone->enemies->push($enemy);
-                    }
-
-                    // Should be the same floor_id all the time, but we need it anyways
-                    $floorId = $enemy->floor_id;
+                    $totalEnemiesKilled += $enemyCount;
                 }
 
-                $totalEnemiesKilled += $enemyCount;
-            }
+                if ($totalEnemiesKilled > 0) {
+                    // KillZones at the average position of all killed enemies
+                    $killZone->floor_id = $floorId;
+                    $killZone->lat = $kzLat / $totalEnemiesKilled;
+                    $killZone->lng = $kzLng / $totalEnemiesKilled;
 
-            // KillZones at the average position of all killed enemies
-            $killZone->floor_id = $floorId;
-            $killZone->lat = $kzLat / $totalEnemiesKilled;
-            $killZone->lng = $kzLng / $totalEnemiesKilled;
-
-            // Do not place them right on top of each other
-            if ($totalEnemiesKilled === 1) {
-                $killZone->lat += 1;
-            }
+                    // Do not place them right on top of each other
+                    if ($totalEnemiesKilled === 1) {
+                        $killZone->lat += 1;
+                    }
 
 
-            if ($save) {
-                $killZone->save();
-            } else {
-                $dungeonRoute->killzones->push($killZone);
+                    if ($save) {
+                        $killZone->save();
+                    } else {
+                        $dungeonRoute->killzones->push($killZone);
+                    }
+                } else {
+                    throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                        __('Failure to find enemies resulted in a pull being skipped.'),
+                        ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
+                    );
+                }
+            } catch (ImportWarning $warning) {
+                $warnings->push($warning);
             }
         }
     }
 
     /**
      * Parse any saved objects from the MDT string to a $dungeonRoute, optionally $save'ing the objects to the database.
+     * @param $warnings Collection A Collection of Warnings that this parsing may produce.
      * @param $decoded array
      * @param $dungeonRoute DungeonRoute
      * @param $save boolean
      */
-    private function _parseObjects($decoded, $dungeonRoute, $save)
+    private function _parseObjects($warnings, $decoded, $dungeonRoute, $save)
     {
         $floors = $dungeonRoute->dungeon->floors;
 
         if (isset($decoded['objects'])) {
             // Pre-init
-            $dungeonRoute->polylines = new Collection();
+            $dungeonRoute->brushlines = new Collection();
             $dungeonRoute->mapcomments = new Collection();
 
             foreach ($decoded['objects'] as $objectIndex => $object) {
-                /*
-                 * Note
-                 * 1 = x (size in case of line)
-                 * 2 = y (smooth in case of line)
-                 * 3 = sublevel
-                 * 4 = enabled/visible?
-                 * 5 = text (color in case of line)
-                 *
-                 * Line
-                 *
-                 * 1 = size
-                 * 2 = linefactor (weight?)
-                 * 3 = sublevel
-                 * 4 = enabled/visible?
-                 * 5 = color
-                 * 6 = layer sublevel
-                 * 7 = smooth
-                 */
-                $details = $object['d'];
+                try {
+                    /*
+                     * Note
+                     * 1 = x (size in case of line)
+                     * 2 = y (smooth in case of line)
+                     * 3 = sublevel
+                     * 4 = enabled/visible?
+                     * 5 = text (color in case of line)
+                     *
+                     * Line
+                     *
+                     * 1 = size
+                     * 2 = linefactor (weight?)
+                     * 3 = sublevel
+                     * 4 = enabled/visible?
+                     * 5 = color
+                     * 6 = layer sublevel
+                     * 7 = smooth
+                     */
+                    $details = $object['d'];
 
-                // Get the proper index of the floor, validated for length
-                $floorIndex = ((int)$details['3']) - 1;
-                $floorIndex = ($floorIndex < $floors->count() ? $floorIndex : 0);
-                /** @var Floor $floor */
-                $floor = ($floors->all())[$floorIndex];
+                    // Get the proper index of the floor, validated for length
+                    $floorIndex = ((int)$details['3']) - 1;
+                    $floorIndex = ($floorIndex < $floors->count() ? $floorIndex : 0);
+                    /** @var Floor $floor */
+                    $floor = ($floors->all())[$floorIndex];
 
-                // If it's a line
-                // MethodDungeonTools.lua:2529
-                if (isset($object['l'])) {
-                    $line = $object['l'];
+                    // If it's a line
+                    // MethodDungeonTools.lua:2529
+                    if (isset($object['l'])) {
+                        $line = $object['l'];
 
-                    $brushline = new Brushline();
-                    // Assign the proper ID
-                    $brushline->floor_id = $floor->id;
-                    $brushline->polyline_id = -1;
+                        $brushline = new Brushline();
+                        // Assign the proper ID
+                        $brushline->floor_id = $floor->id;
+                        $brushline->polyline_id = -1;
 
-                    $polyline = new Polyline();
-                    $polyline->color = '#' . $details['5'];
-                    $polyline->weight = (int)$details['1'];
+                        $polyline = new Polyline();
+                        $polyline->color = '#' . $details['5'];
+                        $polyline->weight = (int)$details['1'];
 
-                    $vertices = [];
-                    for ($i = 1; $i < count($line); $i += 2) {
-                        $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i + 1]), 'y' => doubleval($line[$i])]);
+                        $vertices = [];
+                        for ($i = 1; $i < count($line); $i += 2) {
+                            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i + 1]), 'y' => doubleval($line[$i])]);
+                        }
+
+                        $polyline->vertices_json = json_encode($vertices);
+
+                        if ($save) {
+                            // Only assign when saving
+                            $brushline->dungeon_route_id = $dungeonRoute->id;
+                            $brushline->save();
+
+                            $polyline->model_id = $brushline->id;
+                            $polyline->model_class = get_class($brushline);
+                            $polyline->save();
+                        } else {
+                            // Otherwise inject
+                            $brushline->polyline = $polyline;
+                            $dungeonRoute->brushlines->push($brushline);
+                        }
                     }
+                    // Map comment (n = note)
+                    // MethodDungeonTools.lua:2523
+                    else if (isset($object['n']) && $object['n']) {
+                        $mapComment = new MapComment();
+                        $mapComment->floor_id = $floor->id;
+                        $mapComment->comment = $details['5'];
 
-                    $polyline->vertices_json = json_encode($vertices);
+                        $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details['1'], 'y' => $details['2']]);
+                        $mapComment->lat = $latLng['lat'];
+                        $mapComment->lng = $latLng['lng'];
 
-                    if ($save) {
-                        // Only assign when saving
-                        $brushline->dungeon_route_id = $dungeonRoute->id;
-                        $brushline->save();
-
-                        $polyline->model_id = $brushline->id;
-                        $polyline->model_class = get_class($brushline);
-                        $polyline->save();
-                    } else {
-                        // Otherwise inject
-                        $brushline->polyline = $polyline;
-                        $dungeonRoute->brushlines->push($brushline);
+                        if ($save) {
+                            // Save
+                            $mapComment->dungeon_route_id = $dungeonRoute->id;
+                            $mapComment->save();
+                        } else {
+                            // Inject
+                            $dungeonRoute->mapcomments->push($mapComment);
+                        }
                     }
-                }
-                // Map comment (n = note)
-                // MethodDungeonTools.lua:2523
-                else if (isset($object['n']) && $object['n']) {
-                    $mapComment = new MapComment();
-                    $mapComment->floor_id = $floor->id;
-                    $mapComment->comment = $details['5'];
+                    // Triangles (t = triangle)
+                    // MethodDungeonTools.lua:2554
+                    else if (isset($object['t']) && $object['t']) {
 
-                    $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details['1'], 'y' => $details['2']]);
-                    $mapComment->lat = $latLng['lat'];
-                    $mapComment->lng = $latLng['lng'];
-
-                    if ($save) {
-                        // Save
-                        $mapComment->dungeon_route_id = $dungeonRoute->id;
-                        $mapComment->save();
-                    } else {
-                        // Inject
-                        $dungeonRoute->mapcomments->push($mapComment);
                     }
-                }
-                // Triangles (t = triangle)
-                // MethodDungeonTools.lua:2554
-                else if (isset($object['t']) && $object['t']) {
-
+                } catch (ImportWarning $warning) {
+                    $warnings->push($warning);
                 }
             }
         }
@@ -300,11 +323,12 @@ class ImportString
 
     /**
      * Gets the dungeon route based on the currently encoded string.
+     * @param $warnings Collection Collection that is passed by reference in which any warnings are stored.
      * @param $save boolean True to save the route and all associated models, false to not save & couple.
      * @return DungeonRoute|bool DungeonRoute if the route could be constructed, false if the string was invalid.
      * @throws \Exception
      */
-    public function getDungeonRoute($save = false)
+    public function getDungeonRoute($warnings, $save = false)
     {
         // @TODO This needs a "table" to dungeon route conversion first
         $lua = $this->_getLua();
@@ -332,7 +356,7 @@ class ImportString
                 $dungeonRoute->save();
             } else {
                 $dungeonRoute->killzones = new Collection();
-                $dungeonRoute->polylines = new Collection();
+                $dungeonRoute->brushlines = new Collection();
             }
 
             // Set the affix for this route
@@ -352,10 +376,10 @@ class ImportString
             }
 
             // Create killzones and attach enemies
-            $this->_parseValuePulls($decoded, $dungeonRoute, $save);
+            $this->_parseValuePulls($warnings, $decoded, $dungeonRoute, $save);
 
             // For each object the user created
-            $this->_parseObjects($decoded, $dungeonRoute, $save);
+            $this->_parseObjects($warnings, $decoded, $dungeonRoute, $save);
         }
 
         return $dungeonRoute;
