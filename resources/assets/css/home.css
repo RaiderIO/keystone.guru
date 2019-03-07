@@ -292,3 +292,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+/** .rounded class doesn't work, unfortunately */
+#import_string_loader {
+    border-radius: .25rem !important
+}

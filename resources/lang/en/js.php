@@ -69,5 +69,10 @@ return [
 
 
     // Admin
-    'object.deleted' => 'Objects deleted successfully.'
+    'object.deleted' => 'Objects deleted successfully.',
+
+    // Home page
+    'warnings_label' => 'Warnings',
+    'category_label' => 'Category',
+    'message_label' => 'Message'
 ];

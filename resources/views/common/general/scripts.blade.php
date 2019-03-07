@@ -26,6 +26,14 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
      **/
     function _importStringPasted(typedEvent) {
         // https://stackoverflow.com/questions/686995/catch-paste-input
+        var $importString = $('#import_string_textarea');
+
+        // Ugly, but needed since otherwise the field would be disabled prior to the value beinga ctually assigned
+        setTimeout(function () {
+            // Can no longer edit it
+            $importString.prop('disabled', true);
+        }, 10);
+
         $.ajax({
             type: 'POST',
             url: '{{ route('mdt.details') }}',
@@ -33,10 +41,16 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
             data: {
                 'import_string': typedEvent.originalEvent.clipboardData.getData('text')
             },
+            beforeSend: function () {
+                $('#import_string_loader').show();
+            },
+            complete: function () {
+                $('#import_string_loader').hide();
+            },
             success: function (responseData) {
-                var template = Handlebars.templates['import_string_details_template'];
+                var detailsTemplate = Handlebars.templates['import_string_details_template'];
 
-                var data = {
+                var data = $.extend({
                     details: [
                         {key: "{{ __('Faction') }}", value: responseData.faction},
                         {key: "{{ __('Dungeon') }}", value: responseData.dungeon},
@@ -49,19 +63,44 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
                             value: responseData.enemy_forces + '/' + responseData.enemy_forces_max
                         }
                     ]
-                };
+                }, getHandlebarsTranslations());
 
                 // Build the preview from the template
-                $("#import_string_details").html(template(data));
+                $("#import_string_details").html(detailsTemplate(data));
 
-                // Can no longer edit it
-                var $importString = $('#import_string_textarea');
-                $importString.prop('disabled', true);
+                // Inject the warnings, if there are any
+                if (responseData.warnings.length > 0) {
+                    var warningsTemplate = Handlebars.templates['import_string_warnings_template'];
+
+                    var warningsData = $.extend({
+                        warnings: []
+                    }, getHandlebarsTranslations());
+
+                    // construct the handlebars data
+                    for (var i = 0; i < responseData.warnings.length; i++) {
+                        var warning = responseData.warnings[i];
+
+                        warningsData.warnings.push({
+                            category: warning.category,
+                            message: warning.message,
+                            details: warning.data.details
+                        });
+                    }
+
+                    // Assign the template data to the div
+                    $("#import_string_warnings").html(warningsTemplate(warningsData));
+                }
+
+                // Tooltips may be added above
+                refreshTooltips();
 
                 $('#import_string').val($importString.val());
                 $('#mdt_import_modal input[type="submit"]').prop('disabled', false);
             }, error: function (xhr, textStatus, errorThrown) {
+                $importString.removeProp('disabled');
+
                 $("#import_string_details").html('');
+                $("#import_string_warnings").html('');
 
                 $('#mdt_import_modal input[type="submit"]').prop('disabled', true);
                 defaultAjaxErrorFn(xhr, textStatus, errorThrown);

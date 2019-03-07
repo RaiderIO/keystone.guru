@@ -125,7 +125,7 @@ class ImportString
                         }
 
                         if ($mdtEnemy === null) {
-                            throw new ImportWarning('pull',
+                            throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
                                 sprintf(__('Unable to find MDT enemy for clone index %s and npc index %s.'), $cloneIndex, $npcIndex),
                                 ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
                             );
@@ -143,8 +143,8 @@ class ImportString
                         }
 
                         if ($enemy === null) {
-                            throw new ImportWarning('pull',
-                                sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC id %s'), $mdtEnemy->mdt_id, $mdtEnemy->npc_id),
+                            throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                                sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC id %s.'), $mdtEnemy->mdt_id, $mdtEnemy->npc_id),
                                 ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
                             );
                         }
@@ -187,8 +187,8 @@ class ImportString
                         $dungeonRoute->killzones->push($killZone);
                     }
                 } else {
-                    throw new ImportWarning('pull',
-                        __('Failure to find enemies resulted in a pull being skipped'),
+                    throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                        __('Failure to find enemies resulted in a pull being skipped.'),
                         ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
                     );
                 }
