@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DungeonRouteFormRequest;
+use App\Models\Brushline;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
@@ -141,6 +142,7 @@ class DungeonRouteController extends Controller
                 $dungeonroute->playerclasses,
                 $dungeonroute->affixgroups,
                 $dungeonroute->paths,
+                $dungeonroute->brushlines,
                 $dungeonroute->killzones,
                 $dungeonroute->enemyraidmarkers,
                 $dungeonroute->mapcomments,
@@ -173,6 +175,18 @@ class DungeonRouteController extends Controller
                             $enemy->kill_zone_id = $model->id;
                             $enemy->save();
                         }
+                    } // Make sure all polylines are copied over
+                    else if (isset($model->polyline_id)) {
+                        // It's not technically a brushline, but all other polyline using structs have the same auto complete
+                        // Save a new polyline
+                        /** @var Brushline $model */
+                        $model->polyline->id = 0;
+                        $model->polyline->exists = false;
+                        $model->polyline->model_id = $model->id;
+                        $model->polyline->save();
+
+                        // Write the polyline back to the model
+                        $model->polyline_id = $model->polyline->id;
                     }
                 }
             }
