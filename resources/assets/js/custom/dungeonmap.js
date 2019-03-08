@@ -9,6 +9,7 @@ class DungeonMap extends Signalable {
         this.options = options;
         this.currentFloorId = options.floorId;
         this.edit = options.edit;
+        this.try = options.try;
         this.teeming = options.teeming;
         this.dungeonroute = options.dungeonroute;
         this.visualType = options.defaultEnemyVisualType;
@@ -633,7 +634,7 @@ class DungeonMap extends Signalable {
      * @returns {boolean|*}
      */
     isTryModeEnabled() {
-        return this.getDungeonRoute().publicKey === 'try' && this.edit;
+        return this.try && this.edit;
     }
 
     /**

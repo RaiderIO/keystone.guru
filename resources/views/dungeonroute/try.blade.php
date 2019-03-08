@@ -1,13 +1,15 @@
-@php($custom = isset($dungeon_id))
-@extends('layouts.app', ['custom' => $custom, 'footer' => !$custom, 'header' => !$custom, 'title' => __('Try')])
+<?php
+/** @var $model \App\Models\DungeonRoute */
+?>
+@extends('layouts.app', ['custom' => isset($model), 'footer' => !isset($model), 'header' => !isset($model), 'title' => __('Try')])
 
 @section('content')
     <?php
     // If the user navigated to /try itself
-    if(!isset($dungeon_id)) { ?>
+    if(!isset($model)) { ?>
     @include('common.forms.try')
     <?php } else {
-    $dungeon = \App\Models\Dungeon::findOrFail($dungeon_id);
+    $dungeon = $model->dungeon;
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
     ?>
 
@@ -21,9 +23,8 @@
         ])
 
         @include('common.maps.map', [
-            'dungeon' => $dungeon,
-            'edit' => true,
-            'tryMode' => true
+            'dungeonroute' => $model,
+            'edit' => true
         ])
     </div>
 

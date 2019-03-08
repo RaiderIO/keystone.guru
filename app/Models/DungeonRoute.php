@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\DB;
  * @property $thumbnail_updated_at string
  * @property $updated_at string
  * @property $created_at string
+ * @property $expires_at string
  *
  * @property Dungeon $dungeon
  * @property Path $route

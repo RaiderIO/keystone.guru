@@ -41,12 +41,12 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
         ],
-//        'discord' => [
-//            'driver' => 'custom',
-//            'url' => 'https://discordapp.com/api/webhooks/' . env('APP_LOG_DISCORD_WEBHOOK'),
-//            'via' => App\Logging\CreateDiscordLogger::class,
-//            'level' => 'error',
-//        ],
+        'discord' => [
+            'driver' => 'custom',
+            'url' => 'https://discordapp.com/api/webhooks/' . env('APP_LOG_DISCORD_WEBHOOK'),
+            'via' => App\Logging\CreateDiscordLogger::class,
+            'level' => 'error',
+        ],
         'scheduler_file' => [
             'driver' => 'daily',
             'path' => storage_path('logs/scheduler.log'),

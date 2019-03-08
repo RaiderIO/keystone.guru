@@ -8,7 +8,7 @@ $isAdmin = isset($admin) && $admin;
 $edit = isset($edit) && $edit ? true : false;
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
 // Set the key to 'try' if try mode is enabled
-$routePublicKey = isset($tryMode) && $tryMode ? 'try' : $routePublicKey;
+$tryMode = isset($tryMode) && $tryMode ? true : false;
 // Set the enemy forces of the current route. May not be set if just editing the route from admin
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 // For Siege of Boralus
@@ -83,6 +83,7 @@ $introTexts = [
         var options = {
             floorId: {{ $floorId }},
             edit: {{ $edit ? 'true' : 'false'}},
+            try: {{ $tryMode ? 'true' : 'false' }},
             dungeonroute: {
                 publicKey: '{{ $routePublicKey }}',
                 faction: '{{ $routeFaction }}'

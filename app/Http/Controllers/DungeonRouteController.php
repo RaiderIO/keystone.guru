@@ -13,6 +13,7 @@ use App\Models\Path;
 use App\Models\UserReport;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DungeonRouteController extends Controller
@@ -25,12 +26,20 @@ class DungeonRouteController extends Controller
     {
         $result = null;
 
+        // User posted
         if ($request->has('dungeon_id')) {
-            $result = view('dungeonroute.try', [
-                'dungeon_id' => $request->get('dungeon_id'),
-                'teeming' => $request->get('teeming')
-            ]);
-        } else {
+            $dungeonRoute = new DungeonRoute();
+            $dungeonRoute->dungeon_id = $request->get('dungeon_id');
+            $dungeonRoute->author_id = Auth::check() ? Auth::id() : -1;
+            $dungeonRoute->faction_id = 1; // Unspecified
+            $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
+            $dungeonRoute->teeming = (int)$request->get('teeming', 0) === 1;
+            $dungeonRoute->expires_at = Carbon::now()->addHour(config('keystoneguru.try_dungeon_route_expires_hours'))->toDateTimeString();
+            $dungeonRoute->save();
+
+            $result = view('dungeonroute.try', ['model' => $dungeonRoute]);
+        } // Navigation to /try
+        else {
             $result = view('dungeonroute.try', ['headerTitle' => __('Try Keystone.guru')]);
         }
 

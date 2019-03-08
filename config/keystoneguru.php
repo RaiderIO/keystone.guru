@@ -47,5 +47,11 @@ return [
     /**
      * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
      */
-    'thumbnail_refresh_min' => 30
+    'thumbnail_refresh_min' => 30,
+
+    /**
+     * The amount of hours it takes before a dungeon route that is created through the 'try' functionality expires and
+     * is deleted from the server.
+     */
+    'try_dungeon_route_expires_hours' => 24
 ];

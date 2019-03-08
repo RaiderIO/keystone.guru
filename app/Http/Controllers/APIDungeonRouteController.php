@@ -49,7 +49,9 @@ class APIDungeonRouteController extends Controller
     {
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
             // ->setAppends(['dungeon', 'affixes', 'author'])
-            ->selectRaw('dungeon_routes.*');
+            ->selectRaw('dungeon_routes.*')
+            // Only non-try routes
+            ->where('expires_at', null);
 
         $user = Auth::user();
         $mine = false;
@@ -243,7 +245,7 @@ class APIDungeonRouteController extends Controller
 
         // Start parsing
         $result = [];
-        if ($publickey === 'try' || $publickey === 'admin') {
+        if ($publickey === 'admin') {
             // Delete it so we don't fetch stuff we shouldn't!
             $publickey = null;
         } else {
