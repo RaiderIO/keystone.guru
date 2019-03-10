@@ -14,6 +14,9 @@ $header = isset($header) ? $header : true;
 $footer = isset($footer) ? $footer : true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
+// Any additional parameters to pass to the login/register blade
+$loginParams = isset($loginParams) ? $loginParams : [];
+$registerParams = isset($registerParams) ? $registerParams : [];
 // Show cookie consent
 $cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
 // If user already approved of the cookie..
@@ -449,7 +452,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                 </button>
                 <div class="probootstrap-modal-flex">
                     <div class="probootstrap-modal-content">
-                        @include('common.forms.login', ['modal' => true])
+                        @include('common.forms.login', array_merge(['modal' => true], $loginParams))
                     </div>
                 </div>
             </div>
@@ -466,7 +469,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                 </button>
                 <div class="probootstrap-modal-flex">
                     <div class="probootstrap-modal-content">
-                        @include('common.forms.register', ['modal' => true])
+                        @include('common.forms.register', array_merge(['modal' => true], $registerParams))
                     </div>
                 </div>
             </div>

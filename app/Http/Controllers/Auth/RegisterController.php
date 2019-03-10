@@ -111,6 +111,9 @@ class RegisterController extends Controller
 
         \Session::flash('status', __('Registered successfully. Enjoy the website!'));
 
+        // Set the redirect path if it was set
+        $this->redirectTo = $request->get('redirect', '/');
+
         return $this->registered($request, $user) ?: redirect($this->redirectPath());
     }
 }

@@ -1,7 +1,14 @@
 <?php
 /** @var $model \App\Models\DungeonRoute */
 ?>
-@extends('layouts.app', ['custom' => isset($model), 'footer' => !isset($model), 'header' => !isset($model), 'title' => __('Try')])
+@extends('layouts.app', [
+    'custom' => isset($model),
+    'footer' => !isset($model),
+    'header' => !isset($model),
+    'title' => __('Try'),
+    'loginParams' => isset($model) ? ['redirect' => route('dungeonroute.try', ['dungeonroute' => $model->public_key])] : [],
+    'registerParams' => isset($model) ? ['redirect' => route('dungeonroute.try', ['dungeonroute' => $model->public_key])] : []
+])
 
 @section('content')
     <?php
@@ -16,8 +23,8 @@
     <div class="wrapper">
         @include('common.maps.editsidebar', [
             'show' => [
-                'no-modifications-warning' => true,
-                'virtual-tour' => true
+                'virtual-tour' => true,
+                'tryout' => true
             ],
             'floorSelection' => $floorSelection
         ])

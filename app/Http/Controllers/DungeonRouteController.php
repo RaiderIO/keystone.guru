@@ -9,7 +9,6 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\PageView;
-use App\Models\Path;
 use App\Models\UserReport;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -38,8 +37,18 @@ class DungeonRouteController extends Controller
             $dungeonRoute->save();
 
             $result = view('dungeonroute.try', ['model' => $dungeonRoute]);
-        } // Navigation to /try
-        else {
+        } else if ($request->has('dungeonroute')) {
+            // Navigation to /try
+            // Only routes that are in try mode
+            try {
+                $dungeonRoute = DungeonRoute::where('public_key', $request->get('dungeonroute'))
+                    ->isTry()->firstOrFail();
+
+                $result = view('dungeonroute.try', ['model' => $dungeonRoute]);
+            } catch (\Exception $exception) {
+                $result = view('dungeonroute.tryclaimed');
+            }
+        } else {
             $result = view('dungeonroute.try', ['headerTitle' => __('Try Keystone.guru')]);
         }
 
@@ -219,6 +228,10 @@ class DungeonRouteController extends Controller
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
+        // Make sure the dungeon route is owned by this user if it was in try mode.
+        // Don't share your try routes if you don't want someone else to claim the route!
+        $dungeonroute->claim(Auth::user());
+
         return view('dungeonroute.edit', ['model' => $dungeonroute, 'headerTitle' => __('Edit route')]);
     }
 

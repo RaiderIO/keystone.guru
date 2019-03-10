@@ -2,10 +2,11 @@
 $modal = isset($modal) ? $modal : false;
 $modalClass = $modal ? 'modal-' : '';
 $width = $modal ? '12' : '6';
+$redirect = isset($redirect) ? $redirect : Request::get('redirect', Request::getPathInfo());
 ?>
 
 <form class="form-horizontal" method="POST"
-      action="{{ route('login', ['redirect' => Request::get('redirect', Request::getPathInfo())]) }}">
+      action="{{ route('login', ['redirect' => $redirect]) }}">
     {{ csrf_field() }}
     <h3>
         {{ __('Login') }}
@@ -24,7 +25,8 @@ $width = $modal ? '12' : '6';
         <label for="{{ $modalClass }}login_password" class="control-label">{{ __('Password') }}</label>
 
         <div class="col-md-{{ $width }}">
-            <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password" autocomplete="current-password" required>
+            <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password"
+                   autocomplete="current-password" required>
         </div>
     </div>
 

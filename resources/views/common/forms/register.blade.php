@@ -17,7 +17,7 @@ $width = $modal ? '12' : '6';
     </script>
 @endsection
 
-<form id="{{ $modalClass }}register_form" class="form-horizontal" method="POST" action="{{ route('register') }}">
+<form id="{{ $modalClass }}register_form" class="form-horizontal" method="POST" action="{{ route('register', $registerParams) }}">
     {{ csrf_field() }}
     <h3>
         {{ __('Register') }}
@@ -63,9 +63,9 @@ $width = $modal ? '12' : '6';
     <div class="form-group">
         <label for="{{ $modalClass }}legal_agreed" class="control-label">
             {!! sprintf(__('I agree with the %s, %s and the %s.'),
-             '<a href="' . route('legal.terms') . '">terms of service</a>',
-             '<a href="' . route('legal.privacy') . '">privacy policy</a>',
-             '<a href="' . route('legal.cookies') . '">cookie policy</a>')
+             '<a href="' . route('legal.terms') . '">' . __('terms of service') . '</a>',
+             '<a href="' . route('legal.privacy') . '">' . __('privacy policy') . '</a>',
+             '<a href="' . route('legal.cookies') . '">' . __('cookie policy') . '</a>')
              !!}
         </label>
         {!! Form::checkbox('legal_agreed', 1, 0, ['id' => $modalClass . 'legal_agreed', 'class' => 'form-control left_checkbox']) !!}

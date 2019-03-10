@@ -38,79 +38,64 @@ class Brushline extends Polyline {
         let self = this;
         console.assert(this instanceof Brushline, this, 'this was not a Brushline');
 
-        let successFn = function (json) {
-            self.signal('object:deleted', {response: json});
-        };
-
-        // No network traffic if this is enabled!
-        if (!this.map.isTryModeEnabled()) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/brushline',
-                dataType: 'json',
-                data: {
-                    _method: 'DELETE',
-                    id: self.id
-                },
-                beforeSend: function () {
-                    self.deleting = true;
-                },
-                success: successFn,
-                complete: function () {
-                    self.deleting = false;
-                },
-                error: function () {
-                    self.setSynced(false);
-                }
-            });
-        } else {
-            successFn();
-        }
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/brushline',
+            dataType: 'json',
+            data: {
+                _method: 'DELETE',
+                id: self.id
+            },
+            beforeSend: function () {
+                self.deleting = true;
+            },
+            success: function (json) {
+                self.signal('object:deleted', {response: json});
+            },
+            complete: function () {
+                self.deleting = false;
+            },
+            error: function () {
+                self.setSynced(false);
+            }
+        });
     }
 
     save() {
         let self = this;
         console.assert(this instanceof Brushline, this, 'this was not a Brushline');
 
-        let successFn = function (json) {
-            self.id = json.id;
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/brushline',
+            dataType: 'json',
+            data: {
+                id: self.id,
+                dungeonroute: this.map.getDungeonRoute().publicKey,
+                floor_id: self.map.getCurrentFloor().id,
+                color: self.polylineColor,
+                weight: self.weight,
+                vertices: self.getVertices(),
+            },
+            beforeSend: function () {
+                self.saving = true;
+                $('#map_brushline_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
+            },
+            success: function (json) {
+                self.id = json.id;
 
-            self.setSynced(true);
-            self.map.leafletMap.closePopup();
-        };
-
-        // No network traffic if this is enabled!
-        if (!this.map.isTryModeEnabled()) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/brushline',
-                dataType: 'json',
-                data: {
-                    id: self.id,
-                    dungeonroute: this.map.getDungeonRoute().publicKey,
-                    floor_id: self.map.getCurrentFloor().id,
-                    color: self.polylineColor,
-                    weight: self.weight,
-                    vertices: self.getVertices(),
-                },
-                beforeSend: function () {
-                    self.saving = true;
-                    $('#map_brushline_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
-                },
-                success: successFn,
-                complete: function () {
-                    $('#map_brushline_edit_popup_submit_' + self.id).removeAttr('disabled');
-                    self.saving = false;
-                },
-                error: function () {
-                    // Even if we were synced, make sure user knows it's no longer / an error occurred
-                    self.setSynced(false);
-                }
-            });
-        } else {
-            // We have to supply an ID to keep everything working properly
-            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id})
-        }
+                self.setSynced(true);
+                self.map.leafletMap.closePopup();
+            },
+            complete: function () {
+                $('#map_brushline_edit_popup_submit_' + self.id).removeAttr('disabled');
+                self.saving = false;
+            },
+            error: function () {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
+            }
+        });
     }
 
     // To be overridden by any implementing classes

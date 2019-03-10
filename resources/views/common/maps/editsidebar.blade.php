@@ -132,10 +132,27 @@ if (isset($model)) {
         </div>
     @endisset
 
-    @isset($show['no-modifications-warning'])
-        <div class="form-group">
-            <div class="alert alert-warning text-center">
-                <i class="fa fa-exclamation-triangle"></i> {{ __('Any modification you make in tryout mode will not be saved!') }}
+    @isset($show['tryout'])
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ __('Actions') }}</h5>
+                <div class="form-group">
+                    @if (Auth::guest())
+                        <a href="#" class="btn btn-primary mt-1 w-100" role="button" data-toggle="modal"
+                           data-target="#login_modal">
+                            {{__('Login')}}
+                        </a>
+                        <a href="#" class="btn btn-primary mt-1 w-100" role="button" data-toggle="modal"
+                           data-target="#register_modal">
+                            {{ __('Register and continue') }}
+                        </a>
+                    @else
+                        <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $model->public_key]) }}"
+                           class="btn btn-primary mt-1 w-100" role="button">
+                            {{ __('Save and continue') }}
+                        </a>
+                    @endif
+                </div>
             </div>
         </div>
     @endisset

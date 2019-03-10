@@ -13,16 +13,6 @@ use Illuminate\Support\Facades\Auth;
 class MDTImportController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-
-    }
-
-    /**
      * Returns some details about the passed string.
      * @param Request $request
      * @return array

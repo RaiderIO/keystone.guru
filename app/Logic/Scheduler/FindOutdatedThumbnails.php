@@ -10,8 +10,6 @@ namespace App\Logic\Scheduler;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute;
-use App\Models\Floor;
-use Illuminate\Queue\Jobs\Job;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +41,8 @@ class FindOutdatedThumbnails
             // It has to deserialize the job's payload for each attempt to queue more jobs. If this goes to the 100s
             // it will cause the server to come to a crawl for no real reason. Thus, this magic 100 is introduced.
             if ($currentJobCount < 100 &&
+                // Only take a look at routes that are NOT in trial mode
+                !$dungeonRoute->isTry() &&
                 ((// Updated at is greater than the thumbnail updated at (don't keep updating thumbnails..)
                         $updatedAt->greaterThan($thumbnailUpdatedAt) &&
                         // If the route has been updated in the past x minutes...

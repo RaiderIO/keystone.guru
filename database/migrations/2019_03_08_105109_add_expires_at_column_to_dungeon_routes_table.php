@@ -14,7 +14,7 @@ class AddExpiresAtColumnToDungeonRoutesTable extends Migration
     public function up()
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
-            $table->timestamp('expires_at')->default(null);
+            $table->timestamp('expires_at')->nullable(true);
         });
     }
 

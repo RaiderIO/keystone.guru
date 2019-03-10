@@ -123,81 +123,66 @@ class KillZone extends MapObject {
         let self = this;
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
 
-        let successFn = function (json) {
-            // Detach from all enemies upon deletion
-            self._detachFromEnemies();
-            self.removeExistingConnectionsToEnemies();
-            self.signal('object:deleted', {response: json});
-            self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-        };
-
-        // No network traffic if this is enabled!
-        if (!this.map.isTryModeEnabled()) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone/' + self.id,
-                dataType: 'json',
-                data: {
-                    _method: 'DELETE'
-                },
-                beforeSend: function () {
-                    self.deleting = true;
-                },
-                success: successFn,
-                complete: function () {
-                    self.deleting = false;
-                },
-                error: function () {
-                    self.setSynced(false);
-                }
-            });
-        } else {
-            successFn();
-        }
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone/' + self.id,
+            dataType: 'json',
+            data: {
+                _method: 'DELETE'
+            },
+            beforeSend: function () {
+                self.deleting = true;
+            },
+            success: function (json) {
+                // Detach from all enemies upon deletion
+                self._detachFromEnemies();
+                self.removeExistingConnectionsToEnemies();
+                self.signal('object:deleted', {response: json});
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+            },
+            complete: function () {
+                self.deleting = false;
+            },
+            error: function () {
+                self.setSynced(false);
+            }
+        });
     }
 
     save() {
         let self = this;
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
 
-        let successFn = function (json) {
-            self.id = json.id;
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone',
+            dataType: 'json',
+            data: {
+                id: self.id,
+                floor_id: self.map.getCurrentFloor().id,
+                color: self.color,
+                lat: self.layer.getLatLng().lat,
+                lng: self.layer.getLatLng().lng,
+                enemies: self.enemies
+            },
+            beforeSend: function () {
+                self.saving = true;
+            },
+            success: function (json) {
+                self.id = json.id;
 
-            self.setSynced(true);
-            self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-        };
-
-        // No network traffic if this is enabled!
-        if (!this.map.isTryModeEnabled()) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone',
-                dataType: 'json',
-                data: {
-                    id: self.id,
-                    floor_id: self.map.getCurrentFloor().id,
-                    color: self.color,
-                    lat: self.layer.getLatLng().lat,
-                    lng: self.layer.getLatLng().lng,
-                    enemies: self.enemies
-                },
-                beforeSend: function () {
-                    self.saving = true;
-                },
-                success: successFn,
-                complete: function () {
-                    self.saving = false;
-                },
-                error: function (xhr) {
-                    // Even if we were synced, make sure user knows it's no longer / an error occurred
-                    self.setSynced(false);
-                    defaultAjaxErrorFn(xhr);
-                }
-            });
-        } else {
-            // We have to supply an ID to keep everything working properly
-            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id});
-        }
+                self.setSynced(true);
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+            },
+            complete: function () {
+                self.saving = false;
+            },
+            error: function (xhr) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
+                defaultAjaxErrorFn(xhr);
+            }
+        });
     }
 
     /**

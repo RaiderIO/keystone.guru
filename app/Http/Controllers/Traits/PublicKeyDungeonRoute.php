@@ -21,7 +21,8 @@ trait PublicKeyDungeonRoute
 
         if ($auth) {
             // @TODO handle this in a policy?
-            if (!Auth::check() || $dungeonRoute->author_id !== Auth::user()->id) {
+            // Author may be -1 to indicate a route that's in try mode
+            if (!Auth::check() || ($dungeonRoute->author_id !== -1 && $dungeonRoute->author_id !== Auth::user()->id)) {
                 throw new Exception('Unauthorized');
             }
         }
