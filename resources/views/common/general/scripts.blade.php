@@ -3,7 +3,11 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 ?>
 <script>
 
+    /** Instance that handles all inline code for specific pages */
+    var _inlineManager;
+
     document.addEventListener("DOMContentLoaded", function (event) {
+        _inlineManager = new InlineManager();
         // Default error handler
         $.ajaxSetup({
             error: defaultAjaxErrorFn
@@ -19,7 +23,32 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
         $(".selectpicker").selectpicker();
 
         $('#import_string_textarea').bind('paste', _importStringPasted);
+
+        @guest
+        newPassword('#register_password');
+        newPassword('#modal-register_password');
+        @endguest
     });
+
+    /**
+     * Initiates a password checker on a 'enter your password' input.
+     **/
+    function newPassword(selector) {
+        var $selector = $(selector);
+        if ($selector.length > 0) {
+            $selector.password({
+                enterPass: '&nbsp;',
+                shortPass: '{{ __('Minimum password length is 8') }}',
+                badPass: '{{ __('Weak') }}',
+                goodPass: '{{ __('Medium') }}',
+                strongPass: '{{ __('Strong') }}',
+                containsUsername: '{{ __('Password cannot contain your username') }}',
+                showText: true, // shows the text tips
+                animate: false, // whether or not to animate the progress bar on input blur/focus
+                minimumLength: 8
+            });
+        }
+    }
 
     /**
      * Called whenever the MDT import string has been pasted into the text area.

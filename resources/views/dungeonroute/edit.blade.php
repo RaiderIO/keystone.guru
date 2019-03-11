@@ -7,6 +7,9 @@
 
     <script>
         $(function () {
+            // Activate the inline code for this blade file
+            _inlineManager.activate('dungeonroute/edit');
+
             // Save settings in the modal
             $('#save_settings').bind('click', _saveSettings);
 

@@ -157,6 +157,13 @@ let scripts = [
 
     // Include the rest
     'resources/assets/js/custom/groupcomposition.js',
+
+    // Inline code
+    'resources/assets/js/custom/inline/inlinemanager.js',
+    'resources/assets/js/custom/inline/inlinecode.js',
+
+    // All inline code last
+    'resources/assets/js/custom/inline/*/**/*.js',
 ];
 
 // Output of files
