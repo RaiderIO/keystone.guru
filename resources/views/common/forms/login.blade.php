@@ -3,6 +3,8 @@ $modal = isset($modal) ? $modal : false;
 $modalClass = $modal ? 'modal-' : '';
 $width = $modal ? '12' : '6';
 $redirect = isset($redirect) ? $redirect : Request::get('redirect', Request::getPathInfo());
+// May be set if the user failed his initial login and needs another passthrough of redirect
+$redirect = old('redirect', $redirect);
 ?>
 
 <form class="form-horizontal" method="POST"

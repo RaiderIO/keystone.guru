@@ -2,6 +2,9 @@
 $modal = isset($modal) ? $modal : false;
 $modalClass = $modal ? 'modal-' : '';
 $width = $modal ? '12' : '6';
+$redirect = isset($redirect) ? $redirect : Request::get('redirect', Request::getPathInfo());
+// May be set if the user failed his initial registration and needs another passthrough of redirect
+$redirect = old('redirect', $redirect);
 ?>
 
 @section('scripts')
@@ -17,7 +20,7 @@ $width = $modal ? '12' : '6';
     </script>
 @endsection
 
-<form id="{{ $modalClass }}register_form" class="form-horizontal" method="POST" action="{{ route('register', $registerParams) }}">
+<form id="{{ $modalClass }}register_form" class="form-horizontal" method="POST" action="{{ route('register', ['redirect' => $redirect]) }}">
     {{ csrf_field() }}
     <h3>
         {{ __('Register') }}
