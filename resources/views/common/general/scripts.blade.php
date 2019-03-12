@@ -57,7 +57,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
         // https://stackoverflow.com/questions/686995/catch-paste-input
         var $importString = $('#import_string_textarea');
 
-        // Ugly, but needed since otherwise the field would be disabled prior to the value beinga ctually assigned
+        // Ugly, but needed since otherwise the field would be disabled prior to the value being actually assigned
         setTimeout(function () {
             // Can no longer edit it
             $importString.prop('disabled', true);

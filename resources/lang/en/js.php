@@ -74,5 +74,10 @@ return [
     // Home page
     'warnings_label' => 'Warnings',
     'category_label' => 'Category',
-    'message_label' => 'Message'
+    'message_label' => 'Message',
+
+    // Dungeonroute edit
+    'settings_saved' => 'Settings saved successfully',
+    'route_published' => 'Route published',
+    'route_unpublished' => 'Route unpublished'
 ];
