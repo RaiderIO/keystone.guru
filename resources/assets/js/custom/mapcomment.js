@@ -138,7 +138,7 @@ class MapComment extends MapObject {
 
         let self = this;
 
-        if (this.isEditable() && this.map.edit) {
+        if (this.isEditable() && this.map.options.edit) {
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {

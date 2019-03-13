@@ -67,6 +67,9 @@ return [
     'title_raid_marker_cross' => 'Cross',
     'title_raid_marker_skull' => 'Skull',
 
+    // Visualisation
+    'aggressiveness_label' => 'Aggressiveness',
+
 
     // Admin
     'object.deleted' => 'Objects deleted successfully.',

@@ -7,15 +7,10 @@ class DungeonMap extends Signalable {
         this.dungeonData = dungeonData;
 
         this.options = options;
-        this.currentFloorId = options.floorId;
-        this.edit = options.edit;
-        this.try = options.try;
-        this.teeming = options.teeming;
-        this.dungeonroute = options.dungeonroute;
-        this.visualType = options.defaultEnemyVisualType;
-        this.noUI = options.noUI;
-        this.hiddenMapObjectGroups = options.hiddenMapObjectGroups;
-        this.defaultZoom = options.defaultZoom;
+
+        // Keep track of whatever the current floor ID is
+        this.currentFloorId = this.options.floorId;
+        this.currentVisualType = this.options.defaultEnemyVisualType;
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -349,7 +344,7 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
         // Remove the hidden groups from the list of available groups
-        return _.difference(MAP_OBJECT_GROUP_NAMES, this.hiddenMapObjectGroups);
+        return _.difference(MAP_OBJECT_GROUP_NAMES, this.options.hiddenMapObjectGroups);
     }
 
     /**
@@ -364,13 +359,13 @@ class DungeonMap extends Signalable {
         let result = [];
 
         // No UI = no map controls at all
-        if (!this.noUI) {
-            if (this.edit) {
+        if (!this.options.noUI) {
+            if (this.options.edit) {
                 result.push(new DrawControls(this, editableLayers));
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
-            if (this.getDungeonRoute().publicKey !== '' || this.edit) {
+            if (this.getDungeonRoute().publicKey !== '' || this.options.edit) {
                 result.push(new EnemyForcesControls(this));
             }
             result.push(new EnemyVisualControls(this));
@@ -510,7 +505,7 @@ class DungeonMap extends Signalable {
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
-        this.leafletMap.setView([-128, 192], this.defaultZoom);
+        this.leafletMap.setView([-128, 192], this.options.defaultZoom);
         let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
@@ -634,7 +629,7 @@ class DungeonMap extends Signalable {
      * @returns {boolean|*}
      */
     isTryModeEnabled() {
-        return this.try && this.edit;
+        return this.options.try && this.options.edit;
     }
 
     /**
@@ -650,7 +645,7 @@ class DungeonMap extends Signalable {
      * @param visualType
      */
     setVisualType(visualType) {
-        this.visualType = visualType;
+        this.currentVisualType = visualType;
     }
 
     /**
@@ -658,7 +653,7 @@ class DungeonMap extends Signalable {
      * @returns {string}
      */
     getVisualType() {
-        return this.visualType;
+        return this.currentVisualType;
     }
 
     /**

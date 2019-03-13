@@ -11,10 +11,9 @@ class EnemyVisualControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let source = $('#map_enemy_visuals_template').html();
-                let template = Handlebars.compile(source);
+                let template = Handlebars.templates['map_enemy_visuals_template'];
 
-                let data = {};
+                let data = getHandlebarsTranslations();
 
                 // Build the status bar from the template
                 self.domElement = $(template(data));

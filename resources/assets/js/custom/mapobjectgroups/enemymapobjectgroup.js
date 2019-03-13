@@ -43,12 +43,12 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     }
 
                     // If the map isn't teeming, but the enemy is teeming..
-                    if (!this.manager.map.teeming && remoteEnemy.teeming === 'visible') {
+                    if (!this.manager.map.options.teeming && remoteEnemy.teeming === 'visible') {
                         console.log('Skipping teeming enemy ' + remoteEnemy.id);
                         continue;
                     }
                     // If the map is teeming, but the enemy shouldn't be there for teeming maps..
-                    else if (this.manager.map.teeming && remoteEnemy.teeming === 'invisible') {
+                    else if (this.manager.map.options.teeming && remoteEnemy.teeming === 'invisible') {
                         console.log('Skipping teeming-filtered enemy ' + remoteEnemy.id);
                         continue;
                     }

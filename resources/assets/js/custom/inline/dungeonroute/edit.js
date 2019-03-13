@@ -58,7 +58,7 @@ class DungeonrouteEdit extends InlineCode {
     _saveSettings() {
         $.ajax({
             type: 'POST',
-            url: '/ajax/edit/' + dungeonMap.getDungeonRoute().publicKey,
+            url: '/ajax/dungeonroute/' + dungeonMap.getDungeonRoute().publicKey,
             dataType: 'json',
             data: {
                 dungeon_route_title: $('#dungeon_route_title').val(),

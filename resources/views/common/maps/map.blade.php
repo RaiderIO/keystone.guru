@@ -26,7 +26,7 @@ if (($showAds && Auth::check() && $user->hasPaidTier('ad-free')) || !$isProducti
     $showAds = false;
 }
 // No UI on the map
-$noUI = isset($noUI) && $noUI ? 'true' : 'false';
+$noUI = isset($noUI) && $noUI ? true : false;
 // Default zoom for the map
 $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
@@ -34,7 +34,7 @@ $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups 
 // Floor id to display (bit ugly with JS, but it works)
 $floorId = isset($floorId) ? $floorId : -1;
 // Show the attribution
-$showAttribution = isset($showAttribution) && !$showAttribution ? 'false' : 'true';
+$showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 ?>
 
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => [

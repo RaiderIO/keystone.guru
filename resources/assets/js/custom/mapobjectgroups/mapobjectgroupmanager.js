@@ -143,7 +143,7 @@ class MapObjectGroupManager extends Signalable {
                 floor: this.map.getCurrentFloor().id,
                 show_mdt_enemies: isAdmin ? 1 : 0,
                 enemies: isAdmin ? 0 : 1,
-                teeming: self.map.teeming ? 1 : 0
+                teeming: self.map.options.teeming ? 1 : 0
             },
             success: function (json) {
                 self.signal('fetchsuccess', {response: json});

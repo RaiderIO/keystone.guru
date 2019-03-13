@@ -17,7 +17,6 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
             color: {{ $faction->color }};
             font-weight: bold;
         }
-
         @endforeach
     </style>
 @endsection

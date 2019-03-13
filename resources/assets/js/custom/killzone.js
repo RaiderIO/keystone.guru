@@ -325,7 +325,7 @@ class KillZone extends MapObject {
             this.enemyConnectionsLayerGroup.addLayer(polygon);
 
             // Only add popup to the killzone
-            if (this.isEditable() && this.map.edit) {
+            if (this.isEditable() && this.map.options.edit) {
                 // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
                 // This also cannot be a private function since that'll apparently give different signatures as well.
                 let popupOpenFn = function (event) {
@@ -390,7 +390,7 @@ class KillZone extends MapObject {
 
         let self = this;
 
-        if (this.map.edit) {
+        if (this.map.options.edit) {
             this.layer.on('click', function (clickEvent) {
                 // When deleting, we shouldn't have these interactions
                 if (!self.map.deleteModeActive) {
@@ -428,7 +428,7 @@ class KillZone extends MapObject {
             self.setEnemies(self.enemies);
 
             // Hide the killzone layer when in preview mode
-            if (self.map.noUI) {
+            if (self.map.options.noUI) {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
                 killZoneMapObjectGroup.setMapObjectVisibility(self, false);
             }

@@ -149,7 +149,7 @@ class Path extends Polyline {
         let self = this;
 
         // Only when we're editing
-        if (this.map.edit) {
+        if (this.map.options.edit) {
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {

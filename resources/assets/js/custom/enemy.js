@@ -239,7 +239,7 @@ class Enemy extends MapObject {
             }
         });
 
-        if (this.isEditable() && this.map.edit) {
+        if (this.isEditable() && this.map.options.edit) {
             this.onPopupInit();
         }
     }

@@ -104,7 +104,7 @@ class Brushline extends Polyline {
         super.onLayerInit();
 
         // Only when we're editing
-        if (this.map.edit) {
+        if (this.map.options.edit) {
             let self = this;
 
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
