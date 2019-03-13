@@ -55,9 +55,11 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
-    @include('common.general.scripts', ['showLegalModal' => $showLegalModal])
+    @include('common.general.inlinemanager')
+    @include('common.general.inline', ['path' => 'layouts/app', 'section' => false, 'options' => ['guest' => Auth::guest()]])
+
     @if(!$custom)
-        @include('common.general.sitescripts')
+        @include('common.general.sitescripts', ['showLegalModal' => $showLegalModal])
     @endif
     @if($cookieConsent)
         @include('common.thirdparty.cookieconsent')

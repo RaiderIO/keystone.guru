@@ -118,5 +118,29 @@ return [
     // Sidebar
     'sidebar_expand' => 'Expand the sidebar',
     'sidebar_collapse' => 'Collapse the sidebar',
-    'copied_to_clipboard' => 'Copied to clipboard'
+    'copied_to_clipboard' => 'Copied to clipboard',
+
+
+    // General site modals etc
+    'min_password_length' => 'Minimum password length is 8',
+    'weak' => 'Weak',
+    'medium' => 'Medium',
+    'strong' => 'Strong',
+    'contains_username' => 'Password cannot contain your username',
+
+    // MDT Modal
+    'mdt_faction' => 'Faction',
+    'mdt_dungeon' => 'Dungeon',
+    'mdt_affixes' => 'Affixes',
+    'mdt_pulls' => 'Pulls',
+    'mdt_drawn_lines' => 'Drawn lines',
+    'mdt_notes' => 'Notes',
+    'mdt_enemy_forces' => 'Enemy forces',
+
+    // Default AJAX failed messages
+    'ajax_error_default' => 'An error occurred while performing your request. Please try again.',
+    'ajax_error_403' => 'You are not authorized to perform this request.',
+    'ajax_error_404' => 'The requested resource was not found.',
+    'ajax_error_419' => 'Your session has expired. Refresh the page.',
+
 ];

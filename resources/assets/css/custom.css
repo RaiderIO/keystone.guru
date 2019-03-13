@@ -266,6 +266,38 @@
     align-items: center;
 }
 
+#affixes_list_custom.affix_list {
+    border: 1px solid #ccd0d2;
+    border-radius: 4px;
+}
+
+#affixes_list_custom .affix_row {
+    padding-right: 10px;
+}
+
+#affixes_list_custom .affix_list_row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#affixes_list_custom .affix_list_row_selected {
+    background-color: #2B3E50;
+}
+
+#affixes_list_custom .affix_list_row_disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#affixes_list_custom .affix_list_row:hover {
+    background-color: #2B3E50;
+    cursor: pointer;
+}
+
+#affixes_list_custom .affixselect {
+    height: 100px;
+}
+
 .affixes_overview_table td {
     padding: 0;
 }

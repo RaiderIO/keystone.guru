@@ -25,7 +25,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 @section('scripts')
     @parent
 
-    <script id="test_script">
+    <script>
 
         let _factions = {!! $factions !!};
         let _specializations = {!! $specializations !!};
