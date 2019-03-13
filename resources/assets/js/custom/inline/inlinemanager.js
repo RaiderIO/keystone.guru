@@ -2,7 +2,26 @@ class InlineManager {
 
 
     constructor() {
+        //  Array containing all inline code instances
+        this._inlineCode = [];
+    }
 
+    /**
+     * Get the loaded inline code for a specific blade's path.
+     * @param bladePath
+     * @returns {boolean}
+     */
+    getInlineCode(bladePath) {
+        let result = false;
+
+        for (let index in this._inlineCode) {
+            let code = this._inlineCode[index];
+            if (code.path === bladePath) {
+                result = code.code;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -21,5 +40,9 @@ class InlineManager {
         let code = new (eval(className));
         // Now that we have the instance, run the activate function to trigger it
         code.activate();
+
+        this._inlineCode.push({path: bladePath, code: code});
+
+        return code;
     }
 }

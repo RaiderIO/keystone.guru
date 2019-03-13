@@ -79,5 +79,11 @@ return [
     // Dungeonroute edit
     'settings_saved' => 'Settings saved successfully',
     'route_published' => 'Route published',
-    'route_unpublished' => 'Route unpublished'
+    'route_unpublished' => 'Route unpublished',
+
+    // Dungeonroute table
+    'vote' => 'vote',
+    'votes' => 'votes',
+    'route_delete_confirm' => 'Are you sure you wish to delete this route?',
+    'route_delete_successful' => 'Route deleted successfully'
 ];

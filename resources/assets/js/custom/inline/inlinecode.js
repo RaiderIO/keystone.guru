@@ -7,7 +7,6 @@ class InlineCode {
 
     /**
      *
-     * @param path
      */
     activate(){
 
