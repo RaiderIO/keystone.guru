@@ -71,7 +71,7 @@
                 // Clear of all options
                 $switchDungeonFloorSelect.find('option').remove();
                 // Add each new floor to the select
-                $.each(_dungeonData.floors, function (index, floor) {
+                $.each(dungeonData.floors, function (index, floor) {
                     // Reconstruct the dungeon floor select
                     $switchDungeonFloorSelect.append($('<option>', {
                         text: floor.name,

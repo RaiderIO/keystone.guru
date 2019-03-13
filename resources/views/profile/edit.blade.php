@@ -49,7 +49,7 @@ $user = Auth::getUser();
                     @include('common.forms.form-error', ['key' => 'email'])
                 </div>
                 <div class="form-group{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">
-                    {!! Form::label('game_server_region_id', __('Select your region')) !!}
+                    {!! Form::label('game_server_region_id', __('Region')) !!}
                     {!! Form::select('game_server_region_id', array_merge(['-1' => __('Select region')], \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()), null, ['class' => 'form-control']) !!}
                     @include('common.forms.form-error', ['key' => 'game_server_region_id'])
                 </div>

@@ -13,8 +13,6 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         $(function () {
             let code = _inlineManager.getInlineCode('dungeonroute/table');
 
-            console.log(code);
-
             // Init the code
             code.setProfileMode({{ $profile ? 'true' : 'false'}});
             code.setViewMode("{{ $cookieViewMode }}");

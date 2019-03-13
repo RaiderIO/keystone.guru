@@ -32,39 +32,12 @@ $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
 // Floor id to display (bit ugly with JS, but it works)
-$floorId = isset($floorId) ? $floorId : '_dungeonData.floors[0].id';
+$floorId = isset($floorId) ? $floorId : 'dungeonData.floors[0].id';
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? 'false' : 'true';
-
-$introTexts = [
-    __('Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.'),
-    __('You can use this button to hide or show the sidebar.'),
-
-    __('Here you can select different visualization options.'),
-    __('You can chose from multiple different visualizations to help you quickly find the information you need.'),
-
-    __('If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.'),
-
-    __('These are your route manipulation tools.'),
-    __('This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).'),
-    __('You can draw paths with this tool. Click it, then draw a path (a line) from A to B, with as many points are you like. Once finished, you can click
-    the line on the map to change its color. You can add as many paths as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
-    or purple for a Warlock Gateway, for example.'),
-    __('This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
-    You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
-    Once you have selected enemies your enemy forces (top right) will update to reflect your new enemy forces counter.'),
-    __('Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.'),
-    __('Use this control to free draw lines on your route.'),
-
-    __('This is the edit button. You can use it to adjust your created routes, move your killzones, comments or free drawn lines.'),
-    __('This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
-    that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!'),
-
-    __('The color and weight selection affect newly placed free drawn lines and routes. Killzones get the selected color by default.'),
-
-    __('These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.')
-];
 ?>
+
+@include('common.general.inline', ['path' => 'common/maps/map'])
 
 @section('scripts')
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
@@ -72,103 +45,38 @@ $introTexts = [
 
     <script>
         // Data of the dungeon(s) we're selecting in the map
-        var _dungeonData = {!! $dungeon !!};
+        var dungeonData = {!! $dungeon !!};
         var dungeonRouteEnemyForces = {{ $routeEnemyForces }};
         var isAdmin = {{ $isAdmin ? 'true' : 'false' }};
         var isUserAdmin = {{ Auth::check() && $user->hasRole('admin') ? 'true' : 'false' }};
 
         var dungeonMap;
 
-        // Options for the dungeonmap object
-        var options = {
-            floorId: {{ $floorId }},
-            edit: {{ $edit ? 'true' : 'false'}},
-            try: {{ $tryMode ? 'true' : 'false' }},
-            dungeonroute: {
-                publicKey: '{{ $routePublicKey }}',
-                faction: '{{ $routeFaction }}'
-            },
-            defaultEnemyVisualType: '{{ $enemyVisualType }}',
-            teeming: {{ $teeming }},
-            noUI: {{ $noUI }},
-            hiddenMapObjectGroups: {!!  json_encode($hiddenMapObjectGroups) !!},
-            defaultZoom: {{ $defaultZoom }},
-            showAttribution: {{ $showAttribution }}
-        };
-
         $(function () {
+            let code = _inlineManager.getInlineCode('common/maps/map');
 
-            @if($isAdmin)
-                dungeonMap = new AdminDungeonMap('map', _dungeonData, options);
-            @else
-                dungeonMap = new DungeonMap('map', _dungeonData, options);
-            @endif
-
-            // Support not having a sidebar (preview map)
-            if (typeof (_switchDungeonFloorSelect) !== 'undefined') {
-                $(_switchDungeonFloorSelect).change(function () {
-                    // Pass the new floor ID to the map
-                    dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
-                    dungeonMap.refreshLeafletMap();
-                });
-            }
-
-            $('#start_virtual_tour').bind('click', function () {
-                introjs().start();
+            // Options for the dungeonmap object
+            code.setOptions({
+                floorId: {{ $floorId }},
+                edit: {{ $edit ? 'true' : 'false'}},
+                try: {{ $tryMode ? 'true' : 'false' }},
+                dungeonroute: {
+                    publicKey: '{{ $routePublicKey }}',
+                    faction: '{{ $routeFaction }}'
+                },
+                defaultEnemyVisualType: '{{ $enemyVisualType }}',
+                teeming: {{ $teeming }},
+                noUI: {{ $noUI }},
+                hiddenMapObjectGroups: {!!  json_encode($hiddenMapObjectGroups) !!},
+                defaultZoom: {{ $defaultZoom }},
+                showAttribution: {{ $showAttribution }}
             });
 
-            // Bind leaflet virtual tour classes
-            var selectors = [
-                ['#sidebar', 'right'],
-                ['#sidebarToggle', 'right'],
+            code.initDungeonMap();
 
-                ['.visibility_tools', 'right'],
-                ['#map_enemy_visuals', 'right'],
-                ['.floor_selection', 'right'],
+            // Expose the dungeon map in a global variable
+            dungeonMap = code.getDungeonMap();
 
-                ['.route_manipulation_tools', 'top'],
-                ['#map_enemy_forces_numbers', 'top'],
-                ['.leaflet-draw-draw-path', 'top'],
-                ['.leaflet-draw-draw-killzone', 'top'],
-                ['.leaflet-draw-draw-mapcomment', 'top'],
-                ['.leaflet-draw-draw-brushline', 'top'],
-
-                ['.leaflet-draw-edit-edit', 'top'],
-                ['.leaflet-draw-edit-remove', 'top'],
-
-                ['#edit_route_freedraw_options_container', 'right'],
-
-                ['#map_controls .leaflet-draw-toolbar', 'left'],
-            ];
-            var texts = {!! json_encode($introTexts) !!};
-
-            dungeonMap.register('map:refresh', null, function () {
-                // Upon map refresh, re-init the tutorial selectors
-                for (var i = 0; i < selectors.length; i++) {
-                    var $selector = $(selectors[i][0]);
-                    // Floor selection may not exist
-                    if ($selector.length > 0) {
-                        $selector.attr('data-intro', texts[i]);
-                        $selector.attr('data-position', selectors[i][1]);
-                        $selector.attr('data-step', i + 1);
-                    }
-                }
-
-                // If the map is opened on mobile hide the sidebar
-                if (isMobile()) {
-                    var fn = function () {
-                        if (typeof _hideSidebar === 'function') {
-                            // @TODO This introduces a dependency on sidebar, but sidebar loads before dungeonMap is instantiated
-                            _hideSidebar();
-                        }
-                    };
-                    dungeonMap.leafletMap.off('move', fn);
-                    dungeonMap.leafletMap.on('move', fn);
-                }
-            });
-
-            // Refresh the map; draw the layers on it
-            dungeonMap.refreshLeafletMap();
         });
     </script>
 
