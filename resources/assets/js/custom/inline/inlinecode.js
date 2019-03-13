@@ -1,8 +1,8 @@
 class InlineCode {
 
 
-    constructor() {
-
+    constructor(options) {
+        this.options = options;
     }
 
     /**

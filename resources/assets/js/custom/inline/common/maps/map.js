@@ -1,9 +1,11 @@
 class CommonMapsMap extends InlineCode {
 
-    constructor() {
-        super();
-
-        this._options = {};
+    constructor(options) {
+        super(options);
+        // @TODO Fix this hack?
+        if (options.floorId === -1) {
+            options.floorId = dungeonData.floors[0].id;
+        }
         this._dungeonMap = null;
         this._introTexts = [];
 
@@ -18,14 +20,6 @@ class CommonMapsMap extends InlineCode {
     }
 
     /**
-     * Sets the options of the map.
-     * @param options
-     */
-    setOptions(options) {
-        this._options = options;
-    }
-
-    /**
      *
      * @returns {null}
      */
@@ -37,19 +31,12 @@ class CommonMapsMap extends InlineCode {
      *
      */
     activate() {
-        // Empty, we have to wait for options to be set prior to loading
-    }
-
-    /**
-     * Initializes the dungeon map.
-     */
-    initDungeonMap() {
         let self = this;
 
         if (isAdmin) {
-            this._dungeonMap = new AdminDungeonMap('map', dungeonData, this._options);
+            this._dungeonMap = new AdminDungeonMap('map', dungeonData, this.options);
         } else {
-            this._dungeonMap = new DungeonMap('map', dungeonData, this._options);
+            this._dungeonMap = new DungeonMap('map', dungeonData, this.options);
         }
 
         // Support not having a sidebar (preview map)

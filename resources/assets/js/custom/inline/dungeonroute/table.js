@@ -1,7 +1,7 @@
 class DungeonrouteTable extends InlineCode {
 
-    constructor() {
-        super();
+    constructor(options) {
+        super(options);
         this._profileMode = false;
         this._viewMode = '';
         this._dt = {};

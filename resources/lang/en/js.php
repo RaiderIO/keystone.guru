@@ -114,4 +114,9 @@ return [
     'intro_14' => 'The color and weight selection affect newly placed free drawn lines and routes. Killzones get the selected color by default.',
 
     'intro_15' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.',
+
+    // Sidebar
+    'sidebar_expand' => 'Expand the sidebar',
+    'sidebar_collapse' => 'Collapse the sidebar',
+    'copied_to_clipboard' => 'Copied to clipboard'
 ];

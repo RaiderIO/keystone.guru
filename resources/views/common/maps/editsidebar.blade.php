@@ -8,25 +8,7 @@ if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
 ?>
-@section('scripts')
-    @parent
-
-    <script>
-        $(function () {
-            // Copy to clipboard functionality
-            $('#map_copy_to_clipboard').bind('click', function () {
-                // https://codepen.io/shaikmaqsood/pen/XmydxJ
-                let $temp = $("<input>");
-                $("body").append($temp);
-                $temp.val($('#map_shareable_link').val()).select();
-                document.execCommand("copy");
-                $temp.remove();
-
-                addFixedFooterInfo("{{ __('Copied to clipboard') }}", 2000);
-            });
-        });
-    </script>
-@endsection
+@include('common.general.inline', ['path' => 'common/maps/editsidebar'])
 
 @section('sidebar-content')
 

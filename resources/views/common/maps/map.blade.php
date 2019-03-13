@@ -32,12 +32,26 @@ $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
 // Floor id to display (bit ugly with JS, but it works)
-$floorId = isset($floorId) ? $floorId : 'dungeonData.floors[0].id';
+$floorId = isset($floorId) ? $floorId : -1;
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? 'false' : 'true';
 ?>
 
-@include('common.general.inline', ['path' => 'common/maps/map'])
+@include('common.general.inline', ['path' => 'common/maps/map', 'options' => [
+    'floorId' => $floorId,
+    'edit' => $edit,
+    'try' => $tryMode,
+    'dungeonroute' => [
+        'publicKey' => $routePublicKey,
+        'faction' => $routeFaction
+    ],
+    'defaultEnemyVisualType' => $enemyVisualType,
+    'teeming' => $teeming,
+    'noUI' => $noUI,
+    'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
+    'defaultZoom' => $defaultZoom,
+    'showAttribution' => $showAttribution
+]])
 
 @section('scripts')
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
@@ -54,25 +68,6 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? 'false' : 'tru
 
         $(function () {
             let code = _inlineManager.getInlineCode('common/maps/map');
-
-            // Options for the dungeonmap object
-            code.setOptions({
-                floorId: {{ $floorId }},
-                edit: {{ $edit ? 'true' : 'false'}},
-                try: {{ $tryMode ? 'true' : 'false' }},
-                dungeonroute: {
-                    publicKey: '{{ $routePublicKey }}',
-                    faction: '{{ $routeFaction }}'
-                },
-                defaultEnemyVisualType: '{{ $enemyVisualType }}',
-                teeming: {{ $teeming }},
-                noUI: {{ $noUI }},
-                hiddenMapObjectGroups: {!!  json_encode($hiddenMapObjectGroups) !!},
-                defaultZoom: {{ $defaultZoom }},
-                showAttribution: {{ $showAttribution }}
-            });
-
-            code.initDungeonMap();
 
             // Expose the dungeon map in a global variable
             dungeonMap = code.getDungeonMap();
