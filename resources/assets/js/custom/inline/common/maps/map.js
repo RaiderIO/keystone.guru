@@ -31,6 +31,12 @@ class CommonMapsMap extends InlineCode {
      *
      */
     activate() {
+    }
+
+    /**
+     * Initializes the dungeon map. Cannot put this in activate() because that leads to the draw controls being messed up.
+     */
+    initDungeonMap() {
         let self = this;
 
         if (isAdmin) {

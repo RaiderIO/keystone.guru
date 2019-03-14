@@ -69,6 +69,10 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
         $(function () {
             let code = _inlineManager.getInlineCode('common/maps/map');
 
+            // Must be done here, otherwise it's too soon. I don't really know why either, but otherwise the draw controls
+            // get fucked up
+            code.initDungeonMap();
+
             // Expose the dungeon map in a global variable
             dungeonMap = code.getDungeonMap();
 
