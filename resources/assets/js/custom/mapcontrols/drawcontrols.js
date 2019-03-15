@@ -199,13 +199,13 @@ class DrawControls extends MapControl {
         let $container = $(container);
         // remove all classes
         $container.removeClass();
-        $container.addClass('container');
+        $container.addClass('container p-0');
 
         $.each($container.children(), function (i, child) {
             let $child = $(child);
 
             // Clear of classes, add a row
-            let $parent = $child.removeClass().addClass('row');
+            let $parent = $child.removeClass().addClass('row no-gutters');
 
             // Add columns to the buttons
             let $buttons = $parent.find('a');

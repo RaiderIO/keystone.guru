@@ -135,9 +135,9 @@ html, body, #map, #app, .wrapper {
     padding-bottom: 10px;
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1100px) {
     .route_manipulation_tools {
-        width: 1000px;
+        width: 1100px;
     }
 }
 
@@ -153,6 +153,7 @@ html, body, #map, #app, .wrapper {
 
 .route_manipulation_tools .draw_element {
     text-align: center;
+    margin: 0 10px;
     margin-top: 8px;
 }
 

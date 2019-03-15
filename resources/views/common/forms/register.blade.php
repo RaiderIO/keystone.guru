@@ -13,7 +13,7 @@ $redirect = old('redirect', $redirect);
     <script>
         $(function () {
             $(document).on('submit', '#{{ $modalClass }}register_form', function () {
-                // Defined in scripts.blade
+                // Defined in sitescripts.blade
                 $('#{{ $modalClass }}legal_agreed_ms').val(new Date().getTime() - _legalStartTimer);
             });
         });

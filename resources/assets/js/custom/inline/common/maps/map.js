@@ -49,8 +49,8 @@ class CommonMapsMap extends InlineCode {
         if (typeof (_switchDungeonFloorSelect) !== 'undefined') {
             $(_switchDungeonFloorSelect).change(function () {
                 // Pass the new floor ID to the map
-                this._dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
-                this._dungeonMap.refreshLeafletMap();
+                self._dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
+                self._dungeonMap.refreshLeafletMap();
             });
         }
 

@@ -1,18 +1,16 @@
 <?php
 $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 ?>
-<script>
 
+<script>
     var _legalStartTimer = new Date().getTime();
+    @auth
+    // Legal nag so that everyone agrees to the terms, that has registered.
+    @if($showLegalModal && !Auth::user()->legal_agreed)
 
     document.addEventListener("DOMContentLoaded", function (event) {
-        @auth
-        // Legal nag so that everyone agrees to the terms, that has registered.
-        @if($showLegalModal && !Auth::user()->legal_agreed)
         $('#legal_modal').modal('show');
         $('#legal_confirm_btn').bind('click', _agreeLegalBtnClicked);
-        @endif
-        @endauth
     });
 
     /**
@@ -37,4 +35,6 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
             }
         });
     }
+    @endif
+    @endauth
 </script>
