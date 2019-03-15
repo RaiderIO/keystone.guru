@@ -31,7 +31,8 @@
 
         @include('common.maps.map', [
             'dungeonroute' => $model,
-            'edit' => true
+            'edit' => true,
+            'tryMode' => true
         ])
     </div>
 

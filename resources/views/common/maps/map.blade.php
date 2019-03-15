@@ -63,6 +63,8 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
         var dungeonRouteEnemyForces = {{ $routeEnemyForces }};
         var isAdmin = {{ $isAdmin ? 'true' : 'false' }};
         var isUserAdmin = {{ Auth::check() && $user->hasRole('admin') ? 'true' : 'false' }};
+        var factionsData = {!! \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get() !!};
+        var classColors = {!! \App\Models\CharacterClass::all()->pluck('color') !!};
 
         var dungeonMap;
 
@@ -76,83 +78,6 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
             // Expose the dungeon map in a global variable
             dungeonMap = code.getDungeonMap();
         });
-    </script>
-
-    <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
-        <div id="map_faction_display_controls" class="leaflet-draw-section">
-            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                @php($i = 0)
-                @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
-                    <a class="map_faction_display_control map_controls_custom" href="#"
-                       data-faction="{{ strtolower($faction->name) }}"
-                       title="{{ $faction->name }}">
-                        <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
-                           style="width: 15px"></i>
-                        <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                             data-toggle="tooltip" title="{{ $faction->name }}"/>
-                        @php($i++)
-                    </a>
-                @endforeach
-            </div>
-            <ul class="leaflet-draw-actions"></ul>
-        </div>
-    </script>
-
-    <script id="map_path_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_path_edit_popup_inner" class="popupCustom">
-            <div class="form-group">
-                {!! Form::label('map_path_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('map_path_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
-
-                @php($classes = \App\Models\CharacterClass::all())
-                @php($half = ($classes->count() / 2))
-                @for($i = 0; $i < $classes->count(); $i++)
-                    @php($class = $classes->get($i))
-                    @if($i % $half === 0)
-                        <div class="row no-gutters pt-1">
-                            @endif
-                            <div class="col map_polyline_edit_popup_class_color border-dark"
-                                 data-color="{{ $class->color }}"
-                                 style="background-color: {{ $class->color }};">
-                            </div>
-                            @if($i % $half === $half - 1)
-                        </div>
-                    @endif
-                @endfor
-            </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_path_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
-    </script>
-
-    <script id="map_brushline_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_brushline_edit_popup_inner" class="popupCustom">
-            <div class="form-group">
-                {!! Form::label('map_brushline_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('map_brushline_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
-
-                @php($classes = \App\Models\CharacterClass::all())
-                @php($half = ($classes->count() / 2))
-                @for($i = 0; $i < $classes->count(); $i++)
-                    @php($class = $classes->get($i))
-                    @if($i % $half === 0)
-                        <div class="row no-gutters pt-1">
-                            @endif
-                            <div class="col map_polyline_edit_popup_class_color border-dark"
-                                 data-color="{{ $class->color }}"
-                                 style="background-color: {{ $class->color }};">
-                            </div>
-                            @if($i % $half === $half - 1)
-                        </div>
-                    @endif
-                @endfor
-            </div>
-            <div class="form-group">
-                {!! Form::label('map_brushline_edit_popup_weight_@{{id}}', __('Weight')) !!}
-                {!! Form::select('map_brushline_edit_popup_weight_@{{id}}', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6], 3,
-                ['id' => 'map_brushline_edit_popup_weight_@{{id}}', 'class' => 'form-control selectpicker']) !!}
-            </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_brushline_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
     </script>
 
     <script id="map_map_comment_edit_popup_template" type="text/x-handlebars-template">

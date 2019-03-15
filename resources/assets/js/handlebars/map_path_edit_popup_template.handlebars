@@ -1,0 +1,19 @@
+<div id="map_path_edit_popup_inner" class="popupCustom">
+    <div class="form-group">
+        <label for="map_path_edit_popup_color_{{id}}">{{color_label}}</label>
+        <input class="form-control" name="map_path_edit_popup_color_{{id}}" type="color"
+               id="map_path_edit_popup_color_{{id}}">
+
+        {{#rows}}
+            <div class="row no-gutters pt-1">
+                {{#colors}}
+                    <div class="col map_polyline_edit_popup_class_color border-dark"
+                         data-color="{{color}}"
+                         style="background-color: {{color}};">
+                    </div>
+                {{/colors}}
+            </div>
+        {{/rows}}
+    </div>
+    <button id="map_path_edit_popup_submit_{{id}}" class="btn btn-info" type="button">{{submit_label}}</button>
+</div>
