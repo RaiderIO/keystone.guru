@@ -14,7 +14,7 @@
             showAttributes: row.routeattributes.length > 0,
             attributes: handlebarsRouteAttributesParse(row.routeattributes),
             setup: handlebarsGroupSetupParse(row.setup),
-        }, getHandlebarsTranslations());
+        }, getHandlebarsDefaultVariables());
 
         return template(handlebarsData);
     }

@@ -146,4 +146,6 @@ return [
     'ajax_error_404' => 'The requested resource was not found.',
     'ajax_error_419' => 'Your session has expired. Refresh the page.',
 
+    // Map comment popup
+    'map_comment_label' => 'Comment'
 ];

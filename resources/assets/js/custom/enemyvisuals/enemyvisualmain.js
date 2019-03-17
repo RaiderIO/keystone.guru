@@ -37,7 +37,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
                 let data = $.extend({
                     id: id
-                }, getHandlebarsTranslations());
+                }, getHandlebarsDefaultVariables());
 
                 let $container = $('#map_enemy_visual_' + id);
                 $container.append(template(data));

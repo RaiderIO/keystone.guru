@@ -348,7 +348,7 @@ class KillZone extends MapObject {
 
                 let template = Handlebars.templates['map_killzone_edit_popup_template'];
 
-                let data = $.extend({id: self.id}, getHandlebarsTranslations());
+                let data = $.extend({id: self.id}, getHandlebarsDefaultVariables());
 
                 // Build the status bar from the template
                 polygon.unbindPopup();

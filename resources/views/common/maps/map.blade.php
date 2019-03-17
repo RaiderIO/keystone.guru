@@ -155,21 +155,6 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
         </div>
     </script>
 
-    <script id="map_map_comment_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_map_comment_edit_popup_inner" class="popupCustom">
-            <div class="form-group">
-                {!! Form::label('map_map_comment_edit_popup_comment_@{{id}}', __('Comment')) !!}
-                {!! Form::textarea('map_map_comment_edit_popup_comment_@{{id}}', null, ['class' => 'form-control', 'cols' => '50', 'rows' => '5']) !!}
-            </div>
-            <div class="form-group">
-                @if($isAdmin)
-                    {!! Form::hidden('map_map_comment_edit_popup_always_visible_@{{id}}', 1, []) !!}
-                @endif
-            </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_map_comment_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
-    </script>
-
     @if(!$isAdmin)
         <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
             <div id="enemy_edit_popup_inner" class="popupCustom">

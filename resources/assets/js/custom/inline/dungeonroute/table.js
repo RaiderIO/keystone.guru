@@ -262,7 +262,7 @@ class DungeonrouteTable extends InlineCode {
             columns.push({
                 'render': function (data, type, row, meta) {
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
-                    return template($.extend({public_key: row.public_key}, getHandlebarsTranslations()));
+                    return template($.extend({public_key: row.public_key}, getHandlebarsDefaultVariables()));
                 }
             });
         }

@@ -89,7 +89,7 @@ class LayoutsApp extends InlineCode {
                             value: responseData.enemy_forces + '/' + responseData.enemy_forces_max
                         }
                     ]
-                }, getHandlebarsTranslations());
+                }, getHandlebarsDefaultVariables());
 
                 // Build the preview from the template
                 $('#import_string_details').html(detailsTemplate(data));
@@ -100,7 +100,7 @@ class LayoutsApp extends InlineCode {
 
                     let warningsData = $.extend({
                         warnings: []
-                    }, getHandlebarsTranslations());
+                    }, getHandlebarsDefaultVariables());
 
                     // construct the handlebars data
                     for (let i = 0; i < responseData.warnings.length; i++) {

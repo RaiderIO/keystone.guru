@@ -137,7 +137,6 @@ class Enemy extends MapObject {
                 enemy_forces: enemy_forces,
                 base_health: this.npc.base_health,
                 teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
-                is_user_admin: isUserAdmin,
                 id: this.id,
                 faction: this.faction,
                 npc_id: this.npc_id,
@@ -147,7 +146,7 @@ class Enemy extends MapObject {
                 enemy_id: this.enemy_id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
                 visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
-            }, getHandlebarsTranslations());
+            }, getHandlebarsDefaultVariables());
         }
 
         // Remove any previous tooltip
