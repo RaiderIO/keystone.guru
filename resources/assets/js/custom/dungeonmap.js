@@ -39,7 +39,7 @@ class DungeonMap extends Signalable {
                 self.drawnLayers.addLayer(object.layer);
 
                 // Make sure we know it's editable
-                if (object.isEditable() && addEvent.data.objectgroup.editable && self.edit) {
+                if (object.isEditable() && addEvent.data.objectgroup.editable && self.options.edit) {
                     self.editableLayers.addLayer(object.layer);
                 }
             });
@@ -53,7 +53,7 @@ class DungeonMap extends Signalable {
                     // Add it
                     self.drawnLayers.addLayer(object.layer);
                     // Only if we may add the layer
-                    if (object.isEditable() && visibilityEvent.data.objectgroup.editable && self.edit) {
+                    if (object.isEditable() && visibilityEvent.data.objectgroup.editable && self.options.edit) {
                         self.editableLayers.addLayer(object.layer);
                     }
                 }

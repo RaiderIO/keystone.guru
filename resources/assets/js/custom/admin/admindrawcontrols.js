@@ -21,7 +21,7 @@ class AdminDrawControls extends DrawControls {
             draw: {
                 killzone: false,
                 brushline: false,
-                route: false,
+                path: false,
                 enemypack: {
                     allowIntersection: false, // Restricts shapes to simple polygons
                     drawError: {
