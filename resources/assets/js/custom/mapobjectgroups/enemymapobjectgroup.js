@@ -37,7 +37,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
                     let faction = this.manager.map.getDungeonRoute().faction;
 
-                    if (remoteEnemy.faction !== 'any' && faction !== 'any' && faction !== remoteEnemy.faction) {
+                    // Only when not in try mode!
+                    if (!this.manager.map.isTryModeEnabled() && (remoteEnemy.faction !== 'any' && faction !== 'any' && faction !== remoteEnemy.faction)) {
                         console.log('Skipping enemy that does not belong to the requested faction ', remoteEnemy, faction);
                         continue;
                     }

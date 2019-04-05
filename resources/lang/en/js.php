@@ -39,6 +39,8 @@ return [
     'attributes_label' => 'Attributes',
     'setup_label' => 'Setup',
 
+    'submit_label' => 'Submit',
+
     // Route edit tools
     'path' => 'Path',
     'killzone' => 'Killzone',
