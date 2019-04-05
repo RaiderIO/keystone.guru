@@ -293,13 +293,17 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
     <footer class="fixed-bottom route_manipulation_tools">
         <div class="container">
             <!-- Draw actions are injected here through enemyforces.js -->
-            <div id="edit_route_draw_actions_container" class="row col-6 m-auto text-center">
+            <div class="row m-auto text-center">
+                <div id="edit_route_draw_actions_container" class="col">
 
+                </div>
             </div>
 
             <!-- Draw controls are injected here through enemyforces.js -->
-            <div id="edit_route_enemy_forces_container" class="row col-6 m-auto text-center">
+            <div class="row m-auto text-center">
+                <div id="edit_route_enemy_forces_container" class="col">
 
+                </div>
             </div>
 
             <!-- Draw controls are injected here through drawcontrols.js -->

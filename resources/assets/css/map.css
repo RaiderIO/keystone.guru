@@ -143,12 +143,13 @@ html, body, #map, #app, .wrapper {
 
 .route_manipulation_tools .draw_icon {
     text-align: center;
-    background: #5bc0de;
     cursor: pointer;
-    margin: 0 10px;
     -webkit-transition: all 0.2s;
     -o-transition: all 0.2s;
     transition: all 0.2s;
+}
+.route_manipulation_tools .draw_icon .col {
+    background: #5bc0de;
 }
 
 .route_manipulation_tools .draw_element {
