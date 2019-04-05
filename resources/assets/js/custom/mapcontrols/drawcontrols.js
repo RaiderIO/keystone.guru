@@ -217,8 +217,11 @@ class DrawControls extends MapControl {
         });
 
         // Put the draw actions in a different div
+        let $drawActions = $container.find('.leaflet-draw-actions');
+        // Add the col class to make it align properly in its 'row' parent
+        $drawActions.addClass('col');
         $('#edit_route_draw_actions_container').append(
-            $container.find('.leaflet-draw-actions')
+            $drawActions
         )
     }
 
@@ -262,7 +265,7 @@ class DrawControls extends MapControl {
 
         // // Cancel button container
         let $drawActions = $('<ul>', {
-            class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom',
+            class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom col',
             style: 'top: 7px;'
         });
         // Add as the first child
