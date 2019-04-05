@@ -39,7 +39,7 @@ class CommonMapsMap extends InlineCode {
     initDungeonMap() {
         let self = this;
 
-        if (isAdmin) {
+        if (isMapAdmin) {
             this._dungeonMap = new AdminDungeonMap('map', dungeonData, this.options);
         } else {
             this._dungeonMap = new DungeonMap('map', dungeonData, this.options);

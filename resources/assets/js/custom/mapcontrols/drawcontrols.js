@@ -215,6 +215,11 @@ class DrawControls extends MapControl {
             // The buttons have a parent that shouldn't be there; strip the children from that bad parent!
             $parent.append($buttons);
         });
+
+        // Put the draw actions in a different div
+        $('#edit_route_draw_actions_container').append(
+            $container.find('.leaflet-draw-actions')
+        )
     }
 
     _addControlSetupBrushlineButton() {

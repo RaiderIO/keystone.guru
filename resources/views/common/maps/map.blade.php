@@ -61,8 +61,7 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
         // Data of the dungeon(s) we're selecting in the map
         var dungeonData = {!! $dungeon !!};
         var dungeonRouteEnemyForces = {{ $routeEnemyForces }};
-        var isAdmin = {{ $isAdmin ? 'true' : 'false' }};
-        var isUserAdmin = {{ Auth::check() && $user->hasRole('admin') ? 'true' : 'false' }};
+        var isMapAdmin = {{ $isAdmin ? 'true' : 'false' }};
 
         var dungeonMap;
 
@@ -276,6 +275,11 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 @if($edit)
     <footer class="fixed-bottom route_manipulation_tools">
         <div class="container">
+            <!-- Draw actions are injected here through enemyforces.js -->
+            <div id="edit_route_draw_actions_container" class="row col-6 m-auto text-center">
+
+            </div>
+
             <!-- Draw controls are injected here through enemyforces.js -->
             <div id="edit_route_enemy_forces_container" class="row col-6 m-auto text-center">
 

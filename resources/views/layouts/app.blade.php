@@ -57,10 +57,8 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 
     @include('common.general.inlinemanager')
     @include('common.general.inline', ['path' => 'layouts/app', 'section' => false, 'options' => ['guest' => Auth::guest()]])
+    @include('common.general.sitescripts', ['showLegalModal' => $showLegalModal])
 
-    @if(!$custom)
-        @include('common.general.sitescripts', ['showLegalModal' => $showLegalModal])
-    @endif
     @if($cookieConsent)
         @include('common.thirdparty.cookieconsent')
     @endif

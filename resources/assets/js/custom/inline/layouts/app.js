@@ -62,7 +62,7 @@ class LayoutsApp extends InlineCode {
 
         $.ajax({
             type: 'POST',
-            url: '/mdt/details',
+            url: '/ajax/mdt/details',
             dataType: 'json',
             data: {
                 'import_string': typedEvent.originalEvent.clipboardData.getData('text')

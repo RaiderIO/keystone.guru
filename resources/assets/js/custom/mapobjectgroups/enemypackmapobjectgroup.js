@@ -9,7 +9,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof EnemyPackMapObjectGroup, 'this is not an EnemyPackMapObjectGroup');
 
-        if (isAdmin) {
+        if (isMapAdmin) {
             return new AdminEnemyPack(this.manager.map, layer);
         } else {
             return new EnemyPack(this.manager.map, layer);

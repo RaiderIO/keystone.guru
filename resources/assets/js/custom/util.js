@@ -13,7 +13,7 @@ function _getHandlebarsTranslations(){
 
 function getHandlebarsDefaultVariables(){
     return $.extend(_getHandlebarsTranslations(), {
-        is_admin: isAdmin,
+        is_map_admin: typeof isMapAdmin === 'undefined' ? false : isMapAdmin,
         is_user_admin: isUserAdmin
     });
 }

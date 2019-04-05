@@ -199,25 +199,28 @@ html, body, #map, #app, .wrapper {
     color: #FFF;
 }
 
-#edit_route_draw_container .leaflet-draw-actions {
+#edit_route_draw_actions_container .leaflet-draw-actions {
     background-color: rgb(78, 93, 108);
     box-shadow: 3px 0 3px rgba(0, 0, 0, 0.2);
     -webkit-transition: all 0.2s;
     -o-transition: all 0.2s;
     transition: all 0.2s;
 
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 94px;
     top: unset !important;
+    position: unset !important;
+    left: unset !important;
+    /*position: fixed;*/
+    /*left: 50%;*/
+    /*transform: translateX(-50%);*/
+    /*bottom: 94px;*/
+    /*top: unset !important;*/
 }
 
-#edit_route_draw_container .leaflet-draw-actions li {
+#edit_route_draw_actions_container .leaflet-draw-actions li {
     line-height: 35px;
 }
 
-#edit_route_draw_container .leaflet-draw-actions a {
+#edit_route_draw_actions_container .leaflet-draw-actions a {
     background: inherit;
     color: #DF691A;
     font-size: 14px;

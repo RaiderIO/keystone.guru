@@ -9,7 +9,7 @@ class DungeonStartMarkerMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof DungeonStartMarkerMapObjectGroup, 'this is not an DungeonStartMarkerMapObjectGroup');
 
-        if (isAdmin) {
+        if (isMapAdmin) {
             return new AdminDungeonStartMarker(this.manager.map, layer);
         } else {
             return new DungeonStartMarker(this.manager.map, layer);

@@ -3,6 +3,8 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 ?>
 
 <script>
+    var isUserAdmin = {{ Auth::check() && Auth::user()->hasRole('admin') ? 'true' : 'false' }};
+
     var _legalStartTimer = new Date().getTime();
     @auth
     // Legal nag so that everyone agrees to the terms, that has registered.
