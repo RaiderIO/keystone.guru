@@ -51,7 +51,7 @@ class MDTDungeon
             // Some files require LibStub
             file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
             file_get_contents(
-                base_path('vendor/nnogga/MethodDungeonTools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
+                base_path('vendor/nnogga/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
             ) .
             // Insert dummy function to get what we need
             '
