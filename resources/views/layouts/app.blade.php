@@ -150,27 +150,23 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                     <i class="fas fa-user"></i> {{ Auth::user()->name }}
                                 </a>
                                 <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
-                                    @if( Auth::user()->can('read-expansions') )
-                                        <a class="dropdown-item"
-                                           href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
-                                    @endif
-                                    @if( Auth::user()->can('read-dungeons') )
-                                        <a class="dropdown-item"
-                                           href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
-                                    @endif
-                                    @if( Auth::user()->can('read-npcs') )
-                                        <a class="dropdown-item"
-                                           href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
-                                    @endif
                                     @if( Auth::user()->hasRole('admin'))
                                         <a class="dropdown-item"
-                                           href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
-                                    @endif
-                                    @if( Auth::user()->hasRole('admin'))
+                                           href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
+                                        @if( Auth::user()->can('read-expansions') )
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
+                                        @endif
+                                        @if( Auth::user()->can('read-dungeons') )
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
+                                        @endif
+                                        @if( Auth::user()->can('read-npcs') )
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
+                                        @endif
                                         <a class="dropdown-item"
                                            href="{{ route('admin.users') }}">{{__('View users')}}</a>
-                                    @endif
-                                    @if( Auth::user()->hasRole('admin'))
                                         <a class="dropdown-item"
                                            href="{{ route('admin.userreports') }}">{{__('View user reports') }}
                                             <span class="badge badge-primary badge-pill">{{ $numUserReports }}</span>

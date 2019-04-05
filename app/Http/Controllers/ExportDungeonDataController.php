@@ -122,7 +122,7 @@ class ExportDungeonDataController extends Controller
             }
         }
 
-        return view('admin.datadump.viewexporteddungeondata', ['data' => $result]);
+        return view('admin.tools.datadump.viewexporteddungeondata', ['data' => $result]);
     }
 
     /**
@@ -140,15 +140,5 @@ class ExportDungeonDataController extends Controller
         $file = fopen($filePath, 'w') or die('Cannot create file');
         fwrite($file, json_encode($dataArr, JSON_PRETTY_PRINT));
         fclose($file);
-    }
-
-    /**
-     * Handles the viewing of a collection of items in a table.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
-     */
-    public function view()
-    {
-        return view('admin.datadump.exportdungeondata', ['dungeons' => Dungeon::all()]);
     }
 }

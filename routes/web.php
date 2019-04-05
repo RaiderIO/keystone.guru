@@ -158,8 +158,14 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::get('admin/userreports', 'UserReportController@list')->name('admin.userreports');
 
-        Route::get('admin/datadump/exportdungeondata', 'ExportDungeonDataController@view')->name('admin.datadump.exportdungeondata');
-        Route::post('admin/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.datadump.viewexporteddungeondata');
+        Route::get('admin/tools', function () {
+            return view('admin.tools.list');
+        })->name('admin.tools');
+
+        Route::get('admin/tools/datadump/mdtstring', 'MDTImportController@view')->name('admin.tools.datadump.mdtstring.view');
+        Route::post('admin/tools/datadump/mdtstring', 'MDTImportController@viewstring')->name('admin.tools.datadump.mdtstring.submit');
+
+        Route::get('admin/tools/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.tools.datadump.exportdungeondata');
     });
 
 
