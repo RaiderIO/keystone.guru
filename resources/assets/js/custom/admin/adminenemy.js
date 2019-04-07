@@ -181,7 +181,6 @@ class AdminEnemy extends Enemy {
      * @param enemy The enemy that was selected (or de-selected). Will add/remove the enemy to the list to be redrawn.
      */
     enemySelected(enemy) {
-        console.log('enemySelected', this);
         console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
         console.assert(enemy instanceof AdminEnemy, enemy, 'enemy is not an AdminEnemy');
 

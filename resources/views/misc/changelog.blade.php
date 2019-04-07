@@ -5,6 +5,89 @@
 @section('content')
 
     <h4>
+        v2.2.3 (2019/04/xx)
+    </h4>
+    <p>
+        General changes:
+        <ul>
+            <li>
+                Updated to MDT version 2.5.6, all changes since 2.3.2 will now properly import.
+            </li>
+        </ul>
+    </p>
+
+    <p>
+        Mapping changes (for patch 8.1.5):
+    <ul>
+        <li>
+            Atal'Dazar
+            <ul>
+                <li>
+                    Added a Teeming Dazar'ai Confessor towards the south side of the dungeon, after the first two packs
+                    in a pack with two Dazar'ai Colossi.
+                </li>
+                <li>
+                    Removed two Teeming Shieldbearer of Zul in the pack before Vol'kaal.
+                </li>
+            </ul>
+            Freehold
+            <ul>
+                <li>
+                    Removed a Teeming Irontide Bonesaw, a non-Teeming Irontide Bonesaw and a Teeming Irontide Enforcer
+                    from the large patrolling pack right before Skycap'n Kragg.
+                </li>
+                <li>
+                    Removed a Teeming Irontide Officer in the large pack before Harlan Sweete.
+                </li>
+            </ul>
+            King's Rest
+            <ul>
+                <li>
+                    Removed a Teeming Spectral Brute before the second to last boss.
+                </li>
+            </ul>
+            Temple of Sethraliss
+            <ul>
+                <li>
+                    Aspix is no longer incorrectly marked as an Eye of Sethraliss.
+                </li>
+            </ul>
+            The MOTHERLODE!!
+            <ul>
+                <li>
+                    Added Mech Jockeys in the first section next to their respective Mechanized Peacekeepers.
+                </li>
+                <li>
+                    Removed a lot of the Teeming Crawler Mines in the last section.
+                </li>
+            </ul>
+            The Underrot
+            <ul>
+                <li>
+                    Removed a Teeming Living Rot in a pack right after the first boss.
+                </li>
+            </ul>
+            Tol Dagor
+            <ul>
+                <li>
+                    Removed a Teeming Sewer Vicejaw in the Sodden Depths.
+                </li>
+            </ul>
+            Waycrest Manor
+            <ul>
+                <li>
+                    Removed a pack of Devouring Maggots and Infested Peasants when coming from the south towards Raal
+                    the Gluttonous' room.
+                </li>
+                <li>
+                    Removed two Teeming Heartsbane Soulcharmers in Lady Waycrest's room.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         v2.2.2 (2019/03/07)
     </h4>
     <p>

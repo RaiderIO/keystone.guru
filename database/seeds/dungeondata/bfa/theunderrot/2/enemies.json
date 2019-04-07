@@ -3,7 +3,7 @@
         "id": 155,
         "enemy_pack_id": -1,
         "floor_id": 52,
-        "mdt_id": -1,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,

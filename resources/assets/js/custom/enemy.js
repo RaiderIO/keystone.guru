@@ -147,6 +147,10 @@ class Enemy extends MapObject {
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
                 visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
             }, getHandlebarsDefaultVariables());
+        } else {
+            template = function () {
+                return 'No NPC found for this enemy';
+            }
         }
 
         // Remove any previous tooltip

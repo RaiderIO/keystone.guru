@@ -67,7 +67,7 @@
         "dungeon_id": 21,
         "classification_id": 3,
         "name": "Unbound Abomination",
-        "base_health": 1,
+        "base_health": 2987907,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },

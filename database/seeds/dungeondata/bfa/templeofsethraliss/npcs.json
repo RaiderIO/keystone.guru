@@ -45,6 +45,15 @@
         "aggressiveness": "aggressive"
     },
     {
+        "id": 133944,
+        "dungeon_id": 19,
+        "classification_id": 3,
+        "name": "Aspix",
+        "base_health": 1532260,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
         "id": 134364,
         "dungeon_id": 19,
         "classification_id": 2,

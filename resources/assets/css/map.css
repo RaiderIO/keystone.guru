@@ -148,6 +148,7 @@ html, body, #map, #app, .wrapper {
     -o-transition: all 0.2s;
     transition: all 0.2s;
 }
+
 .route_manipulation_tools .draw_icon .col {
     background: #5bc0de;
 }
@@ -164,16 +165,16 @@ html, body, #map, #app, .wrapper {
     height: 100%;
 }
 
-.route_manipulation_tools .draw_icon.leaflet-disabled,
-.route_manipulation_tools .draw_icon.leaflet-disabled:hover {
+.route_manipulation_tools .draw_icon.leaflet-disabled .col,
+.route_manipulation_tools .draw_icon.leaflet-disabled .col:hover {
     background: gray;
     color: inherit;
     text-decoration: unset;
     cursor: default;
 }
 
-.route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled,
-.route_manipulation_tools .draw_icon:hover {
+.route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col,
+.route_manipulation_tools .draw_icon .col:hover {
     background: #DF691A;
     color: rgb(235, 235, 235) !important;
 }
