@@ -17,6 +17,7 @@ return [
     'enemy_display_type_label' => 'Enemy display type',
     'mdt_enemy_mapping_label' => 'MDT enemy mapping',
     'base_health_label' => 'Base health',
+    'no_npc_found_label' => 'No NPC found for this enemy',
 
     'teeming_label' => 'Teeming',
 

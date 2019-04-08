@@ -162,8 +162,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             return view('admin.tools.list');
         })->name('admin.tools');
 
-        Route::get('admin/tools/datadump/mdtstring', 'MDTImportController@view')->name('admin.tools.datadump.mdtstring.view');
-        Route::post('admin/tools/datadump/mdtstring', 'MDTImportController@viewstring')->name('admin.tools.datadump.mdtstring.submit');
+        Route::get('admin/tools/mdt/string', 'AdminToolsController@mdtview')->name('admin.tools.mdt.string.view');
+        Route::post('admin/tools/mdt/string', 'AdminToolsController@mdtviewsubmit')->name('admin.tools.mdt.string.submit');
+        Route::get('admin/tools/mdt/diff', 'AdminToolsController@mdtdiff')->name('admin.tools.mdt.diff');
 
         Route::get('admin/tools/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.tools.datadump.exportdungeondata');
     });
@@ -226,6 +227,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::delete('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@delete');
 
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
+
+            Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
         });
     });
 

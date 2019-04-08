@@ -149,7 +149,7 @@ class Enemy extends MapObject {
             }, getHandlebarsDefaultVariables());
         } else {
             template = function () {
-                return 'No NPC found for this enemy';
+                return lang.get('messages.no_npc_found_label');
             }
         }
 

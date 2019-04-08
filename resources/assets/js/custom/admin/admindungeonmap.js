@@ -22,6 +22,7 @@ class AdminDungeonMap extends DungeonMap {
         result.push(new AdminDrawControls(this, drawnItemsLayer));
         result.push(new EnemyVisualControls(this));
         result.push(new MapObjectGroupControls(this));
+        result.push(new AdminPanelControls(this));
 
         return result;
     }

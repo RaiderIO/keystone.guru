@@ -151,6 +151,7 @@ let scripts = [
     'resources/assets/js/custom/admin/adminenemypatrol.js',
     'resources/assets/js/custom/admin/adminenemypack.js',
     'resources/assets/js/custom/admin/admindrawcontrols.js',
+    'resources/assets/js/custom/admin/adminpanelcontrols.js',
     'resources/assets/js/custom/admin/admindungeonstartmarker.js',
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
     'resources/assets/js/custom/admin/adminmapcomment.js',

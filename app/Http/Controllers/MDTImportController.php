@@ -100,23 +100,4 @@ class MDTImportController extends Controller
 
         return $result;
     }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
-     */
-    public function view()
-    {
-        return view('admin.tools.datadump.mdtstring');
-    }
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
-     */
-    public function viewstring(Request $request)
-    {
-        $string = $request->get('import_string');
-        $importString = new ImportString();
-        echo json_encode($importString->setEncodedString($string)->getDecoded());
-    }
 }

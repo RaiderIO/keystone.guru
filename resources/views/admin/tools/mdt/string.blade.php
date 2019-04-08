@@ -3,7 +3,7 @@
 @section('header-title', __('View MDT String contents'))
 
 @section('content')
-    {{ Form::open(['route' => 'admin.tools.datadump.mdtstring.submit']) }}
+    {{ Form::open(['route' => 'admin.tools.mdt.string.submit']) }}
     <div class="form-group">
         {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
         {{ Form::textarea('import_string', '', ['class' => 'form-control']) }}

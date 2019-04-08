@@ -36,9 +36,31 @@ class MDTDungeon
     }
 
     /**
+     * Get all clones of a specific NPC.
+     * @param $npcId int WoW's NPC id.
+     * @return array The enemy as an array.
+     */
+    private function _getMDTEnemy($npcId)
+    {
+        $enemies = $this->getMDTNPCs();
+
+        $result = null;
+        // Find the enemy in a list of enemies
+        foreach ($enemies as $enemy) {
+            // Id is classed as a double, some lua -> php conversion issue/choice.
+            if ((int)$enemy->id === $npcId) {
+                $result = $enemy;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get a list of NPCs
      */
-    private function _getMDTNPCs()
+    public function getMDTNPCs()
     {
         $lua = new \Lua();
         $lua->eval(
@@ -62,28 +84,6 @@ class MDTDungeon
         return $lua->call('GetDungeonEnemies');
     }
 
-    /**
-     * Get all clones of a specific NPC.
-     * @param $npcId int WoW's NPC id.
-     * @return array The enemy as an array.
-     */
-    private function _getMDTEnemy($npcId)
-    {
-        $enemies = $this->_getMDTNPCs();
-
-        $result = null;
-        // Find the enemy in a list of enemies
-        foreach ($enemies as $enemy) {
-            // Id is classed as a double, some lua -> php conversion issue/choice.
-            if ((int)$enemy->id === $npcId) {
-                $result = $enemy;
-                break;
-            }
-        }
-
-        return $result;
-    }
-
 
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
@@ -97,7 +97,7 @@ class MDTDungeon
             $floors = [$floors];
         }
 
-        $mdtNpcs = $this->_getMDTNPCs();
+        $mdtNpcs = $this->getMDTNPCs();
 
         // NPC_ID => list of clones
         $npcClones = [];
