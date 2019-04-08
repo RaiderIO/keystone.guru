@@ -46,8 +46,31 @@
                     Removed a Teeming Spectral Brute before the second to last boss.
                 </li>
             </ul>
+            Siege of Boralus (Alliance)
+            <ul>
+                <li>
+                    Added a Dockhound Packmaster and Snarling Dockhound in a pack after passing through the first gate,
+                    after the market section, before the first boss.
+                </li>
+                <li>
+                    In that same pack, added a Teeming Scrimshaw Enforcer.
+                </li>
+            </ul>
+            Shrine of the Storm
+            <ul>
+                <li>
+                    Removed multiple Abyss Dweller in the room before the bridge to the last section.
+                </li>
+                <li>
+                    Removed multiple duplicate Abyssal Eel in the last room.
+                </li>
+            </ul>
             Temple of Sethraliss
             <ul>
+                <li>
+                    Removed a duplicate Sandswept Marksman in the pack entering Aspix' and Adderis' room, when taking
+                    a left initially.
+                </li>
                 <li>
                     Aspix is no longer incorrectly marked as an Eye of Sethraliss.
                 </li>
@@ -58,11 +81,17 @@
                     Added Mech Jockeys in the first section next to their respective Mechanized Peacekeepers.
                 </li>
                 <li>
+                    Removed 3 Teeming Wanton Sappers in the big pack after the first boss.
+                </li>
+                <li>
                     Removed a lot of the Teeming Crawler Mines in the last section.
                 </li>
             </ul>
             The Underrot
             <ul>
+                <li>
+                    Removed a Underrot Tick in the second pack from the start before the first boss.
+                </li>
                 <li>
                     Removed a Teeming Living Rot in a pack right after the first boss.
                 </li>
@@ -71,6 +100,12 @@
             <ul>
                 <li>
                     Removed a Teeming Sewer Vicejaw in the Sodden Depths.
+                </li>
+                <li>
+                    Removed a duplicate Ashvane Marine in the pack right before Knight Captain Valyri.
+                </li>
+                <li>
+                    Removed a duplicate Ashvane Warden right after Knight Captain Valyri.
                 </li>
             </ul>
             Waycrest Manor
