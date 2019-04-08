@@ -12,19 +12,6 @@ if (isset($model)) {
 
 @section('sidebar-content')
 
-    @isset($show['virtual-tour'])
-        <!-- Virtual tour -->
-        <div class="form-group">
-            <div class="card">
-                <div class="card-body">
-                    <div id="start_virtual_tour" class="btn btn-info col">
-                        <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endisset
-
     @isset($show['shareable-link'])
         <!-- Shareable link -->
         <div class="form-group">
@@ -81,6 +68,20 @@ if (isset($model)) {
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ __('Actions') }}</h5>
+
+                @isset($show['virtual-tour'])
+                    <div class="form-group">
+                        <!-- Virtual tour -->
+                        <div class="row">
+                            <div class="col">
+                                <button id="start_virtual_tour" class="btn btn-info col">
+                                    <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endisset
+
                 @isset($show['route-settings'])
                     <div class="form-group">
                         <!-- Route settings -->
@@ -112,6 +113,29 @@ if (isset($model)) {
                         </div>
                     </div>
                 @endisset
+
+                @isset($show['tryout'])
+                    @if (Auth::guest())
+                        <div class="form-group">
+                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
+                                <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
+                                    data-target="#register_modal">
+                                <i class="fas fa-user-plus"></i> {{ __('Register and continue') }}
+                            </button>
+                        </div>
+                    @else
+                        <div class="form-group">
+                            <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $model->public_key]) }}"
+                               class="btn btn-primary mt-1 w-100" role="button">
+                                <i class="fas fa-save"></i> {{ __('Save and continue') }}
+                            </a>
+                        </div>
+                    @endif
+                @endisset
             </div>
         </div>
     </div>
@@ -124,31 +148,6 @@ if (isset($model)) {
                          class="alert alert-info text-center {{ $model->published === 1 ? 'd-none' : '' }}">
                         <i class="fa fa-info-circle"></i> {{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}
                     </div>
-                </div>
-            </div>
-        </div>
-    @endisset
-
-    @isset($show['tryout'])
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Actions') }}</h5>
-                <div class="form-group">
-                    @if (Auth::guest())
-                        <a href="#" class="btn btn-primary mt-1 w-100" role="button" data-toggle="modal"
-                           data-target="#login_modal">
-                            {{__('Login')}}
-                        </a>
-                        <a href="#" class="btn btn-primary mt-1 w-100" role="button" data-toggle="modal"
-                           data-target="#register_modal">
-                            {{ __('Register and continue') }}
-                        </a>
-                    @else
-                        <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $model->public_key]) }}"
-                           class="btn btn-primary mt-1 w-100" role="button">
-                            {{ __('Save and continue') }}
-                        </a>
-                    @endif
                 </div>
             </div>
         </div>

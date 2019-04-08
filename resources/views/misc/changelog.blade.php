@@ -33,6 +33,9 @@
             Freehold
             <ul>
                 <li>
+                    The start of the dungeon is now correctly marked on the map.
+                </li>
+                <li>
                     Removed a Teeming Irontide Bonesaw, a non-Teeming Irontide Bonesaw and a Teeming Irontide Enforcer
                     from the large patrolling pack right before Skycap'n Kragg.
                 </li>

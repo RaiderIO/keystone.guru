@@ -137,6 +137,7 @@ class Enemy extends MapObject {
                 enemy_forces: enemy_forces,
                 base_health: this.npc.base_health,
                 teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
+                is_teeming: this.teeming === 'visible',
                 id: this.id,
                 faction: this.faction,
                 npc_id: this.npc_id,
