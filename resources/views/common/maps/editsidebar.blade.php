@@ -118,7 +118,7 @@ if (isset($model)) {
                     @if (Auth::guest())
                         <div class="form-group">
                             <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
-                                <i class="fas fa-sign-in-alt"></i> {{__('Login')}}
+                                <i class="fas fa-sign-in-alt"></i> {{__('Login and continue')}}
                             </button>
                         </div>
                         <div class="form-group">
