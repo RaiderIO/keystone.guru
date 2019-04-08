@@ -155,13 +155,11 @@ html, body, #map, #app, .wrapper {
 
 .route_manipulation_tools .draw_element {
     text-align: center;
-    margin: 0 10px;
     margin-top: 8px;
 }
 
 .route_manipulation_tools .draw_element .bootstrap-select,
-.route_manipulation_tools .draw_element button,
-.route_manipulation_tools .draw_element input {
+.route_manipulation_tools .draw_element button {
     height: 100%;
 }
 
