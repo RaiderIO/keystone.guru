@@ -2,7 +2,7 @@ class LayoutsApp extends InlineCode {
     /**
      *
      */
-    activate(){
+    activate() {
         // Default error handler
         $.ajaxSetup({
             error: this._defaultAjaxErrorFn
@@ -19,7 +19,7 @@ class LayoutsApp extends InlineCode {
 
         $('#import_string_textarea').bind('paste', this._importStringPasted);
 
-        if( this.options.guest ){
+        if (this.options.guest) {
             this._newPassword('#register_password');
             this._newPassword('#modal-register_password');
         }
@@ -171,7 +171,7 @@ class LayoutsApp extends InlineCode {
             }
         }
 
-        addFixedFooterError(message + " (" + xhr.status + ")");
+        showErrorNotification(message + " (" + xhr.status + ")");
     }
 }
 
@@ -193,101 +193,41 @@ function refreshSelectPickers() {
     $selectpicker.selectpicker('render');
 }
 
+function _showNotification(opts) {
+    new Noty($.extend({
+        theme: 'bootstrap-v4',
+        timeout: 4000
+    }, opts)).show();
+}
+
 /**
- * Add a fixed message to a container with an arbitrary type.
- * @param containerSelector
- * @param type
- * @param message
- * @param durationMs
- * @param small
- * @private
+ * Shows a success notification message.
+ * @param text The text to display.
  */
-function _addFixedMessage(containerSelector, type, message, durationMs, small = false) {
-    let template = Handlebars.templates['app_fixed_message_' + (small ? 'small_' : '') + 'template'];
-
-    let handlebarsData = {
-        type: type,
-        message: message
-    };
-
-    let $message = $(template(handlebarsData));
-    $(containerSelector).append($message);
-
-    $message.delay(durationMs).fadeOut(200, function () {
-        $(this).remove();
-    });
-
-    return $message;
+function showSuccessNotification(text) {
+    _showNotification({type: 'success', text: '<i class="fas fa-check-circle"></i> ' + text});
 }
 
 /**
- * Add a fixed footer message with an arbitrary type.
- * @param type
- * @param message
- * @param durationMs
- * @param small
- * @private
+ * Shows an info notification message.
+ * @param text The text to display.
  */
-function _addFixedFooter(type, message, durationMs, small = false) {
-    return _addFixedMessage('#fixed_footer_container', type, message, durationMs, small);
+function showInfoNotification(text) {
+    _showNotification({type: 'info', text: '<i class="fas fa-info-circle"></i> ' + text});
 }
 
 /**
- * Add a fixed header with an arbitrary type.
- * @param type
- * @param message
- * @param durationMs
- * @param small
- * @private
+ * Shows a warning notification message.
+ * @param text The text to display.
  */
-function _addFixedHeader(type, message, durationMs, small = false) {
-    return _addFixedMessage('#fixed_header_container', type, message, durationMs, small);
+function showWarningNotification(text) {
+    _showNotification({type: 'warning', text: '<i class="fas fa-exclamation-triangle"></i> ' + text});
 }
 
 /**
- * Add a small fixed header which only wraps the content in a background.
- * @returns The created header element.
- **/
-function addFixedHeaderSmall(message, durationMs = 5000) {
-    return _addFixedHeader('info', '<i class="fas fa-info-circle"></i> ' + message, durationMs, true);
-}
-
-/**
- * Add a small fixed footer which only wraps the content in a background.
- * @returns The created footer element.
- **/
-function addFixedFooterSmall(message, durationMs = 5000) {
-    return _addFixedFooter('info', '<i class="fas fa-info-circle"></i> ' + message, durationMs, true);
-}
-
-/**
- * Adds a fixed info footer with a message and a duration to the bottom of the screen.
- * @returns The created footer element.
+ * Shows an error notification message.
+ * @param text The text to display.
  */
-function addFixedFooterInfo(message, durationMs = 5000) {
-    return _addFixedFooter('info', '<i class="fas fa-info-circle"></i> ' + message, durationMs);
-}
-
-/**
- * Adds a fixed success footer with a message and a duration to the bottom of the screen.
- * @returns The created footer element.
- */
-function addFixedFooterSuccess(message, durationMs = 5000) {
-    return _addFixedFooter('success', '<i class="fas fa-check-circle"></i> ' + message, durationMs);
-}
-
-/**
- * Adds a fixed warning footer with a message and a duration to the bottom of the screen.
- * @returns The created footer element.
- */
-function addFixedFooterWarning(message, durationMs = 5000) {
-    return _addFixedFooter('warning', '<i class="fas fa-exclamation-triangle"></i> ' + message, durationMs);
-}
-
-/**
- * Adds a fixed error footer with a message and a duration to the bottom of the screen.
- * @returns The created footer element.
- */
-function addFixedFooterError(message, durationMs = 5000) {
-    return _addFixedFooter('danger', '<i class="fas fa-times-circle"></i> ' + message, durationMs);
+function showErrorNotification(text) {
+    _showNotification({type: 'error', text: '<i class="fas fa-times-circle"></i> ' + text});
 }

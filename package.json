@@ -51,6 +51,7 @@
     "leaflet-pather": "^0.1.17",
     "leaflet-polylinedecorator": "^1.6.0",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
+    "noty": "^3.2.0-beta",
     "npm-force-resolutions": "0.0.2",
     "owl.carousel": "^2.3.4",
     "password-strength-meter": "^1.2.2",

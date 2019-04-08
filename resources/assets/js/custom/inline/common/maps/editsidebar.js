@@ -13,7 +13,7 @@ class CommonMapsEditsidebar extends InlineCode {
             document.execCommand("copy");
             $temp.remove();
 
-            addFixedFooterInfo(lang.get('messages.copied_to_clipboard'), 2000);
+            showInfoNotification(lang.get('messages.copied_to_clipboard'));
         });
     }
 }

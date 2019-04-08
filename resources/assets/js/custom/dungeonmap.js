@@ -129,7 +129,7 @@ class DungeonMap extends Signalable {
             let layerDeletedFn = function () {
                 layersDeleted++;
                 if (layersDeleted === layersLength) {
-                    addFixedFooterSuccess(lang.get('messages.object.deleted'), 1500);
+                    showSuccessNotification(lang.get('messages.object.deleted'));
                 }
             };
 

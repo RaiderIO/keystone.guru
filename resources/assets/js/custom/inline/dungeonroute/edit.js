@@ -38,14 +38,14 @@ class DungeonrouteEdit extends InlineCode {
                     $('#map_route_unpublish').removeClass('d-none');
                     $('#map_route_unpublished_info').addClass('d-none');
 
-                    addFixedFooterSuccess(lang.get('messages.route_published'));
+                    showSuccessNotification(lang.get('messages.route_published'));
                 } else {
                     // Unpublished
                     $('#map_route_publish').removeClass('d-none');
                     $('#map_route_unpublish').addClass('d-none');
                     $('#map_route_unpublished_info').removeClass('d-none');
 
-                    addFixedFooterWarning(lang.get('messages.route_unpublished'));
+                    showWarningNotification(lang.get('messages.route_unpublished'));
                 }
             },
             complete: function () {
@@ -89,7 +89,7 @@ class DungeonrouteEdit extends InlineCode {
                 $('#save_settings_saving').show();
             },
             success: function (json) {
-                addFixedFooterSuccess(lang.get('messages.settings_saved'));
+                showSuccessNotification(lang.get('messages.settings_saved'));
             },
             complete: function () {
                 $('#save_settings').show();

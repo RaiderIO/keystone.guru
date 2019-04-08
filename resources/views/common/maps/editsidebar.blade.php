@@ -76,32 +76,47 @@ if (isset($model)) {
         </div>
     </div>
 
-    @isset($show['route-settings'])
-        <!-- Route settings -->
-        <div class="form-group">
-            <div class="btn btn-primary col" data-toggle="modal" data-target="#settings_modal">
-                <i class='fas fa-cog'></i> {{ __('Route settings') }}
+    <!-- Actions -->
+    <div class="form-group">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ __('Actions') }}</h5>
+                @isset($show['route-settings'])
+                    <div class="form-group">
+                        <!-- Route settings -->
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-info col" data-toggle="modal" data-target="#settings_modal">
+                                    <i class='fas fa-cog'></i> {{ __('Route settings') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endisset
+
+
+                @isset($show['route-publish'])
+                <!-- Published state -->
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <button id="map_route_publish"
+                                        class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}">
+                                    <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
+                                </button>
+                                <button id="map_route_unpublish"
+                                        class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
+                                    <i class="fa fa-plane-arrival"></i> {{ __('Unpublish route') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endisset
             </div>
         </div>
-    @endisset
+    </div>
 
     @isset($show['route-publish'])
-        <!-- Published state -->
-        <div class="form-group">
-            <div class="row">
-                <div class="col">
-                    <div id="map_route_publish"
-                         class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}">
-                        <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
-                    </div>
-                    <div id="map_route_unpublish"
-                         class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
-                        <i class="fa fa-plane-arrival"></i> {{ __('Unpublish route') }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="form-group">
             <div class="row">
                 <div class="col">

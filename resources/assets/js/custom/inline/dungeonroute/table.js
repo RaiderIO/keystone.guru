@@ -284,7 +284,7 @@ class DungeonrouteTable extends InlineCode {
                 url: '/ajax/dungeonroute/' + publicKey,
                 dataType: 'json',
                 success: function (json) {
-                    addFixedFooterSuccess(lang.get('messages.route_delete_successful'));
+                    showSuccessNotification(lang.get('messages.route_delete_successful'));
                     // Refresh the table
                     $('#dungeonroute_filter').trigger('click');
                 }
