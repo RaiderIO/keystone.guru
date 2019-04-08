@@ -67,6 +67,8 @@ class CommonMapsMap extends InlineCode {
             ['#map_enemy_visuals', 'right'],
             ['.floor_selection', 'right'],
 
+            ['.route_actions', 'right'],
+
             ['.route_manipulation_tools', 'top'],
             ['#map_enemy_forces_numbers', 'top'],
             ['.leaflet-draw-draw-path', 'top'],
@@ -77,7 +79,8 @@ class CommonMapsMap extends InlineCode {
             ['.leaflet-draw-edit-edit', 'top'],
             ['.leaflet-draw-edit-remove', 'top'],
 
-            ['#edit_route_freedraw_options_container', 'right'],
+            ['#edit_route_freedraw_options_color', 'top'],
+            ['.draw_element .bootstrap-select', 'top'],
 
             ['#map_controls .leaflet-draw-toolbar', 'left'],
         ];

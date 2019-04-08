@@ -64,7 +64,7 @@ if (isset($model)) {
     </div>
 
     <!-- Actions -->
-    <div class="form-group">
+    <div class="form-group route_actions">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ __('Actions') }}</h5>
