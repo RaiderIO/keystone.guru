@@ -104,16 +104,16 @@ return [
 
     'intro_5' => 'If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.',
 
-    'intro_6' => 'These are some actions you can perform on the current route.',
+    'intro_6' => 'These are some actions you can perform on the current route, register if you\'re not registered or login if you have.',
 
     'intro_7' => 'These are your route manipulation tools.',
     'intro_8' => 'This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).',
-    'intro_9' => 'You can draw paths with this tool. Click it, then draw a path (a line) from A to B, with as many points are you like. Once finished, you can click
+    'intro_9' => 'You can draw paths with this tool. Click it, then draw a path (which is a simple line with directional arrows) from A to B, with as many points are you like. Once finished, you can click
             the line on the map to change its color. You can add as many paths as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
             or purple for a Warlock Gateway, for example.',
     'intro_10' => 'This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
             You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
-            Once you have selected enemies your enemy forces (top right) will update to reflect your new enemy forces counter.',
+            Once you have selected enemies your enemy forces (the label above here) will update to reflect your new enemy forces counter.',
     'intro_11' => 'Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.',
     'intro_12' => 'Use this control to free draw lines on your route.',
 

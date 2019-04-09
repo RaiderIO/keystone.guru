@@ -69,18 +69,18 @@ class CommonMapsMap extends InlineCode {
 
             ['.route_actions', 'right'],
 
-            ['.route_manipulation_tools', 'top'],
-            ['#map_enemy_forces_numbers', 'top'],
-            ['.leaflet-draw-draw-path', 'top'],
-            ['.leaflet-draw-draw-killzone', 'top'],
-            ['.leaflet-draw-draw-mapcomment', 'top'],
-            ['.leaflet-draw-draw-brushline', 'top'],
+            ['.route_manipulation_tools', 'left'],
+            ['#map_enemy_forces_numbers', 'left'],
+            ['.leaflet-draw-draw-path', 'left'],
+            ['.leaflet-draw-draw-killzone', 'left'],
+            ['.leaflet-draw-draw-mapcomment', 'left'],
+            ['.leaflet-draw-draw-brushline', 'left'],
 
-            ['.leaflet-draw-edit-edit', 'top'],
-            ['.leaflet-draw-edit-remove', 'top'],
+            ['.leaflet-draw-edit-edit', 'left'],
+            ['.leaflet-draw-edit-remove', 'left'],
 
-            ['#edit_route_freedraw_options_color', 'top'],
-            ['.draw_element .bootstrap-select', 'top'],
+            ['#edit_route_freedraw_options_color', 'left'],
+            ['.draw_element .bootstrap-select', 'left'],
 
             ['#map_controls .leaflet-draw-toolbar', 'left'],
         ];
