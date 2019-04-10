@@ -5,19 +5,65 @@
 @section('content')
 
     <h4>
-        v2.2.3 (2019/04/xx)
+        v2.3 (2019/04/10)
     </h4>
     <p>
         General changes:
-        <ul>
-            <li>
-                Updated to MDT version 2.5.6, all changes since 2.3.2 will now properly import.
-            </li>
-        </ul>
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/154">#154</a>
+            Reduced loading times of various pages and increased performance.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/150">#150</a>
+            Switching floors in 'Try' mode no longer clears all mapping progress. As a result of changes for this, I've
+            added functionality to save the current mapping as a new Route. If you're not logged in, there's an option
+            to log in and continue mapping, if you do not have an account you can now also register from the same page
+            and continue mapping. Furthermore, changes for this ticket will allow me to more easily allow people to
+            create anonymous Routes.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/153">#153</a>
+            Cloning a route now properly clones free drawn shapes.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/160">#160</a>
+            Updated notifications so they no longer show in a bar at the bottom, but neatly in the top right corner
+            instead.
+        </li>
+    </ul>
     </p>
 
     <p>
-        Mapping changes (for patch 8.1.5):
+        Map changes:
+    <ul>
+        <li>
+            I've done some fine-tuning and bug fixing for the general layout of the map, in both desktop and mobile
+            versions.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/156">#156</a>
+            Worked around an issue where sometimes a Route would cause freezing of the entire browser tab. I cannot
+            directly fix this issue as I believe it lays in another library I use, but I've contacted the author of said
+            library and hopefully I'll have a proper fix soon. For now it seems fixed and is very rare regardless, so
+            hopefully it stays gone til the fix is there.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        MDT importer changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/157">#157</a>
+            Updated to MDT version 2.5.6, all changes since 2.3.2 will now properly import, such as pull colors.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Mapping changes (for patch 8.1.5)
+        <a href="https://github.com/Wotuu/keystone.guru/issues/158">#158</a>:
     <ul>
         <li>
             Atal'Dazar
