@@ -220,6 +220,7 @@ class DrawControls extends MapControl {
         let $drawActions = $container.find('.leaflet-draw-actions');
         // Add the col class to make it align properly in its 'row' parent
         $drawActions.addClass('col');
+        // Add to the proper container
         $('#edit_route_draw_actions_container').append(
             $drawActions
         )
@@ -269,15 +270,17 @@ class DrawControls extends MapControl {
             style: 'top: 7px;'
         });
         // Add as the first child
-        $buttonContainer.prepend($drawActions);
+        $('#edit_route_draw_actions_container').append($drawActions);
         // Remove all previous entries
         $drawActions.empty();
         // Create the button
         let $button = $('<a>', {
             href: '#',
+            'data-toggle': 'tooltip',
             title: lang.get('messages.finish_drawing'),
             text: lang.get('messages.finish')
         });
+
         // On click, disable pather
         $button.bind('click', function () {
             self.map.togglePather(false);
