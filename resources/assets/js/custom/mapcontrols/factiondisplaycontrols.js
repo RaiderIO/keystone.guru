@@ -8,10 +8,21 @@ class FactionDisplayControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let source = $('#map_faction_display_controls_template').html();
-                let template = Handlebars.compile(source);
+                let template = Handlebars.templates['map_faction_display_controls_template'];
 
-                let data = {};
+                // factionsData is defined in map.blade.php
+                let factions = [];
+                for (let index in factionsData) {
+                    let faction = factionsData[index];
+                    factions.push({
+                        name: faction.name,
+                        name_lc: faction.name.toLowerCase(),
+                        icon_url: faction.iconfile.icon_url,
+                        fa_class: parseInt(index) === 0 ? 'fas' : 'far'
+                    });
+                }
+
+                let data = {factions: factions};
 
                 // Build the status bar from the template
                 self.domElement = $(template(data));

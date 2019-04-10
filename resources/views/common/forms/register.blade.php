@@ -2,6 +2,9 @@
 $modal = isset($modal) ? $modal : false;
 $modalClass = $modal ? 'modal-' : '';
 $width = $modal ? '12' : '6';
+$redirect = isset($redirect) ? $redirect : Request::get('redirect', Request::getPathInfo());
+// May be set if the user failed his initial registration and needs another passthrough of redirect
+$redirect = old('redirect', $redirect);
 ?>
 
 @section('scripts')
@@ -10,14 +13,14 @@ $width = $modal ? '12' : '6';
     <script>
         $(function () {
             $(document).on('submit', '#{{ $modalClass }}register_form', function () {
-                // Defined in scripts.blade
+                // Defined in sitescripts.blade
                 $('#{{ $modalClass }}legal_agreed_ms').val(new Date().getTime() - _legalStartTimer);
             });
         });
     </script>
 @endsection
 
-<form id="{{ $modalClass }}register_form" class="form-horizontal" method="POST" action="{{ route('register') }}">
+<form id="{{ $modalClass }}register_form" class="form-horizontal" method="POST" action="{{ route('register', ['redirect' => $redirect]) }}">
     {{ csrf_field() }}
     <h3>
         {{ __('Register') }}
@@ -63,9 +66,9 @@ $width = $modal ? '12' : '6';
     <div class="form-group">
         <label for="{{ $modalClass }}legal_agreed" class="control-label">
             {!! sprintf(__('I agree with the %s, %s and the %s.'),
-             '<a href="' . route('legal.terms') . '">terms of service</a>',
-             '<a href="' . route('legal.privacy') . '">privacy policy</a>',
-             '<a href="' . route('legal.cookies') . '">cookie policy</a>')
+             '<a href="' . route('legal.terms') . '">' . __('terms of service') . '</a>',
+             '<a href="' . route('legal.privacy') . '">' . __('privacy policy') . '</a>',
+             '<a href="' . route('legal.cookies') . '">' . __('cookie policy') . '</a>')
              !!}
         </label>
         {!! Form::checkbox('legal_agreed', 1, 0, ['id' => $modalClass . 'legal_agreed', 'class' => 'form-control left_checkbox']) !!}

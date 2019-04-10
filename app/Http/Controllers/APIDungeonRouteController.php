@@ -48,8 +48,14 @@ class APIDungeonRouteController extends Controller
     function list(Request $request)
     {
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
-            // ->setAppends(['dungeon', 'affixes', 'author'])
-            ->selectRaw('dungeon_routes.*');
+            ->selectRaw('dungeon_routes.*')
+            // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
+            // other may work, this covers all bases for both dev and live
+            ->where(function ($query) {
+                /** @var $query \Illuminate\Database\Query\Builder */
+                $query->where('expires_at', 0);
+                $query->orWhereNull('expires_at');
+            });
 
         $user = Auth::user();
         $mine = false;
@@ -243,7 +249,7 @@ class APIDungeonRouteController extends Controller
 
         // Start parsing
         $result = [];
-        if ($publickey === 'try' || $publickey === 'admin') {
+        if ($publickey === 'admin') {
             // Delete it so we don't fetch stuff we shouldn't!
             $publickey = null;
         } else {

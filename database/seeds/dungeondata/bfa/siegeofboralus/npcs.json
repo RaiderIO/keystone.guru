@@ -4,7 +4,7 @@
         "dungeon_id": 18,
         "classification_id": 3,
         "name": "Sergeant Bainbridge",
-        "base_health": 1648192,
+        "base_health": 2145164,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -13,7 +13,7 @@
         "dungeon_id": 18,
         "classification_id": 3,
         "name": "Chopper Redhook",
-        "base_health": 1648276,
+        "base_health": 2145164,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -22,7 +22,7 @@
         "dungeon_id": 18,
         "classification_id": 3,
         "name": "Hadal Darkfathom",
-        "base_health": 1,
+        "base_health": 2681455,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -31,7 +31,7 @@
         "dungeon_id": 18,
         "classification_id": 3,
         "name": "Viq'Goth",
-        "base_health": 1,
+        "base_health": 9576625,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -40,7 +40,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Sniper",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -49,7 +49,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Commander",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 8,
         "aggressiveness": "aggressive"
     },
@@ -58,7 +58,7 @@
         "dungeon_id": 18,
         "classification_id": 3,
         "name": "Dread Captain Lockwood",
-        "base_health": 1,
+        "base_health": 1877019,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -67,7 +67,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Buccaneer",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -76,7 +76,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Tempest",
-        "base_health": 235470,
+        "base_health": 306450,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -85,7 +85,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Irontide Raider",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 8,
         "aggressiveness": "aggressive"
     },
@@ -94,7 +94,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Irontide Waveshaper",
-        "base_health": 235455,
+        "base_health": 306450,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -103,7 +103,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Riptide Shredder",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -112,7 +112,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Blacktar Bomber",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -121,7 +121,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Dockhound Packmaster",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -130,7 +130,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Scrimshaw Enforcer",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -139,7 +139,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Snarling Dockhound",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -148,7 +148,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Irontide Cleaver",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -157,8 +157,8 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Irontide Powdershot",
-        "base_health": 58867,
-        "enemy_forces": 4,
+        "base_health": 76613,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -166,8 +166,8 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Kul Tiran Vanguard",
-        "base_health": 294335,
-        "enemy_forces": 4,
+        "base_health": 383065,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -175,8 +175,8 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Kul Tiran Marksman",
-        "base_health": 294335,
-        "enemy_forces": 4,
+        "base_health": 383065,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -184,7 +184,7 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Scrimshaw Gutter",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -193,7 +193,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Pillager",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -202,7 +202,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Demolisher",
-        "base_health": 588670,
+        "base_health": 766130,
         "enemy_forces": 8,
         "aggressiveness": "aggressive"
     },
@@ -211,7 +211,7 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Irontide Marauder",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -220,7 +220,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Bilge Rat Cutthroat",
-        "base_health": 235468,
+        "base_health": 306452,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -229,7 +229,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Invader",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -238,7 +238,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Destroyer",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -247,7 +247,7 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Irontide Powdershot",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -256,7 +256,7 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Scrimshaw Gutter",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -265,7 +265,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Kul Tiran Vanguard",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -274,7 +274,7 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Irontide Marauder",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -283,8 +283,8 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Irontide Powdershot",
-        "base_health": 58867,
-        "enemy_forces": 4,
+        "base_health": 76613,
+        "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
     {
@@ -292,7 +292,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Spotter",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -301,7 +301,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Deckhand",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -310,7 +310,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Ashvane Cannoneer",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -319,7 +319,7 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Kul Tiran Footman",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -328,7 +328,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Kul Tiran Halberd",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -337,7 +337,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Kul Tiran Wavetender",
-        "base_health": 235470,
+        "base_health": 306450,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -346,7 +346,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Kul Tiran Marksman",
-        "base_health": 264888,
+        "base_health": 344759,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -355,7 +355,7 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Kul Tiran Footman",
-        "base_health": 95654,
+        "base_health": 124496,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -364,7 +364,7 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Kul Tiran Footman",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -373,7 +373,7 @@
         "dungeon_id": 18,
         "classification_id": 1,
         "name": "Scrimshaw Gutter",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -382,7 +382,7 @@
         "dungeon_id": 18,
         "classification_id": 2,
         "name": "Irontide Waveshaper",
-        "base_health": 235470,
+        "base_health": 306450,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     }

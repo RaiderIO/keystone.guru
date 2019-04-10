@@ -2828,20 +2828,6 @@
         }
     },
     {
-        "id": 3140,
-        "enemy_pack_id": 260,
-        "floor_id": 45,
-        "mdt_id": -1,
-        "teeming": null,
-        "faction": "any",
-        "enemy_forces_override": -1,
-        "lat": -159.81,
-        "lng": 128.38,
-        "npc": {
-            "id": 134423
-        }
-    },
-    {
         "id": 3142,
         "enemy_pack_id": 260,
         "floor_id": 45,
@@ -2983,7 +2969,7 @@
     },
     {
         "id": 3351,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 260,
         "floor_id": 45,
         "mdt_id": 35,
         "teeming": null,

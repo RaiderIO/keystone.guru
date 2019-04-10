@@ -9,7 +9,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not an EnemyMapObjectGroup');
 
-        if (isAdmin) {
+        if (isMapAdmin) {
             return new AdminEnemy(this.manager.map, layer);
         } else {
             return new Enemy(this.manager.map, layer);
@@ -37,18 +37,19 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
                     let faction = this.manager.map.getDungeonRoute().faction;
 
-                    if (remoteEnemy.faction !== 'any' && faction !== 'any' && faction !== remoteEnemy.faction) {
+                    // Only when not in try mode!
+                    if (!this.manager.map.isTryModeEnabled() && (remoteEnemy.faction !== 'any' && faction !== 'any' && faction !== remoteEnemy.faction)) {
                         console.log('Skipping enemy that does not belong to the requested faction ', remoteEnemy, faction);
                         continue;
                     }
 
                     // If the map isn't teeming, but the enemy is teeming..
-                    if (!this.manager.map.teeming && remoteEnemy.teeming === 'visible') {
+                    if (!this.manager.map.options.teeming && remoteEnemy.teeming === 'visible') {
                         console.log('Skipping teeming enemy ' + remoteEnemy.id);
                         continue;
                     }
                     // If the map is teeming, but the enemy shouldn't be there for teeming maps..
-                    else if (this.manager.map.teeming && remoteEnemy.teeming === 'invisible') {
+                    else if (this.manager.map.options.teeming && remoteEnemy.teeming === 'invisible') {
                         console.log('Skipping teeming-filtered enemy ' + remoteEnemy.id);
                         continue;
                     }

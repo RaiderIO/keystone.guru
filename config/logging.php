@@ -1,6 +1,20 @@
 <?php
+
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
+
+$discord = [];
+
+// If it's set only!
+if (!empty(env('APP_LOG_DISCORD_WEBHOOK'))) {
+    $discord['discord'] = [
+        'driver' => 'custom',
+        'url' => 'https://discordapp.com/api/webhooks/' . env('APP_LOG_DISCORD_WEBHOOK'),
+        'via' => App\Logging\CreateDiscordLogger::class,
+        'level' => 'error',
+    ];
+}
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -27,7 +41,7 @@ return [
     |                    "custom", "stack"
     |
     */
-    'channels' => [
+    'channels' => array_merge($discord, [
         'stack' => [
             'driver' => 'stack',
             'channels' => ['daily', 'discord'],
@@ -41,12 +55,6 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
         ],
-//        'discord' => [
-//            'driver' => 'custom',
-//            'url' => 'https://discordapp.com/api/webhooks/' . env('APP_LOG_DISCORD_WEBHOOK'),
-//            'via' => App\Logging\CreateDiscordLogger::class,
-//            'level' => 'error',
-//        ],
         'scheduler_file' => [
             'driver' => 'daily',
             'path' => storage_path('logs/scheduler.log'),
@@ -67,7 +75,7 @@ return [
             'level' => 'critical',
         ],
         'papertrail' => [
-            'driver'  => 'monolog',
+            'driver' => 'monolog',
             'level' => 'debug',
             'handler' => SyslogUdpHandler::class,
             'handler_with' => [
@@ -90,5 +98,5 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
-    ],
+    ]),
 ];

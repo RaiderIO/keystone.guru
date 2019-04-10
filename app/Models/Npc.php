@@ -20,21 +20,21 @@ class Npc extends Model
     public $timestamps = false;
 
     /**
+     * Gets all derived enemies from this Npc.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    function enemies()
+    {
+        return $this->hasMany('App\Models\Enemy');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
     function dungeon()
     {
         return $this->belongsTo('App\Models\Dungeon');
-    }
-
-    /**
-     * Gets all derived enemies from this Npc.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
-     */
-    function enemypack()
-    {
-        return $this->hasMany('App\Models\EnemyPack');
     }
 
     /**

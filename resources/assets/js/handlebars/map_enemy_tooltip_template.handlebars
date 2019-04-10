@@ -11,10 +11,12 @@
         <div class="col-5 no-gutters">{{ base_health_label }}</div>
         <div class="col-7 no-gutters">{{ base_health }}</div>
     </div>
+    {{#if is_teeming}}
     <div class="row">
         <div class="col-5 no-gutters">{{ teeming_label }}</div>
         <div class="col-7 no-gutters">{{ teeming }}</div>
     </div>
+    {{/if}}
     {{#if is_user_admin}}
     <div class="row">
         <div class="col-12 font-weight-bold">{{ admin_only_label }}</div>

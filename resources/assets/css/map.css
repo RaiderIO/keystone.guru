@@ -135,20 +135,22 @@ html, body, #map, #app, .wrapper {
     padding-bottom: 10px;
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1100px) {
     .route_manipulation_tools {
-        width: 1000px;
+        width: 1100px;
     }
 }
 
 .route_manipulation_tools .draw_icon {
     text-align: center;
-    background: #5bc0de;
     cursor: pointer;
-    margin: 0 10px;
     -webkit-transition: all 0.2s;
     -o-transition: all 0.2s;
     transition: all 0.2s;
+}
+
+.route_manipulation_tools .draw_icon .col {
+    background: #5bc0de;
 }
 
 .route_manipulation_tools .draw_element {
@@ -157,21 +159,20 @@ html, body, #map, #app, .wrapper {
 }
 
 .route_manipulation_tools .draw_element .bootstrap-select,
-.route_manipulation_tools .draw_element button,
-.route_manipulation_tools .draw_element input {
+.route_manipulation_tools .draw_element button {
     height: 100%;
 }
 
-.route_manipulation_tools .draw_icon.leaflet-disabled,
-.route_manipulation_tools .draw_icon.leaflet-disabled:hover {
+.route_manipulation_tools .draw_icon.leaflet-disabled .col,
+.route_manipulation_tools .draw_icon.leaflet-disabled .col:hover {
     background: gray;
     color: inherit;
     text-decoration: unset;
     cursor: default;
 }
 
-.route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled,
-.route_manipulation_tools .draw_icon:hover {
+.route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col,
+.route_manipulation_tools .draw_icon .col:hover {
     background: #DF691A;
     color: rgb(235, 235, 235) !important;
 }
@@ -198,25 +199,21 @@ html, body, #map, #app, .wrapper {
     color: #FFF;
 }
 
-#edit_route_draw_container .leaflet-draw-actions {
-    background-color: rgb(78, 93, 108);
-    box-shadow: 3px 0 3px rgba(0, 0, 0, 0.2);
+#edit_route_draw_actions_container .leaflet-draw-actions {
     -webkit-transition: all 0.2s;
     -o-transition: all 0.2s;
     transition: all 0.2s;
 
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 94px;
     top: unset !important;
+    position: unset !important;
+    left: unset !important;
 }
 
-#edit_route_draw_container .leaflet-draw-actions li {
+#edit_route_draw_actions_container .leaflet-draw-actions li {
     line-height: 35px;
 }
 
-#edit_route_draw_container .leaflet-draw-actions a {
+#edit_route_draw_actions_container .leaflet-draw-actions a {
     background: inherit;
     color: #DF691A;
     font-size: 14px;

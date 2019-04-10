@@ -137,7 +137,7 @@ class Enemy extends MapObject {
                 enemy_forces: enemy_forces,
                 base_health: this.npc.base_health,
                 teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
-                is_user_admin: isUserAdmin,
+                is_teeming: this.teeming === 'visible',
                 id: this.id,
                 faction: this.faction,
                 npc_id: this.npc_id,
@@ -147,7 +147,11 @@ class Enemy extends MapObject {
                 enemy_id: this.enemy_id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
                 visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
-            }, getHandlebarsTranslations());
+            }, getHandlebarsDefaultVariables());
+        } else {
+            template = function () {
+                return lang.get('messages.no_npc_found_label');
+            }
         }
 
         // Remove any previous tooltip
@@ -239,7 +243,7 @@ class Enemy extends MapObject {
             }
         });
 
-        if (this.isEditable() && this.map.edit) {
+        if (this.isEditable() && this.map.options.edit) {
             this.onPopupInit();
         }
     }
@@ -283,26 +287,19 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, this, 'this was not an Enemy');
         let self = this;
 
-        let successFn = function (json) {
-            self.map.leafletMap.closePopup();
-            self.setRaidMarkerName(raidMarkerName);
-        };
-
-        // No network traffic!
-        if (this.map.isTryModeEnabled()) {
-            successFn();
-        } else {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/enemy/' + self.id + '/raidmarker',
-                dataType: 'json',
-                data: {
-                    dungeonroute: this.map.getDungeonRoute().publicKey,
-                    raid_marker_name: raidMarkerName
-                },
-                success: successFn,
-            });
-        }
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/enemy/' + self.id + '/raidmarker',
+            dataType: 'json',
+            data: {
+                dungeonroute: this.map.getDungeonRoute().publicKey,
+                raid_marker_name: raidMarkerName
+            },
+            success: function (json) {
+                self.map.leafletMap.closePopup();
+                self.setRaidMarkerName(raidMarkerName);
+            },
+        });
     }
 
     cleanup() {

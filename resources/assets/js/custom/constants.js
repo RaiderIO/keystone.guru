@@ -108,7 +108,7 @@ let c = {
                 opacity: 1
             },
             arcSegments: function (nr) {
-                return Math.max(3, 12 - nr);
+                return Math.max(3, 10 - nr);
             },
             margin: 1
         },

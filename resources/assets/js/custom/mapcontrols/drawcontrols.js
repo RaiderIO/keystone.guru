@@ -199,22 +199,31 @@ class DrawControls extends MapControl {
         let $container = $(container);
         // remove all classes
         $container.removeClass();
-        $container.addClass('container');
+        $container.addClass('container p-0');
 
         $.each($container.children(), function (i, child) {
             let $child = $(child);
 
             // Clear of classes, add a row
-            let $parent = $child.removeClass().addClass('row');
+            let $parent = $child.removeClass().addClass('row no-gutters');
 
             // Add columns to the buttons
             let $buttons = $parent.find('a');
-            $buttons.addClass('col draw_icon mt-2');
+            $buttons.addClass('col-lg col-3 draw_icon mt-2');
             $buttons.attr('data-toggle', 'tooltip');
 
             // The buttons have a parent that shouldn't be there; strip the children from that bad parent!
             $parent.append($buttons);
         });
+
+        // Put the draw actions in a different div
+        let $drawActions = $container.find('.leaflet-draw-actions');
+        // Add the col class to make it align properly in its 'row' parent
+        $drawActions.addClass('col');
+        // Add to the proper container
+        $('#edit_route_draw_actions_container').append(
+            $drawActions
+        )
     }
 
     _addControlSetupBrushlineButton() {
@@ -257,19 +266,21 @@ class DrawControls extends MapControl {
 
         // // Cancel button container
         let $drawActions = $('<ul>', {
-            class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom',
+            class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom col',
             style: 'top: 7px;'
         });
         // Add as the first child
-        $buttonContainer.prepend($drawActions);
+        $('#edit_route_draw_actions_container').append($drawActions);
         // Remove all previous entries
         $drawActions.empty();
         // Create the button
         let $button = $('<a>', {
             href: '#',
+            'data-toggle': 'tooltip',
             title: lang.get('messages.finish_drawing'),
             text: lang.get('messages.finish')
         });
+
         // On click, disable pather
         $button.bind('click', function () {
             self.map.togglePather(false);

@@ -101,72 +101,81 @@ class ImportString
 
             try {
                 // For each NPC that is killed in this pull (and their clones)
-                foreach ($pull as $npcIndex => $mdtClones) {
-                    $npcIndex = (int)$npcIndex;
-                    // Only if filled
-                    $enemyCount = count($mdtClones);
-                    foreach ($mdtClones as $index => $cloneIndex) {
-                        // This comes in through as a double, cast to int
-                        $cloneIndex = (int)$cloneIndex;
+                foreach ($pull as $pullKey => $pullValue) {
+                    // Numeric means it's an index of the dungeon's NPCs
+                    if (is_numeric($pullKey)) {
+                        $npcIndex = (int)$pullKey;
+                        $mdtClones = $pullValue;
+                        // Only if filled
+                        $enemyCount = count($mdtClones);
+                        foreach ($mdtClones as $index => $cloneIndex) {
+                            // This comes in through as a double, cast to int
+                            $cloneIndex = (int)$cloneIndex;
 
-                        // Find the matching enemy of the clones
-                        /** @var Enemy $mdtEnemy */
-                        $mdtEnemy = null;
-                        foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                            // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
-                            // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
-                            $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
-                            // NPC and clone index make for unique ID
-                            if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
-                                // Found it
-                                $mdtEnemy = $mdtEnemyCandidate;
-                                break;
+                            // Find the matching enemy of the clones
+                            /** @var Enemy $mdtEnemy */
+                            $mdtEnemy = null;
+                            foreach ($mdtEnemies as $mdtEnemyCandidate) {
+                                // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
+                                // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
+                                $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
+                                // NPC and clone index make for unique ID
+                                if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
+                                    // Found it
+                                    $mdtEnemy = $mdtEnemyCandidate;
+                                    break;
+                                }
                             }
-                        }
 
-                        if ($mdtEnemy === null) {
-                            throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
-                                sprintf(__('Unable to find MDT enemy for clone index %s and npc index %s.'), $cloneIndex, $npcIndex),
-                                ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
-                            );
-                        }
-
-                        // We now know the MDT enemy that the user was trying to import. However, we need to know
-                        // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
-                        /** @var Enemy $enemy */
-                        $enemy = null;
-                        foreach ($enemies as $enemyCandidate) {
-                            if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
-                                $enemy = $enemyCandidate;
-                                break;
+                            if ($mdtEnemy === null) {
+                                throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                                    sprintf(__('Unable to find MDT enemy for clone index %s and npc index %s.'), $cloneIndex, $npcIndex),
+                                    ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
+                                );
                             }
+
+                            // We now know the MDT enemy that the user was trying to import. However, we need to know
+                            // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
+                            /** @var Enemy $enemy */
+                            $enemy = null;
+                            foreach ($enemies as $enemyCandidate) {
+                                if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id && $enemyCandidate->npc_id === $mdtEnemy->npc_id) {
+                                    $enemy = $enemyCandidate;
+                                    break;
+                                }
+                            }
+
+                            if ($enemy === null) {
+                                throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                                    sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC id %s.'), $mdtEnemy->mdt_id, $mdtEnemy->npc_id),
+                                    ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
+                                );
+                            }
+
+                            $kzLat += $enemy->lat;
+                            $kzLng += $enemy->lng;
+
+                            // Couple the KillZoneEnemy to its KillZone
+                            if ($save) {
+                                $kzEnemy = new KillZoneEnemy();
+                                $kzEnemy->enemy_id = $enemy->id;
+                                $kzEnemy->kill_zone_id = $killZone->id;
+                                $kzEnemy->save();
+                            } else {
+                                $killZone->enemies->push($enemy);
+                            }
+
+                            // Should be the same floor_id all the time, but we need it anyways
+                            $floorId = $enemy->floor_id;
                         }
 
-                        if ($enemy === null) {
-                            throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
-                                sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC id %s.'), $mdtEnemy->mdt_id, $mdtEnemy->npc_id),
-                                ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
-                            );
-                        }
-
-                        $kzLat += $enemy->lat;
-                        $kzLng += $enemy->lng;
-
-                        // Couple the KillZoneEnemy to its KillZone
-                        if ($save) {
-                            $kzEnemy = new KillZoneEnemy();
-                            $kzEnemy->enemy_id = $enemy->id;
-                            $kzEnemy->kill_zone_id = $killZone->id;
-                            $kzEnemy->save();
-                        } else {
-                            $killZone->enemies->push($enemy);
-                        }
-
-                        // Should be the same floor_id all the time, but we need it anyways
-                        $floorId = $enemy->floor_id;
+                        $totalEnemiesKilled += $enemyCount;
+                    } // Color is randomly put in here
+                    else if ($pullKey === 'color') {
+                        // Make sure there is a pound sign in front of the value at all times, but never double up should
+                        // MDT decide to suddenly place it here
+                        $killZone->color = (strpos($pullValue, 0) === '#' ? '#' : '') . $pullValue;
                     }
-
-                    $totalEnemiesKilled += $enemyCount;
                 }
 
                 if ($totalEnemiesKilled > 0) {
@@ -315,10 +324,20 @@ class ImportString
      */
     public function getEncodedString()
     {
-        // @TODO This needs a dungeon route to "table" conversion first
         $lua = $this->_getLua();
         $encoded = $lua->call("TableToString", [$this->_dungeonRoute, true]);
         return $encoded;
+    }
+
+    /**
+     * Gets an array that represents the currently set MDT string.
+     * @return mixed
+     */
+    public function getDecoded()
+    {
+        $lua = $this->_getLua();
+        // Import it to a table
+        return $lua->call("StringToTable", [$this->_encodedString, true]);
     }
 
     /**
@@ -330,7 +349,6 @@ class ImportString
      */
     public function getDungeonRoute($warnings, $save = false)
     {
-        // @TODO This needs a "table" to dungeon route conversion first
         $lua = $this->_getLua();
         // Import it to a table
         $decoded = $lua->call("StringToTable", [$this->_encodedString, true]);
@@ -352,7 +370,7 @@ class ImportString
             $dungeonRoute->published = 0; // Needs to be explicit otherwise redirect to edit will not have this value
 
             if ($save) {
-                // Preemptively save the route
+                // Pre-emptively save the route
                 $dungeonRoute->save();
             } else {
                 $dungeonRoute->killzones = new Collection();

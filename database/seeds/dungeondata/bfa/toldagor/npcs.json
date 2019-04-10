@@ -4,7 +4,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Silt Crab",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 3,
         "aggressiveness": "aggressive"
     },
@@ -13,7 +13,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Saltwater Snapper",
-        "base_health": 353202,
+        "base_health": 459678,
         "enemy_forces": 6,
         "aggressiveness": "neutral"
     },
@@ -22,7 +22,7 @@
         "dungeon_id": 22,
         "classification_id": 3,
         "name": "The Sand Queen",
-        "base_health": 2060240,
+        "base_health": 2681455,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -31,7 +31,7 @@
         "dungeon_id": 22,
         "classification_id": 1,
         "name": "Stinging Parasite",
-        "base_health": 88301,
+        "base_health": 114920,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -40,7 +40,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Sewer Vicejaw",
-        "base_health": 323769,
+        "base_health": 421372,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -49,7 +49,7 @@
         "dungeon_id": 22,
         "classification_id": 3,
         "name": "Jes Howlis",
-        "base_health": 1,
+        "base_health": 2298390,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -58,7 +58,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Bilge Rat Looter",
-        "base_health": 176601,
+        "base_health": 229839,
         "enemy_forces": 3,
         "aggressiveness": "aggressive"
     },
@@ -67,7 +67,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Officer",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 7,
         "aggressiveness": "aggressive"
     },
@@ -76,7 +76,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Flamecaster",
-        "base_health": 412069,
+        "base_health": 536291,
         "enemy_forces": 7,
         "aggressiveness": "aggressive"
     },
@@ -85,7 +85,7 @@
         "dungeon_id": 22,
         "classification_id": 3,
         "name": "Knight Captain Valyri",
-        "base_health": 2060240,
+        "base_health": 2681455,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -94,8 +94,8 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Warden",
-        "base_health": 529803,
-        "enemy_forces": 7,
+        "base_health": 689517,
+        "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
     {
@@ -103,7 +103,7 @@
         "dungeon_id": 22,
         "classification_id": 3,
         "name": "Overseer Korgus",
-        "base_health": 1,
+        "base_health": 3294359,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -112,7 +112,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Irontide Thug",
-        "base_health": 441503,
+        "base_health": 574598,
         "enemy_forces": 7,
         "aggressiveness": "aggressive"
     },
@@ -121,7 +121,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Bilge Rat Seaspeaker",
-        "base_health": 264902,
+        "base_health": 344759,
         "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
@@ -130,7 +130,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Marine",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 7,
         "aggressiveness": "aggressive"
     },
@@ -139,7 +139,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Priest",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 7,
         "aggressiveness": "aggressive"
     },
@@ -148,7 +148,7 @@
         "dungeon_id": 22,
         "classification_id": 1,
         "name": "Despondent Scallywag",
-        "base_health": 88301,
+        "base_health": 114920,
         "enemy_forces": 0,
         "aggressiveness": "neutral"
     },
@@ -157,7 +157,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Cutwater Striker",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
@@ -166,7 +166,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Block Warden",
-        "base_health": 529803,
+        "base_health": 689517,
         "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
@@ -175,7 +175,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Irontide Raider",
-        "base_health": 176601,
+        "base_health": 229839,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -184,7 +184,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Blacktooth Arsonist",
-        "base_health": 323769,
+        "base_health": 421372,
         "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
@@ -193,7 +193,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Jailer",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 7,
         "aggressiveness": "aggressive"
     },
@@ -202,7 +202,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Bilge Rat Looter",
-        "base_health": 176601,
+        "base_health": 229839,
         "enemy_forces": 3,
         "aggressiveness": "aggressive"
     },
@@ -211,7 +211,7 @@
         "dungeon_id": 22,
         "classification_id": 2,
         "name": "Ashvane Spotter",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 7,
         "aggressiveness": "aggressive"
     }

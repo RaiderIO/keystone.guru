@@ -123,81 +123,66 @@ class KillZone extends MapObject {
         let self = this;
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
 
-        let successFn = function (json) {
-            // Detach from all enemies upon deletion
-            self._detachFromEnemies();
-            self.removeExistingConnectionsToEnemies();
-            self.signal('object:deleted', {response: json});
-            self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-        };
-
-        // No network traffic if this is enabled!
-        if (!this.map.isTryModeEnabled()) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone/' + self.id,
-                dataType: 'json',
-                data: {
-                    _method: 'DELETE'
-                },
-                beforeSend: function () {
-                    self.deleting = true;
-                },
-                success: successFn,
-                complete: function () {
-                    self.deleting = false;
-                },
-                error: function () {
-                    self.setSynced(false);
-                }
-            });
-        } else {
-            successFn();
-        }
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone/' + self.id,
+            dataType: 'json',
+            data: {
+                _method: 'DELETE'
+            },
+            beforeSend: function () {
+                self.deleting = true;
+            },
+            success: function (json) {
+                // Detach from all enemies upon deletion
+                self._detachFromEnemies();
+                self.removeExistingConnectionsToEnemies();
+                self.signal('object:deleted', {response: json});
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+            },
+            complete: function () {
+                self.deleting = false;
+            },
+            error: function () {
+                self.setSynced(false);
+            }
+        });
     }
 
     save() {
         let self = this;
         console.assert(this instanceof KillZone, this, 'this was not a KillZone');
 
-        let successFn = function (json) {
-            self.id = json.id;
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone',
+            dataType: 'json',
+            data: {
+                id: self.id,
+                floor_id: self.map.getCurrentFloor().id,
+                color: self.color,
+                lat: self.layer.getLatLng().lat,
+                lng: self.layer.getLatLng().lng,
+                enemies: self.enemies
+            },
+            beforeSend: function () {
+                self.saving = true;
+            },
+            success: function (json) {
+                self.id = json.id;
 
-            self.setSynced(true);
-            self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-        };
-
-        // No network traffic if this is enabled!
-        if (!this.map.isTryModeEnabled()) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone',
-                dataType: 'json',
-                data: {
-                    id: self.id,
-                    floor_id: self.map.getCurrentFloor().id,
-                    color: self.color,
-                    lat: self.layer.getLatLng().lat,
-                    lng: self.layer.getLatLng().lng,
-                    enemies: self.enemies
-                },
-                beforeSend: function () {
-                    self.saving = true;
-                },
-                success: successFn,
-                complete: function () {
-                    self.saving = false;
-                },
-                error: function (xhr) {
-                    // Even if we were synced, make sure user knows it's no longer / an error occurred
-                    self.setSynced(false);
-                    defaultAjaxErrorFn(xhr);
-                }
-            });
-        } else {
-            // We have to supply an ID to keep everything working properly
-            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id});
-        }
+                self.setSynced(true);
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+            },
+            complete: function () {
+                self.saving = false;
+            },
+            error: function (xhr) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
+                defaultAjaxErrorFn(xhr);
+            }
+        });
     }
 
     /**
@@ -340,7 +325,7 @@ class KillZone extends MapObject {
             this.enemyConnectionsLayerGroup.addLayer(polygon);
 
             // Only add popup to the killzone
-            if (this.isEditable() && this.map.edit) {
+            if (this.isEditable() && this.map.options.edit) {
                 // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
                 // This also cannot be a private function since that'll apparently give different signatures as well.
                 let popupOpenFn = function (event) {
@@ -363,7 +348,7 @@ class KillZone extends MapObject {
 
                 let template = Handlebars.templates['map_killzone_edit_popup_template'];
 
-                let data = $.extend({id: self.id}, getHandlebarsTranslations());
+                let data = $.extend({id: self.id}, getHandlebarsDefaultVariables());
 
                 // Build the status bar from the template
                 polygon.unbindPopup();
@@ -405,7 +390,7 @@ class KillZone extends MapObject {
 
         let self = this;
 
-        if (this.map.edit) {
+        if (this.map.options.edit) {
             this.layer.on('click', function (clickEvent) {
                 // When deleting, we shouldn't have these interactions
                 if (!self.map.deleteModeActive) {
@@ -443,7 +428,7 @@ class KillZone extends MapObject {
             self.setEnemies(self.enemies);
 
             // Hide the killzone layer when in preview mode
-            if (self.map.noUI) {
+            if (self.map.options.noUI) {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
                 killZoneMapObjectGroup.setMapObjectVisibility(self, false);
             }

@@ -280,48 +280,6 @@
         }
     },
     {
-        "id": 1803,
-        "enemy_pack_id": 397,
-        "floor_id": 47,
-        "mdt_id": -1,
-        "teeming": null,
-        "faction": "alliance",
-        "enemy_forces_override": -1,
-        "lat": -39.85,
-        "lng": 283.5,
-        "npc": {
-            "id": 141566
-        }
-    },
-    {
-        "id": 1804,
-        "enemy_pack_id": 397,
-        "floor_id": 47,
-        "mdt_id": -1,
-        "teeming": null,
-        "faction": "alliance",
-        "enemy_forces_override": -1,
-        "lat": -40.23,
-        "lng": 284.69,
-        "npc": {
-            "id": 141566
-        }
-    },
-    {
-        "id": 1805,
-        "enemy_pack_id": 397,
-        "floor_id": 47,
-        "mdt_id": -1,
-        "teeming": null,
-        "faction": "alliance",
-        "enemy_forces_override": -1,
-        "lat": -41.29,
-        "lng": 285.62,
-        "npc": {
-            "id": 141566
-        }
-    },
-    {
         "id": 1806,
         "enemy_pack_id": -1,
         "floor_id": 47,
@@ -4197,6 +4155,48 @@
         "lng": 238.25,
         "npc": {
             "id": 138255
+        }
+    },
+    {
+        "id": 3511,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "mdt_id": 5,
+        "teeming": null,
+        "faction": "alliance",
+        "enemy_forces_override": -1,
+        "lat": -57.25,
+        "lng": 238.34375,
+        "npc": {
+            "id": 129373
+        }
+    },
+    {
+        "id": 3512,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "mdt_id": 7,
+        "teeming": null,
+        "faction": "alliance",
+        "enemy_forces_override": -1,
+        "lat": -57.6875,
+        "lng": 239.0625,
+        "npc": {
+            "id": 129640
+        }
+    },
+    {
+        "id": 3513,
+        "enemy_pack_id": -1,
+        "floor_id": 47,
+        "mdt_id": 10,
+        "teeming": "visible",
+        "faction": "alliance",
+        "enemy_forces_override": -1,
+        "lat": -57.40625,
+        "lng": 237.25,
+        "npc": {
+            "id": 129374
         }
     }
 ]

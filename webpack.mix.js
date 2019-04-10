@@ -151,12 +151,20 @@ let scripts = [
     'resources/assets/js/custom/admin/adminenemypatrol.js',
     'resources/assets/js/custom/admin/adminenemypack.js',
     'resources/assets/js/custom/admin/admindrawcontrols.js',
+    'resources/assets/js/custom/admin/adminpanelcontrols.js',
     'resources/assets/js/custom/admin/admindungeonstartmarker.js',
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
     'resources/assets/js/custom/admin/adminmapcomment.js',
 
     // Include the rest
     'resources/assets/js/custom/groupcomposition.js',
+
+    // Inline code
+    'resources/assets/js/custom/inline/inlinemanager.js',
+    'resources/assets/js/custom/inline/inlinecode.js',
+
+    // All inline code last
+    'resources/assets/js/custom/inline/*/**/*.js',
 ];
 
 // Output of files

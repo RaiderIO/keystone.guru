@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Logic\Scheduler\FindOutdatedThumbnails;
+use App\Logic\Scheduler\DeleteExpiredDungeonRoutes;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -31,6 +32,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->call(new FindOutdatedThumbnails)->everyFiveMinutes();
+        $schedule->call(new DeleteExpiredDungeonRoutes)->hourly();
         Log::channel('scheduler')->debug("Finished scheduler");
     }
 

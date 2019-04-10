@@ -1,27 +1,36 @@
-@php($custom = isset($dungeon_id))
-@extends('layouts.app', ['custom' => $custom, 'footer' => !$custom, 'header' => !$custom, 'title' => __('Try')])
+<?php
+/** @var $model \App\Models\DungeonRoute */
+?>
+@extends('layouts.app', [
+    'custom' => isset($model),
+    'footer' => !isset($model),
+    'header' => !isset($model),
+    'title' => __('Try'),
+    'loginParams' => isset($model) ? ['redirect' => route('dungeonroute.try', ['dungeonroute' => $model->public_key])] : [],
+    'registerParams' => isset($model) ? ['redirect' => route('dungeonroute.try', ['dungeonroute' => $model->public_key])] : []
+])
 
 @section('content')
     <?php
     // If the user navigated to /try itself
-    if(!isset($dungeon_id)) { ?>
+    if(!isset($model)) { ?>
     @include('common.forms.try')
     <?php } else {
-    $dungeon = \App\Models\Dungeon::findOrFail($dungeon_id);
+    $dungeon = $model->dungeon;
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
     ?>
 
     <div class="wrapper">
         @include('common.maps.editsidebar', [
             'show' => [
-                'no-modifications-warning' => true,
-                'virtual-tour' => true
+                'virtual-tour' => true,
+                'tryout' => true
             ],
             'floorSelection' => $floorSelection
         ])
 
         @include('common.maps.map', [
-            'dungeon' => $dungeon,
+            'dungeonroute' => $model,
             'edit' => true,
             'tryMode' => true
         ])

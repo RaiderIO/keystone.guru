@@ -36,40 +36,13 @@ class MDTDungeon
     }
 
     /**
-     * Get a list of NPCs
-     */
-    private function _getMDTNPCs()
-    {
-        $lua = new \Lua();
-        $lua->eval(
-            'local MethodDungeonTools = {}
-            MethodDungeonTools.dungeonTotalCount = {}
-            MethodDungeonTools.mapPOIs = {}
-            MethodDungeonTools.dungeonEnemies = {}
-            MethodDungeonTools.scaleMultiplier = {}
-            ' .
-            // Some files require LibStub
-            file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
-            file_get_contents(
-                base_path('vendor/nnogga/MethodDungeonTools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
-            ) .
-            // Insert dummy function to get what we need
-            '
-            function GetDungeonEnemies() 
-                return MethodDungeonTools.dungeonEnemies[dungeonIndex]
-            end
-        ');
-        return $lua->call('GetDungeonEnemies');
-    }
-
-    /**
      * Get all clones of a specific NPC.
      * @param $npcId int WoW's NPC id.
      * @return array The enemy as an array.
      */
     private function _getMDTEnemy($npcId)
     {
-        $enemies = $this->_getMDTNPCs();
+        $enemies = $this->getMDTNPCs();
 
         $result = null;
         // Find the enemy in a list of enemies
@@ -82,6 +55,33 @@ class MDTDungeon
         }
 
         return $result;
+    }
+
+    /**
+     * Get a list of NPCs
+     */
+    public function getMDTNPCs()
+    {
+        $lua = new \Lua();
+        $lua->eval(
+            'local MethodDungeonTools = {}
+            MethodDungeonTools.dungeonTotalCount = {}
+            MethodDungeonTools.mapPOIs = {}
+            MethodDungeonTools.dungeonEnemies = {}
+            MethodDungeonTools.scaleMultiplier = {}
+            ' .
+            // Some files require LibStub
+            file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
+            file_get_contents(
+                base_path('vendor/nnogga/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
+            ) .
+            // Insert dummy function to get what we need
+            '
+            function GetDungeonEnemies() 
+                return MethodDungeonTools.dungeonEnemies[dungeonIndex]
+            end
+        ');
+        return $lua->call('GetDungeonEnemies');
     }
 
 
@@ -97,7 +97,7 @@ class MDTDungeon
             $floors = [$floors];
         }
 
-        $mdtNpcs = $this->_getMDTNPCs();
+        $mdtNpcs = $this->getMDTNPCs();
 
         // NPC_ID => list of clones
         $npcClones = [];

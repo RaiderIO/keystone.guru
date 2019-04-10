@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\DB;
  * @property $thumbnail_updated_at string
  * @property $updated_at string
  * @property $created_at string
+ * @property $expires_at string
  *
  * @property Dungeon $dungeon
  * @property Path $route
@@ -260,6 +261,43 @@ class DungeonRoute extends Model
     {
         // Only set if the route was imported through an MDT string
         return $this->hasMany('App\Models\MDTImport');
+    }
+
+    /**
+     * If this dungeon is in try mode, have a specific user claim this route as theirs.
+     *
+     * @param $user User
+     * @return bool
+     */
+    public function claim($user)
+    {
+        if ($result = $this->isTry()) {
+            $this->author_id = $user->id;
+            $this->expires_at = null;
+            $this->save();
+            $result = true;
+        }
+        return $result;
+    }
+
+    /**
+     * @return bool True if this route is in try mode, false if it is not.
+     */
+    public function isTry()
+    {
+        return $this->author_id === -1 && $this->expires_at !== null;
+    }
+
+    /**
+     * Scope a query to only include dungeon routes that are set in try mode.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeIsTry($query)
+    {
+        return $query->where('author_id', -1)
+            ->where('expires_at', '!=', null);
     }
 
     /**
@@ -605,7 +643,7 @@ class DungeonRoute extends Model
 
             // Delete thumbnails
             $publicPath = public_path('images/route_thumbnails/');
-            foreach($item->dungeon->floors as $floor){
+            foreach ($item->dungeon->floors as $floor) {
                 // @ because we don't care if it fails
                 @unlink(sprintf('%s/%s_%s.png', $publicPath, $item->public_key, $floor->index));
             }

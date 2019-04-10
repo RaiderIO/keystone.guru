@@ -5,6 +5,173 @@
 @section('content')
 
     <h4>
+        v2.3 (2019/04/10)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/154">#154</a>
+            Reduced loading times of various pages and increased performance.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/150">#150</a>
+            Switching floors in 'Try' mode no longer clears all mapping progress. As a result of changes for this, I've
+            added functionality to save the current mapping as a new Route. If you're not logged in, there's an option
+            to log in and continue mapping, if you do not have an account you can now also register from the same page
+            and continue mapping. Furthermore, changes for this ticket will allow me to more easily allow people to
+            create anonymous Routes.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/153">#153</a>
+            Cloning a route now properly clones free drawn shapes.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/160">#160</a>
+            Updated notifications so they no longer show in a bar at the bottom, but neatly in the top right corner
+            instead.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            I've done some fine-tuning and bug fixing for the general layout of the map, in both desktop and mobile
+            versions.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/156">#156</a>
+            Worked around an issue where sometimes a Route would cause freezing of the entire browser tab. I cannot
+            directly fix this issue as I believe it lays in another library I use, but I've contacted the author of said
+            library and hopefully I'll have a proper fix soon. For now it seems fixed and is very rare regardless, so
+            hopefully it stays gone til the fix is there.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        MDT importer changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/157">#157</a>
+            Updated to MDT version 2.5.6, all changes since 2.3.2 will now properly import, such as pull colors.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Mapping changes (for patch 8.1.5)
+        <a href="https://github.com/Wotuu/keystone.guru/issues/158">#158</a>:
+    <ul>
+        <li>
+            Atal'Dazar
+            <ul>
+                <li>
+                    Added a Teeming Dazar'ai Confessor towards the south side of the dungeon, after the first two packs
+                    in a pack with two Dazar'ai Colossi.
+                </li>
+                <li>
+                    Removed two Teeming Shieldbearer of Zul in the pack before Vol'kaal.
+                </li>
+            </ul>
+            Freehold
+            <ul>
+                <li>
+                    The start of the dungeon is now correctly marked on the map.
+                </li>
+                <li>
+                    Removed a Teeming Irontide Bonesaw, a non-Teeming Irontide Bonesaw and a Teeming Irontide Enforcer
+                    from the large patrolling pack right before Skycap'n Kragg.
+                </li>
+                <li>
+                    Removed a Teeming Irontide Officer in the large pack before Harlan Sweete.
+                </li>
+            </ul>
+            King's Rest
+            <ul>
+                <li>
+                    Removed a Teeming Spectral Brute before the second to last boss.
+                </li>
+            </ul>
+            Siege of Boralus (Alliance)
+            <ul>
+                <li>
+                    Added a Dockhound Packmaster and Snarling Dockhound in a pack after passing through the first gate,
+                    after the market section, before the first boss.
+                </li>
+                <li>
+                    In that same pack, added a Teeming Scrimshaw Enforcer.
+                </li>
+            </ul>
+            Shrine of the Storm
+            <ul>
+                <li>
+                    Removed multiple Abyss Dweller in the room before the bridge to the last section.
+                </li>
+                <li>
+                    Removed multiple duplicate Abyssal Eel in the last room.
+                </li>
+            </ul>
+            Temple of Sethraliss
+            <ul>
+                <li>
+                    Removed a duplicate Sandswept Marksman in the pack entering Aspix' and Adderis' room, when taking
+                    a left initially.
+                </li>
+                <li>
+                    Aspix is no longer incorrectly marked as an Eye of Sethraliss.
+                </li>
+            </ul>
+            The MOTHERLODE!!
+            <ul>
+                <li>
+                    Added Mech Jockeys in the first section next to their respective Mechanized Peacekeepers.
+                </li>
+                <li>
+                    Removed 3 Teeming Wanton Sappers in the big pack after the first boss.
+                </li>
+                <li>
+                    Removed a lot of the Teeming Crawler Mines in the last section.
+                </li>
+            </ul>
+            The Underrot
+            <ul>
+                <li>
+                    Removed a Underrot Tick in the second pack from the start before the first boss.
+                </li>
+                <li>
+                    Removed a Teeming Living Rot in a pack right after the first boss.
+                </li>
+            </ul>
+            Tol Dagor
+            <ul>
+                <li>
+                    Removed a Teeming Sewer Vicejaw in the Sodden Depths.
+                </li>
+                <li>
+                    Removed a duplicate Ashvane Marine in the pack right before Knight Captain Valyri.
+                </li>
+                <li>
+                    Removed a duplicate Ashvane Warden right after Knight Captain Valyri.
+                </li>
+            </ul>
+            Waycrest Manor
+            <ul>
+                <li>
+                    Removed a pack of Devouring Maggots and Infested Peasants when coming from the south towards Raal
+                    the Gluttonous' room.
+                </li>
+                <li>
+                    Removed two Teeming Heartsbane Soulcharmers in Lady Waycrest's room.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </p>
+
+    <h4>
         v2.2.2 (2019/03/07)
     </h4>
     <p>

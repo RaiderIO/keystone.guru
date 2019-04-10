@@ -4,6 +4,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         this.title = 'Hide/show killzone';
         this.fa_class = 'fa-bullseye';
+
+        // this.manager.unregister('fetchsuccess', this);
     }
 
     _createObject(layer) {
@@ -38,6 +40,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
                 // Reconstruct the enemies we're coupled with in a format we expect
                 if (remoteKillZone.killzoneenemies !== null) {
+                    if (remoteKillZone.killzoneenemies.length <= 1) {
+                        continue;
+                    }
                     let enemies = [];
                     for (let i = 0; i < remoteKillZone.killzoneenemies.length; i++) {
                         let enemy = remoteKillZone.killzoneenemies[i];

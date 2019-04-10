@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\Models\DungeonRoute;
+use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DungeonRoutePolicy
@@ -70,7 +70,7 @@ class DungeonRoutePolicy
     public function edit(User $user, DungeonRoute $dungeonroute)
     {
         // Only authors or if the user is an admin
-        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->isTry() || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**

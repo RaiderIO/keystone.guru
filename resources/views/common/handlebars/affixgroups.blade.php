@@ -17,7 +17,7 @@
         let handlebarsData = $.extend({
             count: data.length,
             affixgroups: []
-        }, getHandlebarsTranslations());
+        }, getHandlebarsDefaultVariables());
 
         // Data contains affix groups
         for (let i in data) {

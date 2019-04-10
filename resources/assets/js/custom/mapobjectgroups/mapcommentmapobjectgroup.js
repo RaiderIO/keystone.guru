@@ -9,7 +9,7 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof MapCommentMapObjectGroup, 'this is not an MapCommentMapObjectGroup');
 
-        if (isAdmin) {
+        if (isMapAdmin) {
             return new AdminMapComment(this.manager.map, layer);
         } else {
             return new MapComment(this.manager.map, layer);

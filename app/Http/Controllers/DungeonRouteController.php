@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DungeonRouteFormRequest;
+use App\Models\Brushline;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\PageView;
-use App\Models\Path;
 use App\Models\UserReport;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DungeonRouteController extends Controller
@@ -24,11 +25,29 @@ class DungeonRouteController extends Controller
     {
         $result = null;
 
+        // User posted
         if ($request->has('dungeon_id')) {
-            $result = view('dungeonroute.try', [
-                'dungeon_id' => $request->get('dungeon_id'),
-                'teeming' => $request->get('teeming')
-            ]);
+            $dungeonRoute = new DungeonRoute();
+            $dungeonRoute->dungeon_id = $request->get('dungeon_id');
+            $dungeonRoute->author_id = Auth::check() ? Auth::id() : -1;
+            $dungeonRoute->faction_id = 1; // Unspecified
+            $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
+            $dungeonRoute->teeming = (int)$request->get('teeming', 0) === 1;
+            $dungeonRoute->expires_at = Carbon::now()->addHour(config('keystoneguru.try_dungeon_route_expires_hours'))->toDateTimeString();
+            $dungeonRoute->save();
+
+            $result = view('dungeonroute.try', ['model' => $dungeonRoute]);
+        } else if ($request->has('dungeonroute')) {
+            // Navigation to /try
+            // Only routes that are in try mode
+            try {
+                $dungeonRoute = DungeonRoute::where('public_key', $request->get('dungeonroute'))
+                    ->isTry()->firstOrFail();
+
+                $result = view('dungeonroute.try', ['model' => $dungeonRoute]);
+            } catch (\Exception $exception) {
+                $result = view('dungeonroute.tryclaimed');
+            }
         } else {
             $result = view('dungeonroute.try', ['headerTitle' => __('Try Keystone.guru')]);
         }
@@ -141,6 +160,7 @@ class DungeonRouteController extends Controller
                 $dungeonroute->playerclasses,
                 $dungeonroute->affixgroups,
                 $dungeonroute->paths,
+                $dungeonroute->brushlines,
                 $dungeonroute->killzones,
                 $dungeonroute->enemyraidmarkers,
                 $dungeonroute->mapcomments,
@@ -173,6 +193,18 @@ class DungeonRouteController extends Controller
                             $enemy->kill_zone_id = $model->id;
                             $enemy->save();
                         }
+                    } // Make sure all polylines are copied over
+                    else if (isset($model->polyline_id)) {
+                        // It's not technically a brushline, but all other polyline using structs have the same auto complete
+                        // Save a new polyline
+                        /** @var Brushline $model */
+                        $model->polyline->id = 0;
+                        $model->polyline->exists = false;
+                        $model->polyline->model_id = $model->id;
+                        $model->polyline->save();
+
+                        // Write the polyline back to the model
+                        $model->polyline_id = $model->polyline->id;
                     }
                 }
             }
@@ -196,6 +228,10 @@ class DungeonRouteController extends Controller
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
+        // Make sure the dungeon route is owned by this user if it was in try mode.
+        // Don't share your try routes if you don't want someone else to claim the route!
+        $dungeonroute->claim(Auth::user());
+
         return view('dungeonroute.edit', ['model' => $dungeonroute, 'headerTitle' => __('Edit route')]);
     }
 

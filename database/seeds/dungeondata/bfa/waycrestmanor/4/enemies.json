@@ -17,7 +17,7 @@
         "id": 554,
         "enemy_pack_id": 129,
         "floor_id": 63,
-        "mdt_id": 4,
+        "mdt_id": 3,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
@@ -207,34 +207,6 @@
         "lng": 257.75,
         "npc": {
             "id": 139269
-        }
-    },
-    {
-        "id": 2951,
-        "enemy_pack_id": 129,
-        "floor_id": 63,
-        "mdt_id": -1,
-        "teeming": "visible",
-        "faction": "any",
-        "enemy_forces_override": -1,
-        "lat": -168.76,
-        "lng": 189.25,
-        "npc": {
-            "id": 131812
-        }
-    },
-    {
-        "id": 2958,
-        "enemy_pack_id": 129,
-        "floor_id": 63,
-        "mdt_id": 2,
-        "teeming": "visible",
-        "faction": "any",
-        "enemy_forces_override": -1,
-        "lat": -170.26,
-        "lng": 206.5,
-        "npc": {
-            "id": 131812
         }
     },
     {

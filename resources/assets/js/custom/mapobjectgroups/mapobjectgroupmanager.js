@@ -46,23 +46,23 @@ class MapObjectGroupManager extends Signalable {
         let result = null;
 
         if (name === MAP_OBJECT_GROUP_ENEMY) {
-            result = new EnemyMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY, isAdmin);
+            result = new EnemyMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY, isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_ENEMY_PATROL) {
-            result = new EnemyPatrolMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PATROL, isAdmin);
+            result = new EnemyPatrolMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PATROL, isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_ENEMY_PACK) {
-            result = new EnemyPackMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PACK, isAdmin);
+            result = new EnemyPackMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PACK, isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_PATH) {
-            result = new PathMapObjectGroup(this, MAP_OBJECT_GROUP_PATH, !isAdmin);
+            result = new PathMapObjectGroup(this, MAP_OBJECT_GROUP_PATH, !isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_KILLZONE) {
-            result = new KillZoneMapObjectGroup(this, MAP_OBJECT_GROUP_KILLZONE, !isAdmin);
+            result = new KillZoneMapObjectGroup(this, MAP_OBJECT_GROUP_KILLZONE, !isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_BRUSHLINE) {
-            result = new BrushlineMapObjectGroup(this, MAP_OBJECT_GROUP_BRUSHLINE, !isAdmin);
+            result = new BrushlineMapObjectGroup(this, MAP_OBJECT_GROUP_BRUSHLINE, !isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_MAPCOMMENT) {
-            result = new MapCommentMapObjectGroup(this, MAP_OBJECT_GROUP_MAPCOMMENT, !isAdmin);
+            result = new MapCommentMapObjectGroup(this, MAP_OBJECT_GROUP_MAPCOMMENT, !isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_START_MARKER) {
-            result = new DungeonStartMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_START_MARKER, isAdmin);
+            result = new DungeonStartMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_START_MARKER, isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER) {
-            result = new DungeonFloorSwitchMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, isAdmin);
+            result = new DungeonFloorSwitchMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, isMapAdmin);
         }
 
         console.assert(result !== null, 'Unable to find map object group ' + name, this);
@@ -130,7 +130,7 @@ class MapObjectGroupManager extends Signalable {
 
         // @TODO This should probably be different but atm I can't think of a better way
         let publicKey = this.map.getDungeonRoute().publicKey;
-        if (isAdmin) {
+        if (isMapAdmin) {
             publicKey = 'admin';
         }
 
@@ -141,9 +141,9 @@ class MapObjectGroupManager extends Signalable {
             data: {
                 fields: this._getLoadedNames().join(','),
                 floor: this.map.getCurrentFloor().id,
-                show_mdt_enemies: isAdmin ? 1 : 0,
-                enemies: isAdmin ? 0 : 1,
-                teeming: self.map.teeming ? 1 : 0
+                show_mdt_enemies: isMapAdmin ? 1 : 0,
+                enemies: isMapAdmin ? 0 : 1,
+                teeming: self.map.options.teeming ? 1 : 0
             },
             success: function (json) {
                 self.signal('fetchsuccess', {response: json});

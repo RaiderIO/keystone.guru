@@ -81,79 +81,64 @@ class Path extends Polyline {
         let self = this;
         console.assert(this instanceof Path, this, 'this was not a Path');
 
-        let successFn = function (json) {
-            self.signal('object:deleted', {response: json});
-        };
-
-        // No network traffic if this is enabled!
-        if (!this.map.isTryModeEnabled()) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/path',
-                dataType: 'json',
-                data: {
-                    _method: 'DELETE',
-                    id: self.id
-                },
-                beforeSend: function () {
-                    self.deleting = true;
-                },
-                success: successFn,
-                complete: function () {
-                    self.deleting = false;
-                },
-                error: function () {
-                    self.setSynced(false);
-                }
-            });
-        } else {
-            successFn();
-        }
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/path',
+            dataType: 'json',
+            data: {
+                _method: 'DELETE',
+                id: self.id
+            },
+            beforeSend: function () {
+                self.deleting = true;
+            },
+            success: function (json) {
+                self.signal('object:deleted', {response: json});
+            },
+            complete: function () {
+                self.deleting = false;
+            },
+            error: function () {
+                self.setSynced(false);
+            }
+        });
     }
 
     save() {
         let self = this;
         console.assert(this instanceof Path, this, 'this was not a Path');
 
-        let successFn = function (json) {
-            self.id = json.id;
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/path',
+            dataType: 'json',
+            data: {
+                id: self.id,
+                dungeonroute: this.map.getDungeonRoute().publicKey,
+                floor_id: self.map.getCurrentFloor().id,
+                color: self.polylineColor,
+                weight: self.weight,
+                vertices: self.getVertices(),
+            },
+            beforeSend: function () {
+                self.saving = true;
+                $('#map_path_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
+            },
+            success: function (json) {
+                self.id = json.id;
 
-            self.setSynced(true);
-            self.map.leafletMap.closePopup();
-        };
-
-        // No network traffic if this is enabled!
-        if (!this.map.isTryModeEnabled()) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/path',
-                dataType: 'json',
-                data: {
-                    id: self.id,
-                    dungeonroute: this.map.getDungeonRoute().publicKey,
-                    floor_id: self.map.getCurrentFloor().id,
-                    color: self.polylineColor,
-                    weight: self.weight,
-                    vertices: self.getVertices(),
-                },
-                beforeSend: function () {
-                    self.saving = true;
-                    $('#map_path_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
-                },
-                success: successFn,
-                complete: function () {
-                    $('#map_path_edit_popup_submit_' + self.id).removeAttr('disabled');
-                    self.saving = false;
-                },
-                error: function () {
-                    // Even if we were synced, make sure user knows it's no longer / an error occurred
-                    self.setSynced(false);
-                }
-            });
-        } else {
-            // We have to supply an ID to keep everything working properly
-            successFn({id: self.id === 0 ? parseInt((Math.random() * 10000000)) : self.id })
-        }
+                self.setSynced(true);
+                self.map.leafletMap.closePopup();
+            },
+            complete: function () {
+                $('#map_path_edit_popup_submit_' + self.id).removeAttr('disabled');
+                self.saving = false;
+            },
+            error: function () {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
+            }
+        });
     }
 
     // To be overridden by any implementing classes
@@ -164,7 +149,7 @@ class Path extends Polyline {
         let self = this;
 
         // Only when we're editing
-        if (this.map.edit) {
+        if (this.map.options.edit) {
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {
@@ -190,23 +175,33 @@ class Path extends Polyline {
 
             // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
             self.register('synced', this, function (event) {
-                let customPopupHtml = $('#map_path_edit_popup_template').html();
-                // Remove template so our
-                let template = Handlebars.compile(customPopupHtml);
+                let template = Handlebars.templates['map_path_edit_popup_template'];
 
-                let data = {id: self.id};
+                // Two rows
+                let rows = [];
+                let half = classColors.length / 2;
+                let currentRow;
 
-                // Build the status bar from the template
-                customPopupHtml = template(data);
+                // Construct the array required
+                for (let i = 0; i < classColors.length; i++) {
+                    if (i === 0 || i === half) {
+                        currentRow = {colors: []};
+                        rows.push(currentRow);
+                    }
 
-                let customOptions = {
+                    currentRow.colors.push({
+                        color: classColors[i]
+                    });
+                }
+
+                let data = $.extend({id: self.id, rows: rows}, getHandlebarsDefaultVariables());
+
+                self.layer.unbindPopup();
+                self.layer.bindPopup(template(data), {
                     'maxWidth': '400',
                     'minWidth': '300',
                     'className': 'popupCustom'
-                };
-
-                self.layer.unbindPopup();
-                self.layer.bindPopup(customPopupHtml, customOptions);
+                });
 
                 self.layer.off('popupopen');
                 self.layer.on('popupopen', popupOpenFn);

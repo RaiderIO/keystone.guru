@@ -4,7 +4,7 @@
         "dungeon_id": 17,
         "classification_id": 3,
         "name": "Aqu'sirr",
-        "base_health": 2354560,
+        "base_health": 3064520,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -13,7 +13,7 @@
         "dungeon_id": 17,
         "classification_id": 3,
         "name": "Galecaller Faye",
-        "base_health": 1545259,
+        "base_health": 1545180,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -22,7 +22,7 @@
         "dungeon_id": 17,
         "classification_id": 3,
         "name": "Lord Stormsong",
-        "base_health": 2060240,
+        "base_health": 2681455,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -31,7 +31,7 @@
         "dungeon_id": 17,
         "classification_id": 3,
         "name": "Brother Ironhull",
-        "base_health": 1545180,
+        "base_health": 2011091,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -40,7 +40,7 @@
         "dungeon_id": 17,
         "classification_id": 3,
         "name": "Vol'zith the Whisperer",
-        "base_health": 2060240,
+        "base_health": 2451616,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -49,7 +49,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Temple Attendant",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
@@ -58,7 +58,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Shrine Templar",
-        "base_health": 353202,
+        "base_health": 459678,
         "enemy_forces": 10,
         "aggressiveness": "aggressive"
     },
@@ -67,7 +67,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Living Current",
-        "base_health": 529803,
+        "base_health": 689517,
         "enemy_forces": 13,
         "aggressiveness": "aggressive"
     },
@@ -76,7 +76,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Runecarver Sorn",
-        "base_health": 941872,
+        "base_health": 1225808,
         "enemy_forces": 18,
         "aggressiveness": "aggressive"
     },
@@ -85,7 +85,7 @@
         "dungeon_id": 17,
         "classification_id": 1,
         "name": "Animated Droplet",
-        "base_health": 41207,
+        "base_health": 53629,
         "enemy_forces": 1,
         "aggressiveness": "neutral"
     },
@@ -94,7 +94,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Tidesage Enforcer",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
@@ -103,7 +103,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Deepsea Ritualist",
-        "base_health": 647537,
+        "base_health": 842743,
         "enemy_forces": 10,
         "aggressiveness": "aggressive"
     },
@@ -112,7 +112,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Drowned Depthbringer",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
@@ -121,7 +121,7 @@
         "dungeon_id": 17,
         "classification_id": 1,
         "name": "Abyss Dweller",
-        "base_health": 41207,
+        "base_health": 53629,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -130,7 +130,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Abyssal Cultist",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
@@ -139,7 +139,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Tidesage Spiritualist",
-        "base_health": 353202,
+        "base_health": 459678,
         "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
@@ -148,7 +148,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Windspeaker Heldis",
-        "base_health": 1059606,
+        "base_health": 1379034,
         "enemy_forces": 18,
         "aggressiveness": "aggressive"
     },
@@ -157,7 +157,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Guardian Elemental",
-        "base_health": 883005,
+        "base_health": 1149195,
         "enemy_forces": 18,
         "aggressiveness": "aggressive"
     },
@@ -166,7 +166,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Sunken Denizen",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 13,
         "aggressiveness": "aggressive"
     },
@@ -175,7 +175,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Forgotten Denizen",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
@@ -184,7 +184,7 @@
         "dungeon_id": 17,
         "classification_id": 1,
         "name": "Tidesage Initiate",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -193,7 +193,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Colossal Tentacle",
-        "base_health": 323769,
+        "base_health": 421372,
         "enemy_forces": 10,
         "aggressiveness": "aggressive"
     },
@@ -202,7 +202,7 @@
         "dungeon_id": 17,
         "classification_id": 1,
         "name": "Dredged Sailor",
-        "base_health": 14717,
+        "base_health": 19153,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -211,7 +211,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Ironhull Apprentice",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
@@ -220,7 +220,7 @@
         "dungeon_id": 17,
         "classification_id": 2,
         "name": "Galecaller Apprentice",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 9,
         "aggressiveness": "aggressive"
     },
@@ -229,7 +229,7 @@
         "dungeon_id": 17,
         "classification_id": 1,
         "name": "Abyssal Eel",
-        "base_health": 117734,
+        "base_health": 153226,
         "enemy_forces": 3,
         "aggressiveness": "aggressive"
     }

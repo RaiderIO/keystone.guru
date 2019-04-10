@@ -13,11 +13,11 @@ class EnemyForcesControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let template = Handlebars.templates['map_enemy_forces_template' + (!map.edit ? '_view' : '')];
+                let template = Handlebars.templates['map_enemy_forces_template' + (!map.options.edit ? '_view' : '')];
 
                 let data = $.extend({
                     enemy_forces_total: self.map.getEnemyForcesRequired()
-                }, getHandlebarsTranslations());
+                }, getHandlebarsDefaultVariables());
 
                 // Build the status bar from the template
                 self.statusbar = $(template(data));
@@ -102,7 +102,7 @@ class EnemyForcesControls extends MapControl {
         $numbers.removeClass('map_enemy_forces_ok');
         if (this.enemyForces >= enemyForcesRequired) {
             // When editing the route..
-            if (this.map.edit) {
+            if (this.map.options.edit) {
                 if (enemyForcesPercent >= 100) {
                     $enemyForces.attr('title', '');
                     $numbers.addClass('map_enemy_forces_ok');
@@ -131,7 +131,7 @@ class EnemyForcesControls extends MapControl {
             }
         } else {
             // Only on view
-            if (!this.map.edit) {
+            if (!this.map.options.edit) {
                 if (enemyForcesPercent < 100) {
                     $enemyForces.attr('title', 'Warning: this route does not kill enough enemy forces!');
                     $numbers.addClass('map_enemy_forces_too_little_warning');

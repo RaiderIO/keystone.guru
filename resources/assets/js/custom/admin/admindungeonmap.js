@@ -22,6 +22,7 @@ class AdminDungeonMap extends DungeonMap {
         result.push(new AdminDrawControls(this, drawnItemsLayer));
         result.push(new EnemyVisualControls(this));
         result.push(new MapObjectGroupControls(this));
+        result.push(new AdminPanelControls(this));
 
         return result;
     }
@@ -47,29 +48,6 @@ class AdminDungeonMap extends DungeonMap {
         super.refreshLeafletMap();
 
         this.enemyAttaching = new EnemyAttaching(this);
-    }
-
-    /**
-     * Gets if there is currently an MDT enemy being mapped to a Keystone.guru enemy.
-     * @returns {boolean}
-     */
-    isMDTEnemyMappingModeEnabled() {
-        return this.currentMDTEnemyMappingEnemy !== null;
-    }
-
-    /**
-     * Sets the MDT enemy that is currently being mapped to a Keystone.guru enemy.
-     * @param enemy
-     */
-    setMDTEnemyMappingEnemy(enemy = null) {
-        console.assert(enemy.is_mdt, enemy, 'setMDTEnemyMappingEnemy enemy is not an MDT enemy');
-
-        let changed = this.currentMDTEnemyMappingEnemy !== enemy;
-        let previousEnemy = this.currentMDTEnemyMappingEnemy;
-        this.currentMDTEnemyMappingEnemy = enemy;
-        if (changed) {
-            this.signal('map:mdtenemymappingenenemychanged', {previousEnemy: previousEnemy, enemy: enemy});
-        }
     }
 
     /**

@@ -14,6 +14,9 @@ $header = isset($header) ? $header : true;
 $footer = isset($footer) ? $footer : true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
+// Any additional parameters to pass to the login/register blade
+$loginParams = isset($loginParams) ? $loginParams : [];
+$registerParams = isset($registerParams) ? $registerParams : [];
 // Show cookie consent
 $cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
 // If user already approved of the cookie..
@@ -52,10 +55,10 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
-    @include('common.general.scripts', ['showLegalModal' => $showLegalModal])
-    @if(!$custom)
-        @include('common.general.sitescripts')
-    @endif
+    @include('common.general.inlinemanager')
+    @include('common.general.inline', ['path' => 'layouts/app', 'section' => false, 'options' => ['guest' => Auth::guest()]])
+    @include('common.general.sitescripts', ['showLegalModal' => $showLegalModal])
+
     @if($cookieConsent)
         @include('common.thirdparty.cookieconsent')
     @endif
@@ -147,27 +150,23 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                     <i class="fas fa-user"></i> {{ Auth::user()->name }}
                                 </a>
                                 <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
-                                    @if( Auth::user()->can('read-expansions') )
-                                        <a class="dropdown-item"
-                                           href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
-                                    @endif
-                                    @if( Auth::user()->can('read-dungeons') )
-                                        <a class="dropdown-item"
-                                           href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
-                                    @endif
-                                    @if( Auth::user()->can('read-npcs') )
-                                        <a class="dropdown-item"
-                                           href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
-                                    @endif
                                     @if( Auth::user()->hasRole('admin'))
                                         <a class="dropdown-item"
-                                           href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
-                                    @endif
-                                    @if( Auth::user()->hasRole('admin'))
+                                           href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
+                                        @if( Auth::user()->can('read-expansions') )
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
+                                        @endif
+                                        @if( Auth::user()->can('read-dungeons') )
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
+                                        @endif
+                                        @if( Auth::user()->can('read-npcs') )
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
+                                        @endif
                                         <a class="dropdown-item"
                                            href="{{ route('admin.users') }}">{{__('View users')}}</a>
-                                    @endif
-                                    @if( Auth::user()->hasRole('admin'))
                                         <a class="dropdown-item"
                                            href="{{ route('admin.userreports') }}">{{__('View user reports') }}
                                             <span class="badge badge-primary badge-pill">{{ $numUserReports }}</span>
@@ -449,7 +448,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                 </button>
                 <div class="probootstrap-modal-flex">
                     <div class="probootstrap-modal-content">
-                        @include('common.forms.login', ['modal' => true])
+                        @include('common.forms.login', array_merge(['modal' => true], $loginParams))
                     </div>
                 </div>
             </div>
@@ -466,7 +465,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                 </button>
                 <div class="probootstrap-modal-flex">
                     <div class="probootstrap-modal-content">
-                        @include('common.forms.register', ['modal' => true])
+                        @include('common.forms.register', array_merge(['modal' => true], $registerParams))
                     </div>
                 </div>
             </div>
