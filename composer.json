@@ -17,7 +17,7 @@
                 "source": {
                     "url": "https://github.com/nnogga/MethodDungeonTools.git",
                     "type": "git",
-                    "reference": "dev-master#13bc8465b4474a0c24f65dac51b088c74604b7ad"
+                    "reference": "master"
                 }
             }
         }
