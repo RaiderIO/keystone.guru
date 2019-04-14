@@ -153,6 +153,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                     @if( Auth::user()->hasRole('admin'))
                                         <a class="dropdown-item"
                                            href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
+                                        <div class="dropdown-divider"></div>
                                         @if( Auth::user()->can('read-expansions') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
@@ -171,9 +172,12 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                            href="{{ route('admin.userreports') }}">{{__('View user reports') }}
                                             <span class="badge badge-primary badge-pill">{{ $numUserReports }}</span>
                                         </a>
+                                        <div class="dropdown-divider"></div>
                                     @endif
                                     <a class="dropdown-item"
                                        href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
+                                    <a class="dropdown-item"
+                                       href="{{ route('team.list') }}">{{ __('My teams') }}</a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"

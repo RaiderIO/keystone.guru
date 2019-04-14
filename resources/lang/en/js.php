@@ -155,5 +155,9 @@ return [
     'ajax_error_419' => 'Your session has expired. Refresh the page.',
 
     // Map comment popup
-    'map_comment_label' => 'Comment'
+    'map_comment_label' => 'Comment',
+
+    // Dungeonroute table
+    'actions_label' => 'Actions',
+    'add_to_team_label' => 'Add to team'
 ];

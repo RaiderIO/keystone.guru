@@ -95,7 +95,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                 <thead>
                 <tr>
                     <th width="15%">{{ __('Preview') }}</th>
-                    <th width="10%" class="d-none d-md-table-cell">{{ __('Dungeon') }}</th>
+                    <th width="13%" class="d-none d-md-table-cell">{{ __('Dungeon') }}</th>
                     <th width="25%">{{ __('Features') }}</th>
                     <!-- Dummy header to allow for filtering based on attributes -->
                     <th width="15%" class="d-none">{{ __('Attributes') }}</th>
@@ -104,7 +104,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                     <th width="5%">{{ __('Rating') }}</th>
                     <?php if( $profile ) { ?>
                     <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
-                    <th width="10%">{{ __('Actions') }}</th>
+                    <th width="7%">{{ __('Actions') }}</th>
                     <?php } ?>
                 </tr>
                 </thead>

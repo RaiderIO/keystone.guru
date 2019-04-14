@@ -10,6 +10,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property File $iconfile
+ */
 class IconFileModel extends Model
 {
     /**

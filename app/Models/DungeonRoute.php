@@ -264,6 +264,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function teams()
+    {
+        return $this->belongsToMany('App\Models\Team', 'team_dungeon_routes');
+    }
+
+    /**
      * If this dungeon is in try mode, have a specific user claim this route as theirs.
      *
      * @param $user User

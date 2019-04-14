@@ -132,8 +132,9 @@ class DungeonrouteTable extends InlineCode {
 
             // When in biglist, the first entry does not trigger the click events
             let notFirst = self._viewMode === 'biglist' ? ':not(:first-child)' : '';
+            let notLast = self._profileMode ? ':not(:last-child)' : '';
 
-            self._dt[self._viewMode].on('click', 'tbody td' + notFirst, function (clickEvent) {
+            self._dt[self._viewMode].on('click', 'tbody td' + notFirst + notLast, function (clickEvent) {
                 let key = $(clickEvent.currentTarget).data('publickey');
 
                 window.open((self._profileMode ? '/replace_me/edit' : '/replace_me').replace('replace_me', key));

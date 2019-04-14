@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @property $id int
+ * @property $icon_file_id int
  * @property $name string
  * @property $description string
  *
@@ -15,21 +16,21 @@ use Illuminate\Support\Collection;
  *
  * @mixin \Eloquent
  */
-class Team extends Model
+class Team extends IconFileModel
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     function members()
     {
-        return $this->hasMany('App\User', 'user_id');
+        return $this->belongsToMany('App\User', 'team_users');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     function dungeonroutes()
     {
-        return $this->hasMany('App\Models\DungeonRoute');
+        return $this->belongsToMany('App\Models\DungeonRoute', 'team_dungeon_routes');
     }
 }

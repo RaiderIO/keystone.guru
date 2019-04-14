@@ -112,6 +112,13 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
         Route::patch('profile/{user}/privacy', 'ProfileController@updatePrivacy')->name('profile.updateprivacy');
         Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
+
+        Route::get('teams', 'TeamController@list')->name('team.list');
+        Route::get('team/new', 'TeamController@new')->name('team.new');
+        Route::get('team/{team}', 'TeamController@edit')->name('team.edit');
+
+        Route::post('team/new', 'TeamController@savenew')->name('team.savenew');
+        Route::patch('team/{team}', 'TeamController@update')->name('team.update');
     });
 
     Route::group(['middleware' => ['auth', 'role:admin']], function () {

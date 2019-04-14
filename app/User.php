@@ -146,6 +146,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function teams()
+    {
+        return $this->belongsToMany('App\Models\Team', 'team_users');
+    }
+
+    /**
      * Sends the password reset notification.
      *
      * @param  string $token

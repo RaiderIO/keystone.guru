@@ -15,12 +15,12 @@ class CreateTeamsTable extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('logo_file_id');
+            $table->integer('icon_file_id');
             $table->string('name');
             $table->string('description');
             $table->timestamps();
 
-            $table->index('logo_file_id');
+            $table->index('icon_file_id');
         });
     }
 
