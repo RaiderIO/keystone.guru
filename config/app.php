@@ -188,6 +188,7 @@ return [
         PragmaRX\Tracker\Vendor\Laravel\ServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
     ],
 
     /*

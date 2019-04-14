@@ -23,6 +23,12 @@ class LayoutsApp extends InlineCode {
             this._newPassword('#register_password');
             this._newPassword('#modal-register_password');
         }
+
+        $('.close').bind('click', function () {
+            let dimissId = $(this).data('alert-dismiss-id');
+            // Cookie is now set to dismiss this alert permanently
+            Cookies.set('alert-dismiss-' + dimissId, true, {expires: 30});
+        });
     }
 
     /**
