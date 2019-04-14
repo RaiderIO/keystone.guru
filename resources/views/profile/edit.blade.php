@@ -23,19 +23,19 @@ $user = Auth::getUser();
         <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                   aria-controls="profile" aria-selected="true">{{ __('Profile') }}</a>
+                   aria-controls="profile" aria-selected="true"><i class="fas fa-user"></i> {{ __('Profile') }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="patreon-tab" data-toggle="tab" href="#patreon" role="tab"
-                   aria-controls="patreon" aria-selected="false">{{ __('Patreon') }}</a>
+                   aria-controls="patreon" aria-selected="false"><i class="fab fa-patreon"></i> {{ __('Patreon') }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="change-password-tab" data-toggle="tab" href="#change-password" role="tab"
-                   aria-controls="change-password" aria-selected="false">{{ __('Change password') }}</a>
+                   aria-controls="change-password" aria-selected="false"><i class="fas fa-key"></i> {{ __('Change password') }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="privacy-tab" data-toggle="tab" href="#privacy" role="tab"
-                   aria-controls="contact" aria-selected="false">{{ __('Privacy') }}</a>
+                   aria-controls="contact" aria-selected="false"><i class="fas fa-user-secret"></i> {{ __('Privacy') }}</a>
             </li>
         </ul>
 

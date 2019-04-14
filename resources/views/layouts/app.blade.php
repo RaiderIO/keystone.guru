@@ -177,7 +177,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                     <a class="dropdown-item"
                                        href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
                                     <a class="dropdown-item"
-                                       href="{{ route('team.list') }}">{{ __('My teams') }}</a>
+                                       href="{{ route('team.list') }}">{{ __('My teams') }} <sup class="text-primary">{{ __('NEW') }}</sup></a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -228,7 +228,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                         <div class="card-header {{ $wide ? "panel-heading-wide" : "" }}">
                             <div class="row">
                                 @hasSection('header-addition')
-                                    <div class="ml-3">
+                                    <div class="col text-center">
                                         <h4>@yield('header-title')</h4>
                                     </div>
                                     <div class="ml-auto">

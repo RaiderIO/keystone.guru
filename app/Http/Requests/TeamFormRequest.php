@@ -29,14 +29,10 @@ class TeamFormRequest extends FormRequest
         $team = $this->route()->parameter('team');
 
         $rules = [
-            'name' => ['required', Rule::unique('teams')->ignore($team->id)],
-            'description' => 'string'
+            'name' => ['required', Rule::unique('teams')->ignore($team)],
+            'description' => 'string',
+            'logo' => 'image|mimes:png|max:256'
         ];
-
-        // Logo is required when making a new team, when editing it's optional
-        if($team === null){
-            $rules['logo'] = 'required|image|mimes:png|max:256';
-        }
 
         return $rules;
     }

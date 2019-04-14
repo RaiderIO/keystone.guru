@@ -58,6 +58,10 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return view('misc.timetest');
     })->name('misc.timetest');
 
+    Route::get('looptest', function () {
+        return view('misc.looptest');
+    })->name('misc.looptest');
+
     Route::get('status', function () {
         return view('misc.status');
     })->name('misc.status');
@@ -79,6 +83,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return redirect(route('dungeonroutes', ['dungeonroute' => $dungeonroute->public_key]), 301);
     });
     Route::get('routes', 'DungeonRouteController@list')->name('dungeonroutes');
+
+    // May be accessed without being logged in
+    Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
         // Must be logged in to create a new dungeon route
@@ -119,6 +126,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::post('team/new', 'TeamController@savenew')->name('team.savenew');
         Route::patch('team/{team}', 'TeamController@update')->name('team.update');
+        Route::get('team/invite/{invitecode}/accept', 'TeamController@inviteaccept')->name('team.invite.accept');
     });
 
     Route::group(['middleware' => ['auth', 'role:admin']], function () {

@@ -18,6 +18,7 @@ class CreateTeamsTable extends Migration
             $table->integer('icon_file_id');
             $table->string('name');
             $table->string('description');
+            $table->string('invite_code');
             $table->timestamps();
 
             $table->index('icon_file_id');

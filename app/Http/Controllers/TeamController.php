@@ -12,6 +12,7 @@ use App\Http\Requests\TeamFormRequest;
 use App\Models\File;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeamController extends Controller
 {
@@ -31,6 +32,7 @@ class TeamController extends Controller
         /** @var Team $team */
         $team->name = $request->get('name');
         $team->description = $request->get('description');
+        $team->invite_code = Team::generateRandomInviteCode();
         $team->icon_file_id = -1;
 
         $logo = $request->file('logo');
@@ -58,6 +60,9 @@ class TeamController extends Controller
                     throw $ex;
                 }
             }
+
+            // If saving team + logo was successful, save our own user as its first member
+            $team->addMember(Auth::user(), 'admin');
         }
 
         return $team;
@@ -123,5 +128,15 @@ class TeamController extends Controller
     public function list()
     {
         return view('team.list', ['models' => Team::all()]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function invite($invitecode)
+    {
+        $team = Team::where('invite_code', $invitecode)->first();
+
+        return view('team.invite', ['team' => $team]);
     }
 }

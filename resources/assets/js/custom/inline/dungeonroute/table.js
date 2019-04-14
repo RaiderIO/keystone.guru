@@ -101,8 +101,8 @@ class DungeonrouteTable extends InlineCode {
                             });
                         });
                     }
-                }
-                , 'lengthMenu': [25],
+                },
+                'lengthMenu': [25],
                 'bLengthChange': false,
                 // Order by affixes by default
                 'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
