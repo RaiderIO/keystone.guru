@@ -12,7 +12,9 @@ $user = Auth::getUser();
 
     <script type="text/javascript">
         $(function () {
-            newPassword('#new_password');
+            // Code for base app
+            var appCode = _inlineManager.getInlineCode('layouts/app');
+            appCode._newPassword('#new_password');
         });
     </script>
 @endsection
