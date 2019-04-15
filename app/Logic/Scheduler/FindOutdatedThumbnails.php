@@ -35,6 +35,11 @@ class FindOutdatedThumbnails
             $updatedAt = Carbon::createFromTimeString($dungeonRoute->updated_at);
             $thumbnailUpdatedAt = Carbon::createFromTimeString($dungeonRoute->thumbnail_updated_at);
 
+            // Do not do Tol Dagor for now, there's a bug
+            if( $dungeonRoute->dungeon_id === 22 ){
+                continue;
+            }
+
             // Add a limit to the amount of jobs that can be queued at once. When we have 100 jobs, the server is busy
             // enough as-is and we don't need to queue more jobs. Mostly this is done because
             // ProcessRouteFloorThumbnail::thumbnailsExistsForRoute() gets more expensive the more jobs there are

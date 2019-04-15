@@ -9,7 +9,7 @@ $showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
                title="{{ __('Select the attributes that your group is comfortable with handling.') }}">
             {{ __('Attributes') }}
         </label>
-    @elseif
+    @else
         <label for="attributes">{{ __('Attributes') }}</label>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
         __('Attributes describe what features your route has that others may not be able to complete due to composition ' .
