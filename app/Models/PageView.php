@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Session;
  * @property string $session_id
  * @property string $created_at
  * @property string $updated_at
+ *
+ * @mixin \Eloquent
  */
 class PageView extends Model
 {

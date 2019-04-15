@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property $id int The ID of this Affix.
  * @property $affix_id int
  * @property $affix_group_id int
+ *
+ * @mixin \Eloquent
  */
 class AffixGroupCoupling extends Model
 {

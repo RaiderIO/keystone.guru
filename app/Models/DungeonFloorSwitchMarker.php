@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property $target_floor_id int
  * @property $lat float
  * @property $lng float
+ *
+ * @mixin \Eloquent
  */
 class DungeonFloorSwitchMarker extends Model
 {

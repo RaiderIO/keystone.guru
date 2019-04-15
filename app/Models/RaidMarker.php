@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property string $name
+ *
+ * @mixin \Eloquent
  */
 class RaidMarker extends Model
 {

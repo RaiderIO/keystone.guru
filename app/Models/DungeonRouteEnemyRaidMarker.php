@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $dungeon_route_id
  * @property int $raid_marker_id
  * @property int $enemy_id
+ *
+ * @mixin \Eloquent
  */
 class DungeonRouteEnemyRaidMarker extends Model
 {

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
  * @property string $model_class
  * @property string $disk
  * @property string $path
+ *
+ * @mixin \Eloquent
  */
 class File extends Model
 {

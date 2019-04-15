@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,7 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $category
  * @property string $username For anonymous users
  * @property string $message
- * @property \App\User $author
+ *
+ * @property User $author
+ *
+ * @mixin \Eloquent
  */
 class UserReport extends Model
 {

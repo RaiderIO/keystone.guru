@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Auth;
  * @property string $name
  * @property int $reset_day_offset ISO-8601 numeric representation of the day of the week
  * @property string $reset_time_offset_utc
+ *
  * @property \Illuminate\Support\Collection $specializations
+ *
+ * @mixin \Eloquent
  */
 class GameServerRegion extends Model
 {

@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property $id int
  * @property $patreon_data_id int
  * @property $paid_tier_id int
- * @property $user User
+ * @property User $user
+ *
+ * @mixin \Eloquent
  */
 class PatreonTier extends Model
 {

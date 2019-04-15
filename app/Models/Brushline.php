@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property DungeonRoute $dungeonroute
  * @property Polyline $polyline
+ *
+ * @mixin \Eloquent
  */
 class Brushline extends Model
 {

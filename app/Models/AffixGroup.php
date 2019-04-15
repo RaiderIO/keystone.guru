@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property $affix \Illuminate\Database\Eloquent\Collection
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
+ *
+ * @mixin \Eloquent
  */
 class AffixGroup extends Model
 {

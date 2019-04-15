@@ -64,6 +64,8 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $routeattributesraw
  *
  * @method static \Illuminate\Database\Eloquent\Builder visible()
+ *
+ * @mixin \Eloquent
  */
 class DungeonRoute extends Model
 {

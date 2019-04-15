@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_id
  * @property \App\Models\DungeonRoute $dungeonroute
  * @property \App\User $user
+ *
+ * @mixin \Eloquent
  */
 class DungeonRouteFavorite extends Model
 {

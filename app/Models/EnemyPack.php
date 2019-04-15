@@ -10,8 +10,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $faction
  * @property string $label
  * @property string $vertices_json
+ *
  * @property \App\Models\Floor $floor
+ *
  * @property \Illuminate\Support\Collection $enemies
+ *
+ * @mixin \Eloquent
  */
 class EnemyPack extends Model
 {

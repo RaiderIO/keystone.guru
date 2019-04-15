@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,7 +11,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property $access_token string
  * @property $refresh_token string
  * @property $expires_at datetime
- * @property $user User
+ *
+ * @property User $user
+ *
+ * @mixin \Eloquent
  */
 class PatreonData extends Model
 {
