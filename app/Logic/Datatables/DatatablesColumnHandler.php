@@ -33,6 +33,14 @@ abstract class DatatablesColumnHandler
     protected abstract function _applyFilter(Builder $builder, $columnData, $order);
 
     /**
+     * @return DatatablesHandler
+     */
+    public function getDtHandler(): DatatablesHandler
+    {
+        return $this->_dtHandler;
+    }
+
+    /**
      * @return string Gets the column name of the handler.
      */
     public function getColumnName()

@@ -2,6 +2,7 @@ class DungeonrouteTable extends InlineCode {
 
     constructor(options) {
         super(options);
+        this._teamId = -1;
         this._profileMode = false;
         this._viewMode = '';
         this._dt = {};
@@ -34,6 +35,14 @@ class DungeonrouteTable extends InlineCode {
             self.setViewMode($(this).data('viewmode'));
             self.refreshTable();
         });
+    }
+
+    /**
+     * Set the team ID (for filtering purposes)
+     * @param value
+     */
+    setTeamId(value) {
+        this._teamId = value;
     }
 
     /**
@@ -87,6 +96,9 @@ class DungeonrouteTable extends InlineCode {
                     'data': function (d) {
                         d.favorites = $('#favorites').is(':checked') ? 1 : 0;
                         d.mine = self._profileMode;
+                        if (self._teamId > -1) {
+                            d.team_id = self._teamId;
+                        }
                     },
                     'cache': false
                 },
