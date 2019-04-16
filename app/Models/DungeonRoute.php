@@ -266,11 +266,11 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    function teams()
+    function team()
     {
-        return $this->belongsToMany('App\Models\Team', 'team_dungeon_routes');
+        return $this->belongsTo('App\Models\Team');
     }
 
     /**

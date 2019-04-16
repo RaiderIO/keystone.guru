@@ -3,9 +3,9 @@
         {{actions_label}}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item dungeonroute-add-to-team" href="#">{{add_to_team_label}}</a>
-        <a class="dropdown-item dungeonroute-clone" href="#">{{clone_label}}</a>
+        <a class="dropdown-item dungeonroute-add-to-team" href="#"><i class="fas fa-plus"></i> {{add_to_team_label}}</a>
+        <a class="dropdown-item dungeonroute-clone" href="#" data-publickey="{{public_key}}"><i class="fas fa-clone"></i> {{clone_label}}</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item dungeonroute-delete" href="#">{{delete_label}}</a>
+        <a class="dropdown-item dungeonroute-delete text-danger" href="#" data-publickey="{{public_key}}"><i class="fas fa-trash"></i> {{delete_label}}</a>
     </div>
 </div>

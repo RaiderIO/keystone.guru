@@ -58,7 +58,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         'showNoAttributes' => true])
     </div>
     <div class="col-lg-2">
-        <div class="row">
+        <div class="row no-gutters">
             @auth
                 <div class="col">
                     {!! Form::label('favorites', __('Favorites')) !!}
@@ -69,7 +69,9 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                 <div class="d-none d-md-flex mb-2">
                     &nbsp;
                 </div>
-                {!! Form::button(__('Filter'), ['id' => 'dungeonroute_filter', 'class' => 'btn btn-info col-lg']) !!}
+                <button id="dungeonroute_filter" class="btn btn-info col-lg">
+                    <i class="fas fa-filter"></i> {{ __('Filter') }}
+                </button>
             </div>
         </div>
     </div>
@@ -104,12 +106,14 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
                 <!-- Dummy header to allow for filtering based on attributes -->
                 <th width="15%" class="d-none">{{ __('Attributes') }}</th>
                 <th width="10%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
+                @if(!isset($team))
                 <th width="5%">{{ __('Views') }}</th>
                 <th width="5%">{{ __('Rating') }}</th>
-                <?php if( $profile ) { ?>
+                @endif
+                @if($profile)
                 <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
                 <th width="7%">{{ __('Actions') }}</th>
-                <?php } ?>
+                @endif
             </tr>
             </thead>
 
@@ -129,12 +133,14 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             <th width="15%">{{ __('Attributes') }}</th>
             <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
             <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
+            @if(!isset($team))
             <th width="5%" class="d-none d-md-table-cell">{{ __('Views') }}</th>
             <th width="5%">{{ __('Rating') }}</th>
-            <?php if( $profile ) { ?>
+            @endif
+            @if($profile)
             <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
             <th width="10%">{{ __('Actions') }}</th>
-            <?php } ?>
+            @endif
         </tr>
         </thead>
 

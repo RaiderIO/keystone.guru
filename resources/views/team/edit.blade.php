@@ -22,12 +22,6 @@ $title = isset($model) ? __('Edit team') : __('New team');
 
 @section('content')
     @isset($model)
-        {{ Form::model($model, ['route' => ['team.update', $model->id], 'method' => 'patch', 'files' => true]) }}
-    @else
-        {{ Form::open(['route' => 'team.savenew', 'files' => true]) }}
-    @endisset
-
-    @isset($model)
         <div class="container">
             <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
                 <li class="nav-item">
@@ -111,6 +105,11 @@ $title = isset($model) ? __('Edit team') : __('New team');
         @endisset
 
         <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
+            @isset($model)
+                {{ Form::model($model, ['route' => ['team.update', $model->id], 'method' => 'patch', 'files' => true]) }}
+            @else
+                {{ Form::open(['route' => 'team.savenew', 'files' => true]) }}
+            @endisset
 
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                 {!! Form::label('name', __('Name')) !!}

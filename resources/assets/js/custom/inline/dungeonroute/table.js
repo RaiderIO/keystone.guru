@@ -240,28 +240,32 @@ class DungeonrouteTable extends InlineCode {
             'name': 'author.name',
             'className': 'd-none ' + (this._profileMode ? '' : 'd-lg-table-cell')
         });
-        columns.push({
-            'data': 'views',
-            'name': 'views',
-            // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
-        });
-        columns.push({
-            'name': 'rating',
-            'render': function (data, type, row, meta) {
-                let result = '-';
 
-                if (row.rating_count !== 0) {
-                    result = row.avg_rating;
-                    if (row.rating_count === 1) {
-                        result += ' (' + row.rating_count + ' ' + lang.get('messages.vote') + ')';
-                    } else {
-                        result += ' (' + row.rating_count + ' ' + lang.get('messages.votes') + ' )';
+        // Don't care for this when viewing in team
+        if (this._teamId === -1) {
+            columns.push({
+                'data': 'views',
+                'name': 'views',
+                // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
+            });
+            columns.push({
+                'name': 'rating',
+                'render': function (data, type, row, meta) {
+                    let result = '-';
+
+                    if (row.rating_count !== 0) {
+                        result = row.avg_rating;
+                        if (row.rating_count === 1) {
+                            result += ' (' + row.rating_count + ' ' + lang.get('messages.vote') + ')';
+                        } else {
+                            result += ' (' + row.rating_count + ' ' + lang.get('messages.votes') + ' )';
+                        }
                     }
-                }
 
-                return result;
-            }
-        });
+                    return result;
+                }
+            });
+        }
 
         // Only display these columns when we're displaying the table in profile
         if (this._profileMode) {

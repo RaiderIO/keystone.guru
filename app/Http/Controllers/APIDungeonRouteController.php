@@ -91,11 +91,12 @@ class APIDungeonRouteController extends Controller
                     abort(403, 'Unauthorized');
                 }
 
-                // Where the route is part of the requested team
-                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
-                    /** @var $query Builder */
-                    $query->where('team_dungeon_routes.team_id', $teamId);
-                });
+//                // Where the route is part of the requested team
+                $routes = $routes->where('team_id', $teamId);
+//                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
+//                    /** @var $query Builder */
+//                    $query->where('team_dungeon_routes.team_id', $teamId);
+//                });
             }
         }
 

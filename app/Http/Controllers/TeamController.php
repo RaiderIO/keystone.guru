@@ -43,7 +43,7 @@ class TeamController extends Controller
             if ($logo !== null) {
                 try {
                     // Delete the icon should it exist already
-                    if( $team->iconfile !== null ) {
+                    if ($team->iconfile !== null) {
                         $team->iconfile->delete();
                     }
 
@@ -117,7 +117,7 @@ class TeamController extends Controller
         // Message to the user
         \Session::flash('status', __('Team created'));
 
-        return redirect()->route('team.edit', ["team" => $team]);
+        return redirect()->route('team.edit', ['team' => $team]);
     }
 
     /**
@@ -131,12 +131,43 @@ class TeamController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param string $invitecode
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function invite($invitecode)
+    public function invite(Request $request, $invitecode)
     {
+        /** @var Team $team */
         $team = Team::where('invite_code', $invitecode)->first();
 
-        return view('team.invite', ['team' => $team]);
+        if ($team->isCurrentUserMember()) {
+            $result = view('team.invite', ['team' => $team, 'member' => true]);
+        } else {
+            $result = view('team.invite', ['team' => $team]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @param string $invitecode
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function inviteaccept(Request $request, $invitecode)
+    {
+        /** @var Team $team */
+        $team = Team::where('invite_code', $invitecode)->first();
+
+        if ($team->isCurrentUserMember()) {
+            $result = view('team.invite', ['team' => $team, 'member' => true]);
+        } else {
+            $team->addMember(Auth::getUser(), 'member');
+
+            \Session::flash('status', sprintf(__('Success! You are now a member of team %s.'), $team->name));
+            $result = redirect()->route('team.edit', ['team' => $team]);
+        }
+
+        return $result;
     }
 }

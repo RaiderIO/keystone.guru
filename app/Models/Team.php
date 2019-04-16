@@ -37,11 +37,11 @@ class Team extends IconFileModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     function dungeonroutes()
     {
-        return $this->belongsToMany('App\Models\DungeonRoute', 'team_dungeon_routes');
+        return $this->hasMany('App\Models\DungeonRoute');
     }
 
     /**
@@ -59,7 +59,7 @@ class Team extends IconFileModel
      */
     public function isUserMember($user)
     {
-        return Auth::check() ? $this->members()->where('user_id', Auth::id())->count() === 1 : false;
+        return $user !== null ? $this->members()->where('user_id', $user->id)->count() === 1 : false;
     }
 
     /**
