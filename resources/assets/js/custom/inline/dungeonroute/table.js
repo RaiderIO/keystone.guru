@@ -95,7 +95,7 @@ class DungeonrouteTable extends InlineCode {
                     'url': '/ajax/routes',
                     'data': function (d) {
                         d.favorites = $('#favorites').is(':checked') ? 1 : 0;
-                        d.mine = self._profileMode;
+                        d.mine = self._profileMode ? 1 : 0;
                         if (self._teamId > -1) {
                             d.team_id = self._teamId;
                         }
