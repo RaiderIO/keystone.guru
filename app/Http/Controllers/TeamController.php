@@ -127,7 +127,8 @@ class TeamController extends Controller
      */
     public function list()
     {
-        return view('team.list', ['models' => Team::all()]);
+        $user = Auth::user();
+        return view('team.list', ['models' => $user->teams()->where('user_id', $user->id)->get()]);
     }
 
     /**

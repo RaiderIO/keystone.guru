@@ -10,15 +10,107 @@ $title = isset($model) ? __('Edit team') : __('New team');
 @endsection
 @include('common.general.inline', ['path' => 'team/edit'])
 
+@isset($model)
 @section('scripts')
     @parent
 
     <script type="text/javascript">
+            <?php
+            $data = [];
+            foreach ($model->teamusers as $teamuser) {
+                /** @var $teamuser \App\Models\TeamUser */
+                $data[] = [
+                    $teamuser->user->name,
+                    $teamuser->created_at->toDateTimeString(),
+                    $teamuser->role,
+                    // Any and all roles that the user may assign to other users
+                    $model->getAssignableRoles($teamuser->user)
+                ];
+            }
+            ?>
+        var _data = {!! json_encode($data) !!};
+        var _teamId = {!! $model->id !!};
+
         $(function () {
-            $('#team_members_table').DataTable({});
+            $('#team_members_table').DataTable({
+                'data': _data,
+                'columnDefs': [{
+                    'targets': 2,
+                    'render': function (data, type, row, meta) {
+                        // Matching roles to icons
+                        let icons = [{
+                            name: 'member',
+                            icon: 'fa-eye',
+                            label: lang.get('messages.team_member')
+                        }, {
+                            name: 'collaborator',
+                            icon: 'fa-edit',
+                            label: lang.get('messages.team_collaborator')
+                        }, {
+                            name: 'moderator',
+                            icon: 'fa-user-cog',
+                            label: lang.get('messages.team_moderator')
+                        }, {
+                            name: 'admin',
+                            icon: 'fa-crown',
+                            label: lang.get('messages.team_admin')
+                        }];
+
+                        let roles = [];
+
+                        // Match the valid roles with roles above
+                        for (let roleIndex in row[3]) {
+                            let role = row[3][roleIndex];
+                            for (let roleCandidateIndex in icons) {
+                                let roleCandidate = icons[roleCandidateIndex];
+                                if (role === roleCandidate.name) {
+                                    roles.push(roleCandidate);
+                                }
+                            }
+                        }
+
+                        console.log('roles', roles);
+
+                        // Handlebars the entire thing
+                        let template = Handlebars.templates['team_member_table_actions_template'];
+                        let templateData = $.extend({
+                            username: row[0],
+                            role: data,
+                            is_admin: data === 'admin',
+                            roles: roles
+                        }, getHandlebarsDefaultVariables());
+
+                        return template(templateData);
+                    },
+                    'orderable': false
+                }]
+            });
+
+            // Fix members data table being in a separate tab ignoring width
+            // https://datatables.net/examples/api/tabs_and_scrolling.html
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+            });
+
+            $('select.role_selection').bind('change', function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/team/changerole',
+                    dataType: 'json',
+                    data: {
+                        team_id: _teamId,
+                        username: $(this).data('username'),
+                        role: $(this).val()
+                    },
+                    success: function () {
+                        showSuccessNotification(lang.get('messages.change_role_success'));
+                    }
+                });
+            });
         });
     </script>
 @endsection
+@endisset
 
 @section('content')
     @isset($model)
@@ -82,23 +174,11 @@ $title = isset($model) ? __('Edit team') : __('New team');
                     <table id="team_members_table" class="tablesorter default_table table-striped w-100" width="100%">
                         <thead>
                         <tr>
-                            <th width="70%">{{ __('Name') }}</th>
+                            <th width="65%">{{ __('Name') }}</th>
                             <th width="20%">{{ __('Join date') }}</th>
-                            <th width="10%">{{ __('Actions') }}</th>
+                            <th width="15%">{{ __('Permissions') }}</th>
                         </tr>
                         </thead>
-
-                        <tbody>
-                        @foreach ($model->teamusers as $teamuser)
-                            <tr>
-                                <td>{{ $teamuser->user->name }}</td>
-                                <td>{{ $teamuser->created_at }}</td>
-                                <td>
-                                    Actions
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
                     </table>
                 </div>
             </div>

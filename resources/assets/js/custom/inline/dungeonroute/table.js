@@ -24,6 +24,10 @@ class DungeonrouteTable extends InlineCode {
             let attributes = $('#attributes').val();
 
             let offset = self._viewMode === 'biglist' ? 1 : 0;
+            // Profile mode and team mode show title
+            if (self._profileMode || self._teamId > -1) {
+                offset += 1;
+            }
             self._dt[self._viewMode].column(offset).search(dungeonId);
             self._dt[self._viewMode].column(1 + offset).search(affixes);
             self._dt[self._viewMode].column(2 + offset).search(attributes);
@@ -186,6 +190,13 @@ class DungeonrouteTable extends InlineCode {
             });
         }
 
+        if (this._profileMode || this._teamId > -1) {
+            columns.push({
+                'data': 'title',
+                'name': 'title'
+            });
+        }
+
         columns.push({
             'data': 'dungeon.name',
             'name': 'dungeon_id',
@@ -283,6 +294,8 @@ class DungeonrouteTable extends InlineCode {
                 }
             });
         }
+
+        console.log(columns);
 
         return columns;
     }

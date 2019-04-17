@@ -101,6 +101,9 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             <thead>
             <tr>
                 <th width="15%">{{ __('Preview') }}</th>
+                @if(isset($team) || $profile)
+                <th width="15%" class="d-none d-md-table-cell">{{ __('Title') }}</th>
+                @endif
                 <th width="13%" class="d-none d-md-table-cell">{{ __('Dungeon') }}</th>
                 <th width="25%">{{ __('Features') }}</th>
                 <!-- Dummy header to allow for filtering based on attributes -->
@@ -128,6 +131,9 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
            width="100%">
         <thead>
         <tr>
+            @if(isset($team) || $profile)
+            <th width="15%" class="d-none d-md-table-cell">{{ __('Title') }}</th>
+            @endif
             <th width="15%">{{ __('Dungeon') }}</th>
             <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
             <th width="15%">{{ __('Attributes') }}</th>

@@ -17,7 +17,7 @@ class CreateTeamUsersTable extends Migration
             $table->increments('id');
             $table->integer('team_id');
             $table->integer('user_id');
-            $table->enum('role', ['admin', 'moderator', 'member']);
+            $table->enum('role', ['admin', 'moderator', 'collaborator', 'member']);
             $table->timestamps();
 
             $table->index(['team_id', 'user_id']);

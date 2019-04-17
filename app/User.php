@@ -22,8 +22,11 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property int $legal_agreed_ms
  * @property boolean $analytics_cookie_opt_out
  * @property boolean $adsense_no_personalized_ads
+ *
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
+ *
+ * @mixin \Eloquent
  */
 class User extends Authenticatable
 {

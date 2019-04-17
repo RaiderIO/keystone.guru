@@ -1,0 +1,7 @@
+<select class="form-control selectpicker role_selection" data-username="{{username}}">
+    {{#roles}}
+        {{#select role}}
+            <option value="{{name}}" data-icon="fas {{icon}}">{{label}}</option>
+        {{/select}}
+    {{/roles}}
+</select>

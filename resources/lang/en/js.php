@@ -159,5 +159,17 @@ return [
 
     // Dungeonroute table
     'actions_label' => 'Actions',
-    'add_to_team_label' => 'Add to team'
+    'add_to_team_label' => 'Add to team',
+
+    // Teams
+    'view_label' => 'View',
+    'collaborator_label' => 'Edit',
+    'moderator_label' => 'Moderate',
+    'admin_label' => 'Own',
+    'change_role_success' => 'Permissions updated',
+
+    'team_admin' => 'Admin',
+    'team_moderator' => 'Moderator',
+    'team_collaborator' => 'Collaborator',
+    'team_member' => 'Member',
 ];
