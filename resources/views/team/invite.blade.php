@@ -5,11 +5,6 @@ $member = isset($member) ? $member : false;
 ?>
 @extends('layouts.app', ['showAds' => false, 'title' => $title])
 @section('header-title', $title)
-@section('header-addition')
-    <a href="{{ route('team.list') }}" class="btn btn-info text-white float-right" role="button">
-        <i class="fas fa-backward"></i> {{ __('Team list') }}
-    </a>
-@endsection
 
 @section('content')
     <div class="container text-center">

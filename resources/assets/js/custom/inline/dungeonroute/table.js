@@ -295,8 +295,6 @@ class DungeonrouteTable extends InlineCode {
             });
         }
 
-        console.log(columns);
-
         return columns;
     }
 

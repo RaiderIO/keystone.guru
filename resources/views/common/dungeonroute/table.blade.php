@@ -80,16 +80,16 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             &nbsp;
         </div>
         <div class="mb-2 text-right">
-            <div id="table_biglist_btn"
+            <button id="table_biglist_btn"
                  class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} table_list_view_toggle"
                  data-viewmode="biglist">
                 <i class="fas fa-th-list"></i>
-            </div>
-            <div id="table_list_btn"
+            </button>
+            <button id="table_list_btn"
                  class="btn {{ $cookieViewMode === 'list' ? 'btn-primary' : 'btn-default' }}  table_list_view_toggle"
                  data-viewmode="list">
                 <i class="fas fa-list"></i>
-            </div>
+            </button>
         </div>
     </div>
 </div>

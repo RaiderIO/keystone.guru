@@ -1,5 +1,7 @@
 <?php
+/** @var \App\Models\Team $model */
 $title = isset($model) ? __('Edit team') : __('New team');
+$userRole = $model->getUserRole(Auth::user());
 ?>
 @extends('layouts.app', ['showAds' => false, 'title' => $title])
 @section('header-title', $title)
@@ -24,55 +26,50 @@ $title = isset($model) ? __('Edit team') : __('New team');
                     $teamuser->created_at->toDateTimeString(),
                     $teamuser->role,
                     // Any and all roles that the user may assign to other users
-                    $model->getAssignableRoles($teamuser->user)
+                    $model->getAssignableRoles(Auth::user(), $teamuser->user)
                 ];
             }
             ?>
         var _data = {!! json_encode($data) !!};
         var _teamId = {!! $model->id !!};
+        var _userIsModerator = {!! $userRole === 'admin' || $userRole === 'moderator' ? 'true' : 'false' !!};
 
         $(function () {
-            $('#team_members_table').DataTable({
-                'data': _data,
-                'columnDefs': [{
-                    'targets': 2,
-                    'render': function (data, type, row, meta) {
-                        // Matching roles to icons
-                        let icons = [{
-                            name: 'member',
-                            icon: 'fa-eye',
-                            label: lang.get('messages.team_member')
-                        }, {
-                            name: 'collaborator',
-                            icon: 'fa-edit',
-                            label: lang.get('messages.team_collaborator')
-                        }, {
-                            name: 'moderator',
-                            icon: 'fa-user-cog',
-                            label: lang.get('messages.team_moderator')
-                        }, {
-                            name: 'admin',
-                            icon: 'fa-crown',
-                            label: lang.get('messages.team_admin')
-                        }];
+            let columns = [{
+                'targets': 2,
+                'render': function (data, type, row, meta) {
 
-                        let roles = [];
+                    let roles = [];
 
-                        // Match the valid roles with roles above
-                        for (let roleIndex in row[3]) {
-                            let role = row[3][roleIndex];
-                            for (let roleCandidateIndex in icons) {
-                                let roleCandidate = icons[roleCandidateIndex];
-                                if (role === roleCandidate.name) {
-                                    roles.push(roleCandidate);
-                                }
+                    // Match the valid roles with roles above
+                    let assignableRoles = row[3];
+                    for (let roleIndex in assignableRoles) {
+                        if (assignableRoles.hasOwnProperty(roleIndex)) {
+                            // Fetch the role..
+                            let assignableRole = assignableRoles[roleIndex];
+
+                            let icon = _getIcon(assignableRole);
+                            if (icon !== false) {
+                                roles.push(icon);
                             }
                         }
+                    }
 
-                        console.log('roles', roles);
+                    let result = '';
+                    if (roles.length === 0) {
+                        let icon = _getIcon(data);
 
                         // Handlebars the entire thing
-                        let template = Handlebars.templates['team_member_table_actions_template'];
+                        let template = Handlebars.templates['team_member_table_permissions_self_template'];
+                        let templateData = $.extend({
+                            icon: icon.icon,
+                            label: icon.label
+                        }, getHandlebarsDefaultVariables());
+
+                        result = template(templateData);
+                    } else {
+                        // Handlebars the entire thing
+                        let template = Handlebars.templates['team_member_table_permissions_template'];
                         let templateData = $.extend({
                             username: row[0],
                             role: data,
@@ -80,10 +77,30 @@ $title = isset($model) ? __('Edit team') : __('New team');
                             roles: roles
                         }, getHandlebarsDefaultVariables());
 
+                        result = template(templateData);
+                    }
+                    return result;
+                },
+                'orderable': false
+            }];
+
+            // Only admins/moderators have the option to remove members from a team
+            if (_userIsModerator) {
+                columns.push({
+                    'targets': 3,
+                    'render': function (data, type, row, meta) {
+                        // Handlebars the entire thing
+                        let template = Handlebars.templates['team_member_table_actions_template'];
+                        let templateData = $.extend({}, getHandlebarsDefaultVariables());
+
                         return template(templateData);
-                    },
-                    'orderable': false
-                }]
+                    }
+                });
+            }
+
+            $('#team_members_table').DataTable({
+                'data': _data,
+                'columnDefs': columns
             });
 
             // Fix members data table being in a separate tab ignoring width
@@ -108,6 +125,48 @@ $title = isset($model) ? __('Edit team') : __('New team');
                 });
             });
         });
+
+        /**
+         * Gets icon data for a role.
+         * @param roleName The name of the role you want icon data for.
+         * @returns {boolean}
+         * @private
+         */
+        function _getIcon(roleName) {
+            // Matching roles to icons
+            let icons = [{
+                name: 'member',
+                icon: 'fa-eye',
+                label: lang.get('messages.team_member')
+            }, {
+                name: 'collaborator',
+                icon: 'fa-edit',
+                label: lang.get('messages.team_collaborator')
+            }, {
+                name: 'moderator',
+                icon: 'fa-user-cog',
+                label: lang.get('messages.team_moderator')
+            }, {
+                name: 'admin',
+                icon: 'fa-crown',
+                label: lang.get('messages.team_admin')
+            }];
+
+            let result = false;
+
+            // For each role there exists
+            for (let roleCandidateIndex in icons) {
+                let roleCandidate = icons[roleCandidateIndex];
+                // Match assignable role with candidate
+                if (roleName === roleCandidate.name) {
+                    // Found what we're looking for, push the result
+                    result = roleCandidate;
+                    break;
+                }
+            }
+
+            return result;
+        }
     </script>
 @endsection
 @endisset
@@ -174,9 +233,16 @@ $title = isset($model) ? __('Edit team') : __('New team');
                     <table id="team_members_table" class="tablesorter default_table table-striped w-100" width="100%">
                         <thead>
                         <tr>
-                            <th width="65%">{{ __('Name') }}</th>
-                            <th width="20%">{{ __('Join date') }}</th>
-                            <th width="15%">{{ __('Permissions') }}</th>
+                            @if($userRole === 'member' || $userRole === 'collaborator')
+                                <th width="65%">{{ __('Name') }}</th>
+                                <th width="20%">{{ __('Join date') }}</th>
+                                <th width="15%">{{ __('Permissions') }}</th>
+                            @else
+                                <th width="50%">{{ __('Name') }}</th>
+                                <th width="20%">{{ __('Join date') }}</th>
+                                <th width="15%">{{ __('Permissions') }}</th>
+                                <th width="15%">{{ __('Actions') }}</th>
+                            @endif
                         </tr>
                         </thead>
                     </table>

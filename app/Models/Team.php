@@ -20,10 +20,6 @@ use Illuminate\Support\Facades\Auth;
  */
 class Team extends IconFileModel
 {
-    /**
-     * @var array List of current roles for a user in a team.
-     */
-    private static $_roles = ['member' => 1, 'collaborator' => 2, 'moderator' => 3, 'admin' => 4];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -63,20 +59,29 @@ class Team extends IconFileModel
 
     /**
      * Get the roles that a user may assign to other users in this team.
-     * @param $user User
+     * @param $user User The user attempting to change roles.
+     * @param $targetUser User The user that is targeted for a role change.
      * @return array
      */
-    public function getAssignableRoles($user)
+    public function getAssignableRoles($user, $targetUser)
     {
         $userRole = $this->getUserRole($user);
+        $targetUserRole = $this->getUserRole($targetUser);
         $result = [];
 
-        if ($userRole !== false) {
-            // Count down from all roles that exist, starting by the role the user currently has
-            $userRoleKey = self::$_roles[$userRole];
-            for ($i = $userRoleKey; $i > 0; $i--) {
-                // array_search to find key by value
-                $result[] = array_search($i, self::$_roles);
+        // If both users have a valid role (should always be the case)
+        if ($userRole !== false && $targetUserRole !== false) {
+            $roles = config('keystoneguru.team_roles');
+            $userRoleKey = $roles[$userRole];
+            $targetUserRoleKey = $roles[$targetUserRole];
+            // If the current user is a moderator or admin, and (if user is admin or the current user outranks the other user)
+            if ($userRoleKey >= 3 && ($userRoleKey === 4 || $userRoleKey > $targetUserRoleKey)) {
+
+                // Count down from all roles that exist, starting by the role the user currently has
+                for ($i = $userRoleKey; $i > 0; $i--) {
+                    // array_search to find key by value
+                    $result[] = array_search($i, $roles);
+                }
             }
         }
 
@@ -96,16 +101,17 @@ class Team extends IconFileModel
     public function canChangeRole($user, $targetUser, $role)
     {
         $result = false;
+        $roles = config('keystoneguru.team_roles');
 
         // Only if it's a valid role
-        if (isset(self::$_roles[$role])) {
+        if (isset($roles[$role])) {
             $userRole = $this->getUserRole($user);
             $targetUserRole = $this->getUserRole($targetUser);
 
             if ($userRole !== false && $targetUserRole !== false) {
-                $userRoleKey = self::$_roles[$userRole];
-                $targetUserRoleKey = self::$_roles[$targetUserRole];
-                $targetRoleKey = self::$_roles[$role];
+                $userRoleKey = $roles[$userRole];
+                $targetUserRoleKey = $roles[$targetUserRole];
+                $targetRoleKey = $roles[$role];
 
                 // User has a bigger role, and then only up to where the current user is (no promotions past their own
                 // rank) the person, and only users who are currently a moderator or admin may change roles
@@ -119,8 +125,9 @@ class Team extends IconFileModel
     public function changeRole($user, $role)
     {
         $teamUser = $this->teamusers()->where('user_id', $user->id)->get()->first();
+        $roles = config('keystoneguru.team_roles');
         // Only when user is part of the team, and when the role is a valid one.
-        if ($teamUser !== null && isset(self::$_roles[$role])) {
+        if ($teamUser !== null && isset($roles[$role])) {
             // Update the role with the new one
             $teamUser->role = $role;
             $teamUser->save();

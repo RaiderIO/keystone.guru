@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 /**
  * @property $id int
@@ -11,8 +12,11 @@ use Illuminate\Support\Collection;
  * @property $user_id int
  * @property $role string
  *
- * @property Collection $team
- * @property Collection $user
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
+ * @property Team $team
+ * @property User $user
  *
  * @mixin \Eloquent
  */

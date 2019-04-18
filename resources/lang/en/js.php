@@ -168,8 +168,9 @@ return [
     'admin_label' => 'Own',
     'change_role_success' => 'Permissions updated',
 
-    'team_admin' => 'Admin',
-    'team_moderator' => 'Moderator',
-    'team_collaborator' => 'Collaborator',
-    'team_member' => 'Member',
+    'team_admin' => 'Administrate team',
+    'team_moderator' => 'Moderate team',
+    'team_collaborator' => 'Edit routes',
+    'team_member' => 'View routes',
+    'remove_label' => 'Remove'
 ];

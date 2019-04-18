@@ -1,7 +1,4 @@
-<select class="form-control selectpicker role_selection" data-username="{{username}}">
-    {{#roles}}
-        {{#select role}}
-            <option value="{{name}}" data-icon="fas {{icon}}">{{label}}</option>
-        {{/select}}
-    {{/roles}}
-</select>
+<button class="btn btn-danger">
+    <span class="d-xl-none"><i class="fas fa-user-minus"></i></span>
+    <span class="d-none d-xl-block"><i class="fas fa-user-minus"></i> {{remove_label}}</span>
+</button>
