@@ -62,6 +62,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return view('misc.status');
     })->name('misc.status');
 
+    Route::get('login/google', 'Auth\LoginController@redirectToProvider')->name('login.google');
+    Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback')->name('login.google.callback');
+
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
 

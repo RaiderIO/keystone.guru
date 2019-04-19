@@ -22,6 +22,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property int $legal_agreed_ms
  * @property boolean $analytics_cookie_opt_out
  * @property boolean $adsense_no_personalized_ads
+ * @property boolean $changed_username
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
  */
@@ -64,6 +65,16 @@ class User extends Authenticatable
     public function getIsAdminAttribute()
     {
         return $this->hasRole('admin');
+    }
+
+    /**
+     * Checks if this user has registered using OAuth or not.
+     *
+     * @return bool
+     */
+    public function isOAuth()
+    {
+        return empty($this->password);
     }
 
     /**
@@ -149,7 +160,6 @@ class User extends Authenticatable
      * Sends the password reset notification.
      *
      * @param  string $token
-     *
      * @return void
      */
     public function sendPasswordResetNotification($token)

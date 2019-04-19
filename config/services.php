@@ -35,4 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_SIGNIN_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_SIGNIN_CLIENT_SECRET'),
+        'redirect' => '/login/google/callback',
+    ],
 ];

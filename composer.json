@@ -28,6 +28,7 @@
         "folklore/image": "0.3.*",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "5.7.*",
+        "laravel/socialite": "^4.1",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.6",
         "miraris/monolog-discord-handler": "^0.2.0",

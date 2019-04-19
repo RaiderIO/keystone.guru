@@ -55,4 +55,10 @@ $redirect = old('redirect', $redirect);
             </a>
         </div>
     </div>
+
+    <hr>
+
+    <a href="{{ route('login.google') }}">
+        <img src="{{ url('/images/google/btn_google_signin_dark_normal_web.png') }}"/>
+    </a>
 </form>
