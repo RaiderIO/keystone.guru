@@ -37,6 +37,8 @@
         "pragmarx/tracker": "dev-wotuu-bugfix",
         "santigarcor/laratrust": "5.0.*",
         "shrikeh/teapot": "^2.3",
+        "socialiteproviders/battlenet": "^2.0",
+        "socialiteproviders/discord": "^2.0",
         "tremby/laravel-git-version": "^1.1",
         "yajra/laravel-datatables-oracle": "~8.0"
     },

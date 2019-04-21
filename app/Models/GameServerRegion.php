@@ -213,7 +213,7 @@ class GameServerRegion extends Model
             $region = Auth::user()->gameserverregion;
         }
         if ($region === null) {
-            $region = GameServerRegion::all()->where('short', 'na')->first();
+            $region = GameServerRegion::all()->where('short', 'us')->first();
         }
         return $region;
     }

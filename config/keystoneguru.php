@@ -53,5 +53,5 @@ return [
      * The amount of hours it takes before a dungeon route that is created through the 'try' functionality expires and
      * is deleted from the server.
      */
-    'try_dungeon_route_expires_hours' => 24
+    'try_dungeon_route_expires_hours' => 24,
 ];

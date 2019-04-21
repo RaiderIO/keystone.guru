@@ -441,7 +441,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
     <!-- Modal login -->
     <div class="modal fade" id="login_modal" tabindex="-1" role="dialog"
          aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md vertical-align-center">
+        <div class="login-modal-dialog modal-dialog modal-md vertical-align-center">
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     <i class="fas fa-times"></i>
@@ -458,7 +458,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 
     <!-- Modal signup -->
     <div class="modal fade" id="register_modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-md vertical-align-center">
+        <div class="register-modal-dialog modal-dialog modal-md vertical-align-center">
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     <i class="fas fa-times"></i>

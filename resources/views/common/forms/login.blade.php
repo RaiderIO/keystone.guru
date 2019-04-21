@@ -7,58 +7,62 @@ $redirect = isset($redirect) ? $redirect : Request::get('redirect', Request::get
 $redirect = old('redirect', $redirect);
 ?>
 
-<form class="form-horizontal" method="POST"
-      action="{{ route('login', ['redirect' => $redirect]) }}">
-    {{ csrf_field() }}
-    <h3>
-        {{ __('Login') }}
-    </h3>
-
-    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-        <label for="{{ $modalClass }}login_email" class="control-label">{{ __('E-mail address') }}</label>
-
-        <div class="col-md-{{ $width }}">
-            <input id="{{ $modalClass }}login_email" type="email" class="form-control" name="email"
-                   value="{{ old('email') }}" required autofocus autocomplete="username email">
-        </div>
-    </div>
-
-    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-        <label for="{{ $modalClass }}login_password" class="control-label">{{ __('Password') }}</label>
-
-        <div class="col-md-{{ $width }}">
-            <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password"
-                   autocomplete="current-password" required>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
-            <div class="checkbox">
-                <label for="{{ $modalClass }}login_remember">
-                    <input id="{{ $modalClass }}login_remember" type="checkbox"
-                           name="remember" {{ old('remember') ? 'checked' : '' }}>
-                    {{ __('Remember me') }}
-                </label>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-12">
-            <button type="submit" class="btn btn-primary">
+<div class="row">
+    <div class="col">
+        <form class="form-horizontal" method="POST"
+              action="{{ route('login', ['redirect' => $redirect]) }}">
+            {{ csrf_field() }}
+            <h3>
                 {{ __('Login') }}
-            </button>
+            </h3>
 
-            <a class="btn btn-link" href="{{ route('password.request') }}">
-                {{ __('Forgot your password?') }}
-            </a>
-        </div>
+            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                <label for="{{ $modalClass }}login_email" class="control-label">{{ __('E-mail address') }}</label>
+
+                <div class="col-md-{{ $width }}">
+                    <input id="{{ $modalClass }}login_email" type="email" class="form-control" name="email"
+                           value="{{ old('email') }}" required autofocus autocomplete="username email">
+                </div>
+            </div>
+
+            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                <label for="{{ $modalClass }}login_password" class="control-label">{{ __('Password') }}</label>
+
+                <div class="col-md-{{ $width }}">
+                    <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password"
+                           autocomplete="current-password" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
+                    <div class="checkbox">
+                        <label for="{{ $modalClass }}login_remember">
+                            <input id="{{ $modalClass }}login_remember" type="checkbox"
+                                   name="remember" {{ old('remember') ? 'checked' : '' }}>
+                            {{ __('Remember me') }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">
+                        {{ __('Login') }}
+                    </button>
+
+                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                        {{ __('Forgot your password?') }}
+                    </a>
+                </div>
+            </div>
+        </form>
     </div>
-
-    <hr>
-
-    <a href="{{ route('login.google') }}">
-        <img src="{{ url('/images/google/btn_google_signin_dark_normal_web.png') }}"/>
-    </a>
-</form>
+    <div class="col border-left border-white">
+        <h3>
+            {{ __('Login through OAuth2') }}
+        </h3>
+        @include('common.forms.oauth')
+    </div>
+</div>
