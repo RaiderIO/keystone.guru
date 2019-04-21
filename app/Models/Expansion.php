@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
  * @property string $name
  * @property string $shortname
  * @property string $color
+ *
+ * @mixin \Eloquent
  */
 class Expansion extends IconFileModel
 {

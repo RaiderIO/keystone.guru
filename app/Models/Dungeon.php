@@ -15,11 +15,16 @@ use Mockery\Exception;
  * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
  * @property int $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
  * @property boolean $active True if this dungeon is active, false if it is not.
+ *
  * @property Expansion $expansion
+ *
  * @property \Illuminate\Support\Collection $floors
  * @property \Illuminate\Support\Collection $dungeonroutes
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
+ *
+ * @mixin \Eloquent
  */
 class Dungeon extends Model
 {

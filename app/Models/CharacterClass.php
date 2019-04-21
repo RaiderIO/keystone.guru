@@ -5,6 +5,8 @@ namespace App\Models;
 /**
  * @property string $name
  * @property \Illuminate\Support\Collection $specializations
+ *
+ * @mixin \Eloquent
  */
 class CharacterClass extends IconFileModel
 {

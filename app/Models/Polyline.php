@@ -10,8 +10,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property $model_class string
  * @property $color string
  * @property $weight int
- * @property $model Model
  * @property $vertices_json string JSON encoded vertices
+ *
+ * @property Model $model
  *
  * @mixin \Eloquent
  */

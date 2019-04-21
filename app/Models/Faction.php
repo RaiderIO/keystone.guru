@@ -4,8 +4,11 @@ namespace App\Models;
 
 /**
  * @property string $name
+ *
  * @property \Illuminate\Support\Collection $races
  * @property \Illuminate\Support\Collection $dungeonroutes
+ *
+ * @mixin \Eloquent
  */
 class Faction extends IconFileModel
 {

@@ -12,7 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $base_health
  * @property int $enemy_forces
  * @property string $aggressiveness
+ *
  * @property \Illuminate\Support\Collection $enemies
+ *
+ * @mixin \Eloquent
  */
 class Npc extends Model
 {

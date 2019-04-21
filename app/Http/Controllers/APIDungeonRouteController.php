@@ -17,11 +17,13 @@ use App\Logic\Datatables\AuthorNameColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use App\Logic\Datatables\DungeonRouteAffixesColumnHandler;
 use App\Logic\Datatables\DungeonRouteAttributesColumnHandler;
+use App\Logic\Datatables\DungeonRouteTeamColumnHandler;
 use App\Logic\Datatables\RatingColumnHandler;
 use App\Logic\Datatables\ViewsColumnHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -78,8 +80,23 @@ class APIDungeonRouteController extends Controller
             if ($request->get('favorites', false)) {
                 $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
                     /** @var $query Builder */
-                    $query->where('dungeon_route_favorites.user_id', '=', $user->id);
+                    $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
+            }
+
+            // Handle team if set
+            if ($teamId = $request->get('team_id', false)) {
+                // You must be a member of this team to retrieve their routes
+                if (!Team::find($teamId)->members->contains($user->id)) {
+                    abort(403, 'Unauthorized');
+                }
+
+//                // Where the route is part of the requested team
+                $routes = $routes->where('team_id', $teamId);
+//                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
+//                    /** @var $query Builder */
+//                    $query->where('team_dungeon_routes.team_id', $teamId);
+//                });
             }
         }
 

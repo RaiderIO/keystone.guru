@@ -189,6 +189,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
     ],
 
     /*

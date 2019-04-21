@@ -58,6 +58,10 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return view('misc.timetest');
     })->name('misc.timetest');
 
+    Route::get('looptest', function () {
+        return view('misc.looptest');
+    })->name('misc.looptest');
+
     Route::get('status', function () {
         return view('misc.status');
     })->name('misc.status');
@@ -88,6 +92,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return redirect(route('dungeonroutes', ['dungeonroute' => $dungeonroute->public_key]), 301);
     });
     Route::get('routes', 'DungeonRouteController@list')->name('dungeonroutes');
+
+    // May be accessed without being logged in
+    Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
         // Must be logged in to create a new dungeon route
@@ -121,6 +128,14 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
         Route::patch('profile/{user}/privacy', 'ProfileController@updatePrivacy')->name('profile.updateprivacy');
         Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
+
+        Route::get('teams', 'TeamController@list')->name('team.list');
+        Route::get('team/new', 'TeamController@new')->name('team.new');
+        Route::get('team/{team}', 'TeamController@edit')->name('team.edit');
+
+        Route::post('team/new', 'TeamController@savenew')->name('team.savenew');
+        Route::patch('team/{team}', 'TeamController@update')->name('team.update');
+        Route::get('team/invite/{invitecode}/accept', 'TeamController@inviteaccept')->name('team.invite.accept');
     });
 
     Route::group(['middleware' => ['auth', 'role:admin']], function () {
@@ -238,6 +253,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
 
             Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
+
+            Route::post('/team/changerole', 'APITeamController@changeRole');
         });
     });
 

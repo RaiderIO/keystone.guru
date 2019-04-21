@@ -9,8 +9,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property $dungeon_route_id int
  * @property $floor_id int
  * @property $polyline_id int
+ *
  * @property DungeonRoute $dungeonroute
+ *
  * @property \App\Models\Polyline $polyline
+ *
+ * @mixin \Eloquent
  */
 class Path extends Model
 {

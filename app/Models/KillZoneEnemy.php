@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property $id int
  * @property $kill_zone_id int
  * @property $enemy_id int
+ *
+ * @mixin \Eloquent
  */
 class KillZoneEnemy extends Model
 {

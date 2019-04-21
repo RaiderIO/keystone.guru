@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $dungeon_route_id
  * @property string $import_string
+ *
+ * @mixin \Eloquent
  */
 class MDTImport extends Model
 {

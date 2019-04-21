@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $enemy_id
  * @property int $polyline_id
  * @property string $faction
+ *
  * @property \App\Models\Floor $floor
  * @property \App\Models\Enemy $enemy
  * @property \App\Models\Polyline $polyline

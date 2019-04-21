@@ -20,9 +20,12 @@ use Illuminate\Support\Facades\Auth;
  * @property string $enemy_forces_override
  * @property double $lat
  * @property double $lng
+ *
  * @property \App\Models\EnemyPack $enemyPack
  * @property \App\Models\Npc $npc
  * @property \App\Models\Floor $floor
+ *
+ * @mixin \Eloquent
  */
 class Enemy extends Model
 {

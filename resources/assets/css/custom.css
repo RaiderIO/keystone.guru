@@ -343,3 +343,13 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
+
+#team_members_table .dropdown.bootstrap-select .btn {
+    background-color: #4E5D6C;
+    color: #FFF;
+    border: 1px solid #2B3E5066;
+}
+
+#team_members_table .dropdown.bootstrap-select {
+    background-color: #4E5D6C;
+}

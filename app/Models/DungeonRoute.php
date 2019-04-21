@@ -64,6 +64,8 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $routeattributesraw
  *
  * @method static \Illuminate\Database\Eloquent\Builder visible()
+ *
+ * @mixin \Eloquent
  */
 class DungeonRoute extends Model
 {
@@ -261,6 +263,14 @@ class DungeonRoute extends Model
     {
         // Only set if the route was imported through an MDT string
         return $this->hasMany('App\Models\MDTImport');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function team()
+    {
+        return $this->belongsTo('App\Models\Team');
     }
 
     /**

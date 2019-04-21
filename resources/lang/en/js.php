@@ -155,5 +155,22 @@ return [
     'ajax_error_419' => 'Your session has expired. Refresh the page.',
 
     // Map comment popup
-    'map_comment_label' => 'Comment'
+    'map_comment_label' => 'Comment',
+
+    // Dungeonroute table
+    'actions_label' => 'Actions',
+    'add_to_team_label' => 'Add to team',
+
+    // Teams
+    'view_label' => 'View',
+    'collaborator_label' => 'Edit',
+    'moderator_label' => 'Moderate',
+    'admin_label' => 'Own',
+    'change_role_success' => 'Permissions updated',
+
+    'team_admin' => 'Administrate team',
+    'team_moderator' => 'Moderate team',
+    'team_collaborator' => 'Edit routes',
+    'team_member' => 'View routes',
+    'remove_label' => 'Remove'
 ];

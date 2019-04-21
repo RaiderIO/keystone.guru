@@ -23,8 +23,11 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property boolean $analytics_cookie_opt_out
  * @property boolean $adsense_no_personalized_ads
  * @property boolean $changed_username
+ 
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
+ *
+ * @mixin \Eloquent
  */
 class User extends Authenticatable
 {
@@ -154,6 +157,14 @@ class User extends Authenticatable
     {
         // Don't know why it won't work without the foreign key specified..
         return $this->belongsTo('App\Models\GameServerRegion', 'game_server_region_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function teams()
+    {
+        return $this->belongsToMany('App\Models\Team', 'team_users');
     }
 
     /**

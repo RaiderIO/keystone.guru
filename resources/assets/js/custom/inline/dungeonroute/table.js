@@ -2,6 +2,7 @@ class DungeonrouteTable extends InlineCode {
 
     constructor(options) {
         super(options);
+        this._teamId = -1;
         this._profileMode = false;
         this._viewMode = '';
         this._dt = {};
@@ -23,6 +24,10 @@ class DungeonrouteTable extends InlineCode {
             let attributes = $('#attributes').val();
 
             let offset = self._viewMode === 'biglist' ? 1 : 0;
+            // Profile mode and team mode show title
+            if (self._profileMode || self._teamId > -1) {
+                offset += 1;
+            }
             self._dt[self._viewMode].column(offset).search(dungeonId);
             self._dt[self._viewMode].column(1 + offset).search(affixes);
             self._dt[self._viewMode].column(2 + offset).search(attributes);
@@ -34,6 +39,14 @@ class DungeonrouteTable extends InlineCode {
             self.setViewMode($(this).data('viewmode'));
             self.refreshTable();
         });
+    }
+
+    /**
+     * Set the team ID (for filtering purposes)
+     * @param value
+     */
+    setTeamId(value) {
+        this._teamId = value;
     }
 
     /**
@@ -87,6 +100,9 @@ class DungeonrouteTable extends InlineCode {
                     'data': function (d) {
                         d.favorites = $('#favorites').is(':checked') ? 1 : 0;
                         d.mine = self._profileMode ? 1 : 0;
+                        if (self._teamId > -1) {
+                            d.team_id = self._teamId;
+                        }
                     },
                     'cache': false
                 },
@@ -101,8 +117,8 @@ class DungeonrouteTable extends InlineCode {
                             });
                         });
                     }
-                }
-                , 'lengthMenu': [25],
+                },
+                'lengthMenu': [25],
                 'bLengthChange': false,
                 // Order by affixes by default
                 'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
@@ -132,8 +148,9 @@ class DungeonrouteTable extends InlineCode {
 
             // When in biglist, the first entry does not trigger the click events
             let notFirst = self._viewMode === 'biglist' ? ':not(:first-child)' : '';
+            let notLast = self._profileMode ? ':not(:last-child)' : '';
 
-            self._dt[self._viewMode].on('click', 'tbody td' + notFirst, function (clickEvent) {
+            self._dt[self._viewMode].on('click', 'tbody td' + notFirst + notLast, function (clickEvent) {
                 let key = $(clickEvent.currentTarget).data('publickey');
 
                 window.open((self._profileMode ? '/replace_me/edit' : '/replace_me').replace('replace_me', key));
@@ -170,6 +187,13 @@ class DungeonrouteTable extends InlineCode {
                     return handlebarsThumbnailCarouselParse(row);
                 },
                 'orderable': false
+            });
+        }
+
+        if (this._profileMode || this._teamId > -1) {
+            columns.push({
+                'data': 'title',
+                'name': 'title'
             });
         }
 
@@ -227,28 +251,32 @@ class DungeonrouteTable extends InlineCode {
             'name': 'author.name',
             'className': 'd-none ' + (this._profileMode ? '' : 'd-lg-table-cell')
         });
-        columns.push({
-            'data': 'views',
-            'name': 'views',
-            // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
-        });
-        columns.push({
-            'name': 'rating',
-            'render': function (data, type, row, meta) {
-                let result = '-';
 
-                if (row.rating_count !== 0) {
-                    result = row.avg_rating;
-                    if (row.rating_count === 1) {
-                        result += ' (' + row.rating_count + ' ' + lang.get('messages.vote') + ')';
-                    } else {
-                        result += ' (' + row.rating_count + ' ' + lang.get('messages.votes') + ' )';
+        // Don't care for this when viewing in team
+        if (this._teamId === -1) {
+            columns.push({
+                'data': 'views',
+                'name': 'views',
+                // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
+            });
+            columns.push({
+                'name': 'rating',
+                'render': function (data, type, row, meta) {
+                    let result = '-';
+
+                    if (row.rating_count !== 0) {
+                        result = row.avg_rating;
+                        if (row.rating_count === 1) {
+                            result += ' (' + row.rating_count + ' ' + lang.get('messages.vote') + ')';
+                        } else {
+                            result += ' (' + row.rating_count + ' ' + lang.get('messages.votes') + ' )';
+                        }
                     }
-                }
 
-                return result;
-            }
-        });
+                    return result;
+                }
+            });
+        }
 
         // Only display these columns when we're displaying the table in profile
         if (this._profileMode) {
