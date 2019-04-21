@@ -1,6 +1,7 @@
 <?php
 /** @var \App\User $user */
 $user = Auth::getUser();
+$isOAuth = $user->password === '';
 ?>
 
 @extends('layouts.app', ['wide' => true, 'title' => __('Profile')])
@@ -31,10 +32,12 @@ $user = Auth::getUser();
                 <a class="nav-link" id="patreon-tab" data-toggle="tab" href="#patreon" role="tab"
                    aria-controls="patreon" aria-selected="false"><i class="fab fa-patreon"></i> {{ __('Patreon') }}</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="change-password-tab" data-toggle="tab" href="#change-password" role="tab"
-                   aria-controls="change-password" aria-selected="false"><i class="fas fa-key"></i> {{ __('Change password') }}</a>
-            </li>
+            @if(!$isOAuth)
+                <li class="nav-item">
+                    <a class="nav-link" id="change-password-tab" data-toggle="tab" href="#change-password" role="tab"
+                       aria-controls="change-password" aria-selected="false"><i class="fas fa-key"></i> {{ __('Change password') }}</a>
+                </li>
+            @endif
             <li class="nav-item">
                 <a class="nav-link" id="privacy-tab" data-toggle="tab" href="#privacy" role="tab"
                    aria-controls="contact" aria-selected="false"><i class="fas fa-user-secret"></i> {{ __('Privacy') }}</a>
@@ -45,11 +48,24 @@ $user = Auth::getUser();
 
             <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 {{ Form::model($user, ['route' => ['profile.update', $user->name], 'method' => 'patch']) }}
+                @if($isOAuth && !$user->changed_username)
+                    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                        <label for="name">
+                            {{ __('Username') }}
+                            <i class="fas fa-info-circle" data-toggle="tooltip"
+                               title="{{ __('Since you logged in using an external Authentication service, you may change your username once.') }}"></i>
+                        </label>
+                        {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                        @include('common.forms.form-error', ['key' => 'name'])
+                    </div>
+                @endif
+                @if(!$isOAuth)
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     {!! Form::label('email', __('Email')) !!}
                     {!! Form::text('email', null, ['class' => 'form-control']) !!}
                     @include('common.forms.form-error', ['key' => 'email'])
                 </div>
+                @endif
                 <div class="form-group{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">
                     {!! Form::label('game_server_region_id', __('Region')) !!}
                     {!! Form::select('game_server_region_id', array_merge(['-1' => __('Select region')], \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()), null, ['class' => 'form-control']) !!}
@@ -94,33 +110,35 @@ $user = Auth::getUser();
                 </p>
             </div>
 
-            <div class="tab-pane fade" id="change-password" role="tabpanel" aria-labelledby="change-password-tab">
-                {{--$user->email is intended, since that is the actual username--}}
-                {{ Form::model($user, ['route' => ['profile.changepassword', $user->name], 'method' => 'patch']) }}
-                {!! Form::hidden('username', $user->email) !!}
-                <div class="form-group{{ $errors->has('current_password') ? ' has-error' : '' }}">
-                    {!! Form::label('current_password', __('Current password')) !!}
-                    {!! Form::password('current_password', ['class' => 'form-control', 'autocomplete' => 'current-password']) !!}
-                    @include('common.forms.form-error', ['key' => 'current_password'])
+            @if(!$isOAuth)
+                <div class="tab-pane fade" id="change-password" role="tabpanel" aria-labelledby="change-password-tab">
+                    {{--$user->email is intended, since that is the actual username--}}
+                    {{ Form::model($user, ['route' => ['profile.changepassword', $user->name], 'method' => 'patch']) }}
+                    {!! Form::hidden('username', $user->email) !!}
+                    <div class="form-group{{ $errors->has('current_password') ? ' has-error' : '' }}">
+                        {!! Form::label('current_password', __('Current password')) !!}
+                        {!! Form::password('current_password', ['class' => 'form-control', 'autocomplete' => 'current-password']) !!}
+                        @include('common.forms.form-error', ['key' => 'current_password'])
+                    </div>
+
+                    <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
+                        {!! Form::label('new_password', __('New password')) !!}
+                        {!! Form::password('new_password', ['id' => 'new_password', 'class' => 'form-control', 'autocomplete' => 'new-password']) !!}
+                        @include('common.forms.form-error', ['key' => 'new_password'])
+                    </div>
+
+
+                    <div class="form-group{{ $errors->has('new_password-confirm') ? ' has-error' : '' }}">
+                        {!! Form::label('new_password-confirm', __('New password (confirm)')) !!}
+                        {!! Form::password('new_password-confirm', ['class' => 'form-control', 'autocomplete' => 'new-password']) !!}
+                        @include('common.forms.form-error', ['key' => 'new_password-confirm'])
+                    </div>
+
+                    {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+
+                    {!! Form::close() !!}
                 </div>
-
-                <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
-                    {!! Form::label('new_password', __('New password')) !!}
-                    {!! Form::password('new_password', ['id' => 'new_password', 'class' => 'form-control', 'autocomplete' => 'new-password']) !!}
-                    @include('common.forms.form-error', ['key' => 'new_password'])
-                </div>
-
-
-                <div class="form-group{{ $errors->has('new_password-confirm') ? ' has-error' : '' }}">
-                    {!! Form::label('new_password-confirm', __('New password (confirm)')) !!}
-                    {!! Form::password('new_password-confirm', ['class' => 'form-control', 'autocomplete' => 'new-password']) !!}
-                    @include('common.forms.form-error', ['key' => 'new_password-confirm'])
-                </div>
-
-                {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
-
-                {!! Form::close() !!}
-            </div>
+            @endif
 
             <div class="tab-pane fade" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
                 {{ Form::model($user, ['route' => ['profile.updateprivacy', $user->name], 'method' => 'patch']) }}

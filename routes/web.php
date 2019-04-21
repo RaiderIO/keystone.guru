@@ -66,6 +66,15 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return view('misc.status');
     })->name('misc.status');
 
+    Route::get('login/google', 'Auth\GoogleLoginController@redirectToProvider')->name('login.google');
+    Route::get('login/google/callback', 'Auth\GoogleLoginController@handleProviderCallback')->name('login.google.callback');
+
+    Route::get('login/battlenet', 'Auth\BattleNetLoginController@redirectToProvider')->name('login.battlenet');
+    Route::get('login/battlenet/callback', 'Auth\BattleNetLoginController@handleProviderCallback')->name('login.battlenet.callback');
+
+    Route::get('login/discord', 'Auth\DiscordLoginController@redirectToProvider')->name('login.discord');
+    Route::get('login/discord/callback', 'Auth\DiscordLoginController@handleProviderCallback')->name('login.discord.callback');
+
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
 

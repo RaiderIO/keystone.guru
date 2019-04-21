@@ -28,6 +28,7 @@
         "folklore/image": "0.3.*",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "5.7.*",
+        "laravel/socialite": "^4.1",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.6",
         "miraris/monolog-discord-handler": "^0.2.0",
@@ -36,6 +37,8 @@
         "pragmarx/tracker": "dev-wotuu-bugfix",
         "santigarcor/laratrust": "5.0.*",
         "shrikeh/teapot": "^2.3",
+        "socialiteproviders/battlenet": "^2.0",
+        "socialiteproviders/discord": "^2.0",
         "tremby/laravel-git-version": "^1.1",
         "yajra/laravel-datatables-oracle": "~8.0"
     },
