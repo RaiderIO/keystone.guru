@@ -177,7 +177,8 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                     <a class="dropdown-item"
                                        href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
                                     <a class="dropdown-item"
-                                       href="{{ route('team.list') }}">{{ __('My teams') }} <sup class="text-primary">{{ __('NEW') }}</sup></a>
+                                       href="{{ route('team.list') }}">{{ __('My teams') }} <sup
+                                                class="text-success">{{ __('NEW') }}</sup></a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -350,132 +351,81 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 @auth
     @php($user = Auth::user())
     @if(!$user->legal_agreed)
-        <div class="modal fade" id="legal_modal" tabindex="-1" role="dialog"
-             aria-labelledby="legalModalLabel" aria-hidden="true"
-             data-keyboard="false" data-backdrop="static">
-            <div class="modal-dialog modal-md vertical-align-center">
-                <div class="modal-content">
-                    <div class="probootstrap-modal-flex">
-                        <div class="probootstrap-modal-content">
-                            <div class="form-group">
-                                {!! sprintf(__('Welcome back! In order to proceed, you have to agree to our %s, %s and %s.'),
-                                 '<a href="' . route('legal.terms') . '">terms of service</a>',
-                                 '<a href="' . route('legal.privacy') . '">privacy policy</a>',
-                                 '<a href="' . route('legal.cookies') . '">cookie policy</a>')
-                                 !!}
-                            </div>
-                            <div id="legal_confirm_btn" class="btn btn-primary">
-                                {{ __('I agree') }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+@section('modal-content')
+    <div class="form-group">
+        {!! sprintf(__('Welcome back! In order to proceed, you have to agree to our %s, %s and %s.'),
+         '<a href="' . route('legal.terms') . '">terms of service</a>',
+         '<a href="' . route('legal.privacy') . '">privacy policy</a>',
+         '<a href="' . route('legal.cookies') . '">cookie policy</a>')
+         !!}
+    </div>
+    <div id="legal_confirm_btn" class="btn btn-primary">
+        {{ __('I agree') }}
+    </div>
+@overwrite
+@include('common.general.modal', ['id' => 'legal_modal'])
+@endif
 @endauth
 
 <!-- Modal try -->
-<div class="modal fade" id="try_modal" tabindex="-1" role="dialog"
-     aria-labelledby="tryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md vertical-align-center">
-        <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="probootstrap-modal-flex">
-                <div class="probootstrap-modal-content">
-                    @include('common.forms.try', ['modal' => true])
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@section('modal-content')
+    @include('common.forms.try', ['modal' => true])
+@overwrite
+@include('common.general.modal', ['id' => 'try_modal'])
 <!-- END modal try -->
 
 <!-- Modal MDT import -->
-<div class="modal fade" id="mdt_import_modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-md vertical-align-center">
-        <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="probootstrap-modal-flex">
-                <div class="probootstrap-modal-content">
-                    {{ Form::open(['route' => 'dungeonroute.new.mdtimport']) }}
-                    <h3>
-                        {{ __('Import from MDT string') }}
-                    </h3>
-                    <div class="form-group">
-                        {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
-                        {{ Form::textarea('import_string_textarea', '', ['id' => 'import_string_textarea', 'class' => 'form-control']) }}
-                        {{ Form::hidden('import_string', '') }}
-                    </div>
-                    <div class="form-group">
-                        <div id="import_string_loader" class="bg-info p-1" style="display: none;">
-                            <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>
-                            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Parsing your string...') }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div id="import_string_details">
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div id="import_string_warnings">
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
-                        <div class="col-md">
-
-                        </div>
-                    </div>
-                    {{ Form::close() }}
-                </div>
-            </div>
+@section('modal-content')
+    {{ Form::open(['route' => 'dungeonroute.new.mdtimport']) }}
+    <h3>
+        {{ __('Import from MDT string') }}
+    </h3>
+    <div class="form-group">
+        {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
+        {{ Form::textarea('import_string_textarea', '', ['id' => 'import_string_textarea', 'class' => 'form-control']) }}
+        {{ Form::hidden('import_string', '') }}
+    </div>
+    <div class="form-group">
+        <div id="import_string_loader" class="bg-info p-1" style="display: none;">
+            <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>
+            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Parsing your string...') }}
         </div>
     </div>
-</div>
-<!-- END modal signup -->
+    <div class="form-group">
+        <div id="import_string_details">
+
+        </div>
+    </div>
+    <div class="form-group">
+        <div id="import_string_warnings">
+
+        </div>
+    </div>
+    <div class="form-group">
+        {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
+        <div class="col-md">
+
+        </div>
+    </div>
+    {{ Form::close() }}
+@overwrite
+@include('common.general.modal', ['id' => 'mdt_import_modal'])
+<!-- END modal MDT import -->
 
 @guest
     <!-- Modal login -->
-    <div class="modal fade" id="login_modal" tabindex="-1" role="dialog"
-         aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="login-modal-dialog modal-dialog modal-md vertical-align-center">
-            <div class="modal-content">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    <i class="fas fa-times"></i>
-                </button>
-                <div class="probootstrap-modal-flex">
-                    <div class="probootstrap-modal-content">
-                        @include('common.forms.login', array_merge(['modal' => true], $loginParams))
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END modal login -->
+@section('modal-content')
+    @include('common.forms.login', array_merge(['modal' => true], $loginParams))
+@overwrite
+@include('common.general.modal', ['id' => 'login_modal', 'class' => 'login-modal-dialog'])
+<!-- END modal login -->
 
-    <!-- Modal signup -->
-    <div class="modal fade" id="register_modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="register-modal-dialog modal-dialog modal-md vertical-align-center">
-            <div class="modal-content">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    <i class="fas fa-times"></i>
-                </button>
-                <div class="probootstrap-modal-flex">
-                    <div class="probootstrap-modal-content">
-                        @include('common.forms.register', array_merge(['modal' => true], $registerParams))
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END modal signup -->
+<!-- Modal register -->
+@section('modal-content')
+    @include('common.forms.register', array_merge(['modal' => true], $registerParams))
+@overwrite
+@include('common.general.modal', ['id' => 'register_modal', 'class' => 'register-modal-dialog'])
+<!-- END modal register -->
 @endguest
 
 <!-- Scripts -->

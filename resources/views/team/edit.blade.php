@@ -215,13 +215,15 @@ $userRole = $model->getUserRole(Auth::user());
                     <h4>
                         {{ __('Invite new members') }}
                     </h4>
-                    <div class="row">
-                        <div class="col-lg">
+                    <div class="col-xl-4">
+                        <div class="input-group-append">
                             {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
-                            ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
-                        </div>
-                        <div class="col-lg">
-                            {!! Form::button('<i class="far fa-copy"></i> ' . __('Copy to clipboard'), ['id' => 'team_invite_link_copy_to_clipboard', 'class' => 'btn btn-info col-md']) !!}
+                                ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                            <div class="input-group-append">
+                                <button id="team_invite_link_copy_to_clipboard" class="btn btn-info">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
