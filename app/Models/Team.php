@@ -122,6 +122,11 @@ class Team extends IconFileModel
         return $result;
     }
 
+    /**
+     * Changes the role of a user in this team.
+     * @param $user User The user of which the role should be changed.
+     * @param $role string The new role of the user.
+     */
     public function changeRole($user, $role)
     {
         $teamUser = $this->teamusers()->where('user_id', $user->id)->get()->first();

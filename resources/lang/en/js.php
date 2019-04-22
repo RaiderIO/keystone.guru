@@ -159,7 +159,7 @@ return [
 
     // Dungeonroute table
     'actions_label' => 'Actions',
-    'add_to_team_label' => 'Add to team',
+    'add_to_team_label' => 'Add to team...',
 
     // Teams
     'view_label' => 'View',

@@ -20,7 +20,19 @@ $isOAuth = $user->password === '';
     </script>
 @endsection
 
+
+<!-- Modal team select -->
+@section('modal-content')
+    <ul>
+        @foreach($user->teams as $team)
+            <?php /** @var $team \App\Models\Team */?>
+            <li>{{ $team->name }}</li>
+        @endforeach
+    </ul>
+@overwrite
+<!-- END modal team select -->
 @section('content')
+    @include('common.general.modal', ['id' => 'team_select_modal'])
 
     <div class="container">
         <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
@@ -35,12 +47,14 @@ $isOAuth = $user->password === '';
             @if(!$isOAuth)
                 <li class="nav-item">
                     <a class="nav-link" id="change-password-tab" data-toggle="tab" href="#change-password" role="tab"
-                       aria-controls="change-password" aria-selected="false"><i class="fas fa-key"></i> {{ __('Change password') }}</a>
+                       aria-controls="change-password" aria-selected="false"><i
+                                class="fas fa-key"></i> {{ __('Change password') }}</a>
                 </li>
             @endif
             <li class="nav-item">
                 <a class="nav-link" id="privacy-tab" data-toggle="tab" href="#privacy" role="tab"
-                   aria-controls="contact" aria-selected="false"><i class="fas fa-user-secret"></i> {{ __('Privacy') }}</a>
+                   aria-controls="contact" aria-selected="false"><i class="fas fa-user-secret"></i> {{ __('Privacy') }}
+                </a>
             </li>
         </ul>
 
@@ -60,11 +74,11 @@ $isOAuth = $user->password === '';
                     </div>
                 @endif
                 @if(!$isOAuth)
-                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                    {!! Form::label('email', __('Email')) !!}
-                    {!! Form::text('email', null, ['class' => 'form-control']) !!}
-                    @include('common.forms.form-error', ['key' => 'email'])
-                </div>
+                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        {!! Form::label('email', __('Email')) !!}
+                        {!! Form::text('email', null, ['class' => 'form-control']) !!}
+                        @include('common.forms.form-error', ['key' => 'email'])
+                    </div>
                 @endif
                 <div class="form-group{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">
                     {!! Form::label('game_server_region_id', __('Region')) !!}
