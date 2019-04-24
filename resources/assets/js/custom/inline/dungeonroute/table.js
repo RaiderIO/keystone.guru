@@ -3,9 +3,10 @@ class DungeonrouteTable extends InlineCode {
     constructor(options) {
         super(options);
         this._teamId = -1;
-        this._profileMode = false;
         this._viewMode = '';
         this._dt = {};
+
+        this._tableView = null;
     }
 
     /**
@@ -53,8 +54,21 @@ class DungeonrouteTable extends InlineCode {
      * Sets the table to be in profile view mode or not (only show your own routes).
      * @param value
      */
-    setProfileMode(value) {
-        this._profileMode = value;
+    setTableView(value) {
+        switch(value){
+            case 'profile': {
+                this._tableView = new ProfileTableView();
+                break;
+            }
+            case 'team': {
+                this._tableView = new TeamTableView();
+                break;
+            }
+            case 'routes': {
+                this._tableView = new RoutesTableView();
+                break;
+            }
+        }
     }
 
     /**
@@ -63,6 +77,7 @@ class DungeonrouteTable extends InlineCode {
      */
     setViewMode(viewMode) {
         this._viewMode = viewMode;
+        this._setColumns(this._tableView.getColumns(this._viewMode));
     }
 
 
