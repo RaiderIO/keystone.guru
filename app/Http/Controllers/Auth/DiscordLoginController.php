@@ -17,6 +17,7 @@ class DiscordLoginController extends OAuthLoginController
     /**
      * Obtain the user information from Discord.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function handleProviderCallback(Request $request)

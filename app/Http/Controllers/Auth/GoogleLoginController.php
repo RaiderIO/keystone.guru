@@ -17,6 +17,7 @@ class GoogleLoginController extends OAuthLoginController
     /**
      * Obtain the user information from Google.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function handleProviderCallback(Request $request)
