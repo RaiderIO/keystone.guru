@@ -173,6 +173,6 @@ $isOAuth = $user->password === '';
     <div class="mt-4">
         <h3>{{ __('My routes') }}</h3>
 
-        @include('common.dungeonroute.table', ['profile' => true])
+        @include('common.dungeonroute.table', ['view' => 'profile'])
     </div>
 @endsection

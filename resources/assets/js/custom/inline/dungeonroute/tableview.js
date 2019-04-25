@@ -22,22 +22,22 @@ class RoutesTableView extends TableView {
         super();
 
         this._columns = {
-            table: [
-                'dungeon',
-                'affixes',
-                'attributes',
-                'setup',
-                'author',
-                'views',
-                'rating'
+            list: [
+                {name: 'dungeon', width: '15%'},
+                {name: 'affixes', width: '15%'},
+                {name: 'attributes', width: '15%'},
+                {name: 'setup', width: '15%'},
+                {name: 'author', width: '15%'},
+                {name: 'views', width: '5%'},
+                {name: 'rating', width: '5%'},
             ],
             biglist: [
-                'preview',
-                'dungeon',
-                'features',
-                'author',
-                'views',
-                'rating'
+                {name: 'preview', width: '15%'},
+                {name: 'dungeon', width: '13%'},
+                {name: 'features', width: '25%'},
+                {name: 'author', width: '10%'},
+                {name: 'views', width: '5%'},
+                {name: 'rating', width: '5%'},
             ]
         };
     }
@@ -52,22 +52,22 @@ class ProfileTableView extends TableView {
         super();
 
         this._columns = {
-            table: [
-                'title',
-                'dungeon',
-                'affixes',
-                'attributes',
-                'setup',
-                'published',
-                'actions'
+            list: [
+                {name: 'title', width: '15%'},
+                {name: 'dungeon', width: '15%'},
+                {name: 'affixes', width: '15%'},
+                {name: 'attributes', width: '15%'},
+                {name: 'setup', width: '15%'},
+                {name: 'published', width: '5%'},
+                {name: 'actions', width: '10%'},
             ],
             biglist: [
-                'preview',
-                'title',
-                'dungeon',
-                'features',
-                'published',
-                'actions'
+                {name: 'preview', width: '15%'},
+                {name: 'title', width: '15%'},
+                {name: 'dungeon', width: '13%'},
+                {name: 'features', width: '25%'},
+                {name: 'published', width: '5%'},
+                {name: 'actions', width: '7%'},
             ]
         };
     }
@@ -82,20 +82,22 @@ class TeamTableView extends TableView {
         super();
 
         this._columns = {
-            table: [
-                'title',
-                'dungeon',
-                'affixes',
-                'attributes',
-                'setup',
-                'author'
+            list: [
+                {name: 'title', width: '15%'},
+                {name: 'dungeon', width: '15%'},
+                {name: 'affixes', width: '15%'},
+                {name: 'attributes', width: '15%'},
+                {name: 'setup', width: '15%'},
+                {name: 'author', width: '10%'},
+                {name: 'actions', width: '15%'},
             ],
             biglist: [
-                'preview',
-                'title',
-                'dungeon',
-                'features',
-                'author'
+                {name: 'preview', width: '15%'},
+                {name: 'title', width: '15%'},
+                {name: 'dungeon', width: '15%'},
+                {name: 'features', width: '25%'},
+                {name: 'author', width: '10%'},
+                {name: 'actions', width: '15%'},
             ]
         };
     }

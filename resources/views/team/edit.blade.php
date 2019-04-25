@@ -206,7 +206,7 @@ $userRole = $model->getUserRole(Auth::user());
                         {{ __('Route list') }}
                     </h4>
 
-                    @include('common.dungeonroute.table', ['team' => $model])
+                    @include('common.dungeonroute.table', ['view' => 'team', 'team' => $model])
                 </div>
             </div>
 

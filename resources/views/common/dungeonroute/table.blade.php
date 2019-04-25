@@ -1,9 +1,9 @@
 <?php
-$profile = isset($profile) ? $profile : false;
 $team = isset($team) ? $team : null;
-// Whitelist
+/** @var string $view */
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
-($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ? $_COOKIE['routes_viewmode'] : 'biglist';
+($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ?
+    $_COOKIE['routes_viewmode'] : 'biglist';
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/table'])
 
@@ -16,8 +16,8 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 
             // Init the code
             code.setTeamId({{ $team ? $team->id : -1}});
-            code.setProfileMode({{ $profile ? 'true' : 'false'}});
-            code.setViewMode("{{ $cookieViewMode }}");
+            code.setViewMode('{{ $cookieViewMode }}');
+            code.setTableView('{{ $view}}');
 
             // Build the table
             code.refreshTable();
@@ -81,76 +81,23 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         </div>
         <div class="mb-2 text-right">
             <button id="table_biglist_btn"
-                 class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} table_list_view_toggle"
-                 data-viewmode="biglist">
+                    class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} table_list_view_toggle"
+                    data-viewmode="biglist">
                 <i class="fas fa-th-list"></i>
             </button>
             <button id="table_list_btn"
-                 class="btn {{ $cookieViewMode === 'list' ? 'btn-primary' : 'btn-default' }}  table_list_view_toggle"
-                 data-viewmode="list">
+                    class="btn {{ $cookieViewMode === 'list' ? 'btn-primary' : 'btn-default' }}  table_list_view_toggle"
+                    data-viewmode="list">
                 <i class="fas fa-list"></i>
             </button>
         </div>
     </div>
 </div>
-<div id="routes_table_biglist_wrapper" class="{{ !$profile ? 'row' : '' }} routes_table_wrapper">
-    <div class="{{ !$profile ? 'col-xl-8 offset-xl-2' : '' }}">
-        <table id="routes_table_biglist" data-viewmode="biglist"
-               class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
-               width="100%">
-            <thead>
-            <tr>
-                <th width="15%">{{ __('Preview') }}</th>
-                @if(isset($team) || $profile)
-                <th width="15%" class="d-none d-md-table-cell">{{ __('Title') }}</th>
-                @endif
-                <th width="13%" class="d-none d-md-table-cell">{{ __('Dungeon') }}</th>
-                <th width="25%">{{ __('Features') }}</th>
-                <!-- Dummy header to allow for filtering based on attributes -->
-                <th width="15%" class="d-none">{{ __('Attributes') }}</th>
-                <th width="10%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
-                @if(!isset($team))
-                <th width="5%">{{ __('Views') }}</th>
-                <th width="5%">{{ __('Rating') }}</th>
-                @endif
-                @if($profile)
-                <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
-                <th width="7%">{{ __('Actions') }}</th>
-                @endif
-            </tr>
-            </thead>
+<table id="routes_table" class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
+       width="100%">
+    <thead>
+    </thead>
 
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div id="routes_table_list_wrapper" class="routes_table_wrapper" style="display: none;">
-    <table id="routes_table_list" data-viewmode="list"
-           class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
-           width="100%">
-        <thead>
-        <tr>
-            @if(isset($team) || $profile)
-            <th width="15%" class="d-none d-md-table-cell">{{ __('Title') }}</th>
-            @endif
-            <th width="15%">{{ __('Dungeon') }}</th>
-            <th width="15%" class="d-none d-md-table-cell">{{ __('Affixes') }}</th>
-            <th width="15%">{{ __('Attributes') }}</th>
-            <th width="15%" class="d-none d-lg-table-cell">{{ __('Setup') }}</th>
-            <th width="15%" class="d-none {{ $profile ? '' : 'd-lg-table-cell'}}">{{ __('Author') }}</th>
-            @if(!isset($team))
-            <th width="5%" class="d-none d-md-table-cell">{{ __('Views') }}</th>
-            <th width="5%">{{ __('Rating') }}</th>
-            @endif
-            @if($profile)
-            <th width="5%" class="d-none d-lg-table-cell">{{ __('Published') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
-            @endif
-        </tr>
-        </thead>
-
-        <tbody>
-        </tbody>
-    </table>
-</div>
+    <tbody>
+    </tbody>
+</table>

@@ -3,8 +3,8 @@ class DungeonrouteTable extends InlineCode {
     constructor(options) {
         super(options);
         this._teamId = -1;
-        this._viewMode = '';
-        this._dt = {};
+        this._viewMode = 'biglist';
+        this._dt = null;
 
         this._tableView = null;
     }
@@ -24,15 +24,18 @@ class DungeonrouteTable extends InlineCode {
             let affixes = $('#affixes').val();
             let attributes = $('#attributes').val();
 
-            let offset = self._viewMode === 'biglist' ? 1 : 0;
-            // Profile mode and team mode show title
-            if (self._profileMode || self._teamId > -1) {
-                offset += 1;
-            }
-            self._dt[self._viewMode].column(offset).search(dungeonId);
-            self._dt[self._viewMode].column(1 + offset).search(affixes);
-            self._dt[self._viewMode].column(2 + offset).search(attributes);
-            self._dt[self._viewMode].draw();
+            // Find wherever the columns are we're looking for, then filter using them
+            // https://stackoverflow.com/questions/32598279/how-to-get-name-of-datatable-column
+            $.each(self._dt.settings().init().columns, function(index, value){
+                if( value.name === 'dungeon_id' ){
+                    self._dt.column(index).search(dungeonId);
+                } else if( value.name === 'affixes.id' ){
+                    self._dt.column(index).search(affixes);
+                } else if( value.name === 'routeattributes.name' ){
+                    self._dt.column(index).search(attributes);
+                }
+            });
+            self._dt.draw();
         });
 
         $('.table_list_view_toggle').bind('click', function () {
@@ -55,7 +58,7 @@ class DungeonrouteTable extends InlineCode {
      * @param value
      */
     setTableView(value) {
-        switch(value){
+        switch (value) {
             case 'profile': {
                 this._tableView = new ProfileTableView();
                 break;
@@ -69,6 +72,8 @@ class DungeonrouteTable extends InlineCode {
                 break;
             }
         }
+
+        console.assert(this._tableView !== null, 'Unable to find tableview for ' + value, this);
     }
 
     /**
@@ -77,9 +82,7 @@ class DungeonrouteTable extends InlineCode {
      */
     setViewMode(viewMode) {
         this._viewMode = viewMode;
-        this._setColumns(this._tableView.getColumns(this._viewMode));
     }
-
 
     /**
      * Binds a datatables instance to a jquery element.
@@ -87,16 +90,10 @@ class DungeonrouteTable extends InlineCode {
     refreshTable() {
         let self = this;
 
-        // Send cookie only on the current page
+        // Send cookie
         Cookies.set('routes_viewmode', self._viewMode, {path: ''});
 
-        let $element = $('#routes_table_' + self._viewMode);
-
-        // Hide all wrappers
-        $('.routes_table_wrapper').hide();
-
-        // Show the appropriate wrapper
-        $('#routes_table_' + self._viewMode + '_wrapper').show();
+        let $element = $('#routes_table');
 
         // Set buttons to the correct state
         $('.table_list_view_toggle').removeClass('btn-default').removeClass('btn-primary').addClass('btn-default');
@@ -104,177 +101,169 @@ class DungeonrouteTable extends InlineCode {
         // This is now the selected button
         $('#table_' + self._viewMode + '_btn').removeClass('btn-default').addClass('btn-primary');
 
-        // If not initialized
-        if (!self._dt.hasOwnProperty(self._viewMode)) {
-            self._dt[self._viewMode] = $element.DataTable({
-                'processing': true,
-                'serverSide': true,
-                'responsive': true,
-                'ajax': {
-                    'url': '/ajax/routes',
-                    'data': function (d) {
-                        d.favorites = $('#favorites').is(':checked') ? 1 : 0;
-                        d.mine = self._profileMode ? 1 : 0;
-                        if (self._teamId > -1) {
-                            d.team_id = self._teamId;
-                        }
-                    },
-                    'cache': false
-                },
-                'drawCallback': function (settings) {
-                    // Don't do anything when the message 'no data available' is showing
-                    if (settings.json.data.length > 0) {
-                        // For each row in the body
-                        $.each(self._dt[self._viewMode].$('tbody tr'), function (trIndex, trValue) {
-                            // For each td in the row
-                            $.each($(trValue).find('td'), function (tdIndex, tdValue) {
-                                $(tdValue).data('publickey', settings.json.data[trIndex].public_key);
-                            });
-                        });
+        if (self._dt !== null) {
+            self._dt.destroy();
+            $element.empty();
+        }
+
+        self._dt = $element.DataTable({
+            'processing': true,
+            'serverSide': true,
+            'responsive': true,
+            'ajax': {
+                'url': '/ajax/routes',
+                'data': function (d) {
+                    d.favorites = $('#favorites').is(':checked') ? 1 : 0;
+                    d.mine = self._tableView.getName() === 'profile' ? 1 : 0;
+                    if (self._teamId > -1) {
+                        d.team_id = self._teamId;
                     }
                 },
-                'lengthMenu': [25],
-                'bLengthChange': false,
-                // Order by affixes by default
-                'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
-                'columns': self._getColumns()
-            });
-
-            self._dt[self._viewMode].on('draw.dt', function (e, settings, json, xhr) {
-                refreshTooltips();
-                let $deleteBtns = $('.dungeonroute-delete');
-                $deleteBtns.unbind('click');
-                $deleteBtns.bind('click', self._promptDeleteDungeonRoute);
-
-                let $cloneBtns = $('.dungeonroute-clone');
-                $cloneBtns.unbind('click');
-                $cloneBtns.bind('click', self._cloneDungeonRoute);
-
-                $('.owl-carousel').owlCarousel({
-                    // True to enable overlayed buttons (custom styled, wasted time :( )
-                    nav: false,
-                    loop: true,
-                    dots: false,
-                    lazyLoad: true,
-                    lazyLoadEager: 1,
-                    items: 1
-                });
-            });
-
-            // When in biglist, the first entry does not trigger the click events
-            let notFirst = self._viewMode === 'biglist' ? ':not(:first-child)' : '';
-            let notLast = self._profileMode ? ':not(:last-child)' : '';
-
-            self._dt[self._viewMode].on('click', 'tbody td' + notFirst + notLast, function (clickEvent) {
-                let key = $(clickEvent.currentTarget).data('publickey');
-
-                window.open((self._profileMode ? '/replace_me/edit' : '/replace_me').replace('replace_me', key));
-            });
-
-            self._dt[self._viewMode].on('mouseenter', 'tbody tr', function () {
-                self._dt[self._viewMode].$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
-            });
-
-            self._dt[self._viewMode].on('mouseleave', 'tbody tr', function () {
-                if ($(this).hasClass('selected')) {
-                    $(this).removeClass('selected');
+                'cache': false
+            },
+            'drawCallback': function (settings) {
+                // Don't do anything when the message 'no data available' is showing
+                if (settings.json.data.length > 0) {
+                    // For each row in the body
+                    $.each(self._dt.$('tbody tr'), function (trIndex, trValue) {
+                        // For each td in the row
+                        $.each($(trValue).find('td'), function (tdIndex, tdValue) {
+                            $(tdValue).data('publickey', settings.json.data[trIndex].public_key);
+                        });
+                    });
                 }
+            },
+            'lengthMenu': [25],
+            'bLengthChange': false,
+            // Order by affixes by default
+            'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
+            'columns': self._getColumns()
+        });
+
+        self._dt.on('draw.dt', function (e, settings, json, xhr) {
+            refreshTooltips();
+            let $deleteBtns = $('.dungeonroute-delete');
+            $deleteBtns.unbind('click');
+            $deleteBtns.bind('click', self._promptDeleteDungeonRoute);
+
+            let $cloneBtns = $('.dungeonroute-clone');
+            $cloneBtns.unbind('click');
+            $cloneBtns.bind('click', self._cloneDungeonRoute);
+
+            $('.owl-carousel').owlCarousel({
+                // True to enable overlayed buttons (custom styled, wasted time :( )
+                nav: false,
+                loop: true,
+                dots: false,
+                lazyLoad: true,
+                lazyLoadEager: 1,
+                items: 1
             });
-        } else {
-            // Force a click on the filter button to refresh the table
-            $('#dungeonroute_filter').click();
-        }
+        });
+
+        // When in biglist, the first entry does not trigger the click events
+        let notFirst = self._viewMode === 'biglist' ? ':not(:first-child)' : '';
+        let notLast = self._tableView.getName() === 'profile' ? ':not(:last-child)' : '';
+
+        self._dt.on('click', 'tbody td' + notFirst + notLast, function (clickEvent) {
+            let key = $(clickEvent.currentTarget).data('publickey');
+
+            window.open((self._tableView.getName() === 'profile' ? '/replace_me/edit' : '/replace_me').replace('replace_me', key));
+        });
+
+        self._dt.on('mouseenter', 'tbody tr', function () {
+            self._dt.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        self._dt.on('mouseleave', 'tbody tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+        });
     }
 
     /**
      * Get the columns based on the current view for the table.
      **/
     _getColumns() {
+        let self = this;
 
-        let columns = [];
-
-        if (this._viewMode === 'biglist') {
-            columns.push({
+        let columns = {
+            preview: {
+                'title': lang.get('messages.preview_label'),
                 'data': 'public_key',
                 'name': 'public_key',
                 'render': function (data, type, row, meta) {
                     return handlebarsThumbnailCarouselParse(row);
                 },
                 'orderable': false
-            });
-        }
-
-        if (this._profileMode || this._teamId > -1) {
-            columns.push({
+            },
+            title: {
+                'title': lang.get('messages.title_label'),
                 'data': 'title',
                 'name': 'title'
-            });
-        }
-
-        columns.push({
-            'data': 'dungeon.name',
-            'name': 'dungeon_id',
-            'render': function (data, type, row, meta) {
-                return data;
             },
-            'className': this._viewMode === 'biglist' ? 'd-none d-md-table-cell' : '',
-        });
-
-        if (this._viewMode === 'biglist') {
-            columns.push({
+            dungeon: {
+                'title': lang.get('messages.dungeon_label'),
+                'data': 'dungeon.name',
+                'name': 'dungeon_id',
+                'render': function (data, type, row, meta) {
+                    return data;
+                },
+                'className': this._viewMode === 'biglist' ? 'd-none d-md-table-cell' : '',
+            },
+            features: {
+                'title': lang.get('messages.features_label'),
                 'data': 'affixes',
                 'name': 'affixes.id',
                 'render': function (data, type, row, meta) {
                     return handlebarsBiglistFeaturesParse(row);
                 },
-            });
-        } else {
-            columns.push({
+            },
+            affixes: {
+                'title': lang.get('messages.affixes_label'),
                 'data': 'affixes',
                 'name': 'affixes.id',
                 'render': function (data, type, row, meta) {
                     return handlebarsAffixGroupsParse(data);
                 },
                 'className': 'd-none d-md-table-cell'
-            });
-        }
-
-        columns.push({
-            'data': 'routeattributes',
-            'name': 'routeattributes.name',
-            'render': function (data, type, row, meta) {
-                return handlebarsRouteAttributesParse(data);
             },
-            // Hide this column when in big list mode; we can't remove it since we need it in order for the filtering
-            // to work on the server-side
-            'className': this._viewMode === 'biglist' ? 'd-none' : ''
-        });
-
-        if (this._viewMode === 'list') {
-            columns.push({
+            attributes: {
+                'title': lang.get('messages.attributes_label'),
+                'data': 'routeattributes',
+                'name': 'routeattributes.name',
+                'render': function (data, type, row, meta) {
+                    return handlebarsRouteAttributesParse(data);
+                },
+                // Hide this column when in big list mode; we can't remove it since we need it in order for the filtering
+                // to work on the server-side
+                'className': this._viewMode === 'biglist' ? 'd-none' : ''
+            },
+            setup: {
+                'title': lang.get('messages.setup_label'),
                 'data': 'setup',
                 'render': function (data, type, row, meta) {
                     return handlebarsGroupSetupParse(data);
                 },
                 'className': 'd-none d-lg-table-cell',
                 'orderable': false
-            });
-        }
-        columns.push({
-            'data': 'author.name',
-            'name': 'author.name',
-            'className': 'd-none ' + (this._profileMode ? '' : 'd-lg-table-cell')
-        });
-
-        // Don't care for this when viewing in team
-        if (this._teamId === -1) {
-            columns.push({
+            },
+            author: {
+                'title': lang.get('messages.author_label'),
+                'data': 'author.name',
+                'name': 'author.name',
+                'className': 'd-none ' + (self._tableView.getName() === 'profile' ? '' : 'd-lg-table-cell')
+            },
+            views: {
+                'title': lang.get('messages.views_label'),
                 'data': 'views',
                 'name': 'views',
                 // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
-            });
-            columns.push({
+            },
+            rating: {
+                'title': lang.get('messages.rating_label'),
                 'name': 'rating',
                 'render': function (data, type, row, meta) {
                     let result = '-';
@@ -290,27 +279,44 @@ class DungeonrouteTable extends InlineCode {
 
                     return result;
                 }
-            });
-        }
-
-        // Only display these columns when we're displaying the table in profile
-        if (this._profileMode) {
-            columns.push({
+            },
+            published: {
+                'title': lang.get('messages.published_label'),
                 'render': function (data, type, row, meta) {
                     return row.published === 1 ? 'Yes' : 'No';
                 },
                 'className': 'd-none d-lg-table-cell',
-            });
-
-            columns.push({
+            },
+            actions: {
+                'title': lang.get('messages.actions_label'),
                 'render': function (data, type, row, meta) {
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
                     return template($.extend({public_key: row.public_key}, getHandlebarsDefaultVariables()));
                 }
-            });
+            }
+        };
+
+        // Get a list of strings of what columns we want
+        let viewColumns = this._tableView.getColumns(this._viewMode);
+
+        // Map the string columns to actual DT columns and return the result
+        let result = [];
+        for (let index in viewColumns) {
+            // Satisfy PhpStorm..
+            if (viewColumns.hasOwnProperty(index)) {
+                // Object containing name and width of the column
+                let column = viewColumns[index];
+                if (columns.hasOwnProperty(column.name)) {
+                    let dtColumn = columns[column.name];
+                    dtColumn.width = column.width;
+                    result.push(dtColumn);
+                } else {
+                    console.error('Unable to find DT column for view column ', column);
+                }
+            }
         }
 
-        return columns;
+        return result;
     }
 
     /**

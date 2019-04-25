@@ -172,5 +172,19 @@ return [
     'team_moderator' => 'Moderate team',
     'team_collaborator' => 'Edit routes',
     'team_member' => 'View routes',
-    'remove_label' => 'Remove'
+    'remove_label' => 'Remove',
+
+    // Dungeonroute table headers
+    'preview_label' => 'Preview',
+    'title_label' => 'Title',
+    'dungeon_label' => 'Dungeon',
+    'features_label' => 'Features',
+    // 'affixes_label' => 'Affixes',
+    // 'attributes_label' => 'Attributes',
+    // 'setup_label' => 'Setup',
+    'author_label' => 'Author',
+    'views_label' => 'Views',
+    'rating_label' => 'Rating',
+    'published_label' => 'Published',
+    // 'actions_label' => 'Actions',
 ];
