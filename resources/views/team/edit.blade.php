@@ -35,6 +35,28 @@ $userRole = $model->getUserRole(Auth::user());
         var _userIsModerator = {!! $userRole === 'admin' || $userRole === 'moderator' ? 'true' : 'false' !!};
 
         $(function () {
+            let code = _inlineManager.getInlineCode('dungeonroute/table');
+            // Add route to team button
+            $('#add_route_btn').bind('click', function(){
+                let tableView = code.getTableView();
+                tableView.setAddMode(true);
+
+                code.refreshTable();
+                $(this).hide();
+                $('#view_existing_routes').show();
+            });
+
+            // Cancel button when done adding routes
+            $('#view_existing_routes').bind('click', function(){
+                let tableView = code.getTableView();
+                tableView.setAddMode(false);
+
+                code.refreshTable();
+                $(this).hide();
+                $('#add_route_btn').show();
+            });
+
+
             let columns = [{
                 'targets': 2,
                 'render': function (data, type, row, meta) {
@@ -198,7 +220,8 @@ $userRole = $model->getUserRole(Auth::user());
         @isset($model)
             <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
                 <div class="form-group">
-                    <button class="btn btn-success col-md"><i class="fas fa-plus"></i> {{ __('Add route') }}</button>
+                    <button id="add_route_btn" class="btn btn-success col-md"><i class="fas fa-plus"></i> {{ __('Add route') }}</button>
+                    <button id="view_existing_routes" class="btn btn-danger col-md" style="display: none;"><i class="fas fa-times"></i> {{ __('Cancel') }}</button>
                 </div>
 
                 <div class="form-group mt-2">

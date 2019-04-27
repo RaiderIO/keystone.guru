@@ -160,15 +160,6 @@
     background-color: rgba(255, 255, 255, 0.15);
 }
 
-.routes_table_wrapper .dataTables_filter {
-    display: none;
-}
-
-.routes_table_wrapper .route_thumbnail {
-    width: 192px;
-    height: 128px;
-}
-
 .routes_table .limit_width {
     max-width: 400px;
     overflow: hidden;
@@ -180,6 +171,10 @@
     .routes_table .limit_width {
         max-width: 200px;
     }
+}
+
+#routes_table .not_clickable {
+    cursor: default !important;
 }
 
 /** OWL.CAROUSEL */

@@ -15,9 +15,12 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             let code = _inlineManager.getInlineCode('dungeonroute/table');
 
             // Init the code
-            code.setTeamId({{ $team ? $team->id : -1}});
             code.setViewMode('{{ $cookieViewMode }}');
-            code.setTableView('{{ $view}}');
+            let tableView = code.setTableView('{{ $view}}');
+            // Make sure the TeamID is set if we need it
+            if (typeof tableView.setTeamId === 'function') {
+                tableView.setTeamId({{ $team ? $team->id : -1}});
+            }
 
             // Build the table
             code.refreshTable();

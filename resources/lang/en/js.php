@@ -187,4 +187,5 @@ return [
     'rating_label' => 'Rating',
     'published_label' => 'Published',
     // 'actions_label' => 'Actions',
+    'add_route_label' => 'Add',
 ];

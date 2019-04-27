@@ -26,12 +26,12 @@ class DungeonrouteTable extends InlineCode {
 
             // Find wherever the columns are we're looking for, then filter using them
             // https://stackoverflow.com/questions/32598279/how-to-get-name-of-datatable-column
-            $.each(self._dt.settings().init().columns, function(index, value){
-                if( value.name === 'dungeon_id' ){
+            $.each(self._dt.settings().init().columns, function (index, value) {
+                if (value.name === 'dungeon_id') {
                     self._dt.column(index).search(dungeonId);
-                } else if( value.name === 'affixes.id' ){
+                } else if (value.name === 'affixes.id') {
                     self._dt.column(index).search(affixes);
-                } else if( value.name === 'routeattributes.name' ){
+                } else if (value.name === 'routeattributes.name') {
                     self._dt.column(index).search(attributes);
                 }
             });
@@ -46,11 +46,10 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
-     * Set the team ID (for filtering purposes)
-     * @param value
+     * Gets the view that is handling the display of the table.
      */
-    setTeamId(value) {
-        this._teamId = value;
+    getTableView() {
+        return this._tableView;
     }
 
     /**
@@ -74,6 +73,7 @@ class DungeonrouteTable extends InlineCode {
         }
 
         console.assert(this._tableView !== null, 'Unable to find tableview for ' + value, this);
+        return this._tableView;
     }
 
     /**
@@ -114,10 +114,8 @@ class DungeonrouteTable extends InlineCode {
                 'url': '/ajax/routes',
                 'data': function (d) {
                     d.favorites = $('#favorites').is(':checked') ? 1 : 0;
-                    d.mine = self._tableView.getName() === 'profile' ? 1 : 0;
-                    if (self._teamId > -1) {
-                        d.team_id = self._teamId;
-                    }
+                    d = $.extend(d, self._tableView.getAjaxParameters());
+                    console.log(d);
                 },
                 'cache': false
             },
@@ -161,11 +159,8 @@ class DungeonrouteTable extends InlineCode {
             });
         });
 
-        // When in biglist, the first entry does not trigger the click events
-        let notFirst = self._viewMode === 'biglist' ? ':not(:first-child)' : '';
-        let notLast = self._tableView.getName() === 'profile' ? ':not(:last-child)' : '';
-
-        self._dt.on('click', 'tbody td' + notFirst + notLast, function (clickEvent) {
+        self._dt.on('click', 'tbody td.clickable', function (clickEvent) {
+            console.log('clicked!');
             let key = $(clickEvent.currentTarget).data('publickey');
 
             window.open((self._tableView.getName() === 'profile' ? '/replace_me/edit' : '/replace_me').replace('replace_me', key));
@@ -293,6 +288,13 @@ class DungeonrouteTable extends InlineCode {
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
                     return template($.extend({public_key: row.public_key}, getHandlebarsDefaultVariables()));
                 }
+            },
+            addroute: {
+                'title': lang.get('messages.actions_label'),
+                'render': function (data, type, row, meta) {
+                    let template = Handlebars.templates['dungeonroute_table_profile_add_route_template'];
+                    return template($.extend({public_key: row.public_key}, getHandlebarsDefaultVariables()));
+                }
             }
         };
 
@@ -309,6 +311,7 @@ class DungeonrouteTable extends InlineCode {
                 if (columns.hasOwnProperty(column.name)) {
                     let dtColumn = columns[column.name];
                     dtColumn.width = column.width;
+                    dtColumn.className = !column.hasOwnProperty('clickable') || column.clickable === true ? 'clickable' : 'not_clickable';
                     result.push(dtColumn);
                 } else {
                     console.error('Unable to find DT column for view column ', column);

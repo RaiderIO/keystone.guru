@@ -3,6 +3,10 @@ class TableView {
         this._columns = [];
     }
 
+    getAjaxParameters() {
+        return {};
+    }
+
     getName() {
         return 'OVERWRITEME';
     }
@@ -32,7 +36,7 @@ class RoutesTableView extends TableView {
                 {name: 'rating', width: '5%'},
             ],
             biglist: [
-                {name: 'preview', width: '15%'},
+                {name: 'preview', width: '15%', clickable: false},
                 {name: 'dungeon', width: '13%'},
                 {name: 'features', width: '25%'},
                 {name: 'author', width: '10%'},
@@ -59,17 +63,21 @@ class ProfileTableView extends TableView {
                 {name: 'attributes', width: '15%'},
                 {name: 'setup', width: '15%'},
                 {name: 'published', width: '5%'},
-                {name: 'actions', width: '10%'},
+                {name: 'actions', width: '10%', clickable: false},
             ],
             biglist: [
-                {name: 'preview', width: '15%'},
+                {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '13%'},
                 {name: 'features', width: '25%'},
                 {name: 'published', width: '5%'},
-                {name: 'actions', width: '7%'},
+                {name: 'actions', width: '7%', clickable: false},
             ]
         };
+    }
+
+    getAjaxParameters() {
+        return {mine: 1};
     }
 
     getName() {
@@ -81,6 +89,38 @@ class TeamTableView extends TableView {
     constructor() {
         super();
 
+        this._addMode = false;
+    }
+
+    /**
+     * Set the team ID (for filtering purposes)
+     * @param value
+     */
+    setTeamId(value) {
+        this._teamId = value;
+    }
+
+    /**
+     * Sets 'add route mode' to be enabled or not.
+     * @param value True or false.
+     */
+    setAddMode(value) {
+        this._addMode = value;
+    }
+
+    /**
+     * Get the parameters when sending the AJAX request
+     * @returns {{team_id: *}}
+     */
+    getAjaxParameters() {
+        let params = {team_id: this._teamId};
+        if (this._addMode) {
+            params.available = 1;
+        }
+        return params;
+    }
+
+    getColumns(view) {
         this._columns = {
             list: [
                 {name: 'title', width: '15%'},
@@ -89,17 +129,26 @@ class TeamTableView extends TableView {
                 {name: 'attributes', width: '15%'},
                 {name: 'setup', width: '15%'},
                 {name: 'author', width: '10%'},
-                {name: 'actions', width: '15%'},
             ],
             biglist: [
-                {name: 'preview', width: '15%'},
+                {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '15%'},
                 {name: 'features', width: '25%'},
                 {name: 'author', width: '10%'},
-                {name: 'actions', width: '15%'},
             ]
         };
+
+        // Push different columns based on if add mode is enabled or not
+        if (this._addMode) {
+            this._columns.list.push({name: 'addroute', width: '15%', clickable: false});
+            this._columns.biglist.push({name: 'addroute', width: '15%', clickable: false});
+        } else {
+            this._columns.list.push({name: 'actions', width: '15%', clickable: false});
+            this._columns.biglist.push({name: 'actions', width: '15%', clickable: false});
+        }
+
+        return super.getColumns(view);
     }
 
     getName() {
