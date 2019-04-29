@@ -37,7 +37,7 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
         $(function () {
             let code = _inlineManager.getInlineCode('dungeonroute/table');
             // Add route to team button
-            $('#add_route_btn').bind('click', function(){
+            $('#add_route_btn').bind('click', function () {
                 let tableView = code.getTableView();
                 tableView.setAddMode(true);
 
@@ -47,13 +47,24 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
             });
 
             // Cancel button when done adding routes
-            $('#view_existing_routes').bind('click', function(){
+            $('#view_existing_routes').bind('click', function () {
                 let tableView = code.getTableView();
                 tableView.setAddMode(false);
 
                 code.refreshTable();
                 $(this).hide();
                 $('#add_route_btn').show();
+            });
+
+            $('#delete_team').bind('click', function(clickEvent){
+                showConfirmYesCancel(lang.get('messages.delete_team_confirm_label'), function(){
+                    // Change the method to DELETE
+                    $('#details [name="_method"]').val('DELETE');
+                    // Submit the form
+                    $('#details form').submit();
+                }, null, {type: 'error'});
+
+                clickEvent.preventDefault();
             });
 
 
@@ -221,8 +232,10 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
         @isset($model)
             <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
                 <div class="form-group">
-                    <button id="add_route_btn" class="btn btn-success col-md-4"><i class="fas fa-plus"></i> {{ __('Add route') }}</button>
-                    <button id="view_existing_routes" class="btn btn-danger col-md-4" style="display: none;"><i class="fas fa-times"></i> {{ __('Cancel') }}</button>
+                    <button id="add_route_btn" class="btn btn-success col-md-4"><i
+                                class="fas fa-plus"></i> {{ __('Add route') }}</button>
+                    <button id="view_existing_routes" class="btn btn-danger col-md-4" style="display: none;"><i
+                                class="fas fa-times"></i> {{ __('Cancel') }}</button>
                 </div>
 
                 <div class="form-group mt-2">
@@ -245,7 +258,7 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
                                 ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                             <div class="input-group-append">
                                 <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
-                                data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
+                                        data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
                                     <i class="far fa-copy"></i>
                                 </button>
                             </div>
@@ -277,7 +290,8 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
             </div>
         @endisset
 
-        <div class="tab-pane fade @if(!isset($model)) show active @endif" id="details" role="tabpanel" aria-labelledby="details-tab">
+        <div class="tab-pane fade @if(!isset($model)) show active @endif" id="details" role="tabpanel"
+             aria-labelledby="details-tab">
             @isset($model)
                 {{ Form::model($model, ['route' => ['team.update', $model->id], 'method' => 'patch', 'files' => true]) }}
             @else
@@ -306,7 +320,18 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
                 </div>
             @endif
 
-            {!! Form::submit(isset($model) ? __('Save') : __('Submit'), ['class' => 'btn btn-info']) !!}
+            <div class="row">
+                <div class="col">
+                    {!! Form::submit(isset($model) ? __('Save') : __('Submit'), ['class' => 'btn btn-info']) !!}
+                </div>
+                <div class="col">
+                    @if($model->getUserRole(Auth::user()) === 'admin')
+                        <button id="delete_team" class="btn btn-danger float-right">
+                            <i class="fas fa-trash"></i> {{ __('Delete team') }}
+                        </button>
+                    @endif
+                </div>
+            </div>
 
             {!! Form::close() !!}
         </div>

@@ -174,6 +174,9 @@ return [
     'team_member' => 'View routes',
     'remove_label' => 'Remove',
 
+    'team_add_route_successful' => 'Route added to team successfully',
+    'team_remove_route_successful' => 'Route removed from team successfully',
+
     // Dungeonroute table headers
     'preview_label' => 'Preview',
     'title_label' => 'Title',
@@ -190,6 +193,9 @@ return [
     'add_route_label' => 'Add',
     'remove_route_label' => 'Remove',
 
-    'team_add_route_successful' => 'Route added to team successfully',
-    'team_remove_route_successful' => 'Route removed from team successfully',
+    'yes_label' => 'Yes',
+    'no_label' => 'No',
+    'cancel_label' => 'Cancel',
+
+    'delete_team_confirm_label' => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?'
 ];

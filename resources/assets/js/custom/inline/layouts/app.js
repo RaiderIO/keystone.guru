@@ -206,6 +206,38 @@ function _showNotification(opts) {
     }, opts)).show();
 }
 
+function _showConfirm(opts) {
+    let n = new Noty($.extend({
+        theme: 'bootstrap-v4',
+        layout: 'center',
+        modal: true
+    }, opts));
+    n.show();
+}
+
+function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
+    _showConfirm($.extend({
+            type: 'info',
+            text: text,
+            buttons: [
+                Noty.button(lang.get('messages.yes_label'), 'btn btn-success', function (n) {
+                    if (typeof yesCallback === 'function') {
+                        yesCallback();
+                    }
+                    n.close();
+                }, {id: 'yes-button', 'data-status': 'ok'}),
+
+                Noty.button(lang.get('messages.cancel_label'), 'btn btn-danger', function (n) {
+                    if (typeof noCallback === 'function') {
+                        noCallback();
+                    }
+                    n.close();
+                })
+            ]
+        }, opts)
+    );
+}
+
 /**
  * Shows a success notification message.
  * @param text The text to display.

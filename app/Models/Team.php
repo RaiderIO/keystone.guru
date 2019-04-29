@@ -216,11 +216,14 @@ class Team extends IconFileModel
      */
     public function addMember($user, $role)
     {
-        $teamUser = new TeamUser();
-        $teamUser->team_id = $this->id;
-        $teamUser->user_id = $user->id;
-        $teamUser->role = $role;
-        $teamUser->save();
+        // Prevent duplicate member listings
+        if (!$this->isUserMember($user)) {
+            $teamUser = new TeamUser();
+            $teamUser->team_id = $this->id;
+            $teamUser->user_id = $user->id;
+            $teamUser->role = $role;
+            $teamUser->save();
+        }
     }
 
     /**
@@ -238,5 +241,23 @@ class Team extends IconFileModel
         } while (Team::all()->where('public_key', $newKey)->count() > 0);
 
         return $newKey;
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete route properly if it gets deleted
+        static::deleting(function ($item) {
+            /** @var $item Team */
+
+            // Delete icons
+            $item->iconfile->delete();
+
+            // Remove all users associated with this team
+            TeamUser::where('team_id', $item->id)->delete();
+            // Unassign all routes from this team
+            DungeonRoute::where('team_id', $item->id)->update(['team_id' => -1]);
+        });
     }
 }

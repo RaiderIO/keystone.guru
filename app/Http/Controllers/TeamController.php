@@ -61,8 +61,10 @@ class TeamController extends Controller
                 }
             }
 
-            // If saving team + logo was successful, save our own user as its first member
-            $team->addMember(Auth::user(), 'admin');
+            if ($new) {
+                // If saving team + logo was successful, save our own user as its first member
+                $team->addMember(Auth::user(), 'admin');
+            }
         }
 
         return $team;
@@ -84,6 +86,23 @@ class TeamController extends Controller
     public function edit(Request $request, Team $team)
     {
         return view('team.edit', ['model' => $team]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Team $team
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function delete(Request $request, Team $team)
+    {
+        if ($team->isUserMember(Auth::user()) && $team->getUserRole(Auth::user()) === 'admin') {
+            try {
+                $team->delete();
+            } catch (\Exception $ex) {
+                abort(500);
+            }
+        }
+        return redirect()->route('team.list');
     }
 
     /**
@@ -128,7 +147,7 @@ class TeamController extends Controller
     public function list()
     {
         $user = Auth::user();
-        return view('team.list', ['models' => $user->teams()->where('user_id', $user->id)->get()]);
+        return view('team.list', ['models' => $user->teams]);
     }
 
     /**

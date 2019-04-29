@@ -341,7 +341,7 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _promptDeleteDungeonRoute(clickEvent) {
-        if (confirm(lang.get('messages.route_delete_confirm'))) {
+        showConfirmYesCancel(lang.get('messages.route_delete_confirm'), function () {
             let publicKey = $(clickEvent.target).data('publickey');
 
             $.ajax({
@@ -354,7 +354,7 @@ class DungeonrouteTable extends InlineCode {
                     $('#dungeonroute_filter').trigger('click');
                 }
             });
-        }
+        });
 
         // Prevent clicking delete from opening the route after it returns
         clickEvent.preventDefault();

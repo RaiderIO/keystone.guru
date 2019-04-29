@@ -132,6 +132,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::get('teams', 'TeamController@list')->name('team.list');
         Route::get('team/new', 'TeamController@new')->name('team.new');
         Route::get('team/{team}', 'TeamController@edit')->name('team.edit');
+        Route::get('team/{team}', 'TeamController@delete')->name('team.delete');
 
         Route::post('team/new', 'TeamController@savenew')->name('team.savenew');
         Route::patch('team/{team}', 'TeamController@update')->name('team.update');
