@@ -1,7 +1,7 @@
 <?php
 /** @var \App\Models\Team $model */
 $title = isset($model) ? __('Edit team') : __('New team');
-$userRole = $model->getUserRole(Auth::user());
+$userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
 ?>
 @extends('layouts.app', ['showAds' => false, 'title' => $title])
 @section('header-title', $title)
@@ -277,7 +277,7 @@ $userRole = $model->getUserRole(Auth::user());
             </div>
         @endisset
 
-        <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
+        <div class="tab-pane fade @if(!isset($model)) show active @endif" id="details" role="tabpanel" aria-labelledby="details-tab">
             @isset($model)
                 {{ Form::model($model, ['route' => ['team.update', $model->id], 'method' => 'patch', 'files' => true]) }}
             @else
@@ -287,19 +287,16 @@ $userRole = $model->getUserRole(Auth::user());
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                 {!! Form::label('name', __('Name')) !!}
                 {!! Form::text('name', null, ['class' => 'form-control']) !!}
-                @include('common.forms.form-error', ['key' => 'name'])
             </div>
 
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                 {!! Form::label('description', __('Description')) !!}
                 {!! Form::text('description', null, ['class' => 'form-control']) !!}
-                @include('common.forms.form-error', ['key' => 'description'])
             </div>
 
             <div class="form-group{{ $errors->has('logo') ? ' has-error' : '' }}">
                 {!! Form::label('logo', __('Logo')) !!}
                 {!! Form::file('logo', ['class' => 'form-control']) !!}
-                @include('common.forms.form-error', ['key' => 'logo'])
             </div>
 
             @if(isset($model) && isset($model->iconfile))
