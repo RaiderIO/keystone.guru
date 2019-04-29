@@ -301,8 +301,8 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
 
             @if(isset($model) && isset($model->iconfile))
                 <div class="form-group">
-                    {{__('Current logo:')}} <img src="{{ Image::url($model->iconfile->getUrl(), 32, 32) }}"
-                                                 alt="{{ __('Team logo') }}"/>
+                    {{__('Current logo:')}} <img src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
+                                                 alt="{{ __('Team logo') }}" style="max-width: 48px"/>
                 </div>
             @endif
 

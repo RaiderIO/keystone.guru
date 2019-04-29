@@ -18,18 +18,19 @@
 @section('content')
     <div class="container">
         @if(!isAlertDismissed('3479213'))
-        <div class="alert alert-info alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close" data-alert-dismiss-id="3479213"><i class="fas fa-times"></i></a>
-            <p>
-                {{ __('Welcome to the new teams feature of Keystone.guru! A team is a group of people that (frequently)
-                play together. You can attach routes to a team which can then be easily viewed/edited by other team
-                members. This allows for a much better organization than ever before!') }}
-            </p>
-            <p>
-                {{ __('To get started, create a team for your group, or ask your friends to invite you to theirs
-                using the invite link.') }}
-            </p>
-        </div>
+            <div class="alert alert-info alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close" data-alert-dismiss-id="3479213"><i
+                            class="fas fa-times"></i></a>
+                <p>
+                    {{ __('Welcome to the new teams feature of Keystone.guru! A team is a group of people that (frequently)
+                    play together. You can attach routes to a team which can then be easily viewed/edited by other team
+                    members. This allows for a much better organization than ever before!') }}
+                </p>
+                <p>
+                    {{ __('To get started, create a team for your group, or ask your friends to invite you to theirs
+                    using the invite link.') }}
+                </p>
+            </div>
         @endif
     </div>
 
@@ -47,7 +48,7 @@
         @foreach ($models->all() as $team)
             <tr>
                 @isset($team->iconfile)
-                    <td><img src="{{ Image::url($team->iconfile->getUrl(), 32, 32) }}"/></td>
+                    <td><img src="{{ url('storage/' . $team->iconfile->getUrl()) }}" style="max-width: 48px"/></td>
                 @else
                     <td><i class="fas fa-users"></i></td>
                 @endisset
