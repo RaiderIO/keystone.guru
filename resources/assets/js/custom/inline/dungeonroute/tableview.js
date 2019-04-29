@@ -109,6 +109,14 @@ class TeamTableView extends TableView {
     }
 
     /**
+     * Gets the Id of the team that was set for this view.
+     * @returns {*}
+     */
+    getTeamId() {
+        return this._teamId;
+    }
+
+    /**
      * Get the parameters when sending the AJAX request
      * @returns {{team_id: *}}
      */
@@ -140,13 +148,8 @@ class TeamTableView extends TableView {
         };
 
         // Push different columns based on if add mode is enabled or not
-        if (this._addMode) {
-            this._columns.list.push({name: 'addroute', width: '15%', clickable: false});
-            this._columns.biglist.push({name: 'addroute', width: '15%', clickable: false});
-        } else {
-            this._columns.list.push({name: 'actions', width: '15%', clickable: false});
-            this._columns.biglist.push({name: 'actions', width: '15%', clickable: false});
-        }
+        this._columns.list.push({name: 'addremoveroute', width: '15%', clickable: false});
+        this._columns.biglist.push({name: 'addremoveroute', width: '15%', clickable: false});
 
         return super.getColumns(view);
     }

@@ -234,6 +234,11 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::post('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
         Route::delete('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
 
+        // Teams
+        Route::post('/team/{team}/changerole', 'APITeamController@changeRole');
+        Route::post('/team/{team}/route/{dungeonroute}', 'APITeamController@addRoute');
+        Route::delete('/team/{team}/route/{dungeonroute}', 'APITeamController@removeRoute');
+
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
             Route::post('/enemypack', 'APIEnemyPackController@store');
             Route::delete('/enemypack', 'APIEnemyPackController@delete');
@@ -253,8 +258,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
 
             Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
-
-            Route::post('/team/changerole', 'APITeamController@changeRole');
         });
     });
 

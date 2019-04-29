@@ -46,6 +46,57 @@ class Team extends IconFileModel
     }
 
     /**
+     * Checks if a user can add/remove a route to this team or not.
+     * @param $user User
+     * @return boolean
+     */
+    public function canAddRemoveRoute(User $user)
+    {
+        $userRole = $this->getUserRole($user);
+        $roles = config('keystoneguru.team_roles');
+        // Moderator or higher
+        return $roles[$userRole] >= 3;
+    }
+
+    /**
+     * Adds a route to this Team.
+     *
+     * @param DungeonRoute $dungeonRoute The route to add.
+     * @return boolean True if successful, false if not (already assigned, for example).
+     */
+    public function addRoute(DungeonRoute $dungeonRoute)
+    {
+        $result = false;
+        // Not set
+        if ($dungeonRoute->team_id <= 0) {
+            $dungeonRoute->team_id = $this->id;
+            $dungeonRoute->save();
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Removes a route from this Team.
+     *
+     * @param DungeonRoute $dungeonRoute The route to remove.
+     * @return boolean True if successful, false if not (already removed, for example).
+     */
+    public function removeRoute(DungeonRoute $dungeonRoute)
+    {
+        $result = false;
+        // Set already
+        if ($dungeonRoute->team_id > 0) {
+            $dungeonRoute->team_id = -1;
+            $dungeonRoute->save();
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    /**
      * Get the role of a user in this team, or false if the user does not exist in this team.
      * @param $user User
      * @return string|boolean

@@ -87,12 +87,21 @@ class APIDungeonRouteController extends Controller
             // Handle team if set
             if ($teamId = $request->get('team_id', false)) {
                 // You must be a member of this team to retrieve their routes
-                if (!Team::find($teamId)->members->contains($user->id)) {
+                $team = Team::findOrFail($teamId);
+                if (!$team->members->contains($user->id)) {
                     abort(403, 'Unauthorized');
                 }
 
-//                // Where the route is part of the requested team
-                $routes = $routes->where('team_id', $teamId);
+                // If available, we need all routes which MAY be assigned to this team, so all routes where
+                // team_id = -1 and the author is one of the team members
+                $available = intval($request->get('available', 0));
+                if ($available === 1) {
+                    $routes = $routes->where('team_id', -1);
+                    $routes = $routes->whereIn('author_id', $team->members->pluck(['id'])->toArray());
+                } else {
+                    // Where the route is part of the requested team
+                    $routes = $routes->where('team_id', $teamId);
+                }
 //                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
 //                    /** @var $query Builder */
 //                    $query->where('team_dungeon_routes.team_id', $teamId);

@@ -122,6 +122,8 @@ $userRole = $model->getUserRole(Auth::user());
 
             $('#team_members_table').DataTable({
                 'data': _data,
+                'searching': false,
+                'bLengthChange': false,
                 'columnDefs': columns
             });
 
@@ -134,10 +136,9 @@ $userRole = $model->getUserRole(Auth::user());
             $('select.role_selection').bind('change', function (e) {
                 $.ajax({
                     type: 'POST',
-                    url: '/ajax/team/changerole',
+                    url: '/ajax/team/' + _teamId + '/changerole',
                     dataType: 'json',
                     data: {
-                        team_id: _teamId,
                         username: $(this).data('username'),
                         role: $(this).val()
                     },
@@ -220,8 +221,8 @@ $userRole = $model->getUserRole(Auth::user());
         @isset($model)
             <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
                 <div class="form-group">
-                    <button id="add_route_btn" class="btn btn-success col-md"><i class="fas fa-plus"></i> {{ __('Add route') }}</button>
-                    <button id="view_existing_routes" class="btn btn-danger col-md" style="display: none;"><i class="fas fa-times"></i> {{ __('Cancel') }}</button>
+                    <button id="add_route_btn" class="btn btn-success col-md-4"><i class="fas fa-plus"></i> {{ __('Add route') }}</button>
+                    <button id="view_existing_routes" class="btn btn-danger col-md-4" style="display: none;"><i class="fas fa-times"></i> {{ __('Cancel') }}</button>
                 </div>
 
                 <div class="form-group mt-2">
@@ -243,7 +244,8 @@ $userRole = $model->getUserRole(Auth::user());
                             {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
                                 ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                             <div class="input-group-append">
-                                <button id="team_invite_link_copy_to_clipboard" class="btn btn-info">
+                                <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
+                                data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
                                     <i class="far fa-copy"></i>
                                 </button>
                             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DungeonRoute;
 use App\Models\Team;
 use App\User;
 use Illuminate\Http\Request;
@@ -16,15 +17,14 @@ class APITeamController extends Controller
 
     /**
      * @param Request $request
+     * @param Team $team
      * @return array
      * @throws \Exception
      */
-    function changeRole(Request $request)
+    public function changeRole(Request $request, Team $team)
     {
         /** @var User $user */
         $user = Auth::user();
-        /** @var Team $team */
-        $team = Team::findOrFail($request->get('team_id'));
         /** @var User $targetUser */
         $targetUser = User::where('name', $request->get('username'))->firstOrFail();
         $role = $request->get('role');
@@ -34,6 +34,52 @@ class APITeamController extends Controller
         // Only if the current user may do such a thing
         if ($team->canChangeRole($user, $targetUser, $role)) {
             $team->changeRole($targetUser, $role);
+            $result = ['result' => 'success'];
+        } else {
+            abort(403, 'Unauthorized');
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @param Team $team
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws \Exception
+     */
+    public function addRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $result = ['result' => 'error'];
+        if ($team->canAddRemoveRoute($user)) {
+            $team->addRoute($dungeonroute);
+            $result = ['result' => 'success'];
+        } else {
+            abort(403, 'Unauthorized');
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @param Team $team
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws \Exception
+     */
+    public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $result = ['result' => 'error'];
+        if ($team->canAddRemoveRoute($user)) {
+            $team->removeRoute($dungeonroute);
             $result = ['result' => 'success'];
         } else {
             abort(403, 'Unauthorized');

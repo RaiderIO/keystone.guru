@@ -188,4 +188,8 @@ return [
     'published_label' => 'Published',
     // 'actions_label' => 'Actions',
     'add_route_label' => 'Add',
+    'remove_route_label' => 'Remove',
+
+    'team_add_route_successful' => 'Route added to team successfully',
+    'team_remove_route_successful' => 'Route removed from team successfully',
 ];
