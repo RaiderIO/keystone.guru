@@ -252,7 +252,9 @@ class Team extends IconFileModel
             /** @var $item Team */
 
             // Delete icons
-            $item->iconfile->delete();
+            if ($item->iconfile !== null) {
+                $item->iconfile->delete();
+            }
 
             // Remove all users associated with this team
             TeamUser::where('team_id', $item->id)->delete();

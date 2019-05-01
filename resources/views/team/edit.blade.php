@@ -325,7 +325,7 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
                     {!! Form::submit(isset($model) ? __('Save') : __('Submit'), ['class' => 'btn btn-info']) !!}
                 </div>
                 <div class="col">
-                    @if($model->getUserRole(Auth::user()) === 'admin')
+                    @if(isset($model) && $model->getUserRole(Auth::user()) === 'admin')
                         <button id="delete_team" class="btn btn-danger float-right">
                             <i class="fas fa-trash"></i> {{ __('Delete team') }}
                         </button>

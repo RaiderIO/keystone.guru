@@ -88,6 +88,7 @@ return [
     'settings_saved' => 'Settings saved successfully',
     'route_published' => 'Route published',
     'route_unpublished' => 'Route unpublished',
+    'datatable_no_routes_in_table' => 'No routes found',
 
     // Dungeonroute table
     'vote' => 'vote',

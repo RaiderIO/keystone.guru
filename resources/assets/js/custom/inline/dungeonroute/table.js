@@ -134,7 +134,10 @@ class DungeonrouteTable extends InlineCode {
             'bLengthChange': false,
             // Order by affixes by default
             'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
-            'columns': self._getColumns()
+            'columns': self._getColumns(),
+            'language': {
+                'emptyTable': lang.get('messages.datatable_no_routes_in_table')
+            }
         });
 
         self._dt.on('draw.dt', function (e, settings, json, xhr) {
