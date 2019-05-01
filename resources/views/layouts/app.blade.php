@@ -201,6 +201,29 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 
     @if($custom)
         @yield('content')
+
+    @elseif(isset($menuItems))
+        <div class="container container_wide mt-3">
+            <div class="row">
+                <div class="col menu_sidebar bg-secondary p-2">
+                    <ul class="nav flex-column nav-pills">
+                        @foreach($menuItems as $index => $menuItem)
+                            <li class="nav-item">
+                                <a class="nav-link {{ $index === 0 ? 'active' : '' }}" id="routes-tab" data-toggle="tab"
+                                   href="{{ $menuItem['target'] }}" role="tab"
+                                   aria-controls="routes" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
+                                    <i class="fas {{ $menuItem['icon'] }}"></i> {{ $menuItem['text'] }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="col bg-secondary ml-3 p-2">
+                    @yield('content')
+                </div>
+            </div>
+        </div>
+
     @else
 
         @if (!$isProduction && (Auth::user() === null || !Auth::user()->hasRole('admin')))

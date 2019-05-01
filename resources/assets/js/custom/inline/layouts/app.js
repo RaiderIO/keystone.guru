@@ -220,7 +220,7 @@ function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
             type: 'info',
             text: text,
             buttons: [
-                Noty.button(lang.get('messages.yes_label'), 'btn btn-success', function (n) {
+                Noty.button(lang.get('messages.yes_label'), 'btn btn-success mr-1', function (n) {
                     if (typeof yesCallback === 'function') {
                         yesCallback();
                     }

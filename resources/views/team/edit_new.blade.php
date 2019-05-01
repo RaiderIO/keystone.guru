@@ -2,8 +2,13 @@
 /** @var \App\Models\Team $model */
 $title = isset($model) ? __('Edit team') : __('New team');
 $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
+$menuItems = isset($model) ? [
+    ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
+    ['icon' => 'fa-users', 'text' => __('Members'), 'target' => '#members'],
+    ['icon' => 'fa-edit', 'text' => __('Team details'), 'target' => '#details']
+] : null;
 ?>
-@extends('layouts.app', ['showAds' => false, 'title' => $title])
+@extends('layouts.app', ['showAds' => false, 'title' => $title, 'menuItems' => $menuItems])
 @section('header-title', $title)
 @section('header-addition')
     <a href="{{ route('team.list') }}" class="btn btn-info text-white float-right" role="button">
@@ -56,8 +61,8 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
                 $('#add_route_btn').show();
             });
 
-            $('#delete_team').bind('click', function(clickEvent){
-                showConfirmYesCancel(lang.get('messages.delete_team_confirm_label'), function(){
+            $('#delete_team').bind('click', function (clickEvent) {
+                showConfirmYesCancel(lang.get('messages.delete_team_confirm_label'), function () {
                     // Change the method to DELETE
                     $('#details [name="_method"]').val('DELETE');
                     // Submit the form
@@ -206,42 +211,24 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
 @endisset
 
 @section('content')
-    @isset($model)
-        <div class="container">
-            <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="routes-tab" data-toggle="tab" href="#routes" role="tab"
-                       aria-controls="routes" aria-selected="false"><i class="fas fa-route"></i> {{ __('Routes') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="patreon-tab" data-toggle="tab" href="#members" role="tab"
-                       aria-controls="patreon" aria-selected="false"><i class="fas fa-users"></i> {{ __('Members') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="details-tab" data-toggle="tab" href="#details" role="tab"
-                       aria-controls="details" aria-selected="true"><i class="fas fa-edit"></i> {{ __('Team details') }}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    @endisset
 
     <div class="tab-content">
         @isset($model)
             <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
-                <div class="form-group">
-                    <button id="add_route_btn" class="btn btn-success col-md-4"><i
-                                class="fas fa-plus"></i> {{ __('Add route') }}</button>
-                    <button id="view_existing_routes" class="btn btn-danger col-md-4" style="display: none;"><i
-                                class="fas fa-times"></i> {{ __('Cancel') }}</button>
-                </div>
-
                 <div class="form-group mt-2">
-                    <h4>
-                        {{ __('Route list') }}
-                    </h4>
+                    <div class="row">
+                        <div class="col-8">
+                            <h4>
+                                {{ __('Route list') }}
+                            </h4>
+                        </div>
+                        <div class="col-4">
+                            <button id="add_route_btn" class="btn btn-success col-md-4 float-right"><i
+                                        class="fas fa-plus"></i> {{ __('Add route') }}</button>
+                            <button id="view_existing_routes" class="btn btn-danger col-md-4 float-right" style="display: none;"><i
+                                        class="fas fa-times"></i> {{ __('Cancel') }}</button>
+                        </div>
+                    </div>
 
                     @include('common.dungeonroute.table', ['view' => 'team', 'team' => $model])
                 </div>

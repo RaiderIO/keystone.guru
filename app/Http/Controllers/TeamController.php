@@ -85,7 +85,7 @@ class TeamController extends Controller
      */
     public function edit(Request $request, Team $team)
     {
-        return view('team.edit', ['model' => $team]);
+        return view('team.edit_new', ['model' => $team]);
     }
 
     /**
