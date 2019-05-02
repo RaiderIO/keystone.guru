@@ -212,6 +212,47 @@ class Team extends IconFileModel
     }
 
     /**
+     * Checks if a user can remove another user from the team.
+     * @param User $user
+     * @param User $targetUser The user that's to be removed.
+     * @return boolean
+     */
+    public function canRemoveMember(User $user, User $targetUser)
+    {
+        $userRole = $this->getUserRole($user);
+        $targetUserRole = $this->getUserRole($targetUser);
+        $roles = config('keystoneguru.team_roles');
+        // Moderator or higher
+        $userRoleKey = $roles[$userRole];
+        $targetUserRoleKey = $roles[$targetUserRole];
+        // Be admin, or moderator that's removing normal users
+        return $userRoleKey === 4 || ($userRoleKey === 3 && $userRoleKey > $targetUserRoleKey);
+    }
+
+    /**
+     * Removes a member from this Team.
+     *
+     * @param User $member The user to remove.
+     * @return boolean True if successful, false if not (already removed, for example).
+     */
+    public function removeMember(User $member)
+    {
+        $result = false;
+        // Only if the user could be found..
+        if ($this->isUserMember($member)) {
+            /** @var TeamUser $teamUser */
+            $teamUser = TeamUser::where('user_id', $member->id)->get();
+            try {
+                $result = $teamUser->delete();
+            } catch (\Exception $exception) {
+                // YOLO
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Adds a member to this team.
      *
      * @param $user User

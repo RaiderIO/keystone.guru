@@ -97,11 +97,9 @@ class APITeamController extends Controller
      */
     public function removeMember(Request $request, Team $team, User $user)
     {
-        /** @var User $user */
-        $user = Auth::user();
-
+        dd($user);
         $result = ['result' => 'error'];
-        if ($team->canAddRemoveMember($user)) {
+        if ($team->canRemoveMember(Auth::user(), $user)) {
             $team->removeMember($user);
             $result = ['result' => 'success'];
         } else {

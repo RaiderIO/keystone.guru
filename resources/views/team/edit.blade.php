@@ -180,10 +180,10 @@ $menuItems = [
                 $.ajax({
                     type: 'POST',
                     url: '/ajax/team/' + _teamId + '/member/' + $(this).data('userid'),
-                    dataType: 'json',
                     data: {
                         _method: 'DELETE'
                     },
+                    dataType: 'json',
                     success: function () {
                         showSuccessNotification(lang.get('messages.remove_member_success'));
                     }

@@ -238,9 +238,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         // Teams
         Route::post('/team/{team}/changerole', 'APITeamController@changeRole');
         Route::post('/team/{team}/route/{dungeonroute}', 'APITeamController@addRoute');
-        Route::delete('/team/{team}/route/{dungeonroute}', 'APITeamController@removeRoute');
-
         Route::delete('/team/{team}/member/{user}', 'APITeamController@removeMember');
+        Route::delete('/team/{team}/route/{dungeonroute}', 'APITeamController@removeRoute');
 
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
             Route::post('/enemypack', 'APIEnemyPackController@store');
