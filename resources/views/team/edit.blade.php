@@ -1,9 +1,20 @@
 <?php
 /** @var \App\Models\Team $model */
-$title = isset($model) ? __('Edit team') : __('New team');
-$userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
+$title = __('Edit team');
+$user = Auth::user();
+$userRole = $model->getUserRole($user);
+$userIsModerator = $userRole === 'moderator' || $userRole === 'admin';
+$menuItems = [
+    ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
+    ['icon' => 'fa-users', 'text' => __('Members'), 'target' => '#members'],
+    ['icon' => 'fa-edit', 'text' => __('Team details'), 'target' => '#details']
+];
 ?>
-@extends('layouts.app', ['showAds' => false, 'title' => $title])
+@extends('layouts.app', ['title' => $title,
+    'menuTitle' => __('Teams'), 'menuItems' => $menuItems,
+    // The models to display as an option in the menu, plus the route to take when selecting them
+    'menuModels' => $user->teams, 'menuModelsRoute' => 'team.edit',
+    'model' => $model])
 @section('header-title', $title)
 @section('header-addition')
     <a href="{{ route('team.list') }}" class="btn btn-info text-white float-right" role="button">
@@ -12,7 +23,6 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
 @endsection
 @include('common.general.inline', ['path' => 'team/edit'])
 
-@isset($model)
 @section('scripts')
     @parent
 
@@ -22,17 +32,19 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
             foreach ($model->teamusers as $teamuser) {
                 /** @var $teamuser \App\Models\TeamUser */
                 $data[] = [
-                    $teamuser->user->name,
-                    $teamuser->created_at->toDateTimeString(),
-                    $teamuser->role,
+                    'user_id' => $teamuser->user->id,
+                    'name' => $teamuser->user->name,
+                    'join_date' => $teamuser->created_at->toDateTimeString(),
+                    'role' => $teamuser->role,
                     // Any and all roles that the user may assign to other users
-                    $model->getAssignableRoles(Auth::user(), $teamuser->user)
+                    'assignable_roles' => $model->getAssignableRoles(Auth::user(), $teamuser->user)
                 ];
             }
             ?>
         var _data = {!! json_encode($data) !!};
         var _teamId = {!! $model->id !!};
         var _userIsModerator = {!! $userRole === 'admin' || $userRole === 'moderator' ? 'true' : 'false' !!};
+        var _currentUserName = "{{ $user->name }}";
 
         $(function () {
             let code = _inlineManager.getInlineCode('dungeonroute/table');
@@ -56,8 +68,8 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
                 $('#add_route_btn').show();
             });
 
-            $('#delete_team').bind('click', function(clickEvent){
-                showConfirmYesCancel(lang.get('messages.delete_team_confirm_label'), function(){
+            $('#delete_team').bind('click', function (clickEvent) {
+                showConfirmYesCancel(lang.get('messages.delete_team_confirm_label'), function () {
                     // Change the method to DELETE
                     $('#details [name="_method"]').val('DELETE');
                     // Submit the form
@@ -68,63 +80,68 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
             });
 
 
-            let columns = [{
-                'targets': 2,
-                'render': function (data, type, row, meta) {
+            let columns = [{'data': 'name'},
+                {'data': 'join_date'},
+                {
+                    'data': 'assignable_roles',
+                    'render': function (data, type, row, meta) {
+                        let roles = [];
 
-                    let roles = [];
+                        // Match the valid roles with roles above
+                        let assignableRoles = row.assignable_roles;
+                        for (let roleIndex in assignableRoles) {
+                            if (assignableRoles.hasOwnProperty(roleIndex)) {
+                                // Fetch the role..
+                                let assignableRole = assignableRoles[roleIndex];
 
-                    // Match the valid roles with roles above
-                    let assignableRoles = row[3];
-                    for (let roleIndex in assignableRoles) {
-                        if (assignableRoles.hasOwnProperty(roleIndex)) {
-                            // Fetch the role..
-                            let assignableRole = assignableRoles[roleIndex];
-
-                            let icon = _getIcon(assignableRole);
-                            if (icon !== false) {
-                                roles.push(icon);
+                                let icon = _getIcon(assignableRole);
+                                if (icon !== false) {
+                                    roles.push(icon);
+                                }
                             }
                         }
-                    }
 
-                    let result = '';
-                    if (roles.length === 0) {
-                        let icon = _getIcon(data);
+                        let result = '';
+                        if (roles.length === 0) {
+                            let icon = _getIcon(data);
 
-                        // Handlebars the entire thing
-                        let template = Handlebars.templates['team_member_table_permissions_self_template'];
-                        let templateData = $.extend({
-                            icon: icon.icon,
-                            label: icon.label
-                        }, getHandlebarsDefaultVariables());
+                            // Handlebars the entire thing
+                            let template = Handlebars.templates['team_member_table_permissions_self_template'];
+                            let templateData = $.extend({
+                                icon: icon.icon,
+                                label: icon.label,
+                                self: _currentUserName === row.name
+                            }, getHandlebarsDefaultVariables());
 
-                        result = template(templateData);
-                    } else {
-                        // Handlebars the entire thing
-                        let template = Handlebars.templates['team_member_table_permissions_template'];
-                        let templateData = $.extend({
-                            username: row[0],
-                            role: data,
-                            is_admin: data === 'admin',
-                            roles: roles
-                        }, getHandlebarsDefaultVariables());
+                            result = template(templateData);
+                        } else {
+                            // Handlebars the entire thing
+                            let template = Handlebars.templates['team_member_table_permissions_template'];
+                            let templateData = $.extend({
+                                username: row.name,
+                                role: data,
+                                is_admin: data === 'admin',
+                                roles: roles,
+                                self: _currentUserName === data.name
+                            }, getHandlebarsDefaultVariables());
 
-                        result = template(templateData);
-                    }
-                    return result;
-                },
-                'orderable': false
-            }];
+                            result = template(templateData);
+                        }
+                        return result;
+                    },
+                    'orderable': false
+                }];
 
             // Only admins/moderators have the option to remove members from a team
             if (_userIsModerator) {
                 columns.push({
-                    'targets': 3,
+                    'data': 'join_date',
                     'render': function (data, type, row, meta) {
                         // Handlebars the entire thing
                         let template = Handlebars.templates['team_member_table_actions_template'];
-                        let templateData = $.extend({}, getHandlebarsDefaultVariables());
+                        let templateData = $.extend({
+                            user_id: row.user_id
+                        }, getHandlebarsDefaultVariables());
 
                         return template(templateData);
                     }
@@ -135,7 +152,7 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
                 'data': _data,
                 'searching': false,
                 'bLengthChange': false,
-                'columnDefs': columns
+                'columns': columns
             });
 
             // Fix members data table being in a separate tab ignoring width
@@ -155,6 +172,20 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
                     },
                     success: function () {
                         showSuccessNotification(lang.get('messages.change_role_success'));
+                    }
+                });
+            });
+
+            $('.remove_user_btn').bind('click', function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/team/' + _teamId + '/member/' + $(this).data('userid'),
+                    dataType: 'json',
+                    data: {
+                        _method: 'DELETE'
+                    },
+                    success: function () {
+                        showSuccessNotification(lang.get('messages.remove_member_success'));
                     }
                 });
             });
@@ -203,137 +234,86 @@ $userRole = isset($model) ? $model->getUserRole(Auth::user()) : '';
         }
     </script>
 @endsection
-@endisset
 
 @section('content')
-    @isset($model)
-        <div class="container">
-            <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="routes-tab" data-toggle="tab" href="#routes" role="tab"
-                       aria-controls="routes" aria-selected="false"><i class="fas fa-route"></i> {{ __('Routes') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="patreon-tab" data-toggle="tab" href="#members" role="tab"
-                       aria-controls="patreon" aria-selected="false"><i class="fas fa-users"></i> {{ __('Members') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="details-tab" data-toggle="tab" href="#details" role="tab"
-                       aria-controls="details" aria-selected="true"><i class="fas fa-edit"></i> {{ __('Team details') }}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    @endisset
 
     <div class="tab-content">
-        @isset($model)
-            <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
-                <div class="form-group">
-                    <button id="add_route_btn" class="btn btn-success col-md-4"><i
-                                class="fas fa-plus"></i> {{ __('Add route') }}</button>
-                    <button id="view_existing_routes" class="btn btn-danger col-md-4" style="display: none;"><i
-                                class="fas fa-times"></i> {{ __('Cancel') }}</button>
-                </div>
-
-                <div class="form-group mt-2">
-                    <h4>
-                        {{ __('Route list') }}
-                    </h4>
-
-                    @include('common.dungeonroute.table', ['view' => 'team', 'team' => $model])
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
-                <div class="form-group">
-                    <h4>
-                        {{ __('Invite new members') }}
-                    </h4>
-                    <div class="col-xl-4">
-                        <div class="input-group-append">
-                            {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
-                                ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
-                            <div class="input-group-append">
-                                <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
-                                        data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
-                                    <i class="far fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
+        <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
+            <div class="form-group m-2">
+                <div class="row">
+                    <div class="col-8">
+                        <h4>
+                            {{ __('Route list') }}
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        @if($userIsModerator)
+                            <button id="add_route_btn" class="btn btn-success col-md-4 float-right">
+                                <i class="fas fa-plus"></i> {{ __('Add route') }}
+                            </button>
+                            <button id="view_existing_routes" class="btn btn-danger col-md-4 float-right"
+                                    style="display: none;">
+                                <i class="fas fa-times"></i> {{ __('Cancel') }}
+                            </button>
+                        @endif
                     </div>
                 </div>
 
-                <div class="form-group mt-2">
-                    <h4>
-                        {{ __('Member list') }}
-                    </h4>
-                    <table id="team_members_table" class="tablesorter default_table table-striped w-100" width="100%">
-                        <thead>
-                        <tr>
-                            @if($userRole === 'member' || $userRole === 'collaborator')
-                                <th width="65%">{{ __('Name') }}</th>
-                                <th width="20%">{{ __('Join date') }}</th>
-                                <th width="15%">{{ __('Permissions') }}</th>
-                            @else
-                                <th width="50%">{{ __('Name') }}</th>
-                                <th width="20%">{{ __('Join date') }}</th>
-                                <th width="15%">{{ __('Permissions') }}</th>
-                                <th width="15%">{{ __('Actions') }}</th>
-                            @endif
-                        </tr>
-                        </thead>
-                    </table>
+                @include('common.dungeonroute.table', ['view' => 'team', 'team' => $model])
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
+            <div class="form-group m-2">
+                <h4>
+                    {{ __('Invite new members') }}
+                </h4>
+                <div class="col-xl-4">
+                    <div class="input-group-append">
+                        {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
+                            ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                        <div class="input-group-append">
+                            <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
+                                    data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        @endisset
 
-        <div class="tab-pane fade @if(!isset($model)) show active @endif" id="details" role="tabpanel"
+            <div class="form-group m-2">
+                <h4>
+                    {{ __('Member list') }}
+                </h4>
+                <table id="team_members_table" class="tablesorter default_table table-striped w-100" width="100%">
+                    <thead>
+                    <tr>
+                        @if(!$userIsModerator)
+                            <th width="60%">{{ __('Name') }}</th>
+                            <th width="20%">{{ __('Join date') }}</th>
+                            <th width="20%">{{ __('Permissions') }}</th>
+                        @else
+                            <th width="45%">{{ __('Name') }}</th>
+                            <th width="20%">{{ __('Join date') }}</th>
+                            <th width="20%">{{ __('Permissions') }}</th>
+                            <th width="15%">{{ __('Actions') }}</th>
+                        @endif
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="details" role="tabpanel"
              aria-labelledby="details-tab">
-            @isset($model)
-                {{ Form::model($model, ['route' => ['team.update', $model->id], 'method' => 'patch', 'files' => true]) }}
-            @else
-                {{ Form::open(['route' => 'team.savenew', 'files' => true]) }}
-            @endisset
+            <div class=" m-2">
+                <h4>
+                    {{ __('Details') }}
+                </h4>
 
-            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                {!! Form::label('name', __('Name')) !!}
-                {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                @include('team.details', ['model' => $model])
             </div>
-
-            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                {!! Form::label('description', __('Description')) !!}
-                {!! Form::text('description', null, ['class' => 'form-control']) !!}
-            </div>
-
-            <div class="form-group{{ $errors->has('logo') ? ' has-error' : '' }}">
-                {!! Form::label('logo', __('Logo')) !!}
-                {!! Form::file('logo', ['class' => 'form-control']) !!}
-            </div>
-
-            @if(isset($model) && isset($model->iconfile))
-                <div class="form-group">
-                    {{__('Current logo:')}} <img src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
-                                                 alt="{{ __('Team logo') }}" style="max-width: 48px"/>
-                </div>
-            @endif
-
-            <div class="row">
-                <div class="col">
-                    {!! Form::submit(isset($model) ? __('Save') : __('Submit'), ['class' => 'btn btn-info']) !!}
-                </div>
-                <div class="col">
-                    @if(isset($model) && $model->getUserRole(Auth::user()) === 'admin')
-                        <button id="delete_team" class="btn btn-danger float-right">
-                            <i class="fas fa-trash"></i> {{ __('Disband team') }}
-                        </button>
-                    @endif
-                </div>
-            </div>
-
-            {!! Form::close() !!}
         </div>
     </div>
 @endsection

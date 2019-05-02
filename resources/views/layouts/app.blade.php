@@ -206,6 +206,22 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
         <div class="container container_wide mt-3">
             <div class="row">
                 <div class="col menu_sidebar bg-secondary p-2">
+                    <h5>{{ $menuTitle }}</h5>
+                    <hr>
+                    @isset($menuModels)
+                        <select id="selected_model_id" class="form-control selectpicker">
+                            @foreach($menuModels as $menuModel)
+                                <option
+                                        data-url="{{ route($menuModelsRoute, ['id' => $menuModel->id]) }}"
+                                        @isset($menuModel->iconfile)
+                                        data-thumbnail="{{ url('storage/' . $menuModel->iconfile->getUrl()) }}"
+                                        @endisset
+                                        {{ $model->id === $menuModel->id ? 'selected' : '' }}
+                                >{{ $menuModel->name }}</option>
+                            @endforeach
+                        </select>
+                        <hr>
+                    @endisset
                     <ul class="nav flex-column nav-pills">
                         @foreach($menuItems as $index => $menuItem)
                             <li class="nav-item">

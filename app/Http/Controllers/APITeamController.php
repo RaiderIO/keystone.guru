@@ -87,4 +87,27 @@ class APITeamController extends Controller
 
         return $result;
     }
+
+    /**
+     * @param Request $request
+     * @param Team $team
+     * @param User $user
+     * @return array
+     * @throws \Exception
+     */
+    public function removeMember(Request $request, Team $team, User $user)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $result = ['result' => 'error'];
+        if ($team->canAddRemoveMember($user)) {
+            $team->removeMember($user);
+            $result = ['result' => 'success'];
+        } else {
+            abort(403, 'Unauthorized');
+        }
+
+        return $result;
+    }
 }

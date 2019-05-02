@@ -182,14 +182,12 @@ html, body, #map, #app, .wrapper {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
-#sidebar .dropdown.bootstrap-select {
+.dropdown.bootstrap-select {
     background-color: #4E5D6C;
 }
 
 #edit_route_freedraw_options_color,
-#sidebar .dropdown.bootstrap-select .btn,
-.route_manipulation_tools .dropdown.bootstrap-select,
-.route_manipulation_tools .dropdown.bootstrap-select .btn {
+.dropdown.bootstrap-select .btn {
     background-color: #4E5D6C;
     color: #FFF;
     border: 1px solid #2B3E5066;

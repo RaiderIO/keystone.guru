@@ -73,7 +73,7 @@ if( isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row mt-2">
-                    <div id="affixgroup_select_container" class="col">
+                    <div class="col">
                         {!! Form::select('affixes[]', $affixes, $selectedAffixes,
                             ['id' => 'affixes',
                             'class' => 'form-control affixselect selectpicker',

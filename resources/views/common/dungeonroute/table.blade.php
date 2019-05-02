@@ -42,9 +42,10 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             {!! Form::text('team_name', $team->name, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
         @endisset
     </div>
-    <div id="affixgroup_select_container" class="col-lg-2 pl-1 pr-1">
+    <div class="col-lg-2 pl-1 pr-1">
         {!! Form::label('dungeon_id', __('Dungeon')) !!}
-        {!! Form::select('dungeon_id', [0 => 'All'] + \App\Models\Dungeon::active()->pluck('name', 'id')->toArray(), 0, ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control']) !!}
+        {!! Form::select('dungeon_id', [0 => 'All'] + \App\Models\Dungeon::active()->pluck('name', 'id')->toArray(), 0,
+            ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control selectpicker']) !!}
     </div>
     <div class="col-lg-2 pl-1 pr-1">
         {!! Form::label('affixes[]', __('Affixes')) !!}

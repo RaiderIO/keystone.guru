@@ -125,13 +125,16 @@ class Team extends IconFileModel
             $roles = config('keystoneguru.team_roles');
             $userRoleKey = $roles[$userRole];
             $targetUserRoleKey = $roles[$targetUserRole];
-            // If the current user is a moderator or admin, and (if user is admin or the current user outranks the other user)
-            if ($userRoleKey >= 3 && ($userRoleKey === 4 || $userRoleKey > $targetUserRoleKey)) {
+            // For now, admins cannot be demoted to anything else
+            if ($targetUserRoleKey !== 4) {
+                // If the current user is a moderator or admin, and (if user is admin or the current user outranks the other user)
+                if ($userRoleKey >= 3 && ($userRoleKey === 4 || $userRoleKey > $targetUserRoleKey)) {
 
-                // Count down from all roles that exist, starting by the role the user currently has
-                for ($i = $userRoleKey; $i > 0; $i--) {
-                    // array_search to find key by value
-                    $result[] = array_search($i, $roles);
+                    // Count down from all roles that exist, starting by the role the user currently has
+                    for ($i = $userRoleKey; $i > 0; $i--) {
+                        // array_search to find key by value
+                        $result[] = array_search($i, $roles);
+                    }
                 }
             }
         }
