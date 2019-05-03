@@ -241,7 +241,7 @@ class Team extends IconFileModel
         // Only if the user could be found..
         if ($this->isUserMember($member)) {
             /** @var TeamUser $teamUser */
-            $teamUser = TeamUser::where('user_id', $member->id)->get();
+            $teamUser = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->firstOrFail();
             try {
                 $result = $teamUser->delete();
             } catch (\Exception $exception) {

@@ -215,7 +215,6 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     return data;
                 },
-                'className': this._viewMode === 'biglist' ? 'd-none d-md-table-cell' : '',
             },
             features: {
                 'title': lang.get('messages.features_label'),
@@ -303,10 +302,10 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let result = null;
                     if (row.has_team) {
-                        let template = Handlebars.templates['dungeonroute_table_profile_remove_route_template'];
+                        let template = Handlebars.templates['team_dungeonroute_table_remove_route_template'];
                         result = template($.extend({public_key: row.public_key}, getHandlebarsDefaultVariables()))
                     } else {
-                        let template = Handlebars.templates['dungeonroute_table_profile_add_route_template'];
+                        let template = Handlebars.templates['team_dungeonroute_table_add_route_template'];
                         result = template($.extend({public_key: row.public_key}, getHandlebarsDefaultVariables()))
                     }
                     return result;
@@ -327,7 +326,9 @@ class DungeonrouteTable extends InlineCode {
                 if (columns.hasOwnProperty(column.name)) {
                     let dtColumn = columns[column.name];
                     dtColumn.width = column.width;
-                    dtColumn.className = !column.hasOwnProperty('clickable') || column.clickable === true ? 'clickable' : 'not_clickable';
+                    dtColumn.className = column.hasOwnProperty('className') ? column.className : '';
+                    // Default is clickable
+                    dtColumn.className += !column.hasOwnProperty('clickable') || column.clickable === true ? ' clickable' : ' not_clickable';
                     result.push(dtColumn);
                 } else {
                     console.error('Unable to find DT column for view column ', column);

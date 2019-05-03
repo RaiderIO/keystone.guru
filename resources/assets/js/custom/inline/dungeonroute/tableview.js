@@ -37,7 +37,7 @@ class RoutesTableView extends TableView {
             ],
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
-                {name: 'dungeon', width: '13%'},
+                {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
                 {name: 'features', width: '25%'},
                 {name: 'author', width: '10%'},
                 {name: 'views', width: '5%'},
@@ -68,7 +68,7 @@ class ProfileTableView extends TableView {
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
-                {name: 'dungeon', width: '13%'},
+                {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
                 {name: 'features', width: '25%'},
                 {name: 'published', width: '5%'},
                 {name: 'actions', width: '7%', clickable: false},
@@ -141,9 +141,9 @@ class TeamTableView extends TableView {
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
-                {name: 'dungeon', width: '15%'},
+                {name: 'dungeon', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'features', width: '25%'},
-                {name: 'author', width: '10%'},
+                {name: 'author', width: '10%', className: 'd-none d-lg-table-cell'},
             ]
         };
 

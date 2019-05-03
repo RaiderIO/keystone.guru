@@ -85,9 +85,11 @@
     }
 }
 
-.menu_sidebar {
-    -ms-flex: 0 0 230px;
-    flex: 0 0 230px;
+@media (min-width: 1200px) {
+    .menu_sidebar {
+        -ms-flex: 0 0 230px;
+        flex: 0 0 230px;
+    }
 }
 
 @media (max-width: 690px) {

@@ -205,8 +205,8 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
     @elseif(isset($menuItems))
         <div class="container container_wide mt-3">
             <div class="row">
-                <div class="col menu_sidebar bg-secondary p-2">
-                    <h5>{{ $menuTitle }}</h5>
+                <div class="col-xl menu_sidebar bg-secondary p-3">
+                    <h4>{{ $menuTitle }}</h4>
                     <hr>
                     @isset($menuModels)
                         <select id="selected_model_id" class="form-control selectpicker">
@@ -234,7 +234,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                         @endforeach
                     </ul>
                 </div>
-                <div class="col bg-secondary ml-3 p-2">
+                <div class="col-xl bg-secondary ml-xl-3 ml-0 mt-xl-0 mt-3 p-3">
                     @yield('content')
                 </div>
             </div>

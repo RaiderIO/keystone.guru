@@ -198,5 +198,13 @@ return [
     'no_label' => 'No',
     'cancel_label' => 'Cancel',
 
-    'delete_team_confirm_label' => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?'
+    'remove_member_confirm_label' => 'Are you sure you want remove this user from the team?',
+    'remove_member_success' => 'Member removed successfully',
+
+    'name_label' => 'Name',
+    'join_date_label' => 'Join date',
+    'assignable_roles_label' => 'Assignable roles',
+    // 'actions_label' => 'Actions',
+
+    'delete_team_confirm_label' => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?',
 ];

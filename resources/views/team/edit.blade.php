@@ -43,8 +43,10 @@ $menuItems = [
             ?>
         var _data = {!! json_encode($data) !!};
         var _teamId = {!! $model->id !!};
-        var _userIsModerator = {!! $userRole === 'admin' || $userRole === 'moderator' ? 'true' : 'false' !!};
+        var _userIsModerator = {!! $userIsModerator ? 'true' : 'false' !!};
         var _currentUserName = "{{ $user->name }}";
+
+        let _dt = null;
 
         $(function () {
             let code = _inlineManager.getInlineCode('dungeonroute/table');
@@ -79,81 +81,7 @@ $menuItems = [
                 clickEvent.preventDefault();
             });
 
-
-            let columns = [{'data': 'name'},
-                {'data': 'join_date'},
-                {
-                    'data': 'assignable_roles',
-                    'render': function (data, type, row, meta) {
-                        let roles = [];
-
-                        // Match the valid roles with roles above
-                        let assignableRoles = row.assignable_roles;
-                        for (let roleIndex in assignableRoles) {
-                            if (assignableRoles.hasOwnProperty(roleIndex)) {
-                                // Fetch the role..
-                                let assignableRole = assignableRoles[roleIndex];
-
-                                let icon = _getIcon(assignableRole);
-                                if (icon !== false) {
-                                    roles.push(icon);
-                                }
-                            }
-                        }
-
-                        let result = '';
-                        if (roles.length === 0) {
-                            let icon = _getIcon(data);
-
-                            // Handlebars the entire thing
-                            let template = Handlebars.templates['team_member_table_permissions_self_template'];
-                            let templateData = $.extend({
-                                icon: icon.icon,
-                                label: icon.label,
-                                self: _currentUserName === row.name
-                            }, getHandlebarsDefaultVariables());
-
-                            result = template(templateData);
-                        } else {
-                            // Handlebars the entire thing
-                            let template = Handlebars.templates['team_member_table_permissions_template'];
-                            let templateData = $.extend({
-                                username: row.name,
-                                role: data,
-                                is_admin: data === 'admin',
-                                roles: roles,
-                                self: _currentUserName === data.name
-                            }, getHandlebarsDefaultVariables());
-
-                            result = template(templateData);
-                        }
-                        return result;
-                    },
-                    'orderable': false
-                }];
-
-            // Only admins/moderators have the option to remove members from a team
-            if (_userIsModerator) {
-                columns.push({
-                    'data': 'join_date',
-                    'render': function (data, type, row, meta) {
-                        // Handlebars the entire thing
-                        let template = Handlebars.templates['team_member_table_actions_template'];
-                        let templateData = $.extend({
-                            user_id: row.user_id
-                        }, getHandlebarsDefaultVariables());
-
-                        return template(templateData);
-                    }
-                });
-            }
-
-            $('#team_members_table').DataTable({
-                'data': _data,
-                'searching': false,
-                'bLengthChange': false,
-                'columns': columns
-            });
+            refreshTable();
 
             // Fix members data table being in a separate tab ignoring width
             // https://datatables.net/examples/api/tabs_and_scrolling.html
@@ -172,20 +100,6 @@ $menuItems = [
                     },
                     success: function () {
                         showSuccessNotification(lang.get('messages.change_role_success'));
-                    }
-                });
-            });
-
-            $('.remove_user_btn').bind('click', function (e) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/ajax/team/' + _teamId + '/member/' + $(this).data('userid'),
-                    data: {
-                        _method: 'DELETE'
-                    },
-                    dataType: 'json',
-                    success: function () {
-                        showSuccessNotification(lang.get('messages.remove_member_success'));
                     }
                 });
             });
@@ -232,6 +146,133 @@ $menuItems = [
 
             return result;
         }
+
+        /**
+         * Refreshes the table with the current data.
+         */
+        function refreshTable() {
+            let $table = $('#team_members_table');
+            if (_dt !== null) {
+                _dt.destroy();
+                $table.empty();
+            }
+
+            let columns = [{
+                'data': 'name',
+                'title': lang.get('messages.name_label'),
+                'width': _userIsModerator ? '45%' : '60%'
+            }, {
+                'data': 'join_date',
+                'title': lang.get('messages.join_date_label'),
+                'width': '20%',
+                'className': 'd-none d-lg-table-cell'
+            }, {
+                'data': 'assignable_roles',
+                'title': lang.get('messages.assignable_roles_label'),
+                'width': '20%',
+                'render': function (data, type, row, meta) {
+                    let roles = [];
+
+                    // Match the valid roles with roles above
+                    let assignableRoles = row.assignable_roles;
+                    for (let roleIndex in assignableRoles) {
+                        if (assignableRoles.hasOwnProperty(roleIndex)) {
+                            // Fetch the role..
+                            let assignableRole = assignableRoles[roleIndex];
+
+                            let icon = _getIcon(assignableRole);
+                            if (icon !== false) {
+                                roles.push(icon);
+                            }
+                        }
+                    }
+
+                    let result = '';
+                    if (roles.length === 0) {
+                        let icon = _getIcon(data);
+
+                        // Handlebars the entire thing
+                        let template = Handlebars.templates['team_member_table_permissions_self_template'];
+                        let templateData = $.extend({
+                            icon: icon.icon,
+                            label: icon.label,
+                            self: _currentUserName === row.name
+                        }, getHandlebarsDefaultVariables());
+
+                        result = template(templateData);
+                    } else {
+                        // Handlebars the entire thing
+                        let template = Handlebars.templates['team_member_table_permissions_template'];
+                        let templateData = $.extend({
+                            username: row.name,
+                            role: data,
+                            is_admin: data === 'admin',
+                            roles: roles,
+                            self: _currentUserName === data.name
+                        }, getHandlebarsDefaultVariables());
+
+                        result = template(templateData);
+                    }
+                    return result;
+                },
+                'orderable': false
+            }];
+
+            // Only admins/moderators have the option to remove members from a team
+            if (_userIsModerator) {
+                columns.push({
+                    'data': 'join_date',
+                    'title': lang.get('messages.actions_label'),
+                    'width': '15%',
+                    'render': function (data, type, row, meta) {
+                        // Handlebars the entire thing
+                        let template = Handlebars.templates['team_member_table_actions_template'];
+                        let templateData = $.extend({
+                            user_id: row.user_id
+                        }, getHandlebarsDefaultVariables());
+
+                        return template(templateData);
+                    }
+                });
+            }
+
+            _dt = $table.DataTable({
+                'data': _data,
+                'searching': false,
+                'bLengthChange': false,
+                'columns': columns
+            });
+
+            $('.remove_user_btn').bind('click', function (e) {
+                let userId = parseInt($(this).data('userid'));
+                showConfirmYesCancel(lang.get('messages.remove_member_confirm_label'), function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/ajax/team/' + _teamId + '/member/' + userId,
+                        data: {
+                            _method: 'DELETE'
+                        },
+                        dataType: 'json',
+                        success: function () {
+                            showSuccessNotification(lang.get('messages.remove_member_success'));
+
+
+                            // Remove the user from the data
+                            for (let index in _data) {
+                                // If we found the index in the data of the row we just removed..
+                                if (_data.hasOwnProperty(index) && _data[index].user_id === userId) {
+                                    // Remove it from the data array
+                                    _data.splice(index, 1);
+                                    break;
+                                }
+                            }
+
+                            refreshTable();
+                        }
+                    });
+                }, null, {type: 'error'});
+            });
+        }
     </script>
 @endsection
 
@@ -239,7 +280,7 @@ $menuItems = [
 
     <div class="tab-content">
         <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
-            <div class="form-group m-2">
+            <div class="form-group">
                 <div class="row">
                     <div class="col-8">
                         <h4>
@@ -248,12 +289,12 @@ $menuItems = [
                     </div>
                     <div class="col-4">
                         @if($userIsModerator)
-                            <button id="add_route_btn" class="btn btn-success col-md-4 float-right">
+                            <button id="add_route_btn" class="btn btn-success float-right">
                                 <i class="fas fa-plus"></i> {{ __('Add route') }}
                             </button>
-                            <button id="view_existing_routes" class="btn btn-danger col-md-4 float-right"
+                            <button id="view_existing_routes" class="btn btn-warning float-right"
                                     style="display: none;">
-                                <i class="fas fa-times"></i> {{ __('Cancel') }}
+                                <i class="fas fa-backward"></i> {{ __('Stop adding routes') }}
                             </button>
                         @endif
                     </div>
@@ -264,11 +305,11 @@ $menuItems = [
         </div>
 
         <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
-            <div class="form-group m-2">
+            <div class="form-group">
                 <h4>
                     {{ __('Invite new members') }}
                 </h4>
-                <div class="col-xl-4">
+                <div class="col-xl-5">
                     <div class="input-group-append">
                         {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
                             ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
@@ -282,24 +323,13 @@ $menuItems = [
                 </div>
             </div>
 
-            <div class="form-group m-2">
+            <div class="form-group">
                 <h4>
                     {{ __('Member list') }}
                 </h4>
                 <table id="team_members_table" class="tablesorter default_table table-striped w-100" width="100%">
                     <thead>
-                    <tr>
-                        @if(!$userIsModerator)
-                            <th width="60%">{{ __('Name') }}</th>
-                            <th width="20%">{{ __('Join date') }}</th>
-                            <th width="20%">{{ __('Permissions') }}</th>
-                        @else
-                            <th width="45%">{{ __('Name') }}</th>
-                            <th width="20%">{{ __('Join date') }}</th>
-                            <th width="20%">{{ __('Permissions') }}</th>
-                            <th width="15%">{{ __('Actions') }}</th>
-                        @endif
-                    </tr>
+
                     </thead>
                 </table>
             </div>
@@ -307,7 +337,7 @@ $menuItems = [
 
         <div class="tab-pane fade" id="details" role="tabpanel"
              aria-labelledby="details-tab">
-            <div class=" m-2">
+            <div class="">
                 <h4>
                     {{ __('Details') }}
                 </h4>

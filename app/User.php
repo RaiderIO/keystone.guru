@@ -57,13 +57,6 @@ class User extends Authenticatable
         'name'
     ];
 
-    /**
-     * @return string Make the binding for profile/{user} resolve a username rather than an ID. The IDs are private.
-     */
-    public function getRouteKeyName()
-    {
-        return 'name';
-    }
 
     public function getIsAdminAttribute()
     {
