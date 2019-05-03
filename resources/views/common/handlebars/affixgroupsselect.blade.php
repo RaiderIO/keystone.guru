@@ -10,7 +10,7 @@ if(!isset($affixgroups) ){
     let _affixGroups = {!! $affixgroups !!};
 
     $(function(){
-        // handlebarsLoadAffixGroupSelect('#affixes');
+        handlebarsLoadAffixGroupSelect('#affixes');
     });
 
     /**
@@ -42,8 +42,7 @@ if(!isset($affixgroups) ){
 
                 let html = template(handlebarsData);
                 let selector = affixSelectSelector + ' option[value=' + affixGroup.id + ']';
-                console.log(selector, html);
-                $(selector).data('content', html);
+                $(selector).attr('data-content', html);
             }
         }
 

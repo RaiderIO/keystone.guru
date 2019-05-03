@@ -214,10 +214,10 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                 <option
                                         data-url="{{ route($menuModelsRoute, ['id' => $menuModel->id]) }}"
                                         @isset($menuModel->iconfile)
-                                        data-thumbnail="{{ url('storage/' . $menuModel->iconfile->getUrl()) }}"
+                                        data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
                                         @endisset
                                         {{ $model->id === $menuModel->id ? 'selected' : '' }}
-                                >{{ $menuModel->name }}</option>
+                                ></option>
                             @endforeach
                         </select>
                         <hr>
