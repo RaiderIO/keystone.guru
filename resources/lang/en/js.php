@@ -179,6 +179,9 @@ return [
     'team_remove_route_successful' => 'Route removed from team successfully',
 
     // Dungeonroute table headers
+    'datatable_no_teams_in_table' => 'You are not a member of any team yet',
+    'datatable_no_members_in_table' => 'This team has no members yet',
+
     'preview_label' => 'Preview',
     'title_label' => 'Title',
     'dungeon_label' => 'Dungeon',
@@ -205,6 +208,7 @@ return [
     'join_date_label' => 'Join date',
     'assignable_roles_label' => 'Assignable roles',
     // 'actions_label' => 'Actions',
+    'leave_label' => 'Leave',
 
     'delete_team_confirm_label' => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?',
 ];

@@ -10,7 +10,13 @@
 @section('scripts')
     <script type="text/javascript">
         $(function () {
-            $('#team_table').DataTable({});
+            $('#team_table').DataTable({
+                'searching': false,
+                'bLengthChange': false,
+                'language': {
+                    'emptyTable': lang.get('messages.datatable_no_teams_in_table')
+                }
+            });
         });
     </script>
 @endsection

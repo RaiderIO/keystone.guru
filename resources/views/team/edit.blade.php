@@ -44,6 +44,7 @@ $menuItems = [
         var _data = {!! json_encode($data) !!};
         var _teamId = {!! $model->id !!};
         var _userIsModerator = {!! $userIsModerator ? 'true' : 'false' !!};
+        var _currentUserId = {{ $user->id }};
         var _currentUserName = "{{ $user->name }}";
 
         let _dt = null;
@@ -225,8 +226,15 @@ $menuItems = [
                     'title': lang.get('messages.actions_label'),
                     'width': '15%',
                     'render': function (data, type, row, meta) {
-                        // Handlebars the entire thing
-                        let template = Handlebars.templates['team_member_table_actions_template'];
+                        console.log(row.user_id, _currentUserId);
+                        let template = null;
+                        if( row.user_id === _currentUserId ){
+                            // Handlebars the entire thing
+                            template = Handlebars.templates['team_member_table_actions_self_template'];
+                        } else {
+                            // Handlebars the entire thing
+                            template = Handlebars.templates['team_member_table_actions_template'];
+                        }
                         let templateData = $.extend({
                             user_id: row.user_id
                         }, getHandlebarsDefaultVariables());
@@ -240,7 +248,10 @@ $menuItems = [
                 'data': _data,
                 'searching': false,
                 'bLengthChange': false,
-                'columns': columns
+                'columns': columns,
+                'language': {
+                    'emptyTable': lang.get('messages.datatable_no_members_in_table')
+                }
             });
 
             $('.remove_user_btn').bind('click', function (e) {
