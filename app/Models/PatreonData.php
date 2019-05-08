@@ -25,7 +25,7 @@ class PatreonData extends Model
      */
     function user()
     {
-        return $this->hasOne('App\Models\User');
+        return $this->hasOne('App\User');
     }
 
     /**

@@ -56,7 +56,7 @@
                 @isset($team->iconfile)
                     <td><img src="{{ url('storage/' . $team->iconfile->getUrl()) }}" style="max-width: 48px"/></td>
                 @else
-                    <td><i class="fas fa-users"></i></td>
+                    <td class="text-center"><i class="fas fa-users"></i></td>
                 @endisset
                 <td>{{ $team->name }}</td>
                 <td>{{ $team->dungeonroutes->count() }}</td>
