@@ -139,6 +139,11 @@ class Team extends IconFileModel
             }
         }
 
+        // TEMP: uncomment when collaborative editing is done.
+        if ($key = array_search('collaborator', $result)) {
+            unset($result[$key]);
+        }
+
         return $result;
     }
 

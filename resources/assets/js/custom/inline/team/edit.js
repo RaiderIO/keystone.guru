@@ -10,6 +10,8 @@ class TeamEdit extends InlineCode {
      * @param path
      */
     activate() {
+        let self = this;
+
         // Copy to clipboard functionality
         $('#team_invite_link_copy_to_clipboard').bind('click', function () {
             // https://codepen.io/shaikmaqsood/pen/XmydxJ
