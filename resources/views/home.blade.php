@@ -8,6 +8,13 @@
             {{ session('status') }}
         </div>
     @endif
+
+    @if (session('warning'))
+        <div id="app_session_warning_message" class="alert alert-warning text-center">
+            {{ session('warning') }}
+        </div>
+    @endif
+
     @if((new Jenssegers\Agent\Agent())->browser() === 'IE')
         <div class="container-fluid alert alert-warning text-center mt-4">
             <div class="container">
