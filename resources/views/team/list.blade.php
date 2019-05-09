@@ -6,20 +6,7 @@
         <i class="fas fa-plus"></i> {{ __('Create team') }}
     </a>
 @endsection
-
-@section('scripts')
-    <script type="text/javascript">
-        $(function () {
-            $('#team_table').DataTable({
-                'searching': false,
-                'bLengthChange': false,
-                'language': {
-                    'emptyTable': lang.get('messages.datatable_no_teams_in_table')
-                }
-            });
-        });
-    </script>
-@endsection
+@include('common.general.inline', ['path' => 'team/list'])
 
 @section('content')
     <div class="container">
@@ -45,26 +32,22 @@
         <tr>
             <th width="10%">{{ __('Icon') }}</th>
             <th width="70%">{{ __('Name') }}</th>
-            <th width="10%">{{ __('#Routes') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
+            <th width="10%">{{ __('Members') }}</th>
+            <th width="10%">{{ __('Routes') }}</th>
         </tr>
         </thead>
 
         <tbody>
         @foreach ($models->all() as $team)
-            <tr>
+            <tr data-teamid="{{ $team->id }}">
                 @isset($team->iconfile)
                     <td><img src="{{ url('storage/' . $team->iconfile->getUrl()) }}" style="max-width: 48px"/></td>
                 @else
                     <td class="text-center"><i class="fas fa-users"></i></td>
                 @endisset
                 <td>{{ $team->name }}</td>
+                <td>{{ $team->members->count() }}</td>
                 <td>{{ $team->dungeonroutes->count() }}</td>
-                <td>
-                    <a class="btn btn-primary" href="{{ route('team.edit', ['id' => $team->id]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
-                    </a>
-                </td>
             </tr>
         @endforeach
         </tbody>

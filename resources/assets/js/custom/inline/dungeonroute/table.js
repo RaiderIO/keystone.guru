@@ -176,14 +176,11 @@ class DungeonrouteTable extends InlineCode {
         });
 
         self._dt.on('mouseenter', 'tbody tr', function () {
-            self._dt.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
+            $(this).addClass('row_selected');
         });
 
         self._dt.on('mouseleave', 'tbody tr', function () {
-            if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected');
-            }
+            $(this).removeClass('row_selected');
         });
     }
 
