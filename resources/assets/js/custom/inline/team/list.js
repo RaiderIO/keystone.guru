@@ -18,7 +18,7 @@ class TeamList extends InlineCode {
             },
         });
 
-        this._dt.on('click', 'tbody td', function (clickEvent) {
+        this._dt.on('click', 'tbody td.clickable', function (clickEvent) {
             window.open('/team/' + $(clickEvent.currentTarget).parent().data('teamid'));
         });
 

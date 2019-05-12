@@ -44,12 +44,12 @@ return [
     'battlenet' => [
         'client_id' => env('BATTLE_NET_SIGNIN_CLIENT_ID'),
         'client_secret' => env('BATTLE_NET_SIGNIN_CLIENT_SECRET'),
-        'redirect' => url('/login/battlenet/callback')
+        'redirect' => env('APP_URL') . '/login/battlenet/callback'
     ],
 
     'discord' => [
         'client_id' => env('DISCORD_SIGNIN_CLIENT_ID'),
         'client_secret' => env('DISCORD_SIGNIN_CLIENT_SECRET'),
-        'redirect' => url('/login/discord/callback')
+        'redirect' => env('APP_URL') . '/login/discord/callback'
     ],
 ];

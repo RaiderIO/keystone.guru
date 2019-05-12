@@ -41,13 +41,13 @@
         @foreach ($models->all() as $team)
             <tr data-teamid="{{ $team->id }}">
                 @isset($team->iconfile)
-                    <td><img src="{{ url('storage/' . $team->iconfile->getUrl()) }}" style="max-width: 48px"/></td>
+                    <td class="clickable"><img src="{{ url('storage/' . $team->iconfile->getUrl()) }}" style="max-width: 48px"/></td>
                 @else
-                    <td class="text-center"><i class="fas fa-users"></i></td>
+                    <td class="text-center clickable"><i class="fas fa-users"></i></td>
                 @endisset
-                <td>{{ $team->name }}</td>
-                <td>{{ $team->members->count() }}</td>
-                <td>{{ $team->dungeonroutes->count() }}</td>
+                <td class="clickable">{{ $team->name }}</td>
+                <td class="clickable">{{ $team->members->count() }}</td>
+                <td class="clickable">{{ $team->dungeonroutes->count() }}</td>
             </tr>
         @endforeach
         </tbody>

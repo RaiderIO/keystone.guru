@@ -71,6 +71,7 @@ abstract class OAuthLoginController extends LoginController
     {
         /** @var \SocialiteProviders\Manager\OAuth2\User $oauthUser */
         $oauthUser = $this->fetchUser();
+        $success = true;
 
         $oAuthId = $this->getOAuthId($oauthUser->id);
         /** @var User $existingUser */
@@ -89,15 +90,19 @@ abstract class OAuthLoginController extends LoginController
 
                 $existingUser->attachRole($userRole);
 
-                // Login either the new or the existing user
-                Auth::login($existingUser, true);
                 \Session::flash('status', __('Registered successfully. Enjoy the website!'));
             } else {
                 \Session::flash('warning', sprintf(__('There is already a user with the e-mail address %s. Did you already register before?'), $email));
 
                 // Default to home page
                 $this->redirectTo = '/';
+                $success = false;
             }
+        }
+
+        // Login either the new or the existing user
+        if ($success) {
+            Auth::login($existingUser, true);
         }
 
         return redirect($this->redirectTo);
