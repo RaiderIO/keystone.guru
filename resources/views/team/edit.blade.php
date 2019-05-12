@@ -6,6 +6,7 @@ $user = Auth::user();
 $userRole = $model->getUserRole($user);
 $userIsModerator = $userRole === 'moderator' || $userRole === 'admin';
 $menuItems = [
+    ['icon' => 'far fa-list-alt', 'text' => __('Overview'), 'target' => '#overview'],
     ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
     ['icon' => 'fa-users', 'text' => __('Members'), 'target' => '#members'],
     ['icon' => 'fa-edit', 'text' => __('Team details'), 'target' => '#details']
@@ -56,7 +57,52 @@ foreach ($model->teamusers as $teamuser) {
 @section('content')
 
     <div class="tab-content">
-        <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
+        <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+            <div class="form-group">
+                <h4>
+                    {{ sprintf(__('Team %s'), $model->name) }}
+                </h4>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            @isset($model->iconfile)
+                                <img class="card-img-top" src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
+                                     alt="{{ __('No image') }}">
+                            @endisset
+                            <div class="card-body">
+                                <p class="card-text">
+                                    {{ $model->description }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-header">
+                                {{ __('Routes') }}
+                            </div>
+                            <div class="card-body text-center">
+                                <h1>{{ $model->dungeonroutes->count() }}</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-header">
+                                {{ __('Members') }}
+                            </div>
+                            <div class="card-body text-center">
+                                <h1>{{ $model->members->count() }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="routes" role="tabpanel" aria-labelledby="routes-tab">
             <div class="form-group">
                 <div class="row">
                     <div class="col-8">
@@ -82,10 +128,13 @@ foreach ($model->teamusers as $teamuser) {
         </div>
 
         <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
+            <h4>
+                {{ __('Members') }}
+            </h4>
             <div class="form-group">
-                <h4>
+                <h5>
                     {{ __('Invite new members') }}
-                </h4>
+                </h5>
                 <div class="col-xl-5">
                     <div class="input-group-append">
                         {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
@@ -101,9 +150,6 @@ foreach ($model->teamusers as $teamuser) {
             </div>
 
             <div class="form-group">
-                <h4>
-                    {{ __('Member list') }}
-                </h4>
                 <table id="team_members_table" class="tablesorter default_table table-striped w-100" width="100%">
                     <thead>
 
@@ -116,7 +162,7 @@ foreach ($model->teamusers as $teamuser) {
              aria-labelledby="details-tab">
             <div class="">
                 <h4>
-                    {{ __('Details') }}
+                    {{ __('Team details') }}
                 </h4>
 
                 @include('team.details', ['model' => $model])
