@@ -64,11 +64,13 @@ foreach ($model->teamusers as $teamuser) {
                 </h4>
 
                 <div class="row">
-                    <div class="col">
-                        <div class="card" style="width: 18rem;">
+                    <div class="col-lg mt-2">
+                        <div class="card text-center">
                             @isset($model->iconfile)
-                                <img class="card-img-top" src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
-                                     alt="{{ __('No image') }}">
+                            <div class="card-header">
+                                <img class="card-img-top mx-auto d-block mt-1" src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
+                                     alt="{{ __('No image') }}" style="max-width: 128px; max-height: 128px;">
+                            </div>
                             @endisset
                             <div class="card-body">
                                 <p class="card-text">
@@ -78,23 +80,23 @@ foreach ($model->teamusers as $teamuser) {
                         </div>
                     </div>
 
-                    <div class="col">
-                        <div class="card" style="width: 18rem;">
+                    <div class="col-lg mt-2">
+                        <div class="card text-center">
                             <div class="card-header">
                                 {{ __('Routes') }}
                             </div>
-                            <div class="card-body text-center">
+                            <div class="card-body">
                                 <h1>{{ $model->dungeonroutes->count() }}</h1>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col">
-                        <div class="card" style="width: 18rem;">
+                    <div class="col-lg mt-2">
+                        <div class="card text-center">
                             <div class="card-header">
                                 {{ __('Members') }}
                             </div>
-                            <div class="card-body text-center">
+                            <div class="card-body">
                                 <h1>{{ $model->members->count() }}</h1>
                             </div>
                         </div>
