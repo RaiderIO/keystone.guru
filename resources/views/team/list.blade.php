@@ -17,10 +17,10 @@
                 <p>
                     {{ __('Welcome to the new teams feature of Keystone.guru! A team is a group of people that (frequently)
                     play together. You can attach routes to a team which can then be easily viewed/edited by other team
-                    members. This allows for a much better organization than ever before!') }}
+                    members. This allows for a better organization than ever before!') }}
                 </p>
                 <p>
-                    {{ __('To get started, create a team for your group, or ask your friends to invite you to theirs
+                    {{ __('To get started, create a team for your group or ask your friends to invite you to theirs
                     using the invite link.') }}
                 </p>
             </div>
