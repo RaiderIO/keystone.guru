@@ -67,10 +67,13 @@ foreach ($model->teamusers as $teamuser) {
                     <div class="col-lg mt-2">
                         <div class="card text-center">
                             @isset($model->iconfile)
-                            <div class="card-header">
-                                <img class="card-img-top mx-auto d-block mt-1" src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
+                                <img class="card-img-top mx-auto d-block mt-1"
+                                     src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
                                      alt="{{ __('No image') }}" style="max-width: 128px; max-height: 128px;">
-                            </div>
+                            @else
+                                <div class="card-header">
+                                    {{ $model->name }}
+                                </div>
                             @endisset
                             <div class="card-body">
                                 <p class="card-text">
