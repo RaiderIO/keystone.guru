@@ -3,6 +3,39 @@
 @section('header-title', __('Changelog'))
 
 @section('content')
+    <h4>
+        v2.4 (2019/05/12)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/77">#77</a>
+            Added a new feature: Teams! You can now create a group in which you can group up routes, this allows for a
+            much easier way to share specific routes with the people you usually play with.
+        </li>
+        <li>
+            Reworked the Profile view (again!) to match the new Teams feature.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/131">#131</a>
+            Implemented OAuth integration with Battle.net, Discord and Google. You can now login/register using those
+            providers.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/162">#162</a>
+            Redid the backend on the way Routes are displayed in the various tables found on the site.
+        </li>
+    </ul>
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/135">#135</a>
+            Map tiles have been reworked and re-upscaled. They look a lot better now; this also fixed the issue where
+            zooming in the map would expose some misalignment in the tiles.
+        </li>
+    </ul>
 
     <h4>
         v2.3 (2019/04/10)
