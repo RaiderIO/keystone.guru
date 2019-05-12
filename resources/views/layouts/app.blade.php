@@ -211,13 +211,14 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                     @isset($menuModels)
                         <select id="selected_model_id" class="form-control selectpicker">
                             @foreach($menuModels as $menuModel)
+                                @php($hasIcon = isset($menuModel->iconfile))
                                 <option
                                         data-url="{{ route($menuModelsRoute, ['id' => $menuModel->id]) }}"
-                                        @isset($menuModel->iconfile)
+                                        @if($hasIcon)
                                         data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
-                                        @endisset
+                                        @endif
                                         {{ $model->id === $menuModel->id ? 'selected' : '' }}
-                                ></option>
+                                >{{ $hasIcon ? '' : $menuModel->name }}</option>
                             @endforeach
                         </select>
                         <hr>

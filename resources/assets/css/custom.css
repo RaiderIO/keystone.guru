@@ -19,6 +19,10 @@
 }
 
 /** BOOTSTRAP **/
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
 @media (max-width: 576px) and (orientation: landscape) {
     .hide-on-landscape {
         display: none;

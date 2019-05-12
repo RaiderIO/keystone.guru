@@ -37,7 +37,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 
 <div class="row no-gutters">
     <div class="col-lg-2 pl-1 pr-1">
-        @isset($team)
+        @if($team instanceof \App\Models\Team)
             {!! Form::label('team_name', __('Team')) !!}
             {!! Form::text('team_name', $team->name, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
         @endisset
