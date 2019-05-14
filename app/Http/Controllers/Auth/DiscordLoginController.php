@@ -14,9 +14,9 @@ class DiscordLoginController extends OAuthLoginController
         return $oauthUser->email !== null ? $oauthUser->email : sprintf('%s@discordapp.com', $oauthUser->id);
     }
 
-    protected function createUser($oauthUser, $oAuthId, $email)
+    protected function getUser($oauthUser, $oAuthId, $email)
     {
-        return User::create([
+        return new User([
             'oauth_id' => $oAuthId,
             // Prefer nickname over full name
             'name' => $oauthUser->nickname,

@@ -14,9 +14,9 @@ class GoogleLoginController extends OAuthLoginController
         return $oauthUser->email;
     }
 
-    protected function createUser($oauthUser, $oAuthId, $email)
+    protected function getUser($oauthUser, $oAuthId, $email)
     {
-        return User::create([
+        return new User([
             'oauth_id' => $oAuthId,
             // Prefer nickname over full name
             'name' => isset($oauthUser->nickname) && $oauthUser->nickname !== null ? $oauthUser->nickname : $oauthUser->name,

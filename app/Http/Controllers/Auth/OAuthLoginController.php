@@ -18,7 +18,7 @@ abstract class OAuthLoginController extends LoginController
 
     protected abstract function getEmailAddress($oauthUser);
 
-    protected abstract function createUser($oauthUser, $oAuthId, $email);
+    protected abstract function getUser($oauthUser, $oAuthId, $email);
 
     /**
      * @param $id string The ID that the auth provider supplied
@@ -27,6 +27,16 @@ abstract class OAuthLoginController extends LoginController
     protected function getOAuthId($id)
     {
         return sprintf('%s@%s', $id, $this->getDriver());
+    }
+
+    /**
+     * Checks if a user exists by its username.
+     * @param $username string The username to check.
+     * @return bool True if the user exists, false if it does not.
+     */
+    protected function userExistsByUsername($username)
+    {
+        return User::where('name', $username)->get()->first() !== null;
     }
 
     /**
@@ -71,32 +81,34 @@ abstract class OAuthLoginController extends LoginController
     {
         /** @var \SocialiteProviders\Manager\OAuth2\User $oauthUser */
         $oauthUser = $this->fetchUser();
-        $success = true;
+        $success = false;
 
         $oAuthId = $this->getOAuthId($oauthUser->id);
         /** @var User $existingUser */
         $existingUser = User::where('oauth_id', $oAuthId)->first();
         // Does this user exist..
         if ($existingUser === null) {
-            // Attach User role to any new user
-            $userRole = Role::where('name', 'user')->first();
-
             $email = $this->getEmailAddress($oauthUser);
-
             // Only if he/she does not already exists, we cannot just log in that existing user to prevent account takeovers.
             if (!$this->userExistsByEmail($email)) {
-                // Create a new user
-                $existingUser = $this->createUser($oauthUser, $oAuthId, $email);
+                // Get a new template user
+                $existingUser = $this->getUser($oauthUser, $oAuthId, $email);
+                // Check if the username doesn't exist yet
+                if (!$this->userExistsByUsername($existingUser->name)) {
+                    // Save it
+                    $existingUser->save();
 
-                $existingUser->attachRole($userRole);
+                    // Add it as a user
+                    $existingUser->attachRole(Role::where('name', 'user')->first());
 
-                \Session::flash('status', __('Registered successfully. Enjoy the website!'));
+                    \Session::flash('status', __('Registered successfully. Enjoy the website!'));
+                } else {
+                    \Session::flash('warning', sprintf(__('There is already a user with username %s. Did you already register before?'), $existingUser->name));
+                    $this->redirectTo = '/';
+                }
             } else {
-                \Session::flash('warning', sprintf(__('There is already a user with the e-mail address %s. Did you already register before?'), $email));
-
-                // Default to home page
+                \Session::flash('warning', sprintf(__('There is already a user with e-mail address %s. Did you already register before?'), $email));
                 $this->redirectTo = '/';
-                $success = false;
             }
         }
 

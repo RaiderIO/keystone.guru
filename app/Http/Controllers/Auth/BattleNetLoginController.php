@@ -17,9 +17,9 @@ class BattleNetLoginController extends OAuthLoginController
         return sprintf('%s@battle.net', $oauthUser->id);
     }
 
-    protected function createUser($oauthUser, $oAuthId, $email)
+    protected function getUser($oauthUser, $oAuthId, $email)
     {
-        return User::create([
+        return new User([
             'oauth_id' => $oAuthId,
             // Prefer nickname over full name
             'name' => $oauthUser->nickname,
