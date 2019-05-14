@@ -1,3 +1,5 @@
+@include('common.general.messages')
+
 @isset($model)
     {{ Form::model($model, ['route' => ['team.update', $model->id], 'method' => 'patch', 'files' => true]) }}
 @else

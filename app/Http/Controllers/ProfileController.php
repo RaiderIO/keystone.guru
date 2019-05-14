@@ -23,12 +23,15 @@ class ProfileController extends Controller
     {
         // Allow username change once!
         if ($user->isOAuth()) {
+            // When the user may change the username
             if ($request->has('name') && !$user->changed_username) {
-                $user->name = $request->get('name');
-                $user->changed_username = true;
+                // Only when the user's name has actually changed
+                if ($user->name !== $request->get('name')) {
+                    $user->name = $request->get('name');
+                    $user->changed_username = true;
+                }
             }
-        }
-        // May not change e-mail when OAuth
+        } // May not change e-mail when OAuth
         else {
             $user->email = $request->get('email');
         }
@@ -40,6 +43,7 @@ class ProfileController extends Controller
         if ($emailExists) {
             \Session::flash('warning', __('That e-mail is already in use.'));
         }
+
         $nameExists = User::where('name', $user->name)->where('id', '<>', $user->id)->get()->count() > 0;
         if ($nameExists) {
             \Session::flash('warning', __('That username is already in use.'));

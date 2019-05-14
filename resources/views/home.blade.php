@@ -3,17 +3,7 @@
 @section('header-title', __('Welcome to keystone.guru!'))
 
 @section('content')
-    @if (session('status'))
-        <div id="app_session_status_message" class="alert alert-success text-center">
-            {{ session('status') }}
-        </div>
-    @endif
-
-    @if (session('warning'))
-        <div id="app_session_warning_message" class="alert alert-warning text-center">
-            {{ session('warning') }}
-        </div>
-    @endif
+    @include('common.general.messages')
 
     @if((new Jenssegers\Agent\Agent())->browser() === 'IE')
         <div class="container-fluid alert alert-warning text-center mt-4">

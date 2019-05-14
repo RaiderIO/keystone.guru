@@ -36,10 +36,12 @@ $menuTitle = sprintf(__('%s\'s profile'), $user->name);
 
     <div class="tab-content">
         <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            {{ Form::model($user, ['route' => ['profile.update', $user->name], 'method' => 'patch']) }}
+            {{ Form::model($user, ['route' => ['profile.update', $user->id], 'method' => 'patch']) }}
             <h4>
                 {{ $menuTitle }}
             </h4>
+            @include('common.general.messages')
+
             @if($isOAuth && !$user->changed_username)
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="name">
