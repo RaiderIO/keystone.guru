@@ -16,9 +16,7 @@ abstract class OAuthLoginController extends LoginController
      */
     protected abstract function getDriver();
 
-    protected abstract function getEmailAddress($oauthUser);
-
-    protected abstract function getUser($oauthUser, $oAuthId, $email);
+    protected abstract function getUser($oauthUser, $oAuthId);
 
     /**
      * @param $id string The ID that the auth provider supplied
@@ -88,11 +86,10 @@ abstract class OAuthLoginController extends LoginController
         $existingUser = User::where('oauth_id', $oAuthId)->first();
         // Does this user exist..
         if ($existingUser === null) {
-            $email = $this->getEmailAddress($oauthUser);
+            // Get a new template user
+            $existingUser = $this->getUser($oauthUser, $oAuthId);
             // Only if he/she does not already exists, we cannot just log in that existing user to prevent account takeovers.
-            if (!$this->userExistsByEmail($email)) {
-                // Get a new template user
-                $existingUser = $this->getUser($oauthUser, $oAuthId, $email);
+            if (!$this->userExistsByEmail($existingUser->email)) {
                 // Check if the username doesn't exist yet
                 if (!$this->userExistsByUsername($existingUser->name)) {
                     // Save it
