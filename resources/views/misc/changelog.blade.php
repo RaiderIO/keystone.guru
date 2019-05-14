@@ -10,6 +10,14 @@
         General changes:
     <ul>
         <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/167">#167</a>
+            Group selection when creating/editing routes has been fixed.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/166">#166</a>
+            Added support for Kul Tiran and Zandalari Trolls.
+        </li>
+        <li>
             <a href="https://github.com/Wotuu/keystone.guru/issues/77">#77</a>
             Added a new feature: Teams! You can now create a group in which you can group up routes, this allows for a
             much easier way to share specific routes with the people you usually play with.

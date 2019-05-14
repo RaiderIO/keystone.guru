@@ -156,9 +156,6 @@ let scripts = [
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
     'resources/assets/js/custom/admin/adminmapcomment.js',
 
-    // Include the rest
-    'resources/assets/js/custom/groupcomposition.js',
-
     // Inline code
     'resources/assets/js/custom/inline/inlinemanager.js',
     'resources/assets/js/custom/inline/inlinecode.js',

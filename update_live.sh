@@ -5,6 +5,7 @@ php artisan down --message="Upgrading keystone.guru, we will be back stronger th
 
 # get rid of all local mods first
 git checkout .
+git clean -f
 
 # now update
 git pull
