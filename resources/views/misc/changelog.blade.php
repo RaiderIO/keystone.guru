@@ -4,7 +4,7 @@
 
 @section('content')
     <h4>
-        v2.4 (2019/05/12)
+        v2.4 (2019/05/16)
     </h4>
     <p>
         General changes:
