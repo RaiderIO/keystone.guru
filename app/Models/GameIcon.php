@@ -10,7 +10,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $category
  * @property string $name
  * @property string $alias
+ *
  * @property \App\Models\File $file
+ *
+ * @mixin \Eloquent
  */
 class GameIcon extends Model
 {

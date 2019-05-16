@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property $id int
  * @property $dungeon_route_id int
  * @property $affix_group_id int
+ *
+ * @mixin \Eloquent
  */
 class DungeonRouteAffixGroup extends Model
 {

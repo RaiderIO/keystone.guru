@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $rating
  * @property \App\Models\DungeonRoute $dungeonroute
  * @property \App\User $user
+ *
+ * @mixin \Eloquent
  */
 class DungeonRouteRating extends Model
 {

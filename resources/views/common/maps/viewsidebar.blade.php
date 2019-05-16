@@ -73,7 +73,7 @@ if( isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row mt-2">
-                    <div id="affixgroup_select_container" class="col">
+                    <div class="col">
                         {!! Form::select('affixes[]', $affixes, $selectedAffixes,
                             ['id' => 'affixes',
                             'class' => 'form-control affixselect selectpicker',
@@ -200,20 +200,9 @@ if( isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
     </div>
 @endsection
 
-<div class="modal fade" id="userreport_dungeonroute_modal" tabindex="-1" role="dialog"
-     aria-labelledby="userReportDungeonRouteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md vertical-align-center">
-        <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="probootstrap-modal-flex">
-                <div class="probootstrap-modal-content">
-                    @include('common.userreport.dungeonroute')
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@section('modal-content')
+    @include('common.userreport.dungeonroute')
+@overwrite
+@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
 
 @include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $subTitle])

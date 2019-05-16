@@ -58,9 +58,22 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return view('misc.timetest');
     })->name('misc.timetest');
 
+    Route::get('looptest', function () {
+        return view('misc.looptest');
+    })->name('misc.looptest');
+
     Route::get('status', function () {
         return view('misc.status');
     })->name('misc.status');
+
+    Route::get('login/google', 'Auth\GoogleLoginController@redirectToProvider')->name('login.google');
+    Route::get('login/google/callback', 'Auth\GoogleLoginController@handleProviderCallback')->name('login.google.callback');
+
+    Route::get('login/battlenet', 'Auth\BattleNetLoginController@redirectToProvider')->name('login.battlenet');
+    Route::get('login/battlenet/callback', 'Auth\BattleNetLoginController@handleProviderCallback')->name('login.battlenet.callback');
+
+    Route::get('login/discord', 'Auth\DiscordLoginController@redirectToProvider')->name('login.discord');
+    Route::get('login/discord/callback', 'Auth\DiscordLoginController@handleProviderCallback')->name('login.discord.callback');
 
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
@@ -79,6 +92,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         return redirect(route('dungeonroutes', ['dungeonroute' => $dungeonroute->public_key]), 301);
     });
     Route::get('routes', 'DungeonRouteController@list')->name('dungeonroutes');
+
+    // May be accessed without being logged in
+    Route::get('team/invite/{invitecode}', 'TeamController@invite')->name('team.invite');
 
     Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
         // Must be logged in to create a new dungeon route
@@ -112,6 +128,15 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
         Route::patch('profile/{user}/privacy', 'ProfileController@updatePrivacy')->name('profile.updateprivacy');
         Route::patch('profile', 'ProfileController@changepassword')->name('profile.changepassword');
+
+        Route::get('teams', 'TeamController@list')->name('team.list');
+        Route::get('team/new', 'TeamController@new')->name('team.new');
+        Route::get('team/{team}', 'TeamController@edit')->name('team.edit');
+        Route::delete('team/{team}', 'TeamController@delete')->name('team.delete');
+
+        Route::post('team/new', 'TeamController@savenew')->name('team.savenew');
+        Route::patch('team/{team}', 'TeamController@update')->name('team.update');
+        Route::get('team/invite/{invitecode}/accept', 'TeamController@inviteaccept')->name('team.invite.accept');
     });
 
     Route::group(['middleware' => ['auth', 'role:admin']], function () {
@@ -209,6 +234,12 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::post('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
         Route::delete('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
+
+        // Teams
+        Route::post('/team/{team}/changerole', 'APITeamController@changeRole');
+        Route::post('/team/{team}/route/{dungeonroute}', 'APITeamController@addRoute');
+        Route::delete('/team/{team}/member/{user}', 'APITeamController@removeMember');
+        Route::delete('/team/{team}/route/{dungeonroute}', 'APITeamController@removeRoute');
 
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
             Route::post('/enemypack', 'APIEnemyPackController@store');

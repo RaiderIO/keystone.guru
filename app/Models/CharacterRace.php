@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property \App\Models\Faction $faction
  * @property \Illuminate\Support\Collection $classes
  * @property \Illuminate\Support\Collection $specializations
+ *
+ * @mixin \Eloquent
  */
 class CharacterRace extends Model
 {

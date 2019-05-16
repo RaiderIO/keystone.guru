@@ -19,6 +19,10 @@
 }
 
 /** BOOTSTRAP **/
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
 @media (max-width: 576px) and (orientation: landscape) {
     .hide-on-landscape {
         display: none;
@@ -75,6 +79,25 @@
 
 @media (min-width: 1200px) and (orientation: portrait) {
     .hide-on-portrait-xl {
+        display: none;
+    }
+}
+
+@media (min-width: 1440px) {
+    .container_wide {
+        max-width: 1400px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .menu_sidebar {
+        -ms-flex: 0 0 230px;
+        flex: 0 0 230px;
+    }
+}
+
+@media (max-width: 690px) {
+    .my-sidebar {
         display: none;
     }
 }
@@ -152,21 +175,9 @@
 }
 
 /** DATATABLES */
-.routes_table tbody tr {
+.row_selected {
+    background-color: rgba(255, 255, 255, 0.15) !important;
     cursor: pointer;
-}
-
-.routes_table .selected {
-    background-color: rgba(255, 255, 255, 0.15);
-}
-
-.routes_table_wrapper .dataTables_filter {
-    display: none;
-}
-
-.routes_table_wrapper .route_thumbnail {
-    width: 192px;
-    height: 128px;
 }
 
 .routes_table .limit_width {
@@ -180,6 +191,10 @@
     .routes_table .limit_width {
         max-width: 200px;
     }
+}
+
+#routes_table .not_clickable {
+    cursor: default !important;
 }
 
 /** OWL.CAROUSEL */
@@ -342,4 +357,14 @@
     padding-left: 8px; /* Compensation for the missing border */
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+#team_members_table .dropdown.bootstrap-select .btn {
+    background-color: #4E5D6C;
+    color: #FFF;
+    border: 1px solid #2B3E5066;
+}
+
+#team_members_table .dropdown.bootstrap-select {
+    background-color: #4E5D6C;
 }

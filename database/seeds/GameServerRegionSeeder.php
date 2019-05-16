@@ -17,7 +17,7 @@ class GameServerRegionSeeder extends Seeder
 
         $gameServerRegions = [
             // https://us.battle.net/forums/en/wow/topic/20745655899?page=1#post-1
-            new GameServerRegion(['short' => 'na', 'name' => 'Americas', 'reset_day_offset' => 2, 'reset_time_offset_utc' => '15:00:00']),
+            new GameServerRegion(['short' => 'us', 'name' => 'Americas', 'reset_day_offset' => 2, 'reset_time_offset_utc' => '15:00:00']),
             // http://wowreset.com/
             new GameServerRegion(['short' => 'eu', 'name' => 'Europe', 'reset_day_offset' => 3, 'reset_time_offset_utc' => '07:00:00']),
             // Copy paste from America, I couldn't find info for these regions

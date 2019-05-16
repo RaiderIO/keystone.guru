@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Auth;
  * @property string $name
  * @property int $reset_day_offset ISO-8601 numeric representation of the day of the week
  * @property string $reset_time_offset_utc
+ *
  * @property \Illuminate\Support\Collection $specializations
+ *
+ * @mixin \Eloquent
  */
 class GameServerRegion extends Model
 {
@@ -213,7 +216,7 @@ class GameServerRegion extends Model
             $region = Auth::user()->gameserverregion;
         }
         if ($region === null) {
-            $region = GameServerRegion::all()->where('short', 'na')->first();
+            $region = GameServerRegion::all()->where('short', 'us')->first();
         }
         return $region;
     }

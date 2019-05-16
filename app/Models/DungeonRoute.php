@@ -11,12 +11,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property $id int The ID of this DungeonRoute.
+ * @property $id int
+ * @property $public_key string
  * @property $author_id int
  * @property $dungeon_id int
  * @property $faction_id int
+ * @property $team_id int
+ *
  * @property $clone_of string
- * @property $public_key string
  * @property $title string
  * @property $difficulty string
  * @property $teeming boolean
@@ -64,6 +66,8 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $routeattributesraw
  *
  * @method static \Illuminate\Database\Eloquent\Builder visible()
+ *
+ * @mixin \Eloquent
  */
 class DungeonRoute extends Model
 {
@@ -72,10 +76,11 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'avg_rating', 'rating_count', 'views'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count', 'views', 'has_team'];
 
-    protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'unlisted', 'demo', 'created_at', 'updated_at',
-        'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings'];
+    protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'team_id', 'unlisted', 'demo',
+        'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
+        'created_at', 'updated_at', 'expires_at', 'thumbnail_updated_at'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -264,6 +269,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function team()
+    {
+        return $this->belongsTo('App\Models\Team');
+    }
+
+    /**
      * If this dungeon is in try mode, have a specific user claim this route as theirs.
      *
      * @param $user User
@@ -314,6 +327,13 @@ class DungeonRoute extends Model
                 /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
                 $dungeon->active();
             });
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasTeamAttribute(){
+        return $this->team_id > 0;
     }
 
     /**

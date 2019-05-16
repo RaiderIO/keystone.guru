@@ -156,9 +156,6 @@ let scripts = [
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
     'resources/assets/js/custom/admin/adminmapcomment.js',
 
-    // Include the rest
-    'resources/assets/js/custom/groupcomposition.js',
-
     // Inline code
     'resources/assets/js/custom/inline/inlinemanager.js',
     'resources/assets/js/custom/inline/inlinecode.js',
@@ -199,6 +196,7 @@ if (images) {
     mix.copy('resources/assets/images/classes', 'public/images/classes', false);
     mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);
+    mix.copy('resources/assets/images/oauth', 'public/images/oauth', false);
     mix.copy('resources/assets/images/home', 'public/images/home', false);
     mix.copy('resources/assets/images/icon', 'public/images/icon', false);
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);

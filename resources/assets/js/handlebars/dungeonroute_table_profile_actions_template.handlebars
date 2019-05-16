@@ -1,10 +1,10 @@
-<div class="row no-gutters">
-    <div class="col">
-        <div class="btn btn-danger dungeonroute-clone"
-             data-publickey="{{public_key}}">{{clone_label}}</div>
-    </div>
-    <div class="col mt-2 mt-xl-0">
-        <div class="btn btn-danger dungeonroute-delete"
-             data-publickey="{{public_key}}">{{delete_label}}</div>
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{actions_label}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item dungeonroute-clone cursor-pointer" data-publickey="{{public_key}}"><i class="fas fa-clone"></i> {{clone_label}}</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item dungeonroute-remove text-danger cursor-pointer" data-publickey="{{public_key}}"><i class="fas fa-minus"></i> {{delete_label}}</a>
     </div>
 </div>

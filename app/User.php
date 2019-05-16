@@ -22,8 +22,12 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property int $legal_agreed_ms
  * @property boolean $analytics_cookie_opt_out
  * @property boolean $adsense_no_personalized_ads
+ * @property boolean $changed_username
+ 
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
+ *
+ * @mixin \Eloquent
  */
 class User extends Authenticatable
 {
@@ -41,7 +45,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'legal_agreed', 'legal_agreed_ms'
+        'oauth_id', 'name', 'email', 'password', 'legal_agreed', 'legal_agreed_ms'
     ];
 
     /**
@@ -53,17 +57,20 @@ class User extends Authenticatable
         'name'
     ];
 
-    /**
-     * @return string Make the binding for profile/{user} resolve a username rather than an ID. The IDs are private.
-     */
-    public function getRouteKeyName()
-    {
-        return 'name';
-    }
 
     public function getIsAdminAttribute()
     {
         return $this->hasRole('admin');
+    }
+
+    /**
+     * Checks if this user has registered using OAuth or not.
+     *
+     * @return bool
+     */
+    public function isOAuth()
+    {
+        return empty($this->password);
     }
 
     /**
@@ -146,10 +153,17 @@ class User extends Authenticatable
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function teams()
+    {
+        return $this->belongsToMany('App\Models\Team', 'team_users');
+    }
+
+    /**
      * Sends the password reset notification.
      *
      * @param  string $token
-     *
      * @return void
      */
     public function sendPasswordResetNotification($token)

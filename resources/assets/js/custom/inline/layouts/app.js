@@ -23,6 +23,22 @@ class LayoutsApp extends InlineCode {
             this._newPassword('#register_password');
             this._newPassword('#modal-register_password');
         }
+
+        $('.close').bind('click', function () {
+            let dimissId = $(this).data('alert-dismiss-id');
+            // Cookie is now set to dismiss this alert permanently
+            Cookies.set('alert-dismiss-' + dimissId, true, {expires: 30});
+        });
+
+        // When in a model-based layout with tabs, make sure the selected_modal_id actually moves the page to another when changed
+        let $selectedModal = $('#selected_model_id');
+        if ($selectedModal.length > 0) {
+            $selectedModal.bind('change', function(){
+                let optionSelected = $("option:selected", this);
+
+                window.location.href = optionSelected.data('url');
+            });
+        }
     }
 
     /**
@@ -198,6 +214,38 @@ function _showNotification(opts) {
         theme: 'bootstrap-v4',
         timeout: 4000
     }, opts)).show();
+}
+
+function _showConfirm(opts) {
+    let n = new Noty($.extend({
+        theme: 'bootstrap-v4',
+        layout: 'center',
+        modal: true
+    }, opts));
+    n.show();
+}
+
+function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
+    _showConfirm($.extend({
+            type: 'info',
+            text: text,
+            buttons: [
+                Noty.button(lang.get('messages.yes_label'), 'btn btn-success mr-1', function (n) {
+                    if (typeof yesCallback === 'function') {
+                        yesCallback();
+                    }
+                    n.close();
+                }, {id: 'yes-button', 'data-status': 'ok'}),
+
+                Noty.button(lang.get('messages.cancel_label'), 'btn btn-danger', function (n) {
+                    if (typeof noCallback === 'function') {
+                        noCallback();
+                    }
+                    n.close();
+                })
+            ]
+        }, opts)
+    );
 }
 
 /**

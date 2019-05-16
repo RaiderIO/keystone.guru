@@ -71,7 +71,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         // Attach User role to any new user
-        $userRole = Role::all()->where('name', '=', 'user')->first();
+        $userRole = Role::all()->where('name', 'user')->first();
 
         /** @var User $user */
         $user = User::create([
@@ -112,7 +112,7 @@ class RegisterController extends Controller
         \Session::flash('status', __('Registered successfully. Enjoy the website!'));
 
         // Set the redirect path if it was set
-        $this->redirectTo = $request->get('redirect', '/');
+        $this->redirectTo = $request->get('redirect', '/profile');
 
         return $this->registered($request, $user) ?: redirect($this->redirectPath());
     }

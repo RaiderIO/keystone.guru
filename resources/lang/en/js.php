@@ -88,6 +88,7 @@ return [
     'settings_saved' => 'Settings saved successfully',
     'route_published' => 'Route published',
     'route_unpublished' => 'Route unpublished',
+    'datatable_no_routes_in_table' => 'No routes found',
 
     // Dungeonroute table
     'vote' => 'vote',
@@ -155,5 +156,59 @@ return [
     'ajax_error_419' => 'Your session has expired. Refresh the page.',
 
     // Map comment popup
-    'map_comment_label' => 'Comment'
+    'map_comment_label' => 'Comment',
+
+    // Dungeonroute table
+    'actions_label' => 'Actions',
+    'add_to_team_label' => 'Add to team...',
+
+    // Teams
+    'view_label' => 'View',
+    'collaborator_label' => 'Edit',
+    'moderator_label' => 'Moderate',
+    'admin_label' => 'Own',
+    'change_role_success' => 'Permissions updated',
+
+    'team_admin' => 'Administrate team',
+    'team_moderator' => 'Moderate team',
+    'team_collaborator' => 'Edit routes',
+    'team_member' => 'View routes',
+    'remove_label' => 'Remove',
+
+    'team_add_route_successful' => 'Route added to team successfully',
+    'team_remove_route_successful' => 'Route removed from team successfully',
+
+    // Dungeonroute table headers
+    'datatable_no_teams_in_table' => 'You are not a member of any team yet',
+    'datatable_no_members_in_table' => 'This team has no members yet',
+
+    'preview_label' => 'Preview',
+    'title_label' => 'Title',
+    'dungeon_label' => 'Dungeon',
+    'features_label' => 'Features',
+    // 'affixes_label' => 'Affixes',
+    // 'attributes_label' => 'Attributes',
+    // 'setup_label' => 'Setup',
+    'author_label' => 'Author',
+    'views_label' => 'Views',
+    'rating_label' => 'Rating',
+    'published_label' => 'Published',
+    // 'actions_label' => 'Actions',
+    'add_route_label' => 'Add',
+    'remove_route_label' => 'Remove',
+
+    'yes_label' => 'Yes',
+    'no_label' => 'No',
+    'cancel_label' => 'Cancel',
+
+    'remove_member_confirm_label' => 'Are you sure you want remove this user from the team?',
+    'remove_member_success' => 'Member removed successfully',
+
+    'name_label' => 'Name',
+    'join_date_label' => 'Join date',
+    'assignable_roles_label' => 'Assignable roles',
+    // 'actions_label' => 'Actions',
+    'leave_label' => 'Leave',
+
+    'delete_team_confirm_label' => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?',
 ];

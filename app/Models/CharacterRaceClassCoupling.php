@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $character_race_id
  * @property int $character_class_id
  * @property \Illuminate\Support\Collection $specializations
+ *
+ * @mixin \Eloquent
  */
 class CharacterRaceClassCoupling extends Model
 {

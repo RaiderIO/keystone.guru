@@ -9,11 +9,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $dungeon_id
  * @property int $index
  * @property string $name
+ *
  * @property Dungeon $dungeon
+ *
  * @property \Illuminate\Support\Collection $enemypacks
  * @property \Illuminate\Support\Collection $connectedFloors
  * @property \Illuminate\Support\Collection $directConnectedFloors
  * @property \Illuminate\Support\Collection $reverseConnectedFloors
+ *
+ * @mixin \Eloquent
  */
 class Floor extends Model
 {
