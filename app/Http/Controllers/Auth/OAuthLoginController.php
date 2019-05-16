@@ -92,6 +92,7 @@ abstract class OAuthLoginController extends LoginController
             if (!$this->userExistsByEmail($existingUser->email)) {
                 // Check if the username doesn't exist yet
                 if (!$this->userExistsByUsername($existingUser->name)) {
+                    $success = true;
                     // Save it
                     $existingUser->save();
 
@@ -104,9 +105,11 @@ abstract class OAuthLoginController extends LoginController
                     $this->redirectTo = '/';
                 }
             } else {
-                \Session::flash('warning', sprintf(__('There is already a user with e-mail address %s. Did you already register before?'), $email));
+                \Session::flash('warning', sprintf(__('There is already a user with e-mail address %s. Did you already register before?'), $existingUser->email));
                 $this->redirectTo = '/';
             }
+        } else {
+            $success = true;
         }
 
         // Login either the new or the existing user

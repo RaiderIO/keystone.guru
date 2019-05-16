@@ -16,7 +16,7 @@
                             class="fas fa-times"></i></a>
                 <p>
                     {{ __('Welcome to the new teams feature of Keystone.guru! A team is a group of people that (frequently)
-                    play together. You can attach routes to a team which can then be easily viewed/edited by other team
+                    play together. You can attach routes to a team which can then be easily viewed by other team
                     members. This allows for a better organization than ever before!') }}
                 </p>
                 <p>
