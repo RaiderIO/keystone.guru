@@ -30,8 +30,7 @@
     <table id="team_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="10%">{{ __('Icon') }}</th>
-            <th width="70%">{{ __('Name') }}</th>
+            <th width="80%">{{ __('Team') }}</th>
             <th width="10%">{{ __('Members') }}</th>
             <th width="10%">{{ __('Routes') }}</th>
         </tr>
@@ -40,12 +39,12 @@
         <tbody>
         @foreach ($models->all() as $team)
             <tr data-teamid="{{ $team->id }}">
+                <td class="clickable">
                 @isset($team->iconfile)
-                    <td class="clickable"><img src="{{ url('storage/' . $team->iconfile->getUrl()) }}" style="max-width: 48px"/></td>
-                @else
-                    <td class="text-center clickable"><i class="fas fa-users"></i></td>
+                    <img class="mr-1" src="{{ url('storage/' . $team->iconfile->getUrl()) }}" style="max-width: 48px"/>
                 @endisset
-                <td class="clickable">{{ $team->name }}</td>
+                    {{ $team->name }}
+                </td>
                 <td class="clickable">{{ $team->members->count() }}</td>
                 <td class="clickable">{{ $team->dungeonroutes->count() }}</td>
             </tr>

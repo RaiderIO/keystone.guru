@@ -66,20 +66,30 @@ foreach ($model->teamusers as $teamuser) {
                 <div class="row">
                     <div class="col-lg mt-2">
                         <div class="card text-center">
+                            <div class="card-header">
+                                {{ $model->name }}
+                            </div>
                             @isset($model->iconfile)
-                                <img class="card-img-top mx-auto d-block mt-1"
-                                     src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
-                                     alt="{{ __('No image') }}" style="max-width: 128px; max-height: 128px;">
+                                <div class="card-body p-0">
+                                    <div class="row">
+                                        <div class="col" style="max-width: 128px">
+                                            <img class="card-img-top d-block"
+                                                 src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
+                                                 alt="{{ __('No image') }}"
+                                                 style="max-width: 128px; max-height: 128px;">
+                                        </div>
+                                        <div class="col text-left pl-0">
+                                            {{ $model->description }}
+                                        </div>
+                                        <div class="col">
+                                        </div>
+                                    </div>
+                                </div>
                             @else
-                                <div class="card-header">
-                                    {{ $model->name }}
+                                <div class="card-body">
+                                    {{ $model->description }}
                                 </div>
                             @endisset
-                            <div class="card-body">
-                                <p class="card-text">
-                                    {{ $model->description }}
-                                </p>
-                            </div>
                         </div>
                     </div>
 
