@@ -16,9 +16,18 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
 
         return {
             // Set the main html
-            main_visual_classes: 'badge badge-primary badge-pill badge_enemy_forces',
+            main_visual_classes: 'badge badge-primary badge-pill badge_enemy_forces ' +
+                ((this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') ? 'teeming' : ''),
             main_visual_html: this.enemyvisual.enemy.getEnemyForces()
         };
+    }
+
+    /**
+     * Called whenever the NPC of the enemy has been refreshed.
+     */
+    _refreshNpc(){
+        // Re-draw the visual
+        this.setIcon(this.iconName);
     }
 
     getSize() {

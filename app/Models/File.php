@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
  * @property string $model_class
  * @property string $disk
  * @property string $path
+ *
+ * @mixin \Eloquent
  */
 class File extends Model
 {
@@ -88,12 +90,19 @@ class File extends Model
      * Saves a file to the database
      * @param $uploadedFile UploadedFile The uploaded file element.
      * @param $model Model The model that wants to save this file.
+     * @param $dir string The directory to save this file in.
      * @return \App\Models\File The newly saved file in the database.
      * @throws \Exception
      */
     public static function saveFileToDB($uploadedFile, $model, $dir = 'upload')
     {
         $disk = 'public';
+
+        // Ensure the path exists
+        $storageDir = Storage::disk('public')->getAdapter()->getPathPrefix() . '/' . $dir;
+        if( !is_dir($storageDir) ){
+            mkdir($storageDir, 755, true);
+        }
 
         $newFile = new File();
         $newFile->model_id = $model->id;

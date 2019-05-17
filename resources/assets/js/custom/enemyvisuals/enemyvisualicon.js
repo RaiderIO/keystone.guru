@@ -1,5 +1,5 @@
 class EnemyVisualIcon extends Signalable {
-    constructor(enemyvisual){
+    constructor(enemyvisual) {
         super();
         console.assert(enemyvisual instanceof EnemyVisual, enemyvisual, 'enemyvisual was not an EnemyVisual');
         this.enemyvisual = enemyvisual;
@@ -10,8 +10,8 @@ class EnemyVisualIcon extends Signalable {
         return [];
     }
 
-    _getTemplateData(){
-        return {};
+    _getTemplateData() {
+        return {id: this.enemyvisual.enemy.id};
     }
 
     /**
@@ -24,7 +24,7 @@ class EnemyVisualIcon extends Signalable {
         this.enemyvisual._buildVisual();
     }
 
-    cleanup(){
+    cleanup() {
 
     }
 }

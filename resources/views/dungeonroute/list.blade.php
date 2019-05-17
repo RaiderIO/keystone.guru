@@ -11,5 +11,5 @@
 ?>
 
 @section('content')
-    @include('common.dungeonroute.table')
+    @include('common.dungeonroute.table', ['view' => 'routes'])
 @endsection

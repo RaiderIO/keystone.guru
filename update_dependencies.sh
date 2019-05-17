@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 tput setaf 2;
-echo "Updating npm..."
-tput sgr0;
-npm update
-
-tput setaf 2;
 echo "Installing npm packages..."
 tput sgr0;
 npm install
@@ -15,9 +10,9 @@ tput sgr0;
 npm audit fix
 
 tput setaf 2;
-echo "Updating composer..."
+echo "Installing composer packages..."
 tput sgr0;
-composer update
+composer install
 
 ./ide_helper_regen.sh
 

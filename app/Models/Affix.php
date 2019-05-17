@@ -7,6 +7,8 @@ namespace App\Models;
  * @property $icon_file_id int The file ID of the icon associated with this Affix.
  * @property $name string The name of the Affix.
  * @property $description string The description of this Affix.
+ *
+ * @mixin \Eloquent
  */
 class Affix extends IconFileModel
 {

@@ -7,17 +7,24 @@ $classes = \App\Models\CharacterClass::with('specializations')->get();
 $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
 // @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some point
 ?>
+@include('common.general.inline', ['path' => 'common/group/composition',
+'options' => [
+    'factions' => $factions,
+    'specializations' => $specializations,
+    'classDetails' => $classes,
+    'races' =>  $racesClasses,
+
+]])
 
 @section('head')
     @parent
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}                              {
+        .{{ strtolower($faction->name) }}                               {
             color: {{ $faction->color }};
             font-weight: bold;
         }
-
         @endforeach
     </style>
 @endsection
@@ -25,14 +32,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 @section('scripts')
     @parent
 
-    <script id="test_script">
-
-        let _factions = {!! $factions !!};
-        let _specializations = {!! $specializations !!};
-        // Clarity so that _classes is not a thing (conflicts with a programming class etc).
-        let _classDetails = {!! $classes !!};
-        let _races = {!! $racesClasses !!};
-
+    <script>
         let _oldFaction;
         let _oldSpecializations;
         let _oldClasses;
@@ -45,8 +45,6 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
                 _loadDungeonRouteDefaults();
             });
 
-
-            initGroupComposition();
             <?php
                 // @formatter:off
                 // This piece of code (which does not format well at all, hence manual formatting) makes sure that if
@@ -54,38 +52,38 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
                 // validate its contents, we restore the sent data back to the form
                 $oldFactionId = old('faction_id', null);
                 if(isset($dungeonroute) || !is_null($oldFactionId)) {
-                    if( isset($dungeonroute) ){ ?>
+                if( isset($dungeonroute) ){ ?>
 
-                    _oldFaction = '{{ $dungeonroute->faction_id }}';
-                    _oldSpecializations = {!! $dungeonroute->specializations !!};
-                    _oldClasses = {!! $dungeonroute->classes !!};
-                    _oldRaces = {!! $dungeonroute->races !!};
+                _oldFaction = '{{ $dungeonroute->faction_id }}';
+            _oldSpecializations = {!! $dungeonroute->specializations !!};
+            _oldClasses = {!! $dungeonroute->classes !!};
+            _oldRaces = {!! $dungeonroute->races !!};
 
-                <?php } else {
-                    // convert old values in a format we can read it in
-                    $newSpecializations = [];
-                    foreach (old('specialization', '') as $oldSpecialization) {
-                        $newSpecializations[] = ['id' => $oldSpecialization];
-                    }
-                    $newClasses = [];
-                    foreach (old('class', '') as $oldClass) {
-                        $newClasses[] = ['id' => $oldClass];
-                    }
-                    $newRaces = [];
-                    foreach (old('race', '') as $oldRace) {
-                        $newRaces[] = ['id' => $oldRace];
-                    }
+            <?php } else {
+                // convert old values in a format we can read it in
+                $newSpecializations = [];
+                foreach (old('specialization', '') as $oldSpecialization) {
+                    $newSpecializations[] = ['id' => $oldSpecialization];
+                }
+                $newClasses = [];
+                foreach (old('class', '') as $oldClass) {
+                    $newClasses[] = ['id' => $oldClass];
+                }
+                $newRaces = [];
+                foreach (old('race', '') as $oldRace) {
+                    $newRaces[] = ['id' => $oldRace];
+                }
                 ?>
 
-                    _oldFaction = '{{ old('faction_id', '') }}';
-                    _oldSpecializations = {!! json_encode($newSpecializations)  !!};
-                    _oldClasses = {!! json_encode($newClasses)  !!};
-                    _oldRaces = {!! json_encode($newRaces)  !!};
+                _oldFaction = '{{ old('faction_id', '') }}';
+            _oldSpecializations = {!! json_encode($newSpecializations)  !!};
+            _oldClasses = {!! json_encode($newClasses)  !!};
+            _oldRaces = {!! json_encode($newRaces)  !!};
 
             <?php } ?>
             _loadDungeonRouteDefaults();
             <?php }
-        // @formatter:on
+            // @formatter:on
             ?>
         });
     </script>
@@ -135,13 +133,3 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
     </div>
     <?php } ?>
 </div>
-
-<script id="composition_icon_option_template" type="text/x-handlebars-template">
-    <div class="row no-gutters">
-        <div class="col-auto select_icon class_icon @{{ css_class }}" style="height: 24px;">
-        </div>
-        <div class="col pl-1">
-            @{{ name }}
-        </div>
-    </div>
-</script>

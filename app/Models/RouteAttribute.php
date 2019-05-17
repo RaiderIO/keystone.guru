@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $category
  * @property string $name
  * @property string $description
+ *
+ * @mixin \Eloquent
  */
 class RouteAttribute extends Model
 {

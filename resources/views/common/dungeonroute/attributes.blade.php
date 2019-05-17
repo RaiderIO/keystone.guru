@@ -4,15 +4,18 @@ $showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
 ?>
 
 <div class="form-group">
-    <label for="attributes">
-        {{ __('Attributes') }}
-        @if(!$showNoAttributes)
+    @if($showNoAttributes)
+        <label for="attributes" data-toggle="tooltip"
+               title="{{ __('Select the attributes that your group is comfortable with handling.') }}">
+            {{ __('Attributes') }}
+        </label>
+    @else
+        <label for="attributes">{{ __('Attributes') }}</label>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
         __('Attributes describe what features your route has that others may not be able to complete due to composition ' .
             'differences or skill. Marking attributes properly enables others to find your route more easily.')
          }}"></i>
-        @endif
-    </label>
+    @endif
     <?php
     $allAttributes = \App\Models\RouteAttribute::all();
     $allAttributeCount = $allAttributes->count();

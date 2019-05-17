@@ -3,19 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Models\EnemyPatrol;
 use App\Models\EnemyPatrolVertex;
+use App\Models\Polyline;
 use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
 
 class APIEnemyPatrolController extends Controller
 {
     use ChecksForDuplicates;
+    use ListsEnemyPatrols;
 
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        return EnemyPatrol::all()->where('floor_id', '=', $floorId);
+        return $this->listEnemyPatrols($request->get('floor_id'));
     }
 
     /**
@@ -32,24 +34,27 @@ class APIEnemyPatrolController extends Controller
         $enemyPatrol->enemy_id = $request->get('enemy_id');
         $enemyPatrol->faction = $request->get('faction', 'any');
 
+        // Init to a default value if new
+        if (!$enemyPatrol->exists) {
+            $enemyPatrol->polyline_id = -1;
+        }
+
         if (!$enemyPatrol->save()) {
             throw new \Exception("Unable to save enemy patrol!");
         } else {
-            $enemyPatrol->deleteVertices();
+            // Create a new polyline and save it
+            /** @var Polyline $polyline */
+            $polyline = Polyline::findOrNew($enemyPatrol->polyline_id);
+            $polyline->model_id = $enemyPatrol->id;
+            $polyline->model_class = get_class($enemyPatrol);
+            $polyline->color = $request->get('color');
+            $polyline->weight = $request->get('weight');
+            $polyline->vertices_json = json_encode($request->get('vertices'));
+            $polyline->save();
 
-            // Get the new vertices
-            $vertices = $request->get('vertices');
-
-            // Store them
-            foreach ($vertices as $key => $vertex) {
-                // Assign route to each passed vertex
-                $vertices[$key]['enemy_patrol_id'] = $enemyPatrol->id;
-            }
-
-            $this->checkForDuplicateVertices('App\Models\EnemyPatrolVertex', $vertices);
-
-            // Bulk insert
-            EnemyPatrolVertex::insert($vertices);
+            // Couple the patrol to the polyline
+            $enemyPatrol->polyline_id = $polyline->id;
+            $enemyPatrol->save();
         }
 
         return ['id' => $enemyPatrol->id];
@@ -61,8 +66,8 @@ class APIEnemyPatrolController extends Controller
             /** @var EnemyPatrol $enemyPatrol */
             $enemyPatrol = EnemyPatrol::findOrFail($request->get('id'));
 
+            $enemyPatrol->polyline->delete();
             $enemyPatrol->delete();
-            $enemyPatrol->deleteVertices();
             $result = ['result' => 'success'];
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

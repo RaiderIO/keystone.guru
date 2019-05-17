@@ -49,8 +49,8 @@ class CharacterInfoSeeder extends Seeder
             'Highmountain Tauren' => new CharacterRace(['faction_id' => $horde_id]),
             'Mag\'har Orc' => new CharacterRace(['faction_id' => $horde_id]),
 
-//            'Kul Tiran Human' => new CharacterRace(['faction_id' => $alliance_id]),
-//            'Zandalari Troll' => new CharacterRace(['faction_id' => $horde_id]),
+            'Kul Tiran Human' => new CharacterRace(['faction_id' => $alliance_id]),
+            'Zandalari Troll' => new CharacterRace(['faction_id' => $horde_id]),
         ];
 
         foreach ($races as $name => $race) {
@@ -124,8 +124,8 @@ class CharacterInfoSeeder extends Seeder
             'Highmountain Tauren' =>    ['x', 'x', ' ', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' '],
             'Mag\'har Orc' =>           ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
 
-//            'Kul Tiran Human' =>        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x', ' '],
-//            'Zandalari Troll' =>        ['x', 'x', ' ', 'x', 'x', ' ', 'x', 'x', 'x', ' ', 'x', ' '],
+            'Kul Tiran Human' =>        ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
+            'Zandalari Troll' =>        ['x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' '],
         ];
         // @formatter:on
 
@@ -187,7 +187,7 @@ class CharacterInfoSeeder extends Seeder
                 $icon->model_id = $characterClassSpecialization->id;
                 $icon->model_class = get_class($characterClassSpecialization);
                 $icon->disk = 'public';
-                $icon->path = sprintf('images/specializations/%s/%s_%s.png', $classKey, $specKey);
+                $icon->path = sprintf('images/specializations/%s/%s_%s.png', $classKey, $classKey, $specKey);
                 $icon->save();
 
                 $characterClassSpecialization->icon_file_id = $icon->id;
@@ -202,7 +202,7 @@ class CharacterInfoSeeder extends Seeder
         DB::table('character_classes')->truncate();
         DB::table('character_class_specializations')->truncate();
         DB::table('character_race_class_couplings')->truncate();
-        DB::table('files')->where('model_class', '=', 'App\Models\CharacterClass')->delete();
-        DB::table('files')->where('model_class', '=', 'App\Models\CharacterClassSpecialization')->delete();
+        DB::table('files')->where('model_class', 'App\Models\CharacterClass')->delete();
+        DB::table('files')->where('model_class', 'App\Models\CharacterClassSpecialization')->delete();
     }
 }

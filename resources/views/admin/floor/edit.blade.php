@@ -1,4 +1,4 @@
-@extends('layouts.app', ['noads' => true, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $dungeon->name])
+@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $dungeon->name])
 @section('header-title')
     {{ $headerTitle }}
 @endsection
@@ -17,7 +17,12 @@
             'edit' => true,
             'dungeon' => $dungeon,
             'npcs' => $npcs,
-            'selectedFloorId' => $model->id
+            'floorId' => $model->id,
+            'hiddenMapObjectGroups' => [
+                'brushline',
+                'path',
+                'killzone'
+            ]
         ])
 
         @include('common.maps.admineditsidebar', [

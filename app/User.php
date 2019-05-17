@@ -22,8 +22,12 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property int $legal_agreed_ms
  * @property boolean $analytics_cookie_opt_out
  * @property boolean $adsense_no_personalized_ads
+ * @property boolean $changed_username
+ 
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
+ *
+ * @mixin \Eloquent
  */
 class User extends Authenticatable
 {
@@ -41,7 +45,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'legal_agreed', 'legal_agreed_ms'
+        'oauth_id', 'name', 'email', 'password', 'legal_agreed', 'legal_agreed_ms'
     ];
 
     /**
@@ -53,17 +57,20 @@ class User extends Authenticatable
         'name'
     ];
 
-    /**
-     * @return string Make the binding for profile/{user} resolve a username rather than an ID. The IDs are private.
-     */
-    public function getRouteKeyName()
-    {
-        return 'name';
-    }
 
     public function getIsAdminAttribute()
     {
         return $this->hasRole('admin');
+    }
+
+    /**
+     * Checks if this user has registered using OAuth or not.
+     *
+     * @return bool
+     */
+    public function isOAuth()
+    {
+        return empty($this->password);
     }
 
     /**
@@ -146,54 +153,21 @@ class User extends Authenticatable
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function teams()
+    {
+        return $this->belongsToMany('App\Models\Team', 'team_users');
+    }
+
+    /**
      * Sends the password reset notification.
      *
      * @param  string $token
-     *
      * @return void
      */
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new CustomPasswordResetEmail($token));
-    }
-
-    /**
-     * Get a list of Infested votes per user for displaying in a Hall of Fame.
-     * @param int $affixGroupId
-     * @return array
-     */
-    public static function getInfestedEnemyHoF($affixGroupId = -1)
-    {
-        /** @var GameServerRegion $region */
-        $region = GameServerRegion::getUserOrDefaultRegion();
-
-        // Build some variables
-        $affixGroupQuery = '';
-        $params = [
-            // Of the last month only
-            'seasonStartTime' => $region->getCurrentSeasonStart()->format('Y-m-d H:i:s')
-        ];
-
-        // User wants to restrict on affix group, make it so
-        if ($affixGroupId > 0) {
-            $params['affixGroupId'] = $affixGroupId;
-            // If affix group is set, add a restriction, otherwise don't restrict
-            $affixGroupQuery = ' AND `enemy_infested_votes`.affix_group_id = :affixGroupId ';
-        }
-
-        $result = DB::select($query = '
-                SELECT `users`.`name`,
-                       CAST(SUM(if(`vote` = 1, 1, 0)) as SIGNED) as infested_yes_votes,
-                       CAST(SUM(if(`vote` = 0, 1, 0)) as SIGNED) as infested_no_votes
-                FROM `users`
-                       LEFT JOIN `enemy_infested_votes` ON `enemy_infested_votes`.`user_id` = `users`.`id`
-                                                             ' . $affixGroupQuery . '
-                                                             AND `enemy_infested_votes`.updated_at > :seasonStartTime
-                GROUP BY `users`.`id`
-                LIMIT 10;
-                ', $params);
-
-        // Set the ID column as a key for easy isset() usage later
-        return $result;
     }
 }

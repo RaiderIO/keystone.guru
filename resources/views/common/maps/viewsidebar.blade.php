@@ -3,79 +3,16 @@
 $floorSelection = (!isset($floorSelect) || $floorSelect) && $model->dungeon->floors->count() !== 1;
 
 // Only add the 'clone of' when the user cloned it from someone else as a form of credit
-$cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $model->clone_of)->where('author_id', $model->author_id)->count() === 0 ?
-    sprintf('%s %s',
-        __('Clone of'),
-        ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $model->clone_of]) . '">' . $model->clone_of . '</a>')
-    : '';
+if( isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $model->clone_of)->where('author_id', $model->author_id)->count() === 0 ){
+    $subTitle = sprintf('%s %s', __('Clone of'),
+            ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $model->clone_of]) . '">' . $model->clone_of . '</a>'
+    );
+} else {
+    $subTitle = sprintf(__('By %s'), $model->author->name);
+}
 ?>
 
-@section('scripts')
-    @parent
-
-    <script>
-        let _dungeonRoute = {!! $model !!};
-
-        $(function () {
-            $("#view_dungeonroute_group_setup").html(
-                handlebarsGroupSetupParse(_dungeonRoute.setup)
-            );
-            $('#rating').barrating({
-                theme: 'bars-1to10',
-                readonly: true,
-                initialRating: {{ $model->avg_rating }}
-            });
-            $('#your_rating').barrating({
-                theme: 'bars-1to10',
-                deselectable: true,
-                allowEmpty: true,
-                onSelect: function (value, text, event) {
-                    rate(value);
-                }
-            });
-            $('#favorite').bind('change', function (el) {
-                favorite($('#favorite').is(':checked'));
-            });
-
-            refreshTooltips();
-        });
-
-        /**
-         * Rates the current dungeon route or unset it.
-         * @param value int
-         */
-        function rate(value) {
-            let isDelete = value === '';
-            $.ajax({
-                type: isDelete ? 'DELETE' : 'POST',
-                url: '/ajax/dungeonroute/' + _dungeonRoute.public_key + '/rate',
-                dataType: 'json',
-                data: {
-                    rating: value
-                },
-                success: function (json) {
-                    // Update the new average rating
-                    $('#rating').barrating('set', Math.round(json.new_avg_rating));
-                }
-            });
-        }
-
-        /**
-         * Favorites the current dungeon route, or not.
-         * @param value bool
-         */
-        function favorite(value) {
-            $.ajax({
-                type: !value ? 'DELETE' : 'POST',
-                url: '/ajax/dungeonroute/' + _dungeonRoute.public_key + '/favorite',
-                dataType: 'json',
-                success: function (json) {
-
-                }
-            });
-        }
-    </script>
-@endsection
+@include('common.general.inline', ['path' => 'common/maps/viewsidebar', 'options' => $model])
 
 @section('sidebar-content')
     <!-- Enemy forces -->
@@ -97,15 +34,6 @@ $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ __('Details') }}</h5>
-
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col-5 col-md-6 font-weight-bold">
-                        {{ __('Author') }}:
-                    </div>
-                    <div class="col-7 col-md-6">
-                        {{ $model->author->name }}
-                    </div>
-                </div>
                 <div class="row view_dungeonroute_details_row mt-2">
                     <div class="col-5 col-md-6 font-weight-bold">
                         {{ __('Dungeon') }}:
@@ -145,7 +73,7 @@ $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row mt-2">
-                    <div id="affixgroup_select_container" class="col">
+                    <div class="col">
                         {!! Form::select('affixes[]', $affixes, $selectedAffixes,
                             ['id' => 'affixes',
                             'class' => 'form-control affixselect selectpicker',
@@ -272,20 +200,9 @@ $cloneTitle = isset($model->clone_of) && \App\Models\DungeonRoute::where('public
     </div>
 @endsection
 
-<div class="modal fade" id="userreport_dungeonroute_modal" tabindex="-1" role="dialog"
-     aria-labelledby="userReportDungeonRouteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md vertical-align-center">
-        <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="probootstrap-modal-flex">
-                <div class="probootstrap-modal-content">
-                    @include('common.userreport.dungeonroute')
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@section('modal-content')
+    @include('common.userreport.dungeonroute')
+@overwrite
+@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
 
-@include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $cloneTitle])
+@include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $subTitle])

@@ -15,7 +15,7 @@ class CreateAffixGroupsTable extends Migration
     {
         Schema::create('affix_groups', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('randomcolumn');
+            $table->boolean('active')->default(true);
         });
     }
 

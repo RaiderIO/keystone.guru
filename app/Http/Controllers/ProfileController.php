@@ -21,19 +21,41 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->email = $request->get('email');
+        // Allow username change once!
+        if ($user->isOAuth()) {
+            // When the user may change the username
+            if ($request->has('name') && !$user->changed_username) {
+                // Only when the user's name has actually changed
+                if ($user->name !== $request->get('name')) {
+                    $user->name = $request->get('name');
+                    $user->changed_username = true;
+                }
+            }
+        } // May not change e-mail when OAuth
+        else {
+            $user->email = $request->get('email');
+        }
         $user->game_server_region_id = $request->get('game_server_region_id');
         $user->timezone = $request->get('timezone');
 
-        $exists = User::where('email', $user->email)->where('id', '<>', $user->id)->get()->count() > 0;
-        if (!$exists) {
-            if (!$user->save()) {
-                abort(500, __('An unexpected error occurred trying to save your profile'));
-            } else {
-                \Session::flash('status', __('Profile updated'));
-            }
-        } else {
+        // Check if these things already exist or not, if so notify the user that they couldn't be saved
+        $emailExists = User::where('email', $user->email)->where('id', '<>', $user->id)->get()->count() > 0;
+        if ($emailExists) {
             \Session::flash('warning', __('That e-mail is already in use.'));
+        }
+
+        $nameExists = User::where('name', $user->name)->where('id', '<>', $user->id)->get()->count() > 0;
+        if ($nameExists) {
+            \Session::flash('warning', __('That username is already in use.'));
+        }
+
+        // Only when no duplicates are found!
+        if (!$emailExists && !$nameExists) {
+            if ($user->save()) {
+                \Session::flash('status', __('Profile updated'));
+            } else {
+                abort(500, __('An unexpected error occurred trying to save your profile'));
+            }
         }
 
         return redirect()->route('profile.edit');

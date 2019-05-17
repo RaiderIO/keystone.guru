@@ -26,7 +26,7 @@ chmod -R 755 bootstrap/cache
 
 # make sure setfacl is installed on the server
 sudo apt-get install acl
-# Give www-data user permissing to write in this folder regardless of ownership. See https://stackoverflow.com/a/29882246/771270
+# Give www-data user permission to write in this folder regardless of ownership. See https://stackoverflow.com/a/29882246/771270
 setfacl -d -m g:www-data:rwx storage/logs
 
 # ensure any uploaded file may be accessed directly (symlinks public/storage to storage/app/public)
@@ -47,13 +47,16 @@ echo "Publishing service providers..."
 tput sgr0;
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider"
 php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
-php artisan vendor:publish --provider="PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider"
+php artisan vendor:publish --provider="PragmaRX\Tracker\Vendor\Laravel\ServiceProvider"
 
 # In case Tracker is not working, check this -> https://github.com/antonioribeiro/tracker#installing
 tput setaf 2;
 echo "Setting up tracker..."
 tput sgr0;
 php artisan tracker:tables
+
+# Generate encryption key
+php artisan key:generate
 
 # Run migrate again to fix the tracker
 ./migrate.sh
@@ -63,9 +66,11 @@ git clone https://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git publ
 cd public/templates/sb-admin-2
 git checkout tags/v3.3.7+1
 git checkout -b v3.3.7+1
+
 # Back to where we came from
 cd ../../..
 
+sudo npm install handlebars -g
 sudo apt-get install supervisor
 sudo apt-get install pngquant
 

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property $id int
  * @property $name string
+ *
+ * @mixin \Eloquent
  */
 class PaidTier extends Model
 {

@@ -9,7 +9,7 @@ class DungeonRoutePlayerClassRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === '\App\Models\DungeonRoute';
+        return $modelClassName === 'App\Models\DungeonRoute';
     }
 
     /**

@@ -8,10 +8,21 @@ class FactionDisplayControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let source = $('#map_faction_display_controls_template').html();
-                let template = handlebars.compile(source);
+                let template = Handlebars.templates['map_faction_display_controls_template'];
 
-                let data = {};
+                // factionsData is defined in map.blade.php
+                let factions = [];
+                for (let index in factionsData) {
+                    let faction = factionsData[index];
+                    factions.push({
+                        name: faction.name,
+                        name_lc: faction.name.toLowerCase(),
+                        icon_url: faction.iconfile.icon_url,
+                        fa_class: parseInt(index) === 0 ? 'fas' : 'far'
+                    });
+                }
+
+                let data = {factions: factions};
 
                 // Build the status bar from the template
                 self.domElement = $(template(data));
@@ -54,19 +65,27 @@ class FactionDisplayControls extends MapControl {
         });
     }
 
+    /**
+     * Called whenever the visibility has been toggled to display another faction.
+     * @param faction
+     * @param visible
+     * @private
+     */
     _visibilityToggled(faction, visible) {
         console.assert(this instanceof FactionDisplayControls, this, 'this is not FactionDisplayControls');
 
         let enemyMapObjectGroups = [
-            this.map.getMapObjectGroupByName('enemy'),
-            this.map.getMapObjectGroupByName('enemypack'),
-            this.map.getMapObjectGroupByName('enemypatrol')
+            this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY),
+            this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK),
+            this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL)
         ];
+
         // For each group
         $.each(enemyMapObjectGroups, function (i, enemyMapObjectGroup) {
             // For each object in the group
             $.each(enemyMapObjectGroup.objects, function (index, mapObject) {
-                if (mapObject.faction === faction) {
+                // One or either or any faction
+                if (mapObject.faction === faction && mapObject.faction !== 'any') {
                     enemyMapObjectGroup.setMapObjectVisibility(mapObject, visible);
                 }
             });

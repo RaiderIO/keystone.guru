@@ -1,4 +1,15 @@
-var c = {
+if( typeof Cookies.get('polyline_default_color') === 'undefined' ){
+    Cookies.set('polyline_default_color', '#9DFF56');
+}
+if( typeof Cookies.get('polyline_default_weight') === 'undefined' ){
+    Cookies.set('polyline_default_weight', 3);
+}
+
+Cookies.defaults = $.extend(Cookies.defaults, {
+    polyline_default_color: '#9DFF56',
+});
+
+let c = {
     map: {
         admin: {
             mapobject: {
@@ -22,7 +33,18 @@ var c = {
                 /*'#C000F0',
                 '#E25D5D',
                 '#5DE27F'*/
-                'green', 'yellow', 'orange', 'red', 'purple']
+                'green', 'yellow', 'orange', 'red', 'purple'
+            ]
+        },
+        adminenemy: {
+            mdtPolylineOptions: {
+                color: '#00FF00',
+                weight: 1
+            },
+            mdtPolylineMismatchOptions: {
+                color: '#FFA500',
+                weight: 1
+            }
         },
         enemypack: {
             colors: {
@@ -34,13 +56,36 @@ var c = {
 
                 saved: '#5993D2',
                 savedBorder: '#34577D'
-            }
+            },
+            margin: 1,
+            arcSegments: function (nr) {
+                return Math.max(3, 9 - nr);
+            },
+            polygonOptions: {
+                color: '#9DFF56',
+                weight: 1,
+                fillOpacity: 0.3,
+                opacity: 1
+            },
         },
-        enemypatrol : {
+        enemypatrol: {
             defaultColor: '#E25D5D'
         },
-        route: {
-            defaultColor: '#9DFF56',
+        /* These colors may be overriden by drawcontrols.js */
+        path: {
+            defaultColor: Cookies.get('polyline_default_color'),
+        },
+        polyline: {
+            defaultColor: Cookies.get('polyline_default_color'),
+            defaultWeight: Cookies.get('polyline_default_weight'),
+        },
+        brushline: {
+            /**
+             * The minimum distance (squared) that a point must have before it's added to the line from the previous
+             * point. This is to prevent points from being too close to eachother and reducing performance, increasing
+             * bandwidth and storage in database (though that's not that big of a deal).
+             **/
+            minDrawDistanceSquared: 3
         },
         killzone: {
             colors: {
@@ -53,17 +98,17 @@ var c = {
                 mouseoverAddObject: '#5993D2',
             },
             polylineOptions: {
-                color: '#FF0000',
+                color: Cookies.get('polyline_default_color'),
                 weight: 1
             },
             polygonOptions: {
-                color: '#FF0000',
+                color: Cookies.get('polyline_default_color'),
                 weight: 2,
                 fillOpacity: 0.3,
                 opacity: 1
             },
-            arcSegments: function(nr){
-                return Math.max(3, 12 - nr);
+            arcSegments: function (nr) {
+                return Math.max(3, 10 - nr);
             },
             margin: 1
         },

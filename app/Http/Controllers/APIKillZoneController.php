@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Controllers\Traits\ListsKillzones;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\KillZone;
@@ -16,19 +17,14 @@ class APIKillZoneController extends Controller
 {
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
+    use ListsKillzones;
 
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        $dungeonRoutePublicKey = $request->get('dungeonroute');
-        try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey, false);
-            $result = KillZone::where('floor_id', '=', $floorId)->where('dungeon_route_id', '=', $dungeonRoute->id)->get();
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
-
-        return $result;
+        return $this->listKillzones(
+            $request->get('floor_id'),
+            $request->get('dungeonroute')
+        );
     }
 
     /**
@@ -97,7 +93,7 @@ class APIKillZoneController extends Controller
     {
         try {
             // @TODO handle this in a policy?
-            if ($dungeonroute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin')) {
+            if (!Auth::check() || ($dungeonroute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin'))) {
                 throw new Exception('Unauthorized');
             }
 

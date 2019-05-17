@@ -3,11 +3,12 @@
         "id": 155,
         "enemy_pack_id": -1,
         "floor_id": 52,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -107.26000000000001,
-        "lng": 136,
+        "lat": -106.62,
+        "lng": 135.75,
         "npc": {
             "id": 133007
         }

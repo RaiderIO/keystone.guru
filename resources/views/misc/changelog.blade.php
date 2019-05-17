@@ -3,6 +3,742 @@
 @section('header-title', __('Changelog'))
 
 @section('content')
+    <h4>
+        v2.4 (2019/05/16)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/167">#167</a>
+            Group selection when creating/editing routes has been fixed.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/166">#166</a>
+            Added support for Kul Tiran and Zandalari Trolls.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/77">#77</a>
+            Added a new feature: Teams! You can now create a group in which you can group up routes, this allows for a
+            much easier way to share specific routes with the people you usually play with.
+        </li>
+        <li>
+            Reworked the Profile view (again!) to match the new Teams feature.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/131">#131</a>
+            Implemented OAuth integration with Battle.net, Discord and Google. You can now login/register using those
+            providers.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/162">#162</a>
+            Redid the backend on the way Routes are displayed in the various tables found on the site.
+        </li>
+    </ul>
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/135">#135</a>
+            Map tiles have been reworked and re-upscaled. They look a lot better now; this also fixed the issue where
+            zooming in the map would expose some misalignment in the tiles.
+        </li>
+    </ul>
+
+    <h4>
+        v2.3 (2019/04/10)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/154">#154</a>
+            Reduced loading times of various pages and increased performance.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/150">#150</a>
+            Switching floors in 'Try' mode no longer clears all mapping progress. As a result of changes for this, I've
+            added functionality to save the current mapping as a new Route. If you're not logged in, there's an option
+            to log in and continue mapping, if you do not have an account you can now also register from the same page
+            and continue mapping. Furthermore, changes for this ticket will allow me to more easily allow people to
+            create anonymous Routes.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/153">#153</a>
+            Cloning a route now properly clones free drawn shapes.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/160">#160</a>
+            Updated notifications so they no longer show in a bar at the bottom, but neatly in the top right corner
+            instead.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            I've done some fine-tuning and bug fixing for the general layout of the map, in both desktop and mobile
+            versions.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/156">#156</a>
+            Worked around an issue where sometimes a Route would cause freezing of the entire browser tab. I cannot
+            directly fix this issue as I believe it lays in another library I use, but I've contacted the author of said
+            library and hopefully I'll have a proper fix soon. For now it seems fixed and is very rare regardless, so
+            hopefully it stays gone til the fix is there.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        MDT importer changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/157">#157</a>
+            Updated to MDT version 2.5.6, all changes since 2.3.2 will now properly import, such as pull colors.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Mapping changes (for patch 8.1.5)
+        <a href="https://github.com/Wotuu/keystone.guru/issues/158">#158</a>:
+    <ul>
+        <li>
+            Atal'Dazar
+            <ul>
+                <li>
+                    Added a Teeming Dazar'ai Confessor towards the south side of the dungeon, after the first two packs
+                    in a pack with two Dazar'ai Colossi.
+                </li>
+                <li>
+                    Removed two Teeming Shieldbearer of Zul in the pack before Vol'kaal.
+                </li>
+            </ul>
+            Freehold
+            <ul>
+                <li>
+                    The start of the dungeon is now correctly marked on the map.
+                </li>
+                <li>
+                    Removed a Teeming Irontide Bonesaw, a non-Teeming Irontide Bonesaw and a Teeming Irontide Enforcer
+                    from the large patrolling pack right before Skycap'n Kragg.
+                </li>
+                <li>
+                    Removed a Teeming Irontide Officer in the large pack before Harlan Sweete.
+                </li>
+            </ul>
+            King's Rest
+            <ul>
+                <li>
+                    Removed a Teeming Spectral Brute before the second to last boss.
+                </li>
+            </ul>
+            Siege of Boralus (Alliance)
+            <ul>
+                <li>
+                    Added a Dockhound Packmaster and Snarling Dockhound in a pack after passing through the first gate,
+                    after the market section, before the first boss.
+                </li>
+                <li>
+                    In that same pack, added a Teeming Scrimshaw Enforcer.
+                </li>
+            </ul>
+            Shrine of the Storm
+            <ul>
+                <li>
+                    Removed multiple Abyss Dweller in the room before the bridge to the last section.
+                </li>
+                <li>
+                    Removed multiple duplicate Abyssal Eel in the last room.
+                </li>
+            </ul>
+            Temple of Sethraliss
+            <ul>
+                <li>
+                    Removed a duplicate Sandswept Marksman in the pack entering Aspix' and Adderis' room, when taking
+                    a left initially.
+                </li>
+                <li>
+                    Aspix is no longer incorrectly marked as an Eye of Sethraliss.
+                </li>
+            </ul>
+            The MOTHERLODE!!
+            <ul>
+                <li>
+                    Added Mech Jockeys in the first section next to their respective Mechanized Peacekeepers.
+                </li>
+                <li>
+                    Removed 3 Teeming Wanton Sappers in the big pack after the first boss.
+                </li>
+                <li>
+                    Removed a lot of the Teeming Crawler Mines in the last section.
+                </li>
+            </ul>
+            The Underrot
+            <ul>
+                <li>
+                    Removed a Underrot Tick in the second pack from the start before the first boss.
+                </li>
+                <li>
+                    Removed a Teeming Living Rot in a pack right after the first boss.
+                </li>
+            </ul>
+            Tol Dagor
+            <ul>
+                <li>
+                    Removed a Teeming Sewer Vicejaw in the Sodden Depths.
+                </li>
+                <li>
+                    Removed a duplicate Ashvane Marine in the pack right before Knight Captain Valyri.
+                </li>
+                <li>
+                    Removed a duplicate Ashvane Warden right after Knight Captain Valyri.
+                </li>
+            </ul>
+            Waycrest Manor
+            <ul>
+                <li>
+                    Removed a pack of Devouring Maggots and Infested Peasants when coming from the south towards Raal
+                    the Gluttonous' room.
+                </li>
+                <li>
+                    Removed two Teeming Heartsbane Soulcharmers in Lady Waycrest's room.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </p>
+
+    <h4>
+        v2.2.2 (2019/03/07)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/149">#149</a>
+            The MDT importer will now show warnings when something isn't right, rather than outright failing. Also
+            updated the UI to be more user friendly.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
+        v2.2.1 (2019/03/04)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/146">#146</a>
+            Fixed an error that occurred MDT Importer when your imported routes had any drawn lines.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
+        v2.2 (2019/03/04)
+    </h4>
+    <p>
+        Description: <br>
+        This release focuses on improving some user interface elements. I'm not done yet with the changes, but this
+        should be a good improvement already regardless.
+    </p>
+
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/137">#137</a>
+            Assets are now versioned; this means your cached version of Keystone.guru will be invalidated whenever I
+            push an update. This should prevent errors from occurring when taking an old website (your cached version)
+            and having it talk to the new back-end (should there be such breaking changes).
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/118">#118</a>
+            The (buggy) free drawing tool has been replaced by a new tool. This one should be bug-free and offer a much
+            better user experience. Draw away!
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/140">#140</a>
+            The drawing tools are no longer located in the sidebar. Instead, they are now found in a new floating bar
+            that lives on the lower side of your screen. This should reduce the amount of travel your mouse has to do,
+            and puts all items in a more convenient place. This also aids mobile users in creating their routes. In the
+            future I will be looking at adding more elements to this bar so that the sidebar should no longer be needed
+            for general usage, or can be removed entirely.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/141">#141</a>
+            Removed the popup to select a raid marker when clicking on an enemy. Instead, a circle menu pops out and
+            allows you to select the raid marker that way. This should make the process a tad quicker and more
+            aesthetically pleasing.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/142">#142</a>
+            Enemy forces are now displayed in the above mentioned floating bar.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/143">#143</a>
+            Updating your enemy forces (through adding enemies to a Killzone) will now briefly flash the enemy forces
+            display with a green color, rather than showing a small popup.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
+        v2.1 (2019/02/20)
+    </h4>
+    <p>
+        Description: <br>
+        This release focuses on improving the codebase, increasing performance and tying up some loose ends in the code.
+        There will be some improvements and bug fixes but no major new features. I will be focussing on that in next
+        releases now that the codebase is much stronger than before.
+    </p>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            Fixed Virtual Tour not working for dungeons with just one floor.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/115">#115</a>
+            Changed the internal structure of all line-based objects. This results in a good performance increase now
+            and especially going into the future as the amount user-generated Routes keep growing.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/85">#85</a>
+            Reduced the amount of requests upon startup, increasing the speed at which the page loads, especially for
+            those not situated in Europe.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/110">#110</a>
+            Pre-compiled most Handlebars templates. Increases performance and reduces load on the local machine.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/132">#132</a>
+            Any new Route that you create would not save its affixes; this has been resolved (some time ago already,
+            but it's in this release now).
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/124">#124</a>
+            Revamped the menu while on mobile. It looks a lot better now.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/133">#133</a>
+            When you delete a Route it's now cleaned up more thoroughly.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/88">#88</a>
+            Routes are now called Paths. The term 'Route' was ambiguous with your entire run, which is also called a
+            Route. Now the entire plannable dungeon is called a Route, the path which you take is comprised of Paths.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            Various packs that enemies can be part of have been corrected. Some enemies were not part of a pack when
+            they should've been, or were part of the wrong pack.
+        </li>
+        <li>
+            Fixed an issue in Waycrest Manor in The Catacombs that caused Javascript errors, leading to potentially
+            unresponsive pages.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
+        v2.0.2 (2019/02/05)
+    </h4>
+    <p>
+        General changes:
+
+    <ul>
+        <li>
+            Fixed Virtual Tour not working properly.
+        </li>
+        <li>
+            Assigned raid markers are now displayed properly again.
+        </li>
+    </ul>
+    </p>
+
+    <h4>
+        v2.0 (2019/02/03)
+    </h4>
+    <p>
+        General changes:
+
+    <ul>
+        <li>
+            You can now create a new route from a Method Dungeon Tools export string! Keystone.guru will import your
+            pulls, affix, free-drawn shapes and notes from your string.
+        </li>
+    </ul>
+    </p>
+
+    <p>
+        Map changes:
+
+    <ul>
+        <li>
+            You can now free draw lines with a color and weight of your choice.
+        </li>
+        <li>
+            Teeming enemies are now displayed with a red border around them to help see what changed from a 'normal'
+            week.
+        </li>
+        <li>
+            Newly drawn Routes are no longer half-transparent before a refresh of the map.
+        </li>
+        <li>
+            Currently selected drawing tool is now highlighted for the duration of the drawing.
+        </li>
+        <li>
+            Added color and weight selection to draw controls which affects newly generated Routes, drawn lines and
+            Killzones.
+        </li>
+    </ul>
+    </p>
+    <p>
+        Mapping changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/95">#95</a>
+            Due to synchronizing MDT enemies with Keystone.guru enemies, I've had to ensure any differences between MDT
+            and Keystone.guru were ironed out. The changes were as follows:
+        </li>
+        <li>
+            Atal'dazar
+            <ul>
+                <li>
+                    Added two missing Dazar'ai Colossi to the south east which were missing on Teeming weeks.
+                </li>
+                <li>
+                    Added missing Reanimation Totem to accompany the Reanimated Honor Guard when going towards the north
+                    from the start.
+                </li>
+                <li>
+                    A Feasting Skyscreamer in the middle of the dungeon was incorrectly marked as Alliance only, this
+                    has been rectified to be visible for everyone.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Freehold
+            <ul>
+                <li>
+                    Unmarked an Irontide Bonesaw as Teeming before Skycap'n Kragg.
+                </li>
+                <li>
+                    Added missing Irontide Bonesaw on Teeming week before Skycap'n Kragg.
+                </li>
+                <li>
+                    Added missing pack of an Irontide Enforcer, Crackshot and two Bonesaws after Skycap'n Kragg.
+                </li>
+                <li>
+                    Added missing Blacktooth Scrappers and Blacktooth Brutes right after the first rope bridge, around
+                    the center of the square.
+                </li>
+                <li>
+                    Added missing Irontide Crusher on Teeming week before Ring of Booty.
+                </li>
+                <li>
+                    Added various missing Cutwater Knife Jugglers/Harpooner to various packs before Ring of Booty.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Kings' Rest
+            <ul>
+                <li>
+                    Added missing Shadow-Borne Witch Doctor on Teeming week before The Golden Serpent.
+                </li>
+                <li>
+                    Added missing Shadow-Borne Champion on non-Teeming weeks in The Golden Serpent's room just before
+                    going to the next room. Also removed Teeming enemies from that same pack.
+                </li>
+                <li>
+                    Removed various Teeming enemies in the room with the mini bosses.
+                </li>
+                <li>
+                    Removed a Teeming Purification Construct prior to Mchimba the Embalmer.
+                </li>
+                <li>
+                    Added missing Irontide Crusher on Teeming week before Ring of Booty.
+                </li>
+                <li>
+                    Removed a Teeming Spectral Beastmaster prior to The Council of Tribes.
+                </li>
+                <li>
+                    Removed a Teeming Spectral Brute prior to The Council of Tribes.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Siege of Boralus (Shared)
+            <ul>
+                <li>
+                    Added missing Irontide Marauder around Dread Captain Lockwood.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Siege of Boralus (Horde)
+            <ul>
+                <li>
+                    Marked a Scrimshaw Gutter and Kul Tiran Footman in the beginning at the end of the dock as
+                    Horde-only as was intended.
+                </li>
+                <li>
+                    Adds for Sergeant Bainbridge are now displayed.
+                </li>
+                <li>
+                    Fixed various Scrimshaw Gutters and Kul Tiran Footmen marked as 'any' to Horde right after the
+                    broken ship, before Dread Captain Lockwood.
+                </li>
+                <li>
+                    Removed one solo Scrimshaw Gutter right after the broken ship, before Dread Captain Lockwood.
+                </li>
+                <li>
+                    Removed two Teeming Ashvane Spotters in the big pack right after the broken ship, before Dread
+                    Captain Lockwood.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Siege of Boralus (Alliance)
+            <ul>
+                <li>
+                    Added various enemies that exist below the docks at the start.
+                </li>
+                <li>
+                    Added missing pack of two Blacktar Bombers in the initial Docks section.
+                </li>
+                <li>
+                    Added missing pack of five Scrimshaw Gutters and a Scrimshaw Enforcer in the initial Docks section.
+                </li>
+                <li>
+                    Added missing Scrimshaw Gutter in the pack in the corner after the initial Docks section, when going
+                    down the stairs.
+                </li>
+                <li>
+                    Added a missing pack of two Snarling Dockhounds at the gallows before Chopper Redhook.
+                </li>
+                <li>
+                    Merged two packs at the gallows before Chopper Redhook; converted two Scrimshaw Gutters to Blacktar
+                    Bombers to complete the new pack.
+                </li>
+                <li>
+                    Converted an Irontide Enforcer to an Irontide Raider in one of the first packs on the square with
+                    Chopper Redhook.
+                </li>
+                <li>
+                    Added Chopper Redhook and his adds.
+                </li>
+                <li>
+                    Added a pack of seven Irontide Marauders on the docks right before the broken ship.
+                </li>
+                <li>
+                    Added two Irontide Marauders on the docks right after the broken ship.
+                </li>
+                <li>
+                    Added two Irontide Marauder around Dread Captain Lockwood.
+                </li>
+                <li>
+                    Removed a pack of six enemies as the last pack before Viq'Goth.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Shrine of the Storm
+            <ul>
+                <li>
+                    Removed a Teeming Tidesage Spiritualist that was patrolling on the first set of stairs.
+                </li>
+                <li>
+                    Removed a Teeming Shrine Templar on the pack right before crossing the first bridge (after
+                    mini-bosses).
+                </li>
+                <li>
+                    Added missing Abyss Dweller that appears in the room with the two Drowned Depthbringers.
+                </li>
+                <li>
+                    In the same room, added a missing Abyss Dweller on Teeming weeks.
+                </li>
+                <li>
+                    Added missing Irontide Crusher on Teeming week before Ring of Booty.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Temple of Sethraliss
+            <ul>
+                <li>
+                    Removed two Sandfury Stonefists from the pack when going right from the beginning.
+                </li>
+                <li>
+                    The patrolling Sandfury Stonefist between the second set of packs is now Teeming only.
+                </li>
+                <li>
+                    Updated various Teeming and non-Teeming enemies around the first bosses.
+                </li>
+                <li>
+                    Added missing Teeming pack of Shrouded Fangs and Krolusk Hatchlings in the cave with the Krolusks.
+                </li>
+                <li>
+                    Fixed enemy NPCs of various enemies in the same room.
+                </li>
+                <li>
+                    Removed three Teeming Crazed Incubators around Merektha.
+                </li>
+                <li>
+                    Added two Eyes of Sethraliss which grant 12 enemy forces each upon completing the eye throwing
+                    event.
+                </li>
+            </ul>
+        </li>
+        <li>
+            The MOTHERLODE!!
+            <ul>
+                <li>
+                    Added some missing Venture Co. Longshoreman on the dock in the beginning (though they give 0
+                    forces).
+                </li>
+                <li>
+                    Removed a Teeming Addled Thug and Hired Assassin in the pack prior to the first boss.
+                </li>
+                <li>
+                    Added a missing patrolling Venture Co. Mastermind before Rixxa Fluxflame.
+                </li>
+                <li>
+                    Added a Teeming Venture Co. Alchemist in a pack before Rixxa Fluxflame.
+                </li>
+                <li>
+                    Re-did the south pack just before the last pack before Rixxa Fluxflame (get it?).
+                </li>
+                <li>
+                    Removed a Teeming Venture Co. Alchemist and a Weapons Tester in the pack right before Rixxa
+                    Fluxflame.
+                </li>
+                <li>
+                    Added a bunch of missing Crawler Mines in The V.M.Z, also updated mines to have correct Teeming
+                    appearance.
+                </li>
+            </ul>
+        </li>
+        <li>
+            The Underrot
+            <ul>
+                <li>
+                    Unmarked two Chosen Matrons on the left pack after the first bridge as Teeming.
+                </li>
+                <li>
+                    The patrol on the right side of the bridge now has two Devout Blood Priests.
+                </li>
+                <li>
+                    Removed two Chosen Matrons the right pack after the first bridge.
+                </li>
+                <li>
+                    Lots of reconfiguration around Cragmaw the Infested. Added various new enemies, removed invalid
+                    ones, re-marked and un-marked Teeming enemies.
+                </li>
+                <li>
+                    Unmarked one Reanimated Guardian as Teeming, in the patrolling pack of 5 before Sporecaller Zancha.
+                </li>
+                <li>
+                    Removed the Fallen Deathspeaker + adds that patrols after Sporecaller Zancha.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Tol Dagor
+            <ul>
+                <li>
+                    Moved the first pack of Stinging Parasites to the The Drain. Your routes are auto-converted; if you
+                    killed the pack, it'll now be killed on the second floor instead.
+                </li>
+                <li>
+                    Added two missing packs of Stinging Parasites in The Drain.
+                </li>
+                <li>
+                    Added missing Sewer Vicejaw, removed Teeming Sewer Vicejaw in The Drain.
+                </li>
+                <li>
+                    Added a few missing Despondent Scallywags in The Brig.
+                </li>
+                <li>
+                    Removed a Cutwater Striker from the first pack you encounter when entering the Detention Block,
+                    fixed Teeming enemies for said pack as well.
+                </li>
+                <li>
+                    Removed a Teeming Cutwater Striker from the pack with the Block Warden.
+                </li>
+                <li>
+                    Added two missing Teeming Ashvane Marines and an Ashvane Officer in the Officers Quarters on the
+                    left side of the area.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Waycrest Manor
+            <ul>
+                <li>
+                    Corrected an issue where Upstairs was marked as the first floor rather than The Grand Foyer.
+                </li>
+                <li>
+                    Removed middle pack of Soul Essences upon entering the dungeon.
+                </li>
+                <li>
+                    Added a Heartsbane Runeweaver after taking a left initially, then right again.
+                </li>
+                <li>
+                    Unmarked a Heartsbane Runeweaver as Teeming in the room north of the Sister bosses.
+                </li>
+                <li>
+                    Removed Heartsbane Runeweaver in The Hunting Lodge.
+                </li>
+                <li>
+                    Converted a Maddened Survivalist to a Diseased Mastiff in the upper pack in The Hunting Lodge (yes,
+                    this must've hurt).
+                </li>
+                <li>
+                    Converted a Maddened Survivalist to a Crazed Marksman in the lower pack in The Hunting Lodge (this
+                    didn't really hurt).
+                </li>
+                <li>
+                    Updated a lot of enemies around the Banquet Hall. Most of the packs, in fact.
+                </li>
+                <li>
+                    Upstairs: Converted a Maddened Survivalist to a Crazed Marksman in the pack near the Hunting Lodge.
+                </li>
+                <li>
+                    Removed a Teeming Marked Sister in The Cellar in the pack on the top right.
+                </li>
+                <li>
+                    Removed a Teeming Coven Thornshaper in The Cellar in the pack on the top left.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </p>
 
     <h4>
         v1.6 (2019/01/04)
@@ -26,7 +762,8 @@
         General changes:
     <ul>
         <li>
-            Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by dungeon.
+            Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by
+            dungeon.
         </li>
         <li>
             Fixed some route thumbnails not being generated.
@@ -118,6 +855,8 @@
                     Re-added Reanimation Totems to specific packs on the north side of the dungeon.
                 </li>
             </ul>
+        </li>
+        <li>
             Freehold
             <ul>
                 <li>
@@ -127,12 +866,15 @@
                     Corrected some enemy NPCs around the Ring of Booty.
                 </li>
             </ul>
+        </li>
+        <li>
             Kings' Rest
             <ul>
                 <li>
                     Added three missing Embalming Fluids in the chamber at the second boss.
                 </li>
             </ul>
+        <li>
             Temple of Sethraliss
             <ul>
                 <li>
@@ -319,7 +1061,7 @@
             users can now vote on all enemies to be Infested or not. Using the new dropdown for visualization selection
             in the top right you can select a new 'Infested Voting' visualization, which allows you to vote yes or no on
             each enemy on-screen if they're infested or not. Each enemy requires
-            {{ config('keystoneguru.infested_user_vote_threshold') }} more yes votes than no votes to be marked
+            {{ config('keystoneguru.infested_user_vote_threshold', 3) }} more yes votes than no votes to be marked
             as Infested on everyone's map. Every reset, the votes are cleared and the voting begins again (Infested
             enemies change every week).
             <br><br>
@@ -584,6 +1326,8 @@
                     Gilded Priestesses at Priestess Alun'za are no longer linked.
                 </li>
             </ul>
+        </li>
+        <li>
             The MOTHERLODE!!
             <ul>
                 <li>
@@ -593,12 +1337,16 @@
                     Numerous corrections to The D.M.Z. before the last boss (missing bombs, slightly off locations).
                 </li>
             </ul>
+        </li>
+        <li>
             The Underrot
             <ul>
                 <li>
                     Added a missing pack of 2 patrolling Diseased Lashes between the first and second boss.
                 </li>
             </ul>
+        </li>
+        <li>
             Tol Dagor
             <ul>
                 <li>

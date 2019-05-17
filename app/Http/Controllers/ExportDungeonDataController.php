@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brushline;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
-use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\DungeonStartMarker;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
@@ -13,7 +13,7 @@ use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\MapComment;
 use App\Models\Npc;
-use App\Models\Route;
+use App\Models\Path;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -30,13 +30,13 @@ class ExportDungeonDataController extends Controller
         $result = array();
 
         foreach (Dungeon::all() as $dungeon) {
+            /** @var $dungeon Dungeon */
             // HoV is our test dungeon so keep there here so I don't have to rewrite this every time I want to debug
 //            if( $dungeon->getKeyAttribute() !== 'hallsofvalor' ){
 //                continue;
 //            }
 
-            /** @var $dungeon Dungeon */
-            $rootDirPath = storage_path() . '/dungeondata/' . $dungeon->expansion->shortname . '/' . $dungeon->key;
+            $rootDirPath = database_path('/seeds/dungeondata/' . $dungeon->expansion->shortname . '/' . $dungeon->key);
 
             // Demo routes, load it in a specific way to make it easier to import it back in again
             $demoRoutes = $dungeon->dungeonroutes->where('demo', true)->values();
@@ -48,11 +48,11 @@ class ExportDungeonDataController extends Controller
                 // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
                 // for each and every re-import
                 $demoRoute->setHidden(['id']);
-                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups', 'routes', 'killzones', 'enemyraidmarkers', 'mapcomments']);
+                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapcomments']);
 
                 // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
                 // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
-                // Thus, remove the IDs from both Routes and KillZones as we need to make new IDs when the DungeonRoute
+                // Thus, remove the IDs from both Paths and KillZones as we need to make new IDs when the DungeonRoute
                 // is imported into the production environment
                 $toHide = new Collection();
                 // No ->merge() :( -> https://medium.com/@tadaspaplauskas/quick-tip-laravel-eloquent-collections-merge-gotcha-moment-e2a56fc95889
@@ -65,7 +65,14 @@ class ExportDungeonDataController extends Controller
                 foreach ($demoRoute->affixgroups as $item) {
                     $toHide->add($item);
                 }
-                foreach ($demoRoute->routes as $item) {
+                foreach ($demoRoute->brushlines as $item) {
+                    /** @var $item Brushline */
+                    $item->setVisible(['floor_id', 'polyline']);
+                    $toHide->add($item);
+                }
+                foreach ($demoRoute->paths as $item) {
+                    /** @var $item Path */
+                    $item->setVisible(['floor_id', 'polyline']);
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->killzones as $item) {
@@ -115,7 +122,7 @@ class ExportDungeonDataController extends Controller
             }
         }
 
-        return view('admin.datadump.viewexporteddungeondata', ['data' => $result]);
+        return view('admin.tools.datadump.viewexporteddungeondata', ['data' => $result]);
     }
 
     /**
@@ -133,15 +140,5 @@ class ExportDungeonDataController extends Controller
         $file = fopen($filePath, 'w') or die('Cannot create file');
         fwrite($file, json_encode($dataArr, JSON_PRETTY_PRINT));
         fclose($file);
-    }
-
-    /**
-     * Handles the viewing of a collection of items in a table.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
-     */
-    public function view()
-    {
-        return view('admin.datadump.exportdungeondata', ['dungeons' => Dungeon::all()]);
     }
 }

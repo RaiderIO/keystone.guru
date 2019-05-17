@@ -1,8 +1,8 @@
 class MapObjectGroup extends Signalable {
 
-    constructor(map, name, editable = false) {
+    constructor(manager, name, editable = false) {
         super();
-        this.map = map;
+        this.manager = manager;
         this.name = name;
         this.editable = editable;
 
@@ -11,13 +11,18 @@ class MapObjectGroup extends Signalable {
 
         let self = this;
 
-        this.map.register('map:beforerefresh', this, function () {
+        // Callback to when the manager has received data from the server
+        this.manager.register('fetchsuccess', this, function(fetchEvent){
+            self._fetchSuccess(fetchEvent.data.response);
+        });
+
+        this.manager.map.register('map:beforerefresh', this, function () {
             // Remove any layers that were added before
             self._removeObjectsFromLayer.call(self);
 
             if (self.layerGroup !== null) {
                 // Remove ourselves from the map prior to refreshing
-                self.map.leafletMap.removeLayer(self.layerGroup);
+                self.manager.map.leafletMap.removeLayer(self.layerGroup);
             }
 
             for (let i = self.objects.length - 1; i >= 0; i--) {
@@ -26,7 +31,7 @@ class MapObjectGroup extends Signalable {
             self.objects = [];
         });
         // Whenever the map refreshes, we need to add ourselves to the map again
-        this.map.register('map:refresh', this, (function (data) {
+        this.manager.map.register('map:refresh', this, (function (data) {
             // Rebuild the layer group
             self.layerGroup = new L.LayerGroup();
 
@@ -34,6 +39,13 @@ class MapObjectGroup extends Signalable {
             // @todo self.isShown(), currently the layer will ALWAYS show regardless of MapControl status
             self.setVisibility(true);
         }).bind(this));
+    }
+
+    /**
+     * Refreshes the objects that are displayed on the map based on the current dungeon & selected floor.
+     */
+    _fetchSuccess(response) {
+        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
     }
 
     /**
@@ -47,7 +59,7 @@ class MapObjectGroup extends Signalable {
         for (let i = 0; i < this.objects.length; i++) {
             let enemyPack = this.objects[i];
             // Remove all layers
-            this.map.leafletMap.removeLayer(enemyPack.layer);
+            this.manager.map.leafletMap.removeLayer(enemyPack.layer);
         }
     }
 
@@ -70,7 +82,7 @@ class MapObjectGroup extends Signalable {
 
         this.layerGroup.removeLayer(data.context.layer);
         // @TODO Should this be put in the dungeonmap instead?
-        this.map.leafletMap.removeLayer(data.context.layer);
+        this.manager.map.leafletMap.removeLayer(data.context.layer);
 
         let object = data.context;
 
@@ -83,6 +95,25 @@ class MapObjectGroup extends Signalable {
             }
         }
         this.objects = newObjects;
+    }
+
+    /**
+     * Called whenever an object we created has finished wrapping up and is now synced
+     * @param data
+     * @private
+     */
+    _onObjectSynced(data){
+        let object = data.context;
+
+        // We only use this trigger once to fire the object:add event, so unregister..
+        object.unregister('synced', this);
+        // Fire the event
+        this.signal('object:add', {object: object, objectgroup: this});
+
+        // Hide the objects if they're not visible by default
+        if( !object.isDefaultVisible() ){
+            this.setMapObjectVisibility(object, false);
+        }
     }
 
     /**
@@ -99,13 +130,15 @@ class MapObjectGroup extends Signalable {
             if (!this.layerGroup.hasLayer(object.layer)) {
                 this.layerGroup.addLayer(object.layer);
                 // Trigger this on the object
-                object.signal('object:shown', {object: object, visible: true});
+                object.signal('shown', {object: object, visible: true});
+                this.signal('object:shown', {object: object, objectgroup: this, visible: true});
             }
         } else {
             if (this.layerGroup.hasLayer(object.layer)) {
                 this.layerGroup.removeLayer(object.layer);
                 // Trigger this on the object
-                object.signal('object:hidden', {object: object, visible: false});
+                object.signal('hidden', {object: object, visible: false});
+                this.signal('object:hidden', {object: object, objectgroup: this, visible: false});
             }
         }
     }
@@ -152,7 +185,7 @@ class MapObjectGroup extends Signalable {
         object.onLayerInit();
 
         object.register('object:deleted', this, (this._onObjectDeleted).bind(this));
-        this.signal('object:add', {object: object, objectgroup: this});
+        object.register('synced', this, (this._onObjectSynced).bind(this));
 
         return object;
     }
@@ -163,7 +196,7 @@ class MapObjectGroup extends Signalable {
      */
     isShown() {
         console.assert(this instanceof MapObjectGroup, this, 'this was not a MapObjectGroup');
-        return this.map.leafletMap.hasLayer(this.layerGroup);
+        return this.manager.map.leafletMap.hasLayer(this.layerGroup);
     }
 
     /**
@@ -173,16 +206,9 @@ class MapObjectGroup extends Signalable {
     setVisibility(visible) {
         console.assert(this instanceof MapObjectGroup, this, 'this was not a MapObjectGroup');
         if (!this.isShown() && visible) {
-            this.map.leafletMap.addLayer(this.layerGroup);
+            this.manager.map.leafletMap.addLayer(this.layerGroup);
         } else if (this.isShown() && !visible) {
-            this.map.leafletMap.removeLayer(this.layerGroup);
+            this.manager.map.leafletMap.removeLayer(this.layerGroup);
         }
-    }
-
-    /**
-     * Refreshes the objects that are displayed on the map based on the current dungeon & selected floor.
-     */
-    fetchFromServer(floor, callback) {
-        console.warn('call to empty fetchFromServer()');
     }
 }

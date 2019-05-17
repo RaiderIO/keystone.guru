@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
+use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Models\DungeonFloorSwitchMarker;
 use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
@@ -10,11 +11,11 @@ use Teapot\StatusCode\Http;
 class APIDungeonFloorSwitchMarkerController extends Controller
 {
     use ChecksForDuplicates;
+    use ListsDungeonFloorSwitchMarkers;
 
     function list(Request $request)
     {
-        $floorId = $request->get('floor_id');
-        return DungeonFloorSwitchMarker::all()->where('floor_id', '=', $floorId);
+        return $this->listDungeonFloorSwitchMarkers($request->get('floor_id'));
     }
 
     /**

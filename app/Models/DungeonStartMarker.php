@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property $floor_id int
  * @property $lat float
  * @property $lng float
+ *
+ * @mixin \Eloquent
  */
 class DungeonStartMarker extends Model
 {

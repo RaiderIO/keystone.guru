@@ -33,6 +33,14 @@ abstract class DatatablesColumnHandler
     protected abstract function _applyFilter(Builder $builder, $columnData, $order);
 
     /**
+     * @return DatatablesHandler
+     */
+    public function getDtHandler(): DatatablesHandler
+    {
+        return $this->_dtHandler;
+    }
+
+    /**
      * @return string Gets the column name of the handler.
      */
     public function getColumnName()
@@ -68,15 +76,14 @@ abstract class DatatablesColumnHandler
         }
 
         // If the column we're supposed to represent is not found
-        if ($column === null) {
-            throw new \Exception(sprintf("Unable to find column '%s' in Request->params->columns array", $this->_columnName));
+        if ($column !== null) {
+            // == intended
+            $order = $order['column'] == $columnIndex ? $order : null;
+
+            // Handle the filtering of this column
+            $this->_applyFilter($this->_dtHandler->getBuilder(), $column, $order);
+            // throw new \Exception(sprintf("Unable to find column '%s' in Request->params->columns array", $this->_columnName));
         }
-
-        // == intended
-        $order = $order['column'] == $columnIndex ? $order : null;
-
-        // Handle the filtering of this column
-        $this->_applyFilter($this->_dtHandler->getBuilder(), $column, $order);
 
 
         return $this;

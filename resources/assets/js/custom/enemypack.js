@@ -17,25 +17,11 @@ class EnemyPack extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
-        // let self = this;
-
         this.label = 'Enemy pack';
         this.setColors(c.map.enemypack.colors);
 
         this.color = null;
-        this.faction = 'any'; // sensible default
-        // this.decorator = null;
-        this.setSynced(true);
-        //
-        // this.register('synced', this, function () {
-        //     self._rebuildDecorator();
-        // });
-        // this.register('object:deleted', this, function () {
-        //     self._cleanDecorator();
-        // });
-        // this.map.register('map:beforerefresh', this, function () {
-        //     self._cleanDecorator();
-        // });
+        this.faction = 'any';
     }
 
     /**
@@ -43,7 +29,7 @@ class EnemyPack extends MapObject {
      * @private
      */
     _cleanDecorator() {
-        console.assert(this instanceof Route, this, 'this is not an Route');
+        console.assert(this instanceof EnemyPack, this, 'this is not an EnemyPack');
 
         if (this.decorator !== null) {
             this.map.leafletMap.removeLayer(this.decorator);
@@ -55,7 +41,7 @@ class EnemyPack extends MapObject {
      * @private
      */
     _rebuildDecorator() {
-        console.assert(this instanceof EnemyPack, this, 'this is not an Route');
+        console.assert(this instanceof EnemyPack, this, 'this is not an EnemyPack');
 
         // Not sure if this really adds anything but I'll keep it here in case I want to do something with it
         // this._cleanDecorator();

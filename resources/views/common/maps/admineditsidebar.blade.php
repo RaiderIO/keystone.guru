@@ -10,20 +10,6 @@ if (isset($model)) {
 ?>
 
 @section('sidebar-content')
-
-    <!-- Edit route -->
-    <div class="form-group route_manipulation_tools">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Edit route') }}</h5>
-                <!-- Draw controls are injected here through drawcontrols.js -->
-                <div id="edit_route_draw_container" class="row">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Visibility -->
     <div class="form-group visibility_tools">
         <div class="card">
@@ -65,19 +51,19 @@ if (isset($model)) {
                 @endisset
 
                 <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
-                    {!! Form::label('index', __('Index')) !!}
+                    {!! Form::label('index', __('Index'), ['class' => 'font-weight-bold']) !!}:
                     {!! Form::text('index', null, ['class' => 'form-control']) !!}
                     @include('common.forms.form-error', ['key' => 'index'])
                 </div>
 
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                    {!! Form::label('name', __('Floor name')) !!}
+                    {!! Form::label('name', __('Floor name'), ['class' => 'font-weight-bold']) !!}:
                     {!! Form::text('name', null, ['class' => 'form-control']) !!}
                     @include('common.forms.form-error', ['key' => 'name'])
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('connectedfloors[]', __('Connected floors')) !!}
+                    {!! Form::label('connectedfloors[]', __('Connected floors'), ['class' => 'font-weight-bold']) !!}:
                     {!! Form::select('connectedfloors[]', $floors->pluck('name', 'id'), isset($model) ? $model->connectedFloors()->pluck('id')->all() : null,
                         ['multiple' => 'multiple', 'class' => 'form-control']) !!}
                 </div>

@@ -1,0 +1,23 @@
+<div class="alert alert-warning" role="alert">
+    <i class="fa fa-exclamation-triangle"></i> {{warnings_label}}
+</div>
+
+<div class="row no-gutters">
+    <div class="col-4 font-weight-bold">
+        {{category_label}}
+    </div>
+    <div class="col-8 font-weight-bold">
+        {{message_label}}
+    </div>
+</div>
+
+{{#warnings}}
+    <div class="row no-gutters">
+        <div class="col-4">
+            {{category}}:
+        </div>
+        <div class="col-8" title="{{details}}" data-toggle="tooltip">
+            {{message}}
+        </div>
+    </div>
+{{/warnings}}

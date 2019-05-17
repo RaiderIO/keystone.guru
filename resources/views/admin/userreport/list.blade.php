@@ -1,4 +1,4 @@
-@extends('layouts.app', ['noads' => true, 'title' => __('User reports')])
+@extends('layouts.app', ['showAds' => false, 'title' => __('User reports')])
 
 @section('header-title')
     {{ __('View User Reports') }}

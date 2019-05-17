@@ -13,12 +13,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $lng
  * @property boolean $always_visible
  * @property string $comment
+ *
  * @property \App\Models\DungeonRoute $dungeonroute
  * @property \App\User $user
+ *
+ * @mixin \Eloquent
  */
 class MapComment extends Model
 {
-    protected $hidden = ['dungeon_route_id', 'created_at', 'updated_at'];
+    protected $hidden = ['id', 'dungeon_route_id', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

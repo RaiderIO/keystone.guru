@@ -3,13 +3,14 @@
         "id": 144,
         "enemy_pack_id": -1,
         "floor_id": 64,
+        "mdt_id": 1,
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -66.010000000000005,
+        "lat": -66.01,
         "lng": 220.75,
         "npc": {
-            "id": 144324
+            "id": 131864
         }
     }
 ]

@@ -15,6 +15,17 @@ class EnemyVisual extends Signalable {
 
         // Default visual (after modifiers!)
         this.setVisualType(this.map.getVisualType());
+
+        let self = this;
+        // Build and/or destroy the visual based on visibility
+        this.enemy.register(['shown', 'hidden'], this, function (event) {
+            if (event.data.visible) {
+                self._buildVisual();
+            } else {
+                // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
+                // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
+            }
+        });
     }
 
     /**
@@ -24,39 +35,40 @@ class EnemyVisual extends Signalable {
      */
     _buildVisual() {
         console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
-        // Prepare the template
-        let iconHtml = $('#map_enemy_visual_template').html();
-        // Remove template so our
-        let template = handlebars.compile(iconHtml);
 
-        let data = {};
+        // If the object is invisible, don't build the visual
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        if(enemyMapObjectGroup.isMapObjectVisible(this.enemy)){
+            let template = Handlebars.templates['map_enemy_visual_template'];
 
-        if (this.enemy.isKillZoneSelectable()) {
-            data = {
-                killzone_classes: 'leaflet-edit-marker-selected'
-            };
+            let data = {};
+
+            if (this.enemy.isSelectable()) {
+                data = {
+                    selection_classes_base: 'leaflet-edit-marker-selected selected_enemy_icon'
+                };
+            }
+
+            data = $.extend(data, this.mainVisual._getTemplateData());
+            for (let i = 0; i < this.modifiers.length; i++) {
+                data = $.extend(data, this.modifiers[i]._getTemplateData());
+            }
+
+            // Create a new div icon (the entire structure)
+            this.divIcon = new L.divIcon($.extend({html: template(data)}, this.mainVisual.getSize()));
+
+            // Set the structure as HTML for the layer
+            this.layer.setIcon(this.divIcon);
+            this.signal('enemyvisual:builtvisual', {});
         }
-
-        data = $.extend(data, this.mainVisual._getTemplateData());
-        for (let i = 0; i < this.modifiers.length; i++) {
-            data = $.extend(data, this.modifiers[i]._getTemplateData());
-        }
-
-        // Build the status bar from the template
-        iconHtml = template(data);
-
-        // Create a new div icon (the entire structure)
-        this.divIcon = new L.divIcon($.extend({html: iconHtml}, this.mainVisual.getSize()));
-
-        // Set the structure as HTML for the layer
-        this.layer.setIcon(this.divIcon);
-        this.signal('enemyvisual:builtvisual', {});
     }
 
     // @TODO Listen to killzone selectable changed event
     refresh() {
         console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
-        this._buildVisual();
+
+        // Refresh the visual completely
+        this.setVisualType(this.map.getVisualType());
     }
 
     /**
@@ -81,15 +93,12 @@ class EnemyVisual extends Signalable {
             name = 'aggressiveness';
         }
 
-        // Remove the popup when voting for infested!
-        this.enemy.setPopupEnabled(name !== 'infested_vote');
-
         switch (name) {
             case 'aggressiveness':
                 this.mainVisual = new EnemyVisualMainAggressiveness(this);
 
                 this.modifiers = [
-                    new EnemyVisualModifierInfested(this, 0),
+                    new EnemyVisualModifier(this, 0),
                     new EnemyVisualModifierRaidMarker(this, 1),
                     new EnemyVisualModifier(this, 2),
                 ];
@@ -98,20 +107,10 @@ class EnemyVisual extends Signalable {
                 this.mainVisual = new EnemyVisualMainEnemyForces(this);
 
                 this.modifiers = [
-                    new EnemyVisualModifierInfested(this, 0),
+                    new EnemyVisualModifier(this, 0),
                     new EnemyVisualModifierRaidMarker(this, 1),
                     new EnemyVisualModifier(this, 2),
                 ];
-                break;
-            case 'infested_vote':
-                this.mainVisual = new EnemyVisualMainAggressiveness(this);
-
-                this.modifiers = [
-                    new EnemyVisualModifierInfestedVote(this, 0, false),
-                    new EnemyVisualModifierInfested(this, 1, true),
-                    new EnemyVisualModifierInfestedVote(this, 2, true),
-                ];
-
                 break;
         }
 

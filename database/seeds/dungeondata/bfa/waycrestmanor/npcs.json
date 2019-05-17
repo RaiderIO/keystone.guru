@@ -4,7 +4,7 @@
         "dungeon_id": 23,
         "classification_id": 3,
         "name": "Lord Waycrest",
-        "base_health": 529803,
+        "base_health": 689517,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -13,7 +13,7 @@
         "dungeon_id": 23,
         "classification_id": 3,
         "name": "Lady Waycrest",
-        "base_health": 5886700,
+        "base_health": 7661300,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -22,7 +22,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Enthralled Guard",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -31,7 +31,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Banquet Steward",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -40,7 +40,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Bewitched Captain",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 5,
         "aggressiveness": "aggressive"
     },
@@ -49,7 +49,7 @@
         "dungeon_id": 23,
         "classification_id": 1,
         "name": "Coven Thornshaper",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -58,7 +58,7 @@
         "dungeon_id": 23,
         "classification_id": 3,
         "name": "Soulbound Goliath",
-        "base_health": 1,
+        "base_health": 2681455,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -67,7 +67,7 @@
         "dungeon_id": 23,
         "classification_id": 1,
         "name": "Jagged Hound",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -76,7 +76,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Heartsbane Vinetwister",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
@@ -85,7 +85,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Heartsbane Runeweaver",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
@@ -94,7 +94,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Runic Disciple",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -103,7 +103,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Heartsbane Soulcharmer",
-        "base_health": 470936,
+        "base_health": 612904,
         "enemy_forces": 6,
         "aggressiveness": "aggressive"
     },
@@ -112,7 +112,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Marked Sister",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -121,7 +121,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Coven Diviner",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -130,8 +130,35 @@
         "dungeon_id": 23,
         "classification_id": 1,
         "name": "Faceless Maiden",
-        "base_health": 176601,
-        "enemy_forces": -1,
+        "base_health": 229839,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 131823,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Sister Malady",
+        "base_health": 727824,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 131824,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Sister Solena",
+        "base_health": 727824,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 131825,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Sister Briar",
+        "base_health": 727824,
+        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -139,7 +166,7 @@
         "dungeon_id": 23,
         "classification_id": 1,
         "name": "Waycrest Reveler",
-        "base_health": 176601,
+        "base_health": 229839,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -148,7 +175,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Crazed Marksman",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -157,7 +184,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Maddened Survivalist",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -166,7 +193,7 @@
         "dungeon_id": 23,
         "classification_id": 1,
         "name": "Thornguard",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -175,7 +202,16 @@
         "dungeon_id": 23,
         "classification_id": 3,
         "name": "Raal the Gluttonous",
-        "base_health": 1,
+        "base_health": 2604842,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive"
+    },
+    {
+        "id": 131864,
+        "dungeon_id": 23,
+        "classification_id": 3,
+        "name": "Gorak Tul",
+        "base_health": 2451616,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -184,7 +220,7 @@
         "dungeon_id": 23,
         "classification_id": 1,
         "name": "Devouring Maggot",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
         "aggressiveness": "aggressive"
     },
@@ -193,8 +229,8 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Infected Peasant",
-        "base_health": 294335,
-        "enemy_forces": 6,
+        "base_health": 383065,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
     {
@@ -202,7 +238,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Gorestained Piglet",
-        "base_health": 147168,
+        "base_health": 191533,
         "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
@@ -211,8 +247,8 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Dreadwing Raven",
-        "base_health": 176601,
-        "enemy_forces": 3,
+        "base_health": 229839,
+        "enemy_forces": 2,
         "aggressiveness": "aggressive"
     },
     {
@@ -220,17 +256,8 @@
         "dungeon_id": 23,
         "classification_id": 1,
         "name": "Blight Toad",
-        "base_health": 58867,
+        "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 135195,
-        "dungeon_id": 23,
-        "classification_id": 2,
-        "name": "Drustvar Villager",
-        "base_health": 294335,
-        "enemy_forces": -1,
         "aggressiveness": "aggressive"
     },
     {
@@ -238,7 +265,7 @@
         "dungeon_id": 23,
         "classification_id": 1,
         "name": "Diseased Mastiff",
-        "base_health": 176601,
+        "base_health": 229839,
         "enemy_forces": 3,
         "aggressiveness": "aggressive"
     },
@@ -247,7 +274,7 @@
         "dungeon_id": 23,
         "classification_id": 1,
         "name": "Soul Essence",
-        "base_health": 176601,
+        "base_health": 229839,
         "enemy_forces": 2,
         "aggressiveness": "aggressive"
     },
@@ -256,17 +283,8 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Matron Bryndle",
-        "base_health": 706404,
+        "base_health": 919356,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 135360,
-        "dungeon_id": 23,
-        "classification_id": 3,
-        "name": "Sister Briar",
-        "base_health": 1,
-        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     },
     {
@@ -274,7 +292,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Matron Alma",
-        "base_health": 706404,
+        "base_health": 919356,
         "enemy_forces": 8,
         "aggressiveness": "aggressive"
     },
@@ -283,7 +301,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Thistle Acolyte",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -292,7 +310,7 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Pallid Gorger",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
         "aggressiveness": "aggressive"
     },
@@ -301,17 +319,8 @@
         "dungeon_id": 23,
         "classification_id": 2,
         "name": "Gloom Horror",
-        "base_health": 294335,
+        "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
-    },
-    {
-        "id": 144324,
-        "dungeon_id": 23,
-        "classification_id": 3,
-        "name": "Gorak Tul",
-        "base_health": 1,
-        "enemy_forces": 0,
         "aggressiveness": "aggressive"
     }
 ]

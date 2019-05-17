@@ -29,8 +29,6 @@ class DungeonFloorSwitchMarker extends MapObject {
         super(map, layer);
 
         this.label = 'DungeonFloorSwitchMarker';
-
-        this.setSynced(true);
     }
 
 

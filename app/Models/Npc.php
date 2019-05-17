@@ -12,7 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $base_health
  * @property int $enemy_forces
  * @property string $aggressiveness
+ *
  * @property \Illuminate\Support\Collection $enemies
+ *
+ * @mixin \Eloquent
  */
 class Npc extends Model
 {
@@ -20,21 +23,21 @@ class Npc extends Model
     public $timestamps = false;
 
     /**
+     * Gets all derived enemies from this Npc.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    function enemies()
+    {
+        return $this->hasMany('App\Models\Enemy');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
     function dungeon()
     {
         return $this->belongsTo('App\Models\Dungeon');
-    }
-
-    /**
-     * Gets all derived enemies from this Npc.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
-     */
-    function enemypack()
-    {
-        return $this->hasMany('App\Models\EnemyPack');
     }
 
     /**

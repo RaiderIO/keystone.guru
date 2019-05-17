@@ -4,12 +4,6 @@ $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
 $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
-// Show ads if not set
-$noads = isset($noads) ? $noads : false;
-// If logged in, check if the user has paid for an ad-free website
-$noads = $noads || !Auth::check() ? $noads : $user->hasPaidTier('ad-free');
-// If we're showing ads and we're NOT on production, hide them anyways
-$noads = $noads || config('app.env') === 'production' ? $noads : true;
 // Custom content or not
 $custom = isset($custom) ? $custom : false;
 // Wide mode or not (only relevant if custom = false)
@@ -20,10 +14,29 @@ $header = isset($header) ? $header : true;
 $footer = isset($footer) ? $footer : true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
+// Any additional parameters to pass to the login/register blade
+$loginParams = isset($loginParams) ? $loginParams : [];
+$registerParams = isset($registerParams) ? $registerParams : [];
 // Show cookie consent
 $cookieConsent = isset($cookieConsent) ? $cookieConsent : true;
+// If user already approved of the cookie..
+if (isset($_COOKIE['cookieconsent_status']) && $_COOKIE['cookieconsent_status'] === 'dismiss') {
+    // Don't bother the user with it anymore
+    $cookieConsent = false;
+}
 // Easy switch
 $isProduction = config('app.env') === 'production';
+// Show ads if not set
+$showAds = isset($showAds) ? $showAds : true;
+// If we should show ads, are logged in, user has paid for no ads, or we're not in production..
+if (($showAds && Auth::check() && $user->hasPaidTier('ad-free')) || !$isProduction) {
+    // No ads
+    $showAds = false;
+}
+// Analytics or not, default = $isProduction
+$analytics = isset($analytics) ? $analytics : $isProduction;
+// Current Git version
+$version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -37,36 +50,23 @@ $isProduction = config('app.env') === 'production';
     <title>{{ $title . config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/lib.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-    @if (!$isProduction)
-        <link href="{{ asset('css/map.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/classes.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/affixes.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/specializations.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/factions.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/raidmarkers.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/routeattributes.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/home.css') }}" rel="stylesheet">
-    @endif
+    <link href="{{ asset('css/app-' . $version . '.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom-' . $version . '.css') }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
-    @include('common.general.scripts', ['showLegalModal' => $showLegalModal])
-    @if(!$custom)
-        @include('common.general.sitescripts')
-    @endif
+    @include('common.general.inlinemanager')
+    @include('common.general.inline', ['path' => 'layouts/app', 'section' => false, 'options' => ['guest' => Auth::guest()]])
+    @include('common.general.sitescripts', ['showLegalModal' => $showLegalModal])
+
     @if($cookieConsent)
-    @include('common.thirdparty.cookieconsent')
+        @include('common.thirdparty.cookieconsent')
     @endif
 
-    @if(!$noads && $isProduction)
+    @if($showAds)
         @include('common.thirdparty.adsense')
     @endif
-    @if($isProduction)
+    @if($analytics)
         @include('common.thirdparty.analytics')
     @endif
 </head>
@@ -82,7 +82,7 @@ $isProduction = config('app.env') === 'production';
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse text-center text-lg-left" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('dungeonroutes') }}">{{ __('Routes') }}</a>
@@ -93,9 +93,9 @@ $isProduction = config('app.env') === 'production';
                                 {{ __('Demo') }}
                             </a>
 
-                            <div class="dropdown-menu" aria-labelledby="demo_dropdown">
+                            <div class="dropdown-menu text-center text-lg-left" aria-labelledby="demo_dropdown">
                                 @foreach(\App\Models\DungeonRoute::where('demo', '=', true)->get() as $route)
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item test-dropdown-menu"
                                        href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
                                         {{ $route->dungeon->name }}
                                     </a>
@@ -106,70 +106,79 @@ $isProduction = config('app.env') === 'production';
                             <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('misc.infested') }}">{{ __('Infested') }}</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('misc.changelog') }}">{{ __('Changelog') }}</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        <li class="nav-item mr-2">
-                            <a href="#" class="btn btn-primary text-white"
-                               data-toggle="modal" data-target="#try_modal">{{__('Try it!')}}</a>
+                        <li class="nav-item mr-lg-2">
+                            <a href="#" class="btn btn-primary text-white col-lg-auto"
+                               data-toggle="modal" data-target="#try_modal">
+                                {{__('Try it!')}}
+                            </a>
                         </li>
                         @if (Auth::guest())
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal"
-                                   data-target="#login_modal">{{__('Login')}}</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#login_modal">
+                                    {{__('Login')}}
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal"
-                                   data-target="#register_modal">{{__('Register')}}</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#register_modal">
+                                    {{__('Register')}}
+                                </a>
                             </li>
                         @else
-                            <li class="nav-item">
-                                <a href="{{ route('dungeonroute.new') }}" class="btn btn-success text-white"
-                                   role="button"><i class="fas fa-plus"></i> {{__('Create route')}}</a>
+                            <li class="nav-item mr-lg-2 mt-1 mt-lg-0">
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle col-lg-auto" type="button"
+                                            id="newRouteDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                        <i class="fas fa-plus"></i> {{__('Create route')}}
+                                    </button>
+                                    <div class="dropdown-menu text-center text-lg-left"
+                                         aria-labelledby="newRouteDropdownMenuButton">
+                                        <a class="dropdown-item"
+                                           href="{{ route('dungeonroute.new') }}">{{ __('New route') }}</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal"
+                                           data-target="#mdt_import_modal">{{__('Import from MDT')}}</a>
+                                    </div>
+                                </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <div class="user_icon float-left">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div class="float-left">
-                                        {{ Auth::user()->name }}
-                                    </div>
+                                    <i class="fas fa-user"></i> {{ Auth::user()->name }}
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @if( Auth::user()->can('read-expansions') )
-                                        <a class="dropdown-item"
-                                           href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
-                                    @endif
-                                    @if( Auth::user()->can('read-dungeons') )
-                                        <a class="dropdown-item"
-                                           href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
-                                    @endif
-                                    @if( Auth::user()->can('read-npcs') )
-                                        <a class="dropdown-item"
-                                           href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
-                                    @endif
+                                <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
                                     @if( Auth::user()->hasRole('admin'))
                                         <a class="dropdown-item"
-                                           href="{{ route('admin.datadump.exportdungeondata') }}">{{__('Export dungeon data')}}</a>
-                                    @endif
-                                    @if( Auth::user()->hasRole('admin'))
+                                           href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
+                                        <div class="dropdown-divider"></div>
+                                        @if( Auth::user()->can('read-expansions') )
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
+                                        @endif
+                                        @if( Auth::user()->can('read-dungeons') )
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
+                                        @endif
+                                        @if( Auth::user()->can('read-npcs') )
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
+                                        @endif
                                         <a class="dropdown-item"
                                            href="{{ route('admin.users') }}">{{__('View users')}}</a>
-                                    @endif
-                                    @if( Auth::user()->hasRole('admin'))
                                         <a class="dropdown-item"
                                            href="{{ route('admin.userreports') }}">{{__('View user reports') }}
                                             <span class="badge badge-primary badge-pill">{{ $numUserReports }}</span>
                                         </a>
+                                        <div class="dropdown-divider"></div>
                                     @endif
                                     <a class="dropdown-item"
                                        href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
+                                    <a class="dropdown-item"
+                                       href="{{ route('team.list') }}">{{ __('My teams') }} <sup
+                                                class="text-success">{{ __('NEW') }}</sup></a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -192,6 +201,46 @@ $isProduction = config('app.env') === 'production';
 
     @if($custom)
         @yield('content')
+
+    @elseif(isset($menuItems))
+        <div class="container container_wide mt-3">
+            <div class="row">
+                <div class="col-xl menu_sidebar bg-secondary p-3">
+                    <h4>{{ $menuTitle }}</h4>
+                    <hr>
+                    @isset($menuModels)
+                        <select id="selected_model_id" class="form-control selectpicker">
+                            @foreach($menuModels as $menuModel)
+                                @php($hasIcon = isset($menuModel->iconfile))
+                                <option
+                                        data-url="{{ route($menuModelsRoute, ['id' => $menuModel->id]) }}"
+                                        @if($hasIcon)
+                                        data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
+                                        @endif
+                                        {{ $model->id === $menuModel->id ? 'selected' : '' }}
+                                >{{ $hasIcon ? '' : $menuModel->name }}</option>
+                            @endforeach
+                        </select>
+                        <hr>
+                    @endisset
+                    <ul class="nav flex-column nav-pills">
+                        @foreach($menuItems as $index => $menuItem)
+                            <li class="nav-item">
+                                <a class="nav-link {{ $index === 0 ? 'active' : '' }}" id="routes-tab" data-toggle="tab"
+                                   href="{{ $menuItem['target'] }}" role="tab"
+                                   aria-controls="routes" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
+                                    <i class="fas {{ $menuItem['icon'] }}"></i> {{ $menuItem['text'] }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="col-xl bg-secondary ml-xl-3 ml-0 mt-xl-0 mt-3 p-3">
+                    @yield('content')
+                </div>
+            </div>
+        </div>
+
     @else
 
         @if (!$isProduction && (Auth::user() === null || !Auth::user()->hasRole('admin')))
@@ -207,7 +256,7 @@ $isProduction = config('app.env') === 'production';
 
         @yield('global-message')
 
-        @if( !$noads )
+        @if( $showAds )
             <div align="center" class="mt-4">
                 @include('common.thirdparty.adunit', ['type' => 'header'])
             </div>
@@ -220,7 +269,7 @@ $isProduction = config('app.env') === 'production';
                         <div class="card-header {{ $wide ? "panel-heading-wide" : "" }}">
                             <div class="row">
                                 @hasSection('header-addition')
-                                    <div class="ml-3">
+                                    <div class="col text-center">
                                         <h4>@yield('header-title')</h4>
                                     </div>
                                     <div class="ml-auto">
@@ -234,27 +283,7 @@ $isProduction = config('app.env') === 'production';
                             </div>
                         </div>
                         <div class="card-body">
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            @if (session('status'))
-                                <div id="app_session_status_message" class="alert alert-success">
-                                    {{ session('status') }}
-                                </div>
-                            @endif
-
-                            @if (session('warning'))
-                                <div id="app_session_warning_message" class="alert alert-warning">
-                                    {{ session('warning') }}
-                                </div>
-                            @endif
+                            @include('common.general.messages')
 
                             @yield('content')
                         </div>
@@ -264,16 +293,23 @@ $isProduction = config('app.env') === 'production';
         </div>
     @endif
 
+    <header class="fixed-top">
+        <div class="row">
+            <div id="fixed_header_container" class="col-6 m-auto">
+            </div>
+        </div>
+    </header>
+
     <footer class="fixed-bottom">
         <div class="row">
-            <div id="fixed_footer_container" class="col-12">
+            <div id="fixed_footer_container" class="col-6 m-auto">
             </div>
         </div>
     </footer>
 
     @if( $footer )
 
-        @if( !$noads )
+        @if( $showAds )
             <div align="center" class="mt-4">
                 @include('common.thirdparty.adunit', ['type' => 'footer'])
             </div>
@@ -318,7 +354,9 @@ $isProduction = config('app.env') === 'production';
             <div class="row text-center small">
                 <div class="col-md-6">
                     <a class="nav-item nav-link" href="{{ route('misc.mapping') }}">{{ __('Mapping Progress') }}</a>
-                    <a class="nav-item nav-link" href="/">©{{ date('Y') }} {{ Config::get('app.name') }} v.1.0 </a>
+                    <a class="nav-item nav-link" href="/">
+                        ©{{ date('Y') }} {{ \Tremby\LaravelGitVersion\GitVersionHelper::getNameAndVersion() }}
+                    </a>
                 </div>
                 <div class="col-md-6">
                     World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of
@@ -330,175 +368,90 @@ $isProduction = config('app.env') === 'production';
     @endif
 </div>
 
-<script id="app_fixed_footer_small_template" type="text/x-handlebars-template">
-    <div class="text-center m-1">
-        <span class="alert alert-@{{type}} border-secondary mb-0">
-            @{{{message}}}
-        </span>
-    </div>
-</script>
-
-<script id="app_fixed_footer_template" type="text/x-handlebars-template">
-    <div class="alert alert-@{{type}} mb-0 text-center border-secondary border-top m-1">
-        @{{{message}}}
-    </div>
-</script>
-
 @auth
     @php($user = Auth::user())
     @if(!$user->legal_agreed)
-        <div class="modal fade" id="legal_modal" tabindex="-1" role="dialog"
-             aria-labelledby="legalModalLabel" aria-hidden="true"
-             data-keyboard="false" data-backdrop="static">
-            <div class="modal-dialog modal-md vertical-align-center">
-                <div class="modal-content">
-                    <div class="probootstrap-modal-flex">
-                        <div class="probootstrap-modal-content">
-                            <div class="form-group">
-                                {!! sprintf(__('Welcome back! In order to proceed, you have to agree to our %s, %s and %s.'),
-                                 '<a href="' . route('legal.terms') . '">terms of service</a>',
-                                 '<a href="' . route('legal.privacy') . '">privacy policy</a>',
-                                 '<a href="' . route('legal.cookies') . '">cookie policy</a>')
-                                 !!}
-                            </div>
-                            <div id="legal_confirm_btn" class="btn btn-primary">
-                                {{ __('I agree') }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+@section('modal-content')
+    <div class="form-group">
+        {!! sprintf(__('Welcome back! In order to proceed, you have to agree to our %s, %s and %s.'),
+         '<a href="' . route('legal.terms') . '">terms of service</a>',
+         '<a href="' . route('legal.privacy') . '">privacy policy</a>',
+         '<a href="' . route('legal.cookies') . '">cookie policy</a>')
+         !!}
+    </div>
+    <div id="legal_confirm_btn" class="btn btn-primary">
+        {{ __('I agree') }}
+    </div>
+@overwrite
+@include('common.general.modal', ['id' => 'legal_modal'])
+@endif
 @endauth
 
 <!-- Modal try -->
-<div class="modal fade" id="try_modal" tabindex="-1" role="dialog"
-     aria-labelledby="tryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md vertical-align-center">
-        <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="probootstrap-modal-flex">
-                <div class="probootstrap-modal-content">
-                    @include('common.forms.try', ['modal' => true])
-                </div>
-            </div>
+@section('modal-content')
+    @include('common.forms.try', ['modal' => true])
+@overwrite
+@include('common.general.modal', ['id' => 'try_modal'])
+<!-- END modal try -->
+
+<!-- Modal MDT import -->
+@section('modal-content')
+    {{ Form::open(['route' => 'dungeonroute.new.mdtimport']) }}
+    <h3>
+        {{ __('Import from MDT string') }}
+    </h3>
+    <div class="form-group">
+        {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
+        {{ Form::textarea('import_string_textarea', '', ['id' => 'import_string_textarea', 'class' => 'form-control']) }}
+        {{ Form::hidden('import_string', '') }}
+    </div>
+    <div class="form-group">
+        <div id="import_string_loader" class="bg-info p-1" style="display: none;">
+            <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>
+            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Parsing your string...') }}
         </div>
     </div>
-</div>
-<!-- END modal try -->
+    <div class="form-group">
+        <div id="import_string_details">
+
+        </div>
+    </div>
+    <div class="form-group">
+        <div id="import_string_warnings">
+
+        </div>
+    </div>
+    <div class="form-group">
+        {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
+        <div class="col-md">
+
+        </div>
+    </div>
+    {{ Form::close() }}
+@overwrite
+@include('common.general.modal', ['id' => 'mdt_import_modal'])
+<!-- END modal MDT import -->
 
 @guest
     <!-- Modal login -->
-    <div class="modal fade" id="login_modal" tabindex="-1" role="dialog"
-         aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md vertical-align-center">
-            <div class="modal-content">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    <i class="fas fa-times"></i>
-                </button>
-                <div class="probootstrap-modal-flex">
-                    <div class="probootstrap-modal-content">
-                        @include('common.forms.login', ['modal' => true])
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END modal login -->
+@section('modal-content')
+    @include('common.forms.login', array_merge(['modal' => true], $loginParams))
+@overwrite
+@include('common.general.modal', ['id' => 'login_modal', 'class' => 'login-modal-dialog'])
+<!-- END modal login -->
 
-    <!-- Modal signup -->
-    <div class="modal fade" id="register_modal" tabindex="-1" role="dialog"
-         aria-labelledby="signupModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md vertical-align-center">
-            <div class="modal-content">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    <i class="fas fa-times"></i>
-                </button>
-                <div class="probootstrap-modal-flex">
-                    <div class="probootstrap-modal-content">
-                        @include('common.forms.register', ['modal' => true])
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END modal signup -->
+<!-- Modal register -->
+@section('modal-content')
+    @include('common.forms.register', array_merge(['modal' => true], $registerParams))
+@overwrite
+@include('common.general.modal', ['id' => 'register_modal', 'class' => 'register-modal-dialog'])
+<!-- END modal register -->
 @endguest
 
 <!-- Scripts -->
-<script src="{{ asset('js/app.js') }}"></script>
-@if(!$noads)
-@endif
-
-@if ($isProduction)
-    <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
-    <script src="{{ asset('js/custom.js') }}"></script>
-
-@else
-    <?php // Only used on the home page ?>
-    <script src="{{ asset('js/custom/home.js') }}"></script>
-
-    <script src="{{ asset('js/custom/constants.js') }}"></script>
-    <?php // Include in proper order ?>
-    <script src="{{ asset('js/custom/util.js') }}"></script>
-    <script src="{{ asset('js/custom/signalable.js') }}"></script>
-    <script src="{{ asset('js/custom/dungeonmap.js') }}"></script>
-
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisual.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualicon.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmain.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmainaggressiveness.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/enemyvisualmainenemyforces.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifier.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierraidmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfested.js') }}"></script>
-    <script src="{{ asset('js/custom/enemyvisuals/modifiers/modifierinfestedvote.js') }}"></script>
-
-    <script src="{{ asset('js/custom/mapobject.js') }}"></script>
-    <script src="{{ asset('js/custom/enemy.js') }}"></script>
-    <script src="{{ asset('js/custom/enemypatrol.js') }}"></script>
-    <script src="{{ asset('js/custom/enemypack.js') }}"></script>
-    <script src="{{ asset('js/custom/route.js') }}"></script>
-    <script src="{{ asset('js/custom/killzone.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcomment.js') }}"></script>
-    <script src="{{ asset('js/custom/dungeonstartmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/dungeonfloorswitchmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/hotkeys.js') }}"></script>
-
-    <script src="{{ asset('js/custom/mapcontrol.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/addisplaycontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/mapobjectgroupcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/drawcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/enemyforcescontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/enemyvisualcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/mapcontrols/factiondisplaycontrols.js') }}"></script>
-
-    <script src="{{ asset('js/custom/admin/enemyattaching.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindungeonmap.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminenemy.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminenemypatrol.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminenemypack.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindrawcontrols.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindungeonstartmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/admindungeonfloorswitchmarker.js') }}"></script>
-    <script src="{{ asset('js/custom/admin/adminmapcomment.js') }}"></script>
-    <?php // Include the rest ?>
-
-    <script src="{{ asset('js/custom/groupcomposition.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemymapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/enemypackmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/routemapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/killzonemapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/mapcommentmapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js') }}"></script>
-    <script src="{{ asset('js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js') }}"></script>
-
-@endif
+<script src="{{ asset('js/app-' . $version . '.js') }}"></script>
+<?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
+<script src="{{ asset('js/custom-' . $version . '.js') }}"></script>
 @yield('scripts')
 </body>
 </html>

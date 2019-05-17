@@ -8,6 +8,18 @@
         {
             "type": "vcs",
             "url": "https://github.com/Wotuu/tracker"
+        },
+        {
+            "type":"package",
+            "package": {
+                "name": "nnogga/methoddungeontools",
+                "version": "2.5.6",
+                "source": {
+                    "url": "https://github.com/nnogga/MethodDungeonTools.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
         }
     ],
     "require": {
@@ -16,20 +28,26 @@
         "folklore/image": "0.3.*",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "5.7.*",
+        "laravel/socialite": "^4.1",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.6",
         "miraris/monolog-discord-handler": "^0.2.0",
+        "nnogga/methoddungeontools": "*",
         "patreon/patreon": "^0.3.1",
         "pragmarx/tracker": "dev-wotuu-bugfix",
         "predis/predis": "^1.1",
         "santigarcor/laratrust": "5.0.*",
         "shrikeh/teapot": "^2.3",
+        "socialiteproviders/battlenet": "dev-master",
+        "socialiteproviders/discord": "^2.0",
+        "tremby/laravel-git-version": "^1.1",
         "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
+        "filp/whoops": "^2.0",
         "barryvdh/laravel-debugbar": "^3.1",
         "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
+        "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^7.0"
     },
     "autoload": {

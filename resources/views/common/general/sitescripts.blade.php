@@ -1,22 +1,18 @@
 <?php
 $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 ?>
-<script>
 
-    let _legalStartTimer = new Date().getTime();
+<script>
+    var isUserAdmin = {{ Auth::check() && Auth::user()->hasRole('admin') ? 'true' : 'false' }};
+
+    var _legalStartTimer = new Date().getTime();
+    @auth
+    // Legal nag so that everyone agrees to the terms, that has registered.
+    @if($showLegalModal && !Auth::user()->legal_agreed)
 
     document.addEventListener("DOMContentLoaded", function (event) {
-        @guest
-        newPassword('#register_password');
-        newPassword('#modal-register_password');
-        @endguest
-        @auth
-        // Legal nag so that everyone agrees to the terms, that has registered.
-        @if($showLegalModal && !Auth::user()->legal_agreed)
         $('#legal_modal').modal('show');
         $('#legal_confirm_btn').bind('click', _agreeLegalBtnClicked);
-        @endif
-        @endauth
     });
 
     /**
@@ -41,21 +37,6 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
             }
         });
     }
-
-    /**
-     * Initiates a password checker on a 'enter your password' input.
-     **/
-    function newPassword(selector) {
-        $(selector).password({
-            enterPass: '&nbsp;',
-            shortPass: '{{ __('Minimum password length is 8') }}',
-            badPass: '{{ __('Weak') }}',
-            goodPass: '{{ __('Medium') }}',
-            strongPass: '{{ __('Strong') }}',
-            containsUsername: '{{ __('Password cannot contain your username') }}',
-            showText: true, // shows the text tips
-            animate: false, // whether or not to animate the progress bar on input blur/focus
-            minimumLength: 8
-        })
-    }
+    @endif
+    @endauth
 </script>

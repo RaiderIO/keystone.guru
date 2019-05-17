@@ -2,6 +2,7 @@ class AdminDungeonMap extends DungeonMap {
 
     constructor(mapid, dungeonData, options) {
         super(mapid, dungeonData, options);
+        this.currentMDTEnemyMappingEnemy = null;
     }
 
     /**
@@ -12,17 +13,16 @@ class AdminDungeonMap extends DungeonMap {
      */
     _createMapControls(drawnItemsLayer) {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        let result = [];
 
-        let result = [
-            new AdminDrawControls(this, drawnItemsLayer),
-            new EnemyVisualControls(this),
-            new MapObjectGroupControls(this)
-        ];
+        if (this.dungeonData.name === 'Siege of Boralus') {
+            result.push(new FactionDisplayControls(this));
+        }
 
-        // @TODO This breaks the admin
-        // if (this.dungeonData.name === 'Siege of Boralus') {
-        //     result.push(new FactionDisplayControls(this));
-        // }
+        result.push(new AdminDrawControls(this, drawnItemsLayer));
+        result.push(new EnemyVisualControls(this));
+        result.push(new MapObjectGroupControls(this));
+        result.push(new AdminPanelControls(this));
 
         return result;
     }
@@ -46,9 +46,6 @@ class AdminDungeonMap extends DungeonMap {
 
     refreshLeafletMap() {
         super.refreshLeafletMap();
-
-
-        let self = this;
 
         this.enemyAttaching = new EnemyAttaching(this);
     }

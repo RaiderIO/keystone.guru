@@ -2,19 +2,11 @@
     {
         "id": 89,
         "floor_id": 57,
-        "enemy_id": -1,
         "faction": "any",
-        "vertices": [
-            {
-                "id": 489,
-                "lat": 161.5,
-                "lng": -111.76000000000001
-            },
-            {
-                "id": 490,
-                "lat": 186.25,
-                "lng": -81.510000000000005
-            }
-        ]
+        "polyline": {
+            "color": "#E25D5D",
+            "weight": 2,
+            "vertices_json": "[{\"lat\":186,\"lng\":-82.12},{\"lat\":161,\"lng\":-112.25}]"
+        }
     }
 ]

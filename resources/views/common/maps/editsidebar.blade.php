@@ -8,66 +8,9 @@ if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
 ?>
-@section('scripts')
-    @parent
-
-    <script>
-        $(function () {
-            // Copy to clipboard functionality
-            $('#map_copy_to_clipboard').bind('click', function () {
-                // https://codepen.io/shaikmaqsood/pen/XmydxJ
-                let $temp = $("<input>");
-                $("body").append($temp);
-                $temp.val($('#map_shareable_link').val()).select();
-                document.execCommand("copy");
-                $temp.remove();
-
-                addFixedFooterInfo("{{ __('Copied to clipboard') }}", 2000);
-            });
-        });
-    </script>
-@endsection
+@include('common.general.inline', ['path' => 'common/maps/editsidebar'])
 
 @section('sidebar-content')
-
-    @isset($show['virtual-tour'])
-        <!-- Virtual tour -->
-        <div class="form-group">
-            <div class="card">
-                <div class="card-body">
-                    <div id="start_virtual_tour" class="btn btn-info col">
-                        <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endisset
-
-    <!-- Enemy forces -->
-    <div class="form-group enemy_forces_container">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Enemy forces') }}</h5>
-                <!-- Draw controls are injected here through drawcontrols.js -->
-                <div id="edit_route_enemy_forces_container">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit route -->
-    <div class="form-group route_manipulation_tools">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Edit route') }}</h5>
-                <!-- Draw controls are injected here through drawcontrols.js -->
-                <div id="edit_route_draw_container" class="row">
-
-                </div>
-            </div>
-        </div>
-    </div>
 
     @isset($show['shareable-link'])
         <!-- Shareable link -->
@@ -120,32 +63,84 @@ if (isset($model)) {
         </div>
     </div>
 
-    @isset($show['route-settings'])
-        <!-- Route settings -->
-        <div class="form-group">
-            <div class="btn btn-primary col" data-toggle="modal" data-target="#settings_modal">
-                <i class='fas fa-cog'></i> {{ __('Route settings') }}
+    <!-- Actions -->
+    <div class="form-group route_actions">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ __('Actions') }}</h5>
+
+                @isset($show['virtual-tour'])
+                    <div class="form-group">
+                        <!-- Virtual tour -->
+                        <div class="row">
+                            <div class="col">
+                                <button id="start_virtual_tour" class="btn btn-info col">
+                                    <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endisset
+
+                @isset($show['route-settings'])
+                    <div class="form-group">
+                        <!-- Route settings -->
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-info col" data-toggle="modal" data-target="#settings_modal">
+                                    <i class='fas fa-cog'></i> {{ __('Route settings') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endisset
+
+
+                @isset($show['route-publish'])
+                <!-- Published state -->
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <button id="map_route_publish"
+                                        class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}">
+                                    <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
+                                </button>
+                                <button id="map_route_unpublish"
+                                        class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
+                                    <i class="fa fa-plane-arrival"></i> {{ __('Unpublish route') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endisset
+
+                @isset($show['tryout'])
+                    @if (Auth::guest())
+                        <div class="form-group">
+                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
+                                <i class="fas fa-sign-in-alt"></i> {{__('Login and continue')}}
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
+                                    data-target="#register_modal">
+                                <i class="fas fa-user-plus"></i> {{ __('Register and continue') }}
+                            </button>
+                        </div>
+                    @else
+                        <div class="form-group">
+                            <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $model->public_key]) }}"
+                               class="btn btn-primary mt-1 w-100" role="button">
+                                <i class="fas fa-save"></i> {{ __('Save and continue') }}
+                            </a>
+                        </div>
+                    @endif
+                @endisset
             </div>
         </div>
-    @endisset
+    </div>
 
     @isset($show['route-publish'])
-        <!-- Published state -->
-        <div class="form-group">
-            <div class="row">
-                <div class="col">
-                    <div id="map_route_publish"
-                         class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}">
-                        <i class="fa fa-check-circle"></i> {{ __('Publish route') }}
-                    </div>
-                    <div id="map_route_unpublish"
-                         class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
-                        <i class="fa fa-times-circle"></i> {{ __('Unpublish route') }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="form-group">
             <div class="row">
                 <div class="col">
@@ -154,14 +149,6 @@ if (isset($model)) {
                         <i class="fa fa-info-circle"></i> {{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}
                     </div>
                 </div>
-            </div>
-        </div>
-    @endisset
-
-    @isset($show['no-modifications-warning'])
-        <div class="form-group">
-            <div class="alert alert-warning text-center">
-                <i class="fa fa-exclamation-triangle"></i> {{ __('Warning! Any modification you make in tryout mode will not be saved!') }}
             </div>
         </div>
     @endisset

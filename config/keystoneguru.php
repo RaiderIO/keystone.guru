@@ -24,7 +24,7 @@ return [
     /**
      * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming).
      */
-    'registered_user_dungeonroute_limit' => 30,
+    'registered_user_dungeonroute_limit' => 999,
 
 
     /**
@@ -38,12 +38,6 @@ return [
     'season_start_week' => 36,
 
     /**
-     * We require at least 2 more yes votes than no votes before an enemy is marked as Infested on the map.
-     * This may need to be increased in the future as the site becomes more popular.
-     */
-    'infested_user_vote_threshold' => 2,
-
-    /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
      * the view is counted for a second time.
@@ -53,5 +47,16 @@ return [
     /**
      * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
      */
-    'thumbnail_refresh_min' => 30
+    'thumbnail_refresh_min' => 30,
+
+    /**
+     * The amount of hours it takes before a dungeon route that is created through the 'try' functionality expires and
+     * is deleted from the server.
+     */
+    'try_dungeon_route_expires_hours' => 24,
+
+    /**
+     * @var array List of current roles for a user in a team.
+     */
+    'team_roles' => ['member' => 1, 'collaborator' => 2, 'moderator' => 3, 'admin' => 4]
 ];

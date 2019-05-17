@@ -1,0 +1,57 @@
+<div class="map_enemy_tooltip leaflet-draw-section">
+    <div class="row">
+        <div class="col-5 no-gutters">{{ npc_name_label }}</div>
+        <div class="col-7 no-gutters">{{ npc_name }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ enemy_forces_label }}</div>
+        <div class="col-7 no-gutters">{{{ enemy_forces }}}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ base_health_label }}</div>
+        <div class="col-7 no-gutters">{{ base_health }}</div>
+    </div>
+    {{#if is_teeming}}
+    <div class="row">
+        <div class="col-5 no-gutters">{{ teeming_label }}</div>
+        <div class="col-7 no-gutters">{{ teeming }}</div>
+    </div>
+    {{/if}}
+    {{#if is_user_admin}}
+    <div class="row">
+        <div class="col-12 font-weight-bold">{{ admin_only_label }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ id_label }}</div>
+        <div class="col-7 no-gutters">{{ id }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ faction_label }}</div>
+        <div class="col-7 no-gutters">{{ faction }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ npc_id_label }}</div>
+        <div class="col-7 no-gutters">{{ npc_id }} ({{ npc_id_type }})</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ attached_to_pack_label }}</div>
+        <div class="col-7 no-gutters">{{ attached_to_pack }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ is_mdt_label }}</div>
+        <div class="col-7 no-gutters">{{ is_mdt }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ mdt_id_label }}</div>
+        <div class="col-7 no-gutters">{{ mdt_id }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ enemy_id_label }}</div>
+        <div class="col-7 no-gutters">{{ enemy_id }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ visual_label }}</div>
+        <div class="col-7 no-gutters">{{ visual }}</div>
+    </div>
+    {{/if}}
+</div>

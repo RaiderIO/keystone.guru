@@ -21,7 +21,7 @@ class CreateRouteAttributesTable extends Migration
         });
 
         // Fill the table
-        Artisan::call('db:seed', array('--class' => 'RouteAttributesSeeder', '--database' => 'migrate'));
+        Artisan::call('db:seed', array('--class' => 'RouteAttributesSeeder', '--database' => 'migrate', '--force' => true));
     }
 
     /**

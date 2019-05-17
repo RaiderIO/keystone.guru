@@ -11,10 +11,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $color
  * @property double $lat
  * @property double $lng
+ *
  * @property \App\Models\DungeonRoute $dungeonroute
  * @property \App\Models\Floor $floor
+ *
  * @property \Illuminate\Support\Collection $enemies
  * @property \Illuminate\Support\Collection $killzoneenemies
+ *
+ * @mixin \Eloquent
  */
 class KillZone extends Model
 {

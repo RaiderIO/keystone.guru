@@ -280,6 +280,31 @@
     flex-wrap: wrap;
 }
 
+@media (min-width: 900px) {
+    .login-modal-dialog {
+        max-width: 900px;
+    }
+
+    .register-modal-dialog {
+        max-width: 900px;
+    }
+
+    .register-modal-dialog .border-left.border-white {
+        border: hidden;
+    }
+}
+
+/** Hide the separating border between login/register when on a small screen, when they're stacked vertically */
+@media (max-width: 900px) {
+    .login-modal-dialog .border-left.border-white {
+        border: none !important;
+    }
+
+    .register-modal-dialog .border-left.border-white {
+        border: none !important;
+    }
+}
+
 [class^="icon-"], [class*=" icon-"] {
     speak: none;
     font-style: normal;
@@ -291,4 +316,28 @@
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/** .rounded class doesn't work, unfortunately */
+#import_string_loader {
+    border-radius: .25rem !important
+}
+
+.btn-bnet {
+    background-color: #005c99;
+}
+
+.btn-bnet:hover {
+    background-color: #31b0d5;
+    border-color: #005c99;
+}
+
+.google_login_image {
+    background-image: url('/images/oauth/btn_google_signin_dark_normal_web.png');
+    width: 191px;
+    height: 46px;
+}
+
+.google_login_image:hover {
+    background-image: url('/images/oauth/btn_google_signin_dark_pressed_web.png');
 }

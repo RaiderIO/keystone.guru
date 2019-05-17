@@ -13,12 +13,11 @@ class EnemyForcesControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let source = $("#map_enemy_forces_template").html();
-                let template = handlebars.compile(source);
+                let template = Handlebars.templates['map_enemy_forces_template' + (!map.options.edit ? '_view' : '')];
 
-                let data = {
+                let data = $.extend({
                     enemy_forces_total: self.map.getEnemyForcesRequired()
-                };
+                }, getHandlebarsDefaultVariables());
 
                 // Build the status bar from the template
                 self.statusbar = $(template(data));
@@ -31,7 +30,7 @@ class EnemyForcesControls extends MapControl {
 
         // Listen for when all enemies are loaded
         this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
-            let enemyMapObjectGroup = self.map.getMapObjectGroupByName('enemy');
+            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
             // For each enemy we've loaded
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
@@ -45,7 +44,7 @@ class EnemyForcesControls extends MapControl {
             });
         });
 
-        let killzoneMapObjectGroup = self.map.getMapObjectGroupByName('killzone');
+        let killzoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.register('object:add', this, function (addEvent) {
             addEvent.data.object.register('killzone:synced', self, self._killzoneSynced.bind(self));
         });
@@ -77,11 +76,14 @@ class EnemyForcesControls extends MapControl {
 
         // Don't trigger this when loading in the route and the value actually changed
         if (this.loaded && this.enemyForces !== oldEnemyForces) {
-            // Remove any previous footer messages
-            if (this.lastFooterMessage !== null) {
-                this.lastFooterMessage.remove();
-            }
-            this.lastFooterMessage = addFixedFooterSmall($('#map_enemy_forces_numbers').text());
+            let $enemyForces = $('#map_enemy_forces');
+            // Show a short flash of green using the flash class
+            $enemyForces.addClass('update');
+
+            $enemyForces.addClass('flash');
+            setTimeout(function () {
+                $enemyForces.removeClass('flash');
+            }, 1000);
         }
     }
 
@@ -100,7 +102,7 @@ class EnemyForcesControls extends MapControl {
         $numbers.removeClass('map_enemy_forces_ok');
         if (this.enemyForces >= enemyForcesRequired) {
             // When editing the route..
-            if (this.map.edit) {
+            if (this.map.options.edit) {
                 if (enemyForcesPercent >= 100) {
                     $enemyForces.attr('title', '');
                     $numbers.addClass('map_enemy_forces_ok');
@@ -129,7 +131,7 @@ class EnemyForcesControls extends MapControl {
             }
         } else {
             // Only on view
-            if (!this.map.edit) {
+            if (!this.map.options.edit) {
                 if (enemyForcesPercent < 100) {
                     $enemyForces.attr('title', 'Warning: this route does not kill enough enemy forces!');
                     $numbers.addClass('map_enemy_forces_too_little_warning');
@@ -183,11 +185,11 @@ class EnemyForcesControls extends MapControl {
         // Unreg from map
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
         // Unreg killzones
-        let killzoneMapObjectGroup = this.map.getMapObjectGroupByName('killzone');
+        let killzoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.unregister('object:add', this);
 
         // Unreg enemies
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             // Unreg
             enemy.unregister('killzone:attached', self);

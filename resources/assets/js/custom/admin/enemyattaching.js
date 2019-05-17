@@ -71,25 +71,24 @@ class EnemyAttaching {
         });
 
         // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
-        let enemyMapObjectGroup = this.map.getMapObjectGroupByName('enemy');
-        enemyMapObjectGroup.register('object:add', this, function (event) {
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        enemyMapObjectGroup.register('object:add', this, function (addEvent) {
             if (self.currentMouseoverLayer !== null) {
                 let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
 
                 console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject!');
-                event.data.object.enemy_pack_id = mapObject.id;
+                addEvent.data.object.enemy_pack_id = mapObject.id;
             }
         });
 
         // When a pack is created, own all objects that it was placed under
-        let enemyPackMapObjectGroup = this.map.getMapObjectGroupByName('enemypack');
-        // When an enemy pack is loaded..
+        let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+        // When an enemy pack is added..
         enemyPackMapObjectGroup.register('object:add', this, function (event) {
             // Gather some data
             let enemyPack = event.data.object;
 
             enemyPack.register('synced', enemyPack, function (syncedEvent) {
-
                 let newEnemyPack = syncedEvent.context;
                 let enemyPackPolygon = newEnemyPack.layer;
                 // For each enemy we know of
@@ -102,7 +101,7 @@ class EnemyAttaching {
                         coordinates: [latLng.lng, latLng.lat]
                     }, enemyPackPolygon.toGeoJSON().geometry) && enemyMapObjectGroup.isMapObjectVisible(enemy)) {
                         // Only if something changed; we don't want to make unnecessary requests
-                        if (enemy.enemy_pack_id !== newEnemyPack.id) {
+                        if (enemy.enemy_pack_id !== newEnemyPack.id && !enemy.is_mdt) {
                             // Bind the enemies
                             enemy.enemy_pack_id = newEnemyPack.id;
                             // Save all enemies so their pack connection is never broken

@@ -51,7 +51,7 @@ window.leafletcontextmenu = require('leaflet-contextmenu');
 // window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
 window.bootstrapselect = require('bootstrap-select');
-window.handlebars = require('handlebars');
+window.Handlebars = require('handlebars');
 window.barrating = require('jquery-bar-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
 window.owlCarousel = require('owl.carousel');
@@ -62,6 +62,11 @@ window.mCustomScrollbar = require('malihu-custom-scrollbar-plugin');
 window.Cookies = require('js-cookie');
 window.hull = require('hull.js'); // Find the 'hull' of a random set of points
 window.Offset = require('polygon-offset'); // Offsetting polygons to get a smooth padding around them
+window.Lang = require('lang.js'); // Javascript translations
+window.d3 = require('d3'); // v3.5.14 since Pather uses an out-of-date version
+window.Pather = require('leaflet-pather');
+window.circleMenu = require('zikes-circlemenu');
+window.Noty = require('noty');
 
 require('@fortawesome/fontawesome-free');
 
@@ -81,3 +86,17 @@ window.axios.defaults.headers.common = {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+
+
+/**
+ * Translations coupling from server to client.
+ */
+import messages from './messages';
+window.lang = new Lang({ messages });
+
+// https://stackoverflow.com/questions/13046401/how-to-set-selected-select-option-in-handlebars-template
+window.Handlebars.registerHelper('select', function( value, options ){
+    var $el = $('<select />').html( options.fn(this) );
+    $el.find('[value="' + value + '"]').attr({'selected':'selected'});
+    return $el.html();
+});
