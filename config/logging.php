@@ -7,12 +7,12 @@ $discord = [];
 
 // If it's set only!
 if (!empty(env('APP_LOG_DISCORD_WEBHOOK'))) {
-    $discord['discord'] = [
+    $discord['discord'] = [];/*
         'driver' => 'custom',
         'url' => 'https://discordapp.com/api/webhooks/' . env('APP_LOG_DISCORD_WEBHOOK'),
         'via' => App\Logging\CreateDiscordLogger::class,
         'level' => 'error',
-    ];
+    ];*/
 }
 
 return [
@@ -44,11 +44,11 @@ return [
     'channels' => array_merge($discord, [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily', 'discord'],
+            'channels' => ['daily']//, 'discord'],
         ],
         'scheduler' => [
             'driver' => 'stack',
-            'channels' => ['scheduler_file', 'discord'],
+            'channels' => ['scheduler_file']//, 'discord'],
         ],
         'single' => [
             'driver' => 'single',
@@ -98,5 +98,9 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
+//        'discord' => [
+//            'driver' => 'stack',
+//            'channels' => ['daily'],
+//        ],
     ]),
 ];

@@ -180,7 +180,6 @@ class KillZone extends MapObject {
             error: function (xhr) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
-                defaultAjaxErrorFn(xhr);
             }
         });
     }

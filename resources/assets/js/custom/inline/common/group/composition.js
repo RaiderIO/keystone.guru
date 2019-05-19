@@ -28,6 +28,11 @@ class CommonGroupComposition extends InlineCode {
             refreshSelectPickers();
         });
 
+        $('#reload_button').bind('click', function (e) {
+            e.preventDefault();
+            self._loadDungeonRouteDefaults();
+        });
+
         this._fillFactions();
         this._fillSpecializations();
         this._fillClasses();

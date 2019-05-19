@@ -3,25 +3,27 @@
 namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ExampleEvent implements ShouldBroadcast
+class MapObjectEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    private $_model;
 
     /**
      * Create a new event instance.
      *
+     * @param $model Model
      * @return void
      */
-    public function __construct()
+    public function __construct(Model $model)
     {
-        //
+        $this->_model = $model;
     }
 
     /**
@@ -32,17 +34,12 @@ class ExampleEvent implements ShouldBroadcast
     public function broadcastOn()
     {
         return new Channel('route-edit');
-        // return new PrivateChannel('channel-name');
     }
 
     public function broadcastWith()
     {
-        $result = '';
-        for($i = 0; $i < 10; $i++ ){
-            $result .= ($i % 10);
-        }
         return [
-            'data' => $result
+            'data' => $this->_model->attributesToArray()
         ];
     }
 }

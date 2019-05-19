@@ -40,10 +40,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 
         // Defined in groupcomposition.js
         $(function () {
-            $("#reload_button").bind('click', function (e) {
-                e.preventDefault();
-                _loadDungeonRouteDefaults();
-            });
+
 
             <?php
                 // @formatter:off
@@ -81,7 +78,8 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
             _oldRaces = {!! json_encode($newRaces)  !!};
 
             <?php } ?>
-            _loadDungeonRouteDefaults();
+            let composition = _inlineManager.getInlineCode('common/group/composition');
+            composition._loadDungeonRouteDefaults();
             <?php }
             // @formatter:on
             ?>

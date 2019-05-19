@@ -4,6 +4,8 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "repositories": [
         {
             "type": "vcs",
@@ -38,7 +40,7 @@
         "predis/predis": "^1.1",
         "santigarcor/laratrust": "5.0.*",
         "shrikeh/teapot": "^2.3",
-        "socialiteproviders/battlenet": "dev-master",
+        "socialiteproviders/battlenet": "dev-master#4418c2dfd7823e883a83c292704cc90d2fe950a5",
         "socialiteproviders/discord": "^2.0",
         "tremby/laravel-git-version": "^1.1",
         "yajra/laravel-datatables-oracle": "~8.0"

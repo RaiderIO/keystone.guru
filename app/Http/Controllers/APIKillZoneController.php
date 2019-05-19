@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MapObjectEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsKillzones;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
@@ -70,6 +71,9 @@ class APIKillZoneController extends Controller
 
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
+
+                // Something's updated; broadcast it
+                broadcast(new MapObjectEvent($killZone));
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
