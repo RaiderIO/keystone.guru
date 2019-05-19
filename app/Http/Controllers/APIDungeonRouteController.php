@@ -17,7 +17,6 @@ use App\Logic\Datatables\AuthorNameColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use App\Logic\Datatables\DungeonRouteAffixesColumnHandler;
 use App\Logic\Datatables\DungeonRouteAttributesColumnHandler;
-use App\Logic\Datatables\DungeonRouteTeamColumnHandler;
 use App\Logic\Datatables\RatingColumnHandler;
 use App\Logic\Datatables\ViewsColumnHandler;
 use App\Models\DungeonRoute;
@@ -140,6 +139,8 @@ class APIDungeonRouteController extends Controller
      */
     function store(APIDungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null)
     {
+        $this->authorize('edit', $dungeonroute);
+
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
@@ -160,6 +161,8 @@ class APIDungeonRouteController extends Controller
      */
     function delete(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('delete', $dungeonroute);
+
         if (!$dungeonroute->delete()) {
             abort(500, 'Unable to delete dungeonroute');
         }
@@ -175,6 +178,8 @@ class APIDungeonRouteController extends Controller
      */
     function publish(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('publish', $dungeonroute);
+
         $dungeonroute->published = intval($request->get('published', 0)) === 1;
         $dungeonroute->save();
 
@@ -185,9 +190,12 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
+     * @throws \Exception
      */
     function rate(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('rate', $dungeonroute);
+
         $value = $request->get('rating', -1);
         if ($value > 0) {
             $user = Auth::user();
@@ -210,6 +218,8 @@ class APIDungeonRouteController extends Controller
      */
     function rateDelete(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('rate', $dungeonroute);
+
         $user = Auth::user();
 
         /** @var DungeonRouteRating $dungeonRouteRating */
@@ -226,9 +236,12 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
+     * @throws \Exception
      */
     function favorite(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('favorite', $dungeonroute);
+
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
@@ -246,6 +259,8 @@ class APIDungeonRouteController extends Controller
      */
     function favoriteDelete(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('favorite', $dungeonroute);
+
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */

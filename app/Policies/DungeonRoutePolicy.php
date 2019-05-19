@@ -20,7 +20,7 @@ class DungeonRoutePolicy
     public function view(User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
-        return true;
+        return $dungeonroute->published;
     }
 
     /**
@@ -44,6 +44,18 @@ class DungeonRoutePolicy
      * @return mixed
      */
     public function rate(User $user, DungeonRoute $dungeonroute)
+    {
+        return !$dungeonroute->isOwnedByUser();
+    }
+
+    /**
+     * Determine whether the user can favorite a dungeon route.
+     *
+     * @param  \App\User $user
+     * @param  \App\Models\DungeonRoute $dungeonroute
+     * @return mixed
+     */
+    public function favorite(User $user, DungeonRoute $dungeonroute)
     {
         return !$dungeonroute->isOwnedByUser();
     }
