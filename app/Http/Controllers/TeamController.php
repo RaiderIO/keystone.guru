@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TeamFormRequest;
 use App\Models\File;
 use App\Models\Team;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -82,9 +83,12 @@ class TeamController extends Controller
      * @param Request $request
      * @param Team $team
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws AuthorizationException
      */
     public function edit(Request $request, Team $team)
     {
+        $this->authorize('edit', $team);
+
         return view('team.edit', ['model' => $team]);
     }
 
