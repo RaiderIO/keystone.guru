@@ -206,6 +206,7 @@ return [
 
     'name_label' => 'Name',
     'join_date_label' => 'Join date',
+    'role_label' => 'Role',
     'assignable_roles_label' => 'Assignable roles',
     // 'actions_label' => 'Actions',
     'leave_label' => 'Leave',

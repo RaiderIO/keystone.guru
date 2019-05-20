@@ -6,6 +6,14 @@ class DungeonrouteTable extends InlineCode {
         this._dt = null;
 
         this._tableView = null;
+
+        // Init the code
+        this.setViewMode(this.options.viewMode);
+        let tableView = this.setTableView(this.options.tableView);
+        // Make sure the TeamID is set if we need it
+        if (typeof tableView.setTeamId === 'function') {
+            tableView.setTeamId(this.options.teamId);
+        }
     }
 
     /**
