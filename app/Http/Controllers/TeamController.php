@@ -28,10 +28,10 @@ class TeamController extends Controller
         $new = $team === null;
         if ($new) {
             $team = new Team();
+            $team->name = $request->get('name');
         }
 
         /** @var Team $team */
-        $team->name = $request->get('name');
         $team->description = $request->get('description');
         $team->invite_code = Team::generateRandomInviteCode();
         $team->icon_file_id = -1;
@@ -96,16 +96,18 @@ class TeamController extends Controller
      * @param Request $request
      * @param Team $team
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws AuthorizationException
      */
     public function delete(Request $request, Team $team)
     {
-        if ($team->isUserMember(Auth::user()) && $team->getUserRole(Auth::user()) === 'admin') {
-            try {
-                $team->delete();
-            } catch (\Exception $ex) {
-                abort(500);
-            }
+        $this->authorize('delete', $team);
+
+        try {
+            $team->delete();
+        } catch (\Exception $ex) {
+            abort(500);
         }
+
         return redirect()->route('team.list');
     }
 
@@ -117,6 +119,8 @@ class TeamController extends Controller
      */
     public function update(TeamFormRequest $request, Team $team)
     {
+        $this->authorize('edit', $team);
+
         // Store it and show the edit page again
         $team = $this->store($request, $team);
 

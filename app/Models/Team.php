@@ -207,6 +207,18 @@ class Team extends IconFileModel
     }
 
     /**
+     * Gets if a user is a moderator and may perform moderation actions.
+     *
+     * @param $user User
+     * @return bool
+     */
+    public function isUserModerator($user)
+    {
+        $userRole = $this->getUserRole($user);
+        return $userRole === 'moderator' || $userRole === 'admin';
+    }
+
+    /**
      * Checks if a user is a member of this team or not.
      * @param $user User
      * @return bool

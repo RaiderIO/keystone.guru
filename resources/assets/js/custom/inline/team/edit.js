@@ -182,10 +182,10 @@ class TeamEdit extends InlineCode {
                     let template = Handlebars.templates['team_member_table_permissions_template'];
                     let templateData = $.extend({
                         username: row.name,
-                        role: data,
-                        is_admin: data === 'admin',
+                        role: row.role,
+                        is_admin: row.role === 'admin',
                         roles: roles,
-                        self: self.options.currentUserName === data.name
+                        self: self.options.currentUserName === row.name
                     }, getHandlebarsDefaultVariables());
 
                     result = template(templateData);

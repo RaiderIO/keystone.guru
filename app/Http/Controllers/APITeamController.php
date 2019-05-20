@@ -23,6 +23,8 @@ class APITeamController extends Controller
      */
     public function changeRole(Request $request, Team $team)
     {
+        $this->authorize('change-role', $team);
+
         /** @var User $user */
         $user = Auth::user();
         /** @var User $targetUser */
@@ -51,6 +53,8 @@ class APITeamController extends Controller
      */
     public function addRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
+        $this->authorize('moderate-route', $team);
+
         /** @var User $user */
         $user = Auth::user();
 
@@ -74,6 +78,8 @@ class APITeamController extends Controller
      */
     public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
+        $this->authorize('moderate-route', $team);
+
         /** @var User $user */
         $user = Auth::user();
 
@@ -97,6 +103,8 @@ class APITeamController extends Controller
      */
     public function removeMember(Request $request, Team $team, User $user)
     {
+        $this->authorize('remove-member', $team);
+
         $result = ['result' => 'error'];
         if ($team->canRemoveMember(Auth::user(), $user)) {
             // Only when successful
