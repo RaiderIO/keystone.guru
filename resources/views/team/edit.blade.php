@@ -3,14 +3,16 @@
 $title = __('Edit team');
 /** @var \App\User $user */
 $user = Auth::user();
-$userRole = $model->getUserRole($user);
-$userIsModerator = $userRole === 'moderator' || $userRole === 'admin';
+$userIsModerator = $model->isUserModerator($user);
 $menuItems = [
     ['icon' => 'far fa-list-alt', 'text' => __('Overview'), 'target' => '#overview'],
     ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
-    ['icon' => 'fa-users', 'text' => __('Members'), 'target' => '#members'],
-    ['icon' => 'fa-edit', 'text' => __('Team details'), 'target' => '#details']
+    ['icon' => 'fa-users', 'text' => __('Members'), 'target' => '#members']
 ];
+// May only edit details when member is a moderator
+if ($userIsModerator) {
+    $menuItems[] = ['icon' => 'fa-edit', 'text' => __('Team details'), 'target' => '#details'];
+}
 
 $data = [];
 foreach ($model->teamusers as $teamuser) {
@@ -42,7 +44,7 @@ foreach ($model->teamusers as $teamuser) {
     'userIsModerator' => $userIsModerator,
     'currentUserId' => $user->id,
     'currentUserName' => $user->name,
-    'currentUserRole' => $userRole,
+    'currentUserRole' => $model->getUserRole($user),
 ]])
 
 @section('scripts')
@@ -62,6 +64,7 @@ foreach ($model->teamusers as $teamuser) {
                 <h4>
                     {{ sprintf(__('Team %s'), $model->name) }}
                 </h4>
+                @include('common.general.messages')
 
                 <div class="row">
                     <div class="col-lg mt-2">
@@ -150,15 +153,32 @@ foreach ($model->teamusers as $teamuser) {
                 <h5>
                     {{ __('Invite new members') }}
                 </h5>
-                <div class="col-xl-5">
-                    <div class="input-group-append">
-                        {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
-                            ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                <div class="row">
+                    @if(!isAlertDismissed('team-invite-info'))
+                        <div class="col">
+                            <div class="alert alert-info alert-dismissible">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close"
+                                   data-alert-dismiss-id="team-invite-info">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                                <p>
+                                    {{ __('Be careful who you share the invite link with, everyone with it can join your team!') }}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+                <div class="row">
+                    <div class="col-xl-5">
                         <div class="input-group-append">
-                            <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
-                                    data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
-                                <i class="far fa-copy"></i>
-                            </button>
+                            {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
+                                ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                            <div class="input-group-append">
+                                <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
+                                        data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -173,15 +193,17 @@ foreach ($model->teamusers as $teamuser) {
             </div>
         </div>
 
-        <div class="tab-pane fade" id="details" role="tabpanel"
-             aria-labelledby="details-tab">
-            <div class="">
-                <h4>
-                    {{ __('Team details') }}
-                </h4>
+        @if($userIsModerator)
+            <div class="tab-pane fade" id="details" role="tabpanel"
+                 aria-labelledby="details-tab">
+                <div class="">
+                    <h4>
+                        {{ __('Team details') }}
+                    </h4>
 
-                @include('team.details', ['model' => $model])
+                    @include('team.details', ['model' => $model])
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 @endsection

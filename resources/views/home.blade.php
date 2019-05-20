@@ -3,7 +3,7 @@
 @section('header-title', __('Welcome to keystone.guru!'))
 
 @section('content')
-    @include('common.general.messages')
+    @include('common.general.messages', ['center' => true])
 
     @if((new Jenssegers\Agent\Agent())->browser() === 'IE')
         <div class="container-fluid alert alert-warning text-center mt-4">

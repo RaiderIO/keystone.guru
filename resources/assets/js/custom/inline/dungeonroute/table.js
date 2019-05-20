@@ -386,7 +386,7 @@ class DungeonrouteTable extends InlineCode {
     _addToThisTeam(clickEvent) {
         let teamId = this.getTableView().getTeamId();
         if (teamId !== -1) {
-            let key = $(clickEvent.target).attr('data-publickey');
+            let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',
@@ -411,7 +411,7 @@ class DungeonrouteTable extends InlineCode {
     _removeFromThisTeam(clickEvent) {
         let teamId = this.getTableView().getTeamId();
         if (teamId !== -1) {
-            let key = $(clickEvent.target).attr('data-publickey');
+            let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',

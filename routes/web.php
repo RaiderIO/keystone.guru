@@ -112,17 +112,11 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         });
 
         // Edit your own dungeon routes
-        Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')
-            ->middleware('can:edit,dungeonroute')
-            ->name('dungeonroute.edit');
+        Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')->name('dungeonroute.edit');
         // Submit a patch for your own dungeon route
-        Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')
-            ->middleware('can:edit,dungeonroute')
-            ->name('dungeonroute.update');
+        Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')->name('dungeonroute.update');
         // Clone a route
-        Route::get('{dungeonroute}/clone', 'DungeonRouteController@clone')
-            ->middleware('can:clone,dungeonroute')
-            ->name('dungeonroute.clone');
+        Route::get('{dungeonroute}/clone', 'DungeonRouteController@clone')->name('dungeonroute.clone');
 
         Route::get('profile', 'ProfileController@edit')->name('profile.edit');
         Route::patch('profile/{user}', 'ProfileController@update')->name('profile.update');
@@ -219,17 +213,11 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::post('/enemy/{enemy}/raidmarker', 'APIEnemyController@setRaidMarker');
 
         Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
-        Route::post('/dungeonroute/{dungeonroute}/publish', 'APIDungeonRouteController@publish')
-            ->middleware('can:publish,dungeonroute')
-            ->name('api.dungeonroute.publish');
-        Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')
-            ->middleware('can:rate,dungeonroute')
-            ->name('api.dungeonroute.rate');
+        Route::post('/dungeonroute/{dungeonroute}/publish', 'APIDungeonRouteController@publish')->name('api.dungeonroute.publish');
+        Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
 
         // Submit a patch for your own dungeon route
-        Route::delete('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@delete')
-            ->middleware('can:delete,dungeonroute')
-            ->name('api.dungeonroute.delete');
+        Route::delete('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@delete')->name('api.dungeonroute.delete');
         Route::delete('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
 
         Route::post('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
