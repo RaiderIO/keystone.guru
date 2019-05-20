@@ -11,7 +11,7 @@ $member = isset($member) ? $member : false;
         @isset($team)
             @isset($team->iconfile)
                 <p>
-                    <img src="{{ $team->iconfile->getUrl() }}" style="max-width: 256px; max-height: 256px;"
+                    <img src="{{ url('storage/' . $team->iconfile->getUrl()) }}" style="max-width: 256px; max-height: 256px;"
                          alt="{{ __('Team logo') }}"/>
                 </p>
             @endisset
