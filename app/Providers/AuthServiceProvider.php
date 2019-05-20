@@ -2,9 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\DungeonRoute;
-use App\Policies\DungeonRoutePolicy;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -16,7 +13,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
-        'App\Models\DungeonRoute' => 'App\Policies\DungeonRoutePolicy'
+        'App\Models\DungeonRoute' => 'App\Policies\DungeonRoutePolicy',
+        'App\Models\Team' => 'App\Policies\TeamPolicy'
     ];
 
     /**

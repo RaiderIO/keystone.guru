@@ -5,7 +5,13 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 ($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ?
     $_COOKIE['routes_viewmode'] : 'biglist';
 ?>
-@include('common.general.inline', ['path' => 'dungeonroute/table'])
+@include('common.general.inline', ['path' => 'dungeonroute/table',
+        'options' =>  [
+            'tableView' => $view,
+            'viewMode' => $cookieViewMode,
+            'teamId' => $team ? $team->id : -1
+            ]
+])
 
 @section('scripts')
     @parent
@@ -13,14 +19,6 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
     <script type="text/javascript">
         $(function () {
             let code = _inlineManager.getInlineCode('dungeonroute/table');
-
-            // Init the code
-            code.setViewMode('{{ $cookieViewMode }}');
-            let tableView = code.setTableView('{{ $view}}');
-            // Make sure the TeamID is set if we need it
-            if (typeof tableView.setTeamId === 'function') {
-                tableView.setTeamId({{ $team ? $team->id : -1}});
-            }
 
             // Build the table
             code.refreshTable();

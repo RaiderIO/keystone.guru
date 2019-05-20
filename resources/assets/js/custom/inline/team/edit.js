@@ -7,10 +7,12 @@ class TeamEdit extends InlineCode {
 
     /**
      *
-     * @param path
      */
     activate() {
         let self = this;
+        let code = _inlineManager.getInlineCode('dungeonroute/table');
+        let tableView = code.getTableView();
+        tableView.setIsUserModerator(this.options.userIsModerator);
 
         // Copy to clipboard functionality
         $('#team_invite_link_copy_to_clipboard').bind('click', function () {
@@ -24,10 +26,8 @@ class TeamEdit extends InlineCode {
             showInfoNotification(lang.get('messages.copied_to_clipboard'));
         });
 
-        let code = _inlineManager.getInlineCode('dungeonroute/table');
         // Add route to team button
         $('#add_route_btn').bind('click', function () {
-            let tableView = code.getTableView();
             tableView.setAddMode(true);
 
             code.refreshTable();
@@ -37,7 +37,6 @@ class TeamEdit extends InlineCode {
 
         // Cancel button when done adding routes
         $('#view_existing_routes').bind('click', function () {
-            let tableView = code.getTableView();
             tableView.setAddMode(false);
 
             code.refreshTable();
@@ -143,60 +142,61 @@ class TeamEdit extends InlineCode {
             'title': lang.get('messages.join_date_label'),
             'width': '20%',
             'className': 'd-none d-lg-table-cell'
-        }, {
-            'data': 'assignable_roles',
-            'title': lang.get('messages.assignable_roles_label'),
-            'width': '20%',
-            'render': function (data, type, row, meta) {
-                let roles = [];
-
-                // Match the valid roles with roles above
-                let assignableRoles = row.assignable_roles;
-                for (let roleIndex in assignableRoles) {
-                    if (assignableRoles.hasOwnProperty(roleIndex)) {
-                        // Fetch the role..
-                        let assignableRole = assignableRoles[roleIndex];
-
-                        let icon = self._getIcon(assignableRole);
-                        if (icon !== false) {
-                            roles.push(icon);
-                        }
-                    }
-                }
-
-                let result = '';
-                if (roles.length === 0) {
-                    let icon = self._getIcon(data);
-
-                    // Handlebars the entire thing
-                    let template = Handlebars.templates['team_member_table_permissions_self_template'];
-                    let templateData = $.extend({
-                        icon: icon.icon,
-                        label: icon.label,
-                        self: self.options.currentUserName === row.name
-                    }, getHandlebarsDefaultVariables());
-
-                    result = template(templateData);
-                } else {
-                    // Handlebars the entire thing
-                    let template = Handlebars.templates['team_member_table_permissions_template'];
-                    let templateData = $.extend({
-                        username: row.name,
-                        role: data,
-                        is_admin: data === 'admin',
-                        roles: roles,
-                        self: self.options.currentUserName === data.name
-                    }, getHandlebarsDefaultVariables());
-
-                    result = template(templateData);
-                }
-                return result;
-            },
-            'orderable': false
         }];
 
         // Only admins/moderators have the option to remove members from a team
         if (self.options.userIsModerator) {
+            columns.push({
+                'data': 'assignable_roles',
+                'title': lang.get('messages.assignable_roles_label'),
+                'width': '20%',
+                'render': function (data, type, row, meta) {
+                    let roles = [];
+
+                    // Match the valid roles with roles above
+                    let assignableRoles = row.assignable_roles;
+                    for (let roleIndex in assignableRoles) {
+                        if (assignableRoles.hasOwnProperty(roleIndex)) {
+                            // Fetch the role..
+                            let assignableRole = assignableRoles[roleIndex];
+
+                            let icon = self._getIcon(assignableRole);
+                            if (icon !== false) {
+                                roles.push(icon);
+                            }
+                        }
+                    }
+
+                    let result = '';
+                    if (roles.length === 0) {
+                        let icon = self._getIcon(data);
+
+                        // Handlebars the entire thing
+                        let template = Handlebars.templates['team_member_table_permissions_self_template'];
+                        let templateData = $.extend({
+                            icon: icon.icon,
+                            label: icon.label,
+                            self: self.options.currentUserName === row.name
+                        }, getHandlebarsDefaultVariables());
+
+                        result = template(templateData);
+                    } else {
+                        // Handlebars the entire thing
+                        let template = Handlebars.templates['team_member_table_permissions_template'];
+                        let templateData = $.extend({
+                            username: row.name,
+                            role: row.role,
+                            is_admin: row.role === 'admin',
+                            roles: roles,
+                            self: self.options.currentUserName === row.name
+                        }, getHandlebarsDefaultVariables());
+
+                        result = template(templateData);
+                    }
+                    return result;
+                },
+                'orderable': false
+            });
             columns.push({
                 'data': 'join_date',
                 'title': lang.get('messages.actions_label'),
@@ -220,6 +220,16 @@ class TeamEdit extends InlineCode {
                     }
                     return result;
                 }
+            });
+        } else {
+            columns.push({
+                'data': 'role',
+                'title': lang.get('messages.role_label'),
+                'width': '20%',
+                'render': function(data, type, row, meta) {
+                    return _.startCase(_.toLower(row.role));
+                },
+                'orderable': true
             });
         }
 

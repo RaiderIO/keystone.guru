@@ -1,15 +1,15 @@
-@include('common.general.messages')
-
 @isset($model)
     {{ Form::model($model, ['route' => ['team.update', $model->id], 'method' => 'patch', 'files' => true]) }}
 @else
     {{ Form::open(['route' => 'team.savenew', 'files' => true]) }}
 @endisset
 
+@if(!isset($model))
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-    {!! Form::label('name', __('Name')) !!}
+    {!! Form::label('name', __('Name') . '*') !!}
     {!! Form::text('name', null, ['class' => 'form-control']) !!}
 </div>
+@endif
 
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
     {!! Form::label('description', __('Description')) !!}
