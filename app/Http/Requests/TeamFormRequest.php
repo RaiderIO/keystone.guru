@@ -28,8 +28,14 @@ class TeamFormRequest extends FormRequest
         /** @var Team $team */
         $team = $this->route()->parameter('team');
 
+        if( $team === null ){
+            $nameRules = 'required|string|max:32|unique:teams';
+        } else {
+            $nameRules = Rule::unique('teams')->ignore($team);
+        }
+
         $rules = [
-            'name' => ['required', Rule::unique('teams')->ignore($team)],
+            'name' => $nameRules,
             'description' => 'string',
             'logo' => 'image|mimes:png|max:256'
         ];
