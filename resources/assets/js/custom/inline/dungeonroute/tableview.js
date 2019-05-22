@@ -89,7 +89,9 @@ class TeamTableView extends TableView {
     constructor() {
         super();
 
+        this._teamId = -1;
         this._addMode = false;
+        this._isUserModerator = false;
     }
 
     /**
@@ -106,6 +108,10 @@ class TeamTableView extends TableView {
      */
     setAddMode(value) {
         this._addMode = value;
+    }
+
+    setIsUserModerator(value){
+        this._isUserModerator = value;
     }
 
     /**
@@ -148,8 +154,10 @@ class TeamTableView extends TableView {
         };
 
         // Push different columns based on if add mode is enabled or not
-        this._columns.list.push({name: 'addremoveroute', width: '15%', clickable: false});
-        this._columns.biglist.push({name: 'addremoveroute', width: '15%', clickable: false});
+        if(this._isUserModerator ){
+            this._columns.list.push({name: 'addremoveroute', width: '15%', clickable: false});
+            this._columns.biglist.push({name: 'addremoveroute', width: '15%', clickable: false});
+        }
 
         return super.getColumns(view);
     }

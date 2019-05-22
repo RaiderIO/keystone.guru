@@ -6,6 +6,14 @@ class DungeonrouteTable extends InlineCode {
         this._dt = null;
 
         this._tableView = null;
+
+        // Init the code
+        this.setViewMode(this.options.viewMode);
+        let tableView = this.setTableView(this.options.tableView);
+        // Make sure the TeamID is set if we need it
+        if (typeof tableView.setTeamId === 'function') {
+            tableView.setTeamId(this.options.teamId);
+        }
     }
 
     /**
@@ -386,7 +394,7 @@ class DungeonrouteTable extends InlineCode {
     _addToThisTeam(clickEvent) {
         let teamId = this.getTableView().getTeamId();
         if (teamId !== -1) {
-            let key = $(clickEvent.target).attr('data-publickey');
+            let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',
@@ -411,7 +419,7 @@ class DungeonrouteTable extends InlineCode {
     _removeFromThisTeam(clickEvent) {
         let teamId = this.getTableView().getTeamId();
         if (teamId !== -1) {
-            let key = $(clickEvent.target).attr('data-publickey');
+            let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',

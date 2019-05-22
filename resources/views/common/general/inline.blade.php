@@ -8,7 +8,8 @@ if( $section ) { ?>
     @parent
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
-            _inlineManager.activate('{{ $path }}', {!!  json_encode($options) !!} );
+            _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!} );
+            _inlineManager.activate('{{ $path }}');
         });
     </script>
 @endsection
@@ -17,7 +18,8 @@ if( $section ) { ?>
 
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
-        _inlineManager.activate('{{ $path }}', {!!  json_encode($options) !!} );
+        _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!} );
+        _inlineManager.activate('{{ $path }}');
     });
 </script>
 

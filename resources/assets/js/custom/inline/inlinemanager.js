@@ -18,6 +18,7 @@ class InlineManager {
             let code = this._inlineCode[index];
             if (code.path === bladePath) {
                 result = code.code;
+                break;
             }
         }
 
@@ -25,11 +26,11 @@ class InlineManager {
     }
 
     /**
-     * Activates a specific piece of inline code for a blade file.
-     * @param bladePath
-     * @param options
+     * Initializes a specific piece of inline code for a blade file; this code is not activated yet!
+     * @param bladePath string
+     * @param options object
      */
-    activate(bladePath, options) {
+    init(bladePath, options) {
         console.log(bladePath, options);
 
         let explode = bladePath.split('/');
@@ -41,11 +42,19 @@ class InlineManager {
 
         // Bit of a dirty solution, but this works. This creates an instance of the class that is described in the string
         let code = new (eval(className))(options);
-        // Now that we have the instance, run the activate function to trigger it
-        code.activate();
 
         this._inlineCode.push({path: bladePath, code: code});
 
         return code;
+    }
+
+    /**
+     * Activates all loaded inline code.
+     * @param bladePath
+     */
+    activate(bladePath){
+        let code = this.getInlineCode(bladePath);
+        // Now that we have the instance, run the activate function to trigger it
+        code.activate();
     }
 }

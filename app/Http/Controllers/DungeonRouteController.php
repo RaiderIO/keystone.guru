@@ -10,6 +10,7 @@ use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\PageView;
 use App\Models\UserReport;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -79,34 +80,28 @@ class DungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws AuthorizationException
      */
     public function view(Request $request, DungeonRoute $dungeonroute)
     {
-        $result = null;
+        $this->authorize('view', $dungeonroute);
 
-        // @TODO This should be handled differently imho
-        if (!$dungeonroute->published) {
-            $result = view('dungeonroute.unpublished', ['headerTitle' => __('Route unpublished')]);
-        } else {
-            $currentReport = null;
-            if (Auth::check()) {
-                // Find any currently active report the user has made
-                $currentReport = UserReport::where('author_id', Auth::id())
-                    ->where('context', $dungeonroute->getReportContext())
-                    ->where('category', 'dungeonroute')
-                    ->where('handled', 0)
-                    ->first();
-            }
-
-            PageView::trackPageView($dungeonroute->id, get_class($dungeonroute));
-
-            $result = view('dungeonroute.view', [
-                'model' => $dungeonroute,
-                'current_report' => $currentReport
-            ]);
+        $currentReport = null;
+        if (Auth::check()) {
+            // Find any currently active report the user has made
+            $currentReport = UserReport::where('author_id', Auth::id())
+                ->where('context', $dungeonroute->getReportContext())
+                ->where('category', 'dungeonroute')
+                ->where('handled', 0)
+                ->first();
         }
 
-        return $result;
+        PageView::trackPageView($dungeonroute->id, get_class($dungeonroute));
+
+        return view('dungeonroute.view', [
+            'model' => $dungeonroute,
+            'current_report' => $currentReport
+        ]);
     }
 
     /**
@@ -149,9 +144,12 @@ class DungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
+     * @throws AuthorizationException
      */
     function clone(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('clone', $dungeonroute);
+
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute()) {
@@ -225,9 +223,12 @@ class DungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws AuthorizationException
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('edit', $dungeonroute);
+
         // Make sure the dungeon route is owned by this user if it was in try mode.
         // Don't share your try routes if you don't want someone else to claim the route!
         $dungeonroute->claim(Auth::user());
@@ -245,6 +246,8 @@ class DungeonRouteController extends Controller
      */
     public function update(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('edit', $dungeonroute);
+
         // Store it and show the edit page again
         $dungeonroute = $this->store($request, $dungeonroute);
 
