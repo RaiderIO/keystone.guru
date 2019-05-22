@@ -6,12 +6,43 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-bullseye';
 
         // this.manager.unregister('fetchsuccess', this);
+        window.Echo.channel('route-edit')
+            .listen('MapObjectEvent', (e) => {
+                console.log(e);
+            });
     }
 
     _createObject(layer) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup');
 
         return new KillZone(this.manager.map, layer);
+    }
+
+    _restoreObject(localMapObject, remoteMapObject) {
+        localMapObject.id = remoteMapObject.id;
+        localMapObject.floor_id = remoteMapObject.floor_id;
+        // Use default if not set
+        if (remoteMapObject.color !== '') {
+            localMapObject.color = remoteMapObject.color;
+        }
+
+        // Reconstruct the enemies we're coupled with in a format we expect
+        if (remoteMapObject.killzoneenemies !== null) {
+            if (remoteMapObject.killzoneenemies.length <= 1) {
+                return false;
+            }
+            let enemies = [];
+            for (let i = 0; i < remoteMapObject.killzoneenemies.length; i++) {
+                let enemy = remoteMapObject.killzoneenemies[i];
+                enemies.push(enemy.enemy_id);
+            }
+            // Restore the enemies, STILL NEED TO CALL SETENEMIES WHEN EVERYTHING'S DONE LOADING
+            // Should be handled by the killzone itself
+            localMapObject.enemies = enemies;
+        }
+
+        // We just downloaded the kill zone, it's synced alright!
+        localMapObject.setSynced(true);
     }
 
     _fetchSuccess(response) {
@@ -31,29 +62,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
                 /** @var KillZone killzone */
                 let killzone = this.createNew(layer);
-                killzone.id = remoteKillZone.id;
-                killzone.floor_id = remoteKillZone.floor_id;
-                // Use default if not set
-                if (remoteKillZone.color !== '') {
-                    killzone.color = remoteKillZone.color;
-                }
 
-                // Reconstruct the enemies we're coupled with in a format we expect
-                if (remoteKillZone.killzoneenemies !== null) {
-                    if (remoteKillZone.killzoneenemies.length <= 1) {
-                        continue;
-                    }
-                    let enemies = [];
-                    for (let i = 0; i < remoteKillZone.killzoneenemies.length; i++) {
-                        let enemy = remoteKillZone.killzoneenemies[i];
-                        enemies.push(enemy.enemy_id);
-                    }
-                    // Restore the enemies, STILL NEED TO CALL SETENEMIES WHEN EVERYTHING'S DONE LOADING
-                    // Should be handled by the killzone itself
-                    killzone.enemies = enemies;
-                }
-                // We just downloaded the kill zone, it's synced alright!
-                killzone.setSynced(true);
+                this._restoreObject(killzone, remoteKillZone);
             }
         }
     }

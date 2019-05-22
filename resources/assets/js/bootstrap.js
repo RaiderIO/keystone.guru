@@ -29,13 +29,6 @@ window.Echo = new Echo({
     broadcaster: 'socket.io',
     host: window.location.hostname + ':6002'
 });
-window.Echo.channel('route-edit')
-    .listen('ExampleEvent', (e) => {
-        console.log(e);
-    })
-    .listen('MapObjectEvent', (e) => {
-        console.log(e);
-    });
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
