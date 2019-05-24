@@ -139,11 +139,6 @@ class Team extends IconFileModel
             }
         }
 
-        // TEMP: uncomment when collaborative editing is done.
-        if ($key = array_search('collaborator', $result)) {
-            unset($result[$key]);
-        }
-
         return $result;
     }
 
@@ -204,6 +199,17 @@ class Team extends IconFileModel
     public function isCurrentUserMember()
     {
         return $this->isUserMember(Auth::user());
+    }
+
+    /**
+     * Checks if the user is a collaborator or higher.
+     * @param $user  User
+     * @return bool True if the user is, false if not.
+     */
+    public function isUserCollaborator($user)
+    {
+        $userRole = $this->getUserRole($user);
+        return $userRole !== false && $userRole !== 'member';
     }
 
     /**

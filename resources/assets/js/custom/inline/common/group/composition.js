@@ -168,7 +168,7 @@ class CommonGroupComposition extends InlineCode {
      * @private
      */
     _factionChanged(changeEvent) {
-        console.log('>> _factionChanged');
+        // console.log('>> _factionChanged');
         let newFactionId = parseInt($('#faction_id').val());
 
         // Keep a list of classselects
@@ -209,7 +209,7 @@ class CommonGroupComposition extends InlineCode {
                 }
             });
         });
-        console.log('OK _factionChanged');
+        // console.log('OK _factionChanged');
     }
 
     /**
@@ -218,7 +218,7 @@ class CommonGroupComposition extends InlineCode {
      * @private
      */
     _raceChanged(changeEvent) {
-        console.log('>> _raceChanged');
+        // console.log('>> _raceChanged');
         let self = this;
 
         // Changed by user
@@ -264,7 +264,7 @@ class CommonGroupComposition extends InlineCode {
                 }
             }
         }
-        console.log('OK _raceChanged');
+        // console.log('OK _raceChanged');
     }
 
     /**
@@ -272,7 +272,7 @@ class CommonGroupComposition extends InlineCode {
      * @private
      */
     _classChanged(changeEvent) {
-        console.log('>> _classChanged');
+        // console.log('>> _classChanged');
         // Changed by user
         let $classSelect = $(changeEvent.target);
         let newClassId = parseInt($classSelect.val());
@@ -327,7 +327,7 @@ class CommonGroupComposition extends InlineCode {
                 }
             });
         }
-        console.log('OK _classChanged');
+        // console.log('OK _classChanged');
     }
 
     /**
@@ -336,7 +336,7 @@ class CommonGroupComposition extends InlineCode {
      * @private
      */
     _specializationChanged(changeEvent) {
-        console.log('>> _specializationChanged');
+        // console.log('>> _specializationChanged');
         let self = this;
         let $specSelect = $(changeEvent.target);
         let newSpecId = parseInt($specSelect.val());
@@ -361,7 +361,7 @@ class CommonGroupComposition extends InlineCode {
                 }
             }
         });
-        console.log('OK _specializationChanged');
+        // console.log('OK _specializationChanged');
     }
 
     /**

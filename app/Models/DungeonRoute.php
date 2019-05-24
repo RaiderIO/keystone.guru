@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\DB;
  * @property Faction $faction
  * @property User $author
  * @property MDTImport $mdtImport
+ * @property Team $team
  *
  * @property \Illuminate\Support\Collection $specializations
  * @property \Illuminate\Support\Collection $classes
@@ -277,31 +278,6 @@ class DungeonRoute extends Model
     }
 
     /**
-     * If this dungeon is in try mode, have a specific user claim this route as theirs.
-     *
-     * @param $user User
-     * @return bool
-     */
-    public function claim($user)
-    {
-        if ($result = $this->isTry()) {
-            $this->author_id = $user->id;
-            $this->expires_at = null;
-            $this->save();
-            $result = true;
-        }
-        return $result;
-    }
-
-    /**
-     * @return bool True if this route is in try mode, false if it is not.
-     */
-    public function isTry()
-    {
-        return $this->author_id === -1 && $this->expires_at !== null;
-    }
-
-    /**
      * Scope a query to only include dungeon routes that are set in try mode.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -332,7 +308,8 @@ class DungeonRoute extends Model
     /**
      * @return bool
      */
-    public function getHasTeamAttribute(){
+    public function getHasTeamAttribute()
+    {
         return $this->team_id > 0;
     }
 
@@ -422,6 +399,41 @@ class DungeonRoute extends Model
             'classes' => $this->classes,
             'races' => $this->races
         ];
+    }
+
+    /**
+     * @param $user User
+     * @return bool
+     */
+    public function mayUserEdit($user)
+    {
+        return $this->isTry() || $this->isOwnedByUser($user) || $user->hasRole('admin')
+            || ($this->team !== null && $this->team->isUserCollaborator($user));
+    }
+
+    /**
+     * If this dungeon is in try mode, have a specific user claim this route as theirs.
+     *
+     * @param $user User
+     * @return bool
+     */
+    public function claim($user)
+    {
+        if ($result = $this->isTry()) {
+            $this->author_id = $user->id;
+            $this->expires_at = null;
+            $this->save();
+            $result = true;
+        }
+        return $result;
+    }
+
+    /**
+     * @return bool True if this route is in try mode, false if it is not.
+     */
+    public function isTry()
+    {
+        return $this->author_id === -1 && $this->expires_at !== null;
     }
 
     /**

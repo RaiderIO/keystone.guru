@@ -81,11 +81,10 @@ class AdminEnemyPatrol extends EnemyPatrol {
         console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
         $.ajax({
             type: 'POST',
-            url: '/ajax/enemypatrol',
+            url: '/ajax/enemypatrol/' + self.id,
             dataType: 'json',
             data: {
-                _method: 'DELETE',
-                id: self.id
+                _method: 'DELETE'
             },
             beforeSend: function () {
                 self.deleting = true;

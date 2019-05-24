@@ -2,31 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MapObjectEvent;
+use App\Events\KillZoneChangedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
-use App\Http\Controllers\Traits\ListsKillzones;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
 class APIKillZoneController extends Controller
 {
-    use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
-    use ListsKillzones;
-
-    function list(Request $request)
-    {
-        return $this->listKillzones(
-            $request->get('floor_id'),
-            $request->get('dungeonroute')
-        );
-    }
 
     /**
      * @param Request $request
@@ -36,6 +23,8 @@ class APIKillZoneController extends Controller
      */
     function store(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('edit', $dungeonroute);
+
         /** @var KillZone $killZone */
         $killZone = KillZone::findOrNew($request->get('id'));
 
@@ -73,7 +62,7 @@ class APIKillZoneController extends Controller
                 KillZoneEnemy::insert($killZoneEnemies);
 
                 // Something's updated; broadcast it
-                broadcast(new MapObjectEvent($killZone));
+                broadcast(new KillZoneChangedEvent($killZone));
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
@@ -92,15 +81,14 @@ class APIKillZoneController extends Controller
      * @param DungeonRoute $dungeonroute
      * @param KillZone $killzone
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
      */
     function delete(Request $request, DungeonRoute $dungeonroute, KillZone $killzone)
     {
-        try {
-            // @TODO handle this in a policy?
-            if (!Auth::check() || ($dungeonroute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin'))) {
-                throw new Exception('Unauthorized');
-            }
+        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
+        $this->authorize('edit', $dungeonroute);
 
+        try {
             $killzone->delete();
 
             // Refresh the killzones relation

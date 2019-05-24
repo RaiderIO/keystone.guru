@@ -42,13 +42,15 @@ class APIDungeonStartMarkerController extends Controller
         return ['id' => $dungeonStartMarker->id];
     }
 
-    function delete(Request $request)
+    /**
+     * @param Request $request
+     * @param DungeonStartMarker $dungeonstartmarker
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    function delete(Request $request, DungeonStartMarker $dungeonstartmarker)
     {
         try {
-            /** @var DungeonStartMarker $dungeonStartMarker */
-            $dungeonStartMarker = DungeonStartMarker::findOrFail($request->get('id'));
-
-            $dungeonStartMarker->delete();
+            $dungeonstartmarker->delete();
             $result = ['result' => 'success'];
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

@@ -81,8 +81,7 @@ class DungeonRoutePolicy
      */
     public function edit(User $user, DungeonRoute $dungeonroute)
     {
-        // Only authors or if the user is an admin
-        return $dungeonroute->isTry() || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->mayUserEdit($user);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\Npc;
@@ -79,23 +80,25 @@ class APIEnemyController extends Controller
 
     /**
      * @param Request $request
+     * @param DungeonRoute $dungeonroute
      * @param Enemy $enemy
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    function setRaidMarker(Request $request, Enemy $enemy)
+    function setRaidMarker(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
     {
-        $dungeonRoutePublicKey = $request->get('dungeonroute');
+        $this->authorize('edit', $dungeonroute);
+
         try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
             $raidMarkerName = $request->get('raid_marker_name', '');
 
             // Delete existing enemy raid marker
-            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonroute->id)->delete();
 
             // Create a new one, if the user didn't just want to clear it
             if ($raidMarkerName !== null && !empty($raidMarkerName)) {
                 $raidMarker = new DungeonRouteEnemyRaidMarker();
-                $raidMarker->dungeon_route_id = $dungeonRoute->id;
+                $raidMarker->dungeon_route_id = $dungeonroute->id;
                 $raidMarker->raid_marker_id = RaidMarker::where('name', $raidMarkerName)->first()->id;
                 $raidMarker->enemy_id = $enemy->id;
                 $raidMarker->save();
@@ -114,14 +117,12 @@ class APIEnemyController extends Controller
 
     /**
      * @param Request $request
+     * @param Enemy $enemy
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    function delete(Request $request)
+    function delete(Request $request, Enemy $enemy)
     {
         try {
-            /** @var Enemy $enemy */
-            $enemy = Enemy::findOrFail($request->get('id'));
-
             $enemy->delete();
             $result = ['result' => 'success'];
         } catch (\Exception $ex) {

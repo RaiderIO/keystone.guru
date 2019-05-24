@@ -74,11 +74,10 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Restores an object that was received from the server
-     * @param localMapObject
      * @param remoteMapObject
      * @private
      */
-    _restoreObject(localMapObject, remoteMapObject) {
+    _restoreObject(remoteMapObject) {
         // @TODO Add error message like the above
     }
 

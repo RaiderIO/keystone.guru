@@ -2,28 +2,30 @@
 
 namespace App\Events;
 
+use App\Models\KillZone;
+use App\Models\Path;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
-class MapObjectEvent implements ShouldBroadcast
+class PathChangedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $_model;
+    /** @var Path $_path */
+    private $_path;
 
     /**
      * Create a new event instance.
      *
-     * @param $model Model
+     * @param $path Path
      * @return void
      */
-    public function __construct(Model $model)
+    public function __construct(Path $path)
     {
-        $this->_model = $model;
+        $this->_path = $path;
     }
 
     /**
@@ -39,7 +41,7 @@ class MapObjectEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'data' => $this->_model->attributesToArray()
+            'path' => $this->_path
         ];
     }
 }

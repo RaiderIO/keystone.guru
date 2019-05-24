@@ -19,7 +19,7 @@ $redirect = old('redirect', $redirect);
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}login_email" class="control-label">{{ __('E-mail address') }}</label>
 
-                <div class="col-md-{{ $width }}">
+                <div class="col col-xl-{{ $width }}">
                     <input id="{{ $modalClass }}login_email" type="email" class="form-control" name="email"
                            value="{{ old('email') }}" required autofocus autocomplete="username email">
                 </div>
@@ -28,14 +28,14 @@ $redirect = old('redirect', $redirect);
             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}login_password" class="control-label">{{ __('Password') }}</label>
 
-                <div class="col-md-{{ $width }}">
+                <div class="col col-xl-{{ $width }}">
                     <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password"
                            autocomplete="current-password" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-md-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
+                <div class="col col-xl-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
                     <div class="checkbox">
                         <label for="{{ $modalClass }}login_remember">
                             <input id="{{ $modalClass }}login_remember" type="checkbox"
@@ -47,7 +47,7 @@ $redirect = old('redirect', $redirect);
             </div>
 
             <div class="form-group">
-                <div class="col-md-12">
+                <div class="col-xl-12">
                     <button type="submit" class="btn btn-primary">
                         {{ __('Login') }}
                     </button>

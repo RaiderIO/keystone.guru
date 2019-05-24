@@ -198,30 +198,31 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::post('/profile/legal', 'APIProfileController@legalAgree');
 
-        Route::post('/path', 'APIPathController@store');
-        Route::delete('/path', 'APIPathController@delete');
+        Route::post('/{dungeonroute}/brushline', 'APIBrushlineController@store');
+        Route::delete('/{dungeonroute}/brushline/{brushline}', 'APIBrushlineController@delete');
 
-        Route::post('/brushline', 'APIBrushlineController@store');
-        Route::delete('/brushline', 'APIBrushlineController@delete');
+        Route::post('/{dungeonroute}/killzone', 'APIKillZoneController@store');
+        Route::delete('/{dungeonroute}/killzone/{killzone}', 'APIKillZoneController@delete');
 
-        Route::post('/dungeonroute/{dungeonroute}/killzone', 'APIKillZoneController@store');
-        Route::delete('/dungeonroute/{dungeonroute}/killzone/{killzone}', 'APIKillZoneController@delete');
+        Route::post('/{dungeonroute}/mapcomment', 'APIMapCommentController@store');
+        Route::delete('/{dungeonroute}/mapcomment/{mapcomment}', 'APIMapCommentController@delete');
 
-        Route::post('/mapcomment', 'APIMapCommentController@store');
-        Route::delete('/mapcomment', 'APIMapCommentController@delete');
+        Route::post('/{dungeonroute}/path', 'APIPathController@store');
+        Route::delete('/{dungeonroute}/path/{path}', 'APIPathController@delete');
 
-        Route::post('/enemy/{enemy}/raidmarker', 'APIEnemyController@setRaidMarker');
+        Route::post('/{dungeonroute}/raidmarker/{enemy}', 'APIEnemyController@setRaidMarker');
 
-        Route::patch('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
-        Route::post('/dungeonroute/{dungeonroute}/publish', 'APIDungeonRouteController@publish')->name('api.dungeonroute.publish');
-        Route::post('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
+        Route::patch('/{dungeonroute}', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
+        Route::delete('/{dungeonroute}', 'APIDungeonRouteController@delete')->name('api.dungeonroute.delete');
 
-        // Submit a patch for your own dungeon route
-        Route::delete('/dungeonroute/{dungeonroute}', 'APIDungeonRouteController@delete')->name('api.dungeonroute.delete');
-        Route::delete('/dungeonroute/{dungeonroute}/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
+        Route::post('/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
+        Route::delete('/{dungeonroute}/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
 
-        Route::post('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
-        Route::delete('/dungeonroute/{dungeonroute}/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
+        Route::post('/{dungeonroute}/publish', 'APIDungeonRouteController@publish')->name('api.dungeonroute.publish');
+
+        Route::post('/{dungeonroute}/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
+        Route::delete('/{dungeonroute}/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
+
 
         // Teams
         Route::post('/team/{team}/changerole', 'APITeamController@changeRole');
@@ -230,20 +231,20 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::delete('/team/{team}/route/{dungeonroute}', 'APITeamController@removeRoute');
 
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
-            Route::post('/enemypack', 'APIEnemyPackController@store');
-            Route::delete('/enemypack', 'APIEnemyPackController@delete');
-
             Route::post('/enemy', 'APIEnemyController@store');
-            Route::delete('/enemy', 'APIEnemyController@delete');
+            Route::delete('/enemy/{enemy}', 'APIEnemyController@delete');
+
+            Route::post('/enemypack', 'APIEnemyPackController@store');
+            Route::delete('/enemypack/{enemypack}', 'APIEnemyPackController@delete');
 
             Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
-            Route::delete('/enemypatrol', 'APIEnemyPatrolController@delete');
-
-            Route::post('/dungeonstartmarker', 'APIDungeonStartMarkerController@store')->where(['dungeon' => '[0-9]+']);
-            Route::delete('/dungeonstartmarker', 'APIDungeonStartMarkerController@delete');
+            Route::delete('/enemypatrol/{enemypatrol}', 'APIEnemyPatrolController@delete');
 
             Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
-            Route::delete('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@delete');
+            Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', 'APIDungeonFloorSwitchMarkerController@delete');
+
+            Route::post('/dungeonstartmarker', 'APIDungeonStartMarkerController@store')->where(['dungeon' => '[0-9]+']);
+            Route::delete('/dungeonstartmarker/{dungeonstartmarker}', 'APIDungeonStartMarkerController@delete');
 
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
 

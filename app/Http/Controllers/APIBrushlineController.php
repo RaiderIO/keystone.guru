@@ -4,19 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsBrushlines;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\Brushline;
-use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Polyline;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
 class APIBrushlineController extends Controller
 {
-    use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
     use ListsBrushlines;
 
@@ -30,18 +25,18 @@ class APIBrushlineController extends Controller
 
     /**
      * @param Request $request
+     * @param DungeonRoute $dungeonroute
      * @return array
      * @throws \Exception
      */
-    function store(Request $request)
+    function store(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('edit', $dungeonroute);
+
         /** @var Brushline $brushline */
         $brushline = Brushline::findOrNew($request->get('id'));
 
-        /** @var DungeonRoute $dungeonRoute */
-        $dungeonRoute = $this->_getDungeonRouteFromPublicKey($request->get('dungeonroute'));
-
-        $brushline->dungeon_route_id = $dungeonRoute->id;
+        $brushline->dungeon_route_id = $dungeonroute->id;
         $brushline->floor_id = $request->get('floor_id');
 
         // Init to a default value if new
@@ -70,7 +65,7 @@ class APIBrushlineController extends Controller
             // $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
 
             // Touch the route so that the thumbnail gets updated
-            $dungeonRoute->touch();
+            $dungeonroute->touch();
         }
 
         $result = ['id' => $brushline->id];
@@ -78,26 +73,23 @@ class APIBrushlineController extends Controller
         return $result;
     }
 
-    function delete(Request $request)
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param Brushline $brushline
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    function delete(Request $request, DungeonRoute $dungeonroute, Brushline $brushline)
     {
+        $this->authorize('edit', $dungeonroute);
+
         try {
-            /** @var Brushline $brushLine */
-            $brushLine = Brushline::findOrFail($request->get('id'));
-
-            // @TODO WTF why does $route->dungeonroute not work?? It will NOT load the relation despite everything being OK?
-            /** @var Dungeon $dungeonRoute */
-            $dungeonRoute = DungeonRoute::findOrFail($brushLine->dungeon_route_id);
-            // If we're not the author, don't delete anything
-            // @TODO handle this in a policy?
-            if ($dungeonRoute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin')) {
-                throw new Exception('Unauthorized');
-            }
-
-            $brushLine->polyline->delete();
-            $brushLine->delete();
+            $brushline->polyline->delete();
+            $brushline->delete();
 
             // Touch the route so that the thumbnail gets updated
-            $dungeonRoute->touch();
+            $dungeonroute->touch();
 
             $result = ['result' => 'success'];
         } catch (\Exception $ex) {
