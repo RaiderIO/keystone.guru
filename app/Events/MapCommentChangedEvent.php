@@ -2,28 +2,29 @@
 
 namespace App\Events;
 
-use App\Models\KillZone;
+use App\Models\MapComment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class KillZoneChangedEvent implements ShouldBroadcast
+class MapCommentChangedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $_killZone;
+    /** @var MapComment $_mapComment */
+    private $_mapComment;
 
     /**
      * Create a new event instance.
      *
-     * @param $killZone KillZone
+     * @param $mapComment MapComment
      * @return void
      */
-    public function __construct(KillZone $killZone)
+    public function __construct(MapComment $mapComment)
     {
-        $this->_killZone = $killZone;
+        $this->_mapComment = $mapComment;
     }
 
     /**
@@ -38,9 +39,8 @@ class KillZoneChangedEvent implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        $this->_killZone->load('killzoneenemies');
         return [
-            'killzone' => $this->_killZone
+            'mapcomment' => $this->_mapComment
         ];
     }
 }

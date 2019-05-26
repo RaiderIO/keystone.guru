@@ -2,28 +2,29 @@
 
 namespace App\Events;
 
-use App\Models\KillZone;
+use App\Models\Brushline;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class KillZoneChangedEvent implements ShouldBroadcast
+class BrushlineChangedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $_killZone;
+    /** @var Brushline $_brushline */
+    private $_brushline;
 
     /**
      * Create a new event instance.
      *
-     * @param $killZone KillZone
+     * @param $brushline Brushline
      * @return void
      */
-    public function __construct(KillZone $killZone)
+    public function __construct(Brushline $brushline)
     {
-        $this->_killZone = $killZone;
+        $this->_brushline = $brushline;
     }
 
     /**
@@ -38,9 +39,8 @@ class KillZoneChangedEvent implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        $this->_killZone->load('killzoneenemies');
         return [
-            'killzone' => $this->_killZone
+            'brushline' => $this->_brushline
         ];
     }
 }

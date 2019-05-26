@@ -7,7 +7,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show killzone';
         this.fa_class = 'fa-bullseye';
 
-        // this.manager.unregister('fetchsuccess', this);
         window.Echo.channel('route-edit')
             .listen('KillZoneChangedEvent', (e) => {
                 self._restoreObject(e.killzone);
@@ -15,12 +14,13 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     }
 
     _createObject(layer) {
-        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup');
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
 
         return new KillZone(this.manager.map, layer);
     }
 
     _restoreObject(remoteMapObject) {
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
         // Fetch the existing killzone if it exists
         let killzone = this.findMapObjectById(remoteMapObject.id);
 
@@ -62,7 +62,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     _fetchSuccess(response) {
         super._fetchSuccess(response);
         // no super call required
-        console.assert(this instanceof KillZoneMapObjectGroup, this, 'this is not a KillZoneMapObjectGroup');
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
 
         let killzones = response.killzone;
 

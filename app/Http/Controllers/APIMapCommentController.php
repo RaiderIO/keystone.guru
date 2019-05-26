@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MapCommentChangedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsMapComments;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
@@ -55,6 +56,8 @@ class APIMapCommentController extends Controller
         if (!$mapComment->save()) {
             throw new \Exception("Unable to save map comment!");
         } else {
+            broadcast(new MapCommentChangedEvent($mapComment));
+
             $result = ['id' => $mapComment->id];
         }
 

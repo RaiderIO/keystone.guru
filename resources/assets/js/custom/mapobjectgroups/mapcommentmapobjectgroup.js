@@ -2,12 +2,19 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
     constructor(manager, name, editable) {
         super(manager, name, editable);
 
+        let self = this;
+
         this.title = 'Hide/show map comments';
         this.fa_class = 'fa-comment';
+
+        window.Echo.channel('route-edit')
+            .listen('MapCommentChangedEvent', (e) => {
+                self._restoreObject(e.brushline);
+            });
     }
 
     _createObject(layer) {
-        console.assert(this instanceof MapCommentMapObjectGroup, 'this is not an MapCommentMapObjectGroup');
+        console.assert(this instanceof MapCommentMapObjectGroup, 'this is not an MapCommentMapObjectGroup', this);
 
         if (isMapAdmin) {
             return new AdminMapComment(this.manager.map, layer);
@@ -16,33 +23,43 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
         }
     }
 
+    _restoreObject(remoteMapObject) {
+        console.assert(this instanceof MapCommentMapObjectGroup, 'this is not a MapCommentMapObjectGroup', this);
+        // Fetch the existing map comment if it exists
+        let mapComment = this.findMapObjectById(remoteMapObject.id);
+
+        // Only create a new one if it's new for us
+        if (mapComment === null) {
+            let layer = new LeafletMapCommentMarker();
+            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+
+            /** @var KillZone killzone */
+            mapComment = this.createNew(layer);
+        }
+
+        mapComment.id = remoteMapObject.id;
+        mapComment.floor_id = remoteMapObject.floor_id;
+        mapComment.always_visible = remoteMapObject.always_visible;
+        mapComment.comment = remoteMapObject.comment;
+        // if( remoteMapComment.gameIcon !== null ) {
+        //     mapComment.setGameIcon(remoteMapComment.gameIcon);
+        // }
+
+        // We just downloaded the kill zone, it's synced alright!
+        mapComment.setSynced(true);
+    }
+
     _fetchSuccess(response) {
         super._fetchSuccess(response);
         // no super call required
-        console.assert(this instanceof MapCommentMapObjectGroup, this, 'this is not a MapCommentMapObjectGroup');
+        console.assert(this instanceof MapCommentMapObjectGroup, 'this is not a MapCommentMapObjectGroup', this);
 
         let mapComments = response.mapcomment;
 
         // Now draw the patrols on the map
         for (let index in mapComments) {
             if (mapComments.hasOwnProperty(index)) {
-                let remoteMapComment = mapComments[index];
-
-                let layer = new LeafletMapCommentMarker();
-                layer.setLatLng(L.latLng(remoteMapComment.lat, remoteMapComment.lng));
-
-                /** @var MapComment mapComment */
-                let mapComment = this.createNew(layer);
-                mapComment.id = remoteMapComment.id;
-                mapComment.floor_id = remoteMapComment.floor_id;
-                mapComment.always_visible = remoteMapComment.always_visible;
-                mapComment.comment = remoteMapComment.comment;
-                // if( remoteMapComment.gameIcon !== null ) {
-                //     mapComment.setGameIcon(remoteMapComment.gameIcon);
-                // }
-
-                // We just downloaded the kill zone, it's synced alright!
-                mapComment.setSynced(true);
+                this._restoreObject(mapComments[index]);
             }
         }
     }

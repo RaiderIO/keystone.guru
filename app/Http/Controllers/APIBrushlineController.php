@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BrushlineChangedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Models\Brushline;
@@ -63,6 +64,8 @@ class APIBrushlineController extends Controller
 
             // @TODO fix this?
             // $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
+
+            broadcast(new BrushlineChangedEvent($brushline));
 
             // Touch the route so that the thumbnail gets updated
             $dungeonroute->touch();
