@@ -137,7 +137,7 @@ class KillZone extends MapObject {
                 // Detach from all enemies upon deletion
                 self._detachFromEnemies();
                 self.removeExistingConnectionsToEnemies();
-                self.signal('object:deleted', {response: json});
+                self.localDelete();
                 self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
             },
             complete: function () {
@@ -435,7 +435,9 @@ class KillZone extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, function (event) {
+            console.log('Synced killzone!');
             // Restore the connections to our enemies
+            self.redrawConnectionsToEnemies();
 
             // let customPopupHtml = $("#killzone_edit_popup_template").html();
             // // Remove template so our

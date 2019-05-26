@@ -2,29 +2,31 @@
 
 namespace App\Events;
 
-use App\Models\MapComment;
+use App\Models\KillZone;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MapCommentChangedEvent implements ShouldBroadcast
+class KillZoneDeletedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var MapComment $_mapComment */
-    private $_mapComment;
+    /**
+     * @var int
+     */
+    private $_id;
 
     /**
      * Create a new event instance.
      *
-     * @param $mapComment MapComment
+     * @param $killZone KillZone
      * @return void
      */
-    public function __construct(MapComment $mapComment)
+    public function __construct(KillZone $killZone)
     {
-        $this->_mapComment = $mapComment;
+        $this->_id = $killZone->id;
     }
 
     /**
@@ -39,13 +41,13 @@ class MapCommentChangedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'mapcomment-changed';
+        return 'killzone-deleted';
     }
 
     public function broadcastWith()
     {
         return [
-            'mapcomment' => $this->_mapComment
+            'id' => $this->_id
         ];
     }
 }

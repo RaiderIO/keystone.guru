@@ -116,7 +116,9 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 // $this->compressPng($tmpScaledFile, $target);
             } finally {
                 // Cleanup
-                unlink($tmpFile);
+                if (file_exists($tmpFile)) {
+                    unlink($tmpFile);
+                }
                 // unlink($tmpScaledFile);
                 Log::channel('scheduler')->info('Done');
             }

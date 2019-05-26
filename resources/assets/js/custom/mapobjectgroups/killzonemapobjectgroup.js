@@ -8,8 +8,14 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-bullseye';
 
         window.Echo.channel('route-edit')
-            .listen('KillZoneChangedEvent', (e) => {
+            .listen('.killzone-changed', (e) => {
                 self._restoreObject(e.killzone);
+            })
+            .listen('.killzone-deleted', (e) => {
+                let mapObject = self.findMapObjectById(e.id);
+                if (mapObject !== null) {
+                    mapObject.localDelete();
+                }
             });
     }
 
@@ -43,20 +49,18 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         // Reconstruct the enemies we're coupled with in a format we expect
         if (typeof remoteMapObject.killzoneenemies !== 'undefined') {
-            if (remoteMapObject.killzoneenemies.length > 1) {
-                let enemies = [];
-                for (let i = 0; i < remoteMapObject.killzoneenemies.length; i++) {
-                    let enemy = remoteMapObject.killzoneenemies[i];
-                    enemies.push(enemy.enemy_id);
-                }
-                // Restore the enemies, STILL NEED TO CALL SETENEMIES WHEN EVERYTHING'S DONE LOADING
-                // Should be handled by the killzone itself
-                killzone.enemies = enemies;
-
-                // We just downloaded the kill zone, it's synced alright!
-                killzone.setSynced(true);
+            let enemies = [];
+            for (let i = 0; i < remoteMapObject.killzoneenemies.length; i++) {
+                let enemy = remoteMapObject.killzoneenemies[i];
+                enemies.push(enemy.enemy_id);
             }
+            // Restore the enemies, STILL NEED TO CALL SETENEMIES WHEN EVERYTHING'S DONE LOADING
+            // Should be handled by the killzone itself
+            killzone.enemies = enemies;
         }
+
+        // We just downloaded the kill zone, it's synced alright!
+        killzone.setSynced(true);
     }
 
     _fetchSuccess(response) {

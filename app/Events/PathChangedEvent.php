@@ -38,6 +38,11 @@ class PathChangedEvent implements ShouldBroadcast
         return new Channel('route-edit');
     }
 
+    public function broadcastAs()
+    {
+        return 'path-changed';
+    }
+
     public function broadcastWith()
     {
         return [

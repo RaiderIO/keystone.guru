@@ -9,8 +9,14 @@ class PathMapObjectGroup extends MapObjectGroup {
 
         // this.manager.unregister('fetchsuccess', this);
         window.Echo.channel('route-edit')
-            .listen('PathChangedEvent', (e) => {
+            .listen('.path-changed', (e) => {
                 self._restoreObject(e.path);
+            })
+            .listen('.path-deleted', (e) => {
+                let mapObject = self.findMapObjectById(e.id);
+                if (mapObject !== null) {
+                    mapObject.localDelete();
+                }
             });
     }
 

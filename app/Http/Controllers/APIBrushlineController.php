@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\BrushlineChangedEvent;
+use App\Events\BrushlineDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Models\Brushline;
@@ -88,13 +89,16 @@ class APIBrushlineController extends Controller
         $this->authorize('edit', $dungeonroute);
 
         try {
-            $brushline->polyline->delete();
-            $brushline->delete();
+            if ($brushline->delete()) {
+                broadcast(new BrushlineDeletedEvent($brushline));
 
-            // Touch the route so that the thumbnail gets updated
-            $dungeonroute->touch();
+                // Touch the route so that the thumbnail gets updated
+                $dungeonroute->touch();
 
-            $result = ['result' => 'success'];
+                $result = ['result' => 'success'];
+            } else {
+                $result = ['result' => 'error'];
+            }
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

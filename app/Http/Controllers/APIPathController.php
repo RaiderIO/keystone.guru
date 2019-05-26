@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\PathChangedEvent;
+use App\Events\PathDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Models\DungeonRoute;
@@ -91,12 +92,18 @@ class APIPathController extends Controller
         $this->authorize('edit', $dungeonroute);
 
         try {
-            $path->delete();
 
-            // Touch the route so that the thumbnail gets updated
-            $dungeonroute->touch();
+            if ($path->delete()) {
+                broadcast(new PathDeletedEvent($path));
 
-            $result = ['result' => 'success'];
+                // Touch the route so that the thumbnail gets updated
+                $dungeonroute->touch();
+
+                $result = ['result' => 'success'];
+            } else {
+                $result = ['result' => 'error'];
+            }
+
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

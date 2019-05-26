@@ -92,7 +92,7 @@ class Path extends Polyline {
                 self.deleting = true;
             },
             success: function (json) {
-                self.signal('object:deleted', {response: json});
+                self.localDelete();
             },
             complete: function () {
                 self.deleting = false;

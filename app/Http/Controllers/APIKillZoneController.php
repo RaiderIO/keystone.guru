@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\KillZoneChangedEvent;
+use App\Events\KillZoneDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\DungeonRoute;
 use App\Models\KillZone;
@@ -89,15 +90,21 @@ class APIKillZoneController extends Controller
         $this->authorize('edit', $dungeonroute);
 
         try {
-            $killzone->delete();
 
-            // Refresh the killzones relation
-            $dungeonroute->load('killzones');
+            if ($killzone->delete()) {
+                broadcast(new KillZoneDeletedEvent($killzone));
 
-            // Touch the route so that the thumbnail gets updated
-            $dungeonroute->touch();
+                // Refresh the killzones relation
+                $dungeonroute->load('killzones');
 
-            $result = ['result' => 'success', 'enemy_forces' => $dungeonroute->getEnemyForcesAttribute()];
+                // Touch the route so that the thumbnail gets updated
+                $dungeonroute->touch();
+
+                $result = ['result' => 'success', 'enemy_forces' => $dungeonroute->getEnemyForcesAttribute()];
+            } else {
+                $result = ['result' => 'error'];
+            }
+
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

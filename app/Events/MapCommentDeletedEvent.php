@@ -9,12 +9,12 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MapCommentChangedEvent implements ShouldBroadcast
+class MapCommentDeletedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var MapComment $_mapComment */
-    private $_mapComment;
+    /** @var int $_id */
+    private $_id;
 
     /**
      * Create a new event instance.
@@ -24,7 +24,7 @@ class MapCommentChangedEvent implements ShouldBroadcast
      */
     public function __construct(MapComment $mapComment)
     {
-        $this->_mapComment = $mapComment;
+        $this->_id = $mapComment->id;
     }
 
     /**
@@ -39,13 +39,13 @@ class MapCommentChangedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'mapcomment-changed';
+        return 'mapcomment-deleted';
     }
 
     public function broadcastWith()
     {
         return [
-            'mapcomment' => $this->_mapComment
+            'id' => $this->_id
         ];
     }
 }

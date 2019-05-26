@@ -37,6 +37,11 @@ class BrushlineChangedEvent implements ShouldBroadcast
         return new Channel('route-edit');
     }
 
+    public function broadcastAs()
+    {
+        return 'brushline-changed';
+    }
+
     public function broadcastWith()
     {
         return [

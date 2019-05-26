@@ -36,6 +36,11 @@ class KillZoneChangedEvent implements ShouldBroadcast
         return new Channel('route-edit');
     }
 
+    public function broadcastAs()
+    {
+        return 'killzone-changed';
+    }
+
     public function broadcastWith()
     {
         $this->_killZone->load('killzoneenemies');

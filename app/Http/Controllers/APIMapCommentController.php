@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\MapCommentChangedEvent;
+use App\Events\MapCommentDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsMapComments;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
@@ -77,8 +78,12 @@ class APIMapCommentController extends Controller
         $this->authorize('edit', $dungeonroute);
 
         try {
-            $mapcomment->delete();
-            $result = ['result' => 'success'];
+            if ($mapcomment->delete()) {
+                broadcast(new MapCommentDeletedEvent($mapcomment));
+                $result = ['result' => 'success'];
+            } else {
+                $result = ['result' => 'error'];
+            }
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

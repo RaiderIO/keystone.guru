@@ -8,8 +8,14 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-comment';
 
         window.Echo.channel('route-edit')
-            .listen('MapCommentChangedEvent', (e) => {
-                self._restoreObject(e.brushline);
+            .listen('.mapcomment-changed', (e) => {
+                self._restoreObject(e.mapcomment);
+            })
+            .listen('.mapcomment-deleted', (e) => {
+                let mapObject = self.findMapObjectById(e.id);
+                if (mapObject !== null) {
+                    mapObject.localDelete();
+                }
             });
     }
 

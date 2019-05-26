@@ -8,8 +8,14 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-paint-brush';
 
         window.Echo.channel('route-edit')
-            .listen('BrushlineChangedEvent', (e) => {
+            .listen('.brushline-changed', (e) => {
                 self._restoreObject(e.brushline);
+            })
+            .listen('.brushline-deleted', (e) => {
+                let mapObject = self.findMapObjectById(e.id);
+                if (mapObject !== null) {
+                    mapObject.localDelete();
+                }
             });
     }
 

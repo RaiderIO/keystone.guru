@@ -78,6 +78,13 @@ class MapObject extends Signalable {
         };
     }
 
+    /**
+     * Deletes this object locally; removing it from the screen and everywhere else.
+     */
+    localDelete() {
+        this.signal('object:deleted');
+    }
+
     getContextMenuItems() {
         return [
             //     {
