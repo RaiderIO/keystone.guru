@@ -33,6 +33,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      */
     public function __construct(DungeonRoute $dungeonRoute, $floorIndex)
     {
+        $this->queue = 'thumbnail';
         $this->model = $dungeonRoute;
         $this->floorIndex = $floorIndex;
     }
@@ -91,36 +92,40 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         $process->run();
 
         if ($process->isSuccessful()) {
-            try {
-                // We've updated the thumbnail; make sure the route is updated so it doesn't get updated anymore
-                $this->model->thumbnail_updated_at = Carbon::now()->toDateTimeString();
-                // Do not update the timestamps of the route! Otherwise we'll just keep on updating the timestamp
-                $this->model->timestamps = false;
-                $this->model->save();
+            if (!file_exists($tmpFile)) {
+                Log::channel('scheduler')->error('Unable to find generated thumbnail; did puppeteer download Chromium?');
+            } else {
+                try {
+                    // We've updated the thumbnail; make sure the route is updated so it doesn't get updated anymore
+                    $this->model->thumbnail_updated_at = Carbon::now()->toDateTimeString();
+                    // Do not update the timestamps of the route! Otherwise we'll just keep on updating the timestamp
+                    $this->model->timestamps = false;
+                    $this->model->save();
 
-                // Ensure our write path exists
-                if (!is_dir($publicPath)) {
-                    mkdir($publicPath, 0755, true);
+                    // Ensure our write path exists
+                    if (!is_dir($publicPath)) {
+                        mkdir($publicPath, 0755, true);
+                    }
+
+                    // Rescale it
+                    Log::channel('scheduler')->info('Scaling image..');
+                    Image::make($tmpFile, [
+                        'width' => 192,
+                        'height' => 128
+                    ])->save($target);
+
+                    Log::channel('scheduler')->info('Removing previous image..');
+                    // Image now exists in target location; compress it and move it to the target location
+                    // Log::channel('scheduler')->info('Compressing image..');
+                    // $this->compressPng($tmpScaledFile, $target);
+                } finally {
+                    // Cleanup
+                    if (file_exists($tmpFile)) {
+                        unlink($tmpFile);
+                    }
+                    // unlink($tmpScaledFile);
+                    Log::channel('scheduler')->info('Done');
                 }
-
-                // Rescale it
-                Log::channel('scheduler')->info('Scaling image..');
-                Image::make($tmpFile, [
-                    'width' => 192,
-                    'height' => 128
-                ])->save($target);
-
-                Log::channel('scheduler')->info('Removing previous image..');
-                // Image now exists in target location; compress it and move it to the target location
-                // Log::channel('scheduler')->info('Compressing image..');
-                // $this->compressPng($tmpScaledFile, $target);
-            } finally {
-                // Cleanup
-                if (file_exists($tmpFile)) {
-                    unlink($tmpFile);
-                }
-                // unlink($tmpScaledFile);
-                Log::channel('scheduler')->info('Done');
             }
         }
 

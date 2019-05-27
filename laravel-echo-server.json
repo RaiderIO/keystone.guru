@@ -15,7 +15,8 @@
 		},
 		"sqlite": {
 			"databasePath": "/database/laravel-echo-server.sqlite"
-		}
+		},
+		"publishPresence": true
 	},
 	"devMode": true,
 	"host": null,

@@ -30,6 +30,7 @@
         "folklore/image": "0.3.*",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "5.7.*",
+        "laravel/horizon": "^3.2",
         "laravel/socialite": "^4.1",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.6",

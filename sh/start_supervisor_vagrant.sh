@@ -3,5 +3,8 @@ sudo supervisorctl reread
 
 sudo supervisorctl update
 
-sudo supervisorctl stop laravel-worker:*
-sudo supervisorctl start laravel-worker:*
+sudo supervisorctl stop laravel-echo-server:*
+sudo supervisorctl start laravel-echo-server:*
+
+sudo supervisorctl stop laravel-horizon:*
+sudo supervisorctl start laravel-horizon:*
