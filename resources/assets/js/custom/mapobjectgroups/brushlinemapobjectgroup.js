@@ -7,7 +7,7 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show brushlines';
         this.fa_class = 'fa-paint-brush';
 
-        window.Echo.channel('route-edit')
+        window.Echo.private('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
             .listen('.brushline-changed', (e) => {
                 self._restoreObject(e.brushline);
             })

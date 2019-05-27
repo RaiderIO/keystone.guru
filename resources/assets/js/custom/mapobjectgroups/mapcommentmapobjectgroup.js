@@ -7,7 +7,7 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show map comments';
         this.fa_class = 'fa-comment';
 
-        window.Echo.channel('route-edit')
+        window.Echo.private('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
             .listen('.mapcomment-changed', (e) => {
                 self._restoreObject(e.mapcomment);
             })

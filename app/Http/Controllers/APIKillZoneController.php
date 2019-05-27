@@ -63,7 +63,7 @@ class APIKillZoneController extends Controller
                 KillZoneEnemy::insert($killZoneEnemies);
 
                 // Something's updated; broadcast it
-                broadcast(new KillZoneChangedEvent($killZone));
+                broadcast(new KillZoneChangedEvent($dungeonroute, $killZone));
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
@@ -92,7 +92,7 @@ class APIKillZoneController extends Controller
         try {
 
             if ($killzone->delete()) {
-                broadcast(new KillZoneDeletedEvent($killzone));
+                broadcast(new KillZoneDeletedEvent($dungeonroute, $killzone));
 
                 // Refresh the killzones relation
                 $dungeonroute->load('killzones');

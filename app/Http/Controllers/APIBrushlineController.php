@@ -66,7 +66,7 @@ class APIBrushlineController extends Controller
             // @TODO fix this?
             // $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
 
-            broadcast(new BrushlineChangedEvent($brushline));
+            broadcast(new BrushlineChangedEvent($dungeonroute, $brushline));
 
             // Touch the route so that the thumbnail gets updated
             $dungeonroute->touch();
@@ -90,7 +90,7 @@ class APIBrushlineController extends Controller
 
         try {
             if ($brushline->delete()) {
-                broadcast(new BrushlineDeletedEvent($brushline));
+                broadcast(new BrushlineDeletedEvent($dungeonroute, $brushline));
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();

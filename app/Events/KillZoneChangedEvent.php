@@ -2,9 +2,10 @@
 
 namespace App\Events;
 
+use App\Models\DungeonRoute;
 use App\Models\KillZone;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -13,16 +14,22 @@ class KillZoneChangedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /** @var DungeonRoute $_dungeonroute */
+    private $_dungeonroute;
+
+    /** @var KillZone $_killZone */
     private $_killZone;
 
     /**
      * Create a new event instance.
      *
+     * @param $dungeonroute DungeonRoute
      * @param $killZone KillZone
      * @return void
      */
-    public function __construct(KillZone $killZone)
+    public function __construct(DungeonRoute $dungeonroute, KillZone $killZone)
     {
+        $this->_dungeonroute = $dungeonroute;
         $this->_killZone = $killZone;
     }
 
@@ -33,7 +40,7 @@ class KillZoneChangedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('route-edit');
+        return new PrivateChannel(sprintf('route-edit.%s', $this->_dungeonroute->public_key));
     }
 
     public function broadcastAs()

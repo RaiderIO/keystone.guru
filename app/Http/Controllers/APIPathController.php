@@ -66,7 +66,7 @@ class APIPathController extends Controller
                 $path->save();
 
                 // Something's updated; broadcast it
-                broadcast(new PathChangedEvent($path));
+                broadcast(new PathChangedEvent($dungeonroute, $path));
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
@@ -94,7 +94,7 @@ class APIPathController extends Controller
         try {
 
             if ($path->delete()) {
-                broadcast(new PathDeletedEvent($path));
+                broadcast(new PathDeletedEvent($dungeonroute, $path));
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();

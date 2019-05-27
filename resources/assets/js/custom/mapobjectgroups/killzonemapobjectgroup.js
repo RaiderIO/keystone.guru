@@ -7,7 +7,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show killzone';
         this.fa_class = 'fa-bullseye';
 
-        window.Echo.channel('route-edit')
+        window.Echo.private('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
             .listen('.killzone-changed', (e) => {
                 self._restoreObject(e.killzone);
             })

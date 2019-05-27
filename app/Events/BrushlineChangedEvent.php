@@ -3,8 +3,9 @@
 namespace App\Events;
 
 use App\Models\Brushline;
-use Illuminate\Broadcasting\Channel;
+use App\Models\DungeonRoute;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -13,17 +14,22 @@ class BrushlineChangedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /** @var DungeonRoute $_dungeonroute */
+    private $_dungeonroute;
+
     /** @var Brushline $_brushline */
     private $_brushline;
 
     /**
      * Create a new event instance.
      *
+     * @param $dungeonroute DungeonRoute
      * @param $brushline Brushline
      * @return void
      */
-    public function __construct(Brushline $brushline)
+    public function __construct(DungeonRoute $dungeonroute, Brushline $brushline)
     {
+        $this->_dungeonroute = $dungeonroute;
         $this->_brushline = $brushline;
     }
 
@@ -34,7 +40,7 @@ class BrushlineChangedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('route-edit');
+        return new PrivateChannel(sprintf('route-edit.%s', $this->_dungeonroute->public_key));
     }
 
     public function broadcastAs()

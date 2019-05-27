@@ -254,14 +254,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         });
     });
 
-
-    // Echo server
-    Route::get('test-broadcast', function () {
-        broadcast(new \App\Events\ExampleEvent);
-    });
-
-
-
     // View any dungeon route (catch all)
     Route::get('{dungeonroute}', 'DungeonRouteController@view')
         ->name('dungeonroute.view');

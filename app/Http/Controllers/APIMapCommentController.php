@@ -57,7 +57,7 @@ class APIMapCommentController extends Controller
         if (!$mapComment->save()) {
             throw new \Exception("Unable to save map comment!");
         } else {
-            broadcast(new MapCommentChangedEvent($mapComment));
+            broadcast(new MapCommentChangedEvent($dungeonroute, $mapComment));
 
             $result = ['id' => $mapComment->id];
         }
@@ -79,7 +79,7 @@ class APIMapCommentController extends Controller
 
         try {
             if ($mapcomment->delete()) {
-                broadcast(new MapCommentDeletedEvent($mapcomment));
+                broadcast(new MapCommentDeletedEvent($dungeonroute, $mapcomment));
                 $result = ['result' => 'success'];
             } else {
                 $result = ['result' => 'error'];
