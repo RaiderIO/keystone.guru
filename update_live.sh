@@ -25,6 +25,10 @@ echo "Refreshing DungeonData..."
 tput sgr0;
 php artisan db:seed --class=DungeonDataSeeder --database=migrate
 
+# Clear any caches, we just updated
+php artisan optimize:clear
+# Generate route cache
+php artisan route:cache
 # Restart queue processors
 php artisan queue:restart
 

@@ -1,7 +1,12 @@
 {
-	"authHost": "127.0.0.1",
+	"authHost": "http://keystone.test",
 	"authEndpoint": "/broadcasting/auth",
-	"clients": [],
+	"clients": [
+		{
+			"appId": "0ca2f144bffc7f31",
+			"key": "30469d6a8cf3241c5806668f3333dee3"
+		}
+	],
 	"database": "redis",
 	"databaseConfig": {
 		"redis": {
@@ -9,7 +14,7 @@
 			"host": "localhost"
 		},
 		"sqlite": {
-			"databasePath": "/database/laravel-echo-server-staging.sqlite"
+			"databasePath": "/database/laravel-echo-server.sqlite"
 		},
 		"publishPresence": true
 	},
