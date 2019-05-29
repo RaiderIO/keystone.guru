@@ -1,7 +1,12 @@
 {
-	"authHost": "127.0.0.1",
+	"authHost": "https://staging.keystone.guru",
 	"authEndpoint": "/broadcasting/auth",
-	"clients": [],
+	"clients": [
+		{
+			"appId": "4146889bba7214af",
+			"key": "6941eb740883540794d48d7939d13b9d"
+		}
+	],
 	"database": "redis",
 	"databaseConfig": {
 		"redis": {
@@ -15,7 +20,7 @@
 	},
 	"devMode": true,
 	"host": null,
-	"port": "6001",
+	"port": "6002",
 	"protocol": "http",
 	"socketio": {},
 	"sslCertPath": "",

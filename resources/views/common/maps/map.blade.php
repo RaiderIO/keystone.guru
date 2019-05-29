@@ -290,6 +290,12 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 </div>
 
 @if($edit)
+    <footer class="fixed-top route_echo_status">
+            <!-- Draw actions are injected here through echocontrols.js -->
+        <div id="edit_route_echo_container" class="container">
+        </div>
+    </footer>
+
     <footer class="fixed-bottom route_manipulation_tools">
         <div class="container">
             <!-- Draw actions are injected here through enemyforces.js -->
@@ -299,7 +305,7 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
                 </div>
             </div>
 
-            <!-- Draw controls are injected here through enemyforces.js -->
+            <!-- Enemy forces controls are injected here through enemyforces.js -->
             <div class="row m-auto text-center">
                 <div id="edit_route_enemy_forces_container" class="col">
 

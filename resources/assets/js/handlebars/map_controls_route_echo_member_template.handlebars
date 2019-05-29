@@ -1,0 +1,10 @@
+<li class="list-group-item p-2 m-1 echo_user_{{name}}" style="background-color: {{color}};"
+    {{#if self}}
+    data-toggle="tooltip" title="{{member_self_title_label}}"
+    {{/if}}
+>
+    {{#if self}}
+        <i class="fas fa-portrait"></i>
+    {{/if}}
+    {{name}}
+</li>

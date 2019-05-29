@@ -123,22 +123,60 @@ html, body, #map, #app, .wrapper {
     margin: 4px;
 }
 
+#edit_route_echo_members_container .list-group-item,
+#edit_route_echo_status_container .list-group-item {
+    background-color: inherit;
+}
 
+.route_echo_status,
 .route_manipulation_tools {
     background-color: rgba(78, 93, 108, 0.75);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-    border-left: #2B3E50 solid 1px;
-    border-top: #2B3E50 solid 1px;
-    border-right: #2B3E50 solid 1px;
 
+    border-left: #2B3E50 solid 1px;
+    border-right: #2B3E50 solid 1px;
     margin: auto;
+}
+
+.route_echo_status {
+    border-bottom: #2B3E50 solid 1px;
+}
+
+.route_manipulation_tools {
+    border-top: #2B3E50 solid 1px;
     padding-bottom: 10px;
 }
 
 @media screen and (min-width: 1100px) {
+    .route_echo_status {
+        width: 1100px;
+    }
+
     .route_manipulation_tools {
         width: 1100px;
     }
+}
+
+.echo_member_header_column_container {
+    -ms-flex: 0 0 50px;
+    flex: 0 0 50px;
+}
+
+.echo_member_header_column {
+    -ms-flex: 0 0 100px;
+    flex: 0 0 100px;
+}
+
+.echo_member_column_container {
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.echo_member_column {
+    -ms-flex: 0 0 100px;
+    flex: 0 0 100px;
 }
 
 .route_manipulation_tools .draw_icon {
@@ -456,6 +494,7 @@ html, body, #map, #app, .wrapper {
     color: #5cb85c;
 }
 
+.profile_class_color,
 .map_polyline_edit_popup_class_color {
     height: 32px;
     margin: 2px 10px;

@@ -11,6 +11,15 @@
 |
 */
 
-Broadcast::channel('route-edit.{dungeonroute}', function ($user, \App\Models\DungeonRoute $dungeonroute) {
-    return $dungeonroute->team !== null && $dungeonroute->team->isUserCollaborator($user);
+//Broadcast::channel('route-edit.{dungeonroute}', function ($user, \App\Models\DungeonRoute $dungeonroute) {
+////    return $dungeonroute->team !== null && $dungeonroute->team->isUserCollaborator($user);
+////});
+
+// https://laravel.com/docs/5.8/broadcasting#presence-channels
+Broadcast::channel('route-edit.{dungeonroute}', function (\App\User $user, \App\Models\DungeonRoute $dungeonroute) {
+    $result = false;
+    if ($dungeonroute->team !== null && $dungeonroute->team->isUserCollaborator($user)) {
+        $result = ['name' => $user->name, 'color' => $user->echo_color, 'self' => $user->id === Auth::id()];
+    }
+    return $result;
 });

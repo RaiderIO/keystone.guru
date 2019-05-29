@@ -35,6 +35,7 @@ class ProfileController extends Controller
         else {
             $user->email = $request->get('email');
         }
+        $user->echo_color = $request->get('echo_color');
         $user->game_server_region_id = $request->get('game_server_region_id');
         $user->timezone = $request->get('timezone');
 

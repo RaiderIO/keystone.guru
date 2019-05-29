@@ -17,6 +17,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property string $timezone
  * @property string $name
  * @property string $email
+ * @property string $echo_color
  * @property string $password
  * @property boolean $legal_agreed
  * @property int $legal_agreed_ms

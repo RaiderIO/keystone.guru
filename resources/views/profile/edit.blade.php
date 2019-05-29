@@ -27,6 +27,11 @@ $menuTitle = sprintf(__('%s\'s profile'), $user->name);
             // Code for base app
             var appCode = _inlineManager.getInlineCode('layouts/app');
             appCode._newPassword('#new_password');
+
+            let $classColors = $('.profile_class_color');
+            $classColors.bind('click', function () {
+                $('#echo_color').val($(this).data('color'));
+            });
         });
     </script>
 @endsection
@@ -67,6 +72,30 @@ $menuTitle = sprintf(__('%s\'s profile'), $user->name);
             </div>
             <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }}">
                 @include('common.forms.timezoneselect', ['selected' => $user->timezone])
+            </div>
+            <div class="form-group{{ $errors->has('echo_color') ? ' has-error' : '' }}">
+                <label for="echo_color">
+                    {{ __('Synchronized route edit color') }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                       title="{{ __('When editing a route cooperatively with a team member, this color will uniquely identify you.') }}"></i>
+                </label>
+                {!! Form::color('echo_color', null, ['id' => 'echo_color', 'class' => 'form-control']) !!}
+
+                @php($classes = \App\Models\CharacterClass::all())
+                @php($half = ($classes->count() / 2))
+                @for($i = 0; $i < $classes->count(); $i++)
+                    @php($class = $classes->get($i))
+                    @if($i % $half === 0)
+                        <div class="row no-gutters pt-1">
+                            @endif
+                            <div class="col profile_class_color border-dark"
+                                 data-color="{{ $class->color }}"
+                                 style="background-color: {{ $class->color }};">
+                            </div>
+                            @if($i % $half === $half - 1)
+                        </div>
+                    @endif
+                @endfor
             </div>
 
             {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}

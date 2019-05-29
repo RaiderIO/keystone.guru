@@ -86,5 +86,12 @@
     {{ link_to('https://barrens.chat/viewtopic.php?f=5&t=63&p=1726#p1726', 'barrens.chat') }}
     </p>
 
+    <p>
+    <h4>
+        Radio icons
+    </h4>
+    {{ link_to('https://loading.io/spinner/radio') }}
+    </p>
+
 
 @endsection

@@ -166,7 +166,11 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::post('/profile/legal', 'APIProfileController@legalAgree');
 
-        Route::group(['prefix' => '{dungeonroute}', 'middleware' => 'ajax'], function () {
+        Route::group(['prefix' => 'echo', 'middleware' => ['auth', 'role:user']], function () {
+            Route::get('{dungeonroute}/members', 'APIEchoController@members');
+        });
+
+        Route::group(['prefix' => '{dungeonroute}'], function () {
             Route::post('/brushline', 'APIBrushlineController@store');
             Route::delete('/brushline/{brushline}', 'APIBrushlineController@delete');
 
@@ -192,7 +196,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
             Route::delete('/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
         });
-
 
         // Teams
         Route::post('/team/{team}/changerole', 'APITeamController@changeRole');

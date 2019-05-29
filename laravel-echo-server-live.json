@@ -1,5 +1,5 @@
 {
-	"authHost": "127.0.0.1",
+	"authHost": "https://keystone.guru",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [],
 	"database": "redis",

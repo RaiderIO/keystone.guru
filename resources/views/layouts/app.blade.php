@@ -205,7 +205,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
     @elseif(isset($menuItems))
         <div class="container container_wide mt-3">
             <div class="row">
-                <div class="col-xl menu_sidebar bg-secondary p-3">
+                <div class="col-xl-3 bg-secondary p-3">
                     <h4>{{ $menuTitle }}</h4>
                     <hr>
                     @isset($menuModels)
@@ -235,7 +235,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                         @endforeach
                     </ul>
                 </div>
-                <div class="col-xl bg-secondary ml-xl-3 ml-0 mt-xl-0 mt-3 p-3">
+                <div class="col-xl-9 bg-secondary ml-0 mt-xl-0 mt-3 p-3">
                     @yield('content')
                 </div>
             </div>
