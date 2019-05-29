@@ -8,8 +8,6 @@ class AdDisplayControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                console.log('');
-
                 let source = '\n' +
                     '    <ins class="adsbygoogle"\n' +
                     '         style="display:inline-block;width:120px;height:240px"\n' +
@@ -21,7 +19,7 @@ class AdDisplayControls extends MapControl {
 
                 self.domElement = self.domElement[0];
 
-                (adsbygoogle = window.adsbygoogle || []).push({});
+                (window.adsbygoogle || []).push({});
 
                 return self.domElement;
             }
@@ -32,7 +30,7 @@ class AdDisplayControls extends MapControl {
      * Adds the Control to the current LeafletMap
      */
     addControl() {
-        console.assert(this instanceof AdDisplayControls, this, 'this is not AdDisplayControls');
+        console.assert(this instanceof AdDisplayControls, 'this is not AdDisplayControls', this);
 
         // Code for the domElement
         L.Control.domElement = L.Control.extend(this.mapControlOptions);
@@ -47,6 +45,6 @@ class AdDisplayControls extends MapControl {
     cleanup() {
         super.cleanup();
 
-        console.assert(this instanceof AdDisplayControls, this, 'this is not AdDisplayControls');
+        console.assert(this instanceof AdDisplayControls, 'this is not AdDisplayControls', this);
     }
 }
