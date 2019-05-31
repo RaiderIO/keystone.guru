@@ -28,7 +28,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiInterface
         $port = ($this->_configService->getConfig())->port;
 
         // Make sure we don't have a trailing slash in the app_url
-        $appUrl = trim(env('APP_URL'), '/');
+        $appUrl = trim(env('LARAVEL_ECHO_SERVER_URL'), '/');
 
         $this->_client = new Client([
             // Base URI is used with relative requests
