@@ -14,6 +14,9 @@ git pull
 
 ./migrate.sh
 
+# Restore echo server clients
+./update_echo_clients.sh
+
 # Drop and re-populate all dungeon data, it's designed to do this no worries
 tput setaf 2;
 echo "Refreshing Dungeons..."

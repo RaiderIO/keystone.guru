@@ -19,7 +19,7 @@
 Broadcast::channel('route-edit.{dungeonroute}', function (\App\User $user, \App\Models\DungeonRoute $dungeonroute) {
     $result = false;
     if ($dungeonroute->team !== null && $dungeonroute->team->isUserCollaborator($user)) {
-        $result = ['name' => $user->name, 'color' => $user->echo_color, 'self' => $user->id === Auth::id()];
+        $result = ['name' => $user->name, 'color' => $user->echo_color];
     }
     return $result;
 });

@@ -7,7 +7,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show route';
         this.fa_class = 'fa-route';
 
-        window.Echo.private('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
+        window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
             .listen('.path-changed', (e) => {
                 self._restoreObject(e.path);
             })

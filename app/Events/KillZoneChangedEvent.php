@@ -5,6 +5,7 @@ namespace App\Events;
 use App\Models\DungeonRoute;
 use App\Models\KillZone;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -40,7 +41,7 @@ class KillZoneChangedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel(sprintf('route-edit.%s', $this->_dungeonroute->public_key));
+        return new PresenceChannel(sprintf('route-edit.%s', $this->_dungeonroute->public_key));
     }
 
     public function broadcastAs()

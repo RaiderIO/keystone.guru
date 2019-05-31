@@ -66,3 +66,12 @@ location / {
     try_files $uri $uri/ /index.php?$query_string;
 }
 ```
+
+###API Clients
+Clients are saved in the `laravel-echo-server.json` config file. The HTTP API is always open,
+no easy way for me to close it down. As such, everyone can access the the API if they have
+the client password. These passwords are saved in the .json file, which I want to version.
+I cannot version them because of the passwords. To solve this, every time `./update_live.sh`
+is ran, a new password is generated and written to each config file. The passwords that are 
+committed to the repository will NOT work ever since they get overwritten to a new one every
+update.

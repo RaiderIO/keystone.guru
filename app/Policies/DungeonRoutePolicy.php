@@ -17,7 +17,7 @@ class DungeonRoutePolicy
      * @param  \App\Models\DungeonRoute $dungeonroute
      * @return mixed
      */
-    public function view(User $user, DungeonRoute $dungeonroute)
+    public function view(?User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
         return $dungeonroute->published;

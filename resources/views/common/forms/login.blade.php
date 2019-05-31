@@ -39,7 +39,7 @@ $redirect = old('redirect', $redirect);
                     <div class="checkbox">
                         <label for="{{ $modalClass }}login_remember">
                             <input id="{{ $modalClass }}login_remember" type="checkbox"
-                                   name="remember" {{ old('remember') ? 'checked' : '' }}>
+                                   name="remember" class="left_checkbox" {{ old('remember') ? 'checked' : '' }}>
                             {{ __('Remember me') }}
                         </label>
                     </div>

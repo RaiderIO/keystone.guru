@@ -1,4 +1,5 @@
 <?php
+/** @var \App\User $user */
 $user = Auth::user();
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
@@ -38,6 +39,9 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 ?>
 
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => [
+    'username' => Auth::check() ? Auth::user()->name : '',
+    // Only activate Echo when we are a member of the team in which this route is a member of
+    'echo' => $dungeonroute->team === null ? false : $dungeonroute->team->isUserMember($user),
     'floorId' => $floorId,
     'edit' => $edit,
     'try' => $tryMode,
@@ -289,13 +293,12 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 
 </div>
 
+<header class="fixed-top route_echo_status">
+    <!-- Draw actions are injected here through echocontrols.js -->
+    <div id="route_echo_container" class="container">
+    </div>
+</header>
 @if($edit)
-    <footer class="fixed-top route_echo_status">
-            <!-- Draw actions are injected here through echocontrols.js -->
-        <div id="edit_route_echo_container" class="container">
-        </div>
-    </footer>
-
     <footer class="fixed-bottom route_manipulation_tools">
         <div class="container">
             <!-- Draw actions are injected here through enemyforces.js -->

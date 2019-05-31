@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserColorChangedEvent;
+use App\Models\DungeonRoute;
+use App\Service\EchoServerHttpApiService;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +20,11 @@ class ProfileController extends Controller
     /**
      * @param Request $request
      * @param User $user
+     * @param EchoServerHttpApiService $echoServerHttpApiService
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user, EchoServerHttpApiService $echoServerHttpApiService)
     {
         // Allow username change once!
         if ($user->isOAuth()) {
@@ -54,6 +59,33 @@ class ProfileController extends Controller
         if (!$emailExists && !$nameExists) {
             if ($user->save()) {
                 \Session::flash('status', __('Profile updated'));
+
+                // Propagate changes to any channel the user may be in
+                foreach ($echoServerHttpApiService->getChannels() as $channel) {
+                    $assoc = get_object_vars($channel);
+                    $channelName = array_keys($assoc)[0];
+
+                    $routeKey = str_replace('presence-route-edit.', '', $channelName);
+
+                    $userInChannel = false;
+                    // Check if the user is in this channel..
+                    foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $users) {
+
+                        foreach ($users as $channelUser) {
+                            if ($channelUser->id === $user->id) {
+                                $userInChannel = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($userInChannel) {
+                        /** @var DungeonRoute $dungeonRoute */
+                        $dungeonRoute = DungeonRoute::where('public_key', $routeKey)->firstOrFail();
+                        // Broadcast that channel that the user's color has changed
+                        broadcast(new UserColorChangedEvent($dungeonRoute, $user));
+                    }
+                }
             } else {
                 abort(500, __('An unexpected error occurred trying to save your profile'));
             }

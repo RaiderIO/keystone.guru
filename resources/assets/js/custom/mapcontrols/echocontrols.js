@@ -37,7 +37,6 @@ class EchoControls extends MapControl {
         // Keep track of the current users in this channel
         window.Echo.join('route-edit.' + this.map.getDungeonRoute().publicKey)
             .here(users => {
-                console.log('here', users);
                 for (let index in users) {
                     if (users.hasOwnProperty(index)) {
                         self._addUser(users[index]);
@@ -47,35 +46,48 @@ class EchoControls extends MapControl {
                 self._setStatus('connected');
             })
             .joining(user => {
-                console.log('joining', user);
                 self._addUser(user);
             })
             .leaving(user => {
-                console.log('leaving', user);
                 self._removeUser(user);
+            })
+            .listen('.user-color-changed', (e) => {
+                self._setUserColor(e.name, e.color);
             });
     }
 
+    /**
+     * Sets the status of the controls.
+     * @param status string Either 'connecting' or 'connected'.
+     * @private
+     */
     _setStatus(status) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+        let $connecting = $('.connecting');
+        let $connected = $('.connected');
         switch (status) {
             case 'connecting':
-                $('.connecting').show();
-                $('.connected').hide();
+                $connecting.show();
+                $connected.hide();
                 break;
             case 'connected':
-                $('.connecting').hide();
-                $('.connected').show();
+                $connecting.hide();
+                $connected.show();
                 break;
         }
     }
 
+    /**
+     * Adds a user to the status bar.
+     * @param user Object
+     * @private
+     */
     _addUser(user) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         let template = Handlebars.templates['map_controls_route_echo_member_template'];
 
         // May be unset when not our own user, but this confuses handlebars
-        if (typeof user.self === 'undefined') {
-            user.self = false;
-        }
+        user.self = user.name === this.map.options.username;
 
         let data = getHandlebarsDefaultVariables();
 
@@ -87,9 +99,26 @@ class EchoControls extends MapControl {
         refreshTooltips();
     }
 
+    /**
+     * Removes a user from the status bar.
+     * @param user Object
+     * @private
+     */
     _removeUser(user) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         // Remove element
         $('.echo_user_' + user.name).remove();
+    }
+
+    /**
+     * Sets the display color of a user.
+     * @param name string
+     * @param color string
+     * @private
+     */
+    _setUserColor(name, color) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+        $('.echo_user_' + name).css('background-color', color);
     }
 
     /**
@@ -110,7 +139,7 @@ class EchoControls extends MapControl {
         // Add the leaflet draw control to the sidebar
         let container = this._mapControl.getContainer();
         $(container).removeClass('leaflet-control');
-        let $targetContainer = $('#edit_route_echo_container');
+        let $targetContainer = $('#route_echo_container');
         $targetContainer.append(container);
     }
 
