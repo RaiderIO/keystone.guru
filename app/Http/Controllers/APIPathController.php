@@ -10,6 +10,7 @@ use App\Models\DungeonRoute;
 use App\Models\Path;
 use App\Models\Polyline;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
@@ -66,7 +67,7 @@ class APIPathController extends Controller
                 $path->save();
 
                 // Something's updated; broadcast it
-                broadcast(new PathChangedEvent($dungeonroute, $path));
+                broadcast(new PathChangedEvent($dungeonroute, $path, Auth::user()));
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
@@ -94,7 +95,7 @@ class APIPathController extends Controller
         try {
 
             if ($path->delete()) {
-                broadcast(new PathDeletedEvent($dungeonroute, $path));
+                broadcast(new PathDeletedEvent($dungeonroute, $path, Auth::user()));
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();

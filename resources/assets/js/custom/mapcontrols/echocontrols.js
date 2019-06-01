@@ -6,6 +6,8 @@ class EchoControls extends MapControl {
 
         let self = this;
 
+        this.users = [];
+
         this._mapControl = null;
 
         this.mapControlOptions = {
@@ -96,6 +98,10 @@ class EchoControls extends MapControl {
             result
         );
 
+        this.users.push(user);
+        // Update the color
+        this._setUserColor(user.name, user.color);
+
         refreshTooltips();
     }
 
@@ -108,6 +114,30 @@ class EchoControls extends MapControl {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         // Remove element
         $('.echo_user_' + user.name).remove();
+
+        for (let index in this.users) {
+            if (this.users[index].name === user.name) {
+                this.users = this.users.splice(index, 1);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Gets a specific user.
+     * @param name
+     * @returns {object}
+     * @private
+     */
+    _getUser(name) {
+        let result = null;
+        for (let index in this.users) {
+            if (this.users[index].name === name) {
+                result = this.users[index];
+                break;
+            }
+        }
+        return result;
     }
 
     /**
@@ -118,7 +148,33 @@ class EchoControls extends MapControl {
      */
     _setUserColor(name, color) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
-        $('.echo_user_' + name).css('background-color', color);
+
+        let styleID = 'style_color_' + name;
+        // Delete any previous styles
+        $('#' + styleID).remove();
+
+        // Gets funky here, create a new CSS class with the user's color so we can direct some elements to use this class
+        $("<style id='" + styleID + "'>")
+            .prop("type", "text/css")
+            .html("\
+            .user_color_" + name + " {\
+                background-color: " + color + " !important\
+            }")
+            .appendTo("head");
+
+        // Update the user's color
+        this._getUser(name).color = color;
+    }
+
+    /**
+     * Gets the color of a specific user.
+     * @param name
+     * @returns {string}
+     * @private
+     */
+    getUserColor(name) {
+        let user = this._getUser(name);
+        return user === null ? 'black' : user.color;
     }
 
     /**

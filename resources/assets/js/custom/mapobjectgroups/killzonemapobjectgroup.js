@@ -7,16 +7,19 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show killzone';
         this.fa_class = 'fa-bullseye';
 
-        window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
-            .listen('.killzone-changed', (e) => {
-                self._restoreObject(e.killzone);
-            })
-            .listen('.killzone-deleted', (e) => {
-                let mapObject = self.findMapObjectById(e.id);
-                if (mapObject !== null) {
-                    mapObject.localDelete();
-                }
-            });
+        if (this.manager.map.options.echo) {
+            window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
+                .listen('.killzone-changed', (e) => {
+                    self._restoreObject(e.killzone, e.user);
+                })
+                .listen('.killzone-deleted', (e) => {
+                    let mapObject = self.findMapObjectById(e.id);
+                    if (mapObject !== null) {
+                        mapObject.localDelete();
+                        self._showDeletedFromEcho(mapObject, e.user);
+                    }
+                });
+        }
     }
 
     _createObject(layer) {
@@ -25,7 +28,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return new KillZone(this.manager.map, layer);
     }
 
-    _restoreObject(remoteMapObject) {
+    _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
         // Fetch the existing killzone if it exists
         let killzone = this.findMapObjectById(remoteMapObject.id);
@@ -61,6 +64,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         // We just downloaded the kill zone, it's synced alright!
         killzone.setSynced(true);
+
+        // Show echo notification or not
+        this._showReceivedFromEcho(killzone, username);
     }
 
     _fetchSuccess(response) {

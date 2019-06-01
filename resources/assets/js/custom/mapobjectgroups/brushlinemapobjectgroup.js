@@ -7,16 +7,19 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show brushlines';
         this.fa_class = 'fa-paint-brush';
 
-        window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
-            .listen('.brushline-changed', (e) => {
-                self._restoreObject(e.brushline);
-            })
-            .listen('.brushline-deleted', (e) => {
-                let mapObject = self.findMapObjectById(e.id);
-                if (mapObject !== null) {
-                    mapObject.localDelete();
-                }
-            });
+        if (this.manager.map.options.echo) {
+            window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
+                .listen('.brushline-changed', (e) => {
+                    self._restoreObject(e.brushline, e.user);
+                })
+                .listen('.brushline-deleted', (e) => {
+                    let mapObject = self.findMapObjectById(e.id);
+                    if (mapObject !== null) {
+                        mapObject.localDelete();
+                        self._showDeletedFromEcho(mapObject, e.user);
+                    }
+                });
+        }
     }
 
     _createObject(layer) {
@@ -25,7 +28,7 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         return new Brushline(this.manager.map, layer);
     }
 
-    _restoreObject(remoteMapObject) {
+    _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof BrushlineMapObjectGroup, 'this is not an BrushlineMapObjectGroup', this);
 
         // Fetch the existing path if it exists
@@ -58,6 +61,9 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
 
         // We just downloaded the brushline, make it synced
         brushline.setSynced(true);
+
+        // Show echo notification or not
+        this._showReceivedFromEcho(brushline, username);
     }
 
     _fetchSuccess(response) {

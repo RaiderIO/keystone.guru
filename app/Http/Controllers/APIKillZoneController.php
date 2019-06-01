@@ -9,6 +9,7 @@ use App\Models\DungeonRoute;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
@@ -63,7 +64,7 @@ class APIKillZoneController extends Controller
                 KillZoneEnemy::insert($killZoneEnemies);
 
                 // Something's updated; broadcast it
-                broadcast(new KillZoneChangedEvent($dungeonroute, $killZone));
+                broadcast(new KillZoneChangedEvent($dungeonroute, $killZone, Auth::user()));
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
@@ -92,7 +93,7 @@ class APIKillZoneController extends Controller
         try {
 
             if ($killzone->delete()) {
-                broadcast(new KillZoneDeletedEvent($dungeonroute, $killzone));
+                broadcast(new KillZoneDeletedEvent($dungeonroute, $killzone, Auth::user()));
 
                 // Refresh the killzones relation
                 $dungeonroute->load('killzones');

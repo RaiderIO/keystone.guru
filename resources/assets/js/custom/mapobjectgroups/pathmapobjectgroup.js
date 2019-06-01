@@ -7,16 +7,19 @@ class PathMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show route';
         this.fa_class = 'fa-route';
 
-        window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
-            .listen('.path-changed', (e) => {
-                self._restoreObject(e.path);
-            })
-            .listen('.path-deleted', (e) => {
-                let mapObject = self.findMapObjectById(e.id);
-                if (mapObject !== null) {
-                    mapObject.localDelete();
-                }
-            });
+        if (this.manager.map.options.echo) {
+            window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
+                .listen('.path-changed', (e) => {
+                    self._restoreObject(e.path, e.user);
+                })
+                .listen('.path-deleted', (e) => {
+                    let mapObject = self.findMapObjectById(e.id);
+                    if (mapObject !== null) {
+                        mapObject.localDelete();
+                        self._showDeletedFromEcho(mapObject, e.user);
+                    }
+                });
+        }
     }
 
     _createObject(layer) {
@@ -25,7 +28,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         return new Path(this.manager.map, layer);
     }
 
-    _restoreObject(remoteMapObject) {
+    _restoreObject(remoteMapObject, username = null) {
         // Fetch the existing path if it exists
         let path = this.findMapObjectById(remoteMapObject.id);
 
@@ -55,6 +58,9 @@ class PathMapObjectGroup extends MapObjectGroup {
 
         // We just downloaded the path, it's synced alright!
         path.setSynced(true);
+
+        // Show echo notification or not
+        this._showReceivedFromEcho(path, username);
     }
 
     _fetchSuccess(response) {

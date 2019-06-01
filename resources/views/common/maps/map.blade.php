@@ -39,7 +39,7 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 ?>
 
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => [
-    'username' => Auth::check() ? Auth::user()->name : '',
+    'username' => Auth::check() ? $user->name : '',
     // Only activate Echo when we are a member of the team in which this route is a member of
     'echo' => $dungeonroute->team === null ? false : $dungeonroute->team->isUserMember($user),
     'floorId' => $floorId,

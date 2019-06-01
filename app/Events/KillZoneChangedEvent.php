@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Models\DungeonRoute;
 use App\Models\KillZone;
+use App\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -21,6 +22,9 @@ class KillZoneChangedEvent implements ShouldBroadcast
     /** @var KillZone $_killZone */
     private $_killZone;
 
+    /** @var User $_user */
+    private $_user;
+
     /**
      * Create a new event instance.
      *
@@ -28,10 +32,11 @@ class KillZoneChangedEvent implements ShouldBroadcast
      * @param $killZone KillZone
      * @return void
      */
-    public function __construct(DungeonRoute $dungeonroute, KillZone $killZone)
+    public function __construct(DungeonRoute $dungeonroute, KillZone $killZone, User $user)
     {
         $this->_dungeonroute = $dungeonroute;
         $this->_killZone = $killZone;
+        $this->_user = $user;
     }
 
     /**
@@ -53,7 +58,8 @@ class KillZoneChangedEvent implements ShouldBroadcast
     {
         $this->_killZone->load('killzoneenemies');
         return [
-            'killzone' => $this->_killZone
+            'killzone' => $this->_killZone,
+            'user' => $this->_user->name
         ];
     }
 }

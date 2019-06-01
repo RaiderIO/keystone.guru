@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
+use App\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -21,6 +22,9 @@ class BrushlineDeletedEvent implements ShouldBroadcast
     /** @var int $_id */
     private $_id;
 
+    /** @var User $_user */
+    private $_user;
+
     /**
      * Create a new event instance.
      *
@@ -28,10 +32,11 @@ class BrushlineDeletedEvent implements ShouldBroadcast
      * @param $brushline Brushline
      * @return void
      */
-    public function __construct(DungeonRoute $dungeonroute, Brushline $brushline)
+    public function __construct(DungeonRoute $dungeonroute, Brushline $brushline, User $user)
     {
         $this->_dungeonroute = $dungeonroute;
         $this->_id = $brushline->id;
+        $this->_user = $user;
     }
 
     /**
@@ -52,7 +57,8 @@ class BrushlineDeletedEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'id' => $this->_id
+            'id' => $this->_id,
+            'user' => $this->_user->name
         ];
     }
 }

@@ -7,16 +7,19 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show map comments';
         this.fa_class = 'fa-comment';
 
-        window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
-            .listen('.mapcomment-changed', (e) => {
-                self._restoreObject(e.mapcomment);
-            })
-            .listen('.mapcomment-deleted', (e) => {
-                let mapObject = self.findMapObjectById(e.id);
-                if (mapObject !== null) {
-                    mapObject.localDelete();
-                }
-            });
+        if (this.manager.map.options.echo) {
+            window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
+                .listen('.mapcomment-changed', (e) => {
+                    self._restoreObject(e.mapcomment, e.user);
+                })
+                .listen('.mapcomment-deleted', (e) => {
+                    let mapObject = self.findMapObjectById(e.id);
+                    if (mapObject !== null) {
+                        mapObject.localDelete();
+                        self._showDeletedFromEcho(mapObject, e.user);
+                    }
+                });
+        }
     }
 
     _createObject(layer) {
@@ -29,7 +32,7 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    _restoreObject(remoteMapObject) {
+    _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof MapCommentMapObjectGroup, 'this is not a MapCommentMapObjectGroup', this);
         // Fetch the existing map comment if it exists
         let mapComment = this.findMapObjectById(remoteMapObject.id);
@@ -53,6 +56,9 @@ class MapCommentMapObjectGroup extends MapObjectGroup {
 
         // We just downloaded the kill zone, it's synced alright!
         mapComment.setSynced(true);
+
+        // Show echo notification or not
+        this._showReceivedFromEcho(mapComment, username);
     }
 
     _fetchSuccess(response) {

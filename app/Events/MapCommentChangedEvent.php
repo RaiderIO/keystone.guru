@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Models\DungeonRoute;
 use App\Models\MapComment;
+use App\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -21,6 +22,9 @@ class MapCommentChangedEvent implements ShouldBroadcast
     /** @var MapComment $_mapComment */
     private $_mapComment;
 
+    /** @var User $_user */
+    private $_user;
+
     /**
      * Create a new event instance.
      *
@@ -28,10 +32,11 @@ class MapCommentChangedEvent implements ShouldBroadcast
      * @param $mapComment MapComment
      * @return void
      */
-    public function __construct(DungeonRoute $dungeonroute, MapComment $mapComment)
+    public function __construct(DungeonRoute $dungeonroute, MapComment $mapComment, User $user)
     {
         $this->_dungeonroute = $dungeonroute;
         $this->_mapComment = $mapComment;
+        $this->_user = $user;
     }
 
     /**
@@ -52,7 +57,8 @@ class MapCommentChangedEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'mapcomment' => $this->_mapComment
+            'mapcomment' => $this->_mapComment,
+            'user' => $this->_user->name
         ];
     }
 }

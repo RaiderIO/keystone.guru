@@ -219,5 +219,6 @@ return [
     'connecting_title_label' => 'Connecting to route edit synchronization service...',
     'connected_title_label' => 'Connected to route edit synchronization service. All of your route editing actions will be live shared with any of your team members viewing this route!',
     'members_title_label' => 'Your route editing actions are shared with these users that are currently viewing/editing your route!',
-    'member_self_title_label' => 'To change your color, visit your profile.'
+    'member_self_title_label' => 'To change your color, visit your profile.',
+    'echo_object_deleted_notification' => '{object} was deleted by {user}'
 ];
