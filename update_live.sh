@@ -12,10 +12,10 @@ git pull
 
 ./update_dependencies.sh production
 
-./migrate.sh
-
 # Restore echo server clients
 ./update_echo_clients.sh
+
+./migrate.sh
 
 # Drop and re-populate all dungeon data, it's designed to do this no worries
 tput setaf 2;

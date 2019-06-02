@@ -90,9 +90,22 @@ class MapObjectGroup extends Signalable {
      */
     _showReceivedFromEcho(localMapObject, username) {
         if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
+            let userColor = this.manager.map.getEchoControls().getUserColor(username);
+            let fontClass = '';
+
+            // Must be a hex color
+            if (userColor.indexOf('#') === 0) {
+                // Check if the user's color is 'dark' or 'light'. When it's dark we want a white font, black otherwise.
+                if (isColorDark(userColor)) {
+                    fontClass = 'text-white';
+                } else {
+                    fontClass = 'text-dark';
+                }
+            }
+
             let tooltip = localMapObject.layer.bindTooltip(username, {
                 permanent: true,
-                className: 'user_color_' + username
+                className: 'user_color_' + username + ' ' + fontClass
             });
 
             // Fadeout after some time

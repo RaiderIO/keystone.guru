@@ -164,6 +164,15 @@ class EchoControls extends MapControl {
 
         // Update the user's color
         this._getUser(name).color = color;
+        // Update the text color depending on the luminance
+        let $user = $('.echo_user_' + name);
+        if (isColorDark(color)) {
+            $user.addClass('text-white');
+            $user.removeClass('text-dark');
+        } else {
+            $user.addClass('text-dark');
+            $user.removeClass('text-white');
+        }
     }
 
     /**
@@ -174,7 +183,7 @@ class EchoControls extends MapControl {
      */
     getUserColor(name) {
         let user = this._getUser(name);
-        return user === null ? 'black' : user.color;
+        return user === null ? '#000' : user.color;
     }
 
     /**
