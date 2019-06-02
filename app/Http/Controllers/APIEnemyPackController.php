@@ -53,13 +53,15 @@ class APIEnemyPackController extends Controller
         return ['id' => $enemyPack->id];
     }
 
-    function delete(Request $request)
+    /**
+     * @param Request $request
+     * @param EnemyPack $enemypack
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    function delete(Request $request, EnemyPack $enemypack)
     {
         try {
-            /** @var EnemyPack $enemyPack */
-            $enemyPack = EnemyPack::findOrFail($request->get('id'));
-
-            $enemyPack->delete();
+            $enemypack->delete();
             $result = ['result' => 'success'];
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

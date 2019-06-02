@@ -8,6 +8,10 @@ class DungeonMap extends Signalable {
 
         this.options = options;
 
+        if (this.options.echo) {
+            window.startEcho();
+        }
+
         // Keep track of whatever the current floor ID is
         this.currentFloorId = this.options.floorId;
         this.currentVisualType = this.options.defaultEnemyVisualType;
@@ -375,6 +379,10 @@ class DungeonMap extends Signalable {
                 result.push(new FactionDisplayControls(this));
             }
 
+            if (this.options.echo) {
+                result.push(new EchoControls(this));
+            }
+
             // result.push(new AdDisplayControls(this));
         }
 
@@ -695,6 +703,24 @@ class DungeonMap extends Signalable {
             smoothFactor: 5,
             pathColour: c.map.polyline.defaultColor
         });
+    }
+
+    /**
+     * Get the echo controls, if any.
+     * @returns {boolean} False if echo was not set, or the Echo Controls.
+     */
+    getEchoControls() {
+        let result = false;
+        for (let index in this.mapControls) {
+            if (this.mapControls.hasOwnProperty(index)) {
+                let control = this.mapControls[index];
+                if (control instanceof EchoControls) {
+                    result = control;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }
 

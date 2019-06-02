@@ -30,27 +30,26 @@ class Brushline extends Polyline {
     }
 
     edit() {
-        console.assert(this instanceof Brushline, this, 'this was not a Brushline');
+        console.assert(this instanceof Brushline, 'this was not a Brushline', this);
         this.save();
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof Brushline, this, 'this was not a Brushline');
+        console.assert(this instanceof Brushline, 'this was not a Brushline', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/brushline',
+            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/brushline/' + this.id,
             dataType: 'json',
             data: {
-                _method: 'DELETE',
-                id: self.id
+                _method: 'DELETE'
             },
             beforeSend: function () {
                 self.deleting = true;
             },
             success: function (json) {
-                self.signal('object:deleted', {response: json});
+                self.localDelete();
             },
             complete: function () {
                 self.deleting = false;
@@ -63,11 +62,11 @@ class Brushline extends Polyline {
 
     save() {
         let self = this;
-        console.assert(this instanceof Brushline, this, 'this was not a Brushline');
+        console.assert(this instanceof Brushline, 'this was not a Brushline', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/brushline',
+            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/brushline',
             dataType: 'json',
             data: {
                 id: self.id,
@@ -100,7 +99,7 @@ class Brushline extends Polyline {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof Brushline, this, 'this is not an Brushline');
+        console.assert(this instanceof Brushline, 'this is not an Brushline', this);
         super.onLayerInit();
 
         // Only when we're editing

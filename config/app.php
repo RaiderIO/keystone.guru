@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\ChatServiceProvider;
+
 return [
 
     /*
@@ -173,8 +175,9 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
         /**
@@ -190,6 +193,11 @@ return [
         Jenssegers\Agent\AgentServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
+
+        /*
+         * Keystone.guru Service Providers...
+         */
+        App\Providers\EchoServerServiceProvider::class,
     ],
 
     /*

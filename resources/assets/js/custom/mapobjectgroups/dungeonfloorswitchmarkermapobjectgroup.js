@@ -7,7 +7,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
     }
 
     _createObject(layer) {
-        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup');
+        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup', this);
 
         if (isMapAdmin) {
             return new AdminDungeonFloorSwitchMarker(this.manager.map, layer);
@@ -16,28 +16,32 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         }
     }
 
+    _restoreObject(remoteMapObject) {
+        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup', this);
+
+
+        let layer = new LeafletDungeonFloorSwitchMarker();
+        layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+
+        let dungeonFloorSwitchMarker = this.createNew(layer);
+        dungeonFloorSwitchMarker.id = remoteMapObject.id;
+        dungeonFloorSwitchMarker.floor_id = remoteMapObject.floor_id;
+        dungeonFloorSwitchMarker.target_floor_id = remoteMapObject.target_floor_id;
+
+        // We just downloaded the floor switch marker, it's synced alright!
+        dungeonFloorSwitchMarker.setSynced(true);
+    }
+
     _fetchSuccess(response) {
-        super._fetchSuccess(response);
         // no super call required
-        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, this, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup');
+        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup', this);
 
         let floorSwitchMarkers = response.dungeonfloorswitchmarker;
 
         // Now draw the enemies on the map
         for (let index in floorSwitchMarkers) {
             if (floorSwitchMarkers.hasOwnProperty(index)) {
-                let remoteDungeonFloorSwitchMarker = floorSwitchMarkers[index];
-
-                let layer = new LeafletDungeonFloorSwitchMarker();
-                layer.setLatLng(L.latLng(remoteDungeonFloorSwitchMarker.lat, remoteDungeonFloorSwitchMarker.lng));
-
-                let dungeonFloorSwitchMarker = this.createNew(layer);
-                dungeonFloorSwitchMarker.id = remoteDungeonFloorSwitchMarker.id;
-                dungeonFloorSwitchMarker.floor_id = remoteDungeonFloorSwitchMarker.floor_id;
-                dungeonFloorSwitchMarker.target_floor_id = remoteDungeonFloorSwitchMarker.target_floor_id;
-
-                // We just downloaded the floor switch marker, it's synced alright!
-                dungeonFloorSwitchMarker.setSynced(true);
+                this._restoreObject(floorSwitchMarkers[index]);
             }
         }
     }

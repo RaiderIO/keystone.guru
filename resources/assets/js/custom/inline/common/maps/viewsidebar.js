@@ -38,7 +38,7 @@ class CommonMapsViewsidebar extends InlineCode {
         let isDelete = value === '';
         $.ajax({
             type: isDelete ? 'DELETE' : 'POST',
-            url: '/ajax/dungeonroute/' + self.options.public_key + '/rate',
+            url: '/ajax/' + self.options.public_key + '/rate',
             dataType: 'json',
             data: {
                 rating: value
@@ -57,7 +57,7 @@ class CommonMapsViewsidebar extends InlineCode {
     favorite(value) {
         $.ajax({
             type: !value ? 'DELETE' : 'POST',
-            url: '/ajax/dungeonroute/' + self.options.public_key + '/favorite',
+            url: '/ajax/' + self.options.public_key + '/favorite',
             dataType: 'json',
             success: function (json) {
 

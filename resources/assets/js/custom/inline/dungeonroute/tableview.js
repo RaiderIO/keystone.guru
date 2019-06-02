@@ -59,9 +59,9 @@ class ProfileTableView extends TableView {
             list: [
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '15%'},
-                {name: 'affixes', width: '15%'},
-                {name: 'attributes', width: '15%'},
-                {name: 'setup', width: '15%'},
+                {name: 'affixes', width: '15%', className: 'd-none d-lg-table-cell'},
+                {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
+                {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'published', width: '5%'},
                 {name: 'actions', width: '10%', clickable: false},
             ],
@@ -139,8 +139,8 @@ class TeamTableView extends TableView {
             list: [
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '15%'},
-                {name: 'affixes', width: '15%'},
-                {name: 'attributes', width: '15%'},
+                {name: 'affixes', width: '15%', className: 'd-none d-md-table-cell'},
+                {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'setup', width: '15%'},
                 {name: 'author', width: '10%'},
             ],

@@ -289,10 +289,9 @@ class Enemy extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/enemy/' + self.id + '/raidmarker',
+            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/raidmarker/' + self.id,
             dataType: 'json',
             data: {
-                dungeonroute: this.map.getDungeonRoute().publicKey,
                 raid_marker_name: raidMarkerName
             },
             success: function (json) {

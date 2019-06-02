@@ -12,7 +12,7 @@ class MapObjectGroup extends Signalable {
         let self = this;
 
         // Callback to when the manager has received data from the server
-        this.manager.register('fetchsuccess', this, function(fetchEvent){
+        this.manager.register('fetchsuccess', this, function (fetchEvent) {
             self._fetchSuccess(fetchEvent.data.response);
         });
 
@@ -73,6 +73,65 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Restores an object that was received from the server
+     * @param remoteMapObject object
+     * @param username string
+     * @private
+     */
+    _restoreObject(remoteMapObject, username = null) {
+        // @TODO Add error message like the above
+    }
+
+    /**
+     *
+     * @param localMapObject
+     * @param username
+     * @protected
+     */
+    _showReceivedFromEcho(localMapObject, username) {
+        if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
+            let userColor = this.manager.map.getEchoControls().getUserColor(username);
+            let fontClass = '';
+
+            // Must be a hex color
+            if (userColor.indexOf('#') === 0) {
+                // Check if the user's color is 'dark' or 'light'. When it's dark we want a white font, black otherwise.
+                if (isColorDark(userColor)) {
+                    fontClass = 'text-white';
+                } else {
+                    fontClass = 'text-dark';
+                }
+            }
+
+            let tooltip = localMapObject.layer.bindTooltip(username, {
+                permanent: true,
+                className: 'user_color_' + username + ' ' + fontClass
+            });
+
+            // Fadeout after some time
+            setTimeout(function () {
+                tooltip.closeTooltip();
+            }, 5000);
+        }
+    }
+
+    /**
+     *
+     * @param localMapObject
+     * @param username
+     * @protected
+     */
+    _showDeletedFromEcho(localMapObject, username) {
+        if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
+            showInfoNotification(
+                lang.get('messages.echo_object_deleted_notification')
+                    .replace('{object}', _.upperFirst(localMapObject.constructor.name.toLowerCase()))
+                    .replace('{user}', username)
+            );
+        }
+    }
+
+    /**
      * Called whenever an object has deleted itself.
      * @param data
      * @private
@@ -102,7 +161,7 @@ class MapObjectGroup extends Signalable {
      * @param data
      * @private
      */
-    _onObjectSynced(data){
+    _onObjectSynced(data) {
         let object = data.context;
 
         // We only use this trigger once to fire the object:add event, so unregister..
@@ -111,7 +170,7 @@ class MapObjectGroup extends Signalable {
         this.signal('object:add', {object: object, objectgroup: this});
 
         // Hide the objects if they're not visible by default
-        if( !object.isDefaultVisible() ){
+        if (!object.isDefaultVisible()) {
             this.setMapObjectVisibility(object, false);
         }
     }

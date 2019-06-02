@@ -1,0 +1,40 @@
+{
+	"authHost": "https://keystone.guru",
+	"authEndpoint": "/broadcasting/auth",
+	"clients": [
+		{
+			"appId": "DEADBEEFDEADBEEF",
+			"key": "ccfc3ecb82c0ac7248067ca3bf1bed88"
+		}
+	],
+	"database": "redis",
+	"databaseConfig": {
+		"redis": {
+			"port": 6379,
+			"host": "localhost"
+		},
+		"sqlite": {
+			"databasePath": "/database/laravel-echo-server-live.sqlite"
+		},
+		"publishPresence": true
+	},
+	"devMode": false,
+	"host": null,
+	"port": "6001",
+	"protocol": "http",
+	"socketio": {},
+	"sslCertPath": "",
+	"sslKeyPath": "",
+	"sslCertChainPath": "",
+	"sslPassphrase": "",
+	"subscribers": {
+		"http": true,
+		"redis": true
+	},
+	"apiOriginAllow": {
+		"allowCors": false,
+		"allowOrigin": "",
+		"allowMethods": "",
+		"allowHeaders": ""
+	}
+}

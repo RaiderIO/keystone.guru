@@ -1,7 +1,7 @@
 class EnemyForcesControls extends MapControl {
     constructor(map) {
         super(map);
-        console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
+        console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
 
         let self = this;
 
@@ -52,7 +52,7 @@ class EnemyForcesControls extends MapControl {
     }
 
     _killzoneSynced(syncedEvent) {
-        console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
+        console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
 
         if (typeof syncedEvent.data.enemy_forces !== 'undefined') {
             this._setEnemyForces(syncedEvent.data.enemy_forces);
@@ -65,7 +65,7 @@ class EnemyForcesControls extends MapControl {
      * @private
      */
     _setEnemyForces(value) {
-        console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
+        console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
 
         let oldEnemyForces = this.enemyForces;
 
@@ -91,7 +91,7 @@ class EnemyForcesControls extends MapControl {
      * Refreshes the UI to reflect the current enemy forces state
      */
     refreshUI() {
-        console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
+        console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
 
         let enemyForcesRequired = this.map.getEnemyForcesRequired();
         let enemyForcesPercent = enemyForcesRequired === 0 ? 0 : ((this.enemyForces / enemyForcesRequired) * 100);
@@ -151,7 +151,7 @@ class EnemyForcesControls extends MapControl {
      * Adds the Control to the current LeafletMap
      */
     addControl() {
-        console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
+        console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
 
         // Code for the statusbar
         L.Control.Statusbar = L.Control.extend(this.mapControlOptions);
@@ -179,7 +179,7 @@ class EnemyForcesControls extends MapControl {
     cleanup() {
         super.cleanup();
 
-        console.assert(this instanceof EnemyForcesControls, this, 'this is not EnemyForcesControls');
+        console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
         let self = this;
 
         // Unreg from map

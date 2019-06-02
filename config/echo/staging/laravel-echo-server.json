@@ -1,0 +1,40 @@
+{
+	"authHost": "https://staging.keystone.guru",
+	"authEndpoint": "/broadcasting/auth",
+	"clients": [
+		{
+			"appId": "DEADBEEFDEADBEEF",
+			"key": "88cb7c62603213449822e8bf5ebd5c6c"
+		}
+	],
+	"database": "redis",
+	"databaseConfig": {
+		"redis": {
+			"port": 6379,
+			"host": "localhost"
+		},
+		"sqlite": {
+			"databasePath": "/database/laravel-echo-server-staging.sqlite"
+		},
+		"publishPresence": true
+	},
+	"devMode": true,
+	"host": null,
+	"port": "6002",
+	"protocol": "http",
+	"socketio": {},
+	"sslCertPath": "",
+	"sslKeyPath": "",
+	"sslCertChainPath": "",
+	"sslPassphrase": "",
+	"subscribers": {
+		"http": true,
+		"redis": true
+	},
+	"apiOriginAllow": {
+		"allowCors": false,
+		"allowOrigin": "",
+		"allowMethods": "",
+		"allowHeaders": ""
+	}
+}
