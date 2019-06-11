@@ -35,8 +35,8 @@ class EchoControls extends MapControl {
         window.Echo.connector.socket.on('disconnect', function () {
             self._setStatus('connecting');
 
-            // Reset the users that we have to prevent double users
-            this.users = [];
+            // Reset the users that we have to prevent double users from showing up
+            self._clearUsers();
         });
 
         // Keep track of the current users in this channel
@@ -124,6 +124,20 @@ class EchoControls extends MapControl {
                 break;
             }
         }
+    }
+
+    /**
+     * Clears all users stored in memory and in the user interface.
+     * @private
+     */
+    _clearUsers() {
+        // Remove all from interface
+        for (let index in this.users) {
+            $('.echo_user_' + this.users[index].name).remove();
+        }
+
+        // Reset array
+        this.users = [];
     }
 
     /**
