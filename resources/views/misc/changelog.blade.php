@@ -4,6 +4,21 @@
 
 @section('content')
     <h4>
+        v2.5 (2019/06/12)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/37">#37</a>
+            You can now co-operatively edit your routes with your Team members! To get started, create a group, invite
+            your party and finally set them to be collaborators in the "members" section. Add some routes to the team,
+            then start editing them with your team members. All changes you and your team members perform will be
+            synchronized to each other, Google-docs style!
+        </li>
+    </ul>
+
+    <h4>
         v2.4 (2019/05/16)
     </h4>
     <p>

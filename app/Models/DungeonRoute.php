@@ -66,6 +66,7 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Collection $routeattributes
  * @property \Illuminate\Support\Collection $routeattributesraw
  *
+ * @method static \Illuminate\Database\Eloquent\Builder visibleWithUnlisted()
  * @method static \Illuminate\Database\Eloquent\Builder visible()
  *
  * @mixin \Eloquent
@@ -299,6 +300,21 @@ class DungeonRoute extends Model
     {
         return $query->where('unlisted', false)
             ->where('demo', false)
+            ->whereHas('dungeon', function ($dungeon) {
+                /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
+                $dungeon->active();
+            });
+    }
+
+    /**
+     * Scope a query to only include active dungeons but shows unlisted routes
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVisibleWithUnlisted($query)
+    {
+        return $query->where('demo', false)
             ->whereHas('dungeon', function ($dungeon) {
                 /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
                 $dungeon->active();

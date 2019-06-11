@@ -61,6 +61,11 @@ class APIDungeonRouteController extends Controller
         $user = Auth::user();
         $mine = false;
 
+        // If we're with a team and if we want to get all routes that may be assigned to the team
+        $available = false;
+        // If we're viewing a team's route this will be filled
+        $team = null;
+
         // If logged in
         if ($user !== null) {
             $mine = $request->get('mine', false);
@@ -113,7 +118,12 @@ class APIDungeonRouteController extends Controller
         }
 
         // Visible here to allow proper usage of indexes
-        $routes->visible();
+        if ($available === 1 || $team !== null) {
+            $routes = $routes->visibleWithUnlisted();
+        } else {
+            // Visible here to allow proper usage of indexes
+            $routes = $routes->visible();
+        }
 
         $dtHandler = new DatatablesHandler($request);
 
