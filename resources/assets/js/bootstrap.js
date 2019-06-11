@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 
 /**
@@ -19,6 +18,24 @@ require('bootstrap');
  */
 
 // window.Vue = require('vue');
+
+/**
+ * Echo server
+ */
+import Echo from 'laravel-echo'
+/**
+ * Translations coupling from server to client.
+ */
+import messages from './messages';
+
+window.io = require('socket.io-client');
+
+window.startEcho = function () {
+    window.Echo = new Echo({
+        broadcaster: 'socket.io',
+        host: window.location.hostname
+    });
+};
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -71,17 +88,11 @@ window.axios.defaults.headers.common = {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
-
-
-/**
- * Translations coupling from server to client.
- */
-import messages from './messages';
-window.lang = new Lang({ messages });
+window.lang = new Lang({messages});
 
 // https://stackoverflow.com/questions/13046401/how-to-set-selected-select-option-in-handlebars-template
-window.Handlebars.registerHelper('select', function( value, options ){
-    var $el = $('<select />').html( options.fn(this) );
-    $el.find('[value="' + value + '"]').attr({'selected':'selected'});
+window.Handlebars.registerHelper('select', function (value, options) {
+    var $el = $('<select />').html(options.fn(this));
+    $el.find('[value="' + value + '"]').attr({'selected': 'selected'});
     return $el.html();
 });

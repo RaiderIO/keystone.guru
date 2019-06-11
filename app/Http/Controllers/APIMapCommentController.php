@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MapCommentChangedEvent;
+use App\Events\MapCommentDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsMapComments;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Models\DungeonRoute;
 use App\Models\MapComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,33 +29,22 @@ class APIMapCommentController extends Controller
 
     /**
      * @param Request $request
+     * @param DungeonRoute $dungeonroute
      * @return array
      * @throws \Exception
      */
-    function store(Request $request)
+    function store(Request $request, DungeonRoute $dungeonroute)
     {
-        $dungeonRoutePublicKey = $request->get('dungeonroute', null);
+        $this->authorize('edit', $dungeonroute);
 
         /** @var MapComment $mapComment */
         $mapComment = MapComment::findOrNew($request->get('id'));
         $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
 
-        $dungeonRouteId = -1;
-        try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($dungeonRoutePublicKey);
-            $dungeonRouteId = $dungeonRoute->id;
-        } catch (\Exception $ex) {
-            // It's okay if we're an admin, they can add comments without a route (global comments on the floor)
-            if (!$isAdmin) {
-                // I don't like multiple returns but it's much easier/cleaner this way
-                return response('Not found', Http::NOT_FOUND);
-            }
-        }
-
         // Only admins may make global comments for all routes
         $mapComment->always_visible = $isAdmin ? $request->get('always_visible', 0) : 0;
         $mapComment->floor_id = $request->get('floor_id');
-        $mapComment->dungeon_route_id = $dungeonRouteId;
+        $mapComment->dungeon_route_id = $dungeonroute->id;
         $mapComment->game_icon_id = -1;
         $mapComment->comment = $request->get('comment', '');
         $mapComment->lat = $request->get('lat');
@@ -65,6 +57,8 @@ class APIMapCommentController extends Controller
         if (!$mapComment->save()) {
             throw new \Exception("Unable to save map comment!");
         } else {
+            broadcast(new MapCommentChangedEvent($dungeonroute, $mapComment, Auth::user()));
+
             $result = ['id' => $mapComment->id];
         }
 
@@ -73,16 +67,23 @@ class APIMapCommentController extends Controller
 
     /**
      * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param MapComment $mapcomment
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
      */
-    function delete(Request $request)
+    function delete(Request $request, DungeonRoute $dungeonroute, MapComment $mapcomment)
     {
-        try {
-            /** @var MapComment $mapComment */
-            $mapComment = MapComment::findOrFail($request->get('id'));
+        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
+        $this->authorize('edit', $dungeonroute);
 
-            $mapComment->delete();
-            $result = ['result' => 'success'];
+        try {
+            if ($mapcomment->delete()) {
+                broadcast(new MapCommentDeletedEvent($dungeonroute, $mapcomment, Auth::user()));
+                $result = ['result' => 'success'];
+            } else {
+                $result = ['result' => 'error'];
+            }
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

@@ -3,9 +3,15 @@ sudo supervisorctl reread
 
 sudo supervisorctl update
 
-# @TODO This should only restart the workers relative to the current environment, but this works for now
-sudo supervisorctl stop laravel-worker-staging:*
-sudo supervisorctl start laravel-worker-staging:*
+sudo supervisorctl stop laravel-echo-server-staging:*
+sudo supervisorctl start laravel-echo-server-staging:*
 
-sudo supervisorctl stop laravel-worker-live:*
-sudo supervisorctl start laravel-worker-live:*
+sudo supervisorctl stop laravel-echo-server-live:*
+sudo supervisorctl start laravel-echo-server-live:*
+
+# @TODO This should only restart the workers relative to the current environment, but this works for now
+sudo supervisorctl stop laravel-horizon-staging:*
+sudo supervisorctl start laravel-horizon-staging:*
+
+sudo supervisorctl stop laravel-horizon-live:*
+sudo supervisorctl start laravel-horizon-live:*

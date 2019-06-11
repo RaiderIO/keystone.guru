@@ -40,19 +40,19 @@ class MapComment extends MapObject {
     }
 
     _popupSubmitClicked() {
-        console.assert(this instanceof MapComment, this, 'this was not a MapComment');
+        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
         this.comment = $('#map_map_comment_edit_popup_comment_' + this.id).val();
 
         this.edit();
     }
 
     isEditable() {
-        console.assert(this instanceof MapComment, this, 'this is not a MapComment');
+        console.assert(this instanceof MapComment, 'this is not a MapComment', this);
         return !this.always_visible;
     }
 
     bindTooltip() {
-        console.assert(this instanceof MapComment, this, 'this is not a MapComment');
+        console.assert(this instanceof MapComment, 'this is not a MapComment', this);
 
         this.layer.bindTooltip(
             jQuery('<div/>', {
@@ -62,27 +62,26 @@ class MapComment extends MapObject {
     }
 
     edit() {
-        console.assert(this instanceof MapComment, this, 'this was not a MapComment');
+        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
         this.save();
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof MapComment, this, 'this was not a MapComment');
+        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/mapcomment',
+            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/mapcomment/' + this.id,
             dataType: 'json',
             data: {
-                _method: 'DELETE',
-                id: self.id
+                _method: 'DELETE'
             },
             beforeSend: function () {
                 self.deleting = true;
             },
             success: function (json) {
-                self.signal('object:deleted', {response: json});
+                self.localDelete();
             },
             complete: function () {
                 self.deleting = false;
@@ -95,15 +94,14 @@ class MapComment extends MapObject {
 
     save() {
         let self = this;
-        console.assert(this instanceof MapComment, this, 'this was not a MapComment');
+        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/mapcomment',
+            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/mapcomment',
             dataType: 'json',
             data: {
                 id: this.id,
-                dungeonroute: this.map.getDungeonRoute().publicKey, // defined in map.blade.php
                 floor_id: this.map.getCurrentFloor().id,
                 comment: this.comment,
                 always_visible: this.always_visible,
@@ -133,7 +131,7 @@ class MapComment extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof MapComment, this, 'this is not an MapComment');
+        console.assert(this instanceof MapComment, 'this is not an MapComment', this);
         super.onLayerInit();
 
         let self = this;

@@ -17,7 +17,7 @@ class DungeonRoutePolicy
      * @param  \App\Models\DungeonRoute $dungeonroute
      * @return mixed
      */
-    public function view(User $user, DungeonRoute $dungeonroute)
+    public function view(?User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
         return $dungeonroute->published;
@@ -81,8 +81,7 @@ class DungeonRoutePolicy
      */
     public function edit(User $user, DungeonRoute $dungeonroute)
     {
-        // Only authors or if the user is an admin
-        return $dungeonroute->isTry() || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->mayUserEdit($user);
     }
 
     /**

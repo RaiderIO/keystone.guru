@@ -12,6 +12,15 @@ use Illuminate\Support\Collection;
 
 class AdminToolsController extends Controller
 {
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index()
+    {
+        return view('admin.tools.list');
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
      */

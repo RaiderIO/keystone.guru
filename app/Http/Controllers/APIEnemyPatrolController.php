@@ -60,14 +60,15 @@ class APIEnemyPatrolController extends Controller
         return ['id' => $enemyPatrol->id];
     }
 
-    function delete(Request $request)
+    /**
+     * @param Request $request
+     * @param EnemyPatrol $enemypatrol
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    function delete(Request $request, EnemyPatrol $enemypatrol)
     {
         try {
-            /** @var EnemyPatrol $enemyPatrol */
-            $enemyPatrol = EnemyPatrol::findOrFail($request->get('id'));
-
-            $enemyPatrol->polyline->delete();
-            $enemyPatrol->delete();
+            $enemypatrol->delete();
             $result = ['result' => 'success'];
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

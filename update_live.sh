@@ -12,6 +12,9 @@ git pull
 
 ./update_dependencies.sh production
 
+# Restore echo server clients
+./update_echo_clients.sh
+
 ./migrate.sh
 
 # Drop and re-populate all dungeon data, it's designed to do this no worries
@@ -25,6 +28,10 @@ echo "Refreshing DungeonData..."
 tput sgr0;
 php artisan db:seed --class=DungeonDataSeeder --database=migrate
 
+# Clear any caches, we just updated
+php artisan optimize:clear
+# Generate route cache
+php artisan route:cache
 # Restart queue processors
 php artisan queue:restart
 

@@ -34,7 +34,7 @@ class EnemyVisualControls extends MapControl {
      * @private
      */
     _mdtEnemyMappingChanged(changedEvent) {
-        console.assert(this instanceof EnemyVisualControls, this, 'this is not EnemyVisualControls');
+        console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
         let mdtEnemiesEnabled = $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(":checked");
 
@@ -53,7 +53,7 @@ class EnemyVisualControls extends MapControl {
      * @private
      */
     _enemyVisualChanged(changedEvent) {
-        console.assert(this instanceof EnemyVisualControls, this, 'this is not EnemyVisualControls');
+        console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         let visualType = $('#map_enemy_visuals_dropdown').val();
@@ -70,7 +70,7 @@ class EnemyVisualControls extends MapControl {
      * Adds the Control to the current LeafletMap
      */
     addControl() {
-        console.assert(this instanceof EnemyVisualControls, this, 'this is not EnemyVisualControls');
+        console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
         // Code for the domElement
         L.Control.domElement = L.Control.extend(this.mapControlOptions);
@@ -95,7 +95,7 @@ class EnemyVisualControls extends MapControl {
     cleanup() {
         super.cleanup();
 
-        console.assert(this instanceof EnemyVisualControls, this, 'this is not EnemyVisualControls');
+        console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
         this.map.unregister('map:refresh', this);
     }

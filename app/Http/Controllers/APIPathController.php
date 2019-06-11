@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PathChangedEvent;
+use App\Events\PathDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsPaths;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Path;
 use App\Models\Polyline;
@@ -15,7 +16,6 @@ use Teapot\StatusCode\Http;
 
 class APIPathController extends Controller
 {
-    use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
     use ListsPaths;
 
@@ -29,18 +29,19 @@ class APIPathController extends Controller
 
     /**
      * @param Request $request
+     * @param DungeonRoute $dungeonroute
      * @return array
      * @throws \Exception
      */
-    function store(Request $request)
+    function store(Request $request, DungeonRoute $dungeonroute)
     {
+        $this->authorize('edit', $dungeonroute);
+
         /** @var Path $path */
         $path = Path::findOrNew($request->get('id'));
 
         try {
-            $dungeonRoute = $this->_getDungeonRouteFromPublicKey($request->get('dungeonroute'));
-
-            $path->dungeon_route_id = $dungeonRoute->id;
+            $path->dungeon_route_id = $dungeonroute->id;
             $path->floor_id = $request->get('floor_id');
 
             // Init to a default value if new
@@ -65,8 +66,11 @@ class APIPathController extends Controller
                 $path->polyline_id = $polyline->id;
                 $path->save();
 
+                // Something's updated; broadcast it
+                broadcast(new PathChangedEvent($dungeonroute, $path, Auth::user()));
+
                 // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
+                $dungeonroute->touch();
             }
 
             $result = ['id' => $path->id];
@@ -76,28 +80,31 @@ class APIPathController extends Controller
         return $result;
     }
 
-    function delete(Request $request)
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param Path $path
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    function delete(Request $request, DungeonRoute $dungeonroute, Path $path)
     {
-        try {
-            /** @var Path $path */
-            $path = Path::findOrFail($request->get('id'));
+        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
+        $this->authorize('edit', $dungeonroute);
 
-            // @TODO WTF why does $route->dungeonroute not work?? It will NOT load the relation despite everything being OK?
-            /** @var DungeonRoute $dungeonRoute */
-            $dungeonRoute = DungeonRoute::findOrFail($path->dungeon_route_id);
-            // If we're not the author, don't delete anything
-            // @TODO handle this in a policy?
-            if (!Auth::check() || ($dungeonRoute->author_id !== Auth::user()->id && !Auth::user()->hasRole('admin'))) {
-                throw new Exception('Unauthorized');
+        try {
+
+            if ($path->delete()) {
+                broadcast(new PathDeletedEvent($dungeonroute, $path, Auth::user()));
+
+                // Touch the route so that the thumbnail gets updated
+                $dungeonroute->touch();
+
+                $result = ['result' => 'success'];
+            } else {
+                $result = ['result' => 'error'];
             }
 
-            $path->polyline->delete();
-            $path->delete();
-
-            // Touch the route so that the thumbnail gets updated
-            $dungeonRoute->touch();
-
-            $result = ['result' => 'success'];
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

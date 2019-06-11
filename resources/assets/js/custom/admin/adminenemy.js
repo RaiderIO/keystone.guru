@@ -393,17 +393,16 @@ class AdminEnemy extends Enemy {
         let self = this;
         $.ajax({
             type: 'POST',
-            url: '/ajax/enemy',
+            url: '/ajax/enemy/' + self.id,
             dataType: 'json',
             data: {
-                _method: 'DELETE',
-                id: self.id
+                _method: 'DELETE'
             },
             beforeSend: function () {
                 self.deleting = true;
             },
             success: function (json) {
-                self.signal('object:deleted', {response: json});
+                self.localDelete();
             },
             complete: function () {
                 self.deleting = false;

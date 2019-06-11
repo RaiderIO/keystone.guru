@@ -97,7 +97,7 @@ class KillZone extends MapObject {
      * @private
      */
     _detachFromEnemies() {
-        console.assert(this instanceof KillZone, this, 'this was not a KillZone');
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
 
         this.removeExistingConnectionsToEnemies();
 
@@ -114,18 +114,18 @@ class KillZone extends MapObject {
     }
 
     edit() {
-        console.assert(this instanceof KillZone, this, 'this was not a KillZone');
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
         this.save();
         this.redrawConnectionsToEnemies();
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof KillZone, this, 'this was not a KillZone');
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone/' + self.id,
+            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/killzone/' + self.id,
             dataType: 'json',
             data: {
                 _method: 'DELETE'
@@ -137,7 +137,7 @@ class KillZone extends MapObject {
                 // Detach from all enemies upon deletion
                 self._detachFromEnemies();
                 self.removeExistingConnectionsToEnemies();
-                self.signal('object:deleted', {response: json});
+                self.localDelete();
                 self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
             },
             complete: function () {
@@ -151,11 +151,11 @@ class KillZone extends MapObject {
 
     save() {
         let self = this;
-        console.assert(this instanceof KillZone, this, 'this was not a KillZone');
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/dungeonroute/' + this.map.getDungeonRoute().publicKey + '/killzone',
+            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/killzone',
             dataType: 'json',
             data: {
                 id: self.id,
@@ -180,7 +180,6 @@ class KillZone extends MapObject {
             error: function (xhr) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
-                defaultAjaxErrorFn(xhr);
             }
         });
     }
@@ -190,7 +189,7 @@ class KillZone extends MapObject {
      * @param enemies
      */
     setEnemies(enemies) {
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
         let self = this;
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
@@ -213,8 +212,8 @@ class KillZone extends MapObject {
      * @param enemy The enemy that was selected (or de-selected). Will add/remove the enemy to the list to be redrawn.
      */
     enemySelected(enemy) {
-        console.assert(enemy instanceof Enemy, enemy, 'enemy is not an Enemy');
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
+        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
         let index = $.inArray(enemy.id, this.enemies);
         // Already exists, user wants to deselect the enemy
@@ -252,7 +251,7 @@ class KillZone extends MapObject {
      * Removes any existing UI connections to enemies.
      */
     removeExistingConnectionsToEnemies() {
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
         // Remove previous layers if it's needed
         if (this.enemyConnectionsLayerGroup !== null) {
@@ -265,7 +264,7 @@ class KillZone extends MapObject {
      * Throws away all current visible connections to enemies, and rebuilds the visuals.
      */
     redrawConnectionsToEnemies() {
-        console.assert(this instanceof KillZone, this, 'this is not an KillZone');
+        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
         let self = this;
 
@@ -329,7 +328,7 @@ class KillZone extends MapObject {
                 // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
                 // This also cannot be a private function since that'll apparently give different signatures as well.
                 let popupOpenFn = function (event) {
-                    console.assert(self instanceof KillZone, self, 'this was not a KillZone');
+                    console.assert(self instanceof KillZone, 'this was not a KillZone', self);
                     // Give a default color if it was not set
                     let color = self.color === '' ? c.map.killzone.polygonOptions.color : self.color;
                     $('#map_killzone_edit_popup_color_' + self.id).val(color);
@@ -339,7 +338,7 @@ class KillZone extends MapObject {
 
                     $submitBtn.unbind('click');
                     $submitBtn.bind('click', function _popupSubmitClicked() {
-                        console.assert(self instanceof KillZone, self, 'this was not a KillZone');
+                        console.assert(self instanceof KillZone, 'this was not a KillZone', self);
                         self.color = $('#map_killzone_edit_popup_color_' + self.id).val();
 
                         self.edit();
@@ -370,7 +369,7 @@ class KillZone extends MapObject {
      * @private
      */
     _enemySelectionChanged(selectionEvent) {
-        console.assert(this instanceof KillZone, this, 'this is not a KillZone');
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
         // Redraw any changes as necessary
         this.redrawConnectionsToEnemies();
@@ -385,7 +384,7 @@ class KillZone extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof KillZone, this, 'this is not a KillZone');
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
         super.onLayerInit();
 
         let self = this;
@@ -436,7 +435,9 @@ class KillZone extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, function (event) {
+            console.log('Synced killzone!');
             // Restore the connections to our enemies
+            self.redrawConnectionsToEnemies();
 
             // let customPopupHtml = $("#killzone_edit_popup_template").html();
             // // Remove template so our

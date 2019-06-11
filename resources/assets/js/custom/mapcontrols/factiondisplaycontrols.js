@@ -72,7 +72,7 @@ class FactionDisplayControls extends MapControl {
      * @private
      */
     _visibilityToggled(faction, visible) {
-        console.assert(this instanceof FactionDisplayControls, this, 'this is not FactionDisplayControls');
+        console.assert(this instanceof FactionDisplayControls, 'this is not FactionDisplayControls', this);
 
         let enemyMapObjectGroups = [
             this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY),
@@ -96,7 +96,7 @@ class FactionDisplayControls extends MapControl {
      * Adds the Control to the current LeafletMap
      */
     addControl() {
-        console.assert(this instanceof FactionDisplayControls, this, 'this is not FactionDisplayControls');
+        console.assert(this instanceof FactionDisplayControls, 'this is not FactionDisplayControls', this);
 
         // Code for the domElement
         L.Control.domElement = L.Control.extend(this.mapControlOptions);
@@ -111,7 +111,7 @@ class FactionDisplayControls extends MapControl {
     cleanup() {
         super.cleanup();
 
-        console.assert(this instanceof FactionDisplayControls, this, 'this is not FactionDisplayControls');
+        console.assert(this instanceof FactionDisplayControls, 'this is not FactionDisplayControls', this);
 
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
     }

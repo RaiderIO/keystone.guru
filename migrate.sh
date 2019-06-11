@@ -2,4 +2,4 @@
 tput setaf 2;
 echo "Migrating database..."
 tput sgr0;
-php artisan migrate --database=migrate
+php artisan migrate --database=migrate --force

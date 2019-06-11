@@ -44,6 +44,7 @@
     "jquery-mousewheel": "^3.1.13",
     "js-cookie": "^2.2.0",
     "lang.js": "^1.1.14",
+    "laravel-echo": "^1.5.2",
     "leaflet": "^1.4.0",
     "leaflet-contextmenu": "^1.4.0",
     "leaflet-draw": "^1.0.4",
@@ -57,7 +58,8 @@
     "password-strength-meter": "^1.2.2",
     "polygon-offset": "github:Wotuu/polygon-offset#wotuufix",
     "popper.js": "^1.15.0",
-    "puppeteer": "^1.14.0",
+    "puppeteer": "^1.17.0",
+    "socket.io-client": "^2.2.0",
     "zikes-circlemenu": "^0.1.1"
   }
 }
