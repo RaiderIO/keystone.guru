@@ -34,6 +34,9 @@ class EchoControls extends MapControl {
         // Whenever disconnected..
         window.Echo.connector.socket.on('disconnect', function () {
             self._setStatus('connecting');
+
+            // Reset the users that we have to prevent double users
+            this.users = [];
         });
 
         // Keep track of the current users in this channel
