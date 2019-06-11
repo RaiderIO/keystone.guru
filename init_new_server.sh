@@ -70,7 +70,8 @@ git checkout -b v3.3.7+1
 # Back to where we came from
 cd ../../..
 
-sudo npm install handlebars -g
+sudo npm install -g laravel-echo-server
+sudo npm install -g handlebars
 sudo apt-get install supervisor
 sudo apt-get install pngquant
 
