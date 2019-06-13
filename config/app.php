@@ -197,7 +197,7 @@ return [
         /*
          * Keystone.guru Service Providers...
          */
-        App\Providers\EchoServerServiceProvider::class,
+        App\Providers\KeystoneGuruServiceProvider::class,
     ],
 
     /*
