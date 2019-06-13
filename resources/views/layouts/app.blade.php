@@ -152,6 +152,8 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                 <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
                                     @if( Auth::user()->hasRole('admin'))
                                         <a class="dropdown-item"
+                                           href="{{ route('dashboard.home') }}">{{__('Admin Dashboard')}}</a>
+                                        <a class="dropdown-item"
                                            href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
                                         <div class="dropdown-divider"></div>
                                         @if( Auth::user()->can('read-expansions') )

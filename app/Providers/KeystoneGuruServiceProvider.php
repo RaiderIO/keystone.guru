@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class EchoServerServiceProvider extends ServiceProvider
+class KeystoneGuruServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -16,6 +16,10 @@ class EchoServerServiceProvider extends ServiceProvider
         // Bind the interface to the actual service
         $this->app->bind('App\Service\EchoServerConfigServiceInterface', 'App\Service\EchoServerConfigService');
         $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\EchoServerHttpApiService');
+
+        // Dashboard
+        $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\UsersStatisticsService');
+        $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\TeamsStatisticsService');
     }
 
     /**

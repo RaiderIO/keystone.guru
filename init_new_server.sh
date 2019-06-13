@@ -70,6 +70,16 @@ git checkout -b v3.3.7+1
 # Back to where we came from
 cd ../../..
 
+# Setup argon dashboard
+php artisan preset argon
+# This does way too much though, undo the damage it did (we require SOME of it though)
+git checkout .
+git clean -f
+rm -rf resources/views/layouts/footers
+rm -rf resources/views/layouts/headers
+rm -rf resources/views/layouts/navbars
+rm -rf resources/views/users
+
 sudo npm install -g laravel-echo-server
 sudo npm install -g handlebars
 sudo apt-get install supervisor
