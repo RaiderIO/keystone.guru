@@ -29,7 +29,7 @@ class LineChart {
                             time: {
                                 parser: this.timeFormat,
                                 // round: 'day'
-                                tooltipFormat: 'll HH:mm'
+                                tooltipFormat: 'll'
                             },
                             scaleLabel: {
                                 display: true,
