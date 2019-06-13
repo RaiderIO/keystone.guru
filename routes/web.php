@@ -166,10 +166,10 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::get('/teams', 'DashboardController@teams')->name('dashboard.teams');
             Route::get('/pageviews', 'DashboardController@pageviews')->name('dashboard.pageviews');
 
-            Route::resource('user', 'DashboardUserController', ['except' => ['show']]);
-            Route::get('profile', ['as' => 'profile.edit', 'uses' => 'DashboardProfileController@edit']);
-            Route::put('profile', ['as' => 'profile.update', 'uses' => 'DashboardProfileController@update']);
-            Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'DashboardProfileController@password']);
+//            Route::resource('user', 'DashboardUserController', ['except' => ['show']]);
+//            Route::get('profile', ['as' => 'profile.edit', 'uses' => 'DashboardProfileController@edit']);
+//            Route::put('profile', ['as' => 'profile.update', 'uses' => 'DashboardProfileController@update']);
+//            Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'DashboardProfileController@password']);
         });
     });
 
