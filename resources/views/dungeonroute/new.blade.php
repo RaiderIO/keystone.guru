@@ -41,7 +41,7 @@
         </div>
         <div class="form-group">
             {!! Form::label('dungeon_id', __('Select dungeon') . "*") !!}
-            {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->pluck('name', 'id'), null, ['id' => 'dungeon_id_select', 'class' => 'form-control']) !!}
+            {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->pluck('name', 'id'), null, ['id' => 'dungeon_id_select', 'class' => 'form-control selectpicker']) !!}
             <div id="siege_of_boralus_faction_warning" class="text-warning" style="display: none;">
                 {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
             </div>
@@ -56,6 +56,16 @@
                  }}"></i>
             </label>
             {!! Form::checkbox('teeming', 1, 0, ['class' => 'form-control left_checkbox']) !!}
+        </div>
+
+        <div class="form-group">
+            <label for="template">
+                {{ __('Template') }}
+                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                __('Check to pre-fill the route with a template route (the route\'s demo). This gives you straight forward scaffolding to base your route on.')
+                 }}"></i>
+            </label>
+            {!! Form::checkbox('template', 1, 0, ['class' => 'form-control left_checkbox']) !!}
         </div>
 
         <h3>
