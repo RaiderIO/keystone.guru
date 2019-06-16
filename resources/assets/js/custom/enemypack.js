@@ -21,7 +21,6 @@ class EnemyPack extends MapObject {
         this.setColors(c.map.enemypack.colors);
 
         this.color = null;
-        this.faction = 'any';
     }
 
     /**

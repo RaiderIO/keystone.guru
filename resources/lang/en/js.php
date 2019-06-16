@@ -19,7 +19,11 @@ return [
     'base_health_label' => 'Base health',
     'no_npc_found_label' => 'No NPC found for this enemy',
 
+    'enemy_popup_enemy_forces_label' => 'Enemy forces (override, -1 to inherit)',
     'teeming_label' => 'Teeming',
+    'npc_label' => 'Npc',
+
+    'connected_floor_label' => 'Connected floor',
 
     'admin_only_label' => 'Admin only',
     'id_label' => 'ID',

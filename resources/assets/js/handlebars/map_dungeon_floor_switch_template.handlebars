@@ -1,0 +1,13 @@
+<div class="popupCustom">
+    <div class="form-group">
+        <label for="dungeon_floor_switch_edit_popup_target_floor">{{connected_floor_label}}</label>
+        <select id="dungeon_floor_switch_edit_popup_target_floor"
+                name="dungeon_floor_switch_edit_popup_target_floor"
+                class="selectpicker dungeon_floor_switch_edit_popup_target_floor" data-width="300px">
+            {{#floors}}
+            <option value="{{id}}">{{name}}</option>
+            {{/floors}}
+        </select>
+    </div>
+    <input type="submit" id="dungeon_floor_switch_edit_popup_submit" class="btn btn-info"/>
+</div>

@@ -1,4 +1,5 @@
 <?php
+/** @var $npcs \Illuminate\Support\Collection */
 /** @var \App\User $user */
 $user = Auth::user();
 $isAdmin = isset($admin) && $admin;
@@ -36,12 +37,38 @@ $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups 
 $floorId = isset($floorId) ? $floorId : -1;
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
-?>
 
-@include('common.general.inline', ['path' => 'common/maps/map', 'options' => [
+// Additional options to pass to the map when we're in an admin environment
+$adminOptions = [];
+if ($isAdmin) {
+    // Build options for displayed NPCs
+    $npcOptions = [];
+    foreach($npcs as $npc){
+        $npcOptions[] = ['id' => $npc->id, 'name' => $npc->name];
+    }
+
+    $adminOptions = [
+        // Display options for changing Teeming status for map objects
+        'teeming' => [
+            ['key' => '', 'description' => __('Always visible')],
+            ['key' => 'visible', 'description' => __('Visible when Teeming only')],
+            ['key' => 'hidden', 'description' => __('Hidden when Teeming only')],
+        ],
+        // Display options for changing Faction status for map objects
+        'factions' => [
+            ['key' => 'any', 'description' => __('Any')],
+            ['key' => 'alliance', 'description' => __('Alliance')],
+            ['key' => 'horde', 'description' => __('Horde')],
+        ],
+        // Display options for changing the NPC of an enemy
+        'npcs' => $npcOptions
+    ];
+}
+?>
+@include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'username' => Auth::check() ? $user->name : '',
     // Only activate Echo when we are a member of the team in which this route is a member of
-    'echo' => $dungeonroute->team === null ? false : $dungeonroute->team->isUserMember($user),
+    'echo' => !isset($dungeonroute) || $dungeonroute->team === null ? false : $dungeonroute->team->isUserMember($user),
     'floorId' => $floorId,
     'edit' => $edit,
     'try' => $tryMode,
@@ -55,7 +82,7 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,
     'showAttribution' => $showAttribution
-]])
+], $adminOptions)])
 
 @section('scripts')
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
@@ -193,96 +220,6 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
                 @endfor
                 <div id="enemy_raid_marker_clear_@{{id}}" class="btn btn-warning col-12 mt-2"><i
                             class="fa fa-times"></i> {{ __('Clear marker') }}</div>
-            </div>
-        </script>
-    @else
-        @php($factions = ['any' => __('Any'), 'alliance' => __('Alliance'), 'horde' => __('Horde')])
-        <script id="enemy_pack_edit_popup_template" type="text/x-handlebars-template">
-            <div id="enemy_pack_edit_popup_inner" class="popupCustom">
-                <div class="form-group">
-                    <label for="enemy_pack_edit_popup_faction_@{{id}}">{{ __('Faction') }}</label>
-                    <select data-live-search="true" id="enemy_pack_edit_popup_faction_@{{id}}"
-                            name="enemy_pack_edit_popup_faction_@{{id}}"
-                            class="selectpicker popup_select" data-width="300px">
-                        @foreach($factions as $key => $faction)
-                            <option value="{{ $key }}">{{ $faction }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                {!! Form::button(__('Submit'), ['id' => 'enemy_pack_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-            </div>
-        </script>
-
-        <script id="enemy_patrol_edit_popup_template" type="text/x-handlebars-template">
-            <div id="enemy_patrol_edit_popup_inner" class="popupCustom">
-                <div class="form-group">
-                    <label for="enemy_patrol_edit_popup_faction_@{{id}}">{{ __('Faction') }}</label>
-                    <select data-live-search="true" id="enemy_patrol_edit_popup_faction_@{{id}}"
-                            name="enemy_patrol_edit_popup_faction_@{{id}}"
-                            class="selectpicker popup_select" data-width="300px">
-                        @foreach($factions as $key => $faction)
-                            <option value="{{ $key }}">{{ $faction }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                {!! Form::button(__('Submit'), ['id' => 'enemy_patrol_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-            </div>
-        </script>
-
-        <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
-            <div id="enemy_edit_popup_inner" class="popupCustom">
-                <div class="form-group">
-                    <label for="enemy_edit_popup_teeming_@{{id}}">{{ __('Teeming') }}</label>
-                    <select data-live-search="true" id="enemy_edit_popup_teeming_@{{id}}"
-                            name="enemy_edit_popup_teeming_@{{id}}"
-                            class="selectpicker popup_select" data-width="300px">
-                        <option value="">{{ __('Always visible') }}</option>
-                        <option value="visible">{{ __('Visible when Teeming only') }}</option>
-                        <option value="hidden">{{ __('Hidden when Teeming only') }}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="enemy_edit_popup_faction_@{{id}}">{{ __('Faction') }}</label>
-                    <select data-live-search="true" id="enemy_edit_popup_faction_@{{id}}"
-                            name="enemy_edit_popup_faction_@{{id}}"
-                            class="selectpicker popup_select" data-width="300px">
-                        @foreach($factions as $key => $faction)
-                            <option value="{{ $key }}">{{ $faction }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="enemy_edit_popup_enemy_forces_override_@{{id}}">{{ __('Enemy forces (override, -1 to inherit)') }}</label>
-                    {!! Form::text('enemy_edit_popup_enemy_forces_override_@{{id}}', null,
-                                    ['id' => 'enemy_edit_popup_enemy_forces_override_@{{id}}', 'class' => 'form-control']) !!}
-                </div>
-                <div class="form-group">
-                    <label for="enemy_edit_popup_npc_@{{id}}">{{ __('NPC') }}</label>
-                    <select data-live-search="true" id="enemy_edit_popup_npc_@{{id}}"
-                            name="enemy_edit_popup_npc_@{{id}}"
-                            class="selectpicker popup_select" data-width="300px">
-                        @foreach($npcs as $npc)
-                            <option value="{{$npc->id}}">{{ sprintf("%s (%s)", $npc->name, $npc->id) }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                {!! Form::button(__('Submit'), ['id' => 'enemy_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-            </div>
-        </script>
-
-        <script id="dungeon_floor_switch_edit_popup_template" type="text/x-handlebars-template">
-            <div id="dungeon_floor_switch_edit_popup_inner" class="popupCustom">
-                <div class="form-group">
-                    <label for="dungeon_floor_switch_edit_popup_target_floor">{{ __('Connected floor') }}</label>
-                    <select id="dungeon_floor_switch_edit_popup_target_floor"
-                            name="dungeon_floor_switch_edit_popup_target_floor"
-                            class="selectpicker dungeon_floor_switch_edit_popup_target_floor" data-width="300px">
-                        @{{#floors}}
-                        <option value="@{{id}}">@{{name}}</option>
-                        @{{/floors}}
-                    </select>
-                </div>
-                {!! Form::button(__('Submit'), ['id' => 'dungeon_floor_switch_edit_popup_submit', 'class' => 'btn btn-info']) !!}
             </div>
         </script>
     @endif

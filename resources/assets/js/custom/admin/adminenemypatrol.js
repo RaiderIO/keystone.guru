@@ -41,14 +41,14 @@ class AdminEnemyPatrol extends EnemyPatrol {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         let syncedFn = function(event){
-            let customPopupHtml = $('#enemy_patrol_edit_popup_template').html();
             // Remove template so our
-            let template = Handlebars.compile(customPopupHtml);
+            let template = Handlebars.templates['map_enemy_patrol_template'];
 
-            let data = {id: self.id};
-
-            // Build the status bar from the template
-            customPopupHtml = template(data);
+            let data = $.extend({
+                id: self.id,
+                teeming: self.map.options.teeming,
+                factions: self.map.options.factions
+            }, getHandlebarsDefaultVariables());
 
             let customOptions = {
                 'maxWidth': '400',
@@ -64,7 +64,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
 
             $.each(layers, function(i, layer){
                 layer.unbindPopup();
-                layer.bindPopup(customPopupHtml, customOptions);
+                layer.bindPopup(template(data), customOptions);
 
                 // Have you tried turning it off and on again?
                 layer.off('popupopen');

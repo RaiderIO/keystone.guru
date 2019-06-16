@@ -37,12 +37,10 @@ class Enemy extends MapObject {
         this.label = 'Enemy';
         // Not actually saved to the enemy, but is used for keeping track of what killzone this enemy is attached to
         this.kill_zone_id = 0;
-        this.faction = 'any'; // sensible default
         this.enemy_forces_override = -1;
         // May be set when loaded from server
         this.npc = null;
         this.raid_marker_name = '';
-        this.teeming = null;
 
         // MDT
         this.mdt_id = -1;

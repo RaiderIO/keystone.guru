@@ -16,6 +16,8 @@ class MapObject extends Signalable {
         this.layer = layer;
 
         this.id = 0;
+        this.faction = 'any'; // sensible default
+        this.teeming = null;
         this.label = 'default label';
         this.decorator = null;
 

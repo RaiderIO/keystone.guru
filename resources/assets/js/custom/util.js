@@ -11,11 +11,20 @@ function _getHandlebarsTranslations() {
     return lang.messages[locale + '.messages'];
 }
 
+/** Some built-in caching since this function is called a lot */
+let _defaultVariables = null;
+
+/**
+ * Get the default handlebars variables (all translations, etc.)
+ */
 function getHandlebarsDefaultVariables() {
-    return $.extend(_getHandlebarsTranslations(), {
-        is_map_admin: typeof isMapAdmin === 'undefined' ? false : isMapAdmin,
-        is_user_admin: isUserAdmin
-    });
+    if (_defaultVariables === null) {
+        _defaultVariables = $.extend(_getHandlebarsTranslations(), {
+            is_map_admin: typeof isMapAdmin === 'undefined' ? false : isMapAdmin,
+            is_user_admin: isUserAdmin
+        });
+    }
+    return _defaultVariables;
 }
 
 /**

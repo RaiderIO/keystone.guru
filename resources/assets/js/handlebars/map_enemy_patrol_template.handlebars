@@ -1,0 +1,24 @@
+<div class="popupCustom">
+
+    <div class="form-group">
+        <label for="enemy_patrol_edit_popup_teeming_{{id}}">{{teeming_label}}</label>
+        <select data-live-search="true" id="enemy_patrol_edit_popup_teeming_{{id}}"
+                name="enemy_patrol_edit_popup_teeming_{{id}}"
+                class="selectpicker popup_select" data-width="300px">
+            {{#teeming}}
+                <option value="{{key}}">{{description}}</option>
+            {{/teeming}}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="enemy_patrol_edit_popup_faction_{{id}}">{{faction_label}}</label>
+        <select data-live-search="true" id="enemy_patrol_edit_popup_faction_{{id}}"
+                name="enemy_patrol_edit_popup_faction_{{id}}"
+                class="selectpicker popup_select" data-width="300px">
+            {{#factions}}
+            <option value="{{key}}">{{description}}</option>
+            {{/factions}}
+        </select>
+    </div>
+    <input type="submit" id="enemy_patrol_edit_popup_submit_{{id}}" class="btn btn-info"/>
+</div>

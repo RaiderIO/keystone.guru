@@ -350,14 +350,14 @@ class AdminEnemy extends Enemy {
                 });
             };
 
-            let customPopupHtml = $('#enemy_edit_popup_template').html();
-            // Remove template so our
-            let template = Handlebars.compile(customPopupHtml);
+            let template = Handlebars.templates['map_enemy_popup_template'];
 
-            let data = {id: self.id};
-
-            // Build the status bar from the template
-            customPopupHtml = template(data);
+            let data = $.extend({
+                id: self.id,
+                teeming: this.map.options.teeming,
+                factions: this.map.options.factions,
+                npcs: this.map.options.npcs
+            }, getHandlebarsDefaultVariables());
 
             let customOptions = {
                 'maxWidth': '400',
@@ -366,7 +366,7 @@ class AdminEnemy extends Enemy {
             };
 
             self.layer.unbindPopup();
-            self.layer.bindPopup(customPopupHtml, customOptions);
+            self.layer.bindPopup(template(data), customOptions);
 
             // Have you tried turning it off and on again?
             self.layer.off('popupopen');
