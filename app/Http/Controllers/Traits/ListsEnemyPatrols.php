@@ -20,6 +20,6 @@ trait ListsEnemyPatrols
      */
     function listEnemyPatrols($floorId)
     {
-        return EnemyPatrol::with('polyline')->where('floor_id', '=', $floorId)->get();
+        return EnemyPatrol::with('polyline')->where('floor_id', $floorId)->get();
     }
 }

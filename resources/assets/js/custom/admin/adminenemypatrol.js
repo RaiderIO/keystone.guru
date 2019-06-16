@@ -24,6 +24,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
         // This also cannot be a private function since that'll apparently give different signatures as well.
         let popupOpenFn = function (event) {
+            $('#enemy_patrol_edit_popup_teeming_' + self.id).val(self.teeming);
             $('#enemy_patrol_edit_popup_faction_' + self.id).val(self.faction);
 
             // Refresh all select pickers so they work again
@@ -33,6 +34,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
 
             $submitBtn.unbind('click');
             $submitBtn.bind('click', function () {
+                self.teeming = $('#enemy_patrol_edit_popup_teeming_' + self.id).val();
                 self.faction = $('#enemy_patrol_edit_popup_faction_' + self.id).val();
 
                 self.edit();
@@ -121,6 +123,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 id: self.id,
                 floor_id: self.map.getCurrentFloor().id,
                 enemy_id: self.enemy_id,
+                teeming: self.teeming,
                 faction: self.faction,
                 color: self.polylineColor,
                 weight: self.weight,

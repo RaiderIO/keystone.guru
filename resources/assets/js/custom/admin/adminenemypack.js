@@ -21,6 +21,7 @@ class AdminEnemyPack extends EnemyPack {
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
         // This also cannot be a private function since that'll apparently give different signatures as well.
         let popupOpenFn = function (event) {
+            $('#enemy_pack_edit_popup_teeming_' + self.id).val(self.teeming);
             $('#enemy_pack_edit_popup_faction_' + self.id).val(self.faction);
 
             // Refresh all select pickers so they work again
@@ -30,6 +31,7 @@ class AdminEnemyPack extends EnemyPack {
 
             $submitBtn.unbind('click');
             $submitBtn.bind('click', function () {
+                self.teeming = $('#enemy_pack_edit_popup_teeming_' + self.id).val();
                 self.faction = $('#enemy_pack_edit_popup_faction_' + self.id).val();
 
                 self.edit();
@@ -117,6 +119,7 @@ class AdminEnemyPack extends EnemyPack {
                 id: self.id,
                 floor_id: self.map.getCurrentFloor().id,
                 label: self.label,
+                teeming: self.teeming,
                 faction: self.faction,
                 vertices: self.getVertices()
             },

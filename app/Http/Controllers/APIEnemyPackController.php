@@ -41,11 +41,11 @@ class APIEnemyPackController extends Controller
         /** @var EnemyPack $enemyPack */
         $enemyPack = EnemyPack::findOrNew($request->get('id'));
 
+        $enemyPack->teeming = $request->get('teeming');
         $enemyPack->faction = $request->get('faction', 'any');
         $enemyPack->label = $request->get('label');
         $enemyPack->floor_id = $request->get('floor_id');
         $enemyPack->vertices_json = json_encode($request->get('vertices'));
-
         if (!$enemyPack->save()) {
             throw new \Exception("Unable to save pack!");
         }

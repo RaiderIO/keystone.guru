@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $floor_id
+ * @property string $teeming
  * @property string $faction
  * @property string $label
  * @property string $vertices_json
