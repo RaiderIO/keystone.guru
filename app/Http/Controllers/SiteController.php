@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
+use App\Service\Season\SeasonService;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
@@ -94,18 +95,19 @@ class SiteController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function affixes(Request $request)
+    public function timetest(Request $request)
     {
-        return view('misc.affixes');
+        return view('misc.timetest');
     }
 
     /**
      * @param Request $request
+     * @param SeasonService $seasonService
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function timetest(Request $request)
+    public function affixes(Request $request, SeasonService $seasonService)
     {
-        return view('misc.timetest');
+        return view('misc.affixes', ['seasonService' => $seasonService]);
     }
 
     /**

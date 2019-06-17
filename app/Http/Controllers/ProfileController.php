@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -60,31 +61,35 @@ class ProfileController extends Controller
             if ($user->save()) {
                 \Session::flash('status', __('Profile updated'));
 
-                // Propagate changes to any channel the user may be in
-                foreach ($echoServerHttpApiService->getChannels() as $channel) {
-                    $assoc = get_object_vars($channel);
-                    $channelName = array_keys($assoc)[0];
+                try {
+                    // Propagate changes to any channel the user may be in
+                    foreach ($echoServerHttpApiService->getChannels() as $channel) {
+                        $assoc = get_object_vars($channel);
+                        $channelName = array_keys($assoc)[0];
 
-                    $routeKey = str_replace('presence-route-edit.', '', $channelName);
+                        $routeKey = str_replace('presence-route-edit.', '', $channelName);
 
-                    $userInChannel = false;
-                    // Check if the user is in this channel..
-                    foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $users) {
+                        $userInChannel = false;
+                        // Check if the user is in this channel..
+                        foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $users) {
 
-                        foreach ($users as $channelUser) {
-                            if ($channelUser->id === $user->id) {
-                                $userInChannel = true;
-                                break;
+                            foreach ($users as $channelUser) {
+                                if ($channelUser->id === $user->id) {
+                                    $userInChannel = true;
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    if ($userInChannel) {
-                        /** @var DungeonRoute $dungeonRoute */
-                        $dungeonRoute = DungeonRoute::where('public_key', $routeKey)->firstOrFail();
-                        // Broadcast that channel that the user's color has changed
-                        broadcast(new UserColorChangedEvent($dungeonRoute, $user));
+                        if ($userInChannel) {
+                            /** @var DungeonRoute $dungeonRoute */
+                            $dungeonRoute = DungeonRoute::where('public_key', $routeKey)->firstOrFail();
+                            // Broadcast that channel that the user's color has changed
+                            broadcast(new UserColorChangedEvent($dungeonRoute, $user));
+                        }
                     }
+                } catch( \Exception $exception ){
+                    Log::warning('Echo server is probably not running!');
                 }
             } else {
                 abort(500, __('An unexpected error occurred trying to save your profile'));

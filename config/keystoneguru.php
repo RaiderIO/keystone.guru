@@ -28,14 +28,9 @@ return [
 
 
     /**
-     * The year in which the season started.
+     * How many affix groups are in an iteration of a season.
      */
-    'season_start_year' => 2018,
-
-    /**
-     * Which week the current affix season has started at.
-     */
-    'season_start_week' => 36,
+    'season_interation_affix_group_count' => 12,
 
     /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from

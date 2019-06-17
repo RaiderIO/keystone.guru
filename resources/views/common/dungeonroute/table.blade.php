@@ -1,3 +1,14 @@
+@inject('seasonService', 'App\Service\Season\SeasonService')
+<?php
+/** @var $seasonService \App\Service\Season\SeasonService */
+/** This is the template for the Affix Selection when using it in a dropdown */
+
+/** @var \App\Models\DungeonRoute $model */
+if(!isset($affixgroups) ){
+    $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
+}
+?>
+
 <?php
 $team = isset($team) ? $team : null;
 /** @var string $view */
@@ -47,7 +58,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
     </div>
     <div class="col-lg-2 pl-1 pr-1">
         {!! Form::label('affixes[]', __('Affixes')) !!}
-        {!! Form::select('affixes[]', \App\Models\AffixGroup::active()->get()->pluck('text', 'id'), null,
+        {!! Form::select('affixes[]', $affixgroups->pluck('text', 'id'), null,
             ['id' => 'affixes',
             'class' => 'form-control affixselect selectpicker',
             'multiple' => 'multiple',

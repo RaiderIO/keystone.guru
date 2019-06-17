@@ -1,5 +1,7 @@
 @extends('layouts.app', ['showLegalModal' => false, 'title' => __('Affixes')])
 <?php
+/** @var \App\Service\Season\SeasonService $seasonService */
+
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 $timezone = null;
 if (Auth::check()) {
@@ -36,9 +38,14 @@ if ($timezone === null) {
         </thead>
         <tbody>
         <?php
-        $currentAffixGroup = $region->getCurrentAffixGroup();
-        $affixGroups = \App\Models\AffixGroup::active()->get();
-        foreach($affixGroups as $affixGroup){
+
+        // Whatever group we're highlighting
+        $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+
+        $affixGroups = $seasonService->getDisplayedAffixGroups();
+        foreach($affixGroups as $arr){
+        $startDate = $arr['date_start'];
+        $affixGroup = $arr['affixgroup'];
         $affixGroupIndex = $affixGroup->id - 1;
         ?>
         <tr class="table_row">
@@ -48,7 +55,6 @@ if ($timezone === null) {
             ?>
             <td>
                 <div class="affix_row first_column {{ $currentWeekClass }}">
-                    @php($startDate = $region->getAffixGroupStartDate($affixGroup))
                     <span>
                         {{ $startDate->format('Y/M/d') }})
                     </span>
@@ -63,7 +69,7 @@ if ($timezone === null) {
             $class = $currentWeekClass;
             $class .= count($affixGroup->affixes) - 1 === $affixIndex ? 'last_column ' : '';
             $class .= ($affixGroupIndex === 0) ? 'first_row ' : '';
-            $class .= count($affixGroups) - 1 === $affixGroupIndex ? 'last_row ' : '';
+            $class .= $affixGroups->count() - 1 === $affixGroupIndex ? 'last_row ' : '';
             ?>
             <td>
                 <div class="affix_row {{ $class }}">
