@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
-        $this->call(LaratrustSeeder::class);
+        // $this->call(LaratrustSeeder::class);
 
         // Seeders which don't depend on anything else
         $this->call(GameServerRegionSeeder::class);
@@ -21,9 +21,12 @@ class DatabaseSeeder extends Seeder
         $this->call(RouteAttributesSeeder::class);
         $this->call(PaidTiersSeeder::class);
         $this->call(FactionsSeeder::class);
-        $this->call(AffixSeeder::class);
         $this->call(NpcClassificationSeeder::class);
         $this->call(RaidMarkerSeeder::class);
+
+        // Depends on SeasonsSeeder
+        $this->call(SeasonsSeeder::class);
+        $this->call(AffixSeeder::class);
 
         //  Depends on Factions
         $this->call(CharacterInfoSeeder::class);
