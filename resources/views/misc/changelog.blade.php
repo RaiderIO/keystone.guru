@@ -27,6 +27,10 @@
             now.
         </li>
         <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/190">#190</a>
+            Demo routes now properly have group player specializations and attributes.
+        </li>
+        <li>
             As part of the above tickets, I've also fixed an issue that was introduced with the introduction of Teams
             where filtering Routes on the /routes page or in your profile, teams pages would no longer work. This has
             been corrected.

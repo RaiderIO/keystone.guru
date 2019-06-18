@@ -48,7 +48,8 @@ class ExportDungeonDataController extends Controller
                 // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
                 // for each and every re-import
                 $demoRoute->setHidden(['id']);
-                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapcomments']);
+                $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
+                    'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapcomments']);
 
                 // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
                 // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
@@ -56,10 +57,16 @@ class ExportDungeonDataController extends Controller
                 // is imported into the production environment
                 $toHide = new Collection();
                 // No ->merge() :( -> https://medium.com/@tadaspaplauskas/quick-tip-laravel-eloquent-collections-merge-gotcha-moment-e2a56fc95889
+                foreach ($demoRoute->playerspecializations as $item) {
+                    $toHide->add($item);
+                }
                 foreach ($demoRoute->playerraces as $item) {
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->playerclasses as $item) {
+                    $toHide->add($item);
+                }
+                foreach ($demoRoute->routeattributesraw as $item) {
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->affixgroups as $item) {
