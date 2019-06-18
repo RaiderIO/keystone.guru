@@ -330,6 +330,7 @@ class DrawControls extends MapControl {
         $('#edit_route_freedraw_options_color').bind('change', function (changeEvent) {
             let color = $(this).val();
 
+            c.map.path.defaultColor = color;
             c.map.polyline.defaultColor = color;
             c.map.killzone.polylineOptions.color = color;
             c.map.killzone.polygonOptions.color = color;
