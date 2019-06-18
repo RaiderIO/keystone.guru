@@ -1,18 +1,20 @@
 @extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
 <?php
 /** @var $model \App\Models\DungeonRoute */
+$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/edit'])
 
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
-            'dungeon' => \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors'),
+            'dungeon' => $dungeon,
             'dungeonroute' => $model,
             'edit' => true
         ])
 
         @include('common.maps.editsidebar', [
+            'dungeon' => $dungeon,
             'show' => [
                 'shareable-link' => true,
                 'route-settings' => true,

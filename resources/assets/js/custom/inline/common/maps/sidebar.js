@@ -1,8 +1,8 @@
 class CommonMapsSidebar extends InlineCode {
 
 
-    constructor() {
-        super();
+    constructor(options) {
+        super(options);
     }
 
     /**
@@ -14,7 +14,7 @@ class CommonMapsSidebar extends InlineCode {
         // Make sure that the select options have a valid value
         this._refreshFloorSelect();
 
-        $(_switchDungeonFloorSelect).val(defaultSelectedFloorId);
+        $(this.options.switchDungeonFloorSelect).val(this.options.defaultSelectedFloorId);
 
         $('#sidebarToggle').on('click', function () {
             // Dismiss
@@ -41,7 +41,7 @@ class CommonMapsSidebar extends InlineCode {
      * @private
      */
     _refreshFloorSelect() {
-        let $switchDungeonFloorSelect = $(_switchDungeonFloorSelect);
+        let $switchDungeonFloorSelect = $(this.options.switchDungeonFloorSelect);
         if ($switchDungeonFloorSelect.is('select')) {
             // Clear of all options
             $switchDungeonFloorSelect.find('option').remove();
