@@ -4,6 +4,60 @@
 
 @section('content')
     <h4>
+        v2.5.3 (2019/06/18)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/185">#185</a>
+            Interally reworked the way affixes and affix groups are handled (a group is pretty much an affix set that
+            you encounter every week). This now works with M+ Seasons, allowing for cleaner code and making it very
+            easy to add new affixes/seasons. The only change for you is that the /affixes page will be more accurate
+            going into the future, around the weeks where a new season is announced.
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/139">#139</a>
+            Patrols and enemy packs can now be marked as 'teeming' and belonging to a specific faction (think Siege of
+            Boralus).
+        </li>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/169">#169</a>
+            Added simple custom error pages. I'm looking to refine these further, but they're in Keystone.guru style
+            now.
+        </li>
+        <li>
+            As part of the above tickets, I've also fixed an issue that was introduced with the introduction of Teams
+            where filtering Routes on the /routes page or in your profile, teams pages would no longer work. This has
+            been corrected.
+        </li>
+    </ul>
+
+    <h4>
+        v2.5.2 (2019/06/13)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/179">#179</a>
+            Added an admin dashboard.
+        </li>
+    </ul>
+
+    <h4>
+        v2.5.1 (2019/06/12)
+    </h4>
+    <p>
+        General changes:
+    <ul>
+        <li>
+            <a href="https://github.com/Wotuu/keystone.guru/issues/37">#37</a>
+            Fixed multiple issues with the new co-operative route editing feature.
+        </li>
+    </ul>
+
+    <h4>
         v2.5 (2019/06/12)
     </h4>
     <p>
