@@ -205,4 +205,4 @@ if( isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
 @overwrite
 @include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
 
-@include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $subTitle])
+@include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $subTitle, 'selectedFloorId' => $model->dungeon->floors[0]->id])
