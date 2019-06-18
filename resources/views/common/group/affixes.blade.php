@@ -1,7 +1,9 @@
+@inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
+/** @var $seasonService \App\Service\Season\SeasonService */
 /** This is the display of affixes when selecting them when creating a new route */
 
-$affixGroups = \App\Models\AffixGroup::active()->with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
+$affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
 $affixes = \App\Models\Affix::all();
 ?>
 
@@ -9,18 +11,18 @@ $affixes = \App\Models\Affix::all();
 
 <div class="form-group">
     {!! Form::label('affixes[]', __('Select affixes')) !!}
-    {!! Form::select('affixes[]', \App\Models\AffixGroup::active()->get()->pluck('id', 'id'),
+    {!! Form::select('affixes[]', $affixgroups->pluck('id', 'id'),
         !isset($dungeonroute) ? 0 : $dungeonroute->affixgroups->pluck(['affix_group_id']),
         ['id' => 'affixes', 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
     {{--<select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple--}}
     {{--data-selected-text-format="count > 2">--}}
-    {{--@foreach($affixGroups as $group)--}}
+    {{--@foreach($affixgroups as $group)--}}
     {{--<option value="{{ $group->id }}">{{ $group->id }}</option>--}}
     {{--@endforeach--}}
     {{--</select>--}}
 
     <div id="affixes_list_custom" class="affix_list col-lg-12">
-        @foreach($affixGroups as $affixGroup)
+        @foreach($affixgroups as $affixGroup)
             <div class="row affix_list_row {{ $affixGroup->isTeeming() ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
                  {{ $affixGroup->isTeeming() ? 'style="display: none;"' : '' }}
                  data-id="{{ $affixGroup->id }}">
