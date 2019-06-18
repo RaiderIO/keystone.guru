@@ -2,6 +2,7 @@
     {
         "id": 17,
         "floor_id": 61,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -12,6 +13,7 @@
     {
         "id": 18,
         "floor_id": 61,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -22,6 +24,7 @@
     {
         "id": 119,
         "floor_id": 61,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",

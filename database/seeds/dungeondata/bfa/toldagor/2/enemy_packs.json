@@ -2,6 +2,7 @@
     {
         "id": 462,
         "floor_id": 54,
+        "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":251.62,\"lng\":-116.12},{\"lat\":246.25,\"lng\":-122.38},{\"lat\":253.88,\"lng\":-127.75},{\"lat\":258.75,\"lng\":-120.88}]"
@@ -9,6 +10,7 @@
     {
         "id": 500,
         "floor_id": 54,
+        "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":228.31,\"lng\":-137.25},{\"lat\":237.31,\"lng\":-142.75},{\"lat\":242.75,\"lng\":-134.69},{\"lat\":233,\"lng\":-130.12}]"
@@ -16,6 +18,7 @@
     {
         "id": 501,
         "floor_id": 54,
+        "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":207.44,\"lng\":-165.19},{\"lat\":202.75,\"lng\":-171.94},{\"lat\":211.88,\"lng\":-177.88},{\"lat\":217.12,\"lng\":-170.62}]"

@@ -1,1 +1,491 @@
-[]
+[
+    {
+        "public_key": "7pAzBah",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 15,
+        "faction_id": 2,
+        "team_id": -1,
+        "title": "Freehold Demo",
+        "difficulty": "Casual",
+        "teeming": 0,
+        "published": 0,
+        "unlisted": 0,
+        "demo": 1,
+        "thumbnail_updated_at": "1970-01-01 12:00:00",
+        "created_at": "2019-06-14 20:19:43",
+        "updated_at": "2019-06-14 23:15:50",
+        "expires_at": null,
+        "playerraces": [
+            {
+                "character_race_id": 13
+            },
+            {
+                "character_race_id": 14
+            },
+            {
+                "character_race_id": 15
+            },
+            {
+                "character_race_id": 14
+            },
+            {
+                "character_race_id": 15
+            }
+        ],
+        "playerclasses": [
+            {
+                "character_class_id": 11
+            },
+            {
+                "character_class_id": 11
+            },
+            {
+                "character_class_id": 7
+            },
+            {
+                "character_class_id": 9
+            },
+            {
+                "character_class_id": 3
+            }
+        ],
+        "affixgroups": [
+            {
+                "affix_group_id": 13
+            },
+            {
+                "affix_group_id": 14
+            },
+            {
+                "affix_group_id": 16
+            },
+            {
+                "affix_group_id": 17
+            },
+            {
+                "affix_group_id": 19
+            },
+            {
+                "affix_group_id": 20
+            },
+            {
+                "affix_group_id": 21
+            },
+            {
+                "affix_group_id": 22
+            },
+            {
+                "affix_group_id": 24
+            }
+        ],
+        "brushlines": [],
+        "paths": [
+            {
+                "floor_id": 43,
+                "polyline": {
+                    "color": "#20fb00",
+                    "weight": 4,
+                    "vertices_json": "[{\"lat\":\"271.125\",\"lng\":\"-94.25\"},{\"lat\":\"265.25\",\"lng\":\"-102.375\"},{\"lat\":\"264.375\",\"lng\":\"-111.25\"},{\"lat\":\"268.25\",\"lng\":\"-115\"},{\"lat\":\"262.25\",\"lng\":\"-122.375\"},{\"lat\":\"263.375\",\"lng\":\"-137.5\"},{\"lat\":\"265.75\",\"lng\":\"-151.25\"},{\"lat\":\"256.125\",\"lng\":\"-158.125\"},{\"lat\":\"252.8125\",\"lng\":\"-158.25\"},{\"lat\":\"249.375\",\"lng\":\"-142.5\"},{\"lat\":\"225.375\",\"lng\":\"-161.0625\"}]"
+                }
+            },
+            {
+                "floor_id": 43,
+                "polyline": {
+                    "color": "#0d00fb",
+                    "weight": 4,
+                    "vertices_json": "[{\"lat\":\"225.25\",\"lng\":\"-161.125\"},{\"lat\":\"205.0625\",\"lng\":\"-177.0625\"},{\"lat\":\"197.625\",\"lng\":\"-174.5\"},{\"lat\":\"191.0625\",\"lng\":\"-169.1875\"},{\"lat\":\"188.5625\",\"lng\":\"-171.75\"},{\"lat\":\"187.375\",\"lng\":\"-160.875\"},{\"lat\":\"177.875\",\"lng\":\"-161.0625\"},{\"lat\":\"169.125\",\"lng\":\"-168.90625\"},{\"lat\":\"162\",\"lng\":\"-158.6875\"},{\"lat\":\"170.9375\",\"lng\":\"-154.21875\"},{\"lat\":\"160.125\",\"lng\":\"-169.9375\"},{\"lat\":\"146.8125\",\"lng\":\"-172.4375\"},{\"lat\":\"146.4375\",\"lng\":\"-179.75\"},{\"lat\":\"136.875\",\"lng\":\"-179.8125\"},{\"lat\":\"129.25\",\"lng\":\"-172.5625\"},{\"lat\":\"124.6875\",\"lng\":\"-166.21875\"},{\"lat\":\"114.4375\",\"lng\":\"-166.0625\"},{\"lat\":\"131.0625\",\"lng\":\"-163.125\"},{\"lat\":\"141.6875\",\"lng\":\"-161.375\"},{\"lat\":\"150.0625\",\"lng\":\"-160.375\"},{\"lat\":\"157.6875\",\"lng\":\"-156.625\"},{\"lat\":\"156.25\",\"lng\":\"-152.25\"},{\"lat\":\"152.1875\",\"lng\":\"-149.25\"},{\"lat\":\"152.3125\",\"lng\":\"-128.625\"}]"
+                }
+            },
+            {
+                "floor_id": 43,
+                "polyline": {
+                    "color": "#e30000",
+                    "weight": 4,
+                    "vertices_json": "[{\"lat\":\"152.3125\",\"lng\":\"-128.5625\"},{\"lat\":\"152.9375\",\"lng\":\"-102.625\"},{\"lat\":\"153.4375\",\"lng\":\"-95.8125\"},{\"lat\":\"148.1875\",\"lng\":\"-93.8125\"},{\"lat\":\"142.4375\",\"lng\":\"-103.625\"}]"
+                }
+            }
+        ],
+        "killzones": [
+            {
+                "color": "#20fb00",
+                "lat": -100.5625,
+                "lng": 268.5625,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 648
+                    },
+                    {
+                        "enemy_id": 649
+                    },
+                    {
+                        "enemy_id": 650
+                    }
+                ]
+            },
+            {
+                "color": "#20fb00",
+                "lat": -108.875,
+                "lng": 267.125,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 651
+                    },
+                    {
+                        "enemy_id": 652
+                    },
+                    {
+                        "enemy_id": 653
+                    }
+                ]
+            },
+            {
+                "color": "#20fb00",
+                "lat": -128.875,
+                "lng": 263.75,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 661
+                    },
+                    {
+                        "enemy_id": 662
+                    },
+                    {
+                        "enemy_id": 663
+                    },
+                    {
+                        "enemy_id": 664
+                    }
+                ]
+            },
+            {
+                "color": "#20fb00",
+                "lat": -148.6875,
+                "lng": 264.125,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 176
+                    }
+                ]
+            },
+            {
+                "color": "#20fb00",
+                "lat": -144.65625,
+                "lng": 249.59375,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 680
+                    }
+                ]
+            },
+            {
+                "color": "#20fb00",
+                "lat": -157.5625,
+                "lng": 252.375,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1004
+                    },
+                    {
+                        "enemy_id": 1005
+                    },
+                    {
+                        "enemy_id": 1006
+                    },
+                    {
+                        "enemy_id": 1007
+                    },
+                    {
+                        "enemy_id": 1008
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -160.84375,
+                "lng": 178.0625,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1030
+                    },
+                    {
+                        "enemy_id": 714
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -157.4375,
+                "lng": 163.90625,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1035
+                    },
+                    {
+                        "enemy_id": 1031
+                    },
+                    {
+                        "enemy_id": 1032
+                    },
+                    {
+                        "enemy_id": 1033
+                    },
+                    {
+                        "enemy_id": 1034
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -166.75,
+                "lng": 168.59375,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 715
+                    },
+                    {
+                        "enemy_id": 716
+                    },
+                    {
+                        "enemy_id": 717
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -155.71875,
+                "lng": 169.84375,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1036
+                    },
+                    {
+                        "enemy_id": 177
+                    },
+                    {
+                        "enemy_id": 180
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -168.375,
+                "lng": 161.1875,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1037
+                    },
+                    {
+                        "enemy_id": 1038
+                    },
+                    {
+                        "enemy_id": 1039
+                    },
+                    {
+                        "enemy_id": 1040
+                    },
+                    {
+                        "enemy_id": 1041
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -172.28125,
+                "lng": 148.46875,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1042
+                    },
+                    {
+                        "enemy_id": 1043
+                    },
+                    {
+                        "enemy_id": 1044
+                    },
+                    {
+                        "enemy_id": 1045
+                    },
+                    {
+                        "enemy_id": 1046
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -178.6875,
+                "lng": 135.90625,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 3398
+                    },
+                    {
+                        "enemy_id": 731
+                    },
+                    {
+                        "enemy_id": 732
+                    },
+                    {
+                        "enemy_id": 733
+                    },
+                    {
+                        "enemy_id": 734
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -171.9375,
+                "lng": 128.65625,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1086
+                    },
+                    {
+                        "enemy_id": 1089
+                    },
+                    {
+                        "enemy_id": 1090
+                    },
+                    {
+                        "enemy_id": 1091
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -165.96875,
+                "lng": 114.46875,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 179
+                    },
+                    {
+                        "enemy_id": 3347
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -166.25,
+                "lng": 124.5625,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 735
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -162.25,
+                "lng": 136.25,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 725
+                    },
+                    {
+                        "enemy_id": 726
+                    },
+                    {
+                        "enemy_id": 728
+                    }
+                ]
+            },
+            {
+                "color": "#1300fb",
+                "lat": -160.71875,
+                "lng": 146.625,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 723
+                    }
+                ]
+            },
+            {
+                "color": "#ff0000",
+                "lat": -105.90625,
+                "lng": 152.75,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 741
+                    },
+                    {
+                        "enemy_id": 742
+                    }
+                ]
+            },
+            {
+                "color": "#ff0000",
+                "lat": -99.5,
+                "lng": 153.1875,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 752
+                    },
+                    {
+                        "enemy_id": 753
+                    },
+                    {
+                        "enemy_id": 754
+                    }
+                ]
+            },
+            {
+                "color": "#ff0000",
+                "lat": -101.46875,
+                "lng": 153.09375,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 743
+                    },
+                    {
+                        "enemy_id": 744
+                    },
+                    {
+                        "enemy_id": 745
+                    },
+                    {
+                        "enemy_id": 746
+                    }
+                ]
+            },
+            {
+                "color": "#ff0000",
+                "lat": -94.0625,
+                "lng": 147.8125,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 755
+                    },
+                    {
+                        "enemy_id": 756
+                    },
+                    {
+                        "enemy_id": 757
+                    },
+                    {
+                        "enemy_id": 758
+                    },
+                    {
+                        "enemy_id": 759
+                    },
+                    {
+                        "enemy_id": 760
+                    }
+                ]
+            },
+            {
+                "color": "#fb0000",
+                "lat": -103.1875,
+                "lng": 142.25,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 178
+                    }
+                ]
+            }
+        ],
+        "enemyraidmarkers": [],
+        "mapcomments": []
+    }
+]

@@ -2,6 +2,7 @@
     {
         "id": 92,
         "floor_id": 47,
+        "teeming": null,
         "faction": "alliance",
         "polyline": {
             "color": "#E25D5D",
@@ -12,6 +13,7 @@
     {
         "id": 93,
         "floor_id": 47,
+        "teeming": null,
         "faction": "alliance",
         "polyline": {
             "color": "#E25D5D",
@@ -22,6 +24,7 @@
     {
         "id": 94,
         "floor_id": 47,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -32,6 +35,7 @@
     {
         "id": 95,
         "floor_id": 47,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -42,6 +46,7 @@
     {
         "id": 96,
         "floor_id": 47,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -52,6 +57,7 @@
     {
         "id": 97,
         "floor_id": 47,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -62,6 +68,7 @@
     {
         "id": 99,
         "floor_id": 47,
+        "teeming": null,
         "faction": "horde",
         "polyline": {
             "color": "#E25D5D",
@@ -72,6 +79,7 @@
     {
         "id": 123,
         "floor_id": 47,
+        "teeming": null,
         "faction": "alliance",
         "polyline": {
             "color": "#E25D5D",

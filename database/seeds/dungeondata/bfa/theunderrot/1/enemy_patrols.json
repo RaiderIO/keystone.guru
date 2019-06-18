@@ -2,6 +2,7 @@
     {
         "id": 77,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -12,6 +13,7 @@
     {
         "id": 78,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -22,6 +24,7 @@
     {
         "id": 79,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -32,6 +35,7 @@
     {
         "id": 82,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -42,6 +46,7 @@
     {
         "id": 83,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -52,6 +57,7 @@
     {
         "id": 84,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -62,6 +68,7 @@
     {
         "id": 85,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -72,6 +79,7 @@
     {
         "id": 107,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -82,6 +90,7 @@
     {
         "id": 115,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -92,6 +101,7 @@
     {
         "id": 116,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -102,6 +112,7 @@
     {
         "id": 117,
         "floor_id": 51,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",

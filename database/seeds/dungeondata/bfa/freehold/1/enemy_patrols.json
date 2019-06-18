@@ -2,6 +2,7 @@
     {
         "id": 32,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -12,6 +13,7 @@
     {
         "id": 33,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -22,6 +24,7 @@
     {
         "id": 34,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -32,6 +35,7 @@
     {
         "id": 35,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -42,6 +46,7 @@
     {
         "id": 36,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -52,6 +57,7 @@
     {
         "id": 38,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -62,6 +68,7 @@
     {
         "id": 60,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -72,6 +79,7 @@
     {
         "id": 61,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -82,6 +90,7 @@
     {
         "id": 62,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -92,6 +101,7 @@
     {
         "id": 63,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -102,6 +112,7 @@
     {
         "id": 64,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -112,6 +123,7 @@
     {
         "id": 65,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -122,6 +134,7 @@
     {
         "id": 66,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
@@ -132,6 +145,7 @@
     {
         "id": 67,
         "floor_id": 43,
+        "teeming": null,
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
