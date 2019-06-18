@@ -192,6 +192,19 @@ class DungeonMap extends Signalable {
             // Fix an issue where it'd remove all layers just because it got removed from the editable layers. Strange.
             self.leafletMap.removeLayer(self.drawnLayers);
             self.leafletMap.addLayer(self.drawnLayers);
+
+            // Re-draw the enemies to restore their attributes etc
+            let mapObjectGroup = self.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+            // All enemies
+            for (let index in mapObjectGroup.objects) {
+                if (mapObjectGroup.objects.hasOwnProperty(index)) {
+                    let enemy = mapObjectGroup.objects[index];
+                    // Refresh
+                    enemy.visual.refresh();
+                }
+            }
+
         });
 
         this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
