@@ -1485,7 +1485,7 @@
     },
     {
         "id": 3090,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 523,
         "floor_id": 41,
         "mdt_id": 9,
         "teeming": "visible",
@@ -1499,7 +1499,7 @@
     },
     {
         "id": 3091,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 523,
         "floor_id": 41,
         "mdt_id": 9,
         "teeming": "visible",
@@ -1513,7 +1513,7 @@
     },
     {
         "id": 3092,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 523,
         "floor_id": 41,
         "mdt_id": 10,
         "teeming": "visible",
@@ -1835,7 +1835,7 @@
     },
     {
         "id": 3224,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 523,
         "floor_id": 41,
         "mdt_id": 7,
         "teeming": "visible",

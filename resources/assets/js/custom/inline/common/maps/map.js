@@ -46,10 +46,12 @@ class CommonMapsMap extends InlineCode {
         }
 
         // Support not having a sidebar (preview map)
-        if (typeof (_switchDungeonFloorSelect) !== 'undefined') {
-            $(_switchDungeonFloorSelect).change(function () {
+
+        let sidebar = _inlineManager.getInlineCode('common/maps/sidebar');
+        if (sidebar !== false) {
+            $(sidebar.options.switchDungeonFloorSelect).change(function () {
                 // Pass the new floor ID to the map
-                self._dungeonMap.currentFloorId = $(_switchDungeonFloorSelect).val();
+                self._dungeonMap.currentFloorId = $(sidebar.options.switchDungeonFloorSelect).val();
                 self._dungeonMap.refreshLeafletMap();
             });
         }

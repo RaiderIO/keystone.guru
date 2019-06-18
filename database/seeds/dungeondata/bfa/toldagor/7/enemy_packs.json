@@ -2,6 +2,7 @@
     {
         "id": 472,
         "floor_id": 59,
+        "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":210.62,\"lng\":-72.38},{\"lat\":224.75,\"lng\":-73.25},{\"lat\":230.12,\"lng\":-86.38},{\"lat\":219.25,\"lng\":-81.88}]"

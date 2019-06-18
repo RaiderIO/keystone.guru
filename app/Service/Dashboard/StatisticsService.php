@@ -29,12 +29,20 @@ class StatisticsService implements StatisticsServiceInterface
             GROUP BY date
             ");
 
+        // Calculate any and all results that came BEFORE what we're going to show up there
+        $beforeCountResult = DB::select("
+            SELECT COUNT(0) as count
+            FROM " . $this->table . "
+            WHERE created_at <= NOW() - interval " . StatisticsService::MONTHS . " month
+        ");
+        $beforeCount = $beforeCountResult[0]->count;
+
         // Convert to key => value
         $dataByDay = [];
         $cumulative = 0;
         foreach ($dataByDayResult as $row) {
             // Ever increasing
-            $dataByDay[] = ['t' => $row->date, 'y' => $row->count + $cumulative];
+            $dataByDay[] = ['t' => $row->date, 'y' => $beforeCount + $row->count + $cumulative];
             $cumulative += $row->count;
         }
 
@@ -90,7 +98,7 @@ class StatisticsService implements StatisticsServiceInterface
     function getMonthLabels()
     {
         // Start with $months months ago
-        $date = \Carbon\Carbon::now()->subMonths(StatisticsService::MONTHS);
+        $date = \Carbon\Carbon::now()->subMonths(StatisticsService::MONTHS - 1);
         $labels = [];
 
         // Increase by $months months

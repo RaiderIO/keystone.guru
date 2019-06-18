@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property $id int The ID of this Affix.
- * @property $active boolean
- * @property $affix \Illuminate\Database\Eloquent\Collection
- * @method static \Illuminate\Database\Eloquent\Builder active()
- * @method static \Illuminate\Database\Eloquent\Builder inactive()
+ * @property $season_id int
+ *
+ * @property \Illuminate\Database\Eloquent\Collection $affixes
  *
  * @mixin \Eloquent
  */
@@ -19,6 +18,14 @@ class AffixGroup extends Model
     public $with = ['affixes'];
     public $hidden = ['pivot'];
     protected $appends = ['text'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function season()
+    {
+        return $this->belongsTo('App\Models\Season');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
@@ -60,27 +67,5 @@ class AffixGroup extends Model
         }
 
         return $result;
-    }
-
-    /**
-     * Scope a query to only include active dungeons.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('active', 1);
-    }
-
-    /**
-     * Scope a query to only include inactive dungeons.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeInactive($query)
-    {
-        return $query->where('active', 0);
     }
 }

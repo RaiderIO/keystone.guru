@@ -12,6 +12,14 @@ class LineChart {
 
     // Methods
     init($chart) {
+        let chartOptions = $chart.data('options');
+
+        // Find the min and the max values so we can fit the graph
+        let data = chartOptions.data.datasets[0].data;
+
+        let min = data[0].y;
+        let max = data[data.length - 1].y;
+
         let options = $.extend({
                 type: 'line',
                 options: {
@@ -21,7 +29,7 @@ class LineChart {
                             time: {
                                 parser: this.timeFormat,
                                 // round: 'day'
-                                tooltipFormat: 'll HH:mm'
+                                tooltipFormat: 'll'
                             },
                             scaleLabel: {
                                 display: true,
@@ -34,6 +42,8 @@ class LineChart {
                                 zeroLineColor: Charts.colors.gray[900]
                             },
                             ticks: {
+                                min: min,
+                                max: max,
                                 callback: function (value) {
                                     if (!(value % 1)) {
                                         return value;
@@ -61,7 +71,7 @@ class LineChart {
                 }
             },
             // Merge with options received from the chart itself
-            $chart.data('options'));
+            chartOptions);
 
         let lineChart = new Chart($chart, options);
         $chart.data('chart', lineChart);

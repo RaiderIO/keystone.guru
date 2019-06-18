@@ -19,58 +19,42 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _restoreObject(remoteMapObject) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
-        let faction = this.manager.map.getDungeonRoute().faction;
+        // Check teeming, faction status
+        if (this._isObjectVisible(remoteMapObject)) {
+            let layer = new LeafletEnemyMarker();
+            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
 
-        // Only when not in try mode!
-        if (!this.manager.map.isTryModeEnabled() && (remoteMapObject.faction !== 'any' && faction !== 'any' && faction !== remoteMapObject.faction)) {
-            console.log('Skipping enemy that does not belong to the requested faction ', remoteMapObject, faction);
-            return;
+            let enemy = this.createNew(layer);
+            enemy.id = remoteMapObject.id;
+            enemy.enemy_pack_id = remoteMapObject.enemy_pack_id;
+            enemy.floor_id = remoteMapObject.floor_id;
+            enemy.teeming = remoteMapObject.teeming;
+            enemy.faction = remoteMapObject.faction;
+            enemy.enemy_forces_override = remoteMapObject.enemy_forces_override;
+            enemy.raid_marker_name = remoteMapObject.raid_marker_name;
+            // MDT id is always set
+            enemy.mdt_id = remoteMapObject.mdt_id;
+            enemy.is_mdt = false;
+
+            if (remoteMapObject.hasOwnProperty('is_mdt')) {
+                // Exception for MDT enemies
+                enemy.is_mdt = remoteMapObject.is_mdt;
+                // Whatever enemy this MDT enemy is linked to
+                enemy.enemy_id = remoteMapObject.enemy_id;
+                // Hide this enemy by default
+                enemy.setDefaultVisible(false);
+            }
+            // If actually set..
+            if (remoteMapObject.hasOwnProperty('raid_marker_name') && remoteMapObject.raid_marker_name !== null) {
+                enemy.setRaidMarkerName(remoteMapObject.raid_marker_name);
+            }
+
+            // Do this last
+            enemy.setNpc(remoteMapObject.npc);
+
+            // We just downloaded the enemy, it's synced alright!
+            enemy.setSynced(true);
         }
-
-        // If the map isn't teeming, but the enemy is teeming..
-        if (!this.manager.map.options.teeming && remoteMapObject.teeming === 'visible') {
-            console.log('Skipping teeming enemy ' + remoteMapObject.id);
-            return;
-        }
-        // If the map is teeming, but the enemy shouldn't be there for teeming maps..
-        else if (this.manager.map.options.teeming && remoteMapObject.teeming === 'invisible') {
-            console.log('Skipping teeming-filtered enemy ' + remoteMapObject.id);
-            return;
-        }
-
-        let layer = new LeafletEnemyMarker();
-        layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-
-        let enemy = this.createNew(layer);
-        enemy.id = remoteMapObject.id;
-        enemy.enemy_pack_id = remoteMapObject.enemy_pack_id;
-        enemy.floor_id = remoteMapObject.floor_id;
-        enemy.teeming = remoteMapObject.teeming;
-        enemy.faction = remoteMapObject.faction;
-        enemy.enemy_forces_override = remoteMapObject.enemy_forces_override;
-        enemy.raid_marker_name = remoteMapObject.raid_marker_name;
-        // MDT id is always set
-        enemy.mdt_id = remoteMapObject.mdt_id;
-        enemy.is_mdt = false;
-
-        if (remoteMapObject.hasOwnProperty('is_mdt')) {
-            // Exception for MDT enemies
-            enemy.is_mdt = remoteMapObject.is_mdt;
-            // Whatever enemy this MDT enemy is linked to
-            enemy.enemy_id = remoteMapObject.enemy_id;
-            // Hide this enemy by default
-            enemy.setDefaultVisible(false);
-        }
-        // If actually set..
-        if (remoteMapObject.hasOwnProperty('raid_marker_name') && remoteMapObject.raid_marker_name !== null) {
-            enemy.setRaidMarkerName(remoteMapObject.raid_marker_name);
-        }
-
-        // Do this last
-        enemy.setNpc(remoteMapObject.npc);
-
-        // We just downloaded the enemy, it's synced alright!
-        enemy.setSynced(true);
     }
 
     _fetchSuccess(response) {

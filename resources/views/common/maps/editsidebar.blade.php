@@ -1,10 +1,10 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
+/** @var \App\Models\Dungeon $dungeon */
 
 $show = isset($show) ? $show : [];
 // May not be set in the case of a tryout version
 if (isset($model)) {
-    $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
 ?>
@@ -154,4 +154,4 @@ if (isset($model)) {
     @endisset
 @endsection
 
-@include('common.maps.sidebar', ['header' => __('Toolbox')])
+@include('common.maps.sidebar', ['header' => __('Toolbox'), 'selectedFloorId' => $dungeon->floors[0]->id])

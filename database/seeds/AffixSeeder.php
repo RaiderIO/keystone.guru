@@ -56,36 +56,49 @@ class AffixSeeder extends Seeder
         }
 
         $groups = [
-            ['active' => false, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Infested']],
-            ['active' => false, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Infested']],
-            ['active' => false, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Infested']],
-            ['active' => false, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Infested']],
-            ['active' => false, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Infested']],
-            ['active' => false, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Infested']],
-            ['active' => false, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Infested']],
-            ['active' => false, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Infested']],
-            ['active' => false, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Infested']],
-            ['active' => false, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Infested']],
-            ['active' => false, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Infested']],
-            ['active' => false, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Infested']],
+            ['season_id' => 1, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Infested']],
 
-            ['active' => true, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Reaping']],
-            ['active' => true, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Reaping']],
-            ['active' => true, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Reaping']],
-            ['active' => true, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Reaping']],
-            ['active' => true, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Reaping']],
-            ['active' => true, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Reaping']],
-            ['active' => true, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Reaping']],
-            ['active' => true, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Reaping']],
-            ['active' => true, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Reaping']],
-            ['active' => true, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Reaping']],
-            ['active' => true, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Reaping']],
-            ['active' => true, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Reaping']],
+
+//            ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Necrotic']],
+//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Necrotic']],
         ];
 
         foreach ($groups as $groupArr) {
             $group = new AffixGroup();
-            $group->active = $groupArr['active'];
+            $group->season_id = $groupArr['season_id'];
             $group->save();
 
             foreach ($groupArr['affixes'] as $affixName) {
@@ -125,6 +138,6 @@ class AffixSeeder extends Seeder
         DB::table('affixes')->truncate();
         DB::table('affix_groups')->truncate();
         DB::table('affix_group_couplings')->truncate();
-        DB::table('files')->where('model_class', '=', 'App\Models\Affix')->delete();
+        DB::table('files')->where('model_class', 'App\Models\Affix')->delete();
     }
 }

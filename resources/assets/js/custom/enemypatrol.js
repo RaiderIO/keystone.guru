@@ -16,7 +16,6 @@ class EnemyPatrol extends Polyline {
         super(map, layer);
 
         this.label = 'EnemyPatrol';
-        this.faction = 'any'; // sensible default
         // console.log(rand);
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 

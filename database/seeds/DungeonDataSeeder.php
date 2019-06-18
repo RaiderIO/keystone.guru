@@ -122,8 +122,11 @@ class DungeonDataSeeder extends Seeder
         // Parse these attributes AFTER the model has been inserted into the database (so we know its ID)
         $postModelSaveAttributeParsers = [
             // Dungeon route
+            new DungeonRoutePlayerSpecializationRelationParser(),
             new DungeonRoutePlayerRaceRelationParser(),
             new DungeonRoutePlayerClassRelationParser(),
+
+            new DungeonRouteAttributesRelationParser(),
 
             new DungeonRouteAffixGroupRelationParser(),
 

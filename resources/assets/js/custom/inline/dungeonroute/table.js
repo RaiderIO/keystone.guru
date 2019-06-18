@@ -137,7 +137,6 @@ class DungeonrouteTable extends InlineCode {
                     });
                 }
             },
-            'searching': false,
             'lengthMenu': [25],
             'bLengthChange': false,
             // Order by affixes by default

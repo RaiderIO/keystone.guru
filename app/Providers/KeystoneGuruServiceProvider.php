@@ -20,6 +20,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Dashboard
         $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\UsersStatisticsService');
         $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\TeamsStatisticsService');
+
+        // M+ Seasons
+        $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
     }
 
     /**

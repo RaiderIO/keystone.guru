@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $floor_id
  * @property int $enemy_id
  * @property int $polyline_id
+ * @property string $teeming
  * @property string $faction
  *
  * @property \App\Models\Floor $floor
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EnemyPatrol extends Model
 {
-    public $visible = ['id', 'floor_id', 'faction', 'polyline'];
+    public $visible = ['id', 'floor_id', 'teeming', 'faction', 'polyline'];
     public $with = ['polyline'];
     public $timestamps = false;
 

@@ -18,32 +18,31 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
 
     _restoreObject(remoteMapObject) {
         console.assert(this instanceof EnemyPatrolMapObjectGroup, 'this is not a EnemyPatrolMapObjectGroup', this);
-        let points = [];
 
-        let faction = this.manager.map.getDungeonRoute().faction;
-        if (remoteMapObject.faction !== 'any' && faction !== 'any' && faction !== remoteMapObject.faction) {
-            console.log('Skipping enemy patrol that does not belong to the requested faction ', remoteMapObject, faction);
-            return;
+        // Check teeming, faction status
+        if (this._isObjectVisible(remoteMapObject)) {
+            let points = [];
+
+            // Create the polyline first
+            let polyline = remoteMapObject.polyline;
+            let vertices = JSON.parse(polyline.vertices_json);
+
+            for (let j = 0; j < vertices.length; j++) {
+                let vertex = vertices[j];
+                points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
+            }
+
+            let layer = L.polyline(points);
+
+            let enemyPatrol = this.createNew(layer);
+            enemyPatrol.id = remoteMapObject.id;
+            enemyPatrol.enemy_id = remoteMapObject.enemy_id;
+            enemyPatrol.teeming = remoteMapObject.teeming;
+            enemyPatrol.faction = remoteMapObject.faction;
+
+            // We just downloaded the enemy patrol, it's synced alright!
+            enemyPatrol.setSynced(true);
         }
-
-        // Create the polyline first
-        let polyline = remoteMapObject.polyline;
-        let vertices = JSON.parse(polyline.vertices_json);
-
-        for (let j = 0; j < vertices.length; j++) {
-            let vertex = vertices[j];
-            points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
-        }
-
-        let layer = L.polyline(points);
-
-        let enemyPatrol = this.createNew(layer);
-        enemyPatrol.id = remoteMapObject.id;
-        enemyPatrol.enemy_id = remoteMapObject.enemy_id;
-        enemyPatrol.faction = remoteMapObject.faction;
-
-        // We just downloaded the enemy patrol, it's synced alright!
-        enemyPatrol.setSynced(true);
     }
 
     _fetchSuccess(response) {

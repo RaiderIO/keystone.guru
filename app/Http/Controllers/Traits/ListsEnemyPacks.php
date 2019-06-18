@@ -26,7 +26,7 @@ trait ListsEnemyPacks
     {
         /** @var Builder $result */
         $result = null;
-        $fields = ['id', 'label', 'faction'];
+        $fields = ['id', 'label', 'teeming', 'faction'];
         if ($enemies) {
             $result = EnemyPack::with(['enemies' => function ($query) use ($teeming) {
                 /** @var $query \Illuminate\Database\Query\Builder */

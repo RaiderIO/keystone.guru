@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Brushline;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Models\DungeonRoute;
 use App\Models\DungeonStartMarker;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Floor;
-use App\Models\KillZone;
 use App\Models\MapComment;
 use App\Models\Npc;
 use App\Models\Path;
@@ -41,14 +41,15 @@ class ExportDungeonDataController extends Controller
             // Demo routes, load it in a specific way to make it easier to import it back in again
             $demoRoutes = $dungeon->dungeonroutes->where('demo', true)->values();
             foreach ($demoRoutes as $demoRoute) {
-                /** @var $demoRoute Model */
+                /** @var $demoRoute DungeonRoute */
                 unset($demoRoute->relations);
                 // Do not reload them
                 $demoRoute->setAppends([]);
                 // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
                 // for each and every re-import
                 $demoRoute->setHidden(['id']);
-                $demoRoute->load(['playerraces', 'playerclasses', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapcomments']);
+                $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
+                    'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapcomments']);
 
                 // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
                 // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
@@ -56,26 +57,32 @@ class ExportDungeonDataController extends Controller
                 // is imported into the production environment
                 $toHide = new Collection();
                 // No ->merge() :( -> https://medium.com/@tadaspaplauskas/quick-tip-laravel-eloquent-collections-merge-gotcha-moment-e2a56fc95889
+                foreach ($demoRoute->playerspecializations as $item) {
+                    $toHide->add($item);
+                }
                 foreach ($demoRoute->playerraces as $item) {
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->playerclasses as $item) {
                     $toHide->add($item);
                 }
+                foreach ($demoRoute->routeattributesraw as $item) {
+                    $toHide->add($item);
+                }
                 foreach ($demoRoute->affixgroups as $item) {
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->brushlines as $item) {
-                    /** @var $item Brushline */
                     $item->setVisible(['floor_id', 'polyline']);
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->paths as $item) {
-                    /** @var $item Path */
                     $item->setVisible(['floor_id', 'polyline']);
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->killzones as $item) {
+                    // Hidden by default to save data
+                    $item->addVisible(['floor_id']);
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->enemyraidmarkers as $item) {
@@ -107,6 +114,9 @@ class ExportDungeonDataController extends Controller
                 $dungeonStartMarkers = DungeonStartMarker::where('floor_id', $floor->id)->get()->values();
                 $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', $floor->id)->get()->values();
                 $mapComments = MapComment::where('floor_id', $floor->id)->where('always_visible', true)->get()->values();
+                // Map comments can ALSO be added by users, thus we never know where this thing comes. As such, insert it
+                // at the end of the table instead.
+                $mapComments->makeHidden(['id']);
 
                 $result['enemies'] = $enemies;
                 $result['enemy_packs'] = $enemyPacks;

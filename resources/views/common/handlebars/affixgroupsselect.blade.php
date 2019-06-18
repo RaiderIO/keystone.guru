@@ -1,9 +1,11 @@
+@inject('seasonService', 'App\Service\Season\SeasonService');
 <?php
+/** @var $seasonService \App\Service\Season\SeasonService */
 /** This is the template for the Affix Selection when using it in a dropdown */
 
 /** @var \App\Models\DungeonRoute $model */
 if(!isset($affixgroups) ){
-    $affixgroups = \App\Models\AffixGroup::active()->with('affixes')->get();
+    $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
 }
 ?>
 <script>

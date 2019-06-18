@@ -79,7 +79,39 @@ class MapObjectGroup extends Signalable {
      * @private
      */
     _restoreObject(remoteMapObject, username = null) {
-        // @TODO Add error message like the above
+        console.error('override the _restoreObject function!');
+    }
+
+    /**
+     * Checks the object's faction and teeming status, compares it to our map's status of those variables and determines
+     * if it should be visible or not on the map.
+     * @param remoteMapObject The object you're looking to check for visibility
+     * @returns {boolean}
+     * @protected
+     */
+    _isObjectVisible(remoteMapObject) {
+        let result = true;
+
+        let faction = this.manager.map.getDungeonRoute().faction;
+
+        // Only when not in try mode!
+        if (!this.manager.map.isTryModeEnabled() && (remoteMapObject.faction !== 'any' && faction !== 'any' && faction !== remoteMapObject.faction)) {
+            console.warn('Skipping map object that does not belong to the requested faction ', remoteMapObject, faction);
+            result = false;
+        }
+
+        // If the map isn't teeming, but the enemy is teeming..
+        if (!this.manager.map.options.teeming && remoteMapObject.teeming === 'visible') {
+            console.warn('Skipping teeming map object', remoteMapObject);
+            result = false;
+        }
+        // If the map is teeming, but the enemy shouldn't be there for teeming maps..
+        else if (this.manager.map.options.teeming && remoteMapObject.teeming === 'invisible') {
+            console.warn('Skipping teeming-filtered map object', remoteMapObject.id);
+            result = false;
+        }
+
+        return result;
     }
 
     /**

@@ -8,9 +8,8 @@
 
 namespace App\Logic\Datatables;
 
-use App\Models\GameServerRegion;
+use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
 {
@@ -35,11 +34,10 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
 
         // Only order
         if ($order !== null) {
-            /** @var GameServerRegion $region */
-            $region = GameServerRegion::getUserOrDefaultRegion();
+            $seasonService = resolve(SeasonService::class);
 
             // Order by the current affix on top, otherwise by ID
-            $currentAffixId = $region->getCurrentAffixGroup()->id;
+            $currentAffixId = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
             // In order to sort by another table, join it
             // $builder->leftJoin('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id');
             // Then sort by current affix ID on top, THEN sort by ID ascending

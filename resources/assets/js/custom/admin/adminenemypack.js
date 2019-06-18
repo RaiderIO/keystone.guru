@@ -21,6 +21,7 @@ class AdminEnemyPack extends EnemyPack {
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
         // This also cannot be a private function since that'll apparently give different signatures as well.
         let popupOpenFn = function (event) {
+            $('#enemy_pack_edit_popup_teeming_' + self.id).val(self.teeming);
             $('#enemy_pack_edit_popup_faction_' + self.id).val(self.faction);
 
             // Refresh all select pickers so they work again
@@ -30,6 +31,7 @@ class AdminEnemyPack extends EnemyPack {
 
             $submitBtn.unbind('click');
             $submitBtn.bind('click', function () {
+                self.teeming = $('#enemy_pack_edit_popup_teeming_' + self.id).val();
                 self.faction = $('#enemy_pack_edit_popup_faction_' + self.id).val();
 
                 self.edit();
@@ -38,14 +40,14 @@ class AdminEnemyPack extends EnemyPack {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         let syncedFn = function (event) {
-            let customPopupHtml = $('#enemy_pack_edit_popup_template').html();
             // Remove template so our
-            let template = Handlebars.compile(customPopupHtml);
+            let template = Handlebars.templates['map_enemy_pack_template'];
 
-            let data = {id: self.id};
-
-            // Build the status bar from the template
-            customPopupHtml = template(data);
+            let data = $.extend({
+                id: self.id,
+                teeming: self.map.options.teeming,
+                factions: self.map.options.factions
+            }, getHandlebarsDefaultVariables());
 
             let customOptions = {
                 'maxWidth': '400',
@@ -54,7 +56,7 @@ class AdminEnemyPack extends EnemyPack {
             };
 
             self.layer.unbindPopup();
-            self.layer.bindPopup(customPopupHtml, customOptions);
+            self.layer.bindPopup(template(data), customOptions);
 
             // Have you tried turning it off and on again?
             self.layer.off('popupopen');
@@ -117,6 +119,7 @@ class AdminEnemyPack extends EnemyPack {
                 id: self.id,
                 floor_id: self.map.getCurrentFloor().id,
                 label: self.label,
+                teeming: self.teeming,
                 faction: self.faction,
                 vertices: self.getVertices()
             },

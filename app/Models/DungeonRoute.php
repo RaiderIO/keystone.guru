@@ -587,12 +587,108 @@ class DungeonRoute extends Model
             // Instantly generate a placeholder thumbnail for new routes.
             if ($new) {
                 $this->queueRefreshThumbnails();
+
+                // If the user requested a template route..
+                if ($request->get('template', false)) {
+                    // Check if there's a route that we can use as a template..
+                    $templateRoute = DungeonRoute::where('demo', true)
+                        ->where('dungeon_id', $this->dungeon_id)
+                        ->where('teeming', $this->teeming)
+                        ->first();
+
+                    // Only if the route was found!
+                    if ($templateRoute !== null) {
+                        // Clone its innards to this route
+                        $templateRoute->cloneRelationsInto($this, [
+                            $templateRoute->paths,
+                            $templateRoute->brushlines,
+                            $templateRoute->killzones,
+                            $templateRoute->enemyraidmarkers,
+                            $templateRoute->mapcomments,
+                        ]);
+                    }
+                }
             }
 
             $result = true;
         }
 
         return $result;
+    }
+
+    /**
+     *  Clones this route into another route, adding all of our killzones, drawables etc etc to it.
+     *
+     * @return DungeonRoute The newly cloned route.
+     */
+    public function clone()
+    {
+        // Must save the new route first
+        $dungeonroute = new DungeonRoute();
+        $dungeonroute->author_id = Auth::user()->id;
+        $dungeonroute->dungeon_id = $this->dungeon_id;
+        $dungeonroute->faction_id = $this->faction_id;
+        $dungeonroute->title = sprintf('%s (%s)', $this->title, __('clone'));
+        $dungeonroute->clone_of = $this->public_key;
+        $dungeonroute->public_key = DungeonRoute::generateRandomPublicKey();
+        $dungeonroute->published = false;
+        $dungeonroute->save();
+
+        // Clone the relations of this route into the new route.
+        $this->cloneRelationsInto($dungeonroute, [
+            $this->playerraces,
+            $this->playerclasses,
+            $this->affixgroups,
+            $this->paths,
+            $this->brushlines,
+            $this->killzones,
+            $this->enemyraidmarkers,
+            $this->mapcomments,
+            $this->routeattributesraw
+        ]);
+
+        return $dungeonroute;
+    }
+
+    /**
+     * Clone relations of this dungeonroute into another dungeon route.
+     * @param $dungeonroute DungeonRoute The RECEIVER of the relations of THIS dungeon route.
+     * @param $relations array The relations that you want to clone.
+     */
+    public function cloneRelationsInto($dungeonroute, $relations)
+    {
+        // Link all relations to their new dungeon route
+        foreach ($relations as $relation) {
+            foreach ($relation as $model) {
+                /** @var $model Model */
+                $model->id = 0;
+                $model->exists = false;
+                $model->dungeon_route_id = $dungeonroute->id;
+                $model->save();
+
+                // KillZone, save the enemies that were attached to them
+                if ($model instanceof KillZone) {
+                    foreach ($model->killzoneenemies as $enemy) {
+                        $enemy->id = 0;
+                        $enemy->exists = false;
+                        $enemy->kill_zone_id = $model->id;
+                        $enemy->save();
+                    }
+                } // Make sure all polylines are copied over
+                else if (isset($model->polyline_id)) {
+                    // It's not technically a brushline, but all other polyline using structs have the same auto complete
+                    // Save a new polyline
+                    /** @var Brushline $model */
+                    $model->polyline->id = 0;
+                    $model->polyline->exists = false;
+                    $model->polyline->model_id = $model->id;
+                    $model->polyline->save();
+
+                    // Write the polyline back to the model
+                    $model->polyline_id = $model->polyline->id;
+                }
+            }
+        }
     }
 
     /**

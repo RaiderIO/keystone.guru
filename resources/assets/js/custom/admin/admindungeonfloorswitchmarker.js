@@ -21,13 +21,13 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         // super.onLayerInit();
         let self = this;
 
-        let customPopupHtml = $("#dungeon_floor_switch_edit_popup_template").html();
         // Remove template so our
-        let template = Handlebars.compile(customPopupHtml);
+        let template = Handlebars.templates['map_dungeon_floor_switch_template'];
 
-        let data = {
+        let data = $.extend({
             floors: []
-        };
+        }, getHandlebarsDefaultVariables());
+
         // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
         let currentFloorId = this.map.getCurrentFloor().id;
         for (let i in this.map.dungeonData.floors) {

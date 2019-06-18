@@ -153,59 +153,8 @@ class DungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute()) {
-            $relations = [
-                $dungeonroute->playerraces,
-                $dungeonroute->playerclasses,
-                $dungeonroute->affixgroups,
-                $dungeonroute->paths,
-                $dungeonroute->brushlines,
-                $dungeonroute->killzones,
-                $dungeonroute->enemyraidmarkers,
-                $dungeonroute->mapcomments,
-                $dungeonroute->routeattributesraw
-            ];
 
-            $dungeonroute->id = 0;
-            $dungeonroute->exists = false;
-            $dungeonroute->author_id = Auth::user()->id;
-            $dungeonroute->title .= sprintf(' (%s)', __('clone'));
-            $dungeonroute->clone_of = $dungeonroute->public_key;
-            $dungeonroute->public_key = DungeonRoute::generateRandomPublicKey();
-            $dungeonroute->published = false;
-            $dungeonroute->save();
-
-            // Link all relations to their new dungeon route
-            foreach ($relations as $relation) {
-                foreach ($relation as $model) {
-                    /** @var $model Model */
-                    $model->id = 0;
-                    $model->exists = false;
-                    $model->dungeon_route_id = $dungeonroute->id;
-                    $model->save();
-
-                    // KillZone, save the enemies that were attached to them
-                    if ($model instanceof KillZone) {
-                        foreach ($model->killzoneenemies as $enemy) {
-                            $enemy->id = 0;
-                            $enemy->exists = false;
-                            $enemy->kill_zone_id = $model->id;
-                            $enemy->save();
-                        }
-                    } // Make sure all polylines are copied over
-                    else if (isset($model->polyline_id)) {
-                        // It's not technically a brushline, but all other polyline using structs have the same auto complete
-                        // Save a new polyline
-                        /** @var Brushline $model */
-                        $model->polyline->id = 0;
-                        $model->polyline->exists = false;
-                        $model->polyline->model_id = $model->id;
-                        $model->polyline->save();
-
-                        // Write the polyline back to the model
-                        $model->polyline_id = $model->polyline->id;
-                    }
-                }
-            }
+            $newRoute = $dungeonroute->clone();
 
             if (!Auth::user()->hasPaidTier('unlimited-routes')) {
                 \Session::flash('status', sprintf(__('Route cloned. You can create %s more routes.'), $user->getRemainingRouteCount()));
@@ -213,7 +162,7 @@ class DungeonRouteController extends Controller
                 \Session::flash('status', __('Route cloned'));
             }
 
-            return redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]));
+            return redirect(route('dungeonroute.edit', ['dungeonroute' => $newRoute->public_key]));
         } else {
             return view('dungeonroute.limitreached');
         }

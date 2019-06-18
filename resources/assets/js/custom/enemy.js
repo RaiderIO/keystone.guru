@@ -37,12 +37,10 @@ class Enemy extends MapObject {
         this.label = 'Enemy';
         // Not actually saved to the enemy, but is used for keeping track of what killzone this enemy is attached to
         this.kill_zone_id = 0;
-        this.faction = 'any'; // sensible default
         this.enemy_forces_override = -1;
         // May be set when loaded from server
         this.npc = null;
         this.raid_marker_name = '';
-        this.teeming = null;
 
         // MDT
         this.mdt_id = -1;
@@ -58,13 +56,13 @@ class Enemy extends MapObject {
     }
 
     _getPercentageString(enemyForces) {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         // Do some fuckery to round to two decimal places
         return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
     }
 
     _synced(event) {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
         // Synced, can now build the popup since we know our ID
         this._rebuildPopup(event);
@@ -83,7 +81,7 @@ class Enemy extends MapObject {
      * @private
      */
     _rebuildPopup(event) {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
     }
 
     /**
@@ -91,7 +89,7 @@ class Enemy extends MapObject {
      * @param enabled True to enable, false to disable.
      */
     setPopupEnabled(enabled) {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         if (enabled) {
             this._rebuildPopup();
         } else {
@@ -104,12 +102,12 @@ class Enemy extends MapObject {
      * @returns {number}
      */
     getEnemyForces() {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.enemy_forces_override >= 0 ? this.enemy_forces_override : (this.npc === null ? 0 : this.npc.enemy_forces);
     }
 
     bindTooltip() {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
         let template = Handlebars.templates['map_enemy_tooltip_template'];
 
         let data = {};
@@ -149,7 +147,7 @@ class Enemy extends MapObject {
                 visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
             }, getHandlebarsDefaultVariables());
         } else {
-            template = function () {
+            template = function (data) {
                 return lang.get('messages.no_npc_found_label');
             }
         }
@@ -167,7 +165,7 @@ class Enemy extends MapObject {
      * @param npc
      */
     setNpc(npc) {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
         this.npc = npc;
 
 
@@ -188,7 +186,7 @@ class Enemy extends MapObject {
      * @param name
      */
     setRaidMarkerName(name) {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
         this.raid_marker_name = name;
         // Trigger a raid marker change event
         this.signal('enemy:set_raid_marker', {name: name});
@@ -199,7 +197,7 @@ class Enemy extends MapObject {
      * @param killZoneId id
      */
     setKillZone(killZoneId) {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
         this.kill_zone_id = killZoneId;
 
         // We only want to trigger these events when the killzone is actively being edited, not when loading in
@@ -231,7 +229,7 @@ class Enemy extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
         super.onLayerInit();
 
         let self = this;
@@ -249,7 +247,7 @@ class Enemy extends MapObject {
     }
 
     onPopupInit() {
-        console.assert(this instanceof Enemy, this, 'this was not an Enemy');
+        console.assert(this instanceof Enemy,  'this was not an Enemy', this);
         let self = this;
 
         self.map.leafletMap.on('contextmenu', function () {
@@ -273,7 +271,7 @@ class Enemy extends MapObject {
      * @param value boolean True or false
      */
     setSelectable(value) {
-        console.assert(this instanceof Enemy, this, 'this is not an Enemy');
+        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
         this.selectable = value;
         // Refresh the icon
         this.visual.refresh();
@@ -284,7 +282,7 @@ class Enemy extends MapObject {
      * @param raidMarkerName The name of the marker, or empty to unset it
      */
     assignRaidMarker(raidMarkerName) {
-        console.assert(this instanceof Enemy, this, 'this was not an Enemy');
+        console.assert(this instanceof Enemy,  'this was not an Enemy', this);
         let self = this;
 
         $.ajax({
@@ -302,7 +300,7 @@ class Enemy extends MapObject {
     }
 
     cleanup() {
-        console.assert(this instanceof Enemy, this, 'this was not an Enemy');
+        console.assert(this instanceof Enemy,  'this was not an Enemy', this);
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));

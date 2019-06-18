@@ -26,6 +26,7 @@
                 'virtual-tour' => true,
                 'tryout' => true
             ],
+            'dungeon' => $dungeon,
             'floorSelection' => $floorSelection
         ])
 
