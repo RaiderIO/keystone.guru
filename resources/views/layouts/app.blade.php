@@ -94,7 +94,7 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                             </a>
 
                             <div class="dropdown-menu text-center text-lg-left" aria-labelledby="demo_dropdown">
-                                @foreach(\App\Models\DungeonRoute::where('demo', '=', true)->get() as $route)
+                                @foreach(\App\Models\DungeonRoute::where('demo', true)->where('published', true)->get() as $route)
                                     <a class="dropdown-item test-dropdown-menu"
                                        href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
                                         {{ $route->dungeon->name }}
