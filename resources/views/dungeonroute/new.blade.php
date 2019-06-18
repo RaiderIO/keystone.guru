@@ -58,15 +58,15 @@
             {!! Form::checkbox('teeming', 1, 0, ['class' => 'form-control left_checkbox']) !!}
         </div>
 
-        <div class="form-group">
-            <label for="template">
-                {{ __('Template') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __('Check to pre-fill the route with a template route (the route\'s demo). This gives you straight forward scaffolding to base your route on.')
-                 }}"></i>
-            </label>
-            {!! Form::checkbox('template', 1, 0, ['class' => 'form-control left_checkbox']) !!}
-        </div>
+{{--        <div class="form-group">--}}
+{{--            <label for="template">--}}
+{{--                {{ __('Template') }}--}}
+{{--                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{--}}
+{{--                __('Check to pre-fill the route with a template route (the route\'s demo). This gives you straight forward scaffolding to base your route on.')--}}
+{{--                 }}"></i>--}}
+{{--            </label>--}}
+{{--            {!! Form::checkbox('template', 1, 0, ['class' => 'form-control left_checkbox']) !!}--}}
+{{--        </div>--}}
 
         <h3>
             {{ __('Group composition (optional)') }}
