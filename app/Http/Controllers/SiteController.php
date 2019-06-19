@@ -52,7 +52,7 @@ class SiteController extends Controller
      */
     public function privacy(Request $request)
     {
-        return view('misc.privacy');
+        return view('legal.privacy');
     }
 
     /**
@@ -61,7 +61,7 @@ class SiteController extends Controller
      */
     public function terms(Request $request)
     {
-        return view('misc.terms');
+        return view('legal.terms');
     }
 
     /**
@@ -70,7 +70,7 @@ class SiteController extends Controller
      */
     public function cookies(Request $request)
     {
-        return view('misc.cookies');
+        return view('legal.cookies');
     }
 
     /**
