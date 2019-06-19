@@ -37,6 +37,7 @@ class AffixSeeder extends Seeder
             new Affix(['name' => 'Tyrannical', 'icon_file_id' => -1, 'description' => 'Boss enemies have 40% more health and inflict up to 15% increased damage.']),
             new Affix(['name' => 'Volcanic', 'icon_file_id' => -1, 'description' => 'While in combat, enemies periodically cause gouts of flame to erupt beneath the feet of distant players.']),
             new Affix(['name' => 'Reaping', 'icon_file_id' => -1, 'description' => 'Non-boss enemies are empowered by Bwonsamdi and periodically seek vengeance from beyond the grave.']),
+            new Affix(['name' => 'Beguiling', 'icon_file_id' => -1, 'description' => 'Azshara\'s Emissaries are present throughout the dungeon.'])
         ];
 
         foreach ($affixes as $affix) {
@@ -82,18 +83,18 @@ class AffixSeeder extends Seeder
             ['season_id' => 2, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Reaping']],
             ['season_id' => 2, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Reaping']],
 
-//            ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Necrotic']],
-//            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Necrotic']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Beguiling']],
         ];
 
         foreach ($groups as $groupArr) {
