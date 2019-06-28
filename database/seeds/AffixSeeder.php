@@ -76,13 +76,17 @@ class AffixSeeder extends Seeder
             ['season_id' => 2, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Reaping']],
             ['season_id' => 2, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Reaping']],
             ['season_id' => 2, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Reaping']],
-            ['season_id' => 2, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Reaping']],
-            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Reaping']],
-            ['season_id' => 2, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Reaping']],
-            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Reaping']],
+            ['season_id' => 2, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Reaping']],
             ['season_id' => 2, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Reaping']],
             ['season_id' => 2, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Reaping']],
 
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Necrotic', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Beguiling']],
@@ -91,10 +95,6 @@ class AffixSeeder extends Seeder
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Beguiling']],
-            ['season_id' => 3, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Beguiling']],
-            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Beguiling']],
-            ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Beguiling']],
-            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Beguiling']],
         ];
 
         foreach ($groups as $groupArr) {
