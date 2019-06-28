@@ -22,11 +22,10 @@ class SeasonsSeeder extends Seeder
             ]), new App\Models\Season([
                 'seasonal_affix_id' => 16,
                 'start' => '2019-01-23 00:00:00'
+            ]), new App\Models\Season([
+                'seasonal_affix_id' => 17,
+                'start' => '2019-07-10 00:00:00'
             ])
-//            , new App\Models\Season([
-//                'seasonal_affix_id' => 10,
-//                'start' => '2019-10-19 00:00:00'
-//            ])
         ];
 
 

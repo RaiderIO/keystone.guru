@@ -1,0 +1,24 @@
+<div id="enemy_pack_edit_popup_beguiling_row_{{id}}_{{index}}" class="row no-gutters mt-1">
+    <div class="col-4">
+        <input type="text" class="form-control"
+               id="enemy_pack_edit_popup_beguiling_set_{{id}}_{{index}}"
+               name="enemy_pack_edit_popup_beguiling_set_{{id}}_{{index}}"
+               value="{{set}}"/>
+    </div>
+    <div class="col-7">
+        <select data-live-search="true" id="enemy_pack_edit_popup_beguiling_npc_{{id}}_{{index}}"
+                name="enemy_pack_edit_popup_beguiling_npc_{{id}}_{{index}}"
+                class="selectpicker popup_select" data-width="230px">
+            {{#select npc_id}}
+                {{#npcs}}
+                    <option value="{{id}}">{{name}} ({{id}})</option>
+                {{/npcs}}
+            {{/select}}
+        </select>
+    </div>
+    <div class="col-1">
+        <button id="enemy_pack_edit_popup_beguiling_delete_{{id}}_{{index}}" class="btn btn-danger">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+</div>

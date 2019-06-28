@@ -43,10 +43,10 @@ if ($timezone === null) {
         $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
 
         $affixGroups = $seasonService->getDisplayedAffixGroups();
-        foreach($affixGroups as $arr){
+        $affixGroupIndex = 0;
+        foreach($affixGroups as $index => $arr){
         $startDate = $arr['date_start'];
         $affixGroup = $arr['affixgroup'];
-        $affixGroupIndex = $affixGroup->id - 1;
         ?>
         <tr class="table_row">
             <?php

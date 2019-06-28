@@ -154,7 +154,7 @@ if( isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                         <div class="col-12 font-weight-bold">
                             @isset($current_report)
                                 <span class="text-warning">
-                                    <i class="fa fa-exclamation-triangle"></i> {{ __('You have reported this dungeonroute for moderation.') }}
+                                    <i class="fa fa-exclamation-triangle"></i> {{ __('You have reported this route for moderation.') }}
                                 </span>
                             @else
                                 <i class="fa fa-flag"></i>
