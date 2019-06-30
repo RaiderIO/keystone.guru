@@ -48,10 +48,15 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                 let p = hull(points, 100);
                 // Only if we can actually make an offset
                 if (p.length > 1) {
-                    let offset = new Offset();
-                    p = offset.data(p).arcSegments(c.map.enemypack.arcSegments(p.length)).margin(c.map.enemypack.margin);
+                    try {
+                        let offset = new Offset();
+                        p = offset.data(p).arcSegments(c.map.enemypack.arcSegments(p.length)).margin(c.map.enemypack.margin);
 
-                    layer = L.polygon(p, c.map.enemypack.polygonOptions);
+                        layer = L.polygon(p, c.map.enemypack.polygonOptions);
+                    } catch (error) {
+                        // Not particularly interesting to spam the console with
+                        // console.error('Unable to create offset for pack', remoteMapObject.id, error);
+                    }
                 }
             }
 
@@ -60,6 +65,24 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                 enemyPack.id = remoteMapObject.id;
                 enemyPack.teeming = remoteMapObject.teeming;
                 enemyPack.faction = remoteMapObject.faction;
+
+                // Restore beguiling enemies
+                // 1. Make sure we can resolve the IDs of the enemies
+                /** @var enemyMapObjectGroup MapObjectGroup */
+
+                    // Our data
+                let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                for (let i = 0; i < remoteMapObject.beguilingenemyids.length; i++) {
+                    let id = remoteMapObject.beguilingenemyids[i];
+
+                    // Resolve it
+                    let enemy = enemyMapObjectGroup.findMapObjectById(id);
+                    // Verify
+                    console.assert(enemy !== null, 'Unable to find beguiling enemy!', this);
+
+                    // Restore it on the enemy pack
+                    enemyPack.beguilingenemies.push(enemy);
+                }
 
                 // We just downloaded the enemy pack, it's synced alright!
                 enemyPack.setSynced(true);

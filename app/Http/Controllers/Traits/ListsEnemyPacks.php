@@ -41,7 +41,7 @@ trait ListsEnemyPacks
             $result = EnemyPack::query();
         }
 
-        $enemyPacks = $result->where('floor_id', '=', $floorId)->get($fields);
+        $enemyPacks = $result->where('floor_id', $floorId)->get($fields);
 
         return $enemyPacks;
     }

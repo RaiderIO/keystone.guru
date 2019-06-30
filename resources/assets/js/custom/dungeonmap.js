@@ -678,6 +678,25 @@ class DungeonMap extends Signalable {
     }
 
     /**
+     * Sets the beguiling preset that is currently displayed on the map.
+     * @param preset int
+     */
+    setBeguilingPreset(preset) {
+        this.options.beguiling_preset = preset;
+
+        // Let everyone know it's changed
+        this.signal('beguiling_preset:changed', {preset: preset});
+    }
+
+    /**
+     * Get the beguiling preset that is currently displayed on the map.
+     * @returns {string}
+     */
+    getBeguilingPreset() {
+        return this.options.beguiling_preset;
+    }
+
+    /**
      * Checks if pather is currently active or not.
      * @returns {boolean}
      */
@@ -723,6 +742,8 @@ class DungeonMap extends Signalable {
      * @returns {boolean} False if echo was not set, or the Echo Controls.
      */
     getEchoControls() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
         let result = false;
         for (let index in this.mapControls) {
             if (this.mapControls.hasOwnProperty(index)) {
@@ -733,6 +754,29 @@ class DungeonMap extends Signalable {
                 }
             }
         }
+        return result;
+    }
+
+    /**
+     * Find an NPC by its ID in the local NPC storage.
+     * @param npcId int
+     * @returns {null|object}
+     */
+    getNpcById(npcId) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+        let result = null;
+
+        // Find the actual NPC..
+        for (let npcIndex in this.options.npcs) {
+            if (this.options.npcs.hasOwnProperty(npcIndex)) {
+                let npc = this.options.npcs[npcIndex];
+                if (npc.id === npcId) {
+                    result = npc;
+                    break;
+                }
+            }
+        }
+
         return result;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
+use App\Models\Enemy;
 use App\Models\EnemyPack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,8 @@ class APIEnemyPackController extends Controller
         $enemyPack->label = $request->get('label');
         $enemyPack->floor_id = $request->get('floor_id');
         $enemyPack->vertices_json = json_encode($request->get('vertices'));
+
+        // Upon successful save!
         if (!$enemyPack->save()) {
             throw new \Exception("Unable to save pack!");
         }

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
  * @property int $enemy_id Only used for temp MDT enemies
  * @property bool $is_mdt Only used for temp MDT enemies
  * @property string $teeming
+ * @property int $beguiling_preset
  * @property string $faction
  * @property string $enemy_forces_override
  * @property double $lat

@@ -400,7 +400,6 @@ html, body, #map, #app, .wrapper {
     border-radius: 6px;
     background-blend-mode: hard-light;
 }
-
 .teeming {
     border: 1px solid red;
 }
@@ -408,6 +407,11 @@ html, body, #map, #app, .wrapper {
 .aggressive_enemy_icon {
     background-color: #dc3c3c !important;
 }
+
+.aggressive_enemy_icon.beguiling  {
+    background-color: purple !important;
+}
+
 
 .neutral_enemy_icon {
     background-color: #cccc2d !important;
@@ -423,10 +427,6 @@ html, body, #map, #app, .wrapper {
 
 .boss_enemy_icon {
     background: url("/images/mapicon/boss.png") no-repeat center !important;
-}
-
-.unset_enemy_icon {
-
 }
 
 .flagged_enemy_icon {

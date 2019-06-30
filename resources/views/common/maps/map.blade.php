@@ -34,17 +34,23 @@ $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
 // Floor id to display (bit ugly with JS, but it works)
-$floorId = isset($floorId) ? $floorId : -1;
+$floorId = isset($floorId) ? $floorId : $dungeon->floors->first()->id;
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
+// Construct the data of the beguiling NPCs
+$maxBeguilingPresets = DB::table('enemies')->selectRaw('MAX(`beguiling_preset`) as max')->where('floor_id', $floorId)->get()->first()->max;
+$beguilingPresets = [];
+for ($i = 1; $i <= $maxBeguilingPresets; $i++) {
+    $beguilingPresets[] = ['index' => $i, 'description' => sprintf(__('Preset %s'), $i)];
+}
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
 if ($isAdmin) {
     // Build options for displayed NPCs
     $npcOptions = [];
-    foreach($npcs as $npc){
-        $npcOptions[] = ['id' => $npc->id, 'name' => $npc->name];
+    foreach ($npcs as $npc) {
+        $npcOptions[] = ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
     }
 
     $adminOptions = [
@@ -64,6 +70,7 @@ if ($isAdmin) {
         'npcs' => $npcOptions
     ];
 }
+
 ?>
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'username' => Auth::check() ? $user->name : '',
@@ -76,6 +83,7 @@ if ($isAdmin) {
         'publicKey' => $routePublicKey,
         'faction' => $routeFaction
     ],
+    'beguilingPresets' => $beguilingPresets,
     'defaultEnemyVisualType' => $enemyVisualType,
     'teeming' => $teeming,
     'noUI' => $noUI,

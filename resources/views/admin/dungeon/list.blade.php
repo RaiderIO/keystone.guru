@@ -33,18 +33,16 @@
 <table id="admin_dungeon_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('Id') }}</th>
         <th width="10%">{{ __('Exp.') }}</th>
-        <th width="70%">{{ __('Name') }}</th>
+        <th width="80%">{{ __('Name') }}</th>
         <th width="10%">{{ __('Actions') }}</th>
     </tr>
     </thead>
 
     <tbody>
-    @foreach ($models->all() as $dungeon)
+    @foreach ($models as $dungeon)
         <?php /** @var $dungeon \App\Models\Dungeon */?>
     <tr>
-        <td>{{ $dungeon->id }}</td>
         <td>
             <img src="{{ Image::url($dungeon->expansion->iconfile->getUrl(), 32, 32) }}"
                  title="{{ $dungeon->expansion->name }}"

@@ -13,12 +13,16 @@ class EnemyVisualControls extends MapControl {
             onAdd: function (leafletMap) {
                 let template = Handlebars.templates['map_enemy_visuals_template'];
 
-                let data = getHandlebarsDefaultVariables();
+                let data = $.extend({
+                        beguiling_presets: self.map.options.beguilingPresets
+                    }, getHandlebarsDefaultVariables()
+                );
 
                 // Build the status bar from the template
                 self.domElement = $(template(data));
                 let $domElement = $(self.domElement);
                 $domElement.find('#map_enemy_visuals_dropdown').bind('change', self._enemyVisualChanged.bind(self));
+                $domElement.find('#map_enemy_beguiling_preset_dropdown').bind('change', self._beguilingPresetChanged.bind(self));
                 $domElement.find('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', self._mdtEnemyMappingChanged.bind(self));
 
                 self.domElement = self.domElement[0];
@@ -64,6 +68,20 @@ class EnemyVisualControls extends MapControl {
             console.assert(enemy instanceof Enemy, this, 'enemy is not an Enemy');
             enemy.visual.setVisualType(visualType);
         });
+    }
+
+    /**
+     * Called whenever the user wants to change beguiling preset.
+     * @param changedEvent
+     * @private
+     */
+    _beguilingPresetChanged(changedEvent) {
+        console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
+
+        let beguilingPreset = parseInt($('#map_enemy_beguiling_preset_dropdown').val());
+
+        // Keep track of the visual type
+        this.map.setBeguilingPreset(beguilingPreset);
     }
 
     /**

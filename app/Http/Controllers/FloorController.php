@@ -68,8 +68,8 @@ class FloorController extends Controller
         return view('admin.floor.edit', [
             'model' => $floor,
             'dungeon' => $floor->dungeon->load('floors'),
-            'floors' => Floor::all()->where('dungeon_id', '=', $floor->dungeon_id)->where('id', '<>', $floor->id),
-            'npcs' => Npc::all()->where('dungeon_id', '=', $floor->dungeon_id),
+            'floors' => Floor::all()->where('dungeon_id', $floor->dungeon_id)->where('id', '<>', $floor->id),
+            'npcs' => Npc::all()->whereIn('dungeon_id', [$floor->dungeon_id, -1]),
             'headerTitle' => __('Edit floor')
         ]);
     }

@@ -7,6 +7,7 @@
  * @var $model \App\Models\Floor
  * @var $dungeon \App\Models\Dungeon
  * @var $floors \Illuminate\Support\Collection
+ * @var $npcs \Illuminate\Support\Collection
  */
 ?>
 

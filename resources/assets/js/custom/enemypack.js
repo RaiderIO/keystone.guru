@@ -1,4 +1,4 @@
-$(function(){
+$(function () {
     L.Draw.EnemyPack = L.Draw.Polygon.extend({
         statics: {
             TYPE: 'enemypack'
@@ -17,53 +17,91 @@ class EnemyPack extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
+        let self = this;
+
         this.label = 'Enemy pack';
         this.setColors(c.map.enemypack.colors);
 
         this.color = null;
-    }
+        // Any enemies that MAY be displayed when switching Beguiling presets
+        this.beguilingenemies = [];
 
-    /**
-     * Cleans up the decorator of this route, removing it from the map.
-     * @private
-     */
-    _cleanDecorator() {
-        console.assert(this instanceof EnemyPack, this, 'this is not an EnemyPack');
+        this.register('synced', this, function () {
+            self.activateBeguilingPreset(1);
+        });
 
-        if (this.decorator !== null) {
-            this.map.leafletMap.removeLayer(this.decorator);
-        }
+        this.map.register('beguiling_preset:changed', this, function (changedEvent) {
+            let newPreset = changedEvent.data.preset;
+
+            self.activateBeguilingPreset(newPreset);
+        });
     }
 
     /**
      * Rebuild the decorators for this route (directional arrows etc).
      * @private
      */
-    _rebuildDecorator() {
-        console.assert(this instanceof EnemyPack, this, 'this is not an EnemyPack');
+    // _getDecorator() {
+    //     console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
-        // Not sure if this really adds anything but I'll keep it here in case I want to do something with it
-        // this._cleanDecorator();
-        //
-        // this.decorator = L.polylineDecorator(this.layer, {
-        //     patterns: [
-        //         {
-        //             offset: 12,
-        //             repeat: 25,
-        //             symbol: L.Symbol.dash({
-        //                 pixelSize: 10,
-        //                 pathOptions: {color: 'darkred', weight: 2}
-        //             })
-        //         }
-        //     ]
-        // });
-        // this.decorator.addTo(this.map.leafletMap);
+    // Not sure if this really adds anything but I'll keep it here in case I want to do something with it
+    // this._cleanDecorator();
+    //
+    // this.decorator = L.polylineDecorator(this.layer, {
+    //     patterns: [
+    //         {
+    //             offset: 12,
+    //             repeat: 25,
+    //             symbol: L.Symbol.dash({
+    //                 pixelSize: 10,
+    //                 pathOptions: {color: 'darkred', weight: 2}
+    //             })
+    //         }
+    //     ]
+    // });
+    // this.decorator.addTo(this.map.leafletMap);
+    // }
+
+    /**
+     * Gets a local beguiling enemy by its preset.
+     * @param preset int
+     * @returns {null}
+     * @protected
+     */
+    _getBeguilingEnemyByPreset(preset) {
+        let result = null;
+
+        for (let i = 0; i < this.beguilingenemies.length; i++) {
+            let enemy = this.beguilingenemies[i];
+            if (enemy.beguiling_preset === preset) {
+                result = enemy;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Activates a specific preset on the pack, displaying different beguiling enemies as necessary.
+     * @param preset int The preset to display.
+     */
+    activateBeguilingPreset(preset) {
+        console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        for (let i = 0; i < this.beguilingenemies.length; i++) {
+            let enemy = this.beguilingenemies[i];
+            // Make it visible, only when it's the preset we want, otherwise disable it
+            enemyMapObjectGroup.setMapObjectVisibility(enemy, enemy.beguiling_preset === preset);
+        }
     }
 
     // To be overridden by any implementing classes
     onLayerInit() {
         // this.constructor.name.indexOf('EnemyPack') >= 0
-        console.assert(this instanceof EnemyPack, this, 'this is not an EnemyPack');
+        console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
         super.onLayerInit();
 
         // Show a permanent tooltip for the pack's name

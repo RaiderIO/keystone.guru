@@ -48,7 +48,7 @@ class AdminEnemy extends Enemy {
      * @private
      */
     _enemySelectionModeChanged(selectionEvent) {
-        console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
 
         // Redraw any changes as necessary
         // this.redrawConnectionToEnemy();
@@ -105,7 +105,7 @@ class AdminEnemy extends Enemy {
      * Get the MDT enemy that is attached to this enemy. NOT the other way around.
      */
     getConnectedEnemy() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
         let result = null;
 
         if (this._connectedEnemy === null) {
@@ -150,7 +150,7 @@ class AdminEnemy extends Enemy {
      * Detaches the connected MDT enemy from this enemy.
      */
     detachConnectedEnemy() {
-        console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
         this.mdt_id = -1;
         this._connectedEnemy = null;
     }
@@ -160,7 +160,7 @@ class AdminEnemy extends Enemy {
      * @returns {boolean}
      */
     isEditable() {
-        console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
         return !this.is_mdt;
     }
 
@@ -181,8 +181,8 @@ class AdminEnemy extends Enemy {
      * @param enemy The enemy that was selected (or de-selected). Will add/remove the enemy to the list to be redrawn.
      */
     enemySelected(enemy) {
-        console.assert(this instanceof AdminEnemy, this, 'this is not an AdminEnemy');
-        console.assert(enemy instanceof AdminEnemy, enemy, 'enemy is not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
+        console.assert(enemy instanceof AdminEnemy, 'enemy is not an AdminEnemy', enemy);
 
         // Keep track of what we had
         this._previousConnectedEnemyId = this.enemy_id;
@@ -216,7 +216,7 @@ class AdminEnemy extends Enemy {
      * Removes any existing UI connections to enemies.
      */
     removeExistingConnectionToEnemy() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
 
         // Remove previous layers if it's needed
         if (this.enemyConnectionLayerGroup !== null) {
@@ -229,7 +229,7 @@ class AdminEnemy extends Enemy {
      * Redraw connections to the enemy
      */
     redrawConnectionToEnemy() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
 
         this.removeExistingConnectionToEnemy();
 
@@ -268,7 +268,7 @@ class AdminEnemy extends Enemy {
     }
 
     onLayerInit() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
         super.onLayerInit();
 
         let self = this;
@@ -321,9 +321,11 @@ class AdminEnemy extends Enemy {
      * @private
      */
     _rebuildPopup(event) {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
 
-        if (!this.is_mdt) {
+        // Beguiling and MDT enemies should not be editable directly.
+        // Beguiling not because it's managed through the EnemyPack, MDT because well, MDT manages them.
+        if (!this.is_mdt && !this.isBeguiling()) {
             let self = this;
 
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
@@ -375,7 +377,7 @@ class AdminEnemy extends Enemy {
     }
 
     onPopupInit() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
         // Don't actually init the popup here since we may not know the ID yet.
         // Called multiple times, so unreg first
         this.unregister('synced', this, this._rebuildPopup.bind(this));
@@ -384,12 +386,30 @@ class AdminEnemy extends Enemy {
     }
 
     edit() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
+
+        // If we're a Beguiling enemy and we've just been edited, we should apply the same lat/lngs to all other beguiling enemies.
+        // Find other beguiling enemies with the same enemy pack
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemies = enemyMapObjectGroup.getBeguilingEnemiesByEnemyPackId(this.enemy_pack_id);
+
+        for (let i = 0; i < enemies.length; i++) {
+            let enemy = enemies[i];
+
+            // Not ourselves, that'd give an infinite loop
+            if (enemy.id !== this.id) {
+                // Apply our lat/lngs
+                enemy.layer.setLatLng(this.layer.getLatLng());
+                // Do not call edit(), infinite loop!
+                enemy.save();
+            }
+        }
+
         this.save();
     }
 
     delete() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
         let self = this;
         $.ajax({
             type: 'POST',
@@ -417,7 +437,7 @@ class AdminEnemy extends Enemy {
     }
 
     save() {
-        console.assert(this instanceof AdminEnemy, this, 'this was not an AdminEnemy');
+        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
         let self = this;
 
         if (!this.is_mdt) {
@@ -432,6 +452,7 @@ class AdminEnemy extends Enemy {
                     floor_id: self.map.getCurrentFloor().id,
                     mdt_id: self.mdt_id,
                     teeming: self.teeming,
+                    beguiling_preset: self.beguiling_preset,
                     faction: self.faction,
                     enemy_forces_override: self.enemy_forces_override,
                     lat: self.layer.getLatLng().lat,
