@@ -96,9 +96,13 @@ class DrawControls extends MapControl {
             }
         });
 
-        this.map.hotkeys.attach('r', 'leaflet-draw-draw-path');
-        this.map.hotkeys.attach('c', 'leaflet-draw-edit-edit');
-        this.map.hotkeys.attach('d', 'leaflet-draw-edit-remove');
+        this.map.hotkeys.attach('1', 'leaflet-draw-draw-path');
+        this.map.hotkeys.attach('2', 'leaflet-draw-draw-killzone');
+        this.map.hotkeys.attach('3', 'leaflet-draw-draw-mapcomment');
+        this.map.hotkeys.attach('4', 'leaflet-draw-draw-brushline');
+        this.map.hotkeys.attach('5', 'leaflet-draw-edit-edit');
+        // Doesn't work, but we don't want it anyways jonsnow.jpg
+        // this.map.hotkeys.attach('6', 'leaflet-draw-edit-remove');
     }
 
     /**
@@ -133,19 +137,22 @@ class DrawControls extends MapControl {
                     },
                     zIndexOffset: 1000,
                     faClass: 'fa-route',
-                    title: 'Draw a route'
+                    title: 'Draw a path',
+                    hotkey: '1'
                 },
                 killzone: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-bullseye',
-                    title: 'Draw a killzone'
+                    title: 'Draw a killzone',
+                    hotkey: '2'
                 },
                 mapcomment: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-comment',
-                    title: 'Create a map comment'
+                    title: 'Create a comment',
+                    hotkey: '3'
                 },
                 brushline: false,
                 // Brushlines are added in a custom way since I'm using Pather for this
@@ -174,17 +181,19 @@ class DrawControls extends MapControl {
 
     /**
      * Get HTML that should be placed inside a button that is used for interaction with the route.
-     * @param faIconClass
-     * @param text
+     * @param faIconClass string
+     * @param text string
+     * @param hotkey string
      * @returns {string}
      * @private
      */
-    _getButtonHtml(faIconClass, text) {
+    _getButtonHtml(faIconClass, text, hotkey = '') {
         let template = Handlebars.templates['map_controls_route_edit_button_template'];
 
         let data = {
             fa_class: faIconClass,
-            text: text
+            text: text,
+            hotkey: hotkey
         };
 
         return template(data);
@@ -242,7 +251,7 @@ class DrawControls extends MapControl {
             title: lang.get('messages.brushline_title'),
         });
         $brushlineButton.html(
-            this._getButtonHtml('fa-paint-brush', lang.get('messages.brushline'))
+            this._getButtonHtml('fa-paint-brush', lang.get('messages.brushline'), '4')
         );
         $brushlineButton.bind('click', function (clickEvent) {
             // Check if it's enabled now
@@ -304,7 +313,7 @@ class DrawControls extends MapControl {
         // Add custom content for the edit and remove buttons
         let $buttons = $editRouteControls.find('a');
         $buttons.attr('data-toggle', 'tooltip');
-        $($buttons[0]).html(this._getButtonHtml('fa-edit', lang.get('messages.edit')));
+        $($buttons[0]).html(this._getButtonHtml('fa-edit', lang.get('messages.edit'), '5'));
         $($buttons[1]).html(this._getButtonHtml('fa-trash', lang.get('messages.delete')));
 
         // Remove from the second row, inject in the first row
@@ -380,7 +389,7 @@ class DrawControls extends MapControl {
                 if (option.hasOwnProperty('faClass')) {
                     // Set the FA icon and remove the background image that was initially there
                     $(".leaflet-draw-draw-" + optionName)
-                        .html(this._getButtonHtml(option.faClass, lang.get('messages.' + optionName)))
+                        .html(this._getButtonHtml(option.faClass, lang.get('messages.' + optionName), option.hotkey))
                         .css('background-image', 'none');
                 }
             }
