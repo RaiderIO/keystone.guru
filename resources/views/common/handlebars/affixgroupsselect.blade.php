@@ -1,4 +1,4 @@
-@inject('seasonService', 'App\Service\Season\SeasonService');
+@inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
 /** @var $seasonService \App\Service\Season\SeasonService */
 /** This is the template for the Affix Selection when using it in a dropdown */

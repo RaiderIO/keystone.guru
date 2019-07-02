@@ -202,6 +202,22 @@ class APIDungeonRouteController extends Controller
      * @return array
      * @throws \Exception
      */
+    function beguilingpreset(Request $request, DungeonRoute $dungeonroute)
+    {
+        $this->authorize('beguilingpreset', $dungeonroute);
+
+        $dungeonroute->beguiling_preset = intval($request->get('beguilingpreset', 0));
+        $dungeonroute->save();
+
+        return ['result' => 'success'];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws \Exception
+     */
     function rate(Request $request, DungeonRoute $dungeonroute)
     {
         $this->authorize('rate', $dungeonroute);

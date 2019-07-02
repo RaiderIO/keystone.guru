@@ -35,6 +35,8 @@ class CommonMapsViewsidebar extends InlineCode {
      * @param value int
      */
     rate(value) {
+        let self = this;
+
         let isDelete = value === '';
         $.ajax({
             type: isDelete ? 'DELETE' : 'POST',
@@ -55,6 +57,8 @@ class CommonMapsViewsidebar extends InlineCode {
      * @param value bool
      */
     favorite(value) {
+        let self = this;
+
         $.ajax({
             type: !value ? 'DELETE' : 'POST',
             url: '/ajax/' + self.options.public_key + '/favorite',

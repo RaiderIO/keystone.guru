@@ -87,7 +87,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                 // We just downloaded the enemy pack, it's synced alright!
                 enemyPack.setSynced(true);
             } else {
-                console.error('Unable to create layer for enemypack ' + remoteMapObject.id + '; not enough data points');
+                console.warn('Unable to create layer for enemypack ' + remoteMapObject.id + '; not enough data points');
             }
         }
     }

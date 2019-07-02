@@ -13,8 +13,13 @@ class EnemyVisualControls extends MapControl {
             onAdd: function (leafletMap) {
                 let template = Handlebars.templates['map_enemy_visuals_template'];
 
+                let showBeguilingPreset = self.map.options.edit;
+
                 let data = $.extend({
-                        beguiling_presets: self.map.options.beguilingPresets
+                        beguiling_presets: self.map.options.beguilingPresets,
+                        preset: self.map.options.dungeonroute.beguiling_preset,
+                        // Only when we're editing the route can we change the beguiling preset
+                        show_beguiling_preset: showBeguilingPreset
                     }, getHandlebarsDefaultVariables()
                 );
 
@@ -40,7 +45,7 @@ class EnemyVisualControls extends MapControl {
     _mdtEnemyMappingChanged(changedEvent) {
         console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
-        let mdtEnemiesEnabled = $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(":checked");
+        let mdtEnemiesEnabled = $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(':checked');
 
         // Hide or show any MDT enemies
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
@@ -82,6 +87,20 @@ class EnemyVisualControls extends MapControl {
 
         // Keep track of the visual type
         this.map.setBeguilingPreset(beguilingPreset);
+
+        // If we're editing the current route..
+        if (this.map.options.edit) {
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/beguilingpreset',
+                dataType: 'json',
+                data: {
+                    _method: 'POST',
+                    beguilingpreset: beguilingPreset
+                }
+                // No need for a success/failure really
+            });
+        }
     }
 
     /**

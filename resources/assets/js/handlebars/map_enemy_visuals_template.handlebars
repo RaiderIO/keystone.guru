@@ -7,22 +7,29 @@
         </select>
     </div>
 
-    <div id="map_enemy_beguiling_preset" class="form-group">
-        <div class="font-weight-bold">{{ beguiling_preset_label }}:</div>
-        <select id="map_enemy_beguiling_preset_dropdown" class="form-control selectpicker" name="map_enemy_beguiling_preset_dropdown">
-            {{#beguiling_presets}}
-                <option value="{{index}}">{{description}}</option>
-            {{/beguiling_presets}}
-        </select>
-    </div>
+    {{#if show_beguiling_preset}}
+        <div id="map_enemy_beguiling_preset" class="form-group">
+            <div class="font-weight-bold">{{ beguiling_preset_label }}:</div>
+            <select id="map_enemy_beguiling_preset_dropdown" class="form-control selectpicker"
+                    name="map_enemy_beguiling_preset_dropdown">
+                {{#select preset}}
+                    {{#beguiling_presets}}
+                        <option value="{{index}}">{{description}}</option>
+                    {{/beguiling_presets}}
+                {{/select}}
+            </select>
+        </div>
+    {{else}}
+        <input type="hidden" value="{{preset}}" id="map_enemy_beguiling_preset_dropdown"/>
+    {{/if}}
 
 
     {{#if is_map_admin}}
-    <div class="form-group">
-        <div class="font-weight-bold">{{ mdt_enemy_mapping_label }}:</div>
-        <input type="checkbox" class="form-control left_checkbox" value="1"
-               id="map_enemy_visuals_map_mdt_clones_to_enemies"
-               name="map_enemy_visuals_map_mdt_clones_to_enemies" />
-    </div>
+        <div class="form-group">
+            <div class="font-weight-bold">{{ mdt_enemy_mapping_label }}:</div>
+            <input type="checkbox" class="form-control left_checkbox" value="1"
+                   id="map_enemy_visuals_map_mdt_clones_to_enemies"
+                   name="map_enemy_visuals_map_mdt_clones_to_enemies"/>
+        </div>
     {{/if}}
 </div>

@@ -26,7 +26,7 @@ if (isset($model)) {
                             {{ __('Floor') }}:
                         </div>
                     </div>
-                    <div class="row view_dungeonroute_details_row mt-2">
+                    <div class="row view_dungeonroute_details_row mt-1">
                         <div class="col floor_selection">
                             <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
                             {!! Form::select('map_floor_selection', [__('Select floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}

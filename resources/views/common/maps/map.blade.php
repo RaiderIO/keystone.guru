@@ -15,6 +15,7 @@ $tryMode = isset($tryMode) && $tryMode ? true : false;
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 // For Siege of Boralus
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
+$routeBeguilingPreset = isset($dungeonroute) ? $dungeonroute->beguiling_preset : 1;
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? true : false;
 $enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
@@ -81,7 +82,8 @@ if ($isAdmin) {
     'try' => $tryMode,
     'dungeonroute' => [
         'publicKey' => $routePublicKey,
-        'faction' => $routeFaction
+        'faction' => $routeFaction,
+        'beguiling_preset' => $routeBeguilingPreset
     ],
     'beguilingPresets' => $beguilingPresets,
     'defaultEnemyVisualType' => $enemyVisualType,
