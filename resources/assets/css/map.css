@@ -255,6 +255,13 @@ html, body, #map, #app, .wrapper {
     font-size: 14px;
 }
 
+.button_hotkey_label {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    z-index: 1;
+}
+
 /** Fix display type/beguiling enemy preset not filling full width of sidebar */
 #map_enemy_visuals_container .leaflet-draw-section.leaflet-control {
     width: 100%;
