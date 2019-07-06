@@ -4,7 +4,11 @@ namespace App\Models;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -44,31 +48,31 @@ use Illuminate\Support\Facades\DB;
  * @property MDTImport $mdtImport
  * @property Team $team
  *
- * @property \Illuminate\Support\Collection $specializations
- * @property \Illuminate\Support\Collection $classes
- * @property \Illuminate\Support\Collection $races
+ * @property Collection $specializations
+ * @property Collection $classes
+ * @property Collection $races
  *
- * @property \Illuminate\Support\Collection $playerspecializations
- * @property \Illuminate\Support\Collection $playerclasses
- * @property \Illuminate\Support\Collection $playerraces
+ * @property Collection $playerspecializations
+ * @property Collection $playerclasses
+ * @property Collection $playerraces
  *
- * @property \Illuminate\Support\Collection $affixgroups
- * @property \Illuminate\Support\Collection $affixes
- * @property \Illuminate\Support\Collection $ratings
+ * @property Collection $affixgroups
+ * @property Collection $affixes
+ * @property Collection $ratings
  *
- * @property \Illuminate\Support\Collection $brushlines
- * @property \Illuminate\Support\Collection $paths
- * @property \Illuminate\Support\Collection $killzones
+ * @property Collection $brushlines
+ * @property Collection $paths
+ * @property Collection $killzones
  *
- * @property \Illuminate\Support\Collection $enemyraidmarkers
- * @property \Illuminate\Support\Collection $mapcomments
- * @property \Illuminate\Support\Collection $pageviews
+ * @property Collection $enemyraidmarkers
+ * @property Collection $mapcomments
+ * @property Collection $pageviews
  *
- * @property \Illuminate\Support\Collection $routeattributes
- * @property \Illuminate\Support\Collection $routeattributesraw
+ * @property Collection $routeattributes
+ * @property Collection $routeattributesraw
  *
- * @method static \Illuminate\Database\Eloquent\Builder visibleWithUnlisted()
- * @method static \Illuminate\Database\Eloquent\Builder visible()
+ * @method static Builder visibleWithUnlisted()
+ * @method static Builder visible()
  *
  * @mixin \Eloquent
  */
@@ -95,7 +99,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function dungeon()
     {
@@ -103,7 +107,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function brushlines()
     {
@@ -111,7 +115,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function paths()
     {
@@ -119,7 +123,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function faction()
     {
@@ -127,7 +131,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function author()
     {
@@ -135,7 +139,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function specializations()
     {
@@ -143,7 +147,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function playerspecializations()
     {
@@ -151,7 +155,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function routeattributesraw()
     {
@@ -159,7 +163,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function classes()
     {
@@ -167,7 +171,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function playerclasses()
     {
@@ -175,7 +179,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function races()
     {
@@ -183,7 +187,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function playerraces()
     {
@@ -191,7 +195,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function affixgroups()
     {
@@ -199,7 +203,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function affixes()
     {
@@ -207,7 +211,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function killzones()
     {
@@ -215,7 +219,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function ratings()
     {
@@ -223,7 +227,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function favorites()
     {
@@ -231,7 +235,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function enemyraidmarkers()
     {
@@ -239,7 +243,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function mapcomments()
     {
@@ -247,7 +251,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function routeattributes()
     {
@@ -255,7 +259,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function pageviews()
     {
@@ -263,7 +267,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function mdtImport()
     {
@@ -272,7 +276,7 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function team()
     {

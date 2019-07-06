@@ -69,7 +69,14 @@ class DatatablesHandler
     public function setBuilder(Builder $builder)
     {
         $this->_builder = $builder;
+        // Store havings, since they may cause incorrect total results
+        $havings = $this->_builder->getQuery()->havings;
+        // Clear them
+        $this->_builder->getQuery()->havings = null;
+        // Get the count
         $this->_recordsTotal = $builder->count();
+        // Restore havings
+        $this->_builder->getQuery()->havings = $havings;
 
         return $this;
     }
@@ -141,8 +148,13 @@ class DatatablesHandler
         $query = $this->_builder->getQuery()
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate'));
+        // Temp store; it messes with the count
+        $havings = $query->havings;
+        $query->havings = null;
         $query->orders = null;
         $countResults = $query->get();
+        // Restore
+        $query->havings = $havings;
 
         // Returns an array with numbers, sum the entries to get the actual count. Again, a hack but it works for now.
         $count = 0;
@@ -150,7 +162,7 @@ class DatatablesHandler
             $count += $countResult->aggregate;
         }
 
-        // Fetch the datak
+        // Fetch the data
         $data = $this->_builder->get();
 
         $result = [

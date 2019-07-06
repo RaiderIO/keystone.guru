@@ -4,7 +4,7 @@
 /** This is the template for the Affix Selection when using it in a dropdown */
 
 /** @var \App\Models\DungeonRoute $model */
-if(!isset($affixgroups) ){
+if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
 }
 ?>
@@ -45,18 +45,18 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 @endsection
 
 <div class="row no-gutters">
-    <div class="col-lg-2 pl-1 pr-1">
-        @if($team instanceof \App\Models\Team)
+    @if($team instanceof \App\Models\Team)
+        <div class="col-lg pl-1 pr-1">
             {!! Form::label('team_name', __('Team')) !!}
             {!! Form::text('team_name', $team->name, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
-        @endisset
-    </div>
-    <div class="col-lg-2 pl-1 pr-1">
+        </div>
+    @endisset
+    <div class="col-lg pl-1 pr-1">
         {!! Form::label('dungeon_id', __('Dungeon')) !!}
         {!! Form::select('dungeon_id', [0 => 'All'] + \App\Models\Dungeon::active()->pluck('name', 'id')->toArray(), 0,
             ['id' => 'dungeonroute_search_dungeon_id', 'class' => 'form-control selectpicker']) !!}
     </div>
-    <div class="col-lg-2 pl-1 pr-1">
+    <div class="col-lg pl-1 pr-1">
         {!! Form::label('affixes[]', __('Affixes')) !!}
         {!! Form::select('affixes[]', $affixgroups->pluck('text', 'id'), null,
             ['id' => 'affixes',
@@ -65,30 +65,25 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
             'data-selected-text-format' => 'count > 1',
             'data-count-selected-text' => __('{0} affixes selected')]) !!}
     </div>
-    <div class="col-lg-2 pl-1 pr-1">
+    <div class="col-lg pl-1 pr-1">
         @include('common.dungeonroute.attributes', [
         'selectedIds' => array_merge( [-1], \App\Models\RouteAttribute::all()->pluck('id')->toArray() ),
         'showNoAttributes' => true])
     </div>
-    <div class="col-lg-2 pl-1 pr-1">
-        <div class="row no-gutters">
-            @auth
-                <div class="col">
-                    {!! Form::label('favorites', __('Favorites')) !!}
-                    {!! Form::checkbox('favorites', 1, 0, ['id' => 'favorites', 'class' => 'form-control left_checkbox']) !!}
-                </div>
-            @endauth
-            <div class="col">
-                <div class="d-none d-md-flex mb-2">
-                    &nbsp;
-                </div>
-                <button id="dungeonroute_filter" class="btn btn-info col-lg">
-                    <i class="fas fa-filter"></i> {{ __('Filter') }}
-                </button>
-            </div>
-        </div>
+    <div class="col-lg pl-1 pr-1">
+        {!! Form::label('dungeonroute_requirements_select', __('Requirements')) !!}
+        {!! Form::select('dungeon_id', ['favorite' => __('Favorite'), 'enough_enemy_forces' => __('Enough enemy forces')], 0,
+            ['id' => 'dungeonroute_requirements_select', 'class' => 'form-control selectpicker', 'multiple' => 'multiple']) !!}
     </div>
-    <div class="col-lg-2 pl-1 pr-1">
+    <div class="col-lg pl-1 pr-1">
+        <div class="mb-2">
+            &nbsp;
+        </div>
+        <button id="dungeonroute_filter" class="btn btn-info col-lg">
+            <i class="fas fa-filter"></i> {{ __('Filter') }}
+        </button>
+    </div>
+    <div class="col-lg pl-1 pr-1">
         <div class="mb-2">
             &nbsp;
         </div>

@@ -120,7 +120,7 @@ class DungeonrouteTable extends InlineCode {
             'ajax': {
                 'url': '/ajax/routes',
                 'data': function (d) {
-                    d.favorites = $('#favorites').is(':checked') ? 1 : 0;
+                    d.requirements = $('#dungeonroute_requirements_select').val();
                     d = $.extend(d, self._tableView.getAjaxParameters());
                 },
                 'cache': false
@@ -262,6 +262,21 @@ class DungeonrouteTable extends InlineCode {
                 'data': 'author.name',
                 'name': 'author.name',
                 'className': 'd-none ' + (self._tableView.getName() === 'profile' ? '' : 'd-lg-table-cell')
+            },
+            enemy_forces: {
+                'title': lang.get('messages.enemy_forces_label'),
+                'data': 'enemy_forces',
+                'name': 'enemy_forces',
+                'render': function (data, type, row, meta) {
+                    let enemyForcesRequired = row.teeming === 1 ? row.dungeon.enemy_forces_required_teeming : row.dungeon.enemy_forces_required;
+                    let template = Handlebars.templates['dungeonroute_table_profile_enemy_forces_template'];
+
+                    return template($.extend({
+                        enemy_forces: row.enemy_forces,
+                        enemy_forces_required: enemyForcesRequired,
+                        enough: row.enemy_forces >= enemyForcesRequired
+                    }, getHandlebarsDefaultVariables()));
+                }
             },
             views: {
                 'title': lang.get('messages.views_label'),

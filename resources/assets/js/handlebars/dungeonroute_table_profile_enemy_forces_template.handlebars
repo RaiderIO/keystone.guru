@@ -1,0 +1,11 @@
+{{#if enough}}
+    <span class="text-success">
+        <i class="fas fa-check-circle"></i>
+        {{enemy_forces}}/{{enemy_forces_required}}
+    </span>
+{{else}}
+    <span class="text-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        {{enemy_forces}}/{{enemy_forces_required}}
+    </span>
+{{/if}}
