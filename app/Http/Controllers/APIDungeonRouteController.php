@@ -50,12 +50,15 @@ class APIDungeonRouteController extends Controller
     function list(Request $request)
     {
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
-            ->selectRaw('dungeon_routes.*, IFNULL(SUM(npcs.enemy_forces), 0) as enemy_forces')
+            // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
+            // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
+            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required, IFNULL(SUM(npcs.enemy_forces), 0) as enemy_forces')
             // Select enemy forces
             ->leftJoin('kill_zones', 'kill_zones.dungeon_route_id', '=', 'dungeon_routes.id')
             ->leftJoin('kill_zone_enemies', 'kill_zone_enemies.kill_zone_id', '=', 'kill_zones.id')
             ->leftJoin('enemies', 'enemies.id', '=', 'kill_zone_enemies.enemy_id')
             ->leftJoin('npcs', 'npcs.id', '=', 'enemies.npc_id')
+            ->leftJoin('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query) {
@@ -101,7 +104,7 @@ class APIDungeonRouteController extends Controller
             // Enough enemy forces
             if (array_search('enough_enemy_forces', $requirements) !== false) {
                 // Clear group by
-                $routes = $routes->leftJoin('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
+                $routes = $routes
                     // Having because we're using the result of SELECT
                     ->havingRaw('IF(dungeon_routes.teeming, enemy_forces > dungeons.enemy_forces_required_teeming, enemy_forces > dungeons.enemy_forces_required)')
                     // Add more group by clauses, required for the above having query

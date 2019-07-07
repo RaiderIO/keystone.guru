@@ -73,7 +73,8 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
     <div class="col-lg pl-1 pr-1">
         {!! Form::label('dungeonroute_requirements_select', __('Requirements')) !!}
         {!! Form::select('dungeon_id', ['favorite' => __('Favorite'), 'enough_enemy_forces' => __('Enough enemy forces')], 0,
-            ['id' => 'dungeonroute_requirements_select', 'class' => 'form-control selectpicker', 'multiple' => 'multiple']) !!}
+            ['id' => 'dungeonroute_requirements_select', 'class' => 'form-control selectpicker', 'multiple' => 'multiple',
+            'data-selected-text-format' => 'count > 1', 'data-count-selected-text' => __('{0} requirements')]) !!}
     </div>
     <div class="col-lg pl-1 pr-1">
         <div class="mb-2">
