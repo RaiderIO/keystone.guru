@@ -133,6 +133,25 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::get('expansions', 'ExpansionController@list')->name('admin.expansions');
 
+            // Changelogs
+            Route::get('release/new', 'ReleaseController@new')->name('admin.release.new');
+            Route::get('release/{release}', 'ReleaseController@edit')->name('admin.release.edit');
+
+            Route::post('release/new', 'ReleaseController@savenew')->name('admin.release.savenew');
+            Route::patch('release/{release}', 'ReleaseController@update')->name('admin.release.update');
+
+            Route::get('release', 'ReleaseController@list')->name('admin.releases');
+
+            // Changelogs
+            Route::get('changelog/new', 'ChangelogController@new')->name('admin.changelog.new');
+            Route::get('changelog/{changelog}', 'ChangelogController@edit')->name('admin.changelog.edit');
+
+            Route::post('changelog/new', 'ChangelogController@savenew')->name('admin.changelog.savenew');
+            Route::patch('changelog/{changelog}', 'ChangelogController@update')->name('admin.changelog.update');
+
+            Route::get('changelog', 'ChangelogController@list')->name('admin.changelogs');
+
+
             // NPCs
             Route::get('npc/new', 'NpcController@new')->name('admin.npc.new');
             Route::get('npc/{npc}', 'NpcController@edit')->name('admin.npc.edit');
@@ -149,13 +168,17 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::get('userreports', 'UserReportController@list')->name('admin.userreports');
 
             Route::get('dashboard', 'AdminToolsController@dashboard')->name('admin.dashboard');
-            Route::get('tools', 'AdminToolsController@index')->name('admin.tools');
 
-            Route::get('tools/mdt/string', 'AdminToolsController@mdtview')->name('admin.tools.mdt.string.view');
-            Route::post('tools/mdt/string', 'AdminToolsController@mdtviewsubmit')->name('admin.tools.mdt.string.submit');
-            Route::get('tools/mdt/diff', 'AdminToolsController@mdtdiff')->name('admin.tools.mdt.diff');
+            Route::group(['prefix' => 'tools'], function () {
+                Route::get('/', 'AdminToolsController@index')->name('admin.tools');
 
-            Route::get('tools/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.tools.datadump.exportdungeondata');
+                Route::get('mdt/string', 'AdminToolsController@mdtview')->name('admin.tools.mdt.string.view');
+                Route::post('mdt/string', 'AdminToolsController@mdtviewsubmit')->name('admin.tools.mdt.string.submit');
+                Route::get('mdt/diff', 'AdminToolsController@mdtdiff')->name('admin.tools.mdt.diff');
+
+                Route::get('datadump/exportdungeondata', 'AdminToolsController@exportdungeondata')->name('admin.tools.datadump.exportdungeondata');
+                Route::get('datadump/exportreleases', 'AdminToolsController@exportreleases')->name('admin.tools.datadump.exportreleases');
+            });
         });
 
         // Dashboard

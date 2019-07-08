@@ -156,6 +156,8 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                         <a class="dropdown-item"
                                            href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
                                         <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.releases') }}">{{__('View releases')}}</a>
                                         @if( Auth::user()->can('read-expansions') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
