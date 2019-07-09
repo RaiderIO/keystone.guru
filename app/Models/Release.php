@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
  * @property int $release_changelog_id
  * @property string $version
- * @property $updated_at string
- * @property $created_at string
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @property ReleaseChangelog $changelog
  *

@@ -28,8 +28,13 @@ class ReleaseFormRequest extends FormRequest
     {
         /** @var Release $release */
         $release = $this->route()->parameter('release');
+
+        $rule = Rule::unique('releases', 'version');
+        if( $release !== null ){
+            $rule->ignore($release->id);
+        }
         $rules = [
-            'version' => ['required', Rule::unique('releases', 'version')->ignore($release->id)]
+            'version' => ['required', $rule]
         ];
         return $rules;
     }

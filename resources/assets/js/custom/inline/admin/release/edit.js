@@ -6,11 +6,11 @@ class AdminReleaseEdit extends InlineCode {
     activate() {
         let self = this;
 
-        if (this.options.changelog !== null) {
+        if (typeof this.options.changelog.changes !== 'undefined') {
             let changes = this.options.changelog.changes;
             for (let i = 0; i < changes.length; i++) {
                 let change = changes[i];
-                this._addChangeRow(change.ticket_id, change.release_category_id, change.change);
+                this._addChangeRow(change.ticket_id, change.release_changelog_category_id, change.change);
             }
         }
 
@@ -42,5 +42,7 @@ class AdminReleaseEdit extends InlineCode {
             // Remove the row
             $($(this).closest('.row')).remove();
         });
+
+        refreshSelectPickers();
     }
 }

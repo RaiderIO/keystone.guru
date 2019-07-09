@@ -16,7 +16,7 @@ class CreateReleaseChangelogChangesTable extends Migration
         Schema::create('release_changelog_changes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('release_changelog_id');
-            $table->integer('release_category_id');
+            $table->integer('release_changelog_category_id');
             // May be null for old issues, but must be required for later on
             $table->integer('ticket_id')->nullable();
             $table->text('change');

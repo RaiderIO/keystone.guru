@@ -7,15 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $release_changelog_id
- * @property int $release_category_id
+ * @property int $release_changelog_category_id
  * @property int $ticket_id
  * @property string $change
+ *
+ * @property ReleaseChangelogCategory $category
+ * @property ReleaseChangelog $changelog
  *
  * @mixin \Eloquent
  */
 class ReleaseChangelogChange extends Model
 {
-    protected $visible = ['ticket_id', 'change', 'release_category_id', 'release_changelog_id'];
+    protected $visible = ['ticket_id', 'change', 'release_changelog_category_id', 'release_changelog_id'];
     protected $with = ['category'];
     public $timestamps = false;
 
@@ -33,6 +36,6 @@ class ReleaseChangelogChange extends Model
      */
     function changelog()
     {
-        return $this->belongsTo('App\Models\Changelog');
+        return $this->belongsTo('App\Models\ReleaseChangelog');
     }
 }

@@ -35,6 +35,6 @@ class ReleaseChangelog extends Model
      */
     function changes()
     {
-        return $this->hasMany('App\Models\ReleaseChangelogChange');
+        return $this->hasMany('App\Models\ReleaseChangelogChange')->orderBy('release_changelog_category_id');
     }
 }

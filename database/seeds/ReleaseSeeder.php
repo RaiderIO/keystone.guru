@@ -38,7 +38,7 @@ class ReleaseSeeder extends Seeder
                     // Changelog changes
                     $changelogChange = new \App\Models\ReleaseChangelogChange([
                         'release_changelog_id' => $changeData['release_changelog_id'],
-                        'release_category_id' => $changeData['release_category_id'],
+                        'release_changelog_category_id' => $changeData['release_changelog_category_id'],
                         'ticket_id' => $changeData['ticket_id'],
                         'change' => $changeData['change'],
                     ]);

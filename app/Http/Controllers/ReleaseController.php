@@ -21,12 +21,14 @@ class ReleaseController extends Controller
     {
         if ($new = ($release === null)) {
             $release = new Release();
-            $release->changelog = new ReleaseChangelog();
+            $changelog = new ReleaseChangelog();
+        } else {
+            $changelog = $release->changelog;
         }
 
         // Update the changelog
-        $release->changelog->description = $request->get('changelog_description');
-        $release->changelog->save();
+        $changelog->description = $request->get('changelog_description');
+        $changelog->save();
 
         // Update changes
         $tickets = $request->get('tickets', []);
@@ -34,32 +36,32 @@ class ReleaseController extends Controller
         $categories = $request->get('categories', []);
 
         // Delete existing changes
-        $release->changelog->changes()->delete();
+        $changelog->changes()->delete();
         // Unset the relation so it's reloaded
-        $release->changelog->unsetRelation('changes');
+        $changelog->unsetRelation('changes');
         for ($i = 0; $i < count($tickets); $i++) {
-            // Only filled in rows
-            if (strlen($tickets[$i]) > 0 && strlen($categories[$i]) > 0 && strlen($changes[$i]) > 0) {
+            // Only filled in rows, but tickets may be null
+            if (/*strlen($tickets[$i]) > 0 && */ (int)$categories[$i] !== -1 && strlen($categories[$i]) > 0 && strlen($changes[$i]) > 0) {
                 // Add new changes
                 $changelogChange = new ReleaseChangelogChange();
-                $changelogChange->release_changelog_id = $release->changelog->id;
-                $changelogChange->release_category_id = $categories[$i];
+                $changelogChange->release_changelog_id = $changelog->id;
+                $changelogChange->release_changelog_category_id = $categories[$i];
                 $changelogChange->ticket_id = $tickets[$i];
                 $changelogChange->change = $changes[$i];
                 $changelogChange->save();
             }
         }
-        $release->changelog->load('changes');
+        $changelog->load('changes');
 
 
         $release->version = $request->get('version');
 
         // Match the changelog to the release
-        $release->release_changelog_id = $release->changelog->id;
+        $release->release_changelog_id = $changelog->id;
 
         if ($release->save()) {
-            $release->changelog->release_id = $release->id;
-            $release->changelog->save();
+            $changelog->release_id = $release->id;
+            $changelog->save();
         } // Something went wrong with saving
         else {
             abort(500, 'Unable to save release');
@@ -75,7 +77,10 @@ class ReleaseController extends Controller
      */
     public function new()
     {
-        return view('admin.release.edit', ['headerTitle' => __('New release')]);
+        return view('admin.release.edit', [
+            'headerTitle' => __('New release'),
+            'categories' => ReleaseChangelogCategory::all()
+        ]);
     }
 
     /**
