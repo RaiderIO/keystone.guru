@@ -1,0 +1,32 @@
+{
+    "id": 9,
+    "release_changelog_id": 13,
+    "version": "v1.1.1",
+    "created_at": "2018-10-18 21:16:06",
+    "updated_at": "2018-10-18 21:16:06",
+    "changelog": {
+        "id": 13,
+        "release_id": 9,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 13,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "Increased performance of the website. I'll continue to monitor the performance as the amount of users & routes grow."
+            },
+            {
+                "release_changelog_id": 13,
+                "release_changelog_category_id": 3,
+                "ticket_id": null,
+                "change": "You can no longer attempt to assign raid markers while in view mode."
+            },
+            {
+                "release_changelog_id": 13,
+                "release_changelog_category_id": 3,
+                "ticket_id": null,
+                "change": "Raid markers can now be unassigned from enemies (in edit mode, of course)."
+            }
+        ]
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "id": 13,
+    "release_changelog_id": 17,
+    "version": "v1.4",
+    "created_at": "2018-11-05 20:46:19",
+    "updated_at": "2018-11-05 20:46:19",
+    "changelog": {
+        "id": 17,
+        "release_id": 13,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 17,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "Added titles for all pages on the website. This will aid multi browser-tab usage."
+            },
+            {
+                "release_changelog_id": 17,
+                "release_changelog_category_id": 3,
+                "ticket_id": 40,
+                "change": "The view and edit pages for routes are completely reworked. The map is now full screen, a toggleable sidebar holds all interaction\/information. Because of the increased screen real-estate for the map, a new zoom level has been added."
+            },
+            {
+                "release_changelog_id": 17,
+                "release_changelog_category_id": 3,
+                "ticket_id": null,
+                "change": "Fixed an issue where Infested Voting information was not available on the tryout version. Voting is still not possible if you're not logged in."
+            },
+            {
+                "release_changelog_id": 17,
+                "release_changelog_category_id": 3,
+                "ticket_id": null,
+                "change": "Fixed an issue where you could attempt to assign raid markers to enemies in view mode (didn't work, but still). I also think I re-introduced this bug so hopefully it stays gone for a while now."
+            },
+            {
+                "release_changelog_id": 17,
+                "release_changelog_category_id": 3,
+                "ticket_id": null,
+                "change": "Many small changes and improvements to the mapping experience."
+            }
+        ]
+    }
+}

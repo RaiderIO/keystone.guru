@@ -1,0 +1,32 @@
+{
+    "id": 11,
+    "release_changelog_id": 15,
+    "version": "v1.3",
+    "created_at": "2018-10-28 21:16:06",
+    "updated_at": "2018-10-28 21:16:06",
+    "changelog": {
+        "id": 15,
+        "release_id": 11,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 15,
+                "release_changelog_category_id": 1,
+                "ticket_id": 75,
+                "change": "Profile page is now tabbed; it looks a lot better now!"
+            },
+            {
+                "release_changelog_id": 15,
+                "release_changelog_category_id": 1,
+                "ticket_id": 29,
+                "change": "Added privacy controls in your Profile for opting out of Google Analytics cookies and disabling Personalized Ads for Google Adsense. With both options enabled, you should have no third-party cookies on your browser from Keystone.guru."
+            },
+            {
+                "release_changelog_id": 15,
+                "release_changelog_category_id": 1,
+                "ticket_id": 74,
+                "change": "Now users now have to explicitly agree to the privacy policy, terms of service and the cookie policy. Existing users have to give their consent to continue using the site."
+            }
+        ]
+    }
+}

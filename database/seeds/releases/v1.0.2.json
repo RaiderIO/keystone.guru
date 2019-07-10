@@ -1,0 +1,44 @@
+{
+    "id": 3,
+    "release_changelog_id": 7,
+    "version": "v1.0.2",
+    "created_at": "2018-10-09 20:16:06",
+    "updated_at": "2018-10-09 20:16:06",
+    "changelog": {
+        "id": 7,
+        "release_id": 3,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 7,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "Your routes are now unpublished by default. You have to publish them in order to have them show up in the search and to have other people see your route."
+            },
+            {
+                "release_changelog_id": 7,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "Route search can no longer sort on rating as it was broken. I will fix this at a later stage."
+            },
+            {
+                "release_changelog_id": 7,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Fixed some inconsistencies with Saurids in the middle part of the dungeon."
+            },
+            {
+                "release_changelog_id": 7,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Fixed a host of issues in Shrine of the Storm."
+            },
+            {
+                "release_changelog_id": 7,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Fixed map comments not showing up for logged in users."
+            }
+        ]
+    }
+}

@@ -2,8 +2,8 @@
     <div class="col-2">
         <input type="text" name="tickets[]" value="{{ticket}}" class="form-control"/>
     </div>
-    <div class="col-2">
-        <select name="categories[]" class="selectpicker">
+    <div class="col-3">
+        <select name="categories[]" class="selectpicker" data-width="100%">
             {{#select category}}
                 <option value="-1">{{select_category_label}}</option>
                 {{#categories}}
@@ -12,7 +12,7 @@
             {{/select}}
         </select>
     </div>
-    <div class="col-7">
+    <div class="col-6">
         <input type="text" name="changes[]" value="{{change}}" class="form-control"/>
     </div>
     <div class="col-1">
