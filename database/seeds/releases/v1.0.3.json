@@ -1,0 +1,74 @@
+{
+    "id": 4,
+    "release_changelog_id": 8,
+    "version": "v1.0.3",
+    "created_at": "2018-10-11 20:16:06",
+    "updated_at": "2018-10-11 20:16:06",
+    "changelog": {
+        "id": 8,
+        "release_id": 4,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "You can now edit your route's title."
+            },
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "You can no longer rate your own routes (I saw you rate your own routes a 10\/10!)."
+            },
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "Polished the layout of the website, mainly focussed on mobile users."
+            },
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "There's now some feedback on your actions on the website (success\/failure of actions)."
+            },
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "Improved performance of Routes page."
+            },
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 3,
+                "ticket_id": null,
+                "change": "Height is now auto-adjusted to your device's viewport rather than a fixed value."
+            },
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Atal'Dazar             <ul>                 <li>                     Shadowblade Stalker near the beginning is now marked as a patrol.                 <\/li>                 <li>                     Added a missing pack of Saurids on the way to Priestess Alun'za.                 <\/li>                 <li>                     Gilded Priestesses at Priestess Alun'za are no longer linked.                 <\/li>             <\/ul>"
+            },
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "The MOTHERLODE!!             <ul>                 <li>                     Stonefuries before Taskmaster Askari are now linked.                 <\/li>                 <li>                     Numerous corrections to The D.M.Z. before the last boss (missing bombs, slightly off locations).                 <\/li>             <\/ul>"
+            },
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "The Underrot             <ul>                 <li>                     Added a missing pack of 2 patrolling Diseased Lashes between the first and second boss.                 <\/li>             <\/ul>"
+            },
+            {
+                "release_changelog_id": 8,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Tol Dagor<ul>                 <li>                     Pack of Stringing Swarmers right after the first boss was duplicated (two mobs inside eachother).                     The duplicated enemies have been removed.                 <\/li>             <\/ul>"
+            }
+        ]
+    }
+}

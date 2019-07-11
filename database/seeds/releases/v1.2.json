@@ -1,0 +1,80 @@
+{
+    "id": 10,
+    "release_changelog_id": 14,
+    "version": "v1.2",
+    "created_at": "2018-10-27 21:16:06",
+    "updated_at": "2018-10-27 21:16:06",
+    "changelog": {
+        "id": 14,
+        "release_id": 10,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 1,
+                "ticket_id": 68,
+                "change": "Editing a dungeon with Teeming selected will now show the proper valid affixes again rather than just non-teeming affixes."
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 1,
+                "ticket_id": 57,
+                "change": "Failing validation for a new route will no longer reset your selected spec\/class\/race selections."
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 1,
+                "ticket_id": 42,
+                "change": "Adjusted various labels when editing a route away from their defaults to more clear new ones."
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 1,
+                "ticket_id": 69,
+                "change": "You can now select your region and timezone in your profile. This will make the Affixes page 100% accurate to your region + timezone. This was also needed to properly implement #39 (see below)."
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 3,
+                "ticket_id": 62,
+                "change": "Re-wrote all code related to visualising enemies on the map. The new setup allows me to extend the system and display a lot more information regarding enemies. Look for a new dropdown to the top right of your map to change visualization layers. The options are limited for now, but as soon as I gather more information about enemies this list will fill with more options. Because of this, raid markers no longer completely replace the selected enemy, but place the marker to the top of them instead (just like in-game)."
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 3,
+                "ticket_id": 39,
+                "change": "With help of the above, all logged in users can now vote on all enemies to be Infested or not. Using the new dropdown for visualization selection in the top right you can select a new 'Infested Voting' visualization, which allows you to vote yes or no on each enemy on-screen if they're infested or not. Each enemy requires 3 more yes votes than no votes to be marked as Infested on everyone's map. Every reset, the votes are cleared and the voting begins again (Infested enemies change every week).   To vote for Infested enemies, you need to have your region and timezone set in your profile. Why? As a European you can vote for Infested enemies on Tuesday afternoon, while Americas will have a new set of Infested enemies already and they're voting for theirs. You don't want your 'last week' votes messing up the 'new' votes for the next week that are already being voted for in America."
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "All dungeons         <ul>                 <li>                     Due to Infested voting, all enemies which are tightly clustered have been spaced up slightly as to                     not impede with the voting process. If this is still an issue I'll consider adding another zoom                     level to the maps.                 <\/li>             <\/ul>"
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Shrine of the Storm<ul>                 <li>                     Several duplicate enemies on the second floor were removed.                 <\/li>             <\/ul>"
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Siege of Boralus<ul>                 <li>                     Several duplicate enemies between the first and second boss were removed.                 <\/li>             <\/ul>"
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Tol Dagor<ul>                 <li>                     Removed two duplicate enemies in the Overseer's Redoubt.                 <\/li>                 <li>                     Added some missing enemies in the Officer Quarters.                 <\/li>             <\/ul>"
+            },
+            {
+                "release_changelog_id": 14,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "The Underrot<ul>                 <li>                     Re-positioned a lot of enemies to their correct location on the map. The in-game map (and thus the                     one on the website) isn't very accurate so some enemies may look a bit out of place, but it's the                     best thing to do. Hopefully Blizzard fixes their map some time so the enemies are correctly placed.                 <\/li>                 <li>                     Added flying Feral Bloodswarmers after the second boss.                 <\/li>                 <li>                     Added a few missing Grotesque Horrors at the south part after the third boss.                 <\/li>             <\/ul>"
+            }
+        ]
+    }
+}

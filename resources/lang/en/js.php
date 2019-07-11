@@ -53,6 +53,8 @@ return [
 
     'submit_label' => 'Submit',
 
+    'select_category_label' => 'Select category...',
+
     // Route edit tools
     'path' => 'Path',
     'killzone' => 'Killzone',

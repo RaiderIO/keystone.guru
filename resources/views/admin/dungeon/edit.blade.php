@@ -66,7 +66,7 @@
 {!! Form::close() !!}
 @isset($model)
 </div>
-<h4>Floor management</h4>
+<h4>{{ __('Floor management') }}</h4>
 <div class="float-right">
     <a href="{{ route('admin.floor.new', array('dungeon' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">
         <i class="fas fa-plus"></i> {{ __('Add floor') }}

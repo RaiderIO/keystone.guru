@@ -1,0 +1,62 @@
+{
+    "id": 29,
+    "release_changelog_id": 33,
+    "version": "v2.5.3",
+    "created_at": "2019-06-18 21:25:43",
+    "updated_at": "2019-06-18 21:25:43",
+    "changelog": {
+        "id": 33,
+        "release_id": 29,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 33,
+                "release_changelog_category_id": 1,
+                "ticket_id": 139,
+                "change": "Patrols and enemy packs can now be marked as 'teeming' and belonging to a specific faction (think Siege of Boralus)."
+            },
+            {
+                "release_changelog_id": 33,
+                "release_changelog_category_id": 1,
+                "ticket_id": 169,
+                "change": "Added simple custom error pages. I'm looking to refine these further, but they're in Keystone.guru style now."
+            },
+            {
+                "release_changelog_id": 33,
+                "release_changelog_category_id": 1,
+                "ticket_id": 185,
+                "change": "Interally reworked the way affixes and affix groups are handled (a group is pretty much an affix set that you encounter every week). This now works with M+ Seasons, allowing for cleaner code and making it very easy to add new affixes\/seasons. The only change for you is that the \/affixes page will be more accurate going into the future, around the weeks where a new season is announced."
+            },
+            {
+                "release_changelog_id": 33,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "As part of the above tickets, I've also fixed an issue that was introduced with the introduction of Teams where filtering Routes on the \/routes page or in your profile, teams pages would no longer work. This has been corrected."
+            },
+            {
+                "release_changelog_id": 33,
+                "release_changelog_category_id": 3,
+                "ticket_id": 188,
+                "change": "Finishing deleting an object (or cancelling it) will no longer remove all raid markers from view. A refresh would bring them back, but that's not ideal of course."
+            },
+            {
+                "release_changelog_id": 33,
+                "release_changelog_category_id": 3,
+                "ticket_id": 190,
+                "change": "Demo routes now properly have group player specializations and attributes."
+            },
+            {
+                "release_changelog_id": 33,
+                "release_changelog_category_id": 3,
+                "ticket_id": 191,
+                "change": "Changing drawing color now properly changes the color of drawn Paths."
+            },
+            {
+                "release_changelog_id": 33,
+                "release_changelog_category_id": 3,
+                "ticket_id": 192,
+                "change": "Floor switcher is now initialized on the current floor, plus using it to change floors now always works."
+            }
+        ]
+    }
+}

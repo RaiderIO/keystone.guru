@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DungeonRoute;
+use App\Models\Release;
 use App\Service\Season\SeasonService;
 use Illuminate\Http\Request;
 
@@ -79,7 +79,7 @@ class SiteController extends Controller
      */
     public function changelog(Request $request)
     {
-        return view('misc.changelog');
+        return view('misc.changelog', ['releases' => Release::orderBy('created_at', 'DESC')->paginate(5)]);
     }
 
     /**
