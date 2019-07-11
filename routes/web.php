@@ -31,6 +31,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('/', 'SiteController@index')->name('home');
 
     Route::get('changelog', 'SiteController@changelog')->name('misc.changelog');
+    Route::get('release/{release}', 'ReleaseController@view')->name('release.view');
 
     Route::get('mapping', 'SiteController@mapping')->name('misc.mapping');
 

@@ -5,36 +5,12 @@
 @extends('layouts.app', ['showLegalModal' => false, 'title' => __('Changelog')])
 
 @section('header-title', __('Changelog'))
+@include('common.general.inline', ['path' => 'release/view', 'options' => ['max_release' => $releases->first()->id]])
 
 @section('content')
     @foreach($releases as $release)
-        <?php
-        /** @var $release \App\Models\Release */
-        ?>
-        <h4>
-            {{ sprintf('%s (%s)', $release->version, $release->created_at->format('Y/m/d')) }}
-        </h4>
-        <?php
-        /** @var \App\Models\ReleaseChangelogCategory $category */
-        ?>
-        @foreach ($release->changelog->changes->groupBy('release_changelog_category_id') as $categoryId => $groupedChange)
-            <p>
-                <?php /** @var $change \App\Models\ReleaseChangelogChange */?>
-                {{ \App\Models\ReleaseChangelogCategory::findOrFail($categoryId)->category }}:
-            <ul>
-                @foreach ($groupedChange as $category => $change)
-                    <li>
-                        @if($change->ticket_id !== null)
-                            <a href="https://github.com/Wotuu/keystone.guru/issues/{{ $change->ticket_id }}">#{{ $change->ticket_id }}</a>
-                        @endif
-                        {!! $change->change !!}
-                    </li>
-                @endforeach
-            </ul>
-            </p>
-        @endforeach
+        @include('common.release.release', ['release' => $release])
     @endforeach
 
     {{ $releases->links() }}
-
 @endsection

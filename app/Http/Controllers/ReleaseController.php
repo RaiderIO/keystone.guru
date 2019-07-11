@@ -140,4 +140,13 @@ class ReleaseController extends Controller
     {
         return view('admin.release.list', ['models' => Release::all()]);
     }
+
+    /**
+     * @param Release $release
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function view(Release $release)
+    {
+        return view('release.view', ['release' => $release]);
+    }
 }

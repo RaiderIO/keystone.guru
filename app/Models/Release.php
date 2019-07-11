@@ -22,6 +22,11 @@ class Release extends Model
 
     protected $with = ['changelog'];
 
+    public function getRouteKeyName()
+    {
+        return 'version';
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
