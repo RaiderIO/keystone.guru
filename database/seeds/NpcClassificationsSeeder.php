@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class NpcClassificationSeeder extends Seeder
+class NpcClassificationsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
