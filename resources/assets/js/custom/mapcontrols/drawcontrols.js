@@ -96,6 +96,14 @@ class DrawControls extends MapControl {
             }
         });
 
+        this._attachHotkeys();
+    }
+
+    /**
+     *
+     * @protected
+     */
+    _attachHotkeys(){
         this.map.hotkeys.attach('1', 'leaflet-draw-draw-path');
         this.map.hotkeys.attach('2', 'leaflet-draw-draw-killzone');
         this.map.hotkeys.attach('3', 'leaflet-draw-draw-mapcomment');

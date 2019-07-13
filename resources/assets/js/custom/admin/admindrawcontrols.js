@@ -1,10 +1,13 @@
 class AdminDrawControls extends DrawControls {
-    constructor(map, drawnItemsLayer) {
-        super(map, drawnItemsLayer);
 
-        this.map.hotkeys.attach('e', 'leaflet-draw-draw-enemy');
-        this.map.hotkeys.attach('a', 'leaflet-draw-draw-enemypack');
-        this.map.hotkeys.attach('p', 'leaflet-draw-draw-enemypatrol');
+    _attachHotkeys() {
+        this.map.hotkeys.attach('1', 'leaflet-draw-draw-mapcomment');
+        this.map.hotkeys.attach('2', 'leaflet-draw-draw-enemypack');
+        this.map.hotkeys.attach('3', 'leaflet-draw-draw-enemy');
+        this.map.hotkeys.attach('4', 'leaflet-draw-draw-enemypatrol');
+        this.map.hotkeys.attach('5', 'leaflet-draw-draw-dungeonstartmarker');
+        this.map.hotkeys.attach('6', 'leaflet-draw-draw-dungeonfloorswitchmarker');
+        this.map.hotkeys.attach('7', 'leaflet-draw-edit-edit');
     }
 
     /**

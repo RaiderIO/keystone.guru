@@ -55,7 +55,7 @@ class APIMapCommentController extends Controller
         }
 
         if (!$mapComment->save()) {
-            throw new \Exception("Unable to save map comment!");
+            throw new \Exception('Unable to save map comment!');
         } else {
             broadcast(new MapCommentChangedEvent($dungeonroute, $mapComment, Auth::user()));
 
