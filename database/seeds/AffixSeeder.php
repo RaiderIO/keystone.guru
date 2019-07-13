@@ -91,7 +91,7 @@ class AffixSeeder extends Seeder
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Beguiling']],
-            ['season_id' => 3, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Bolstering', 'Grievous', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Beguiling']],

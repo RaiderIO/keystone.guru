@@ -161,9 +161,8 @@ foreach ($model->teamusers as $teamuser) {
                                    data-alert-dismiss-id="team-invite-info">
                                     <i class="fas fa-times"></i>
                                 </a>
-                                <p>
-                                    {{ __('Be careful who you share the invite link with, everyone with it can join your team!') }}
-                                </p>
+                                <i class="fas fa-info-circle"></i>
+                                {{ __('Be careful who you share the invite link with, everyone with the link can join your team!') }}
                             </div>
                         </div>
                     @endif
