@@ -37,7 +37,7 @@
                 <td>{{ $release->id }}</td>
                 <td>{{ $release->version }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('admin.release.edit', ['id' => $release->id]) }}">
+                    <a class="btn btn-primary" href="{{ route('admin.release.edit', ['release' => $release->version]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
                     </a>
                 </td>
