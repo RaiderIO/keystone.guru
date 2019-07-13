@@ -29,7 +29,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let self = this;
 
         // Some exclusions as to when the menu should not pop up
-        if (!self.enemyvisual.map.isEnemySelectionEnabled() && self.enemyvisual.enemy.constructor.name !== 'AdminEnemy') {
+        if (self.enemyvisual.map.options.edit &&
+            !self.enemyvisual.map.isEnemySelectionEnabled() &&
+            self.enemyvisual.enemy.constructor.name !== 'AdminEnemy') {
 
             if (self.circleMenu === null) {
                 let template = Handlebars.templates['map_enemy_raid_marker_template'];

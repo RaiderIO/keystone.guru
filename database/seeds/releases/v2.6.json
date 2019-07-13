@@ -47,6 +47,12 @@
             },
             {
                 "release_changelog_id": 35,
+                "release_changelog_category_id": 3,
+                "ticket_id": 200,
+                "change": "You can no longer (attempt to) assign a raid marker to enemies in view mode."
+            },
+            {
+                "release_changelog_id": 35,
                 "release_changelog_category_id": 7,
                 "ticket_id": 197,
                 "change": "Teams now use their names in the URL rather than their internal ID."

@@ -79,6 +79,16 @@ class APIDungeonRouteController extends Controller
 
         $requirements = $request->get('requirements', []);
 
+        // Enough enemy forces
+        if (array_search('enough_enemy_forces', $requirements) !== false) {
+            // Clear group by
+            $routes = $routes
+                // Having because we're using the result of SELECT
+                ->havingRaw('IF(dungeon_routes.teeming, enemy_forces > dungeons.enemy_forces_required_teeming, enemy_forces > dungeons.enemy_forces_required)')
+                // Add more group by clauses, required for the above having query
+                ->groupBy(['dungeon_routes.teeming', 'dungeons.enemy_forces_required', 'dungeons.enemy_forces_required_teeming']);
+        }
+
         // If logged in
         if ($user !== null) {
             $mine = $request->get('mine', false);
@@ -99,16 +109,6 @@ class APIDungeonRouteController extends Controller
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
-            }
-
-            // Enough enemy forces
-            if (array_search('enough_enemy_forces', $requirements) !== false) {
-                // Clear group by
-                $routes = $routes
-                    // Having because we're using the result of SELECT
-                    ->havingRaw('IF(dungeon_routes.teeming, enemy_forces > dungeons.enemy_forces_required_teeming, enemy_forces > dungeons.enemy_forces_required)')
-                    // Add more group by clauses, required for the above having query
-                    ->groupBy(['dungeon_routes.teeming', 'dungeons.enemy_forces_required', 'dungeons.enemy_forces_required_teeming']);
             }
 
             // Handle team if set

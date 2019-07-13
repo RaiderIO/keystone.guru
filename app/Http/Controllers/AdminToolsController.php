@@ -175,6 +175,13 @@ class AdminToolsController extends Controller
     {
         $result = [];
 
+        // Save all NPCs which aren't directly tied to a dungeon
+        $npcs = Npc::all()->where('dungeon_id', -1)->values();
+
+        // Save NPC data in the root of folder
+        $dungeonDataDir = database_path('/seeds/dungeondata/');
+        $this->_saveData($npcs, $dungeonDataDir, 'npcs.json');
+
         foreach (Dungeon::all() as $dungeon) {
             /** @var $dungeon Dungeon */
             // HoV is our test dungeon so keep there here so I don't have to rewrite this every time I want to debug
@@ -182,7 +189,7 @@ class AdminToolsController extends Controller
 //                continue;
 //            }
 
-            $rootDirPath = database_path('/seeds/dungeondata/' . $dungeon->expansion->shortname . '/' . $dungeon->key);
+            $rootDirPath = $dungeonDataDir . $dungeon->expansion->shortname . '/' . $dungeon->key;
 
             // Demo routes, load it in a specific way to make it easier to import it back in again
             $demoRoutes = $dungeon->dungeonroutes->where('demo', true)->values();

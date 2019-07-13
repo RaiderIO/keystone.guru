@@ -21,11 +21,10 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
 
     protected function _applyFilter(Builder $builder, $columnData, $order)
     {
-
         $routeattributes = $columnData['search']['value'];
         // If filtering or ordering
         if (!empty($routeattributes) || $order !== null) {
-            $builder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
+            // $builder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
             $builder->groupBy('dungeon_routes.id');
         }
 

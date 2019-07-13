@@ -31,17 +31,17 @@ class DungeonDataSeeder extends Seeder
             'map_comments' => 'App\Models\MapComment'
         ];
 
-        $rootDir = base_path() . '/database/seeds/dungeondata/';
+        $rootDir = database_path('/seeds/dungeondata/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
         // For each expansion
-        foreach ($rootDirIterator as $expansionShortnameDir) {
-            $expansionShortnameBasename = basename($expansionShortnameDir);
+        foreach ($rootDirIterator as $rootDirChild) {
+            $rootDirChildBaseName = basename($rootDirChild);
 
             // Only folders which have the correct shortname
-            if (\App\Models\Expansion::where('shortname', $expansionShortnameBasename)->first() !== null) {
-                $this->command->info('Expansion ' . $expansionShortnameBasename);
-                $expansionDirIterator = new FilesystemIterator($expansionShortnameDir);
+            if (\App\Models\Expansion::where('shortname', $rootDirChildBaseName)->first() !== null) {
+                $this->command->info('Expansion ' . $rootDirChildBaseName);
+                $expansionDirIterator = new FilesystemIterator($rootDirChild);
 
                 // For each dungeon inside an expansion dir
                 foreach ($expansionDirIterator as $dungeonKeyDir) {
@@ -66,6 +66,10 @@ class DungeonDataSeeder extends Seeder
                         }
                     }
                 }
+            }
+            // It's a 'global' file, parse it
+            else if( strpos($rootDirChild, '.json') === strlen($rootDirChild) - 5 ) { // 5 for length of .json
+                $this->_parseRawFile($rootDir, $rootDirChild, $nameMapping, 1);
             }
         }
     }
