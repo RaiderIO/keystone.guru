@@ -2,7 +2,7 @@
 
 @section('header-title')
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg">
             <h4>{{ __('View expansions') }}</h4>
         </div>
         <div class="ml-auto">

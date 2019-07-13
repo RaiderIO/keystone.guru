@@ -24,7 +24,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         if ($columnData['searchable'] === 'true') {
             $searchValue = $columnData['search']['value'];
             if (!empty($searchValue)) {
-                $builder->where($this->getColumnName(), '=', $searchValue);
+                $builder->where($this->getColumnName(), $searchValue);
             }
         }
 

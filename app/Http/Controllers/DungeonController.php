@@ -103,6 +103,6 @@ class DungeonController extends Controller
      */
     public function list()
     {
-        return view('admin.dungeon.list', ['models' => Dungeon::all()->sortBy('active')]);
+        return view('admin.dungeon.list', ['models' => Dungeon::orderByDesc('active')->get()]);
     }
 }

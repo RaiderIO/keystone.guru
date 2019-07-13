@@ -16,6 +16,19 @@ if ($timezone === null) {
 
 @section('content')
 
+    @if(!isAlertDismissed('affixes-s3-inaccurate-warning'))
+        <div class="alert alert-info alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close"
+               data-alert-dismiss-id="affixes-s3-inaccurate-warning">
+                <i class="fas fa-times"></i>
+            </a>
+            <i class="fas fa-info-circle"></i>
+            {{ __('Due to the schedule for M+ season 3 not being published yet this page may be incorrect or out of
+            date. I will update the page weekly to reflect the current week and/or the entire schedule as it becomes
+            available.') }}
+        </div>
+    @endif
+
     <table class="affixes_overview_table table-striped" width="100%">
         <thead>
         <tr>

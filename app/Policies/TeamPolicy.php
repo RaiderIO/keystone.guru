@@ -13,8 +13,8 @@ class TeamPolicy
     /**
      * Determine whether the user can edit a team.
      *
-     * @param  \App\User $user
-     * @param  \App\Models\Team $team
+     * @param \App\User $user
+     * @param \App\Models\Team $team
      * @return bool
      */
     public function edit(User $user, Team $team)
@@ -61,6 +61,16 @@ class TeamPolicy
      * @return boolean
      */
     public function removeMember(User $user, Team $team)
+    {
+        return $team->isUserModerator($user);
+    }
+
+    /**
+     * @param User $user
+     * @param Team $team
+     * @return bool
+     */
+    public function refreshInviteLink(User $user, Team $team)
     {
         return $team->isUserModerator($user);
     }

@@ -95,7 +95,7 @@
             <td>
                 Your session when logged into the website. Removal of this cookie causes you to be logged out
                 immediately. Anyone having access to the value of this cookie will be instantly logged in as you.
-                Never share this value with anyone. Blocking this cookie causes you to not be able to log in properly.
+                Never share this value with anyone. Blocking this cookie causes you to not be able to log in.
             </td>
         </tr>
         <tr>
@@ -110,6 +110,24 @@
         </tr>
         <tr>
             <td>
+                alert-dismiss-[string]
+            </td>
+            <td>
+                Keeps track of which dialogs you've dismissed. When set, a specific dialog you've dismissed will no
+                longer keep showing up.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                changelog_release_last_viewed
+            </td>
+            <td>
+                Keeps track of the latest release you've viewed so we can show the NEW keyword next to the changelog in
+                the header when there's a new release.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 cookieconsent_status
             </td>
             <td>
@@ -118,10 +136,34 @@
         </tr>
         <tr>
             <td>
+                io
+            </td>
+            <td>
+                This cookie is set whenever you use the collaborative route editing feature when using Teams.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 laravel_session
             </td>
             <td>
                 Placed when you log into the site and keeps you logged in when you selected "remember me".
+            </td>
+        </tr>
+        <tr>
+            <td>
+                polyline_default_color
+            </td>
+            <td>
+                Remembers the color you set when changing the color of a polyline in the map editor.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                polyline_default_weight
+            </td>
+            <td>
+                Remembers the stroke width you set when changing the stroke width of a polyline in the map editor.
             </td>
         </tr>
         <tr>

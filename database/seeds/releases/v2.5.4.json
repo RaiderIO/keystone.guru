@@ -1,0 +1,20 @@
+{
+    "id": 30,
+    "release_changelog_id": 34,
+    "version": "v2.5.4",
+    "created_at": "2019-06-28 20:40:06",
+    "updated_at": "2019-06-28 20:40:06",
+    "changelog": {
+        "id": 34,
+        "release_id": 30,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 34,
+                "release_changelog_category_id": 1,
+                "ticket_id": 186,
+                "change": "Updated the affixes page to reflect the current and upcoming season."
+            }
+        ]
+    }
+}

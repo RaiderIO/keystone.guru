@@ -1,0 +1,49 @@
+@extends('layouts.app', ['showAds' => false, 'title' => __('Release listing')])
+
+@section('header-title')
+    <div class="row">
+        <div class="col-lg">
+            <h4>{{ __('View releases') }}</h4>
+        </div>
+        <div class="ml-auto">
+            <a href="{{ route('admin.release.new') }}" class="btn btn-success text-white pull-right ml-auto" role="button">
+                <i class="fas fa-plus"></i> {{ __('Create release') }}
+            </a>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <script type="text/javascript">
+        $(function () {
+            $('#admin_release_table').DataTable({});
+        });
+    </script>
+@endsection
+
+@section('content')
+    <table id="admin_release_table" class="tablesorter default_table table-striped">
+        <thead>
+        <tr>
+            <th width="10%">{{ __('Id') }}</th>
+            <th width="80%">{{ __('Version') }}</th>
+            <th width="10%">{{ __('Actions') }}</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach ($models->all() as $release)
+            <tr>
+                <td>{{ $release->id }}</td>
+                <td>{{ $release->version }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ route('admin.release.edit', ['id' => $release->id]) }}">
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
+                    </a>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+
+    </table>
+@endsection()

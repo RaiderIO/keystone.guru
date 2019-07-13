@@ -5,6 +5,7 @@
         "floor_id": 62,
         "mdt_id": 7,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -71.02,
@@ -19,6 +20,7 @@
         "floor_id": 62,
         "mdt_id": 14,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -61.52,
@@ -33,6 +35,7 @@
         "floor_id": 62,
         "mdt_id": 16,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -78.02,
@@ -47,6 +50,7 @@
         "floor_id": 62,
         "mdt_id": 17,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -79.52,
@@ -61,6 +65,7 @@
         "floor_id": 62,
         "mdt_id": 15,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -62.52,
@@ -75,10 +80,11 @@
         "floor_id": 62,
         "mdt_id": 4,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -176.01,
-        "lng": 233,
+        "lat": -176.5,
+        "lng": 233.625,
         "npc": {
             "id": 131587
         }
@@ -89,10 +95,11 @@
         "floor_id": 62,
         "mdt_id": 2,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -173.51,
-        "lng": 226,
+        "lat": -171.125,
+        "lng": 224.25,
         "npc": {
             "id": 131818
         }
@@ -103,6 +110,7 @@
         "floor_id": 62,
         "mdt_id": 3,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -108.76,
@@ -117,6 +125,7 @@
         "floor_id": 62,
         "mdt_id": 5,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -114.76,
@@ -131,6 +140,7 @@
         "floor_id": 62,
         "mdt_id": 7,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -116.76,
@@ -145,6 +155,7 @@
         "floor_id": 62,
         "mdt_id": 1,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -126.01,
@@ -159,6 +170,7 @@
         "floor_id": 62,
         "mdt_id": 1,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -168.01,
@@ -173,6 +185,7 @@
         "floor_id": 62,
         "mdt_id": 8,
         "teeming": null,
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -174.01,
@@ -187,6 +200,7 @@
         "floor_id": 62,
         "mdt_id": 4,
         "teeming": "visible",
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -78.63,
@@ -201,12 +215,43 @@
         "floor_id": 62,
         "mdt_id": 3,
         "teeming": "visible",
+        "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
         "lat": -113.88,
         "lng": 95.88,
         "npc": {
             "id": 131819
+        }
+    },
+    {
+        "id": 3649,
+        "enemy_pack_id": 125,
+        "floor_id": 62,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 1,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -111.635,
+        "lng": 94.375,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3650,
+        "enemy_pack_id": 121,
+        "floor_id": 62,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 1,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -174.25,
+        "lng": 228.875,
+        "npc": {
+            "id": 155432
         }
     }
 ]

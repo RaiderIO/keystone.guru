@@ -54,6 +54,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => 'required|alpha_dash|max:32|unique:users',
             'email' => 'required|email|max:255|unique:users',
+            'game_server_region_id' => 'nullable|int',
             'password' => 'required|min:8|confirmed',
             'legal_agreed' => 'required|accepted'
         ], [
@@ -77,6 +78,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'game_server_region_id' => $data['region'],
             'password' => bcrypt($data['password']),
             'legal_agreed' => $data['legal_agreed'],
             'legal_agreed_ms' => intval($data['legal_agreed_ms'])

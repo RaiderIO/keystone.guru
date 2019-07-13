@@ -17,6 +17,7 @@ use App\Logic\Datatables\AuthorNameColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use App\Logic\Datatables\DungeonRouteAffixesColumnHandler;
 use App\Logic\Datatables\DungeonRouteAttributesColumnHandler;
+use App\Logic\Datatables\EnemyForcesColumnHandler;
 use App\Logic\Datatables\RatingColumnHandler;
 use App\Logic\Datatables\ViewsColumnHandler;
 use App\Models\DungeonRoute;
@@ -49,14 +50,24 @@ class APIDungeonRouteController extends Controller
     function list(Request $request)
     {
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
-            ->selectRaw('dungeon_routes.*')
+            // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
+            // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
+            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required, IFNULL(SUM(npcs.enemy_forces), 0) as enemy_forces')
+            // Select enemy forces
+            ->leftJoin('kill_zones', 'kill_zones.dungeon_route_id', '=', 'dungeon_routes.id')
+            ->leftJoin('kill_zone_enemies', 'kill_zone_enemies.kill_zone_id', '=', 'kill_zones.id')
+            ->leftJoin('enemies', 'enemies.id', '=', 'kill_zone_enemies.enemy_id')
+            ->leftJoin('npcs', 'npcs.id', '=', 'enemies.npc_id')
+            ->leftJoin('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query) {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
-            });
+            })
+            // required for the enemy forces calculation
+            ->groupBy('dungeon_routes.id');
 
         $user = Auth::user();
         $mine = false;
@@ -66,32 +77,45 @@ class APIDungeonRouteController extends Controller
         // If we're viewing a team's route this will be filled
         $team = null;
 
+        $requirements = $request->get('requirements', []);
+
         // If logged in
         if ($user !== null) {
             $mine = $request->get('mine', false);
 
             // Filter by our own user if logged in
             if ($mine) {
-                $routes = $routes->where('author_id', '=', $user->id);
+                $routes = $routes->where('author_id', $user->id);
             }
 
             // Never show demo routes here
             if (!$user->hasRole('admin')) {
-                $routes = $routes->where('demo', '=', '0');
+                $routes = $routes->where('demo', '0');
             }
 
             // Handle favorites
-            if ($request->get('favorites', false)) {
+            if (array_search('favorite', $requirements) !== false) {
                 $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
             }
 
+            // Enough enemy forces
+            if (array_search('enough_enemy_forces', $requirements) !== false) {
+                // Clear group by
+                $routes = $routes
+                    // Having because we're using the result of SELECT
+                    ->havingRaw('IF(dungeon_routes.teeming, enemy_forces > dungeons.enemy_forces_required_teeming, enemy_forces > dungeons.enemy_forces_required)')
+                    // Add more group by clauses, required for the above having query
+                    ->groupBy(['dungeon_routes.teeming', 'dungeons.enemy_forces_required', 'dungeons.enemy_forces_required_teeming']);
+            }
+
             // Handle team if set
-            if ($teamId = $request->get('team_id', false)) {
+            if ($teamName = $request->get('team_name', false)) {
+                // @TODO Policy?
                 // You must be a member of this team to retrieve their routes
-                $team = Team::findOrFail($teamId);
+                $team = Team::where('name', $teamName)->firstOrFail();
                 if (!$team->members->contains($user->id)) {
                     abort(403, 'Unauthorized');
                 }
@@ -104,7 +128,7 @@ class APIDungeonRouteController extends Controller
                     $routes = $routes->whereIn('author_id', $team->members->pluck(['id'])->toArray());
                 } else {
                     // Where the route is part of the requested team
-                    $routes = $routes->where('team_id', $teamId);
+                    $routes = $routes->where('team_id', $team->id);
                 }
 //                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
 //                    /** @var $query Builder */
@@ -127,18 +151,22 @@ class APIDungeonRouteController extends Controller
 
         $dtHandler = new DatatablesHandler($request);
 
-        return $dtHandler->setBuilder($routes)->addColumnHandler([
+        $result = $dtHandler->setBuilder($routes)->addColumnHandler([
             // Handles any searching/filtering based on DR Affixes
             new DungeonRouteAffixesColumnHandler($dtHandler),
             // Sort by the amount of attributes
             new DungeonRouteAttributesColumnHandler($dtHandler),
             // Allow sorting by author name
             new AuthorNameColumnHandler($dtHandler),
+            // Allow sorting by enemy forces
+            new EnemyForcesColumnHandler($dtHandler),
             // Allow sorting by views
             new ViewsColumnHandler($dtHandler),
             // Allow sorting by rating
             new RatingColumnHandler($dtHandler)
         ])->applyRequestToBuilder()->getResult();
+
+        return $result;
     }
 
     /**
@@ -191,6 +219,22 @@ class APIDungeonRouteController extends Controller
         $this->authorize('publish', $dungeonroute);
 
         $dungeonroute->published = intval($request->get('published', 0)) === 1;
+        $dungeonroute->save();
+
+        return ['result' => 'success'];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array
+     * @throws \Exception
+     */
+    function beguilingpreset(Request $request, DungeonRoute $dungeonroute)
+    {
+        $this->authorize('beguilingpreset', $dungeonroute);
+
+        $dungeonroute->beguiling_preset = intval($request->get('beguilingpreset', 0));
         $dungeonroute->save();
 
         return ['result' => 'success'];

@@ -2,7 +2,7 @@ class Hotkeys {
     constructor(map) {
         this.map = map;
 
-        this.map.register('map:refresh', this, (this._mapRefreshed).bind(this))
+        this.map.register('map:refresh', this, (this._mapRefreshed).bind(this));
         this.keys = [];
     }
 
@@ -12,7 +12,7 @@ class Hotkeys {
      * @private
      */
     _mapRefreshed(refreshEvent) {
-        console.assert(this instanceof Hotkeys, this, 'this is not an instance of Hotkeys');
+        console.assert(this instanceof Hotkeys, 'this is not an instance of Hotkeys', this);
         let self = this;
 
         this.map.leafletMap.on('keypress', function (event) {
@@ -40,7 +40,7 @@ class Hotkeys {
      * @param event
      */
     onKeyPressed(event) {
-        console.assert(this instanceof Hotkeys, this, 'this is not an instance of Hotkeys');
+        console.assert(this instanceof Hotkeys, 'this is not an instance of Hotkeys', this);
 
         let keyEvent = event.originalEvent;
         let className = '';
@@ -63,7 +63,7 @@ class Hotkeys {
      * @private
      */
     _triggerClickOnClass(className) {
-        console.assert(this instanceof Hotkeys, this, 'this is not an instance of Hotkeys');
+        console.assert(this instanceof Hotkeys, 'this is not an instance of Hotkeys', this);
 
         let newEvent = document.createEvent('Event');
         newEvent.initEvent('click', true, true);

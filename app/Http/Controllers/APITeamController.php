@@ -117,4 +117,21 @@ class APITeamController extends Controller
 
         return $result;
     }
+
+    /**
+     * Invalidate the current invite link and generate a new one.
+     * @param Request $request
+     * @param Team $team
+     * @return array
+     * @throws \Exception
+     */
+    public function refreshInviteLink(Request $request, Team $team)
+    {
+        $this->authorize('refresh-invite-link', $team);
+
+        $team->invite_code = Team::generateRandomInviteCode();
+        $team->save();
+
+        return ['new_invite_link' => route('team.invite', ['invitecode' => $team->invite_code])];
+    }
 }

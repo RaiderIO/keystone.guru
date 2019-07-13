@@ -255,6 +255,18 @@ html, body, #map, #app, .wrapper {
     font-size: 14px;
 }
 
+.button_hotkey_label {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    z-index: 1;
+}
+
+/** Fix display type/beguiling enemy preset not filling full width of sidebar */
+#map_enemy_visuals_container .leaflet-draw-section.leaflet-control {
+    width: 100%;
+}
+
 #map-controls {
     height: 700px;
 }
@@ -409,6 +421,11 @@ html, body, #map, #app, .wrapper {
     background-color: #dc3c3c !important;
 }
 
+.aggressive_enemy_icon.beguiling {
+    background-color: purple !important;
+}
+
+
 .neutral_enemy_icon {
     background-color: #cccc2d !important;
 }
@@ -423,10 +440,6 @@ html, body, #map, #app, .wrapper {
 
 .boss_enemy_icon {
     background: url("/images/mapicon/boss.png") no-repeat center !important;
-}
-
-.unset_enemy_icon {
-
 }
 
 .flagged_enemy_icon {

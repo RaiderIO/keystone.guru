@@ -40,7 +40,6 @@ class DungeonFloorSwitchMarker extends MapObject {
         let self = this;
 
         this.layer.on('click', function () {
-            console.log('click!');
             // Reference to the sidebar floor is stored in the sidebar. Bit of a hack but eh.
             let sidebar = _inlineManager.getInlineCode('common/maps/sidebar');
             $(sidebar.options.switchDungeonFloorSelect).val(self.target_floor_id).trigger('change').change();

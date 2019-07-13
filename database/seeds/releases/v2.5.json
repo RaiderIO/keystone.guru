@@ -1,0 +1,20 @@
+{
+    "id": 26,
+    "release_changelog_id": 30,
+    "version": "v2.5",
+    "created_at": "2019-06-12 21:24:14",
+    "updated_at": "2019-06-12 21:24:14",
+    "changelog": {
+        "id": 30,
+        "release_id": 26,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 30,
+                "release_changelog_category_id": 1,
+                "ticket_id": 37,
+                "change": "You can now co-operatively edit your routes with your Team members! To get started, create a group, invite your party and finally set them to be collaborators in the \"members\" section. Add some routes to the team, then start editing them with your team members. All changes you and your team members perform will be synchronized to each other, Google-docs style!"
+            }
+        ]
+    }
+}

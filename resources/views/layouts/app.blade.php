@@ -37,6 +37,8 @@ if (($showAds && Auth::check() && $user->hasPaidTier('ad-free')) || !$isProducti
 $analytics = isset($analytics) ? $analytics : $isProduction;
 // Current Git version
 $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
+
+$newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max('id') > (int)$_COOKIE['changelog_release'] : true;
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -106,7 +108,12 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                             <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('misc.changelog') }}">{{ __('Changelog') }}</a>
+                            <a class="nav-link" href="{{ route('misc.changelog') }}">
+                                {{ __('Changelog') }}
+                                @if($newChangelog)
+                                    <sup class="text-success">{{ __('NEW') }}</sup>
+                                @endif
+                            </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
@@ -156,6 +163,8 @@ $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
                                         <a class="dropdown-item"
                                            href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
                                         <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item"
+                                           href="{{ route('admin.releases') }}">{{__('View releases')}}</a>
                                         @if( Auth::user()->can('read-expansions') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>

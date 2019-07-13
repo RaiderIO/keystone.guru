@@ -21,6 +21,11 @@ use Illuminate\Support\Facades\Auth;
 class Team extends IconFileModel
 {
 
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

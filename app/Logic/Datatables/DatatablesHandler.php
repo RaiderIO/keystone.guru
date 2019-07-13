@@ -69,7 +69,18 @@ class DatatablesHandler
     public function setBuilder(Builder $builder)
     {
         $this->_builder = $builder;
-        $this->_recordsTotal = $builder->count();
+        // Clear them
+        $countQuery = $this->_builder->getQuery()
+            ->cloneWithout(['having', 'groups'])
+            // ->cloneWithoutBindings(['select'])
+            ->selectRaw('count(distinct dungeon_routes.id) as aggregate');
+        // Get the count
+        $result = $countQuery->get(['aggregate']);
+        // Returns an array with numbers, sum the entries to get the actual count. Again, a hack but it works for now.
+        $this->_recordsTotal = 0;
+        foreach ($result as $countResult) {
+            $this->_recordsTotal += $countResult->aggregate;
+        }
 
         return $this;
     }
@@ -141,8 +152,13 @@ class DatatablesHandler
         $query = $this->_builder->getQuery()
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate'));
+        // Temp store; it messes with the count
+        $havings = $query->havings;
+        $query->havings = null;
         $query->orders = null;
         $countResults = $query->get();
+        // Restore
+        $query->havings = $havings;
 
         // Returns an array with numbers, sum the entries to get the actual count. Again, a hack but it works for now.
         $count = 0;
@@ -150,7 +166,7 @@ class DatatablesHandler
             $count += $countResult->aggregate;
         }
 
-        // Fetch the datak
+        // Fetch the data
         $data = $this->_builder->get();
 
         $result = [
@@ -160,7 +176,7 @@ class DatatablesHandler
             // The amount of records after filtering
             'data' => $data,
             // The amount of rows there would have been, if it were not for the limits
-            'recordsFiltered' => $count,
+            'recordsFiltered' => count($data),
             // Only show this info in dev instance
             'input' => $isDev ? $this->_request->toArray() : [],
             // Debug sql queries for optimization

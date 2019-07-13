@@ -55,6 +55,7 @@ class APIEnemyController extends Controller
         $enemy->mdt_id = $mdtId === null ? -1 : $mdtId;
         $enemy->floor_id = $request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
+        $enemy->beguiling_preset = $request->get('beguiling_preset', null);
         $enemy->faction = $request->get('faction', 'any');
         $enemy->enemy_forces_override = $request->get('enemy_forces_override', -1);
         $enemy->lat = $request->get('lat');

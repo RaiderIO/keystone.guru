@@ -29,16 +29,27 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
     _getTemplateData() {
         console.assert(this instanceof EnemyVisualMainAggressiveness, this, 'this is not an EnemyVisualMainAggressiveness!');
 
+        let mainVisualClasses = ['enemy_icon', this.iconName + '_enemy_icon'];
+
+        // Handle Teeming display
+        if (this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') {
+            mainVisualClasses.push('teeming');
+        }
+        // Handle beguiling display
+        if (this.enemyvisual.enemy.isBeguiling()) {
+            mainVisualClasses.push('beguiling');
+        }
+
+        // Any additional classes to add for when the enemy is selectable
+        let selectionClasses = [];
+        if (this.enemyvisual.enemy.isSelectable()) {
+            selectionClasses.push('selected_enemy_icon_' + (this.iconName === 'boss' ? 'big' : 'small'));
+        }
+
         return {
             // Set the main icon
-            main_visual_classes: 'enemy_icon ' + (this.iconName + '_enemy_icon ') + ' ' +
-                ((this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') ? 'teeming' : ''),
-            selection_classes:
-            // If we're in kill zone mode..
-                (this.enemyvisual.enemy.isSelectable() ?
-                    // Adjust the size of the icon based on whether we're going big or small
-                    'selected_enemy_icon_' + (this.iconName === 'boss' ? 'big' : 'small')
-                    : '')
+            main_visual_classes: mainVisualClasses.join(' '),
+            selection_classes: selectionClasses.join(' ')
         };
     }
 

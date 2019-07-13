@@ -1,5 +1,5 @@
 @isset($model)
-    {{ Form::model($model, ['route' => ['team.update', $model->id], 'method' => 'patch', 'files' => true]) }}
+    {{ Form::model($model, ['route' => ['team.update', $model->name], 'method' => 'patch', 'files' => true]) }}
 @else
     {{ Form::open(['route' => 'team.savenew', 'files' => true]) }}
 @endisset

@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\GameServerRegion;
 
-class GameServerRegionSeeder extends Seeder
+class GameServerRegionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.

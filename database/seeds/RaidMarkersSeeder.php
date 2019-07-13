@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class RaidMarkerSeeder extends Seeder
+class RaidMarkersSeeder extends Seeder
 {
     /**
      * Run the database seeds.

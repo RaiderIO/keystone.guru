@@ -31,6 +31,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('/', 'SiteController@index')->name('home');
 
     Route::get('changelog', 'SiteController@changelog')->name('misc.changelog');
+    Route::get('release/{release}', 'ReleaseController@view')->name('release.view');
 
     Route::get('mapping', 'SiteController@mapping')->name('misc.mapping');
 
@@ -133,6 +134,25 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::get('expansions', 'ExpansionController@list')->name('admin.expansions');
 
+            // Changelogs
+            Route::get('release/new', 'ReleaseController@new')->name('admin.release.new');
+            Route::get('release/{release}', 'ReleaseController@edit')->name('admin.release.edit');
+
+            Route::post('release/new', 'ReleaseController@savenew')->name('admin.release.savenew');
+            Route::patch('release/{release}', 'ReleaseController@update')->name('admin.release.update');
+
+            Route::get('release', 'ReleaseController@list')->name('admin.releases');
+
+            // Changelogs
+            Route::get('changelog/new', 'ChangelogController@new')->name('admin.changelog.new');
+            Route::get('changelog/{changelog}', 'ChangelogController@edit')->name('admin.changelog.edit');
+
+            Route::post('changelog/new', 'ChangelogController@savenew')->name('admin.changelog.savenew');
+            Route::patch('changelog/{changelog}', 'ChangelogController@update')->name('admin.changelog.update');
+
+            Route::get('changelog', 'ChangelogController@list')->name('admin.changelogs');
+
+
             // NPCs
             Route::get('npc/new', 'NpcController@new')->name('admin.npc.new');
             Route::get('npc/{npc}', 'NpcController@edit')->name('admin.npc.edit');
@@ -149,13 +169,17 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::get('userreports', 'UserReportController@list')->name('admin.userreports');
 
             Route::get('dashboard', 'AdminToolsController@dashboard')->name('admin.dashboard');
-            Route::get('tools', 'AdminToolsController@index')->name('admin.tools');
 
-            Route::get('tools/mdt/string', 'AdminToolsController@mdtview')->name('admin.tools.mdt.string.view');
-            Route::post('tools/mdt/string', 'AdminToolsController@mdtviewsubmit')->name('admin.tools.mdt.string.submit');
-            Route::get('tools/mdt/diff', 'AdminToolsController@mdtdiff')->name('admin.tools.mdt.diff');
+            Route::group(['prefix' => 'tools'], function () {
+                Route::get('/', 'AdminToolsController@index')->name('admin.tools');
 
-            Route::get('tools/datadump/exportdungeondata', 'ExportDungeonDataController@submit')->name('admin.tools.datadump.exportdungeondata');
+                Route::get('mdt/string', 'AdminToolsController@mdtview')->name('admin.tools.mdt.string.view');
+                Route::post('mdt/string', 'AdminToolsController@mdtviewsubmit')->name('admin.tools.mdt.string.submit');
+                Route::get('mdt/diff', 'AdminToolsController@mdtdiff')->name('admin.tools.mdt.diff');
+
+                Route::get('datadump/exportdungeondata', 'AdminToolsController@exportdungeondata')->name('admin.tools.datadump.exportdungeondata');
+                Route::get('datadump/exportreleases', 'AdminToolsController@exportreleases')->name('admin.tools.datadump.exportreleases');
+            });
         });
 
         // Dashboard
@@ -183,43 +207,52 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::post('/profile/legal', 'APIProfileController@legalAgree');
 
-        Route::group(['prefix' => 'echo', 'middleware' => ['auth', 'role:user']], function () {
-            Route::get('{dungeonroute}/members', 'APIEchoController@members');
+        // Must be logged in to perform these actions
+        Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+            Route::group(['prefix' => '{dungeonroute}'], function () {
+                Route::post('/brushline', 'APIBrushlineController@store');
+                Route::delete('/brushline/{brushline}', 'APIBrushlineController@delete');
+
+                Route::post('/killzone', 'APIKillZoneController@store');
+                Route::delete('/killzone/{killzone}', 'APIKillZoneController@delete');
+
+                Route::post('/mapcomment', 'APIMapCommentController@store');
+                Route::delete('/mapcomment/{mapcomment}', 'APIMapCommentController@delete');
+
+                Route::post('/path', 'APIPathController@store');
+                Route::delete('/path/{path}', 'APIPathController@delete');
+
+                Route::post('/raidmarker/{enemy}', 'APIEnemyController@setRaidMarker');
+
+                Route::patch('/', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
+                Route::delete('/', 'APIDungeonRouteController@delete')->name('api.dungeonroute.delete');
+
+                Route::post('/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
+                Route::delete('/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
+
+                Route::post('/publish', 'APIDungeonRouteController@publish')->name('api.dungeonroute.publish');
+                Route::post('/beguilingpreset', 'APIDungeonRouteController@beguilingpreset')->name('api.dungeonroute.beguilingpreset');
+
+                Route::post('/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
+                Route::delete('/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
+            });
+
+            Route::group(['prefix' => 'echo'], function () {
+                // Echo controller misc
+                Route::get('{dungeonroute}/members', 'APIEchoController@members');
+            });
+
+            // Teams
+            Route::group(['prefix' => 'team/{team}'], function () {
+                Route::post('/changerole', 'APITeamController@changeRole');
+                Route::post('/route/{dungeonroute}', 'APITeamController@addRoute');
+                Route::delete('/member/{user}', 'APITeamController@removeMember');
+                Route::delete('/route/{dungeonroute}', 'APITeamController@removeRoute');
+                Route::get('/refreshlink', 'APITeamController@refreshInviteLink');
+            });
         });
 
-        Route::group(['prefix' => '{dungeonroute}'], function () {
-            Route::post('/brushline', 'APIBrushlineController@store');
-            Route::delete('/brushline/{brushline}', 'APIBrushlineController@delete');
-
-            Route::post('/killzone', 'APIKillZoneController@store');
-            Route::delete('/killzone/{killzone}', 'APIKillZoneController@delete');
-
-            Route::post('/mapcomment', 'APIMapCommentController@store');
-            Route::delete('/mapcomment/{mapcomment}', 'APIMapCommentController@delete');
-
-            Route::post('/path', 'APIPathController@store');
-            Route::delete('/path/{path}', 'APIPathController@delete');
-
-            Route::post('/raidmarker/{enemy}', 'APIEnemyController@setRaidMarker');
-
-            Route::patch('/', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
-            Route::delete('/', 'APIDungeonRouteController@delete')->name('api.dungeonroute.delete');
-
-            Route::post('/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');
-            Route::delete('/favorite', 'APIDungeonRouteController@favoriteDelete')->name('api.dungeonroute.favorite.delete');
-
-            Route::post('/publish', 'APIDungeonRouteController@publish')->name('api.dungeonroute.publish');
-
-            Route::post('/rate', 'APIDungeonRouteController@rate')->name('api.dungeonroute.rate');
-            Route::delete('/rate', 'APIDungeonRouteController@rateDelete')->name('api.dungeonroute.rate.delete');
-        });
-
-        // Teams
-        Route::post('/team/{team}/changerole', 'APITeamController@changeRole');
-        Route::post('/team/{team}/route/{dungeonroute}', 'APITeamController@addRoute');
-        Route::delete('/team/{team}/member/{user}', 'APITeamController@removeMember');
-        Route::delete('/team/{team}/route/{dungeonroute}', 'APITeamController@removeRoute');
-
+        // Must be an admin to perform these actions
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
             Route::post('/enemy', 'APIEnemyController@store');
             Route::delete('/enemy/{enemy}', 'APIEnemyController@delete');
@@ -243,11 +276,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     });
 
     // View any dungeon route (catch all)
-    Route::get('{dungeonroute}', 'DungeonRouteController@view')
-        ->name('dungeonroute.view');
+    Route::get('{dungeonroute}', 'DungeonRouteController@view')->name('dungeonroute.view');
     // Preview of a route for image capturing library
-    Route::get('{dungeonroute}/preview/{floorindex}', 'DungeonRouteController@preview')
-        ->name('dungeonroute.preview');
+    Route::get('{dungeonroute}/preview/{floorindex}', 'DungeonRouteController@preview')->name('dungeonroute.preview');
 });
 
 Auth::routes();

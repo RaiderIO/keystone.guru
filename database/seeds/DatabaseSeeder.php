@@ -15,14 +15,16 @@ class DatabaseSeeder extends Seeder
         // $this->call(LaratrustSeeder::class);
 
         // Seeders which don't depend on anything else
-        $this->call(GameServerRegionSeeder::class);
+        $this->call(GameServerRegionsSeeder::class);
         $this->call(ExpansionsSeeder::class);
         $this->call(DungeonsSeeder::class);
         $this->call(RouteAttributesSeeder::class);
         $this->call(PaidTiersSeeder::class);
         $this->call(FactionsSeeder::class);
-        $this->call(NpcClassificationSeeder::class);
-        $this->call(RaidMarkerSeeder::class);
+        $this->call(NpcClassificationsSeeder::class);
+        $this->call(RaidMarkersSeeder::class);
+        $this->call(ReleaseChangelogCategorySeeder::class);
+        $this->call(ReleasesSeeder::class);
 
         // Depends on SeasonsSeeder
         $this->call(SeasonsSeeder::class);

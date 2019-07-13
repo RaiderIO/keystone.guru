@@ -36,7 +36,8 @@ $showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
     $selectedIds = isset($selectedIds) ? $selectedIds : (!isset($dungeonroute) ? [] : $dungeonroute->routeattributes->pluck('id')->toArray());
     ?>
     <select multiple name="attributes[]" id="attributes" class="form-control selectpicker"
-            size="{{ $allAttributeCount + $attributes->count() }}">
+            size="{{ $allAttributeCount + $attributes->count() }}"
+            data-selected-text-format="count > 1" data-count-selected-text="{{__('{0} attributes')}}">
         @foreach ($attributes as $category => $categoryAttributes)
             <optgroup label="{{ ucfirst($category) }}">
                 @foreach ($categoryAttributes as $attribute) {

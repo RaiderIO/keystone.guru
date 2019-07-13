@@ -5,7 +5,10 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":281.5,\"lng\":-44.69},{\"lat\":280.69,\"lng\":-48.12},{\"lat\":284,\"lng\":-48.73},{\"lat\":284.62,\"lng\":-45.69}]"
+        "vertices_json": "[{\"lat\":\"281.5\",\"lng\":\"-44.69\"},{\"lat\":\"280.69\",\"lng\":\"-48.12\"},{\"lat\":\"284\",\"lng\":\"-48.73\"},{\"lat\":\"284.62\",\"lng\":\"-45.69\"}]",
+        "beguilingenemyids": [
+            3611
+        ]
     },
     {
         "id": 398,
@@ -13,7 +16,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":274.44,\"lng\":-40.73},{\"lat\":275.56,\"lng\":-42.1},{\"lat\":279.81,\"lng\":-39.54},{\"lat\":278.62,\"lng\":-38.16}]"
+        "vertices_json": "[{\"lat\":274.44,\"lng\":-40.73},{\"lat\":275.56,\"lng\":-42.1},{\"lat\":279.81,\"lng\":-39.54},{\"lat\":278.62,\"lng\":-38.16}]",
+        "beguilingenemyids": []
     },
     {
         "id": 399,
@@ -21,7 +25,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":274.44,\"lng\":-37.35},{\"lat\":275.69,\"lng\":-38.85},{\"lat\":277.81,\"lng\":-37.48},{\"lat\":276.5,\"lng\":-36.04}]"
+        "vertices_json": "[{\"lat\":274.44,\"lng\":-37.35},{\"lat\":275.69,\"lng\":-38.85},{\"lat\":277.81,\"lng\":-37.48},{\"lat\":276.5,\"lng\":-36.04}]",
+        "beguilingenemyids": []
     },
     {
         "id": 400,
@@ -29,7 +34,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":282.31,\"lng\":-35.23},{\"lat\":282.19,\"lng\":-37.29},{\"lat\":284.69,\"lng\":-37.23},{\"lat\":284.88,\"lng\":-35.35}]"
+        "vertices_json": "[{\"lat\":282.31,\"lng\":-35.23},{\"lat\":282.19,\"lng\":-37.29},{\"lat\":284.69,\"lng\":-37.23},{\"lat\":284.88,\"lng\":-35.35}]",
+        "beguilingenemyids": []
     },
     {
         "id": 401,
@@ -37,7 +43,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":286.62,\"lng\":-36.29},{\"lat\":288.69,\"lng\":-38.16},{\"lat\":286.88,\"lng\":-38.85},{\"lat\":285.25,\"lng\":-37.41}]"
+        "vertices_json": "[{\"lat\":286.62,\"lng\":-36.29},{\"lat\":288.69,\"lng\":-38.16},{\"lat\":286.88,\"lng\":-38.85},{\"lat\":285.25,\"lng\":-37.41}]",
+        "beguilingenemyids": []
     },
     {
         "id": 402,
@@ -45,7 +52,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":273.25,\"lng\":-42.85},{\"lat\":272.12,\"lng\":-45.04},{\"lat\":274.75,\"lng\":-45.91},{\"lat\":275.62,\"lng\":-43.48}]"
+        "vertices_json": "[{\"lat\":273.25,\"lng\":-42.85},{\"lat\":272.12,\"lng\":-45.04},{\"lat\":274.75,\"lng\":-45.91},{\"lat\":275.62,\"lng\":-43.48}]",
+        "beguilingenemyids": []
     },
     {
         "id": 403,
@@ -53,7 +61,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":268.31,\"lng\":-40.31},{\"lat\":266.81,\"lng\":-43.25},{\"lat\":270.56,\"lng\":-45.06},{\"lat\":272.31,\"lng\":-42}]"
+        "vertices_json": "[{\"lat\":268.31,\"lng\":-40.31},{\"lat\":266.81,\"lng\":-43.25},{\"lat\":270.56,\"lng\":-45.06},{\"lat\":272.31,\"lng\":-42}]",
+        "beguilingenemyids": []
     },
     {
         "id": 404,
@@ -61,7 +70,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":254.31,\"lng\":-47.6},{\"lat\":253.88,\"lng\":-49.48},{\"lat\":258.19,\"lng\":-51.16},{\"lat\":259.19,\"lng\":-48.91}]"
+        "vertices_json": "[{\"lat\":254.31,\"lng\":-47.6},{\"lat\":253.88,\"lng\":-49.48},{\"lat\":258.19,\"lng\":-51.16},{\"lat\":259.19,\"lng\":-48.91}]",
+        "beguilingenemyids": []
     },
     {
         "id": 405,
@@ -69,7 +79,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":254.31,\"lng\":-52.91},{\"lat\":255.69,\"lng\":-54.79},{\"lat\":257.69,\"lng\":-54.79},{\"lat\":258.44,\"lng\":-51.91}]"
+        "vertices_json": "[{\"lat\":254.31,\"lng\":-52.91},{\"lat\":255.69,\"lng\":-54.79},{\"lat\":257.69,\"lng\":-54.79},{\"lat\":258.44,\"lng\":-51.91}]",
+        "beguilingenemyids": []
     },
     {
         "id": 407,
@@ -77,7 +88,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":239.44,\"lng\":-47.06},{\"lat\":237.25,\"lng\":-50.04},{\"lat\":239.12,\"lng\":-50.85},{\"lat\":241.34,\"lng\":-47.72}]"
+        "vertices_json": "[{\"lat\":239.44,\"lng\":-47.06},{\"lat\":237.25,\"lng\":-50.04},{\"lat\":239.12,\"lng\":-50.85},{\"lat\":241.34,\"lng\":-47.72}]",
+        "beguilingenemyids": []
     },
     {
         "id": 408,
@@ -85,7 +97,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":239.5,\"lng\":-51.41},{\"lat\":240.81,\"lng\":-53.91},{\"lat\":242.75,\"lng\":-52.91},{\"lat\":241.25,\"lng\":-50.54}]"
+        "vertices_json": "[{\"lat\":239.5,\"lng\":-51.41},{\"lat\":240.81,\"lng\":-53.91},{\"lat\":242.75,\"lng\":-52.91},{\"lat\":241.25,\"lng\":-50.54}]",
+        "beguilingenemyids": []
     },
     {
         "id": 409,
@@ -93,7 +106,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":\"235.21875\",\"lng\":\"-55.875\"},{\"lat\":\"237.5625\",\"lng\":\"-58.53125\"},{\"lat\":\"240.6875\",\"lng\":\"-57.03125\"},{\"lat\":\"237.81\",\"lng\":\"-54.62\"}]"
+        "vertices_json": "[{\"lat\":\"235.21875\",\"lng\":\"-55.875\"},{\"lat\":\"237.5625\",\"lng\":\"-58.53125\"},{\"lat\":\"240.6875\",\"lng\":\"-57.03125\"},{\"lat\":\"237.81\",\"lng\":\"-54.62\"}]",
+        "beguilingenemyids": []
     },
     {
         "id": 410,
@@ -101,7 +115,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":225.94,\"lng\":-59.48},{\"lat\":225.69,\"lng\":-63.35},{\"lat\":230,\"lng\":-62.85},{\"lat\":228.81,\"lng\":-59.23}]"
+        "vertices_json": "[{\"lat\":225.94,\"lng\":-59.48},{\"lat\":225.69,\"lng\":-63.35},{\"lat\":230,\"lng\":-62.85},{\"lat\":228.81,\"lng\":-59.23}]",
+        "beguilingenemyids": []
     },
     {
         "id": 411,
@@ -109,7 +124,10 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":214.12,\"lng\":-70.35},{\"lat\":213.38,\"lng\":-73.29},{\"lat\":218.38,\"lng\":-73.98},{\"lat\":218.06,\"lng\":-70.98}]"
+        "vertices_json": "[{\"lat\":\"214.12\",\"lng\":\"-70.35\"},{\"lat\":\"213.38\",\"lng\":\"-73.29\"},{\"lat\":\"218.38\",\"lng\":\"-73.98\"},{\"lat\":\"218.06\",\"lng\":\"-70.98\"}]",
+        "beguilingenemyids": [
+            3601
+        ]
     },
     {
         "id": 413,
@@ -117,7 +135,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":219.44,\"lng\":-82.16},{\"lat\":220.75,\"lng\":-85.41},{\"lat\":223.88,\"lng\":-84.04},{\"lat\":222.38,\"lng\":-81.54}]"
+        "vertices_json": "[{\"lat\":219.44,\"lng\":-82.16},{\"lat\":220.75,\"lng\":-85.41},{\"lat\":223.88,\"lng\":-84.04},{\"lat\":222.38,\"lng\":-81.54}]",
+        "beguilingenemyids": []
     },
     {
         "id": 414,
@@ -125,7 +144,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":216.06,\"lng\":-87.6},{\"lat\":217.56,\"lng\":-90.35},{\"lat\":220.12,\"lng\":-88.66},{\"lat\":218.25,\"lng\":-86.48}]"
+        "vertices_json": "[{\"lat\":216.06,\"lng\":-87.6},{\"lat\":217.56,\"lng\":-90.35},{\"lat\":220.12,\"lng\":-88.66},{\"lat\":218.25,\"lng\":-86.48}]",
+        "beguilingenemyids": []
     },
     {
         "id": 415,
@@ -133,7 +153,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":222.94,\"lng\":-90.73},{\"lat\":223.5,\"lng\":-93.81},{\"lat\":227.38,\"lng\":-92.62},{\"lat\":225.31,\"lng\":-90.16}]"
+        "vertices_json": "[{\"lat\":222.94,\"lng\":-90.73},{\"lat\":223.5,\"lng\":-93.81},{\"lat\":227.38,\"lng\":-92.62},{\"lat\":225.31,\"lng\":-90.16}]",
+        "beguilingenemyids": []
     },
     {
         "id": 416,
@@ -141,7 +162,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":218.06,\"lng\":-96.85},{\"lat\":219.81,\"lng\":-100.48},{\"lat\":223.5,\"lng\":-99.06},{\"lat\":221.06,\"lng\":-95.66}]"
+        "vertices_json": "[{\"lat\":218.06,\"lng\":-96.85},{\"lat\":219.81,\"lng\":-100.48},{\"lat\":223.5,\"lng\":-99.06},{\"lat\":221.06,\"lng\":-95.66}]",
+        "beguilingenemyids": []
     },
     {
         "id": 417,
@@ -149,7 +171,10 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":223.5,\"lng\":-111.29},{\"lat\":224.56,\"lng\":-114.06},{\"lat\":227.5,\"lng\":-113.06},{\"lat\":230,\"lng\":-112},{\"lat\":228.38,\"lng\":-109.41}]"
+        "vertices_json": "[{\"lat\":\"225.15625\",\"lng\":\"-117.03125\"},{\"lat\":\"226.21875\",\"lng\":\"-119.90625\"},{\"lat\":\"229.3125\",\"lng\":\"-118.5625\"},{\"lat\":\"232\",\"lng\":\"-117.34375\"},{\"lat\":\"230.65625\",\"lng\":\"-114.59375\"}]",
+        "beguilingenemyids": [
+            3603
+        ]
     },
     {
         "id": 418,
@@ -157,7 +182,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":233.31,\"lng\":-118.5},{\"lat\":235.06,\"lng\":-122.44},{\"lat\":239.62,\"lng\":-120.87},{\"lat\":237.62,\"lng\":-117.13}]"
+        "vertices_json": "[{\"lat\":233.31,\"lng\":-118.5},{\"lat\":235.06,\"lng\":-122.44},{\"lat\":239.62,\"lng\":-120.87},{\"lat\":237.62,\"lng\":-117.13}]",
+        "beguilingenemyids": []
     },
     {
         "id": 419,
@@ -165,7 +191,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":236.12,\"lng\":-142.19},{\"lat\":238.81,\"lng\":-148.31},{\"lat\":242.06,\"lng\":-146.94},{\"lat\":239.12,\"lng\":-141.12}]"
+        "vertices_json": "[{\"lat\":236.12,\"lng\":-142.19},{\"lat\":238.81,\"lng\":-148.31},{\"lat\":242.06,\"lng\":-146.94},{\"lat\":239.12,\"lng\":-141.12}]",
+        "beguilingenemyids": []
     },
     {
         "id": 420,
@@ -173,7 +200,10 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":213.62,\"lng\":-150.54},{\"lat\":216.75,\"lng\":-155.6},{\"lat\":218.88,\"lng\":-153.79},{\"lat\":215.81,\"lng\":-149.79}]"
+        "vertices_json": "[{\"lat\":\"213.62\",\"lng\":\"-150.54\"},{\"lat\":\"216.75\",\"lng\":\"-155.6\"},{\"lat\":\"218.88\",\"lng\":\"-153.79\"},{\"lat\":\"215.81\",\"lng\":\"-149.79\"}]",
+        "beguilingenemyids": [
+            3605
+        ]
     },
     {
         "id": 421,
@@ -181,7 +211,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":206.81,\"lng\":-175.35},{\"lat\":209.81,\"lng\":-177.66},{\"lat\":211.94,\"lng\":-175.1},{\"lat\":208.44,\"lng\":-173.29}]"
+        "vertices_json": "[{\"lat\":206.81,\"lng\":-175.35},{\"lat\":209.81,\"lng\":-177.66},{\"lat\":211.94,\"lng\":-175.1},{\"lat\":208.44,\"lng\":-173.29}]",
+        "beguilingenemyids": []
     },
     {
         "id": 422,
@@ -189,7 +220,10 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":204.25,\"lng\":-180.85},{\"lat\":207.44,\"lng\":-183.6},{\"lat\":209.06,\"lng\":-181.85},{\"lat\":205.88,\"lng\":-179.66}]"
+        "vertices_json": "[{\"lat\":\"204.25\",\"lng\":\"-180.85\"},{\"lat\":\"207.44\",\"lng\":\"-183.6\"},{\"lat\":\"209.06\",\"lng\":\"-181.85\"},{\"lat\":\"205.88\",\"lng\":\"-179.66\"}]",
+        "beguilingenemyids": [
+            3606
+        ]
     },
     {
         "id": 423,
@@ -197,7 +231,10 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":211,\"lng\":-184.16},{\"lat\":215,\"lng\":-187.16},{\"lat\":216.88,\"lng\":-184.35},{\"lat\":213,\"lng\":-182.35}]"
+        "vertices_json": "[{\"lat\":\"211\",\"lng\":\"-184.16\"},{\"lat\":\"215\",\"lng\":\"-187.16\"},{\"lat\":\"216.88\",\"lng\":\"-184.35\"},{\"lat\":\"213\",\"lng\":\"-182.35\"}]",
+        "beguilingenemyids": [
+            3608
+        ]
     },
     {
         "id": 424,
@@ -205,7 +242,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":223.31,\"lng\":-177.79},{\"lat\":221.19,\"lng\":-180.48},{\"lat\":223.69,\"lng\":-181.98},{\"lat\":226.25,\"lng\":-178.66}]"
+        "vertices_json": "[{\"lat\":223.31,\"lng\":-177.79},{\"lat\":221.19,\"lng\":-180.48},{\"lat\":223.69,\"lng\":-181.98},{\"lat\":226.25,\"lng\":-178.66}]",
+        "beguilingenemyids": []
     },
     {
         "id": 425,
@@ -213,7 +251,10 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":217.12,\"lng\":-173.85},{\"lat\":215.56,\"lng\":-175.98},{\"lat\":218.69,\"lng\":-177.66},{\"lat\":220.25,\"lng\":-175.16}]"
+        "vertices_json": "[{\"lat\":\"217.12\",\"lng\":\"-173.85\"},{\"lat\":\"215.56\",\"lng\":\"-175.98\"},{\"lat\":\"218.69\",\"lng\":\"-177.66\"},{\"lat\":\"220.25\",\"lng\":\"-175.16\"}]",
+        "beguilingenemyids": [
+            3607
+        ]
     },
     {
         "id": 426,
@@ -221,7 +262,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":199.31,\"lng\":-187.91},{\"lat\":200.06,\"lng\":-191.87},{\"lat\":203.44,\"lng\":-191.69},{\"lat\":202.25,\"lng\":-187.54}]"
+        "vertices_json": "[{\"lat\":199.31,\"lng\":-187.91},{\"lat\":200.06,\"lng\":-191.87},{\"lat\":203.44,\"lng\":-191.69},{\"lat\":202.25,\"lng\":-187.54}]",
+        "beguilingenemyids": []
     },
     {
         "id": 427,
@@ -229,7 +271,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":182.81,\"lng\":-190.91},{\"lat\":185.94,\"lng\":-193.1},{\"lat\":187.75,\"lng\":-190.79},{\"lat\":184.81,\"lng\":-188.98}]"
+        "vertices_json": "[{\"lat\":182.81,\"lng\":-190.91},{\"lat\":185.94,\"lng\":-193.1},{\"lat\":187.75,\"lng\":-190.79},{\"lat\":184.81,\"lng\":-188.98}]",
+        "beguilingenemyids": []
     },
     {
         "id": 428,
@@ -237,7 +280,10 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":190.62,\"lng\":-200.6},{\"lat\":192.38,\"lng\":-204.41},{\"lat\":196.56,\"lng\":-202.54},{\"lat\":194.31,\"lng\":-199.6}]"
+        "vertices_json": "[{\"lat\":\"190.62\",\"lng\":\"-200.6\"},{\"lat\":\"192.38\",\"lng\":\"-204.41\"},{\"lat\":\"196.56\",\"lng\":\"-202.54\"},{\"lat\":\"194.31\",\"lng\":\"-199.6\"}]",
+        "beguilingenemyids": [
+            3610
+        ]
     },
     {
         "id": 429,
@@ -245,7 +291,10 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":173,\"lng\":-196.35},{\"lat\":175.06,\"lng\":-199.23},{\"lat\":178.19,\"lng\":-197.6},{\"lat\":175.56,\"lng\":-194.98}]"
+        "vertices_json": "[{\"lat\":\"171.09375\",\"lng\":\"-201.1875\"},{\"lat\":\"172.46875\",\"lng\":\"-203.96875\"},{\"lat\":\"175.15625\",\"lng\":\"-202.75\"},{\"lat\":\"173.84375\",\"lng\":\"-199.8125\"}]",
+        "beguilingenemyids": [
+            3609
+        ]
     },
     {
         "id": 431,
@@ -253,7 +302,10 @@
         "teeming": null,
         "faction": "horde",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":284.56,\"lng\":-44.98},{\"lat\":284.19,\"lng\":-48.85},{\"lat\":287.06,\"lng\":-49.16},{\"lat\":287.19,\"lng\":-44.91}]"
+        "vertices_json": "[{\"lat\":\"284.56\",\"lng\":\"-44.98\"},{\"lat\":\"284.19\",\"lng\":\"-48.85\"},{\"lat\":\"287.06\",\"lng\":\"-49.16\"},{\"lat\":\"287.19\",\"lng\":\"-44.91\"}]",
+        "beguilingenemyids": [
+            3596
+        ]
     },
     {
         "id": 432,
@@ -261,7 +313,8 @@
         "teeming": null,
         "faction": "horde",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":267.69,\"lng\":-45.29},{\"lat\":267.12,\"lng\":-49.73},{\"lat\":271.06,\"lng\":-49.75},{\"lat\":271.31,\"lng\":-45.85}]"
+        "vertices_json": "[{\"lat\":267.69,\"lng\":-45.29},{\"lat\":267.12,\"lng\":-49.73},{\"lat\":271.06,\"lng\":-49.75},{\"lat\":271.31,\"lng\":-45.85}]",
+        "beguilingenemyids": []
     },
     {
         "id": 433,
@@ -269,7 +322,10 @@
         "teeming": null,
         "faction": "horde",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":252.44,\"lng\":-39.44},{\"lat\":251.19,\"lng\":-40.5},{\"lat\":250.5,\"lng\":-41.88},{\"lat\":254.69,\"lng\":-43.44},{\"lat\":255.69,\"lng\":-40.75}]"
+        "vertices_json": "[{\"lat\":\"252.44\",\"lng\":\"-39.44\"},{\"lat\":\"251.19\",\"lng\":\"-40.5\"},{\"lat\":\"250.5\",\"lng\":\"-41.88\"},{\"lat\":\"254.69\",\"lng\":\"-43.44\"},{\"lat\":\"255.69\",\"lng\":\"-40.75\"}]",
+        "beguilingenemyids": [
+            3597
+        ]
     },
     {
         "id": 434,
@@ -277,7 +333,8 @@
         "teeming": null,
         "faction": "horde",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":235.06,\"lng\":-53},{\"lat\":236.19,\"lng\":-55.44},{\"lat\":239.06,\"lng\":-54.06},{\"lat\":237.06,\"lng\":-51.75}]"
+        "vertices_json": "[{\"lat\":235.06,\"lng\":-53},{\"lat\":236.19,\"lng\":-55.44},{\"lat\":239.06,\"lng\":-54.06},{\"lat\":237.06,\"lng\":-51.75}]",
+        "beguilingenemyids": []
     },
     {
         "id": 435,
@@ -285,7 +342,8 @@
         "teeming": null,
         "faction": "horde",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":223.88,\"lng\":-60.04},{\"lat\":226.38,\"lng\":-64.6},{\"lat\":228.81,\"lng\":-63.23},{\"lat\":226.25,\"lng\":-58.85}]"
+        "vertices_json": "[{\"lat\":223.88,\"lng\":-60.04},{\"lat\":226.38,\"lng\":-64.6},{\"lat\":228.81,\"lng\":-63.23},{\"lat\":226.25,\"lng\":-58.85}]",
+        "beguilingenemyids": []
     },
     {
         "id": 436,
@@ -293,7 +351,10 @@
         "teeming": null,
         "faction": "horde",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":227.12,\"lng\":-69.41},{\"lat\":229.25,\"lng\":-73.23},{\"lat\":233.69,\"lng\":-70.6},{\"lat\":230.88,\"lng\":-67.35}]"
+        "vertices_json": "[{\"lat\":\"227.12\",\"lng\":\"-69.41\"},{\"lat\":\"229.25\",\"lng\":\"-73.23\"},{\"lat\":\"233.69\",\"lng\":\"-70.6\"},{\"lat\":\"230.88\",\"lng\":\"-67.35\"}]",
+        "beguilingenemyids": [
+            3600
+        ]
     },
     {
         "id": 438,
@@ -301,7 +362,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":206.25,\"lng\":-74.29},{\"lat\":207,\"lng\":-77.6},{\"lat\":211.06,\"lng\":-76.79},{\"lat\":209.88,\"lng\":-73.91}]"
+        "vertices_json": "[{\"lat\":206.25,\"lng\":-74.29},{\"lat\":207,\"lng\":-77.6},{\"lat\":211.06,\"lng\":-76.79},{\"lat\":209.88,\"lng\":-73.91}]",
+        "beguilingenemyids": []
     },
     {
         "id": 439,
@@ -309,7 +371,8 @@
         "teeming": null,
         "faction": "horde",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":239.56,\"lng\":-114},{\"lat\":242.44,\"lng\":-120.69},{\"lat\":249.94,\"lng\":-117.75},{\"lat\":246.31,\"lng\":-111.5}]"
+        "vertices_json": "[{\"lat\":239.56,\"lng\":-114},{\"lat\":242.44,\"lng\":-120.69},{\"lat\":249.94,\"lng\":-117.75},{\"lat\":246.31,\"lng\":-111.5}]",
+        "beguilingenemyids": []
     },
     {
         "id": 505,
@@ -317,7 +380,8 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":211.03,\"lng\":-99.97},{\"lat\":212.78,\"lng\":-104},{\"lat\":216.25,\"lng\":-102.66},{\"lat\":214.12,\"lng\":-98.78}]"
+        "vertices_json": "[{\"lat\":211.03,\"lng\":-99.97},{\"lat\":212.78,\"lng\":-104},{\"lat\":216.25,\"lng\":-102.66},{\"lat\":214.12,\"lng\":-98.78}]",
+        "beguilingenemyids": []
     },
     {
         "id": 506,
@@ -325,7 +389,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":227.75,\"lng\":-46.81},{\"lat\":229.25,\"lng\":-48.28},{\"lat\":231.34,\"lng\":-46.53},{\"lat\":229.72,\"lng\":-45.34}]"
+        "vertices_json": "[{\"lat\":227.75,\"lng\":-46.81},{\"lat\":229.25,\"lng\":-48.28},{\"lat\":231.34,\"lng\":-46.53},{\"lat\":229.72,\"lng\":-45.34}]",
+        "beguilingenemyids": []
     },
     {
         "id": 507,
@@ -333,7 +398,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":282.59,\"lng\":-41.47},{\"lat\":282.41,\"lng\":-43.16},{\"lat\":284.06,\"lng\":-44.62},{\"lat\":284.88,\"lng\":-43.31}]"
+        "vertices_json": "[{\"lat\":282.59,\"lng\":-41.47},{\"lat\":282.41,\"lng\":-43.16},{\"lat\":284.06,\"lng\":-44.62},{\"lat\":284.88,\"lng\":-43.31}]",
+        "beguilingenemyids": []
     },
     {
         "id": 508,
@@ -341,7 +407,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":275.69,\"lng\":-44.16},{\"lat\":277.56,\"lng\":-45.22},{\"lat\":280.31,\"lng\":-42.56},{\"lat\":278.31,\"lng\":-41.38}]"
+        "vertices_json": "[{\"lat\":275.69,\"lng\":-44.16},{\"lat\":277.56,\"lng\":-45.22},{\"lat\":280.31,\"lng\":-42.56},{\"lat\":278.31,\"lng\":-41.38}]",
+        "beguilingenemyids": []
     },
     {
         "id": 510,
@@ -349,7 +416,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":239.56,\"lng\":-114.66},{\"lat\":242.56,\"lng\":-120.41},{\"lat\":249,\"lng\":-118.34},{\"lat\":245.38,\"lng\":-112.34}]"
+        "vertices_json": "[{\"lat\":239.56,\"lng\":-114.66},{\"lat\":242.56,\"lng\":-120.41},{\"lat\":249,\"lng\":-118.34},{\"lat\":245.38,\"lng\":-112.34}]",
+        "beguilingenemyids": []
     },
     {
         "id": 512,
@@ -357,7 +425,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":221.5,\"lng\":-71.12},{\"lat\":222.88,\"lng\":-70.28},{\"lat\":225.91,\"lng\":-73.91},{\"lat\":224.25,\"lng\":-74.56}]"
+        "vertices_json": "[{\"lat\":221.5,\"lng\":-71.12},{\"lat\":222.88,\"lng\":-70.28},{\"lat\":225.91,\"lng\":-73.91},{\"lat\":224.25,\"lng\":-74.56}]",
+        "beguilingenemyids": []
     },
     {
         "id": 513,
@@ -365,7 +434,8 @@
         "teeming": null,
         "faction": "horde",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":221.53,\"lng\":-70.34},{\"lat\":223.19,\"lng\":-69.91},{\"lat\":225.22,\"lng\":-73.97},{\"lat\":223.69,\"lng\":-74.41}]"
+        "vertices_json": "[{\"lat\":221.53,\"lng\":-70.34},{\"lat\":223.19,\"lng\":-69.91},{\"lat\":225.22,\"lng\":-73.97},{\"lat\":223.69,\"lng\":-74.41}]",
+        "beguilingenemyids": []
     },
     {
         "id": 514,
@@ -373,7 +443,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":252.56,\"lng\":-39.69},{\"lat\":251.78,\"lng\":-41.97},{\"lat\":253.59,\"lng\":-42.56},{\"lat\":254.44,\"lng\":-40.03}]"
+        "vertices_json": "[{\"lat\":252.56,\"lng\":-39.69},{\"lat\":251.78,\"lng\":-41.97},{\"lat\":253.59,\"lng\":-42.56},{\"lat\":254.44,\"lng\":-40.03}]",
+        "beguilingenemyids": []
     },
     {
         "id": 515,
@@ -381,7 +452,8 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":264.69,\"lng\":-44.97},{\"lat\":262.75,\"lng\":-49.38},{\"lat\":265.94,\"lng\":-50.28},{\"lat\":267.72,\"lng\":-45.47}]"
+        "vertices_json": "[{\"lat\":264.69,\"lng\":-44.97},{\"lat\":262.75,\"lng\":-49.38},{\"lat\":265.94,\"lng\":-50.28},{\"lat\":267.72,\"lng\":-45.47}]",
+        "beguilingenemyids": []
     },
     {
         "id": 517,
@@ -389,6 +461,51 @@
         "teeming": null,
         "faction": "alliance",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":\"228.375\",\"lng\":\"-68.71875\"},{\"lat\":\"230.625\",\"lng\":\"-72.4375\"},{\"lat\":\"234.1875\",\"lng\":\"-70.5625\"},{\"lat\":\"231.40625\",\"lng\":\"-67.5625\"}]"
+        "vertices_json": "[{\"lat\":\"228.375\",\"lng\":\"-68.71875\"},{\"lat\":\"230.625\",\"lng\":\"-72.4375\"},{\"lat\":\"234.1875\",\"lng\":\"-70.5625\"},{\"lat\":\"231.40625\",\"lng\":\"-67.5625\"}]",
+        "beguilingenemyids": []
+    },
+    {
+        "id": 552,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"245.9375\",\"lng\":\"-49.34375\"},{\"lat\":\"245.96875\",\"lng\":\"-51.6875\"},{\"lat\":\"247.375\",\"lng\":\"-51.71875\"},{\"lat\":\"247.3125\",\"lng\":\"-49.46875\"}]",
+        "beguilingenemyids": [
+            3598
+        ]
+    },
+    {
+        "id": 553,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"239.8125\",\"lng\":\"-58.28125\"},{\"lat\":\"240.25\",\"lng\":\"-58.9375\"},{\"lat\":\"242.40625\",\"lng\":\"-58.09375\"},{\"lat\":\"241.3125\",\"lng\":\"-57.21875\"}]",
+        "beguilingenemyids": [
+            3599
+        ]
+    },
+    {
+        "id": 554,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"222.9375\",\"lng\":\"-87.4375\"},{\"lat\":\"223.375\",\"lng\":\"-88.65625\"},{\"lat\":\"225.25\",\"lng\":\"-87.875\"},{\"lat\":\"224.5625\",\"lng\":\"-87.0625\"}]",
+        "beguilingenemyids": [
+            3602
+        ]
+    },
+    {
+        "id": 555,
+        "floor_id": 47,
+        "teeming": null,
+        "faction": "any",
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"248.78125\",\"lng\":\"-140.28125\"},{\"lat\":\"249.375\",\"lng\":\"-141.40625\"},{\"lat\":\"250.25\",\"lng\":\"-141.09375\"},{\"lat\":\"249.5625\",\"lng\":\"-140.03125\"}]",
+        "beguilingenemyids": [
+            3604
+        ]
     }
 ]

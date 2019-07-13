@@ -4,7 +4,7 @@ let _bigIcon = {iconSize: [32, 32]};
 
 // Default icon; placeholder while placing a new enemy. This can't really use the Visual system, it'd require
 // too much rewrites. Better to just make a small placeholder like this and assign it to the below constructs.
-let DefaultEnemyIcon = new L.divIcon($.extend({className: 'enemy_icon unset_enemy_icon'}, _smallIcon));
+let DefaultEnemyIcon = new L.divIcon($.extend({className: 'enemy_icon'}, _smallIcon));
 let MDTEnemyIconSelected = new L.divIcon($.extend({className: 'enemy_icon mdt_enemy_icon leaflet-edit-marker-selected'}, _smallIcon));
 
 $(function () {
@@ -41,6 +41,8 @@ class Enemy extends MapObject {
         // May be set when loaded from server
         this.npc = null;
         this.raid_marker_name = '';
+        // May be null if we're not a Beguiling enemy
+        this.beguiling_preset = null;
 
         // MDT
         this.mdt_id = -1;
@@ -85,6 +87,15 @@ class Enemy extends MapObject {
     }
 
     /**
+     * Checks if this enemy is a beguiling enemy.
+     * @returns {boolean} True if it is, false if it is not.
+     */
+    isBeguiling() {
+        // Beguiling NPCs have their dungeon ID set to -1 since they're the only ones whose
+        return typeof this.beguiling_preset === 'number';
+    }
+
+    /**
      * Sets the click popup to be enabled or not.
      * @param enabled True to enable, false to disable.
      */
@@ -107,7 +118,7 @@ class Enemy extends MapObject {
     }
 
     bindTooltip() {
-        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         let template = Handlebars.templates['map_enemy_tooltip_template'];
 
         let data = {};
@@ -165,7 +176,7 @@ class Enemy extends MapObject {
      * @param npc
      */
     setNpc(npc) {
-        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.npc = npc;
 
 
@@ -186,7 +197,7 @@ class Enemy extends MapObject {
      * @param name
      */
     setRaidMarkerName(name) {
-        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.raid_marker_name = name;
         // Trigger a raid marker change event
         this.signal('enemy:set_raid_marker', {name: name});
@@ -197,7 +208,7 @@ class Enemy extends MapObject {
      * @param killZoneId id
      */
     setKillZone(killZoneId) {
-        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.kill_zone_id = killZoneId;
 
         // We only want to trigger these events when the killzone is actively being edited, not when loading in
@@ -229,7 +240,7 @@ class Enemy extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         super.onLayerInit();
 
         let self = this;
@@ -247,7 +258,7 @@ class Enemy extends MapObject {
     }
 
     onPopupInit() {
-        console.assert(this instanceof Enemy,  'this was not an Enemy', this);
+        console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         let self = this;
 
         self.map.leafletMap.on('contextmenu', function () {
@@ -271,7 +282,7 @@ class Enemy extends MapObject {
      * @param value boolean True or false
      */
     setSelectable(value) {
-        console.assert(this instanceof Enemy,  'this is not an Enemy', this);
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.selectable = value;
         // Refresh the icon
         this.visual.refresh();
@@ -282,7 +293,7 @@ class Enemy extends MapObject {
      * @param raidMarkerName The name of the marker, or empty to unset it
      */
     assignRaidMarker(raidMarkerName) {
-        console.assert(this instanceof Enemy,  'this was not an Enemy', this);
+        console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         let self = this;
 
         $.ajax({
@@ -300,7 +311,7 @@ class Enemy extends MapObject {
     }
 
     cleanup() {
-        console.assert(this instanceof Enemy,  'this was not an Enemy', this);
+        console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));

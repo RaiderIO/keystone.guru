@@ -31,15 +31,17 @@ class RoutesTableView extends TableView {
                 {name: 'affixes', width: '15%'},
                 {name: 'attributes', width: '15%'},
                 {name: 'setup', width: '15%'},
-                {name: 'author', width: '15%'},
+                {name: 'author', width: '10%'},
+                {name: 'enemy_forces', width: '5%'},
                 {name: 'views', width: '5%'},
                 {name: 'rating', width: '5%'},
             ],
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
-                {name: 'features', width: '25%'},
+                {name: 'features', width: '20%'},
                 {name: 'author', width: '10%'},
+                {name: 'enemy_forces', width: '5%'},
                 {name: 'views', width: '5%'},
                 {name: 'rating', width: '5%'},
             ]
@@ -61,8 +63,9 @@ class ProfileTableView extends TableView {
                 {name: 'dungeon', width: '15%'},
                 {name: 'affixes', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
-                {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
-                {name: 'published', width: '5%'},
+                // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
+                {name: 'enemy_forces', width: '10%'},
+                {name: 'published', width: '10%'},
                 {name: 'actions', width: '10%', clickable: false},
             ],
             biglist: [
@@ -89,7 +92,7 @@ class TeamTableView extends TableView {
     constructor() {
         super();
 
-        this._teamId = -1;
+        this._teamName = '';
         this._addMode = false;
         this._isUserModerator = false;
     }
@@ -98,8 +101,8 @@ class TeamTableView extends TableView {
      * Set the team ID (for filtering purposes)
      * @param value
      */
-    setTeamId(value) {
-        this._teamId = value;
+    setTeamName(value) {
+        this._teamName = value;
     }
 
     /**
@@ -118,16 +121,16 @@ class TeamTableView extends TableView {
      * Gets the Id of the team that was set for this view.
      * @returns {*}
      */
-    getTeamId() {
-        return this._teamId;
+    getTeamName() {
+        return this._teamName;
     }
 
     /**
      * Get the parameters when sending the AJAX request
-     * @returns {{team_id: *}}
+     * @returns {{team_name: *}}
      */
     getAjaxParameters() {
-        let params = {team_id: this._teamId};
+        let params = {team_name: this._teamName};
         if (this._addMode) {
             params.available = 1;
         }
@@ -141,7 +144,9 @@ class TeamTableView extends TableView {
                 {name: 'dungeon', width: '15%'},
                 {name: 'affixes', width: '15%', className: 'd-none d-md-table-cell'},
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
-                {name: 'setup', width: '15%'},
+                // {name: 'setup', width: '15%'},
+                {name: 'enemy_forces', width: '10%'},
+                {name: 'published', width: '10%'},
                 {name: 'author', width: '10%'},
             ],
             biglist: [

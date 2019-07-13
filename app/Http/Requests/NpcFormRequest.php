@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Dungeon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -28,7 +29,7 @@ class NpcFormRequest extends FormRequest
             // Can only add one entry per game_id, but exclude if we're editing a row but don't change the game_id
             'id' => ['required'],
             'name' => 'required',
-            'dungeon_id' => Rule::exists('dungeons', 'id'),
+            'dungeon_id' => [Rule::in([-1] + Dungeon::all()->pluck('id')->toArray())],
             'classification_id' => 'required',
             'aggressiveness' => Rule::in(config('keystoneguru.aggressiveness')),
             'base_health' => [

@@ -11,8 +11,8 @@ class DungeonrouteTable extends InlineCode {
         this.setViewMode(this.options.viewMode);
         let tableView = this.setTableView(this.options.tableView);
         // Make sure the TeamID is set if we need it
-        if (typeof tableView.setTeamId === 'function') {
-            tableView.setTeamId(this.options.teamId);
+        if (typeof tableView.setTeamName === 'function') {
+            tableView.setTeamName(this.options.teamName);
         }
     }
 
@@ -120,7 +120,7 @@ class DungeonrouteTable extends InlineCode {
             'ajax': {
                 'url': '/ajax/routes',
                 'data': function (d) {
-                    d.favorites = $('#favorites').is(':checked') ? 1 : 0;
+                    d.requirements = $('#dungeonroute_requirements_select').val();
                     d = $.extend(d, self._tableView.getAjaxParameters());
                 },
                 'cache': false
@@ -263,6 +263,21 @@ class DungeonrouteTable extends InlineCode {
                 'name': 'author.name',
                 'className': 'd-none ' + (self._tableView.getName() === 'profile' ? '' : 'd-lg-table-cell')
             },
+            enemy_forces: {
+                'title': lang.get('messages.enemy_forces_label'),
+                'data': 'enemy_forces',
+                'name': 'enemy_forces',
+                'render': function (data, type, row, meta) {
+                    let enemyForcesRequired = row.teeming === 1 ? row.dungeon.enemy_forces_required_teeming : row.dungeon.enemy_forces_required;
+                    let template = Handlebars.templates['dungeonroute_table_profile_enemy_forces_template'];
+
+                    return template($.extend({
+                        enemy_forces: row.enemy_forces,
+                        enemy_forces_required: enemyForcesRequired,
+                        enough: row.enemy_forces >= enemyForcesRequired
+                    }, getHandlebarsDefaultVariables()));
+                }
+            },
             views: {
                 'title': lang.get('messages.views_label'),
                 'data': 'views',
@@ -391,13 +406,13 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _addToThisTeam(clickEvent) {
-        let teamId = this.getTableView().getTeamId();
-        if (teamId !== -1) {
+        let teamName = this.getTableView().getTeamName();
+        if (teamName !== '') {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',
-                url: '/ajax/team/' + teamId + '/route/' + key,
+                url: '/ajax/team/' + teamName + '/route/' + key,
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('messages.team_add_route_successful'));
@@ -416,13 +431,13 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _removeFromThisTeam(clickEvent) {
-        let teamId = this.getTableView().getTeamId();
-        if (teamId !== -1) {
+        let teamName = this.getTableView().getTeamName();
+        if (teamName !== '') {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',
-                url: '/ajax/team/' + teamId + '/route/' + key,
+                url: '/ajax/team/' + teamName + '/route/' + key,
                 data: {
                     _method: 'DELETE'
                 },
