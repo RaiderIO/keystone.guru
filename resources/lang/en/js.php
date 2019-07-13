@@ -213,6 +213,7 @@ return [
     'no_label' => 'No',
     'cancel_label' => 'Cancel',
 
+    // Teams
     'remove_member_confirm_label' => 'Are you sure you want remove this user from the team?',
     'remove_member_success' => 'Member removed successfully',
 
@@ -224,6 +225,7 @@ return [
     'leave_label' => 'Leave',
 
     'delete_team_confirm_label' => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?',
+    'invite_link_refreshed' => 'Invite link refreshed.',
 
     // Echo server
     'echo_connecting_label' => 'Connecting...',

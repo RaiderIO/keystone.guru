@@ -40,7 +40,7 @@ foreach ($model->teamusers as $teamuser) {
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
     'data' => $data,
-    'teamId' => $model->id,
+    'teamName' => $model->name,
     'userIsModerator' => $userIsModerator,
     'currentUserId' => $user->id,
     'currentUserName' => $user->name,
@@ -176,6 +176,10 @@ foreach ($model->teamusers as $teamuser) {
                                 <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
                                         data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
                                     <i class="far fa-copy"></i>
+                                </button>
+                                <button id="team_invite_link_refresh" class="btn btn-info"
+                                        data-toggle="tooltip" title="{{ __('Refresh invite link') }}">
+                                    <i class="fa fa-sync"></i>
                                 </button>
                             </div>
                         </div>

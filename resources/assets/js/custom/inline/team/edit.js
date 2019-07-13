@@ -1,6 +1,6 @@
 class TeamEdit extends InlineCode {
 
-    constructor(options){
+    constructor(options) {
         super(options);
         this._dt = null;
     }
@@ -24,6 +24,11 @@ class TeamEdit extends InlineCode {
             $temp.remove();
 
             showInfoNotification(lang.get('messages.copied_to_clipboard'));
+        });
+
+        // Refresh invite link
+        $('#team_invite_link_refresh').bind('click', function () {
+            self.refreshInviteLink();
         });
 
         // Add route to team button
@@ -66,7 +71,7 @@ class TeamEdit extends InlineCode {
         $('select.role_selection').bind('change', function (e) {
             $.ajax({
                 type: 'POST',
-                url: '/ajax/team/' + self.options.teamId + '/changerole',
+                url: '/ajax/team/' + self.options.teamName + '/changerole',
                 dataType: 'json',
                 data: {
                     username: $(this).data('username'),
@@ -203,7 +208,7 @@ class TeamEdit extends InlineCode {
                 'width': '15%',
                 'render': function (data, type, row, meta) {
                     let result = '';
-                    if( self.options.currentUserRole !== 'admin' ){
+                    if (self.options.currentUserRole !== 'admin') {
                         let template = null;
                         if (row.user_id === self.options.currentUserId) {
                             // Handlebars the entire thing
@@ -226,7 +231,7 @@ class TeamEdit extends InlineCode {
                 'data': 'role',
                 'title': lang.get('messages.role_label'),
                 'width': '20%',
-                'render': function(data, type, row, meta) {
+                'render': function (data, type, row, meta) {
                     return _.startCase(_.toLower(row.role));
                 },
                 'orderable': true
@@ -248,7 +253,7 @@ class TeamEdit extends InlineCode {
             showConfirmYesCancel(lang.get('messages.remove_member_confirm_label'), function () {
                 $.ajax({
                     type: 'POST',
-                    url: '/ajax/team/' + self.options.teamId + '/member/' + userId,
+                    url: '/ajax/team/' + self.options.teamName + '/member/' + userId,
                     data: {
                         _method: 'DELETE'
                     },
@@ -272,5 +277,20 @@ class TeamEdit extends InlineCode {
                 });
             }, null, {type: 'error'});
         });
+    }
+
+    refreshInviteLink() {
+        $.ajax({
+            type: 'GET',
+            url: '/ajax/team/' + this.options.teamName + '/refreshlink',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                $('#team_members_invite_link').val(response.new_invite_link);
+
+                showInfoNotification(lang.get('messages.invite_link_refreshed'));
+            }
+        });
+
     }
 }
