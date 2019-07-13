@@ -6,6 +6,7 @@
 !/public/.htaccess
 !/public/favicon.ico
 !/public/index.php
+!/public/ads.txt
 !/public/robots.txt
 !/public/web.config
 
