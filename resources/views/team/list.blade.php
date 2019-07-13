@@ -37,7 +37,7 @@
 
         <tbody>
         @foreach ($models->all() as $team)
-            <tr data-teamid="{{ $team->id }}">
+            <tr data-teamid="{{ $team->name }}">
                 <td class="clickable">
                     @isset($team->iconfile)
                         <img class="mr-1" src="{{ url('storage/' . $team->iconfile->getUrl()) }}"
