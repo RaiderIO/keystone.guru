@@ -170,10 +170,15 @@ class AdminEnemyPack extends EnemyPack {
                 self._addBeguilingEnemyRow();
             });
 
-            // Restore selected beguiling NPCs
-            $.each(self.beguilingenemies, function (index, value) {
-                self._addBeguilingEnemyRow(value.beguiling_preset, value.npc_id);
-            });
+            if (self.beguilingenemies.length === 0) {
+                // Add a row to start off with
+                self._addBeguilingEnemyRow('');
+            } else {
+                // Restore selected beguiling NPCs
+                $.each(self.beguilingenemies, function (index, value) {
+                    self._addBeguilingEnemyRow(value.beguiling_preset, value.npc_id);
+                });
+            }
 
             // Refresh all select pickers so they work again
             refreshSelectPickers();
@@ -309,5 +314,12 @@ class AdminEnemyPack extends EnemyPack {
                 self.setSynced(false);
             }
         });
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        // Clear references so they can be cleaned up properly; otherwise they stay on the map when switching floors
+        this.beguilingenemies = [];
     }
 }

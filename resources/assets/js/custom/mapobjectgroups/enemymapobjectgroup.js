@@ -131,9 +131,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         };
 
         // Build and handle the enemy
-        let enemy = this._restoreObject(remoteEnemy);
-        console.log(enemy);
-        return enemy;
+        return this._restoreObject(remoteEnemy);
     }
 
     /**

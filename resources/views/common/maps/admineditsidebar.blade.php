@@ -76,4 +76,4 @@ if (isset($model)) {
     </div>
 @endsection
 
-@include('common.maps.sidebar', ['header' => __('Admin toolbox')])
+@include('common.maps.sidebar', ['header' => __('Admin toolbox'), 'selectedFloorId' => $dungeon->floors[0]->id])
