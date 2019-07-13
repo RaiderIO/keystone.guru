@@ -30,7 +30,7 @@ $redirect = old('redirect', $redirect);
             </h3>
 
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                <label for="{{ $modalClass }}register_name" class="control-label">{{ __('Username') }}</label>
+                <label for="{{ $modalClass }}register_name" class="control-label">{{ __('Username') }}*</label>
 
                 <div class="col-md-{{ $width }}">
                     <input id="{{ $modalClass }}register_name" type="text" class="form-control" name="name"
@@ -39,16 +39,27 @@ $redirect = old('redirect', $redirect);
             </div>
 
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                <label for="{{ $modalClass }}register_email" class="control-label">{{ __('E-mail address') }}</label>
-
+                <label for="{{ $modalClass }}register_email" class="control-label">{{ __('E-mail address') }}*</label>
                 <div class="col-md-{{ $width }}">
                     <input id="{{ $modalClass }}register_email" type="email" class="form-control" name="email"
                            value="{{ old('email') }}" required>
                 </div>
             </div>
 
+            <div class="form-group{{ $errors->has('region') ? ' has-error' : '' }}">
+                <label for="{{ $modalClass }}register_region" class="control-label">{{ __('Region') }}</label>
+
+
+                <div class="col-md-{{ $width }}">
+                    {!! Form::select('region', array_merge(
+                    ['-1' => __('Select region')],
+                    \App\Models\GameServerRegion::all()->pluck('name', 'id')->toArray()
+                    ), null, ['class' => 'form-control']) !!}
+                </div>
+            </div>
+
             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                <label for="{{ $modalClass }}register_password" class="control-label">{{ __('Password') }}</label>
+                <label for="{{ $modalClass }}register_password" class="control-label">{{ __('Password') }}*</label>
 
                 <div class="col-md-{{ $width }}">
                     <input id="{{ $modalClass }}register_password" type="password" class="form-control" name="password"
@@ -58,7 +69,7 @@ $redirect = old('redirect', $redirect);
 
             <div class="form-group">
                 <label for="{{ $modalClass }}register_password-confirm"
-                       class="control-label">{{ __('Confirm password') }}</label>
+                       class="control-label">{{ __('Confirm password') }}*</label>
 
                 <div class="col-md-{{ $width }}">
                     <input id="{{ $modalClass }}register_password-confirm" type="password" class="form-control"
