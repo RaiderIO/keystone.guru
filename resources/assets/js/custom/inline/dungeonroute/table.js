@@ -11,8 +11,8 @@ class DungeonrouteTable extends InlineCode {
         this.setViewMode(this.options.viewMode);
         let tableView = this.setTableView(this.options.tableView);
         // Make sure the TeamID is set if we need it
-        if (typeof tableView.setTeamId === 'function') {
-            tableView.setTeamId(this.options.teamId);
+        if (typeof tableView.setTeamName === 'function') {
+            tableView.setTeamName(this.options.teamName);
         }
     }
 
@@ -406,13 +406,13 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _addToThisTeam(clickEvent) {
-        let teamId = this.getTableView().getTeamId();
-        if (teamId !== -1) {
+        let teamName = this.getTableView().getTeamName();
+        if (teamName !== '') {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',
-                url: '/ajax/team/' + teamId + '/route/' + key,
+                url: '/ajax/team/' + teamName + '/route/' + key,
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('messages.team_add_route_successful'));
@@ -431,13 +431,13 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _removeFromThisTeam(clickEvent) {
-        let teamId = this.getTableView().getTeamId();
-        if (teamId !== -1) {
+        let teamName = this.getTableView().getTeamName();
+        if (teamName !== '') {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
                 type: 'POST',
-                url: '/ajax/team/' + teamId + '/route/' + key,
+                url: '/ajax/team/' + teamName + '/route/' + key,
                 data: {
                     _method: 'DELETE'
                 },

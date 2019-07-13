@@ -112,10 +112,10 @@ class APIDungeonRouteController extends Controller
             }
 
             // Handle team if set
-            if ($teamId = $request->get('team_id', false)) {
+            if ($teamName = $request->get('team_name', false)) {
                 // @TODO Policy?
                 // You must be a member of this team to retrieve their routes
-                $team = Team::findOrFail($teamId);
+                $team = Team::where('name', $teamName)->firstOrFail();
                 if (!$team->members->contains($user->id)) {
                     abort(403, 'Unauthorized');
                 }
@@ -128,7 +128,7 @@ class APIDungeonRouteController extends Controller
                     $routes = $routes->whereIn('author_id', $team->members->pluck(['id'])->toArray());
                 } else {
                     // Where the route is part of the requested team
-                    $routes = $routes->where('team_id', $teamId);
+                    $routes = $routes->where('team_id', $team->id);
                 }
 //                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
 //                    /** @var $query Builder */

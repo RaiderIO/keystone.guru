@@ -92,7 +92,7 @@ class TeamTableView extends TableView {
     constructor() {
         super();
 
-        this._teamId = -1;
+        this._teamName = '';
         this._addMode = false;
         this._isUserModerator = false;
     }
@@ -101,8 +101,8 @@ class TeamTableView extends TableView {
      * Set the team ID (for filtering purposes)
      * @param value
      */
-    setTeamId(value) {
-        this._teamId = value;
+    setTeamName(value) {
+        this._teamName = value;
     }
 
     /**
@@ -121,16 +121,16 @@ class TeamTableView extends TableView {
      * Gets the Id of the team that was set for this view.
      * @returns {*}
      */
-    getTeamId() {
-        return this._teamId;
+    getTeamName() {
+        return this._teamName;
     }
 
     /**
      * Get the parameters when sending the AJAX request
-     * @returns {{team_id: *}}
+     * @returns {{team_name: *}}
      */
     getAjaxParameters() {
-        let params = {team_id: this._teamId};
+        let params = {team_name: this._teamName};
         if (this._addMode) {
             params.available = 1;
         }

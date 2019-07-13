@@ -20,7 +20,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         'options' =>  [
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
-            'teamId' => $team ? $team->id : -1
+            'teamName' => $team ? $team->name : ''
             ]
 ])
 
