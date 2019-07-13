@@ -22,6 +22,7 @@ class ReleaseChangelogCategorySeeder extends Seeder
             new ReleaseChangelogCategory(['category' => 'Mapping changes']),
             new ReleaseChangelogCategory(['category' => 'Bugfixes']),
             new ReleaseChangelogCategory(['category' => 'MDT importer changes']),
+            new ReleaseChangelogCategory(['category' => 'Team changes']),
         ];
 
         foreach ($categories as $category) {

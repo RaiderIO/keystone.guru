@@ -14,7 +14,7 @@ $changelog = isset($model) ? $model->changelog : new \App\Models\ReleaseChangelo
 
 @section('content')
     @isset($model)
-        {{ Form::model($model, ['route' => ['admin.release.update', $model->id], 'method' => 'patch', 'files' => true]) }}
+        {{ Form::model($model, ['route' => ['admin.release.update', $model->version], 'method' => 'patch', 'files' => true]) }}
     @else
         {{ Form::open(['route' => 'admin.release.savenew', 'files' => true]) }}
     @endisset
