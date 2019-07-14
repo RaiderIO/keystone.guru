@@ -14,7 +14,7 @@ class EnemyVisual extends Signalable {
         this.modifiers = [];
 
         // Default visual (after modifiers!)
-        this.setVisualType(this.map.getVisualType());
+        this.setVisualType(getState().getEnemyDisplayType());
 
         let self = this;
         // Build and/or destroy the visual based on visibility
@@ -68,7 +68,7 @@ class EnemyVisual extends Signalable {
         console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
 
         // Refresh the visual completely
-        this.setVisualType(this.map.getVisualType());
+        this.setVisualType(getState().getEnemyDisplayType());
     }
 
     /**

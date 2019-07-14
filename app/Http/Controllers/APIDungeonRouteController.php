@@ -27,6 +27,7 @@ use App\Models\Team;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Teapot\StatusCode;
 
 class APIDungeonRouteController extends Controller
 {
@@ -234,10 +235,17 @@ class APIDungeonRouteController extends Controller
     {
         $this->authorize('beguilingpreset', $dungeonroute);
 
-        $dungeonroute->beguiling_preset = intval($request->get('beguilingpreset', 0));
-        $dungeonroute->save();
+        $preset = intval($request->get('beguilingpreset', 0));
 
-        return ['result' => 'success'];
+        $resultCode = StatusCode::BAD_REQUEST;
+        if ($preset > 0) {
+            $dungeonroute->beguiling_preset = $preset;
+            $dungeonroute->save();
+
+            $resultCode = StatusCode::NO_CONTENT;
+        }
+
+        abort($resultCode);
     }
 
     /**

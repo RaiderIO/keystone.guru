@@ -30,10 +30,9 @@ class EnemyPack extends MapObject {
             self.activateBeguilingPreset(1);
         });
 
-        this.map.register('beguiling_preset:changed', this, function (changedEvent) {
-            let newPreset = changedEvent.data.preset;
-
-            self.activateBeguilingPreset(newPreset);
+        getState().register('beguilingpreset:changed', this, function (changedEvent) {
+            console.log(changedEvent.data.beguilingPreset);
+            self.activateBeguilingPreset(changedEvent.data.beguilingPreset);
         });
     }
 

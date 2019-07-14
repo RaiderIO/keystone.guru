@@ -9,6 +9,32 @@ class EnemyVisualControls extends MapControl {
             refreshSelectPickers();
         });
 
+        // When we or someone else changed the beguiling preset
+        getState().register('beguilingpreset:changed', this, function(changedEvent){
+            // If we're editing the current route..
+            if (self.map.options.edit) {
+                // Update the preset on the server
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/' + self.map.getDungeonRoute().publicKey + '/beguilingpreset',
+                    dataType: 'json',
+                    data: {
+                        beguilingpreset: changedEvent.data.beguilingPreset
+                    }
+                    // No need for a success/failure really
+                });
+            }
+        });
+
+        // When we or someone else changed the enemy display type
+        getState().register('enemydisplaytype:changed', this, function(){
+            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+                console.assert(enemy instanceof Enemy, self, 'enemy is not an Enemy');
+                enemy.visual.setVisualType(visualType);
+            });
+        });
+
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
                 let template = Handlebars.templates['map_enemy_visuals_template'];
@@ -64,15 +90,10 @@ class EnemyVisualControls extends MapControl {
     _enemyVisualChanged(changedEvent) {
         console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        let visualType = $('#map_enemy_visuals_dropdown').val();
+        let enemyDisplayType = parseInt($('#map_enemy_visuals_dropdown').val());
 
         // Keep track of the visual type
-        this.map.setVisualType(visualType);
-        $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-            console.assert(enemy instanceof Enemy, this, 'enemy is not an Enemy');
-            enemy.visual.setVisualType(visualType);
-        });
+        getState().setEnemyDisplayType(enemyDisplayType);
     }
 
     /**
@@ -86,21 +107,7 @@ class EnemyVisualControls extends MapControl {
         let beguilingPreset = parseInt($('#map_enemy_beguiling_preset_dropdown').val());
 
         // Keep track of the visual type
-        this.map.setBeguilingPreset(beguilingPreset);
-
-        // If we're editing the current route..
-        if (this.map.options.edit) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/beguilingpreset',
-                dataType: 'json',
-                data: {
-                    _method: 'POST',
-                    beguilingpreset: beguilingPreset
-                }
-                // No need for a success/failure really
-            });
-        }
+        getState().setBeguilingPreset(beguilingPreset);
     }
 
     /**
@@ -124,7 +131,7 @@ class EnemyVisualControls extends MapControl {
         $targetContainer.append(container);
 
         // Restore what the user had selected
-        $('#map_enemy_visuals_dropdown').val(this.map.getVisualType());
+        $('#map_enemy_visuals_dropdown').val(getState().getEnemyDisplayType());
 
         refreshSelectPickers();
     }

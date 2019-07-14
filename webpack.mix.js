@@ -109,6 +109,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
 
     // Depends on map object groups
+    'resources/assets/js/custom/statemanager.js',
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/mapobject.js',
     'resources/assets/js/custom/polyline.js',

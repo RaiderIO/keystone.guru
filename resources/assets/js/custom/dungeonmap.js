@@ -8,13 +8,15 @@ class DungeonMap extends Signalable {
 
         this.options = options;
 
+        // Apply the map to our state first thing
+        getState().setDungeonMap(this);
+
         if (this.options.echo) {
             window.startEcho();
         }
 
         // Keep track of whatever the current floor ID is
         this.currentFloorId = this.options.floorId;
-        this.currentVisualType = this.options.defaultEnemyVisualType;
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -24,7 +26,7 @@ class DungeonMap extends Signalable {
             refreshTooltips();
 
             // Make sure the beguiling preset is applied now that everything's loaded
-            self.setBeguilingPreset(self.options.dungeonroute.beguiling_preset);
+            getState().setBeguilingPreset(self.options.dungeonroute.beguiling_preset);
 
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
@@ -662,41 +664,6 @@ class DungeonMap extends Signalable {
      */
     getDungeonRoute() {
         return this.options.dungeonroute;
-    }
-
-    /**
-     * Sets the visual type that is currently being displayed.
-     * @param visualType
-     */
-    setVisualType(visualType) {
-        this.currentVisualType = visualType;
-    }
-
-    /**
-     * Get the default visual to display for all enemies.
-     * @returns {string}
-     */
-    getVisualType() {
-        return this.currentVisualType;
-    }
-
-    /**
-     * Sets the beguiling preset that is currently displayed on the map.
-     * @param preset int
-     */
-    setBeguilingPreset(preset) {
-        this.options.beguiling_preset = preset;
-
-        // Let everyone know it's changed
-        this.signal('beguiling_preset:changed', {preset: preset});
-    }
-
-    /**
-     * Get the beguiling preset that is currently displayed on the map.
-     * @returns {string}
-     */
-    getBeguilingPreset() {
-        return this.options.beguiling_preset;
     }
 
     /**

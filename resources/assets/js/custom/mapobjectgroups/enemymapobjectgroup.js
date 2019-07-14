@@ -5,7 +5,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
 
-        this.manager.map.register('beguiling_preset:changed', this, function () {
+        this.manager.map.register('beguilingpreset:changed', this, function () {
             // @TODO remove all beguiling enemies
         });
     }
