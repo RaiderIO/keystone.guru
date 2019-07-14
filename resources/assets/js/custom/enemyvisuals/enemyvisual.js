@@ -54,8 +54,12 @@ class EnemyVisual extends Signalable {
                 data = $.extend(data, this.modifiers[i]._getTemplateData());
             }
 
+            let size = this.mainVisual.getSize();
+            data.width = size.iconSize[0];
+            data.height = size.iconSize[1];
+
             // Create a new div icon (the entire structure)
-            this.divIcon = new L.divIcon($.extend({html: template(data)}, this.mainVisual.getSize()));
+            this.divIcon = new L.divIcon($.extend({html: template(data)}, size));
 
             // Set the structure as HTML for the layer
             this.layer.setIcon(this.divIcon);

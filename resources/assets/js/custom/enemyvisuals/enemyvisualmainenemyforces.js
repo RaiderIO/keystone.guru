@@ -30,9 +30,9 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         this.setIcon(this.iconName);
     }
 
-    getSize() {
-        console.assert(this instanceof EnemyVisualMainEnemyForces, this, 'this is not an EnemyVisualMainEnemyForces!');
-
-        return this.iconName === 'boss' ? _bigIcon : _smallIcon;
-    }
+    // getSize() {
+    //     console.assert(this instanceof EnemyVisualMainEnemyForces, this, 'this is not an EnemyVisualMainEnemyForces!');
+    //
+    //     return this.iconName === 'boss' ? _bigIcon : _smallIcon;
+    // }
 }

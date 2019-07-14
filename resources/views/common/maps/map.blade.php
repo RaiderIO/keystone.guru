@@ -91,7 +91,9 @@ if ($isAdmin) {
     'noUI' => $noUI,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,
-    'showAttribution' => $showAttribution
+    'showAttribution' => $showAttribution,
+    'npcsMinHealth' => $dungeon->getNpcsMinHealth(),
+    'npcsMaxHealth' => $dungeon->getNpcsMaxHealth()
 ], $adminOptions)])
 
 @section('scripts')

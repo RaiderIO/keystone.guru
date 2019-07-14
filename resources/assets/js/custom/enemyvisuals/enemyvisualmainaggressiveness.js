@@ -106,11 +106,11 @@ class EnemyVisualMainAggressiveness extends EnemyVisualMain {
         this.setIcon(this.iconName);
     }
 
-    getSize() {
-        console.assert(this instanceof EnemyVisualMainAggressiveness, this, 'this is not an EnemyVisualMainAggressiveness!');
-
-        return this.iconName === 'boss' ? _bigIcon : _smallIcon;
-    }
+    // getSize() {
+    //     console.assert(this instanceof EnemyVisualMainAggressiveness, this, 'this is not an EnemyVisualMainAggressiveness!');
+    //
+    //     return this.iconName === 'boss' ? _bigIcon : _smallIcon;
+    // }
 
     cleanup() {
         super.cleanup();

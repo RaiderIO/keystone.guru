@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 
 /**
@@ -20,6 +18,7 @@ use Mockery\Exception;
  *
  * @property \Illuminate\Support\Collection $floors
  * @property \Illuminate\Support\Collection $dungeonroutes
+ * @property \Illuminate\Support\Collection $npcs
  *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
@@ -94,6 +93,22 @@ class Dungeon extends Model
         $result['percent'] = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
 
         return $result;
+    }
+
+    /**
+     * Get the minimum amount of health of all NPCs in this dungeon.
+     */
+    public function getNpcsMinHealth()
+    {
+        return $this->npcs->where('classification_id', '<>', 3)->min('base_health');
+    }
+
+    /**
+     * Get the maximum amount of health of all NPCs in this dungeon.
+     */
+    public function getNpcsMaxHealth()
+    {
+        return $this->npcs->where('classification_id', '<>', 3)->max('base_health');
     }
 
     /**

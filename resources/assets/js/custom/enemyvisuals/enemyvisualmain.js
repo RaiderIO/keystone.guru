@@ -124,7 +124,14 @@ class EnemyVisualMain extends EnemyVisualIcon {
     }
 
     getSize() {
-        return {};
+        let calculatedSize = c.map.enemy.calculateSize(
+            this.enemyvisual.enemy.npc.base_health,
+            this.enemyvisual.map.options.npcsMinHealth,
+            this.enemyvisual.map.options.npcsMaxHealth
+        );
+        return {
+            iconSize: [calculatedSize, calculatedSize]
+        };
     }
 
     cleanup() {

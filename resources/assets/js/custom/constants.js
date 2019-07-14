@@ -1,7 +1,7 @@
-if( typeof Cookies.get('polyline_default_color') === 'undefined' ){
+if (typeof Cookies.get('polyline_default_color') === 'undefined') {
     Cookies.set('polyline_default_color', '#9DFF56');
 }
-if( typeof Cookies.get('polyline_default_weight') === 'undefined' ){
+if (typeof Cookies.get('polyline_default_weight') === 'undefined') {
     Cookies.set('polyline_default_weight', 3);
 }
 
@@ -34,7 +34,20 @@ let c = {
                 '#E25D5D',
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple'
-            ]
+            ],
+            minSize: 11,
+            maxSize: 32,
+            calculateSize: function (health, minHealth, maxHealth) {
+                // Perhaps some enemies are below minHealth, should not be lower than it, nor higher than max health (bosses)
+                health = Math.min(Math.max(health, minHealth), maxHealth);
+
+                // Offset the min health
+                health -= minHealth;
+                maxHealth -= minHealth;
+
+                // Return the correct size
+                return parseInt(c.map.enemy.minSize + ((health / maxHealth) * (c.map.enemy.maxSize - c.map.enemy.minSize)));
+            }
         },
         adminenemy: {
             mdtPolylineOptions: {
