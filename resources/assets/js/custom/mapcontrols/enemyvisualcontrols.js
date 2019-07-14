@@ -148,5 +148,7 @@ class EnemyVisualControls extends MapControl {
         console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
         this.map.unregister('map:refresh', this);
+        getState().unregister('enemydisplaytype:changed', this);
+        getState().unregister('beguilingpreset:changed', this);
     }
 }

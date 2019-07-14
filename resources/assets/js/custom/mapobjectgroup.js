@@ -57,9 +57,8 @@ class MapObjectGroup extends Signalable {
 
         // Remove any layers that were added before
         for (let i = 0; i < this.objects.length; i++) {
-            let enemyPack = this.objects[i];
             // Remove all layers
-            this.manager.map.leafletMap.removeLayer(enemyPack.layer);
+            this.manager.map.leafletMap.removeLayer(this.objects[i].layer);
         }
     }
 

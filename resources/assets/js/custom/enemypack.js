@@ -120,5 +120,7 @@ class EnemyPack extends MapObject {
 
         // Clear references so they can be cleaned up properly; otherwise they stay on the map when switching floors
         this.beguilingenemies = [];
+
+        getState().unregister('beguilingpreset:changed', this);
     }
 }
