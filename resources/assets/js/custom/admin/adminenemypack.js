@@ -275,7 +275,7 @@ class AdminEnemyPack extends EnemyPack {
             dataType: 'json',
             data: {
                 id: self.id,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 label: self.label,
                 teeming: self.teeming,
                 faction: self.faction,
@@ -314,12 +314,5 @@ class AdminEnemyPack extends EnemyPack {
                 self.setSynced(false);
             }
         });
-    }
-
-    cleanup() {
-        super.cleanup();
-
-        // Clear references so they can be cleaned up properly; otherwise they stay on the map when switching floors
-        this.beguilingenemies = [];
     }
 }

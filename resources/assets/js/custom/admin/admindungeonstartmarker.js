@@ -47,7 +47,7 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
             url: '/ajax/dungeonstartmarker',
             dataType: 'json',
             data: {
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng
             },

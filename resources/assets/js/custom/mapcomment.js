@@ -102,7 +102,7 @@ class MapComment extends MapObject {
             dataType: 'json',
             data: {
                 id: this.id,
-                floor_id: this.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 comment: this.comment,
                 always_visible: this.always_visible,
                 lat: this.layer.getLatLng().lat,

@@ -159,7 +159,7 @@ class KillZone extends MapObject {
             dataType: 'json',
             data: {
                 id: self.id,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 color: self.color,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng,
@@ -435,7 +435,6 @@ class KillZone extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, function (event) {
-            console.log('Synced killzone!');
             // Restore the connections to our enemies
             self.redrawConnectionsToEnemies();
 

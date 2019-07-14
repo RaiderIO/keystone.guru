@@ -140,7 +140,7 @@ class MapObjectGroupManager extends Signalable {
             dataType: 'json',
             data: {
                 fields: this._getLoadedNames().join(','),
-                floor: this.map.getCurrentFloor().id,
+                floor: getState().getCurrentFloor().id,
                 show_mdt_enemies: isMapAdmin ? 1 : 0,
                 enemies: isMapAdmin ? 0 : 1,
                 teeming: self.map.options.teeming ? 1 : 0

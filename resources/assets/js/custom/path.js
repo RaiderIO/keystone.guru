@@ -114,7 +114,7 @@ class Path extends Polyline {
             data: {
                 id: self.id,
                 dungeonroute: this.map.getDungeonRoute().publicKey,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 color: self.polylineColor,
                 weight: self.weight,
                 vertices: self.getVertices(),

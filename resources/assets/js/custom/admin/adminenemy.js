@@ -451,7 +451,7 @@ class AdminEnemy extends Enemy {
                     id: self.id,
                     enemy_pack_id: self.enemy_pack_id,
                     npc_id: self.npc_id,
-                    floor_id: self.map.getCurrentFloor().id,
+                    floor_id: getState().getCurrentFloor().id,
                     mdt_id: self.mdt_id,
                     teeming: self.teeming,
                     beguiling_preset: self.beguiling_preset,

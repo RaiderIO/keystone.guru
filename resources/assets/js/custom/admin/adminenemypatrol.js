@@ -121,7 +121,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
             dataType: 'json',
             data: {
                 id: self.id,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 enemy_id: self.enemy_id,
                 teeming: self.teeming,
                 faction: self.faction,

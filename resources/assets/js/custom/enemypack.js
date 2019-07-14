@@ -31,7 +31,6 @@ class EnemyPack extends MapObject {
         });
 
         getState().register('beguilingpreset:changed', this, function (changedEvent) {
-            console.log(changedEvent.data.beguilingPreset);
             self.activateBeguilingPreset(changedEvent.data.beguilingPreset);
         });
     }
@@ -114,5 +113,12 @@ class EnemyPack extends MapObject {
             result.push({lat: coordinates[i][0], lng: coordinates[i][1]});
         }
         return result;
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        // Clear references so they can be cleaned up properly; otherwise they stay on the map when switching floors
+        this.beguilingenemies = [];
     }
 }

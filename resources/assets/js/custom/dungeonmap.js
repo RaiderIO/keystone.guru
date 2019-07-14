@@ -15,9 +15,6 @@ class DungeonMap extends Signalable {
             window.startEcho();
         }
 
-        // Keep track of whatever the current floor ID is
-        this.currentFloorId = this.options.floorId;
-
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());
@@ -467,27 +464,6 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Gets the data of the currently selected floor
-     * @returns {boolean|Object}
-     */
-    getCurrentFloor() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        let self = this;
-        let result = false;
-        // Iterate over the found floors
-        $.each(this.dungeonData.floors, function (index, value) {
-            // Find the floor we're looking for
-            if (parseInt(value.id) === parseInt(self.currentFloorId)) {
-                result = value;
-                return false;
-            }
-        });
-
-        return result;
-    }
-
-    /**
      * Finds a map object by means of a Leaflet layer.
      * @param layer object The layer you want the map object for.
      */
@@ -536,7 +512,7 @@ class DungeonMap extends Signalable {
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
 
-        this.mapTileLayer = L.tileLayer('/images/tiles/' + this.dungeonData.expansion.shortname + '/' + this.dungeonData.key + '/' + this.getCurrentFloor().index + '/{z}/{x}_{y}.png', {
+        this.mapTileLayer = L.tileLayer('/images/tiles/' + this.dungeonData.expansion.shortname + '/' + this.dungeonData.key + '/' + getState().getCurrentFloor().index + '/{z}/{x}_{y}.png', {
             maxZoom: 5,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: L.point(384, 256),

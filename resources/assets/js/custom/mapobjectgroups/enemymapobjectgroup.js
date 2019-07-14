@@ -121,7 +121,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             lat: location.lat,
             lng: location.lng,
             enemy_pack_id: enemyPack.id,
-            floor_id: this.manager.map.getCurrentFloor().id,
+            floor_id: getState().getCurrentFloor().id,
             teeming: null,
             faction: 'any',
             enemy_forces_override: -1,

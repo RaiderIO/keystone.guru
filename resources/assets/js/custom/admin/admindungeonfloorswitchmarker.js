@@ -29,7 +29,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         }, getHandlebarsDefaultVariables());
 
         // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
-        let currentFloorId = this.map.getCurrentFloor().id;
+        let currentFloorId = getState().getCurrentFloor().id;
         for (let i in this.map.dungeonData.floors) {
             let floor = this.map.dungeonData.floors[i];
             if (floor.id !== currentFloorId) {
@@ -84,7 +84,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
             dataType: 'json',
             data: {
                 id: self.id,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 target_floor_id: self.target_floor_id,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng
