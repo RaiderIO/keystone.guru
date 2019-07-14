@@ -26,7 +26,7 @@ class DungeonMap extends Signalable {
             refreshTooltips();
 
             // Make sure the beguiling preset is applied now that everything's loaded
-            getState().setBeguilingPreset(self.options.dungeonroute.beguiling_preset);
+            getState().setBeguilingPreset(self.options.dungeonroute.beguilingPreset);
 
             self.signal('map:mapobjectgroupsfetchsuccess');
         });

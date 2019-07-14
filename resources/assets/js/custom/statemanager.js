@@ -19,7 +19,7 @@ class StateManager extends Signalable {
         this.map = map;
 
         this.setEnemyDisplayType(this.map.options.defaultEnemyVisualType);
-        this.setBeguilingPreset(this.map.options.dungeonroute.beguiling_preset);
+        this.setBeguilingPreset(this.map.options.dungeonroute.beguilingPreset);
     }
 
     /**
@@ -34,14 +34,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Get the default visual to display for all enemies.
-     * @returns {string}
-     */
-    getEnemyDisplayType() {
-        return this.enemyDisplayType;
-    }
-
-    /**
      * Sets the beguiling preset that is currently displayed on the map.
      * @param preset int
      */
@@ -50,6 +42,14 @@ class StateManager extends Signalable {
 
         // Let everyone know it's changed
         this.signal('beguilingpreset:changed', {beguilingPreset: this.beguilingPreset});
+    }
+
+    /**
+     * Get the default visual to display for all enemies.
+     * @returns {string}
+     */
+    getEnemyDisplayType() {
+        return this.enemyDisplayType;
     }
 
     /**

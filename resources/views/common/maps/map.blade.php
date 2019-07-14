@@ -83,7 +83,7 @@ if ($isAdmin) {
     'dungeonroute' => [
         'publicKey' => $routePublicKey,
         'faction' => $routeFaction,
-        'beguiling_preset' => $routeBeguilingPreset
+        'beguilingPreset' => $routeBeguilingPreset
     ],
     'beguilingPresets' => $beguilingPresets,
     'defaultEnemyVisualType' => $enemyVisualType,
