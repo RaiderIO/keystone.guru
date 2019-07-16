@@ -60,6 +60,7 @@ class Npc extends Model
      */
     function type()
     {
-        return $this->belongsTo('App\Models\NpcType');
+        // Not sure why the foreign key declaration is required here, but it is
+        return $this->belongsTo('App\Models\NpcType', 'npc_type_id');
     }
 }

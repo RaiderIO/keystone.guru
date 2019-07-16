@@ -15,6 +15,7 @@ use App\Models\EnemyPatrol;
 use App\Models\Floor;
 use App\Models\MapComment;
 use App\Models\Npc;
+use App\Models\NpcType;
 use App\Models\Release;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -55,7 +56,7 @@ class AdminToolsController extends Controller
     public function mdtdiff()
     {
         $warnings = new Collection();
-        $npcs = Npc::all();
+        $npcs = Npc::with(['enemies', 'type'])->get();
 
         // For each dungeon
         foreach (Dungeon::active()->get() as $dungeon) {
@@ -108,6 +109,17 @@ class AdminToolsController extends Controller
                             )
                         );
                     }
+
+                    // Match npc type, should be equal
+                    if ($npc->type->type !== $mdtNpc->creatureType) {
+                        $warnings->push(
+                            new ImportWarning('mismatched_enemy_type',
+                                sprintf(__('NPC %s has mismatched enemy type, MDT: %s, KG: %s'),
+                                    $mdtNpc->id, $mdtNpc->creatureType, $npc->type->type),
+                                ['mdt_npc' => $mdtNpc, 'npc' => $npc, 'old' => $npc->type->type, 'new' => $mdtNpc->creatureType]
+                            )
+                        );
+                    }
                 }
             }
         }
@@ -135,6 +147,11 @@ class AdminToolsController extends Controller
                 break;
             case 'mismatched_enemy_forces':
                 $npc->enemy_forces = $value;
+                $npc->save();
+                break;
+            case 'mismatched_enemy_type':
+                $npcType = NpcType::where('type', $value)->first();
+                $npc->npc_type_id = $npcType->id;
                 $npc->save();
                 break;
             default:
@@ -253,6 +270,7 @@ class AdminToolsController extends Controller
             $this->_saveData($demoRoutes, $rootDirPath, 'dungeonroutes.json');
 
             $npcs = Npc::all()->where('dungeon_id', $dungeon->id)->values();
+            $npcs->makeHidden(['type']);
 
             // Save NPC data in the root of the dungeon folder
             $this->_saveData($npcs, $rootDirPath, 'npcs.json');

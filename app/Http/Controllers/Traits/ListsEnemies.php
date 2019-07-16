@@ -79,7 +79,7 @@ trait ListsEnemies
                 return $enemy->npc_id === $item->id;
             })->first();
 
-            $enemy->npc->type = $npcTypes->get(rand(0, 9));//$npcTypes->get($enemy->npc->npc_type_id - 1);
+            $enemy->npc->type =$npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
 
             // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
             foreach ($mdtEnemies as $mdtEnemy) {

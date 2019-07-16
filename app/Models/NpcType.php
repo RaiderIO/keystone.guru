@@ -20,4 +20,14 @@ class NpcType extends Model
     {
         return strtolower($this->type);
     }
+
+    /**
+     * Gets all derived NPCs from this type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function npcs()
+    {
+        return $this->hasMany('App\Models\Npc');
+    }
 }

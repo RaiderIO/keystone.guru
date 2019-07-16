@@ -358,19 +358,16 @@ html, body, #map, #app, .wrapper {
 
 .modifier_0 {
     top: -19px;
-    left: -20px;
     /* background-color: red; */
 }
 
 .modifier_1 {
     top: -22px;
-    left: -3px;
     /* background-color: green; */
 }
 
 .modifier_2 {
     top: -19px;
-    left: 14px;
     /* background-color: blue; */
 }
 
@@ -463,6 +460,10 @@ html, body, #map, #app, .wrapper {
 
 .aggressive_enemy_icon.beguiling {
     background-color: purple !important;
+}
+
+.enemy_icon_npc_type.beguiling {
+    border: purple 1px solid !important;
 }
 
 

@@ -3,27 +3,42 @@
         "id": 155432,
         "dungeon_id": -1,
         "classification_id": 2,
+        "npc_type_id": 8,
         "name": "Enchanted Emissary",
         "base_health": 1,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "type": {
+            "id": 8,
+            "type": "Humanoid"
+        }
     },
     {
         "id": 155433,
         "dungeon_id": -1,
         "classification_id": 2,
+        "npc_type_id": 8,
         "name": "Void-Touched Emissary",
         "base_health": 1,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "type": {
+            "id": 8,
+            "type": "Humanoid"
+        }
     },
     {
         "id": 155434,
         "dungeon_id": -1,
         "classification_id": 2,
+        "npc_type_id": 8,
         "name": "Emissary of the Tides",
         "base_health": 1,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "type": {
+            "id": 8,
+            "type": "Humanoid"
+        }
     }
 ]

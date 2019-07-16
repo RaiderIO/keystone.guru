@@ -55,8 +55,13 @@ class EnemyVisual extends Signalable {
             }
 
             let size = this.mainVisual.getSize();
+            data.id = this.enemy.id;
             data.width = size.iconSize[0];
             data.height = size.iconSize[1];
+
+            data.modifier_0_left = (data.width / 2) - 26;
+            data.modifier_1_left = (data.width / 2) - 8;
+            data.modifier_2_left = (data.width / 2) + 10;
 
             // Create a new div icon (the entire structure)
             this.divIcon = new L.divIcon($.extend({html: template(data)}, size));
@@ -96,8 +101,6 @@ class EnemyVisual extends Signalable {
         if (isBoss) {
             name = 'aggressiveness';
         }
-
-        console.log(name);
 
         switch (name) {
             case 'npc_type':
