@@ -97,7 +97,18 @@ class EnemyVisual extends Signalable {
             name = 'aggressiveness';
         }
 
+        console.log(name);
+
         switch (name) {
+            case 'npc_type':
+                this.mainVisual = new EnemyVisualMainNpcType(this);
+
+                this.modifiers = [
+                    new EnemyVisualModifier(this, 0),
+                    new EnemyVisualModifierRaidMarker(this, 1),
+                    new EnemyVisualModifier(this, 2),
+                ];
+                break;
             case 'aggressiveness':
                 this.mainVisual = new EnemyVisualMainAggressiveness(this);
 

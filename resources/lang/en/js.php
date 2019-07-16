@@ -84,6 +84,7 @@ return [
     'title_raid_marker_skull' => 'Skull',
 
     // Visualisation
+    'npc_type_label' => 'Enemy type',
     'aggressiveness_label' => 'Aggressiveness',
 
 

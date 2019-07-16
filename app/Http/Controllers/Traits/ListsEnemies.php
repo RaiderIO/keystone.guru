@@ -9,6 +9,8 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Models\Floor;
+use App\Models\NpcType;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 
@@ -54,6 +56,9 @@ trait ListsEnemies
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
         $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
 
+        /** @var Collection $npcTypes */
+        $npcTypes = NpcType::all();
+
         // Only if we should show MDT enemies
         $mdtEnemies = [];
         if ($showMdtEnemies) {
@@ -73,6 +78,8 @@ trait ListsEnemies
             $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
                 return $enemy->npc_id === $item->id;
             })->first();
+
+            $enemy->npc->type = $npcTypes->get(rand(0, 9));//$npcTypes->get($enemy->npc->npc_type_id - 1);
 
             // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
             foreach ($mdtEnemies as $mdtEnemy) {

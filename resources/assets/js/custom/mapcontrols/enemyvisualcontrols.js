@@ -96,7 +96,7 @@ class EnemyVisualControls extends MapControl {
     _enemyVisualChanged(changedEvent) {
         console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
-        let enemyDisplayType = parseInt($('#map_enemy_visuals_dropdown').val());
+        let enemyDisplayType = $('#map_enemy_visuals_dropdown').val();
 
         // Keep track of the visual type
         getState().setEnemyDisplayType(enemyDisplayType);

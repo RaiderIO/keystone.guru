@@ -134,6 +134,7 @@ let scripts = [
     'resources/assets/js/custom/enemyvisuals/enemyvisualmain.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainaggressiveness.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyforces.js',
+    'resources/assets/js/custom/enemyvisuals/enemyvisualmainnpctype.js',
 
     'resources/assets/js/custom/enemyvisuals/modifiers/modifier.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
@@ -209,6 +210,7 @@ if (images) {
     mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
     mix.copy('resources/assets/images/classes', 'public/images/classes', false);
     mix.copy('resources/assets/images/echo', 'public/images/echo', false);
+    mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);
     mix.copy('resources/assets/images/oauth', 'public/images/oauth', false);

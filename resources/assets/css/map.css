@@ -408,6 +408,51 @@ html, body, #map, #app, .wrapper {
     background-blend-mode: luminosity;
 }
 
+.enemy_icon_npc_type {
+    background-color: white;
+    border: black 1px solid;
+}
+
+.aberration {
+    background-image: url('/images/enemytypes/aberration.png') !important;
+}
+
+.beast {
+    background-image: url('/images/enemytypes/beast.png') !important;
+}
+
+.critter {
+    background-image: url('/images/enemytypes/critter.png') !important;
+}
+
+.demon {
+    background-image: url('/images/enemytypes/demon.png') !important;
+}
+
+.dragonkin {
+    background-image: url('/images/enemytypes/dragonkin.png') !important;
+}
+
+.elemental {
+    background-image: url('/images/enemytypes/elemental.png') !important;
+}
+
+.giant {
+    background-image: url('/images/enemytypes/giant.png') !important;
+}
+
+.humanoid {
+    background-image: url('/images/enemytypes/humanoid.png') !important;
+}
+
+.mechanical {
+    background-image: url('/images/enemytypes/mechanical.png') !important;
+}
+
+.undead {
+    background-image: url('/images/enemytypes/undead.png') !important;
+}
+
 .teeming {
     border: 1px solid red;
 }

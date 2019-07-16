@@ -35,8 +35,8 @@ let c = {
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple'
             ],
-            minSize: 11,
-            maxSize: 32,
+            minSize: 22,
+            maxSize: 45,
             calculateSize: function (health, minHealth, maxHealth) {
                 // Perhaps some enemies are below minHealth, should not be lower than it, nor higher than max health (bosses)
                 health = Math.min(Math.max(health, minHealth), maxHealth);
