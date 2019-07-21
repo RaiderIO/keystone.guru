@@ -26,8 +26,9 @@ class EnemyPack extends MapObject {
         // Any enemies that MAY be displayed when switching Beguiling presets
         this.beguilingenemies = [];
 
+        // Show visibility of whatever preset we're currently displaying
         this.register('synced', this, function () {
-            self.activateBeguilingPreset(1);
+            self.activateBeguilingPreset(getState().getBeguilingPreset());
         });
 
         getState().register('beguilingpreset:changed', this, function (changedEvent) {

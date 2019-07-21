@@ -4,10 +4,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
-
-        this.manager.map.register('beguilingpreset:changed', this, function () {
-            // @TODO remove all beguiling enemies
-        });
     }
 
     _createObject(layer) {
@@ -22,6 +18,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
     _restoreObject(remoteMapObject) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+        let self = this;
 
         let result = null;
 
@@ -112,8 +109,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         let npc = this.manager.map.getNpcById(npcId);
 
-        console.log(npc);
-
         // Build an object that could've come straight from the server
         let remoteEnemy = {
             // Doesn't have a server ID
@@ -130,8 +125,17 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             npc: npc
         };
 
-        // Build and handle the enemy
-        return this._restoreObject(remoteEnemy);
+        // Now return the enemy so callers can make use of it
+        let enemy = this._restoreObject(remoteEnemy);
+
+
+        // Set it to be visible if we should (editing that same preset)
+        if (getState().getBeguilingPreset() === enemy.beguiling_preset) {
+            console.log('Showing beguiling enemy..');
+            this.setMapObjectVisibility(enemy, true);
+        }
+
+        return enemy;
     }
 
     /**

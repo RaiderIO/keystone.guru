@@ -388,25 +388,6 @@ class AdminEnemy extends Enemy {
     edit() {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
 
-        // If we're a Beguiling enemy and we've just been edited, we should apply the same lat/lngs to all other beguiling enemies.
-        // Find other beguiling enemies with the same enemy pack
-        if (this.isBeguiling()) {
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-            let enemies = enemyMapObjectGroup.getBeguilingEnemiesByEnemyPackId(this.enemy_pack_id);
-
-            for (let i = 0; i < enemies.length; i++) {
-                let enemy = enemies[i];
-
-                // Not ourselves, that'd give an infinite loop
-                if (enemy.id !== this.id) {
-                    // Apply our lat/lngs
-                    enemy.layer.setLatLng(this.layer.getLatLng());
-                    // Do not call edit(), infinite loop!
-                    enemy.save();
-                }
-            }
-        }
-
         this.save();
     }
 

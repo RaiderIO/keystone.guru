@@ -13,8 +13,14 @@ class EnemyVisualControls extends MapControl {
         // @TODO I believe this actual changing logic should be somewhere else. But I don't quite know where.
         // When we or someone else changed the beguiling preset
         getState().register('beguilingpreset:changed', this, function (changedEvent) {
+            // Retrofit the preset value if necessary (we didn't make this change)
+            $('#map_enemy_beguiling_preset_dropdown').val(changedEvent.data.beguilingPreset);
+
+            refreshSelectPickers();
+
             // If we're editing the current route and we should change it
-            if (self.map.options.edit &&
+            if (!isMapAdmin &&
+                self.map.options.edit &&
                 self.map.options.dungeonroute.beguilingPreset !== changedEvent.data.beguilingPreset) {
                 // Update the preset on the server
                 $.ajax({
