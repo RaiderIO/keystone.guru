@@ -20,8 +20,6 @@ class AdminEnemy extends Enemy {
         // Whatever enemy we're connected with if we're an MDT enemy
         this.enemy_id = -1;
 
-        this.saving = false;
-        this.deleting = false;
         this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
 
@@ -401,20 +399,16 @@ class AdminEnemy extends Enemy {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
@@ -442,7 +436,6 @@ class AdminEnemy extends Enemy {
                     lng: self.layer.getLatLng().lng
                 },
                 beforeSend: function () {
-                    self.editing = true;
                     $('#enemy_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
                 },
                 success: function (json) {
@@ -461,11 +454,12 @@ class AdminEnemy extends Enemy {
                 },
                 complete: function () {
                     $('#enemy_edit_popup_submit_' + self.id).removeAttr('disabled');
-                    self.editing = false;
                 },
-                error: function () {
+                error: function (xhr, textStatus, errorThrown) {
                     // Even if we were synced, make sure user knows it's no longer / an error occurred
                     self.setSynced(false);
+
+                    defaultAjaxErrorFn(xhr, textStatus, errorThrown);
                 }
             });
         } else {

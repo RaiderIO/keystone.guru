@@ -63,7 +63,7 @@ class APIEnemyController extends Controller
 
         // Find out of there is a duplicate
         if (!$enemy->exists) {
-            $this->checkForDuplicate($enemy);
+            $this->checkForDuplicate($enemy, ['beguiling_preset']);
         }
 
         if (!$enemy->save()) {

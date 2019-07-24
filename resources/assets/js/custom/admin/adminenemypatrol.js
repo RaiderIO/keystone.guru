@@ -3,21 +3,19 @@ class AdminEnemyPatrol extends EnemyPatrol {
     constructor(map, layer) {
         super(map, layer);
 
-        this.saving = false;
-        this.deleting = false;
         this.setSynced(false);
 
         this.enemy_id = -1;
     }
 
-    onLayerInit(){
+    onLayerInit() {
         console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
         super.onLayerInit();
 
         this.onPopupInit();
     }
 
-    onPopupInit(){
+    onPopupInit() {
         let self = this;
         console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
 
@@ -42,7 +40,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         };
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        let syncedFn = function(event){
+        let syncedFn = function (event) {
             // Remove template so our
             let template = Handlebars.templates['map_enemy_patrol_template'];
 
@@ -64,7 +62,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 self.layer
             ];
 
-            $.each(layers, function(i, layer){
+            $.each(layers, function (i, layer) {
                 layer.unbindPopup();
                 layer.bindPopup(template(data), customOptions);
 
@@ -88,26 +86,22 @@ class AdminEnemyPatrol extends EnemyPatrol {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
-                self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
 
-    edit(){
+    edit() {
         console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
         this.save();
     }
@@ -131,7 +125,6 @@ class AdminEnemyPatrol extends EnemyPatrol {
             },
             beforeSend: function () {
                 $('#enemy_patrol_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
-                self.saving = true;
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.edited,
                     color: c.map.admin.mapobject.colors.editedBorder
@@ -150,15 +143,16 @@ class AdminEnemyPatrol extends EnemyPatrol {
             },
             complete: function () {
                 $('#enemy_patrol_edit_popup_submit_' + self.id).removeAttr('disabled');
-                self.saving = false;
             },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }

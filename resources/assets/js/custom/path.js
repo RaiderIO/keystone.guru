@@ -44,8 +44,6 @@ class Path extends Polyline {
         super(map, layer);
 
         this.label = 'Path';
-        this.saving = false;
-        this.deleting = false;
         this.decorator = null;
 
         this.setColor(c.map.path.defaultColor);
@@ -88,17 +86,14 @@ class Path extends Polyline {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
@@ -120,7 +115,6 @@ class Path extends Polyline {
                 vertices: self.getVertices(),
             },
             beforeSend: function () {
-                self.saving = true;
                 $('#map_path_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
             },
             success: function (json) {
@@ -131,11 +125,12 @@ class Path extends Polyline {
             },
             complete: function () {
                 $('#map_path_edit_popup_submit_' + self.id).removeAttr('disabled');
-                self.saving = false;
             },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }

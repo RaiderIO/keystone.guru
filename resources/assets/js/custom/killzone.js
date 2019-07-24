@@ -39,8 +39,6 @@ class KillZone extends MapObject {
         let self = this;
         this.id = 0;
         this.label = 'KillZone';
-        this.saving = false;
-        this.deleting = false;
         this.color = c.map.killzone.polygonOptions.color;
         // List of IDs of selected enemies
         this.enemies = [];
@@ -130,9 +128,6 @@ class KillZone extends MapObject {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 // Detach from all enemies upon deletion
                 self._detachFromEnemies();
@@ -140,11 +135,11 @@ class KillZone extends MapObject {
                 self.localDelete();
                 self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
@@ -165,21 +160,17 @@ class KillZone extends MapObject {
                 lng: self.layer.getLatLng().lng,
                 enemies: self.enemies
             },
-            beforeSend: function () {
-                self.saving = true;
-            },
             success: function (json) {
                 self.id = json.id;
 
                 self.setSynced(true);
                 self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
             },
-            complete: function () {
-                self.saving = false;
-            },
-            error: function (xhr) {
+            error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
