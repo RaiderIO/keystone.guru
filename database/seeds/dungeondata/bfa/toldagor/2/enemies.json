@@ -433,5 +433,20 @@
         "npc": {
             "id": 155433
         }
+    },
+    {
+        "id": 3711,
+        "enemy_pack_id": 531,
+        "floor_id": 54,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -130.75,
+        "lng": 152.625,
+        "npc": {
+            "id": 155434
+        }
     }
 ]

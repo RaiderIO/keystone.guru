@@ -5,8 +5,10 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":202.75,\"lng\":-68.76},{\"lat\":211,\"lng\":-72.51},{\"lat\":203.5,\"lng\":-83.01},{\"lat\":197.5,\"lng\":-78.76}]",
-        "beguilingenemyids": []
+        "vertices_json": "[{\"lat\":\"202.75\",\"lng\":\"-68.76\"},{\"lat\":\"211\",\"lng\":\"-72.51\"},{\"lat\":\"198.6875\",\"lng\":\"-89.5625\"},{\"lat\":\"189.25\",\"lng\":\"-83.0625\"}]",
+        "beguilingenemyids": [
+            3712
+        ]
     },
     {
         "id": 337,
@@ -54,7 +56,19 @@
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"222\",\"lng\":\"-118.375\"},{\"lat\":\"215.375\",\"lng\":\"-129.125\"},{\"lat\":\"221.75\",\"lng\":\"-132\"},{\"lat\":\"228.875\",\"lng\":\"-120.75\"}]",
         "beguilingenemyids": [
-            3532
+            3532,
+            3714
+        ]
+    },
+    {
+        "id": 566,
+        "floor_id": 55,
+        "teeming": null,
+        "faction": "any",
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"133.5\",\"lng\":\"-152.5\"},{\"lat\":\"135.1875\",\"lng\":\"-157.375\"},{\"lat\":\"137.875\",\"lng\":\"-156.5625\"},{\"lat\":\"136.25\",\"lng\":\"-152.125\"}]",
+        "beguilingenemyids": [
+            3713
         ]
     }
 ]

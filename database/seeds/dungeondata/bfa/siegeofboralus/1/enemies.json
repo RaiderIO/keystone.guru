@@ -2738,8 +2738,8 @@
         "beguiling_preset": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -54,
-        "lng": 237.06,
+        "lat": -54.3125,
+        "lng": 237.21875,
         "npc": {
             "id": 141283
         }
@@ -2753,8 +2753,8 @@
         "beguiling_preset": null,
         "faction": "horde",
         "enemy_forces_override": -1,
-        "lat": -53.19,
-        "lng": 236.44,
+        "lat": -53,
+        "lng": 236.34375,
         "npc": {
             "id": 141285
         }
@@ -4441,7 +4441,7 @@
     },
     {
         "id": 3481,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 419,
         "floor_id": 47,
         "mdt_id": 4,
         "teeming": "visible",
@@ -4737,6 +4737,201 @@
         "lng": 282.655,
         "npc": {
             "id": 155432
+        }
+    },
+    {
+        "id": 3725,
+        "enemy_pack_id": 432,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -46.40625,
+        "lng": 268.5,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3726,
+        "enemy_pack_id": 552,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -50.53125,
+        "lng": 246.65625,
+        "npc": {
+            "id": 155432
+        }
+    },
+    {
+        "id": 3727,
+        "enemy_pack_id": 434,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -53.595,
+        "lng": 237.06,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3728,
+        "enemy_pack_id": 436,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -70.3125,
+        "lng": 229.0625,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3729,
+        "enemy_pack_id": 411,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -71.1875,
+        "lng": 215.71875,
+        "npc": {
+            "id": 155433
+        }
+    },
+    {
+        "id": 3730,
+        "enemy_pack_id": 416,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -98.07,
+        "lng": 220.78,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3731,
+        "enemy_pack_id": 418,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -119.785,
+        "lng": 236.465,
+        "npc": {
+            "id": 155432
+        }
+    },
+    {
+        "id": 3732,
+        "enemy_pack_id": 419,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -144.53125,
+        "lng": 239.65625,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3733,
+        "enemy_pack_id": 421,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -175.3125,
+        "lng": 208.25,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3734,
+        "enemy_pack_id": 423,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -184.755,
+        "lng": 213.94,
+        "npc": {
+            "id": 155433
+        }
+    },
+    {
+        "id": 3735,
+        "enemy_pack_id": 426,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -188.90625,
+        "lng": 200.34375,
+        "npc": {
+            "id": 155432
+        }
+    },
+    {
+        "id": 3736,
+        "enemy_pack_id": 427,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -190.28125,
+        "lng": 184.375,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3737,
+        "enemy_pack_id": 428,
+        "floor_id": 47,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -202.005,
+        "lng": 193.59,
+        "npc": {
+            "id": 155434
         }
     }
 ]

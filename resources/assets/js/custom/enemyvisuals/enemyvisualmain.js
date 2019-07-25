@@ -126,7 +126,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
     getSize() {
         let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health;
         if (this.enemyvisual.enemy.npc === null) {
-            console.error('Enemy has no NPC!', this.enemyvisual.enemy);
+            console.warn('Enemy has no NPC!', this.enemyvisual.enemy);
         }
         let calculatedSize = c.map.enemy.calculateSize(
             health,

@@ -413,8 +413,8 @@
         "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -176.54,
-        "lng": 204.56,
+        "lat": -176.8125,
+        "lng": 204.375,
         "npc": {
             "id": 130435
         }
@@ -938,8 +938,8 @@
         "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -160.16,
-        "lng": 222.44,
+        "lat": -160.28125,
+        "lng": 222.28125,
         "npc": {
             "id": 130488
         }
@@ -1268,8 +1268,8 @@
         "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -144.41,
-        "lng": 217.69,
+        "lat": -143.9375,
+        "lng": 216.59375,
         "npc": {
             "id": 130488
         }
@@ -5153,8 +5153,8 @@
         "beguiling_preset": null,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -68.81,
-        "lng": 278.44,
+        "lat": -68.9375,
+        "lng": 278.53125,
         "npc": {
             "id": 133463
         }
@@ -5791,7 +5791,7 @@
     },
     {
         "id": 3426,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 202,
         "floor_id": 50,
         "mdt_id": 19,
         "teeming": "visible",
@@ -6113,8 +6113,8 @@
         "beguiling_preset": 1,
         "faction": "any",
         "enemy_forces_override": -1,
-        "lat": -145.07,
-        "lng": 218.03,
+        "lat": -144.625,
+        "lng": 217.90625,
         "npc": {
             "id": 155432
         }
@@ -6267,6 +6267,291 @@
         "lng": 273.59375,
         "npc": {
             "id": 155433
+        }
+    },
+    {
+        "id": 3689,
+        "enemy_pack_id": 54,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -201.5625,
+        "lng": 206.46875,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3690,
+        "enemy_pack_id": 60,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -187.5,
+        "lng": 214.71875,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3691,
+        "enemy_pack_id": 64,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -176.135,
+        "lng": 204.5,
+        "npc": {
+            "id": 155432
+        }
+    },
+    {
+        "id": 3692,
+        "enemy_pack_id": 66,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -161.75,
+        "lng": 207.21875,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3693,
+        "enemy_pack_id": 79,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -166.605,
+        "lng": 197.035,
+        "npc": {
+            "id": 155432
+        }
+    },
+    {
+        "id": 3695,
+        "enemy_pack_id": 67,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -159.75,
+        "lng": 222.78125,
+        "npc": {
+            "id": 155433
+        }
+    },
+    {
+        "id": 3696,
+        "enemy_pack_id": 72,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -149.71875,
+        "lng": 223.28125,
+        "npc": {
+            "id": 155432
+        }
+    },
+    {
+        "id": 3697,
+        "enemy_pack_id": 83,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -150.285,
+        "lng": 196.22,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3698,
+        "enemy_pack_id": 179,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -111.355,
+        "lng": 155.185,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3699,
+        "enemy_pack_id": 181,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -122.21875,
+        "lng": 147.625,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3700,
+        "enemy_pack_id": 185,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -123.40625,
+        "lng": 131.0625,
+        "npc": {
+            "id": 155432
+        }
+    },
+    {
+        "id": 3701,
+        "enemy_pack_id": 188,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -116.3125,
+        "lng": 123.4375,
+        "npc": {
+            "id": 155433
+        }
+    },
+    {
+        "id": 3702,
+        "enemy_pack_id": 192,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -84.475,
+        "lng": 114.655,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3703,
+        "enemy_pack_id": 494,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -58.06,
+        "lng": 168,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3704,
+        "enemy_pack_id": 565,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -46.59375,
+        "lng": 165.234375,
+        "npc": {
+            "id": 155433
+        }
+    },
+    {
+        "id": 3705,
+        "enemy_pack_id": 202,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -48.015,
+        "lng": 188.47,
+        "npc": {
+            "id": 155432
+        }
+    },
+    {
+        "id": 3706,
+        "enemy_pack_id": 205,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -73.97,
+        "lng": 178.565,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3707,
+        "enemy_pack_id": 211,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -48.135,
+        "lng": 232.59,
+        "npc": {
+            "id": 155434
+        }
+    },
+    {
+        "id": 3708,
+        "enemy_pack_id": 214,
+        "floor_id": 50,
+        "mdt_id": -1,
+        "teeming": null,
+        "beguiling_preset": 2,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "lat": -68.8125,
+        "lng": 279.625,
+        "npc": {
+            "id": 155434
         }
     }
 ]

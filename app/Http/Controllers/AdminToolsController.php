@@ -279,7 +279,13 @@ class AdminToolsController extends Controller
             foreach ($dungeon->floors as $floor) {
                 /** @var Floor $floor */
                 // Only export NPC->id, no need to store the full npc in the enemy
-                $enemies = Enemy::where('floor_id', $floor->id)->without('npc')->with('npc:id')->get()->values();
+                $enemies = Enemy::where('floor_id', $floor->id)->without(['npc', 'type'])->with('npc:id')->get()->values();
+                foreach ($enemies as $enemy) {
+                    /** @var $enemy Enemy */
+                    if ($enemy->npc !== null) {
+                        $enemy->npc->unsetRelation('type');
+                    }
+                }
                 $enemyPacks = EnemyPack::where('floor_id', $floor->id)->get()->values();
                 $enemyPatrols = EnemyPatrol::where('floor_id', $floor->id)->get()->values();
                 $dungeonStartMarkers = DungeonStartMarker::where('floor_id', $floor->id)->get()->values();
