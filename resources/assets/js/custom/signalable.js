@@ -11,10 +11,10 @@ class Signalable {
      * @param fn function The function that should be triggered.
      */
     register(name, listener, fn) {
-        console.assert(this instanceof Signalable, this, 'this is not a Signalable!');
-        console.assert(typeof name === 'string' || Array.isArray(name), name, 'name is not a string|array!');
-        console.assert(typeof listener !== 'function', listener, 'listener is not a function! You probably forgot to add the listener');
-        console.assert(typeof fn === 'function', listener, 'fn should be a function');
+        console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
+        console.assert(typeof name === 'string' || Array.isArray(name), 'name is not a string|array!', name);
+        console.assert(typeof listener !== 'function', 'listener is not a function! You probably forgot to add the listener', listener);
+        console.assert(typeof fn === 'function', 'fn should be a function', listener);
 
         if (typeof name === 'string') {
             // Convert to array
@@ -44,7 +44,7 @@ class Signalable {
      * @param fn callable|null The function you wish to unregister. Null to remove everything.
      */
     unregister(name, listener, fn = null) {
-        console.assert(this instanceof Signalable, this, 'this is not a Signalable!');
+        console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
         let toRemove = [];
 
         for (let i = 0; i < this.signals.length; i++) {
@@ -70,7 +70,7 @@ class Signalable {
      * @param data object Any data you wish to pass, optional.
      */
     signal(name, data = {}) {
-        console.assert(this instanceof Signalable, this, 'this is not a Signalable!');
+        console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
         let self = this;
 
         for (let i = 0; i < this.signals.length; i++) {

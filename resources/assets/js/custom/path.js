@@ -55,7 +55,7 @@ class Path extends Polyline {
      * @private
      */
     _getDecorator() {
-        console.assert(this instanceof Path, this, 'this is not a Path');
+        console.assert(this instanceof Path, 'this is not a Path', this);
         return L.polylineDecorator(this.layer, {
             patterns: [
                 {
@@ -71,13 +71,13 @@ class Path extends Polyline {
     }
 
     edit() {
-        console.assert(this instanceof Path, this, 'this was not a Path');
+        console.assert(this instanceof Path, 'this was not a Path', this);
         this.save();
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof Path, this, 'this was not a Path');
+        console.assert(this instanceof Path, 'this was not a Path', this);
 
         $.ajax({
             type: 'POST',
@@ -100,7 +100,7 @@ class Path extends Polyline {
 
     save() {
         let self = this;
-        console.assert(this instanceof Path, this, 'this was not a Path');
+        console.assert(this instanceof Path, 'this was not a Path', this);
 
         $.ajax({
             type: 'POST',
@@ -137,7 +137,7 @@ class Path extends Polyline {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof Path, this, 'this is not a Path');
+        console.assert(this instanceof Path, 'this is not a Path', this);
         super.onLayerInit();
 
         let self = this;

@@ -42,7 +42,7 @@ class EnemyVisualControls extends MapControl {
             let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-                console.assert(enemy instanceof Enemy, self, 'enemy is not an Enemy');
+                console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', self);
                 enemy.visual.setVisualType(changedEvent.data.enemyDisplayType);
             });
         });
