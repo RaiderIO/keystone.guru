@@ -19,9 +19,15 @@ class EnemyVisualMain extends EnemyVisualIcon {
             $('#map_enemy_visual_' + id).find('.enemy_icon').bind('click', self._visualClicked.bind(self));
         });
 
-        getState().register('mapzoomlevel:changed', this, function () {
-            self.enemyvisual.refresh();
-        });
+        this.enemyvisual.map.leafletMap.on('zoomend', this._zoomEnd, this);
+
+        // getState().register('mapzoomlevel:changed', this, function () {
+        //     self.enemyvisual.refresh();
+        // });
+    }
+
+    _zoomEnd() {
+        this.enemyvisual.refresh();
     }
 
     /**
@@ -154,6 +160,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         this.enemyvisual.enemy.unregister('enemy:set_npc', this);
         this.enemyvisual.unregister('enemyvisual:builtvisual', this);
-        getState().unregister('mapzoomlevel:changed', this);
+        // getState().unregister('mapzoomlevel:changed', this);
+        this.enemyvisual.map.leafletMap.off('zoomend', this._zoomEnd, this);
     }
 }

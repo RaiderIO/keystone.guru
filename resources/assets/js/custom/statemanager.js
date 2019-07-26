@@ -109,8 +109,6 @@ class StateManager extends Signalable {
     setMapZoomLevel(zoom) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        console.log(zoom, this.mapZoomLevel);
-
         // Only when actually changed..
         if (zoom !== this.mapZoomLevel) {
             this.mapZoomLevel = zoom;
