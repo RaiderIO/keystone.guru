@@ -38,7 +38,7 @@ class EnemyVisual extends Signalable {
 
         // If the object is invisible, don't build the visual
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        if(enemyMapObjectGroup.isMapObjectVisible(this.enemy)){
+        if (enemyMapObjectGroup.isMapObjectVisible(this.enemy)) {
             let template = Handlebars.templates['map_enemy_visual_template'];
 
             let data = {};
@@ -59,6 +59,8 @@ class EnemyVisual extends Signalable {
             data.width = size.iconSize[0];
             data.height = size.iconSize[1];
 
+            // console.log('VISIBLE', this.enemy.id, this.enemy.npc.name, data.width);
+
             data.modifier_0_left = (data.width / 2) - 26;
             data.modifier_1_left = (data.width / 2) - 8;
             data.modifier_2_left = (data.width / 2) + 10;
@@ -69,6 +71,8 @@ class EnemyVisual extends Signalable {
             // Set the structure as HTML for the layer
             this.layer.setIcon(this.divIcon);
             this.signal('enemyvisual:builtvisual', {});
+        } else {
+            // console.log('INVISIBLE', this.enemy.id, this.enemy.npc.name);
         }
     }
 
