@@ -45,8 +45,14 @@ let c = {
                 health -= minHealth;
                 maxHealth -= minHealth;
 
+                // Scale factor
+                let scale = getState().getMapZoomLevel() / 2.0;
+
+                let result = (c.map.enemy.minSize + ((health / maxHealth) * (c.map.enemy.maxSize - c.map.enemy.minSize))) * scale;
+                // console.log(typeof result, result, typeof Math.floor(result), Math.floor(result));
+
                 // Return the correct size
-                return parseInt(c.map.enemy.minSize + ((health / maxHealth) * (c.map.enemy.maxSize - c.map.enemy.minSize)));
+                return Math.floor(result);
             }
         },
         adminenemy: {

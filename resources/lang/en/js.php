@@ -28,6 +28,7 @@ return [
 
     'admin_only_label' => 'Admin only',
     'id_label' => 'ID',
+    'size_label' => 'Size',
     'faction_label' => 'Faction',
     'npc_id_label' => 'NPC_ID',
     'attached_to_pack_label' => 'Pack',

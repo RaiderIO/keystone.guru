@@ -108,7 +108,8 @@ class Dungeon extends Model
      */
     public function getNpcsMaxHealth()
     {
-        return $this->npcs->where('classification_id', '<>', 3)->max('base_health');
+        // Specifically ignore the Enchanted Emissary, that one has such highly inflated HP that it's not supposed to be killed
+        return $this->npcs->where('classification_id', '<>', 3)->whereNotIn('id', ['155432'])->max('base_health');
     }
 
     /**

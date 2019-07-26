@@ -11,6 +11,8 @@ class StateManager extends Signalable {
         this.beguilingPreset = null;
         // The currently displayed floor ID
         this.floorId = null;
+        // Map zoom level
+        this.mapZoomLevel = 1;
     }
 
     /**
@@ -101,6 +103,24 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Sets the current map zoom level.
+     * @param zoom
+     */
+    setMapZoomLevel(zoom) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        console.log(zoom, this.mapZoomLevel);
+
+        // Only when actually changed..
+        if (zoom !== this.mapZoomLevel) {
+            this.mapZoomLevel = zoom;
+
+            // Let everyone know it's changed
+            this.signal('mapzoomlevel:changed', {mapZoomLevel: this.mapZoomLevel});
+        }
+    }
+
+    /**
      * Get the default visual to display for all enemies.
      * @returns {string}
      */
@@ -116,6 +136,15 @@ class StateManager extends Signalable {
     getBeguilingPreset() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.beguilingPreset;
+    }
+
+    /**
+     * Get the current map's zoom level.
+     * @returns {string}
+     */
+    getMapZoomLevel() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.mapZoomLevel;
     }
 
     /**

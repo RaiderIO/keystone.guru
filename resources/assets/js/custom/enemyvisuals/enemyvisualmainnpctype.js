@@ -39,6 +39,20 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
             mainVisualClasses.push('beguiling');
         }
 
+        let npc = this.enemyvisual.enemy.npc;
+        if (npc !== null) {
+            mainVisualClasses.push(npc.aggressiveness);
+
+            // Enchanted Emissary
+            if (npc.id === 155432) {
+                mainVisualClasses.push('enchanted');
+            } else if (npc.id === 155433) {
+                mainVisualClasses.push('void');
+            } else if (npc.id === 155434) {
+                mainVisualClasses.push('tide');
+            }
+        }
+
         // Any additional classes to add for when the enemy is selectable
         let selectionClasses = [];
         if (this.enemyvisual.enemy.isSelectable()) {
@@ -58,7 +72,6 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
      */
     _updateIconName() {
         let npc = this.enemyvisual.enemy.npc;
-        console.log(npc);
         this.iconName = npc.type.type.toLowerCase();
     }
 

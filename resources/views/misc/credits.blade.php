@@ -112,7 +112,7 @@
             Demon: https://www.iconfinder.com/icons/725403/alchemy_antichrist_halloween_hell_pentagram_wicca_witch_icon
         </li>
         <li>
-            Dragonkin: https://www.iconfinder.com/icons/763114/collection_dragon_final_harry_potter_icon
+            Dragonkin: https://www.iconfinder.com/icons/2580985/dragon_fairytale_fantasy_flying_head_magic_monster_icon
         </li>
         <li>
             Elemental: https://www.iconfinder.com/icons/1161512/earth_element_elemental_magic_rock_spell_stone_icon
@@ -131,7 +131,13 @@
             Mechanical: https://www.iconfinder.com/icons/2376279/android_bot_droid_robot_icon
         </li>
         <li>
-            Undead: https://www.iconfinder.com/icons/2659901/evil_halloween_hand_monster_undead_zombie_icon
+            Undead: https://www.iconfinder.com/icons/1974373/halloween_hand_rise_zombie_icon
+        </li>
+        <li>
+            Void: https://www.iconfinder.com/icons/3903825/frozen_theme_snowflake_swirl_snowflake_tornado_swirl_snowflake_winter_swirl_icon
+        </li>
+        <li>
+            Tide: https://www.iconfinder.com/icons/4605982/big_ocean_sea_tide_wave_icon
         </li>
     </ul>
     </p>

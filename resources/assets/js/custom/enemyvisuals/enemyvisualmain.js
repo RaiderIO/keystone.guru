@@ -18,6 +18,10 @@ class EnemyVisualMain extends EnemyVisualIcon {
             // When the visual exists, bind a click method to it (to increase performance)
             $('#map_enemy_visual_' + id).find('.enemy_icon').bind('click', self._visualClicked.bind(self));
         });
+
+        getState().register('mapzoomlevel:changed', this, function () {
+            self.enemyvisual.refresh();
+        });
     }
 
     /**
@@ -54,7 +58,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
                     trigger: 'click',
                     transition_function: 'linear',
                     circle_radius: 40,
-                    item_diameter: 16,
+                    item_diameter: this.getSize().iconSize[0],
                     speed: 200,
                     open: function () {
                         self.enemyvisual.enemy.unbindTooltip();
@@ -127,12 +131,18 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health;
         if (this.enemyvisual.enemy.npc === null) {
             console.warn('Enemy has no NPC!', this.enemyvisual.enemy);
+        } else {
+            // Special catch for Enchanted Emissary
+            if (this.enemyvisual.enemy.npc.id === 155432) {
+                health = (this.enemyvisual.map.options.npcsMinHealth + this.enemyvisual.map.options.npcsMaxHealth) / 2;
+            }
         }
         let calculatedSize = c.map.enemy.calculateSize(
             health,
             this.enemyvisual.map.options.npcsMinHealth,
             this.enemyvisual.map.options.npcsMaxHealth
         );
+
         return {
             iconSize: [calculatedSize, calculatedSize]
         };
@@ -144,5 +154,6 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         this.enemyvisual.enemy.unregister('enemy:set_npc', this);
         this.enemyvisual.unregister('enemyvisual:builtvisual', this);
+        getState().unregister('mapzoomlevel:changed', this);
     }
 }

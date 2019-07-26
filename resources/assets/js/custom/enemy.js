@@ -115,55 +115,19 @@ class Enemy extends MapObject {
 
     bindTooltip() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        let template = Handlebars.templates['map_enemy_tooltip_template'];
 
-        let data = {};
+        let text = '';
         if (this.npc !== null) {
-            // Determine what to show for enemy forces based on override or not
-            let enemy_forces = this.npc.enemy_forces;
-
-            // Admin maps have 0 enemy forces
-            if (this.map.getEnemyForcesRequired() > 0) {
-                if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
-                    // @TODO This HTML probably needs to go somewhere else
-                    if (this.enemy_forces_override >= 0) {
-                        enemy_forces = '<s>' + enemy_forces + '</s> ' +
-                            '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
-                    } else if (enemy_forces >= 1) {
-                        enemy_forces += ' ' + this._getPercentageString(enemy_forces);
-                    }
-                } else if (enemy_forces === -1) {
-                    enemy_forces = 'unknown';
-                }
-            }
-
-            data = $.extend({
-                npc_name: this.npc.name,
-                enemy_forces: enemy_forces,
-                base_health: this.npc.base_health,
-                teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
-                is_teeming: this.teeming === 'visible',
-                id: this.id,
-                faction: this.faction,
-                npc_id: this.npc_id,
-                npc_id_type: typeof this.npc_id,
-                is_mdt: this.is_mdt,
-                mdt_id: this.mdt_id,
-                enemy_id: this.enemy_id,
-                attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
-                visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
-            }, getHandlebarsDefaultVariables());
+            text = this.npc.name;
         } else {
-            template = function (data) {
-                return lang.get('messages.no_npc_found_label');
-            }
+            text = lang.get('messages.no_npc_found_label');
         }
 
         // Remove any previous tooltip
         this.unbindTooltip();
-        this.layer.bindTooltip(template(data), {
-            offset: [0, 10],
-            direction: 'bottom'
+        this.layer.bindTooltip(text, {
+            offset: [0, -10],
+            direction: 'top'
         });
     }
 

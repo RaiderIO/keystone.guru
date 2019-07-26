@@ -52,7 +52,7 @@
             <tr>
                 <td>{{ $npc->id }}</td>
                 <td>{{ $npc->name }}</td>
-                <td>{{ $npc->dungeon->name }}</td>
+                <td>{{ isset($npc->dungeon) ? $npc->dungeon->name : 'Any' }}</td>
                 <td>{{ $npc->enemy_forces }}</td>
                 <td>{{ $npc->classification->name }}</td>
                 <td>

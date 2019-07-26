@@ -286,7 +286,13 @@ class DungeonMap extends Signalable {
             });
         }
 
-        this.leafletMap.on('zoomend', (this._adjustZoomForLayers).bind(this));
+        this.leafletMap.on('zoomend', function () {
+            if (typeof self.leafletMap !== 'undefined') {
+                self._adjustZoomForLayers();
+                // Propagate to any other listeners
+                getState().setMapZoomLevel(self.leafletMap.getZoom());
+            }
+        });
         this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
 
@@ -406,12 +412,12 @@ class DungeonMap extends Signalable {
 
     /**
      * Fixes the border width for based on current zoom of the map
+     * @TODO This should be moved to all layers that actually have a setStyle property and listen to getState() call instead.
      * @private
      */
     _adjustZoomForLayers() {
         console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
 
-        // @TODO Verify if this code still does what it's supposed to do?
         for (let i = 0; i < this.mapObjects.length; i++) {
             let layer = this.mapObjects[i].layer;
             if (layer.hasOwnProperty('setStyle')) {
