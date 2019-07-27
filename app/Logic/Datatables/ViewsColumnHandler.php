@@ -33,14 +33,17 @@ class ViewsColumnHandler extends DatatablesColumnHandler
 
         // Only order
         if ($order !== null) {
-            $builder->addSelect(DB::raw('COUNT(page_views.id) as views'));
+            $builder->addSelect(DB::raw('pv.views AS views'));
 
-            $builder->leftJoin('page_views', function ($join) {
+            $subQuery = DB::table('page_views')
+                ->select('model_id', DB::raw('COUNT(distinct page_views.id) views'))
+                ->where('model_class', DungeonRoute::class)
+                ->groupBy('model_id');
+
+            $builder->joinSub($subQuery, 'pv', function ($join) {
                 /** @var $join JoinClause */
-                $join->on('page_views.model_id', '=', 'dungeon_routes.id');
-                $join->where('page_views.model_class', '=', DungeonRoute::class);
+                $join->on('dungeon_routes.id', '=', 'pv.model_id');
             });
-            $builder->groupBy(DB::raw('dungeon_routes.id'));
             $builder->orderBy('views', $order['dir'] === 'asc' ? 'asc' : 'desc');
         }
     }
