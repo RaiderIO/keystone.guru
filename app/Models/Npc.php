@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $dungeon_id
  * @property int $classification_id
  * @property int $npc_type_id
+ * @property int $npc_class_id
  * @property string $name
  * @property int $base_health
  * @property int $enemy_forces
@@ -27,7 +28,7 @@ class Npc extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $with = ['type'];
+    protected $with = ['type', 'class'];
 
     /**
      * Gets all derived enemies from this Npc.
@@ -62,5 +63,14 @@ class Npc extends Model
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo('App\Models\NpcType', 'npc_type_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    function class()
+    {
+        // Not sure why the foreign key declaration is required here, but it is
+        return $this->belongsTo('App\Models\NpcClass', 'npc_class_id');
     }
 }

@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Models\Floor;
+use App\Models\NpcClass;
 use App\Models\NpcType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,8 @@ trait ListsEnemies
 
         /** @var Collection $npcTypes */
         $npcTypes = NpcType::all();
+        /** @var Collection $npcClasses */
+        $npcClasses = NpcClass::all();
 
         // Only if we should show MDT enemies
         $mdtEnemies = [];
@@ -79,7 +82,8 @@ trait ListsEnemies
                 return $enemy->npc_id === $item->id;
             })->first();
 
-            $enemy->npc->type =$npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
+            $enemy->npc->type = $npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
+            $enemy->npc->class = $npcClasses->random();
 
             // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
             foreach ($mdtEnemies as $mdtEnemy) {

@@ -132,7 +132,7 @@ let scripts = [
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmain.js',
-    'resources/assets/js/custom/enemyvisuals/enemyvisualmainaggressiveness.js',
+    'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyclass.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyforces.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainnpctype.js',
 

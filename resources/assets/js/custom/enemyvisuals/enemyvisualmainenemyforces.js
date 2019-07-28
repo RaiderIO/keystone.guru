@@ -12,7 +12,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     }
 
     _getTemplateData() {
-        console.assert(this instanceof EnemyVisualMainEnemyForces, this, 'this is not an EnemyVisualMainEnemyForces!');
+        console.assert(this instanceof EnemyVisualMainEnemyForces, 'this is not an EnemyVisualMainEnemyForces!', this);
 
         return {
             // Set the main html

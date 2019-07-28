@@ -86,7 +86,7 @@ return [
 
     // Visualisation
     'npc_type_label' => 'Enemy type',
-    'aggressiveness_label' => 'Aggressiveness',
+    'npc_class_label' => 'Enemy class',
 
 
     // Admin

@@ -108,14 +108,14 @@ class EnemyVisual extends Signalable {
         // Create a new visual based on the requested visual. With one exception, bosses are always shown with the
         // Aggressiveness filter. Otherwise they show up as things we don't want them to
         // @TODO Hard coded 3 = boss
-        let isBoss = this.enemy.npc !== null && this.enemy.npc.classification_id === 3;
-        if (isBoss) {
-            name = 'aggressiveness';
-        }
+        // let isBoss = this.enemy.npc !== null && this.enemy.npc.classification_id === 3;
+        // if (isBoss) {
+        //     name = 'npc_class';
+        // }
 
         switch (name) {
-            case 'npc_type':
-                this.mainVisual = new EnemyVisualMainNpcType(this);
+            case 'npc_class':
+                this.mainVisual = new EnemyVisualMainEnemyClass(this);
 
                 this.modifiers = [
                     new EnemyVisualModifier(this, 0),
@@ -123,8 +123,8 @@ class EnemyVisual extends Signalable {
                     new EnemyVisualModifier(this, 2),
                 ];
                 break;
-            case 'aggressiveness':
-                this.mainVisual = new EnemyVisualMainAggressiveness(this);
+            case 'npc_type':
+                this.mainVisual = new EnemyVisualMainNpcType(this);
 
                 this.modifiers = [
                     new EnemyVisualModifier(this, 0),

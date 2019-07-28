@@ -404,6 +404,37 @@ html, body, #map, #app, .wrapper {
     border-radius: 100px;
 }
 
+
+/*
+ * Enemy classes
+ */
+.melee {
+    background-image: url('/images/enemyclasses/melee.png') !important;
+}
+
+.caster {
+    background-image: url('/images/enemyclasses/caster.png') !important;
+}
+
+.ranged {
+    background-image: url('/images/enemyclasses/ranged.png') !important;
+}
+
+.healer {
+    background-image: url('/images/enemyclasses/healer.png') !important;
+}
+
+.enemy_icon.melee,
+.enemy_icon.caster,
+.enemy_icon.ranged,
+.enemy_icon.healer {
+    background-color: #2B3E50 !important;
+}
+
+/*
+ * Enemy types
+ */
+.enemy_icon_npc_class,
 .enemy_icon_npc_type {
     background-color: white;
     border: black 2px solid;
@@ -411,18 +442,22 @@ html, body, #map, #app, .wrapper {
     background-blend-mode: luminosity;
 }
 
+.enemy_icon_npc_class.aggressive,
 .enemy_icon_npc_type.aggressive {
     border-color: #dc3c3c;
 }
 
+.enemy_icon_npc_class.neutral,
 .enemy_icon_npc_type.neutral {
     border-color: #cccc2d !important;
 }
 
+.enemy_icon_npc_class.unfriendly,
 .enemy_icon_npc_type.unfriendly {
     border-color: #ff9900 !important;
 }
 
+.enemy_icon_npc_class.friendly,
 .enemy_icon_npc_type.friendly {
     border-color: #15c415 !important;
 }
@@ -466,6 +501,10 @@ html, body, #map, #app, .wrapper {
 .undead {
     background-image: url('/images/enemytypes/undead.png') !important;
 }
+
+/**
+ * Beguiling
+ */
 
 .beguiling.enchanted {
     background-image: url('/images/enemytypes/enchanted.png') !important;
