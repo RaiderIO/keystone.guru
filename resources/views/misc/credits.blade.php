@@ -103,7 +103,7 @@
             https://www.iconfinder.com/icons/3759345/events_eyes_halloween_horror_october_witches_zombie_icon
         </li>
         <li>
-            Beast: https://www.iconfinder.com/icons/1460296/animal_fox_fox_head_wild_animal_wolf_icon
+            Beast: https://www.iconfinder.com/icons/1604346/animal_footprint_paw_pet_print_track_icon
         </li>
         <li>
             Critter: https://www.iconfinder.com/icons/586373/easter_easter_bunny_easter_hare_easter_rabbit_rabbit_icon
@@ -122,7 +122,7 @@
         </li>
         <li>
             Humanoid:
-            <div>Icon made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a
+            <div>Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
                         href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a
                         href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0"
                         target="_blank">CC 3.0 BY</a></div>
@@ -134,7 +134,8 @@
             Undead: https://www.iconfinder.com/icons/1974373/halloween_hand_rise_zombie_icon
         </li>
         <li>
-            Void: https://www.iconfinder.com/icons/3903825/frozen_theme_snowflake_swirl_snowflake_tornado_swirl_snowflake_winter_swirl_icon
+            Void:
+            https://www.iconfinder.com/icons/3903825/frozen_theme_snowflake_swirl_snowflake_tornado_swirl_snowflake_winter_swirl_icon
         </li>
         <li>
             Tide: https://www.iconfinder.com/icons/4605982/big_ocean_sea_tide_wave_icon

@@ -56,8 +56,15 @@ class EnemyVisual extends Signalable {
 
             let size = this.mainVisual.getSize();
             data.id = this.enemy.id;
-            data.width = size.iconSize[0];
-            data.height = size.iconSize[1];
+            // Compensate for a 2px border
+            data.width = size.iconSize[0] - 4;
+            data.height = size.iconSize[1] - 4;
+
+            let margin = c.map.enemy.calculateMargin(data.height);
+            data.outer_width = size.iconSize[0] + (margin * 2);
+            data.outer_height = size.iconSize[1] + (margin * 2);
+
+            data.margin = margin;
 
             // console.log('VISIBLE', this.enemy.id, this.enemy.npc.name, data.width);
 

@@ -397,17 +397,18 @@ html, body, #map, #app, .wrapper {
 }
 
 .enemy_icon {
-    background-image: url("/images/mapicon/unset.png") !important; /* no-repeat center !important; */
+    background-color: white;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     border-radius: 100px;
-    background-blend-mode: luminosity;
 }
 
 .enemy_icon_npc_type {
     background-color: white;
     border: black 2px solid;
+    border-radius: 100px;
+    background-blend-mode: luminosity;
 }
 
 .enemy_icon_npc_type.aggressive {
@@ -482,10 +483,11 @@ html, body, #map, #app, .wrapper {
 }
 
 .teeming {
-    border: 1px solid red;
+    background-color: blue !important;
 }
 
 .aggressive_enemy_icon {
+    background-image: url("/images/mapicon/unset.png") !important; /* no-repeat center !important; */
     background-color: #dc3c3c !important;
 }
 

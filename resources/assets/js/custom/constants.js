@@ -35,8 +35,14 @@ let c = {
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple'
             ],
-            minSize: 16,
-            maxSize: 36,
+            minSize: 12,
+            maxSize: 32,
+            margin: 4,
+            calculateMargin: function(size) {
+                let range = c.map.enemy.maxSize - c.map.enemy.minSize;
+                let zeroBased = (size - c.map.enemy.minSize);
+                return (zeroBased / range) * c.map.enemy.margin;
+            },
             calculateSize: function (health, minHealth, maxHealth) {
                 // Perhaps some enemies are below minHealth, should not be lower than it, nor higher than max health (bosses)
                 health = Math.min(Math.max(health, minHealth), maxHealth);

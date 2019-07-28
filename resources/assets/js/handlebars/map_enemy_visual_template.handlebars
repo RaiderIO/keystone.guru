@@ -8,9 +8,12 @@
     <div class="modifier modifier_2 {{modifier_2_classes}}" style="display: none; left: {{modifier_2_left}}px;">
         {{{modifier_2_html}}}
     </div>
-    <div id="map_enemy_visual_{{id}}" class="{{selection_classes_base}} {{selection_classes}}" style="width: {{width}}px; height: {{height}}px;">
-        <div class="{{main_visual_classes}}" style="width: {{width}}px; height: {{height}}px;">
-            {{{main_visual_html}}}
+    <div id="map_enemy_visual_{{id}}" class="{{selection_classes_base}} {{selection_classes}}">
+        <div class="{{main_visual_outer_classes}}" style="width: {{outer_width}}px; height: {{outer_height}}px;">
+            <div class="{{main_visual_inner_classes}}" style="width: {{width}}px; height: {{height}}px; margin:{{margin}}px;
+                    ">
+                {{{main_visual_html}}}
+            </div>
         </div>
     </div>
 </div>

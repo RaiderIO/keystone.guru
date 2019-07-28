@@ -28,28 +28,29 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
     _getTemplateData() {
         console.assert(this instanceof EnemyVisualMainNpcType, this, 'this is not an EnemyVisualMainNpcType!');
 
-        let mainVisualClasses = ['enemy_icon', 'enemy_icon_npc_type', this.iconName];
+        let mainVisualOuterClasses = ['enemy_icon_npc_type'];
+        let mainVisualInnerClasses = ['enemy_icon', this.iconName];
 
         // Handle Teeming display
         if (this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') {
-            mainVisualClasses.push('teeming');
+            mainVisualOuterClasses.push('teeming');
         }
         // Handle beguiling display
         if (this.enemyvisual.enemy.isBeguiling()) {
-            mainVisualClasses.push('beguiling');
+            mainVisualInnerClasses.push('beguiling');
         }
 
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
-            mainVisualClasses.push(npc.aggressiveness);
+            mainVisualOuterClasses.push(npc.aggressiveness);
 
             // Enchanted Emissary
             if (npc.id === 155432) {
-                mainVisualClasses.push('enchanted');
+                mainVisualInnerClasses.push('enchanted');
             } else if (npc.id === 155433) {
-                mainVisualClasses.push('void');
+                mainVisualInnerClasses.push('void');
             } else if (npc.id === 155434) {
-                mainVisualClasses.push('tide');
+                mainVisualInnerClasses.push('tide');
             }
         }
 
@@ -61,7 +62,8 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
 
         return {
             // Set the main icon
-            main_visual_classes: mainVisualClasses.join(' '),
+            main_visual_outer_classes: mainVisualOuterClasses.join(' '),
+            main_visual_inner_classes: mainVisualInnerClasses.join(' '),
             selection_classes: selectionClasses.join(' ')
         };
     }
@@ -72,7 +74,9 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
      */
     _updateIconName() {
         let npc = this.enemyvisual.enemy.npc;
-        this.iconName = npc.type.type.toLowerCase();
+        if (npc !== null) {
+            this.iconName = npc.type.type.toLowerCase();
+        }
     }
 
     /**
