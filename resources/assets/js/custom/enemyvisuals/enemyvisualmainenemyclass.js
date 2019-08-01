@@ -3,7 +3,7 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
     constructor(enemyvisual) {
         super(enemyvisual);
 
-        this.iconName = 'unset';
+        this.iconName = 'melee';
         // Set the icon initially to draw the current npc
         this._updateIconName();
 
@@ -13,6 +13,7 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
 
     _getValidIconNames() {
         return [
+            'boss',
             'melee',
             'caster',
             'healer',
@@ -51,7 +52,7 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
         // Any additional classes to add for when the enemy is selectable
         let selectionClasses = [];
         if (this.enemyvisual.enemy.isSelectable()) {
-            selectionClasses.push('selected_enemy_icon_' + (this.iconName === 'boss' ? 'big' : 'small'));
+            selectionClasses.push('selected_enemy_icon');
         }
 
         return {
@@ -69,7 +70,11 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
     _updateIconName() {
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
-            this.iconName = npc.class.name.toLowerCase();
+            if (npc.classification_id === 3) {
+                this.iconName = 'boss';
+            } else {
+                this.iconName = npc.class.name.toLowerCase();
+            }
         }
     }
 

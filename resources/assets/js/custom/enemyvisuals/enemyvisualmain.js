@@ -150,7 +150,8 @@ class EnemyVisualMain extends EnemyVisualIcon {
         );
 
         return {
-            iconSize: [calculatedSize, calculatedSize]
+            // 2px border; so + 4
+            iconSize: [calculatedSize + 4, calculatedSize + 4]
         };
     }
 

@@ -55,14 +55,19 @@ class EnemyVisual extends Signalable {
             }
 
             let size = this.mainVisual.getSize();
-            data.id = this.enemy.id;
-            // Compensate for a 2px border
-            data.width = size.iconSize[0] - 4;
-            data.height = size.iconSize[1] - 4;
 
-            let margin = c.map.enemy.calculateMargin(data.height);
-            data.outer_width = size.iconSize[0] + (margin * 2);
-            data.outer_height = size.iconSize[1] + (margin * 2);
+            let width = size.iconSize[0];
+            let height = size.iconSize[1];
+
+            let margin = c.map.enemy.calculateMargin(width);
+
+            data.id = this.enemy.id;
+            // Compensate for a 2px border on the inner, 2x border on the outer
+            data.inner_width = 'calc(100% - ' + (margin * 2) + 'px)';
+            data.inner_height = 'calc(100% - ' + (margin * 2) + 'px)';
+
+            data.outer_width = (width + (margin * 2)) + 'px';
+            data.outer_height = (height + (margin * 2)) + 'px';
 
             data.margin = margin;
 
@@ -73,7 +78,10 @@ class EnemyVisual extends Signalable {
             data.modifier_2_left = (data.width / 2) + 10;
 
             // Create a new div icon (the entire structure)
-            this.divIcon = new L.divIcon($.extend({html: template(data)}, size));
+            this.divIcon = new L.divIcon({
+                html: template(data),
+                iconSize: [width + (margin * 2), height + (margin * 2)]
+            });
 
             // Set the structure as HTML for the layer
             this.layer.setIcon(this.divIcon);
@@ -145,32 +153,4 @@ class EnemyVisual extends Signalable {
 
         this._buildVisual();
     }
-
-    // /**
-    //  *
-    //  * @param name
-    //  */
-    // setMainIcon(name) {
-    //     console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
-    //
-    //     this.mainVisual.setIcon(name);
-    //     this._buildVisual();
-    // }
-    //
-    // /**
-    //  * Set a modifier's icon name by index. Pass null or an empty string to the name to unset.
-    //  * @param index
-    //  * @param name
-    //  */
-    // setModifierIcon(index, name) {
-    //     console.assert(index >= 0 && index <= 2, this, 'Index is out of bounds!');
-    //     console.log(">> setModifierIcon", index, name);
-    //
-    //     // Find the modifier of the index
-    //     let modifier = this.modifiers[index];
-    //     // Let it figure out its own icon by setting the name
-    //     modifier.setIcon(name);
-    //     this._buildVisual();
-    //     console.log("OK setModifierIcon", index, name);
-    // }
 }

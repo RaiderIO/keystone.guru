@@ -57,7 +57,7 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
         // Any additional classes to add for when the enemy is selectable
         let selectionClasses = [];
         if (this.enemyvisual.enemy.isSelectable()) {
-            selectionClasses.push('selected_enemy_icon_' + (this.iconName === 'boss' ? 'big' : 'small'));
+            selectionClasses.push('selected_enemy_icon');
         }
 
         return {

@@ -424,6 +424,10 @@ html, body, #map, #app, .wrapper {
     background-image: url('/images/enemyclasses/healer.png') !important;
 }
 
+.boss {
+    background-image: url("/images/mapicon/boss.png") !important;
+}
+
 .enemy_icon.melee,
 .enemy_icon.caster,
 .enemy_icon.ranged,
@@ -581,21 +585,9 @@ html, body, #map, #app, .wrapper {
     border-color: yellow !important;
 }
 
-.selected_enemy_icon_small {
+.selected_enemy_icon {
     margin-top: -4px !important;
     margin-left: -4px !important;
-}
-
-.selected_enemy_icon_medium {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
-}
-
-.selected_enemy_icon_big {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
-    width: 32px !important;
-    height: 32px !important;
 }
 
 #map_enemy_forces h5 {

@@ -36,8 +36,8 @@ let c = {
                 'green', 'yellow', 'orange', 'red', 'purple'
             ],
             minSize: 12,
-            maxSize: 32,
-            margin: 4,
+            maxSize: 26,
+            margin: 2,
             calculateMargin: function(size) {
                 let range = c.map.enemy.maxSize - c.map.enemy.minSize;
                 let zeroBased = (size - c.map.enemy.minSize);
