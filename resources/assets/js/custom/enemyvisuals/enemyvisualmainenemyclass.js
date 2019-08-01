@@ -17,7 +17,10 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
             'melee',
             'caster',
             'healer',
-            'ranged'
+            'ranged',
+            'enchanted',
+            'tide',
+            'void'
         ];
     }
 

@@ -47,7 +47,13 @@
     <div class="form-group{{ $errors->has('aggressiveness') ? ' has-error' : '' }}">
         {!! Form::label('aggressiveness', __('Aggressiveness') . "*") !!}
         {!! Form::select('aggressiveness', array_combine(config('keystoneguru.aggressiveness'), config('keystoneguru.aggressiveness_pretty')), null, ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'classification_id'])
+        @include('common.forms.form-error', ['key' => 'aggressiveness'])
+    </div>
+
+    <div class="form-group{{ $errors->has('npc_class_id') ? ' has-error' : '' }}">
+        {!! Form::label('npc_class_id', __('Class') . "*") !!}
+        {!! Form::select('npc_class_id', \App\Models\NpcClass::pluck('name', 'id'), null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'npc_class_id'])
     </div>
 
     <div class="form-group{{ $errors->has('base_health') ? ' has-error' : '' }}">

@@ -40,6 +40,7 @@ class NpcController extends Controller
         $npc->id = $request->get('id');
         $npc->dungeon_id = $request->get('dungeon_id');
         $npc->classification_id = $request->get('classification_id');
+        $npc->npc_class_id = $request->get('npc_class_id');
         $npc->name = $request->get('name');
         // Remove commas or dots in the name; we want the integer value
         $npc->base_health = str_replace(',', '', $request->get('base_health'));
@@ -49,8 +50,7 @@ class NpcController extends Controller
 
         if (!$npc->save()) {
             abort(500, 'Unable to save npc!');
-        }
-        // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
+        } // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
         else if ($oldId > 0) {
             Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
         }
