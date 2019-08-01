@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Dungeon $dungeon
  * @property NpcClassification $classification
  * @property NpcType $type
+ * @property NpcClass $class
  *
  * @property \Illuminate\Support\Collection $enemies
  *

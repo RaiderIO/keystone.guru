@@ -432,7 +432,7 @@ html, body, #map, #app, .wrapper {
 .enemy_icon.caster,
 .enemy_icon.ranged,
 .enemy_icon.healer {
-    background-color: #2B3E50 !important;
+    background-color: #2B3E50;
 }
 
 /*
@@ -510,37 +510,37 @@ html, body, #map, #app, .wrapper {
  * Beguiling
  */
 
-.beguiling.enchanted {
+.beguiling .enchanted {
     background-image: url('/images/enemytypes/enchanted.png') !important;
-    background-color: #28ff28 !important;
+    background-color: #e1e0dd;
 }
 
-.beguiling.void {
+.beguiling .void {
     background-image: url('/images/enemytypes/void.png') !important;
-    background-color: purple !important;
+    background-color: #e1e0dd;
 }
 
-.beguiling.tide {
+.beguiling .tide {
     background-image: url('/images/enemytypes/tide.png') !important;
-    background-color: #2298ff !important;
+    background-color: #e1e0dd;
 }
 
 .teeming {
-    background-color: blue !important;
+    background-color: #3d3cff;
 }
 
 .aggressive_enemy_icon {
     background-image: url("/images/mapicon/unset.png") !important; /* no-repeat center !important; */
-    background-color: #dc3c3c !important;
+    background-color: #dc3c3c;
 }
 
-.aggressive_enemy_icon.beguiling {
-    background-color: purple !important;
+.beguiling {
+    background-color: #7f2480;
 }
 
-.enemy_icon_npc_type.beguiling {
-    border: purple 2px solid !important;
-}
+/*.enemy_icon_npc_type.beguiling {*/
+/*    border: #7f2480 2px solid !important;*/
+/*}*/
 
 
 .neutral_enemy_icon {

@@ -194,6 +194,7 @@ class AdminToolsController extends Controller
 
         // Save all NPCs which aren't directly tied to a dungeon
         $npcs = Npc::all()->where('dungeon_id', -1)->values();
+        $npcs->makeHidden(['type', 'class']);
 
         // Save NPC data in the root of folder
         $dungeonDataDir = database_path('/seeds/dungeondata/');
@@ -270,7 +271,7 @@ class AdminToolsController extends Controller
             $this->_saveData($demoRoutes, $rootDirPath, 'dungeonroutes.json');
 
             $npcs = Npc::all()->where('dungeon_id', $dungeon->id)->values();
-            $npcs->makeHidden(['type']);
+            $npcs->makeHidden(['type', 'class']);
 
             // Save NPC data in the root of the dungeon folder
             $this->_saveData($npcs, $rootDirPath, 'npcs.json');
@@ -284,6 +285,7 @@ class AdminToolsController extends Controller
                     /** @var $enemy Enemy */
                     if ($enemy->npc !== null) {
                         $enemy->npc->unsetRelation('type');
+                        $enemy->npc->unsetRelation('class');
                     }
                 }
                 $enemyPacks = EnemyPack::where('floor_id', $floor->id)->get()->values();

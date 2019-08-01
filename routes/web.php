@@ -134,7 +134,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::get('expansions', 'ExpansionController@list')->name('admin.expansions');
 
-            // Changelogs
+            // Releases
             Route::get('release/new', 'ReleaseController@new')->name('admin.release.new');
             Route::get('release/{release}', 'ReleaseController@edit')->name('admin.release.edit');
 
@@ -142,15 +142,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::patch('release/{release}', 'ReleaseController@update')->name('admin.release.update');
 
             Route::get('release', 'ReleaseController@list')->name('admin.releases');
-
-            // Changelogs
-            Route::get('changelog/new', 'ChangelogController@new')->name('admin.changelog.new');
-            Route::get('changelog/{changelog}', 'ChangelogController@edit')->name('admin.changelog.edit');
-
-            Route::post('changelog/new', 'ChangelogController@savenew')->name('admin.changelog.savenew');
-            Route::patch('changelog/{changelog}', 'ChangelogController@update')->name('admin.changelog.update');
-
-            Route::get('changelog', 'ChangelogController@list')->name('admin.changelogs');
 
 
             // NPCs

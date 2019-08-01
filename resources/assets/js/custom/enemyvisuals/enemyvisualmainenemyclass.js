@@ -33,20 +33,11 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
         }
         // Handle beguiling display
         if (this.enemyvisual.enemy.isBeguiling()) {
-            mainVisualInnerClasses.push('beguiling');
+            mainVisualOuterClasses.push('beguiling');
         }
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
             mainVisualOuterClasses.push(npc.aggressiveness);
-
-            // Enchanted Emissary
-            if (npc.id === 155432) {
-                mainVisualInnerClasses.push('enchanted');
-            } else if (npc.id === 155433) {
-                mainVisualInnerClasses.push('void');
-            } else if (npc.id === 155434) {
-                mainVisualInnerClasses.push('tide');
-            }
         }
 
         // Any additional classes to add for when the enemy is selectable
@@ -73,7 +64,16 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
             if (npc.classification_id === 3) {
                 this.iconName = 'boss';
             } else {
-                this.iconName = npc.class.name.toLowerCase();
+                // Enchanted Emissary
+                if (npc.id === 155432) {
+                    this.iconName = 'enchanted';
+                } else if (npc.id === 155433) {
+                    this.iconName = 'void';
+                } else if (npc.id === 155434) {
+                    this.iconName = 'tide';
+                } else {
+                    this.iconName = npc.class.name.toLowerCase();
+                }
             }
         }
     }
