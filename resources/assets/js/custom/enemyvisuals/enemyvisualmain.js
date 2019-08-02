@@ -56,6 +56,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
                 let $enemyDiv = $container.find('.enemy_icon');
 
+                let size = this.getSize().iconSize[0];
+                let margin = c.map.enemy.calculateMargin(size);
+
                 // Init circle menu and open it
                 self.circleMenu = $('#map_enemy_raid_marker_radial_' + id).circleMenu({
                     direction: 'full',
@@ -63,8 +66,10 @@ class EnemyVisualMain extends EnemyVisualIcon {
                     step_out: 0,
                     trigger: 'click',
                     transition_function: 'linear',
-                    circle_radius: 40,
-                    item_diameter: this.getSize().iconSize[0],
+                    // Radius
+                    circle_radius: size + margin,
+                    // Positioning
+                    item_diameter: size + margin * 2,
                     speed: 200,
                     open: function () {
                         self.enemyvisual.enemy.unbindTooltip();

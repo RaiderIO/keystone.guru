@@ -71,23 +71,21 @@ class EnemyVisual extends Signalable {
 
             data.margin = margin;
 
-            // console.log('VISIBLE', this.enemy.id, this.enemy.npc.name, data.width);
-
-            data.modifier_0_left = (data.width / 2) - 26;
-            data.modifier_1_left = (data.width / 2) - 8;
-            data.modifier_2_left = (data.width / 2) + 10;
+            data.modifier_0_left = (width / 2) + margin - 26;
+            data.modifier_1_left = (width / 2) + margin - 8;
+            data.modifier_2_left = (width / 2) + margin + 10;
 
             // Create a new div icon (the entire structure)
             this.divIcon = new L.divIcon({
                 html: template(data),
-                iconSize: [width + (margin * 2), height + (margin * 2)]
+                iconSize: [width + (margin * 2), height + (margin * 2)],
+                tooltipAnchor: [0, ((height * -.5) - margin)],
+                popupAnchor: [0, ((height * -.5) - margin)]
             });
 
             // Set the structure as HTML for the layer
             this.layer.setIcon(this.divIcon);
             this.signal('enemyvisual:builtvisual', {});
-        } else {
-            // console.log('INVISIBLE', this.enemy.id, this.enemy.npc.name);
         }
     }
 
