@@ -54,13 +54,21 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 let $container = $('#map_enemy_visual_' + id);
                 $container.append(template(data));
 
+                let $circleMenu = $('#map_enemy_raid_marker_radial_' + id);
+
                 let $enemyDiv = $container.find('.enemy_icon');
 
                 let size = this.getSize().iconSize[0];
                 let margin = c.map.enemy.calculateMargin(size);
 
+                // Force the circle menu to appear in the center of the enemy visual
+                $circleMenu.css('position', 'absolute');
+                // Compensate of the 24x24 square
+                $circleMenu.css('left', ((size / 2) + margin - 12) + 'px');
+                $circleMenu.css('top', ((size / 2) + margin - 12) + 'px');
+
                 // Init circle menu and open it
-                self.circleMenu = $('#map_enemy_raid_marker_radial_' + id).circleMenu({
+                self.circleMenu = $circleMenu.circleMenu({
                     direction: 'full',
                     step_in: 5,
                     step_out: 0,
@@ -69,8 +77,11 @@ class EnemyVisualMain extends EnemyVisualIcon {
                     // Radius
                     circle_radius: size + margin,
                     // Positioning
-                    item_diameter: size + margin * 2,
+                    item_diameter: 24,
                     speed: 200,
+                    init: function () {
+                        refreshTooltips();
+                    },
                     open: function () {
                         self.enemyvisual.enemy.unbindTooltip();
                     },
@@ -118,6 +129,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let self = this;
         let id = self.enemyvisual.enemy.id;
         let $enemyDiv = $('#map_enemy_visual_' + id).find('.enemy_icon');
+
+        // Clear any stray tooltips
+        refreshTooltips();
 
         // Delay it by 500 ms so the animations have a chance to complete
         $('#map_enemy_raid_marker_radial_' + id).delay(500).queue(function () {

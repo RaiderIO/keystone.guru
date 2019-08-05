@@ -37,6 +37,7 @@ class Enemy extends MapObject {
         // May be set when loaded from server
         this.npc = null;
         this.raid_marker_name = '';
+        this.dangerous = false;
         // May be null if we're not a Beguiling enemy
         this.beguiling_preset = null;
 
@@ -126,7 +127,6 @@ class Enemy extends MapObject {
         // Remove any previous tooltip
         this.unbindTooltip();
         this.layer.bindTooltip(text, {
-            offset: [0, -10],
             direction: 'top'
         });
     }

@@ -18,7 +18,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
     _restoreObject(remoteMapObject) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
-        let self = this;
 
         let result = null;
 
@@ -35,6 +34,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             enemy.faction = remoteMapObject.faction;
             enemy.enemy_forces_override = remoteMapObject.enemy_forces_override;
             enemy.raid_marker_name = remoteMapObject.raid_marker_name;
+            enemy.dangerous = remoteMapObject.dangerous === 1;
             // MDT id is always set
             enemy.mdt_id = remoteMapObject.mdt_id;
             enemy.is_mdt = false;

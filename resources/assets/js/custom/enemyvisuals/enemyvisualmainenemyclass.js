@@ -41,6 +41,8 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
             mainVisualOuterClasses.push(npc.aggressiveness);
+
+            mainVisualInnerClasses.push(npc.dangerous ? 'dangerous' : '');
         }
 
         // Any additional classes to add for when the enemy is selectable

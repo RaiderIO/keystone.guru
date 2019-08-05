@@ -10,7 +10,8 @@ class EnemyVisualIcon extends Signalable {
         return [];
     }
 
-    _getTemplateData() {
+    _getTemplateData(width, height, margin) {
+        console.assert(this instanceof EnemyVisualIcon, this, 'this was not an EnemyVisualIcon');
         return {id: this.enemyvisual.enemy.id};
     }
 

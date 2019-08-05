@@ -47,6 +47,7 @@ class NpcController extends Controller
         $npc->base_health = str_replace('.', '', $npc->base_health);
         $npc->enemy_forces = $request->get('enemy_forces');
         $npc->aggressiveness = $request->get('aggressiveness');
+        $npc->dangerous = $request->get('dangerous', 0);
 
         if (!$npc->save()) {
             abort(500, 'Unable to save npc!');

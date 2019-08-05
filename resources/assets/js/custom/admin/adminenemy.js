@@ -428,7 +428,6 @@ class AdminEnemy extends Enemy {
         // Remove any previous tooltip
         this.unbindTooltip();
         this.layer.bindTooltip(template(data), {
-            offset: [0, -10],
             direction: 'top'
         });
     }

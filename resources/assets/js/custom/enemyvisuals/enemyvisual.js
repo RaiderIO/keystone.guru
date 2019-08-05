@@ -11,8 +11,6 @@ class EnemyVisual extends Signalable {
 
         this.mainVisual = null;
 
-        this.modifiers = [];
-
         // Default visual (after modifiers!)
         this.setVisualType(getState().getEnemyDisplayType());
 
@@ -26,6 +24,23 @@ class EnemyVisual extends Signalable {
                 // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
             }
         });
+
+        // If it changed, refresh the entire visual
+        this.enemy.register('enemy:set_raid_marker', this, this._buildVisual.bind(this));
+    }
+
+    /**
+     * Creates modifiers that alter the display of the visual
+     * @returns {Array}
+     * @private
+     */
+    _createModifiers() {
+        let modifiers = [];
+        // Only add the modifiers if they're necessary; otherwise don't waste resources on adding hidden items
+        if (typeof this.enemy.raid_marker_name === 'string' && this.enemy.raid_marker_name !== '') {
+            modifiers.push(new EnemyVisualModifierRaidMarker(this, 0));
+        }
+        return modifiers;
     }
 
     /**
@@ -35,6 +50,8 @@ class EnemyVisual extends Signalable {
      */
     _buildVisual() {
         console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
+
+        // Determine which modifiers the visual should have
 
         // If the object is invisible, don't build the visual
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
@@ -50,9 +67,6 @@ class EnemyVisual extends Signalable {
             }
 
             data = $.extend(data, this.mainVisual._getTemplateData());
-            for (let i = 0; i < this.modifiers.length; i++) {
-                data = $.extend(data, this.modifiers[i]._getTemplateData());
-            }
 
             let size = this.mainVisual.getSize();
 
@@ -71,9 +85,13 @@ class EnemyVisual extends Signalable {
 
             data.margin = margin;
 
-            data.modifier_0_left = (width / 2) + margin - 26;
-            data.modifier_1_left = (width / 2) + margin - 8;
-            data.modifier_2_left = (width / 2) + margin + 10;
+            // Build modifiers object
+            data.modifiers = [];
+            // Fetch the modifiers we're displaying on our visual
+            let modifiers = this._createModifiers();
+            for (let i = 0; i < modifiers.length; i++) {
+                data.modifiers.push(modifiers[i]._getTemplateData(width, height, margin));
+            }
 
             // Create a new div icon (the entire structure)
             this.divIcon = new L.divIcon({
@@ -106,46 +124,16 @@ class EnemyVisual extends Signalable {
         if (this.mainVisual !== null) {
             this.mainVisual.cleanup();
         }
-        for (let i = 0; i < this.modifiers.length; i++) {
-            this.modifiers[i].cleanup();
-        }
-
-        // @TODO Create boss visual
-        // Create a new visual based on the requested visual. With one exception, bosses are always shown with the
-        // Aggressiveness filter. Otherwise they show up as things we don't want them to
-        // @TODO Hard coded 3 = boss
-        // let isBoss = this.enemy.npc !== null && this.enemy.npc.classification_id === 3;
-        // if (isBoss) {
-        //     name = 'npc_class';
-        // }
 
         switch (name) {
             case 'npc_class':
                 this.mainVisual = new EnemyVisualMainEnemyClass(this);
-
-                this.modifiers = [
-                    new EnemyVisualModifier(this, 0),
-                    new EnemyVisualModifierRaidMarker(this, 1),
-                    new EnemyVisualModifier(this, 2),
-                ];
                 break;
             case 'npc_type':
                 this.mainVisual = new EnemyVisualMainNpcType(this);
-
-                this.modifiers = [
-                    new EnemyVisualModifier(this, 0),
-                    new EnemyVisualModifierRaidMarker(this, 1),
-                    new EnemyVisualModifier(this, 2),
-                ];
                 break;
             case 'enemy_forces':
                 this.mainVisual = new EnemyVisualMainEnemyForces(this);
-
-                this.modifiers = [
-                    new EnemyVisualModifier(this, 0),
-                    new EnemyVisualModifierRaidMarker(this, 1),
-                    new EnemyVisualModifier(this, 2),
-                ];
                 break;
         }
 

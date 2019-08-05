@@ -68,6 +68,14 @@
         @include('common.forms.form-error', ['key' => 'enemy_forces'])
     </div>
 
+    <div class="form-group{{ $errors->has('dangerous') ? ' has-error' : '' }}">
+        {!! Form::label('dangerous', __('Dangerous')) !!}
+        {!! Form::checkbox('dangerous', 1, isset($model) ? $model->dangerous : 1, ['class' => 'form-control left_checkbox']) !!}
+        @include('common.forms.form-error', ['key' => 'dangerous'])
+    </div>
+
+
+
     <div>
         {!! Form::submit(__('Submit'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'submit']) !!}
         @isset($model)

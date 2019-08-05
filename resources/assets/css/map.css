@@ -352,35 +352,21 @@ html, body, #map, #app, .wrapper {
 
 .modifier {
     position: absolute;
-    width: 16px;
-    height: 16px;
+    width: 25px !important;
+    height: 25px !important;
+    background-color: white !important;
+    border: 1px black solid;
+    border-radius: 18px;
 }
 
-.modifier_0 {
-    top: -19px;
-    /* background-color: red; */
+.map_enemy_raid_marker_circle_menu {
+    z-index: 10000;
 }
 
-.modifier_1 {
-    top: -22px;
-    /* background-color: green; */
-}
-
-.modifier_2 {
-    top: -19px;
-    /* background-color: blue; */
-}
-
-.modifier_0_boss {
-    left: -9px;
-}
-
-.modifier_1_boss {
-    left: 8px;
-}
-
-.modifier_2_boss {
-    left: 25px;
+.map_enemy_raid_marker_item {
+    background-color: white !important;
+    border: 1px black solid;
+    border-radius: 18px;
 }
 
 .badge_enemy_forces {
@@ -536,6 +522,10 @@ html, body, #map, #app, .wrapper {
 
 .beguiling {
     background-color: #7f2480;
+}
+
+.dangerous {
+    border: 3px dashed #ff9900;
 }
 
 /*.enemy_icon_npc_type.beguiling {*/
