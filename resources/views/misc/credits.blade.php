@@ -154,5 +154,15 @@
     </ul>
     </p>
 
+    <h4>
+        Star icon
+    </h4>
+    <ul>
+        <li>
+            https://www.flaticon.com/free-icon/favourites_1040230#term=star&page=1&position=33
+        </li>
+    </ul>
+    </p>
+
 
 @endsection

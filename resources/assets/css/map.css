@@ -354,7 +354,7 @@ html, body, #map, #app, .wrapper {
     position: absolute;
     width: 25px !important;
     height: 25px !important;
-    background-color: white !important;
+    background-color: white;
     border: 1px black solid;
     border-radius: 18px;
 }
@@ -411,7 +411,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .boss {
-    background-image: url("/images/mapicon/boss.png") !important;
+    background-image: url('/images/mapicon/boss.png') !important;
 }
 
 .enemy_icon.melee,
@@ -516,7 +516,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .aggressive_enemy_icon {
-    background-image: url("/images/mapicon/unset.png") !important; /* no-repeat center !important; */
+    background-image: url('/images/mapicon/unset.png') !important; /* no-repeat center !important; */
     background-color: #dc3c3c;
 }
 
@@ -527,6 +527,19 @@ html, body, #map, #app, .wrapper {
 .dangerous {
     border: 3px dashed #ff9900;
 }
+
+.modifier_classification {
+    width: 16px !important;
+    height: 16px !important;
+    background-color: unset;
+    border: unset;
+    border-radius: unset;
+}
+
+.classification_icon_elite {
+    background-image: url('/images/enemyclassifications/elite.png') !important;
+}
+
 
 /*.enemy_icon_npc_type.beguiling {*/
 /*    border: #7f2480 2px solid !important;*/
@@ -546,7 +559,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .boss_enemy_icon {
-    background: url("/images/mapicon/boss.png") no-repeat center !important;
+    background: url('/images/enemyclassifications/boss.png') no-repeat center !important;
 }
 
 .flagged_enemy_icon {
@@ -566,7 +579,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .door_icon {
-    background: url("/images/mapicon/door.png") no-repeat center !important;
+    background: url('/images/mapicon/door.png') no-repeat center !important;
 }
 
 .killzone_icon_big {

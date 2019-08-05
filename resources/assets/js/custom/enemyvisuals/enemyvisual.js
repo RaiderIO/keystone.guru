@@ -40,6 +40,13 @@ class EnemyVisual extends Signalable {
         if (typeof this.enemy.raid_marker_name === 'string' && this.enemy.raid_marker_name !== '') {
             modifiers.push(new EnemyVisualModifierRaidMarker(this, 0));
         }
+
+        // Only for elite enemies
+        if (this.enemy.npc !== null &&
+            this.enemy.npc.classification_id !== 1 &&
+            this.map.leafletMap.getZoom() > c.map.enemy.classification_display_zoom) {
+            modifiers.push(new EnemyVisualModifierClassification(this, 1));
+        }
         return modifiers;
     }
 
