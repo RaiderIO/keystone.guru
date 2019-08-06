@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $enemy_forces
  * @property string $aggressiveness
  * @property bool $dangerous
+ * @property bool $truesight
  *
  * @property Dungeon $dungeon
  * @property NpcClassification $classification

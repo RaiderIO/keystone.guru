@@ -540,6 +540,10 @@ html, body, #map, #app, .wrapper {
     background-image: url('/images/enemyclassifications/elite.png') !important;
 }
 
+.truesight {
+    background-image: url('/images/enemymodifiers/truesight.png') !important;
+}
+
 
 /*.enemy_icon_npc_type.beguiling {*/
 /*    border: #7f2480 2px solid !important;*/

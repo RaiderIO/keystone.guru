@@ -42,10 +42,16 @@ class EnemyVisual extends Signalable {
         }
 
         // Only for elite enemies
-        if (this.enemy.npc !== null &&
-            this.enemy.npc.classification_id !== 1 &&
-            this.map.leafletMap.getZoom() > c.map.enemy.classification_display_zoom) {
-            modifiers.push(new EnemyVisualModifierClassification(this, 1));
+        if (this.enemy.npc !== null) {
+            if (this.enemy.npc.classification_id !== 1 &&
+                this.map.leafletMap.getZoom() > c.map.enemy.classification_display_zoom) {
+                modifiers.push(new EnemyVisualModifierClassification(this, 1));
+            }
+
+            // Truesight marker
+            if (this.enemy.npc.truesight === 1) {
+                modifiers.push(new EnemyVisualModifierTruesight(this, 2));
+            }
         }
         return modifiers;
     }

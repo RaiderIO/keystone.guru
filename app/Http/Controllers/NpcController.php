@@ -48,6 +48,7 @@ class NpcController extends Controller
         $npc->enemy_forces = $request->get('enemy_forces');
         $npc->aggressiveness = $request->get('aggressiveness');
         $npc->dangerous = $request->get('dangerous', 0);
+        $npc->truesight = $request->get('truesight', 0);
 
         if (!$npc->save()) {
             abort(500, 'Unable to save npc!');
