@@ -17,7 +17,7 @@ class EnemyVisualModifierTruesight extends EnemyVisualModifier {
 
         // Top left corner
         return {
-            classes: this.iconName,
+            classes: 'modifier_external ' + this.iconName,
             left: 0,
             top: 0
         };

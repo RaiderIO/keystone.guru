@@ -16,7 +16,7 @@ class EnemyVisualModifierClassification extends EnemyVisualModifier {
         console.assert(this instanceof EnemyVisualModifierClassification, 'this is not an EnemyVisualModifierClassification!', this);
 
         return {
-            classes: 'modifier_classification ' + (this.iconName === '' || this.iconName === null ? '' : 'classification_icon_' + this.iconName),
+            classes: 'modifier_external ' + (this.iconName === '' || this.iconName === null ? '' : 'classification_icon_' + this.iconName),
             left: width,
             top: 0
         };

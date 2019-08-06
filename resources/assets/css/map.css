@@ -528,7 +528,7 @@ html, body, #map, #app, .wrapper {
     border: 3px dashed #ff9900;
 }
 
-.modifier_classification {
+.modifier_external {
     width: 16px !important;
     height: 16px !important;
     background-color: unset;
@@ -541,7 +541,9 @@ html, body, #map, #app, .wrapper {
 }
 
 .truesight {
-    background-image: url('/images/enemymodifiers/truesight.png') !important;
+    background: white url('/images/enemymodifiers/truesight.png') no-repeat center !important;
+    border: 1px black solid;
+    border-radius: 18px;
 }
 
 

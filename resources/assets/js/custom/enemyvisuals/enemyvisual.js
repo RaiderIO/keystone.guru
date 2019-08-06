@@ -49,7 +49,8 @@ class EnemyVisual extends Signalable {
             }
 
             // Truesight marker
-            if (this.enemy.npc.truesight === 1) {
+            if (this.enemy.npc.truesight === 1 &&
+                this.map.leafletMap.getZoom() > c.map.enemy.truesight_display_zoom) {
                 modifiers.push(new EnemyVisualModifierTruesight(this, 2));
             }
         }

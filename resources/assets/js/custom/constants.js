@@ -33,6 +33,10 @@ let c = {
              * At whatever zoom the classifications are displayed on the map
              */
             classification_display_zoom: 3,
+            /**
+             * At whatever zoom the truesight modifier are displayed on the map
+             */
+            truesight_display_zoom: 3,
             colors: [
                 /*'#C000F0',
                 '#E25D5D',
