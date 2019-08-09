@@ -83,7 +83,7 @@ class AffixSeeder extends Seeder
             ['season_id' => 2, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Reaping']],
             ['season_id' => 2, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Reaping']],
 
-            ['season_id' => 3, 'affixes' => ['Fortified', 'Bursting', 'Quaking', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Volcanic', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Explosive', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Bolstering', 'Grievous', 'Beguiling']],
@@ -93,8 +93,8 @@ class AffixSeeder extends Seeder
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Fortified', 'Bolstering', 'Grievous', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Explosive', 'Beguiling']],
-            ['season_id' => 3, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Beguiling']],
-            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Beguiling']],
+            ['season_id' => 3, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Beguiling']],
         ];
 
         foreach ($groups as $groupArr) {
