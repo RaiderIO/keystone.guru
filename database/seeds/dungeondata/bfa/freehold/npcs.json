@@ -8,7 +8,9 @@
         "name": "Skycap'n Kragg",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 126845,
@@ -19,7 +21,9 @@
         "name": "Captain Jolly",
         "base_health": 3370972,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 126847,
@@ -30,7 +34,9 @@
         "name": "Captain Raoul",
         "base_health": 3370972,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 126848,
@@ -41,29 +47,35 @@
         "name": "Captain Eudora",
         "base_health": 3370972,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 126918,
         "dungeon_id": 15,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Irontide Crackshot",
         "base_health": 344759,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 126919,
         "dungeon_id": 15,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Irontide Stormcaller",
         "base_health": 306450,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 126928,
@@ -74,7 +86,9 @@
         "name": "Irontide Corsair",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 126969,
@@ -85,7 +99,9 @@
         "name": "Trothak",
         "base_health": 2758068,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 126983,
@@ -96,7 +112,9 @@
         "name": "Harlan Sweete",
         "base_health": 3830650,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 127106,
@@ -107,7 +125,9 @@
         "name": "Irontide Officer",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 127111,
@@ -118,7 +138,9 @@
         "name": "Irontide Oarsman",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 127119,
@@ -129,7 +151,9 @@
         "name": "Freehold Deckhand",
         "base_health": 76613,
         "enemy_forces": 0,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 127124,
@@ -140,7 +164,9 @@
         "name": "Freehold Barhand",
         "base_health": 57460,
         "enemy_forces": 0,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 128551,
@@ -151,7 +177,9 @@
         "name": "Irontide Mastiff",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129526,
@@ -162,7 +190,9 @@
         "name": "Bilge Rat Swabby",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129527,
@@ -173,7 +203,9 @@
         "name": "Bilge Rat Buccaneer",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129529,
@@ -184,7 +216,9 @@
         "name": "Blacktooth Scrapper",
         "base_health": 459678,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129547,
@@ -195,7 +229,9 @@
         "name": "Blacktooth Knuckleduster",
         "base_health": 421372,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129548,
@@ -206,7 +242,9 @@
         "name": "Blacktooth Brute",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129550,
@@ -217,7 +255,9 @@
         "name": "Bilge Rat Padfoot",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129559,
@@ -228,7 +268,9 @@
         "name": "Cutwater Duelist",
         "base_health": 184490,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129598,
@@ -239,7 +281,9 @@
         "name": "Freehold Pack Mule",
         "base_health": 76613,
         "enemy_forces": 0,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129599,
@@ -250,18 +294,22 @@
         "name": "Cutwater Knife Juggler",
         "base_health": 344759,
         "enemy_forces": 3,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129600,
         "dungeon_id": 15,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Bilge Rat Brinescale",
         "base_health": 245160,
         "enemy_forces": 3,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129601,
@@ -272,7 +320,9 @@
         "name": "Cutwater Harpooner",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129602,
@@ -283,7 +333,9 @@
         "name": "Irontide Enforcer",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 129699,
@@ -294,7 +346,9 @@
         "name": "Ludwig Von Tortollan",
         "base_health": 1532260,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 129788,
@@ -305,7 +359,9 @@
         "name": "Irontide Bonesaw",
         "base_health": 306450,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130011,
@@ -316,7 +372,9 @@
         "name": "Irontide Buccaneer",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130012,
@@ -327,7 +385,9 @@
         "name": "Irontide Ravager",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130024,
@@ -338,7 +398,9 @@
         "name": "Soggy Shiprat",
         "base_health": 38307,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130400,
@@ -349,7 +411,9 @@
         "name": "Irontide Crusher",
         "base_health": 766130,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 130404,
@@ -360,7 +424,9 @@
         "name": "Vermin Trapper",
         "base_health": 612904,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130521,
@@ -371,7 +437,9 @@
         "name": "Freehold Deckhand",
         "base_health": 18449,
         "enemy_forces": 1,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130522,
@@ -382,7 +450,9 @@
         "name": "Freehold Shipmate",
         "base_health": 76324,
         "enemy_forces": 2,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129547000,
@@ -393,6 +463,8 @@
         "name": "Blacktooth Knuckleduster",
         "base_health": 421372,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     }
 ]

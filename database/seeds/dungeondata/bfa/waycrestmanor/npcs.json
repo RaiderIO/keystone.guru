@@ -8,7 +8,9 @@
         "name": "Lord Waycrest",
         "base_health": 689517,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131545,
@@ -19,7 +21,9 @@
         "name": "Lady Waycrest",
         "base_health": 7661300,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131585,
@@ -30,7 +34,9 @@
         "name": "Enthralled Guard",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131586,
@@ -41,7 +47,9 @@
         "name": "Banquet Steward",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131587,
@@ -52,7 +60,9 @@
         "name": "Bewitched Captain",
         "base_health": 612904,
         "enemy_forces": 5,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131666,
@@ -63,7 +73,9 @@
         "name": "Coven Thornshaper",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131667,
@@ -74,7 +86,9 @@
         "name": "Soulbound Goliath",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131669,
@@ -85,7 +99,9 @@
         "name": "Jagged Hound",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131670,
@@ -96,7 +112,9 @@
         "name": "Heartsbane Vinetwister",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 131677,
@@ -107,7 +125,9 @@
         "name": "Heartsbane Runeweaver",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 131685,
@@ -118,18 +138,22 @@
         "name": "Runic Disciple",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131812,
         "dungeon_id": 23,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Heartsbane Soulcharmer",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 131818,
@@ -140,7 +164,9 @@
         "name": "Marked Sister",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131819,
@@ -151,7 +177,9 @@
         "name": "Coven Diviner",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131821,
@@ -162,7 +190,9 @@
         "name": "Faceless Maiden",
         "base_health": 229839,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131823,
@@ -173,7 +203,9 @@
         "name": "Sister Malady",
         "base_health": 727824,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131824,
@@ -184,7 +216,9 @@
         "name": "Sister Solena",
         "base_health": 727824,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131825,
@@ -195,7 +229,9 @@
         "name": "Sister Briar",
         "base_health": 727824,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131847,
@@ -206,18 +242,22 @@
         "name": "Waycrest Reveler",
         "base_health": 229839,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131849,
         "dungeon_id": 23,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Crazed Marksman",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131850,
@@ -228,7 +268,9 @@
         "name": "Maddened Survivalist",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131858,
@@ -239,7 +281,9 @@
         "name": "Thornguard",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131863,
@@ -250,7 +294,9 @@
         "name": "Raal the Gluttonous",
         "base_health": 2604842,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131864,
@@ -261,7 +307,9 @@
         "name": "Gorak Tul",
         "base_health": 2451616,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134024,
@@ -272,7 +320,9 @@
         "name": "Devouring Maggot",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134041,
@@ -283,7 +333,9 @@
         "name": "Infected Peasant",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135048,
@@ -294,7 +346,9 @@
         "name": "Gorestained Piglet",
         "base_health": 191533,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135049,
@@ -305,7 +359,9 @@
         "name": "Dreadwing Raven",
         "base_health": 229839,
         "enemy_forces": 2,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135052,
@@ -316,7 +372,9 @@
         "name": "Blight Toad",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135234,
@@ -327,7 +385,9 @@
         "name": "Diseased Mastiff",
         "base_health": 229839,
         "enemy_forces": 3,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135240,
@@ -338,7 +398,9 @@
         "name": "Soul Essence",
         "base_health": 229839,
         "enemy_forces": 2,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135329,
@@ -349,7 +411,9 @@
         "name": "Matron Bryndle",
         "base_health": 919356,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 135365,
@@ -360,7 +424,9 @@
         "name": "Matron Alma",
         "base_health": 919356,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 135474,
@@ -371,7 +437,9 @@
         "name": "Thistle Acolyte",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137830,
@@ -382,7 +450,9 @@
         "name": "Pallid Gorger",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 139269,
@@ -393,6 +463,8 @@
         "name": "Gloom Horror",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     }
 ]

@@ -8,7 +8,9 @@
         "name": "Sergeant Bainbridge",
         "base_health": 2145164,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 128650,
@@ -19,7 +21,9 @@
         "name": "Chopper Redhook",
         "base_health": 2145164,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 128651,
@@ -30,7 +34,9 @@
         "name": "Hadal Darkfathom",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 128652,
@@ -41,7 +47,9 @@
         "name": "Viq'Goth",
         "base_health": 9576625,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 128967,
@@ -52,7 +60,9 @@
         "name": "Ashvane Sniper",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 128969,
@@ -63,7 +73,9 @@
         "name": "Ashvane Commander",
         "base_health": 612904,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 129208,
@@ -74,7 +86,9 @@
         "name": "Dread Captain Lockwood",
         "base_health": 1877019,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129366,
@@ -85,18 +99,22 @@
         "name": "Bilge Rat Buccaneer",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129367,
         "dungeon_id": 18,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Bilge Rat Tempest",
         "base_health": 306450,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129369,
@@ -107,7 +125,9 @@
         "name": "Irontide Raider",
         "base_health": 612904,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129370,
@@ -118,7 +138,9 @@
         "name": "Irontide Waveshaper",
         "base_health": 306450,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129371,
@@ -129,7 +151,9 @@
         "name": "Riptide Shredder",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129372,
@@ -140,7 +164,9 @@
         "name": "Blacktar Bomber",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129373,
@@ -151,7 +177,9 @@
         "name": "Dockhound Packmaster",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129374,
@@ -162,7 +190,9 @@
         "name": "Scrimshaw Enforcer",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129640,
@@ -173,7 +203,9 @@
         "name": "Snarling Dockhound",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129879,
@@ -184,18 +216,22 @@
         "name": "Irontide Cleaver",
         "base_health": 383065,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129928,
         "dungeon_id": 18,
         "classification_id": 1,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Irontide Powdershot",
         "base_health": 76613,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 132530,
@@ -206,18 +242,22 @@
         "name": "Kul Tiran Vanguard",
         "base_health": 383065,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 132532,
         "dungeon_id": 18,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Kul Tiran Marksman",
         "base_health": 383065,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133990,
@@ -228,7 +268,9 @@
         "name": "Scrimshaw Gutter",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135241,
@@ -239,7 +281,9 @@
         "name": "Bilge Rat Pillager",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135245,
@@ -250,7 +294,9 @@
         "name": "Bilge Rat Demolisher",
         "base_health": 766130,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 135258,
@@ -261,7 +307,9 @@
         "name": "Irontide Marauder",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137511,
@@ -272,7 +320,9 @@
         "name": "Bilge Rat Cutthroat",
         "base_health": 306452,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137516,
@@ -283,7 +333,9 @@
         "name": "Ashvane Invader",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137517,
@@ -294,18 +346,22 @@
         "name": "Ashvane Destroyer",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137521,
         "dungeon_id": 18,
         "classification_id": 1,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Irontide Powdershot",
         "base_health": 76613,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138002,
@@ -316,7 +372,9 @@
         "name": "Scrimshaw Gutter",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138019,
@@ -327,7 +385,9 @@
         "name": "Kul Tiran Vanguard",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138247,
@@ -338,18 +398,22 @@
         "name": "Irontide Marauder",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138254,
         "dungeon_id": 18,
         "classification_id": 1,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Irontide Powdershot",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138255,
@@ -360,7 +424,9 @@
         "name": "Ashvane Spotter",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 138464,
@@ -371,7 +437,9 @@
         "name": "Ashvane Deckhand",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138465,
@@ -382,7 +450,9 @@
         "name": "Ashvane Cannoneer",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 141282,
@@ -393,7 +463,9 @@
         "name": "Kul Tiran Footman",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 141283,
@@ -404,29 +476,35 @@
         "name": "Kul Tiran Halberd",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 141284,
         "dungeon_id": 18,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Kul Tiran Wavetender",
         "base_health": 306450,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 141285,
         "dungeon_id": 18,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Kul Tiran Marksman",
         "base_health": 344759,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 141495,
@@ -437,7 +515,9 @@
         "name": "Kul Tiran Footman",
         "base_health": 124496,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 141565,
@@ -448,7 +528,9 @@
         "name": "Kul Tiran Footman",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 141566,
@@ -459,7 +541,9 @@
         "name": "Scrimshaw Gutter",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 144071,
@@ -470,6 +554,8 @@
         "name": "Irontide Waveshaper",
         "base_health": 306450,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     }
 ]

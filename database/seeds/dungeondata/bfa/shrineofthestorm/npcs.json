@@ -8,7 +8,9 @@
         "name": "Aqu'sirr",
         "base_health": 3064520,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134058,
@@ -19,7 +21,9 @@
         "name": "Galecaller Faye",
         "base_health": 1545180,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134060,
@@ -30,7 +34,9 @@
         "name": "Lord Stormsong",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134063,
@@ -41,7 +47,9 @@
         "name": "Brother Ironhull",
         "base_health": 2011091,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134069,
@@ -52,18 +60,22 @@
         "name": "Vol'zith the Whisperer",
         "base_health": 2451616,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134137,
         "dungeon_id": 17,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Temple Attendant",
         "base_health": 383065,
         "enemy_forces": 9,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134139,
@@ -74,7 +86,9 @@
         "name": "Shrine Templar",
         "base_health": 459678,
         "enemy_forces": 10,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134144,
@@ -85,7 +99,9 @@
         "name": "Living Current",
         "base_health": 689517,
         "enemy_forces": 13,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1
     },
     {
         "id": 134150,
@@ -96,7 +112,9 @@
         "name": "Runecarver Sorn",
         "base_health": 1225808,
         "enemy_forces": 18,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 134173,
@@ -107,7 +125,9 @@
         "name": "Animated Droplet",
         "base_health": 53629,
         "enemy_forces": 1,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134338,
@@ -118,29 +138,35 @@
         "name": "Tidesage Enforcer",
         "base_health": 383065,
         "enemy_forces": 9,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134417,
         "dungeon_id": 17,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Deepsea Ritualist",
         "base_health": 842743,
         "enemy_forces": 10,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 134418,
         "dungeon_id": 17,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Drowned Depthbringer",
         "base_health": 383065,
         "enemy_forces": 9,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 134423,
@@ -151,40 +177,48 @@
         "name": "Abyss Dweller",
         "base_health": 53629,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134514,
         "dungeon_id": 17,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Abyssal Cultist",
         "base_health": 383065,
         "enemy_forces": 9,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 136186,
         "dungeon_id": 17,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 4,
         "name": "Tidesage Spiritualist",
         "base_health": 459678,
         "enemy_forces": 9,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 136214,
         "dungeon_id": 17,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Windspeaker Heldis",
         "base_health": 1379034,
         "enemy_forces": 18,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 136249,
@@ -195,29 +229,35 @@
         "name": "Guardian Elemental",
         "base_health": 1149195,
         "enemy_forces": 18,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 136295,
         "dungeon_id": 17,
         "classification_id": 2,
         "npc_type_id": 1,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Sunken Denizen",
         "base_health": 612904,
         "enemy_forces": 13,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 136297,
         "dungeon_id": 17,
         "classification_id": 2,
         "npc_type_id": 1,
-        "npc_class_id": 1,
+        "npc_class_id": 4,
         "name": "Forgotten Denizen",
         "base_health": 383065,
         "enemy_forces": 9,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 136347,
@@ -228,7 +268,9 @@
         "name": "Tidesage Initiate",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 136353,
@@ -239,7 +281,9 @@
         "name": "Colossal Tentacle",
         "base_health": 421372,
         "enemy_forces": 10,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 139626,
@@ -250,7 +294,9 @@
         "name": "Dredged Sailor",
         "base_health": 19153,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 139799,
@@ -261,7 +307,9 @@
         "name": "Ironhull Apprentice",
         "base_health": 383065,
         "enemy_forces": 9,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 139800,
@@ -272,7 +320,9 @@
         "name": "Galecaller Apprentice",
         "base_health": 383065,
         "enemy_forces": 9,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 140038,
@@ -283,6 +333,8 @@
         "name": "Abyssal Eel",
         "base_health": 153226,
         "enemy_forces": 3,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     }
 ]

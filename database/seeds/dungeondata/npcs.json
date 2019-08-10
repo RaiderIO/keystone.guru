@@ -8,7 +8,9 @@
         "name": "Enchanted Emissary",
         "base_health": 12855000,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 155433,
@@ -19,7 +21,9 @@
         "name": "Void-Touched Emissary",
         "base_health": 920000,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1
     },
     {
         "id": 155434,
@@ -30,6 +34,8 @@
         "name": "Emissary of the Tides",
         "base_health": 513000,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     }
 ]

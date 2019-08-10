@@ -8,7 +8,9 @@
         "name": "Coin-Operated Crowd Pummeler",
         "base_health": 4443554,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129227,
@@ -19,7 +21,9 @@
         "name": "Azerokk",
         "base_health": 2359680,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129231,
@@ -30,7 +34,9 @@
         "name": "Rixxa Fluxflame",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129232,
@@ -41,7 +47,9 @@
         "name": "Mogul Razdunk",
         "base_health": 2987907,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 129802,
@@ -52,7 +60,9 @@
         "name": "Earthrager",
         "base_health": 383065,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130435,
@@ -63,18 +73,22 @@
         "name": "Addled Thug",
         "base_health": 497985,
         "enemy_forces": 5,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 130436,
         "dungeon_id": 20,
         "classification_id": 1,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Off-Duty Laborer",
         "base_health": 153226,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130437,
@@ -85,7 +99,9 @@
         "name": "Mine Rat",
         "base_health": 229839,
         "enemy_forces": 2,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130485,
@@ -96,7 +112,9 @@
         "name": "Mechanized Peacekeeper",
         "base_health": 612904,
         "enemy_forces": 12,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 130488,
@@ -107,7 +125,9 @@
         "name": "Mech Jockey",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 130635,
@@ -118,7 +138,9 @@
         "name": "Stonefury",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 130653,
@@ -129,7 +151,9 @@
         "name": "Wanton Sapper",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 130661,
@@ -140,7 +164,9 @@
         "name": "Venture Co. Earthshaper",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133345,
@@ -151,18 +177,22 @@
         "name": "Feckless Assistant",
         "base_health": 383065,
         "enemy_forces": 5,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133430,
         "dungeon_id": 20,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Venture Co. Mastermind",
         "base_health": 612904,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 133432,
@@ -173,7 +203,9 @@
         "name": "Venture Co. Alchemist",
         "base_health": 383065,
         "enemy_forces": 5,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133436,
@@ -184,7 +216,9 @@
         "name": "Venture Co. Skyscorcher",
         "base_health": 383065,
         "enemy_forces": 5,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133463,
@@ -195,7 +229,9 @@
         "name": "Venture Co. War Machine",
         "base_health": 612904,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1
     },
     {
         "id": 133482,
@@ -206,7 +242,9 @@
         "name": "Crawler Mine",
         "base_health": 12914,
         "enemy_forces": 1,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133593,
@@ -217,7 +255,9 @@
         "name": "Expert Technician",
         "base_health": 383065,
         "enemy_forces": 5,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133963,
@@ -228,18 +268,22 @@
         "name": "Test Subject",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134005,
         "dungeon_id": 20,
         "classification_id": 1,
         "npc_type_id": 6,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Shalebiter",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134012,
@@ -250,7 +294,9 @@
         "name": "Taskmaster Askari",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 134232,
@@ -261,18 +307,22 @@
         "name": "Hired Assassin",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135975,
         "dungeon_id": 20,
         "classification_id": 1,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 2,
         "name": "Off-Duty Laborer",
         "base_health": 153226,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 136006,
@@ -283,7 +333,9 @@
         "name": "Rowdy Reveler",
         "base_health": 76613,
         "enemy_forces": 0,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 136139,
@@ -294,18 +346,22 @@
         "name": "Mechanized Peacekeeper",
         "base_health": 612904,
         "enemy_forces": 12,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 136470,
         "dungeon_id": 20,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 3,
         "name": "Refreshment Vendor",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 136643,
@@ -316,7 +372,9 @@
         "name": "Azerite Extractor",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 136688,
@@ -327,7 +385,9 @@
         "name": "Fanatical Driller",
         "base_health": 176601,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 136934,
@@ -338,7 +398,9 @@
         "name": "Weapons Tester",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 137029,
@@ -349,7 +411,9 @@
         "name": "Ordnance Specialist",
         "base_health": 383065,
         "enemy_forces": 5,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137713,
@@ -360,7 +424,9 @@
         "name": "Big Money Crab",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137716,
@@ -371,7 +437,9 @@
         "name": "Bottom Feeder",
         "base_health": 76613,
         "enemy_forces": 0,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137940,
@@ -382,7 +450,9 @@
         "name": "Safety Shark",
         "base_health": 1532260,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138061,
@@ -393,7 +463,9 @@
         "name": "Venture Co. Longshoreman",
         "base_health": 153226,
         "enemy_forces": 0,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138064,
@@ -404,7 +476,9 @@
         "name": "Posh Vacationer",
         "base_health": 76613,
         "enemy_forces": 0,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138369,
@@ -415,7 +489,9 @@
         "name": "Footbomb Hooligan",
         "base_health": 76613,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 140319,
@@ -426,7 +502,9 @@
         "name": "Dr. Wrenchly von Boom",
         "base_health": 183935,
         "enemy_forces": 0,
-        "aggressiveness": "friendly"
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 144243,
@@ -437,6 +515,8 @@
         "name": "Drix Bassbolter",
         "base_health": 36787,
         "enemy_forces": 0,
-        "aggressiveness": "friendly"
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0
     }
 ]

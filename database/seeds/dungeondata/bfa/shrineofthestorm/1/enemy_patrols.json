@@ -55,28 +55,6 @@
         }
     },
     {
-        "id": 73,
-        "floor_id": 45,
-        "teeming": null,
-        "faction": "any",
-        "polyline": {
-            "color": "#E25D5D",
-            "weight": 2,
-            "vertices_json": "[{\"lat\":206.94,\"lng\":-206.44},{\"lat\":206.62,\"lng\":-209.88},{\"lat\":208.81,\"lng\":-210},{\"lat\":209.88,\"lng\":-207.56},{\"lat\":182.19,\"lng\":-194.88}]"
-        }
-    },
-    {
-        "id": 74,
-        "floor_id": 45,
-        "teeming": null,
-        "faction": "any",
-        "polyline": {
-            "color": "#E25D5D",
-            "weight": 2,
-            "vertices_json": "[{\"lat\":208.19,\"lng\":-203},{\"lat\":209.38,\"lng\":-201.38},{\"lat\":211.5,\"lng\":-202.31},{\"lat\":210.62,\"lng\":-204.38},{\"lat\":184.44,\"lng\":-191.19}]"
-        }
-    },
-    {
         "id": 101,
         "floor_id": 45,
         "teeming": null,
