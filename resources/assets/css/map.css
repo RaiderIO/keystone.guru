@@ -417,13 +417,15 @@ html, body, #map, #app, .wrapper {
 .enemy_icon.melee,
 .enemy_icon.caster,
 .enemy_icon.ranged,
-.enemy_icon.healer {
+.enemy_icon.healer,
+.enemy_icon.enemy_forces {
     background-color: #2B3E50;
 }
 
 /*
  * Enemy types
  */
+.enemy_icon_npc_enemy_forces,
 .enemy_icon_npc_class,
 .enemy_icon_npc_type {
     background-color: white;
@@ -432,21 +434,25 @@ html, body, #map, #app, .wrapper {
     background-blend-mode: luminosity;
 }
 
+.enemy_icon_npc_enemy_forces.aggressive,
 .enemy_icon_npc_class.aggressive,
 .enemy_icon_npc_type.aggressive {
     border-color: #dc3c3c;
 }
 
+.enemy_icon_npc_enemy_forces.neutral,
 .enemy_icon_npc_class.neutral,
 .enemy_icon_npc_type.neutral {
     border-color: #cccc2d !important;
 }
 
+.enemy_icon_npc_enemy_forces.unfriendly,
 .enemy_icon_npc_class.unfriendly,
 .enemy_icon_npc_type.unfriendly {
     border-color: #ff9900 !important;
 }
 
+.enemy_icon_npc_enemy_forces.friendly,
 .enemy_icon_npc_class.friendly,
 .enemy_icon_npc_type.friendly {
     border-color: #15c415 !important;

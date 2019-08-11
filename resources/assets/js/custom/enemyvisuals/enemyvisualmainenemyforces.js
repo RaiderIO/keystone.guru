@@ -3,7 +3,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     constructor(enemyvisual) {
         super(enemyvisual);
 
-        this.iconName = 'unset';
+        this.iconName = 'enemy_forces';
     }
 
     _getValidIconNames() {
@@ -12,12 +12,19 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     }
 
     _getTemplateData() {
-        console.assert(this instanceof EnemyVisualMainEnemyClass, 'this is not an EnemyVisualMainEnemyClass!', this);
+        console.assert(this instanceof EnemyVisualMainEnemyForces, 'this is not an EnemyVisualMainEnemyForces!', this);
 
         let data = super._getTemplateData();
+
+        let size = this.enemyvisual.mainVisual.getSize();
+        let width = size.iconSize[0];
+
+        let margin = c.map.enemy.calculateMargin(width);
+        width -= margin;
+
         // Just append a single class
-        data.main_visual_outer_classes += ' badge badge-primary badge-pill badge_enemy_forces';
-        data.main_visual_html = this.enemyvisual.enemy.getEnemyForces();
+        data.main_visual_outer_classes += ' enemy_icon_npc_enemy_forces text-white text-center';
+        data.main_visual_html = '<div style="font-size: ' + width + 'px; line-height: ' + width + 'px;">' + this.enemyvisual.enemy.getEnemyForces() + '</div>';
 
         return data;
     }
@@ -25,7 +32,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     /**
      * Called whenever the NPC of the enemy has been refreshed.
      */
-    _refreshNpc(){
+    _refreshNpc() {
         // Re-draw the visual
         this.setIcon(this.iconName);
     }
