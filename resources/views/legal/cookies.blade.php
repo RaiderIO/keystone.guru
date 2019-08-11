@@ -128,6 +128,15 @@
         </tr>
         <tr>
             <td>
+                viewed_teams
+            </td>
+            <td>
+                Keeps track of whether you've viewed the Teams feature so we can show the NEW keyword next to it until
+                you have.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 cookieconsent_status
             </td>
             <td>

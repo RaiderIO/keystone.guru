@@ -39,6 +39,7 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
 $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 
 $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max('id') > (int)$_COOKIE['changelog_release'] : true;
+$newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['changelog_release'] === 1 : true;
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -107,6 +108,16 @@ $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max(
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
                         </li>
+                        @if (Auth::check())
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ route('team.list') }}">{{ __('Teams') }}
+                                    @if($newToTeams)
+                                        <sup class="text-success">{{ __('NEW') }}</sup>
+                                    @endif
+                                </a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('misc.changelog') }}">
                                 {{ __('Changelog') }}
@@ -189,9 +200,6 @@ $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max(
                                     @endif
                                     <a class="dropdown-item"
                                        href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
-                                    <a class="dropdown-item"
-                                       href="{{ route('team.list') }}">{{ __('My teams') }} <sup
-                                                class="text-success">{{ __('NEW') }}</sup></a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
