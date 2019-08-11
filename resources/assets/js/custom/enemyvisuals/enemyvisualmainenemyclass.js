@@ -27,36 +27,11 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
     _getTemplateData() {
         console.assert(this instanceof EnemyVisualMainEnemyClass, 'this is not an EnemyVisualMainEnemyClass!', this);
 
-        let mainVisualOuterClasses = ['enemy_icon_npc_class'];
-        let mainVisualInnerClasses = ['enemy_icon', this.iconName];
+        let data = super._getTemplateData();
+        // Just append a single class
+        data.main_visual_outer_classes += ' enemy_icon_npc_class';
 
-        // Handle Teeming display
-        if (this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') {
-            mainVisualOuterClasses.push('teeming');
-        }
-        // Handle beguiling display
-        if (this.enemyvisual.enemy.isBeguiling()) {
-            mainVisualOuterClasses.push('beguiling');
-        }
-        let npc = this.enemyvisual.enemy.npc;
-        if (npc !== null) {
-            mainVisualOuterClasses.push(npc.aggressiveness);
-
-            mainVisualInnerClasses.push(npc.dangerous ? 'dangerous' : '');
-        }
-
-        // Any additional classes to add for when the enemy is selectable
-        let selectionClasses = [];
-        if (this.enemyvisual.enemy.isSelectable()) {
-            selectionClasses.push('selected_enemy_icon');
-        }
-
-        return {
-            // Set the main icon
-            main_visual_outer_classes: mainVisualOuterClasses.join(' '),
-            main_visual_inner_classes: mainVisualInnerClasses.join(' '),
-            selection_classes: selectionClasses.join(' ')
-        };
+        return data;
     }
 
     /**

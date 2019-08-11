@@ -10,6 +10,14 @@ class EnemyVisualIcon extends Signalable {
         return [];
     }
 
+    /**
+     * Gets the data that's used to fill the enemy visual template.
+     * @param width
+     * @param height
+     * @param margin
+     * @returns {{id: *}}
+     * @protected
+     */
     _getTemplateData(width, height, margin) {
         console.assert(this instanceof EnemyVisualIcon, this, 'this was not an EnemyVisualIcon');
         return {id: this.enemyvisual.enemy.id};

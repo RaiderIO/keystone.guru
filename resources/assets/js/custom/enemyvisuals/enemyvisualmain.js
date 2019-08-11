@@ -1,7 +1,3 @@
-/**
- * Main visual icons only define an extra size.
- */
-
 class EnemyVisualMain extends EnemyVisualIcon {
     constructor(enemyvisual) {
         super(enemyvisual);
@@ -28,6 +24,41 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
     _zoomEnd() {
         this.enemyvisual.refresh();
+    }
+
+    _getTemplateData(width, height, margin) {
+        let data = super._getTemplateData(width, height, margin);
+
+        let mainVisualOuterClasses = [];
+        let mainVisualInnerClasses = ['enemy_icon', this.iconName];
+
+        // Handle Teeming display
+        if (this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') {
+            mainVisualOuterClasses.push('teeming');
+        }
+        // Handle beguiling display
+        if (this.enemyvisual.enemy.isBeguiling()) {
+            mainVisualOuterClasses.push('beguiling');
+        }
+        let npc = this.enemyvisual.enemy.npc;
+        if (npc !== null) {
+            mainVisualOuterClasses.push(npc.aggressiveness);
+
+            mainVisualInnerClasses.push(npc.dangerous ? 'dangerous' : '');
+        }
+
+        // Any additional classes to add for when the enemy is selectable
+        let selectionClasses = [];
+        if (this.enemyvisual.enemy.isSelectable()) {
+            selectionClasses.push('selected_enemy_icon');
+        }
+
+        return $.extend(data, {
+            // Set the main icon
+            main_visual_outer_classes: mainVisualOuterClasses.join(' '),
+            main_visual_inner_classes: mainVisualInnerClasses.join(' '),
+            selection_classes: selectionClasses.join(' ')
+        });
     }
 
     /**

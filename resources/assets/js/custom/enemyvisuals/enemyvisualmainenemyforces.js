@@ -12,14 +12,14 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
     }
 
     _getTemplateData() {
-        console.assert(this instanceof EnemyVisualMainEnemyForces, 'this is not an EnemyVisualMainEnemyForces!', this);
+        console.assert(this instanceof EnemyVisualMainEnemyClass, 'this is not an EnemyVisualMainEnemyClass!', this);
 
-        return {
-            // Set the main html
-            main_visual_classes: 'badge badge-primary badge-pill badge_enemy_forces ' +
-                ((this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') ? 'teeming' : ''),
-            main_visual_html: this.enemyvisual.enemy.getEnemyForces()
-        };
+        let data = super._getTemplateData();
+        // Just append a single class
+        data.main_visual_outer_classes += ' badge badge-primary badge-pill badge_enemy_forces';
+        data.main_visual_html = this.enemyvisual.enemy.getEnemyForces();
+
+        return data;
     }
 
     /**

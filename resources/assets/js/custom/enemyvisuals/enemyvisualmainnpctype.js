@@ -26,46 +26,13 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
     }
 
     _getTemplateData() {
-        console.assert(this instanceof EnemyVisualMainNpcType, this, 'this is not an EnemyVisualMainNpcType!');
+        console.assert(this instanceof EnemyVisualMainNpcType, 'this is not an EnemyVisualMainNpcType!', this);
 
-        let mainVisualOuterClasses = ['enemy_icon_npc_type'];
-        let mainVisualInnerClasses = ['enemy_icon', this.iconName];
+        let data = super._getTemplateData();
+        // Just append a single class
+        data.main_visual_outer_classes += ' enemy_icon_npc_type';
 
-        // Handle Teeming display
-        if (this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') {
-            mainVisualOuterClasses.push('teeming');
-        }
-        // Handle beguiling display
-        if (this.enemyvisual.enemy.isBeguiling()) {
-            mainVisualInnerClasses.push('beguiling');
-        }
-
-        let npc = this.enemyvisual.enemy.npc;
-        if (npc !== null) {
-            mainVisualOuterClasses.push(npc.aggressiveness);
-
-            // Enchanted Emissary
-            if (npc.id === 155432) {
-                mainVisualInnerClasses.push('enchanted');
-            } else if (npc.id === 155433) {
-                mainVisualInnerClasses.push('void');
-            } else if (npc.id === 155434) {
-                mainVisualInnerClasses.push('tide');
-            }
-        }
-
-        // Any additional classes to add for when the enemy is selectable
-        let selectionClasses = [];
-        if (this.enemyvisual.enemy.isSelectable()) {
-            selectionClasses.push('selected_enemy_icon');
-        }
-
-        return {
-            // Set the main icon
-            main_visual_outer_classes: mainVisualOuterClasses.join(' '),
-            main_visual_inner_classes: mainVisualInnerClasses.join(' '),
-            selection_classes: selectionClasses.join(' ')
-        };
+        return data;
     }
 
     /**
