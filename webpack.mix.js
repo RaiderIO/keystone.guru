@@ -212,6 +212,7 @@ if (images) {
     mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
     mix.copy('resources/assets/images/classes', 'public/images/classes', false);
     mix.copy('resources/assets/images/echo', 'public/images/echo', false);
+    mix.copy('resources/assets/images/enemyclasses', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);
