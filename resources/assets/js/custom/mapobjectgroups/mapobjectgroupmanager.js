@@ -113,7 +113,7 @@ class MapObjectGroupManager extends Signalable {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
 
         let objectGroup = this.getByName(objectGroupName);
-        console.assert(objectGroup instanceof MapObjectGroup, objectGroup, 'objectGroup is not a MapObjectGroup');
+        console.assert(objectGroup instanceof MapObjectGroup, 'objectGroup is not a MapObjectGroup', objectGroup);
 
         // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want

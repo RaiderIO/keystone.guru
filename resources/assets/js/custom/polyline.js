@@ -11,7 +11,7 @@ class Polyline extends MapObject {
      * @param color
      */
     setColor(color) {
-        console.assert(this instanceof Polyline, this, 'this was not a Polyline');
+        console.assert(this instanceof Polyline, 'this was not a Polyline', this);
 
         this.polylineColor = color;
         this.setColors({
@@ -31,7 +31,7 @@ class Polyline extends MapObject {
      * @param weight
      */
     setWeight(weight) {
-        console.assert(this instanceof Polyline, this, 'this was not a Polyline');
+        console.assert(this instanceof Polyline, 'this was not a Polyline', this);
 
         this.weight = weight;
         this.layer.setStyle({
@@ -43,7 +43,7 @@ class Polyline extends MapObject {
      * To be overridden by any implementing classes.
      */
     onLayerInit() {
-        console.assert(this instanceof Polyline, this, 'this is not a Polyline');
+        console.assert(this instanceof Polyline, 'this is not a Polyline', this);
         super.onLayerInit();
 
         // Apply weight to layer
@@ -55,7 +55,7 @@ class Polyline extends MapObject {
      * @returns {Array}
      */
     getVertices() {
-        console.assert(this instanceof Polyline, this, 'this is not a Polyline');
+        console.assert(this instanceof Polyline, 'this is not a Polyline', this);
 
         let coordinates = this.layer.toGeoJSON().geometry.coordinates;
         let result = [];

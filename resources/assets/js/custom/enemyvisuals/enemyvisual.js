@@ -1,8 +1,8 @@
 class EnemyVisual extends Signalable {
     constructor(map, enemy, layer) {
         super();
-        console.assert(map instanceof DungeonMap, map, 'map was not a DungeonMap');
-        console.assert(enemy instanceof Enemy, enemy, 'enemy was not an Enemy');
+        console.assert(map instanceof DungeonMap, 'map was not a DungeonMap', map);
+        console.assert(enemy instanceof Enemy, 'enemy was not an Enemy', enemy);
 
         this.map = map;
         this.enemy = enemy;
@@ -117,7 +117,7 @@ class EnemyVisual extends Signalable {
      * @private
      */
     _buildVisual() {
-        console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         // Determine which modifiers the visual should have
 
@@ -177,7 +177,7 @@ class EnemyVisual extends Signalable {
 
     // @TODO Listen to killzone selectable changed event
     refresh() {
-        console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         // Refresh the visual completely
         this.setVisualType(getState().getEnemyDisplayType(), true);

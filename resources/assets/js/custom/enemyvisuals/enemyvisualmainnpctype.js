@@ -50,7 +50,7 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
      * The NPC on the enemy has been refreshed; rebuild the visual to match.
      */
     _refreshNpc() {
-        console.assert(this instanceof EnemyVisualMainNpcType, this, 'this is not an EnemyVisualMainNpcType!');
+        console.assert(this instanceof EnemyVisualMainNpcType, 'this is not an EnemyVisualMainNpcType!', this);
 
         this._refresh();
     }
@@ -60,7 +60,7 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
      * @private
      */
     _refresh() {
-        console.assert(this instanceof EnemyVisualMainNpcType, this, 'this is not an EnemyVisualMainNpcType!');
+        console.assert(this instanceof EnemyVisualMainNpcType, 'this is not an EnemyVisualMainNpcType!', this);
         // Update the icon to a new icon as necessary
         this._updateIconName();
         // Re-draw the visual
@@ -68,7 +68,7 @@ class EnemyVisualMainNpcType extends EnemyVisualMain {
     }
 
     // getSize() {
-    //     console.assert(this instanceof EnemyVisualMainNpcType, this, 'this is not an EnemyVisualMainNpcType!');
+    //     console.assert(this instanceof EnemyVisualMainNpcType, 'this is not an EnemyVisualMainNpcType!', this);
     //
     //     return this.iconName === 'boss' ? _bigIcon : _smallIcon;
     // }

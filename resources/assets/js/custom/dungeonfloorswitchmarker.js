@@ -34,7 +34,7 @@ class DungeonFloorSwitchMarker extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof DungeonFloorSwitchMarker, this, 'this is not a DungeonFloorSwitchMarker');
+        console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
         super.onLayerInit();
 
         let self = this;
@@ -52,6 +52,7 @@ class DungeonFloorSwitchMarker extends MapObject {
 
     setSynced(value) {
         super.setSynced(value);
+        console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
 
         // If we've fully loaded this marker
         if (value && typeof this.layer !== 'undefined') {

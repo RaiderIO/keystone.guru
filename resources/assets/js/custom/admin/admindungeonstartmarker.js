@@ -9,7 +9,7 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
 
     delete() {
         let self = this;
-        console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
+        console.assert(this instanceof AdminDungeonStartMarker, 'this was not an AdminDungeonStartMarker', this);
         $.ajax({
             type: 'POST',
             url: '/ajax/dungeonstartmarker',
@@ -36,7 +36,7 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
 
     save() {
         let self = this;
-        console.assert(this instanceof AdminDungeonStartMarker, this, 'this was not an AdminDungeonStartMarker');
+        console.assert(this instanceof AdminDungeonStartMarker, 'this was not an AdminDungeonStartMarker', this);
 
         $.ajax({
             type: 'POST',

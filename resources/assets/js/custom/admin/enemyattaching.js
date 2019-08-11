@@ -76,7 +76,7 @@ class EnemyAttaching {
             if (self.currentMouseoverLayer !== null) {
                 let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
 
-                console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject!');
+                console.assert(mapObject instanceof MapObject, 'mapObject is not a MapObject!', mapObject);
                 addEvent.data.object.enemy_pack_id = mapObject.id;
             }
         });
@@ -117,7 +117,7 @@ class EnemyAttaching {
      * Resets the current mouse over layer, if we have it
      */
     resetCurrentMouseoverLayer() {
-        console.assert(this instanceof EnemyAttaching, this, 'this is not an instance of EnemyAttaching');
+        console.assert(this instanceof EnemyAttaching, 'this is not an instance of EnemyAttaching', this);
 
         if (this.currentMouseoverLayer !== null) {
             // No longer in this layer, revert changes
@@ -135,7 +135,7 @@ class EnemyAttaching {
      */
     onLayerCreated(event) {
         console.log(">> onLayerCreated", event);
-        console.assert(this instanceof EnemyAttaching, this, 'this is not an instance of EnemyAttaching');
+        console.assert(this instanceof EnemyAttaching, 'this is not an instance of EnemyAttaching', this);
         // Only listen to created layers of enemy packs
         if (event.layer instanceof L.Polygon) {
             this.monitorLayer(event.layer);
@@ -145,7 +145,7 @@ class EnemyAttaching {
 
     monitorLayer(layer) {
         console.log(">> monitorLayer", layer);
-        console.assert(this instanceof EnemyAttaching, this, 'this is not an instance of EnemyAttaching');
+        console.assert(this instanceof EnemyAttaching, 'this is not an instance of EnemyAttaching', this);
         let self = this;
 
         console.log('attached to layer ' + layer);

@@ -1,8 +1,8 @@
 class EnemySelection extends Signalable {
     constructor(map, sourceMapObject) {
         super();
-        console.assert(map instanceof DungeonMap, map, 'map is not a Map');
-        console.assert(sourceMapObject instanceof MapObject, sourceMapObject, 'sourceMapObject is not a MapObject');
+        console.assert(map instanceof DungeonMap, 'map is not a Map', map);
+        console.assert(sourceMapObject instanceof MapObject, 'sourceMapObject is not a MapObject', sourceMapObject);
 
         this.map = map;
         this.sourceMapObject = sourceMapObject;
@@ -42,7 +42,7 @@ class EnemySelection extends Signalable {
      * Starts select mode on this Selection, if no other select mode was enabled already.
      */
     startSelectMode() {
-        console.assert(this instanceof EnemySelection, this, 'this is not an EnemySelection');
+        console.assert(this instanceof EnemySelection, 'this is not an EnemySelection', this);
         let self = this;
 
         // https://stackoverflow.com/a/18008067/771270
@@ -58,8 +58,8 @@ class EnemySelection extends Signalable {
 
             enemy.register('enemy:selected', self, function (data) {
                 let enemy = data.context;
-                console.assert(enemy instanceof Enemy, enemy, 'enemy is not an Enemy');
-                console.assert(self instanceof EnemySelection, self, 'this is not an EnemySelection');
+                console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
+                console.assert(self instanceof EnemySelection, 'this is not an EnemySelection', self);
 
                 self.signal('enemyselection:enemyselected', {enemy: enemy});
             });
@@ -75,7 +75,7 @@ class EnemySelection extends Signalable {
      * Stops selecting enemies.
      */
     cancelSelectMode() {
-        console.assert(this instanceof EnemySelection, this, 'this is not an EnemySelection');
+        console.assert(this instanceof EnemySelection, 'this is not an EnemySelection', this);
         let self = this;
 
         // Restore the previous icon

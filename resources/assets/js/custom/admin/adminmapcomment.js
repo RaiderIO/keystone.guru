@@ -6,7 +6,7 @@ class AdminMapComment extends MapComment {
     }
 
     _popupSubmitClicked(){
-        console.assert(this instanceof AdminMapComment, this, 'this was not a MapComment');
+        console.assert(this instanceof AdminMapComment, 'this was not a MapComment', this);
         // Set an additional parameter
         this.always_visible = $('#map_map_comment_edit_popup_always_visible_' + this.id).val();
 

@@ -7,7 +7,7 @@ class MapObject extends Signalable {
      */
     constructor(map, layer) {
         super();
-        console.assert(map instanceof DungeonMap, map, 'Passed map is not a DungeonMap!');
+        console.assert(map instanceof DungeonMap, 'Passed map is not a DungeonMap!', map);
         let self = this;
 
         this._defaultVisible = true;
@@ -45,7 +45,7 @@ class MapObject extends Signalable {
      * @private
      */
     _cleanDecorator() {
-        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         if (this.decorator !== null) {
             this.map.leafletMap.removeLayer(this.decorator);
@@ -57,7 +57,7 @@ class MapObject extends Signalable {
      * @private
      */
     _rebuildDecorator() {
-        console.assert(this instanceof MapObject, this, 'this is not an MapObject');
+        console.assert(this instanceof MapObject, 'this is not an MapObject', this);
 
         this._cleanDecorator();
 
@@ -84,6 +84,7 @@ class MapObject extends Signalable {
      * Deletes this object locally; removing it from the screen and everywhere else.
      */
     localDelete() {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
         this.signal('object:deleted');
     }
 
@@ -117,6 +118,7 @@ class MapObject extends Signalable {
      * @param value boolean
      */
     setDefaultVisible(value) {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
         this._defaultVisible = value;
     }
 
@@ -125,6 +127,7 @@ class MapObject extends Signalable {
      * @returns {boolean}
      */
     isDefaultVisible() {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
         return this._defaultVisible;
     }
 
@@ -132,6 +135,7 @@ class MapObject extends Signalable {
      * Unbinds the tooltip from this map object.
      */
     unbindTooltip() {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
         this.layer.unbindTooltip();
     }
 
@@ -147,7 +151,7 @@ class MapObject extends Signalable {
      * @param colors object The colors object as found in the constants.js file.
      */
     setColors(colors) {
-        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
         this.colors = colors;
     }
 
@@ -157,7 +161,7 @@ class MapObject extends Signalable {
      * @todo Somehow this does not work when trying to set edited colors. Very strange, couldn't get it to work
      */
     setSynced(value) {
-        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         // Only if the colors object was ever set by a parent
         if (typeof this.colors !== 'undefined' && typeof this.layer.setStyle === 'function') {
@@ -198,7 +202,7 @@ class MapObject extends Signalable {
 
     onLayerInit() {
         let self = this;
-        console.assert(this instanceof MapObject, this, 'this is not a MapObject');
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         self.layer.bindContextMenu(self._updateContextMenuOptions());
         self.layer.on('contextmenu', function () {

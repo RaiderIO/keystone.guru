@@ -9,7 +9,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
     }
 
     onLayerInit() {
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
         super.onLayerInit();
 
         this.onPopupInit();
@@ -17,7 +17,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
 
     onPopupInit() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
 
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
         // This also cannot be a private function since that'll apparently give different signatures as well.
@@ -78,7 +78,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
 
     delete() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
         $.ajax({
             type: 'POST',
             url: '/ajax/enemypatrol/' + self.id,
@@ -102,13 +102,13 @@ class AdminEnemyPatrol extends EnemyPatrol {
     }
 
     edit() {
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
         this.save();
     }
 
     save() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
         $.ajax({
             type: 'POST',
             url: '/ajax/enemypatrol',

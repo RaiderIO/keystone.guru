@@ -79,7 +79,7 @@ class MapObjectGroupControls extends MapControl {
      * Adds the Control to the current LeafletMap
      */
     addControl() {
-        console.assert(this instanceof MapObjectGroupControls, this, 'this is not MapObjectGroupControls');
+        console.assert(this instanceof MapObjectGroupControls, 'this is not MapObjectGroupControls', this);
 
         // Code for the statusbar
         L.Control.Statusbar = L.Control.extend(this.mapControlOptions);

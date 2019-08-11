@@ -20,7 +20,7 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
     }
 
     _getTemplateData(width, height, margin) {
-        console.assert(this instanceof EnemyVisualModifierRaidMarker, this, 'this is not an EnemyVisualModifierRaidMarker!');
+        console.assert(this instanceof EnemyVisualModifierRaidMarker, 'this is not an EnemyVisualModifierRaidMarker!', this);
 
         return {
             classes: this.iconName === '' || this.iconName === null ? '' : this.iconName + '_enemy_icon',

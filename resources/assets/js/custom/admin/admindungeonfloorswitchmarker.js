@@ -68,12 +68,12 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
     }
 
     edit() {
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
         this.save();
     }
 
     save() {
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
         let self = this;
 
         $.ajax({
@@ -103,7 +103,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
 
     delete() {
         let self = this;
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
         $.ajax({
             type: 'POST',
             url: '/ajax/dungeonfloorswitchmarker/' + self.id,
