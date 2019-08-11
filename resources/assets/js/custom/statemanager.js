@@ -11,8 +11,8 @@ class StateManager extends Signalable {
         this.beguilingPreset = null;
         // The currently displayed floor ID
         this.floorId = null;
-        // Map zoom level
-        this.mapZoomLevel = 1;
+        // Map zoom level (default = 2)
+        this.mapZoomLevel = 2;
     }
 
     /**

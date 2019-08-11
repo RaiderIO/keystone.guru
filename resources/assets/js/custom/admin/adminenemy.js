@@ -417,7 +417,7 @@ class AdminEnemy extends Enemy {
                 mdt_id: this.mdt_id,
                 enemy_id: this.enemy_id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
-                visual: typeof this.visual !== 'undefined' ? this.visual.constructor.name : 'undefined'
+                visual: this.visual !== null ? this.visual.constructor.name : 'undefined'
             }, getHandlebarsDefaultVariables());
         } else {
             template = function (data) {

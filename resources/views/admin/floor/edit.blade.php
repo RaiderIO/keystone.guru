@@ -27,6 +27,7 @@
         ])
 
         @include('common.maps.admineditsidebar', [
+            'floorId' => $model->id,
             'show' => [
                 'shareable-link' => true,
                 'route-settings' => true,

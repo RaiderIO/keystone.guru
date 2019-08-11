@@ -16,15 +16,22 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
 
         let data = super._getTemplateData();
 
+        let enemyForces = this.enemyvisual.enemy.getEnemyForces();
+
         let size = this.enemyvisual.mainVisual.getSize();
         let width = size.iconSize[0];
 
         let margin = c.map.enemy.calculateMargin(width);
         width -= margin;
 
+        // More characters to display..
+        if (enemyForces >= 10) {
+            width -= 7;
+        }
+
         // Just append a single class
         data.main_visual_outer_classes += ' enemy_icon_npc_enemy_forces text-white text-center';
-        data.main_visual_html = '<div style="font-size: ' + width + 'px; line-height: ' + width + 'px;">' + this.enemyvisual.enemy.getEnemyForces() + '</div>';
+        data.main_visual_html = '<div style="font-size: ' + width + 'px; line-height: ' + width + 'px;">' + enemyForces + '</div>';
 
         return data;
     }

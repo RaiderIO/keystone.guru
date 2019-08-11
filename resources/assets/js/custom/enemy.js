@@ -40,6 +40,8 @@ class Enemy extends MapObject {
         this.dangerous = false;
         // May be null if we're not a Beguiling enemy
         this.beguiling_preset = null;
+        // The visual display of this enemy
+        this.visual = null;
 
         // MDT
         this.mdt_id = -1;
@@ -67,6 +69,9 @@ class Enemy extends MapObject {
         this._rebuildPopup(event);
 
         // Create the visual now that we know all data to construct it properly
+        if (this.visual !== null) {
+            this.visual.cleanup();
+        }
         this.visual = new EnemyVisual(this.map, this, this.layer);
 
         // Recreate the tooltip
@@ -81,6 +86,27 @@ class Enemy extends MapObject {
      */
     _rebuildPopup(event) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+    }
+
+    /**
+     * Get all enemies that share the same pack as this enemy
+     */
+    getPackBuddies() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        let self = this;
+
+        // Add all the enemies in said pack to the toggle display
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        let result = [];
+        $.each(enemyMapObjectGroup.objects, function (index, enemy) {
+            if (enemy.enemy_pack_id === self.enemy_pack_id) {
+                result.push(enemy);
+            }
+        });
+
+        return result;
     }
 
     /**

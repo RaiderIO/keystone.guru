@@ -7,6 +7,8 @@ if (isset($model)) {
     $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
+// Set correctly displayed floor
+$floorId = isset($floorId) ? $floorId : $dungeon->floors[0]->id;
 ?>
 
 @section('sidebar-content')
@@ -29,11 +31,11 @@ if (isset($model)) {
                     <div class="row view_dungeonroute_details_row mt-1">
                         <div class="col floor_selection">
                             <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-                            {!! Form::select('map_floor_selection', [__('Select floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
+                            {!! Form::select('map_floor_selection', [__('Select floor')], $floorId, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
                         </div>
                     </div>
                 @else
-                    {!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
+                    {!! Form::input('hidden', 'map_floor_selection', $floorId, ['id' => 'map_floor_selection']) !!}
                 @endif
             </div>
         </div>
@@ -76,4 +78,4 @@ if (isset($model)) {
     </div>
 @endsection
 
-@include('common.maps.sidebar', ['header' => __('Admin toolbox'), 'selectedFloorId' => $dungeon->floors[0]->id])
+@include('common.maps.sidebar', ['header' => __('Admin toolbox'), 'selectedFloorId' => $floorId])

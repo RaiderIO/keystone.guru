@@ -9,6 +9,7 @@ class EnemyVisual extends Signalable {
         this.layer = layer;
         this.divIcon = null;
 
+        this.visualType = '';
         this.mainVisual = null;
 
         // Default visual (after modifiers!)
@@ -27,6 +28,57 @@ class EnemyVisual extends Signalable {
 
         // If it changed, refresh the entire visual
         this.enemy.register('enemy:set_raid_marker', this, this._buildVisual.bind(this));
+
+        this.layer.on('mouseover', function () {
+            self._mouseOver();
+        });
+        this.layer.on('mouseout', function () {
+            self._mouseOut();
+        });
+    }
+
+    /**
+     *
+     * @protected
+     */
+    _mouseOver() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+        let visuals = [this];
+
+        // If enemy is part of a pack..
+        if (this.enemy.enemy_pack_id >= 0) {
+            // Add all the enemies in said pack to the toggle display
+            let packBuddies = this.enemy.getPackBuddies();
+            $.each(packBuddies, function (index, enemy) {
+                visuals.push(enemy.visual);
+            });
+        }
+
+        for (let i = 0; i < visuals.length; i++) {
+            visuals[i].setVisualType('enemy_forces');
+        }
+    }
+
+    /**
+     *
+     * @protected
+     */
+    _mouseOut() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+        let visuals = [this];
+
+        // If enemy is part of a pack..
+        if (this.enemy.enemy_pack_id >= 0) {
+            // Add all the enemies in said pack to the toggle display
+            let packBuddies = this.enemy.getPackBuddies();
+            $.each(packBuddies, function (index, enemy) {
+                visuals.push(enemy.visual);
+            });
+        }
+
+        for (let i = 0; i < visuals.length; i++) {
+            visuals[i].setVisualType(getState().getEnemyDisplayType());
+        }
     }
 
     /**
@@ -35,6 +87,8 @@ class EnemyVisual extends Signalable {
      * @private
      */
     _createModifiers() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+
         let modifiers = [];
         // Only add the modifiers if they're necessary; otherwise don't waste resources on adding hidden items
         if (typeof this.enemy.raid_marker_name === 'string' && this.enemy.raid_marker_name !== '') {
@@ -126,31 +180,42 @@ class EnemyVisual extends Signalable {
         console.assert(this instanceof EnemyVisual, this, 'this is not an EnemyVisual');
 
         // Refresh the visual completely
-        this.setVisualType(getState().getEnemyDisplayType());
+        this.setVisualType(getState().getEnemyDisplayType(), true);
     }
 
     /**
      * Sets the visual type for this enemy.
      * @param name
+     * @param force Force the recreation of the visual
      */
-    setVisualType(name) {
-        // Let them clean up their mess
-        if (this.mainVisual !== null) {
-            this.mainVisual.cleanup();
-        }
+    setVisualType(name, force = false) {
+        // Only when actually changed
+        if (this.visualType !== name || force) {
+            // Let them clean up their mess
+            if (this.mainVisual !== null) {
+                this.mainVisual.cleanup();
+            }
 
-        switch (name) {
-            case 'npc_class':
-                this.mainVisual = new EnemyVisualMainEnemyClass(this);
-                break;
-            case 'npc_type':
-                this.mainVisual = new EnemyVisualMainNpcType(this);
-                break;
-            case 'enemy_forces':
-                this.mainVisual = new EnemyVisualMainEnemyForces(this);
-                break;
-        }
+            switch (name) {
+                case 'npc_class':
+                    this.mainVisual = new EnemyVisualMainEnemyClass(this);
+                    break;
+                case 'npc_type':
+                    this.mainVisual = new EnemyVisualMainNpcType(this);
+                    break;
+                case 'enemy_forces':
+                    this.mainVisual = new EnemyVisualMainEnemyForces(this);
+                    break;
+            }
 
-        this._buildVisual();
+            this._buildVisual();
+
+            this.visualType = name;
+        }
+    }
+
+    cleanup() {
+        this.layer.off('mouseover');
+        this.layer.off('mouseout');
     }
 }
