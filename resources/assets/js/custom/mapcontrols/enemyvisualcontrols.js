@@ -54,6 +54,7 @@ class EnemyVisualControls extends MapControl {
                 let showBeguilingPreset = self.map.options.edit;
 
                 let data = $.extend({
+                        enemy_visual_type: self.map.options.defaultEnemyVisualType,
                         beguiling_presets: self.map.options.beguilingPresets,
                         preset: self.map.options.dungeonroute.beguilingPreset,
                         // Only when we're editing the route can we change the beguiling preset

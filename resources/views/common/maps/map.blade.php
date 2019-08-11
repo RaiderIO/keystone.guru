@@ -18,7 +18,7 @@ $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) 
 $routeBeguilingPreset = isset($dungeonroute) ? $dungeonroute->beguiling_preset : 1;
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? true : false;
-$enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'npc_class';
+$enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
 $isProduction = config('app.env') === 'production';

@@ -177,6 +177,14 @@
         </tr>
         <tr>
             <td>
+                enemy_display_type
+            </td>
+            <td>
+                Remembers the enemy display type you selected in the sidebar so it can persist across sessions.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 routes_viewmode
             </td>
             <td>

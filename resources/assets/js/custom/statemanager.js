@@ -70,6 +70,8 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         this.enemyDisplayType = enemyDisplayType;
 
+        Cookies.set('enemy_display_type', this.enemyDisplayType);
+
         // Let everyone know it's changed
         this.signal('enemydisplaytype:changed', {enemyDisplayType: this.enemyDisplayType});
     }
