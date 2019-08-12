@@ -12,7 +12,6 @@ use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FindOutdatedThumbnails
@@ -27,9 +26,11 @@ class FindOutdatedThumbnails
         $routes = DungeonRoute::orderBy('published', 'desc')->get();
         Log::channel('scheduler')->debug(sprintf('Checking %s routes for thumbnails', $routes->count()));
 
+        $queue = 'thumbnail';
         $processed = 0;
+        $alreadyExists = 0;
 
-        $currentJobCount = DB::table('jobs')->count();
+        $currentJobCount = \Queue::size($queue);
         foreach ($routes as $dungeonRoute) {
             /** @var DungeonRoute $dungeonRoute */
             $updatedAt = Carbon::createFromTimeString($dungeonRoute->updated_at);
@@ -55,19 +56,28 @@ class FindOutdatedThumbnails
                     !ProcessRouteFloorThumbnail::thumbnailsExistsForRoute($dungeonRoute)
                 )) {
 
-                if (!$this->isJobQueuedForModel(\App\Jobs\ProcessRouteFloorThumbnail::class, $dungeonRoute)) {
-                    Log::channel('scheduler')->debug(sprintf('Queueing job for route %s (%s floors)', $dungeonRoute->public_key, $dungeonRoute->dungeon->floors->count()));
+                if (!$this->isJobQueuedForModel(\App\Jobs\ProcessRouteFloorThumbnail::class, $dungeonRoute, $queue)) {
+                    Log::channel('scheduler')->debug(
+                        sprintf('Queueing job for route %s (%s floors)',
+                            $dungeonRoute->public_key, $dungeonRoute->dungeon->floors->count())
+                    );
 
                     $dungeonRoute->queueRefreshThumbnails();
 
                     // Refresh the current job count, it should be increased now
-                    $currentJobCount = DB::table('jobs')->count();
+                    $currentJobCount = \Queue::size($queue);
                     $processed++;
+                } else {
+                    Log::channel('scheduler')->debug(
+                        sprintf('Not queueing job for route %s (%s floors); already in queue',
+                            $dungeonRoute->public_key, $dungeonRoute->dungeon->floors->count())
+                    );
+                    $alreadyExists++;
                 }
             }
         }
 
-        Log::channel('scheduler')->debug(sprintf('Scheduled processing for %s routes', $processed));
+        Log::channel('scheduler')->debug(sprintf('Scheduled processing for %s routes, skipped %s routes', $processed, $alreadyExists));
         Log::channel('scheduler')->debug('OK Finding thumbnails');
     }
 }
