@@ -20,8 +20,6 @@ class AdminEnemy extends Enemy {
         // Whatever enemy we're connected with if we're an MDT enemy
         this.enemy_id = -1;
 
-        this.saving = false;
-        this.deleting = false;
         this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
 
@@ -376,6 +374,64 @@ class AdminEnemy extends Enemy {
         }
     }
 
+    bindTooltip() {
+        console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
+        let template = Handlebars.templates['map_enemy_tooltip_template'];
+
+        let data = {};
+        if (this.npc !== null) {
+            // Determine what to show for enemy forces based on override or not
+            let enemy_forces = this.npc.enemy_forces;
+
+            // Admin maps have 0 enemy forces
+            if (this.map.getEnemyForcesRequired() > 0) {
+                if (this.enemy_forces_override >= 0 || enemy_forces >= 1) {
+                    // @TODO This HTML probably needs to go somewhere else
+                    if (this.enemy_forces_override >= 0) {
+                        enemy_forces = '<s>' + enemy_forces + '</s> ' +
+                            '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
+                    } else if (enemy_forces >= 1) {
+                        enemy_forces += ' ' + this._getPercentageString(enemy_forces);
+                    }
+                } else if (enemy_forces === -1) {
+                    enemy_forces = 'unknown';
+                }
+            }
+
+            data = $.extend({
+                npc_name: this.npc.name,
+                enemy_forces: enemy_forces,
+                base_health: this.npc.base_health,
+                teeming: (this.teeming === 'visible' ? 'yes' : (this.teeming === 'hidden' ? 'hidden' : 'no')),
+                is_teeming: this.teeming === 'visible',
+                id: this.id,
+                size: c.map.enemy.calculateSize(
+                    this.npc.base_health,
+                    this.map.options.npcsMinHealth,
+                    this.map.options.npcsMaxHealth
+                ),
+                faction: this.faction,
+                npc_id: this.npc_id,
+                npc_id_type: typeof this.npc_id,
+                is_mdt: this.is_mdt,
+                mdt_id: this.mdt_id,
+                enemy_id: this.enemy_id,
+                attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
+                visual: this.visual !== null ? this.visual.constructor.name : 'undefined'
+            }, getHandlebarsDefaultVariables());
+        } else {
+            template = function (data) {
+                return lang.get('messages.no_npc_found_label');
+            }
+        }
+
+        // Remove any previous tooltip
+        this.unbindTooltip();
+        this.layer.bindTooltip(template(data), {
+            direction: 'top'
+        });
+    }
+
     onPopupInit() {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
         // Don't actually init the popup here since we may not know the ID yet.
@@ -387,25 +443,6 @@ class AdminEnemy extends Enemy {
 
     edit() {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
-
-        // If we're a Beguiling enemy and we've just been edited, we should apply the same lat/lngs to all other beguiling enemies.
-        // Find other beguiling enemies with the same enemy pack
-        if (this.isBeguiling()) {
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-            let enemies = enemyMapObjectGroup.getBeguilingEnemiesByEnemyPackId(this.enemy_pack_id);
-
-            for (let i = 0; i < enemies.length; i++) {
-                let enemy = enemies[i];
-
-                // Not ourselves, that'd give an infinite loop
-                if (enemy.id !== this.id) {
-                    // Apply our lat/lngs
-                    enemy.layer.setLatLng(this.layer.getLatLng());
-                    // Do not call edit(), infinite loop!
-                    enemy.save();
-                }
-            }
-        }
 
         this.save();
     }
@@ -420,20 +457,16 @@ class AdminEnemy extends Enemy {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
@@ -451,7 +484,7 @@ class AdminEnemy extends Enemy {
                     id: self.id,
                     enemy_pack_id: self.enemy_pack_id,
                     npc_id: self.npc_id,
-                    floor_id: self.map.getCurrentFloor().id,
+                    floor_id: getState().getCurrentFloor().id,
                     mdt_id: self.mdt_id,
                     teeming: self.teeming,
                     beguiling_preset: self.beguiling_preset,
@@ -461,7 +494,6 @@ class AdminEnemy extends Enemy {
                     lng: self.layer.getLatLng().lng
                 },
                 beforeSend: function () {
-                    self.editing = true;
                     $('#enemy_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
                 },
                 success: function (json) {
@@ -480,11 +512,12 @@ class AdminEnemy extends Enemy {
                 },
                 complete: function () {
                     $('#enemy_edit_popup_submit_' + self.id).removeAttr('disabled');
-                    self.editing = false;
                 },
-                error: function () {
+                error: function (xhr, textStatus, errorThrown) {
                     // Even if we were synced, make sure user knows it's no longer / an error occurred
                     self.setSynced(false);
+
+                    defaultAjaxErrorFn(xhr, textStatus, errorThrown);
                 }
             });
         } else {

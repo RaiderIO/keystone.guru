@@ -1,3 +1,6 @@
+<?php
+setcookie('viewed_teams', true);
+?>
 @extends('layouts.app', ['showAds' => false, 'title' => __('My teams')])
 
 @section('header-title', __('My teams'))

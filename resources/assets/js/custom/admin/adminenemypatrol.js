@@ -3,23 +3,21 @@ class AdminEnemyPatrol extends EnemyPatrol {
     constructor(map, layer) {
         super(map, layer);
 
-        this.saving = false;
-        this.deleting = false;
         this.setSynced(false);
 
         this.enemy_id = -1;
     }
 
-    onLayerInit(){
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+    onLayerInit() {
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
         super.onLayerInit();
 
         this.onPopupInit();
     }
 
-    onPopupInit(){
+    onPopupInit() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
 
         // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
         // This also cannot be a private function since that'll apparently give different signatures as well.
@@ -42,7 +40,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         };
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        let syncedFn = function(event){
+        let syncedFn = function (event) {
             // Remove template so our
             let template = Handlebars.templates['map_enemy_patrol_template'];
 
@@ -64,7 +62,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 self.layer
             ];
 
-            $.each(layers, function(i, layer){
+            $.each(layers, function (i, layer) {
                 layer.unbindPopup();
                 layer.bindPopup(template(data), customOptions);
 
@@ -80,7 +78,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
 
     delete() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
         $.ajax({
             type: 'POST',
             url: '/ajax/enemypatrol/' + self.id,
@@ -88,40 +86,36 @@ class AdminEnemyPatrol extends EnemyPatrol {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
-                self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
 
-    edit(){
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+    edit() {
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
         this.save();
     }
 
     save() {
         let self = this;
-        console.assert(this instanceof AdminEnemyPatrol, this, 'this was not an AdminEnemyPatrol');
+        console.assert(this instanceof AdminEnemyPatrol, 'this was not an AdminEnemyPatrol', this);
         $.ajax({
             type: 'POST',
             url: '/ajax/enemypatrol',
             dataType: 'json',
             data: {
                 id: self.id,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 enemy_id: self.enemy_id,
                 teeming: self.teeming,
                 faction: self.faction,
@@ -131,7 +125,6 @@ class AdminEnemyPatrol extends EnemyPatrol {
             },
             beforeSend: function () {
                 $('#enemy_patrol_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
-                self.saving = true;
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.edited,
                     color: c.map.admin.mapobject.colors.editedBorder
@@ -150,15 +143,16 @@ class AdminEnemyPatrol extends EnemyPatrol {
             },
             complete: function () {
                 $('#enemy_patrol_edit_popup_submit_' + self.id).removeAttr('disabled');
-                self.saving = false;
             },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }

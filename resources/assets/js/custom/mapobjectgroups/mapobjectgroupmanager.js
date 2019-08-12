@@ -113,7 +113,7 @@ class MapObjectGroupManager extends Signalable {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
 
         let objectGroup = this.getByName(objectGroupName);
-        console.assert(objectGroup instanceof MapObjectGroup, objectGroup, 'objectGroup is not a MapObjectGroup');
+        console.assert(objectGroup instanceof MapObjectGroup, 'objectGroup is not a MapObjectGroup', objectGroup);
 
         // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
@@ -140,7 +140,7 @@ class MapObjectGroupManager extends Signalable {
             dataType: 'json',
             data: {
                 fields: this._getLoadedNames().join(','),
-                floor: this.map.getCurrentFloor().id,
+                floor: getState().getCurrentFloor().id,
                 show_mdt_enemies: isMapAdmin ? 1 : 0,
                 enemies: isMapAdmin ? 0 : 1,
                 teeming: self.map.options.teeming ? 1 : 0

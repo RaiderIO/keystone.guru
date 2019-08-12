@@ -47,7 +47,13 @@
     <div class="form-group{{ $errors->has('aggressiveness') ? ' has-error' : '' }}">
         {!! Form::label('aggressiveness', __('Aggressiveness') . "*") !!}
         {!! Form::select('aggressiveness', array_combine(config('keystoneguru.aggressiveness'), config('keystoneguru.aggressiveness_pretty')), null, ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'classification_id'])
+        @include('common.forms.form-error', ['key' => 'aggressiveness'])
+    </div>
+
+    <div class="form-group{{ $errors->has('npc_class_id') ? ' has-error' : '' }}">
+        {!! Form::label('npc_class_id', __('Class') . "*") !!}
+        {!! Form::select('npc_class_id', \App\Models\NpcClass::pluck('name', 'id'), null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'npc_class_id'])
     </div>
 
     <div class="form-group{{ $errors->has('base_health') ? ' has-error' : '' }}">
@@ -61,6 +67,20 @@
         {!! Form::text('enemy_forces', isset($model) ? $model->enemy_forces : -1, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'enemy_forces'])
     </div>
+
+    <div class="form-group{{ $errors->has('dangerous') ? ' has-error' : '' }}">
+        {!! Form::label('dangerous', __('Dangerous')) !!}
+        {!! Form::checkbox('dangerous', 1, isset($model) ? $model->dangerous : 1, ['class' => 'form-control left_checkbox']) !!}
+        @include('common.forms.form-error', ['key' => 'dangerous'])
+    </div>
+
+    <div class="form-group{{ $errors->has('truesight') ? ' has-error' : '' }}">
+        {!! Form::label('truesight', __('Truesight')) !!}
+        {!! Form::checkbox('truesight', 1, isset($model) ? $model->truesight : 1, ['class' => 'form-control left_checkbox']) !!}
+        @include('common.forms.form-error', ['key' => 'truesight'])
+    </div>
+
+
 
     <div>
         {!! Form::submit(__('Submit'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'submit']) !!}

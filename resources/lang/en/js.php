@@ -28,6 +28,7 @@ return [
 
     'admin_only_label' => 'Admin only',
     'id_label' => 'ID',
+    'size_label' => 'Size',
     'faction_label' => 'Faction',
     'npc_id_label' => 'NPC_ID',
     'attached_to_pack_label' => 'Pack',
@@ -84,7 +85,8 @@ return [
     'title_raid_marker_skull' => 'Skull',
 
     // Visualisation
-    'aggressiveness_label' => 'Aggressiveness',
+    'npc_type_label' => 'Enemy type',
+    'npc_class_label' => 'Enemy class',
 
 
     // Admin

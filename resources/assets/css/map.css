@@ -334,12 +334,6 @@ html, body, #map, #app, .wrapper {
     opacity: 1;
 }
 
-.selected_enemy_icon,
-.enemy_icon {
-    width: 11px;
-    height: 11px;
-}
-
 .mdt_enemy_icon.leaflet-edit-marker-selected {
     border-color: yellow !important;
     margin-top: -9px !important;
@@ -358,38 +352,21 @@ html, body, #map, #app, .wrapper {
 
 .modifier {
     position: absolute;
-    width: 16px;
-    height: 16px;
+    width: 25px !important;
+    height: 25px !important;
+    background-color: white;
+    border: 1px black solid;
+    border-radius: 18px;
 }
 
-.modifier_0 {
-    top: -19px;
-    left: -20px;
-    /* background-color: red; */
+.map_enemy_raid_marker_circle_menu {
+    z-index: 10000;
 }
 
-.modifier_1 {
-    top: -22px;
-    left: -3px;
-    /* background-color: green; */
-}
-
-.modifier_2 {
-    top: -19px;
-    left: 14px;
-    /* background-color: blue; */
-}
-
-.modifier_0_boss {
-    left: -9px;
-}
-
-.modifier_1_boss {
-    left: 8px;
-}
-
-.modifier_2_boss {
-    left: 25px;
+.map_enemy_raid_marker_item {
+    background-color: white !important;
+    border: 1px black solid;
+    border-radius: 18px;
 }
 
 .badge_enemy_forces {
@@ -406,24 +383,179 @@ html, body, #map, #app, .wrapper {
 }
 
 .enemy_icon {
-    background-image: url("/images/mapicon/unset.png") !important; /* no-repeat center !important; */
+    background-color: white;
     background-repeat: no-repeat;
     background-position: center;
-    border-radius: 6px;
-    background-blend-mode: hard-light;
+    background-size: cover;
+    border-radius: 100px;
+}
+
+
+/*
+ * Enemy classes
+ */
+.melee {
+    background-image: url('/images/enemyclasses/melee.png') !important;
+}
+
+.caster {
+    background-image: url('/images/enemyclasses/caster.png') !important;
+}
+
+.ranged {
+    background-image: url('/images/enemyclasses/ranged.png') !important;
+}
+
+.healer {
+    background-image: url('/images/enemyclasses/healer.png') !important;
+}
+
+.boss {
+    background-image: url('/images/enemyclassifications/boss.png') !important;
+}
+
+.enemy_icon.melee,
+.enemy_icon.caster,
+.enemy_icon.ranged,
+.enemy_icon.healer,
+.enemy_icon.enemy_forces {
+    background-color: #2B3E50;
+}
+
+/*
+ * Enemy types
+ */
+.enemy_icon_npc_enemy_forces,
+.enemy_icon_npc_class,
+.enemy_icon_npc_type {
+    background-color: white;
+    border: black 2px solid;
+    border-radius: 100px;
+    background-blend-mode: luminosity;
+}
+
+.enemy_icon_npc_enemy_forces.aggressive,
+.enemy_icon_npc_class.aggressive,
+.enemy_icon_npc_type.aggressive {
+    border-color: #dc3c3c;
+}
+
+.enemy_icon_npc_enemy_forces.neutral,
+.enemy_icon_npc_class.neutral,
+.enemy_icon_npc_type.neutral {
+    border-color: #cccc2d !important;
+}
+
+.enemy_icon_npc_enemy_forces.unfriendly,
+.enemy_icon_npc_class.unfriendly,
+.enemy_icon_npc_type.unfriendly {
+    border-color: #ff9900 !important;
+}
+
+.enemy_icon_npc_enemy_forces.friendly,
+.enemy_icon_npc_class.friendly,
+.enemy_icon_npc_type.friendly {
+    border-color: #15c415 !important;
+}
+
+.aberration {
+    background-image: url('/images/enemytypes/aberration.png') !important;
+}
+
+.beast {
+    background-image: url('/images/enemytypes/beast.png') !important;
+}
+
+.critter {
+    background-image: url('/images/enemytypes/critter.png') !important;
+}
+
+.demon {
+    background-image: url('/images/enemytypes/demon.png') !important;
+}
+
+.dragonkin {
+    background-image: url('/images/enemytypes/dragonkin.png') !important;
+}
+
+.elemental {
+    background-image: url('/images/enemytypes/elemental.png') !important;
+}
+
+.giant {
+    background-image: url('/images/enemytypes/giant.png') !important;
+}
+
+.humanoid {
+    background-image: url('/images/enemytypes/humanoid.png') !important;
+}
+
+.mechanical {
+    background-image: url('/images/enemytypes/mechanical.png') !important;
+}
+
+.undead {
+    background-image: url('/images/enemytypes/undead.png') !important;
+}
+
+/**
+ * Beguiling
+ */
+
+.beguiling .enchanted {
+    background-image: url('/images/enemytypes/enchanted.png') !important;
+    background-color: #e1e0dd;
+}
+
+.beguiling .void {
+    background-image: url('/images/enemytypes/void.png') !important;
+    background-color: #e1e0dd;
+}
+
+.beguiling .tide {
+    background-image: url('/images/enemytypes/tide.png') !important;
+    background-color: #e1e0dd;
 }
 
 .teeming {
-    border: 1px solid red;
+    background-color: #3d3cff;
 }
 
 .aggressive_enemy_icon {
-    background-color: #dc3c3c !important;
+    background-image: url('/images/mapicon/unset.png') !important; /* no-repeat center !important; */
+    background-color: #dc3c3c;
 }
 
-.aggressive_enemy_icon.beguiling {
-    background-color: purple !important;
+.beguiling {
+    background-color: #7f2480;
 }
+
+.dangerous {
+    border: 3px dashed #ff9900;
+}
+
+.modifier_external {
+    width: 16px !important;
+    height: 16px !important;
+    background-color: unset;
+    border: unset;
+    border-radius: unset;
+}
+
+.classification_icon_elite {
+    background-image: url('/images/enemyclassifications/elite.png') !important;
+}
+
+.truesight {
+    background: white url('/images/enemymodifiers/truesight.png') no-repeat center !important;
+    border: 1px black solid;
+    border-radius: 18px;
+}
+
+
+/*.enemy_icon_npc_type.beguiling {*/
+/*    border: #7f2480 2px solid !important;*/
+/*}*/
 
 
 .neutral_enemy_icon {
@@ -439,7 +571,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .boss_enemy_icon {
-    background: url("/images/mapicon/boss.png") no-repeat center !important;
+    background: url('/images/enemyclassifications/boss.png') no-repeat center !important;
 }
 
 .flagged_enemy_icon {
@@ -459,7 +591,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .door_icon {
-    background: url("/images/mapicon/door.png") no-repeat center !important;
+    background: url('/images/mapicon/door.png') no-repeat center !important;
 }
 
 .killzone_icon_big {
@@ -468,21 +600,9 @@ html, body, #map, #app, .wrapper {
     border-color: yellow !important;
 }
 
-.selected_enemy_icon_small {
+.selected_enemy_icon {
     margin-top: -4px !important;
     margin-left: -4px !important;
-}
-
-.selected_enemy_icon_medium {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
-}
-
-.selected_enemy_icon_big {
-    margin-top: -4px !important;
-    margin-left: -4px !important;
-    width: 32px !important;
-    height: 32px !important;
 }
 
 #map_enemy_forces h5 {

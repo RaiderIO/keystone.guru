@@ -1,16 +1,15 @@
 <div style="position: relative;">
-    <div class="modifier modifier_0 {{modifier_0_classes}}" style="display: none;">
-        {{{modifier_0_html}}}
+    {{#each modifiers}}
+    <div class="modifier {{classes}}" style="left: {{left}}px; top: {{top}}px;">
+        {{{html}}}
     </div>
-    <div class="modifier modifier_1 {{modifier_1_classes}}" style="display: none;">
-        {{{modifier_1_html}}}
-    </div>
-    <div class="modifier modifier_2 {{modifier_2_classes}}" style="display: none;">
-        {{{modifier_2_html}}}
-    </div>
+    {{/each}}
     <div id="map_enemy_visual_{{id}}" class="{{selection_classes_base}} {{selection_classes}}">
-        <div class="{{main_visual_classes}}">
-            {{{main_visual_html}}}
+        <div class="{{main_visual_outer_classes}}" style="width: {{outer_width}}; height: {{outer_height}};">
+            <div class="{{main_visual_inner_classes}}" style="width: {{inner_width}}; height: {{inner_height}}; margin:{{margin}}px;
+                    ">
+                {{{main_visual_html}}}
+            </div>
         </div>
     </div>
 </div>

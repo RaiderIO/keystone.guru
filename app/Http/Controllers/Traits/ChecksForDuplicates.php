@@ -15,23 +15,26 @@ trait ChecksForDuplicates
 {
     /**
      * @param Model $candidate
-     * @param string $foreignKey Optional foreign key to check.
+     * @param array $fields Additional fields to check on for duplicates.
      * @param bool $abort True to abort, false to return true|false upon completion.
      * @return bool False if no duplicate was found, true if there was a duplicate.
      */
-    function checkForDuplicate($candidate, $foreignKey = '', $abort = true)
+    function checkForDuplicate($candidate, $fields = [], $abort = true)
     {
         // Find out of there is a duplicate
         /** @var Builder $query */
         // Round it like MySql does, otherwise we get strange rounding errors and it won't detect it as a duplicate
-        $query = get_class($candidate)::where('lat', round($candidate->lat, 2, PHP_ROUND_HALF_EVEN))
+        /** @var \Eloquent $modelClass */
+        $modelClass = get_class($candidate);
+        $query = $modelClass::where('lat', round($candidate->lat, 2, PHP_ROUND_HALF_EVEN))
             ->where('lng', round($candidate->lng, 2, PHP_ROUND_HALF_EVEN));
 
-        if ($foreignKey !== '') {
-            $query->where($foreignKey, $candidate[$foreignKey]);
-        }
-        if (isset($candidate['dungeon_route_id'])) {
-            $query->where('dungeon_route_id', $candidate->dungeon_route_id);
+        $fields[] = 'dungeon_route_id';
+
+        foreach ($fields as $field) {
+            if( isset($candidate[$field]) ){
+                $query->where($field, $candidate->$field);
+            }
         }
 
         $count = $query->get()->count();
@@ -67,7 +70,7 @@ trait ChecksForDuplicates
         $failures = 0;
         foreach ($verticesArray as $key => $vertex) {
             // Check if there was a duplicate
-            $failures += $this->checkForDuplicate(new $className($verticesArray[$key]), '', false) ? 1 : 0;
+            $failures += $this->checkForDuplicate(new $className($verticesArray[$key]), [], false) ? 1 : 0;
         }
 
         // Only if all nodes are marked as duplicates do we fail the request

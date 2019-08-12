@@ -267,6 +267,7 @@ class DungeonrouteTable extends InlineCode {
                 'title': lang.get('messages.enemy_forces_label'),
                 'data': 'enemy_forces',
                 'name': 'enemy_forces',
+                'orderable': false,
                 'render': function (data, type, row, meta) {
                     let enemyForcesRequired = row.teeming === 1 ? row.dungeon.enemy_forces_required_teeming : row.dungeon.enemy_forces_required;
                     let template = Handlebars.templates['dungeonroute_table_profile_enemy_forces_template'];

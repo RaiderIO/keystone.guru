@@ -5,7 +5,7 @@ class LayoutsApp extends InlineCode {
     activate() {
         // Default error handler
         $.ajaxSetup({
-            error: this._defaultAjaxErrorFn
+            error: defaultAjaxErrorFn
         });
 
         // Fade out success messages. They're not too interesting
@@ -33,7 +33,7 @@ class LayoutsApp extends InlineCode {
         // When in a model-based layout with tabs, make sure the selected_modal_id actually moves the page to another when changed
         let $selectedModal = $('#selected_model_id');
         if ($selectedModal.length > 0) {
-            $selectedModal.bind('change', function(){
+            $selectedModal.bind('change', function () {
                 let optionSelected = $("option:selected", this);
 
                 window.location.href = optionSelected.data('url');
@@ -149,46 +149,47 @@ class LayoutsApp extends InlineCode {
             }
         });
     }
+}
 
-    /**
-     * The default function that should be called when an ajax request fails (error handler)
-     **/
-    _defaultAjaxErrorFn(xhr, textStatus, errorThrown) {
-        let message = lang.get('messages.ajax_error_default');
+/**
+ * The default function that should be called when an ajax request fails (error handler)
+ **/
+function defaultAjaxErrorFn(xhr, textStatus, errorThrown)
+{
+    let message = lang.get('messages.ajax_error_default');
 
-        switch (xhr.status) {
-            case 403:
-                message = lang.get('messages.ajax_error_403');
-                break;
-            case 404:
-                message = lang.get('messages.ajax_error_404');
-                break;
-            case 419:
-                message = lang.get('messages.ajax_error_419');
-                break;
-        }
+    switch (xhr.status) {
+        case 403:
+            message = lang.get('messages.ajax_error_403');
+            break;
+        case 404:
+            message = lang.get('messages.ajax_error_404');
+            break;
+        case 419:
+            message = lang.get('messages.ajax_error_419');
+            break;
+    }
 
-        // If json was set
-        if (typeof xhr.responseJSON === 'object') {
-            // There were Laravel errors
-            if (typeof xhr.responseJSON.errors === 'object') {
-                let errors = xhr.responseJSON.errors;
-                message = '';
-                // Extract them and put them in the response string.
-                for (let key in errors) {
-                    if (errors.hasOwnProperty(key)) {
-                        message += errors[key] + ' ';
-                    }
-                }
-            } else if (typeof xhr.responseJSON.message === 'string') {
-                if (xhr.responseJSON.message.length > 0) {
-                    message = xhr.responseJSON.message;
+    // If json was set
+    if (typeof xhr.responseJSON === 'object') {
+        // There were Laravel errors
+        if (typeof xhr.responseJSON.errors === 'object') {
+            let errors = xhr.responseJSON.errors;
+            message = '';
+            // Extract them and put them in the response string.
+            for (let key in errors) {
+                if (errors.hasOwnProperty(key)) {
+                    message += errors[key] + ' ';
                 }
             }
+        } else if (typeof xhr.responseJSON.message === 'string') {
+            if (xhr.responseJSON.message.length > 0) {
+                message = xhr.responseJSON.message;
+            }
         }
-
-        showErrorNotification(message + " (" + xhr.status + ")");
     }
+
+    showErrorNotification(message + " (" + xhr.status + ")");
 }
 
 /**

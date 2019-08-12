@@ -176,7 +176,7 @@ class DatatablesHandler
             // The amount of records after filtering
             'data' => $data,
             // The amount of rows there would have been, if it were not for the limits
-            'recordsFiltered' => count($data),
+            'recordsFiltered' => $count,
             // Only show this info in dev instance
             'input' => $isDev ? $this->_request->toArray() : [],
             // Debug sql queries for optimization

@@ -1,7 +1,7 @@
 class MapControl {
     constructor(map){
-        console.assert(this instanceof MapControl, this, 'this is not MapControls');
-        console.assert(map instanceof DungeonMap, map, 'map is not DungeonMap');
+        console.assert(this instanceof MapControl, 'this is not MapControls', this);
+        console.assert(map instanceof DungeonMap, 'map is not DungeonMap', map);
 
         this.map = map;
         this._mapControl = null;
@@ -11,7 +11,7 @@ class MapControl {
      * Cleans up the MapControl; removing it from the current LeafletMap.
      */
     cleanup() {
-        console.assert(this instanceof MapControl, this, 'this is not MapControl');
+        console.assert(this instanceof MapControl, 'this is not MapControl', this);
 
         if (typeof this._mapControl === 'object') {
             this.map.leafletMap.removeControl(this._mapControl);

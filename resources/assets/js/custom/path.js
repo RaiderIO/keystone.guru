@@ -44,8 +44,6 @@ class Path extends Polyline {
         super(map, layer);
 
         this.label = 'Path';
-        this.saving = false;
-        this.deleting = false;
         this.decorator = null;
 
         this.setColor(c.map.path.defaultColor);
@@ -57,7 +55,7 @@ class Path extends Polyline {
      * @private
      */
     _getDecorator() {
-        console.assert(this instanceof Path, this, 'this is not a Path');
+        console.assert(this instanceof Path, 'this is not a Path', this);
         return L.polylineDecorator(this.layer, {
             patterns: [
                 {
@@ -73,13 +71,13 @@ class Path extends Polyline {
     }
 
     edit() {
-        console.assert(this instanceof Path, this, 'this was not a Path');
+        console.assert(this instanceof Path, 'this was not a Path', this);
         this.save();
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof Path, this, 'this was not a Path');
+        console.assert(this instanceof Path, 'this was not a Path', this);
 
         $.ajax({
             type: 'POST',
@@ -88,24 +86,21 @@ class Path extends Polyline {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
 
     save() {
         let self = this;
-        console.assert(this instanceof Path, this, 'this was not a Path');
+        console.assert(this instanceof Path, 'this was not a Path', this);
 
         $.ajax({
             type: 'POST',
@@ -114,13 +109,12 @@ class Path extends Polyline {
             data: {
                 id: self.id,
                 dungeonroute: this.map.getDungeonRoute().publicKey,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 color: self.polylineColor,
                 weight: self.weight,
                 vertices: self.getVertices(),
             },
             beforeSend: function () {
-                self.saving = true;
                 $('#map_path_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
             },
             success: function (json) {
@@ -131,18 +125,19 @@ class Path extends Polyline {
             },
             complete: function () {
                 $('#map_path_edit_popup_submit_' + self.id).removeAttr('disabled');
-                self.saving = false;
             },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof Path, this, 'this is not a Path');
+        console.assert(this instanceof Path, 'this is not a Path', this);
         super.onLayerInit();
 
         let self = this;

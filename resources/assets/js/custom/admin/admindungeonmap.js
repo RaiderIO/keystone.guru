@@ -12,7 +12,7 @@ class AdminDungeonMap extends DungeonMap {
      * @private
      */
     _createMapControls(drawnItemsLayer) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = [];
 
         if (this.dungeonData.name === 'Siege of Boralus') {

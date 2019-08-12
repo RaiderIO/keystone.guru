@@ -11,9 +11,9 @@ class MDTEnemySelection extends EnemySelection {
      * @protected
      */
     _filter(source, enemyCandidate) {
-        console.assert(source instanceof Enemy, source, 'source is not an Enemy');
-        console.assert(source.is_mdt, source, 'source not an MDT Enemy');
-        console.assert(enemyCandidate instanceof Enemy, enemyCandidate, 'enemyCandidate is not an Enemy');
+        console.assert(source instanceof Enemy, 'source is not an Enemy', source);
+        console.assert(source.is_mdt, 'source not an MDT Enemy', source);
+        console.assert(enemyCandidate instanceof Enemy, 'enemyCandidate is not an Enemy', enemyCandidate);
 
         return !enemyCandidate.is_mdt &&
             enemyCandidate.npc_id === source.npc_id;

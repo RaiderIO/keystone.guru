@@ -93,5 +93,76 @@
     {{ link_to('https://loading.io/spinner/radio') }}
     </p>
 
+    <p>
+    <h4>
+        Enemy type icons
+    </h4>
+    <ul>
+        <li>
+            Aberration:
+            https://www.iconfinder.com/icons/3759345/events_eyes_halloween_horror_october_witches_zombie_icon
+        </li>
+        <li>
+            Beast: https://www.iconfinder.com/icons/1604346/animal_footprint_paw_pet_print_track_icon
+        </li>
+        <li>
+            Critter: https://www.iconfinder.com/icons/586373/easter_easter_bunny_easter_hare_easter_rabbit_rabbit_icon
+        </li>
+        <li>
+            Demon: https://www.iconfinder.com/icons/725403/alchemy_antichrist_halloween_hell_pentagram_wicca_witch_icon
+        </li>
+        <li>
+            Dragonkin: https://www.iconfinder.com/icons/2580985/dragon_fairytale_fantasy_flying_head_magic_monster_icon
+        </li>
+        <li>
+            Elemental: https://www.iconfinder.com/icons/1161512/earth_element_elemental_magic_rock_spell_stone_icon
+        </li>
+        <li>
+            Giant: https://www.iconfinder.com/icons/2117581/fantasy_folklore_giant_monster_ogre_troll_icon
+        </li>
+        <li>
+            Humanoid:
+            <div>Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
+                        href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a
+                        href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0"
+                        target="_blank">CC 3.0 BY</a></div>
+        </li>
+        <li>
+            Mechanical: https://www.iconfinder.com/icons/2376279/android_bot_droid_robot_icon
+        </li>
+        <li>
+            Undead: https://www.iconfinder.com/icons/1974373/halloween_hand_rise_zombie_icon
+        </li>
+        <li>
+            Void:
+            https://www.iconfinder.com/icons/3903825/frozen_theme_snowflake_swirl_snowflake_tornado_swirl_snowflake_winter_swirl_icon
+        </li>
+        <li>
+            Tide: https://www.iconfinder.com/icons/4605982/big_ocean_sea_tide_wave_icon
+        </li>
+    </ul>
+    </p>
+
+    <h4>
+        Truesight icon
+    </h4>
+    <p>
+    <ul>
+        <li>
+            https://www.iconfinder.com/icons/2724129/eye_face_human_vision_icon_icon
+        </li>
+    </ul>
+    </p>
+
+    <h4>
+        Star icon
+    </h4>
+    <ul>
+        <li>
+            https://www.flaticon.com/free-icon/favourites_1040230#term=star&page=1&position=33
+        </li>
+    </ul>
+    </p>
+
 
 @endsection

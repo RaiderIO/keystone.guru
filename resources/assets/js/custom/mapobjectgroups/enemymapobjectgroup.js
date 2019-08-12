@@ -4,10 +4,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
-
-        this.manager.map.register('beguiling_preset:changed', this, function () {
-            // @TODO remove all beguiling enemies
-        });
     }
 
     _createObject(layer) {
@@ -38,6 +34,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             enemy.faction = remoteMapObject.faction;
             enemy.enemy_forces_override = remoteMapObject.enemy_forces_override;
             enemy.raid_marker_name = remoteMapObject.raid_marker_name;
+            enemy.dangerous = remoteMapObject.dangerous === 1;
             // MDT id is always set
             enemy.mdt_id = remoteMapObject.mdt_id;
             enemy.is_mdt = false;
@@ -112,8 +109,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         let npc = this.manager.map.getNpcById(npcId);
 
-        console.log(npc);
-
         // Build an object that could've come straight from the server
         let remoteEnemy = {
             // Doesn't have a server ID
@@ -121,7 +116,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             lat: location.lat,
             lng: location.lng,
             enemy_pack_id: enemyPack.id,
-            floor_id: this.manager.map.getCurrentFloor().id,
+            floor_id: getState().getCurrentFloor().id,
             teeming: null,
             faction: 'any',
             enemy_forces_override: -1,
@@ -130,8 +125,17 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             npc: npc
         };
 
-        // Build and handle the enemy
-        return this._restoreObject(remoteEnemy);
+        // Now return the enemy so callers can make use of it
+        let enemy = this._restoreObject(remoteEnemy);
+
+
+        // Set it to be visible if we should (editing that same preset)
+        if (getState().getBeguilingPreset() === enemy.beguiling_preset) {
+            console.log('Showing beguiling enemy..');
+            this.setMapObjectVisibility(enemy, true);
+        }
+
+        return enemy;
     }
 
     /**

@@ -38,7 +38,7 @@ class DungeonStartMarker extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof DungeonStartMarker, this, 'this is not a DungeonStartMarker');
+        console.assert(this instanceof DungeonStartMarker, 'this is not a DungeonStartMarker', this);
         super.onLayerInit();
 
         // Show a permanent tooltip for the pack's name

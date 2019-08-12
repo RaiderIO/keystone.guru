@@ -3,8 +3,6 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
         super(enemyvisual, index);
         // If it's loaded already, set it now
         this.iconName = this.enemyvisual.enemy.raid_marker_name;
-        // If it changed, let us know!
-        this.enemyvisual.enemy.register('enemy:set_raid_marker', this, this._refreshRaidMarker.bind(this));
     }
 
     _getValidIconNames() {
@@ -21,24 +19,13 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
         ];
     }
 
-    _getTemplateData() {
-        console.assert(this instanceof EnemyVisualModifierRaidMarker, this, 'this is not an EnemyVisualModifierRaidMarker!');
+    _getTemplateData(width, height, margin) {
+        console.assert(this instanceof EnemyVisualModifierRaidMarker, 'this is not an EnemyVisualModifierRaidMarker!', this);
 
-        let result = [];
-        result['modifier_' + this.index + '_classes'] = this.iconName === '' || this.iconName === null ? '' : this.iconName + '_enemy_icon';
-        return result;
-    }
-
-    _refreshRaidMarker() {
-        console.assert(this instanceof EnemyVisualModifierRaidMarker, this, 'this is not an EnemyVisualModifierRaidMarker!');
-
-        this.setIcon(this.enemyvisual.enemy.raid_marker_name);
-    }
-
-    cleanup() {
-        super.cleanup();
-        console.assert(this instanceof EnemyVisualModifierRaidMarker, this, 'this is not an EnemyVisualModifierRaidMarker!');
-
-        this.enemyvisual.enemy.unregister('enemy:set_raid_marker', this);
+        return {
+            classes: this.iconName === '' || this.iconName === null ? '' : this.iconName + '_enemy_icon',
+            left: (width / 2) + margin - 13,
+            top: (height / 2) + margin - 13
+        };
     }
 }

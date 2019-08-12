@@ -3,279 +3,403 @@
         "id": 133935,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Animated Guardian",
         "base_health": 651211,
         "enemy_forces": 5,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 133943,
         "dungeon_id": 16,
         "classification_id": 1,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
         "name": "Minion of Zul",
         "base_health": 24,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134157,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Shadow-Borne Warrior",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134158,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Shadow-Borne Champion",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 134174,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 2,
         "name": "Shadow-Borne Witch Doctor",
         "base_health": 574598,
         "enemy_forces": 5,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134251,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 4,
         "name": "Seneschal M'bara",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 134331,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "King Rahu'ai",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 134739,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Purification Construct",
         "base_health": 919356,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 134993,
         "dungeon_id": 16,
         "classification_id": 3,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
         "name": "Mchimba the Embalmer",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134994,
         "dungeon_id": 16,
         "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Spectral Headhunter",
         "base_health": 124496,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135167,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Spectral Berserker",
         "base_health": 459678,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 135192,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Honored Raptor",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135204,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 3,
         "name": "Spectral Hex Priest",
         "base_health": 344759,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135231,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Spectral Brute",
         "base_health": 766130,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 135235,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 2,
         "name": "Spectral Beastmaster",
         "base_health": 363912,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135239,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 4,
         "name": "Spectral Witch Doctor",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135322,
         "dungeon_id": 16,
         "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
         "name": "The Golden Serpent",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135470,
         "dungeon_id": 16,
         "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Aka'ali the Conqueror",
         "base_health": 1379034,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135472,
         "dungeon_id": 16,
         "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Zanazal the Wise",
         "base_health": 1379034,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135475,
         "dungeon_id": 16,
         "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Kula the Butcher",
         "base_health": 1379034,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 136160,
         "dungeon_id": 16,
         "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "King Dazar",
         "base_health": 2987907,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137473,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 2,
         "name": "Guard Captain Atu",
         "base_health": 622481,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 137474,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "King Timalji",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 137478,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 3,
         "name": "Queen Wasi",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 137484,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "King A'akul",
         "base_health": 995969,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 137485,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Bloodsworn Agent",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 137486,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 2,
         "name": "Queen Patlaa",
         "base_health": 612904,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 137487,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Skeletal Hunting Raptor",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 137969,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Interment Construct",
         "base_health": 766130,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 137989,
         "dungeon_id": 16,
         "classification_id": 1,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
         "name": "Embalming Fluid",
         "base_health": 229839,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138489,
         "dungeon_id": 16,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
         "name": "Shadow of Zul",
         "base_health": 1302421,
         "enemy_forces": 8,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     }
 ]

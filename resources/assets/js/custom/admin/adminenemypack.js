@@ -3,9 +3,6 @@ class AdminEnemyPack extends EnemyPack {
     constructor(map, layer) {
         super(map, layer);
 
-        this.saving = false;
-        this.deleting = false;
-
         this.setSynced(false);
     }
 
@@ -242,21 +239,14 @@ class AdminEnemyPack extends EnemyPack {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
-                self.setSynced(false);
             }
         });
     }
@@ -275,7 +265,7 @@ class AdminEnemyPack extends EnemyPack {
             dataType: 'json',
             data: {
                 id: self.id,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 label: self.label,
                 teeming: self.teeming,
                 faction: self.faction,
@@ -284,7 +274,6 @@ class AdminEnemyPack extends EnemyPack {
             },
             beforeSend: function () {
                 $('#enemy_pack_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
-                self.saving = true;
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.edited,
                     color: c.map.admin.mapobject.colors.editedBorder
@@ -303,23 +292,17 @@ class AdminEnemyPack extends EnemyPack {
             },
             complete: function () {
                 $('#enemy_pack_edit_popup_submit_' + self.id).removeAttr('disabled');
-                self.saving = false;
             },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
-    }
-
-    cleanup() {
-        super.cleanup();
-
-        // Clear references so they can be cleaned up properly; otherwise they stay on the map when switching floors
-        this.beguilingenemies = [];
     }
 }

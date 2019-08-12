@@ -1,7 +1,7 @@
-if( typeof Cookies.get('polyline_default_color') === 'undefined' ){
+if (typeof Cookies.get('polyline_default_color') === 'undefined') {
     Cookies.set('polyline_default_color', '#9DFF56');
 }
-if( typeof Cookies.get('polyline_default_weight') === 'undefined' ){
+if (typeof Cookies.get('polyline_default_weight') === 'undefined') {
     Cookies.set('polyline_default_weight', 3);
 }
 
@@ -29,12 +29,45 @@ let c = {
             }
         },
         enemy: {
+            /**
+             * At whatever zoom the classifications are displayed on the map
+             */
+            classification_display_zoom: 3,
+            /**
+             * At whatever zoom the truesight modifier are displayed on the map
+             */
+            truesight_display_zoom: 3,
             colors: [
                 /*'#C000F0',
                 '#E25D5D',
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple'
-            ]
+            ],
+            minSize: 12,
+            maxSize: 26,
+            margin: 2,
+            calculateMargin: function(size) {
+                let range = c.map.enemy.maxSize - c.map.enemy.minSize;
+                let zeroBased = (size - c.map.enemy.minSize);
+                return (zeroBased / range) * c.map.enemy.margin;
+            },
+            calculateSize: function (health, minHealth, maxHealth) {
+                // Perhaps some enemies are below minHealth, should not be lower than it, nor higher than max health (bosses)
+                health = Math.min(Math.max(health, minHealth), maxHealth);
+
+                // Offset the min health
+                health -= minHealth;
+                maxHealth -= minHealth;
+
+                // Scale factor
+                let scale = getState().getMapZoomLevel() / 2.0;
+
+                let result = (c.map.enemy.minSize + ((health / maxHealth) * (c.map.enemy.maxSize - c.map.enemy.minSize))) * scale;
+                // console.log(typeof result, result, typeof Math.floor(result), Math.floor(result));
+
+                // Return the correct size
+                return Math.floor(result);
+            }
         },
         adminenemy: {
             mdtPolylineOptions: {

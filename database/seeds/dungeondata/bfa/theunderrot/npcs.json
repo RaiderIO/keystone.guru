@@ -3,171 +3,247 @@
         "id": 130909,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Fetid Maggot",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 131318,
         "dungeon_id": 21,
         "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Elder Leaxa",
         "base_health": 1838700,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131383,
         "dungeon_id": 21,
         "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Sporecaller Zancha",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131402,
         "dungeon_id": 21,
         "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Underrot Tick",
         "base_health": 76613,
         "enemy_forces": 1,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131436,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Chosen Blood Matron",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1
     },
     {
         "id": 131492,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
         "name": "Devout Blood Priest",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 131817,
         "dungeon_id": 21,
         "classification_id": 3,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Cragmaw the Infested",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133007,
         "dungeon_id": 21,
         "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Unbound Abomination",
         "base_health": 2987907,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133663,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Fanatical Headhunter",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133685,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
         "name": "Befouled Spirit",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133835,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Feral Bloodswarmer",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133836,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Reanimated Guardian",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133852,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
         "name": "Living Rot",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133870,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
         "name": "Diseased Lasher",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133912,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Bloodsworn Defiler",
         "base_health": 383065,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 134284,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Fallen Deathspeaker",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134419,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Titan Keeper Hezrel",
         "base_health": 470936,
         "enemy_forces": 0,
-        "aggressiveness": "friendly"
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138187,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
         "name": "Grotesque Horror",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 138281,
         "dungeon_id": 21,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Faceless Corruptor",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     }
 ]

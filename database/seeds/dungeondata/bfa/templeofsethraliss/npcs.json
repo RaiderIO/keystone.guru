@@ -3,252 +3,364 @@
         "id": 68819,
         "dungeon_id": 19,
         "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Eye of Sethraliss",
         "base_health": 0,
         "enemy_forces": 12,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133379,
         "dungeon_id": 19,
         "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Adderis",
         "base_health": 1532260,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133384,
         "dungeon_id": 19,
         "classification_id": 3,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Merektha",
         "base_health": 1762099,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133389,
         "dungeon_id": 19,
         "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
         "name": "Galvazzt",
         "base_health": 2681455,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133392,
         "dungeon_id": 19,
         "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
         "name": "Avatar of Sethraliss",
         "base_health": 766130,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 133944,
         "dungeon_id": 19,
         "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Aspix",
         "base_health": 1532260,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134364,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Faithless Tender",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134599,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Imbued Stormcaller",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134600,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
         "name": "Sandswept Marksman",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134602,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Shrouded Fang",
         "base_health": 306452,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134616,
         "dungeon_id": 19,
         "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Krolusk Pup",
         "base_health": 229839,
         "enemy_forces": 2,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134617,
         "dungeon_id": 19,
         "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Krolusk Hatchling",
         "base_health": 3690,
         "enemy_forces": 1,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134629,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Scaled Krolusk Rider",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134686,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Mature Krolusk",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134691,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
         "name": "Static-charged Dervish",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134990,
         "dungeon_id": 19,
-        "classification_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Charged Dust Devil",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 134991,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Sandfury Stonefist",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
     },
     {
         "id": 135007,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Orb Guardian",
         "base_health": 383065,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135562,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Venomous Ophidian",
         "base_health": 153226,
         "enemy_forces": 2,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135846,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
         "name": "Sand-crusted Striker",
         "base_health": 153226,
         "enemy_forces": 2,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 135971,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Faithless Conscript",
         "base_health": 88301,
         "enemy_forces": 0,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 136076,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
         "name": "Agitated Nimbus",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 136250,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
         "name": "Hoodoo Hexer",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 139110,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Spark Channeler",
         "base_health": 612904,
         "enemy_forces": 11,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 139422,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Scaled Krolusk Tamer",
         "base_health": 612904,
         "enemy_forces": 6,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 139425,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
         "name": "Crazed Incubator",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 139946,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
         "name": "Heart Guardian",
         "base_health": 612904,
         "enemy_forces": 4,
-        "aggressiveness": "neutral"
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0
     },
     {
         "id": 139949,
         "dungeon_id": 19,
         "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
         "name": "Plague Doctor",
         "base_health": 383065,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive"
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     }
 ]

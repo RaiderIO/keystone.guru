@@ -33,8 +33,6 @@ class MapComment extends MapObject {
         this.id = 0;
         this.label = 'MapComment';
         this.always_visible = 0;
-        this.saving = false;
-        this.deleting = false;
 
         this.setSynced(false);
     }
@@ -77,17 +75,14 @@ class MapComment extends MapObject {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
@@ -102,14 +97,13 @@ class MapComment extends MapObject {
             dataType: 'json',
             data: {
                 id: this.id,
-                floor_id: this.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 comment: this.comment,
                 always_visible: this.always_visible,
                 lat: this.layer.getLatLng().lat,
                 lng: this.layer.getLatLng().lng,
             },
             beforeSend: function () {
-                self.saving = true;
                 $('#map_map_comment_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
             },
             success: function (json) {
@@ -120,11 +114,12 @@ class MapComment extends MapObject {
             },
             complete: function () {
                 $('#map_map_comment_edit_popup_submit_' + self.id).removeAttr('disabled');
-                self.saving = false;
             },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }

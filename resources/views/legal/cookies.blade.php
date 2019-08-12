@@ -128,6 +128,15 @@
         </tr>
         <tr>
             <td>
+                viewed_teams
+            </td>
+            <td>
+                Keeps track of whether you've viewed the Teams feature so we can show the NEW keyword next to it until
+                you have.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 cookieconsent_status
             </td>
             <td>
@@ -164,6 +173,14 @@
             </td>
             <td>
                 Remembers the stroke width you set when changing the stroke width of a polyline in the map editor.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                enemy_display_type
+            </td>
+            <td>
+                Remembers the enemy display type you selected in the sidebar so it can persist across sessions.
             </td>
         </tr>
         <tr>

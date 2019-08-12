@@ -49,6 +49,7 @@
     $headers = [
         'mismatched_health' => __('Mismatched health'),
         'mismatched_enemy_count' => __('Mismatched enemy count'),
+        'mismatched_enemy_type' => __('Mismatched enemy type'),
         'missing_npc' => __('Missing NPC'),
         'mismatched_enemy_forces' => __('Mismatched enemy forces'),
     ]
@@ -82,12 +83,12 @@
                             {{ $importWarning->getMessage() }}
                         </td>
                         <td>
-                            @if( $key === 'mismatched_health' || $key === 'mismatched_enemy_forces')
-                                <a class="btn btn-primary apply_btn"
+                            @if( $key === 'mismatched_health' || $key === 'mismatched_enemy_forces' || $key === 'mismatched_enemy_type')
+                                <button class="btn btn-primary apply_btn"
                                    data-id="{{ $mdtNpc->id }}" data-category="{{ $key }}"
                                    data-new="{{ $new }}">
                                     {{ __('Apply (MDT -> KG)') }}
-                                </a>
+                                </button>
                             @endif
                         </td>
                     </tr>

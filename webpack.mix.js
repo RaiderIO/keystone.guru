@@ -109,6 +109,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
 
     // Depends on map object groups
+    'resources/assets/js/custom/statemanager.js',
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/mapobject.js',
     'resources/assets/js/custom/polyline.js',
@@ -131,11 +132,14 @@ let scripts = [
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmain.js',
-    'resources/assets/js/custom/enemyvisuals/enemyvisualmainaggressiveness.js',
+    'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyclass.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyforces.js',
+    'resources/assets/js/custom/enemyvisuals/enemyvisualmainnpctype.js',
 
     'resources/assets/js/custom/enemyvisuals/modifiers/modifier.js',
+    'resources/assets/js/custom/enemyvisuals/modifiers/modifierclassification.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
+    'resources/assets/js/custom/enemyvisuals/modifiers/modifiertruesight.js',
 
     'resources/assets/js/custom/mapcontrol.js',
     'resources/assets/js/custom/mapcontrols/addisplaycontrols.js',
@@ -208,13 +212,17 @@ if (images) {
     mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
     mix.copy('resources/assets/images/classes', 'public/images/classes', false);
     mix.copy('resources/assets/images/echo', 'public/images/echo', false);
+    mix.copy('resources/assets/images/enemyclasses', 'public/images/enemytypes', false);
+    mix.copy('resources/assets/images/enemyclassifications', 'public/images/enemyclassifications', false);
+    mix.copy('resources/assets/images/enemymodifiers', 'public/images/enemymodifiers', false);
+    mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);
-    mix.copy('resources/assets/images/oauth', 'public/images/oauth', false);
     mix.copy('resources/assets/images/home', 'public/images/home', false);
     mix.copy('resources/assets/images/icon', 'public/images/icon', false);
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);
     mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
+    mix.copy('resources/assets/images/oauth', 'public/images/oauth', false);
     mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);
     mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes', false);
     mix.copy('resources/assets/images/specializations', 'public/images/specializations', false);

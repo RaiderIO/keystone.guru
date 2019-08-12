@@ -21,9 +21,6 @@ class AddActiveColumnToAffixGroupsTable extends Migration
                 $table->boolean('active')->default(true);
             }
         });
-
-        // Re-seed the affixes
-        Artisan::call('db:seed', array('--class' => 'AffixSeeder', '--database' => 'migrate', '--force' => true));
     }
 
     /**

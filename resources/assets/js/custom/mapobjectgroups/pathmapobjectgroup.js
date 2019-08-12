@@ -23,7 +23,7 @@ class PathMapObjectGroup extends MapObjectGroup {
     }
 
     _createObject(layer) {
-        console.assert(this instanceof PathMapObjectGroup, this, 'this is not an PathMapObjectGroup');
+        console.assert(this instanceof PathMapObjectGroup, 'this is not an PathMapObjectGroup', this);
 
         return new Path(this.manager.map, layer);
     }
@@ -66,7 +66,7 @@ class PathMapObjectGroup extends MapObjectGroup {
     _fetchSuccess(response) {
         super._fetchSuccess(response);
 
-        console.assert(this instanceof PathMapObjectGroup, this, 'this is not a PathMapObjectGroup');
+        console.assert(this instanceof PathMapObjectGroup, 'this is not a PathMapObjectGroup', this);
 
         // Should always exist
         let paths = response.path;

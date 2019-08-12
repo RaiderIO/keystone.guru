@@ -8,8 +8,6 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
     constructor(map, layer) {
         super(map, layer);
 
-        this.saving = false;
-        this.deleting = false;
         this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
 
@@ -29,7 +27,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         }, getHandlebarsDefaultVariables());
 
         // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
-        let currentFloorId = this.map.getCurrentFloor().id;
+        let currentFloorId = getState().getCurrentFloor().id;
         for (let i in this.map.dungeonData.floors) {
             let floor = this.map.dungeonData.floors[i];
             if (floor.id !== currentFloorId) {
@@ -70,12 +68,12 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
     }
 
     edit() {
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
         this.save();
     }
 
     save() {
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
         let self = this;
 
         $.ajax({
@@ -84,32 +82,28 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
             dataType: 'json',
             data: {
                 id: self.id,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 target_floor_id: self.target_floor_id,
                 lat: self.layer.getLatLng().lat,
                 lng: self.layer.getLatLng().lng
-            },
-            beforeSend: function () {
-                self.saving = true;
             },
             success: function (json) {
                 self.id = json.id;
                 self.setSynced(true);
                 self.layer.closePopup();
             },
-            complete: function () {
-                self.saving = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, this, 'this was not an AdminDungeonFloorSwitchMarker');
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
         $.ajax({
             type: 'POST',
             url: '/ajax/dungeonfloorswitchmarker/' + self.id,
@@ -117,20 +111,18 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 self.layer.setStyle({
                     fillColor: c.map.admin.mapobject.colors.unsaved,
                     color: c.map.admin.mapobject.colors.unsavedBorder
                 });
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }

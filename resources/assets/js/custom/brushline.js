@@ -18,8 +18,6 @@ class Brushline extends Polyline {
 
         this.label = 'Brushline';
         this.type = 'brushline';
-        this.saving = false;
-        this.deleting = false;
         this.decorator = null;
 
         this.setSynced(false);
@@ -45,17 +43,14 @@ class Brushline extends Polyline {
             data: {
                 _method: 'DELETE'
             },
-            beforeSend: function () {
-                self.deleting = true;
-            },
             success: function (json) {
                 self.localDelete();
             },
-            complete: function () {
-                self.deleting = false;
-            },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
@@ -71,13 +66,12 @@ class Brushline extends Polyline {
             data: {
                 id: self.id,
                 dungeonroute: this.map.getDungeonRoute().publicKey,
-                floor_id: self.map.getCurrentFloor().id,
+                floor_id: getState().getCurrentFloor().id,
                 color: self.polylineColor,
                 weight: self.weight,
                 vertices: self.getVertices(),
             },
             beforeSend: function () {
-                self.saving = true;
                 $('#map_brushline_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
             },
             success: function (json) {
@@ -88,11 +82,12 @@ class Brushline extends Polyline {
             },
             complete: function () {
                 $('#map_brushline_edit_popup_submit_' + self.id).removeAttr('disabled');
-                self.saving = false;
             },
-            error: function () {
+            error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }

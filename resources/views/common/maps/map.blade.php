@@ -18,7 +18,7 @@ $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) 
 $routeBeguilingPreset = isset($dungeonroute) ? $dungeonroute->beguiling_preset : 1;
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
 $teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? true : false;
-$enemyVisualType = isset($enemyVisualType) ? $enemyVisualType : 'aggressiveness';
+$enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
 $isProduction = config('app.env') === 'production';
@@ -83,7 +83,7 @@ if ($isAdmin) {
     'dungeonroute' => [
         'publicKey' => $routePublicKey,
         'faction' => $routeFaction,
-        'beguiling_preset' => $routeBeguilingPreset
+        'beguilingPreset' => $routeBeguilingPreset
     ],
     'beguilingPresets' => $beguilingPresets,
     'defaultEnemyVisualType' => $enemyVisualType,
@@ -91,13 +91,16 @@ if ($isAdmin) {
     'noUI' => $noUI,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,
-    'showAttribution' => $showAttribution
+    'showAttribution' => $showAttribution,
+    'npcsMinHealth' => $dungeon->getNpcsMinHealth(),
+    'npcsMaxHealth' => $dungeon->getNpcsMaxHealth()
 ], $adminOptions)])
 
 @section('scripts')
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
 
+    @include('common.general.statemanager')
     <script>
         // Data of the dungeon(s) we're selecting in the map
         var dungeonData = {!! $dungeon !!};

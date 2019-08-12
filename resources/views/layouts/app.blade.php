@@ -39,6 +39,7 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
 $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 
 $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max('id') > (int)$_COOKIE['changelog_release'] : true;
+$newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['changelog_release'] === 1 : true;
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -107,6 +108,16 @@ $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max(
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('misc.affixes') }}">{{ __('Affixes') }}</a>
                         </li>
+                        @if (Auth::check())
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ route('team.list') }}">{{ __('Teams') }}
+                                    @if($newToTeams)
+                                        <sup class="text-success">{{ __('NEW') }}</sup>
+                                    @endif
+                                </a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('misc.changelog') }}">
                                 {{ __('Changelog') }}
@@ -154,26 +165,28 @@ $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max(
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-user"></i> {{ Auth::user()->name }}
+                                    <i class="fas fa-user"></i> {{ $user->name }}
                                 </a>
                                 <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
-                                    @if( Auth::user()->hasRole('admin'))
+                                    @if( $user->hasRole('admin'))
                                         <a class="dropdown-item"
                                            href="{{ route('dashboard.home') }}">{{__('Admin Dashboard')}}</a>
+                                        <a class="dropdown-item"
+                                           href="{{ route('tracker.stats.index') }}">{{__('Admin Stats')}}</a>
                                         <a class="dropdown-item"
                                            href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item"
                                            href="{{ route('admin.releases') }}">{{__('View releases')}}</a>
-                                        @if( Auth::user()->can('read-expansions') )
+                                        @if( $user->can('read-expansions') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
                                         @endif
-                                        @if( Auth::user()->can('read-dungeons') )
+                                        @if( $user->can('read-dungeons') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
                                         @endif
-                                        @if( Auth::user()->can('read-npcs') )
+                                        @if( $user->can('read-npcs') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
                                         @endif
@@ -187,9 +200,6 @@ $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max(
                                     @endif
                                     <a class="dropdown-item"
                                        href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
-                                    <a class="dropdown-item"
-                                       href="{{ route('team.list') }}">{{ __('My teams') }} <sup
-                                                class="text-success">{{ __('NEW') }}</sup></a>
                                     <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -254,7 +264,7 @@ $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max(
 
     @else
 
-        @if (!$isProduction && (Auth::user() === null || !Auth::user()->hasRole('admin')))
+        @if (!$isProduction && (!Auth::check() || !$user->hasRole('admin')))
             <div class="container-fluid alert alert-warning text-center mt-4">
                 <i class="fa fa-exclamation-triangle"></i>
                 {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
@@ -380,7 +390,6 @@ $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max(
 </div>
 
 @auth
-    @php($user = Auth::user())
     @if(!$user->legal_agreed)
 @section('modal-content')
     <div class="form-group">

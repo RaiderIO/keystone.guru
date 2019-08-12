@@ -26,14 +26,13 @@ class EnemyPack extends MapObject {
         // Any enemies that MAY be displayed when switching Beguiling presets
         this.beguilingenemies = [];
 
+        // Show visibility of whatever preset we're currently displaying
         this.register('synced', this, function () {
-            self.activateBeguilingPreset(1);
+            self.activateBeguilingPreset(getState().getBeguilingPreset());
         });
 
-        this.map.register('beguiling_preset:changed', this, function (changedEvent) {
-            let newPreset = changedEvent.data.preset;
-
-            self.activateBeguilingPreset(newPreset);
+        getState().register('beguilingpreset:changed', this, function (changedEvent) {
+            self.activateBeguilingPreset(changedEvent.data.beguilingPreset);
         });
     }
 
@@ -115,5 +114,14 @@ class EnemyPack extends MapObject {
             result.push({lat: coordinates[i][0], lng: coordinates[i][1]});
         }
         return result;
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        // Clear references so they can be cleaned up properly; otherwise they stay on the map when switching floors
+        this.beguilingenemies = [];
+
+        getState().unregister('beguilingpreset:changed', this);
     }
 }

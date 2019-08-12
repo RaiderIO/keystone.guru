@@ -45,7 +45,7 @@ class MapObjectGroup extends Signalable {
      * Refreshes the objects that are displayed on the map based on the current dungeon & selected floor.
      */
     _fetchSuccess(response) {
-        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
     }
 
     /**
@@ -53,13 +53,12 @@ class MapObjectGroup extends Signalable {
      * @protected
      */
     _removeObjectsFromLayer() {
-        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         // Remove any layers that were added before
         for (let i = 0; i < this.objects.length; i++) {
-            let enemyPack = this.objects[i];
             // Remove all layers
-            this.manager.map.leafletMap.removeLayer(enemyPack.layer);
+            this.manager.map.leafletMap.removeLayer(this.objects[i].layer);
         }
     }
 
@@ -169,7 +168,7 @@ class MapObjectGroup extends Signalable {
      * @private
      */
     _onObjectDeleted(data) {
-        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         this.layerGroup.removeLayer(data.context.layer);
         // @TODO Should this be put in the dungeonmap instead?
@@ -213,7 +212,7 @@ class MapObjectGroup extends Signalable {
      * @param visible
      */
     setMapObjectVisibility(object, visible) {
-        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
@@ -267,7 +266,7 @@ class MapObjectGroup extends Signalable {
      * @return MapObject
      */
     createNew(layer) {
-        console.assert(this instanceof MapObjectGroup, this, 'this is not a MapObjectGroup');
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let object = this._createObject(layer);
         this.objects.push(object);
@@ -286,7 +285,7 @@ class MapObjectGroup extends Signalable {
      * @returns {*|boolean}
      */
     isShown() {
-        console.assert(this instanceof MapObjectGroup, this, 'this was not a MapObjectGroup');
+        console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
         return this.manager.map.leafletMap.hasLayer(this.layerGroup);
     }
 
@@ -295,7 +294,7 @@ class MapObjectGroup extends Signalable {
      * @param visible
      */
     setVisibility(visible) {
-        console.assert(this instanceof MapObjectGroup, this, 'this was not a MapObjectGroup');
+        console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
         if (!this.isShown() && visible) {
             this.manager.map.leafletMap.addLayer(this.layerGroup);
         } else if (this.isShown() && !visible) {

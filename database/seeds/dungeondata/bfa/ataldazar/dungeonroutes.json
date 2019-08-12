@@ -622,6 +622,10 @@
             {
                 "enemy_id": 261,
                 "raid_marker_id": 8
+            },
+            {
+                "enemy_id": 239,
+                "raid_marker_id": 7
             }
         ],
         "mapcomments": [

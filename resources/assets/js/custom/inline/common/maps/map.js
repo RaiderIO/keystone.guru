@@ -2,10 +2,6 @@ class CommonMapsMap extends InlineCode {
 
     constructor(options) {
         super(options);
-        // @TODO Fix this hack?
-        if (options.floorId === -1) {
-            options.floorId = dungeonData.floors[0].id;
-        }
         this._dungeonMap = null;
         this._introTexts = [];
 
@@ -51,7 +47,7 @@ class CommonMapsMap extends InlineCode {
         if (sidebar !== false) {
             $(sidebar.options.switchDungeonFloorSelect).change(function () {
                 // Pass the new floor ID to the map
-                self._dungeonMap.currentFloorId = $(sidebar.options.switchDungeonFloorSelect).val();
+                getState().setFloorId($(sidebar.options.switchDungeonFloorSelect).val());
                 self._dungeonMap.refreshLeafletMap();
             });
         }

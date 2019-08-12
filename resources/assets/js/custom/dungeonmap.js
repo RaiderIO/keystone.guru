@@ -8,13 +8,12 @@ class DungeonMap extends Signalable {
 
         this.options = options;
 
+        // Apply the map to our state first thing
+        getState().setDungeonMap(this);
+
         if (this.options.echo) {
             window.startEcho();
         }
-
-        // Keep track of whatever the current floor ID is
-        this.currentFloorId = this.options.floorId;
-        this.currentVisualType = this.options.defaultEnemyVisualType;
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -24,7 +23,7 @@ class DungeonMap extends Signalable {
             refreshTooltips();
 
             // Make sure the beguiling preset is applied now that everything's loaded
-            self.setBeguilingPreset(self.options.dungeonroute.beguiling_preset);
+            getState().setBeguilingPreset(self.options.dungeonroute.beguilingPreset);
 
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
@@ -116,7 +115,7 @@ class DungeonMap extends Signalable {
             let layers = e.layers;
             layers.eachLayer(function (layer) {
                 let mapObject = self.findMapObjectByLayer(layer);
-                console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
+                console.assert(mapObject instanceof MapObject, 'mapObject is not a MapObject', mapObject);
 
                 // No longer synced
                 mapObject.setSynced(false);
@@ -142,7 +141,7 @@ class DungeonMap extends Signalable {
 
             layers.eachLayer(function (layer) {
                 let mapObject = self.findMapObjectByLayer(layer);
-                console.assert(mapObject instanceof MapObject, mapObject, 'mapObject is not a MapObject');
+                console.assert(mapObject instanceof MapObject, 'mapObject is not a MapObject', mapObject);
 
                 if (typeof mapObject.delete === 'function') {
                     mapObject.register('object:deleted', self, layerDeletedFn);
@@ -287,7 +286,13 @@ class DungeonMap extends Signalable {
             });
         }
 
-        this.leafletMap.on('zoomend', (this._adjustZoomForLayers).bind(this));
+        this.leafletMap.on('zoomend', function () {
+            if (typeof self.leafletMap !== 'undefined') {
+                self._adjustZoomForLayers();
+                // Propagate to any other listeners
+                getState().setMapZoomLevel(self.leafletMap.getZoom());
+            }
+        });
         this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
 
@@ -297,7 +302,7 @@ class DungeonMap extends Signalable {
      * @private
      */
     _setMapInteraction(enabled) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         if (enabled) {
             this.leafletMap.dragging.enable();
@@ -326,7 +331,7 @@ class DungeonMap extends Signalable {
      * @private
      */
     _getHotkeys() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         return new Hotkeys(this);
     }
@@ -336,7 +341,7 @@ class DungeonMap extends Signalable {
      * @private
      */
     _createAdditionalControlPlaceholders() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let corners = this.leafletMap._controlCorners,
             l = 'leaflet-',
@@ -361,7 +366,7 @@ class DungeonMap extends Signalable {
      * @protected
      */
     _getMapObjectGroupNames() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         // Remove the hidden groups from the list of available groups
         return _.difference(MAP_OBJECT_GROUP_NAMES, this.options.hiddenMapObjectGroups);
@@ -374,7 +379,7 @@ class DungeonMap extends Signalable {
      * @private
      */
     _createMapControls(editableLayers) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let result = [];
 
@@ -407,12 +412,12 @@ class DungeonMap extends Signalable {
 
     /**
      * Fixes the border width for based on current zoom of the map
+     * @TODO This should be moved to all layers that actually have a setStyle property and listen to getState() call instead.
      * @private
      */
     _adjustZoomForLayers() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        // @TODO Verify if this code still does what it's supposed to do?
         for (let i = 0; i < this.mapObjects.length; i++) {
             let layer = this.mapObjects[i].layer;
             if (layer.hasOwnProperty('setStyle')) {
@@ -433,6 +438,7 @@ class DungeonMap extends Signalable {
      * @returns {boolean}
      */
     hasPopupOpen() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = false;
         for (let i = 0; i < this.mapObjects.length; i++) {
             let mapObject = this.mapObjects[i];
@@ -451,6 +457,7 @@ class DungeonMap extends Signalable {
      * @returns {*}|bool
      */
     getFloorById(floorId) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = false;
 
         for (let i = 0; i < this.dungeonData.floors.length; i++) {
@@ -465,32 +472,11 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Gets the data of the currently selected floor
-     * @returns {boolean|Object}
-     */
-    getCurrentFloor() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
-
-        let self = this;
-        let result = false;
-        // Iterate over the found floors
-        $.each(this.dungeonData.floors, function (index, value) {
-            // Find the floor we're looking for
-            if (parseInt(value.id) === parseInt(self.currentFloorId)) {
-                result = value;
-                return false;
-            }
-        });
-
-        return result;
-    }
-
-    /**
      * Finds a map object by means of a Leaflet layer.
      * @param layer object The layer you want the map object for.
      */
     findMapObjectByLayer(layer) {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let result = false;
         for (let i = 0; i < this.mapObjects.length; i++) {
@@ -515,7 +501,7 @@ class DungeonMap extends Signalable {
      * Refreshes the leaflet map so
      */
     refreshLeafletMap() {
-        console.assert(this instanceof DungeonMap, this, 'this is not a DungeonMap');
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let self = this;
 
@@ -534,7 +520,7 @@ class DungeonMap extends Signalable {
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
 
-        this.mapTileLayer = L.tileLayer('/images/tiles/' + this.dungeonData.expansion.shortname + '/' + this.dungeonData.key + '/' + this.getCurrentFloor().index + '/{z}/{x}_{y}.png', {
+        this.mapTileLayer = L.tileLayer('/images/tiles/' + this.dungeonData.expansion.shortname + '/' + this.dungeonData.key + '/' + getState().getCurrentFloor().index + '/{z}/{x}_{y}.png', {
             maxZoom: 5,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: L.point(384, 256),
@@ -609,6 +595,8 @@ class DungeonMap extends Signalable {
      * @returns {boolean}
      */
     isEnemySelectionEnabled() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
         return this.currentEnemySelection !== null;
     }
 
@@ -617,6 +605,8 @@ class DungeonMap extends Signalable {
      * @returns {null}
      */
     getEnemySelection() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
         return this.currentEnemySelection;
     }
 
@@ -625,7 +615,8 @@ class DungeonMap extends Signalable {
      * @param enemySelection The instance of an EnemySelection object which defines what may be selected.
      */
     startEnemySelection(enemySelection) {
-        console.assert(enemySelection instanceof EnemySelection, this, 'enemySelection is not an EnemySelection');
+        console.assert(enemySelection instanceof EnemySelection, 'enemySelection is not an EnemySelection', this);
+
         if (this.currentEnemySelection === null) {
             this.currentEnemySelection = enemySelection;
             this.signal('map:enemyselectionmodechanged', {enemySelection: this.currentEnemySelection, finished: false});
@@ -639,6 +630,8 @@ class DungeonMap extends Signalable {
      * Finishes the current enemy selection, if there's one going on at the moment.
      */
     finishEnemySelection() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
         if (this.currentEnemySelection !== null) {
             this.currentEnemySelection.cancelSelectMode();
             this.signal('map:enemyselectionmodechanged', {enemySelection: this.currentEnemySelection, finished: true});
@@ -653,6 +646,8 @@ class DungeonMap extends Signalable {
      * @returns {boolean|*}
      */
     isTryModeEnabled() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
         return this.options.try && this.options.edit;
     }
 
@@ -661,42 +656,9 @@ class DungeonMap extends Signalable {
      * @returns {*}
      */
     getDungeonRoute() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
         return this.options.dungeonroute;
-    }
-
-    /**
-     * Sets the visual type that is currently being displayed.
-     * @param visualType
-     */
-    setVisualType(visualType) {
-        this.currentVisualType = visualType;
-    }
-
-    /**
-     * Get the default visual to display for all enemies.
-     * @returns {string}
-     */
-    getVisualType() {
-        return this.currentVisualType;
-    }
-
-    /**
-     * Sets the beguiling preset that is currently displayed on the map.
-     * @param preset int
-     */
-    setBeguilingPreset(preset) {
-        this.options.beguiling_preset = preset;
-
-        // Let everyone know it's changed
-        this.signal('beguiling_preset:changed', {preset: preset});
-    }
-
-    /**
-     * Get the beguiling preset that is currently displayed on the map.
-     * @returns {string}
-     */
-    getBeguilingPreset() {
-        return this.options.beguiling_preset;
     }
 
     /**
@@ -704,6 +666,8 @@ class DungeonMap extends Signalable {
      * @returns {boolean}
      */
     isPatherActive() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
         return this.pather !== null && this.pather.getMode() === L.Pather.MODE.CREATE;
     }
 
