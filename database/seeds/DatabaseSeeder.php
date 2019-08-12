@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FactionsSeeder::class);
         $this->call(NpcClassificationsSeeder::class);
         $this->call(NpcClassesSeeder::class);
+        $this->call(NpcTypesSeeder::class);
         $this->call(RaidMarkersSeeder::class);
         $this->call(ReleaseChangelogCategorySeeder::class);
         $this->call(ReleasesSeeder::class);

@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class NpcType extends Model
 {
-    protected $attributes = ['type_key'];
     protected $fillable = ['id', 'type'];
     public $timestamps = false;
 

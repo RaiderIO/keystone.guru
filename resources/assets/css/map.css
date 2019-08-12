@@ -411,7 +411,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .boss {
-    background-image: url('/images/mapicon/boss.png') !important;
+    background-image: url('/images/enemyclassifications/boss.png') !important;
 }
 
 .enemy_icon.melee,

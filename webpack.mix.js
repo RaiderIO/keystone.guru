@@ -213,14 +213,16 @@ if (images) {
     mix.copy('resources/assets/images/classes', 'public/images/classes', false);
     mix.copy('resources/assets/images/echo', 'public/images/echo', false);
     mix.copy('resources/assets/images/enemyclasses', 'public/images/enemytypes', false);
+    mix.copy('resources/assets/images/enemyclassifications', 'public/images/enemyclassifications', false);
+    mix.copy('resources/assets/images/enemymodifiers', 'public/images/enemymodifiers', false);
     mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);
-    mix.copy('resources/assets/images/oauth', 'public/images/oauth', false);
     mix.copy('resources/assets/images/home', 'public/images/home', false);
     mix.copy('resources/assets/images/icon', 'public/images/icon', false);
     mix.copy('resources/assets/images/lib', 'public/images/lib', false);
     mix.copy('resources/assets/images/mapicon', 'public/images/mapicon', false);
+    mix.copy('resources/assets/images/oauth', 'public/images/oauth', false);
     mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);
     mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes', false);
     mix.copy('resources/assets/images/specializations', 'public/images/specializations', false);
