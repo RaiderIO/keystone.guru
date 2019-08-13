@@ -21,6 +21,10 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
                 'route-publish' => true
             ]
         ])
+
+        @include('common.maps.killzonessidebar', [
+
+        ])
     </div>
 
     <!-- Modal settings -->

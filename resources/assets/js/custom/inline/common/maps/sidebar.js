@@ -16,9 +16,10 @@ class CommonMapsSidebar extends InlineCode {
 
         $(this.options.switchDungeonFloorSelect).val(this.options.defaultSelectedFloorId);
 
-        $('#sidebarToggle').on('click', function () {
+        let $sidebar = $(this.options.sidebarSelector);
+        $(this.options.sidebarToggleSelector).on('click', function () {
             // Dismiss
-            if ($('#sidebar').hasClass('active')) {
+            if ($sidebar.hasClass('active')) {
                 self._hideSidebar();
             }
             // Show
@@ -29,7 +30,7 @@ class CommonMapsSidebar extends InlineCode {
             refreshTooltips();
         });
 
-        $("#sidebar").mCustomScrollbar({
+        $sidebar.mCustomScrollbar({
             theme: "minimal"
         });
 
@@ -63,8 +64,8 @@ class CommonMapsSidebar extends InlineCode {
      * @private
      */
     _hideSidebar() {
-        let $sidebar = $('#sidebar');
-        let $sidebarToggle = $('#sidebarToggle');
+        let $sidebar = $(this.options.sidebarSelector);
+        let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
         // Hide sidebar
         $sidebar.removeClass('active');
@@ -80,8 +81,8 @@ class CommonMapsSidebar extends InlineCode {
      * @private
      */
     _showSidebar() {
-        let $sidebar = $('#sidebar');
-        let $sidebarToggle = $('#sidebarToggle');
+        let $sidebar = $(this.options.sidebarSelector);
+        let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
         // Open sidebar
         $sidebar.addClass('active');

@@ -39,11 +39,10 @@ html, body, #map, #app, .wrapper {
     max-width: 80%;
 }
 
-#sidebar {
+.sidebar {
     width: 300px;
     position: fixed;
     top: 0;
-    left: -300px;
     height: 100vh;
     z-index: 1030;
     transition: all 0.2s;
@@ -52,11 +51,23 @@ html, body, #map, #app, .wrapper {
     border-right: #2B3E50 solid 1px;
 }
 
-#sidebar.active {
+.sidebar.anchor-left {
+    left: -300px;
+}
+
+.sidebar.anchor-left.active {
     left: 0;
 }
 
-#sidebarToggle {
+.sidebar.anchor-right {
+    right: -300px;
+}
+
+.sidebar.anchor-right.active {
+    right: 0;
+}
+
+.sidebar-toggle {
     width: 35px;
     height: 35px;
     line-height: 35px;
@@ -77,47 +88,47 @@ html, body, #map, #app, .wrapper {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
-#sidebarToggle.active {
+.sidebar-toggle.active {
     left: 300px;
 }
 
-#sidebarToggle:hover {
+.sidebar-toggle:hover {
     background: #DF691A;
     color: #FFF;
 }
 
-#sidebar .sidebar-header {
+.sidebar .sidebar-header {
     padding: 10px 20px;
     background: #2B3E50;
 }
 
 /* Force reserve height */
-#sidebar .sidebar-header h4 {
+.sidebar .sidebar-header h4 {
     -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap
 }
 
-#sidebar .sidebar-header-subtitle {
+.sidebar .sidebar-header-subtitle {
     padding-left: 10px;
     min-height: 25px;
     color: #C1C1C1;
 }
 
-#sidebar .sidebar-content .container {
+.sidebar .sidebar-content .container {
     padding: 0 15px;
 }
 
-#sidebar .sidebar-content {
+.sidebar .sidebar-content {
     padding-top: 10px;
 }
 
-#sidebar .sidebar-content .card-body {
+.sidebar .sidebar-content .card-body {
     padding: 0.75rem 1.25rem;
 }
 
-#sidebar .sidebar-panel {
+.sidebar .sidebar-panel {
     /*padding: 10px;*/
     /*border: #2B3E50 solid 1px;*/
     margin: 4px;
@@ -216,7 +227,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .floating_panel,
-#sidebar .card {
+.sidebar .card {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -610,7 +621,7 @@ html, body, #map, #app, .wrapper {
 }
 
 /* When in the sidebar, spread it out fully */
-#sidebar #map_enemy_visuals {
+.sidebar #map_enemy_visuals {
     width: 100%;
 }
 

@@ -78,4 +78,9 @@ $floorId = isset($floorId) ? $floorId : $dungeon->floors[0]->id;
     </div>
 @endsection
 
-@include('common.maps.sidebar', ['header' => __('Admin toolbox'), 'selectedFloorId' => $floorId])
+@include('common.maps.sidebar', [
+'header' => __('Admin toolbox'),
+'anchor' => 'left',
+'id' => 'admineditsidebar',
+'selectedFloorId' => $floorId
+])

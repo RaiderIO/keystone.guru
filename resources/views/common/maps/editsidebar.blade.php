@@ -4,14 +4,20 @@
 
 $show = isset($show) ? $show : [];
 // May not be set in the case of a tryout version
-if (isset($model)) {
+if (isset($model))
+{
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
 ?>
 @include('common.general.inline', ['path' => 'common/maps/editsidebar'])
 
-@section('sidebar-content')
 
+@component('common.maps.sidebar', [
+'header' => __('Toolbox'),
+'anchor' => 'left',
+'id' => 'editsidebar',
+'selectedFloorId' => $dungeon->floors[0]->id
+])
     @isset($show['shareable-link'])
         <!-- Shareable link -->
         <div class="form-group">
@@ -152,6 +158,4 @@ if (isset($model)) {
             </div>
         </div>
     @endisset
-@endsection
-
-@include('common.maps.sidebar', ['header' => __('Toolbox'), 'selectedFloorId' => $dungeon->floors[0]->id])
+@endcomponent
