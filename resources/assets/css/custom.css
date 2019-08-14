@@ -332,6 +332,10 @@
     border-top-right-radius: 5px;
 }
 
+.affixes_overview_table .last_column.first_row:not(.current_week) {
+    border-top-left-radius: 5px;
+}
+
 /** When the top row is the current week, don't show the rounded border in the top left corner; looks strange */
 .affixes_overview_table .current_week.first_column:not(.current_week) {
     border-top-left-radius: 5px;
