@@ -107,7 +107,7 @@ class SiteController extends Controller
      */
     public function affixes(Request $request, SeasonService $seasonService)
     {
-        return view('misc.affixes', ['seasonService' => $seasonService]);
+        return view('misc.affixes', ['seasonService' => $seasonService, 'offset' => $request->get('offset', 0)]);
     }
 
     /**
