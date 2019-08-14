@@ -39,7 +39,7 @@ $analytics = isset($analytics) ? $analytics : $isProduction;
 $version = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 
 $newChangelog = isset($_COOKIE['changelog_release']) ? \App\Models\Release::max('id') > (int)$_COOKIE['changelog_release'] : true;
-$newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['changelog_release'] === 1 : true;
+$newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 : true;
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
