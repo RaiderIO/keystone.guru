@@ -72,7 +72,7 @@ if ($timezone === null) {
             <td>
                 <div class="affix_row first_column {{ $currentWeekClass }}">
                     <span>
-                        {{ $startDate->format('Y/M/d') }})
+                        {{ $startDate->format('Y/M/d') }}
                     </span>
                     <span class="d-xl-inline d-none">
                         {{ $startDate->format(' @ H\h') }}
