@@ -330,9 +330,16 @@
 .affixes_overview_table .last_column.first_row {
     border-top: orange 3px solid;
     border-top-right-radius: 5px;
+}
+
+.affixes_overview_table .last_column.first_row:not(.current_week) {
     border-top-left-radius: 5px;
 }
 
+/** When the top row is the current week, don't show the rounded border in the top left corner; looks strange */
+.affixes_overview_table .current_week.first_column:not(.current_week) {
+    border-top-left-radius: 5px;
+}
 .affixes_overview_table .last_column.last_row {
     border-bottom: orange 3px solid;
     border-bottom-right-radius: 5px;
@@ -340,15 +347,15 @@
 }
 
 .affixes_overview_table .current_week {
-    border-top: rgb(235, 235, 235) 3px solid;
-    border-bottom: rgb(235, 235, 235) 3px solid;
+    border-top: rgb(235, 235, 235) 3px solid !important;
+    border-bottom: rgb(235, 235, 235) 3px solid !important;
     background-color: #2B3E50;
 }
 
 .affixes_overview_table .current_week.first_column {
     border-left: rgb(235, 235, 235) 3px solid;
-    border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .affixes_overview_table .current_week.last_column {

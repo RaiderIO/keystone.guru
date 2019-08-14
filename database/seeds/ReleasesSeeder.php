@@ -13,6 +13,7 @@ class ReleasesSeeder extends Seeder
     {
         $this->_rollback();
 
+        $this->command->info('Adding releases');
         $rootDir = database_path('/seeds/releases/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
@@ -47,6 +48,7 @@ class ReleasesSeeder extends Seeder
             }
 
             // Save the release last!
+            $this->command->info(sprintf('Adding release %s', $modelsData['version']));
             $release = new \App\Models\Release([
                 'id' => $modelsData['id'],
                 'release_changelog_id' => $modelsData['release_changelog_id'],

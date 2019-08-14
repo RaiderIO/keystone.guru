@@ -15,5 +15,5 @@ interface SeasonServiceInterface
 
     function getAffixGroupIndexAt($date);
 
-    function getDisplayedAffixGroups();
+    function getDisplayedAffixGroups($iterationOffset);
 }
