@@ -99,7 +99,7 @@ if ($timezone === null) {
                         <div class="col d-lg-block d-none pl-1">
                             {{ $affix->name }}
                             @if($lastColumn && $affixGroup->season->presets > 0 )
-                                {{ __(sprintf('preset %s', $affixGroup->season->getWeeksSinceStartAt($startDate) % $affixGroup->season->presets + 1)) }}
+                                {{ __(sprintf('preset %s', $affixGroup->season->getPresetAt($startDate))) }}
                             @endif
                         </div>
                     </div>

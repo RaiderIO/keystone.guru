@@ -13,7 +13,7 @@ $showNoAttributes = isset($showNoAttributes) ? $showNoAttributes : false;
         <label for="attributes">{{ __('Attributes') }}</label>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
         __('Attributes describe what features your route has that others may not be able to complete due to composition ' .
-            'differences or skill. Marking attributes properly enables others to find your route more easily.')
+            'differences or skill. Marking attributes properly enables others to find routes that fit them more easily.')
          }}"></i>
     @endif
     <?php
