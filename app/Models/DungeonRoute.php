@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
+use App\Service\Season\SeasonService;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -479,9 +481,10 @@ class DungeonRoute extends Model
      * Saves this DungeonRoute with information from the passed Request.
      *
      * @param Request $request
+     * @param SeasonService $seasonService
      * @return bool
      */
-    public function saveFromRequest(Request $request)
+    public function saveFromRequest(Request $request, SeasonService $seasonService)
     {
         $result = false;
 
@@ -507,6 +510,8 @@ class DungeonRoute extends Model
             $this->unlisted = intval($request->get('unlisted', 0)) > 0;
         }
         $this->demo = intval($request->get('demo', 0)) > 0;
+        $this->beguiling_preset = $seasonService->getCurrentSeason()->getPresetAt(Carbon::now());
+
 
         // Update or insert it
         if ($this->save()) {

@@ -82,8 +82,9 @@ if ($timezone === null) {
             <?php
             $affixIndex = 0;
             foreach($affixGroup->affixes as $affix) {
+                $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
             $class = $currentWeekClass;
-            $class .= count($affixGroup->affixes) - 1 === $affixIndex ? 'last_column ' : '';
+            $class .= $lastColumn ? 'last_column ' : '';
             $class .= ($affixGroupIndex === 0) ? 'first_row ' : '';
             $class .= $affixGroups->count() - 1 === $affixGroupIndex ? 'last_row ' : '';
             ?>
@@ -97,6 +98,9 @@ if ($timezone === null) {
                         </div>
                         <div class="col d-lg-block d-none pl-1">
                             {{ $affix->name }}
+                            @if($lastColumn && $affixGroup->season->presets > 0 )
+                                {{ __(sprintf('preset %s', $affixGroup->season->getPresetAt($startDate))) }}
+                            @endif
                         </div>
                     </div>
                 </div>

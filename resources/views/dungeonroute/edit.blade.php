@@ -39,7 +39,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
                             </h3>
                             <div class='form-group'>
                                 <label for="dungeon_route_title">
-                                    {{ __('Title') }}*
+                                    {{ __('Title') }} <span class="form-required">*</span>
                                     <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                                 __('Choose a title that will uniquely identify the route for you over other similar routes you may create.')
                                  }}"></i>
