@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
  * @property $id int
  * @property $seasonal_affix_id int
  * @property $start datetime
+ * @property $presets int
  *
  * @property Collection $affixgroups
  *
