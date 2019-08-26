@@ -83,7 +83,7 @@ class DungeonRoutePolicy
      */
     public function clone(User $user, DungeonRoute $dungeonroute)
     {
-        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->published || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**
