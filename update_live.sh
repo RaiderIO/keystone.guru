@@ -25,10 +25,10 @@ php artisan db:seed --database=migrate --force
 
 # Clear any caches, we just updated
 php artisan optimize:clear
-# Generate config cache
-php artisan config:clear
 # Generate route cache
 php artisan route:cache
+# Generate config cache
+php artisan config:clear
 # Restart queue processors
 php artisan queue:restart
 

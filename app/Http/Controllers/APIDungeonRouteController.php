@@ -24,6 +24,7 @@ use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
 use App\Models\Team;
+use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -173,10 +174,11 @@ class APIDungeonRouteController extends Controller
     /**
      * @param APIDungeonRouteFormRequest $request
      * @param DungeonRoute $dungeonroute
+     * @param SeasonService $seasonService
      * @return array
      * @throws \Exception
      */
-    function store(APIDungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null)
+    function store(APIDungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
     {
         $this->authorize('edit', $dungeonroute);
 
@@ -185,7 +187,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Update or insert it
-        if (!$dungeonroute->saveFromRequest($request)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
             abort(500, 'Unable to save dungeonroute');
         }
 
