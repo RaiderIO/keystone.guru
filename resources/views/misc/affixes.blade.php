@@ -129,7 +129,7 @@ if ($timezone === null) {
 
     <div class="mt-4 col-12 text-center">
         <p>
-            {!!  __('For more information about affixes and M+, please visit') !!}
+            {{ __('Last updated at 2019/Aug/28.') }} {!!  __('For more information about affixes and M+, please visit') !!}
             <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>
         </p>
     </div>
