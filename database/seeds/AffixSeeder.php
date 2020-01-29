@@ -37,7 +37,8 @@ class AffixSeeder extends Seeder
             new Affix(['name' => 'Tyrannical', 'icon_file_id' => -1, 'description' => 'Boss enemies have 40% more health and inflict up to 15% increased damage.']),
             new Affix(['name' => 'Volcanic', 'icon_file_id' => -1, 'description' => 'While in combat, enemies periodically cause gouts of flame to erupt beneath the feet of distant players.']),
             new Affix(['name' => 'Reaping', 'icon_file_id' => -1, 'description' => 'Non-boss enemies are empowered by Bwonsamdi and periodically seek vengeance from beyond the grave.']),
-            new Affix(['name' => 'Beguiling', 'icon_file_id' => -1, 'description' => 'Azshara\'s Emissaries are present throughout the dungeon.'])
+            new Affix(['name' => 'Beguiling', 'icon_file_id' => -1, 'description' => 'Azshara\'s Emissaries are present throughout the dungeon.']),
+            new Affix(['name' => 'Awakened', 'icon_file_id' => -1, 'description' => 'Obelisks throughout the dungeon allow players to enter Ny\'alotha and confront powerful servants of N\'Zoth. If a servant is not dealt with, they must be faced during the final boss encounter.'])
         ];
 
         foreach ($affixes as $affix) {
@@ -95,6 +96,19 @@ class AffixSeeder extends Seeder
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Raging', 'Explosive', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Beguiling']],
+
+            ['season_id' => 4, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Bursting', 'Necrotic', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Fortified', 'Sanguine', 'Quaking', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Fortified', 'Bolstering', 'Grievous', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Raging', 'Explosive', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Awakened']],
+            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Awakened']],
         ];
 
         foreach ($groups as $groupArr) {

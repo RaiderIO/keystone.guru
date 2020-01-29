@@ -16,20 +16,6 @@ if ($timezone === null) {
 @section('header-title', __('Weekly affixes in ' . $region->name))
 
 @section('content')
-
-    @if(!isAlertDismissed('affixes-s3-inaccurate-warning'))
-        <div class="alert alert-info alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close"
-               data-alert-dismiss-id="affixes-s3-inaccurate-warning">
-                <i class="fas fa-times"></i>
-            </a>
-            <i class="fas fa-info-circle"></i>
-            {{ __('Due to the schedule for M+ season 3 not being published yet this page may be incorrect or out of
-            date. I will update the page weekly to reflect the current week and/or the entire schedule as it becomes
-            available.') }}
-        </div>
-    @endif
-
     <table class="affixes_overview_table table-striped" width="100%">
         <thead>
         <tr>
@@ -129,7 +115,7 @@ if ($timezone === null) {
 
     <div class="mt-4 col-12 text-center">
         <p>
-            {{ __('Last updated at 2019/Aug/28.') }} {!!  __('For more information about affixes and M+, please visit') !!}
+            {{ __('Last updated at 2020/Jan/22.') }} {!!  __('For more information about affixes and M+, please visit') !!}
             <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>
         </p>
     </div>
