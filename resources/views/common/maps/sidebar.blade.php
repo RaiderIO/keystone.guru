@@ -1,5 +1,5 @@
 <?php
-$isMobile        = (new \Jenssegers\Agent\Agent())->isMobile();
+$isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/sidebar', 'options' => [
@@ -9,7 +9,8 @@ $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
     'defaultSelectedFloorId' => $selectedFloorId,
 ]])
 
-<div id="{{ $id }}Toggle" class="sidebar-toggle {{ $isMobile ? '' : 'active' }}" data-toggle="tooltip">
+<div id="{{ $id }}Toggle" class="sidebar-toggle anchor-{{$anchor}} {{ $isMobile ? '' : 'active' }}"
+     data-toggle="tooltip">
     <i class="fas fa-arrow-{{ $isMobile ? 'right' : 'left' }}"></i>
 </div>
 
@@ -17,14 +18,18 @@ $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
 <nav id="{{ $id }}" class="sidebar anchor-{{$anchor}} {{ $isMobile ? '' : 'active' }}">
     <div class="sidebar-header">
         <h4 title="{!! $header !!}" data-toggle="tooltip">{!! $header !!}</h4>
-        <div class="sidebar-header-subtitle">
-            @isset($subHeader)
-                {!! $subHeader !!}
-            @endisset
-        </div>
-        <span>
-            <a href="{{ route('home') }}"><i class="fas fa-arrow-left"></i> {{ __('Back to Keystone.guru') }}</a>
-        </span>
+        @isset($customSubHeader)
+            {!! $customSubHeader !!}
+        @else
+            <div class="sidebar-header-subtitle">
+                @isset($subHeader)
+                    {!! $subHeader !!}
+                @endisset
+            </div>
+            <div>
+                <a href="{{ route('home') }}"><i class="fas fa-arrow-left"></i> {{ __('Back to Keystone.guru') }}</a>
+            </div>
+        @endisset
     </div>
 
     <div class="sidebar-content">

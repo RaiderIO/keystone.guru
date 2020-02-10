@@ -46,13 +46,13 @@ html, body, #map, #app, .wrapper {
     height: 100vh;
     z-index: 1030;
     transition: all 0.2s;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     background-color: #4E5D6C;
-    border-right: #2B3E50 solid 1px;
 }
 
 .sidebar.anchor-left {
     left: -300px;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    border-right: #2B3E50 solid 1px;
 }
 
 .sidebar.anchor-left.active {
@@ -61,6 +61,8 @@ html, body, #map, #app, .wrapper {
 
 .sidebar.anchor-right {
     right: -300px;
+    box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.2);
+    border-left: #2B3E50 solid 1px;
 }
 
 .sidebar.anchor-right.active {
@@ -79,17 +81,29 @@ html, body, #map, #app, .wrapper {
 
     position: fixed;
     top: 106px;
-    left: 0;
     cursor: pointer;
     z-index: 1050;
 
     background: #4E5D6C;
     color: #DF691A;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
-.sidebar-toggle.active {
+.sidebar-toggle.anchor-left {
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    left: 0;
+}
+
+.sidebar-toggle.anchor-right {
+    box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.2);
+    right: 0;
+}
+
+.sidebar-toggle.anchor-left.active {
     left: 300px;
+}
+
+.sidebar-toggle.anchor-right.active {
+    right: 300px;
 }
 
 .sidebar-toggle:hover {
@@ -114,6 +128,10 @@ html, body, #map, #app, .wrapper {
     padding-left: 10px;
     min-height: 25px;
     color: #C1C1C1;
+}
+
+.sidebar .sidebar-header-pulls-spacer {
+    min-height: 11px;
 }
 
 .sidebar .sidebar-content .container {

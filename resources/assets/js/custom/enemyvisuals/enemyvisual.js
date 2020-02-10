@@ -29,12 +29,12 @@ class EnemyVisual extends Signalable {
         // If it changed, refresh the entire visual
         this.enemy.register('enemy:set_raid_marker', this, this._buildVisual.bind(this));
 
-        this.layer.on('mouseover', function () {
-            self._mouseOver();
-        });
-        this.layer.on('mouseout', function () {
-            self._mouseOut();
-        });
+        // this.layer.on('mouseover', function () {
+        //     self._mouseOver();
+        // });
+        // this.layer.on('mouseout', function () {
+        //     self._mouseOut();
+        // });
     }
 
     /**

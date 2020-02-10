@@ -14,7 +14,17 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
 
 @include('common.general.inline', ['path' => 'common/maps/viewsidebar', 'options' => $model])
 
-@section('sidebar-content')
+@section('modal-content')
+    @include('common.userreport.dungeonroute')
+@overwrite
+@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+
+@component('common.maps.sidebar', [
+'header' => $model->title,
+'subHeader' => $subTitle,
+'anchor' => 'left',
+'id' => 'viewsidebar',
+'selectedFloorId' => $model->dungeon->floors[0]->id])
     <!-- Enemy forces -->
     <div class="form-group">
         <div class="card">
@@ -205,11 +215,4 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
             </div>
         </div>
     </div>
-@endsection
-
-@section('modal-content')
-    @include('common.userreport.dungeonroute')
-@overwrite
-@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
-
-@include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $subTitle, 'selectedFloorId' => $model->dungeon->floors[0]->id])
+@endcomponent

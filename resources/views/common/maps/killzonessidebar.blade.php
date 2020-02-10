@@ -8,9 +8,10 @@
 @endsection
 
 @component('common.maps.sidebar', [
-'header' => __('Toolbox'),
+'header' => __('Pulls'),
 'anchor' => 'right',
 'id' => 'killzonesidebar',
+'customSubHeader' => '<div class="sidebar-header-pulls-spacer"></div><button class="btn btn-primary w-100"><i class="fas fa-plus"></i> ' . __('New Pull') . '</button>',
 'selectedFloorId' => 0
 ])
     <div class="bg-danger h-100">
