@@ -13,25 +13,25 @@
                 "release_changelog_id": 39,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed being unable to delete routes"
+                "change": "Fixed being unable to delete routes."
             },
             {
                 "release_changelog_id": 39,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed issue where if someone edited ?offset=something it'd crash"
+                "change": "Fixed issue where if someone edited ?offset=something it'd crash."
             },
             {
                 "release_changelog_id": 39,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed affixes not being saved"
+                "change": "Fixed affixes not being saved."
             },
             {
                 "release_changelog_id": 39,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed crash when attempting to edit route details"
+                "change": "Fixed crash when attempting to edit route details."
             }
         ]
     }
