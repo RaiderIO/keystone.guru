@@ -159,6 +159,7 @@ class Season extends Model
      */
     public function getPresetAt(Carbon $date)
     {
-        return $this->getWeeksSinceStartAt($date) % $this->presets + 1;
+        // Only if the current season has presets do we calculate, otherwise return 0
+        return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets + 1 : 0;
     }
 }
