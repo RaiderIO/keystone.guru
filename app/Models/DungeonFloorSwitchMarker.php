@@ -10,12 +10,21 @@ use Illuminate\Database\Eloquent\Model;
  * @property $target_floor_id int
  * @property $lat float
  * @property $lng float
+ * @property $direction string
  *
  * @mixin \Eloquent
  */
 class DungeonFloorSwitchMarker extends Model
 {
+    protected $appends = ['direction'];
+
     public $timestamps = false;
+
+    public function getDirectionAttribute(){
+        $floorCoupling = FloorCoupling::where('floor1_id', $this->floor_id)->where('floor2_id', $this->target_floor_id)->first();
+
+        return $floorCoupling === null ? 'unknown' : $floorCoupling->direction;
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

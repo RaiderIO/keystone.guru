@@ -594,6 +594,38 @@ html, body, #map, #app, .wrapper {
     background: url('/images/mapicon/door.png') no-repeat center !important;
 }
 
+.door_locked_icon {
+    background: url('/images/mapicon/door_locked.png') no-repeat center !important;
+}
+
+.door_up_icon {
+    background: url('/images/mapicon/door_up.png') no-repeat center !important;
+}
+
+.door_down_icon {
+    background: url('/images/mapicon/door_down.png') no-repeat center !important;
+}
+
+.door_left_icon {
+    background: url('/images/mapicon/door_left.png') no-repeat center !important;
+}
+
+.door_right_icon {
+    background: url('/images/mapicon/door_right.png') no-repeat center !important;
+}
+
+.dungeon_start_icon {
+    background: url('/images/mapicon/dungeon_start.png') no-repeat center !important;
+}
+
+.graveyard_icon {
+    background: url('/images/mapicon/graveyard.png') no-repeat center !important;
+}
+
+.warlock_gateway_icon {
+    background: url('/images/mapicon/warlock_gateway.png') no-repeat center !important;
+}
+
 .killzone_icon_big {
     margin-left: -19px !important;
     margin-top: -19px !important;

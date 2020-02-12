@@ -136,24 +136,24 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'The High Gate',
                         'to' => 'Fields of the Eternal Hunt',
-                        'direction' => 'equal'
+                        'direction' => 'right'
                     ],
                     [
                         'from' => 'Fields of the Eternal Hunt',
                         'to' => 'The High Gate',
-                        'direction' => 'equal'
+                        'direction' => 'top'
                     ],
 
 
                     [
                         'from' => 'The High Gate',
                         'to' => 'Halls of Valor',
-                        'direction' => 'equal'
+                        'direction' => 'up'
                     ],
                     [
                         'from' => 'Halls of Valor',
                         'to' => 'The High Gate',
-                        'direction' => 'equal'
+                        'direction' => 'down'
                     ]
                 ]
             ], 'Lower Karazhan' => [
@@ -340,12 +340,12 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'Shrine of the Storm',
                         'to' => 'Storm\'s End',
-                        'direction' => 'equal'
+                        'direction' => 'right'
                     ],
                     [
                         'from' => 'Storm\'s End',
                         'to' => 'Shrine of the Storm',
-                        'direction' => 'equal'
+                        'direction' => 'left'
                     ],
                 ]
             ],
@@ -416,12 +416,12 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'The Underrot',
                         'to' => 'Ruin\'s Descent',
-                        'direction' => 'equal'
+                        'direction' => 'left'
                     ],
                     [
                         'from' => 'Ruin\'s Descent',
                         'to' => 'The Underrot',
-                        'direction' => 'equal'
+                        'direction' => 'up'
                     ]
                 ]
             ],
@@ -457,12 +457,12 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'Tol Dagor',
                         'to' => 'The Drain',
-                        'direction' => 'equal'
+                        'direction' => 'left'
                     ],
                     [
                         'from' => 'The Drain',
                         'to' => 'Tol Dagor',
-                        'direction' => 'equal'
+                        'direction' => 'right'
                     ],
 
 
