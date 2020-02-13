@@ -292,6 +292,8 @@ class AdminToolsController extends Controller
                 $enemyPatrols = EnemyPatrol::where('floor_id', $floor->id)->get()->values();
                 $dungeonStartMarkers = DungeonStartMarker::where('floor_id', $floor->id)->get()->values();
                 $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', $floor->id)->get()->values();
+                // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
+                $dungeonFloorSwitchMarkers->makeHidden(['direction']);
                 $mapComments = MapComment::where('floor_id', $floor->id)->where('always_visible', true)->get()->values();
                 // Map comments can ALSO be added by users, thus we never know where this thing comes. As such, insert it
                 // at the end of the table instead.

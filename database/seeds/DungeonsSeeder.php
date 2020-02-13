@@ -141,7 +141,7 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'Fields of the Eternal Hunt',
                         'to' => 'The High Gate',
-                        'direction' => 'top'
+                        'direction' => 'up'
                     ],
 
 

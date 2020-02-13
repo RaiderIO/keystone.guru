@@ -108,6 +108,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         // Only admins may view a list of profiles
         Route::get('profiles', 'ProfileController@list')->name('profile.list');
 
+        Route::get('phpinfo', 'SiteController@phpinfo')->name('misc.phpinfo');
+
         Route::group(['prefix' => 'admin'], function () {
             // Dungeons
             Route::get('dungeon/new', 'DungeonController@new')->name('admin.dungeon.new');
