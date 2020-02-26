@@ -14,7 +14,7 @@ class RemoveBeguilingPresetFromDungeonRoutesTable extends Migration
     public function up()
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
-            $table->removeColumn('beguiling_preset');
+            $table->dropColumn('beguiling_preset');
         });
     }
 

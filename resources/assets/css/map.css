@@ -498,25 +498,6 @@ html, body, #map, #app, .wrapper {
     background-image: url('/images/enemytypes/undead.png') !important;
 }
 
-/**
- * Beguiling
- */
-
-.beguiling .enchanted {
-    background-image: url('/images/enemytypes/enchanted.png') !important;
-    background-color: #e1e0dd;
-}
-
-.beguiling .void {
-    background-image: url('/images/enemytypes/void.png') !important;
-    background-color: #e1e0dd;
-}
-
-.beguiling .tide {
-    background-image: url('/images/enemytypes/tide.png') !important;
-    background-color: #e1e0dd;
-}
-
 .teeming {
     background-color: #3d3cff;
 }
@@ -524,10 +505,6 @@ html, body, #map, #app, .wrapper {
 .aggressive_enemy_icon {
     background-image: url('/images/mapicon/unset.png') !important; /* no-repeat center !important; */
     background-color: #dc3c3c;
-}
-
-.beguiling {
-    background-color: #7f2480;
 }
 
 .dangerous {
