@@ -28,7 +28,6 @@ use Illuminate\Support\Facades\DB;
  * @property $title string
  * @property $difficulty string
  * @property $teeming boolean
- * @property $beguiling_preset int
  * @property $published boolean
  * @property $unlisted boolean
  * @property $demo boolean
@@ -510,7 +509,6 @@ class DungeonRoute extends Model
             $this->unlisted = intval($request->get('unlisted', 0)) > 0;
         }
         $this->demo = intval($request->get('demo', 0)) > 0;
-        $this->beguiling_preset = $seasonService->getCurrentSeason()->getPresetAt(Carbon::now());
 
 
         // Update or insert it

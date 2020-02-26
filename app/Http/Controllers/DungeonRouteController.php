@@ -34,7 +34,6 @@ class DungeonRouteController extends Controller
             $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
             $dungeonRoute->teeming = (int)$request->get('teeming', 0) === 1;
             $dungeonRoute->expires_at = Carbon::now()->addHour(config('keystoneguru.try_dungeon_route_expires_hours'))->toDateTimeString();
-            $dungeonRoute->beguiling_preset = $seasonService->getCurrentSeason()->getPresetAt(Carbon::now());
             $dungeonRoute->save();
 
             $result = view('dungeonroute.try', ['model' => $dungeonRoute]);

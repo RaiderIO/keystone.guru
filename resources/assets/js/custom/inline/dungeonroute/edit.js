@@ -15,8 +15,6 @@ class DungeonrouteEdit extends InlineCode {
         $('#map_route_unpublish').bind('click', function () {
             self._setPublished(false);
         });
-
-        // Looking for the Beguiling enemies preset? Check enemyvisualcontrols.js
     }
 
     _setPublished(value) {

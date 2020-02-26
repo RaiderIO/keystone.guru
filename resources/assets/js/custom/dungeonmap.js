@@ -22,9 +22,6 @@ class DungeonMap extends Signalable {
             // All layers have been fetched, refresh tooltips to update "No layers to edit" state
             refreshTooltips();
 
-            // Make sure the beguiling preset is applied now that everything's loaded
-            getState().setBeguilingPreset(self.options.dungeonroute.beguilingPreset);
-
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
 

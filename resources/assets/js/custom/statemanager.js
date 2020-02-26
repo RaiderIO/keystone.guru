@@ -7,8 +7,6 @@ class StateManager extends Signalable {
         this.map = null;
         // What enemy visual type we're displaying
         this.enemyDisplayType = null;
-        // The beguiling preset we're displaying
-        this.beguilingPreset = null;
         // The currently displayed floor ID
         this.floorId = null;
         // Map zoom level (default = 2)
@@ -30,13 +28,11 @@ class StateManager extends Signalable {
         this.map = map;
 
         this.setEnemyDisplayType(this.map.options.defaultEnemyVisualType);
-        this.setBeguilingPreset(this.map.options.dungeonroute.beguilingPreset);
         this.setFloorId(this.map.options.floorId);
 
         // Change defaults based on the hash if necessary
         if (window.location.hash.length > 0) {
             this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
-                console.log('changing defaults..');
                 // Fill the hashVariables with key=>value pairs
                 let hashVariables = {};
                 let variables = window.location.hash.replace('#', '').split('&');
@@ -52,12 +48,6 @@ class StateManager extends Signalable {
                 if (hashVariables.hasOwnProperty('display')) {
                     self.setEnemyDisplayType(hashVariables.display);
                 }
-
-                // Beguiling preset
-                if (hashVariables.hasOwnProperty('preset')) {
-                    self.setBeguilingPreset(parseInt(hashVariables.preset));
-                }
-                console.log(hashVariables);
             });
         }
     }
@@ -89,22 +79,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Sets the beguiling preset that is currently displayed on the map.
-     * @param preset int
-     */
-    setBeguilingPreset(preset) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        // Only when actually changed..
-        if (preset !== this.beguilingPreset) {
-            this.beguilingPreset = preset;
-
-            // Let everyone know it's changed
-            this.signal('beguilingpreset:changed', {beguilingPreset: this.beguilingPreset});
-        }
-    }
-
-    /**
      * Sets the current map zoom level.
      * @param zoom
      */
@@ -127,15 +101,6 @@ class StateManager extends Signalable {
     getEnemyDisplayType() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.enemyDisplayType;
-    }
-
-    /**
-     * Get the beguiling preset that is currently displayed on the map.
-     * @returns {string}
-     */
-    getBeguilingPreset() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.beguilingPreset;
     }
 
     /**

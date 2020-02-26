@@ -66,24 +66,6 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                 enemyPack.teeming = remoteMapObject.teeming;
                 enemyPack.faction = remoteMapObject.faction;
 
-                // Restore beguiling enemies
-                // 1. Make sure we can resolve the IDs of the enemies
-                /** @var enemyMapObjectGroup MapObjectGroup */
-
-                    // Our data
-                let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                for (let i = 0; i < remoteMapObject.beguilingenemyids.length; i++) {
-                    let id = remoteMapObject.beguilingenemyids[i];
-
-                    // Resolve it
-                    let enemy = enemyMapObjectGroup.findMapObjectById(id);
-                    // Verify
-                    console.assert(enemy !== null, 'Unable to find beguiling enemy!', this);
-
-                    // Restore it on the enemy pack
-                    enemyPack.beguilingenemies.push(enemy);
-                }
-
                 // We just downloaded the enemy pack, it's synced alright!
                 enemyPack.setSynced(true);
             } else {

@@ -15,9 +15,8 @@ $tryMode = isset($tryMode) && $tryMode ? true : false;
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 // For Siege of Boralus
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
-$routeBeguilingPreset = isset($dungeonroute) ? $dungeonroute->beguiling_preset : 1;
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
-$teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? true : false;
+$teeming = (isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin)) ? true : false;
 $enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
@@ -38,12 +37,6 @@ $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups 
 $floorId = isset($floorId) ? $floorId : $dungeon->floors->first()->id;
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
-// Construct the data of the beguiling NPCs
-$maxBeguilingPresets = DB::table('enemies')->selectRaw('MAX(`beguiling_preset`) as max')->where('floor_id', $floorId)->get()->first()->max;
-$beguilingPresets = [];
-for ($i = 1; $i <= $maxBeguilingPresets; $i++) {
-    $beguilingPresets[] = ['index' => $i, 'description' => sprintf(__('Preset %s'), $i)];
-}
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
@@ -82,10 +75,8 @@ if ($isAdmin) {
     'try' => $tryMode,
     'dungeonroute' => [
         'publicKey' => $routePublicKey,
-        'faction' => $routeFaction,
-        'beguilingPreset' => $routeBeguilingPreset
+        'faction' => $routeFaction
     ],
-    'beguilingPresets' => $beguilingPresets,
     'defaultEnemyVisualType' => $enemyVisualType,
     'teeming' => $teeming,
     'noUI' => $noUI,

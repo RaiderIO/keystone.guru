@@ -36,10 +36,6 @@ class EnemyVisualMain extends EnemyVisualIcon {
         if (this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') {
             mainVisualOuterClasses.push('teeming');
         }
-        // Handle beguiling display
-        if (this.enemyvisual.enemy.isBeguiling()) {
-            mainVisualOuterClasses.push('beguiling');
-        }
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
             mainVisualOuterClasses.push(npc.aggressiveness);

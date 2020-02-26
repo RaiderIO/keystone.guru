@@ -38,8 +38,6 @@ class Enemy extends MapObject {
         this.npc = null;
         this.raid_marker_name = '';
         this.dangerous = false;
-        // May be null if we're not a Beguiling enemy
-        this.beguiling_preset = null;
         // The visual display of this enemy
         this.visual = null;
 
@@ -107,15 +105,6 @@ class Enemy extends MapObject {
         });
 
         return result;
-    }
-
-    /**
-     * Checks if this enemy is a beguiling enemy.
-     * @returns {boolean} True if it is, false if it is not.
-     */
-    isBeguiling() {
-        // Beguiling NPCs have their dungeon ID set to -1 since they're the only ones whose
-        return typeof this.beguiling_preset === 'number';
     }
 
     /**

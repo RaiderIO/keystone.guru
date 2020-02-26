@@ -63,7 +63,6 @@ class CommonMapsMap extends InlineCode {
 
             ['.visibility_tools', 'right'],
             ['#map_enemy_visuals', 'right'],
-            ['#map_enemy_beguiling_preset', 'right'],
             ['.floor_selection', 'right'],
 
             ['.route_actions', 'right'],
