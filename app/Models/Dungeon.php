@@ -44,7 +44,7 @@ class Dungeon extends Model
     public function getKeyAttribute()
     {
         // https://stackoverflow.com/questions/14114411/remove-all-special-characters-from-a-string
-        $string = str_replace(' ', '', strtolower($this->name)); // Replaces all spaces with hyphens.
+        $string = str_replace(' ', '', strtolower($this->name)); // Replaces all spaces with nothing.
 
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
     }

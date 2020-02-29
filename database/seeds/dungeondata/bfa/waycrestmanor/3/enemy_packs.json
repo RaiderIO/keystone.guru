@@ -1,7 +1,7 @@
 [
     {
         "id": 120,
-        "floor_id": 62,
+        "floor_id": 67,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -9,7 +9,7 @@
     },
     {
         "id": 121,
-        "floor_id": 62,
+        "floor_id": 67,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -17,7 +17,7 @@
     },
     {
         "id": 125,
-        "floor_id": 62,
+        "floor_id": 67,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -25,7 +25,7 @@
     },
     {
         "id": 126,
-        "floor_id": 62,
+        "floor_id": 67,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",

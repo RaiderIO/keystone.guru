@@ -1,36 +1,36 @@
 [
     {
         "id": 62,
-        "floor_id": 61,
-        "target_floor_id": 60,
+        "floor_id": 66,
+        "target_floor_id": 65,
         "lat": -88.5,
         "lng": 139.5
     },
     {
         "id": 63,
-        "floor_id": 61,
-        "target_floor_id": 60,
+        "floor_id": 66,
+        "target_floor_id": 65,
         "lat": -150.38,
         "lng": 109.25
     },
     {
         "id": 64,
-        "floor_id": 61,
-        "target_floor_id": 60,
+        "floor_id": 66,
+        "target_floor_id": 65,
         "lat": -188.38,
         "lng": 109.81
     },
     {
         "id": 65,
-        "floor_id": 61,
-        "target_floor_id": 60,
+        "floor_id": 66,
+        "target_floor_id": 65,
         "lat": -148.38,
         "lng": 200.88
     },
     {
         "id": 66,
-        "floor_id": 61,
-        "target_floor_id": 60,
+        "floor_id": 66,
+        "target_floor_id": 65,
         "lat": -135.13,
         "lng": 339.38
     }

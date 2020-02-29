@@ -2,7 +2,7 @@
     {
         "id": 145,
         "enemy_pack_id": -1,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 1,
         "teeming": null,
         "faction": "any",
@@ -16,7 +16,7 @@
     {
         "id": 554,
         "enemy_pack_id": 129,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 3,
         "teeming": null,
         "faction": "any",
@@ -30,7 +30,7 @@
     {
         "id": 555,
         "enemy_pack_id": 129,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 12,
         "teeming": null,
         "faction": "any",
@@ -44,7 +44,7 @@
     {
         "id": 556,
         "enemy_pack_id": 129,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 11,
         "teeming": null,
         "faction": "any",
@@ -58,7 +58,7 @@
     {
         "id": 557,
         "enemy_pack_id": 128,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 10,
         "teeming": null,
         "faction": "any",
@@ -72,7 +72,7 @@
     {
         "id": 558,
         "enemy_pack_id": 128,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 9,
         "teeming": null,
         "faction": "any",
@@ -86,7 +86,7 @@
     {
         "id": 559,
         "enemy_pack_id": 128,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 2,
         "teeming": null,
         "faction": "any",
@@ -100,7 +100,7 @@
     {
         "id": 560,
         "enemy_pack_id": -1,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 4,
         "teeming": null,
         "faction": "any",
@@ -114,7 +114,7 @@
     {
         "id": 562,
         "enemy_pack_id": 131,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 1,
         "teeming": null,
         "faction": "any",
@@ -128,7 +128,7 @@
     {
         "id": 563,
         "enemy_pack_id": 131,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 2,
         "teeming": null,
         "faction": "any",
@@ -142,7 +142,7 @@
     {
         "id": 564,
         "enemy_pack_id": 131,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 3,
         "teeming": null,
         "faction": "any",
@@ -156,7 +156,7 @@
     {
         "id": 565,
         "enemy_pack_id": 130,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 4,
         "teeming": null,
         "faction": "any",
@@ -170,7 +170,7 @@
     {
         "id": 566,
         "enemy_pack_id": 130,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 5,
         "teeming": null,
         "faction": "any",
@@ -184,7 +184,7 @@
     {
         "id": 568,
         "enemy_pack_id": 520,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 7,
         "teeming": null,
         "faction": "any",
@@ -198,7 +198,7 @@
     {
         "id": 570,
         "enemy_pack_id": 520,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 6,
         "teeming": null,
         "faction": "any",
@@ -212,7 +212,7 @@
     {
         "id": 2965,
         "enemy_pack_id": -1,
-        "floor_id": 63,
+        "floor_id": 68,
         "mdt_id": 1,
         "teeming": null,
         "faction": "any",

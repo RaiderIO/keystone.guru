@@ -1,7 +1,7 @@
 [
     {
         "id": 17,
-        "floor_id": 61,
+        "floor_id": 66,
         "teeming": null,
         "faction": "any",
         "polyline": {
@@ -12,7 +12,7 @@
     },
     {
         "id": 18,
-        "floor_id": 61,
+        "floor_id": 66,
         "teeming": null,
         "faction": "any",
         "polyline": {
@@ -23,7 +23,7 @@
     },
     {
         "id": 119,
-        "floor_id": 61,
+        "floor_id": 66,
         "teeming": null,
         "faction": "any",
         "polyline": {
