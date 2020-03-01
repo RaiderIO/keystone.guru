@@ -37,12 +37,11 @@ class APIMapCommentController extends Controller
     {
         $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
-        if( $dungeonroute === null ) {
-            if( !$isAdmin ) {
+        if ($dungeonroute === null) {
+            if (!$isAdmin) {
                 throw new \Exception('Unable to save map comment!');
             }
-        }
-        // We're editing a map comment for the user, carry on
+        } // We're editing a map comment for the user, carry on
         else {
             $this->authorize('edit', $dungeonroute);
         }
@@ -64,7 +63,7 @@ class APIMapCommentController extends Controller
 
         if (!$mapComment->save()) {
             throw new \Exception('Unable to save map comment!');
-        } else if( $dungeonroute !== null ) {
+        } else if ($dungeonroute !== null) {
             broadcast(new MapCommentChangedEvent($dungeonroute, $mapComment, Auth::user()));
         }
 
@@ -80,14 +79,25 @@ class APIMapCommentController extends Controller
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      */
-    function delete(Request $request, DungeonRoute $dungeonroute, MapComment $mapcomment)
+    function delete(Request $request, ?DungeonRoute $dungeonroute, MapComment $mapcomment)
     {
-        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
-        $this->authorize('edit', $dungeonroute);
+        $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
+        // Must be an admin to use this endpoint like this!
+        if ($dungeonroute === null) {
+            if (!$isAdmin) {
+                throw new \Exception('Unable to delete map comment!');
+            }
+        } // We're editing a map comment for the user, carry on
+        else {
+            // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
+            $this->authorize('edit', $dungeonroute);
+        }
 
         try {
             if ($mapcomment->delete()) {
-                broadcast(new MapCommentDeletedEvent($dungeonroute, $mapcomment, Auth::user()));
+                if ($dungeonroute !== null) {
+                    broadcast(new MapCommentDeletedEvent($dungeonroute, $mapcomment, Auth::user()));
+                }
                 $result = ['result' => 'success'];
             } else {
                 $result = ['result' => 'error'];
@@ -109,4 +119,15 @@ class APIMapCommentController extends Controller
         return $this->store($request, null);
     }
 
+
+    /**
+     * @param Request $request
+     * @param MapComment $mapcomment
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
+     */
+    function adminDelete(Request $request, MapComment $mapcomment)
+    {
+        return $this->delete($request, null, $mapcomment);
+    }
 }
