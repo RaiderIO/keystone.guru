@@ -1,7 +1,9 @@
 <?php
 
 
-class DungeonRouteMapCommentsRelationParser implements RelationParser
+use App\Models\MapIcon;
+
+class DungeonRouteMapIconsRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -19,7 +21,7 @@ class DungeonRouteMapCommentsRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'mapcomments' && is_array($value);
+        return $name === 'mapicons' && is_array($value);
     }
 
     /**
@@ -31,16 +33,16 @@ class DungeonRouteMapCommentsRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $mapCommentData) {
-            if ($mapCommentData['always_visible'] === 1) {
+        foreach ($value as $mapIconData) {
+            if ($mapIconData['always_visible'] === 1) {
                 // Not tied to a dungeon route!
-                $mapCommentData['dungeon_route_id'] = -1;
+                $mapIconData['dungeon_route_id'] = -1;
             } else {
                 // We now know the dungeon route ID, set it back to the map comment
-                $mapCommentData['dungeon_route_id'] = $modelData['id'];
+                $mapIconData['dungeon_route_id'] = $modelData['id'];
             }
 
-            \App\Models\MapComment::insert($mapCommentData);
+            MapIcon::insert($mapIconData);
         }
 
         // Didn't really change anything so just return the value.
