@@ -57,7 +57,7 @@ return [
     // Route edit tools
     'path' => 'Path',
     'killzone' => 'Killzone',
-    'mapcomment' => 'Comment',
+    'mapicon' => 'Icon',
     'brushline' => 'Draw',
     'brushline_title' => 'Draw a line',
     'edit' => 'Edit',

@@ -71,7 +71,7 @@ class CommonMapsMap extends InlineCode {
             ['#map_enemy_forces_numbers', 'left'],
             ['.leaflet-draw-draw-path', 'left'],
             ['.leaflet-draw-draw-killzone', 'left'],
-            ['.leaflet-draw-draw-mapcomment', 'left'],
+            ['.leaflet-draw-draw-icon', 'left'],
             ['.leaflet-draw-draw-brushline', 'left'],
 
             ['.leaflet-draw-edit-edit', 'left'],

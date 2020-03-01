@@ -9,7 +9,7 @@ use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsKillzones;
-use App\Http\Controllers\Traits\ListsMapComments;
+use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\APIDungeonRouteFormRequest;
@@ -40,7 +40,7 @@ class APIDungeonRouteController extends Controller
     use ListsPaths;
     use ListsKillzones;
     use ListsBrushlines;
-    use ListsMapComments;
+    use ListsMapIcons;
     use ListsDungeonStartMarkers;
     use ListsDungeonFloorSwitchMarkers;
 
@@ -322,7 +322,7 @@ class APIDungeonRouteController extends Controller
     function data(Request $request, $publickey)
     {
         // Init the fields we should get for this request
-        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapcomment,dungeonstartmarker,dungeonfloorswitchmarker']);
+        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonstartmarker,dungeonfloorswitchmarker']);
         $fields = explode(',', $fields);
 
         // Show enemies or raw data when fetching enemy packs
@@ -380,8 +380,8 @@ class APIDungeonRouteController extends Controller
         }
 
         // Map comments
-        if (in_array('mapcomment', $fields)) {
-            $result['mapcomment'] = $this->listMapComments($request->get('floor'), $publickey);
+        if (in_array('mapicon', $fields)) {
+            $result['mapicon'] = $this->listMapIcons($request->get('floor'), $publickey);
         }
 
         // Enemy patrols

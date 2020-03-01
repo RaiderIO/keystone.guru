@@ -1,7 +1,7 @@
 class AdminDrawControls extends DrawControls {
 
     _attachHotkeys() {
-        this.map.hotkeys.attach('1', 'leaflet-draw-draw-mapcomment');
+        this.map.hotkeys.attach('1', 'leaflet-draw-draw-mapicon');
         this.map.hotkeys.attach('2', 'leaflet-draw-draw-enemypack');
         this.map.hotkeys.attach('3', 'leaflet-draw-draw-enemy');
         this.map.hotkeys.attach('4', 'leaflet-draw-draw-enemypatrol');

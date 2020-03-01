@@ -47,7 +47,7 @@ class MDTImportController extends Controller
                 'affixes' => $affixes,
                 'pulls' => $dungeonRoute->killzones->count(),
                 'lines' => $dungeonRoute->brushlines->count(),
-                'notes' => $dungeonRoute->mapcomments->count(),
+                'notes' => $dungeonRoute->mapicons->count(),
                 'enemy_forces' => $dungeonRoute->getEnemyForcesAttribute(),
                 'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
                 'warnings' => $warningResult

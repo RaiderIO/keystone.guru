@@ -323,6 +323,10 @@ html, body, #map, #app, .wrapper {
     margin-right: 10px;
 }
 
+#map .dropdown-menu.show li {
+    background-color: #2B3E50;
+}
+
 /** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */
 /** leaflet-marker-icon leaflet-div-icon leaflet-editing-icon leaflet-touch-icon leaflet-zoom-animated leaflet-interactive leaflet-marker-draggable */
 

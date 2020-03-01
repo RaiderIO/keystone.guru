@@ -627,37 +627,33 @@
                 "raid_marker_id": 7
             }
         ],
-        "mapcomments": [
+        "mapicons": [
             {
                 "floor_id": 41,
-                "game_icon_id": -1,
+                "icon_type": "mapcomment",
                 "lat": -115.625,
                 "lng": 242.75,
-                "always_visible": 0,
                 "comment": "Jump down to Rezan"
             },
             {
                 "floor_id": 41,
-                "game_icon_id": -1,
+                "icon_type": "mapcomment",
                 "lat": -47.4375,
                 "lng": 213.8125,
-                "always_visible": 0,
                 "comment": "Double Rogue Shroud to get past this pack twice."
             },
             {
                 "floor_id": 42,
-                "game_icon_id": -1,
+                "icon_type": "mapcomment",
                 "lat": -88.5,
                 "lng": 220.75,
-                "always_visible": 0,
                 "comment": "Bloodlust"
             },
             {
                 "floor_id": 41,
-                "game_icon_id": -1,
+                "icon_type": "mapcomment",
                 "lat": -126,
                 "lng": 139,
-                "always_visible": 0,
                 "comment": "Bloodlust"
             }
         ]

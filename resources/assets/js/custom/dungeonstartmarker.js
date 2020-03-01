@@ -15,11 +15,7 @@ $(function () {
     });
 });
 
-let LeafletDungeonStartIcon = L.divIcon({
-    html: '<div class="marker_div_icon marker_div_icon_circle_border"><i class="fas fa-flag"></i></div>',
-    iconSize: [30, 30],
-    className: 'marker_div_icon_font_awesome marker_div_icon_dungeon_start_marker'
-});
+let LeafletDungeonStartIcon = new L.divIcon({className: 'dungeon_start_icon', iconSize: [32, 32]});
 
 let LeafletDungeonStartMarker = L.Marker.extend({
     options: {

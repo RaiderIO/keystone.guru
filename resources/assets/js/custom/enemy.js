@@ -50,6 +50,11 @@ class Enemy extends MapObject {
             self.setPopupEnabled(selectionModeChangedEvent.data.finished);
         });
 
+        // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
+        getState().register('mapzoomlevel:changed', this, function(){
+            self.bindTooltip();
+        });
+
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, this._synced.bind(this));
     }

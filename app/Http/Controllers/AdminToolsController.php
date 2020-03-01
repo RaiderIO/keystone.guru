@@ -13,7 +13,7 @@ use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Floor;
-use App\Models\MapComment;
+use App\Models\MapIcon;
 use App\Models\Npc;
 use App\Models\NpcType;
 use App\Models\Release;
@@ -220,7 +220,7 @@ class AdminToolsController extends Controller
                 // for each and every re-import
                 $demoRoute->setHidden(['id']);
                 $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
-                    'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapcomments']);
+                    'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapicons']);
 
                 // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
                 // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
@@ -259,7 +259,7 @@ class AdminToolsController extends Controller
                 foreach ($demoRoute->enemyraidmarkers as $item) {
                     $toHide->add($item);
                 }
-                foreach ($demoRoute->mapcomments as $item) {
+                foreach ($demoRoute->mapicons as $item) {
                     $toHide->add($item);
                 }
                 foreach ($toHide as $item) {
@@ -294,17 +294,17 @@ class AdminToolsController extends Controller
                 $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', $floor->id)->get()->values();
                 // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
                 $dungeonFloorSwitchMarkers->makeHidden(['direction']);
-                $mapComments = MapComment::where('floor_id', $floor->id)->where('always_visible', true)->get()->values();
+                $mapIcons = MapIcon::where('floor_id', $floor->id)->where('dungeon_route_id', -1)->get()->values();
                 // Map comments can ALSO be added by users, thus we never know where this thing comes. As such, insert it
                 // at the end of the table instead.
-                $mapComments->makeHidden(['id']);
+                $mapIcons->makeHidden(['id']);
 
                 $result['enemies'] = $enemies;
                 $result['enemy_packs'] = $enemyPacks;
                 $result['enemy_patrols'] = $enemyPatrols;
                 $result['dungeon_start_markers'] = $dungeonStartMarkers;
                 $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
-                $result['map_comments'] = $mapComments;
+                $result['map_icons'] = $mapIcons;
 
                 foreach ($result as $category => $categoryData) {
                     // Save enemies, packs, patrols, markers on a per-floor basis

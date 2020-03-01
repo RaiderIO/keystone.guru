@@ -209,8 +209,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
                 Route::post('/killzone', 'APIKillZoneController@store');
                 Route::delete('/killzone/{killzone}', 'APIKillZoneController@delete');
 
-                Route::post('/mapcomment', 'APIMapCommentController@store');
-                Route::delete('/mapcomment/{mapcomment}', 'APIMapCommentController@delete');
+                Route::post('/mapicon', 'APIMapIconController@store');
+                Route::delete('/mapicon/{mapicon}', 'APIMapIconController@delete');
 
                 Route::post('/path', 'APIPathController@store');
                 Route::delete('/path/{path}', 'APIPathController@delete');
@@ -265,8 +265,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
 
-            Route::post('/mapcomment', 'APIMapCommentController@adminStore');
-            Route::delete('/mapcomment/{mapcomment}', 'APIMapCommentController@adminDelete');
+            Route::post('/mapicon', 'APIMapIconController@adminStore');
+            Route::delete('/mapicon/{mapicon}', 'APIMapIconController@adminDelete');
         });
     });
 
