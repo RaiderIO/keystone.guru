@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MapCommentChangedEvent;
-use App\Events\MapCommentDeletedEvent;
+use App\Events\MapIconChangedEvent;
+use App\Events\MapIconDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
-use App\Http\Controllers\Traits\ListsMapComments;
+use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
-use App\Models\MapComment;
+use App\Models\MapIcon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
-class APIMapCommentController extends Controller
+class APIMapIconController extends Controller
 {
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
-    use ListsMapComments;
+    use ListsMapIcons;
 
     function list(Request $request)
     {
-        return $this->listMapComments(
+        return $this->listMapIcons(
             $request->get('floor_id'),
             $request->get('dungeonroute', null)
         );
@@ -46,28 +46,28 @@ class APIMapCommentController extends Controller
             $this->authorize('edit', $dungeonroute);
         }
 
-        /** @var MapComment $mapComment */
-        $mapComment = MapComment::findOrNew($request->get('id'));
+        /** @var MapIcon $mapIcon */
+        $mapIcon = MapIcon::findOrNew($request->get('id'));
 
         // Only admins may make global comments for all routes
-        $mapComment->floor_id = $request->get('floor_id');
-        $mapComment->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
-        $mapComment->game_icon_id = -1;
-        $mapComment->comment = $request->get('comment', '');
-        $mapComment->lat = $request->get('lat');
-        $mapComment->lng = $request->get('lng');
+        $mapIcon->floor_id = $request->get('floor_id');
+        $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
+        $mapIcon->game_icon_id = -1;
+        $mapIcon->comment = $request->get('comment', '');
+        $mapIcon->lat = $request->get('lat');
+        $mapIcon->lng = $request->get('lng');
 
-        if (!$mapComment->exists) {
-            $this->checkForDuplicate($mapComment);
+        if (!$mapIcon->exists) {
+            $this->checkForDuplicate($mapIcon);
         }
 
-        if (!$mapComment->save()) {
+        if (!$mapIcon->save()) {
             throw new \Exception('Unable to save map comment!');
         } else if ($dungeonroute !== null) {
-            broadcast(new MapCommentChangedEvent($dungeonroute, $mapComment, Auth::user()));
+            broadcast(new MapIconChangedEvent($dungeonroute, $mapIcon, Auth::user()));
         }
 
-        $result = ['id' => $mapComment->id];
+        $result = ['id' => $mapIcon->id];
 
         return $result;
     }
@@ -75,11 +75,11 @@ class APIMapCommentController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @param MapComment $mapcomment
+     * @param MapIcon $mapicon
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      */
-    function delete(Request $request, ?DungeonRoute $dungeonroute, MapComment $mapcomment)
+    function delete(Request $request, ?DungeonRoute $dungeonroute, MapIcon $mapicon)
     {
         $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
@@ -94,9 +94,9 @@ class APIMapCommentController extends Controller
         }
 
         try {
-            if ($mapcomment->delete()) {
+            if ($mapicon->delete()) {
                 if ($dungeonroute !== null) {
-                    broadcast(new MapCommentDeletedEvent($dungeonroute, $mapcomment, Auth::user()));
+                    broadcast(new MapIconDeletedEvent($dungeonroute, $mapicon, Auth::user()));
                 }
                 $result = ['result' => 'success'];
             } else {
@@ -122,12 +122,12 @@ class APIMapCommentController extends Controller
 
     /**
      * @param Request $request
-     * @param MapComment $mapcomment
+     * @param MapIcon $mapicon
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      */
-    function adminDelete(Request $request, MapComment $mapcomment)
+    function adminDelete(Request $request, MapIcon $mapicon)
     {
-        return $this->delete($request, null, $mapcomment);
+        return $this->delete($request, null, $mapicon);
     }
 }

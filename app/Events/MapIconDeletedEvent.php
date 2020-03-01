@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Models\DungeonRoute;
-use App\Models\MapComment;
+use App\Models\MapIcon;
 use App\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MapCommentDeletedEvent implements ShouldBroadcast
+class MapIconDeletedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -29,13 +29,13 @@ class MapCommentDeletedEvent implements ShouldBroadcast
      * Create a new event instance.
      *
      * @param $dungeonroute DungeonRoute
-     * @param $mapComment MapComment
+     * @param $mapIcon MapIcon
      * @return void
      */
-    public function __construct(DungeonRoute $dungeonroute, MapComment $mapComment, User $user)
+    public function __construct(DungeonRoute $dungeonroute, MapIcon $mapIcon, User $user)
     {
         $this->_dungeonroute = $dungeonroute;
-        $this->_id = $mapComment->id;
+        $this->_id = $mapIcon->id;
         $this->_user = $user;
     }
 
@@ -51,7 +51,7 @@ class MapCommentDeletedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'mapcomment-deleted';
+        return 'mapicon-deleted';
     }
 
     public function broadcastWith()

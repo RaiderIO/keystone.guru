@@ -8,19 +8,19 @@
 
 namespace App\Http\Controllers\Traits;
 
-use App\Models\MapComment;
+use App\Models\MapIcon;
 use Illuminate\Database\Query\Builder;
 
-trait ListsMapComments
+trait ListsMapIcons
 {
     /**
      * Lists all map comments of a floor.
      *
      * @param $floorId
      * @param $publicKey
-     * @return MapComment[]
+     * @return MapIcon[]
      */
-    function listMapComments($floorId, $publicKey)
+    function listMapIcons($floorId, $publicKey)
     {
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($publicKey, false);
@@ -30,10 +30,10 @@ trait ListsMapComments
             $dungeonRouteId = -1;
         }
 
-        return MapComment::where('floor_id', $floorId)
+        return MapIcon::where('floor_id', $floorId)
             ->where(function ($query) use ($floorId, $dungeonRouteId) {
                 /** @var $query Builder */
-                return $query->where('dungeon_route_id', $dungeonRouteId)->orWhere('always_visible', true);
+                return $query->where('dungeon_route_id', $dungeonRouteId)->orWhere('dungeon_route_id', -1);
             })->get();
     }
 }

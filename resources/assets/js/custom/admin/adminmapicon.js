@@ -1,4 +1,4 @@
-class AdminMapComment extends MapComment {
+class AdminMapIcon extends MapIcon {
 
     // Actually this class is quite empty. But I'll have it anyways for any possible later additions.
     constructor(map, layer) {
@@ -6,7 +6,7 @@ class AdminMapComment extends MapComment {
     }
 
     _popupSubmitClicked(){
-        console.assert(this instanceof AdminMapComment, 'this was not a MapComment', this);
+        console.assert(this instanceof AdminMapIcon, 'this was not a MapIcon', this);
         // Set an additional parameter
         this.always_visible = $('#map_map_comment_edit_popup_always_visible_' + this.id).val();
 
@@ -18,11 +18,11 @@ class AdminMapComment extends MapComment {
 
     delete() {
         let self = this;
-        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
+        console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/mapcomment/' + this.id,
+            url: '/ajax/mapicon/' + this.id,
             dataType: 'json',
             data: {
                 _method: 'DELETE'
@@ -41,11 +41,11 @@ class AdminMapComment extends MapComment {
 
     save() {
         let self = this;
-        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
+        console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/mapcomment',
+            url: '/ajax/mapicon',
             dataType: 'json',
             data: {
                 id: this.id,

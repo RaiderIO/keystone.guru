@@ -8,10 +8,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $floor_id
  * @property int $dungeon_route_id
- * @property int $game_icon_id
+ * @property int $icon_type
  * @property float $lat
  * @property float $lng
- * @property boolean $always_visible
  * @property string $comment
  *
  * @property \App\Models\DungeonRoute $dungeonroute
@@ -19,9 +18,11 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class MapComment extends Model
+class MapIcon extends Model
 {
-    protected $visible = ['id', 'floor_id', 'game_icon_id', 'lat', 'lng', 'always_visible', 'comment'];
+    const MAP_COMMENT = 'mapcomment';
+
+    protected $visible = ['id', 'floor_id', 'icon_type', 'lat', 'lng', 'comment'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

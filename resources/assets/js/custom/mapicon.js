@@ -1,56 +1,61 @@
 $(function () {
-    L.Draw.MapComment = L.Draw.Marker.extend({
+    L.Draw.MapIcon = L.Draw.Marker.extend({
         statics: {
-            TYPE: 'mapcomment'
+            TYPE: 'mapicon'
         },
         options: {
-            icon: LeafletMapCommentIcon
+            icon: LeafletMapIconUnknownMarker
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.MapComment.TYPE;
+            this.type = L.Draw.MapIcon.TYPE;
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
 });
 
-let LeafletMapCommentIcon = L.divIcon({
+let LeafletMapIconComment = L.divIcon({
     html: '<i class="fas fa-comment"></i>',
     iconSize: [16, 16],
     className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
 });
 
-let LeafletMapCommentMarker = L.Marker.extend({
+let LeafletMapIconCommentMarker = L.Marker.extend({
     options: {
-        icon: LeafletMapCommentIcon
+        icon: LeafletMapIconComment
     }
 });
 
-class MapComment extends MapObject {
+let LeafletMapIconUnknownMarker = L.Marker.extend({
+    options: {
+        icon: LeafletMapIconComment
+    }
+});
+
+class MapIcon extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
         this.id = 0;
-        this.label = 'MapComment';
-        this.always_visible = 0;
+        this.label = 'MapIcon';
 
         this.setSynced(false);
     }
 
     _popupSubmitClicked() {
-        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
+        console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
         this.comment = $('#map_map_comment_edit_popup_comment_' + this.id).val();
 
         this.edit();
     }
 
     isEditable() {
-        console.assert(this instanceof MapComment, 'this is not a MapComment', this);
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         return !this.always_visible;
     }
 
     bindTooltip() {
-        console.assert(this instanceof MapComment, 'this is not a MapComment', this);
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
         this.layer.bindTooltip(
             jQuery('<div/>', {
@@ -60,17 +65,17 @@ class MapComment extends MapObject {
     }
 
     edit() {
-        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
+        console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
         this.save();
     }
 
     delete() {
         let self = this;
-        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
+        console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/mapcomment/' + this.id,
+            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/mapicon/' + this.id,
             dataType: 'json',
             data: {
                 _method: 'DELETE'
@@ -89,11 +94,11 @@ class MapComment extends MapObject {
 
     save() {
         let self = this;
-        console.assert(this instanceof MapComment, 'this was not a MapComment', this);
+        console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/mapcomment',
+            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/mapicon',
             dataType: 'json',
             data: {
                 id: this.id,
@@ -126,7 +131,7 @@ class MapComment extends MapObject {
 
     // To be overridden by any implementing classes
     onLayerInit() {
-        console.assert(this instanceof MapComment, 'this is not an MapComment', this);
+        console.assert(this instanceof MapIcon, 'this is not an MapIcon', this);
         super.onLayerInit();
 
         let self = this;
