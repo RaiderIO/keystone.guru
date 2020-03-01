@@ -33,18 +33,26 @@ class APIMapCommentController extends Controller
      * @return array
      * @throws \Exception
      */
-    function store(Request $request, DungeonRoute $dungeonroute)
+    function store(Request $request, ?DungeonRoute $dungeonroute)
     {
-        $this->authorize('edit', $dungeonroute);
+        $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
+        // Must be an admin to use this endpoint like this!
+        if( $dungeonroute === null ) {
+            if( !$isAdmin ) {
+                throw new \Exception('Unable to save map comment!');
+            }
+        }
+        // We're editing a map comment for the user, carry on
+        else {
+            $this->authorize('edit', $dungeonroute);
+        }
 
         /** @var MapComment $mapComment */
         $mapComment = MapComment::findOrNew($request->get('id'));
-        $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
 
         // Only admins may make global comments for all routes
-        $mapComment->always_visible = $isAdmin ? $request->get('always_visible', 0) : 0;
         $mapComment->floor_id = $request->get('floor_id');
-        $mapComment->dungeon_route_id = $dungeonroute->id;
+        $mapComment->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
         $mapComment->game_icon_id = -1;
         $mapComment->comment = $request->get('comment', '');
         $mapComment->lat = $request->get('lat');
@@ -56,11 +64,11 @@ class APIMapCommentController extends Controller
 
         if (!$mapComment->save()) {
             throw new \Exception('Unable to save map comment!');
-        } else {
+        } else if( $dungeonroute !== null ) {
             broadcast(new MapCommentChangedEvent($dungeonroute, $mapComment, Auth::user()));
-
-            $result = ['id' => $mapComment->id];
         }
+
+        $result = ['id' => $mapComment->id];
 
         return $result;
     }
@@ -90,4 +98,15 @@ class APIMapCommentController extends Controller
 
         return $result;
     }
+
+    /**
+     * @param Request $request
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
+     */
+    function adminStore(Request $request)
+    {
+        return $this->store($request, null);
+    }
+
 }
