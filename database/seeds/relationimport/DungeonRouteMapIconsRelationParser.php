@@ -34,13 +34,8 @@ class DungeonRouteMapIconsRelationParser implements RelationParser
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
         foreach ($value as $mapIconData) {
-            if ($mapIconData['always_visible'] === 1) {
-                // Not tied to a dungeon route!
-                $mapIconData['dungeon_route_id'] = -1;
-            } else {
-                // We now know the dungeon route ID, set it back to the map comment
-                $mapIconData['dungeon_route_id'] = $modelData['id'];
-            }
+            // We now know the dungeon route ID, set it back to the map comment
+            $mapIconData['dungeon_route_id'] = $modelData['id'];
 
             MapIcon::insert($mapIconData);
         }

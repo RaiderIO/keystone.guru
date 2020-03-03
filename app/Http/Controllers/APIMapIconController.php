@@ -39,7 +39,7 @@ class APIMapIconController extends Controller
         // Must be an admin to use this endpoint like this!
         if ($dungeonroute === null) {
             if (!$isAdmin) {
-                throw new \Exception('Unable to save map comment!');
+                throw new \Exception('Unable to save map icon!');
             }
         } // We're editing a map comment for the user, carry on
         else {
@@ -52,7 +52,6 @@ class APIMapIconController extends Controller
         // Only admins may make global comments for all routes
         $mapIcon->floor_id = $request->get('floor_id');
         $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
-        $mapIcon->game_icon_id = -1;
         $mapIcon->comment = $request->get('comment', '');
         $mapIcon->lat = $request->get('lat');
         $mapIcon->lng = $request->get('lng');
@@ -62,7 +61,7 @@ class APIMapIconController extends Controller
         }
 
         if (!$mapIcon->save()) {
-            throw new \Exception('Unable to save map comment!');
+            throw new \Exception('Unable to save map icon!');
         } else if ($dungeonroute !== null) {
             broadcast(new MapIconChangedEvent($dungeonroute, $mapIcon, Auth::user()));
         }
@@ -85,7 +84,7 @@ class APIMapIconController extends Controller
         // Must be an admin to use this endpoint like this!
         if ($dungeonroute === null) {
             if (!$isAdmin) {
-                throw new \Exception('Unable to delete map comment!');
+                throw new \Exception('Unable to delete map icon!');
             }
         } // We're editing a map comment for the user, carry on
         else {
