@@ -26,6 +26,24 @@ let LeafletMapIconUnknown = L.divIcon({
     className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
 });
 
+let LeafletMapIconGreaseBot = L.divIcon({
+    html: '<i class="fas fa-comment"></i>',
+    iconSize: [16, 16],
+    className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
+});
+
+let LeafletMapIconShockBot = L.divIcon({
+    html: '<i class="fas fa-shock"></i>',
+    iconSize: [16, 16],
+    className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
+});
+
+let LeafletMapIconWeldingBot = L.divIcon({
+    html: '<i class="fas fa-plus"></i>',
+    iconSize: [16, 16],
+    className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
+});
+
 let LeafletMapIconCommentMarker = L.Marker.extend({
     options: {
         icon: LeafletMapIconComment
