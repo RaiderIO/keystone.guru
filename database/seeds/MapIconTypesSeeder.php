@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\MapIconType;
 use Illuminate\Database\Seeder;
 
 class MapIconTypesSeeder extends Seeder
@@ -15,29 +16,29 @@ class MapIconTypesSeeder extends Seeder
         $this->command->info('Adding known Map Icon Types');
 
         $mapIconData = [
-            'Awakened Obelisk' => ['key' => 'awakened_obelisk'],
-            'Door' => ['key' => 'door'],
-            'Door Down' => ['key' => 'door_down'],
-            'Door Left' => ['key' => 'door_left'],
-            'Door Locked' => ['key' => 'door_locked'],
-            'Door Right' => ['key' => 'door_right'],
-            'Door Up' => ['key' => 'door_up'],
-            'Yellow Dot' => ['key' => 'dot_yellow'],
-            'Dungeon Start' => ['key' => 'dungeon_start'],
-            'Gateway' => ['key' => 'gateway'],
-            'Graveyard' => ['key' => 'graveyard'],
-            'Grease bot (haste)' => ['key' => 'greasebot'],
-            'Shock bot (damage)' => ['key' => 'shockbot'],
-            'Warlock Gateway' => ['key' => 'warlock_gateway'],
-            'Welding bot (-damage taken/+healing received)' => ['key' => 'weldingbot'],
+            'awakened_obelisk' => ['name' => 'Awakened Obelisk'],
+            'door' => ['name' => 'Door'],
+            'door_down' => ['name' => 'Door Down'],
+            'door_left' => ['name' => 'Door Left'],
+            'door_locked' => ['name' => 'Door Locked'],
+            'door_right' => ['name' => 'Door Right'],
+            'door_up' => ['name' => 'Door Up'],
+            'dot_yellow' => ['name' => 'Yellow Dot'],
+            'dungeon_start' => ['name' => 'Dungeon Start'],
+            'gateway' => ['name' => 'Gateway'],
+            'graveyard' => ['name' => 'Graveyard'],
+            'greasebot' => ['name' => 'Grease bot (haste)'],
+            'shockbot' => ['name' => 'Shock bot (damage)'],
+            'warlock_gateway' => ['name' => 'Warlock Gateway'],
+            'weldingbot' => ['name' => 'Welding bot (-damage taken/+healing received)'],
         ];
 
-        foreach ($mapIconData as $name => $mapIcon)
+        foreach ($mapIconData as $key => $mapIcon)
         {
-            $classification = new \App\Models\NpcClassification();
-            $classification->name = $name;
-            $classification->color = $mapIcon['color'];
-            $classification->save();
+            $mapIconType = new MapIconType();
+            $mapIconType->key = $key;
+            $mapIconType->name = $mapIcon['name'];
+            $mapIconType->save();
         }
     }
 
