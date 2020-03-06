@@ -17,6 +17,7 @@ class CreateMapIconTypesTable extends Migration
             $table->increments('id');
             $table->string('key');
             $table->string('name');
+            $table->boolean('admin_only');
         });
     }
 

@@ -9,6 +9,7 @@ use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\MapIcon;
+use App\Models\MapIconType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
@@ -46,12 +47,25 @@ class APIMapIconController extends Controller
             $this->authorize('edit', $dungeonroute);
         }
 
+        $mapIconTypeId = $request->get('map_icon_type_id', 0);
+
+        if( $mapIconTypeId > 0 ) {
+            /** @var MapIconType $mapIconType */
+            $mapIconType = MapIconType::where('id', $mapIconTypeId)->first();
+
+            // Only allow admins to save admin_only icons
+            if( $mapIconType === null || $mapIconType->admin_only && !$isAdmin ) {
+                throw new \Exception('Unable to save map icon!');
+            }
+        }
+
         /** @var MapIcon $mapIcon */
         $mapIcon = MapIcon::findOrNew($request->get('id'));
 
         // Only admins may make global comments for all routes
         $mapIcon->floor_id = $request->get('floor_id');
         $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
+        $mapIcon->map_icon_type_id = $mapIconTypeId;
         $mapIcon->comment = $request->get('comment', '');
         $mapIcon->lat = $request->get('lat');
         $mapIcon->lng = $request->get('lng');

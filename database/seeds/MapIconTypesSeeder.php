@@ -16,21 +16,22 @@ class MapIconTypesSeeder extends Seeder
         $this->command->info('Adding known Map Icon Types');
 
         $mapIconData = [
-            'awakened_obelisk' => ['name' => 'Awakened Obelisk'],
-            'door' => ['name' => 'Door'],
-            'door_down' => ['name' => 'Door Down'],
-            'door_left' => ['name' => 'Door Left'],
-            'door_locked' => ['name' => 'Door Locked'],
-            'door_right' => ['name' => 'Door Right'],
-            'door_up' => ['name' => 'Door Up'],
+            'awakened_obelisk' => ['name' => 'Awakened Obelisk', 'admin_only' => true],
+            'comment' => ['name' => 'Comment'],
+            'door' => ['name' => 'Door', 'admin_only' => true],
+            'door_down' => ['name' => 'Door Down', 'admin_only' => true],
+            'door_left' => ['name' => 'Door Left', 'admin_only' => true],
+            'door_locked' => ['name' => 'Door Locked', 'admin_only' => true],
+            'door_right' => ['name' => 'Door Right', 'admin_only' => true],
+            'door_up' => ['name' => 'Door Up', 'admin_only' => true],
             'dot_yellow' => ['name' => 'Yellow Dot'],
-            'dungeon_start' => ['name' => 'Dungeon Start'],
+            'dungeon_start' => ['name' => 'Dungeon Start', 'admin_only' => true],
             'gateway' => ['name' => 'Gateway'],
-            'graveyard' => ['name' => 'Graveyard'],
-            'greasebot' => ['name' => 'Grease bot (haste)'],
-            'shockbot' => ['name' => 'Shock bot (damage)'],
+            'graveyard' => ['name' => 'Graveyard', 'admin_only' => true],
+            'greasebot' => ['name' => 'Grease bot (haste)', 'admin_only' => true],
+            'shockbot' => ['name' => 'Shock bot (damage)', 'admin_only' => true],
             'warlock_gateway' => ['name' => 'Warlock Gateway'],
-            'weldingbot' => ['name' => 'Welding bot (-damage taken/+healing received)'],
+            'weldingbot' => ['name' => 'Welding bot (-damage taken/+healing received)', 'admin_only' => true],
         ];
 
         foreach ($mapIconData as $key => $mapIcon)
@@ -38,6 +39,7 @@ class MapIconTypesSeeder extends Seeder
             $mapIconType = new MapIconType();
             $mapIconType->key = $key;
             $mapIconType->name = $mapIcon['name'];
+            $mapIconType->admin_only = isset($mapIcon['admin_only']) ? $mapIcon['admin_only'] : 0;
             $mapIconType->save();
         }
     }

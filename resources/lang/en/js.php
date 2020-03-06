@@ -136,7 +136,7 @@ return [
     'intro_15' => 'The color selection affect newly placed free drawn lines and routes. Killzones get the selected color by default.',
     'intro_16' => 'The weight (thickness) of newly placed free drawn lines and routes.',
 
-    'intro_17' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.',
+    'intro_17' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map icons, start markers and floor switch markers.',
 
     // Sidebar
     'sidebar_expand' => 'Expand the sidebar',
@@ -166,8 +166,10 @@ return [
     'ajax_error_404' => 'The requested resource was not found.',
     'ajax_error_419' => 'Your session has expired. Refresh the page.',
 
-    // Map comment popup
-    'map_comment_label' => 'Comment',
+    // Map icon comment popup
+    'map_icon_comment_label' => 'Comment',
+    'map_icon_type_label' => 'Icon',
+    'select_map_icon_type_label' => 'Select icon',
 
     // Dungeonroute table
     'actions_label' => 'Actions',

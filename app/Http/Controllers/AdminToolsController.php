@@ -295,7 +295,7 @@ class AdminToolsController extends Controller
                 // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
                 $dungeonFloorSwitchMarkers->makeHidden(['direction']);
                 $mapIcons = MapIcon::where('floor_id', $floor->id)->where('dungeon_route_id', -1)->get()->values();
-                // Map comments can ALSO be added by users, thus we never know where this thing comes. As such, insert it
+                // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
                 // at the end of the table instead.
                 $mapIcons->makeHidden(['id']);
 

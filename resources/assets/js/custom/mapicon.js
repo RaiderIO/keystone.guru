@@ -14,6 +14,19 @@ $(function () {
     });
 });
 
+function getLeafletMapIconMarker(mapIconType){
+    let generatedMarker = L.Marker.extend({
+        options: {
+            icon: L.divIcon({
+                html: '<div class="' + mapIconType.key + '"><img src="/images/mapicon/' + mapIconType.key + '.png" /></div>',
+                iconSize: [16, 16],
+                className: 'enemy_icon ' + 'map_icon_' + mapIconType.key
+            })
+        }
+    });
+    return new generatedMarker();
+}
+
 let LeafletMapIconComment = L.divIcon({
     html: '<i class="fas fa-comment"></i>',
     iconSize: [16, 16],
@@ -61,6 +74,7 @@ class MapIcon extends MapObject {
         super(map, layer);
 
         this.id = 0;
+        this.map_icon_type_id = 0;
         this.label = 'MapIcon';
 
         this.setSynced(false);
@@ -69,6 +83,7 @@ class MapIcon extends MapObject {
     _popupSubmitClicked() {
         console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
         this.comment = $('#map_map_icon_edit_popup_comment_' + this.id).val();
+        this.map_icon_type_id = $('#map_map_icon_edit_popup_icon_type_id_' + this.id).val();
 
         this.edit();
     }
@@ -127,8 +142,8 @@ class MapIcon extends MapObject {
             data: {
                 id: this.id,
                 floor_id: getState().getCurrentFloor().id,
+                map_icon_type_id: this.map_icon_type_id,
                 comment: this.comment,
-                always_visible: this.always_visible,
                 lat: this.layer.getLatLng().lat,
                 lng: this.layer.getLatLng().lng,
             },
@@ -165,18 +180,30 @@ class MapIcon extends MapObject {
             // This also cannot be a private function since that'll apparently give different signatures as well.
             let popupOpenFn = function (event) {
                 $('#map_map_icon_edit_popup_comment_' + self.id).val(self.comment);
+                $('#map_map_icon_edit_popup_map_icon_type_id_' + self.id).val(self.map_icon_type_id);
 
                 // Prevent multiple binds to click
                 let $submitBtn = $('#map_map_icon_edit_popup_submit_' + self.id);
                 $submitBtn.unbind('click');
                 $submitBtn.bind('click', self._popupSubmitClicked.bind(self));
+
+                refreshSelectPickers();
             };
 
             // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
             this.register('synced', this, function (event) {
                 let template = Handlebars.templates['map_map_icon_edit_popup_template'];
 
-                let data = $.extend({id: self.id}, getHandlebarsDefaultVariables());
+                // Construct the html for each option and insert it into the handlebars template
+                for( let i in MAP_ICON_TYPES ){
+                    if( MAP_ICON_TYPES.hasOwnProperty(i) ){
+                        let template = Handlebars.templates['map_map_icon_select_option_template'];
+
+                        MAP_ICON_TYPES[i].html = template(MAP_ICON_TYPES[i]);
+                    }
+                }
+
+                let data = $.extend({id: self.id, map_icon_type_id: self.map_icon_type_id, mapicontypes: MAP_ICON_TYPES}, getHandlebarsDefaultVariables());
 
                 self.layer.unbindPopup();
                 self.layer.bindPopup(template(data), {

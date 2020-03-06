@@ -1,4 +1,5 @@
-const MAP_ICON_COMMENT = 'mapcomment';
+// Filled from the _fetchSuccess() function of this class
+let MAP_ICON_TYPES = [];
 
 class MapIconMapObjectGroup extends MapObjectGroup {
     constructor(manager, name, editable) {
@@ -41,23 +42,31 @@ class MapIconMapObjectGroup extends MapObjectGroup {
 
         // Only create a new one if it's new for us
         if (mapIcon === null) {
-            let layer = null;
-
-            switch(remoteMapObject.icon_type){
-                case MAP_ICON_COMMENT:
-                    layer = new LeafletMapIconCommentMarker();
+            let mapIconType = null;
+            for(let i = 0; i < MAP_ICON_TYPES.length; i++ ){
+                if( MAP_ICON_TYPES[i].id === remoteMapObject.map_icon_type_id ){
+                    mapIconType = MAP_ICON_TYPES[i];
                     break;
-                default:
-                    layer = new LeafletMapIconUnknownMarker();
+                }
             }
+
+            // Find the layer we should display on the map
+            let layer;
+            if( mapIconType === null ) {
+                console.error('Unable to find mapIconType for id = ' + remoteMapObject.map_icon_type_id);
+                layer = new LeafletMapIconUnknownMarker();
+            } else {
+                layer = getLeafletMapIconMarker(mapIconType);
+            }
+
             layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
 
-            /** @var KillZone killzone */
             mapIcon = this.createNew(layer);
         }
 
         mapIcon.id = remoteMapObject.id;
         mapIcon.floor_id = remoteMapObject.floor_id;
+        mapIcon.map_icon_type_id = remoteMapObject.map_icon_type_id;
         mapIcon.comment = remoteMapObject.comment;
 
         // We just downloaded the kill zone, it's synced alright!
@@ -72,6 +81,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         // no super call required
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
 
+        MAP_ICON_TYPES = response.mapicontypes;
         let mapIcons = response.mapicon;
 
         // Now draw the patrols on the map

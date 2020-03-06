@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property string $key
+ * @property boolean $admin_only
  *
  * @mixin \Eloquent
  */

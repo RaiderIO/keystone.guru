@@ -14,7 +14,7 @@ use Illuminate\Database\Query\Builder;
 trait ListsMapIcons
 {
     /**
-     * Lists all map comments of a floor.
+     * Lists all map icons of a floor.
      *
      * @param $floorId
      * @param $publicKey

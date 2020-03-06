@@ -1,7 +1,7 @@
 [
     {
         "floor_id": 61,
-        "icon_type": "mapcomment",
+        "map_icon_type_id": 2,
         "lat": -84.7578125,
         "lng": 140,
         "comment": "Keystone Guru: There's a third holding cell here, the map is incorrect."

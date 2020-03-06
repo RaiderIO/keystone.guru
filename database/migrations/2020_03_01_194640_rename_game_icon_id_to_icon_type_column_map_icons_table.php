@@ -15,7 +15,7 @@ class RenameGameIconIdToIconTypeColumnMapIconsTable extends Migration
     {
         Schema::table('map_icons', function (Blueprint $table) {
             $table->dropColumn('game_icon_id');
-            $table->string('icon_type')->after('dungeon_route_id');
+            $table->integer('map_icon_type_id')->after('dungeon_route_id');
         });
     }
 
@@ -27,7 +27,7 @@ class RenameGameIconIdToIconTypeColumnMapIconsTable extends Migration
     public function down()
     {
         Schema::table('map_icons', function (Blueprint $table) {
-            $table->dropColumn('icon_type');
+            $table->dropColumn('map_icon_type_id');
             $table->integer('game_icon_id')->after('dungeon_route_id');
         });
     }

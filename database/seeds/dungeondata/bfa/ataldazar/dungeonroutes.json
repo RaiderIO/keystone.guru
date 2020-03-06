@@ -630,28 +630,28 @@
         "mapicons": [
             {
                 "floor_id": 41,
-                "icon_type": "mapcomment",
+                "map_icon_type_id": 2,
                 "lat": -115.625,
                 "lng": 242.75,
                 "comment": "Jump down to Rezan"
             },
             {
                 "floor_id": 41,
-                "icon_type": "mapcomment",
+                "map_icon_type_id": 2,
                 "lat": -47.4375,
                 "lng": 213.8125,
                 "comment": "Double Rogue Shroud to get past this pack twice."
             },
             {
                 "floor_id": 42,
-                "icon_type": "mapcomment",
+                "map_icon_type_id": 2,
                 "lat": -88.5,
                 "lng": 220.75,
                 "comment": "Bloodlust"
             },
             {
                 "floor_id": 41,
-                "icon_type": "mapcomment",
+                "map_icon_type_id": 2,
                 "lat": -126,
                 "lng": 139,
                 "comment": "Bloodlust"

@@ -214,7 +214,7 @@ class DungeonDataSeeder extends Seeder
         DB::table('enemy_patrols')->truncate();
         DB::table('dungeon_start_markers')->truncate();
         DB::table('dungeon_floor_switch_markers')->truncate();
-        // Delete all map comments that are always there
+        // Delete all map icons that are always there
         DB::table('map_icons')->where('dungeon_route_id', -1)->delete();
         // Delete polylines related to enemy patrols
         DB::table('polylines')->where('model_class', 'App\Models\EnemyPatrol')->delete();

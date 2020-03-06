@@ -23,6 +23,7 @@ use App\Logic\Datatables\ViewsColumnHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
+use App\Models\MapIconType;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
@@ -321,6 +322,8 @@ class APIDungeonRouteController extends Controller
      */
     function data(Request $request, $publickey)
     {
+        $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
+
         // Init the fields we should get for this request
         $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonstartmarker,dungeonfloorswitchmarker']);
         $fields = explode(',', $fields);
@@ -379,9 +382,10 @@ class APIDungeonRouteController extends Controller
             $result['enemypatrol'] = $this->listEnemyPatrols($request->get('floor'));
         }
 
-        // Map comments
+        // Map icons
         if (in_array('mapicon', $fields)) {
             $result['mapicon'] = $this->listMapIcons($request->get('floor'), $publickey);
+            $result['mapicontypes'] = MapIconType::all();
         }
 
         // Enemy patrols
