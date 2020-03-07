@@ -4,7 +4,7 @@ $(function () {
             TYPE: 'mapicon'
         },
         options: {
-            icon: LeafletMapIconUnknown
+            icon: LeafletMapIcon
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
@@ -14,58 +14,36 @@ $(function () {
     });
 });
 
-function getLeafletMapIconMarker(mapIconType){
-    let generatedMarker = L.Marker.extend({
-        options: {
-            icon: L.divIcon({
-                html: '<div class="' + mapIconType.key + '"><img src="/images/mapicon/' + mapIconType.key + '.png" /></div>',
-                iconSize: [16, 16],
-                className: 'enemy_icon ' + 'map_icon_' + mapIconType.key
-            })
-        }
-    });
-    return new generatedMarker();
+/**
+ * Get the Leaflet Marker that represents said mapIconType
+ * @param mapIconType null|obj When null, default unknown marker type is returned
+ * @returns {*}
+ */
+function getMapIconLeafletIcon(mapIconType) {
+    let icon;
+    if (mapIconType === null) {
+        console.warn('Unable to find mapIconType for null');
+        icon = LeafletMapIcon;
+    } else {
+        icon = L.divIcon({
+            html: '<div class="' + mapIconType.key + '"><img src="/images/mapicon/' + mapIconType.key + '.png" /></div>',
+            iconSize: [mapIconType.width, mapIconType.height],
+            popupAnchor: [0, -(mapIconType.height / 2)],
+            className: 'map_icon_' + mapIconType.key
+        })
+    }
+    return icon;
 }
 
-let LeafletMapIconComment = L.divIcon({
-    html: '<i class="fas fa-comment"></i>',
-    iconSize: [16, 16],
-    className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
-});
-
-let LeafletMapIconUnknown = L.divIcon({
+let LeafletMapIcon = L.divIcon({
     html: '<i class="fas fa-question"></i>',
-    iconSize: [16, 16],
+    iconSize: [32, 32],
     className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
 });
 
-let LeafletMapIconGreaseBot = L.divIcon({
-    html: '<i class="fas fa-comment"></i>',
-    iconSize: [16, 16],
-    className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
-});
-
-let LeafletMapIconShockBot = L.divIcon({
-    html: '<i class="fas fa-shock"></i>',
-    iconSize: [16, 16],
-    className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
-});
-
-let LeafletMapIconWeldingBot = L.divIcon({
-    html: '<i class="fas fa-plus"></i>',
-    iconSize: [16, 16],
-    className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
-});
-
-let LeafletMapIconCommentMarker = L.Marker.extend({
+let LeafletMapIconMarker = L.Marker.extend({
     options: {
-        icon: LeafletMapIconComment
-    }
-});
-
-let LeafletMapIconUnknownMarker = L.Marker.extend({
-    options: {
-        icon: LeafletMapIconUnknown
+        icon: LeafletMapIcon
     }
 });
 
@@ -75,32 +53,60 @@ class MapIcon extends MapObject {
 
         this.id = 0;
         this.map_icon_type_id = 0;
+        this.map_icon_type = null;
+        this.comment = '';
         this.label = 'MapIcon';
 
         this.setSynced(false);
+        this.register('synced', this, this._synced.bind(this));
+    }
+
+    _synced(event) {
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+
+        // Recreate the tooltip
+        this.bindTooltip();
     }
 
     _popupSubmitClicked() {
         console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
         this.comment = $('#map_map_icon_edit_popup_comment_' + this.id).val();
-        this.map_icon_type_id = $('#map_map_icon_edit_popup_icon_type_id_' + this.id).val();
+        this.map_icon_type_id = parseInt($('#map_map_icon_edit_popup_map_icon_type_id_' + this.id).val());
+        this.setMapIconType(getMapIconType(this.map_icon_type_id));
 
         this.edit();
     }
 
+    setMapIconType(mapIconType) {
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+
+        console.log(mapIconType);
+
+        this.map_icon_type = mapIconType;
+        this.layer.setIcon(getMapIconLeafletIcon(mapIconType));
+
+        // Rebuild the visual
+        this.setSynced(true);
+    }
+
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
-        return !this.always_visible;
+        // @TODO change this
+        return true; // !this.map_icon_type.admin_only;
     }
 
     bindTooltip() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
-        this.layer.bindTooltip(
-            jQuery('<div/>', {
-                class: 'map_map_comment_tooltip'
-            }).text(this.comment)[0].outerHTML
-        );
+        this.unbindTooltip();
+
+        if (this.comment.length > 0) {
+            this.layer.bindTooltip(
+                jQuery('<div/>', {
+                    class: 'map_map_icon_comment_tooltip'
+                }).text(this.comment)[0].outerHTML
+            );
+        }
     }
 
     edit() {
@@ -195,15 +201,19 @@ class MapIcon extends MapObject {
                 let template = Handlebars.templates['map_map_icon_edit_popup_template'];
 
                 // Construct the html for each option and insert it into the handlebars template
-                for( let i in MAP_ICON_TYPES ){
-                    if( MAP_ICON_TYPES.hasOwnProperty(i) ){
+                for (let i in MAP_ICON_TYPES) {
+                    if (MAP_ICON_TYPES.hasOwnProperty(i)) {
                         let template = Handlebars.templates['map_map_icon_select_option_template'];
 
                         MAP_ICON_TYPES[i].html = template(MAP_ICON_TYPES[i]);
                     }
                 }
 
-                let data = $.extend({id: self.id, map_icon_type_id: self.map_icon_type_id, mapicontypes: MAP_ICON_TYPES}, getHandlebarsDefaultVariables());
+                let data = $.extend({
+                    id: self.id,
+                    map_icon_type_id: self.map_icon_type_id,
+                    mapicontypes: MAP_ICON_TYPES
+                }, getHandlebarsDefaultVariables());
 
                 self.layer.unbindPopup();
                 self.layer.bindPopup(template(data), {

@@ -39,6 +39,10 @@ class MapIconTypesSeeder extends Seeder
             $mapIconType = new MapIconType();
             $mapIconType->key = $key;
             $mapIconType->name = $mapIcon['name'];
+
+            $imageSize = getimagesize(resource_path(sprintf('/assets/images/mapicon/%s.png', $key)));
+            $mapIconType->width = $imageSize[0];
+            $mapIconType->height = $imageSize[1];
             $mapIconType->admin_only = isset($mapIcon['admin_only']) ? $mapIcon['admin_only'] : 0;
             $mapIconType->save();
         }
@@ -46,6 +50,6 @@ class MapIconTypesSeeder extends Seeder
 
     private function _rollback()
     {
-        DB::table('map_icons')->truncate();
+        DB::table('map_icon_types')->truncate();
     }
 }

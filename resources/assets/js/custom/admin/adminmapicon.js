@@ -50,6 +50,7 @@ class AdminMapIcon extends MapIcon {
             data: {
                 id: this.id,
                 floor_id: getState().getCurrentFloor().id,
+                map_icon_type_id: this.map_icon_type_id,
                 comment: this.comment,
                 lat: this.layer.getLatLng().lat,
                 lng: this.layer.getLatLng().lng,

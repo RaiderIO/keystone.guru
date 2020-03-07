@@ -7,7 +7,7 @@ let gitRevisionPlugin = null; // Init in the config below
 mix.webpackConfig({
     watchOptions: {
         ignored: ['node_modules', 'vendor'],
-        poll: 1000 // Check for changes every second
+        poll: 2000 // Check for changes every second
     },
     // Handlebars has a bug which requires this: https://github.com/wycats/handlebars.js/issues/1174
     resolve: {

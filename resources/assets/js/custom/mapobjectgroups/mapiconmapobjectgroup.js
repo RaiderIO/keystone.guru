@@ -1,6 +1,22 @@
 // Filled from the _fetchSuccess() function of this class
 let MAP_ICON_TYPES = [];
 
+/**
+ * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
+ * @param mapIconTypeId
+ * @returns {null}
+ */
+function getMapIconType(mapIconTypeId) {
+    let mapIconType = null;
+    for (let i = 0; i < MAP_ICON_TYPES.length; i++) {
+        if (MAP_ICON_TYPES[i].id === mapIconTypeId) {
+            mapIconType = MAP_ICON_TYPES[i];
+            break;
+        }
+    }
+    return mapIconType;
+}
+
 class MapIconMapObjectGroup extends MapObjectGroup {
     constructor(manager, name, editable) {
         super(manager, name, editable);
@@ -41,24 +57,10 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         let mapIcon = this.findMapObjectById(remoteMapObject.id);
 
         // Only create a new one if it's new for us
+        let mapIconType = getMapIconType(remoteMapObject.map_icon_type_id);
         if (mapIcon === null) {
-            let mapIconType = null;
-            for(let i = 0; i < MAP_ICON_TYPES.length; i++ ){
-                if( MAP_ICON_TYPES[i].id === remoteMapObject.map_icon_type_id ){
-                    mapIconType = MAP_ICON_TYPES[i];
-                    break;
-                }
-            }
-
             // Find the layer we should display on the map
-            let layer;
-            if( mapIconType === null ) {
-                console.error('Unable to find mapIconType for id = ' + remoteMapObject.map_icon_type_id);
-                layer = new LeafletMapIconUnknownMarker();
-            } else {
-                layer = getLeafletMapIconMarker(mapIconType);
-            }
-
+            let layer = new LeafletMapIconMarker();
             layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
 
             mapIcon = this.createNew(layer);
@@ -68,8 +70,9 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         mapIcon.floor_id = remoteMapObject.floor_id;
         mapIcon.map_icon_type_id = remoteMapObject.map_icon_type_id;
         mapIcon.comment = remoteMapObject.comment;
+        mapIcon.setMapIconType(mapIconType);
 
-        // We just downloaded the kill zone, it's synced alright!
+        // We just downloaded the map icon, it's synced alright!
         mapIcon.setSynced(true);
 
         // Show echo notification or not

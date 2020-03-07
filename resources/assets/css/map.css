@@ -682,7 +682,7 @@ html, body, #map, #app, .wrapper {
     border-radius: 15px;
 }
 
-.map_map_comment_tooltip {
+.map_map_icon_comment_tooltip {
     width: 240px;
     white-space: normal;
 }
