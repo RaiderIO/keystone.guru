@@ -358,7 +358,7 @@
         "npc_class_id": 3,
         "name": "Anodized Coilbearer",
         "base_health": 963270,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0

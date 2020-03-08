@@ -21,6 +21,6 @@ class KillZoneEnemySelection extends EnemySelection {
      * @protected
      */
     _getLayerIcon(){
-        return LeafletKillZoneIconSelected;
+        return LeafletKillZoneIconEditMode;
     }
 }

@@ -58,7 +58,7 @@ class MapObjectGroupManager extends Signalable {
         } else if (name === MAP_OBJECT_GROUP_BRUSHLINE) {
             result = new BrushlineMapObjectGroup(this, MAP_OBJECT_GROUP_BRUSHLINE, !isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_MAPICON) {
-            result = new MapIconMapObjectGroup(this, MAP_OBJECT_GROUP_MAPICON, !isMapAdmin);
+            result = new MapIconMapObjectGroup(this, MAP_OBJECT_GROUP_MAPICON, true);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_START_MARKER) {
             result = new DungeonStartMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_START_MARKER, isMapAdmin);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER) {

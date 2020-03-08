@@ -338,11 +338,18 @@ html, body, #map, #app, .wrapper {
     opacity: 1;
 }
 
-.mdt_enemy_icon.leaflet-edit-marker-selected {
+.leaflet-edit-marker-selected {
     border-color: yellow !important;
+    border-radius: 4px !important; /* Fixes weird border */
+}
+
+.map_icon.leaflet-edit-marker-selected {
+    margin-top: -4px !important;
+    margin-left: -4px !important;
+}
+.mdt_enemy_icon.leaflet-edit-marker-selected {
     margin-top: -9px !important;
     margin-left: -9px !important;
-    border-radius: 4px !important; /* Fixes weird border */
 }
 
 .boss_enemy_icon {
@@ -673,7 +680,7 @@ html, body, #map, #app, .wrapper {
     font-size: 30px;
 }
 
-.marker_div_icon_mapcomment {
+.map_icon_div_icon_unknown {
     font-size: 16px;
 }
 

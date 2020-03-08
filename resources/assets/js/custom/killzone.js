@@ -20,7 +20,7 @@ let LeafletKillZoneIcon = L.divIcon({
     className: 'marker_div_icon_font_awesome marker_div_icon_killzone'
 });
 
-let LeafletKillZoneIconSelected = L.divIcon({
+let LeafletKillZoneIconEditMode = L.divIcon({
     html: '<i class="fas fa-bullseye"></i>',
     iconSize: [30, 30],
     className: 'marker_div_icon_font_awesome marker_div_icon_killzone killzone_icon_big leaflet-edit-marker-selected'

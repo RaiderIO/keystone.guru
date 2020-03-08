@@ -4,12 +4,15 @@ class EnemyVisual extends Signalable {
         console.assert(map instanceof DungeonMap, 'map was not a DungeonMap', map);
         console.assert(enemy instanceof Enemy, 'enemy was not an Enemy', enemy);
 
+        /** @type DungeonMap */
         this.map = map;
+        /** @type Enemy */
         this.enemy = enemy;
         this.layer = layer;
         this.divIcon = null;
 
         this.visualType = '';
+        /** @type EnemyVisualMain */
         this.mainVisual = null;
 
         // Default visual (after modifiers!)
@@ -28,6 +31,7 @@ class EnemyVisual extends Signalable {
 
         // If it changed, refresh the entire visual
         this.enemy.register('enemy:set_raid_marker', this, this._buildVisual.bind(this));
+        this.map.register('map:editmodetoggled', this, this._buildVisual.bind(this));
 
         this.layer.on('mouseover', function () {
             self._mouseOver();
@@ -35,6 +39,7 @@ class EnemyVisual extends Signalable {
         this.layer.on('mouseout', function () {
             self._mouseOut();
         });
+
     }
 
     /**
@@ -79,6 +84,8 @@ class EnemyVisual extends Signalable {
         for (let i = 0; i < visuals.length; i++) {
             visuals[i].setVisualType(getState().getEnemyDisplayType());
         }
+
+        this.layer.closeTooltip();
     }
 
     /**
@@ -128,7 +135,7 @@ class EnemyVisual extends Signalable {
 
             let data = {};
 
-            if (this.enemy.isSelectable()) {
+            if (this.enemy.isSelectable() || this.map.editModeActive) {
                 data = {
                     selection_classes_base: 'leaflet-edit-marker-selected selected_enemy_icon'
                 };
@@ -217,5 +224,8 @@ class EnemyVisual extends Signalable {
     cleanup() {
         this.layer.off('mouseover');
         this.layer.off('mouseout');
+
+        this.enemy.unregister('enemy:set_raid_marker', this);
+        this.map.unregister('map:editmodetoggled', this);
     }
 }

@@ -4,7 +4,7 @@ $(function () {
             TYPE: 'mapicon'
         },
         options: {
-            icon: LeafletMapIcon
+            icon: LeafletMapIconUnknown
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
@@ -17,33 +17,48 @@ $(function () {
 /**
  * Get the Leaflet Marker that represents said mapIconType
  * @param mapIconType null|obj When null, default unknown marker type is returned
+ * @param editModeEnabled bool
  * @returns {*}
  */
-function getMapIconLeafletIcon(mapIconType) {
+function getMapIconLeafletIcon(mapIconType, editModeEnabled) {
     let icon;
     if (mapIconType === null) {
         console.warn('Unable to find mapIconType for null');
-        icon = LeafletMapIcon;
+        icon = editModeEnabled ? LeafletMapIconUnknownEditMode : LeafletMapIconUnknown;
     } else {
+        let template = Handlebars.templates['map_map_icon_visual_template'];
+
+        let handlebarsData = $.extend(mapIconType, {
+            selectedclass: (editModeEnabled ? ' leaflet-edit-marker-selected' : ''),
+            width: mapIconType.width,
+            height: mapIconType.height
+        });
+
         icon = L.divIcon({
-            html: '<div class="' + mapIconType.key + '"><img src="/images/mapicon/' + mapIconType.key + '.png" /></div>',
+            html: template(handlebarsData),
             iconSize: [mapIconType.width, mapIconType.height],
             popupAnchor: [0, -(mapIconType.height / 2)],
             className: 'map_icon_' + mapIconType.key
-        })
+        });
     }
     return icon;
 }
 
-let LeafletMapIcon = L.divIcon({
+let LeafletMapIconUnknown = L.divIcon({
     html: '<i class="fas fa-question"></i>',
     iconSize: [32, 32],
-    className: 'marker_div_icon_font_awesome marker_div_icon_mapcomment'
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown'
+});
+
+let LeafletMapIconUnknownEditMode = L.divIcon({
+    html: '<i class="fas fa-question"></i>',
+    iconSize: [32, 32],
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected'
 });
 
 let LeafletMapIconMarker = L.Marker.extend({
     options: {
-        icon: LeafletMapIcon
+        icon: LeafletMapIconUnknown
     }
 });
 
@@ -59,13 +74,15 @@ class MapIcon extends MapObject {
 
         this.setSynced(false);
         this.register('synced', this, this._synced.bind(this));
+        this.map.register('map:editmodetoggled', this, this._refreshVisual.bind(this))
     }
 
-    _synced(event) {
+    _synced() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
         // Recreate the tooltip
         this.bindTooltip();
+        this._refreshVisual();
     }
 
     _popupSubmitClicked() {
@@ -77,20 +94,31 @@ class MapIcon extends MapObject {
         this.edit();
     }
 
+    _refreshVisual(){
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+
+        this.layer.setIcon(getMapIconLeafletIcon(this.map_icon_type, this.map.editModeActive && this.isEditable()));
+        // @TODO Refresh the layer; required as a workaroudn since in mapiconmapobjectgroup we don't know the map_icon_type upon init,
+        // thus we don't know if this will be editable or not. In the sync this will get called and the edit state is known
+        // after which this function will function properly
+        this.onLayerInit();
+    }
+
     setMapIconType(mapIconType) {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
         this.map_icon_type = mapIconType;
-        this.layer.setIcon(getMapIconLeafletIcon(mapIconType));
-
-        // Rebuild the visual
-        this.setSynced(true);
+        this._refreshVisual();
     }
 
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
-        // @TODO change this
-        return !this.map_icon_type || !this.map_icon_type.admin_only;
+        // Admin may edit everything, but not useful when editing a dungeonroute
+        console.warn(this.map_icon_type);
+        return this.map_icon_type !== null && (
+            (this.map_icon_type.admin_only && isUserAdmin && this.map.getDungeonRoute().publicKey === '') ||
+            (!this.map_icon_type.admin_only && this.map.getDungeonRoute().publicKey !== '')
+        );
     }
 
     bindTooltip() {
@@ -225,6 +253,12 @@ class MapIcon extends MapObject {
             });
 
         }
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        this.map.unregister('map:editmodetoggled', this);
     }
 
 }
