@@ -80,8 +80,6 @@ class MapIcon extends MapObject {
     setMapIconType(mapIconType) {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
-        console.log(mapIconType);
-
         this.map_icon_type = mapIconType;
         this.layer.setIcon(getMapIconLeafletIcon(mapIconType));
 
@@ -92,7 +90,7 @@ class MapIcon extends MapObject {
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // @TODO change this
-        return true; // !this.map_icon_type.admin_only;
+        return !this.map_icon_type || !this.map_icon_type.admin_only;
     }
 
     bindTooltip() {

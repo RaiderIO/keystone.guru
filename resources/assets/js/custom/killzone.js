@@ -301,7 +301,7 @@ class KillZone extends MapObject {
         let p = hull(latLngs, 100);
 
         // Only if we can actually make an offset
-        if (p.length > 1) {
+        if (latLngs.length > 1 && p.length > 1) {
             let offset = new Offset();
             p = offset.data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
 

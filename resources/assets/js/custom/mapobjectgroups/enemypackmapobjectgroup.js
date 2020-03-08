@@ -47,7 +47,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
                 // Build a layer based off a hull if we're supposed to
                 let p = hull(points, 100);
                 // Only if we can actually make an offset
-                if (p.length > 1) {
+                if (points.length > 1 && p.length > 1) {
                     try {
                         let offset = new Offset();
                         p = offset.data(p).arcSegments(c.map.enemypack.arcSegments(p.length)).margin(c.map.enemypack.margin);
