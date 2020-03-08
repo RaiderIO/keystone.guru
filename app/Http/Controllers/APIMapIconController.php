@@ -66,7 +66,7 @@ class APIMapIconController extends Controller
         $mapIcon->floor_id = $request->get('floor_id');
         $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
         $mapIcon->map_icon_type_id = $mapIconTypeId;
-        $mapIcon->comment = $request->get('comment', '');
+        $mapIcon->comment = $request->get('comment', '') ?? '';
         $mapIcon->lat = $request->get('lat');
         $mapIcon->lng = $request->get('lng');
 
