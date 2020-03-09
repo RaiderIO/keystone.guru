@@ -69,6 +69,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         mapIcon.id = remoteMapObject.id;
         mapIcon.floor_id = remoteMapObject.floor_id;
         mapIcon.map_icon_type_id = remoteMapObject.map_icon_type_id;
+        mapIcon.has_dungeon_route = remoteMapObject.has_dungeon_route;
         mapIcon.comment = remoteMapObject.comment;
         mapIcon.setMapIconType(mapIconType);
 

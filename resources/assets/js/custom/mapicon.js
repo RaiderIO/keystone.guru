@@ -69,6 +69,7 @@ class MapIcon extends MapObject {
         this.id = 0;
         this.map_icon_type_id = 0;
         this.map_icon_type = null;
+        this.has_dungeon_route = false;
         this.comment = '';
         this.label = 'MapIcon';
 
@@ -116,8 +117,8 @@ class MapIcon extends MapObject {
         // Admin may edit everything, but not useful when editing a dungeonroute
         console.warn(this.map_icon_type);
         return this.map_icon_type !== null && (
-            (this.map_icon_type.admin_only && isUserAdmin && this.map.getDungeonRoute().publicKey === '') ||
-            (!this.map_icon_type.admin_only && this.map.getDungeonRoute().publicKey !== '')
+            ((this.map_icon_type.admin_only && isUserAdmin && this.map.getDungeonRoute().publicKey === '') ||
+            !this.map_icon_type.admin_only)
         );
     }
 
@@ -126,15 +127,14 @@ class MapIcon extends MapObject {
 
         this.unbindTooltip();
 
-        if (this.comment.length > 0) {
-            this.layer.bindTooltip(
-                jQuery('<div/>', {
-                    class: 'map_map_icon_comment_tooltip'
-                }).text(this.comment)[0].outerHTML, {
+        this.layer.bindTooltip(
+            jQuery('<div/>', {
+                class: 'map_map_icon_comment_tooltip'
+            }).text(this.comment.length > 0 ? this.comment : this.map_icon_type.name)[0].outerHTML, {
                     direction: 'top'
                 }
             );
-        }
+
     }
 
     edit() {
