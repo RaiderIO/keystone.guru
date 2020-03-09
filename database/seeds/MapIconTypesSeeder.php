@@ -42,9 +42,9 @@ class MapIconTypesSeeder extends Seeder
             // Just in case it doesn't exist
             $filePath = resource_path(sprintf('assets/images/mapicon/%s.png', $key));
             if (file_exists($filePath)) {
-                $this->command->warn(sprintf('Unable to find file %s', $filePath));
                 $imageSize = getimagesize($filePath);
             } else {
+                $this->command->warn(sprintf('Unable to find file %s', $filePath));
                 $imageSize = [16, 16];
             }
             $mapIconType->width = $imageSize[0];
