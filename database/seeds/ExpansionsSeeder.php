@@ -27,7 +27,7 @@ class ExpansionsSeeder extends Seeder
         ];
 
 
-        foreach($expansions as $name => $expansion){
+        foreach ($expansions as $name => $expansion) {
             $expansion->name = $name;
             // Temp file
             $expansion->icon_file_id = -1;

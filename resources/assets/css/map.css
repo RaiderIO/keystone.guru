@@ -690,8 +690,9 @@ html, body, #map, #app, .wrapper {
 }
 
 .map_map_icon_comment_tooltip {
-    width: 240px;
+    max-width: 240px;
     white-space: normal;
+    display: inline-block;
 }
 
 #map_ad_horizontal,
