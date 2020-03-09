@@ -130,7 +130,9 @@ class MapIcon extends MapObject {
             this.layer.bindTooltip(
                 jQuery('<div/>', {
                     class: 'map_map_icon_comment_tooltip'
-                }).text(this.comment)[0].outerHTML
+                }).text(this.comment)[0].outerHTML, {
+                    direction: 'top'
+                }
             );
         }
     }
