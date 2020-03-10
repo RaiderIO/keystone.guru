@@ -385,7 +385,6 @@ class APIDungeonRouteController extends Controller
         // Map icons
         if (in_array('mapicon', $fields)) {
             $result['mapicon'] = $this->listMapIcons($request->get('floor'), $publickey);
-            $result['mapicontypes'] = MapIconType::all();
         }
 
         // Enemy patrols

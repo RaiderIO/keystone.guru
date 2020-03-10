@@ -90,7 +90,7 @@ class MapIcon extends MapObject {
         console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
         this.comment = $('#map_map_icon_edit_popup_comment_' + this.id).val();
         this.map_icon_type_id = parseInt($('#map_map_icon_edit_popup_map_icon_type_id_' + this.id).val());
-        this.setMapIconType(getMapIconType(this.map_icon_type_id));
+        this.setMapIconType(getState().getMapIconType(this.map_icon_type_id));
 
         this.edit();
     }
@@ -226,18 +226,18 @@ class MapIcon extends MapObject {
                 let template = Handlebars.templates['map_map_icon_edit_popup_template'];
 
                 // Construct the html for each option and insert it into the handlebars template
-                for (let i in MAP_ICON_TYPES) {
-                    if (MAP_ICON_TYPES.hasOwnProperty(i)) {
+                for (let i in mapIconTypes) {
+                    if (mapIconTypes.hasOwnProperty(i)) {
                         let template = Handlebars.templates['map_map_icon_select_option_template'];
 
-                        MAP_ICON_TYPES[i].html = template(MAP_ICON_TYPES[i]);
+                        mapIconTypes[i].html = template(mapIconTypes[i]);
                     }
                 }
 
                 let data = $.extend({
                     id: self.id,
                     map_icon_type_id: self.map_icon_type_id,
-                    mapicontypes: MAP_ICON_TYPES
+                    mapicontypes: mapIconTypes
                 }, getHandlebarsDefaultVariables());
 
                 self.layer.unbindPopup();

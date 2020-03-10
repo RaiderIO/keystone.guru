@@ -11,6 +11,17 @@ class StateManager extends Signalable {
         this.floorId = null;
         // Map zoom level (default = 2)
         this.mapZoomLevel = 2;
+
+        // List of static arrays
+        this.mapIconTypes = [];
+    }
+
+    /**
+     * Sets the map icon types to be used in the state.
+     * @param mapIconTypes int
+     */
+    setMapIconTypes(mapIconTypes) {
+        this.mapIconTypes = mapIconTypes;
     }
 
     /**
@@ -132,4 +143,21 @@ class StateManager extends Signalable {
 
         return result;
     }
+
+    /**
+     * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
+     * @param mapIconTypeId
+     * @returns {null}
+     */
+    getMapIconType(mapIconTypeId) {
+        let mapIconType = null;
+        for (let i = 0; i < this.mapIconTypes.length; i++) {
+            if (this.mapIconTypes[i].id === mapIconTypeId) {
+                mapIconType = this.mapIconTypes[i];
+                break;
+            }
+        }
+        return mapIconType;
+    }
+
 }

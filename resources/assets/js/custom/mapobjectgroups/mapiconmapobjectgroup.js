@@ -1,22 +1,3 @@
-// Filled from the _fetchSuccess() function of this class
-let MAP_ICON_TYPES = [];
-
-/**
- * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
- * @param mapIconTypeId
- * @returns {null}
- */
-function getMapIconType(mapIconTypeId) {
-    let mapIconType = null;
-    for (let i = 0; i < MAP_ICON_TYPES.length; i++) {
-        if (MAP_ICON_TYPES[i].id === mapIconTypeId) {
-            mapIconType = MAP_ICON_TYPES[i];
-            break;
-        }
-    }
-    return mapIconType;
-}
-
 class MapIconMapObjectGroup extends MapObjectGroup {
     constructor(manager, name, editable) {
         super(manager, name, editable);
@@ -57,7 +38,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         let mapIcon = this.findMapObjectById(remoteMapObject.id);
 
         // Only create a new one if it's new for us
-        let mapIconType = getMapIconType(remoteMapObject.map_icon_type_id);
+        let mapIconType = getState().getMapIconType(remoteMapObject.map_icon_type_id);
         if (mapIcon === null) {
             // Find the layer we should display on the map
             let layer = new LeafletMapIconMarker();
@@ -85,7 +66,6 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         // no super call required
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
 
-        MAP_ICON_TYPES = response.mapicontypes;
         let mapIcons = response.mapicon;
 
         // Now draw the patrols on the map
