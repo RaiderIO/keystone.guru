@@ -136,7 +136,8 @@ class MapObjectGroup extends Signalable {
 
             let tooltip = localMapObject.layer.bindTooltip(username, {
                 permanent: true,
-                className: 'user_color_' + username + ' ' + fontClass
+                className: 'user_color_' + username + ' ' + fontClass,
+                direction: 'top'
             });
 
             // Fadeout after some time

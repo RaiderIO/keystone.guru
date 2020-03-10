@@ -95,7 +95,7 @@ class MapIcon extends MapObject {
         this.edit();
     }
 
-    _refreshVisual(){
+    _refreshVisual() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
         this.layer.setIcon(getMapIconLeafletIcon(this.map_icon_type, this.map.editModeActive && this.isEditable()));
@@ -115,10 +115,9 @@ class MapIcon extends MapObject {
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        console.warn(this.map_icon_type);
         return this.map_icon_type !== null && (
             ((this.map_icon_type.admin_only && isUserAdmin && this.map.getDungeonRoute().publicKey === '') ||
-            !this.map_icon_type.admin_only)
+                !this.map_icon_type.admin_only)
         );
     }
 
@@ -127,11 +126,15 @@ class MapIcon extends MapObject {
 
         this.unbindTooltip();
 
-        this.layer.bindTooltip(
-            jQuery('<div/>', {
-                class: 'map_map_icon_comment_tooltip'
-            }).text(this.comment.length > 0 ? this.comment : this.map_icon_type.name)[0].outerHTML
-        );
+        if (this.comment.length > 0 || this.map_icon_type !== null) {
+            this.layer.bindTooltip(
+                jQuery('<div/>', {
+                    class: 'map_map_icon_comment_tooltip'
+                }).text(this.comment.length > 0 ? this.comment : this.map_icon_type.name)[0].outerHTML, {
+                    direction: 'top'
+                }
+            );
+        }
     }
 
     edit() {

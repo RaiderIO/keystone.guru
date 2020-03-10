@@ -87,7 +87,9 @@ class DungeonFloorSwitchMarker extends MapObject {
             let targetFloor = this.map.getFloorById(this.target_floor_id);
 
             if (targetFloor !== false) {
-                this.layer.bindTooltip("Go to " + targetFloor.name);
+                this.layer.bindTooltip('Go to ' + targetFloor.name, {
+                    direction: 'top'
+                });
             }
         }
     }
