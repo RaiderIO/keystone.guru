@@ -20,7 +20,7 @@ class DungeonrouteEdit extends InlineCode {
     _setPublished(value) {
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + dungeonMap.getDungeonRoute().publicKey + '/publish',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/publish',
             dataType: 'json',
             data: {
                 published: value === true ? 1 : 0
@@ -56,7 +56,7 @@ class DungeonrouteEdit extends InlineCode {
     _saveSettings() {
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + dungeonMap.getDungeonRoute().publicKey,
+            url: '/ajax/' + getState().getDungeonRoute().publicKey,
             dataType: 'json',
             data: {
                 dungeon_route_title: $('#dungeon_route_title').val(),

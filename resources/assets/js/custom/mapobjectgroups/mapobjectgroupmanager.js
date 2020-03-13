@@ -129,7 +129,7 @@ class MapObjectGroupManager extends Signalable {
         let self = this;
 
         // @TODO This should probably be different but atm I can't think of a better way
-        let publicKey = this.map.getDungeonRoute().publicKey;
+        let publicKey = getState().getDungeonRoute().publicKey;
         if (isMapAdmin) {
             publicKey = 'admin';
         }

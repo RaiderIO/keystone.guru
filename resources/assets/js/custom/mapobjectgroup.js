@@ -64,10 +64,11 @@ class MapObjectGroup extends Signalable {
 
     /**
      * @param layer
+     * @param options Object
      * @protected
      * @return MapObject
      */
-    _createObject(layer) {
+    _createObject(layer, options = {}) {
         console.error('override the _createObject function!');
     }
 
@@ -91,7 +92,7 @@ class MapObjectGroup extends Signalable {
     _isObjectVisible(remoteMapObject) {
         let result = true;
 
-        let faction = this.manager.map.getDungeonRoute().faction;
+        let faction = getState().getDungeonRoute().faction;
 
         // Only when not in try mode!
         if (!this.manager.map.isTryModeEnabled() && (remoteMapObject.faction !== 'any' && faction !== 'any' && faction !== remoteMapObject.faction)) {
@@ -263,13 +264,14 @@ class MapObjectGroup extends Signalable {
 
     /**
      *
-     * @param layer
+     * @param layer L.Layer
+     * @param options Object
      * @return MapObject
      */
-    createNew(layer) {
+    createNew(layer, options) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        let object = this._createObject(layer);
+        let object = this._createObject(layer, options);
         this.objects.push(object);
         this.layerGroup.addLayer(layer);
 

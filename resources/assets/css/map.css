@@ -690,6 +690,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .map_map_icon_comment_tooltip {
+    min-width: 150px;
     max-width: 240px;
     white-space: normal;
     display: inline-block;

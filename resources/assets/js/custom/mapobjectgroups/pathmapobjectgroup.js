@@ -8,7 +8,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-route';
 
         if (this.manager.map.options.echo) {
-            window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
+            window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.path-changed', (e) => {
                     self._restoreObject(e.path, e.user);
                 })

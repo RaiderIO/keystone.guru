@@ -389,7 +389,7 @@ class DungeonMap extends Signalable {
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
-            if (this.getDungeonRoute().publicKey !== '' || this.options.edit) {
+            if (getState().getDungeonRoute().publicKey !== '' || this.options.edit) {
                 result.push(new EnemyForcesControls(this));
             }
             result.push(new EnemyVisualControls(this));
@@ -648,16 +648,6 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         return this.options.try && this.options.edit;
-    }
-
-    /**
-     * Get data related to the dungeon route we're displaying (may be a dummy/empty dungeon route)
-     * @returns {*}
-     */
-    getDungeonRoute() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        return this.options.dungeonroute;
     }
 
     /**

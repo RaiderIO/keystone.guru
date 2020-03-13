@@ -170,11 +170,11 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                 <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
                                     @if( $user->hasRole('admin'))
                                         <a class="dropdown-item"
-                                           href="{{ route('dashboard.home') }}">{{__('Admin Dashboard')}}</a>
+                                           href="{{ route('dashboard.home') }}">{{__('Admin dashboard')}}</a>
                                         <a class="dropdown-item"
-                                           href="{{ route('tracker.stats.index') }}">{{__('Admin Stats')}}</a>
+                                           href="{{ route('tracker.stats.index') }}">{{__('Admin stats')}}</a>
                                         <a class="dropdown-item"
-                                           href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
+                                           href="{{ route('admin.tools') }}">{{__('Admin tools')}}</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item"
                                            href="{{ route('admin.releases') }}">{{__('View releases')}}</a>

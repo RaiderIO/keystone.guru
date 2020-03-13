@@ -1,1 +1,30 @@
-[]
+[
+    {
+        "floor_id": 41,
+        "map_icon_type_id": 19,
+        "lat": -164.625,
+        "lng": 265,
+        "comment": ""
+    },
+    {
+        "floor_id": 41,
+        "map_icon_type_id": 20,
+        "lat": -87.375,
+        "lng": 266.625,
+        "comment": ""
+    },
+    {
+        "floor_id": 41,
+        "map_icon_type_id": 17,
+        "lat": -124.125,
+        "lng": 211.25,
+        "comment": ""
+    },
+    {
+        "floor_id": 41,
+        "map_icon_type_id": 18,
+        "lat": -60.3125,
+        "lng": 188.875,
+        "comment": ""
+    }
+]

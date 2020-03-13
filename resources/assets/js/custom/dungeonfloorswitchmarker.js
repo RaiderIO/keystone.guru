@@ -15,11 +15,12 @@ $(function () {
     });
 });
 
-let LeafletDungeonFloorSwitchIcon = new L.divIcon({className: 'door_icon', iconSize: [32, 32]});
-let LeafletDungeonFloorSwitchIconUp = new L.divIcon({className: 'door_up_icon', iconSize: [32, 32]});
-let LeafletDungeonFloorSwitchIconDown = new L.divIcon({className: 'door_down_icon', iconSize: [32, 32]});
-let LeafletDungeonFloorSwitchIconLeft = new L.divIcon({className: 'door_left_icon', iconSize: [32, 32]});
-let LeafletDungeonFloorSwitchIconRight = new L.divIcon({className: 'door_right_icon', iconSize: [32, 32]});
+let defaultDungeonFloorSwitchIconSettings = {iconSize: [32, 32], tooltipAnchor: [0, -16], popupAnchor: [0, -16]};
+let LeafletDungeonFloorSwitchIcon = new L.divIcon($.extend({className: 'door_icon'}, defaultDungeonFloorSwitchIconSettings));
+let LeafletDungeonFloorSwitchIconUp = new L.divIcon($.extend({className: 'door_up_icon'}, defaultDungeonFloorSwitchIconSettings));
+let LeafletDungeonFloorSwitchIconDown = new L.divIcon($.extend({className: 'door_down_icon'}, defaultDungeonFloorSwitchIconSettings));
+let LeafletDungeonFloorSwitchIconLeft = new L.divIcon($.extend({className: 'door_left_icon'}, defaultDungeonFloorSwitchIconSettings));
+let LeafletDungeonFloorSwitchIconRight = new L.divIcon($.extend({className: 'door_right_icon'}, defaultDungeonFloorSwitchIconSettings));
 
 let LeafletDungeonFloorSwitchMarker = L.Marker.extend({
     options: {

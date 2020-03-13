@@ -159,7 +159,7 @@
     </p>
 
     <h4>
-        Comment icon
+        Comment/question mark icon
     </h4>
     <p>
     <ul>
@@ -168,6 +168,5 @@
         </li>
     </ul>
     </p>
-
 
 @endsection

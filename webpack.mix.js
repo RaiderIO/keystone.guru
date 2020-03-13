@@ -120,6 +120,7 @@ let scripts = [
     'resources/assets/js/custom/path.js',
     'resources/assets/js/custom/killzone.js',
     'resources/assets/js/custom/mapicon.js',
+    'resources/assets/js/custom/mapicontype.js',
     'resources/assets/js/custom/dungeonstartmarker.js',
     'resources/assets/js/custom/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/hotkeys.js',

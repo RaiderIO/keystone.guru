@@ -37,6 +37,7 @@ function getMapIconLeafletIcon(mapIconType, editModeEnabled) {
         icon = L.divIcon({
             html: template(handlebarsData),
             iconSize: [mapIconType.width, mapIconType.height],
+            tooltipAnchor: [0, -(mapIconType.height / 2)],
             popupAnchor: [0, -(mapIconType.height / 2)],
             className: 'map_icon_' + mapIconType.key
         });
@@ -45,13 +46,13 @@ function getMapIconLeafletIcon(mapIconType, editModeEnabled) {
 }
 
 let LeafletMapIconUnknown = L.divIcon({
-    html: '<i class="fas fa-question"></i>',
+    html: '<i class="fas fa-icons"></i>',
     iconSize: [32, 32],
     className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown'
 });
 
 let LeafletMapIconUnknownEditMode = L.divIcon({
-    html: '<i class="fas fa-question"></i>',
+    html: '<i class="fas fa-icons"></i>',
     iconSize: [32, 32],
     className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected'
 });
@@ -68,7 +69,7 @@ class MapIcon extends MapObject {
 
         this.id = 0;
         this.map_icon_type_id = 0;
-        this.map_icon_type = null;
+        this.map_icon_type = getState().getUnknownMapIcon();
         this.has_dungeon_route = false;
         this.comment = '';
         this.label = 'MapIcon';
@@ -99,26 +100,24 @@ class MapIcon extends MapObject {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
         this.layer.setIcon(getMapIconLeafletIcon(this.map_icon_type, this.map.editModeActive && this.isEditable()));
-        // @TODO Refresh the layer; required as a workaroudn since in mapiconmapobjectgroup we don't know the map_icon_type upon init,
-        // thus we don't know if this will be editable or not. In the sync this will get called and the edit state is known
-        // after which this function will function properly
-        this.onLayerInit();
+        // // @TODO Refresh the layer; required as a workaround since in mapiconmapobjectgroup we don't know the map_icon_type upon init,
+        // // thus we don't know if this will be editable or not. In the sync this will get called and the edit state is known
+        // // after which this function will function properly
+        // this.onLayerInit();
     }
 
     setMapIconType(mapIconType) {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        console.assert(mapIconType instanceof MapIconType, 'mapIconType is not a MapIconType', mapIconType);
 
+        console.log(mapIconType);
         this.map_icon_type = mapIconType;
-        this._refreshVisual();
     }
 
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        return this.map_icon_type !== null && (
-            ((this.map_icon_type.admin_only && isUserAdmin && this.map.getDungeonRoute().publicKey === '') ||
-                !this.map_icon_type.admin_only)
-        );
+        return this.map_icon_type.isEditable();
     }
 
     bindTooltip() {
@@ -126,7 +125,7 @@ class MapIcon extends MapObject {
 
         this.unbindTooltip();
 
-        if (this.comment.length > 0 || this.map_icon_type !== null) {
+        if (this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
             this.layer.bindTooltip(
                 jQuery('<div/>', {
                     class: 'map_map_icon_comment_tooltip'
@@ -148,7 +147,7 @@ class MapIcon extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/mapicon/' + this.id,
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/mapicon/' + this.id,
             dataType: 'json',
             data: {
                 _method: 'DELETE'
@@ -171,7 +170,7 @@ class MapIcon extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/mapicon',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/mapicon',
             dataType: 'json',
             data: {
                 id: this.id,
@@ -229,18 +228,29 @@ class MapIcon extends MapObject {
                 let template = Handlebars.templates['map_map_icon_edit_popup_template'];
 
                 // Construct the html for each option and insert it into the handlebars template
-                for (let i in mapIconTypes) {
-                    if (mapIconTypes.hasOwnProperty(i)) {
-                        let template = Handlebars.templates['map_map_icon_select_option_template'];
+                let mapIconTypes = getState().getMapIconTypes();
+                let unknownMapIcon = getState().getUnknownMapIcon();
 
-                        mapIconTypes[i].html = template(mapIconTypes[i]);
+                let editableMapIconTypes = [];
+                for (let i in mapIconTypes) {
+                    // Only editable types!
+                    if (mapIconTypes.hasOwnProperty(i) && mapIconTypes[i].isEditable() ) {
+                        // Skip unknown map icons, that should be a one time state when placing the icon, not a selectable state
+                        if( mapIconTypes[i].id !== unknownMapIcon.id ) {
+                            let template = Handlebars.templates['map_map_icon_select_option_template'];
+
+                            // Direct assign to the object that is in the array so we're sure this change sticks
+                            mapIconTypes[i].html = template(mapIconTypes[i]);
+
+                            editableMapIconTypes.push(mapIconTypes[i]);
+                        }
                     }
                 }
 
                 let data = $.extend({
                     id: self.id,
                     map_icon_type_id: self.map_icon_type_id,
-                    mapicontypes: mapIconTypes
+                    mapicontypes: editableMapIconTypes
                 }, getHandlebarsDefaultVariables());
 
                 self.layer.unbindPopup();

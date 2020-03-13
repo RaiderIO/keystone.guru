@@ -123,7 +123,7 @@ class KillZone extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/killzone/' + self.id,
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone/' + self.id,
             dataType: 'json',
             data: {
                 _method: 'DELETE'
@@ -150,7 +150,7 @@ class KillZone extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/killzone',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone',
             dataType: 'json',
             data: {
                 id: self.id,

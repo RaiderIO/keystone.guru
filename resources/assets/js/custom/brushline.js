@@ -38,7 +38,7 @@ class Brushline extends Polyline {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/brushline/' + this.id,
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/brushline/' + this.id,
             dataType: 'json',
             data: {
                 _method: 'DELETE'
@@ -61,11 +61,11 @@ class Brushline extends Polyline {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/brushline',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/brushline',
             dataType: 'json',
             data: {
                 id: self.id,
-                dungeonroute: this.map.getDungeonRoute().publicKey,
+                dungeonroute: getState().getDungeonRoute().publicKey,
                 floor_id: getState().getCurrentFloor().id,
                 color: self.polylineColor,
                 weight: self.weight,

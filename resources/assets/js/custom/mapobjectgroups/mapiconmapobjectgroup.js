@@ -8,7 +8,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-icons';
 
         if (this.manager.map.options.echo) {
-            window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
+            window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.mapicon-changed', (e) => {
                     self._restoreObject(e.mapicon, e.user);
                 })
@@ -22,29 +22,36 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    _createObject(layer) {
+    _createObject(layer, options) {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not an MapIconMapObjectGroup', this);
 
+        let mapIcon;
         if (isMapAdmin) {
-            return new AdminMapIcon(this.manager.map, layer);
+            mapIcon = new AdminMapIcon(this.manager.map, layer);
         } else {
-            return new MapIcon(this.manager.map, layer);
+            mapIcon = new MapIcon(this.manager.map, layer);
         }
+        // Pass the map icon type here so layer initialization can take the type into account
+        if (typeof options !== 'undefined' && typeof options.mapIconType !== 'undefined') {
+            mapIcon.setMapIconType(options.mapIconType);
+        }
+
+        return mapIcon;
     }
 
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
-        // Fetch the existing map comment if it exists
+        // Fetch the existing map icon if it exists
         let mapIcon = this.findMapObjectById(remoteMapObject.id);
 
         // Only create a new one if it's new for us
-        let mapIconType = getState().getMapIconType(remoteMapObject.map_icon_type_id);
         if (mapIcon === null) {
             // Find the layer we should display on the map
             let layer = new LeafletMapIconMarker();
             layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
 
-            mapIcon = this.createNew(layer);
+            // Pass the map icon type here so layer initialization can take the type into account
+            mapIcon = this.createNew(layer, {mapIconType: getState().getMapIconType(remoteMapObject.map_icon_type_id)});
         }
 
         mapIcon.id = remoteMapObject.id;
@@ -52,7 +59,6 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         mapIcon.map_icon_type_id = remoteMapObject.map_icon_type_id;
         mapIcon.has_dungeon_route = remoteMapObject.has_dungeon_route;
         mapIcon.comment = remoteMapObject.comment;
-        mapIcon.setMapIconType(mapIconType);
 
         // We just downloaded the map icon, it's synced alright!
         mapIcon.setSynced(true);
@@ -68,7 +74,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
 
         let mapIcons = response.mapicon;
 
-        // Now draw the patrols on the map
+        // Now draw the map icons on the map
         for (let index in mapIcons) {
             if (mapIcons.hasOwnProperty(index)) {
                 this._restoreObject(mapIcons[index]);

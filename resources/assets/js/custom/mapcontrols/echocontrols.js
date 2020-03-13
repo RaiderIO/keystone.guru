@@ -40,7 +40,7 @@ class EchoControls extends MapControl {
         });
 
         // Keep track of the current users in this channel
-        window.Echo.join('route-edit.' + this.map.getDungeonRoute().publicKey)
+        window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
             .here(users => {
                 for (let index in users) {
                     if (users.hasOwnProperty(index)) {

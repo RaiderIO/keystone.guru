@@ -73,10 +73,6 @@ if ($isAdmin) {
     'floorId' => $floorId,
     'edit' => $edit,
     'try' => $tryMode,
-    'dungeonroute' => [
-        'publicKey' => $routePublicKey,
-        'faction' => $routeFaction
-    ],
     'defaultEnemyVisualType' => $enemyVisualType,
     'teeming' => $teeming,
     'noUI' => $noUI,
@@ -91,7 +87,13 @@ if ($isAdmin) {
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
 
-    @include('common.general.statemanager')
+    @include('common.general.statemanager', [
+        'mapIconTypes' => \App\Models\MapIconType::all(),
+        'dungeonroute' => [
+            'publicKey' => $routePublicKey,
+            'faction' => $routeFaction
+        ],
+    ])
     <script>
         // Data of the dungeon(s) we're selecting in the map
         var dungeonData = {!! $dungeon !!};

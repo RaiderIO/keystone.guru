@@ -5,17 +5,6 @@ class AdminMapIcon extends MapIcon {
         super(map, layer);
     }
 
-    _popupSubmitClicked(){
-        console.assert(this instanceof AdminMapIcon, 'this was not a MapIcon', this);
-        // Set an additional parameter
-        this.always_visible = $('#map_map_icon_edit_popup_always_visible_' + this.id).val();
-
-        // Now the rest and submit
-        super._popupSubmitClicked();
-    }
-
-
-
     delete() {
         let self = this;
         console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);

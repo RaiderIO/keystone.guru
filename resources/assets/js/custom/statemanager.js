@@ -1,8 +1,9 @@
 class StateManager extends Signalable {
-
-
     constructor() {
         super();
+
+        // Any dungeon route we may be editing at this time
+        this.dungeonRoute = null;
 
         this.map = null;
         // What enemy visual type we're displaying
@@ -14,6 +15,21 @@ class StateManager extends Signalable {
 
         // List of static arrays
         this.mapIconTypes = [];
+        // Bit of a hack? But for now best solution
+        this.unknownMapIconId = 1;
+        // The map icon as found using above ID once the list of map icons is known
+        this.unknownMapIcon = null;
+    }
+
+    /**
+     * Sets the dungeon route that we're currently editing (may be null)
+     * @param dungeonRoute
+     */
+    setDungeonRoute(dungeonRoute){
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        console.assert(dungeonRoute instanceof Object, 'dungeonRoute is not an Object', dungeonRoute);
+
+        this.dungeonRoute = dungeonRoute;
     }
 
     /**
@@ -21,7 +37,13 @@ class StateManager extends Signalable {
      * @param mapIconTypes int
      */
     setMapIconTypes(mapIconTypes) {
-        this.mapIconTypes = mapIconTypes;
+        this.mapIconTypes = [];
+        for (let i = 0; i < mapIconTypes.length; i++) {
+            this.mapIconTypes.push(
+                new MapIconType(mapIconTypes[i])
+            )
+        }
+        this.unknownMapIcon = this.getMapIconType(this.unknownMapIconId);
     }
 
     /**
@@ -31,7 +53,7 @@ class StateManager extends Signalable {
     setDungeonMap(map) {
         let self = this;
 
-        // Unreg ourself if necessary
+        // Unreg ourselves if necessary
         if (this.map !== null) {
             this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
         }
@@ -106,6 +128,15 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Get the dungeon route we may or may not be editing at this time.
+     * @returns {null}
+     */
+    getDungeonRoute(){
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.dungeonRoute;
+    }
+
+    /**
      * Get the default visual to display for all enemies.
      * @returns {string}
      */
@@ -145,12 +176,20 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Gets the default map icon for initializing; when the map icon is unknown.
+     * @returns {null}
+     */
+    getUnknownMapIcon() {
+        return this.unknownMapIcon;
+    }
+
+    /**
      * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
      * @param mapIconTypeId
      * @returns {null}
      */
     getMapIconType(mapIconTypeId) {
-        let mapIconType = null;
+        let mapIconType = this.unknownMapIcon;
         for (let i = 0; i < this.mapIconTypes.length; i++) {
             if (this.mapIconTypes[i].id === mapIconTypeId) {
                 mapIconType = this.mapIconTypes[i];
@@ -158,6 +197,14 @@ class StateManager extends Signalable {
             }
         }
         return mapIconType;
+    }
+
+    /**
+     * Get a list of all map icon types.
+     * @returns {[]|*[]}
+     */
+    getMapIconTypes(){
+        return this.mapIconTypes;
     }
 
 }

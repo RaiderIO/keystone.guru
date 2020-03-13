@@ -8,7 +8,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-bullseye';
 
         if (this.manager.map.options.echo) {
-            window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
+            window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.killzone-changed', (e) => {
                     self._restoreObject(e.killzone, e.user);
                 })
@@ -76,7 +76,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         let killzones = response.killzone;
 
-        // Now draw the patrols on the map
+        // Now draw the killzones on the map
         for (let index in killzones) {
             if (killzones.hasOwnProperty(index)) {
                 this._restoreObject(killzones[index]);
