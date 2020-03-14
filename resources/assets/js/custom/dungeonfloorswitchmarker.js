@@ -69,7 +69,7 @@ class DungeonFloorSwitchMarker extends MapObject {
             let sidebar = _inlineManager.getInlineCode('common/maps/sidebar');
 
             // Tol'dagor doors don't have a target (locked doors)
-            if( self.target_floor_id > 0 ) {
+            if (self.target_floor_id > 0) {
                 $(sidebar.options.switchDungeonFloorSelect).val(self.target_floor_id).trigger('change').change();
                 refreshSelectPickers();
             }

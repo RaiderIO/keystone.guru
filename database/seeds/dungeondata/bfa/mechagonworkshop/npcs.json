@@ -1,7 +1,7 @@
 [
     {
         "id": 144244,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -14,7 +14,7 @@
     },
     {
         "id": 144246,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -27,7 +27,7 @@
     },
     {
         "id": 144248,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -40,7 +40,7 @@
     },
     {
         "id": 144249,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -53,7 +53,7 @@
     },
     {
         "id": 144293,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -66,7 +66,7 @@
     },
     {
         "id": 144294,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 3,
@@ -79,7 +79,7 @@
     },
     {
         "id": 144295,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -92,7 +92,7 @@
     },
     {
         "id": 144296,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -105,7 +105,7 @@
     },
     {
         "id": 144299,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -118,7 +118,7 @@
     },
     {
         "id": 144301,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -131,7 +131,7 @@
     },
     {
         "id": 144303,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -144,7 +144,7 @@
     },
     {
         "id": 145185,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -157,7 +157,7 @@
     },
     {
         "id": 150396,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 2,
@@ -170,7 +170,7 @@
     },
     {
         "id": 151476,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 3,
@@ -183,7 +183,7 @@
     },
     {
         "id": 151649,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -196,7 +196,7 @@
     },
     {
         "id": 151657,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -209,7 +209,7 @@
     },
     {
         "id": 151658,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -222,7 +222,7 @@
     },
     {
         "id": 151659,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 3,
@@ -235,7 +235,7 @@
     },
     {
         "id": 151773,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -248,7 +248,7 @@
     },
     {
         "id": 151812,
-        "dungeon_id": 18,
+        "dungeon_id": 25,
         "classification_id": 1,
         "npc_type_id": 8,
         "npc_class_id": 1,

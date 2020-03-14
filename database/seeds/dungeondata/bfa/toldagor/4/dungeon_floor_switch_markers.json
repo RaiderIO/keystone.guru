@@ -1,51 +1,16 @@
 [
     {
         "id": 35,
-        "floor_id": 61,
-        "target_floor_id": 60,
+        "floor_id": 56,
+        "target_floor_id": 55,
         "lat": -202.38,
         "lng": 144.25
     },
     {
         "id": 36,
-        "floor_id": 61,
-        "target_floor_id": 62,
+        "floor_id": 56,
+        "target_floor_id": 57,
         "lat": -169.75,
         "lng": 98.5
-    },
-    {
-        "id": 72,
-        "floor_id": 61,
-        "target_floor_id": -1,
-        "lat": -82.88,
-        "lng": 162
-    },
-    {
-        "id": 73,
-        "floor_id": 61,
-        "target_floor_id": -1,
-        "lat": -95.12,
-        "lng": 154.12
-    },
-    {
-        "id": 74,
-        "floor_id": 61,
-        "target_floor_id": -1,
-        "lat": -106.5,
-        "lng": 146.25
-    },
-    {
-        "id": 75,
-        "floor_id": 61,
-        "target_floor_id": -1,
-        "lat": -141.88,
-        "lng": 220.38
-    },
-    {
-        "id": 76,
-        "floor_id": 61,
-        "target_floor_id": -1,
-        "lat": -130,
-        "lng": 228
     }
 ]

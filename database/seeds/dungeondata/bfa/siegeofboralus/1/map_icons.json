@@ -1,1 +1,65 @@
-[]
+[
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 12,
+        "lat": -44.0625,
+        "lng": 289.5,
+        "comment": ""
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 12,
+        "lat": -50.5625,
+        "lng": 240.8125,
+        "comment": ""
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 12,
+        "lat": -152.125,
+        "lng": 207.9375,
+        "comment": ""
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 12,
+        "lat": -211.375,
+        "lng": 185.6875,
+        "comment": ""
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 17,
+        "lat": -51.65625,
+        "lng": 246.5,
+        "comment": ""
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 18,
+        "lat": -99.375,
+        "lng": 225.75,
+        "comment": ""
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 19,
+        "lat": -147.875,
+        "lng": 244.625,
+        "comment": ""
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 20,
+        "lat": -180.84375,
+        "lng": 194.5625,
+        "comment": ""
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 10,
+        "lat": -50.84375,
+        "lng": 294.53125,
+        "comment": ""
+    }
+]

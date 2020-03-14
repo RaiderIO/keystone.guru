@@ -1,7 +1,7 @@
 [
     {
         "id": 602,
-        "floor_id": 46,
+        "floor_id": 66,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -9,7 +9,7 @@
     },
     {
         "id": 603,
-        "floor_id": 46,
+        "floor_id": 66,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",

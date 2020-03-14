@@ -1,7 +1,7 @@
 [
     {
         "id": 134,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -9,7 +9,7 @@
     },
     {
         "id": 135,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -17,7 +17,7 @@
     },
     {
         "id": 136,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -25,7 +25,7 @@
     },
     {
         "id": 137,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -33,7 +33,7 @@
     },
     {
         "id": 138,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -41,7 +41,7 @@
     },
     {
         "id": 139,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -49,7 +49,7 @@
     },
     {
         "id": 140,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -57,7 +57,7 @@
     },
     {
         "id": 141,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -65,7 +65,7 @@
     },
     {
         "id": 142,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -73,7 +73,7 @@
     },
     {
         "id": 143,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -81,7 +81,7 @@
     },
     {
         "id": 144,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -89,7 +89,7 @@
     },
     {
         "id": 145,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -97,7 +97,7 @@
     },
     {
         "id": 148,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -105,7 +105,7 @@
     },
     {
         "id": 300,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -113,42 +113,18 @@
     },
     {
         "id": 499,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"248.06\",\"lng\":\"-224.44\"},{\"lat\":\"250.94\",\"lng\":\"-228.25\"},{\"lat\":\"252.88\",\"lng\":\"-224.31\"}]"
     },
     {
-        "id": 542,
-        "floor_id": 53,
-        "teeming": null,
-        "faction": "any",
-        "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":\"194.71875\",\"lng\":\"-113.0625\"},{\"lat\":\"194.6875\",\"lng\":\"-114.65625\"},{\"lat\":\"196.40625\",\"lng\":\"-114.625\"},{\"lat\":\"196.5\",\"lng\":\"-112.96875\"}]"
-    },
-    {
-        "id": 543,
-        "floor_id": 53,
-        "teeming": null,
-        "faction": "any",
-        "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":\"184.65625\",\"lng\":\"-84.84375\"},{\"lat\":\"184.6875\",\"lng\":\"-86.84375\"},{\"lat\":\"186.625\",\"lng\":\"-86.75\"},{\"lat\":\"186.59375\",\"lng\":\"-84.90625\"}]"
-    },
-    {
         "id": 570,
-        "floor_id": 53,
+        "floor_id": 48,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"153.90625\",\"lng\":\"-125.6875\"},{\"lat\":\"152.53125\",\"lng\":\"-129.46875\"},{\"lat\":\"155.625\",\"lng\":\"-130.40625\"},{\"lat\":\"156.5625\",\"lng\":\"-126.40625\"}]"
-    },
-    {
-        "id": 578,
-        "floor_id": 53,
-        "teeming": null,
-        "faction": "any",
-        "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":\"195.03125\",\"lng\":\"-89.125\"},{\"lat\":\"195.09375\",\"lng\":\"-90.6875\"},{\"lat\":\"198.15625\",\"lng\":\"-90.375\"},{\"lat\":\"198\",\"lng\":\"-88.53125\"}]"
     }
 ]

@@ -1,9 +1,58 @@
 [
     {
-        "floor_id": 61,
+        "floor_id": 56,
         "map_icon_type_id": 2,
         "lat": -84.7578125,
         "lng": 140,
         "comment": "Keystone Guru: There's a third holding cell here, the map is incorrect."
+    },
+    {
+        "floor_id": 56,
+        "map_icon_type_id": 6,
+        "lat": -106.625,
+        "lng": 145.375,
+        "comment": ""
+    },
+    {
+        "floor_id": 56,
+        "map_icon_type_id": 6,
+        "lat": -95.375,
+        "lng": 154.125,
+        "comment": ""
+    },
+    {
+        "floor_id": 56,
+        "map_icon_type_id": 6,
+        "lat": -83.5,
+        "lng": 162.5,
+        "comment": ""
+    },
+    {
+        "floor_id": 56,
+        "map_icon_type_id": 6,
+        "lat": -152.6875,
+        "lng": 212.3125,
+        "comment": ""
+    },
+    {
+        "floor_id": 56,
+        "map_icon_type_id": 6,
+        "lat": -141.375,
+        "lng": 220.25,
+        "comment": ""
+    },
+    {
+        "floor_id": 56,
+        "map_icon_type_id": 6,
+        "lat": -129.375,
+        "lng": 228.1875,
+        "comment": ""
+    },
+    {
+        "floor_id": 56,
+        "map_icon_type_id": 12,
+        "lat": -166,
+        "lng": 156.625,
+        "comment": ""
     }
 ]

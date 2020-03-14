@@ -593,7 +593,6 @@ class DungeonsSeeder extends Seeder
                         'to' => 'Catacombs',
                         'direction' => 'up'
                     ],
-
                 ]
             ],
             'Mechagon: Junkyard' => [

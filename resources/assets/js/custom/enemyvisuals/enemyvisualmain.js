@@ -182,13 +182,17 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
     }
 
+    isCircleMenuOpen(){
+        return this.circleMenu === null;
+    }
+
     getSize() {
         let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health;
         if (this.enemyvisual.enemy.npc === null) {
             console.warn('Enemy has no NPC!', this.enemyvisual.enemy);
         } else {
-            // Special catch for Enchanted Emissary
-            if (this.enemyvisual.enemy.npc.id === 155432) {
+            // Special catch for all dungeon enemies
+            if (this.enemyvisual.enemy.npc.dungeon_id === -1) {
                 health = (this.enemyvisual.map.options.npcsMinHealth + this.enemyvisual.map.options.npcsMaxHealth) / 2;
             }
         }

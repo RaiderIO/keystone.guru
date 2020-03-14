@@ -1,7 +1,7 @@
 [
     {
         "id": 336,
-        "floor_id": 60,
+        "floor_id": 55,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -9,7 +9,7 @@
     },
     {
         "id": 337,
-        "floor_id": 60,
+        "floor_id": 55,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -17,7 +17,7 @@
     },
     {
         "id": 338,
-        "floor_id": 60,
+        "floor_id": 55,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -25,7 +25,7 @@
     },
     {
         "id": 339,
-        "floor_id": 60,
+        "floor_id": 55,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -33,7 +33,7 @@
     },
     {
         "id": 340,
-        "floor_id": 60,
+        "floor_id": 55,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
@@ -41,18 +41,10 @@
     },
     {
         "id": 533,
-        "floor_id": 60,
+        "floor_id": 55,
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"222\",\"lng\":\"-118.375\"},{\"lat\":\"215.375\",\"lng\":\"-129.125\"},{\"lat\":\"221.75\",\"lng\":\"-132\"},{\"lat\":\"228.875\",\"lng\":\"-120.75\"}]"
-    },
-    {
-        "id": 566,
-        "floor_id": 60,
-        "teeming": null,
-        "faction": "any",
-        "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":\"133.5\",\"lng\":\"-152.5\"},{\"lat\":\"135.1875\",\"lng\":\"-157.375\"},{\"lat\":\"137.875\",\"lng\":\"-156.5625\"},{\"lat\":\"136.25\",\"lng\":\"-152.125\"}]"
     }
 ]

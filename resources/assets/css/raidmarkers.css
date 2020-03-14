@@ -2,10 +2,10 @@
 
 .star_enemy_icon, .circle_enemy_icon, .diamond_enemy_icon, .triangle_enemy_icon,
 .moon_enemy_icon, .square_enemy_icon, .cross_enemy_icon, .skull_enemy_icon
-{ display: inline-block; background: white url('/images/raidmarkers/raidmarkers_med.png') no-repeat; overflow: hidden; text-indent: -9999px; text-align: left; cursor: pointer;}
+{ display: inline-block; background: url('/images/raidmarkers/raidmarkers_med.png') no-repeat; overflow: hidden; text-indent: -9999px; text-align: left; cursor: pointer;}
 
 .enemy_raid_marker_icon
-{ display: inline-block; background: white url('/images/raidmarkers/raidmarkers.png') no-repeat; overflow: hidden; text-indent: -9999px; text-align: left; cursor: pointer; margin: 2px;}
+{ display: inline-block; background: url('/images/raidmarkers/raidmarkers.png') no-repeat; overflow: hidden; text-indent: -9999px; text-align: left; cursor: pointer; margin: 2px;}
 
 /** To make it look proper we gotta increase the height, compensate for the border with margins (see above) */
 .enemy_raid_marker_icon.enemy_raid_marker_icon_selected {

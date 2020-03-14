@@ -100,7 +100,7 @@ class Dungeon extends Model
      */
     public function getNpcsMinHealth()
     {
-        return $this->npcs->where('classification_id', '<>', 3)->min('base_health');
+        return $this->npcs->where('classification_id', '<>', 3)->where('dungeon_id', '<>', -1)->min('base_health');
     }
 
     /**
@@ -108,7 +108,7 @@ class Dungeon extends Model
      */
     public function getNpcsMaxHealth()
     {
-        return $this->npcs->where('classification_id', '<>', 3)->max('base_health');
+        return $this->npcs->where('classification_id', '<>', 3)->where('dungeon_id', '<>', -1)->max('base_health');
     }
 
     /**
