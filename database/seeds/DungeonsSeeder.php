@@ -323,73 +323,6 @@ class DungeonsSeeder extends Seeder
                 ],
                 'floor_couplings' => []
             ],
-            'Mechagon: Junkyard' => [
-                'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 332,
-                'enemy_forces_required_teeming' => 398,
-                'active' => true,
-                'floors' => [
-                    'Mechagon Island' => [
-                        'index' => 1
-                    ],
-                    'Tunnels' => [
-                        'index' => 2
-                    ],
-                ],
-                'floor_couplings' => [
-                    [
-                        'from' => 'Mechagon Island',
-                        'to' => 'Tunnels',
-                        'direction' => 'down'
-                    ],
-                    [
-                        'from' => 'Tunnels',
-                        'to' => 'Mechagon Island',
-                        'direction' => 'up'
-                    ],
-                ]
-            ],
-            'Mechagon: Workshop' => [
-                'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 160,
-                'enemy_forces_required_teeming' => 192,
-                'active' => true,
-                'floors' => [
-                    'The Robodrome' => [
-                        'index' => 1
-                    ],
-                    'The Under Junk' => [
-                        'index' => 2
-                    ],
-                    'Mechagon City' => [
-                        'index' => 3
-                    ],
-                ],
-                'floor_couplings' => [
-                    [
-                        'from' => 'The Robodrome',
-                        'to' => 'The Under Junk',
-                        'direction' => 'down'
-                    ],
-                    [
-                        'from' => 'The Under Junk',
-                        'to' => 'The Robodrome',
-                        'direction' => 'up'
-                    ],
-
-
-                    [
-                        'from' => 'The Under Junk',
-                        'to' => 'Mechagon City',
-                        'direction' => 'left'
-                    ],
-                    [
-                        'from' => 'Mechagon City',
-                        'to' => 'The Under Junk',
-                        'direction' => 'right'
-                    ],
-                ]
-            ],
             'Shrine of the Storm' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 662,
@@ -661,6 +594,73 @@ class DungeonsSeeder extends Seeder
                         'direction' => 'up'
                     ],
 
+                ]
+            ],
+            'Mechagon: Junkyard' => [
+                'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 332,
+                'enemy_forces_required_teeming' => 398,
+                'active' => true,
+                'floors' => [
+                    'Mechagon Island' => [
+                        'index' => 1
+                    ],
+                    'Tunnels' => [
+                        'index' => 2
+                    ],
+                ],
+                'floor_couplings' => [
+                    [
+                        'from' => 'Mechagon Island',
+                        'to' => 'Tunnels',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from' => 'Tunnels',
+                        'to' => 'Mechagon Island',
+                        'direction' => 'up'
+                    ],
+                ]
+            ],
+            'Mechagon: Workshop' => [
+                'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 160,
+                'enemy_forces_required_teeming' => 192,
+                'active' => true,
+                'floors' => [
+                    'The Robodrome' => [
+                        'index' => 1
+                    ],
+                    'The Under Junk' => [
+                        'index' => 2
+                    ],
+                    'Mechagon City' => [
+                        'index' => 3
+                    ],
+                ],
+                'floor_couplings' => [
+                    [
+                        'from' => 'The Robodrome',
+                        'to' => 'The Under Junk',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from' => 'The Under Junk',
+                        'to' => 'The Robodrome',
+                        'direction' => 'up'
+                    ],
+
+
+                    [
+                        'from' => 'The Under Junk',
+                        'to' => 'Mechagon City',
+                        'direction' => 'left'
+                    ],
+                    [
+                        'from' => 'Mechagon City',
+                        'to' => 'The Under Junk',
+                        'direction' => 'right'
+                    ],
                 ]
             ],
             'Orgrimmar (Horrific Vision)' => [

@@ -12,12 +12,6 @@ class MapIconType {
     }
 
     isEditable() {
-        // if( this.id >= 17 ) {
-        //     console.warn(this.admin_only, isUserAdmin, getState().getDungeonRoute().publicKey);
-        //     console.log((getState().getDungeonRoute().publicKey === '' && this.admin_only && isUserAdmin) ||
-        //         (getState().getDungeonRoute().publicKey !== '' && !this.admin_only));
-        // }
-        return (getState().getDungeonRoute().publicKey === '' && this.admin_only && isUserAdmin) ||
-            (getState().getDungeonRoute().publicKey !== '' && !this.admin_only);
+        return (getState().getDungeonRoute().publicKey === '') || !this.admin_only;
     }
 }

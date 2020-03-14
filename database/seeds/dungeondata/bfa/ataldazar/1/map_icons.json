@@ -26,5 +26,12 @@
         "lat": -60.3125,
         "lng": 188.875,
         "comment": ""
+    },
+    {
+        "floor_id": 41,
+        "map_icon_type_id": 10,
+        "lat": -124.5,
+        "lng": 305.25,
+        "comment": ""
     }
 ]

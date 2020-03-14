@@ -1,1 +1,54 @@
-[]
+[
+    {
+        "id": 161124,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Urg'roth, Breaker of Heroes",
+        "base_health": 700000,
+        "enemy_forces": 4,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
+    },
+    {
+        "id": 161241,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Voidweaver Mal'thir",
+        "base_health": 700000,
+        "enemy_forces": 4,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
+    },
+    {
+        "id": 161243,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Samh'rek, Beckoner of Chaos",
+        "base_health": 700000,
+        "enemy_forces": 4,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
+    },
+    {
+        "id": 161244,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Blood of the Corruptor",
+        "base_health": 700000,
+        "enemy_forces": 4,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
+    }
+]

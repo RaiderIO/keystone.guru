@@ -169,6 +169,7 @@ class Enemy extends MapObject {
             this.npc_id = -1;
         }
 
+        this.bindTooltip();
         this.signal('enemy:set_npc', {npc: npc});
     }
 

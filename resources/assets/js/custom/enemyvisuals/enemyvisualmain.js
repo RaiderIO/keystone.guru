@@ -39,6 +39,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
             mainVisualOuterClasses.push(npc.aggressiveness);
+            if (npc.dungeon_id === -1) {
+                mainVisualOuterClasses.push('awakened');
+            }
 
             mainVisualInnerClasses.push(npc.dangerous ? 'dangerous' : '');
         }

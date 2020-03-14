@@ -513,6 +513,10 @@ html, body, #map, #app, .wrapper {
     background-color: #3d3cff;
 }
 
+.awakened {
+    background-color: #8832ff;
+}
+
 .aggressive_enemy_icon {
     background-image: url('/images/mapicon/unset.png') !important; /* no-repeat center !important; */
     background-color: #dc3c3c;

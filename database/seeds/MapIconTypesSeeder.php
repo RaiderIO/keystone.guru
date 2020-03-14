@@ -36,6 +36,10 @@ class MapIconTypesSeeder extends Seeder
             'awakened_obelisk_cursed'   => ['name' => 'Cursed Spire of Ny\'alotha (Voidweaver Mal\'thir)', 'admin_only' => true],
             'awakened_obelisk_defiled'  => ['name' => 'Defiled Spire of Ny\'alotha (Blood of the Corruptor)', 'admin_only' => true],
             'awakened_obelisk_entropic' => ['name' => 'Entropic Spire of Ny\'alotha (Samh\'rek, Beckoner of Chaos)', 'admin_only' => true],
+
+            'skip_flight'   => ['name' => 'Skip', 'admin_only' => true],
+            'skip_teleport' => ['name' => 'Skip', 'admin_only' => true],
+            'skip_walk'     => ['name' => 'Skip', 'admin_only' => true],
         ];
 
         foreach ($mapIconData as $key => $mapIcon) {

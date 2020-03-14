@@ -110,7 +110,6 @@ class MapIcon extends MapObject {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         console.assert(mapIconType instanceof MapIconType, 'mapIconType is not a MapIconType', mapIconType);
 
-        console.log(mapIconType);
         this.map_icon_type = mapIconType;
     }
 

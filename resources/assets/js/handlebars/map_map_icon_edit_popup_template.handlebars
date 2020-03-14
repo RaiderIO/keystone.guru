@@ -6,11 +6,10 @@
     </div>
     <div class="form-group">
         <label for="map_map_icon_edit_popup_map_icon_type_id_{{id}}">{{map_icon_type_label}}</label>
-        <select id="map_map_icon_edit_popup_map_icon_type_id_{{id}}" class="selectpicker popup_select">
+        <select id="map_map_icon_edit_popup_map_icon_type_id_{{id}}" class="selectpicker popup_select" data-live-search="true" >
             {{#select map_icon_type_id}}
                 <option value="-1">{{select_map_icon_type_label}}</option>
                 {{#mapicontypes}}
-                    {{if admin
                     <option data-content="{{html}}" value="{{id}}">{{name}}</option>
                 {{/mapicontypes}}
             {{/select}}
