@@ -13,6 +13,7 @@ class ChangeFloorDirectionsOnFloorCouplingsTable extends Migration
      */
     public function up()
     {
+        DB::statement('TRUNCATE TABLE floor_couplings');
         DB::statement("ALTER TABLE floor_couplings CHANGE COLUMN direction direction ENUM('up', 'down', 'left', 'right') NOT NULL DEFAULT 'up'");
     }
 

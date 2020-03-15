@@ -111,7 +111,7 @@ class MapObject extends Signalable {
      * Gets if this map object is deleteable, default is true. May be overridden.
      * @returns {boolean}
      */
-    isDeleteable() {
+    isDeletable() {
         return true;
     }
 

@@ -119,6 +119,10 @@ class MapIcon extends MapObject {
         return this.map_icon_type.isEditable();
     }
 
+    isDeletable() {
+        return this.map_icon_type.isDeletable();
+    }
+
     bindTooltip() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 

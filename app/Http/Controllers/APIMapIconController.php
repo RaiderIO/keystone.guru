@@ -11,7 +11,9 @@ use App\Models\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 
 class APIMapIconController extends Controller
@@ -43,18 +45,18 @@ class APIMapIconController extends Controller
                 throw new \Exception('Unable to save map icon!');
             }
         } // We're editing a map comment for the user, carry on
-        else {
+        else if (!$dungeonroute->isTry()) {
             $this->authorize('edit', $dungeonroute);
         }
 
         $mapIconTypeId = $request->get('map_icon_type_id', 0);
 
-        if( $mapIconTypeId > 0 ) {
+        if ($mapIconTypeId > 0) {
             /** @var MapIconType $mapIconType */
             $mapIconType = MapIconType::where('id', $mapIconTypeId)->first();
 
             // Only allow admins to save admin_only icons
-            if( $mapIconType === null || $mapIconType->admin_only && !$isAdmin ) {
+            if ($mapIconType === null || $mapIconType->admin_only && !$isAdmin) {
                 throw new \Exception('Unable to save map icon!');
             }
         }
@@ -76,7 +78,7 @@ class APIMapIconController extends Controller
 
         if (!$mapIcon->save()) {
             throw new \Exception('Unable to save map icon!');
-        } else if ($dungeonroute !== null) {
+        } else if ($dungeonroute !== null && Auth::check()) {
             broadcast(new MapIconChangedEvent($dungeonroute, $mapIcon, Auth::user()));
         }
 
@@ -96,19 +98,17 @@ class APIMapIconController extends Controller
     {
         $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
-        if ($dungeonroute === null) {
-            if (!$isAdmin) {
-                throw new \Exception('Unable to delete map icon!');
-            }
+        if (!$isAdmin && ($dungeonroute === null || $mapicon->dungeon_route_id === -1)) {
+            return response(null, StatusCode::FORBIDDEN);
         } // We're editing a map comment for the user, carry on
-        else {
+        else if (!$dungeonroute->isTry()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
             $this->authorize('edit', $dungeonroute);
         }
 
         try {
             if ($mapicon->delete()) {
-                if ($dungeonroute !== null) {
+                if ($dungeonroute !== null && Auth::check()) {
                     broadcast(new MapIconDeletedEvent($dungeonroute, $mapicon, Auth::user()));
                 }
                 $result = ['result' => 'success'];

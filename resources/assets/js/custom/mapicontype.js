@@ -14,4 +14,8 @@ class MapIconType {
     isEditable() {
         return (getState().getDungeonRoute().publicKey === '') || !this.admin_only;
     }
+
+    isDeletable(){
+        return this.isEditable();
+    }
 }

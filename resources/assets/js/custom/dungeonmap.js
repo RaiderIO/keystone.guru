@@ -173,7 +173,7 @@ class DungeonMap extends Signalable {
             // Loop through each element to see if they are NOT editable, but ARE deleteable.
             // If so, we have to add them to the 'can delete this' list, and remove them after
             $.each(self.mapObjects, function (index, mapObject) {
-                if (!mapObject.isEditable() && mapObject.isDeleteable()) {
+                if (!mapObject.isEditable() && mapObject.isDeletable()) {
                     self.editableLayers.addLayer(mapObject.layer);
                 }
             });
@@ -183,7 +183,7 @@ class DungeonMap extends Signalable {
 
             // Now we make them un-editable again.
             $.each(self.mapObjects, function (index, mapObject) {
-                if (!mapObject.isEditable() && mapObject.isDeleteable()) {
+                if (!mapObject.isEditable() && mapObject.isDeletable()) {
                     self.editableLayers.removeLayer(mapObject.layer);
                 }
             });
