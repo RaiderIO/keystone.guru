@@ -8,7 +8,7 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-paint-brush';
 
         if (this.manager.map.options.echo) {
-            window.Echo.join('route-edit.' + this.manager.map.getDungeonRoute().publicKey)
+            window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.brushline-changed', (e) => {
                     self._restoreObject(e.brushline, e.user);
                 })

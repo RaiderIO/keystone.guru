@@ -48,13 +48,13 @@ class APIDungeonFloorSwitchMarkerController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonStartMarker $dungeonstartmarker
+     * @param DungeonFloorSwitchMarker $dungeonFloorSwitchMarker
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    function delete(Request $request, DungeonStartMarker $dungeonstartmarker)
+    function delete(Request $request, DungeonFloorSwitchMarker $dungeonfloorswitchmarker)
     {
         try {
-            $dungeonstartmarker->delete();
+            dd($dungeonfloorswitchmarker->delete());
             $result = ['result' => 'success'];
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

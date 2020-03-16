@@ -4,6 +4,8 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         _stateManager = new StateManager();
+        _stateManager.setDungeonRoute({!! new \Illuminate\Support\Collection($dungeonroute) !!});
+        _stateManager.setMapIconTypes({!! $mapIconTypes !!});
     });
 
     /**

@@ -12,11 +12,10 @@ class AdminDungeonStartMarker extends DungeonStartMarker {
         console.assert(this instanceof AdminDungeonStartMarker, 'this was not an AdminDungeonStartMarker', this);
         $.ajax({
             type: 'POST',
-            url: '/ajax/dungeonstartmarker',
+            url: '/ajax/dungeonstartmarker/' + self.id,
             dataType: 'json',
             data: {
-                _method: 'DELETE',
-                id: self.id
+                _method: 'DELETE'
             },
             success: function (json) {
                 self.localDelete();

@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+# TODO?
+# Add root SSH key
+# Increase PHP memory limit
+# Create databases?
+# Create users & permissions?
+
 
 # create directories
 tput setaf 2;

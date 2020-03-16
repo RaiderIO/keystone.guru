@@ -12,7 +12,9 @@ class MapObject extends Signalable {
 
         this._defaultVisible = true;
         this.synced = false;
+        /** @type DungeonMap */
         this.map = map;
+        /** @type L.Layer */
         this.layer = layer;
 
         this.id = 0;
@@ -109,7 +111,7 @@ class MapObject extends Signalable {
      * Gets if this map object is deleteable, default is true. May be overridden.
      * @returns {boolean}
      */
-    isDeleteable() {
+    isDeletable() {
         return true;
     }
 

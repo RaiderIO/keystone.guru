@@ -1,0 +1,56 @@
+{
+    "id": 37,
+    "release_changelog_id": 41,
+    "version": "v2.8",
+    "created_at": "2020-03-16 21:57:45",
+    "updated_at": "2020-03-16 21:57:45",
+    "changelog": {
+        "id": 41,
+        "release_id": 37,
+        "description": "Been a long time since the last update! Hopefully it's worth the wait.",
+        "changes": [
+            {
+                "release_changelog_id": 41,
+                "release_changelog_category_id": 3,
+                "ticket_id": 246,
+                "change": "Up\/down\/left\/right directions for floor switching is now included on the icon."
+            },
+            {
+                "release_changelog_id": 41,
+                "release_changelog_category_id": 3,
+                "ticket_id": 247,
+                "change": "Tol Dagor now has its locked doors added."
+            },
+            {
+                "release_changelog_id": 41,
+                "release_changelog_category_id": 3,
+                "ticket_id": 255,
+                "change": "You may now place icons on the map and add an optional comment. This new system is now in use for various other parts of the website. This also means I have more ability to add random stuff everywhere. The bots in Mechagon: Junkyard now use this system for example. I've added some icons for known skips, and you can now place things like warlock portals to help you further detail your route."
+            },
+            {
+                "release_changelog_id": 41,
+                "release_changelog_category_id": 3,
+                "ticket_id": 47,
+                "change": "Graveyard markers are now added (see #255)."
+            },
+            {
+                "release_changelog_id": 41,
+                "release_changelog_category_id": 3,
+                "ticket_id": 257,
+                "change": "Raid marker selection now stays open properly."
+            },
+            {
+                "release_changelog_id": 41,
+                "release_changelog_category_id": 4,
+                "ticket_id": 249,
+                "change": "All traces of Beguiling enemies have been removed. All new Awakened enemies have been added to all dungeons."
+            },
+            {
+                "release_changelog_id": 41,
+                "release_changelog_category_id": 4,
+                "ticket_id": 251,
+                "change": "Added Mechagon: Junkyard."
+            }
+        ]
+    }
+}

@@ -28,7 +28,7 @@ class DungeonDataSeeder extends Seeder
             'enemy_patrols' => 'App\Models\EnemyPatrol',
             'dungeon_floor_switch_markers' => 'App\Models\DungeonFloorSwitchMarker',
             'dungeon_start_markers' => 'App\Models\DungeonStartMarker',
-            'map_comments' => 'App\Models\MapComment'
+            'map_icons' => 'App\Models\MapIcon'
         ];
 
         $rootDir = database_path('/seeds/dungeondata/');
@@ -141,7 +141,7 @@ class DungeonDataSeeder extends Seeder
 
             new DungeonRouteEnemyRaidMarkersRelationParser(),
 
-            new DungeonRouteMapCommentsRelationParser()
+            new DungeonRouteMapIconsRelationParser()
         ];
 
         // Do some php fuckery to make this a bit cleaner
@@ -214,8 +214,8 @@ class DungeonDataSeeder extends Seeder
         DB::table('enemy_patrols')->truncate();
         DB::table('dungeon_start_markers')->truncate();
         DB::table('dungeon_floor_switch_markers')->truncate();
-        // Delete all map comments that are always there
-        DB::table('map_comments')->where('dungeon_route_id', -1)->delete();
+        // Delete all map icons that are always there
+        DB::table('map_icons')->where('dungeon_route_id', -1)->delete();
         // Delete polylines related to enemy patrols
         DB::table('polylines')->where('model_class', 'App\Models\EnemyPatrol')->delete();
 

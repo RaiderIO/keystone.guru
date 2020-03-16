@@ -9,7 +9,6 @@
         "title": "Atal'Dazar Demo",
         "difficulty": "Casual",
         "teeming": 0,
-        "beguiling_preset": 1,
         "published": 1,
         "unlisted": 1,
         "demo": 1,
@@ -628,37 +627,33 @@
                 "raid_marker_id": 7
             }
         ],
-        "mapcomments": [
+        "mapicons": [
             {
                 "floor_id": 41,
-                "game_icon_id": -1,
+                "map_icon_type_id": 2,
                 "lat": -115.625,
                 "lng": 242.75,
-                "always_visible": 0,
                 "comment": "Jump down to Rezan"
             },
             {
                 "floor_id": 41,
-                "game_icon_id": -1,
+                "map_icon_type_id": 2,
                 "lat": -47.4375,
                 "lng": 213.8125,
-                "always_visible": 0,
                 "comment": "Double Rogue Shroud to get past this pack twice."
             },
             {
                 "floor_id": 42,
-                "game_icon_id": -1,
+                "map_icon_type_id": 2,
                 "lat": -88.5,
                 "lng": 220.75,
-                "always_visible": 0,
                 "comment": "Bloodlust"
             },
             {
                 "floor_id": 41,
-                "game_icon_id": -1,
+                "map_icon_type_id": 2,
                 "lat": -126,
                 "lng": 139,
-                "always_visible": 0,
                 "comment": "Bloodlust"
             }
         ]

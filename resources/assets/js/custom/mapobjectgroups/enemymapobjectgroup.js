@@ -48,15 +48,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 enemy.setDefaultVisible(false);
             }
 
-            // Beguiling NPC handling
-            if (remoteMapObject.hasOwnProperty('beguiling_preset')) {
-                enemy.beguiling_preset = remoteMapObject.beguiling_preset;
-                // If it was set to a number
-                if (remoteMapObject.beguiling_preset !== null) {
-                    // Hide this enemy by default
-                    enemy.setDefaultVisible(false);
-                }
-            }
             // If actually set..
             if (remoteMapObject.hasOwnProperty('raid_marker_name') && remoteMapObject.raid_marker_name !== null) {
                 enemy.setRaidMarkerName(remoteMapObject.raid_marker_name);
@@ -95,64 +86,5 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 }
             }
         }
-    }
-
-    /**
-     * Adds the beguiling enemy of an enemy pack
-     * @param enemyPack EnemyPack
-     * @param preset int
-     * @param npcId int
-     * @param location L.LatLng
-     */
-    createBeguilingEnemy(enemyPack, preset, npcId, location) {
-        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
-
-        let npc = this.manager.map.getNpcById(npcId);
-
-        // Build an object that could've come straight from the server
-        let remoteEnemy = {
-            // Doesn't have a server ID
-            id: -1,
-            lat: location.lat,
-            lng: location.lng,
-            enemy_pack_id: enemyPack.id,
-            floor_id: getState().getCurrentFloor().id,
-            teeming: null,
-            faction: 'any',
-            enemy_forces_override: -1,
-            raid_marker_name: null,
-            beguiling_preset: preset,
-            npc: npc
-        };
-
-        // Now return the enemy so callers can make use of it
-        let enemy = this._restoreObject(remoteEnemy);
-
-
-        // Set it to be visible if we should (editing that same preset)
-        if (getState().getBeguilingPreset() === enemy.beguiling_preset) {
-            console.log('Showing beguiling enemy..');
-            this.setMapObjectVisibility(enemy, true);
-        }
-
-        return enemy;
-    }
-
-    /**
-     * Finds all beguiling enemies of a specific pack.
-     * @param enemyPackId
-     * @returns {Array}
-     */
-    getBeguilingEnemiesByEnemyPackId(enemyPackId) {
-        let result = [];
-
-        for (let i = 0; i < this.objects.length; i++) {
-            let enemy = this.objects[i];
-            if (enemy.isBeguiling() && enemy.enemy_pack_id === enemyPackId) {
-                result.push(enemy);
-            }
-        }
-
-        return result;
     }
 }

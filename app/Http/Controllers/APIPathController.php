@@ -35,7 +35,9 @@ class APIPathController extends Controller
      */
     function store(Request $request, DungeonRoute $dungeonroute)
     {
-        $this->authorize('edit', $dungeonroute);
+        if (!$dungeonroute->isTry()) {
+            $this->authorize('edit', $dungeonroute);
+        }
 
         /** @var Path $path */
         $path = Path::findOrNew($request->get('id'));
@@ -67,7 +69,9 @@ class APIPathController extends Controller
                 $path->save();
 
                 // Something's updated; broadcast it
-                broadcast(new PathChangedEvent($dungeonroute, $path, Auth::user()));
+                if (Auth::check()) {
+                    broadcast(new PathChangedEvent($dungeonroute, $path, Auth::user()));
+                }
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
@@ -90,12 +94,16 @@ class APIPathController extends Controller
     function delete(Request $request, DungeonRoute $dungeonroute, Path $path)
     {
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
-        $this->authorize('edit', $dungeonroute);
+        if (!$dungeonroute->isTry()) {
+            $this->authorize('edit', $dungeonroute);
+        }
 
         try {
 
             if ($path->delete()) {
-                broadcast(new PathDeletedEvent($dungeonroute, $path, Auth::user()));
+                if (Auth::check()) {
+                    broadcast(new PathDeletedEvent($dungeonroute, $path, Auth::user()));
+                }
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();

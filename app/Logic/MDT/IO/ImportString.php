@@ -18,7 +18,7 @@ use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
-use App\Models\MapComment;
+use App\Models\MapIcon;
 use App\Models\Polyline;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -221,7 +221,7 @@ class ImportString
         if (isset($decoded['objects'])) {
             // Pre-init
             $dungeonRoute->brushlines = new Collection();
-            $dungeonRoute->mapcomments = new Collection();
+            $dungeonRoute->mapicons = new Collection();
 
             foreach ($decoded['objects'] as $objectIndex => $object) {
                 try {
@@ -289,8 +289,9 @@ class ImportString
                     // Map comment (n = note)
                     // MethodDungeonTools.lua:2523
                     else if (isset($object['n']) && $object['n']) {
-                        $mapComment = new MapComment();
+                        $mapComment = new MapIcon();
                         $mapComment->floor_id = $floor->id;
+                        $mapComment->icon_type = MapIcon::MAP_COMMENT;
                         $mapComment->comment = $details['5'];
 
                         $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details['1'], 'y' => $details['2']]);
@@ -303,7 +304,7 @@ class ImportString
                             $mapComment->save();
                         } else {
                             // Inject
-                            $dungeonRoute->mapcomments->push($mapComment);
+                            $dungeonRoute->mapicons->push($mapComment);
                         }
                     }
                     // Triangles (t = triangle)

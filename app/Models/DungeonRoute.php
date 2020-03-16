@@ -28,7 +28,6 @@ use Illuminate\Support\Facades\DB;
  * @property $title string
  * @property $difficulty string
  * @property $teeming boolean
- * @property $beguiling_preset int
  * @property $published boolean
  * @property $unlisted boolean
  * @property $demo boolean
@@ -67,7 +66,7 @@ use Illuminate\Support\Facades\DB;
  * @property Collection $killzones
  *
  * @property Collection $enemyraidmarkers
- * @property Collection $mapcomments
+ * @property Collection $mapicons
  * @property Collection $pageviews
  *
  * @property Collection $routeattributes
@@ -247,9 +246,9 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function mapcomments()
+    public function mapicons()
     {
-        return $this->hasMany('App\Models\MapComment');
+        return $this->hasMany('App\Models\MapIcon');
     }
 
     /**
@@ -510,7 +509,6 @@ class DungeonRoute extends Model
             $this->unlisted = intval($request->get('unlisted', 0)) > 0;
         }
         $this->demo = intval($request->get('demo', 0)) > 0;
-        $this->beguiling_preset = $seasonService->getCurrentSeason()->getPresetAt(Carbon::now());
 
 
         // Update or insert it
@@ -614,7 +612,7 @@ class DungeonRoute extends Model
                             $templateRoute->brushlines,
                             $templateRoute->killzones,
                             $templateRoute->enemyraidmarkers,
-                            $templateRoute->mapcomments,
+                            $templateRoute->mapicons,
                         ]);
                     }
                 }
@@ -653,7 +651,7 @@ class DungeonRoute extends Model
             $this->brushlines,
             $this->killzones,
             $this->enemyraidmarkers,
-            $this->mapcomments,
+            $this->mapicons,
             $this->routeattributesraw
         ]);
 
@@ -810,7 +808,7 @@ class DungeonRoute extends Model
             DungeonRouteRating::where('dungeon_route_id', $item->id)->delete();
             // @TODO Do not remove favorites, people ought to know why their favorited dungeon was removed?
             // DungeonRouteFavorite::where('dungeon_route_id', '=', $item->id)->delete();
-            MapComment::where('dungeon_route_id', $item->id)->delete();
+            MapIcon::where('dungeon_route_id', $item->id)->delete();
 
             // Delete brushlines
             foreach ($item->brushlines as $brushline) {

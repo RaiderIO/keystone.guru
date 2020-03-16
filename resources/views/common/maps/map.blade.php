@@ -15,9 +15,8 @@ $tryMode = isset($tryMode) && $tryMode ? true : false;
 $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
 // For Siege of Boralus
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
-$routeBeguilingPreset = isset($dungeonroute) ? $dungeonroute->beguiling_preset : 1;
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
-$teeming = isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin) ? true : false;
+$teeming = (isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin)) ? true : false;
 $enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
@@ -38,12 +37,6 @@ $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups 
 $floorId = isset($floorId) ? $floorId : $dungeon->floors->first()->id;
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
-// Construct the data of the beguiling NPCs
-$maxBeguilingPresets = DB::table('enemies')->selectRaw('MAX(`beguiling_preset`) as max')->where('floor_id', $floorId)->get()->first()->max;
-$beguilingPresets = [];
-for ($i = 1; $i <= $maxBeguilingPresets; $i++) {
-    $beguilingPresets[] = ['index' => $i, 'description' => sprintf(__('Preset %s'), $i)];
-}
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
@@ -80,12 +73,6 @@ if ($isAdmin) {
     'floorId' => $floorId,
     'edit' => $edit,
     'try' => $tryMode,
-    'dungeonroute' => [
-        'publicKey' => $routePublicKey,
-        'faction' => $routeFaction,
-        'beguilingPreset' => $routeBeguilingPreset
-    ],
-    'beguilingPresets' => $beguilingPresets,
     'defaultEnemyVisualType' => $enemyVisualType,
     'teeming' => $teeming,
     'noUI' => $noUI,
@@ -100,7 +87,13 @@ if ($isAdmin) {
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
 
-    @include('common.general.statemanager')
+    @include('common.general.statemanager', [
+        'mapIconTypes' => \App\Models\MapIconType::all(),
+        'dungeonroute' => [
+            'publicKey' => $routePublicKey,
+            'faction' => $routeFaction
+        ],
+    ])
     <script>
         // Data of the dungeon(s) we're selecting in the map
         var dungeonData = {!! $dungeon !!};
@@ -197,21 +190,6 @@ if ($isAdmin) {
                 ['id' => 'map_brushline_edit_popup_weight_@{{id}}', 'class' => 'form-control selectpicker']) !!}
             </div>
             {!! Form::button(__('Submit'), ['id' => 'map_brushline_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
-    </script>
-
-    <script id="map_map_comment_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_map_comment_edit_popup_inner" class="popupCustom">
-            <div class="form-group">
-                {!! Form::label('map_map_comment_edit_popup_comment_@{{id}}', __('Comment')) !!}
-                {!! Form::textarea('map_map_comment_edit_popup_comment_@{{id}}', null, ['class' => 'form-control', 'cols' => '50', 'rows' => '5']) !!}
-            </div>
-            <div class="form-group">
-                @if($isAdmin)
-                    {!! Form::hidden('map_map_comment_edit_popup_always_visible_@{{id}}', 1, []) !!}
-                @endif
-            </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_map_comment_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
         </div>
     </script>
 

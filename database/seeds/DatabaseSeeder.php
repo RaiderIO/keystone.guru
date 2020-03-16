@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RaidMarkersSeeder::class);
         $this->call(ReleaseChangelogCategorySeeder::class);
         $this->call(ReleasesSeeder::class);
+        $this->call(MapIconTypesSeeder::class);
 
         // Depends on SeasonsSeeder
         $this->call(SeasonsSeeder::class);
