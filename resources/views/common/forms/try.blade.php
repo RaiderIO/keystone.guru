@@ -5,7 +5,7 @@
     </h3>
     <div class="form-group">
         {!! Form::label('dungeon_id', __('Dungeon') . '<span class="form-required">*</span>', [], false) !!}
-        {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->pluck('name', 'id'), null, ['class' => 'form-control']) !!}
+        {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->orderBy('name')->pluck('name', 'id'), null, ['class' => 'form-control']) !!}
     </div>
 
     <div class="form-group">

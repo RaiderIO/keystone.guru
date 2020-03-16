@@ -41,7 +41,7 @@
         </div>
         <div class="form-group">
             {!! Form::label('dungeon_id', __('Dungeon') . '<span class="form-required">*</span>', [], false) !!}
-            {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->pluck('name', 'id'), null, ['id' => 'dungeon_id_select', 'class' => 'form-control selectpicker']) !!}
+            {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->orderBy('name')->pluck('name', 'id'), null, ['id' => 'dungeon_id_select', 'class' => 'form-control selectpicker']) !!}
             <div id="siege_of_boralus_faction_warning" class="text-warning" style="display: none;">
                 {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
             </div>

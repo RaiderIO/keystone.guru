@@ -625,7 +625,7 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 160,
                 'enemy_forces_required_teeming' => 192,
-                'active' => true,
+                'active' => false,
                 'floors' => [
                     'The Robodrome' => [
                         'index' => 1
