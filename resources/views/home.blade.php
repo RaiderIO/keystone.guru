@@ -40,7 +40,7 @@
                     <ul>
                         <li class="active">
                             <a href="#">{{ __('Interactive maps') }}</a>
-                            <p>{{ __('Powered by Leaflet, Keystone.guru features interactive maps with 3 zoom levels and visibility controls.') }}</p>
+                            <p>{{ __('Powered by Leaflet, Keystone.guru features interactive maps with 4 zoom levels and visibility controls. All maps have been upscaled to provide high detail when zoomed in.') }}</p>
                         </li>
                         <li>
                             <a href="#">{{ __('All BFA dungeons supported') }}</a>
@@ -49,6 +49,10 @@
                         <li>
                             <a href="#">{{ __('All enemies added - teeming included') }}</a>
                             <p>{{ __('Ever wondered what different route you could possibly take while still hitting a 100% enemy forces? All enemies are visible on the map, find the alternative route to make your run a success. Includes all enemies that are added on Teeming weeks!') }}</p>
+                        </li>
+                        <li>
+                            <a href="#">{{ __('Awakened affix supported') }}</a>
+                            <p>{{ __('Awakened enemies are added, allowing your to plan your skips using N\'Zoth\'s shadow realm.') }}</p>
                         </li>
                         <li>
                             <a href="#">{{ __('Define your setup') }}</a>
@@ -70,22 +74,25 @@
                             <div class="probootstrap-image-showcase">
                                 <ul class="probootstrap-images-list">
                                     <li class="active">
-                                        <img src="images/home/1.png" alt="Image" class="img-responsive">
+                                        <img src="images/home/1.jpg" alt="Image" class="img-responsive">
                                     </li>
                                     <li>
-                                        <img src="images/home/2.png" alt="Image" class="img-responsive">
+                                        <img src="images/home/2.jpg" alt="Image" class="img-responsive">
                                     </li>
                                     <li>
-                                        <img src="images/home/3.png" alt="Image" class="img-responsive">
+                                        <img src="images/home/3.jpg" alt="Image" class="img-responsive">
                                     </li>
                                     <li>
-                                        <img src="images/home/4.png" alt="Image" class="img-responsive">
+                                        <img src="images/home/4.jpg" alt="Image" class="img-responsive">
                                     </li>
                                     <li>
-                                        <img src="images/home/5.png" alt="Image" class="img-responsive">
+                                        <img src="images/home/5.jpg" alt="Image" class="img-responsive">
                                     </li>
                                     <li>
-                                        <img src="images/home/6.png" alt="Image" class="img-responsive">
+                                        <img src="images/home/6.jpg" alt="Image" class="img-responsive">
+                                    </li>
+                                    <li>
+                                        <img src="images/home/7.jpg" alt="Image" class="img-responsive">
                                     </li>
                                 </ul>
                             </div>
@@ -130,7 +137,7 @@
                     <div class="service text-center">
                         <div class="icon"><i class="fa fa-star"></i></div>
                         <div class="text">
-                            <h3>{{ __('Rating and Favoriting') }}</h3>
+                            <h3>{{ __('Rating and Favorites') }}</h3>
                             <p>{{ __('Saw a route that had some great features or you enjoyed running with your group? Rate it for others to discover and favorite it for easy finding for later on through your Profile page!') }}</p>
                         </div>
                     </div>
