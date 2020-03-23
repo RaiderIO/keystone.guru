@@ -46,7 +46,7 @@ class ReleaseController extends Controller
                 $changelogChange = new ReleaseChangelogChange();
                 $changelogChange->release_changelog_id = $changelog->id;
                 $changelogChange->release_changelog_category_id = $categories[$i];
-                $changelogChange->ticket_id = intval($tickets[$i]);
+                $changelogChange->ticket_id = intval(str_replace('#', '', $tickets[$i]));
                 $changelogChange->change = $changes[$i];
                 $changelogChange->save();
             }
