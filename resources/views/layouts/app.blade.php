@@ -267,9 +267,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
         @if (!$isProduction && (!Auth::check() || !$user->hasRole('admin')))
             <div class="container-fluid alert alert-warning text-center mt-4">
                 <i class="fa fa-exclamation-triangle"></i>
-                {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
-                <br>
-                {{ __('If you got here by accident, I\'d be interested in knowing how you got here! Message me on Discord :)') }}
+                {{ __('Warning! You are currently on the staging environment of Keystone.guru. This is NOT the main site.') }}
                 <br>
                 <a href="https://keystone.guru/">{{ __('Take me to the main site!') }}</a>
             </div>
