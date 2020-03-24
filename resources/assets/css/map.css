@@ -437,6 +437,7 @@ html, body, #map, #app, .wrapper {
  * Enemy types
  */
 .enemy_icon_npc_enemy_forces,
+.enemy_icon_npc_enemy_portrait,
 .enemy_icon_npc_class,
 .enemy_icon_npc_type {
     background-color: white;
