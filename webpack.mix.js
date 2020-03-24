@@ -217,6 +217,7 @@ if (images) {
     mix.copy('resources/assets/images/enemyclasses', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/enemyclassifications', 'public/images/enemyclassifications', false);
     mix.copy('resources/assets/images/enemymodifiers', 'public/images/enemymodifiers', false);
+    mix.copy('resources/assets/images/enemyportraits', 'public/images/enemyportraits', false);
     mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);
