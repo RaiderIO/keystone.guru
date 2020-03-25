@@ -7,6 +7,7 @@ use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\NpcClassification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class NpcController extends Controller
 {
@@ -55,6 +56,14 @@ class NpcController extends Controller
         } // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
         else if ($oldId > 0) {
             Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
+        }
+
+        $portrait = $request->file('portrait');
+        // Save was successful, now do any file handling that may be necessary
+        if ($portrait !== null) {
+//            $portrait->move(public_path('images/enemyportraits'), $npc->id . '.png');
+            // Move file to the enemyportraits folder
+            dd($portrait->storeAs('images/enemyportraits', $npc->id . '.png', 'public'));
         }
 
         return $npc;
