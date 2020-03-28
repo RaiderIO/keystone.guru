@@ -49,13 +49,8 @@ sudo ln /usr/include/lua5.3/lua.h /usr/include/luaconf.h
 ```
 
 # Coupling LUA to PHP using the plugin
-
-Now that LUA is properly installed, download latest version of the php plugin here: https://pecl.php.net/package/lua
-
-Copy the file you just downloaded to /tmp, from there, run the following command (Adjust version accordingly of course).
-
 ```bash
-sudo pecl install lua-2.0.6.tgz
+sudo pecl install lua-2.0.6
 ```
 Add extension=lua.so to php.ini file (could be /etc/php/7.1/fpm/php.ini). Check with `phpinfo()` to see the exact version you got.
 

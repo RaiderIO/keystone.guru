@@ -1,19 +1,28 @@
--- This file is a subset of the original file by Nnogga and others. Please find the original at
--- https://github.com/nnogga/MethodDungeonTools/blob/master/Transmission.lua
+-- This file is a subset of the original file by Nnoggie and others. Please find the original at
+-- https://github.com/nnoggie/MethodDungeonTools/blob/master/Transmission.lua
 -- I removed functions I didn't need and removed namespacing due to not being able to call functions otherwise.
-
-local Compresser = LibStub:GetLibrary("LibCompress");
+local Compresser = LibStub:GetLibrary("LibCompress")
 local Encoder = Compresser:GetAddonEncodeTable()
-local Serializer = LibStub:GetLibrary("AceSerializer-3.0");
-local bit = require("bit")
+local Serializer = LibStub:GetLibrary("AceSerializer-3.0")
+local LibDeflate = LibStub:GetLibrary("LibDeflate")
+local configForDeflate = {
+    [1]= {level = 1},
+    [2]= {level = 2},
+    [3]= {level = 3},
+    [4]= {level = 4},
+    [5]= {level = 5},
+    [6]= {level = 6},
+    [7]= {level = 7},
+    [8]= {level = 8},
+    [9]= {level = 9},
+}
+
+MDTcommsObject = LibStub("AceAddon-3.0"):NewAddon("MDTCommsObject","AceComm-3.0","AceSerializer-3.0")
 
 -- Lua APIs
---local tinsert = table.insert
-local tostring, string_char, strsplit = tostring, string.char, strsplit
+local tostring, string_char, strsplit,tremove,tinsert = tostring, string.char, strsplit,table.remove,table.insert
 local pairs, type, unpack = pairs, type, unpack
---local error = error
 local bit_band, bit_lshift, bit_rshift = bit.band, bit.lshift, bit.rshift
---local coroutine = coroutine
 
 --Based on code from WeakAuras2, all credit goes to the authors
 local bytetoB64 = {
@@ -40,101 +49,626 @@ local B64tobyte = {
 
 -- This code is based on the Encode7Bit algorithm from LibCompress
 -- Credit goes to Galmok (galmok@gmail.com)
-local encodeB64Table = {};
-
-function encodeB64(str)
-    local B64 = encodeB64Table;
-    local remainder = 0;
-    local remainder_length = 0;
-    local encoded_size = 0;
-    local l=#str
-    local code
-    for i=1,l do
-        code = string.byte(str, i);
-        remainder = remainder + bit_lshift(code, remainder_length);
-        remainder_length = remainder_length + 8;
-        while(remainder_length) >= 6 do
-            encoded_size = encoded_size + 1;
-            B64[encoded_size] = bytetoB64[bit_band(remainder, 63)];
-            remainder = bit_rshift(remainder, 6);
-            remainder_length = remainder_length - 6;
-        end
-    end
-    if remainder_length > 0 then
-        encoded_size = encoded_size + 1;
-        B64[encoded_size] = bytetoB64[remainder];
-    end
-    return table.concat(B64, "", 1, encoded_size)
-end
-
 local decodeB64Table = {}
 
 function decodeB64(str)
-    local bit8 = decodeB64Table;
-    local decoded_size = 0;
-    local ch;
-    local i = 1;
-    local bitfield_len = 0;
-    local bitfield = 0;
-    local l = #str;
+    local bit8 = decodeB64Table
+    local decoded_size = 0
+    local ch
+    local i = 1
+    local bitfield_len = 0
+    local bitfield = 0
+    local l = #str
     while true do
         if bitfield_len >= 8 then
-            decoded_size = decoded_size + 1;
-            bit8[decoded_size] = string_char(bit_band(bitfield, 255));
-            bitfield = bit_rshift(bitfield, 8);
-            bitfield_len = bitfield_len - 8;
+            decoded_size = decoded_size + 1
+            bit8[decoded_size] = string_char(bit_band(bitfield, 255))
+            bitfield = bit_rshift(bitfield, 8)
+            bitfield_len = bitfield_len - 8
         end
-        ch = B64tobyte[str:sub(i, i)];
-        bitfield = bitfield + bit_lshift(ch or 0, bitfield_len);
-        bitfield_len = bitfield_len + 6;
+        ch = B64tobyte[str:sub(i, i)]
+        bitfield = bitfield + bit_lshift(ch or 0, bitfield_len)
+        bitfield_len = bitfield_len + 6
         if i > l then
-            break;
+            break
         end
-        i = i + 1;
+        i = i + 1
     end
     return table.concat(bit8, "", 1, decoded_size)
 end
 
-function TableToString(inTable, forChat)
-    local serialized = Serializer:Serialize(inTable);
-    local compressed = Compresser:CompressHuffman(serialized);
+function TableToString(inTable, forChat,level)
+    local serialized = Serializer:Serialize(inTable)
+    local compressed = LibDeflate:CompressDeflate(serialized, configForDeflate[level])
+    -- prepend with "!" so that we know that it is not a legacy compression
+    -- also this way, old versions will error out due to the "bad" encoding
+    local encoded = "!"
     if(forChat) then
-        return encodeB64(compressed);
+        encoded = encoded .. LibDeflate:EncodeForPrint(compressed)
     else
-        return Encoder:Encode(compressed);
+        encoded = encoded .. LibDeflate:EncodeForWoWAddonChannel(compressed)
     end
+    return encoded
 end
 
 function StringToTable(inString, fromChat)
-    local decoded;
+    -- if gsub strips off a ! at the beginning then we know that this is not a legacy encoding
+    local encoded, usesDeflate = inString:gsub("^%!", "")
+    local decoded
     if(fromChat) then
-        decoded = decodeB64(inString);
+        if usesDeflate == 1 then
+            decoded = LibDeflate:DecodeForPrint(encoded)
+        else
+            decoded = decodeB64(encoded)
+        end
     else
-        decoded = Encoder:Decode(inString);
+        decoded = LibDeflate:DecodeForWoWAddonChannel(encoded)
     end
 
-    local decompressed, errorMsg = Compresser:Decompress(decoded);
+    if not decoded then
+        return "Error decoding."
+    end
+
+    local decompressed, errorMsg = nil, "unknown compression method"
+    if usesDeflate == 1 then
+        decompressed = LibDeflate:DecompressDeflate(decoded)
+    else
+        decompressed, errorMsg = Compresser:Decompress(decoded)
+    end
     if not(decompressed) then
-        return "Error decompressing: "..errorMsg;
+        return "Error decompressing: " .. errorMsg
     end
 
-    local success, deserialized = Serializer:Deserialize(decompressed);
+    local success, deserialized = Serializer:Deserialize(decompressed)
     if not(success) then
-        return "Error deserializing "..deserialized;
+        return "Error deserializing "..deserialized
     end
-    return deserialized;
+    return deserialized
 end
 
-function ValidateImportPreset(preset)
-    if type(preset) ~= "table" then return false end
-    if not preset.text then return false end
-    if not preset.value then return false end
-    if type(preset.text) ~= "string" then return false end
-    if type(preset.value) ~= "table" then return false end
-    if not preset.value.currentDungeonIdx then return false end
-    if not preset.value.currentPull then return false end
-    if not preset.value.currentSublevel then return false end
-    if not preset.value.pulls then return false end
-    if type(preset.value.pulls) ~= "table" then return false end
-    return true
+local function filterFunc(_, event, msg, player, l, cs, t, flag, channelId, ...)
+    if flag == "GM" or flag == "DEV" or (event == "CHAT_MSG_CHANNEL" and type(channelId) == "number" and channelId > 0) then
+        return
+    end
+    local newMsg = ""
+    local remaining = msg
+    local done
+    repeat
+        local start, finish, characterName, displayName = remaining:find("%[ ([^%s]+) %- ([^%]]+)%]")
+        local startLive, finishLive, characterNameLive, displayNameLive = remaining:find("%[MDTLive: ([^%s]+) %- ([^%]]+)%]")
+        if(characterName and displayName) then
+            characterName = characterName:gsub("|c[Ff][Ff]......", ""):gsub("|r", "")
+            displayName = displayName:gsub("|c[Ff][Ff]......", ""):gsub("|r", "")
+            newMsg = newMsg..remaining:sub(1, start-1)
+            --newMsg = newMsg.."|HMethodDungeonTools-"..characterName.."|h|cFFF49D38[".."|r|cFFF49D38"..displayName.."]|h|r"
+            newMsg = "|cfff49d38|Hgarrmission:mdt-"..characterName.."|h["..displayName.."]|h|r"
+            remaining = remaining:sub(finish + 1)
+        elseif (characterNameLive and displayNameLive) then
+            characterNameLive = characterNameLive:gsub("|c[Ff][Ff]......", ""):gsub("|r", "")
+            displayNameLive = displayNameLive:gsub("|c[Ff][Ff]......", ""):gsub("|r", "")
+            newMsg = newMsg..remaining:sub(1, startLive-1)
+            newMsg = newMsg.."|Hgarrmission:mdtlive-"..characterNameLive.."|h[".."|cFF00FF00Live Session: |cfff49d38"..""..displayNameLive.."]|h|r"
+            remaining = remaining:sub(finishLive + 1)
+        else
+            done = true
+        end
+    until(done)
+    if newMsg ~= "" then
+        return false, newMsg, player, l, cs, t, flag, channelId, ...
+    end
+end
+
+local presetCommPrefix = "MDTPreset"
+
+MethodDungeonTools.liveSessionPrefixes = {
+    ["enabled"] = "MDTLiveEnabled",
+    ["request"] = "MDTLiveReq",
+    ["ping"] = "MDTLivePing",
+    ["obj"] = "MDTLiveObj",
+    ["objOff"] = "MDTLiveObjOff",
+    ["objChg"] = "MDTLiveObjChg",
+    ["cmd"] = "MDTLiveCmd",
+    ["note"] = "MDTLiveNote",
+    ["preset"] = "MDTLivePreset",
+    ["pull"] = "MDTLivePull",
+    ["week"] = "MDTLiveWeek",
+    ["free"] = "MDTLiveFree",
+    ["bora"] = "MDTLiveBora",
+    ["mdi"] = "MDTLiveMDI",
+    ["reqPre"] = "MDTLiveReqPre",
+    ["corrupted"] = "MDTLiveCor",
+    ["difficulty"] = "MDTLiveLvl",
+}
+
+function MDTcommsObject:OnEnable()
+    self:RegisterComm(presetCommPrefix)
+    for _,prefix in pairs(MethodDungeonTools.liveSessionPrefixes) do
+        self:RegisterComm(prefix)
+    end
+    MethodDungeonTools.transmissionCache = {}
+    ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", filterFunc)
+    ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", filterFunc)
+    ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", filterFunc)
+    ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", filterFunc)
+end
+
+--handle preset chat link clicks
+hooksecurefunc("SetItemRef", function(link, text)
+    if(link and link:sub(0, 19) == "garrmission:mdtlive") then
+        local sender = link:sub(21, string.len(link))
+        local name,realm = string.match(sender,"(.*)+(.*)")
+        sender = name.."-"..realm
+        --ignore importing the live preset when sender is player, open MDT only
+        local playerName,playerRealm = UnitFullName("player")
+        playerName = playerName.."-"..playerRealm
+        if sender==playerName then
+            ShowInterface(true)
+        else
+            ShowInterface(true)
+            LiveSession_Enable()
+        end
+        return
+    elseif (link and link:sub(0, 15) == "garrmission:mdt") then
+        local sender = link:sub(17, string.len(link))
+        local name,realm = string.match(sender,"(.*)+(.*)")
+        if (not name) or (not realm) then
+            print("MDT could not properly receive a preset, please make sure sender "..sender.." has the latest version of MDT installed!")
+            return
+        end
+        sender = name.."-"..realm
+        local preset = MethodDungeonTools.transmissionCache[sender]
+        if preset then
+            ShowInterface(true)
+            OpenChatImportPresetDialog(sender,preset)
+        end
+        return
+    end
+end)
+
+function MDTcommsObject:OnCommReceived(prefix, message, distribution, sender)
+    --[[
+        Sender has no realm name attached when sender is from the same realm as the player
+        UnitFullName("Nnogga") returns no realm while UnitFullName("player") does
+        UnitFullName("Nnogga-TarrenMill") returns realm even if you are not on the same realm as Nnogga
+        We append our realm if there is no realm
+    ]]
+    local name, realm = UnitFullName(sender)
+    if not name then return end
+    if not realm or string.len(realm)<3 then
+        local _,r = UnitFullName("player")
+        realm = r
+    end
+    local fullName = name.."-"..realm
+
+    --standard preset transmission
+    --we cache the preset here already
+    --the user still decides if he wants to click the chat link and add the preset to his db
+    if prefix == presetCommPrefix then
+        local preset = StringToTable(message,false)
+        MethodDungeonTools.transmissionCache[fullName] = preset
+        --live session preset
+        if MethodDungeonTools.liveSessionActive and MethodDungeonTools.liveSessionAcceptingPreset and preset.uid == MethodDungeonTools.livePresetUID then
+            if ValidateImportPreset(preset) then
+                ImportPreset(preset,true)
+                MethodDungeonTools.liveSessionAcceptingPreset = false
+                MethodDungeonTools.main_frame.SendingStatusBar:Hide()
+                if MethodDungeonTools.main_frame.LoadingSpinner then
+                    MethodDungeonTools.main_frame.LoadingSpinner:Hide()
+                    MethodDungeonTools.main_frame.LoadingSpinner.Anim:Stop()
+                end
+                MethodDungeonTools.liveSessionRequested = false
+            end
+        end
+    end
+
+    if prefix == MethodDungeonTools.liveSessionPrefixes.enabled then
+        if MethodDungeonTools.liveSessionRequested == true then
+            LiveSession_SessionFound(fullName,message)
+        end
+    end
+
+    --pulls
+    if prefix == MethodDungeonTools.liveSessionPrefixes.pull then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local pulls = StringToTable(message,false)
+            preset.value.pulls = pulls
+            if preset == GetCurrentPreset() then
+                ReloadPullButtons()
+                SetSelectionToPull(GetCurrentPull())
+                POI_UpdateAll() --for corrupted spires
+            end
+        end
+    end
+
+    --corrupted
+    if prefix == MethodDungeonTools.liveSessionPrefixes.corrupted then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local offsets = StringToTable(message,false)
+            --only reposition if no blip is currently moving
+            if not MethodDungeonTools.draggedBlip then
+                preset.value.riftOffsets = offsets
+                UpdateMap()
+            end
+        end
+    end
+
+    --difficulty
+    if prefix == MethodDungeonTools.liveSessionPrefixes.difficulty then
+        if MethodDungeonTools.liveSessionActive then
+            local db = GetDB()
+            local difficulty = tonumber(message)
+            if difficulty and difficulty~= db.currentDifficulty then
+                local updateSeasonal
+                if ((difficulty>=10 and db.currentDifficulty<10) or (difficulty<10 and db.currentDifficulty>=10)) then
+                    updateSeasonal = true
+                end
+                db.currentDifficulty = difficulty
+                MethodDungeonTools.main_frame.sidePanel.DifficultySlider:SetValue(difficulty)
+                UpdateProgressbar()
+                if MethodDungeonTools.EnemyInfoFrame and MethodDungeonTools.EnemyInfoFrame.frame:IsShown() then UpdateEnemyInfoData() end
+                ReloadPullButtons()
+                if updateSeasonal then
+                    DungeonEnemies_UpdateSeasonalAffix()
+                    MethodDungeonTools.main_frame.sidePanel.difficultyWarning:Toggle(difficulty)
+                    POI_UpdateAll()
+                    KillAllAnimatedLines()
+                    DrawAllAnimatedLines()
+                end
+            end
+        end
+    end
+
+    --week
+    if prefix == MethodDungeonTools.liveSessionPrefixes.week then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local week = tonumber(message)
+            if preset.week ~= week then
+                preset.week = week
+                local teeming = IsPresetTeeming(preset)
+                preset.value.teeming = teeming
+                if preset == GetCurrentPreset() then
+                    local affixDropdown = MethodDungeonTools.main_frame.sidePanel.affixDropdown
+                    affixDropdown:SetValue(week)
+                    if not GetCurrentAffixWeek() then
+                        MethodDungeonTools.main_frame.sidePanel.affixWeekWarning.image:Hide()
+                        MethodDungeonTools.main_frame.sidePanel.affixWeekWarning:SetDisabled(true)
+                    elseif GetCurrentAffixWeek() == week then
+                        MethodDungeonTools.main_frame.sidePanel.affixWeekWarning.image:Hide()
+                        MethodDungeonTools.main_frame.sidePanel.affixWeekWarning:SetDisabled(true)
+                    else
+                        MethodDungeonTools.main_frame.sidePanel.affixWeekWarning.image:Show()
+                        MethodDungeonTools.main_frame.sidePanel.affixWeekWarning:SetDisabled(false)
+                    end
+                    DungeonEnemies_UpdateTeeming()
+                    UpdateFreeholdSelector(week)
+                    DungeonEnemies_UpdateBlacktoothEvent(week)
+                    DungeonEnemies_UpdateSeasonalAffix()
+                    DungeonEnemies_UpdateBoralusFaction(preset.faction)
+                    POI_UpdateAll()
+                    UpdateProgressbar()
+                    ReloadPullButtons()
+                    KillAllAnimatedLines()
+                    DrawAllAnimatedLines()
+                end
+            end
+        end
+    end
+
+    --live session messages that ignore concurrency from here on, we ignore our own messages
+    if sender == UnitFullName("player") then return end
+
+
+    if prefix == MethodDungeonTools.liveSessionPrefixes.request then
+        if MethodDungeonTools.liveSessionActive then
+            LiveSession_NotifyEnabled()
+        end
+    end
+
+    --request preset
+    if prefix == MethodDungeonTools.liveSessionPrefixes.reqPre then
+        local playerName,playerRealm = UnitFullName("player")
+        playerName = playerName.."-"..playerRealm
+        if playerName == message then
+            SendToGroup(IsPlayerInGroup(),true,GetCurrentLivePreset())
+        end
+    end
+
+
+    --ping
+    if prefix == MethodDungeonTools.liveSessionPrefixes.ping then
+        local currentUID = GetCurrentPreset().uid
+        if MethodDungeonTools.liveSessionActive and (currentUID and currentUID==MethodDungeonTools.livePresetUID) then
+            local x,y,sublevel = string.match(message,"(.*):(.*):(.*)")
+            x = tonumber(x)
+            y = tonumber(y)
+            sublevel = tonumber(sublevel)
+            local scale = GetScale()
+            if sublevel == GetCurrentSubLevel() then
+                PingMap(x*scale,y*scale)
+            end
+        end
+    end
+
+    --preset objects
+    if prefix == MethodDungeonTools.liveSessionPrefixes.obj then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local obj = StringToTable(message,false)
+            StorePresetObject(obj,true,preset)
+            if preset == GetCurrentPreset() then
+                local scale = GetScale()
+                local currentPreset = GetCurrentPreset()
+                local currentSublevel = GetCurrentSubLevel()
+                DrawPresetObject(obj,nil,scale,currentPreset,currentSublevel)
+            end
+        end
+    end
+
+    --preset object offsets
+    if prefix == MethodDungeonTools.liveSessionPrefixes.objOff then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local objIdx,x,y = string.match(message,"(.*):(.*):(.*)")
+            objIdx = tonumber(objIdx)
+            x = tonumber(x)
+            y = tonumber(y)
+            UpdatePresetObjectOffsets(objIdx,x,y,preset,true)
+            if preset == GetCurrentPreset() then DrawAllPresetObjects() end
+        end
+    end
+
+    --preset object changed (deletions, partial deletions)
+    if prefix == MethodDungeonTools.liveSessionPrefixes.objChg then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local changedObjects = StringToTable(message,false)
+            for objIdx,obj in pairs(changedObjects) do
+                preset.objects[objIdx] = obj
+            end
+            if preset == GetCurrentPreset() then DrawAllPresetObjects() end
+        end
+    end
+
+    --various commands
+    if prefix == MethodDungeonTools.liveSessionPrefixes.cmd then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            if message == "deletePresetObjects" then DeletePresetObjects(preset, true) end
+            if message == "undo" then PresetObjectStepBack(preset, true) end
+            if message == "redo" then PresetObjectStepForward(preset, true) end
+            if message == "clear" then ClearPreset(preset,true) end
+        end
+    end
+
+    --note text update, delete, move
+    if prefix == MethodDungeonTools.liveSessionPrefixes.note then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local action,noteIdx,text,y = string.match(message,"(.*):(.*):(.*):(.*)")
+            noteIdx = tonumber(noteIdx)
+            if action == "text" then
+                preset.objects[noteIdx].d[5]=text
+            elseif action == "delete" then
+                tremove(preset.objects,noteIdx)
+            elseif action == "move" then
+                local x = tonumber(text)
+                y = tonumber(y)
+                preset.objects[noteIdx].d[1]=x
+                preset.objects[noteIdx].d[2]=y
+            end
+            if preset == GetCurrentPreset() then DrawAllPresetObjects() end
+        end
+    end
+
+    --preset
+    if prefix == MethodDungeonTools.liveSessionPrefixes.preset then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = StringToTable(message,false)
+            MethodDungeonTools.transmissionCache[fullName] = preset
+            if ValidateImportPreset(preset) then
+                MethodDungeonTools.livePresetUID = preset.uid
+                ImportPreset(preset,true)
+            end
+        end
+    end
+
+    --freehold
+    if prefix == MethodDungeonTools.liveSessionPrefixes.free then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local value,week = string.match(message,"(.*):(.*)")
+            value = value == "T" and true or false
+            week = tonumber(week)
+            preset.freeholdCrew = (value and week) or nil
+            if preset == GetCurrentPreset() then
+                DungeonEnemies_UpdateFreeholdCrew(preset.freeholdCrew)
+                UpdateFreeholdSelector(week)
+                ReloadPullButtons()
+                UpdateProgressbar()
+            end
+        end
+    end
+
+    --Siege of Boralus
+    if prefix == MethodDungeonTools.liveSessionPrefixes.bora then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local faction = tonumber(message)
+            preset.faction = faction
+            if preset == GetCurrentPreset() then
+                UpdateBoralusSelector()
+                ReloadPullButtons()
+                UpdateProgressbar()
+            end
+        end
+    end
+
+    --MDI
+    if prefix == MethodDungeonTools.liveSessionPrefixes.mdi then
+        if MethodDungeonTools.liveSessionActive then
+            local preset = GetCurrentLivePreset()
+            local updateUI = preset == GetCurrentPreset()
+            local action,data = string.match(message,"(.*):(.*)")
+            data = tonumber(data)
+            if action == "toggle" then
+                GetDB().MDI.enabled = data == 1 or false
+                DisplayMDISelector()
+            elseif action == "beguiling" then
+                preset.mdi.beguiling = data
+                if updateUI then
+                    MethodDungeonTools.MDISelector.BeguilingDropDown:SetValue(preset.mdi.beguiling)
+                    DungeonEnemies_UpdateSeasonalAffix()
+                    DungeonEnemies_UpdateBoralusFaction(preset.faction)
+                    UpdateProgressbar()
+                    ReloadPullButtons()
+                    POI_UpdateAll()
+                    KillAllAnimatedLines()
+                    DrawAllAnimatedLines()
+                end
+            elseif action == "freehold" then
+                preset.mdi.freehold = data
+                if updateUI then
+                    MethodDungeonTools.MDISelector.FreeholdDropDown:SetValue(preset.mdi.freehold)
+                    if preset.mdi.freeholdJoined then
+                        DungeonEnemies_UpdateFreeholdCrew(preset.mdi.freehold)
+                    end
+                    DungeonEnemies_UpdateBlacktoothEvent()
+                    UpdateProgressbar()
+                    ReloadPullButtons()
+                end
+            elseif action == "join" then
+                preset.mdi.freeholdJoined = data == 1 or false
+                if updateUI then
+                    DungeonEnemies_UpdateFreeholdCrew()
+                    ReloadPullButtons()
+                    UpdateProgressbar()
+                end
+            end
+
+        end
+    end
+
+end
+
+
+---MakeSendingStatusBar
+---Creates a bar that indicates sending progress when sharing presets with your group
+---Called once from initFrames()
+function MakeSendingStatusBar(f)
+    f.SendingStatusBar = CreateFrame("StatusBar", nil, f)
+    local statusbar = f.SendingStatusBar
+    statusbar:SetMinMaxValues(0, 1)
+    statusbar:SetPoint("LEFT", f.bottomPanel, "LEFT", 5, 0)
+    statusbar:SetWidth(200)
+    statusbar:SetHeight(20)
+    statusbar:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+    statusbar:GetStatusBarTexture():SetHorizTile(false)
+    statusbar:GetStatusBarTexture():SetVertTile(false)
+    statusbar:SetStatusBarColor(0.26,0.42,1)
+
+    statusbar.bg = statusbar:CreateTexture(nil, "BACKGROUND")
+    statusbar.bg:SetTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+    statusbar.bg:SetAllPoints(true)
+    statusbar.bg:SetVertexColor(0.26,0.42,1)
+
+    statusbar.value = statusbar:CreateFontString(nil, "OVERLAY")
+    statusbar.value:SetPoint("CENTER", statusbar, "CENTER", 0, 0)
+    statusbar.value:SetFontObject("GameFontNormalSmall")
+    statusbar.value:SetJustifyH("CENTER")
+    statusbar.value:SetJustifyV("CENTER")
+    statusbar.value:SetShadowOffset(1, -1)
+    statusbar.value:SetTextColor(1, 1, 1)
+    statusbar:Hide()
+
+    if IsAddOnLoaded("ElvUI") then
+        local E, L, V, P, G = unpack(ElvUI)
+        statusbar:SetStatusBarTexture(E.media.normTex)
+    end
+end
+
+--callback for SendCommMessage
+local function displaySendingProgress(userArgs,bytesSent,bytesToSend)
+    MethodDungeonTools.main_frame.SendingStatusBar:Show()
+    MethodDungeonTools.main_frame.SendingStatusBar:SetValue(bytesSent/bytesToSend)
+    MethodDungeonTools.main_frame.SendingStatusBar.value:SetText(string.format("Sending: %.1f",bytesSent/bytesToSend*100).."%")
+    --done sending
+    if bytesSent == bytesToSend then
+        local distribution = userArgs[1]
+        local preset = userArgs[2]
+        local silent = userArgs[3]
+        --restore "Send" and "Live" button
+        if MethodDungeonTools.liveSessionActive then
+            MethodDungeonTools.main_frame.LiveSessionButton:SetText("*Live*")
+        else
+            MethodDungeonTools.main_frame.LiveSessionButton:SetText("Live")
+            MethodDungeonTools.main_frame.LiveSessionButton.text:SetTextColor(1,0.8196,0)
+            MethodDungeonTools.main_frame.LinkToChatButton:SetDisabled(false)
+            MethodDungeonTools.main_frame.LinkToChatButton.text:SetTextColor(1,0.8196,0)
+        end
+        MethodDungeonTools.main_frame.LinkToChatButton:SetText("Share")
+        MethodDungeonTools.main_frame.LiveSessionButton:SetDisabled(false)
+        MethodDungeonTools.main_frame.SendingStatusBar:Hide()
+        --output chat link
+        if not silent then
+            local prefix = "[ "
+            local dungeon = GetDungeonName(preset.value.currentDungeonIdx)
+            local presetName = preset.text
+            local name, realm = UnitFullName("player")
+            local fullName = name.."+"..realm
+            SendChatMessage(prefix..fullName.." - "..dungeon..": "..presetName.."]",distribution)
+            SetThrottleValues(true)
+        end
+    end
+end
+
+---SetUniqueID
+---generates a unique random 11 digit number in base64 and assigns it to a preset if it does not have one yet
+---credit to WeakAuras2
+function SetUniqueID(preset)
+    if not preset.uid then
+        local s = {}
+        for i=1,11 do
+            tinsert(s, bytetoB64[math.random(0, 63)])
+        end
+        preset.uid = table.concat(s)
+    end
+end
+
+---SendToGroup
+---Send current preset to group/raid
+function SendToGroup(distribution,silent,preset)
+    SetThrottleValues()
+    preset = preset or GetCurrentPreset()
+    --set unique id
+    SetUniqueID(preset)
+    --gotta encode mdi mode / difficulty into preset
+    local db = GetDB()
+    preset.mdiEnabled = db.MDI.enabled
+    preset.difficulty = db.currentDifficulty
+    local export = TableToString(preset,false,5)
+    MDTcommsObject:SendCommMessage("MDTPreset", export, distribution, nil, "BULK",displaySendingProgress,{distribution,preset,silent})
+end
+
+---GetPresetSize
+---Returns the number of characters the string version of the preset contains
+function GetPresetSize(forChat,level)
+    local preset = GetCurrentPreset()
+    local export = TableToString(preset,forChat,level)
+    return string.len(export)
+end
+
+local defaultCPS = tonumber(_G.ChatThrottleLib.MAX_CPS)
+local defaultBURST = tonumber(_G.ChatThrottleLib.BURST)
+function SetThrottleValues(default)
+    if not _G.ChatThrottleLib then return end
+    if default then
+        _G.ChatThrottleLib.MAX_CPS = defaultCPS
+        _G.ChatThrottleLib.BURST = defaultBURST
+    else --4000/16000 is fine but we go safe with 2000/10000
+        _G.ChatThrottleLib.MAX_CPS= 2000
+        _G.ChatThrottleLib.BURST = 10000
+    end
 end

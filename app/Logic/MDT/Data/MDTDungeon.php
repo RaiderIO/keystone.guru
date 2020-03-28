@@ -16,7 +16,7 @@ use App\Models\Npc;
 use Illuminate\Support\Collection;
 
 /**
- * Class ImportString. This file was created as a sort of copy of https://github.com/nnogga/MethodDungeonTools/blob/master/Transmission.lua
+ * Class ImportString. This file was created as a sort of copy of https://github.com/nnoggie/MethodDungeonTools/blob/master/Transmission.lua
  * All rights belong to their respective owners, I did write this but I did not make this up.  I merely translated the LUA
  * to PHP to allow for importing of the exported strings.
  * @package App\Logic\MDT
@@ -73,7 +73,7 @@ class MDTDungeon
             // Some files require LibStub
             file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
             file_get_contents(
-                base_path('vendor/nnogga/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
+                base_path('vendor/nnoggie/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
             ) .
             // Insert dummy function to get what we need
             '

@@ -353,6 +353,7 @@ class ImportString
         $lua = $this->_getLua();
         // Import it to a table
         $decoded = $lua->call("StringToTable", [$this->_encodedString, true]);
+        dd($decoded);
         // Check if it's valid
         $isValid = $lua->call("ValidateImportPreset", [$decoded]);
 
