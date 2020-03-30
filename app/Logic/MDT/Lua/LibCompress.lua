@@ -8,7 +8,7 @@
 -- Revision: $Revision: 83 $
 -- Date: $Date: 2018-07-03 14:33:48 +0000 (Tue, 03 Jul 2018) $
 ----------------------------------------------------------------------------------
-
+local bit = require("bit")
 
 local LibCompress = LibStub:NewLibrary("LibCompress", 90000 + tonumber(("$Revision: 83 $"):match("%d+")))
 
@@ -27,7 +27,7 @@ local type = type
 local tostring = tostring
 local select = select
 local next = next
-local loadstring = loadstring
+local loadstring = load
 local setmetatable = setmetatable
 local rawset = rawset
 local assert = assert
@@ -62,24 +62,24 @@ local function cleanup()
 	end
 end
 
-local timeout = -1
-local function onUpdate(frame, elapsed)
-	frame:Hide()
-	timeout = timeout - elapsed
-	if timeout <= 0 then
-		cleanup()
-	end
-end
-
-LibCompress.frame = LibCompress.frame or CreateFrame("frame", nil, UIParent) -- reuse the old frame
-LibCompress.frame:SetScript("OnUpdate", onUpdate)
-LibCompress.frame:Hide()
+--local timeout = -1
+--local function onUpdate(frame, elapsed)
+--	frame:Hide()
+--	timeout = timeout - elapsed
+--	if timeout <= 0 then
+--		cleanup()
+--	end
+--end
+--
+--LibCompress.frame = LibCompress.frame or CreateFrame("frame", nil, UIParent) -- reuse the old frame
+--LibCompress.frame:SetScript("OnUpdate", onUpdate)
+--LibCompress.frame:Hide()
 
 local function setCleanupTables(...)
 	timeout = 15 -- empty tables after 15 seconds
-	if not LibCompress.frame:IsShown() then
-		LibCompress.frame:Show()
-	end
+--	if not LibCompress.frame:IsShown() then
+--		LibCompress.frame:Show()
+--	end
 	for i = 1, select("#",...) do
 		tables_to_clean[(select(i, ...))] = true
 	end

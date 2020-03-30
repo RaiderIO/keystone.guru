@@ -58,6 +58,7 @@ class ImportString
         // Load libraries (yeah can do this with ->library function as well)
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')));
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibCompress.lua')));
+        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibDeflate.lua')));
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/AceSerializer.lua')));
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/MDTTransmission.lua')));
 
@@ -353,7 +354,6 @@ class ImportString
         $lua = $this->_getLua();
         // Import it to a table
         $decoded = $lua->call("StringToTable", [$this->_encodedString, true]);
-        dd($decoded);
         // Check if it's valid
         $isValid = $lua->call("ValidateImportPreset", [$decoded]);
 

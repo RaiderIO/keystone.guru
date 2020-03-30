@@ -145,7 +145,7 @@ class LayoutsApp extends InlineCode {
                 $('#import_string_warnings').html('');
 
                 $('#mdt_import_modal input[type="submit"]').prop('disabled', true);
-                self._defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }
