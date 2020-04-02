@@ -17,7 +17,16 @@ sudo ln /usr/include/lua5.3/lua.h /usr/include/luaconf.h
 
 sudo pecl install lua-2.0.6
 
+#sudo mkdir -p /usr/lib/lua/5.3/
+#sudo cp storage/lua/* /usr/lib/lua/5.3/
+
+unzip storage/lua/LuaBitOp-1.0.3.zip
+cd storage/lua/LuaBitOp-1.0.3 || return
+make && cp bit.so /usr/lib/lua/5.3/
 sudo mkdir -p /usr/lib/lua/5.3/
-sudo cp storage/lua/* /usr/lib/lua/5.3/
+
+cd ../../../
+
+
 
 echo "Now you just need to add 'extension=lua.so' to your PHP.ini"
