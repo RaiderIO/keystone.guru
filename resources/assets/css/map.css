@@ -347,6 +347,7 @@ html, body, #map, #app, .wrapper {
     margin-top: -4px !important;
     margin-left: -4px !important;
 }
+
 .mdt_enemy_icon.leaflet-edit-marker-selected {
     margin-top: -9px !important;
     margin-left: -9px !important;
@@ -433,9 +434,14 @@ html, body, #map, #app, .wrapper {
     background-color: #2B3E50;
 }
 
+.enemy_icon.mdt {
+    background-color: hotpink;
+}
+
 /*
  * Enemy types
  */
+.enemy_icon_npc_mdt,
 .enemy_icon_npc_enemy_forces,
 .enemy_icon_npc_enemy_portrait,
 .enemy_icon_npc_class,
@@ -444,6 +450,10 @@ html, body, #map, #app, .wrapper {
     border: black 2px solid;
     border-radius: 100px;
     background-blend-mode: luminosity;
+}
+
+.enemy_icon_npc_mdt {
+    border-color: hotpink;
 }
 
 .enemy_icon_npc_enemy_forces.aggressive,
