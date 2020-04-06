@@ -32,6 +32,7 @@ class Npc extends Model
     public $timestamps = false;
 
     protected $with = ['type', 'class'];
+    protected $fillable = ['id', 'dungeon_id', 'name', 'base_health', 'enemy_forces'];
 
     /**
      * Gets all derived enemies from this Npc.
