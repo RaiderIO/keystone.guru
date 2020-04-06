@@ -8,7 +8,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
 
     _getValidIconNames() {
         // Nothing is valid, we don't work with icon names. One size fits all!
-        return [];
+        return ['enemy_forces'];
     }
 
     _getTemplateData() {
