@@ -175,7 +175,7 @@ class ImportString
                     else if ($pullKey === 'color') {
                         // Make sure there is a pound sign in front of the value at all times, but never double up should
                         // MDT decide to suddenly place it here
-                        $killZone->color = (strpos($pullValue, 0) !== '#' ? '#' : '') . $pullValue;
+                        $killZone->color = (substr($pullValue, 0, 1) !== '#' ? '#' : '') . $pullValue;
                     }
                 }
 
