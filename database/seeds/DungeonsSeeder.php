@@ -313,8 +313,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Kings\' Rest' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 224,
-                'enemy_forces_required_teeming' => 260,
+                'enemy_forces_required' => 246,
+                'enemy_forces_required_teeming' => 286,
                 'active' => true,
                 'floors' => [
                     'Kings\' Rest' => [
@@ -325,8 +325,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Shrine of the Storm' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 662,
-                'enemy_forces_required_teeming' => 794,
+                'enemy_forces_required' => 695,
+                'enemy_forces_required_teeming' => 834,
                 'active' => true,
                 'floors' => [
                     'Shrine of the Storm' => [
@@ -390,7 +390,7 @@ class DungeonsSeeder extends Seeder
             'The MOTHERLODE!!' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 384,
-                'enemy_forces_required_teeming' => 499,
+                'enemy_forces_required_teeming' => 460,
                 'active' => true,
                 'floors' => [
                     'The Motherlode' => [
@@ -427,8 +427,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Tol Dagor' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 348,
-                'enemy_forces_required_teeming' => 417,
+                'enemy_forces_required' => 400,
+                'enemy_forces_required_teeming' => 479,
                 'active' => true,
                 'floors' => [
                     'Tol Dagor' => [
@@ -528,8 +528,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Waycrest Manor' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 289,
-                'enemy_forces_required_teeming' => 346,
+                'enemy_forces_required' => 303,
+                'enemy_forces_required_teeming' => 363,
                 'active' => true,
                 'floors' => [
                     'The Grand Foyer' => [
