@@ -19,7 +19,9 @@ use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\Polyline;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -297,7 +299,8 @@ class ImportString
                     else if (isset($object['n']) && $object['n']) {
                         $mapComment = new MapIcon();
                         $mapComment->floor_id = $floor->id;
-                        $mapComment->icon_type = MapIcon::MAP_COMMENT;
+                        // Bit hacky? But should work
+                        $mapComment->map_icon_type_id = MapIconType::where('key', 'comment')->firstOrFail()->id;
                         $mapComment->comment = $details['5'];
 
                         $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details['1'], 'y' => $details['2']]);
@@ -350,11 +353,12 @@ class ImportString
     /**
      * Gets the dungeon route based on the currently encoded string.
      * @param $warnings Collection Collection that is passed by reference in which any warnings are stored.
+     * @param $try boolean True to mark the dungeon as a try route which will be automatically deleted at a later stage.
      * @param $save boolean True to save the route and all associated models, false to not save & couple.
      * @return DungeonRoute|bool DungeonRoute if the route could be constructed, false if the string was invalid.
      * @throws \Exception
      */
-    public function getDungeonRoute($warnings, $save = false)
+    public function getDungeonRoute($warnings, $try = false, $save = false)
     {
         $lua = $this->_getLua();
         // Import it to a table
@@ -366,7 +370,7 @@ class ImportString
         if ($isValid) {
             // Create a dungeon route
             $dungeonRoute = new DungeonRoute();
-            $dungeonRoute->author_id = Auth::id();
+            $dungeonRoute->author_id = $try ? -1 : Auth::id();
             $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
             // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
             $dungeonRoute->faction_id = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
@@ -375,6 +379,10 @@ class ImportString
             $dungeonRoute->title = $decoded['text'];
             $dungeonRoute->difficulty = 'Casual';
             $dungeonRoute->published = 0; // Needs to be explicit otherwise redirect to edit will not have this value
+            // Must expire if we're trying
+            if ($try) {
+                $dungeonRoute->expires_at = Carbon::now()->addHour(config('keystoneguru.try_dungeon_route_expires_hours'))->toDateTimeString();
+            }
 
             if ($save) {
                 // Pre-emptively save the route

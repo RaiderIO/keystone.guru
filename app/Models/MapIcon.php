@@ -20,8 +20,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MapIcon extends Model
 {
-    const MAP_COMMENT = 'mapcomment';
-
     protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'lat', 'lng', 'comment'];
 
     protected $appends = ['has_dungeon_route'];
