@@ -117,6 +117,11 @@ class ImportString
                             /** @var Enemy $mdtEnemy */
                             $mdtEnemy = null;
                             foreach ($mdtEnemies as $mdtEnemyCandidate) {
+                                // Skip Emissaries (Season 3), season is over
+                                if (in_array($mdtEnemyCandidate->npc_id, [155432, 155433, 155434])) {
+                                    break 2;
+                                }
+
                                 // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
                                 // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
                                 $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;

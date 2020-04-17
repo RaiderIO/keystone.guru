@@ -24,7 +24,7 @@ class MDTImportController extends Controller
 
         $importString = new ImportString();
 
-        try {
+//        try {
             $warnings = new Collection();
             $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, false);
 
@@ -54,15 +54,15 @@ class MDTImportController extends Controller
             ];
 
             return $result;
-        } catch (\Exception $ex) {
-            // Different message based on our deployment settings
-            if (config('app.debug')) {
-                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
-            } else {
-                $message = __('Invalid MDT string');
-            }
-            return abort(400, $message);
-        }
+//        } catch (\Exception $ex) {
+//            // Different message based on our deployment settings
+//            if (config('app.debug')) {
+//                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
+//            } else {
+//                $message = __('Invalid MDT string');
+//            }
+//            return abort(400, $message);
+//        }
     }
 
     /**

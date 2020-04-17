@@ -28,8 +28,14 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
         if (text >= 10) {
             width -= 7;
         }
+        // Dangerous = less space
+        else if( this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous ) {
+            width -= 6;
+        }
 
-        // Just append a single class
+        if (this.enemyvisual.enemy.enemy_id > 0) {
+            data.main_visual_inner_classes += ' coupled';
+        }
         data.main_visual_outer_classes += ' enemy_icon_npc_mdt text-black text-center';
         data.main_visual_html = '<div style="font-size: ' + width + 'px; line-height: ' + width + 'px;">' + text + '</div>';
 
@@ -40,7 +46,6 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
      * Called whenever the NPC of the enemy has been refreshed.
      */
     _refreshNpc() {
-        // Re-draw the visual
         this.setIcon(this.iconName);
     }
 

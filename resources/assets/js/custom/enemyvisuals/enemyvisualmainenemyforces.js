@@ -29,6 +29,11 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
             width -= 7;
         }
 
+        // Dangerous = less space
+        else if( this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous ) {
+            width -= 6;
+        }
+
         // Just append a single class
         data.main_visual_outer_classes += ' enemy_icon_npc_enemy_forces text-white text-center';
         data.main_visual_html = '<div style="font-size: ' + width + 'px; line-height: ' + width + 'px;">' + enemyForces + '</div>';

@@ -66,6 +66,7 @@ class MDTDungeon
         $lua->eval(
             'local MethodDungeonTools = {}
             MethodDungeonTools.dungeonTotalCount = {}
+            MethodDungeonTools.mapInfo = {}
             MethodDungeonTools.mapPOIs = {}
             MethodDungeonTools.dungeonEnemies = {}
             MethodDungeonTools.scaleMultiplier = {}
@@ -140,11 +141,6 @@ class MDTDungeon
             /** @var Collection $npcs */
             $npcs = Npc::whereIn('dungeon_id', [$floor->dungeon->id, -1])->get();
             foreach ($npcClones as $npcId => $clones) {
-                // Skip Emissaries (Season 3), season is over
-                if (in_array($npcId, [155432, 155433, 155434])) {
-                    continue;
-                }
-
                 foreach ($clones as $mdtCloneIndex => $clone) {
                     $enemy = new Enemy();
                     // Dummy so we can ID them later on

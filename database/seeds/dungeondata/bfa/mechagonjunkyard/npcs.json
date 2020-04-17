@@ -91,6 +91,19 @@
         "truesight": 0
     },
     {
+        "id": 150168,
+        "dungeon_id": 24,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Toxic Monstrosity",
+        "base_health": 2311848,
+        "enemy_forces": 6,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0
+    },
+    {
         "id": 150169,
         "dungeon_id": 24,
         "classification_id": 2,
@@ -247,6 +260,19 @@
         "truesight": 0
     },
     {
+        "id": 150295,
+        "dungeon_id": 24,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Tank Buster MK1",
+        "base_health": 3853080,
+        "enemy_forces": 0,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1
+    },
+    {
         "id": 150297,
         "dungeon_id": 24,
         "classification_id": 2,
@@ -335,19 +361,6 @@
         "enemy_forces": 0,
         "aggressiveness": "friendly",
         "dangerous": 0,
-        "truesight": 0
-    },
-    {
-        "id": 154758,
-        "dungeon_id": 24,
-        "classification_id": 2,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "name": "Toxic Monstrosity",
-        "base_health": 2311848,
-        "enemy_forces": 6,
-        "aggressiveness": "aggressive",
-        "dangerous": 1,
         "truesight": 0
     },
     {

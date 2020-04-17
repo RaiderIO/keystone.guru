@@ -76,6 +76,11 @@ class EnemyVisualMain extends EnemyVisualIcon {
             this.enemyvisual.map.options.npcsMaxHealth
         );
 
+        // Smaller MDT icons to make it easier to link them
+        if( this.enemyvisual.enemy.is_mdt ){
+            calculatedSize /= 2;
+        }
+
         return {
             // 2px border; so + 4
             iconSize: [calculatedSize + 4, calculatedSize + 4]
