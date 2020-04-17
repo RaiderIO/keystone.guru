@@ -16,7 +16,7 @@ use App\Models\Npc;
 use Illuminate\Support\Collection;
 
 /**
- * Class ImportString. This file was created as a sort of copy of https://github.com/nnogga/MethodDungeonTools/blob/master/Transmission.lua
+ * Class ImportString. This file was created as a sort of copy of https://github.com/nnoggie/MethodDungeonTools/blob/master/Transmission.lua
  * All rights belong to their respective owners, I did write this but I did not make this up.  I merely translated the LUA
  * to PHP to allow for importing of the exported strings.
  * @package App\Logic\MDT
@@ -66,6 +66,7 @@ class MDTDungeon
         $lua->eval(
             'local MethodDungeonTools = {}
             MethodDungeonTools.dungeonTotalCount = {}
+            MethodDungeonTools.mapInfo = {}
             MethodDungeonTools.mapPOIs = {}
             MethodDungeonTools.dungeonEnemies = {}
             MethodDungeonTools.scaleMultiplier = {}
@@ -73,7 +74,7 @@ class MDTDungeon
             // Some files require LibStub
             file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
             file_get_contents(
-                base_path('vendor/nnogga/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
+                base_path('vendor/nnoggie/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
             ) .
             // Insert dummy function to get what we need
             '
@@ -138,7 +139,7 @@ class MDTDungeon
         $enemies = [];
         foreach ($floors as $floor) {
             /** @var Collection $npcs */
-            $npcs = Npc::where('dungeon_id', $floor->dungeon->id)->get();
+            $npcs = Npc::whereIn('dungeon_id', [$floor->dungeon->id, -1])->get();
             foreach ($npcClones as $npcId => $clones) {
                 foreach ($clones as $mdtCloneIndex => $clone) {
                     $enemy = new Enemy();
@@ -160,6 +161,10 @@ class MDTDungeon
                     $enemy->lng = $latLng['lng'];
 
                     $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
+
+                    if ($enemy->npc === null) {
+                        $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);
+                    }
 
                     // Some properties which are dynamic on a normal enemy but static here
                     $enemy->raid_marker_name = null;

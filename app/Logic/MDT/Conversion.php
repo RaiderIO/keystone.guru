@@ -22,7 +22,9 @@ class Conversion
         'The MOTHERLODE!!' => 'TheMotherlode',
         'The Underrot' => 'TheUnderrot',
         'Tol Dagor' => 'TolDagor',
-        'Waycrest Manor' => 'WaycrestManor'
+        'Waycrest Manor' => 'WaycrestManor',
+        'Mechagon: Junkyard' => 'MechagonIsland',
+        'Mechagon: Workshop' => 'MechagonCity',
     ];
 
     /**
@@ -55,7 +57,7 @@ class Conversion
         // May be a double, convert it first
         $mdtDungeonId = (int)$mdtDungeonId;
         // BFA, there's 10 valid dungeons
-        if ($mdtDungeonId >= 15 && $mdtDungeonId <= 24) {
+        if ($mdtDungeonId >= 15 && $mdtDungeonId <= 26) {
             return $mdtDungeonId - 1;
         } else {
             throw new \Exception('Unsupported dungeon found.');

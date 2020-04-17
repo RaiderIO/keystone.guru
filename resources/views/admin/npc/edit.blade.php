@@ -16,10 +16,16 @@
 
 @section('content')
     @isset($model)
-        {{ Form::model($model, ['route' => ['admin.npc.update', $model->id], 'autocomplete' => 'off', 'method' => 'patch']) }}
+        {{ Form::model($model, ['route' => ['admin.npc.update', $model->id], 'autocomplete' => 'off', 'method' => 'patch', 'files' => true]) }}
     @else
-        {{ Form::open(['route' => 'admin.npc.savenew', 'autocomplete' => 'off']) }}
+        {{ Form::open(['route' => 'admin.npc.savenew', 'autocomplete' => 'off', 'files' => true]) }}
     @endisset
+
+    <div class="form-group{{ $errors->has('portrait') ? ' has-error' : '' }}">
+        {!! Form::label('id', __('Portrait (temp)'), [], false) !!}
+        {!! Form::file('portrait', ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'portrait'])
+    </div>
 
     <div class="form-group{{ $errors->has('id') ? ' has-error' : '' }}">
         {!! Form::label('id', __('Game ID') . '<span class="form-required">*</span>', [], false) !!}

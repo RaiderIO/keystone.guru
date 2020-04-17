@@ -19,7 +19,9 @@ use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\Polyline;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +60,7 @@ class ImportString
         // Load libraries (yeah can do this with ->library function as well)
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')));
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibCompress.lua')));
+        $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibDeflate.lua')));
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/AceSerializer.lua')));
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/MDTTransmission.lua')));
 
@@ -116,6 +119,11 @@ class ImportString
                             /** @var Enemy $mdtEnemy */
                             $mdtEnemy = null;
                             foreach ($mdtEnemies as $mdtEnemyCandidate) {
+                                // Skip Emissaries (Season 3), season is over
+                                if (in_array($mdtEnemyCandidate->npc_id, [155432, 155433, 155434])) {
+                                    break 2;
+                                }
+
                                 // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
                                 // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
                                 $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
@@ -174,7 +182,7 @@ class ImportString
                     else if ($pullKey === 'color') {
                         // Make sure there is a pound sign in front of the value at all times, but never double up should
                         // MDT decide to suddenly place it here
-                        $killZone->color = (strpos($pullValue, 0) !== '#' ? '#' : '') . $pullValue;
+                        $killZone->color = (substr($pullValue, 0, 1) !== '#' ? '#' : '') . $pullValue;
                     }
                 }
 
@@ -291,7 +299,8 @@ class ImportString
                     else if (isset($object['n']) && $object['n']) {
                         $mapComment = new MapIcon();
                         $mapComment->floor_id = $floor->id;
-                        $mapComment->icon_type = MapIcon::MAP_COMMENT;
+                        // Bit hacky? But should work
+                        $mapComment->map_icon_type_id = MapIconType::where('key', 'comment')->firstOrFail()->id;
                         $mapComment->comment = $details['5'];
 
                         $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details['1'], 'y' => $details['2']]);
@@ -344,11 +353,12 @@ class ImportString
     /**
      * Gets the dungeon route based on the currently encoded string.
      * @param $warnings Collection Collection that is passed by reference in which any warnings are stored.
+     * @param $try boolean True to mark the dungeon as a try route which will be automatically deleted at a later stage.
      * @param $save boolean True to save the route and all associated models, false to not save & couple.
      * @return DungeonRoute|bool DungeonRoute if the route could be constructed, false if the string was invalid.
      * @throws \Exception
      */
-    public function getDungeonRoute($warnings, $save = false)
+    public function getDungeonRoute($warnings, $try = false, $save = false)
     {
         $lua = $this->_getLua();
         // Import it to a table
@@ -360,7 +370,7 @@ class ImportString
         if ($isValid) {
             // Create a dungeon route
             $dungeonRoute = new DungeonRoute();
-            $dungeonRoute->author_id = Auth::id();
+            $dungeonRoute->author_id = $try ? -1 : Auth::id();
             $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
             // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
             $dungeonRoute->faction_id = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
@@ -369,6 +379,10 @@ class ImportString
             $dungeonRoute->title = $decoded['text'];
             $dungeonRoute->difficulty = 'Casual';
             $dungeonRoute->published = 0; // Needs to be explicit otherwise redirect to edit will not have this value
+            // Must expire if we're trying
+            if ($try) {
+                $dungeonRoute->expires_at = Carbon::now()->addHour(config('keystoneguru.try_dungeon_route_expires_hours'))->toDateTimeString();
+            }
 
             if ($save) {
                 // Pre-emptively save the route

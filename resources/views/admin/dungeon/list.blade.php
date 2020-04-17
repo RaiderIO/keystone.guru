@@ -34,7 +34,9 @@
     <thead>
     <tr>
         <th width="10%">{{ __('Exp.') }}</th>
-        <th width="80%">{{ __('Name') }}</th>
+        <th width="40%">{{ __('Name') }}</th>
+        <th width="20%">{{ __('Enemy Forces') }}</th>
+        <th width="20%">{{ __('Enemy Forces (Teeming)') }}</th>
         <th width="10%">{{ __('Actions') }}</th>
     </tr>
     </thead>
@@ -49,6 +51,8 @@
                  data-toggle="tooltip"/>
         </td>
         <td>{{ $dungeon->name }}</td>
+        <td>{{ $dungeon->enemy_forces_required }}</td>
+        <td>{{ $dungeon->enemy_forces_required_teeming }}</td>
         <td>
             <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['id' => $dungeon->id]) }}">
                 <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}

@@ -333,16 +333,23 @@ class EnemyVisual extends Signalable {
                 this.mainVisual.cleanup();
             }
 
-            switch (name) {
-                case 'npc_class':
-                    this.mainVisual = new EnemyVisualMainEnemyClass(this);
-                    break;
-                case 'npc_type':
-                    this.mainVisual = new EnemyVisualMainNpcType(this);
-                    break;
-                case 'enemy_forces':
-                    this.mainVisual = new EnemyVisualMainEnemyForces(this);
-                    break;
+            if( this.enemy.is_mdt ){
+                this.mainVisual = new EnemyVisualMainMDT(this);
+            } else {
+                switch (name) {
+                    case 'npc_class':
+                        this.mainVisual = new EnemyVisualMainEnemyClass(this);
+                        break;
+                    case 'npc_type':
+                        this.mainVisual = new EnemyVisualMainNpcType(this);
+                        break;
+                    case 'enemy_forces':
+                        this.mainVisual = new EnemyVisualMainEnemyForces(this);
+                        break;
+                    case 'enemy_portrait':
+                        this.mainVisual = new EnemyVisualMainEnemyPortrait(this);
+                        break;
+                }
             }
 
             this._buildVisual();

@@ -14,6 +14,7 @@ return [
     // Handlebars
     'npc_name_label' => 'Name',
     'enemy_forces_label' => 'Enemy forces',
+    'enemy_portrait_label' => 'Enemy portrait',
     'enemy_display_type_label' => 'Enemy display type',
     'mdt_enemy_mapping_label' => 'MDT enemy mapping',
     'base_health_label' => 'Base health',

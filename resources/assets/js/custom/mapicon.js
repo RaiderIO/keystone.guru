@@ -129,10 +129,7 @@ class MapIcon extends MapObject {
         this.unbindTooltip();
 
         if (this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
-            this.layer.bindTooltip(
-                jQuery('<div/>', {
-                    class: 'map_map_icon_comment_tooltip'
-                }).text(this.comment.length > 0 ? this.comment : this.map_icon_type.name)[0].outerHTML, {
+            this.layer.bindTooltip(this.comment.length > 0 ? this.comment : this.map_icon_type.name, {
                     direction: 'top'
                 }
             );
@@ -237,9 +234,9 @@ class MapIcon extends MapObject {
                 let editableMapIconTypes = [];
                 for (let i in mapIconTypes) {
                     // Only editable types!
-                    if (mapIconTypes.hasOwnProperty(i) && mapIconTypes[i].isEditable() ) {
+                    if (mapIconTypes.hasOwnProperty(i) && mapIconTypes[i].isEditable()) {
                         // Skip unknown map icons, that should be a one time state when placing the icon, not a selectable state
-                        if( mapIconTypes[i].id !== unknownMapIcon.id ) {
+                        if (mapIconTypes[i].id !== unknownMapIcon.id) {
                             let template = Handlebars.templates['map_map_icon_select_option_template'];
 
                             // Direct assign to the object that is in the array so we're sure this change sticks
