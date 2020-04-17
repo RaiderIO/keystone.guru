@@ -154,7 +154,7 @@ class LayoutsApp extends InlineCode {
                 $importStringTextArea.removeProp('disabled');
 
                 $details.html('');
-                $('#import_string_warnings').html('');
+                $warnings.html('');
 
                 $submitBtn.prop('disabled', true);
                 defaultAjaxErrorFn(xhr, textStatus, errorThrown);
