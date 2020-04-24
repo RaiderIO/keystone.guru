@@ -18,13 +18,20 @@ class SeasonsSeeder extends Seeder
         $seasons = [
             new App\Models\Season([
                 'seasonal_affix_id' => 6,
-                'start' => '2018-09-04 00:00:00'
+                'start' => '2018-09-04 00:00:00',
+                'presets' => 3,
             ]), new App\Models\Season([
                 'seasonal_affix_id' => 16,
-                'start' => '2019-01-23 00:00:00'
+                'start' => '2019-01-23 00:00:00',
+                'presets' => 0,
             ]), new App\Models\Season([
                 'seasonal_affix_id' => 17,
-                'start' => '2019-07-10 00:00:00'
+                'start' => '2019-07-10 00:00:00',
+                'presets' => 3,
+            ]), new App\Models\Season([
+                'seasonal_affix_id' => 18,
+                'start' => '2020-01-21 00:00:00',
+                'presets' => 0,
             ])
         ];
 

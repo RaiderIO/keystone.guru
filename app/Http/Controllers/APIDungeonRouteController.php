@@ -9,7 +9,7 @@ use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsKillzones;
-use App\Http\Controllers\Traits\ListsMapComments;
+use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\APIDungeonRouteFormRequest;
@@ -23,7 +23,9 @@ use App\Logic\Datatables\ViewsColumnHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
+use App\Models\MapIconType;
 use App\Models\Team;
+use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +41,7 @@ class APIDungeonRouteController extends Controller
     use ListsPaths;
     use ListsKillzones;
     use ListsBrushlines;
-    use ListsMapComments;
+    use ListsMapIcons;
     use ListsDungeonStartMarkers;
     use ListsDungeonFloorSwitchMarkers;
 
@@ -173,10 +175,11 @@ class APIDungeonRouteController extends Controller
     /**
      * @param APIDungeonRouteFormRequest $request
      * @param DungeonRoute $dungeonroute
+     * @param SeasonService $seasonService
      * @return array
      * @throws \Exception
      */
-    function store(APIDungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null)
+    function store(APIDungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
     {
         $this->authorize('edit', $dungeonroute);
 
@@ -185,7 +188,7 @@ class APIDungeonRouteController extends Controller
         }
 
         // Update or insert it
-        if (!$dungeonroute->saveFromRequest($request)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
             abort(500, 'Unable to save dungeonroute');
         }
 
@@ -223,29 +226,6 @@ class APIDungeonRouteController extends Controller
         $dungeonroute->save();
 
         return ['result' => 'success'];
-    }
-
-    /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @return array
-     * @throws \Exception
-     */
-    function beguilingpreset(Request $request, DungeonRoute $dungeonroute)
-    {
-        $this->authorize('beguilingpreset', $dungeonroute);
-
-        $preset = intval($request->get('beguilingpreset', 0));
-
-        $resultCode = StatusCode::BAD_REQUEST;
-        if ($preset > 0) {
-            $dungeonroute->beguiling_preset = $preset;
-            $dungeonroute->save();
-
-            $resultCode = StatusCode::NO_CONTENT;
-        }
-
-        abort($resultCode);
     }
 
     /**
@@ -342,8 +322,10 @@ class APIDungeonRouteController extends Controller
      */
     function data(Request $request, $publickey)
     {
+        $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
+
         // Init the fields we should get for this request
-        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapcomment,dungeonstartmarker,dungeonfloorswitchmarker']);
+        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonstartmarker,dungeonfloorswitchmarker']);
         $fields = explode(',', $fields);
 
         // Show enemies or raw data when fetching enemy packs
@@ -400,9 +382,9 @@ class APIDungeonRouteController extends Controller
             $result['enemypatrol'] = $this->listEnemyPatrols($request->get('floor'));
         }
 
-        // Map comments
-        if (in_array('mapcomment', $fields)) {
-            $result['mapcomment'] = $this->listMapComments($request->get('floor'), $publickey);
+        // Map icons
+        if (in_array('mapicon', $fields)) {
+            $result['mapicon'] = $this->listMapIcons($request->get('floor'), $publickey);
         }
 
         // Enemy patrols

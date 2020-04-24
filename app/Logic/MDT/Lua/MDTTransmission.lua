@@ -1,19 +1,28 @@
--- This file is a subset of the original file by Nnogga and others. Please find the original at
--- https://github.com/nnogga/MethodDungeonTools/blob/master/Transmission.lua
+-- This file is a subset of the original file by Nnoggie and others. Please find the original at
+-- https://github.com/nnoggie/MethodDungeonTools/blob/master/Transmission.lua
 -- I removed functions I didn't need and removed namespacing due to not being able to call functions otherwise.
-
-local Compresser = LibStub:GetLibrary("LibCompress");
+local Compresser = LibStub:GetLibrary("LibCompress")
 local Encoder = Compresser:GetAddonEncodeTable()
-local Serializer = LibStub:GetLibrary("AceSerializer-3.0");
+local Serializer = LibStub:GetLibrary("AceSerializer-3.0")
+local LibDeflate = LibStub:GetLibrary("LibDeflate")
 local bit = require("bit")
 
+local configForDeflate = {
+    [1]= {level = 1},
+    [2]= {level = 2},
+    [3]= {level = 3},
+    [4]= {level = 4},
+    [5]= {level = 5},
+    [6]= {level = 6},
+    [7]= {level = 7},
+    [8]= {level = 8},
+    [9]= {level = 9},
+}
+
 -- Lua APIs
---local tinsert = table.insert
-local tostring, string_char, strsplit = tostring, string.char, strsplit
+local tostring, string_char, strsplit,tremove,tinsert = tostring, string.char, strsplit,table.remove,table.insert
 local pairs, type, unpack = pairs, type, unpack
---local error = error
 local bit_band, bit_lshift, bit_rshift = bit.band, bit.lshift, bit.rshift
---local coroutine = coroutine
 
 --Based on code from WeakAuras2, all credit goes to the authors
 local bytetoB64 = {
@@ -40,89 +49,81 @@ local B64tobyte = {
 
 -- This code is based on the Encode7Bit algorithm from LibCompress
 -- Credit goes to Galmok (galmok@gmail.com)
-local encodeB64Table = {};
-
-function encodeB64(str)
-    local B64 = encodeB64Table;
-    local remainder = 0;
-    local remainder_length = 0;
-    local encoded_size = 0;
-    local l=#str
-    local code
-    for i=1,l do
-        code = string.byte(str, i);
-        remainder = remainder + bit_lshift(code, remainder_length);
-        remainder_length = remainder_length + 8;
-        while(remainder_length) >= 6 do
-            encoded_size = encoded_size + 1;
-            B64[encoded_size] = bytetoB64[bit_band(remainder, 63)];
-            remainder = bit_rshift(remainder, 6);
-            remainder_length = remainder_length - 6;
-        end
-    end
-    if remainder_length > 0 then
-        encoded_size = encoded_size + 1;
-        B64[encoded_size] = bytetoB64[remainder];
-    end
-    return table.concat(B64, "", 1, encoded_size)
-end
-
 local decodeB64Table = {}
 
 function decodeB64(str)
-    local bit8 = decodeB64Table;
-    local decoded_size = 0;
-    local ch;
-    local i = 1;
-    local bitfield_len = 0;
-    local bitfield = 0;
-    local l = #str;
+    local bit8 = decodeB64Table
+    local decoded_size = 0
+    local ch
+    local i = 1
+    local bitfield_len = 0
+    local bitfield = 0
+    local l = #str
     while true do
         if bitfield_len >= 8 then
-            decoded_size = decoded_size + 1;
-            bit8[decoded_size] = string_char(bit_band(bitfield, 255));
-            bitfield = bit_rshift(bitfield, 8);
-            bitfield_len = bitfield_len - 8;
+            decoded_size = decoded_size + 1
+            bit8[decoded_size] = string_char(bit_band(bitfield, 255))
+            bitfield = bit_rshift(bitfield, 8)
+            bitfield_len = bitfield_len - 8
         end
-        ch = B64tobyte[str:sub(i, i)];
-        bitfield = bitfield + bit_lshift(ch or 0, bitfield_len);
-        bitfield_len = bitfield_len + 6;
+        ch = B64tobyte[str:sub(i, i)]
+        bitfield = bitfield + bit_lshift(ch or 0, bitfield_len)
+        bitfield_len = bitfield_len + 6
         if i > l then
-            break;
+            break
         end
-        i = i + 1;
+        i = i + 1
     end
     return table.concat(bit8, "", 1, decoded_size)
 end
 
-function TableToString(inTable, forChat)
-    local serialized = Serializer:Serialize(inTable);
-    local compressed = Compresser:CompressHuffman(serialized);
+function TableToString(inTable, forChat,level)
+    local serialized = Serializer:Serialize(inTable)
+    local compressed = LibDeflate:CompressDeflate(serialized, configForDeflate[level])
+    -- prepend with "!" so that we know that it is not a legacy compression
+    -- also this way, old versions will error out due to the "bad" encoding
+    local encoded = "!"
     if(forChat) then
-        return encodeB64(compressed);
+        encoded = encoded .. LibDeflate:EncodeForPrint(compressed)
     else
-        return Encoder:Encode(compressed);
+        encoded = encoded .. LibDeflate:EncodeForWoWAddonChannel(compressed)
     end
+    return encoded
 end
 
 function StringToTable(inString, fromChat)
-    local decoded;
+    -- if gsub strips off a ! at the beginning then we know that this is not a legacy encoding
+    local encoded, usesDeflate = inString:gsub("^%!", "")
+    local decoded
     if(fromChat) then
-        decoded = decodeB64(inString);
+        if usesDeflate == 1 then
+            decoded = LibDeflate:DecodeForPrint(encoded)
+        else
+            decoded = decodeB64(encoded)
+        end
     else
-        decoded = Encoder:Decode(inString);
+        decoded = LibDeflate:DecodeForWoWAddonChannel(encoded)
     end
 
-    local decompressed, errorMsg = Compresser:Decompress(decoded);
+    if not decoded then
+        return "Error decoding."
+    end
+
+    local decompressed, errorMsg = nil, "unknown compression method"
+    if usesDeflate == 1 then
+        decompressed = LibDeflate:DecompressDeflate(decoded)
+    else
+        decompressed, errorMsg = Compresser:Decompress(decoded)
+    end
     if not(decompressed) then
-        return "Error decompressing: "..errorMsg;
+        return "Error decompressing: " .. errorMsg
     end
 
-    local success, deserialized = Serializer:Deserialize(decompressed);
+    local success, deserialized = Serializer:Deserialize(decompressed)
     if not(success) then
-        return "Error deserializing "..deserialized;
+        return "Error deserializing "..deserialized
     end
-    return deserialized;
+    return deserialized
 end
 
 function ValidateImportPreset(preset)

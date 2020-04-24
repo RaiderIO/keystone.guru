@@ -6,25 +6,10 @@
                 <option value="npc_class">{{ npc_class_label }}</option>
                 <option value="npc_type">{{ npc_type_label }}</option>
                 <option value="enemy_forces">{{ enemy_forces_label }}</option>
+                <option value="enemy_portrait">{{ enemy_portrait_label }}</option>
             {{/select}}
         </select>
     </div>
-
-    {{#if show_beguiling_preset}}
-        <div id="map_enemy_beguiling_preset" class="form-group">
-            <div class="font-weight-bold">{{ beguiling_preset_label }}:</div>
-            <select id="map_enemy_beguiling_preset_dropdown" class="form-control selectpicker"
-                    name="map_enemy_beguiling_preset_dropdown">
-                {{#select preset}}
-                    {{#beguiling_presets}}
-                        <option value="{{index}}">{{description}}</option>
-                    {{/beguiling_presets}}
-                {{/select}}
-            </select>
-        </div>
-    {{else}}
-        <input type="hidden" value="{{preset}}" id="map_enemy_beguiling_preset_dropdown"/>
-    {{/if}}
 
 
     {{#if is_map_admin}}

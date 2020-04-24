@@ -107,7 +107,7 @@ class SiteController extends Controller
      */
     public function affixes(Request $request, SeasonService $seasonService)
     {
-        return view('misc.affixes', ['seasonService' => $seasonService, 'offset' => $request->get('offset', 0)]);
+        return view('misc.affixes', ['seasonService' => $seasonService, 'offset' => (int)$request->get('offset', 0)]);
     }
 
     /**
@@ -135,5 +135,13 @@ class SiteController extends Controller
     public function dungeonroutes(Request $request)
     {
         return redirect(route('dungeonroutes'), 301);
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function phpinfo(Request $request)
+    {
+        phpinfo();
     }
 }

@@ -10,15 +10,14 @@ $(function () {
                 handler: new L.Draw.KillZone(map, this.options.killzone),
                 title: this.options.killzone.title
             }, {
-                enabled: this.options.mapcomment,
-                handler: new L.Draw.MapComment(map, this.options.mapcomment),
-                title: this.options.mapcomment.title
+                enabled: this.options.mapicon,
+                handler: new L.Draw.MapIcon(map, this.options.mapicon),
+                title: this.options.mapicon.title
             }, {
                 enabled: this.options.brushline,
                 handler: new L.Draw.Brushline(map, this.options.brushline),
                 title: this.options.brushline.title
-            },
-            {
+            }, {
                 enabled: this.options.enemypack,
                 handler: new L.Draw.EnemyPack(map, this.options.enemypack),
                 title: this.options.enemypack.title
@@ -106,7 +105,7 @@ class DrawControls extends MapControl {
     _attachHotkeys(){
         this.map.hotkeys.attach('1', 'leaflet-draw-draw-path');
         this.map.hotkeys.attach('2', 'leaflet-draw-draw-killzone');
-        this.map.hotkeys.attach('3', 'leaflet-draw-draw-mapcomment');
+        this.map.hotkeys.attach('3', 'leaflet-draw-draw-mapicon');
         this.map.hotkeys.attach('4', 'leaflet-draw-draw-brushline');
         this.map.hotkeys.attach('5', 'leaflet-draw-edit-edit');
         // Doesn't work, but we don't want it anyways jonsnow.jpg
@@ -155,11 +154,11 @@ class DrawControls extends MapControl {
                     title: 'Draw a killzone',
                     hotkey: '2'
                 },
-                mapcomment: {
+                mapicon: {
                     repeatMode: false,
                     zIndexOffset: 1000,
-                    faClass: 'fa-comment',
-                    title: 'Create a comment',
+                    faClass: 'fa-icons',
+                    title: 'Create an icon',
                     hotkey: '3'
                 },
                 brushline: false,

@@ -1,18 +1,49 @@
 class StateManager extends Signalable {
-
-
     constructor() {
         super();
+
+        // Any dungeon route we may be editing at this time
+        this.dungeonRoute = null;
 
         this.map = null;
         // What enemy visual type we're displaying
         this.enemyDisplayType = null;
-        // The beguiling preset we're displaying
-        this.beguilingPreset = null;
         // The currently displayed floor ID
         this.floorId = null;
         // Map zoom level (default = 2)
         this.mapZoomLevel = 2;
+
+        // List of static arrays
+        this.mapIconTypes = [];
+        // Bit of a hack? But for now best solution
+        this.unknownMapIconId = 1;
+        // The map icon as found using above ID once the list of map icons is known
+        this.unknownMapIcon = null;
+    }
+
+    /**
+     * Sets the dungeon route that we're currently editing (may be null)
+     * @param dungeonRoute
+     */
+    setDungeonRoute(dungeonRoute){
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        console.assert(dungeonRoute instanceof Object, 'dungeonRoute is not an Object', dungeonRoute);
+
+        this.dungeonRoute = dungeonRoute;
+    }
+
+    /**
+     * Sets the map icon types to be used in the state.
+     * @param mapIconTypes int
+     */
+    setMapIconTypes(mapIconTypes) {
+        this.mapIconTypes = [];
+        for (let i = 0; i < mapIconTypes.length; i++) {
+            this.mapIconTypes.push(
+                new MapIconType(mapIconTypes[i])
+            )
+        }
+        this.unknownMapIcon = this.getMapIconType(this.unknownMapIconId);
     }
 
     /**
@@ -22,7 +53,7 @@ class StateManager extends Signalable {
     setDungeonMap(map) {
         let self = this;
 
-        // Unreg ourself if necessary
+        // Unreg ourselves if necessary
         if (this.map !== null) {
             this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
         }
@@ -30,13 +61,11 @@ class StateManager extends Signalable {
         this.map = map;
 
         this.setEnemyDisplayType(this.map.options.defaultEnemyVisualType);
-        this.setBeguilingPreset(this.map.options.dungeonroute.beguilingPreset);
         this.setFloorId(this.map.options.floorId);
 
         // Change defaults based on the hash if necessary
         if (window.location.hash.length > 0) {
             this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
-                console.log('changing defaults..');
                 // Fill the hashVariables with key=>value pairs
                 let hashVariables = {};
                 let variables = window.location.hash.replace('#', '').split('&');
@@ -52,12 +81,6 @@ class StateManager extends Signalable {
                 if (hashVariables.hasOwnProperty('display')) {
                     self.setEnemyDisplayType(hashVariables.display);
                 }
-
-                // Beguiling preset
-                if (hashVariables.hasOwnProperty('preset')) {
-                    self.setBeguilingPreset(parseInt(hashVariables.preset));
-                }
-                console.log(hashVariables);
             });
         }
     }
@@ -89,22 +112,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Sets the beguiling preset that is currently displayed on the map.
-     * @param preset int
-     */
-    setBeguilingPreset(preset) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        // Only when actually changed..
-        if (preset !== this.beguilingPreset) {
-            this.beguilingPreset = preset;
-
-            // Let everyone know it's changed
-            this.signal('beguilingpreset:changed', {beguilingPreset: this.beguilingPreset});
-        }
-    }
-
-    /**
      * Sets the current map zoom level.
      * @param zoom
      */
@@ -121,21 +128,21 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Get the dungeon route we may or may not be editing at this time.
+     * @returns {null}
+     */
+    getDungeonRoute(){
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.dungeonRoute;
+    }
+
+    /**
      * Get the default visual to display for all enemies.
      * @returns {string}
      */
     getEnemyDisplayType() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.enemyDisplayType;
-    }
-
-    /**
-     * Get the beguiling preset that is currently displayed on the map.
-     * @returns {string}
-     */
-    getBeguilingPreset() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.beguilingPreset;
     }
 
     /**
@@ -167,4 +174,37 @@ class StateManager extends Signalable {
 
         return result;
     }
+
+    /**
+     * Gets the default map icon for initializing; when the map icon is unknown.
+     * @returns {null}
+     */
+    getUnknownMapIcon() {
+        return this.unknownMapIcon;
+    }
+
+    /**
+     * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
+     * @param mapIconTypeId
+     * @returns {null}
+     */
+    getMapIconType(mapIconTypeId) {
+        let mapIconType = this.unknownMapIcon;
+        for (let i = 0; i < this.mapIconTypes.length; i++) {
+            if (this.mapIconTypes[i].id === mapIconTypeId) {
+                mapIconType = this.mapIconTypes[i];
+                break;
+            }
+        }
+        return mapIconType;
+    }
+
+    /**
+     * Get a list of all map icon types.
+     * @returns {[]|*[]}
+     */
+    getMapIconTypes(){
+        return this.mapIconTypes;
+    }
+
 }

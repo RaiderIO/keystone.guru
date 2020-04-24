@@ -47,11 +47,11 @@
                     // I really want to be the only one doing this
                     if( Auth::user()->name === 'Admin' ){ ?>
                     <div class="row">
-                        {{ Form::model($user, ['route' => ['admin.user.makeadmin', $user->name], 'autocomplete' => 'off', 'method' => 'post']) }}
+                        {{ Form::model($user, ['route' => ['admin.user.makeadmin', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}
                         {!! Form::submit(__('Make admin'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'submit']) !!}
                         {!! Form::close() !!}
 
-                        {{ Form::model($user, ['route' => ['admin.user.makeuser', $user->name], 'autocomplete' => 'off', 'method' => 'post']) }}
+                        {{ Form::model($user, ['route' => ['admin.user.makeuser', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}
                         {!! Form::submit(__('Make user'), ['class' => 'btn btn-info ml-1', 'name' => 'submit', 'value' => 'submit']) !!}
                         {!! Form::close() !!}
                     </div>

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $season_id int
  *
  * @property \Illuminate\Database\Eloquent\Collection $affixes
+ * @property Season $season
  *
  * @mixin \Eloquent
  */

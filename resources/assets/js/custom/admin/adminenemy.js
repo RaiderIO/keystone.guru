@@ -321,9 +321,8 @@ class AdminEnemy extends Enemy {
     _rebuildPopup(event) {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
 
-        // Beguiling and MDT enemies should not be editable directly.
-        // Beguiling not because it's managed through the EnemyPack, MDT because well, MDT manages them.
-        if (!this.is_mdt && !this.isBeguiling()) {
+        // MDT enemies should not be editable directly
+        if (!this.is_mdt) {
             let self = this;
 
             // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
@@ -487,7 +486,6 @@ class AdminEnemy extends Enemy {
                     floor_id: getState().getCurrentFloor().id,
                     mdt_id: self.mdt_id,
                     teeming: self.teeming,
-                    beguiling_preset: self.beguiling_preset,
                     faction: self.faction,
                     enemy_forces_override: self.enemy_forces_override,
                     lat: self.layer.getLatLng().lat,

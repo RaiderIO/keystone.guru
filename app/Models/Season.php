@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
  * @property $id int
  * @property $seasonal_affix_id int
  * @property $start datetime
+ * @property $presets int
  *
  * @property Collection $affixgroups
  *
@@ -116,7 +117,7 @@ class Season extends Model
      *
      * @return AffixGroup
      */
-    function getCurrentAffixGroup()
+    public function getCurrentAffixGroup()
     {
         $result = false;
         try {
@@ -135,7 +136,7 @@ class Season extends Model
      * @return AffixGroup The affix group that is active at that point in time for your passed timezone.
      * @throws \Exception
      */
-    function getAffixGroupAtTime($date)
+    public function getAffixGroupAtTime($date)
     {
         /** @var SeasonService $seasonService */
         $start = $this->start();
@@ -149,5 +150,16 @@ class Season extends Model
 
         // Get the affix group which occurs after a few weeks and return that
         return $this->affixgroups[$seasonService->getAffixGroupIndexAt($date)];
+    }
+
+    /**
+     * Get the current preset (if any) at a specific date.
+     * @param Carbon $date
+     * @return int The preset at the passed date.
+     */
+    public function getPresetAt(Carbon $date)
+    {
+        // Only if the current season has presets do we calculate, otherwise return 0
+        return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets + 1 : 0;
     }
 }

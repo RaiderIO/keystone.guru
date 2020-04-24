@@ -14,10 +14,10 @@
         {
             "type":"package",
             "package": {
-                "name": "nnogga/methoddungeontools",
-                "version": "2.5.6",
+                "name": "nnoggie/methoddungeontools",
+                "version": "3.0.4",
                 "source": {
-                    "url": "https://github.com/nnogga/MethodDungeonTools.git",
+                    "url": "https://github.com/nnoggie/MethodDungeonTools.git",
                     "type": "git",
                     "reference": "master"
                 }
@@ -36,7 +36,7 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.6",
         "miraris/monolog-discord-handler": "^0.2.0",
-        "nnogga/methoddungeontools": "*",
+        "nnoggie/methoddungeontools": "*",
         "patreon/patreon": "^0.3.1",
         "pragmarx/tracker": "dev-wotuu-bugfix",
         "predis/predis": "^1.1",
@@ -45,7 +45,8 @@
         "socialiteproviders/battlenet": "dev-master#4418c2dfd7823e883a83c292704cc90d2fe950a5",
         "socialiteproviders/discord": "^2.0",
         "tremby/laravel-git-version": "^1.1",
-        "yajra/laravel-datatables-oracle": "~8.0"
+        "yajra/laravel-datatables-oracle": "~8.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

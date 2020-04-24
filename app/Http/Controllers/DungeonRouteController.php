@@ -8,6 +8,7 @@ use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
+use App\Service\Season\SeasonService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -17,9 +18,10 @@ class DungeonRouteController extends Controller
 {
     /**
      * @param Request $request
+     * @param SeasonService $seasonService
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|null
      */
-    public function try(Request $request)
+    public function try(Request $request, SeasonService $seasonService)
     {
         $result = null;
 
@@ -119,18 +121,19 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteFormRequest $request
+     * @param SeasonService $seasonService
      * @param DungeonRoute $dungeonroute
      * @return mixed
      * @throws \Exception
      */
-    public function store(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute = null)
+    public function store(DungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
 
         // May fail
-        if (!$dungeonroute->saveFromRequest($request)) {
+        if (!$dungeonroute->saveFromRequest($request, $seasonService)) {
             abort(500, __('Unable to save route'));
         }
 
@@ -186,16 +189,17 @@ class DungeonRouteController extends Controller
      * Override to give the type hint which is required.
      *
      * @param DungeonRouteFormRequest $request
+     * @param SeasonService $seasonService
      * @param DungeonRoute $dungeonroute
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      */
-    public function update(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute)
+    public function update(DungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
     {
         $this->authorize('edit', $dungeonroute);
 
         // Store it and show the edit page again
-        $dungeonroute = $this->store($request, $dungeonroute);
+        $dungeonroute = $this->store($request, $seasonService, $dungeonroute);
 
         // Message to the user
         \Session::flash('status', __('Dungeonroute updated'));
@@ -206,13 +210,14 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteFormRequest $request
+     * @param SeasonService $seasonService
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function savenew(DungeonRouteFormRequest $request)
+    public function savenew(DungeonRouteFormRequest $request, SeasonService $seasonService)
     {
         // Store it and show the edit page
-        $dungeonroute = $this->store($request);
+        $dungeonroute = $this->store($request, $seasonService);
 
         // Message to the user
         \Session::flash('status', __('Route created'));

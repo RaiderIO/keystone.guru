@@ -8,7 +8,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
 
     _getValidIconNames() {
         // Nothing is valid, we don't work with icon names. One size fits all!
-        return [];
+        return ['enemy_forces'];
     }
 
     _getTemplateData() {
@@ -27,6 +27,11 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         // More characters to display..
         if (enemyForces >= 10) {
             width -= 7;
+        }
+
+        // Dangerous = less space
+        else if( this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous ) {
+            width -= 6;
         }
 
         // Just append a single class

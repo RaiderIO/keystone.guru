@@ -30,12 +30,16 @@ class EchoServerHttpApiService implements EchoServerHttpApiInterface
         // Make sure we don't have a trailing slash in the app_url
         $appUrl = trim(env('LARAVEL_ECHO_SERVER_URL'), '/');
 
-        $this->_client = new Client([
-            // Base URI is used with relative requests
-            'base_uri' => sprintf('%s:%s', $appUrl, $port),
-            // You can set any number of default request options.
-            'timeout' => 2.0
-        ]);
+        try {
+            $this->_client = new Client([
+                // Base URI is used with relative requests
+                'base_uri' => sprintf('%s:%s', $appUrl, $port),
+                // You can set any number of default request options.
+                'timeout' => 2.0
+            ]);
+        } catch( \InvalidArgumentException $ex ) {
+            \Log::error('Unable to connect to echo server service!');
+        }
     }
 
     /**
@@ -48,13 +52,15 @@ class EchoServerHttpApiService implements EchoServerHttpApiInterface
     {
         $result = false;
 
-        // Find the client based on the app ID
-        $client = $appId === '' ? $this->_configService->getClientAt(0) : $this->_configService->getClient($appId);
+        if( $this->_client !== null ) {
+            // Find the client based on the app ID
+            $client = $appId === '' ? $this->_configService->getClientAt(0) : $this->_configService->getClient($appId);
 
-        // Perform the API request with the correct auth key
-        $response = $this->_client->get(sprintf('apps/%s/%s', $client->appId, $uri), ['query' => ['auth_key' => $client->key]]);
-        if ($response->getStatusCode() === StatusCode::OK) {
-            $result = json_decode((string)$response->getBody());
+            // Perform the API request with the correct auth key
+            $response = $this->_client->get(sprintf('apps/%s/%s', $client->appId, $uri), ['query' => ['auth_key' => $client->key]]);
+            if ($response->getStatusCode() === StatusCode::OK) {
+                $result = json_decode((string)$response->getBody());
+            }
         }
 
         return $result;

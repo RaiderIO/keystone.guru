@@ -15,7 +15,7 @@ class NpcFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::user()->hasRole("admin");
+        return \Auth::user()->hasRole('admin');
     }
 
     /**
@@ -25,18 +25,23 @@ class NpcFormRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $npc = $this->route()->parameter('npc');
+
+        $rules = [
             // Can only add one entry per game_id, but exclude if we're editing a row but don't change the game_id
-            'id' => ['required'],
-            'name' => 'required',
-            'dungeon_id' => [Rule::in([-1] + Dungeon::all()->pluck('id')->toArray())],
+            'portrait'          => 'image|mimes:png|max:128',
+            'id'                => ['required'],
+            'name'              => 'required',
+            'dungeon_id'        => [Rule::in([-1] + Dungeon::all()->pluck('id')->toArray())],
             'classification_id' => 'required',
-            'aggressiveness' => Rule::in(config('keystoneguru.aggressiveness')),
-            'base_health' => [
+            'aggressiveness'    => Rule::in(config('keystoneguru.aggressiveness')),
+            'base_health'       => [
                 'required',
                 'regex:/^[\d\s,]*$/',
             ],
-            'enemy_forces' => 'int'
+            'enemy_forces'      => 'int'
         ];
+
+        return $rules;
     }
 }

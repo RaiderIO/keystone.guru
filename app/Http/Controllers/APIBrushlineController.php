@@ -34,7 +34,9 @@ class APIBrushlineController extends Controller
      */
     function store(Request $request, DungeonRoute $dungeonroute)
     {
-        $this->authorize('edit', $dungeonroute);
+        if (!$dungeonroute->isTry()) {
+            $this->authorize('edit', $dungeonroute);
+        }
 
         /** @var Brushline $brushline */
         $brushline = Brushline::findOrNew($request->get('id'));
@@ -67,7 +69,9 @@ class APIBrushlineController extends Controller
             // @TODO fix this?
             // $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
 
-            broadcast(new BrushlineChangedEvent($dungeonroute, $brushline, Auth::getUser()));
+            if (Auth::check()) {
+                broadcast(new BrushlineChangedEvent($dungeonroute, $brushline, Auth::getUser()));
+            }
 
             // Touch the route so that the thumbnail gets updated
             $dungeonroute->touch();
@@ -87,11 +91,16 @@ class APIBrushlineController extends Controller
      */
     function delete(Request $request, DungeonRoute $dungeonroute, Brushline $brushline)
     {
-        $this->authorize('edit', $dungeonroute);
+        if (!$dungeonroute->isTry()) {
+            // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
+            $this->authorize('edit', $dungeonroute);
+        }
 
         try {
             if ($brushline->delete()) {
-                broadcast(new BrushlineDeletedEvent($dungeonroute, $brushline, Auth::user()));
+                if (Auth::check()) {
+                    broadcast(new BrushlineDeletedEvent($dungeonroute, $brushline, Auth::user()));
+                }
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();

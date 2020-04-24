@@ -69,14 +69,6 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col-5 col-md-6 font-weight-bold">
-                        {{ __('Beguiling') }}:
-                    </div>
-                    <div class="col-7 col-md-6">
-                        {{ sprintf(__('Preset %s'), $model->beguiling_preset) }}
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row mt-2">
                     <div class="col font-weight-bold">
                         {{ __('Group setup') }}:
                     </div>

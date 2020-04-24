@@ -15,11 +15,36 @@ $(function () {
     });
 });
 
-let LeafletDungeonFloorSwitchIcon = new L.divIcon({className: 'door_icon', iconSize: [32, 32]});
+let defaultDungeonFloorSwitchIconSettings = {iconSize: [32, 32], tooltipAnchor: [0, -16], popupAnchor: [0, -16]};
+let LeafletDungeonFloorSwitchIcon = new L.divIcon($.extend({className: 'door_icon'}, defaultDungeonFloorSwitchIconSettings));
+let LeafletDungeonFloorSwitchIconUp = new L.divIcon($.extend({className: 'door_up_icon'}, defaultDungeonFloorSwitchIconSettings));
+let LeafletDungeonFloorSwitchIconDown = new L.divIcon($.extend({className: 'door_down_icon'}, defaultDungeonFloorSwitchIconSettings));
+let LeafletDungeonFloorSwitchIconLeft = new L.divIcon($.extend({className: 'door_left_icon'}, defaultDungeonFloorSwitchIconSettings));
+let LeafletDungeonFloorSwitchIconRight = new L.divIcon($.extend({className: 'door_right_icon'}, defaultDungeonFloorSwitchIconSettings));
 
 let LeafletDungeonFloorSwitchMarker = L.Marker.extend({
     options: {
         icon: LeafletDungeonFloorSwitchIcon
+    }
+});
+let LeafletDungeonFloorSwitchMarkerUp = L.Marker.extend({
+    options: {
+        icon: LeafletDungeonFloorSwitchIconUp
+    }
+});
+let LeafletDungeonFloorSwitchMarkerDown = L.Marker.extend({
+    options: {
+        icon: LeafletDungeonFloorSwitchIconDown
+    }
+});
+let LeafletDungeonFloorSwitchMarkerLeft = L.Marker.extend({
+    options: {
+        icon: LeafletDungeonFloorSwitchIconLeft
+    }
+});
+let LeafletDungeonFloorSwitchMarkerRight = L.Marker.extend({
+    options: {
+        icon: LeafletDungeonFloorSwitchIconRight
     }
 });
 
@@ -42,8 +67,12 @@ class DungeonFloorSwitchMarker extends MapObject {
         this.layer.on('click', function () {
             // Reference to the sidebar floor is stored in the sidebar. Bit of a hack but eh.
             let sidebar = _inlineManager.getInlineCode('common/maps/sidebar');
-            $(sidebar.options.switchDungeonFloorSelect).val(self.target_floor_id).trigger('change').change();
-            refreshSelectPickers();
+
+            // Tol'dagor doors don't have a target (locked doors)
+            if (self.target_floor_id > 0) {
+                $(sidebar.options.switchDungeonFloorSelect).val(self.target_floor_id).trigger('change').change();
+                refreshSelectPickers();
+            }
         });
 
         // Show a permanent tooltip for the pack's name
@@ -59,7 +88,9 @@ class DungeonFloorSwitchMarker extends MapObject {
             let targetFloor = this.map.getFloorById(this.target_floor_id);
 
             if (targetFloor !== false) {
-                this.layer.bindTooltip("Go to " + targetFloor.name);
+                this.layer.bindTooltip('Go to ' + targetFloor.name, {
+                    direction: 'top'
+                });
             }
         }
     }

@@ -352,6 +352,10 @@ html, body, #map, #app, .wrapper {
     margin-right: 10px;
 }
 
+#map .dropdown-menu.show li {
+    background-color: #2B3E50;
+}
+
 /** leaflet-marker-icon leaflet-div-icon leaflet-zoom-animated leaflet-interactive */
 /** leaflet-marker-icon leaflet-div-icon leaflet-editing-icon leaflet-touch-icon leaflet-zoom-animated leaflet-interactive leaflet-marker-draggable */
 
@@ -363,11 +367,19 @@ html, body, #map, #app, .wrapper {
     opacity: 1;
 }
 
-.mdt_enemy_icon.leaflet-edit-marker-selected {
+.leaflet-edit-marker-selected {
     border-color: yellow !important;
+    border-radius: 4px !important; /* Fixes weird border */
+}
+
+.map_icon.leaflet-edit-marker-selected {
+    margin-top: -4px !important;
+    margin-left: -4px !important;
+}
+
+.mdt_enemy_icon.leaflet-edit-marker-selected {
     margin-top: -9px !important;
     margin-left: -9px !important;
-    border-radius: 4px !important; /* Fixes weird border */
 }
 
 .boss_enemy_icon {
@@ -451,16 +463,30 @@ html, body, #map, #app, .wrapper {
     background-color: #2B3E50;
 }
 
+.enemy_icon.mdt {
+    background-color: hotpink;
+}
+
+.enemy_icon.mdt.coupled {
+    background-color: green;
+}
+
 /*
  * Enemy types
  */
+.enemy_icon_npc_mdt,
 .enemy_icon_npc_enemy_forces,
+.enemy_icon_npc_enemy_portrait,
 .enemy_icon_npc_class,
 .enemy_icon_npc_type {
     background-color: white;
     border: black 2px solid;
     border-radius: 100px;
     background-blend-mode: luminosity;
+}
+
+.enemy_icon_npc_mdt {
+    border-color: hotpink;
 }
 
 .enemy_icon_npc_enemy_forces.aggressive,
@@ -527,36 +553,17 @@ html, body, #map, #app, .wrapper {
     background-image: url('/images/enemytypes/undead.png') !important;
 }
 
-/**
- * Beguiling
- */
-
-.beguiling .enchanted {
-    background-image: url('/images/enemytypes/enchanted.png') !important;
-    background-color: #e1e0dd;
-}
-
-.beguiling .void {
-    background-image: url('/images/enemytypes/void.png') !important;
-    background-color: #e1e0dd;
-}
-
-.beguiling .tide {
-    background-image: url('/images/enemytypes/tide.png') !important;
-    background-color: #e1e0dd;
-}
-
 .teeming {
     background-color: #3d3cff;
+}
+
+.awakened {
+    background-color: #8832ff;
 }
 
 .aggressive_enemy_icon {
     background-image: url('/images/mapicon/unset.png') !important; /* no-repeat center !important; */
     background-color: #dc3c3c;
-}
-
-.beguiling {
-    background-color: #7f2480;
 }
 
 .dangerous {
@@ -621,6 +628,38 @@ html, body, #map, #app, .wrapper {
 
 .door_icon {
     background: url('/images/mapicon/door.png') no-repeat center !important;
+}
+
+.door_locked_icon {
+    background: url('/images/mapicon/door_locked.png') no-repeat center !important;
+}
+
+.door_up_icon {
+    background: url('/images/mapicon/door_up.png') no-repeat center !important;
+}
+
+.door_down_icon {
+    background: url('/images/mapicon/door_down.png') no-repeat center !important;
+}
+
+.door_left_icon {
+    background: url('/images/mapicon/door_left.png') no-repeat center !important;
+}
+
+.door_right_icon {
+    background: url('/images/mapicon/door_right.png') no-repeat center !important;
+}
+
+.dungeon_start_icon {
+    background: url('/images/mapicon/dungeon_start.png') no-repeat center !important;
+}
+
+.graveyard_icon {
+    background: url('/images/mapicon/graveyard.png') no-repeat center !important;
+}
+
+.warlock_gateway_icon {
+    background: url('/images/mapicon/warlock_gateway.png') no-repeat center !important;
 }
 
 .killzone_icon_big {
@@ -689,7 +728,7 @@ html, body, #map, #app, .wrapper {
     font-size: 30px;
 }
 
-.marker_div_icon_mapcomment {
+.map_icon_div_icon_unknown {
     font-size: 16px;
 }
 
@@ -698,9 +737,11 @@ html, body, #map, #app, .wrapper {
     border-radius: 15px;
 }
 
-.map_map_comment_tooltip {
-    width: 240px;
+.map_map_icon_comment_tooltip {
+    min-width: 150px;
+    max-width: 240px;
     white-space: normal;
+    display: inline-block;
 }
 
 #map_ad_horizontal,

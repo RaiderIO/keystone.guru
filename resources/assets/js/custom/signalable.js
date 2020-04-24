@@ -13,7 +13,7 @@ class Signalable {
     register(name, listener, fn) {
         console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
         console.assert(typeof name === 'string' || Array.isArray(name), 'name is not a string|array!', name);
-        console.assert(typeof listener !== 'function', 'listener is not a function! You probably forgot to add the listener', listener);
+        console.assert(typeof listener !== 'function', 'listener should not be a function! You probably forgot to pass reference to this/self', listener);
         console.assert(typeof fn === 'function', 'fn should be a function', listener);
 
         if (typeof name === 'string') {

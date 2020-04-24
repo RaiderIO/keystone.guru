@@ -81,7 +81,7 @@ class Path extends Polyline {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/path/' + this.id,
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/path/' + this.id,
             dataType: 'json',
             data: {
                 _method: 'DELETE'
@@ -104,11 +104,11 @@ class Path extends Polyline {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/path',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/path',
             dataType: 'json',
             data: {
                 id: self.id,
-                dungeonroute: this.map.getDungeonRoute().publicKey,
+                dungeonroute: getState().getDungeonRoute().publicKey,
                 floor_id: getState().getCurrentFloor().id,
                 color: self.polylineColor,
                 weight: self.weight,

@@ -129,10 +129,22 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item mr-lg-2">
-                            <a href="#" class="btn btn-primary text-white col-lg-auto"
-                               data-toggle="modal" data-target="#try_modal">
-                                {{__('Try it!')}}
-                            </a>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle col-lg-auto" type="button"
+                                        id="tryImportMDTDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                    {{__('Try it!')}}
+                                </button>
+                                <div class="dropdown-menu text-center text-lg-left"
+                                     aria-labelledby="newRouteDropdownMenuButton">
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#try_modal">
+                                        {{__('New route')}}
+                                    </a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#try_mdt_import_modal">
+                                        {{__('Import from MDT')}}
+                                    </a>
+                                </div>
+                            </div>
                         </li>
                         @if (Auth::guest())
                             <li class="nav-item">
@@ -155,10 +167,12 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                     </button>
                                     <div class="dropdown-menu text-center text-lg-left"
                                          aria-labelledby="newRouteDropdownMenuButton">
-                                        <a class="dropdown-item"
-                                           href="{{ route('dungeonroute.new') }}">{{ __('New route') }}</a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal"
-                                           data-target="#mdt_import_modal">{{__('Import from MDT')}}</a>
+                                        <a class="dropdown-item" href="{{ route('dungeonroute.new') }}">
+                                            {{ __('New route') }}
+                                        </a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdt_import_modal">
+                                            {{__('Import from MDT')}}
+                                        </a>
                                     </div>
                                 </div>
                             </li>
@@ -170,11 +184,11 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                 <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
                                     @if( $user->hasRole('admin'))
                                         <a class="dropdown-item"
-                                           href="{{ route('dashboard.home') }}">{{__('Admin Dashboard')}}</a>
+                                           href="{{ route('dashboard.home') }}">{{__('Admin dashboard')}}</a>
                                         <a class="dropdown-item"
-                                           href="{{ route('tracker.stats.index') }}">{{__('Admin Stats')}}</a>
+                                           href="{{ route('tracker.stats.index') }}">{{__('Admin stats')}}</a>
                                         <a class="dropdown-item"
-                                           href="{{ route('admin.tools') }}">{{__('Admin Tools')}}</a>
+                                           href="{{ route('admin.tools') }}">{{__('Admin tools')}}</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item"
                                            href="{{ route('admin.releases') }}">{{__('View releases')}}</a>
@@ -267,9 +281,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
         @if (!$isProduction && (!Auth::check() || !$user->hasRole('admin')))
             <div class="container-fluid alert alert-warning text-center mt-4">
                 <i class="fa fa-exclamation-triangle"></i>
-                {{ __('Warning! You are currently on the development instance of Keystone.guru. This is NOT the main site.') }}
-                <br>
-                {{ __('If you got here by accident, I\'d be interested in knowing how you got here! Message me on Discord :)') }}
+                {{ __('Warning! You are currently on the staging environment of Keystone.guru. This is NOT the main site.') }}
                 <br>
                 <a href="https://keystone.guru/">{{ __('Take me to the main site!') }}</a>
             </div>
@@ -422,26 +434,27 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     </h3>
     <div class="form-group">
         {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
-        {{ Form::textarea('import_string_textarea', '', ['id' => 'import_string_textarea', 'class' => 'form-control']) }}
-        {{ Form::hidden('import_string', '') }}
+        {{ Form::textarea('import_string_textarea', '', ['class' => 'form-control import_mdt_string_textarea']) }}
+        {{ Form::hidden('import_string', '', ['class' => 'import_string']) }}
     </div>
     <div class="form-group">
-        <div id="import_string_loader" class="bg-info p-1" style="display: none;">
+        <div class="bg-info p-1 import_mdt_string_loader" style="display: none;">
             <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>
             <i class="fas fa-stroopwafel fa-spin"></i> {{ __('Parsing your string...') }}
         </div>
     </div>
     <div class="form-group">
-        <div id="import_string_details">
+        <div class="import_mdt_string_details">
 
         </div>
     </div>
     <div class="form-group">
-        <div id="import_string_warnings">
+        <div class="import_mdt_string_warnings">
 
         </div>
     </div>
     <div class="form-group">
+        {!! Form::hidden('try', 0, ['class' => 'hidden_try']) !!}
         {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
         <div class="col-md">
 
@@ -450,6 +463,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     {{ Form::close() }}
 @overwrite
 @include('common.general.modal', ['id' => 'mdt_import_modal'])
+@include('common.general.modal', ['id' => 'try_mdt_import_modal'])
 <!-- END modal MDT import -->
 
 @guest

@@ -136,24 +136,24 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'The High Gate',
                         'to' => 'Fields of the Eternal Hunt',
-                        'direction' => 'equal'
+                        'direction' => 'right'
                     ],
                     [
                         'from' => 'Fields of the Eternal Hunt',
                         'to' => 'The High Gate',
-                        'direction' => 'equal'
+                        'direction' => 'up'
                     ],
 
 
                     [
                         'from' => 'The High Gate',
                         'to' => 'Halls of Valor',
-                        'direction' => 'equal'
+                        'direction' => 'up'
                     ],
                     [
                         'from' => 'Halls of Valor',
                         'to' => 'The High Gate',
-                        'direction' => 'equal'
+                        'direction' => 'down'
                     ]
                 ]
             ], 'Lower Karazhan' => [
@@ -313,8 +313,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Kings\' Rest' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 224,
-                'enemy_forces_required_teeming' => 260,
+                'enemy_forces_required' => 246,
+                'enemy_forces_required_teeming' => 286,
                 'active' => true,
                 'floors' => [
                     'Kings\' Rest' => [
@@ -325,8 +325,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Shrine of the Storm' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 662,
-                'enemy_forces_required_teeming' => 794,
+                'enemy_forces_required' => 695,
+                'enemy_forces_required_teeming' => 834,
                 'active' => true,
                 'floors' => [
                     'Shrine of the Storm' => [
@@ -340,12 +340,12 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'Shrine of the Storm',
                         'to' => 'Storm\'s End',
-                        'direction' => 'equal'
+                        'direction' => 'right'
                     ],
                     [
                         'from' => 'Storm\'s End',
                         'to' => 'Shrine of the Storm',
-                        'direction' => 'equal'
+                        'direction' => 'left'
                     ],
                 ]
             ],
@@ -390,7 +390,7 @@ class DungeonsSeeder extends Seeder
             'The MOTHERLODE!!' => [
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 384,
-                'enemy_forces_required_teeming' => 499,
+                'enemy_forces_required_teeming' => 460,
                 'active' => true,
                 'floors' => [
                     'The Motherlode' => [
@@ -416,19 +416,19 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'The Underrot',
                         'to' => 'Ruin\'s Descent',
-                        'direction' => 'equal'
+                        'direction' => 'left'
                     ],
                     [
                         'from' => 'Ruin\'s Descent',
                         'to' => 'The Underrot',
-                        'direction' => 'equal'
+                        'direction' => 'up'
                     ]
                 ]
             ],
             'Tol Dagor' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 348,
-                'enemy_forces_required_teeming' => 417,
+                'enemy_forces_required' => 400,
+                'enemy_forces_required_teeming' => 479,
                 'active' => true,
                 'floors' => [
                     'Tol Dagor' => [
@@ -457,12 +457,12 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'Tol Dagor',
                         'to' => 'The Drain',
-                        'direction' => 'equal'
+                        'direction' => 'left'
                     ],
                     [
                         'from' => 'The Drain',
                         'to' => 'Tol Dagor',
-                        'direction' => 'equal'
+                        'direction' => 'right'
                     ],
 
 
@@ -528,8 +528,8 @@ class DungeonsSeeder extends Seeder
             ],
             'Waycrest Manor' => [
                 'expansion_id' => $bfa->id,
-                'enemy_forces_required' => 289,
-                'enemy_forces_required_teeming' => 346,
+                'enemy_forces_required' => 303,
+                'enemy_forces_required_teeming' => 363,
                 'active' => true,
                 'floors' => [
                     'The Grand Foyer' => [
@@ -593,8 +593,112 @@ class DungeonsSeeder extends Seeder
                         'to' => 'Catacombs',
                         'direction' => 'up'
                     ],
-
                 ]
+            ],
+            'Mechagon: Junkyard' => [
+                'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 332,
+                'enemy_forces_required_teeming' => 398,
+                'active' => true,
+                'floors' => [
+                    'Mechagon Island' => [
+                        'index' => 1
+                    ],
+                    'Tunnels' => [
+                        'index' => 2
+                    ],
+                ],
+                'floor_couplings' => [
+                    [
+                        'from' => 'Mechagon Island',
+                        'to' => 'Tunnels',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from' => 'Tunnels',
+                        'to' => 'Mechagon Island',
+                        'direction' => 'up'
+                    ],
+                ]
+            ],
+            'Mechagon: Workshop' => [
+                'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 160,
+                'enemy_forces_required_teeming' => 192,
+                'active' => false,
+                'floors' => [
+                    'The Robodrome' => [
+                        'index' => 1
+                    ],
+                    'The Under Junk' => [
+                        'index' => 2
+                    ],
+                    'Mechagon City' => [
+                        'index' => 3
+                    ],
+                ],
+                'floor_couplings' => [
+                    [
+                        'from' => 'The Robodrome',
+                        'to' => 'The Under Junk',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from' => 'The Under Junk',
+                        'to' => 'The Robodrome',
+                        'direction' => 'up'
+                    ],
+
+
+                    [
+                        'from' => 'The Under Junk',
+                        'to' => 'Mechagon City',
+                        'direction' => 'left'
+                    ],
+                    [
+                        'from' => 'Mechagon City',
+                        'to' => 'The Under Junk',
+                        'direction' => 'right'
+                    ],
+                ]
+            ],
+            'Orgrimmar (Horrific Vision)' => [
+                'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
+                'active' => false,
+                'floors' => [
+                    'Orgrimmar' => [
+                        'index' => 1
+                    ],
+                    'The Drag' => [
+                        'index' => 2
+                    ],
+                ],
+                'floor_couplings' => [
+                    [
+                        'from' => 'Orgrimmar',
+                        'to' => 'The Drag',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from' => 'The Drag',
+                        'to' => 'Orgrimmar',
+                        'direction' => 'up'
+                    ],
+                ]
+            ],
+            'Stormwind City (Horrific Vision)' => [
+                'expansion_id' => $bfa->id,
+                'enemy_forces_required' => 0,
+                'enemy_forces_required_teeming' => 0,
+                'active' => false,
+                'floors' => [
+                    'Stormwind City' => [
+                        'index' => 1
+                    ],
+                ],
+                'floor_couplings' => []
             ],
         ];
 

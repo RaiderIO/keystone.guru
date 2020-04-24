@@ -44,7 +44,7 @@ class Dungeon extends Model
     public function getKeyAttribute()
     {
         // https://stackoverflow.com/questions/14114411/remove-all-special-characters-from-a-string
-        $string = str_replace(' ', '', strtolower($this->name)); // Replaces all spaces with hyphens.
+        $string = str_replace(' ', '', strtolower($this->name)); // Replaces all spaces with nothing.
 
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
     }
@@ -100,7 +100,7 @@ class Dungeon extends Model
      */
     public function getNpcsMinHealth()
     {
-        return $this->npcs->where('classification_id', '<>', 3)->min('base_health');
+        return $this->npcs->where('classification_id', '<>', 3)->where('dungeon_id', '<>', -1)->min('base_health');
     }
 
     /**
@@ -108,8 +108,7 @@ class Dungeon extends Model
      */
     public function getNpcsMaxHealth()
     {
-        // Specifically ignore the Enchanted Emissary, that one has such highly inflated HP that it's not supposed to be killed
-        return $this->npcs->where('classification_id', '<>', 3)->whereNotIn('id', ['155432'])->max('base_health');
+        return $this->npcs->where('classification_id', '<>', 3)->where('dungeon_id', '<>', -1)->max('base_health');
     }
 
     /**

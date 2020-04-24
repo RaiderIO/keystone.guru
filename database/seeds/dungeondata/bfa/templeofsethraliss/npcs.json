@@ -199,7 +199,7 @@
         "dungeon_id": 19,
         "classification_id": 2,
         "npc_type_id": 8,
-        "npc_class_id": 1,
+        "npc_class_id": 4,
         "name": "Charged Dust Devil",
         "base_health": 383065,
         "enemy_forces": 4,

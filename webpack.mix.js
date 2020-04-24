@@ -7,7 +7,7 @@ let gitRevisionPlugin = null; // Init in the config below
 mix.webpackConfig({
     watchOptions: {
         ignored: ['node_modules', 'vendor'],
-        poll: 1000 // Check for changes every second
+        poll: 2000 // Check for changes every second
     },
     // Handlebars has a bug which requires this: https://github.com/wycats/handlebars.js/issues/1174
     resolve: {
@@ -103,7 +103,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/killzonemapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/mapcommentmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
@@ -119,7 +119,8 @@ let scripts = [
     'resources/assets/js/custom/enemypack.js',
     'resources/assets/js/custom/path.js',
     'resources/assets/js/custom/killzone.js',
-    'resources/assets/js/custom/mapcomment.js',
+    'resources/assets/js/custom/mapicon.js',
+    'resources/assets/js/custom/mapicontype.js',
     'resources/assets/js/custom/dungeonstartmarker.js',
     'resources/assets/js/custom/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/hotkeys.js',
@@ -134,6 +135,8 @@ let scripts = [
     'resources/assets/js/custom/enemyvisuals/enemyvisualmain.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyclass.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyforces.js',
+    'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyportrait.js',
+    'resources/assets/js/custom/enemyvisuals/enemyvisualmainmdt.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainnpctype.js',
 
     'resources/assets/js/custom/enemyvisuals/modifiers/modifier.js',
@@ -159,7 +162,7 @@ let scripts = [
     'resources/assets/js/custom/admin/adminpanelcontrols.js',
     'resources/assets/js/custom/admin/admindungeonstartmarker.js',
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
-    'resources/assets/js/custom/admin/adminmapcomment.js',
+    'resources/assets/js/custom/admin/adminmapicon.js',
 
     // Inline code
     'resources/assets/js/custom/inline/inlinemanager.js',
@@ -215,6 +218,7 @@ if (images) {
     mix.copy('resources/assets/images/enemyclasses', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/enemyclassifications', 'public/images/enemyclassifications', false);
     mix.copy('resources/assets/images/enemymodifiers', 'public/images/enemymodifiers', false);
+    mix.copy('resources/assets/images/enemyportraits', 'public/images/enemyportraits', false);
     mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);

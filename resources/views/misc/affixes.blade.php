@@ -16,20 +16,6 @@ if ($timezone === null) {
 @section('header-title', __('Weekly affixes in ' . $region->name))
 
 @section('content')
-
-    @if(!isAlertDismissed('affixes-s3-inaccurate-warning'))
-        <div class="alert alert-info alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close"
-               data-alert-dismiss-id="affixes-s3-inaccurate-warning">
-                <i class="fas fa-times"></i>
-            </a>
-            <i class="fas fa-info-circle"></i>
-            {{ __('Due to the schedule for M+ season 3 not being published yet this page may be incorrect or out of
-            date. I will update the page weekly to reflect the current week and/or the entire schedule as it becomes
-            available.') }}
-        </div>
-    @endif
-
     <table class="affixes_overview_table table-striped" width="100%">
         <thead>
         <tr>
@@ -72,7 +58,7 @@ if ($timezone === null) {
             <td>
                 <div class="affix_row first_column {{ $currentWeekClass }}">
                     <span>
-                        {{ $startDate->format('Y/M/d') }})
+                        {{ $startDate->format('Y/M/d') }}
                     </span>
                     <span class="d-xl-inline d-none">
                         {{ $startDate->format(' @ H\h') }}
@@ -82,8 +68,9 @@ if ($timezone === null) {
             <?php
             $affixIndex = 0;
             foreach($affixGroup->affixes as $affix) {
+                $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
             $class = $currentWeekClass;
-            $class .= count($affixGroup->affixes) - 1 === $affixIndex ? 'last_column ' : '';
+            $class .= $lastColumn ? 'last_column ' : '';
             $class .= ($affixGroupIndex === 0) ? 'first_row ' : '';
             $class .= $affixGroups->count() - 1 === $affixGroupIndex ? 'last_row ' : '';
             ?>
@@ -97,6 +84,9 @@ if ($timezone === null) {
                         </div>
                         <div class="col d-lg-block d-none pl-1">
                             {{ $affix->name }}
+                            @if($lastColumn && $affixGroup->season->presets > 0 )
+                                {{ __(sprintf('preset %s', $affixGroup->season->getPresetAt($startDate))) }}
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -125,7 +115,7 @@ if ($timezone === null) {
 
     <div class="mt-4 col-12 text-center">
         <p>
-            {!!  __('For more information about affixes and M+, please visit') !!}
+            {{ __('Last updated at 2020/Jan/22.') }} {!!  __('For more information about affixes and M+, please visit') !!}
             <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>
         </p>
     </div>

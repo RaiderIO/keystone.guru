@@ -1,0 +1,38 @@
+{
+    "id": 35,
+    "release_changelog_id": 39,
+    "version": "v2.7.3",
+    "created_at": "2019-12-05 08:22:13",
+    "updated_at": "2019-12-05 08:22:13",
+    "changelog": {
+        "id": 39,
+        "release_id": 35,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 39,
+                "release_changelog_category_id": 5,
+                "ticket_id": null,
+                "change": "Fixed being unable to delete routes."
+            },
+            {
+                "release_changelog_id": 39,
+                "release_changelog_category_id": 5,
+                "ticket_id": null,
+                "change": "Fixed issue where if someone edited ?offset=something it'd crash."
+            },
+            {
+                "release_changelog_id": 39,
+                "release_changelog_category_id": 5,
+                "ticket_id": null,
+                "change": "Fixed affixes not being saved."
+            },
+            {
+                "release_changelog_id": 39,
+                "release_changelog_category_id": 5,
+                "ticket_id": null,
+                "change": "Fixed crash when attempting to edit route details."
+            }
+        ]
+    }
+}

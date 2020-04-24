@@ -17,7 +17,7 @@ class LayoutsApp extends InlineCode {
         // Make sure selectpicker is enabled
         $('.selectpicker').selectpicker();
 
-        $('#import_string_textarea').bind('paste', this._importStringPasted);
+        $('.import_mdt_string_textarea').bind('paste', this._importStringPasted);
 
         if (this.options.guest) {
             this._newPassword('#register_password');
@@ -68,12 +68,24 @@ class LayoutsApp extends InlineCode {
         let self = this;
 
         // https://stackoverflow.com/questions/686995/catch-paste-input
-        let $importString = $('#import_string_textarea');
+        let $importStringTextArea = $(this);
+        let $root = $importStringTextArea.closest('.modal');
+        console.log($root);
+
+        let $loader = $root.find('.import_mdt_string_loader');
+        let $details = $root.find('.import_mdt_string_details');
+        let $warnings = $root.find('.import_mdt_string_warnings');
+        let $importString = $root.find('.import_string');
+        let $submitBtn = $root.find('input[type="submit"]');
+
+        // Identify the type; try or not.
+        let $type = $root.find('.hidden_try');
+        $type.val($root.attr('id').includes('try') ? 1 : 0);
 
         // Ugly, but needed since otherwise the field would be disabled prior to the value being actually assigned
         setTimeout(function () {
             // Can no longer edit it
-            $importString.prop('disabled', true);
+            $importStringTextArea.prop('disabled', true);
         }, 10);
 
         $.ajax({
@@ -84,10 +96,10 @@ class LayoutsApp extends InlineCode {
                 'import_string': typedEvent.originalEvent.clipboardData.getData('text')
             },
             beforeSend: function () {
-                $('#import_string_loader').show();
+                $loader.show();
             },
             complete: function () {
-                $('#import_string_loader').hide();
+                $loader.hide();
             },
             success: function (responseData) {
                 let detailsTemplate = Handlebars.templates['import_string_details_template'];
@@ -108,7 +120,7 @@ class LayoutsApp extends InlineCode {
                 }, getHandlebarsDefaultVariables());
 
                 // Build the preview from the template
-                $('#import_string_details').html(detailsTemplate(data));
+                $details.html(detailsTemplate(data));
 
                 // Inject the warnings, if there are any
                 if (responseData.warnings.length > 0) {
@@ -130,22 +142,22 @@ class LayoutsApp extends InlineCode {
                     }
 
                     // Assign the template data to the div
-                    $('#import_string_warnings').html(warningsTemplate(warningsData));
+                    $warnings.html(warningsTemplate(warningsData));
                 }
 
                 // Tooltips may be added above
                 refreshTooltips();
 
-                $('#import_string').val($importString.val());
-                $('#mdt_import_modal input[type="submit"]').prop('disabled', false);
+                $importString.val($importStringTextArea.val());
+                $submitBtn.prop('disabled', false);
             }, error: function (xhr, textStatus, errorThrown) {
-                $importString.removeProp('disabled');
+                $importStringTextArea.removeProp('disabled');
 
-                $('#import_string_details').html('');
-                $('#import_string_warnings').html('');
+                $details.html('');
+                $warnings.html('');
 
-                $('#mdt_import_modal input[type="submit"]').prop('disabled', true);
-                self._defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+                $submitBtn.prop('disabled', true);
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
         });
     }

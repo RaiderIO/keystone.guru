@@ -14,8 +14,8 @@ return [
     // Handlebars
     'npc_name_label' => 'Name',
     'enemy_forces_label' => 'Enemy forces',
+    'enemy_portrait_label' => 'Enemy portrait',
     'enemy_display_type_label' => 'Enemy display type',
-    'beguiling_preset_label' => 'Beguiling enemies preset',
     'mdt_enemy_mapping_label' => 'MDT enemy mapping',
     'base_health_label' => 'Base health',
     'no_npc_found_label' => 'No NPC found for this enemy',
@@ -37,7 +37,6 @@ return [
     'enemy_id_label' => 'ENEMY_ID',
     'visual_label' => 'Visual',
 
-    'beguiling_npcs_label' => 'Beguiling Npcs',
     'preset_label' => 'Preset',
     'add_label' => 'Add',
 
@@ -59,7 +58,7 @@ return [
     // Route edit tools
     'path' => 'Path',
     'killzone' => 'Killzone',
-    'mapcomment' => 'Comment',
+    'mapicon' => 'Icon',
     'brushline' => 'Draw',
     'brushline_title' => 'Draw a line',
     'edit' => 'Edit',
@@ -115,31 +114,30 @@ return [
 
     'intro_3' => 'Here you can select different visualization options.',
     'intro_4' => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',
-    'intro_5' => 'In Season 3, Beguiling is the new affix. Each week a new "preset" of enemies is applied to the dungeons. You can change presets here to fine-tune your route based on the current week\'s active preset.',
 
-    'intro_6' => 'If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.',
+    'intro_5' => 'If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.',
 
-    'intro_7' => 'These are some actions you can perform on the current route, register if you\'re not registered or login if you have.',
+    'intro_6' => 'These are some actions you can perform on the current route, register if you\'re not registered or login if you have.',
 
-    'intro_8' => 'These are your route manipulation tools.',
-    'intro_9' => 'This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).',
-    'intro_10' => 'You can draw paths with this tool. Click it, then draw a path (which is a simple line with directional arrows) from A to B, with as many points are you like. Once finished, you can click
+    'intro_7' => 'These are your route manipulation tools.',
+    'intro_8' => 'This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).',
+    'intro_9' => 'You can draw paths with this tool. Click it, then draw a path (which is a simple line with directional arrows) from A to B, with as many points are you like. Once finished, you can click
             the line on the map to change its color. You can add as many paths as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
             or purple for a Warlock Gateway, for example.',
-    'intro_11' => 'This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
+    'intro_10' => 'This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
             You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
             Once you have selected enemies your enemy forces (the label above here) will update to reflect your new enemy forces counter.',
-    'intro_12' => 'Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.',
-    'intro_13' => 'Use this control to free draw lines on your route.',
+    'intro_11' => 'Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.',
+    'intro_12' => 'Use this control to free draw lines on your route.',
 
-    'intro_14' => 'This is the edit button. You can use it to adjust your created routes, move your killzones, comments or free drawn lines.',
-    'intro_15' => 'This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
+    'intro_13' => 'This is the edit button. You can use it to adjust your created routes, move your killzones, comments or free drawn lines.',
+    'intro_14' => 'This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
             that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!',
 
-    'intro_16' => 'The color selection affect newly placed free drawn lines and routes. Killzones get the selected color by default.',
-    'intro_17' => 'The weight (thickness) of newly placed free drawn lines and routes.',
+    'intro_15' => 'The color selection affect newly placed free drawn lines and routes. Killzones get the selected color by default.',
+    'intro_16' => 'The weight (thickness) of newly placed free drawn lines and routes.',
 
-    'intro_18' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map comments, start markers and floor switch markers.',
+    'intro_17' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map icons, start markers and floor switch markers.',
 
     // Sidebar
     'sidebar_expand' => 'Expand the sidebar',
@@ -169,8 +167,10 @@ return [
     'ajax_error_404' => 'The requested resource was not found.',
     'ajax_error_419' => 'Your session has expired. Refresh the page.',
 
-    // Map comment popup
-    'map_comment_label' => 'Comment',
+    // Map icon comment popup
+    'map_icon_comment_label' => 'Comment',
+    'map_icon_type_label' => 'Icon',
+    'select_map_icon_type_label' => 'Select icon',
 
     // Dungeonroute table
     'actions_label' => 'Actions',

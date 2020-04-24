@@ -20,7 +20,7 @@ let LeafletKillZoneIcon = L.divIcon({
     className: 'marker_div_icon_font_awesome marker_div_icon_killzone'
 });
 
-let LeafletKillZoneIconSelected = L.divIcon({
+let LeafletKillZoneIconEditMode = L.divIcon({
     html: '<i class="fas fa-bullseye"></i>',
     iconSize: [30, 30],
     className: 'marker_div_icon_font_awesome marker_div_icon_killzone killzone_icon_big leaflet-edit-marker-selected'
@@ -123,7 +123,7 @@ class KillZone extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/killzone/' + self.id,
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone/' + self.id,
             dataType: 'json',
             data: {
                 _method: 'DELETE'
@@ -150,7 +150,7 @@ class KillZone extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/killzone',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone',
             dataType: 'json',
             data: {
                 id: self.id,
@@ -301,7 +301,7 @@ class KillZone extends MapObject {
         let p = hull(latLngs, 100);
 
         // Only if we can actually make an offset
-        if (p.length > 1) {
+        if (latLngs.length > 1 && p.length > 1) {
             let offset = new Offset();
             p = offset.data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
 

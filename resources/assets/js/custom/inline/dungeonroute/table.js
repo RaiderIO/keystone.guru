@@ -370,7 +370,7 @@ class DungeonrouteTable extends InlineCode {
 
             $.ajax({
                 type: 'DELETE',
-                url: '/ajax/dungeonroute/' + publicKey,
+                url: '/ajax/' + publicKey,
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('messages.route_delete_successful'));

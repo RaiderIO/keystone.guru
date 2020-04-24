@@ -6,7 +6,7 @@
 
 @if(!isset($model))
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-    {!! Form::label('name', __('Name') . '*') !!}
+    {!! Form::label('name', __('Name') . '<span class="form-required">*</span>', [], false) !!}
     {!! Form::text('name', null, ['class' => 'form-control']) !!}
 </div>
 @endif

@@ -38,8 +38,6 @@ class Enemy extends MapObject {
         this.npc = null;
         this.raid_marker_name = '';
         this.dangerous = false;
-        // May be null if we're not a Beguiling enemy
-        this.beguiling_preset = null;
         // The visual display of this enemy
         this.visual = null;
 
@@ -50,6 +48,11 @@ class Enemy extends MapObject {
         this.map.register('map:enemyselectionmodechanged', this, function (selectionModeChangedEvent) {
             // Remove/enable the popup
             self.setPopupEnabled(selectionModeChangedEvent.data.finished);
+        });
+
+        // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
+        getState().register('mapzoomlevel:changed', this, function(){
+            self.bindTooltip();
         });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
@@ -110,15 +113,6 @@ class Enemy extends MapObject {
     }
 
     /**
-     * Checks if this enemy is a beguiling enemy.
-     * @returns {boolean} True if it is, false if it is not.
-     */
-    isBeguiling() {
-        // Beguiling NPCs have their dungeon ID set to -1 since they're the only ones whose
-        return typeof this.beguiling_preset === 'number';
-    }
-
-    /**
      * Sets the click popup to be enabled or not.
      * @param enabled True to enable, false to disable.
      */
@@ -175,6 +169,7 @@ class Enemy extends MapObject {
             this.npc_id = -1;
         }
 
+        this.bindTooltip();
         this.signal('enemy:set_npc', {npc: npc});
     }
 
@@ -284,7 +279,7 @@ class Enemy extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + this.map.getDungeonRoute().publicKey + '/raidmarker/' + self.id,
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/raidmarker/' + self.id,
             dataType: 'json',
             data: {
                 raid_marker_name: raidMarkerName

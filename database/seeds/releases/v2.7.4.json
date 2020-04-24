@@ -1,0 +1,20 @@
+{
+    "id": 36,
+    "release_changelog_id": 40,
+    "version": "v2.7.4",
+    "created_at": "2020-02-10 10:39:40",
+    "updated_at": "2020-02-10 10:39:40",
+    "changelog": {
+        "id": 40,
+        "release_id": 36,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 40,
+                "release_changelog_category_id": 1,
+                "ticket_id": 239,
+                "change": "Awakened affix added."
+            }
+        ]
+    }
+}

@@ -3,7 +3,7 @@
 $changelog = isset($model) ? $model->changelog : new \App\Models\ReleaseChangelog();
 ?>
 
-@extends('layouts.app', ['showAds' => false, 'title' => __('Edit release')])
+@extends('layouts.app', ['showAds' => false, 'title' => $headerTitle])
 @section('header-title', __('View releases'))
 @section('header-addition')
     <a href="{{ route('admin.releases') }}" class="btn btn-info text-white float-right" role="button">

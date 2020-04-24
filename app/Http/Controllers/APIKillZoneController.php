@@ -25,7 +25,9 @@ class APIKillZoneController extends Controller
      */
     function store(Request $request, DungeonRoute $dungeonroute)
     {
-        $this->authorize('edit', $dungeonroute);
+        if (!$dungeonroute->isTry()) {
+            $this->authorize('edit', $dungeonroute);
+        }
 
         /** @var KillZone $killZone */
         $killZone = KillZone::findOrNew($request->get('id'));
@@ -56,15 +58,17 @@ class APIKillZoneController extends Controller
                     // Assign kill zone to each passed enemy
                     $killZoneEnemies[] = [
                         'kill_zone_id' => $killZone->id,
-                        'enemy_id' => $enemyId
+                        'enemy_id'     => $enemyId
                     ];
                 }
 
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
 
-                // Something's updated; broadcast it
-                broadcast(new KillZoneChangedEvent($dungeonroute, $killZone, Auth::user()));
+                if (Auth::check()) {
+                    // Something's updated; broadcast it
+                    broadcast(new KillZoneChangedEvent($dungeonroute, $killZone, Auth::user()));
+                }
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
@@ -87,13 +91,17 @@ class APIKillZoneController extends Controller
      */
     function delete(Request $request, DungeonRoute $dungeonroute, KillZone $killzone)
     {
-        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
-        $this->authorize('edit', $dungeonroute);
+        if (!$dungeonroute->isTry()) {
+            // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
+            $this->authorize('edit', $dungeonroute);
+        }
 
         try {
 
             if ($killzone->delete()) {
-                broadcast(new KillZoneDeletedEvent($dungeonroute, $killzone, Auth::user()));
+                if (Auth::check()) {
+                    broadcast(new KillZoneDeletedEvent($dungeonroute, $killzone, Auth::user()));
+                }
 
                 // Refresh the killzones relation
                 $dungeonroute->load('killzones');

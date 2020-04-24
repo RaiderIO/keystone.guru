@@ -22,9 +22,6 @@ class DungeonMap extends Signalable {
             // All layers have been fetched, refresh tooltips to update "No layers to edit" state
             refreshTooltips();
 
-            // Make sure the beguiling preset is applied now that everything's loaded
-            getState().setBeguilingPreset(self.options.dungeonroute.beguilingPreset);
-
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
 
@@ -176,7 +173,7 @@ class DungeonMap extends Signalable {
             // Loop through each element to see if they are NOT editable, but ARE deleteable.
             // If so, we have to add them to the 'can delete this' list, and remove them after
             $.each(self.mapObjects, function (index, mapObject) {
-                if (!mapObject.isEditable() && mapObject.isDeleteable()) {
+                if (!mapObject.isEditable() && mapObject.isDeletable()) {
                     self.editableLayers.addLayer(mapObject.layer);
                 }
             });
@@ -186,7 +183,7 @@ class DungeonMap extends Signalable {
 
             // Now we make them un-editable again.
             $.each(self.mapObjects, function (index, mapObject) {
-                if (!mapObject.isEditable() && mapObject.isDeleteable()) {
+                if (!mapObject.isEditable() && mapObject.isDeletable()) {
                     self.editableLayers.removeLayer(mapObject.layer);
                 }
             });
@@ -211,9 +208,11 @@ class DungeonMap extends Signalable {
 
         this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
             self.editModeActive = true;
+            self.signal('map:editmodetoggled', {dungeonmap: self});
         });
         this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
             self.editModeActive = false;
+            self.signal('map:editmodetoggled', {dungeonmap: self});
         });
 
         // If we created something
@@ -390,7 +389,7 @@ class DungeonMap extends Signalable {
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
-            if (this.getDungeonRoute().publicKey !== '' || this.options.edit) {
+            if (getState().getDungeonRoute().publicKey !== '' || this.options.edit) {
                 result.push(new EnemyForcesControls(this));
             }
             result.push(new EnemyVisualControls(this));
@@ -649,16 +648,6 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         return this.options.try && this.options.edit;
-    }
-
-    /**
-     * Get data related to the dungeon route we're displaying (may be a dummy/empty dungeon route)
-     * @returns {*}
-     */
-    getDungeonRoute() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        return this.options.dungeonroute;
     }
 
     /**

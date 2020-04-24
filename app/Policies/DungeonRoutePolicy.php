@@ -37,19 +37,6 @@ class DungeonRoutePolicy
     }
 
     /**
-     * Determine whether the user can change the beguiling preset of a dungeon routes.
-     *
-     * @param  \App\User $user
-     * @param  \App\Models\DungeonRoute $dungeonroute
-     * @return mixed
-     */
-    public function beguilingpreset(User $user, DungeonRoute $dungeonroute)
-    {
-        // Only authors or if the user is an admin
-        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
-    }
-
-    /**
      * Determine whether the user can rate a dungeon route.
      *
      * @param  \App\User $user
@@ -83,7 +70,7 @@ class DungeonRoutePolicy
      */
     public function clone(User $user, DungeonRoute $dungeonroute)
     {
-        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->published || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**
