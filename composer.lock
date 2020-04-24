@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d91af59c1f17d3a0e04dd781ac96d4f0",
+    "content-hash": "195bc9ce051d5a0641437f84ea215c18",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -1464,6 +1464,7 @@
                     "email": "jakub.onderka@gmail.com"
                 }
             ],
+            "abandoned": "php-parallel-lint/php-console-color",
             "time": "2018-09-29T17:23:10+00:00"
         },
         {
@@ -1510,6 +1511,7 @@
                 }
             ],
             "description": "Highlight PHP code in terminal",
+            "abandoned": "php-parallel-lint/php-console-highlighter",
             "time": "2018-09-29T18:48:56+00:00"
         },
         {
@@ -2929,11 +2931,11 @@
             "time": "2019-11-08T13:50:10+00:00"
         },
         {
-            "name": "nnogga/methoddungeontools",
-            "version": "2.5.6",
+            "name": "nnoggie/methoddungeontools",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nnogga/MethodDungeonTools.git",
+                "url": "https://github.com/nnoggie/MethodDungeonTools.git",
                 "reference": "master"
             },
             "type": "library"
@@ -7951,7 +7953,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6.4"
+        "php": ">=5.6.4",
+        "ext-json": "*"
     },
     "platform-dev": []
 }
