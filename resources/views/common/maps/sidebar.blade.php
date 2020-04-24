@@ -2,13 +2,6 @@
 $isMobile = (new \Jenssegers\Agent\Agent())->isMobile();
 $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
 ?>
-@include('common.general.inline', ['path' => 'common/maps/sidebar', 'options' => [
-    'sidebarSelector' =>  sprintf('#%s', $id),
-    'sidebarToggleSelector' => sprintf('#%sToggle', $id),
-    'switchDungeonFloorSelect' => '#map_floor_selection',
-    'defaultSelectedFloorId' => $selectedFloorId,
-]])
-
 <div id="{{ $id }}Toggle" class="sidebar-toggle anchor-{{$anchor}} {{ $isMobile ? '' : 'active' }}"
      data-toggle="tooltip">
     <i class="fas fa-arrow-{{ $isMobile ? 'right' : 'left' }}"></i>
@@ -27,7 +20,7 @@ $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
                 @endisset
             </div>
             <div>
-                <a href="{{ route('home') }}"><i class="fas fa-arrow-left"></i> {{ __('Back to Keystone.guru') }}</a>
+                <a href="{{ route('home') }}"><i class="fas fa-arrow-{{ $anchor }}"></i> {{ __('Back to Keystone.guru') }}</a>
             </div>
         @endisset
     </div>

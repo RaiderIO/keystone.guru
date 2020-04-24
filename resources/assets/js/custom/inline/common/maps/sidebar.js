@@ -1,8 +1,8 @@
-class CommonMapsSidebar extends InlineCode {
+class Sidebar {
 
 
     constructor(options) {
-        super(options);
+        this.options = options;
     }
 
     /**
@@ -31,7 +31,7 @@ class CommonMapsSidebar extends InlineCode {
         });
 
         $sidebar.mCustomScrollbar({
-            theme: "minimal"
+            theme: 'minimal'
         });
 
         this._showSidebar();
@@ -67,13 +67,19 @@ class CommonMapsSidebar extends InlineCode {
         let $sidebar = $(this.options.sidebarSelector);
         let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
+        console.log('Hide sidebar!');
+
         // Hide sidebar
         $sidebar.removeClass('active');
         // Move toggle button back
         $sidebarToggle.removeClass('active');
         $sidebarToggle.attr('title', lang.get('messages.sidebar_expand'));
         // Toggle image
-        $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
+        if (this.options.anchor === 'left') {
+            $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
+        } else {
+            $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
+        }
     }
 
     /**
@@ -84,12 +90,18 @@ class CommonMapsSidebar extends InlineCode {
         let $sidebar = $(this.options.sidebarSelector);
         let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
+        console.log('Show sidebar!');
+
         // Open sidebar
         $sidebar.addClass('active');
         // Move toggle button
         $sidebarToggle.addClass('active');
         $sidebarToggle.attr('title', lang.get('messages.sidebar_collapse'));
         // Toggle image
-        $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
+        if (this.options.anchor === 'left') {
+            $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
+        } else {
+            $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
+        }
     }
 }

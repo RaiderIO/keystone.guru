@@ -7,12 +7,6 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
 
 @section('content')
     <div class="wrapper">
-        @include('common.maps.map', [
-            'dungeon' => $dungeon,
-            'dungeonroute' => $model,
-            'edit' => true
-        ])
-
         @include('common.maps.editsidebar', [
             'dungeon' => $dungeon,
             'show' => [
@@ -20,6 +14,12 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
                 'route-settings' => true,
                 'route-publish' => true
             ]
+        ])
+
+        @include('common.maps.map', [
+            'dungeon' => $dungeon,
+            'dungeonroute' => $model,
+            'edit' => true
         ])
 
         @include('common.maps.killzonessidebar', [

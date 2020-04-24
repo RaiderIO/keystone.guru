@@ -4,20 +4,24 @@
 
 $show = isset($show) ? $show : [];
 // May not be set in the case of a tryout version
-if (isset($model))
-{
+if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
 ?>
-@include('common.general.inline', ['path' => 'common/maps/editsidebar'])
-
+@include('common.general.inline', ['path' => 'common/maps/editsidebar', 'options' => [
+    'sidebarSelector' => '#editsidebar',
+    'sidebarToggleSelector' => '#editsidebarToggle',
+    'switchDungeonFloorSelect' => '#map_floor_selection',
+    'defaultSelectedFloorId' => $dungeon->floors[0]->id,
+    'anchor' => 'left',
+]])
 
 @component('common.maps.sidebar', [
-'header' => __('Toolbox'),
-'anchor' => 'left',
-'id' => 'editsidebar',
-'selectedFloorId' => $dungeon->floors[0]->id
+    'header' => __('Toolbox'),
+    'anchor' => 'left',
+    'id' => 'editsidebar'
 ])
+
     @isset($show['shareable-link'])
         <!-- Shareable link -->
         <div class="form-group">
