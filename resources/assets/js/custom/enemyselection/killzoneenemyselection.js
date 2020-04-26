@@ -13,7 +13,7 @@ class KillZoneEnemySelection extends EnemySelection {
     _filter(source, enemyCandidate){
         console.assert(source instanceof KillZone, 'source is not a KillZone', source);
         console.assert(enemyCandidate instanceof Enemy, 'enemyCandidate is not an Enemy', enemyCandidate);
-        return enemyCandidate.kill_zone_id <= 0 || enemyCandidate.kill_zone_id === source.id;
+        return enemyCandidate.getKillZone() === null || enemyCandidate.getKillZone() === source.id;
     }
 
     /**

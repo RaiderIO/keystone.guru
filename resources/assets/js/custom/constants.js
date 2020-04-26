@@ -37,6 +37,11 @@ let c = {
              * At whatever zoom the truesight modifier are displayed on the map
              */
             truesight_display_zoom: 3,
+            /**
+             * At whatever zoom the teeming modifier are displayed on the map
+             */
+            teeming_display_zoom: 3,
+            awakened_display_zoom: 3,
             colors: [
                 /*'#C000F0',
                 '#E25D5D',
@@ -90,9 +95,9 @@ let c = {
                 saved: '#5993D2',
                 savedBorder: '#34577D'
             },
-            margin: 1,
+            margin: 2,
             arcSegments: function (nr) {
-                return Math.max(3, 9 - nr);
+                return Math.max(5, 11 - nr);
             },
             polygonOptions: {
                 color: '#9DFF56',
@@ -140,10 +145,10 @@ let c = {
                 fillOpacity: 0.3,
                 opacity: 1
             },
+            margin: 2,
             arcSegments: function (nr) {
-                return Math.max(3, 10 - nr);
-            },
-            margin: 1
+                return Math.max(5, 11 - nr);
+            }
         },
         placeholderColors: {}
     }

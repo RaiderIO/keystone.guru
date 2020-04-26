@@ -14,7 +14,6 @@ return [
     // Handlebars
     'npc_name_label' => 'Name',
     'enemy_forces_label' => 'Enemy forces',
-    'enemy_portrait_label' => 'Enemy portrait',
     'enemy_display_type_label' => 'Enemy display type',
     'mdt_enemy_mapping_label' => 'MDT enemy mapping',
     'base_health_label' => 'Base health',
@@ -84,8 +83,9 @@ return [
     'title_raid_marker_skull' => 'Skull',
 
     // Visualisation
-    'npc_type_label' => 'Enemy type',
-    'npc_class_label' => 'Enemy class',
+    'npc_type_label' => 'Type',
+    'npc_class_label' => 'Class',
+    'npc_portrait_label' => 'Portrait',
 
 
     // Admin
