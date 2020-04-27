@@ -49,7 +49,12 @@ class EnemyVisual extends Signalable {
             }
             self._buildVisual();
         });
-        this.map.register('map:editmodetoggled', this, this._buildVisual.bind(this));
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof EditMapState) {
+                self._buildVisual();
+            }
+        });
 
         this.layer.on('mouseover', function () {
             self._mouseOver();
@@ -396,7 +401,7 @@ class EnemyVisual extends Signalable {
         this.enemy.unregister('killzone:detached', this);
         this.enemy.unregister('killzone:attached', this);
         this.enemy.unregister('enemy:set_raid_marker', this);
-        this.map.unregister('map:editmodetoggled', this);
+        this.map.unregister('map:mapstatechanged', this);
 
         this._cleanupCircleMenu();
     }

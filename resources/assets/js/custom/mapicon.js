@@ -67,6 +67,8 @@ class MapIcon extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
+        let self = this;
+
         this.id = 0;
         this.map_icon_type_id = 0;
         this.map_icon_type = getState().getUnknownMapIcon();
@@ -76,7 +78,12 @@ class MapIcon extends MapObject {
 
         this.setSynced(false);
         this.register('synced', this, this._synced.bind(this));
-        this.map.register('map:editmodetoggled', this, this._refreshVisual.bind(this))
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof EditMapState) {
+                self._refreshVisual();
+            }
+        });
     }
 
     _synced() {
@@ -270,7 +277,7 @@ class MapIcon extends MapObject {
     cleanup() {
         super.cleanup();
 
-        this.map.unregister('map:editmodetoggled', this);
+        this.map.unregister('map:mapstatechanged', this);
     }
 
 }

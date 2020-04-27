@@ -173,12 +173,10 @@ class DungeonMap extends Signalable {
         });
 
         this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
-            self.editModeActive = true;
-            self.signal('map:editmodetoggled', {dungeonmap: self});
+            self.setMapState(new EditMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
-            self.editModeActive = false;
-            self.signal('map:editmodetoggled', {dungeonmap: self});
+            self.setMapState(null);
         });
 
         // If we created something
