@@ -579,6 +579,7 @@ class DungeonMap extends Signalable {
             self.pather.removePath(patherEvent.polyline);
         });
         this.leafletMap.addLayer(this.pather);
+        this.pather.setMode(L.Pather.MODE.VIEW);
         // Set its options properly
         this.refreshPather();
         // Not enabled at this time
@@ -628,16 +629,6 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Checks if pather is currently active or not.
-     * @returns {boolean}
-     */
-    isPatherActive() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        return this.pather !== null && this.pather.getMode() === L.Pather.MODE.CREATE;
-    }
-
-    /**
      * Toggle pather to be enabled or not.
      * @param enabled
      */
@@ -648,9 +639,9 @@ class DungeonMap extends Signalable {
         if (this.pather !== null) {
             //  When enabled, add to the map
             if (enabled) {
-                this.pather.setMode(L.Pather.MODE.CREATE);
+                this.setMapState(new PatherMapState(this));
             } else {
-                this.pather.setMode(L.Pather.MODE.VIEW);
+                this.setMapState(null);
             }
 
             this.signal('map:pathertoggled', {enabled: enabled});

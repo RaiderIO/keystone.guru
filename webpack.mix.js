@@ -127,6 +127,7 @@ let scripts = [
     'resources/assets/js/custom/brushline.js',
 
     'resources/assets/js/custom/mapstate/mapstate.js',
+    'resources/assets/js/custom/mapstate/pathermapstate.js',
     'resources/assets/js/custom/mapstate/enemyselection/enemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/killzoneenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',

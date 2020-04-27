@@ -80,15 +80,16 @@ class DrawControls extends MapControl {
         });
 
         // Make sure that when pather is toggled, the button changes state accordingly
-        this.map.register('map:pathertoggled', this, function (toggleEvent) {
+        this.map.register('map:mapstatechanged', this, function (toggleEvent) {
+            let enabled = toggleEvent.data.newMapState instanceof PatherMapState;
             let $brushlineButton = $('.leaflet-draw-draw-brushline');
 
             // Show or hide draw actions depending on what was needed
             let $drawActions = $('.leaflet-draw-actions-pather');
-            $drawActions.toggle(toggleEvent.data.enabled);
+            $drawActions.toggle(enabled);
 
             // Enable/disable the button accordingly
-            if (toggleEvent.data.enabled) {
+            if (enabled) {
                 $brushlineButton.addClass('leaflet-draw-toolbar-button-enabled');
             } else {
                 $brushlineButton.removeClass('leaflet-draw-toolbar-button-enabled');
@@ -102,7 +103,7 @@ class DrawControls extends MapControl {
      *
      * @protected
      */
-    _attachHotkeys(){
+    _attachHotkeys() {
         this.map.hotkeys.attach('1', 'leaflet-draw-draw-path');
         this.map.hotkeys.attach('2', 'leaflet-draw-draw-killzone');
         this.map.hotkeys.attach('3', 'leaflet-draw-draw-mapicon');
@@ -252,7 +253,7 @@ class DrawControls extends MapControl {
         let $brushlineButton = $('<a>', {
             class: 'leaflet-draw-draw-brushline col draw_icon mt-2' +
                 // If pather was enabled, make sure it stays active
-                (self.map.isPatherActive() ? ' leaflet-draw-toolbar-button-enabled' : ''),
+                (self.map.getMapState() instanceof PatherMapState ? ' leaflet-draw-toolbar-button-enabled' : ''),
             href: '#',
             'data-toggle': 'tooltip',
             title: lang.get('messages.brushline_title'),
@@ -262,7 +263,7 @@ class DrawControls extends MapControl {
         );
         $brushlineButton.bind('click', function (clickEvent) {
             // Check if it's enabled now
-            let wasEnabled = self.map.isPatherActive();
+            let wasEnabled = self.map.getMapState() instanceof PatherMapState;
             // Enable it now
             if (!wasEnabled) {
                 self.map.togglePather(true);
@@ -306,7 +307,7 @@ class DrawControls extends MapControl {
         $drawActions.append($('<li>').append($button));
 
         // Re-set pather to the same enabled state so all events are fired and UI is put back in a proper state
-        this.map.togglePather(this.map.isPatherActive());
+        this.map.togglePather(this.map.getMapState() instanceof PatherMapState);
     }
 
     _addControlSetupEditDeleteButtons() {
