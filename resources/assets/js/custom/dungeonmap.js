@@ -73,7 +73,6 @@ class DungeonMap extends Signalable {
         this.mapControls = [];
         // Keeps track of if we're in edit or delete mode
         this.toolbarActive = false;
-        this.deleteModeActive = false;
         this.editModeActive = false;
         /** @type MapState */
         this.mapState = null;
@@ -167,41 +166,10 @@ class DungeonMap extends Signalable {
             self.toolbarActive = false;
         });
         this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
-            self.deleteModeActive = true;
-            // Loop through each element to see if they are NOT editable, but ARE deleteable.
-            // If so, we have to add them to the 'can delete this' list, and remove them after
-            $.each(self.mapObjects, function (index, mapObject) {
-                if (!mapObject.isEditable() && mapObject.isDeletable()) {
-                    self.editableLayers.addLayer(mapObject.layer);
-                }
-            });
+            self.setMapState(new DeleteMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
-            self.deleteModeActive = false;
-
-            // Now we make them un-editable again.
-            $.each(self.mapObjects, function (index, mapObject) {
-                if (!mapObject.isEditable() && mapObject.isDeletable()) {
-                    self.editableLayers.removeLayer(mapObject.layer);
-                }
-            });
-
-            // Fix an issue where it'd remove all layers just because it got removed from the editable layers. Strange.
-            self.leafletMap.removeLayer(self.drawnLayers);
-            self.leafletMap.addLayer(self.drawnLayers);
-
-            // Re-draw the enemies to restore their attributes etc
-            let mapObjectGroup = self.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-
-            // All enemies
-            for (let index in mapObjectGroup.objects) {
-                if (mapObjectGroup.objects.hasOwnProperty(index)) {
-                    let enemy = mapObjectGroup.objects[index];
-                    // Refresh
-                    enemy.visual.refresh();
-                }
-            }
-
+            self.setMapState(null);
         });
 
         this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {

@@ -384,24 +384,21 @@ class KillZone extends MapObject {
 
         if (this.map.options.edit) {
             this.layer.on('click', function (clickEvent) {
-                // When deleting, we shouldn't have these interactions
-                if (!self.map.deleteModeActive) {
-                    let enemySelection = self.map.getMapState();
-                    // Can only interact with select mode if we're the one that is currently being selected
-                    if (enemySelection instanceof EnemySelection && enemySelection.getMapObject() === self) {
-                        self.map.setMapState(null);
-                    } else if (enemySelection === null) {
-                        let kzEnemySelection = new KillZoneEnemySelection(self.map, self);
-                        kzEnemySelection.register('enemyselection:enemyselected', this, function (selectedEvent) {
-                            self.enemySelected(selectedEvent.data.enemy);
-                        });
+                let mapState = self.map.getMapState();
+                // Can only interact with select mode if we're the one that is currently being selected
+                if (mapState instanceof EnemySelection && mapState.getMapObject() === self) {
+                    self.map.setMapState(null);
+                } else if (mapState === null) {
+                    let kzEnemySelection = new KillZoneEnemySelection(self.map, self);
+                    kzEnemySelection.register('enemyselection:enemyselected', this, function (selectedEvent) {
+                        self.enemySelected(selectedEvent.data.enemy);
+                    });
 
-                        // Register for changes to the selection event
-                        self.map.register('map:mapstatechanged', self, self._mapStateChanged.bind(self));
+                    // Register for changes to the selection event
+                    self.map.register('map:mapstatechanged', self, self._mapStateChanged.bind(self));
 
-                        // Start selecting enemies
-                        self.map.setMapState(kzEnemySelection);
-                    }
+                    // Start selecting enemies
+                    self.map.setMapState(kzEnemySelection);
                 }
             });
         }

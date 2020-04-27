@@ -285,7 +285,7 @@ class AdminEnemy extends Enemy {
         self.layer.on('click', function () {
             // When deleting, we shouldn't have these interactions
             // Only when we're an MDT enemy!
-            if (self.is_mdt && !self.map.deleteModeActive) {
+            if (self.is_mdt && !(self.map.getMapState() instanceof DeleteMapState)) {
                 let enemySelection = self.map.getMapState();
                 // Can only interact with select mode if we're the one that is currently being selected
                 if (enemySelection === null) {
