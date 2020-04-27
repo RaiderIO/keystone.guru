@@ -37,65 +37,69 @@ class AdminEnemy extends Enemy {
         });
 
         // Register for changes to the selection event
-        this.map.register('map:enemyselectionmodechanged', this, this._enemySelectionModeChanged.bind(this));
+        this.map.register('map:mapstatechanged', this, this._mapStateChangedEvent.bind(this));
     }
 
     /**
      * Called when enemy selection for this enemy has changed (started/finished)
-     * @param selectionEvent
+     * @param mapStateChangedEvent
      * @private
      */
-    _enemySelectionModeChanged(selectionEvent) {
+    _mapStateChangedEvent(mapStateChangedEvent) {
         console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
 
         // Redraw any changes as necessary
         // this.redrawConnectionToEnemy();
 
         // Get whatever object is handling the enemy selection
-        let enemySelection = this.map.getEnemySelection();
+        let enemySelection = mapStateChangedEvent.data.newMapState === null ?
+            mapStateChangedEvent.data.previousMapState :
+            mapStateChangedEvent.data.newMapState;
 
-        let selectedMapObject = enemySelection.getMapObject();
+        // Only if we WERE ever selecting enemies
+        if (enemySelection instanceof EnemySelection) {
+            let selectedMapObject = enemySelection.getMapObject();
 
-        // We calculate this because tooltip binding is expensive for 100s of enemies on screen. Generally a MDT
-        // enemy is close to the enemy we're selecting, so we only really need to disable tooltips for the enemies that
-        // are close by. If they're far away, we don't really care if we get a tooltip for the odd time it happens
-        // Advantage is that this dramatically speeds up the JS.
-        // 100 = 10 distance
-        let closeEnough = getDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) < 100;
-        // console.log(closeEnough);
-        // Only if we were the enemy that initiated the selection
-        if (selectionEvent.data.finished) {
-            if (closeEnough) {
-                // Attach tooltip again
-                this.bindTooltip();
-            }
-
-            if (selectedMapObject === this) {
-                // May save when nothing has changed, but that's okay
-                let connectedEnemy = this.getConnectedEnemy();
-                if (connectedEnemy !== null) {
-                    // Save them, not us
-                    connectedEnemy.save();
+            // We calculate this because tooltip binding is expensive for 100s of enemies on screen. Generally a MDT
+            // enemy is close to the enemy we're selecting, so we only really need to disable tooltips for the enemies that
+            // are close by. If they're far away, we don't really care if we get a tooltip for the odd time it happens
+            // Advantage is that this dramatically speeds up the JS.
+            // 100 = 10 distance
+            let closeEnough = getDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) < 100;
+            //
+            if (!(mapStateChangedEvent.data.newMapState instanceof EnemySelection)) {
+                if (closeEnough) {
+                    // Attach tooltip again
+                    this.bindTooltip();
                 }
 
-                if (this._previousConnectedEnemyId > 0) {
-                    let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                    let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
-                    // Must be found..
-                    if (previousEnemy !== null) {
-                        previousEnemy.save();
-                        previousEnemy.bindTooltip();
-                    } else {
-                        console.error('Unable to find previous enemy', this._previousConnectedEnemyId);
+                if (selectedMapObject === this) {
+                    // May save when nothing has changed, but that's okay
+                    let connectedEnemy = this.getConnectedEnemy();
+                    if (connectedEnemy !== null) {
+                        // Save them, not us
+                        connectedEnemy.save();
                     }
-                }
 
-                // Reset it for the next time
-                this._previousConnectedEnemyId = -1;
+                    if (this._previousConnectedEnemyId > 0) {
+                        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                        let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
+                        // Must be found..
+                        if (previousEnemy !== null) {
+                            previousEnemy.save();
+                            previousEnemy.bindTooltip();
+                        } else {
+                            console.error('Unable to find previous enemy', this._previousConnectedEnemyId);
+                        }
+                    }
+
+                    // Reset it for the next time
+                    this._previousConnectedEnemyId = -1;
+                }
+            } else if (closeEnough) {
+                // Remove tooltip whilst actively coupling. It gets in the way
+                this.unbindTooltip();
             }
-        } else if (closeEnough) {
-            // Remove tooltip whilst actively coupling. It gets in the way
-            this.unbindTooltip();
         }
     }
 
@@ -207,7 +211,7 @@ class AdminEnemy extends Enemy {
         enemy.signal('mdt_connected', {target: this});
 
         // Finish the selection, we generally don't want to make changes multiple times. We can always restart the procedure
-        this.map.finishEnemySelection();
+        this.map.setMapState(null);
     }
 
     /**
@@ -282,7 +286,7 @@ class AdminEnemy extends Enemy {
             // When deleting, we shouldn't have these interactions
             // Only when we're an MDT enemy!
             if (self.is_mdt && !self.map.deleteModeActive) {
-                let enemySelection = self.map.getEnemySelection();
+                let enemySelection = self.map.getMapState();
                 // Can only interact with select mode if we're the one that is currently being selected
                 if (enemySelection === null) {
                     let mdtEnemySelection = new MDTEnemySelection(self.map, self);
@@ -291,12 +295,12 @@ class AdminEnemy extends Enemy {
                     });
 
                     // Start selecting enemies
-                    self.map.startEnemySelection(mdtEnemySelection);
+                    self.map.setMapState(mdtEnemySelection);
                 }
                 // User clicks the object again to cancel the procedure
                 else if (enemySelection.getMapObject() === self) {
                     // Do not unregister enemyselectionmodechanged here; it may be changed externally as well
-                    self.map.finishEnemySelection();
+                    self.map.setMapState(null);
                 }
             }
         });
@@ -527,6 +531,6 @@ class AdminEnemy extends Enemy {
         super.cleanup();
 
         // We're done with this event now (after finishing! otherwise we won't process the result)
-        this.map.unregister('map:enemyselectionmodechanged', this);
+        this.map.unregister('map:mapstatechanged', this);
     }
 }

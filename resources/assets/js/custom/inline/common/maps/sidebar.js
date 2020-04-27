@@ -67,8 +67,6 @@ class Sidebar {
         let $sidebar = $(this.options.sidebarSelector);
         let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
-        console.log('Hide sidebar!');
-
         // Hide sidebar
         $sidebar.removeClass('active');
         // Move toggle button back
@@ -89,8 +87,6 @@ class Sidebar {
     _showSidebar() {
         let $sidebar = $(this.options.sidebarSelector);
         let $sidebarToggle = $(this.options.sidebarToggleSelector);
-
-        console.log('Show sidebar!');
 
         // Open sidebar
         $sidebar.addClass('active');

@@ -55,10 +55,10 @@ class KillZone extends MapObject {
         // });
         //
         // // External change (due to delete mode being started, for example)
-        // this.map.register('map:enemyselectionmodechanged', this, function (event) {
+        // this.map.register('map:mapstatechanged', this, function (event) {
         //     // Only if the toolbar is active, not when we just de-selected ourselves
         //     if(event.data.finished && event.data.enemySelection instanceof KillZoneEnemySelection && self.map.toolbarActive){
-        //         self.cancelSelectMode(true);
+        //         self.stop(true);
         //     }
         // });
     }
@@ -357,20 +357,21 @@ class KillZone extends MapObject {
 
     /**
      * Called when enemy selection for this killzone has changed (started/finished)
-     * @param selectionEvent
+     * @param mapStateChangedEvent
      * @private
      */
-    _enemySelectionChanged(selectionEvent) {
+    _mapStateChanged(mapStateChangedEvent) {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
-        // Redraw any changes as necessary
-        this.redrawConnectionsToEnemies();
-        if (selectionEvent.data.finished) {
+        if (mapStateChangedEvent.data.previousMapState instanceof EnemySelection) {
+            // Redraw any changes as necessary
+            this.redrawConnectionsToEnemies();
+
             // May save when nothing has changed, but that's okay
             this.save();
 
             // We're done with this event now (after finishing! otherwise we won't process the result)
-            this.map.unregister('map:enemyselectionmodechanged', this);
+            this.map.unregister('map:mapstatechanged', this);
         }
     }
 
@@ -385,7 +386,7 @@ class KillZone extends MapObject {
             this.layer.on('click', function (clickEvent) {
                 // When deleting, we shouldn't have these interactions
                 if (!self.map.deleteModeActive) {
-                    let enemySelection = self.map.getEnemySelection();
+                    let enemySelection = self.map.getMapState();
                     // Can only interact with select mode if we're the one that is currently being selected
                     if (enemySelection === null) {
                         let kzEnemySelection = new KillZoneEnemySelection(self.map, self);
@@ -394,12 +395,12 @@ class KillZone extends MapObject {
                         });
 
                         // Register for changes to the selection event
-                        self.map.register('map:enemyselectionmodechanged', self, self._enemySelectionChanged.bind(self));
+                        self.map.register('map:mapstatechanged', self, self._mapStateChanged.bind(self));
 
                         // Start selecting enemies
-                        self.map.startEnemySelection(kzEnemySelection);
+                        self.map.setMapState(kzEnemySelection);
                     } else if (enemySelection.getMapObject() === self) {
-                        self.map.finishEnemySelection();
+                        self.map.setMapState(null);
                     }
                 }
             });
@@ -425,7 +426,7 @@ class KillZone extends MapObject {
             }
         });
 
-        this.register('object:deleted', this, function() {
+        this.register('object:deleted', this, function () {
             let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             $.each(self.enemies, function (i, id) {
                 let enemy = enemyMapObjectGroup.findMapObjectById(id);

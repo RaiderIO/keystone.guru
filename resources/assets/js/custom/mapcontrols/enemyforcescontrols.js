@@ -37,12 +37,12 @@ class EnemyForcesControls extends MapControl {
                 // Local changes will update the counter
                 enemy.register('killzone:attached', self, function (data) {
                     // This is also triggered
-                    if (self.map.isEnemySelectionEnabled()) {
+                    if (self.map.getMapState() instanceof EnemySelection) {
                         self._setEnemyForces(self.enemyForces + data.context.enemy_forces);
                     }
                 });
                 enemy.register('killzone:detached', self, function (data) {
-                    if (self.map.isEnemySelectionEnabled()) {
+                    if (self.map.getMapState() instanceof EnemySelection) {
                         self._setEnemyForces(self.enemyForces - data.context.enemy_forces);
                     }
                 });

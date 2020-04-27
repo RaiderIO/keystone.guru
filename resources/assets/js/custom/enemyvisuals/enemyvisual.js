@@ -160,7 +160,7 @@ class EnemyVisual extends Signalable {
 
         // Some exclusions as to when the menu should not pop up
         if (self.map.options.edit &&
-            !self.map.isEnemySelectionEnabled() &&
+            self.map.getMapState() === null &&
             self.enemy.constructor.name !== 'AdminEnemy') {
 
             if (self.circleMenu === null) {

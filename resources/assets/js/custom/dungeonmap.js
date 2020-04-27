@@ -25,8 +25,6 @@ class DungeonMap extends Signalable {
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
 
-        // The current enemy selection class in-use. Used for selecting enemies for whatever reason
-        this.currentEnemySelection = null;
         //  Whatever killzone is currently in select mode
         this.currentSelectModeKillZone = null;
         // Pather instance
@@ -77,6 +75,8 @@ class DungeonMap extends Signalable {
         this.toolbarActive = false;
         this.deleteModeActive = false;
         this.editModeActive = false;
+        /** @type MapState */
+        this.mapState = null;
 
         this.mapTileLayer = null;
 
@@ -160,10 +160,8 @@ class DungeonMap extends Signalable {
 
         this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
             self.toolbarActive = true;
-            // If a killzone was selected, unselect it now
-            if (self.isEnemySelectionEnabled()) {
-                self.finishEnemySelection();
-            }
+            // If we were doing anything, we're no longer doing it
+            self.setMapState(null);
         });
         this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
             self.toolbarActive = false;
@@ -506,10 +504,8 @@ class DungeonMap extends Signalable {
 
         this.signal('map:beforerefresh', {dungeonmap: this});
 
-        // If we were selecting enemies, stop doing that now
-        if (this.isEnemySelectionEnabled()) {
-            this.finishEnemySelection();
-        }
+        // If we were doing anything, we're no longer doing it
+        this.setMapState(null);
 
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
@@ -590,53 +586,34 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Gets if enemy selection is enabled or not.
-     * @returns {boolean}
-     */
-    isEnemySelectionEnabled() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        return this.currentEnemySelection !== null;
-    }
-
-    /**
      * Gets the current enemy selection instance.
-     * @returns {null}
+     * @returns MapState|null
      */
-    getEnemySelection() {
+    getMapState() {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        return this.currentEnemySelection;
+        return this.mapState;
     }
 
     /**
-     * Start the enemy selection
-     * @param enemySelection The instance of an EnemySelection object which defines what may be selected.
+     * Sets the current map state to a new state.
+     * @param mapState
      */
-    startEnemySelection(enemySelection) {
-        console.assert(enemySelection instanceof EnemySelection, 'enemySelection is not an EnemySelection', this);
+    setMapState(mapState) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+        console.assert(mapState instanceof MapState || mapState === null, 'mapState is not a MapState|null', mapState);
 
-        if (this.currentEnemySelection === null) {
-            this.currentEnemySelection = enemySelection;
-            this.signal('map:enemyselectionmodechanged', {enemySelection: this.currentEnemySelection, finished: false});
-            this.currentEnemySelection.startSelectMode();
-        } else {
-            console.error('Unable to assign enemy selection when we\'re already selecting enemies!', this.currentEnemySelection, enemySelection);
+        // Stop if necessary
+        if (this.mapState instanceof MapState && this.mapState.isStarted() && !this.mapState.isStopped()) {
+            this.mapState.stop();
         }
-    }
 
-    /**
-     * Finishes the current enemy selection, if there's one going on at the moment.
-     */
-    finishEnemySelection() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        if (this.currentEnemySelection !== null) {
-            this.currentEnemySelection.cancelSelectMode();
-            this.signal('map:enemyselectionmodechanged', {enemySelection: this.currentEnemySelection, finished: true});
-            this.currentEnemySelection = null;
-        } else {
-            console.error('Unable to finish enemy selection; we\'re currently not selecting any enemies now');
+        // Start new map state
+        let previousMapState = this.mapState;
+        this.mapState = mapState;
+        this.signal('map:mapstatechanged', {previousMapState: previousMapState, newMapState: this.mapState});
+        if (this.mapState instanceof MapState) {
+            this.mapState.start();
         }
     }
 

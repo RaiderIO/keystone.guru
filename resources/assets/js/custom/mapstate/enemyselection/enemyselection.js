@@ -1,10 +1,8 @@
-class EnemySelection extends Signalable {
+class EnemySelection extends MapState {
     constructor(map, sourceMapObject) {
-        super();
-        console.assert(map instanceof DungeonMap, 'map is not a Map', map);
+        super(map);
         console.assert(sourceMapObject instanceof MapObject, 'sourceMapObject is not a MapObject', sourceMapObject);
 
-        this.map = map;
         this.sourceMapObject = sourceMapObject;
 
         this._oldMapObjectIcon = null;
@@ -41,8 +39,9 @@ class EnemySelection extends Signalable {
     /**
      * Starts select mode on this Selection, if no other select mode was enabled already.
      */
-    startSelectMode() {
-        console.assert(this instanceof EnemySelection, 'this is not an EnemySelection', this);
+    start() {
+        super.start();
+        console.assert(this instanceof EnemySelection, 'this is not an EnemySelectionMapState', this);
         let self = this;
 
         // https://stackoverflow.com/a/18008067/771270
@@ -59,7 +58,7 @@ class EnemySelection extends Signalable {
             enemy.register('enemy:selected', self, function (data) {
                 let enemy = data.context;
                 console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
-                console.assert(self instanceof EnemySelection, 'this is not an EnemySelection', self);
+                console.assert(self instanceof EnemySelection, 'this is not an EnemySelectionMapState', self);
 
                 self.signal('enemyselection:enemyselected', {enemy: enemy});
             });
@@ -74,8 +73,9 @@ class EnemySelection extends Signalable {
     /**
      * Stops selecting enemies.
      */
-    cancelSelectMode() {
-        console.assert(this instanceof EnemySelection, 'this is not an EnemySelection', this);
+    stop() {
+        super.stop();
+        console.assert(this instanceof EnemySelection, 'this is not an EnemySelectionMapState', this);
         let self = this;
 
         // Restore the previous icon
@@ -89,7 +89,7 @@ class EnemySelection extends Signalable {
             enemy.unregister('enemy:selected', self);
         });
 
-        // Ok we're clear, may edit again (there's always something to edit because this EnemySelection was triggered by one)
+        // Ok we're clear, may edit again (there's always something to edit because this EnemySelectionMapState was triggered by one)
         $('.leaflet-draw-edit-edit').removeClass('leaflet-disabled');
         $('.leaflet-draw-edit-remove').removeClass('leaflet-disabled');
     }

@@ -126,9 +126,10 @@ let scripts = [
     'resources/assets/js/custom/hotkeys.js',
     'resources/assets/js/custom/brushline.js',
 
-    'resources/assets/js/custom/enemyselection/enemyselection.js',
-    'resources/assets/js/custom/enemyselection/killzoneenemyselection.js',
-    'resources/assets/js/custom/enemyselection/mdtenemyselection.js',
+    'resources/assets/js/custom/mapstate/mapstate.js',
+    'resources/assets/js/custom/mapstate/enemyselection/enemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/killzoneenemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
 
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',

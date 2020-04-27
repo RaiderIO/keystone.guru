@@ -46,9 +46,9 @@ class Enemy extends MapObject {
         this.mdt_id = -1;
 
         let self = this;
-        this.map.register('map:enemyselectionmodechanged', this, function (selectionModeChangedEvent) {
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Remove/enable the popup
-            self.setPopupEnabled(selectionModeChangedEvent.data.finished);
+            self.setPopupEnabled(mapStateChangedEvent.data.newMapState instanceof MapState);
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -235,7 +235,7 @@ class Enemy extends MapObject {
 
         // Show a permanent tooltip for the enemy's name
         this.layer.on('click', function () {
-            if (self.map.isEnemySelectionEnabled() && self.selectable) {
+            if (self.map.getMapState() instanceof EnemySelection && self.selectable) {
                 self.signal('enemy:selected');
             }
         });
@@ -303,6 +303,6 @@ class Enemy extends MapObject {
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));
-        this.map.unregister('map:enemyselectionmodechanged', this);
+        this.map.unregister('map:mapstatechanged', this);
     }
 }
