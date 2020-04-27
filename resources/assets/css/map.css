@@ -553,14 +553,6 @@ html, body, #map, #app, .wrapper {
     background-image: url('/images/enemytypes/undead.png') !important;
 }
 
-.teeming {
-    background-color: #3d3cff;
-}
-
-.awakened {
-    background-color: #8832ff;
-}
-
 .aggressive_enemy_icon {
     background-image: url('/images/mapicon/unset.png') !important; /* no-repeat center !important; */
     background-color: #dc3c3c;
@@ -584,6 +576,18 @@ html, body, #map, #app, .wrapper {
 
 .truesight {
     background: white url('/images/enemymodifiers/truesight.png') no-repeat center !important;
+    border: 1px black solid;
+    border-radius: 18px;
+}
+
+.teeming {
+    background: white url('/images/enemymodifiers/teeming.png') no-repeat center !important;
+    border: 1px black solid;
+    border-radius: 18px;
+}
+
+.awakened {
+    background: white url('/images/enemymodifiers/awakened_obelisk.png') no-repeat -5px -11px !important;
     border: 1px black solid;
     border-radius: 18px;
 }

@@ -25,15 +25,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let mainVisualInnerClasses = ['enemy_icon', this.iconName];
 
         // Handle Teeming display
-        if (this.enemyvisual.enemy.teeming === 'visible' || this.enemyvisual.enemy.teeming === 'hidden') {
-            mainVisualOuterClasses.push('teeming');
-        }
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
             mainVisualOuterClasses.push(npc.aggressiveness);
-            if (npc.dungeon_id === -1) {
-                mainVisualOuterClasses.push('awakened');
-            }
 
             mainVisualInnerClasses.push(npc.dangerous ? 'dangerous' : '');
         }

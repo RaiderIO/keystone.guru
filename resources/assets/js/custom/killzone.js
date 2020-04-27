@@ -69,7 +69,7 @@ class KillZone extends MapObject {
      * @private
      */
     _removeEnemy(enemy) {
-        enemy.setKillZone(-1);
+        enemy.setKillZone(null);
         let index = $.inArray(enemy.id, this.enemies);
         if (index !== -1) {
             // Remove it
@@ -83,7 +83,7 @@ class KillZone extends MapObject {
      * @private
      */
     _addEnemy(enemy) {
-        enemy.setKillZone(this.id);
+        enemy.setKillZone(this);
         // Add it, but don't double add it
         if ($.inArray(enemy.id, this.enemies) === -1) {
             this.enemies.push(enemy.id);
@@ -106,7 +106,7 @@ class KillZone extends MapObject {
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             // When found, actually detach it
             if (enemy !== null) {
-                enemy.setKillZone(0);
+                enemy.setKillZone(null);
             }
         }
     }
@@ -115,6 +115,7 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
         this.save();
         this.redrawConnectionsToEnemies();
+        this.signal('killzone:changed');
     }
 
     delete() {
@@ -187,7 +188,7 @@ class KillZone extends MapObject {
         $.each(enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
             if (enemy !== null) {
-                enemy.setKillZone(self.id);
+                enemy.setKillZone(self);
             } else {
                 console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
                     'this enemy was probably removed during a migration?');
@@ -422,6 +423,20 @@ class KillZone extends MapObject {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
                 killZoneMapObjectGroup.setMapObjectVisibility(self, false);
             }
+        });
+
+        this.register('object:deleted', this, function() {
+            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            $.each(self.enemies, function (i, id) {
+                let enemy = enemyMapObjectGroup.findMapObjectById(id);
+                if (enemy !== null) {
+                    // Detach ourselves
+                    enemy.setKillZone(null);
+                } else {
+                    console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
+                        'this enemy was probably removed during a migration?');
+                }
+            });
         });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.

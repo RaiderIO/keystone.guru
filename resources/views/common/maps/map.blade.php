@@ -91,13 +91,13 @@ if ($isAdmin) {
         'mapIconTypes' => \App\Models\MapIconType::all(),
         'dungeonroute' => [
             'publicKey' => $routePublicKey,
-            'faction' => $routeFaction
+            'faction' => $routeFaction,
+            'enemyForces' => $routeEnemyForces
         ],
     ])
     <script>
         // Data of the dungeon(s) we're selecting in the map
         var dungeonData = {!! $dungeon !!};
-        var dungeonRouteEnemyForces = {{ $routeEnemyForces }};
         var isMapAdmin = {{ $isAdmin ? 'true' : 'false' }};
         var factionsData = {!! \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get() !!};
         var classColors = {!! \App\Models\CharacterClass::all()->pluck('color') !!};

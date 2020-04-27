@@ -19,7 +19,7 @@ class MapObject extends Signalable {
 
         this.id = 0;
         this.faction = 'any'; // sensible default
-        this.teeming = null;
+        this.teeming = null; // visible, hidden, null
         this.label = 'default label';
         this.decorator = null;
 

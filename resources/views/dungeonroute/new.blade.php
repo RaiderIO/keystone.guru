@@ -55,7 +55,7 @@
                 __('Check to change the dungeon to resemble Teeming week. Warning: once set, you cannot change this later on without creating a new route.')
                  }}"></i>
             </label>
-            {!! Form::checkbox('teeming', 1, 0, ['class' => 'form-control left_checkbox']) !!}
+            {!! Form::checkbox('teeming', 1, 0, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}
         </div>
 
 {{--        <div class="form-group">--}}

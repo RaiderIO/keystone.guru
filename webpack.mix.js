@@ -140,8 +140,10 @@ let scripts = [
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainnpctype.js',
 
     'resources/assets/js/custom/enemyvisuals/modifiers/modifier.js',
+    'resources/assets/js/custom/enemyvisuals/modifiers/modifierawakened.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierclassification.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
+    'resources/assets/js/custom/enemyvisuals/modifiers/modifierteeming.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifiertruesight.js',
 
     'resources/assets/js/custom/mapcontrol.js',

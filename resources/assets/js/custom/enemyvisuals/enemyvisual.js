@@ -33,6 +33,22 @@ class EnemyVisual extends Signalable {
 
         // If it changed, refresh the entire visual
         this.enemy.register('enemy:set_raid_marker', this, this._buildVisual.bind(this));
+        this.enemy.register('killzone:attached', this, function () {
+            // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
+            let killZone = self.enemy.getKillZone();
+            killZone.register('killzone:changed', self, self._buildVisual.bind(self));
+            killZone.register('object:deleted', self, self._buildVisual.bind(self));
+            self._buildVisual();
+        });
+        // Cleanup if it's detached
+        this.enemy.register('killzone:detached', this, function (event) {
+            // Only if it was attached to something
+            if (event.data.previous instanceof KillZone) {
+                event.data.previous.unregister('object:deleted', self);
+                event.data.previous.unregister('killzone:changed', self);
+            }
+            self._buildVisual();
+        });
         this.map.register('map:editmodetoggled', this, this._buildVisual.bind(this));
 
         this.layer.on('mouseover', function () {
@@ -109,16 +125,28 @@ class EnemyVisual extends Signalable {
         // Only for elite enemies
         if (this.enemy.npc !== null) {
             if (this.enemy.npc.classification_id !== 1 &&
-                this.map.leafletMap.getZoom() > c.map.enemy.classification_display_zoom) {
+                getState().getMapZoomLevel() > c.map.enemy.classification_display_zoom) {
                 modifiers.push(new EnemyVisualModifierClassification(this, 1));
             }
 
             // Truesight marker
             if (this.enemy.npc.truesight === 1 &&
-                this.map.leafletMap.getZoom() > c.map.enemy.truesight_display_zoom) {
+                getState().getMapZoomLevel() > c.map.enemy.truesight_display_zoom) {
                 modifiers.push(new EnemyVisualModifierTruesight(this, 2));
             }
+
+            // Awakened marker
+            if (this.enemy.npc.dungeon_id === -1 &&
+                getState().getMapZoomLevel() > c.map.enemy.awakened_display_zoom) {
+                modifiers.push(new EnemyVisualModifierAwakened(this, 3));
+            }
         }
+
+        if (this.enemy.teeming === 'visible' &&
+            getState().getMapZoomLevel() > c.map.enemy.teeming_display_zoom) {
+            modifiers.push(new EnemyVisualModifierTeeming(this, 4));
+        }
+
         return modifiers;
     }
 
@@ -257,7 +285,10 @@ class EnemyVisual extends Signalable {
         if (enemyMapObjectGroup.isMapObjectVisible(this.enemy)) {
             let template = Handlebars.templates['map_enemy_visual_template'];
 
-            let data = {};
+            // Set a default color which may be overridden by any visuals
+            let data = {
+                outer_background_color: this.enemy.getKillZone() instanceof KillZone ? this.enemy.getKillZone().color : 'white'
+            };
 
             if (this.enemy.isSelectable() || this.map.editModeActive) {
                 data = {
@@ -333,7 +364,7 @@ class EnemyVisual extends Signalable {
                 this.mainVisual.cleanup();
             }
 
-            if( this.enemy.is_mdt ){
+            if (this.enemy.is_mdt) {
                 this.mainVisual = new EnemyVisualMainMDT(this);
             } else {
                 switch (name) {
@@ -362,6 +393,8 @@ class EnemyVisual extends Signalable {
         this.layer.off('mouseover');
         this.layer.off('mouseout');
 
+        this.enemy.unregister('killzone:detached', this);
+        this.enemy.unregister('killzone:attached', this);
         this.enemy.unregister('enemy:set_raid_marker', this);
         this.map.unregister('map:editmodetoggled', this);
 
