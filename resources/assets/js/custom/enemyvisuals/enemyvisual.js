@@ -295,7 +295,7 @@ class EnemyVisual extends Signalable {
                 outer_background_color: this.enemy.getKillZone() instanceof KillZone ? this.enemy.getKillZone().color : 'white'
             };
 
-            if (this.enemy.isSelectable() || this.map.editModeActive) {
+            if (this.enemy.isSelectable() || this.map.getMapState() instanceof EditMapState) {
                 data = {
                     selection_classes_base: 'leaflet-edit-marker-selected selected_enemy_icon'
                 };

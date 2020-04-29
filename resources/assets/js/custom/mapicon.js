@@ -106,7 +106,11 @@ class MapIcon extends MapObject {
     _refreshVisual() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
-        this.layer.setIcon(getMapIconLeafletIcon(this.map_icon_type, this.map.editModeActive && this.isEditable()));
+        this.layer.setIcon(
+            getMapIconLeafletIcon(this.map_icon_type,
+                this.map.getMapState() instanceof EditMapState && this.isEditable()
+            )
+        );
         // // @TODO Refresh the layer; required as a workaround since in mapiconmapobjectgroup we don't know the map_icon_type upon init,
         // // thus we don't know if this will be editable or not. In the sync this will get called and the edit state is known
         // // after which this function will function properly

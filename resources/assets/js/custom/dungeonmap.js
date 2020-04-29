@@ -71,9 +71,6 @@ class DungeonMap extends Signalable {
         this.mapObjects = [];
         /** @var Array Stores all UI elements that are drawn on the map */
         this.mapControls = [];
-        // Keeps track of if we're in edit or delete mode
-        this.toolbarActive = false;
-        this.editModeActive = false;
         /** @type MapState */
         this.mapState = null;
 
