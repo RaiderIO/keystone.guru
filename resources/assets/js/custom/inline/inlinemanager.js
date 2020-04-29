@@ -4,6 +4,40 @@ class InlineManager {
     constructor() {
         //  Array containing all inline code instances
         this._inlineCode = [];
+
+        this._activatedInlineCode = [];
+
+        this._dependencies = [];
+    }
+
+    /**
+     * Checks if this blade path has its dependencies loaded yet
+     * @param bladePath
+     * @private
+     */
+    _hasDependenciesLoaded(bladePath) {
+        let numDependencies = 0;
+        let loadedDependencies = 0;
+
+        // For each script that has OTHER scripts depend on it (parents)
+        for (let parent in this._dependencies) {
+            if (this._dependencies.hasOwnProperty(parent)) {
+                // For each of the scripts that are waiting for parents to activate (children)
+                for (let child in this._dependencies[parent]) {
+                    // If it's us that are waiting for a parent
+                    if (this._dependencies[parent].hasOwnProperty(child) && this._dependencies[parent][child] === bladePath) {
+                        numDependencies++;
+                        loadedDependencies += this._activatedInlineCode.includes(parent) ? 1 : 0;
+                    }
+                }
+            }
+        }
+
+        console.log(`${bladePath} `, numDependencies, loadedDependencies, numDependencies === loadedDependencies);
+
+        console.log(this._activatedInlineCode, this._dependencies);
+
+        return numDependencies === loadedDependencies;
     }
 
     /**
@@ -15,10 +49,12 @@ class InlineManager {
         let result = false;
 
         for (let index in this._inlineCode) {
-            let code = this._inlineCode[index];
-            if (code.path === bladePath) {
-                result = code.code;
-                break;
+            if (this._inlineCode.hasOwnProperty(index)) {
+                let code = this._inlineCode[index];
+                if (code.path === bladePath) {
+                    result = code.code;
+                    break;
+                }
             }
         }
 
@@ -45,6 +81,19 @@ class InlineManager {
 
         this._inlineCode.push({path: bladePath, code: code});
 
+        // If this inline code has dependencies..
+        if (typeof options.dependencies !== 'undefined') {
+            console.log('Found dependencies!');
+
+            // If the file we depend on did not have any dependencies yet..
+            if (typeof this._dependencies[options.dependencies] === 'undefined') {
+                this._dependencies[options.dependencies] = [];
+            }
+
+            // This blade now has a dependency
+            this._dependencies[options.dependencies].push(bladePath);
+        }
+
         return code;
     }
 
@@ -52,9 +101,29 @@ class InlineManager {
      * Activates all loaded inline code.
      * @param bladePath
      */
-    activate(bladePath){
-        let code = this.getInlineCode(bladePath);
-        // Now that we have the instance, run the activate function to trigger it
-        code.activate();
+    activate(bladePath) {
+        if (this._hasDependenciesLoaded(bladePath)) {
+            // console.warn(`Loading ${bladePath}, dependencies are loaded`);
+            let code = this.getInlineCode(bladePath);
+            // Now that we have the instance, run the activate function to trigger it
+            code.activate();
+
+            // This is now activated
+            this._activatedInlineCode.push(bladePath);
+
+            // If there were any dependencies on this blade..
+            let dependencies = this._dependencies[bladePath];
+            if (typeof dependencies !== 'undefined') {
+                // Attempt to activate everything that depended on it now that we're activated
+                for (let index in dependencies) {
+                    if (dependencies.hasOwnProperty(index)) {
+                        console.warn(`Attempting load of ${dependencies[index]} since dependency is now loaded`);
+                        this.activate(dependencies[index]);
+                    }
+                }
+            }
+        } else {
+            console.warn(`Not loading ${bladePath}, dependencies not loaded`);
+        }
     }
 }

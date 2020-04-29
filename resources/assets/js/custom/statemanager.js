@@ -5,7 +5,7 @@ class StateManager extends Signalable {
         // Any dungeon route we may be editing at this time
         this.dungeonRoute = null;
 
-        this.map = null;
+        this._map = null;
         // What enemy visual type we're displaying
         this.enemyDisplayType = null;
         // The currently displayed floor ID
@@ -54,18 +54,18 @@ class StateManager extends Signalable {
         let self = this;
 
         // Unreg ourselves if necessary
-        if (this.map !== null) {
-            this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
+        if (this._map !== null) {
+            this._map.unregister('map:mapobjectgroupsfetchsuccess', this);
         }
 
-        this.map = map;
+        this._map = map;
 
-        this.setEnemyDisplayType(this.map.options.defaultEnemyVisualType);
-        this.setFloorId(this.map.options.floorId);
+        this.setEnemyDisplayType(this._map.options.defaultEnemyVisualType);
+        this.setFloorId(this._map.options.floorId);
 
         // Change defaults based on the hash if necessary
         if (window.location.hash.length > 0) {
-            this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+            this._map.register('map:mapobjectgroupsfetchsuccess', this, function () {
                 // Fill the hashVariables with key=>value pairs
                 let hashVariables = {};
                 let variables = window.location.hash.replace('#', '').split('&');
@@ -128,6 +128,14 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Gets the dungeon map if it's set before.
+     * @returns {null}
+     */
+    getDungeonMap() {
+        return this._map;
+    }
+
+    /**
      * Get the dungeon route we may or may not be editing at this time.
      * @returns {null}
      */
@@ -164,7 +172,7 @@ class StateManager extends Signalable {
         let self = this;
         let result = false;
         // Iterate over the found floors
-        $.each(this.map.dungeonData.floors, function (index, value) {
+        $.each(this._map.dungeonData.floors, function (index, value) {
             // Find the floor we're looking for
             if (parseInt(value.id) === parseInt(self.floorId)) {
                 result = value;
