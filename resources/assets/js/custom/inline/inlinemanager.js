@@ -33,10 +33,6 @@ class InlineManager {
             }
         }
 
-        console.log(`${bladePath} `, numDependencies, loadedDependencies, numDependencies === loadedDependencies);
-
-        console.log(this._activatedInlineCode, this._dependencies);
-
         return numDependencies === loadedDependencies;
     }
 
