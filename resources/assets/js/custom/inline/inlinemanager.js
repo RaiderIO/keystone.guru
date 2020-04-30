@@ -79,8 +79,6 @@ class InlineManager {
 
         // If this inline code has dependencies..
         if (typeof options.dependencies !== 'undefined') {
-            console.log('Found dependencies!');
-
             // If the file we depend on did not have any dependencies yet..
             if (typeof this._dependencies[options.dependencies] === 'undefined') {
                 this._dependencies[options.dependencies] = [];
@@ -113,7 +111,7 @@ class InlineManager {
                 // Attempt to activate everything that depended on it now that we're activated
                 for (let index in dependencies) {
                     if (dependencies.hasOwnProperty(index)) {
-                        console.warn(`Attempting load of ${dependencies[index]} since dependency is now loaded`);
+                        console.log(`Attempting load of ${dependencies[index]} since dependency is now loaded`);
                         this.activate(dependencies[index]);
                     }
                 }

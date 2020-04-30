@@ -19,6 +19,9 @@ class DungeonMap extends Signalable {
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());
         this.mapObjectGroupManager.register('fetchsuccess', this, function () {
+            // Add new controls; we're all loaded now and user should now be able to edit their route
+            self._addMapControls(self.editableLayers);
+
             // All layers have been fetched, refresh tooltips to update "No layers to edit" state
             refreshTooltips();
 
@@ -338,36 +341,38 @@ class DungeonMap extends Signalable {
      * @returns {*[]}
      * @private
      */
-    _createMapControls(editableLayers) {
+    _addMapControls(editableLayers) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        let result = [];
+        this.mapControls = [];
 
         // No UI = no map controls at all
         if (!this.options.noUI) {
             if (this.options.edit) {
-                result.push(new DrawControls(this, editableLayers));
+                this.mapControls.push(new DrawControls(this, editableLayers));
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
             if (getState().getDungeonRoute().publicKey !== '' || this.options.edit) {
-                result.push(new EnemyForcesControls(this));
+                this.mapControls.push(new EnemyForcesControls(this));
             }
-            result.push(new EnemyVisualControls(this));
-            result.push(new MapObjectGroupControls(this));
+            this.mapControls.push(new EnemyVisualControls(this));
+            this.mapControls.push(new MapObjectGroupControls(this));
 
             if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
-                result.push(new FactionDisplayControls(this));
+                this.mapControls.push(new FactionDisplayControls(this));
             }
 
             if (this.options.echo) {
-                result.push(new EchoControls(this));
+                this.mapControls.push(new EchoControls(this));
             }
 
             // result.push(new AdDisplayControls(this));
         }
 
-        return result;
+        for (let i = 0; i < this.mapControls.length; i++) {
+            this.mapControls[i].addControl();
+        }
     }
 
     /**
@@ -493,12 +498,6 @@ class DungeonMap extends Signalable {
         }
 
         this.editableLayers = new L.FeatureGroup();
-        this.mapControls = this._createMapControls(this.editableLayers);
-
-        // Add new controls
-        for (let i = 0; i < this.mapControls.length; i++) {
-            this.mapControls[i].addControl();
-        }
 
         // Refresh the list of drawn items
         this.drawnLayers = new L.FeatureGroup();

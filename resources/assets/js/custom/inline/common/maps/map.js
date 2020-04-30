@@ -44,7 +44,7 @@ class CommonMapsMap extends InlineCode {
 
         // Support not having a sidebar (preview map)
 
-        let sidebar = _inlineManager.getInlineCode('common/maps/sidebar');
+        let sidebar = _inlineManager.getInlineCode('common/maps/editsidebar');
         if (sidebar !== false) {
             $(sidebar.options.switchDungeonFloorSelect).change(function () {
                 // Pass the new floor ID to the map
