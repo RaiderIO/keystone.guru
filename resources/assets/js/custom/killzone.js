@@ -99,16 +99,33 @@ class KillZone extends MapObject {
 
         this.removeExistingConnectionsToEnemies();
 
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < this.enemies.length; i++) {
             let enemyId = this.enemies[i];
-            // Find the enemy
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             // When found, actually detach it
             if (enemy !== null) {
                 enemy.setKillZone(null);
             }
         }
+    }
+
+    /**
+     * Get the enemy forces that will be added if this enemy pack is killed.
+     */
+    getEnemyForces() {
+        let result = 0;
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < this.enemies.length; i++) {
+            let enemyId = this.enemies[i];
+            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+            if (enemy !== null && enemy.npc !== null) {
+                result += enemy.npc.enemy_forces;
+            }
+        }
+
+        return result;
     }
 
     edit() {

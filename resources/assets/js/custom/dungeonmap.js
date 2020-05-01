@@ -30,6 +30,7 @@ class DungeonMap extends Signalable {
 
         //  Whatever killzone is currently in select mode
         this.currentSelectModeKillZone = null;
+        this.selectedKillZoneId = 0;
         // Pather instance
         this.pather = null;
 
@@ -664,6 +665,17 @@ class DungeonMap extends Signalable {
         }
 
         return result;
+    }
+
+    setSelectedKillZoneId(killZoneId) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+        let previousSelectedKillZoneId = this.selectedKillZoneId;
+        this.selectedKillZoneId = killZoneId;
+
+        this.signal('killzone:selectionChanged', {
+            previousKillZoneId: previousSelectedKillZoneId,
+            newKillZoneId: this.selectedKillZoneId
+        });
     }
 }
 
