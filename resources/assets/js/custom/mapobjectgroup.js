@@ -128,11 +128,7 @@ class MapObjectGroup extends Signalable {
             // Must be a hex color
             if (userColor.indexOf('#') === 0) {
                 // Check if the user's color is 'dark' or 'light'. When it's dark we want a white font, black otherwise.
-                if (isColorDark(userColor)) {
-                    fontClass = 'text-white';
-                } else {
-                    fontClass = 'text-dark';
-                }
+                fontClass = isColorDark(userColor) ? 'text-white' : 'text-dark';
             }
 
             let tooltip = localMapObject.layer.bindTooltip(username, {

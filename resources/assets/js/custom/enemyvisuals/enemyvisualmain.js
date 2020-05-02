@@ -34,9 +34,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         // Any additional classes to add for when the enemy is selectable
         let selectionClasses = [];
-        if (this.enemyvisual.enemy.isSelectable()) {
-            selectionClasses.push('selected_enemy_icon');
-        }
+        // if (this.enemyvisual.enemy.isSelectable()) {
+        //     selectionClasses.push('selected_enemy_icon');
+        // }
 
         return $.extend(data, {
             // Set the main icon

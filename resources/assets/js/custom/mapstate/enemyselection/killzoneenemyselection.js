@@ -1,6 +1,15 @@
 class KillZoneEnemySelection extends EnemySelection {
     constructor(map, sourceMapObject) {
         super(map, sourceMapObject);
+
+        this.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
+    }
+
+    _enemySelected(enemySelectedEvent){
+        console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
+
+        /** @type KillZone sourceMapObject */
+        this.sourceMapObject.enemySelected(enemySelectedEvent.data.enemy);
     }
 
     /**
@@ -11,9 +20,10 @@ class KillZoneEnemySelection extends EnemySelection {
      * @protected
      */
     _filter(source, enemyCandidate){
+        console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
         console.assert(source instanceof KillZone, 'source is not a KillZone', source);
         console.assert(enemyCandidate instanceof Enemy, 'enemyCandidate is not an Enemy', enemyCandidate);
-        return enemyCandidate.getKillZone() === null || enemyCandidate.getKillZone().id === source.id;
+        return true; //enemyCandidate.getKillZone() === null || enemyCandidate.getKillZone().id === source.id;
     }
 
     /**
@@ -21,6 +31,7 @@ class KillZoneEnemySelection extends EnemySelection {
      * @protected
      */
     _getLayerIcon(){
+        console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
         return LeafletKillZoneIconEditMode;
     }
 }

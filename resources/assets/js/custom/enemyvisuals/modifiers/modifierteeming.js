@@ -18,7 +18,7 @@ class EnemyVisualModifierTeeming extends EnemyVisualModifier {
         // Bottom left corner
         return {
             classes: 'modifier_external ' + this.iconName,
-            left: 0,
+            left: -8, // 16px wide; divided by 2
             top: height
         };
     }

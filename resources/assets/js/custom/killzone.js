@@ -42,6 +42,8 @@ class KillZone extends MapObject {
         this.color = c.map.killzone.polygonOptions.color;
         // List of IDs of selected enemies
         this.enemies = [];
+        // Temporary list of enemies when we received them from the server
+        this.remoteEnemies = [];
         this.enemyConnectionsLayerGroup = null;
 
         this.setColors(c.map.killzone.colors);
@@ -64,16 +66,44 @@ class KillZone extends MapObject {
     }
 
     /**
+     * An enemy that was added to us has now detached itself.
+     * @param enemyDetachedEvent
+     * @private
+     */
+    _enemyDetached(enemyDetachedEvent) {
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+
+        // Only remove it when it concerns us
+        if (enemyDetachedEvent.data.previous === null ||
+            enemyDetachedEvent.data.previous.id === this.id
+        ) {
+            this._removeEnemy(enemyDetachedEvent.context);
+            this.redrawConnectionsToEnemies();
+        }
+    }
+
+    /**
      * Removes an enemy from this killzone.
      * @param enemy Object The enemy object to remove.
      * @private
      */
     _removeEnemy(enemy) {
-        enemy.setKillZone(null);
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+
+        // Deselect if necessary
+        if (enemy.getKillZone() !== null && enemy.getKillZone().id === this.id) {
+            enemy.setKillZone(null);
+        }
+
         let index = $.inArray(enemy.id, this.enemies);
         if (index !== -1) {
             // Remove it
-            this.enemies.splice(index, 1);
+            let deleted = this.enemies.splice(index, 1);
+            if (deleted.length === 1) {
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                // This enemy left us, no longer interested in it
+                enemyMapObjectGroup.findMapObjectById(deleted[0]).unregister('killzone:detached', this);
+            }
         }
     }
 
@@ -83,10 +113,16 @@ class KillZone extends MapObject {
      * @private
      */
     _addEnemy(enemy) {
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+        console.log('adding enemy', enemy);
+
         enemy.setKillZone(this);
         // Add it, but don't double add it
         if ($.inArray(enemy.id, this.enemies) === -1) {
             this.enemies.push(enemy.id);
+
+            // We're interested in knowing when this enemy has detached itself (by assigning to another killzone, for example)
+            enemy.register('killzone:detached', this, this._enemyDetached.bind(this));
         }
     }
 
@@ -201,18 +237,30 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
         let self = this;
 
+        // Remove any enemies that we may have had
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        $.each(enemies, function (i, id) {
+        // Copy enemies array as we're making changes in it by removing enemies
+        let currentEnemies = [...this.enemies];
+        $.each(currentEnemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
             if (enemy !== null) {
-                enemy.setKillZone(self);
+                self._removeEnemy(enemy);
             } else {
-                console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
+                console.warn('Remove: unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
                     'this enemy was probably removed during a migration?');
             }
         });
 
-        this.enemies = enemies;
+        $.each(enemies, function (i, id) {
+            let enemy = enemyMapObjectGroup.findMapObjectById(id);
+            if (enemy !== null) {
+                self._addEnemy(enemy);
+            } else {
+                console.warn('Add: unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
+                    'this enemy was probably removed during a migration?');
+            }
+        });
+
         this.redrawConnectionsToEnemies();
     }
 
@@ -227,6 +275,12 @@ class KillZone extends MapObject {
         let index = $.inArray(enemy.id, this.enemies);
         // Already exists, user wants to deselect the enemy
         let removed = index >= 0;
+
+        // Keep track of the killzone it may have been attached to, we need to refresh it ourselves here since then
+        // the actions only get done once. If the previous enemy was part of a pack of 10 enemies, which were part of
+        // the same killzone, it would otherwise send 10 save messages (if this.save() was part of killzone:detached
+        // logic. By removing that there and adding it here, we get one clean save message.
+        let previousKillZone = enemy.getKillZone();
 
         // If the enemy was part of a pack..
         if (enemy.enemy_pack_id > 0) {
@@ -254,6 +308,13 @@ class KillZone extends MapObject {
         }
 
         this.redrawConnectionsToEnemies();
+        this.save();
+
+        // The previous killzone lost a member, we have to notify it and save it
+        if (previousKillZone !== null && previousKillZone.id !== this.id) {
+            previousKillZone.redrawConnectionsToEnemies();
+            previousKillZone.save();
+        }
     }
 
     /**
@@ -324,6 +385,9 @@ class KillZone extends MapObject {
             p = offset.data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
 
             let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color});
+            if (this.map.getSelectedKillZoneId() === this.id) {
+                opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
+            }
 
             let polygon = L.polygon(p, opts);
 
@@ -402,20 +466,9 @@ class KillZone extends MapObject {
         if (this.map.options.edit) {
             this.layer.on('click', function (clickEvent) {
                 let mapState = self.map.getMapState();
-                // Can only interact with select mode if we're the one that is currently being selected
-                if (mapState instanceof EnemySelection && mapState.getMapObject() === self) {
-                    self.map.setMapState(null);
-                } else if (mapState === null) {
-                    let kzEnemySelection = new KillZoneEnemySelection(self.map, self);
-                    kzEnemySelection.register('enemyselection:enemyselected', this, function (selectedEvent) {
-                        self.enemySelected(selectedEvent.data.enemy);
-                    });
+                // Can only assign
+                if (mapState === null) {
 
-                    // Register for changes to the selection event
-                    self.map.register('map:mapstatechanged', self, self._mapStateChanged.bind(self));
-
-                    // Start selecting enemies
-                    self.map.setMapState(kzEnemySelection);
                 }
             });
         }
@@ -426,12 +479,15 @@ class KillZone extends MapObject {
         });
 
 
+        this.map.register('killzone:selectionchanged', this, this.redrawConnectionsToEnemies.bind(this));
         // When we have all data, redraw the connections. Not sooner or otherwise we may not have the enemies back yet
         this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
             // The enemies data has been set, but not properly propagated to all enemies that they're attached to a killzone
             // Couldn't do that because enemies may not have been loaded at that point. Now we're sure the enemies have been
             // loaded so we can inject ourselves in the enemy
-            self.setEnemies(self.enemies);
+            self.setEnemies(self.remoteEnemies);
+            // Clear it to save some memory I guess
+            self.remoteEnemies = null;
 
             // Hide the killzone layer when in preview mode
             if (self.map.options.noUI) {
@@ -488,6 +544,7 @@ class KillZone extends MapObject {
 
     cleanup() {
         // this.unregister('synced', this); // Not needed as super.cleanup() does this
+        this.map.unregister('killzone:selectionchanged', this);
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
         this.map.unregister('map:beforerefresh', this);
 
@@ -495,6 +552,7 @@ class KillZone extends MapObject {
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             enemy.setSelectable(false);
             enemy.unregister('enemy:selected', self);
+            enemy.unregister('killzone:detached', self);
         });
 
         super.cleanup();

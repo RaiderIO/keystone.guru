@@ -89,7 +89,7 @@ class MapObjectGroupManager extends Signalable {
     /**
      * Retrieves a map object group by its name.
      * @param name
-     * @returns {boolean}|{MapObjectGroup}
+     * @returns {boolean|MapObjectGroup}
      */
     getByName(name) {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);

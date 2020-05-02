@@ -97,7 +97,7 @@ let c = {
             },
             margin: 2,
             arcSegments: function (nr) {
-                return Math.max(5, 11 - nr);
+                return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             },
             polygonOptions: {
                 color: '#9DFF56',
@@ -143,11 +143,15 @@ let c = {
                 color: Cookies.get('polyline_default_color'),
                 weight: 2,
                 fillOpacity: 0.3,
-                opacity: 1
+                opacity: 1,
+            },
+            // Whenever the killzone is selected or focussed by the user to adjust it
+            polygonOptionsSelected: {
+                dashArray: '20, 20'
             },
             margin: 2,
             arcSegments: function (nr) {
-                return Math.max(5, 11 - nr);
+                return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
         },
         placeholderColors: {}

@@ -155,7 +155,7 @@ class StateManager extends Signalable {
 
     /**
      * Get the current map's zoom level.
-     * @returns {string}
+     * @returns {int}
      */
     getMapZoomLevel() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);

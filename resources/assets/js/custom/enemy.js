@@ -187,7 +187,7 @@ class Enemy extends MapObject {
 
     /**
      * Gets the killzone for this enemy.
-     * @returns {null}
+     * @returns {KillZone|null}
      */
     getKillZone() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -204,8 +204,13 @@ class Enemy extends MapObject {
         this.kill_zone = killZone;
 
         if (this.kill_zone instanceof KillZone) {
+            console.log('killzone:attached', this.id);
             this.signal('killzone:attached', {previous: oldKillZone});
-        } else {
+        }
+
+        // We should notify it that we have detached from it
+        if (oldKillZone !== null) {
+            console.log('killzone:detached', this.id);
             this.signal('killzone:detached', {previous: oldKillZone});
         }
     }

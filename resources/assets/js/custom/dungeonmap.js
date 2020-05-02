@@ -667,12 +667,18 @@ class DungeonMap extends Signalable {
         return result;
     }
 
+    getSelectedKillZoneId() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        return this.selectedKillZoneId;
+    }
+
     setSelectedKillZoneId(killZoneId) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let previousSelectedKillZoneId = this.selectedKillZoneId;
         this.selectedKillZoneId = killZoneId;
 
-        this.signal('killzone:selectionChanged', {
+        this.signal('killzone:selectionchanged', {
             previousKillZoneId: previousSelectedKillZoneId,
             newKillZoneId: this.selectedKillZoneId
         });

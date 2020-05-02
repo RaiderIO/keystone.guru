@@ -3,6 +3,7 @@ class EnemySelection extends MapState {
         super(map);
         console.assert(sourceMapObject instanceof MapObject, 'sourceMapObject is not a MapObject', sourceMapObject);
 
+        /** @type MapObject */
         this.sourceMapObject = sourceMapObject;
 
         this._oldMapObjectIcon = null;

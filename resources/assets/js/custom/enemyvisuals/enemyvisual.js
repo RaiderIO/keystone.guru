@@ -203,7 +203,7 @@ class EnemyVisual extends Signalable {
                     circle_radius: size + margin,
                     // Positioning
                     item_diameter: 24,
-                    speed: 200,
+                    speed: 300,
                     init: function () {
                         refreshTooltips();
                     },
@@ -270,8 +270,8 @@ class EnemyVisual extends Signalable {
             self._mouseOut();
 
             // Re-bind this function
-            $enemyDiv.unbind('click');
-            $enemyDiv.bind('click', self._visualClicked.bind(self));
+            $enemyDiv.unbind('contextmenu');
+            $enemyDiv.bind('contextmenu', self._visualClicked.bind(self));
         });
     }
 
@@ -295,7 +295,7 @@ class EnemyVisual extends Signalable {
                 outer_background_color: this.enemy.getKillZone() instanceof KillZone ? this.enemy.getKillZone().color : 'white'
             };
 
-            if (this.enemy.isSelectable() || this.map.getMapState() instanceof EditMapState) {
+            if (this.map.getMapState() instanceof EditMapState) {
                 data = {
                     selection_classes_base: 'leaflet-edit-marker-selected selected_enemy_icon'
                 };
@@ -341,8 +341,8 @@ class EnemyVisual extends Signalable {
 
             // When the visual exists, bind a click method to it (to increase performance)
             let $enemyIcon = $('#map_enemy_visual_' + this.enemy.id).find('.enemy_icon');
-            $enemyIcon.unbind('click');
-            $enemyIcon.bind('click', this._visualClicked.bind(this));
+            $enemyIcon.unbind('contextmenu');
+            $enemyIcon.bind('contextmenu', this._visualClicked.bind(this));
 
             this.signal('enemyvisual:builtvisual', {});
         }

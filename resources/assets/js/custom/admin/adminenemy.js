@@ -286,9 +286,9 @@ class AdminEnemy extends Enemy {
             // When deleting, we shouldn't have these interactions
             // Only when we're an MDT enemy!
             if (self.is_mdt && !(self.map.getMapState() instanceof DeleteMapState)) {
-                let enemySelection = self.map.getMapState();
+                let currentMapState = self.map.getMapState();
                 // Can only interact with select mode if we're the one that is currently being selected
-                if (enemySelection === null) {
+                if (currentMapState === null) {
                     let mdtEnemySelection = new MDTEnemySelection(self.map, self);
                     mdtEnemySelection.register('enemyselection:enemyselected', this, function (selectedEvent) {
                         self.enemySelected(selectedEvent.data.enemy);
@@ -298,7 +298,7 @@ class AdminEnemy extends Enemy {
                     self.map.setMapState(mdtEnemySelection);
                 }
                 // User clicks the object again to cancel the procedure
-                else if (enemySelection.getMapObject() === self) {
+                else if (currentMapState.getMapObject() === self) {
                     // Do not unregister enemyselectionmodechanged here; it may be changed externally as well
                     self.map.setMapState(null);
                 }
