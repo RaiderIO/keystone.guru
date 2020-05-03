@@ -15,6 +15,7 @@ use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\APIDungeonRouteFormRequest;
 use App\Logic\Datatables\AuthorNameColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
+use App\Logic\Datatables\DungeonColumnHandler;
 use App\Logic\Datatables\DungeonRouteAffixesColumnHandler;
 use App\Logic\Datatables\DungeonRouteAttributesColumnHandler;
 use App\Logic\Datatables\EnemyForcesColumnHandler;
@@ -23,13 +24,11 @@ use App\Logic\Datatables\ViewsColumnHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
-use App\Models\MapIconType;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Teapot\StatusCode;
 
 class APIDungeonRouteController extends Controller
 {
@@ -64,7 +63,8 @@ class APIDungeonRouteController extends Controller
             ->leftJoin('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
-            ->where(function ($query) {
+            ->where(function ($query)
+            {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
@@ -108,7 +108,8 @@ class APIDungeonRouteController extends Controller
 
             // Handle favorites
             if (array_search('favorite', $requirements) !== false) {
-                $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
+                $routes = $routes->whereHas('favorites', function ($query) use (&$user)
+                {
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
@@ -155,6 +156,8 @@ class APIDungeonRouteController extends Controller
         $dtHandler = new DatatablesHandler($request);
 
         $result = $dtHandler->setBuilder($routes)->addColumnHandler([
+            // Handles any searching/filtering based on dungeon
+            new DungeonColumnHandler($dtHandler),
             // Handles any searching/filtering based on DR Affixes
             new DungeonRouteAffixesColumnHandler($dtHandler),
             // Sort by the amount of attributes
