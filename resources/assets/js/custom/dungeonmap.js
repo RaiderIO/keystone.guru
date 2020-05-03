@@ -41,11 +41,13 @@ class DungeonMap extends Signalable {
             mapObjectGroup.register('object:add', this, function (addEvent) {
                 let object = addEvent.data.object;
                 self.mapObjects.push(object);
-                self.drawnLayers.addLayer(object.layer);
+                if (object.layer !== null) {
+                    self.drawnLayers.addLayer(object.layer);
 
-                // Make sure we know it's editable
-                if (object.isEditable() && addEvent.data.objectgroup.editable && self.options.edit) {
-                    self.editableLayers.addLayer(object.layer);
+                    // Make sure we know it's editable
+                    if (object.isEditable() && addEvent.data.objectgroup.editable && self.options.edit) {
+                        self.editableLayers.addLayer(object.layer);
+                    }
                 }
             });
 
@@ -54,19 +56,21 @@ class DungeonMap extends Signalable {
             mapObjectGroup.register(['object:shown', 'object:hidden'], this, function (visibilityEvent) {
                 let object = visibilityEvent.data.object;
                 // If it's visible now and the layer is not added already
-                if (visibilityEvent.data.visible && !self.drawnLayers.hasLayer(object.layer)) {
-                    // Add it
-                    self.drawnLayers.addLayer(object.layer);
-                    // Only if we may add the layer
-                    if (object.isEditable() && visibilityEvent.data.objectgroup.editable && self.options.edit) {
-                        self.editableLayers.addLayer(object.layer);
+                if (object.layer !== null) {
+                    if (visibilityEvent.data.visible && !self.drawnLayers.hasLayer(object.layer)) {
+                        // Add it
+                        self.drawnLayers.addLayer(object.layer);
+                        // Only if we may add the layer
+                        if (object.isEditable() && visibilityEvent.data.objectgroup.editable && self.options.edit) {
+                            self.editableLayers.addLayer(object.layer);
+                        }
                     }
-                }
-                // If it should not be visible but it's visible now
-                else if (!visibilityEvent.data.visible && self.drawnLayers.hasLayer(object.layer)) {
-                    // Remove it from the layer
-                    self.drawnLayers.removeLayer(object.layer);
-                    self.editableLayers.removeLayer(object.layer);
+                    // If it should not be visible but it's visible now
+                    else if (!visibilityEvent.data.visible && self.drawnLayers.hasLayer(object.layer)) {
+                        // Remove it from the layer
+                        self.drawnLayers.removeLayer(object.layer);
+                        self.editableLayers.removeLayer(object.layer);
+                    }
                 }
             });
         }
@@ -386,7 +390,7 @@ class DungeonMap extends Signalable {
 
         for (let i = 0; i < this.mapObjects.length; i++) {
             let layer = this.mapObjects[i].layer;
-            if (layer.hasOwnProperty('setStyle')) {
+            if (layer !== null && layer.hasOwnProperty('setStyle')) {
                 let zoomStep = Math.max(2, this.leafletMap.getZoom());
                 if (layer instanceof L.Polyline) {
                     layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
@@ -671,17 +675,6 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         return this.selectedKillZoneId;
-    }
-
-    setSelectedKillZoneId(killZoneId) {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-        let previousSelectedKillZoneId = this.selectedKillZoneId;
-        this.selectedKillZoneId = killZoneId;
-
-        this.signal('killzone:selectionchanged', {
-            previousKillZoneId: previousSelectedKillZoneId,
-            newKillZoneId: this.selectedKillZoneId
-        });
     }
 }
 

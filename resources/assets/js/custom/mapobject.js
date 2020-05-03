@@ -166,7 +166,7 @@ class MapObject extends Signalable {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         // Only if the colors object was ever set by a parent
-        if (typeof this.colors !== 'undefined' && typeof this.layer.setStyle === 'function') {
+        if (typeof this.colors !== 'undefined' && this.layer !== null && typeof this.layer.setStyle === 'function') {
             // Now synced
             if (value) {
                 this.layer.setStyle({

@@ -144,6 +144,9 @@ return [
     'sidebar_collapse' => 'Collapse the sidebar',
     'copied_to_clipboard' => 'Copied to clipboard',
 
+    // Killzone sidebar
+    'killzone_sidebar_kill_location_label' => 'Kill location',
+
 
     // General site modals etc
     'min_password_length' => 'Minimum password length is 8',

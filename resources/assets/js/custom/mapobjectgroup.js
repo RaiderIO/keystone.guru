@@ -269,9 +269,11 @@ class MapObjectGroup extends Signalable {
 
         let object = this._createObject(layer, options);
         this.objects.push(object);
-        this.layerGroup.addLayer(layer);
+        if (layer !== null) {
+            this.layerGroup.addLayer(layer);
+            object.onLayerInit();
+        }
 
-        object.onLayerInit();
 
         object.register('object:deleted', this, (this._onObjectDeleted).bind(this));
         object.register('synced', this, (this._onObjectSynced).bind(this));

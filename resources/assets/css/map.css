@@ -153,15 +153,23 @@ html, body, #map, #app, .wrapper {
 }
 
 #killzonesidebar .map_killzonessidebar_killzone {
+    background-color: #2B3E50;
+    /*padding: 6px;*/
+}
+
+#killzonesidebar .map_killzonessidebar_killzone_selectable {
     cursor: pointer;
-    padding: 6px;
 }
 
-#killzonesidebar .map_killzonessidebar_killzone.selected {
-    border: #DF691A 3px solid;
-
-    padding: 3px;
+#killzonesidebar .map_killzonessidebar_color_btn {
+    cursor: pointer;
 }
+
+/*#killzonesidebar .map_killzonessidebar_killzone.selected {*/
+/*    border: #DF691A 3px solid;*/
+
+/*    padding: 3px;*/
+/*}*/
 
 #edit_route_echo_members_container .list-group-item,
 #edit_route_echo_status_container .list-group-item {

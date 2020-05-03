@@ -1,12 +1,26 @@
-<div id="map_killzonessidebar_killzone_{{id}}" class="row no-gutters mb-2 map_killzonessidebar_killzone" data-id="{{id}}">
-    <div class="col">
-        <div class="h-100 text-center {{text-class}}" style="background-color: {{color}}">
-            {{text}}
+<div id="map_killzonessidebar_killzone_{{id}}" class="mb-2 map_killzonessidebar_killzone" data-id="{{id}}">
+    <div class="row no-gutters map_killzonessidebar_killzone_selectable">
+        <div class="col">
+            <div id="map_killzonessidebar_killzone_{{id}}_text" class="h-100 text-center {{text-class}}">
+
+            </div>
+        </div>
+        <div class="col" style="-ms-flex: 0 0 40px; flex: 0 0 40px;">
+            <div class="btn btn-warning">
+                <i class="fa fa-trash"></i>
+            </div>
         </div>
     </div>
-    <div class="col" style="-ms-flex: 0 0 40px; flex: 0 0 40px;">
-        <div class="btn btn-warning">
-            <i class="fa fa-trash"></i>
+    <div class="row no-gutters">
+        <div class="col">
+            <div id="map_killzonessidebar_killzone_{{id}}_color"
+                 class="btn map_killzonessidebar_color_btn w-100">
+
+            </div>
+        </div>
+        <div class="col">
+            <input type="checkbox" id="map_killzonessidebar_killzone_{{id}}_has_kill_location" class="left_checkbox">
+            {{killzone_sidebar_kill_location_label}}
         </div>
     </div>
 </div>

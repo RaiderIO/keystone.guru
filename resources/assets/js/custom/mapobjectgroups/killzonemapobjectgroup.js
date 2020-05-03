@@ -28,6 +28,13 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return new KillZone(this.manager.map, layer);
     }
 
+    /**
+     *
+     * @param remoteMapObject
+     * @param username
+     * @returns {KillZone}
+     * @private
+     */
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
         // Fetch the existing killzone if it exists
@@ -35,8 +42,11 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         // Only create a new one if it's new for us
         if (killzone === null) {
-            let layer = new LeafletKillZoneMarker();
-            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+            let layer = null;
+            if( remoteMapObject.lat !== null && remoteMapObject.lng !== null ) {
+                layer = new LeafletKillZoneMarker();
+                layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+            }
 
             /** @var KillZone killzone */
             killzone = this.createNew(layer);
@@ -67,6 +77,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         // Show echo notification or not
         this._showReceivedFromEcho(killzone, username);
+
+        return killzone;
     }
 
     _fetchSuccess(response) {
@@ -82,5 +94,22 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 this._restoreObject(killzones[index]);
             }
         }
+    }
+
+    /**
+     * Creates a whole new pull.
+     * @returns {KillZone}
+     */
+    createNewPull() {
+        let killZone = this._restoreObject({
+            id: -1,
+            color: c.map.killzone.polygonOptions.color,
+            floor_id: getState().getCurrentFloor().id,
+            killzoneenemies: [],
+            lat: null,
+            lng: null
+        });
+        killZone.save();
+        return killZone;
     }
 }

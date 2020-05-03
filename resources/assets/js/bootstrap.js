@@ -69,6 +69,7 @@ window.d3 = require('d3'); // v3.5.14 since Pather uses an out-of-date version
 window.Pather = require('leaflet-pather');
 window.circleMenu = require('zikes-circlemenu');
 window.Noty = require('noty');
+window.Pickr = require('@simonwep/pickr');
 
 require('@fortawesome/fontawesome-free');
 

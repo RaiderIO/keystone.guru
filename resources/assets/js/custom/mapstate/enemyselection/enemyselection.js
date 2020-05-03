@@ -6,7 +6,7 @@ class EnemySelection extends MapState {
         /** @type MapObject */
         this.sourceMapObject = sourceMapObject;
 
-        this._oldMapObjectIcon = null;
+        // this._oldMapObjectIcon = null;
     }
 
     /**
@@ -46,8 +46,8 @@ class EnemySelection extends MapState {
         let self = this;
 
         // https://stackoverflow.com/a/18008067/771270
-        this._oldMapObjectIcon = this.sourceMapObject.layer.options.icon;
-        this.sourceMapObject.layer.setIcon(this._getLayerIcon());
+        // this._oldMapObjectIcon = this.sourceMapObject.layer.options.icon;
+        // this.sourceMapObject.layer.setIcon(this._getLayerIcon());
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
@@ -80,7 +80,7 @@ class EnemySelection extends MapState {
         let self = this;
 
         // Restore the previous icon
-        this.sourceMapObject.layer.setIcon(this._oldMapObjectIcon);
+        // this.sourceMapObject.layer.setIcon(this._oldMapObjectIcon);
 
         // Revert all things we did to enemies
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);

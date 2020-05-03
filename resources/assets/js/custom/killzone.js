@@ -104,6 +104,7 @@ class KillZone extends MapObject {
                 // This enemy left us, no longer interested in it
                 enemyMapObjectGroup.findMapObjectById(deleted[0]).unregister('killzone:detached', this);
             }
+            this.signal('killzone:enemyremoved', this, {enemy: enemy});
         }
     }
 
@@ -123,6 +124,7 @@ class KillZone extends MapObject {
 
             // We're interested in knowing when this enemy has detached itself (by assigning to another killzone, for example)
             enemy.register('killzone:detached', this, this._enemyDetached.bind(this));
+            this.signal('killzone:enemyadded', this, {enemy: enemy});
         }
     }
 
@@ -210,8 +212,8 @@ class KillZone extends MapObject {
                 id: self.id,
                 floor_id: getState().getCurrentFloor().id,
                 color: self.color,
-                lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng,
+                lat: self.layer !== null ? self.layer.getLatLng().lat : null,
+                lng: self.layer !== null ? self.layer.getLatLng().lng : null,
                 enemies: self.enemies
             },
             success: function (json) {
@@ -375,8 +377,10 @@ class KillZone extends MapObject {
 
 
         // Alpha shapes
-        let selfLatLng = self.layer.getLatLng();
-        latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
+        if (this.layer !== null) {
+            let selfLatLng = this.layer.getLatLng();
+            latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
+        }
         let p = hull(latLngs, 100);
 
         // Only if we can actually make an offset
@@ -420,7 +424,7 @@ class KillZone extends MapObject {
 
                 let template = Handlebars.templates['map_killzone_edit_popup_template'];
 
-                let data = $.extend({id: self.id}, getHandlebarsDefaultVariables());
+                let data = $.extend({id: this.id}, getHandlebarsDefaultVariables());
 
                 // Build the status bar from the template
                 polygon.unbindPopup();
@@ -459,6 +463,7 @@ class KillZone extends MapObject {
     // To be overridden by any implementing classes
     onLayerInit() {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
+        console.assert(this.layer instanceof L.Layer, 'this.layer is not an L.Layer', this);
         super.onLayerInit();
 
         let self = this;
