@@ -138,8 +138,10 @@ class KillZone extends MapObject {
         this.removeExistingConnectionsToEnemies();
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < this.enemies.length; i++) {
-            let enemyId = this.enemies[i];
+        // Copy enemies array as we're making changes in it by removing enemies
+        let currentEnemies = [...this.enemies];
+        for (let i = 0; i < currentEnemies.length; i++) {
+            let enemyId = currentEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             // When found, actually detach it
             if (enemy !== null) {
@@ -187,7 +189,6 @@ class KillZone extends MapObject {
             success: function (json) {
                 // Detach from all enemies upon deletion
                 self._detachFromEnemies();
-                self.removeExistingConnectionsToEnemies();
                 self.localDelete();
                 self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
             },
@@ -559,6 +560,8 @@ class KillZone extends MapObject {
             enemy.unregister('enemy:selected', self);
             enemy.unregister('killzone:detached', self);
         });
+
+        this.removeExistingConnectionsToEnemies();
 
         super.cleanup();
     }

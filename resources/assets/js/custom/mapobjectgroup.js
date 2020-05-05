@@ -168,9 +168,11 @@ class MapObjectGroup extends Signalable {
     _onObjectDeleted(data) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        this.layerGroup.removeLayer(data.context.layer);
-        // @TODO Should this be put in the dungeonmap instead?
-        this.manager.map.leafletMap.removeLayer(data.context.layer);
+        if( data.context.layer !== null ){
+            this.layerGroup.removeLayer(data.context.layer);
+            // @TODO Should this be put in the dungeonmap instead?
+            this.manager.map.leafletMap.removeLayer(data.context.layer);
+        }
 
         let object = data.context;
 

@@ -43,7 +43,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         // Only create a new one if it's new for us
         if (killzone === null) {
             let layer = null;
-            if( remoteMapObject.lat !== null && remoteMapObject.lng !== null ) {
+            if (remoteMapObject.lat !== null && remoteMapObject.lng !== null) {
                 layer = new LeafletKillZoneMarker();
                 layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
             }
@@ -73,7 +73,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
 
         // We just downloaded the kill zone, it's synced alright!
-        killzone.setSynced(true);
+        if (!remoteMapObject.local) {
+            killzone.setSynced(true);
+        }
 
         // Show echo notification or not
         this._showReceivedFromEcho(killzone, username);
@@ -107,7 +109,10 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             floor_id: getState().getCurrentFloor().id,
             killzoneenemies: [],
             lat: null,
-            lng: null
+            lng: null,
+            // Bit of a hack, we don't want the synced event to be fired in this case, we only want it _after_ the ID has been
+            // set by calling save() below. That will then trigger object:add and the killzone will have it's ID for the UI
+            local: true
         });
         killZone.save();
         return killZone;

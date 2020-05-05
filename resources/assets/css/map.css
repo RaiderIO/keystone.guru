@@ -157,7 +157,7 @@ html, body, #map, #app, .wrapper {
     /*padding: 6px;*/
 }
 
-#killzonesidebar .map_killzonessidebar_killzone_selectable {
+#killzonesidebar .map_killzonessidebar_killzone .selectable {
     cursor: pointer;
 }
 

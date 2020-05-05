@@ -167,6 +167,14 @@ class AdminEnemy extends Enemy {
     }
 
     /**
+     * Unlike normal enemies, admin enemies may be deleted.
+     * @returns {boolean}
+     */
+    isDeletable() {
+        return true;
+    }
+
+    /**
      *
      * @returns {boolean}
      */

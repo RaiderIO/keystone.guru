@@ -108,7 +108,8 @@ class MapIcon extends MapObject {
 
         this.layer.setIcon(
             getMapIconLeafletIcon(this.map_icon_type,
-                this.map.getMapState() instanceof EditMapState && this.isEditable()
+                (this.map.getMapState() instanceof EditMapState && this.isEditable()) ||
+                (this.map.getMapState() instanceof DeleteMapState && this.isDeletable())
             )
         );
         // // @TODO Refresh the layer; required as a workaround since in mapiconmapobjectgroup we don't know the map_icon_type upon init,

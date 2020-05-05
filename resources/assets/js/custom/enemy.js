@@ -262,6 +262,14 @@ class Enemy extends MapObject {
         });
     }
 
+    isDeletable() {
+        return false;
+    }
+
+    isEditable() {
+        return false;
+    }
+
     /**
      * Checks if this enemy is possibly selectable when selecting enemies.
      * @returns {*}

@@ -106,10 +106,12 @@ class DungeonMap extends Signalable {
         this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function (e) {
             // Disable pather if we were doing it
             self.togglePather(false);
+            // @TODO Start a new map state
         });
         this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
             // After adding, there may be layers when there were none. Fix the edit/delete tooltips
             refreshTooltips();
+            // @TODO Stop the new map state
         });
         // Set all edited layers to no longer be synced.
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
