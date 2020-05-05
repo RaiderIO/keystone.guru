@@ -146,6 +146,10 @@ html, body, #map, #app, .wrapper {
     padding: 0.75rem 1.25rem;
 }
 
+#killzonesidebar .sidebar-content .card-body {
+    padding: 0.75rem 0.75rem;
+}
+
 .sidebar .sidebar-panel {
     /*padding: 10px;*/
     /*border: #2B3E50 solid 1px;*/
@@ -153,7 +157,7 @@ html, body, #map, #app, .wrapper {
 }
 
 #killzonesidebar .map_killzonessidebar_killzone {
-    background-color: #2B3E50;
+    /*background-color: #2B3E50;*/
     /*padding: 6px;*/
 }
 
@@ -163,6 +167,10 @@ html, body, #map, #app, .wrapper {
 
 #killzonesidebar .map_killzonessidebar_color_btn {
     cursor: pointer;
+}
+
+#killzonesidebar .pickr {
+    width: 160px;
 }
 
 /*#killzonesidebar .map_killzonessidebar_killzone.selected {*/

@@ -13,7 +13,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         let killZone = killZoneMapObjectGroup.createNewPull();
 
-        this._selectKillZone.bind($(``))
+        // this._selectKillZone.bind($(``))
         // this._addKillZone(killZone);
     }
 
@@ -110,6 +110,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             $(template(data))
         );
 
+        $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index', $($(this.options.killZonesContainerSelector).children()).length);
         $(`#map_killzonessidebar_killzone_${killZone.id} .selectable`).bind('click', this._selectKillZone);
         $(`#map_killzonessidebar_killzone_${killZone.id}_color`).bind('click', function () {
             self._colorPickers[killZone.id].show();
@@ -117,7 +118,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $(`#map_killzonessidebar_killzone_${killZone.id}_delete`).bind('click', this._deleteKillZone);
         this._colorPickers[killZone.id] = this._initColorPicker(killZone);
         // Small hack to get it to look better
-        $(`#map_killzonessidebar_killzone_${killZone.id} .pcr-button`).addClass('w-100');
+        $(`#map_killzonessidebar_killzone_${killZone.id} .pcr-button`).addClass('h-100 w-100');
 
 
         // Set some additional properties
@@ -167,8 +168,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let enemyForcesPercent = (killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100;
         enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
+        let index = $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index');
         $(`#map_killzonessidebar_killzone_${killZone.id}_text`)
-            .text(`${killZone.enemies.length} enemies, ${enemyForcesPercent}%`);
+            .text(`${index}: ${killZone.enemies.length} enemies, ${enemyForcesPercent}%`);
 
         $(`#map_killzonessidebar_killzone_${killZone.id}_color`)
             .css('background-color', killZone.color);

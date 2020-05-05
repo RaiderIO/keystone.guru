@@ -1,26 +1,26 @@
-<div id="map_killzonessidebar_killzone_{{id}}" class="mb-2 map_killzonessidebar_killzone" data-id="{{id}}">
-    <div class="row no-gutters">
-        <div class="col selectable">
-            <div id="map_killzonessidebar_killzone_{{id}}_text" class="h-100 text-center {{text-class}}">
+<div id="map_killzonessidebar_killzone_{{id}}" class="form-group map_killzonessidebar_killzone" data-id="{{id}}">
+    <div class="card">
+        <div class="card-body">
+            <h5 id="map_killzonessidebar_killzone_{{id}}_text" class="card-title selectable {{text-class}}">
 
-            </div>
-        </div>
-        <div class="col" style="-ms-flex: 0 0 40px; flex: 0 0 40px;">
-            <div id="map_killzonessidebar_killzone_{{id}}_delete" class="btn btn-warning">
-                <i class="fa fa-trash"></i>
-            </div>
-        </div>
-    </div>
-    <div class="row no-gutters">
-        <div class="col">
-            <div id="map_killzonessidebar_killzone_{{id}}_color"
-                 class="btn map_killzonessidebar_color_btn w-100">
+            </h5>
+            <div class="input-group">
+                <div id="map_killzonessidebar_killzone_{{id}}_color"
+                     class="btn map_killzonessidebar_color_btn w-100">
 
+                </div>
+                <div class="input-group-append">
+                    <button id="map_killzonessidebar_killzone_{{id}}_has_killzone"
+                            class="btn btn-primary" data-toggle="button" aria-pressed="false">
+                        <i class="fas fa-bullseye"></i>
+                    </button>
+                </div>
+                <div class="input-group-append">
+                    <div id="map_killzonessidebar_killzone_{{id}}_delete" class="btn btn-warning">
+                        <i class="fa fa-trash"></i>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col">
-            <input type="checkbox" id="map_killzonessidebar_killzone_{{id}}_has_kill_location" class="left_checkbox">
-            {{killzone_sidebar_kill_location_label}}
         </div>
     </div>
 </div>
