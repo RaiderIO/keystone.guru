@@ -6,6 +6,7 @@
     _stateManager = new StateManager();
     _stateManager.setDungeonRoute({!! new \Illuminate\Support\Collection($dungeonroute) !!});
     _stateManager.setMapIconTypes({!! $mapIconTypes !!});
+    _stateManager.setClassColors({!! $classColors !!});
 
     /**
      * Get the current state manager of the app.

@@ -40,6 +40,7 @@ return [
     'add_label' => 'Add',
 
     'color_label' => 'Color',
+    'weight_label' => 'Weight',
 
     'clone_label' => 'Clone',
     'delete_label' => 'Delete',

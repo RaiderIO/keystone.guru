@@ -15,6 +15,7 @@ class StateManager extends Signalable {
 
         // List of static arrays
         this.mapIconTypes = [];
+        this.classColors = [];
         // Bit of a hack? But for now best solution
         this.unknownMapIconId = 1;
         // The map icon as found using above ID once the list of map icons is known
@@ -44,6 +45,10 @@ class StateManager extends Signalable {
             )
         }
         this.unknownMapIcon = this.getMapIconType(this.unknownMapIconId);
+    }
+
+    setClassColors(classColors){
+        this.classColors = classColors;
     }
 
     /**
@@ -151,6 +156,15 @@ class StateManager extends Signalable {
     getEnemyDisplayType() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.enemyDisplayType;
+    }
+
+    /**
+     * Get all the colors of all current classes.
+     * @returns {[]}
+     */
+    getClassColors() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.classColors;
     }
 
     /**
