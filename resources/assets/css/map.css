@@ -161,6 +161,18 @@ html, body, #map, #app, .wrapper {
     /*padding: 6px;*/
 }
 
+#killzonesidebar .selectable {
+    flex: 1 1 auto
+}
+
+#killzonesidebar [data-toggle="collapse"] .fa:before {
+    content: "\f077";
+}
+
+#killzonesidebar [data-toggle="collapse"].collapsed .fa:before {
+    content: "\f078";
+}
+
 #killzonesidebar .map_killzonessidebar_killzone .selectable {
     cursor: pointer;
 }
@@ -170,7 +182,7 @@ html, body, #map, #app, .wrapper {
 }
 
 #killzonesidebar .pickr {
-    width: 160px;
+    flex: 1 1 auto;
 }
 
 /*#killzonesidebar .map_killzonessidebar_killzone.selected {*/

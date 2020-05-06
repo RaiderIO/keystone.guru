@@ -120,7 +120,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // Small hack to get it to look better
         $(`#map_killzonessidebar_killzone_${killZone.id} .pcr-button`).addClass('h-100 w-100');
 
-
         // Set some additional properties
         this._refreshKillZone(killZone);
     }
@@ -174,6 +173,37 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         $(`#map_killzonessidebar_killzone_${killZone.id}_color`)
             .css('background-color', killZone.color);
+
+        // Fill the enemy list
+        let npcs = [];
+        let enemyMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < killZone.enemies.length; i++) {
+            let enemyId = killZone.enemies[i];
+            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+
+            // If enemy found and said enemy has an npc
+            if (enemy !== null && enemy.npc !== null) {
+                // If not in our array, add it
+                if (!npcs.hasOwnProperty(enemy.npc.id)) {
+                    npcs[enemy.npc.id] = {
+                        'npc': enemy.npc,
+                        'count': 0
+                    };
+                }
+
+                npcs[enemy.npc.id].count++;
+            }
+        }
+
+        let html = '';
+        for (let index in npcs) {
+            if (npcs.hasOwnProperty(index)) {
+                let obj = npcs[index];
+                html += `${obj.count * obj.npc.enemy_forces}: ${obj.count}x ${obj.npc.name} <br>`;
+            }
+        }
+
+        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_list`).html(html);
     }
 
     /**
