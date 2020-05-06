@@ -115,7 +115,6 @@ class KillZone extends MapObject {
      */
     _addEnemy(enemy) {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
-        console.log('adding enemy', enemy);
 
         enemy.setKillZone(this);
         // Add it, but don't double add it

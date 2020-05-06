@@ -168,8 +168,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
         let index = $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index');
-        $(`#map_killzonessidebar_killzone_${killZone.id}_text`)
-            .text(`${index}: ${killZone.enemies.length} enemies, ${enemyForcesPercent}%`);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_title`)
+            .text(`${index}: ${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);
 
         $(`#map_killzonessidebar_killzone_${killZone.id}_color`)
             .css('background-color', killZone.color);
@@ -195,15 +195,28 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
         }
 
-        let html = '';
+        let $enemyList = $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_list`);
+        $enemyList.children().remove();
+        console.log(npcs);
         for (let index in npcs) {
             if (npcs.hasOwnProperty(index)) {
                 let obj = npcs[index];
-                html += `${obj.count * obj.npc.enemy_forces}: ${obj.count}x ${obj.npc.name} <br>`;
+
+                let template = Handlebars.templates['map_killzonessidebar_killzone_row_enemy_row_template'];
+
+                let data = $.extend({
+                    'enemy_forces': obj.count * obj.npc.enemy_forces,
+                    'count': obj.count,
+                    'name': obj.npc.name,
+                    'dangerous': obj.npc.dangerous === 1
+                }, getHandlebarsDefaultVariables());
+
+                console.log(data);
+
+                $enemyList.append($(template(data)));
             }
         }
 
-        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_list`).html(html);
     }
 
     /**
