@@ -1,4 +1,4 @@
-<div class="row no-gutters {{text-class}}">
+<div class="row no-gutters w-100 {{text-class}}">
     <div class="col">
         <div class="input-group">
             <div class="input-group-prepend" style="width: 24px;">
@@ -10,7 +10,10 @@
                 {{enemy_forces}}
             </div>
             <div>
-                {{count}}x {{name}}
+                {{name}}
+                {{#ifCond count '>' 1}}
+                    x{{count}}
+                {{/ifCond}}
             </div>
         </div>
     </div>

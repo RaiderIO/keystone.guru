@@ -98,7 +98,30 @@ window.Handlebars.registerHelper('select', function (value, options) {
     return $el.html();
 });
 
-// https://stackoverflow.com/questions/34252817/handlebarsjs-check-if-a-string-is-equal-to-a-value
-window.Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
-    return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+// https://stackoverflow.com/questions/8853396/logical-operator-in-a-handlebars-js-if-conditional
+window.Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+    switch (operator) {
+        case '==':
+            return (v1 == v2) ? options.fn(this) : options.inverse(this);
+        case '===':
+            return (v1 === v2) ? options.fn(this) : options.inverse(this);
+        case '!=':
+            return (v1 != v2) ? options.fn(this) : options.inverse(this);
+        case '!==':
+            return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+        case '<':
+            return (v1 < v2) ? options.fn(this) : options.inverse(this);
+        case '<=':
+            return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+        case '>':
+            return (v1 > v2) ? options.fn(this) : options.inverse(this);
+        case '>=':
+            return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+        case '&&':
+            return (v1 && v2) ? options.fn(this) : options.inverse(this);
+        case '||':
+            return (v1 || v2) ? options.fn(this) : options.inverse(this);
+        default:
+            return options.inverse(this);
+    }
 });
