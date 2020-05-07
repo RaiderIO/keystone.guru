@@ -66,6 +66,7 @@ if ($isAdmin) {
 }
 
 ?>
+@php($dependencies = $edit && !$tryMode ? ['dungeonroute/edit'] : null)
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'username' => Auth::check() ? $user->name : '',
     // Only activate Echo when we are a member of the team in which this route is a member of
@@ -81,9 +82,7 @@ if ($isAdmin) {
     'showAttribution' => $showAttribution,
     'npcsMinHealth' => $dungeon->getNpcsMinHealth(),
     'npcsMaxHealth' => $dungeon->getNpcsMaxHealth(),
-    'dependencies' => [
-        'dungeonroute/edit'
-    ]
+    'dependencies' => $dependencies
 ], $adminOptions)])
 
 @section('scripts')

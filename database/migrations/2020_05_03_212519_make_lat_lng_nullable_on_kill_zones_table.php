@@ -12,8 +12,8 @@ class MakeLatLngNullableOnKillZonesTable extends Migration
     public function up()
     {
         // Cannot do normal migration stuffs as https://stackoverflow.com/questions/56864556/migration-cannot-change-double-data-type-value
-        DB::table('kill_zones')->raw('alter table kill_zones modify lat double null;');
-        DB::table('kill_zones')->raw('alter table kill_zones modify lng double null;');
+        DB::statement('alter table kill_zones modify lat double null;');
+        DB::statement('alter table kill_zones modify lng double null;');
     }
 
     /**
@@ -23,7 +23,7 @@ class MakeLatLngNullableOnKillZonesTable extends Migration
      */
     public function down()
     {
-        DB::table('kill_zones')->raw('alter table kill_zones modify lat double not null;');
-        DB::table('kill_zones')->raw('alter table kill_zones modify lng double not null;');
+        DB::statement('alter table kill_zones modify lat double not null;');
+        DB::statement('alter table kill_zones modify lng double not null;');
     }
 }

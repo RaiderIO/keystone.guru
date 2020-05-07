@@ -3,7 +3,7 @@
 /** @var \App\Models\Dungeon $dungeon */
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
-    'dependencies' => 'common/maps/map',
+    'dependencies' => ['common/maps/map'],
     'sidebarSelector' => '#killzonesidebar',
     'sidebarToggleSelector' => '#killzonesidebarToggle',
     'anchor' => 'right',
