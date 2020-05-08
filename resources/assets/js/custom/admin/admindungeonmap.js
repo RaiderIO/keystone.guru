@@ -7,11 +7,11 @@ class AdminDungeonMap extends DungeonMap {
 
     /**
      * Create instances of all controls that will be added to the map (UI on the map itself)
-     * @param drawnItemsLayer
+     * @param editableLayers
      * @returns {*[]}
      * @private
      */
-    _createMapControls(drawnItemsLayer) {
+    _getMapControls(editableLayers) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = [];
 
@@ -19,7 +19,7 @@ class AdminDungeonMap extends DungeonMap {
             result.push(new FactionDisplayControls(this));
         }
 
-        result.push(new AdminDrawControls(this, drawnItemsLayer));
+        result.push(new AdminDrawControls(this, editableLayers));
         result.push(new EnemyVisualControls(this));
         result.push(new MapObjectGroupControls(this));
         result.push(new AdminPanelControls(this));

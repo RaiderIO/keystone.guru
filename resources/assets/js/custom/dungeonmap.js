@@ -348,34 +348,52 @@ class DungeonMap extends Signalable {
      * @returns {*[]}
      * @private
      */
-    _addMapControls(editableLayers) {
+    _getMapControls(editableLayers) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        this.mapControls = [];
-
+        let mapControls = [];
         // No UI = no map controls at all
         if (!this.options.noUI) {
             if (this.options.edit) {
-                this.mapControls.push(new DrawControls(this, editableLayers));
+                mapControls.push(new DrawControls(this, editableLayers));
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
             if (getState().getDungeonRoute().publicKey !== '' || this.options.edit) {
-                this.mapControls.push(new EnemyForcesControls(this));
+                mapControls.push(new EnemyForcesControls(this));
             }
-            this.mapControls.push(new EnemyVisualControls(this));
-            this.mapControls.push(new MapObjectGroupControls(this));
+            mapControls.push(new EnemyVisualControls(this));
+            mapControls.push(new MapObjectGroupControls(this));
 
             if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
-                this.mapControls.push(new FactionDisplayControls(this));
+                mapControls.push(new FactionDisplayControls(this));
             }
 
             if (this.options.echo) {
-                this.mapControls.push(new EchoControls(this));
+                mapControls.push(new EchoControls(this));
             }
 
             // result.push(new AdDisplayControls(this));
         }
+
+        return mapControls;
+    }
+
+    /**
+     * Create instances of all controls that will be added to the map (UI on the map itself)
+     * @param editableLayers
+     * @returns {*[]}
+     * @private
+     */
+    _addMapControls(editableLayers) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        // Remove existing map controls
+        for (let i = 0; i < this.mapControls.length; i++) {
+            this.mapControls[i].cleanup();
+        }
+
+        this.mapControls = this._getMapControls(editableLayers);
 
         for (let i = 0; i < this.mapControls.length; i++) {
             this.mapControls[i].addControl();
@@ -498,11 +516,6 @@ class DungeonMap extends Signalable {
             continuousWorld: true,
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
-
-        // Remove existing map controls
-        for (let i = 0; i < this.mapControls.length; i++) {
-            this.mapControls[i].cleanup();
-        }
 
         this.editableLayers = new L.FeatureGroup();
 

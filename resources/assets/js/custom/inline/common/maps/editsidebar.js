@@ -12,6 +12,8 @@ class CommonMapsEditsidebar extends InlineCode {
      *
      */
     activate() {
+        let self = this;
+
         // Copy to clipboard functionality
         $('#map_copy_to_clipboard').bind('click', function () {
             // https://codepen.io/shaikmaqsood/pen/XmydxJ
@@ -22,6 +24,12 @@ class CommonMapsEditsidebar extends InlineCode {
             $temp.remove();
 
             showInfoNotification(lang.get('messages.copied_to_clipboard'));
+        });
+
+        $(this.options.switchDungeonFloorSelect).change(function () {
+            // Pass the new floor ID to the map
+            getState().setFloorId($(self.options.switchDungeonFloorSelect).val());
+            getState().getDungeonMap().refreshLeafletMap();
         });
     }
 }

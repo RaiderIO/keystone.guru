@@ -1,13 +1,27 @@
 class AdminDrawControls extends DrawControls {
-
-    _attachHotkeys() {
-        this.map.hotkeys.attach('1', 'leaflet-draw-draw-mapicon');
-        this.map.hotkeys.attach('2', 'leaflet-draw-draw-enemypack');
-        this.map.hotkeys.attach('3', 'leaflet-draw-draw-enemy');
-        this.map.hotkeys.attach('4', 'leaflet-draw-draw-enemypatrol');
-        this.map.hotkeys.attach('5', 'leaflet-draw-draw-dungeonstartmarker');
-        this.map.hotkeys.attach('6', 'leaflet-draw-draw-dungeonfloorswitchmarker');
-        this.map.hotkeys.attach('7', 'leaflet-draw-edit-edit');
+    _getHotkeys(){
+        return [{
+            hotkey: '1',
+            cssClass: 'leaflet-draw-draw-mapicon',
+        }, {
+            hotkey: '2',
+            cssClass: 'leaflet-draw-draw-enemypack',
+        }, {
+            hotkey: '3',
+            cssClass: 'leaflet-draw-draw-enemy',
+        }, {
+            hotkey: '4',
+            cssClass: 'leaflet-draw-draw-enemypatrol',
+        }, {
+            hotkey: '5',
+            cssClass: 'leaflet-draw-draw-dungeonstartmarker',
+        }, {
+            hotkey: '6',
+            cssClass: 'leaflet-draw-draw-dungeonfloorswitchmarker',
+        }, {
+            hotkey: '7',
+            cssClass: 'leaflet-draw-edit-edit',
+        }];
     }
 
     /**
@@ -32,13 +46,15 @@ class AdminDrawControls extends DrawControls {
                         message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
                     },
                     faClass: 'fa-draw-polygon',
-                    title: 'Draw an enemy pack'
+                    title: 'Draw an enemy pack',
+                    hotkey: this._findHotkeyByCssClass('enemypack')
                 },
                 enemy: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-user',
-                    title: 'Draw an enemy'
+                    title: 'Draw an enemy',
+                    hotkey: this._findHotkeyByCssClass('enemy')
                 },
                 enemypatrol: {
                     shapeOptions: {
@@ -47,19 +63,22 @@ class AdminDrawControls extends DrawControls {
                     },
                     zIndexOffset: 1000,
                     faClass: 'fa-exchange-alt',
-                    title: 'Draw a patrol route for an enemy'
+                    title: 'Draw a patrol route for an enemy',
+                    hotkey: this._findHotkeyByCssClass('enemypatrol')
                 },
                 dungeonstartmarker: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-flag',
-                    title: 'Draw a dungeon start marker'
+                    title: 'Draw a dungeon start marker',
+                    hotkey: this._findHotkeyByCssClass('dungeonstartmarker')
                 },
                 dungeonfloorswitchmarker: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-door-open',
-                    title: 'Draw a dungeon floor switch marker'
+                    title: 'Draw a dungeon floor switch marker',
+                    hotkey: this._findHotkeyByCssClass('dungeonfloorswitchmarker')
                 }
             }
         });

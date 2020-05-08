@@ -42,17 +42,6 @@ class CommonMapsMap extends InlineCode {
             this._dungeonMap = new DungeonMap('map', dungeonData, this.options);
         }
 
-        // Support not having a sidebar (preview map)
-
-        let sidebar = _inlineManager.getInlineCode('common/maps/editsidebar');
-        if (sidebar !== false) {
-            $(sidebar.options.switchDungeonFloorSelect).change(function () {
-                // Pass the new floor ID to the map
-                getState().setFloorId($(sidebar.options.switchDungeonFloorSelect).val());
-                self._dungeonMap.refreshLeafletMap();
-            });
-        }
-
         $('#start_virtual_tour').bind('click', function () {
             introjs().start();
         });

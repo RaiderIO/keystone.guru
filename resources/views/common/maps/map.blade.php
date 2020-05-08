@@ -66,7 +66,7 @@ if ($isAdmin) {
 }
 
 ?>
-@php($dependencies = $edit && !$tryMode ? ['dungeonroute/edit'] : null)
+@php($dependencies = $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null)
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'username' => Auth::check() ? $user->name : '',
     // Only activate Echo when we are a member of the team in which this route is a member of

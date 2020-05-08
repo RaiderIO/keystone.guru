@@ -5,10 +5,10 @@ $(function () {
                 enabled: this.options.path,
                 handler: new L.Draw.Path(map, this.options.path),
                 title: this.options.path.title
-            }, {
-                enabled: this.options.killzone,
-                handler: new L.Draw.KillZone(map, this.options.killzone),
-                title: this.options.killzone.title
+                // }, {
+                //     enabled: this.options.killzone,
+                //     handler: new L.Draw.KillZone(map, this.options.killzone),
+                //     title: this.options.killzone.title
             }, {
                 enabled: this.options.mapicon,
                 handler: new L.Draw.MapIcon(map, this.options.mapicon),
@@ -66,6 +66,7 @@ class DrawControls extends MapControl {
         super(map);
         console.assert(this instanceof DrawControls, 'this is not DrawControls', this);
         console.assert(map instanceof DungeonMap, 'map is not DungeonMap', map);
+        console.assert(editableItemsLayer instanceof L.FeatureGroup, 'editableItemsLayer is not L.FeatureGroup', editableItemsLayer);
 
         let self = this;
 
@@ -99,18 +100,52 @@ class DrawControls extends MapControl {
         this._attachHotkeys();
     }
 
+    _getHotkeys() {
+        return [{
+            hotkey: '1',
+            cssClass: 'leaflet-draw-draw-path',
+        }, {
+            hotkey: '2',
+            cssClass: 'leaflet-draw-draw-mapicon',
+        }, {
+            hotkey: '3',
+            cssClass: 'leaflet-draw-draw-brushline',
+        }, {
+            hotkey: '4',
+            cssClass: 'leaflet-draw-edit-edit',
+        }];
+    }
+
+    _findHotkeyByCssClass(cssClass) {
+        let result = null;
+
+        let hotkeys = this._getHotkeys();
+        for (let index in hotkeys) {
+            if (hotkeys.hasOwnProperty(index)) {
+                let hotkey = hotkeys[index];
+                if (hotkey.cssClass.includes(cssClass)) {
+                    result = hotkey.hotkey;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
     /**
      *
      * @protected
      */
     _attachHotkeys() {
-        this.map.hotkeys.attach('1', 'leaflet-draw-draw-path');
-        this.map.hotkeys.attach('2', 'leaflet-draw-draw-killzone');
-        this.map.hotkeys.attach('3', 'leaflet-draw-draw-mapicon');
-        this.map.hotkeys.attach('4', 'leaflet-draw-draw-brushline');
-        this.map.hotkeys.attach('5', 'leaflet-draw-edit-edit');
-        // Doesn't work, but we don't want it anyways jonsnow.jpg
-        // this.map.hotkeys.attach('6', 'leaflet-draw-edit-remove');
+        let hotkeys = this._getHotkeys();
+
+        for (let index in hotkeys) {
+            if (hotkeys.hasOwnProperty(index)) {
+                let hotkey = hotkeys[index];
+                this.map.hotkeys.attach(hotkey.hotkey, hotkey.cssClass);
+            }
+        }
     }
 
     /**
@@ -146,21 +181,21 @@ class DrawControls extends MapControl {
                     zIndexOffset: 1000,
                     faClass: 'fa-route',
                     title: 'Draw a path',
-                    hotkey: '1'
+                    hotkey: this._findHotkeyByCssClass('path')
                 },
-                killzone: {
-                    repeatMode: false,
-                    zIndexOffset: 1000,
-                    faClass: 'fa-bullseye',
-                    title: 'Draw a killzone',
-                    hotkey: '2'
-                },
+                // killzone: {
+                //     repeatMode: false,
+                //     zIndexOffset: 1000,
+                //     faClass: 'fa-bullseye',
+                //     title: 'Draw a killzone',
+                //     hotkey: this._findHotkeyByCssClass('killzone')
+                // },
                 mapicon: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-icons',
                     title: 'Create an icon',
-                    hotkey: '3'
+                    hotkey: this._findHotkeyByCssClass('icon')
                 },
                 brushline: false,
                 // Brushlines are added in a custom way since I'm using Pather for this
@@ -259,7 +294,7 @@ class DrawControls extends MapControl {
             title: lang.get('messages.brushline_title'),
         });
         $brushlineButton.html(
-            this._getButtonHtml('fa-paint-brush', lang.get('messages.brushline'), '4')
+            this._getButtonHtml('fa-paint-brush', lang.get('messages.brushline'), this._findHotkeyByCssClass('brushline'))
         );
         $brushlineButton.bind('click', function (clickEvent) {
             // Check if it's enabled now
@@ -321,7 +356,7 @@ class DrawControls extends MapControl {
         // Add custom content for the edit and remove buttons
         let $buttons = $editRouteControls.find('a');
         $buttons.attr('data-toggle', 'tooltip');
-        $($buttons[0]).html(this._getButtonHtml('fa-edit', lang.get('messages.edit'), '5'));
+        $($buttons[0]).html(this._getButtonHtml('fa-edit', lang.get('messages.edit'), this._findHotkeyByCssClass('edit')));
         $($buttons[1]).html(this._getButtonHtml('fa-trash', lang.get('messages.delete')));
 
         // Remove from the second row, inject in the first row
