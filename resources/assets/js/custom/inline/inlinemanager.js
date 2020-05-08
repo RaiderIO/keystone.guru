@@ -78,7 +78,6 @@ class InlineManager {
         this._inlineCode.push({path: bladePath, code: code});
 
         // If this inline code has dependencies..
-        console.log(typeof options.dependencies);
         if (typeof options.dependencies === 'object' && options.dependencies !== null) {
             // If the file we depend on did not have any dependencies yet..
             if (typeof this._dependencies[options.dependencies] !== 'object') {

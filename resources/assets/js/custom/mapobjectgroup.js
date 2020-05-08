@@ -58,7 +58,9 @@ class MapObjectGroup extends Signalable {
         // Remove any layers that were added before
         for (let i = 0; i < this.objects.length; i++) {
             // Remove all layers
-            this.manager.map.leafletMap.removeLayer(this.objects[i].layer);
+            if (this.objects[i].layer !== null) {
+                this.manager.map.leafletMap.removeLayer(this.objects[i].layer);
+            }
         }
     }
 
@@ -168,7 +170,7 @@ class MapObjectGroup extends Signalable {
     _onObjectDeleted(data) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if( data.context.layer !== null ){
+        if (data.context.layer !== null) {
             this.layerGroup.removeLayer(data.context.layer);
             // @TODO Should this be put in the dungeonmap instead?
             this.manager.map.leafletMap.removeLayer(data.context.layer);
