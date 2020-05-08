@@ -525,7 +525,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .enemy_icon_npc_mdt {
-    border-color: hotpink;
+    background-color: hotpink;
 }
 
 .enemy_icon_npc_enemy_forces.aggressive,
@@ -549,7 +549,13 @@ html, body, #map, #app, .wrapper {
 .enemy_icon_npc_enemy_forces.friendly,
 .enemy_icon_npc_class.friendly,
 .enemy_icon_npc_type.friendly {
-    border-color: #15c415 !important;
+    background-color: #15c415 !important;
+}
+
+.enemy_icon_npc_enemy_forces.awakened,
+.enemy_icon_npc_class.awakened,
+.enemy_icon_npc_type.awakened {
+    background-color: #9200c4 !important;
 }
 
 .aberration {
@@ -625,7 +631,7 @@ html, body, #map, #app, .wrapper {
     border-radius: 18px;
 }
 
-.awakened {
+.awakened_obelisk {
     background: white url('/images/enemymodifiers/awakened_obelisk.png') no-repeat -5px -11px !important;
     border: 1px black solid;
     border-radius: 18px;
