@@ -71,13 +71,13 @@ class EnemyVisualMain extends EnemyVisualIcon {
         );
 
         // Smaller MDT icons to make it easier to link them
-        if( this.enemyvisual.enemy.is_mdt ){
+        if (this.enemyvisual.enemy.is_mdt) {
             calculatedSize /= 2;
         }
 
+        let zoomLevelOffset = getState().getMapZoomLevel() * 2;
         return {
-            // 2px border; so + 4
-            iconSize: [calculatedSize + 4, calculatedSize + 4]
+            iconSize: [calculatedSize + zoomLevelOffset, calculatedSize + zoomLevelOffset]
         };
     }
 

@@ -291,9 +291,15 @@ class EnemyVisual extends Signalable {
             let template = Handlebars.templates['map_enemy_visual_template'];
 
             // Set a default color which may be overridden by any visuals
-            let data = {
-                outer_background_color: this.enemy.getKillZone() instanceof KillZone ? this.enemy.getKillZone().color : 'white'
-            };
+            let data = {};
+
+            // Either no border or a solid border in the color of the killzone
+            let border = `${getState().getMapZoomLevel()}px solid white`;
+            if( this.enemy.getKillZone() instanceof KillZone ){
+                border = `${getState().getMapZoomLevel()}px solid ${this.enemy.getKillZone().color}`;
+            }
+
+            data.outer_border = border;
 
             if ((this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) ||
                 (this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable())) {
