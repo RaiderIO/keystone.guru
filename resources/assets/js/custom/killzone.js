@@ -241,6 +241,7 @@ class KillZone extends MapObject {
 
         // Remove any enemies that we may have had
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
         // Copy enemies array as we're making changes in it by removing enemies
         let currentEnemies = [...this.enemies];
         $.each(currentEnemies, function (i, id) {
@@ -337,6 +338,12 @@ class KillZone extends MapObject {
      */
     redrawConnectionsToEnemies() {
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+
+        // Not drawing this killzone; our enemies are not on this floor
+        if (this.floor_id !== getState().getCurrentFloor().id) {
+            console.warn('Not drawing killzone; not on this floor!');
+            return;
+        }
 
         let self = this;
 
@@ -487,13 +494,6 @@ class KillZone extends MapObject {
         this.map.register('killzone:selectionchanged', this, this.redrawConnectionsToEnemies.bind(this));
         // When we have all data, redraw the connections. Not sooner or otherwise we may not have the enemies back yet
         this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
-            // The enemies data has been set, but not properly propagated to all enemies that they're attached to a killzone
-            // Couldn't do that because enemies may not have been loaded at that point. Now we're sure the enemies have been
-            // loaded so we can inject ourselves in the enemy
-            self.setEnemies(self.remoteEnemies);
-            // Clear it to save some memory I guess
-            self.remoteEnemies = null;
-
             // Hide the killzone layer when in preview mode
             if (self.map.options.noUI) {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);

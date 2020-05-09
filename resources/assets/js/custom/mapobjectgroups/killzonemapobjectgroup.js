@@ -69,7 +69,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             }
             // Restore the enemies, STILL NEED TO CALL SETENEMIES WHEN EVERYTHING'S DONE LOADING
             // Should be handled by the killzone itself
-            killzone.remoteEnemies = enemies;
+            killzone.setEnemies(enemies);
         }
 
         // We just downloaded the kill zone, it's synced alright!

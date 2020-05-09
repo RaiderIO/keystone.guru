@@ -69,17 +69,20 @@ class Enemy extends MapObject {
     _synced(event) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        // Synced, can now build the popup since we know our ID
-        this._rebuildPopup(event);
+        // Only if we should display this enemy
+        if (this.layer !== null) {
+            // Synced, can now build the popup since we know our ID
+            this._rebuildPopup(event);
 
-        // Create the visual now that we know all data to construct it properly
-        if (this.visual !== null) {
-            this.visual.cleanup();
+            // Create the visual now that we know all data to construct it properly
+            if (this.visual !== null) {
+                this.visual.cleanup();
+            }
+            this.visual = new EnemyVisual(this.map, this, this.layer);
+
+            // Recreate the tooltip
+            this.bindTooltip();
         }
-        this.visual = new EnemyVisual(this.map, this, this.layer);
-
-        // Recreate the tooltip
-        this.bindTooltip();
     }
 
     /**
@@ -119,10 +122,12 @@ class Enemy extends MapObject {
      */
     setPopupEnabled(enabled) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        if (enabled) {
-            this._rebuildPopup();
-        } else {
-            this.layer.unbindPopup();
+        if (this.layer !== null) {
+            if (enabled) {
+                this._rebuildPopup();
+            } else {
+                this.layer.unbindPopup();
+            }
         }
     }
 
@@ -138,18 +143,20 @@ class Enemy extends MapObject {
     bindTooltip() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        let text = '';
-        if (this.npc !== null) {
-            text = this.npc.name;
-        } else {
-            text = lang.get('messages.no_npc_found_label');
-        }
+        if (this.layer !== null) {
+            let text = '';
+            if (this.npc !== null) {
+                text = this.npc.name;
+            } else {
+                text = lang.get('messages.no_npc_found_label');
+            }
 
-        // Remove any previous tooltip
-        this.unbindTooltip();
-        this.layer.bindTooltip(text, {
-            direction: 'top'
-        });
+            // Remove any previous tooltip
+            this.unbindTooltip();
+            this.layer.bindTooltip(text, {
+                direction: 'top'
+            });
+        }
     }
 
     /**
@@ -273,7 +280,7 @@ class Enemy extends MapObject {
      * @returns {*}
      */
     isSelectable() {
-        return this.selectable;
+        return this.selectable && this.visual !== null;
     }
 
     /**
@@ -283,8 +290,10 @@ class Enemy extends MapObject {
     setSelectable(value) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.selectable = value;
-        // Refresh the icon
-        this.visual.refresh();
+        if (this.visual !== null) {
+            // Refresh the icon
+            this.visual.refresh();
+        }
     }
 
     /**

@@ -332,7 +332,7 @@ class APIDungeonRouteController extends Controller
         $fields = explode(',', $fields);
 
         // Show enemies or raw data when fetching enemy packs
-        $enemies = (int)$request->get('enemies', true) === 1;
+        $enemyPackEnemies = (int)$request->get('enemies', true) === 1;
         $teeming = (int)$request->get('teeming', false) === 1;
 
         // Start parsing
@@ -349,7 +349,7 @@ class APIDungeonRouteController extends Controller
 
             // Killzone
             if (in_array('killzone', $fields)) {
-                $result['killzone'] = $this->listKillzones($request->get('floor'), $publickey);
+                $result['killzone'] = $this->listKillzones($publickey);
             }
 
             // Brushline
@@ -359,25 +359,25 @@ class APIDungeonRouteController extends Controller
         }
 
         // Enemies
-        if (in_array('enemy', $fields)) {
-            $showMdtEnemies = false;
-            // Only admins are allowed to see this
-            if (Auth::check() && Auth::user()->hasRole('admin')) {
-                // Only fetch it now
-                $showMdtEnemies = (int)$request->get('show_mdt_enemies', 0) === 1;
-            }
-
-            $result['enemy'] = $this->listEnemies($request->get('floor'), $showMdtEnemies, $publickey);
-        }
+//        if (in_array('enemy', $fields)) {
+//            $showMdtEnemies = false;
+//            // Only admins are allowed to see this
+//            if (Auth::check() && Auth::user()->hasRole('admin')) {
+//                // Only fetch it now
+//                $showMdtEnemies = (int)$request->get('show_mdt_enemies', 0) === 1;
+//            }
+//
+//            $result['enemy'] = $this->listEnemies($request->get('floor'), $showMdtEnemies, $publickey);
+//        }
 
         // Enemy packs
         if (in_array('enemypack', $fields)) {
             // If logged in, and we're NOT an admin
             if (Auth::check() && !Auth::user()->hasRole('admin')) {
                 // Don't expose vertices
-                $enemies = true;
+                $enemyPackEnemies = true;
             }
-            $result['enemypack'] = $this->listEnemyPacks($request->get('floor'), $enemies, $teeming);
+            $result['enemypack'] = $this->listEnemyPacks($request->get('floor'), $enemyPackEnemies, $teeming);
         }
 
         // Enemy patrols

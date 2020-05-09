@@ -176,28 +176,29 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Fill the enemy list
         let npcs = [];
-        let enemyMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemies = getState().getEnemies();
+        // console.log(enemies, killZone.enemies);
         for (let i = 0; i < killZone.enemies.length; i++) {
             let enemyId = killZone.enemies[i];
-            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+            for (let j = 0; j < enemies.length; j++) {
+                let enemy = enemies[j];
+                // If enemy found and said enemy has an npc
+                if (enemy.id === enemyId && enemy.npc !== null) {
+                    // If not in our array, add it
+                    if (!npcs.hasOwnProperty(enemy.npc.id)) {
+                        npcs[enemy.npc.id] = {
+                            'npc': enemy.npc,
+                            'count': 0
+                        };
+                    }
 
-            // If enemy found and said enemy has an npc
-            if (enemy !== null && enemy.npc !== null) {
-                // If not in our array, add it
-                if (!npcs.hasOwnProperty(enemy.npc.id)) {
-                    npcs[enemy.npc.id] = {
-                        'npc': enemy.npc,
-                        'count': 0
-                    };
+                    npcs[enemy.npc.id].count++;
                 }
-
-                npcs[enemy.npc.id].count++;
             }
         }
 
         let $enemyList = $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_list`);
         $enemyList.children().remove();
-        console.log(npcs);
         for (let index in npcs) {
             if (npcs.hasOwnProperty(index)) {
                 let obj = npcs[index];
@@ -210,8 +211,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     'name': obj.npc.name,
                     'dangerous': obj.npc.dangerous === 1
                 }, getHandlebarsDefaultVariables());
-
-                console.log(data);
 
                 $enemyList.append($(template(data)));
             }
@@ -245,7 +244,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         });
         // If the killzone was deleted, get rid of our display too
         killZoneMapObjectGroup.register('object:deleted', this, function (killZoneDeletedEvent) {
-            let killZone = killZoneAddedEvent.data.object;
+            let killZone = killZoneDeletedEvent.data.object;
             // Add the killzone to our list
             self._removeKillZone(killZone);
             // Stop listening to changes in the killzone

@@ -89,20 +89,22 @@ if ($isAdmin) {
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
 
-    @include('common.general.statemanager', [
+    @include('common.general.statemanager', array_merge([
         'mapIconTypes' => \App\Models\MapIconType::all(),
         'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
+        'raidMarkers' => \App\Models\RaidMarker::all(),
+        'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
         'dungeonroute' => [
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,
             'enemyForces' => $routeEnemyForces
         ],
-    ])
+    ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, empty($routePublicKey) ? null : $routePublicKey)))
     <script>
         // Data of the dungeon(s) we're selecting in the map
         var dungeonData = {!! $dungeon !!};
         var isMapAdmin = {{ $isAdmin ? 'true' : 'false' }};
-        var factionsData = {!! \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get() !!};
+            {{--var factionsData = {!!  !!};--}}
 
         var dungeonMap;
 
@@ -118,43 +120,22 @@ if ($isAdmin) {
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
                 @php($i = 0)
-                @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
-                    <a class="map_faction_display_control map_controls_custom" href="#"
-                       data-faction="{{ strtolower($faction->name) }}"
+        @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
+            <a class="map_faction_display_control map_controls_custom" href="#"
+               data-faction="{{ strtolower($faction->name) }}"
                        title="{{ $faction->name }}">
                         <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                            style="width: 15px"></i>
                         <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
                              data-toggle="tooltip" title="{{ $faction->name }}"/>
                         @php($i++)
-                    </a>
-                @endforeach
-            </div>
-            <ul class="leaflet-draw-actions"></ul>
+            </a>
+@endforeach
         </div>
-    </script>
+        <ul class="leaflet-draw-actions"></ul>
+    </div>
 
-    @if(!$isAdmin)
-        <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
-            <div id="enemy_edit_popup_inner" class="popupCustom">
-                @php($raidMarkers = \App\Models\RaidMarker::all())
-                @for($i = 0; $i < $raidMarkers->count(); $i++)
-                    @php($raidMarker = $raidMarkers->get($i))
-                    @if($i % 4 === 0)
-                        <div class="row no-gutters">
-                            @endif
-                            <div class="enemy_raid_marker_icon enemy_raid_marker_icon_{{ $raidMarker->name }}"
-                                 data-name="{{ $raidMarker->name }}">
-                            </div>
-                            @if($i % 4 === 3)
-                        </div>
-                    @endif
-                @endfor
-                <div id="enemy_raid_marker_clear_@{{id}}" class="btn btn-warning col-12 mt-2"><i
-                            class="fa fa-times"></i> {{ __('Clear marker') }}</div>
-            </div>
-        </script>
-    @endif
+    </script>
 @endsection
 
 <div id="map" class="virtual-tour-element"

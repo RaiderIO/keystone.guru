@@ -30,11 +30,17 @@ class APIEnemyController extends Controller
             $showMdtEnemies = intval($request->get('show_mdt_enemies', 0)) === 1;
         }
 
-        return $this->listEnemies(
+        $enemies = $this->listEnemies(
             $request->get('floorId'),
             $showMdtEnemies,
             $request->get('dungeonroute', null)
         );
+
+        if( $enemies === false ){
+            return response('Not found', Http::NOT_FOUND);
+        } else {
+            return $enemies;
+        }
     }
 
     /**

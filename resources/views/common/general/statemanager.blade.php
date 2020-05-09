@@ -7,6 +7,12 @@
     _stateManager.setDungeonRoute({!! new \Illuminate\Support\Collection($dungeonroute) !!});
     _stateManager.setMapIconTypes({!! $mapIconTypes !!});
     _stateManager.setClassColors({!! $classColors !!});
+    _stateManager.setRawEnemies({!! $enemies !!});
+    _stateManager.setRaidMarkers({!! $raidMarkers !!});
+    _stateManager.setFactions({!! $factions !!});
+    @isset($mdtEnemies)
+        _stateManager.setMdtEnemies({!! $mdtEnemies !!});
+     @endisset
 
     /**
      * Get the current state manager of the app.

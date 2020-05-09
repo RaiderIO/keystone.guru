@@ -209,6 +209,7 @@ function defaultAjaxErrorFn(xhr, textStatus, errorThrown)
  */
 function refreshTooltips() {
     if (!isMobile()) {
+        $('.tooltip').remove();
         $('[data-toggle="tooltip"]').tooltip('_fixTitle').tooltip();
     }
 }

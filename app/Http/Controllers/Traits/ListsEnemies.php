@@ -8,9 +8,14 @@
 
 namespace App\Http\Controllers\Traits;
 
-use App\Models\Floor;
+use App\Logic\MDT\Data\MDTDungeon;
+use App\Models\Dungeon;
 use App\Models\NpcClass;
 use App\Models\NpcType;
+use Error;
+use Exception;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
@@ -21,20 +26,20 @@ trait ListsEnemies
     /**
      * Lists all enemies for a specific floor.
      *
-     * @param $floorId
+     * @param $dungeonId
      * @param bool $showMdtEnemies
      * @param string|null $publicKey
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return array|bool
      */
-    function listEnemies($floorId, $showMdtEnemies = false, $publicKey = null)
+    function listEnemies($dungeonId, $showMdtEnemies = false, $publicKey = null)
     {
         $dungeonRoute = null;
         // If dungeon route was set, fetch the markers as well
         if ($publicKey !== null) {
             try {
                 $dungeonRoute = $this->_getDungeonRouteFromPublicKey($publicKey, false);
-            } catch (\Exception $ex) {
-                return response('Not found', Http::NOT_FOUND);
+            } catch (Exception $ex) {
+                return false;
             }
         }
 
@@ -47,11 +52,12 @@ trait ListsEnemies
                          on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
                             `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
                        left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
-                where `enemies`.`floor_id` = :floorId
+                       left join `floors` on enemies.floor_id = floors.id
+                where `floors`.dungeon_id = :dungeonId
                 group by `enemies`.`id`;
                 ', $params = [
             'routeId' => isset($dungeonRoute) ? $dungeonRoute->id : -1,
-            'floorId' => $floorId
+            'dungeonId' => $dungeonId
         ]);
 
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
@@ -65,14 +71,12 @@ trait ListsEnemies
         // Only if we should show MDT enemies
         $mdtEnemies = [];
         if ($showMdtEnemies) {
-            /** @var Floor $floor */
-            $floor = Floor::find($floorId);
-
             try {
-                $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($floor->dungeon->name))->getClonesAsEnemies($floor);
+                $dungeon = Dungeon::findOrFail($dungeonId);
+                $mdtEnemies = (new MDTDungeon($dungeon->name))->getClonesAsEnemies($dungeon->floors);
             } // Thrown when Lua hasn't been configured
-            catch (\Error $ex) {
-
+            catch (Error $ex) {
+                return false;
             }
         }
 
@@ -101,6 +105,6 @@ trait ListsEnemies
             unset($enemy->npc_id);
         }
 
-        return ['enemies' => $result, 'mdt_enemies' => $mdtEnemies];
+        return ['enemies' => collect($result), 'mdt_enemies' => collect($mdtEnemies)];
     }
 }

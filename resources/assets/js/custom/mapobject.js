@@ -14,7 +14,7 @@ class MapObject extends Signalable {
         this.synced = false;
         /** @type DungeonMap */
         this.map = map;
-        /** @type L.Layer */
+        /** @type L.Layer|null */
         this.layer = layer;
 
         this.id = 0;

@@ -25,8 +25,10 @@ class MapObjectGroup extends Signalable {
                 self.manager.map.leafletMap.removeLayer(self.layerGroup);
             }
 
-            for (let i = self.objects.length - 1; i >= 0; i--) {
-                self.objects[i].cleanup();
+            while (self.objects.length > 0) {
+                let obj = self.objects[0];
+                obj.localDelete();
+                obj.cleanup();
             }
             self.objects = [];
         });
@@ -187,6 +189,9 @@ class MapObjectGroup extends Signalable {
             }
         }
         this.objects = newObjects;
+
+        // Fire the event
+        this.signal('object:deleted', {object: object, objectgroup: this});
     }
 
     /**

@@ -16,6 +16,12 @@ class StateManager extends Signalable {
         // List of static arrays
         this.mapIconTypes = [];
         this.classColors = [];
+        this.enemies = [];
+        this.rawEnemies = [];
+        this.mdtEnemies = [];
+        this.factions = [];
+        this.raidMarkers = [];
+
         // Bit of a hack? But for now best solution
         this.unknownMapIconId = 1;
         // The map icon as found using above ID once the list of map icons is known
@@ -26,7 +32,7 @@ class StateManager extends Signalable {
      * Sets the dungeon route that we're currently editing (may be null)
      * @param dungeonRoute
      */
-    setDungeonRoute(dungeonRoute){
+    setDungeonRoute(dungeonRoute) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         console.assert(dungeonRoute instanceof Object, 'dungeonRoute is not an Object', dungeonRoute);
 
@@ -47,8 +53,52 @@ class StateManager extends Signalable {
         this.unknownMapIcon = this.getMapIconType(this.unknownMapIconId);
     }
 
-    setClassColors(classColors){
+    /**
+     * Sets the class colors.
+     * @param classColors
+     */
+    setClassColors(classColors) {
         this.classColors = classColors;
+    }
+
+    /**
+     * Sets the enemies.
+     * @param enemies
+     */
+    setEnemies(enemies) {
+        this.enemies = enemies;
+    }
+
+    /**
+     * Sets the raw enemies (not converted to Enemy classes yet; pure objects)
+     * @param rawEnemies
+     */
+    setRawEnemies(rawEnemies){
+        this.rawEnemies = rawEnemies;
+    }
+
+    /**
+     * Sets the MDT enemies.
+     * @param mdtEnemies
+     */
+    setMdtEnemies(mdtEnemies) {
+        this.mdtEnemies = mdtEnemies;
+    }
+
+    /**
+     * Sets the raid markers.
+     * @param raidMarkers
+     */
+    setRaidMarkers(raidMarkers) {
+        this.raidMarkers = raidMarkers;
+    }
+
+    /**
+     *
+     * @param factions
+     */
+    setFactions(factions) {
+        this.factions = factions;
     }
 
     /**
@@ -144,7 +194,7 @@ class StateManager extends Signalable {
      * Get the dungeon route we may or may not be editing at this time.
      * @returns {null}
      */
-    getDungeonRoute(){
+    getDungeonRoute() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.dungeonRoute;
     }
@@ -165,6 +215,91 @@ class StateManager extends Signalable {
     getClassColors() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.classColors;
+    }
+
+    /**
+     * Get a list of all map icon types.
+     * @returns {[]|*[]}
+     */
+    getMapIconTypes() {
+        return this.mapIconTypes;
+    }
+
+    /**
+     * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
+     * @param mapIconTypeId
+     * @returns {null}
+     */
+    getMapIconType(mapIconTypeId) {
+        let mapIconType = this.unknownMapIcon;
+        for (let i = 0; i < this.mapIconTypes.length; i++) {
+            if (this.mapIconTypes[i].id === mapIconTypeId) {
+                mapIconType = this.mapIconTypes[i];
+                break;
+            }
+        }
+        return mapIconType;
+    }
+
+    /**
+     * Get all the enemies of this dungeon.
+     * @returns {[]}
+     */
+    getEnemies() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.enemies;
+    }
+
+    /**
+     * Find an enemy by an ID
+     * @param enemyId
+     * @returns {null}
+     */
+    getEnemyById(enemyId){
+        let enemy = null;
+        for (let i = 0; i < this.enemies.length; i++) {
+            if (this.enemies[i].id === enemyId) {
+                enemy = this.enemies[i];
+                break;
+            }
+        }
+        return enemy;
+    }
+
+    /**
+     * Get all the raw enemies of this dungeon.
+     * @returns {[]}
+     */
+    getRawEnemies() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.rawEnemies;
+    }
+
+    /**
+     * Get all the mdt enemies of this dungeon.
+     * @returns {[]}
+     */
+    getMdtEnemies() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.mdtEnemies;
+    }
+
+    /**
+     * Get all factions.
+     * @returns {[]}
+     */
+    getFactions() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.factions;
+    }
+
+    /**
+     * Get all raid markers.
+     * @returns {[]}
+     */
+    getRaidMarkers() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.raidMarkers;
     }
 
     /**
@@ -203,30 +338,6 @@ class StateManager extends Signalable {
      */
     getUnknownMapIcon() {
         return this.unknownMapIcon;
-    }
-
-    /**
-     * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
-     * @param mapIconTypeId
-     * @returns {null}
-     */
-    getMapIconType(mapIconTypeId) {
-        let mapIconType = this.unknownMapIcon;
-        for (let i = 0; i < this.mapIconTypes.length; i++) {
-            if (this.mapIconTypes[i].id === mapIconTypeId) {
-                mapIconType = this.mapIconTypes[i];
-                break;
-            }
-        }
-        return mapIconType;
-    }
-
-    /**
-     * Get a list of all map icon types.
-     * @returns {[]|*[]}
-     */
-    getMapIconTypes(){
-        return this.mapIconTypes;
     }
 
 }
