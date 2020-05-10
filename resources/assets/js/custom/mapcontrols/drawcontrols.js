@@ -123,7 +123,7 @@ class DrawControls extends MapControl {
         for (let index in hotkeys) {
             if (hotkeys.hasOwnProperty(index)) {
                 let hotkey = hotkeys[index];
-                if (hotkey.cssClass.includes(cssClass)) {
+                if (hotkey.cssClass.endsWith(cssClass)) {
                     result = hotkey.hotkey;
                     break;
                 }

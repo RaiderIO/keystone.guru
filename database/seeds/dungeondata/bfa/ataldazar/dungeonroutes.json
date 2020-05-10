@@ -240,13 +240,6 @@
             },
             {
                 "floor_id": 41,
-                "color": "#5595ff",
-                "lat": -87.16,
-                "lng": 263.91,
-                "killzoneenemies": []
-            },
-            {
-                "floor_id": 41,
                 "color": "#55e6ff",
                 "lat": -80.75,
                 "lng": 254.31,

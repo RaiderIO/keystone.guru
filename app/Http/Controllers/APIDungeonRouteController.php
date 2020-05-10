@@ -332,7 +332,7 @@ class APIDungeonRouteController extends Controller
         $fields = explode(',', $fields);
 
         // Show enemies or raw data when fetching enemy packs
-        $enemyPackEnemies = (int)$request->get('enemies', true) === 1;
+        $enemyPackEnemies = (int)$request->get('enemyPackEnemies', true) === 1;
         $teeming = (int)$request->get('teeming', false) === 1;
 
         // Start parsing
