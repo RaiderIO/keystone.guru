@@ -124,6 +124,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 // Start drawing a killzone
                 $('.leaflet-draw-draw-killzone')[0].click();
             } else {
+                // @TODO This entire piece of code is hacky, should be done differently eventually
                 getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
                 getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
 
@@ -131,13 +132,14 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 // It's been removed; unset it
                 killZoneMapObjectGroup.setLayerToMapObject(null, killZone);
 
+                killZone.floor_id = getState().getCurrentFloor().id;
                 // Update its visuals
                 killZone.redrawConnectionsToEnemies();
                 killZone.save();
             }
         });
         // If we have a killzone layer
-        if (killZone.layer !== null) {
+        if (killZone.isKillZoneVisible()) {
             // Was inactive (always starts inactive), is active now
             $hasKillZone.button('toggle');
         }
@@ -164,7 +166,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             $('#map_killzonessidebar_killzone_' + killZone.id).remove();
 
             // Bit hacky?
-            if (killZone.layer !== null) {
+            if (killZone.isKillZoneVisible()) {
                 getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
                 getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
             }

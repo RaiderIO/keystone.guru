@@ -13,11 +13,12 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_ENEMY_PATROL,
     MAP_OBJECT_GROUP_ENEMY_PACK,
     MAP_OBJECT_GROUP_PATH,
-    MAP_OBJECT_GROUP_KILLZONE,
+    MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
     MAP_OBJECT_GROUP_BRUSHLINE,
     MAP_OBJECT_GROUP_MAPICON,
     MAP_OBJECT_GROUP_DUNGEON_START_MARKER,
-    MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
+    // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
+    MAP_OBJECT_GROUP_KILLZONE
 ];
 
 class MapObjectGroupManager extends Signalable {
@@ -127,16 +128,9 @@ class MapObjectGroupManager extends Signalable {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
 
         let self = this;
-
-        // @TODO This should probably be different but atm I can't think of a better way
-        let publicKey = getState().getDungeonRoute().publicKey;
-        if (isMapAdmin) {
-            publicKey = 'admin';
-        }
-
         $.ajax({
             type: 'GET',
-            url: '/ajax/' + publicKey + '/data',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/data',
             dataType: 'json',
             data: {
                 fields: this._getLoadedNames().join(','),

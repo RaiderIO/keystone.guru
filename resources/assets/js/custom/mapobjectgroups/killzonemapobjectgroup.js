@@ -43,7 +43,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         // Only create a new one if it's new for us
         if (killzone === null) {
             let layer = null;
-            if (remoteMapObject.lat !== null && remoteMapObject.lng !== null) {
+            // Only if it was set, and if it was on this floor
+            if (remoteMapObject.lat !== null && remoteMapObject.lng !== null &&
+                remoteMapObject.floor_id === getState().getCurrentFloor().id) {
                 layer = new LeafletKillZoneMarker();
                 layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
             }

@@ -8,7 +8,7 @@ $isAdmin = isset($admin) && $admin;
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? true : false;
-$routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
+$routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
 // Set the key to 'try' if try mode is enabled
 $tryMode = isset($tryMode) && $tryMode ? true : false;
 // Set the enemy forces of the current route. May not be set if just editing the route from admin
@@ -99,7 +99,7 @@ if ($isAdmin) {
             'faction' => $routeFaction,
             'enemyForces' => $routeEnemyForces
         ],
-    ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, empty($routePublicKey) ? null : $routePublicKey)))
+    ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>
         // Data of the dungeon(s) we're selecting in the map
         var dungeonData = {!! $dungeon !!};

@@ -150,6 +150,15 @@ class KillZone extends MapObject {
     }
 
     /**
+     * Checks if this killzone should be visible or not.
+     * @returns {boolean|boolean}
+     */
+    isKillZoneVisible() {
+        console.log(this.layer, getState().getCurrentFloor().id, this.floor_id);
+        return this.layer !== null && getState().getCurrentFloor().id === this.floor_id;
+    }
+
+    /**
      * Get the enemy forces that will be added if this enemy pack is killed.
      */
     getEnemyForces() {
@@ -339,12 +348,6 @@ class KillZone extends MapObject {
     redrawConnectionsToEnemies() {
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
-        // Not drawing this killzone; our enemies are not on this floor
-        if (this.floor_id !== getState().getCurrentFloor().id) {
-            console.warn('Not drawing killzone; not on this floor!');
-            return;
-        }
-
         let self = this;
 
         this.removeExistingConnectionsToEnemies();
@@ -358,6 +361,7 @@ class KillZone extends MapObject {
         // Add connections from each enemy to our location
         let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         let latLngs = [];
+        let otherFloorsWithEnemies = [];
         $.each(this.enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
@@ -378,6 +382,10 @@ class KillZone extends MapObject {
                         self.enemyConnectionsLayerGroup.addLayer(layer);
                     }
                 }
+                // The enemy was not on this floor; add its floor to the 'add floor switch as part of pack' list
+                else if (!otherFloorsWithEnemies.includes(enemy.floor_id)) {
+                    otherFloorsWithEnemies.push(enemy.floor_id);
+                }
             } else {
                 console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + 'on floor ' + self.floor_id + ', ' +
                     'cannot draw connection, this enemy was probably removed during a migration?');
@@ -386,10 +394,57 @@ class KillZone extends MapObject {
 
 
         // Alpha shapes
-        if (this.layer !== null) {
+        if (this.isKillZoneVisible()) {
             let selfLatLng = this.layer.getLatLng();
             latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
         }
+
+        // If there are other floors with enemies..
+        if (otherFloorsWithEnemies.length > 0) {
+            let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+            $.each(otherFloorsWithEnemies, function (i, floorId) {
+                // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
+                // In the case of Waycrest, we want to select the closest floor switch marker, not the 1st index which
+                // may be really far away
+                let floorSwitchMarkerCandidates = [];
+                $.each(floorSwitchMapObjectGroup.objects, function (j, floorSwitchMapObject) {
+                    console.log(floorSwitchMapObject.target_floor_id, floorId);
+                    if (floorSwitchMapObject.target_floor_id === floorId) {
+                        floorSwitchMarkerCandidates.push(floorSwitchMapObject);
+                    }
+                });
+
+                console.assert(floorSwitchMarkerCandidates.length > 0, 'floorSwitchMarkerCandidates.length is <= 0', self);
+
+                // https://stackoverflow.com/questions/22796520/finding-the-center-of-leaflet-polygon
+                let getCentroid = function (arr) {
+                    return arr.reduce(function (x, y) {
+                        return [x[0] + y[0] / arr.length, x[1] + y[1] / arr.length]
+                    }, [0, 0])
+                }
+                // Calculate a rough center of our bounds
+                let centeroid = getCentroid(latLngs);
+                let ourCenterLatLng = L.latLng(centeroid[0], centeroid[1]);
+                let closestFloorSwitchMarker = null;
+                let closestDistance = 9999999;
+                // Find the closest floor switch marker
+                $.each(floorSwitchMarkerCandidates, function (j, floorSwitchMapObject) {
+                    let distance = floorSwitchMapObject.layer.getLatLng().distanceTo(ourCenterLatLng);
+                    if (closestDistance > distance) {
+                        closestDistance = distance;
+                        closestFloorSwitchMarker = floorSwitchMapObject;
+                    }
+                });
+                console.assert(closestFloorSwitchMarker instanceof DungeonFloorSwitchMarker,
+                    'closestFloorSwitchMarker is not a DungeonFloorSwitchMarker', closestFloorSwitchMarker);
+                console.log(centeroid, ourCenterLatLng, closestFloorSwitchMarker, closestDistance);
+
+                // Add its location to the list!
+                let latLng = closestFloorSwitchMarker.layer.getLatLng();
+                latLngs.push([latLng.lat, latLng.lng]);
+            });
+        }
+
         let p = hull(latLngs, 100);
 
         // Only if we can actually make an offset
@@ -410,42 +465,42 @@ class KillZone extends MapObject {
             this.enemyConnectionsLayerGroup.addLayer(polygon);
 
             // Only add popup to the killzone
-            if (this.isEditable() && this.map.options.edit) {
-                // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
-                // This also cannot be a private function since that'll apparently give different signatures as well.
-                let popupOpenFn = function (event) {
-                    console.assert(self instanceof KillZone, 'this was not a KillZone', self);
-                    // Give a default color if it was not set
-                    let color = self.color === '' ? c.map.killzone.polygonOptions.color : self.color;
-                    $('#map_killzone_edit_popup_color_' + self.id).val(color);
-
-                    // Prevent multiple binds to click
-                    let $submitBtn = $('#map_killzone_edit_popup_submit_' + self.id);
-
-                    $submitBtn.unbind('click');
-                    $submitBtn.bind('click', function _popupSubmitClicked() {
-                        console.assert(self instanceof KillZone, 'this was not a KillZone', self);
-                        self.color = $('#map_killzone_edit_popup_color_' + self.id).val();
-
-                        self.edit();
-                    });
-                };
-
-                let template = Handlebars.templates['map_killzone_edit_popup_template'];
-
-                let data = $.extend({id: this.id}, getHandlebarsDefaultVariables());
-
-                // Build the status bar from the template
-                polygon.unbindPopup();
-                polygon.bindPopup(template(data), {
-                    'maxWidth': '400',
-                    'minWidth': '300',
-                    'className': 'popupCustom'
-                });
-
-                polygon.off('popupopen');
-                polygon.on('popupopen', popupOpenFn);
-            }
+            // if (this.isEditable() && this.map.options.edit) {
+            //     // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
+            //     // This also cannot be a private function since that'll apparently give different signatures as well.
+            //     let popupOpenFn = function (event) {
+            //         console.assert(self instanceof KillZone, 'this was not a KillZone', self);
+            //         // Give a default color if it was not set
+            //         let color = self.color === '' ? c.map.killzone.polygonOptions.color : self.color;
+            //         $('#map_killzone_edit_popup_color_' + self.id).val(color);
+            //
+            //         // Prevent multiple binds to click
+            //         let $submitBtn = $('#map_killzone_edit_popup_submit_' + self.id);
+            //
+            //         $submitBtn.unbind('click');
+            //         $submitBtn.bind('click', function _popupSubmitClicked() {
+            //             console.assert(self instanceof KillZone, 'this was not a KillZone', self);
+            //             self.color = $('#map_killzone_edit_popup_color_' + self.id).val();
+            //
+            //             self.edit();
+            //         });
+            //     };
+            //
+            //     let template = Handlebars.templates['map_killzone_edit_popup_template'];
+            //
+            //     let data = $.extend({id: this.id}, getHandlebarsDefaultVariables());
+            //
+            //     // Build the status bar from the template
+            //     polygon.unbindPopup();
+            //     polygon.bindPopup(template(data), {
+            //         'maxWidth': '400',
+            //         'minWidth': '300',
+            //         'className': 'popupCustom'
+            //     });
+            //
+            //     polygon.off('popupopen');
+            //     polygon.on('popupopen', popupOpenFn);
+            // }
         }
     }
 

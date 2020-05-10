@@ -437,10 +437,12 @@ class AdminEnemy extends Enemy {
         }
 
         // Remove any previous tooltip
-        this.unbindTooltip();
-        this.layer.bindTooltip(template(data), {
-            direction: 'top'
-        });
+        if (this.layer !== null) {
+            this.unbindTooltip();
+            this.layer.bindTooltip(template(data), {
+                direction: 'top'
+            });
+        }
     }
 
     onPopupInit() {
