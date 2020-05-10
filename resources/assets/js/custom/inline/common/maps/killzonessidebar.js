@@ -112,6 +112,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index', $($(this.options.killZonesContainerSelector).children()).length);
         $(`#map_killzonessidebar_killzone_${killZone.id} .selectable`).bind('click', this._selectKillZone);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_expand`).css('background-color', killZone.color);
         $(`#map_killzonessidebar_killzone_${killZone.id}_color`).bind('click', function () {
             self._colorPickers[killZone.id].show();
         });

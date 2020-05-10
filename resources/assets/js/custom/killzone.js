@@ -362,19 +362,21 @@ class KillZone extends MapObject {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
             if (enemy !== null) {
-                let latLng = enemy.layer.getLatLng();
-                latLngs.push([latLng.lat, latLng.lng]);
+                if (enemy.layer !== null) {
+                    let latLng = enemy.layer.getLatLng();
+                    latLngs.push([latLng.lat, latLng.lng]);
 
-                // Draw lines to self if killzone mode is enabled
-                if (self.map.currentSelectModeKillZone === self) {
-                    let layer = L.polyline([
-                        latLng,
-                        self.layer.getLatLng()
-                    ], c.map.killzone.polylineOptions);
-                    // do not prevent clicking on anything else
-                    self.enemyConnectionsLayerGroup.setZIndex(-1000);
+                    // Draw lines to self if killzone mode is enabled
+                    if (self.map.currentSelectModeKillZone === self) {
+                        let layer = L.polyline([
+                            latLng,
+                            self.layer.getLatLng()
+                        ], c.map.killzone.polylineOptions);
+                        // do not prevent clicking on anything else
+                        self.enemyConnectionsLayerGroup.setZIndex(-1000);
 
-                    self.enemyConnectionsLayerGroup.addLayer(layer);
+                        self.enemyConnectionsLayerGroup.addLayer(layer);
+                    }
                 }
             } else {
                 console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + 'on floor ' + self.floor_id + ', ' +
