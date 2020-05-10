@@ -5,10 +5,10 @@ $(function () {
                 enabled: this.options.path,
                 handler: new L.Draw.Path(map, this.options.path),
                 title: this.options.path.title
-                // }, {
-                //     enabled: this.options.killzone,
-                //     handler: new L.Draw.KillZone(map, this.options.killzone),
-                //     title: this.options.killzone.title
+            }, {
+                enabled: this.options.killzone,
+                handler: new L.Draw.KillZone(map, this.options.killzone),
+                title: this.options.killzone.title
             }, {
                 enabled: this.options.mapicon,
                 handler: new L.Draw.MapIcon(map, this.options.mapicon),
@@ -183,13 +183,13 @@ class DrawControls extends MapControl {
                     title: 'Draw a path',
                     hotkey: this._findHotkeyByCssClass('path')
                 },
-                // killzone: {
-                //     repeatMode: false,
-                //     zIndexOffset: 1000,
-                //     faClass: 'fa-bullseye',
-                //     title: 'Draw a killzone',
-                //     hotkey: this._findHotkeyByCssClass('killzone')
-                // },
+                killzone: {
+                    repeatMode: false,
+                    zIndexOffset: 1000,
+                    cssClass: 'd-none',
+                    faClass: 'fa-bullseye',
+                    title: 'Draw a killzone'
+                },
                 mapicon: {
                     repeatMode: false,
                     zIndexOffset: 1000,
@@ -316,7 +316,7 @@ class DrawControls extends MapControl {
         $buttonContainer.append($brushlineButton);
 
 
-        // // Cancel button container
+        // Cancel button container
         let $drawActions = $('<ul>', {
             class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom col',
             style: 'top: 7px;'
@@ -431,9 +431,14 @@ class DrawControls extends MapControl {
                 let option = this.drawControlOptions.draw[optionName];
                 if (option.hasOwnProperty('faClass')) {
                     // Set the FA icon and remove the background image that was initially there
-                    $(".leaflet-draw-draw-" + optionName)
+                    let $option = $('.leaflet-draw-draw-' + optionName)
                         .html(this._getButtonHtml(option.faClass, lang.get('messages.' + optionName), option.hotkey))
                         .css('background-image', 'none');
+
+                    // Add any css class that may or may not have been set
+                    if (typeof option.cssClass !== 'undefined') {
+                        $option.addClass(option.cssClass);
+                    }
                 }
             }
         }

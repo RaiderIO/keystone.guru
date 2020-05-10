@@ -116,6 +116,31 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $(`#map_killzonessidebar_killzone_${killZone.id}_color`).bind('click', function () {
             self._colorPickers[killZone.id].show();
         });
+        let $hasKillZone = $(`#map_killzonessidebar_killzone_${killZone.id}_has_killzone`).bind('click', function () {
+            // Inject the selectable in the _selectKillZone call to simulate selecting the actual killzone
+            self._selectKillZone.call($(`#map_killzonessidebar_killzone_${killZone.id} .selectable`));
+
+            if (killZone.layer === null) {
+                // Start drawing a killzone
+                $('.leaflet-draw-draw-killzone')[0].click();
+            } else {
+                getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
+                getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
+
+                let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+                // It's been removed; unset it
+                killZoneMapObjectGroup.setLayerToMapObject(null, killZone);
+
+                // Update its visuals
+                killZone.redrawConnectionsToEnemies();
+                killZone.save();
+            }
+        });
+        // If we have a killzone layer
+        if (killZone.layer !== null) {
+            // Was inactive (always starts inactive), is active now
+            $hasKillZone.button('toggle');
+        }
         $(`#map_killzonessidebar_killzone_${killZone.id}_delete`).bind('click', this._deleteKillZone);
         this._colorPickers[killZone.id] = this._initColorPicker(killZone);
         // Small hack to get it to look better

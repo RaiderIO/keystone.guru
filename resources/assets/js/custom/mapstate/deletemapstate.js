@@ -40,7 +40,9 @@ class DeleteMapState extends MapState {
             if (mapObjectGroup.objects.hasOwnProperty(index)) {
                 let enemy = mapObjectGroup.objects[index];
                 // Refresh
-                enemy.visual.refresh();
+                if( enemy.visual !== null ) {
+                    enemy.visual.refresh();
+                }
             }
         }
     }

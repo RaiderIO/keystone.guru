@@ -268,6 +268,28 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Sets a layer to an existing map object.
+     * @param layer
+     * @param mapObject
+     */
+    setLayerToMapObject(layer, mapObject) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+        console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
+
+        if (layer !== null) {
+            mapObject.layer = layer;
+            this.layerGroup.addLayer(mapObject.layer);
+            mapObject.onLayerInit();
+        }
+        // User wants to unset the mapObject's layer, remove its references
+        else if (mapObject.layer !== null) {
+            this.layerGroup.removeLayer(mapObject.layer);
+            // Set to null
+            mapObject.layer = layer;
+        }
+    }
+
+    /**
      *
      * @param layer L.Layer
      * @param options Object
@@ -276,18 +298,14 @@ class MapObjectGroup extends Signalable {
     createNew(layer, options) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        let object = this._createObject(layer, options);
-        this.objects.push(object);
-        if (layer !== null) {
-            this.layerGroup.addLayer(layer);
-            object.onLayerInit();
-        }
+        let mapObject = this._createObject(layer, options);
+        this.objects.push(mapObject);
+        this.setLayerToMapObject(layer, mapObject);
 
+        mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
+        mapObject.register('synced', this, (this._onObjectSynced).bind(this));
 
-        object.register('object:deleted', this, (this._onObjectDeleted).bind(this));
-        object.register('synced', this, (this._onObjectSynced).bind(this));
-
-        return object;
+        return mapObject;
     }
 
     /**

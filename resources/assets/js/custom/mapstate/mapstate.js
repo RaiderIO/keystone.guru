@@ -8,15 +8,15 @@ class MapState extends Signalable {
         this._stopped = false;
     }
 
-    start(){
+    start() {
         console.assert(this instanceof MapState, 'this is not a MapState', this);
+        console.warn('Starting MapState ' + this.constructor.name);
         this._started = true;
-
     }
 
     stop() {
         console.assert(this instanceof MapState, 'this is not a MapState', this);
-
+        console.warn('Stopping MapState ' + this.constructor.name);
         this._stopped = true;
     }
 

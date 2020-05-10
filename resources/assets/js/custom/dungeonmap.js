@@ -167,7 +167,7 @@ class DungeonMap extends Signalable {
         this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
             self.toolbarActive = true;
             // If we were doing anything, we're no longer doing it
-            self.setMapState(null);
+            // self.setMapState(null);
         });
         this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
             self.toolbarActive = false;
@@ -191,9 +191,21 @@ class DungeonMap extends Signalable {
             // Find the corresponding map object group
             let mapObjectGroup = self.mapObjectGroupManager.getByName(event.layerType);
             if (mapObjectGroup !== false) {
-                let object = mapObjectGroup.createNew(event.layer);
+                let mapObject;
+                // Catch creating a KillZone - we want to add a layer to an existing KillZone, not create a new KillZone object
+                if (mapObjectGroup instanceof KillZoneMapObjectGroup) {
+                    let mapState = self.getMapState();
+                    console.assert(mapState instanceof KillZoneEnemySelection, 'MapState was not in KillZoneEnemySelection!', mapState);
+                    // Get the killzone that we should add this layer to
+                    mapObject = mapState.getMapObject();
+                    console.assert(mapObject instanceof KillZone, 'object is not a KillZone!', mapObject);
+                    // Apply the layer to the killzone
+                    mapObjectGroup.setLayerToMapObject(event.layer, mapObject);
+                } else {
+                    mapObject = mapObjectGroup.createNew(event.layer);
+                }
                 // Save it to server instantly, manually saving is meh
-                object.save();
+                mapObject.save();
             } else {
                 console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
             }
@@ -432,10 +444,12 @@ class DungeonMap extends Signalable {
         let result = false;
         for (let i = 0; i < this.mapObjects.length; i++) {
             let mapObject = this.mapObjects[i];
-            let popup = mapObject.layer.getPopup();
-            if (typeof popup !== 'undefined' && popup !== null && popup.isOpen()) {
-                result = true;
-                break;
+            if (mapObject.layer !== null) {
+                let popup = mapObject.layer.getPopup();
+                if (typeof popup !== 'undefined' && popup !== null && popup.isOpen()) {
+                    result = true;
+                    break;
+                }
             }
         }
         return result;
@@ -622,11 +636,13 @@ class DungeonMap extends Signalable {
             //  When enabled, add to the map
             if (enabled) {
                 this.setMapState(new PatherMapState(this));
-            } else {
-                this.setMapState(null);
+                this.signal('map:pathertoggled', {enabled: enabled});
             }
-
-            this.signal('map:pathertoggled', {enabled: enabled});
+            // Only disable it when we're actively in the pather map state
+            else if (this.getMapState() instanceof PatherMapState) {
+                this.setMapState(null);
+                this.signal('map:pathertoggled', {enabled: enabled});
+            }
         }
     }
 

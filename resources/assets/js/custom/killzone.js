@@ -521,31 +521,6 @@ class KillZone extends MapObject {
         this.register('synced', this, function (event) {
             // Restore the connections to our enemies
             self.redrawConnectionsToEnemies();
-
-            // let customPopupHtml = $("#killzone_edit_popup_template").html();
-            // // Remove template so our
-            // let template = Handlebars.compile(customPopupHtml);
-            //
-            // let data = {id: self.id};
-            //
-            // // Build the status bar from the template
-            // customPopupHtml = template(data);
-            //
-            // let customOptions = {
-            //     'maxWidth': '400',
-            //     'minWidth': '300',
-            //     'className': 'popupCustom'
-            // };
-            // self.layer.bindPopup(customPopupHtml, customOptions);
-            // self.layer.on('popupopen', function (event) {
-            //     $("#killzone_edit_popup_color_" + self.id).val(self.killzoneColor);
-            //
-            //     $("#killzone_edit_popup_submit_" + self.id).bind('click', function () {
-            //         self.setKillZoneColor($("#killzone_edit_popup_color_" + self.id).val());
-            //
-            //         self.edit();
-            //     });
-            // });
         });
     }
 
