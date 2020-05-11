@@ -140,6 +140,7 @@ html, body, #map, #app, .wrapper {
 
 .sidebar .sidebar-content {
     padding-top: 10px;
+    height: 100vh;
 }
 
 .sidebar .sidebar-content .card-body {

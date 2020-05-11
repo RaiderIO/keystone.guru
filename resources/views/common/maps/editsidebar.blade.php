@@ -10,6 +10,7 @@ if (isset($model)) {
 ?>
 @include('common.general.inline', ['path' => 'common/maps/editsidebar', 'options' => [
     'sidebarSelector' => '#editsidebar',
+    'sidebarScrollSelector' => '#editsidebar .sidebar-content',
     'sidebarToggleSelector' => '#editsidebarToggle',
     'switchDungeonFloorSelect' => '#map_floor_selection',
     'defaultSelectedFloorId' => $dungeon->floors[0]->id,

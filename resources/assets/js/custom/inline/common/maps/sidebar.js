@@ -30,7 +30,7 @@ class Sidebar {
             refreshTooltips();
         });
 
-        $sidebar.mCustomScrollbar({
+        $(this.options.sidebarScrollSelector).mCustomScrollbar({
             theme: 'minimal'
         });
 

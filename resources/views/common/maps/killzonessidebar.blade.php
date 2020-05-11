@@ -5,6 +5,7 @@
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'dependencies' => ['common/maps/map'],
     'sidebarSelector' => '#killzonesidebar',
+    'sidebarScrollSelector' => '#killzonesidebar .sidebar-content',
     'sidebarToggleSelector' => '#killzonesidebarToggle',
     'anchor' => 'right',
     'newKillZoneSelector' => '#new_pull_btn',
