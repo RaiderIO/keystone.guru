@@ -98,6 +98,11 @@ class DrawControls extends MapControl {
         });
 
         this._attachHotkeys();
+
+        // Remove delete all button -> https://stackoverflow.com/a/46949925
+        L.EditToolbar.Delete.include({
+            removeAllLayers: false
+        });
     }
 
     _getHotkeys() {

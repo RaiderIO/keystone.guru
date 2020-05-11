@@ -154,7 +154,6 @@ class KillZone extends MapObject {
      * @returns {boolean|boolean}
      */
     isKillZoneVisible() {
-        console.log(this.layer, getState().getCurrentFloor().id, this.floor_id);
         return this.layer !== null && getState().getCurrentFloor().id === this.floor_id;
     }
 
@@ -465,42 +464,27 @@ class KillZone extends MapObject {
             this.enemyConnectionsLayerGroup.addLayer(polygon);
 
             // Only add popup to the killzone
-            // if (this.isEditable() && this.map.options.edit) {
-            //     // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
-            //     // This also cannot be a private function since that'll apparently give different signatures as well.
-            //     let popupOpenFn = function (event) {
-            //         console.assert(self instanceof KillZone, 'this was not a KillZone', self);
-            //         // Give a default color if it was not set
-            //         let color = self.color === '' ? c.map.killzone.polygonOptions.color : self.color;
-            //         $('#map_killzone_edit_popup_color_' + self.id).val(color);
-            //
-            //         // Prevent multiple binds to click
-            //         let $submitBtn = $('#map_killzone_edit_popup_submit_' + self.id);
-            //
-            //         $submitBtn.unbind('click');
-            //         $submitBtn.bind('click', function _popupSubmitClicked() {
-            //             console.assert(self instanceof KillZone, 'this was not a KillZone', self);
-            //             self.color = $('#map_killzone_edit_popup_color_' + self.id).val();
-            //
-            //             self.edit();
-            //         });
-            //     };
-            //
-            //     let template = Handlebars.templates['map_killzone_edit_popup_template'];
-            //
-            //     let data = $.extend({id: this.id}, getHandlebarsDefaultVariables());
-            //
-            //     // Build the status bar from the template
-            //     polygon.unbindPopup();
-            //     polygon.bindPopup(template(data), {
-            //         'maxWidth': '400',
-            //         'minWidth': '300',
-            //         'className': 'popupCustom'
-            //     });
-            //
-            //     polygon.off('popupopen');
-            //     polygon.on('popupopen', popupOpenFn);
-            // }
+            if (this.isEditable() && this.map.options.edit) {
+                polygon.on('click', function () {
+                    // We're now selecting this killzone
+                    let currentMapState = self.map.getMapState();
+                    let newMapState = currentMapState;
+                    if (!(currentMapState instanceof EditMapState) && !(currentMapState instanceof DeleteMapState)) {
+                        // If we're already being selected..
+                        if (currentMapState instanceof KillZoneEnemySelection && currentMapState.getMapObject().id === self.id) {
+                            newMapState = null;
+                        } else {
+                            newMapState = new KillZoneEnemySelection(self.map, self);
+                        }
+                    }
+
+                    // Only if there would be a change
+                    if (newMapState !== currentMapState) {
+                        // Set to null or not
+                        self.map.setMapState(newMapState);
+                    }
+                });
+            }
         }
     }
 
