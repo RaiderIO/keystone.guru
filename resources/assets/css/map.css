@@ -162,7 +162,7 @@ html, body, #map, #app, .wrapper {
     /*padding: 6px;*/
 }
 
-#killzonesidebar .selectable {
+#killzonesidebar .map_killzonessidebar_killzone_fill_space {
     flex: 1 1 auto
 }
 
