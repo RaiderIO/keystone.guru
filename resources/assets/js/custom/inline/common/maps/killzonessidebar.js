@@ -95,37 +95,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     _initColorPicker(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
-        let self = this;
 
         // Simple example, see optional options for more configuration.
-        return Pickr.create({
+        return Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
             el: `#map_killzonessidebar_killzone_${killZone.id}_color`,
-            theme: 'nano', // 'classic' or 'monolith', or 'nano',
-
-            default: killZone.color,
-
-            swatches: getState().getClassColors(),
-
-            components: {
-
-                // Main components
-                preview: true,
-                opacity: true,
-                hue: true,
-
-                // Input / output Options
-                interaction: {
-                    hex: true,
-                    rgba: true,
-                    hsla: false,
-                    hsva: false,
-                    cmyk: false,
-                    input: true,
-                    clear: false,
-                    save: true
-                }
-            }
-        }).on('save', (color, instance) => {
+            default: killZone.color
+        })).on('save', (color, instance) => {
             // Apply the new color
             killZone.color = '#' + color.toHEXA().join('');
             killZone.save();
@@ -257,8 +232,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $(`#map_killzonessidebar_killzone_${killZone.id}_title`)
             .text(`${index}: ${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);
 
-        $(`#map_killzonessidebar_killzone_${killZone.id}_expand`)
-            .css('background-color', killZone.color);
+        // $(`#map_killzonessidebar_killzone_${killZone.id}_expand`)
+        //     .css('background-color', killZone.color);
         $(`#map_killzonessidebar_killzone_${killZone.id}_color`)
             .css('background-color', killZone.color);
 

@@ -10,9 +10,30 @@
 
                             </h5>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col">
+                    <div class="input-group">
+                        <button id="map_killzonessidebar_killzone_{{id}}_color"
+                             class="btn map_killzonessidebar_color_btn w-100">
+
+                        </button>
+                        <div class="input-group-append">
+                            <button id="map_killzonessidebar_killzone_{{id}}_has_killzone"
+                                    class="btn btn-primary" data-toggle="button" aria-pressed="false">
+                                <i class="fas fa-bullseye"></i>
+                            </button>
+                        </div>
+                        <div class="input-group-append">
+                            <div id="map_killzonessidebar_killzone_{{id}}_delete" class="btn btn-warning">
+                                <i class="fa fa-trash"></i>
+                            </div>
+                        </div>
                         <div class="input-group-append">
                             <button id="map_killzonessidebar_killzone_{{id}}_expand" type="button"
-                                    class="btn collapsed" aria-pressed="false" data-toggle="collapse"
+                                    class="btn btn-primary collapsed" aria-pressed="false" data-toggle="collapse"
                                     data-target="#map_killzonessidebar_killzone_{{id}}_toggle_target">
                                 <i class="fa" aria-hidden="true"></i>
                             </button>
@@ -23,23 +44,6 @@
             <div id="map_killzonessidebar_killzone_{{id}}_toggle_target" class="collapse">
                 <div id="map_killzonessidebar_killzone_{{id}}_enemy_list" class="input-group mb-1">
 
-                </div>
-                <div class="input-group">
-                    <div id="map_killzonessidebar_killzone_{{id}}_color"
-                         class="btn map_killzonessidebar_color_btn w-100">
-
-                    </div>
-                    <div class="input-group-append">
-                        <button id="map_killzonessidebar_killzone_{{id}}_has_killzone"
-                                class="btn btn-primary" data-toggle="button" aria-pressed="false">
-                            <i class="fas fa-bullseye"></i>
-                        </button>
-                    </div>
-                    <div class="input-group-append">
-                        <div id="map_killzonessidebar_killzone_{{id}}_delete" class="btn btn-warning">
-                            <i class="fa fa-trash"></i>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

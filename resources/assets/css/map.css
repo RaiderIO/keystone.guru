@@ -266,8 +266,12 @@ html, body, #map, #app, .wrapper {
 }
 
 .route_manipulation_tools .draw_element .bootstrap-select,
-.route_manipulation_tools .draw_element button {
+.route_manipulation_tools .draw_element div {
     height: 100%;
+}
+
+.route_manipulation_tools .draw_element .pickr {
+    flex: 1 1 auto;
 }
 
 .route_manipulation_tools .draw_icon.leaflet-disabled .col,

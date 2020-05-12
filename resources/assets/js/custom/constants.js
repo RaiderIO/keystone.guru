@@ -51,7 +51,7 @@ let c = {
             minSize: 12,
             maxSize: 26,
             margin: 2,
-            calculateMargin: function(size) {
+            calculateMargin: function (size) {
                 let range = c.map.enemy.maxSize - c.map.enemy.minSize;
                 let zeroBased = (size - c.map.enemy.minSize);
                 return (zeroBased / range) * c.map.enemy.margin;
@@ -159,6 +159,32 @@ let c = {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
         },
-        placeholderColors: {}
+        placeholderColors: {},
+        colorPickerDefaultOptions: {
+            theme: 'nano', // 'classic' or 'monolith', or 'nano',
+
+            // Set in state manager when class colors are set
+            swatches: [],
+
+            components: {
+
+                // Main components
+                preview: true,
+                opacity: true,
+                hue: true,
+
+                // Input / output Options
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: false,
+                    hsva: false,
+                    cmyk: false,
+                    input: true,
+                    clear: false,
+                    save: true
+                }
+            }
+        }
     }
 };

@@ -59,6 +59,8 @@ class StateManager extends Signalable {
      */
     setClassColors(classColors) {
         this.classColors = classColors;
+
+        c.map.colorPickerDefaultOptions.swatches = this.classColors;
     }
 
     /**

@@ -384,8 +384,11 @@ class DrawControls extends MapControl {
         $buttonContainer.append(template(data));
 
         // Handle changes
-        $('#edit_route_freedraw_options_color').bind('change', function (changeEvent) {
-            let color = $(this).val();
+        this._colorPicker = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
+            el: `#edit_route_freedraw_options_color`,
+            default: c.map.polyline.defaultColor
+        })).on('save', (color, instance) => {
+            color = '#' + color.toHEXA().join('');
 
             c.map.path.defaultColor = color;
             c.map.polyline.defaultColor = color;
@@ -397,6 +400,15 @@ class DrawControls extends MapControl {
             self.map.refreshPather();
 
             self.addControl();
+
+            // Reset ourselves
+            instance.hide();
+        });
+        // Make the button expand its contents
+        $(`.route_manipulation_tools .draw_element .pickr .pcr-button`).addClass('h-100 w-100');
+
+        $('#edit_route_freedraw_options_color').bind('click', function () {
+            self._colorPicker.show();
         });
 
         let $weight = $('#edit_route_freedraw_options_weight');
