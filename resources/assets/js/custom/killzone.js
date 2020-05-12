@@ -57,12 +57,7 @@ class KillZone extends MapObject {
         // });
         //
         // // External change (due to delete mode being started, for example)
-        // this.map.register('map:mapstatechanged', this, function (event) {
-        //     // Only if the toolbar is active, not when we just de-selected ourselves
-        //     if(event.data.finished && event.data.enemySelection instanceof KillZoneEnemySelection && self.map.toolbarActive){
-        //         self.stop(true);
-        //     }
-        // });
+        this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
     }
 
     /**
@@ -451,21 +446,27 @@ class KillZone extends MapObject {
             let offset = new Offset();
             p = offset.data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
 
-            let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color});
-            if (this.map.getSelectedKillZoneId() === this.id) {
+            let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color, fillColor: this.color});
+
+            let layer;
+            if (this.map.getMapState() instanceof KillZoneEnemySelection && this.map.getMapState().getMapObject().id === this.id) {
                 opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
+                // Change the pulse color to be dark or light depending on the KZ color
+                opts.pulseColor = isColorDark(this.color) ? opts.pulseColorLight : opts.pulseColorDark;
+                layer = L.polyline.antPath(p, opts);
+            } else {
+                layer = L.polygon(p, opts);
             }
 
-            let polygon = L.polygon(p, opts);
 
             // do not prevent clicking on anything else
             this.enemyConnectionsLayerGroup.setZIndex(-1000);
 
-            this.enemyConnectionsLayerGroup.addLayer(polygon);
+            this.enemyConnectionsLayerGroup.addLayer(layer);
 
             // Only add popup to the killzone
             if (this.isEditable() && this.map.options.edit) {
-                polygon.on('click', function () {
+                layer.on('click', function () {
                     // We're now selecting this killzone
                     let currentMapState = self.map.getMapState();
                     let newMapState = currentMapState;
@@ -496,15 +497,16 @@ class KillZone extends MapObject {
     _mapStateChanged(mapStateChangedEvent) {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
-        if (mapStateChangedEvent.data.previousMapState instanceof EnemySelection) {
-            // Redraw any changes as necessary
+        let previousState = mapStateChangedEvent.data.previousMapState;
+        let newState = mapStateChangedEvent.data.newMapState;
+        if (previousState instanceof EnemySelection || newState instanceof EnemySelection) {
+            // Redraw any changes as necessary (for example, user (de-)selected a killzone, must redraw to update selection visuals)
             this.redrawConnectionsToEnemies();
 
-            // May save when nothing has changed, but that's okay
-            this.save();
-
-            // We're done with this event now (after finishing! otherwise we won't process the result)
-            this.map.unregister('map:mapstatechanged', this);
+            if (previousState instanceof EnemySelection && previousState.getMapObject().id === this.id) {
+                // May save when nothing has changed, but that's okay
+                this.save();
+            }
         }
     }
 
@@ -565,6 +567,7 @@ class KillZone extends MapObject {
 
     cleanup() {
         // this.unregister('synced', this); // Not needed as super.cleanup() does this
+        this.map.unregister('map:mapstatechanged', this);
         this.map.unregister('killzone:selectionchanged', this);
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
         this.map.unregister('map:beforerefresh', this);

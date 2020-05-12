@@ -147,7 +147,12 @@ let c = {
             },
             // Whenever the killzone is selected or focussed by the user to adjust it
             polygonOptionsSelected: {
-                dashArray: '20, 20'
+                delay: 400,
+                dashArray: [10, 20],
+                pulseColorLight: '#FFF',
+                pulseColorDark: '#000',
+                hardwareAccelerated: true,
+                use: L.polygon
             },
             margin: 2,
             arcSegments: function (nr) {

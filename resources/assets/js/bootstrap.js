@@ -70,6 +70,7 @@ window.Pather = require('leaflet-pather');
 window.circleMenu = require('zikes-circlemenu');
 window.Noty = require('noty');
 window.Pickr = require('@simonwep/pickr');
+window.AntPath = require('leaflet-ant-path');
 
 require('@fortawesome/fontawesome-free');
 
