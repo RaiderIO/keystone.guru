@@ -55,6 +55,10 @@ return [
 
     'select_category_label' => 'Select category...',
 
+    'show_enemies_label' => 'Show enemies',
+    'add_kill_area_label' => 'Add kill area',
+    'delete_killzone_label' => 'Delete pull',
+
     // Route edit tools
     'path' => 'Path',
     'killzone' => 'Killzone',
