@@ -167,9 +167,18 @@ class ProfileController extends Controller
 
     public function delete(Request $request)
     {
-        try {
-            $user = Auth::getUser()->delete();
-        } catch (\Exception $e) {
+        if (Auth::getUser()->hasRole('admin')) {
+            throw new \Exception('Admins cannot delete themselves!');
         }
+
+        try {
+            Auth::getUser()->delete();
+            Auth::logout();
+            \Session::flash('status', __('Account deleted successfully.'));
+        } catch (\Exception $e) {
+            \Session::flash('warning', __('An error occurred. Please try again.'));
+        }
+
+        return redirect()->route('home');
     }
 }

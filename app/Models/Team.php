@@ -302,10 +302,10 @@ class Team extends IconFileModel
     /**
      * Get the new owner of this team should a user decide to delete their account.
      *
-     * @return string|null Null returned if there was no change in owner.
+     * @return User|null Null returned if there was no change in owner.
      * @var $user User
      */
-    public function getNewOwnerNameUponOwnerAccountDeletion(User $user)
+    public function getNewAdminUponAdminAccountDeletion(User $user)
     {
         if ($this->getUserRole($user) !== 'admin') {
             return null;
@@ -316,7 +316,7 @@ class Team extends IconFileModel
                 return $roles[$obj->role];
             })->first();
 
-            return $newOwner !== null ? $newOwner->user->name : null;
+            return $newOwner !== null ? $newOwner->user : null;
         }
     }
 

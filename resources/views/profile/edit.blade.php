@@ -140,7 +140,7 @@ $deleteConsequences = $user->getDeleteConsequences();
                             <?php
                             $consequenceText = '';
                             if ($consequence['result'] === 'new_owner') {
-                                $consequenceText = sprintf(__('%s will be appointed Admin of this team.'), $consequence['new_owner']);
+                                $consequenceText = sprintf(__('%s will be appointed Admin of this team.'), $consequence['new_owner']->name);
                             } else if ($consequence['result'] === 'deleted') {
                                 $consequenceText = __('This team will be deleted (you are the only user in this team).');
                             }
@@ -168,6 +168,7 @@ $deleteConsequences = $user->getDeleteConsequences();
                 {{ __('Your account will be permanently deleted. There is no turning back.') }}
             </div>
             {{ Form::open(['route' => 'profile.delete']) }}
+            {!! Form::hidden('_method', 'delete') !!}
             {!! Form::submit(__('Delete my Keystone.guru account'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
             {!! Form::close() !!}
         </div>

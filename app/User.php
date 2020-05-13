@@ -7,7 +7,6 @@ use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\PatreonData;
 use App\Models\Team;
-use App\Models\TeamUser;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -138,7 +137,7 @@ class User extends Authenticatable
      */
     function reports()
     {
-        return $this->hasMany('App\Models\UserReports', 'author_id');
+        return $this->hasMany('App\Models\UserReport', 'author_id');
     }
 
     /**
@@ -187,12 +186,12 @@ class User extends Authenticatable
             /** @var $team Team */
             $teams['teams'][$team->name] = [
                 'result'    => $team->members->count() === 1 ? 'deleted' : 'new_owner',
-                'new_owner' => $team->getNewOwnerNameUponOwnerAccountDeletion($this)
+                'new_owner' => $team->getNewAdminUponAdminAccountDeletion($this)
             ];
         }
 
         return array_merge($teams, [
-            'patreon' => [
+            'patreon'       => [
                 'unlinked' => $this->patreondata !== null
             ],
             'dungeonroutes' => [
@@ -216,8 +215,14 @@ class User extends Authenticatable
 
             foreach ($item->teams as $team) {
                 /** @var $team Team */
-                if ($team->getNewOwnerNameUponOwnerAccountDeletion($item)) {
-
+                $newAdmin = $team->getNewAdminUponAdminAccountDeletion($item);
+                if ($newAdmin !== null) {
+                    // Appoint someone else admin
+                    $team->changeRole(User::find($newAdmin->id), 'admin');
+                    // Remove ourselves from the team
+                    $team->removeMember($item);
+                } else {
+                    $team->delete();
                 }
             }
         });
