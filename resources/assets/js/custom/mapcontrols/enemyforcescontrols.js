@@ -9,7 +9,7 @@ class EnemyForcesControls extends MapControl {
         this.lastFooterMessage = null;
         this.map = map;
         // Just the initial enemy forces upon page load.
-        this._setEnemyForces(dungeonRouteEnemyForces); // Defined in map.blade.php
+        this._setEnemyForces(getState().getDungeonRoute().enemyForces); // Defined in map.blade.php
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
@@ -36,10 +36,15 @@ class EnemyForcesControls extends MapControl {
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
                 // Local changes will update the counter
                 enemy.register('killzone:attached', self, function (data) {
-                    self._setEnemyForces(self.enemyForces + data.context.enemy_forces);
+                    // This is also triggered
+                    if (self.map.isEnemySelectionEnabled()) {
+                        self._setEnemyForces(self.enemyForces + data.context.enemy_forces);
+                    }
                 });
                 enemy.register('killzone:detached', self, function (data) {
-                    self._setEnemyForces(self.enemyForces - data.context.enemy_forces);
+                    if (self.map.isEnemySelectionEnabled()) {
+                        self._setEnemyForces(self.enemyForces - data.context.enemy_forces);
+                    }
                 });
             });
         });
@@ -70,8 +75,8 @@ class EnemyForcesControls extends MapControl {
         let oldEnemyForces = this.enemyForces;
 
         this.enemyForces = value;
-        // @TODO This is a bit of a dirty solution for solving an issue where being in edit mode and switching a floor the enemy_forces counter is reset to 0.
-        dungeonRouteEnemyForces = value;
+        // Write the enemy forces into the state so we can remember it when switching floors and this control is re-created
+        getState().getDungeonRoute().enemyForces = value;
         this.refreshUI();
 
         // Don't trigger this when loading in the route and the value actually changed

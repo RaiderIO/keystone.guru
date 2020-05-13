@@ -88,7 +88,7 @@ class ProfileController extends Controller
                             broadcast(new UserColorChangedEvent($dungeonRoute, $user));
                         }
                     }
-                } catch( \Exception $exception ){
+                } catch (\Exception $exception) {
                     Log::warning('Echo server is probably not running!');
                 }
             } else {
@@ -163,5 +163,22 @@ class ProfileController extends Controller
     public function list(Request $request)
     {
         return view('profile.list');
+    }
+
+    public function delete(Request $request)
+    {
+        if (Auth::getUser()->hasRole('admin')) {
+            throw new \Exception('Admins cannot delete themselves!');
+        }
+
+        try {
+            Auth::getUser()->delete();
+            Auth::logout();
+            \Session::flash('status', __('Account deleted successfully.'));
+        } catch (\Exception $e) {
+            \Session::flash('warning', __('An error occurred. Please try again.'));
+        }
+
+        return redirect()->route('home');
     }
 }

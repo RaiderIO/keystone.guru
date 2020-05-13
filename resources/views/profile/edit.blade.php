@@ -4,6 +4,7 @@ $user = Auth::getUser();
 $isOAuth = $user->password === '';
 $menuItems = [
     ['icon' => 'fa-user', 'text' => __('Profile'), 'target' => '#profile'],
+    ['icon' => 'fa-cog', 'text' => __('Account'), 'target' => '#account'],
     ['icon' => 'fab fa-patreon', 'text' => __('Patreon'), 'target' => '#patreon'],
 ];
 // Optionally add this menu item
@@ -13,6 +14,7 @@ if (!$isOAuth) {
 $menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('Privacy'), 'target' => '#privacy'];
 
 $menuTitle = sprintf(__('%s\'s profile'), $user->name);
+$deleteConsequences = $user->getDeleteConsequences();
 ?>
 @extends('layouts.app', ['wide' => true, 'title' => __('Profile'),
     'menuTitle' => $menuTitle, 'menuItems' => $menuItems,
@@ -106,6 +108,69 @@ $menuTitle = sprintf(__('%s\'s profile'), $user->name);
 
                 @include('common.dungeonroute.table', ['view' => 'profile'])
             </div>
+        </div>
+
+        <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="patreon-tab">
+            <h4>
+                {{ __('Account') }}
+            </h4>
+            <div class="form-group">
+                {{ __('If you delete your Keystone.guru account the following will happen:') }}
+            </div>
+            @if( !empty($deleteConsequences['dungeonroutes']) && $deleteConsequences['dungeonroutes']['delete_count'] > 0 )
+            <div class="form-group">
+                <h5>
+                    {{ __('Routes') }}
+                </h5>
+                <ul>
+                    <li>
+                        {{ __(sprintf('Your %s route(s) will be deleted.', $deleteConsequences['dungeonroutes']['delete_count'])) }}
+                    </li>
+                </ul>
+            </div>
+            @endif
+            @if( !empty($deleteConsequences['teams']) )
+                <div class="form-group">
+                    <h5>
+                        {{ __('Teams') }}
+                    </h5>
+                    <ul>
+                        <?php foreach($deleteConsequences['teams'] as $teamName => $consequence) { ?>
+                        <li>
+                            <?php
+                            $consequenceText = '';
+                            if ($consequence['result'] === 'new_owner') {
+                                $consequenceText = sprintf(__('%s will be appointed Admin of this team.'), $consequence['new_owner']->name);
+                            } else if ($consequence['result'] === 'deleted') {
+                                $consequenceText = __('This team will be deleted (you are the only user in this team).');
+                            }
+                            ?>
+                            {{ sprintf(__('%s: %s'), $teamName, $consequenceText) }}
+                        </li>
+                        <?php } ?>
+                    </ul>
+                </div>
+            @endif
+            @if( !empty($deleteConsequences['patreon']) && $deleteConsequences['patreon']['unlinked'] )
+                <div class="form-group">
+                    <h5>
+                        {{ __('Patreon') }}
+                    </h5>
+                    <ul>
+                        <li>
+                            {{ __('The connection between Patreon and Keystone.guru will be terminated. You will no longer receive
+                            Patreon rewards.') }}
+                        </li>
+                    </ul>
+                </div>
+            @endif
+            <div class="text-danger font-weight-bold">
+                {{ __('Your account will be permanently deleted. There is no turning back.') }}
+            </div>
+            {{ Form::open(['route' => 'profile.delete']) }}
+            {!! Form::hidden('_method', 'delete') !!}
+            {!! Form::submit(__('Delete my Keystone.guru account'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
+            {!! Form::close() !!}
         </div>
 
         <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">

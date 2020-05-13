@@ -2,7 +2,7 @@ class EnemyVisualModifierClassification extends EnemyVisualModifier {
     constructor(enemyvisual, index) {
         super(enemyvisual, index);
         // If it's loaded already, set it now
-        this.iconName = this.enemyvisual.enemy.npc.classification_id !== 1 ? 'elite' : '';
+        this.iconName = this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.classification_id !== 1 ? 'elite' : '';
     }
 
     _getValidIconNames() {

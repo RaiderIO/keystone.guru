@@ -1,25 +1,25 @@
-class EnemyVisualModifierTruesight extends EnemyVisualModifier {
+class EnemyVisualModifierTeeming extends EnemyVisualModifier {
     constructor(enemyvisual, index) {
         super(enemyvisual, index);
         // If it's loaded already, set it now
-        this.iconName = this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.truesight === 1 ? 'truesight' : '';
+        this.iconName = this.enemyvisual.enemy.teeming === 'visible' ? 'teeming' : '';
     }
 
     _getValidIconNames() {
         return [
             '', // we are allowed to have nothing
-            'truesight',
+            'teeming',
         ];
     }
 
     _getTemplateData(width, height, margin) {
-        console.assert(this instanceof EnemyVisualModifierTruesight, 'this is not an EnemyVisualModifierTruesight!', this);
+        console.assert(this instanceof EnemyVisualModifierTeeming, 'this is not an EnemyVisualModifierTeeming!', this);
 
-        // Top left corner
+        // Bottom left corner
         return {
             classes: 'modifier_external ' + this.iconName,
             left: 0,
-            top: 0
+            top: height
         };
     }
 }

@@ -31,10 +31,11 @@ class Enemy extends MapObject {
         super(map, layer);
 
         this.label = 'Enemy';
-        // Not actually saved to the enemy, but is used for keeping track of what killzone this enemy is attached to
-        this.kill_zone_id = 0;
+        // Used for keeping track of what kill zone this enemy is attached to
+        /** @type KillZone */
+        this.kill_zone = null;
         this.enemy_forces_override = -1;
-        // May be set when loaded from server
+        /** @type Object May be set when loaded from server */
         this.npc = null;
         this.raid_marker_name = '';
         this.dangerous = false;
@@ -51,7 +52,7 @@ class Enemy extends MapObject {
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
-        getState().register('mapzoomlevel:changed', this, function(){
+        getState().register('mapzoomlevel:changed', this, function () {
             self.bindTooltip();
         });
 
@@ -185,21 +186,27 @@ class Enemy extends MapObject {
     }
 
     /**
-     * Sets the killzone for this enemy.
-     * @param killZoneId id
+     * Gets the killzone for this enemy.
+     * @returns {null}
      */
-    setKillZone(killZoneId) {
+    getKillZone() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        this.kill_zone_id = killZoneId;
+        return this.kill_zone;
+    }
 
-        // We only want to trigger these events when the killzone is actively being edited, not when loading in
-        // the connections from the server initially
-        if (this.map.isEnemySelectionEnabled()) {
-            if (this.kill_zone_id >= 0) {
-                this.signal('killzone:attached');
-            } else {
-                this.signal('killzone:detached');
-            }
+    /**
+     * Sets the killzone for this enemy.
+     * @param killZone object
+     */
+    setKillZone(killZone) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        let oldKillZone = this.kill_zone;
+        this.kill_zone = killZone;
+
+        if (this.kill_zone instanceof KillZone) {
+            this.signal('killzone:attached', {previous: oldKillZone});
+        } else {
+            this.signal('killzone:detached', {previous: oldKillZone});
         }
     }
 
