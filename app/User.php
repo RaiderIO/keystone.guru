@@ -6,9 +6,11 @@ use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\PatreonData;
+use App\Models\Team;
+use App\Models\TeamUser;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use Laratrust\Traits\LaratrustUserTrait;
 
 /**
@@ -24,9 +26,12 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property boolean $analytics_cookie_opt_out
  * @property boolean $adsense_no_personalized_ads
  * @property boolean $changed_username
- 
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
+ *
+ * @property Collection $dungeonroutes
+ * @property Collection $reports
+ * @property Collection $teams
  *
  * @mixin \Eloquent
  */
@@ -164,11 +169,57 @@ class User extends Authenticatable
     /**
      * Sends the password reset notification.
      *
-     * @param  string $token
+     * @param string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new CustomPasswordResetEmail($token));
+    }
+
+    /**
+     * Gets a list of consequences that will happen when this user tries to delete their account.
+     */
+    public function getDeleteConsequences()
+    {
+        $teams = ['teams' => []];
+        foreach ($this->teams as $team) {
+            /** @var $team Team */
+            $teams['teams'][$team->name] = [
+                'result'    => $team->members->count() === 1 ? 'deleted' : 'new_owner',
+                'new_owner' => $team->getNewOwnerNameUponOwnerAccountDeletion($this)
+            ];
+        }
+
+        return array_merge($teams, [
+            'patreon' => [
+                'unlinked' => $this->patreondata !== null
+            ],
+            'dungeonroutes' => [
+                'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isTry()->count())
+            ]
+        ]);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete user properly if it gets deleted
+        static::deleting(function ($item)
+        {
+            /** @var $item User */
+            $item->dungeonroutes()->delete();
+            $item->reports()->delete();
+
+            $item->patreondata()->delete();
+
+            foreach ($item->teams as $team) {
+                /** @var $team Team */
+                if ($team->getNewOwnerNameUponOwnerAccountDeletion($item)) {
+
+                }
+            }
+        });
     }
 }

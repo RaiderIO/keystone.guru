@@ -88,7 +88,7 @@ class ProfileController extends Controller
                             broadcast(new UserColorChangedEvent($dungeonRoute, $user));
                         }
                     }
-                } catch( \Exception $exception ){
+                } catch (\Exception $exception) {
                     Log::warning('Echo server is probably not running!');
                 }
             } else {
@@ -163,5 +163,13 @@ class ProfileController extends Controller
     public function list(Request $request)
     {
         return view('profile.list');
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $user = Auth::getUser()->delete();
+        } catch (\Exception $e) {
+        }
     }
 }
