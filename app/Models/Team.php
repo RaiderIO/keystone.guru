@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
  * @property $description string
  * @property $invite_code string
  *
+ * @property Collection $teamusers
  * @property Collection $members
  * @property Collection $dungeonroutes
  *
@@ -299,6 +300,27 @@ class Team extends IconFileModel
     }
 
     /**
+     * Get the new owner of this team should a user decide to delete their account.
+     *
+     * @return User|null Null returned if there was no change in owner.
+     * @var $user User
+     */
+    public function getNewAdminUponAdminAccountDeletion(User $user)
+    {
+        if ($this->getUserRole($user) !== 'admin') {
+            return null;
+        } else {
+            $roles = config('keystoneguru.team_roles');
+            $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(function ($obj, $key) use ($roles)
+            {
+                return $roles[$obj->role];
+            })->first();
+
+            return $newOwner !== null ? $newOwner->user : null;
+        }
+    }
+
+    /**
      * @return string Generates a random invite code.
      */
     public static function generateRandomInviteCode()
@@ -319,8 +341,9 @@ class Team extends IconFileModel
     {
         parent::boot();
 
-        // Delete route properly if it gets deleted
-        static::deleting(function ($item) {
+        // Delete team properly if it gets deleted
+        static::deleting(function ($item)
+        {
             /** @var $item Team */
 
             // Delete icons

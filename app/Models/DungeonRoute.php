@@ -292,8 +292,7 @@ class DungeonRoute extends Model
      */
     public function scopeIsTry($query)
     {
-        return $query->where('author_id', -1)
-            ->where('expires_at', '!=', null);
+        return $query->where('expires_at', '!=', null);
     }
 
     /**
@@ -800,34 +799,23 @@ class DungeonRoute extends Model
                 @unlink(sprintf('%s/%s_%s.png', $publicPath, $item->public_key, $floor->index));
             }
 
-            DungeonRouteAffixGroup::where('dungeon_route_id', $item->id)->delete();
-            DungeonRoutePlayerClass::where('dungeon_route_id', $item->id)->delete();
-            DungeonRoutePlayerRace::where('dungeon_route_id', $item->id)->delete();
-            DungeonRoutePlayerSpecialization::where('dungeon_route_id', $item->id)->delete();
-            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $item->id)->delete();
-            DungeonRouteRating::where('dungeon_route_id', $item->id)->delete();
-            // @TODO Do not remove favorites, people ought to know why their favorited dungeon was removed?
-            // DungeonRouteFavorite::where('dungeon_route_id', '=', $item->id)->delete();
-            MapIcon::where('dungeon_route_id', $item->id)->delete();
+            // Dungeonroute settings
+            $item->affixgroups()->delete();
+            $item->routeattributesraw()->delete();
+            $item->playerclasses()->delete();
+            $item->playerraces()->delete();
+            $item->playerspecializations()->delete();
 
-            // Delete brushlines
-            foreach ($item->brushlines as $brushline) {
-                /** @var $brushline \App\Models\Brushline */
-                $brushline->delete();
-            }
+            // Mapping related items
+            $item->enemyraidmarkers()->delete();
+            $item->brushlines()->delete();
+            $item->paths()->delete();
+            $item->killzones()->delete();
+            $item->mapicons()->delete();
 
-            // Delete paths
-            foreach ($item->paths as $path) {
-                /** @var $path \App\Models\Path */
-                $path->delete();
-            }
-
-            // Delete kill zones
-            foreach ($item->killzones as $killzone) {
-                /** @var $killzone \App\Models\KillZone */
-                $killzone->deleteEnemies();
-                $killzone->delete();
-            }
+            // External
+            $item->ratings()->delete();
+            $item->favorites()->delete();
         });
     }
 }
