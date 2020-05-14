@@ -3376,12 +3376,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/tracker.git",
-                "reference": "08bda2251927e8e265bfb07a7cd79fc534cca2f8"
+                "reference": "76e8e7fa058c6b1c15fea4b2ffa5169ae087d6f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Wotuu/tracker/zipball/08bda2251927e8e265bfb07a7cd79fc534cca2f8",
-                "reference": "08bda2251927e8e265bfb07a7cd79fc534cca2f8",
+                "url": "https://api.github.com/repos/Wotuu/tracker/zipball/76e8e7fa058c6b1c15fea4b2ffa5169ae087d6f7",
+                "reference": "76e8e7fa058c6b1c15fea4b2ffa5169ae087d6f7",
                 "shasum": ""
             },
             "require": {
