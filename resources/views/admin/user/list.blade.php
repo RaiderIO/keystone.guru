@@ -27,8 +27,7 @@
             <th width="15%">{{ __('# routes') }}</th>
             <th width="10%">{{ __('Roles') }}</th>
             <th width="15%">{{ __('Registered') }}</th>
-            <th width="15%">{{ __('Last action') }}</th>
-            <th width="20%">{{ __('Actions') }}</th>
+            <th width="35%">{{ __('Actions') }}</th>
         </tr>
         </thead>
 
@@ -41,18 +40,21 @@
                 <td>{{ $user->dungeonroutes->count() }}</td>
                 <td>{{ implode(', ', $user->roles->pluck('display_name')->toArray())}}</td>
                 <td>{{ $user->created_at->setTimezone('Europe/Amsterdam') }}</td>
-                <td>{{ $user->updated_at->setTimezone('Europe/Amsterdam') }}</td>
                 <td>
                     <?php
                     // I really want to be the only one doing this
                     if( Auth::user()->name === 'Admin' ){ ?>
                     <div class="row">
                         {{ Form::model($user, ['route' => ['admin.user.makeadmin', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}
-                        {!! Form::submit(__('Make admin'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'submit']) !!}
+                        {!! Form::submit(__('Make admin'), ['class' => 'btn btn-info', 'name' => 'submit']) !!}
                         {!! Form::close() !!}
 
                         {{ Form::model($user, ['route' => ['admin.user.makeuser', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}
-                        {!! Form::submit(__('Make user'), ['class' => 'btn btn-info ml-1', 'name' => 'submit', 'value' => 'submit']) !!}
+                        {!! Form::submit(__('Make user'), ['class' => 'btn btn-info ml-1', 'name' => 'submit']) !!}
+                        {!! Form::close() !!}
+
+                        {{ Form::model($user, ['route' => ['admin.user.delete', $user->id], 'autocomplete' => 'off', 'method' => 'delete']) }}
+                        {!! Form::submit(__('Delete user'), ['class' => 'btn btn-danger ml-1', 'name' => 'submit']) !!}
                         {!! Form::close() !!}
                     </div>
                     <?php } else {

@@ -163,6 +163,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::get('users', 'UserController@list')->name('admin.users');
             Route::post('user/{user}/makeadmin', 'UserController@makeadmin')->name('admin.user.makeadmin');
             Route::post('user/{user}/makeuser', 'UserController@makeuser')->name('admin.user.makeuser');
+            Route::delete('user/{user}/delete', 'UserController@delete')->name('admin.user.delete');
 
             Route::get('userreports', 'UserReportController@list')->name('admin.userreports');
 
