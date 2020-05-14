@@ -9,7 +9,7 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof EnemyPatrolMapObjectGroup, 'this is not an EnemyPatrolMapObjectGroup', this);
 
-        if (isMapAdmin) {
+        if (getState().isMapAdmin()) {
             return new AdminEnemyPatrol(this.manager.map, layer);
         } else {
             return new EnemyPatrol(this.manager.map, layer);

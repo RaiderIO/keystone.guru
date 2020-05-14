@@ -30,12 +30,14 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         let currentFloorId = getState().getCurrentFloor().id;
         let dungeonData = getState().getDungeonData();
         for (let i in dungeonData.floors) {
-            let floor = dungeonData.floors[i];
-            if (floor.id !== currentFloorId) {
-                data.floors.push({
-                    id: floor.id,
-                    name: floor.name,
-                });
+            if( dungeonData.floors.hasOwnProperty(i) ){
+                let floor = dungeonData.floors[i];
+                if (floor.id !== currentFloorId) {
+                    data.floors.push({
+                        id: floor.id,
+                        name: floor.name,
+                    });
+                }
             }
         }
 

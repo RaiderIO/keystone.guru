@@ -360,4 +360,11 @@ class StateManager extends Signalable {
         return this.unknownMapIcon;
     }
 
+    /**
+     * Returns true if the map is currently in admin mode, false if not.
+     * @returns {boolean}
+     */
+    isMapAdmin() {
+        return this.dungeonRoute.publicKey === 'admin';
+    }
 }

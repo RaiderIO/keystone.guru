@@ -36,10 +36,10 @@ class CommonMapsMap extends InlineCode {
     initDungeonMap() {
         let self = this;
 
-        if (isMapAdmin) {
-            this._dungeonMap = new AdminDungeonMap('map', dungeonData, this.options);
+        if (getState().isMapAdmin()) {
+            this._dungeonMap = new AdminDungeonMap('map', this.options);
         } else {
-            this._dungeonMap = new DungeonMap('map', dungeonData, this.options);
+            this._dungeonMap = new DungeonMap('map', this.options);
         }
 
         $('#start_virtual_tour').bind('click', function () {

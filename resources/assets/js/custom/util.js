@@ -20,7 +20,7 @@ let _defaultVariables = null;
 function getHandlebarsDefaultVariables() {
     if (_defaultVariables === null) {
         _defaultVariables = $.extend(_getHandlebarsTranslations(), {
-            is_map_admin: typeof isMapAdmin === 'undefined' ? false : isMapAdmin,
+            is_map_admin: getState().isMapAdmin(),
             is_user_admin: isUserAdmin
         });
     }

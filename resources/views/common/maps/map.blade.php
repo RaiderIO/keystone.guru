@@ -102,10 +102,6 @@ if ($isAdmin) {
         ],
     ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>
-        // Data of the dungeon(s) we're selecting in the map
-        var isMapAdmin = {{ $isAdmin ? 'true' : 'false' }};
-            {{--var factionsData = {!!  !!};--}}
-
         var dungeonMap;
 
         $(function () {

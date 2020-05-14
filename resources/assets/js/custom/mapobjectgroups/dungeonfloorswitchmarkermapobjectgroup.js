@@ -9,7 +9,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup', this);
 
-        if (isMapAdmin) {
+        if (getState().isMapAdmin()) {
             return new AdminDungeonFloorSwitchMarker(this.manager.map, layer);
         } else {
             return new DungeonFloorSwitchMarker(this.manager.map, layer);

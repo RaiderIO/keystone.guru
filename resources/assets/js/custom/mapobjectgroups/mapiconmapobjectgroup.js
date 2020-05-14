@@ -26,7 +26,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not an MapIconMapObjectGroup', this);
 
         let mapIcon;
-        if (isMapAdmin) {
+        if (getState().isMapAdmin()) {
             mapIcon = new AdminMapIcon(this.manager.map, layer);
         } else {
             mapIcon = new MapIcon(this.manager.map, layer);
