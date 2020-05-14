@@ -4,6 +4,8 @@ class StateManager extends Signalable {
 
         // Any dungeon route we may be editing at this time
         this.dungeonRoute = null;
+        // The data of the dungeon that we're editing
+        this.dungeonData = null;
 
         this._map = null;
         // What enemy visual type we're displaying
@@ -37,6 +39,13 @@ class StateManager extends Signalable {
         console.assert(dungeonRoute instanceof Object, 'dungeonRoute is not an Object', dungeonRoute);
 
         this.dungeonRoute = dungeonRoute;
+    }
+
+    setDungeonData(dungeonData) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        console.assert(dungeonData instanceof Object, 'dungeonData is not an Object', dungeonData);
+
+        this.dungeonData = dungeonData;
     }
 
     /**
@@ -75,7 +84,7 @@ class StateManager extends Signalable {
      * Sets the raw enemies (not converted to Enemy classes yet; pure objects)
      * @param rawEnemies
      */
-    setRawEnemies(rawEnemies){
+    setRawEnemies(rawEnemies) {
         this.rawEnemies = rawEnemies;
     }
 
@@ -202,6 +211,15 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Gets the data of the dungeon that we're currently editing.
+     * @returns {null}
+     */
+    getDungeonData() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.dungeonData;
+    }
+
+    /**
      * Get the default visual to display for all enemies.
      * @returns {string}
      */
@@ -257,7 +275,7 @@ class StateManager extends Signalable {
      * @param enemyId
      * @returns {null}
      */
-    getEnemyById(enemyId){
+    getEnemyById(enemyId) {
         let enemy = null;
         for (let i = 0; i < this.enemies.length; i++) {
             if (this.enemies[i].id === enemyId) {
@@ -323,7 +341,7 @@ class StateManager extends Signalable {
         let self = this;
         let result = false;
         // Iterate over the found floors
-        $.each(this._map.dungeonData.floors, function (index, value) {
+        $.each(this.dungeonData.floors, function (index, value) {
             // Find the floor we're looking for
             if (parseInt(value.id) === parseInt(self.floorId)) {
                 result = value;

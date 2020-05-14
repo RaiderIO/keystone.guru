@@ -5,6 +5,7 @@
     // Init it right away
     _stateManager = new StateManager();
     _stateManager.setDungeonRoute({!! new \Illuminate\Support\Collection($dungeonroute) !!});
+    _stateManager.setDungeonData({!! $dungeonData !!});
     _stateManager.setMapIconTypes({!! $mapIconTypes !!});
     _stateManager.setClassColors({!! $classColors !!});
     _stateManager.setRawEnemies({!! $enemies !!});

@@ -1,10 +1,8 @@
 class DungeonMap extends Signalable {
 
-    constructor(mapid, dungeonData, options) { // floorID, edit, teeming
+    constructor(mapid, options) { // floorID, edit, teeming
         super();
         let self = this;
-
-        this.dungeonData = dungeonData;
 
         this.options = options;
 
@@ -376,7 +374,7 @@ class DungeonMap extends Signalable {
             mapControls.push(new EnemyVisualControls(this));
             mapControls.push(new MapObjectGroupControls(this));
 
-            if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
+            if (this.isTryModeEnabled() && getState().getDungeonData().name === 'Siege of Boralus') {
                 mapControls.push(new FactionDisplayControls(this));
             }
 
@@ -463,8 +461,9 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = false;
 
-        for (let i = 0; i < this.dungeonData.floors.length; i++) {
-            let floor = this.dungeonData.floors[i];
+        let dungeonData = getState().getDungeonData();
+        for (let i = 0; i < dungeonData.floors.length; i++) {
+            let floor = dungeonData.floors[i];
             if (floor.id === floorId) {
                 result = floor;
                 break;
@@ -497,7 +496,8 @@ class DungeonMap extends Signalable {
      * @returns {*}
      */
     getEnemyForcesRequired() {
-        return this.teeming ? this.dungeonData.enemy_forces_required_teeming : this.dungeonData.enemy_forces_required;
+        let dungeonData = getState().getDungeonData();
+        return this.teeming ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
     }
 
     /**
@@ -521,7 +521,8 @@ class DungeonMap extends Signalable {
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
 
-        this.mapTileLayer = L.tileLayer('/images/tiles/' + this.dungeonData.expansion.shortname + '/' + this.dungeonData.key + '/' + getState().getCurrentFloor().index + '/{z}/{x}_{y}.png', {
+        let dungeonData = getState().getDungeonData();
+        this.mapTileLayer = L.tileLayer('/images/tiles/' + dungeonData.expansion.shortname + '/' + dungeonData.key + '/' + getState().getCurrentFloor().index + '/{z}/{x}_{y}.png', {
             maxZoom: 5,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: L.point(384, 256),

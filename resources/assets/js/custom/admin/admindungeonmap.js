@@ -15,7 +15,7 @@ class AdminDungeonMap extends DungeonMap {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = [];
 
-        if (this.dungeonData.name === 'Siege of Boralus') {
+        if (getState().getDungeonData().name === 'Siege of Boralus') {
             result.push(new FactionDisplayControls(this));
         }
 

@@ -94,6 +94,7 @@ if ($isAdmin) {
         'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
         'raidMarkers' => \App\Models\RaidMarker::all(),
         'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
+        'dungeonData' => $dungeon,
         'dungeonroute' => [
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,
@@ -102,7 +103,6 @@ if ($isAdmin) {
     ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>
         // Data of the dungeon(s) we're selecting in the map
-        var dungeonData = {!! $dungeon !!};
         var isMapAdmin = {{ $isAdmin ? 'true' : 'false' }};
             {{--var factionsData = {!!  !!};--}}
 
