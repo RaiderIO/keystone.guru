@@ -41,6 +41,7 @@ return [
 
     'color_label' => 'Color',
     'weight_label' => 'Weight',
+    'mapobject_visibility_label' => 'Visibility',
 
     'clone_label' => 'Clone',
     'delete_label' => 'Delete',

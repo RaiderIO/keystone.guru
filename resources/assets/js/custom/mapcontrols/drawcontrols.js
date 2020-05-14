@@ -368,63 +368,6 @@ class DrawControls extends MapControl {
         $buttonContainer.append($buttons);
     }
 
-    _addControlSetupPolylineOptions() {
-        let self = this;
-
-        let $container = $(this._mapControl.getContainer());
-        let $buttonContainer = $($container.children()[0]);
-
-        // Move the free draw controls next to the buttons
-        let template = Handlebars.templates['map_controls_route_edit_freedraw_template'];
-
-        let data = {
-            color: c.map.polyline.defaultColor,
-            weight: c.map.polyline.defaultWeight
-        };
-        $buttonContainer.append(template(data));
-
-        // Handle changes
-        this._colorPicker = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
-            el: `#edit_route_freedraw_options_color`,
-            default: c.map.polyline.defaultColor
-        })).on('save', (color, instance) => {
-            color = '#' + color.toHEXA().join('');
-
-            c.map.path.defaultColor = color;
-            c.map.polyline.defaultColor = color;
-            c.map.killzone.polylineOptions.color = color;
-            c.map.killzone.polygonOptions.color = color;
-
-            Cookies.set('polyline_default_color', color);
-
-            self.map.refreshPather();
-
-            self.addControl();
-
-            // Reset ourselves
-            instance.hide();
-        });
-        // Make the button expand its contents
-        $(`.route_manipulation_tools .draw_element .pickr .pcr-button`).addClass('h-100 w-100');
-
-        $('#edit_route_freedraw_options_color').bind('click', function () {
-            self._colorPicker.show();
-        });
-
-        let $weight = $('#edit_route_freedraw_options_weight');
-        $weight.bind('change', function (changeEvent) {
-            let weight = $('#edit_route_freedraw_options_weight :selected').val();
-
-            c.map.polyline.defaultWeight = weight;
-
-            Cookies.set('polyline_default_weight', weight);
-
-            self.map.refreshPather();
-
-            self.addControl();
-        });
-    }
-
     /**
      * Adds the control to the map.
      */
@@ -470,10 +413,6 @@ class DrawControls extends MapControl {
 
         // Edit and delete buttons need to be moved to the same container as the other buttons
         this._addControlSetupEditDeleteButtons();
-
-        if (this.drawControlOptions.brushline !== false) {
-            this._addControlSetupPolylineOptions();
-        }
 
         // Refresh some basics that need to be regenerated when html gets changed
         refreshTooltips();

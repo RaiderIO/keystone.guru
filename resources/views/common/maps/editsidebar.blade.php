@@ -30,14 +30,15 @@ if (isset($model)) {
                 <div class="card-body">
                     <h5 class="card-title">{{ __('Shareable link') }}</h5>
                     <div class="row">
-                        <div class="col">
+                        <div class="input-group-append">
                             {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
                             ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col mt-2">
-                            {!! Form::button('<i class="far fa-copy"></i> ' . __('Copy to clipboard'), ['id' => 'map_copy_to_clipboard', 'class' => 'btn btn-info col-md']) !!}
+                            <div class="input-group-append">
+                                <button id="map_copy_to_clipboard" class="btn btn-info"
+                                        data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -70,6 +71,37 @@ if (isset($model)) {
                 @else
                     {!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
                 @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Draw Settings -->
+    <div class="form-group draw_settings_tools">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ __('Draw Settings') }}</h5>
+                <?php // Weight ?>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col font-weight-bold">
+                        {{ __('Line weight') }}:
+                    </div>
+                    <div class="col font-weight-bold">
+                        {{ __('Color') }}:
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col line_weight_selection">
+                        <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+                        {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
+                            isset($_COOKIE['polyline_default_weight']) ? $_COOKIE['polyline_default_weight'] : 0,
+                            ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
+                    </div>
+                    <div class="col default_color_selection">
+                        <div id="edit_route_freedraw_options_color">
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

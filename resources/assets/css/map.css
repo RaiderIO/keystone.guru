@@ -186,6 +186,10 @@ html, body, #map, #app, .wrapper {
     flex: 1 1 auto;
 }
 
+.draw_settings_tools .pickr {
+    height: 100%;
+}
+
 /*#killzonesidebar .map_killzonessidebar_killzone.selected {*/
 /*    border: #DF691A 3px solid;*/
 
@@ -222,7 +226,7 @@ html, body, #map, #app, .wrapper {
     }
 
     .route_manipulation_tools {
-        width: 1100px;
+        width: 900px;
     }
 }
 
@@ -265,13 +269,8 @@ html, body, #map, #app, .wrapper {
     margin-top: 8px;
 }
 
-.route_manipulation_tools .draw_element .bootstrap-select,
-.route_manipulation_tools .draw_element div {
+.route_manipulation_tools .draw_element .bootstrap-select {
     height: 100%;
-}
-
-.route_manipulation_tools .draw_element .pickr {
-    flex: 1 1 auto;
 }
 
 .route_manipulation_tools .draw_icon.leaflet-disabled .col,
@@ -727,8 +726,8 @@ html, body, #map, #app, .wrapper {
     margin-left: -4px !important;
 }
 
-#map_enemy_forces h5 {
-    margin-bottom: 0;
+#map_enemy_forces {
+    font-size: 1.3em;
 }
 
 /* When in the sidebar, spread it out fully */
