@@ -3372,16 +3372,16 @@
         },
         {
             "name": "pragmarx/tracker",
-            "version": "dev-wotuu-bugfix",
+            "version": "dev-wotuu-bugfix-laravel-5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/tracker.git",
-                "reference": "76e8e7fa058c6b1c15fea4b2ffa5169ae087d6f7"
+                "reference": "39d6c5c121af4a85a19ac38d2f29b3a6f70aed6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Wotuu/tracker/zipball/76e8e7fa058c6b1c15fea4b2ffa5169ae087d6f7",
-                "reference": "76e8e7fa058c6b1c15fea4b2ffa5169ae087d6f7",
+                "url": "https://api.github.com/repos/Wotuu/tracker/zipball/39d6c5c121af4a85a19ac38d2f29b3a6f70aed6c",
+                "reference": "39d6c5c121af4a85a19ac38d2f29b3a6f70aed6c",
                 "shasum": ""
             },
             "require": {
