@@ -13,7 +13,7 @@ class DropDungeonStartMarkersTable extends Migration
      */
     public function up()
     {
-        DB::raw('DROP table `dungeon_start_markers`');
+        DB::statement('DROP table `dungeon_start_markers`');
     }
 
     /**
