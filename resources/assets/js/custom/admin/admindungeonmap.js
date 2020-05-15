@@ -35,12 +35,11 @@ class AdminDungeonMap extends DungeonMap {
     _createMapObjectGroups() {
         // For this page, let the enemy pack be the admin version with more functions which are otherwise hidden from the user
         return [
-            new EnemyMapObjectGroup(this, 'enemy', 'AdminEnemy', true),
-            new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'AdminEnemyPatrol', true),
-            new EnemyPackMapObjectGroup(this, 'enemypack', 'AdminEnemyPack', true),
-            new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'AdminDungeonStartMarker', true),
-            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'AdminDungeonFloorSwitchMarker', true),
-            new MapIconMapObjectGroup(this, 'mapicon', 'AdminMapComment', true),
+            new EnemyMapObjectGroup(this, 'AdminEnemy', true),
+            new EnemyPatrolMapObjectGroup(this, 'AdminEnemyPatrol', true),
+            new EnemyPackMapObjectGroup(this, 'AdminEnemyPack', true),
+            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'AdminDungeonFloorSwitchMarker', true),
+            new MapIconMapObjectGroup(this, 'AdminMapComment', true),
         ];
     }
 

@@ -14,12 +14,9 @@ class AdminDrawControls extends DrawControls {
             cssClass: 'leaflet-draw-draw-enemypatrol',
         }, {
             hotkey: '5',
-            cssClass: 'leaflet-draw-draw-dungeonstartmarker',
-        }, {
-            hotkey: '6',
             cssClass: 'leaflet-draw-draw-dungeonfloorswitchmarker',
         }, {
-            hotkey: '7',
+            hotkey: '6',
             cssClass: 'leaflet-draw-edit-edit',
         }];
     }
@@ -65,13 +62,6 @@ class AdminDrawControls extends DrawControls {
                     faClass: 'fa-exchange-alt',
                     title: 'Draw a patrol route for an enemy',
                     hotkey: this._findHotkeyByCssClass('enemypatrol')
-                },
-                dungeonstartmarker: {
-                    repeatMode: false,
-                    zIndexOffset: 1000,
-                    faClass: 'fa-flag',
-                    title: 'Draw a dungeon start marker',
-                    hotkey: this._findHotkeyByCssClass('dungeonstartmarker')
                 },
                 dungeonfloorswitchmarker: {
                     repeatMode: false,

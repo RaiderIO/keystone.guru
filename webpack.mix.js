@@ -97,7 +97,6 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
@@ -121,7 +120,6 @@ let scripts = [
     'resources/assets/js/custom/killzone.js',
     'resources/assets/js/custom/mapicon.js',
     'resources/assets/js/custom/mapicontype.js',
-    'resources/assets/js/custom/dungeonstartmarker.js',
     'resources/assets/js/custom/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/hotkeys.js',
     'resources/assets/js/custom/brushline.js',
@@ -166,7 +164,6 @@ let scripts = [
     'resources/assets/js/custom/admin/adminenemypack.js',
     'resources/assets/js/custom/admin/admindrawcontrols.js',
     'resources/assets/js/custom/admin/adminpanelcontrols.js',
-    'resources/assets/js/custom/admin/admindungeonstartmarker.js',
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
     'resources/assets/js/custom/admin/adminmapicon.js',
 

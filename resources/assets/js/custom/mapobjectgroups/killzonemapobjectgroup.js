@@ -1,6 +1,6 @@
 class KillZoneMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, editable) {
-        super(manager, name, editable);
+    constructor(manager, editable) {
+        super(manager, MAP_OBJECT_GROUP_KILLZONE, editable);
 
         let self = this;
 

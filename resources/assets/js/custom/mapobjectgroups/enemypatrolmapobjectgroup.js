@@ -1,6 +1,6 @@
 class EnemyPatrolMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, editable) {
-        super(manager, name, editable);
+    constructor(manager, editable) {
+        super(manager, MAP_OBJECT_GROUP_ENEMY_PATROL, editable);
 
         this.title = 'Hide/show enemy patrol routes';
         this.fa_class = 'fa-exchange-alt';

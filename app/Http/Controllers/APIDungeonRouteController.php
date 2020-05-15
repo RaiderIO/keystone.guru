@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
-use App\Http\Controllers\Traits\ListsDungeonStartMarkers;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
@@ -41,7 +40,6 @@ class APIDungeonRouteController extends Controller
     use ListsKillzones;
     use ListsBrushlines;
     use ListsMapIcons;
-    use ListsDungeonStartMarkers;
     use ListsDungeonFloorSwitchMarkers;
 
     /**
@@ -328,7 +326,7 @@ class APIDungeonRouteController extends Controller
         $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
 
         // Init the fields we should get for this request
-        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonstartmarker,dungeonfloorswitchmarker']);
+        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker']);
         $fields = explode(',', $fields);
 
         // Show enemies or raw data when fetching enemy packs

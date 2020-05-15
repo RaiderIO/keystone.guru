@@ -35,6 +35,21 @@
         ],
         "playerraces": [
             {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
                 "character_race_id": 15
             },
             {
@@ -115,6 +130,14 @@
             {
                 "floor_id": 41,
                 "polyline": {
+                    "color": "#9DFF56",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":\"255.5625\",\"lng\":\"-108.6875\"},{\"lat\":\"254.5625\",\"lng\":\"-116\"},{\"lat\":\"268.375\",\"lng\":\"-124.875\"},{\"lat\":\"266.6875\",\"lng\":\"-107.25\"},{\"lat\":\"248.375\",\"lng\":\"-109.5625\"},{\"lat\":\"250.8125\",\"lng\":\"-116.25\"}]"
+                }
+            },
+            {
+                "floor_id": 41,
+                "polyline": {
                     "color": "#0070de",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":305.69,\"lng\":-124.38},{\"lat\":280.25,\"lng\":-123.31},{\"lat\":245.19,\"lng\":-114.88}]"
@@ -170,6 +193,13 @@
             }
         ],
         "killzones": [
+            {
+                "floor_id": 41,
+                "color": "#9DFF56",
+                "lat": -117.625,
+                "lng": 215.75,
+                "killzoneenemies": []
+            },
             {
                 "floor_id": 42,
                 "color": "",
@@ -606,6 +636,20 @@
             }
         ],
         "mapicons": [
+            {
+                "floor_id": 41,
+                "map_icon_type_id": 9,
+                "lat": -113,
+                "lng": 224.3125,
+                "comment": ""
+            },
+            {
+                "floor_id": 41,
+                "map_icon_type_id": 11,
+                "lat": -118.875,
+                "lng": 246.1875,
+                "comment": "zzz"
+            },
             {
                 "floor_id": 41,
                 "map_icon_type_id": 2,

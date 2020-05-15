@@ -1,6 +1,6 @@
 class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, editable) {
-        super(manager, name, editable);
+    constructor(manager, editable) {
+        super(manager, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, editable);
 
         this.title = 'Hide/show floor switch markers';
         this.fa_class = 'fa-door-open';

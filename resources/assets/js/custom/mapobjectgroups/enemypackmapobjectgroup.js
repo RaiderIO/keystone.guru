@@ -1,6 +1,6 @@
 class EnemyPackMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, editable) {
-        super(manager, name, editable);
+    constructor(manager, editable) {
+        super(manager, MAP_OBJECT_GROUP_ENEMY_PACK, editable);
 
         this.title = 'Hide/show enemy packs';
         this.fa_class = 'fa-draw-polygon';

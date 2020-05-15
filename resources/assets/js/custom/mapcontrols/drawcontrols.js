@@ -30,10 +30,6 @@ $(function () {
                 handler: new L.Draw.EnemyPatrol(map, this.options.enemypatrol),
                 title: this.options.enemypatrol.title
             }, {
-                enabled: this.options.dungeonstartmarker,
-                handler: new L.Draw.DungeonStartMarker(map, this.options.dungeonstartmarker),
-                title: this.options.dungeonstartmarker.title
-            }, {
                 enabled: this.options.dungeonfloorswitchmarker,
                 handler: new L.Draw.DungeonFloorSwitchMarker(map, this.options.dungeonfloorswitchmarker),
                 title: this.options.dungeonfloorswitchmarker.title
@@ -217,7 +213,6 @@ class DrawControls extends MapControl {
                 enemypack: false,
                 enemypatrol: false,
                 enemy: false,
-                dungeonstartmarker: false,
                 dungeonfloorswitchmarker: false,
             },
             edit: {

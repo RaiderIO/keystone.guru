@@ -5,7 +5,6 @@ const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
 const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
-const MAP_OBJECT_GROUP_DUNGEON_START_MARKER = 'dungeonstartmarker';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
@@ -16,7 +15,6 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
     MAP_OBJECT_GROUP_BRUSHLINE,
     MAP_OBJECT_GROUP_MAPICON,
-    MAP_OBJECT_GROUP_DUNGEON_START_MARKER,
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
     MAP_OBJECT_GROUP_KILLZONE
 ];
@@ -47,23 +45,21 @@ class MapObjectGroupManager extends Signalable {
         let result = null;
 
         if (name === MAP_OBJECT_GROUP_ENEMY) {
-            result = new EnemyMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY, getState().isMapAdmin());
+            result = new EnemyMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_ENEMY_PATROL) {
-            result = new EnemyPatrolMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PATROL, getState().isMapAdmin());
+            result = new EnemyPatrolMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_ENEMY_PACK) {
-            result = new EnemyPackMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PACK, getState().isMapAdmin());
+            result = new EnemyPackMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_PATH) {
-            result = new PathMapObjectGroup(this, MAP_OBJECT_GROUP_PATH, !getState().isMapAdmin());
+            result = new PathMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_KILLZONE) {
-            result = new KillZoneMapObjectGroup(this, MAP_OBJECT_GROUP_KILLZONE, !getState().isMapAdmin());
+            result = new KillZoneMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_BRUSHLINE) {
-            result = new BrushlineMapObjectGroup(this, MAP_OBJECT_GROUP_BRUSHLINE, !getState().isMapAdmin());
+            result = new BrushlineMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_MAPICON) {
-            result = new MapIconMapObjectGroup(this, MAP_OBJECT_GROUP_MAPICON, true);
-        } else if (name === MAP_OBJECT_GROUP_DUNGEON_START_MARKER) {
-            result = new DungeonStartMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_START_MARKER, getState().isMapAdmin());
+            result = new MapIconMapObjectGroup(this, true);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER) {
-            result = new DungeonFloorSwitchMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, getState().isMapAdmin());
+            result = new DungeonFloorSwitchMarkerMapObjectGroup(this, getState().isMapAdmin());
         }
 
         console.assert(result !== null, 'Unable to find map object group ' + name, this);

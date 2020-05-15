@@ -8,7 +8,6 @@ use App\Logic\MDT\IO\ImportWarning;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute;
-use App\Models\DungeonStartMarker;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
@@ -290,7 +289,6 @@ class AdminToolsController extends Controller
                 }
                 $enemyPacks = EnemyPack::where('floor_id', $floor->id)->get()->values();
                 $enemyPatrols = EnemyPatrol::where('floor_id', $floor->id)->get()->values();
-                $dungeonStartMarkers = DungeonStartMarker::where('floor_id', $floor->id)->get()->values();
                 $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', $floor->id)->get()->values();
                 // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
                 $dungeonFloorSwitchMarkers->makeHidden(['direction']);
@@ -302,7 +300,6 @@ class AdminToolsController extends Controller
                 $result['enemies'] = $enemies;
                 $result['enemy_packs'] = $enemyPacks;
                 $result['enemy_patrols'] = $enemyPatrols;
-                $result['dungeon_start_markers'] = $dungeonStartMarkers;
                 $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
                 $result['map_icons'] = $mapIcons;
 
