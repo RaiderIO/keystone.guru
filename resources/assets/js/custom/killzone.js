@@ -39,7 +39,7 @@ class KillZone extends MapObject {
         let self = this;
         this.id = 0;
         this.label = 'KillZone';
-        this.color = c.map.killzone.polygonOptions.color;
+        this.color = c.map.killzone.polygonOptions.color();
         // List of IDs of selected enemies
         this.enemies = [];
         // Temporary list of enemies when we received them from the server

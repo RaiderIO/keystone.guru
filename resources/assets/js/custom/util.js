@@ -11,6 +11,8 @@ function _getHandlebarsTranslations() {
     return lang.messages[locale + '.messages'];
 }
 
+const randomColor = () => '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+
 /** Some built-in caching since this function is called a lot */
 let _defaultVariables = null;
 

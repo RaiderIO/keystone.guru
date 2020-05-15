@@ -84,13 +84,13 @@ let scripts = [
     // Home page only
     'resources/assets/js/custom/home.js',
     // Doesn't depend on anything
+    'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/constants.js',
 
     // Pre-compiled handlebars
     'resources/assets/js/handlebars.js',
 
     // Include in proper order
-    'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/signalable.js',
 
     // Map object groups

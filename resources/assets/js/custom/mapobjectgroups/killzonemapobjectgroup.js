@@ -107,7 +107,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     createNewPull() {
         let killZone = this._restoreObject({
             id: -1,
-            color: c.map.killzone.polygonOptions.color,
+            color: c.map.killzone.polygonOptions.color(),
             floor_id: -1, // Only for the killzone location which is not set from a 'new pull'
             killzoneenemies: [],
             lat: null,

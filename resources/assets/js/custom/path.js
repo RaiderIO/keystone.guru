@@ -46,7 +46,7 @@ class Path extends Polyline {
         this.label = 'Path';
         this.decorator = null;
 
-        this.setColor(c.map.path.defaultColor);
+        this.setColor(c.map.path.defaultColor());
         this.setSynced(false);
     }
 

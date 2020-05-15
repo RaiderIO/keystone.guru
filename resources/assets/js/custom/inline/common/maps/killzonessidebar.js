@@ -189,9 +189,13 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _deleteKillZone() {
+        let self = this;
+
         let selectedKillZoneId = parseInt($(this).closest('.map_killzonessidebar_killzone').data('id'));
         let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
+
+        $(this).find('i').removeClass('fa-trash').addClass('fa fa-circle-notch fa-spin');
 
         killZone.register('object:deleted', '123123', function () {
             showSuccessNotification(lang.get('messages.object.deleted'));
@@ -206,6 +210,15 @@ class CommonMapsKillzonessidebar extends InlineCode {
             killZone.unregister('object:deleted', '123123');
             killZone.cleanup();
         });
+        // Failed to delete
+        killZone.register('synced', '123123', function () {
+            if (!killZone.synced) {
+                $(self).find('i').addClass('fa-trash').removeClass('fa fa-circle-notch fa-spin')
+            }
+
+            killZone.unregister('synced', '123123');
+        });
+
         killZone.delete();
     }
 

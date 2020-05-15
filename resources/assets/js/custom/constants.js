@@ -1,16 +1,9 @@
-if (typeof Cookies.get('polyline_default_color') === 'undefined') {
-    Cookies.set('polyline_default_color', '#9DFF56');
-}
 if (typeof Cookies.get('polyline_default_weight') === 'undefined') {
     Cookies.set('polyline_default_weight', 3);
 }
 if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
     Cookies.set('hidden_map_object_groups', []);
 }
-
-Cookies.defaults = $.extend(Cookies.defaults, {
-    polyline_default_color: '#9DFF56',
-});
 
 let c = {
     map: {
@@ -110,14 +103,14 @@ let c = {
             },
         },
         enemypatrol: {
-            defaultColor: '#E25D5D'
+            defaultColor: randomColor
         },
         /* These colors may be overriden by drawcontrols.js */
         path: {
-            defaultColor: Cookies.get('polyline_default_color'),
+            defaultColor: randomColor,
         },
         polyline: {
-            defaultColor: Cookies.get('polyline_default_color'),
+            defaultColor: randomColor,
             defaultWeight: Cookies.get('polyline_default_weight'),
         },
         brushline: {
@@ -143,7 +136,7 @@ let c = {
                 weight: 1
             },
             polygonOptions: {
-                color: Cookies.get('polyline_default_color'),
+                color: randomColor, //Cookies.get('polyline_default_color'),
                 weight: 2,
                 fillOpacity: 0.3,
                 opacity: 1,

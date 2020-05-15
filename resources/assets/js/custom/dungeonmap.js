@@ -655,7 +655,7 @@ class DungeonMap extends Signalable {
         this.pather.setOptions({
             strokeWidth: c.map.polyline.defaultWeight,
             smoothFactor: 5,
-            pathColour: c.map.polyline.defaultColor
+            pathColour: c.map.polyline.defaultColor()
         });
     }
 

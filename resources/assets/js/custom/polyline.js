@@ -3,7 +3,7 @@ class Polyline extends MapObject {
         super(map, layer);
         this.weight = c.map.polyline.defaultWeight;
 
-        this.setColor(c.map.polyline.defaultColor);
+        this.setColor(c.map.polyline.defaultColor());
     }
 
     /**

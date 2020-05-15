@@ -102,9 +102,6 @@ if (isset($model)) {
                     <div class="col font-weight-bold">
                         {{ __('Line weight') }}:
                     </div>
-                    <div class="col font-weight-bold">
-                        {{ __('Color') }}:
-                    </div>
                 </div>
                 <div class="row view_dungeonroute_details_row">
                     <div class="col line_weight_selection">
@@ -112,11 +109,6 @@ if (isset($model)) {
                         {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
                             isset($_COOKIE['polyline_default_weight']) ? $_COOKIE['polyline_default_weight'] : 0,
                             ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
-                    </div>
-                    <div class="col default_color_selection">
-                        <div id="edit_route_freedraw_options_color">
-
-                        </div>
                     </div>
                 </div>
             </div>

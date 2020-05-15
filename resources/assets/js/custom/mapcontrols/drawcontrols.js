@@ -161,7 +161,7 @@ class DrawControls extends MapControl {
         let weight = $('#edit_route_freedraw_options_weight').val();
 
         if (typeof color === 'undefined') {
-            color = c.map.polyline.defaultColor;
+            color = c.map.polyline.defaultColor();
         }
 
         if (typeof weight === 'undefined') {

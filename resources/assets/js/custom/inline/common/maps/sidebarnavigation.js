@@ -16,13 +16,10 @@ class SidebarNavigation extends Sidebar {
         let mapObjectGroups = map.mapObjectGroupManager.mapObjectGroups;
         let cookieHiddenMapObjectGroups = Cookies.get('hidden_map_object_groups');
 
-        console.log(cookieHiddenMapObjectGroups);
-
         for (let i in mapObjectGroups) {
             if (mapObjectGroups.hasOwnProperty(i)) {
                 let group = mapObjectGroups[i];
 
-                console.log([group.name, cookieHiddenMapObjectGroups.includes(group.name)]);
                 let selected = !cookieHiddenMapObjectGroups.includes(group.name) ? {selected: 'selected'} : {};
                 $mapObjectGroupVisibilitySelect.append($('<option>', $.extend(selected, {
                     text: lang.get(`messages.${group.name}_map_object_group_label`),
