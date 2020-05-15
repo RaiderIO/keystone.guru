@@ -41,6 +41,15 @@ class Conversion
      * @param $dungeonName string
      * @return mixed Gets the MDT version of a dungeon name.
      */
+    public static function hasMDTDungeonName($dungeonName)
+    {
+        return isset(self::$dungeonNameMapping[$dungeonName]);
+    }
+
+    /**
+     * @param $dungeonName string
+     * @return mixed Gets the MDT version of a dungeon name.
+     */
     public static function getMDTDungeonName($dungeonName)
     {
         return self::$dungeonNameMapping[$dungeonName];
