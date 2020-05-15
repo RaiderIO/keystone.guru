@@ -4,7 +4,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
     constructor(options) {
         super(options);
         this.sidebar = new Sidebar(options);
-        this.sidebar.activate();
 
         this._colorPickers = [];
         this._currentlyActiveColorPicker = null;
@@ -285,6 +284,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     activate() {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+        this.sidebar.activate();
+
         this.map = getState().getDungeonMap();
 
         let self = this;
@@ -334,5 +335,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         this.map.unregister('map:mapstatechanged', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.unregister('object:add', this);
+
+        this.sidebar.cleanup();
     }
 }

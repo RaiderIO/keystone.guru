@@ -4,6 +4,9 @@ if (typeof Cookies.get('polyline_default_color') === 'undefined') {
 if (typeof Cookies.get('polyline_default_weight') === 'undefined') {
     Cookies.set('polyline_default_weight', 3);
 }
+if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
+    Cookies.set('hidden_map_object_groups', []);
+}
 
 Cookies.defaults = $.extend(Cookies.defaults, {
     polyline_default_color: '#9DFF56',

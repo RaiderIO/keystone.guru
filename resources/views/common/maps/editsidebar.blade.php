@@ -9,12 +9,13 @@ if (isset($model)) {
 }
 ?>
 @include('common.general.inline', ['path' => 'common/maps/editsidebar', 'options' => [
+    'dependencies' => ['common/maps/map'],
     'sidebarSelector' => '#editsidebar',
     'sidebarScrollSelector' => '#editsidebar .sidebar-content',
     'sidebarToggleSelector' => '#editsidebarToggle',
     'switchDungeonFloorSelect' => '#map_floor_selection',
     'defaultSelectedFloorId' => $dungeon->floors[0]->id,
-    'anchor' => 'left',
+    'anchor' => 'left'
 ]])
 
 @component('common.maps.sidebar', [
@@ -56,8 +57,24 @@ if (isset($model)) {
                     </div>
                 </div>
 
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col font-weight-bold">
+                        {{ __('Map elements') }}:
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col">
+                        {!! Form::select('map_map_object_group_visibility', [], 0,
+                            ['id' => 'map_map_object_group_visibility',
+                            'class' => 'form-control selectpicker',
+                            'multiple' => 'multiple',
+                            'data-selected-text-format' => 'count > 1',
+                            'data-count-selected-text' => __('{0} visible')]) !!}
+                    </div>
+                </div>
+
                 @if($floorSelection)
-                    <div class="row view_dungeonroute_details_row">
+                    <div class="row view_dungeonroute_details_row mt-3">
                         <div class="col font-weight-bold">
                             {{ __('Floor') }}:
                         </div>

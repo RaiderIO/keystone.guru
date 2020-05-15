@@ -14,8 +14,10 @@ class Sidebar {
         // Make sure that the select options have a valid value
         this._refreshFloorSelect();
 
+        // Switch floors
         $(this.options.switchDungeonFloorSelect).val(this.options.defaultSelectedFloorId);
 
+        // Sidebar toggle
         let $sidebar = $(this.options.sidebarSelector);
         $(this.options.sidebarToggleSelector).on('click', function () {
             // Dismiss
@@ -99,5 +101,9 @@ class Sidebar {
         } else {
             $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
         }
+    }
+    
+    cleanup() {
+
     }
 }

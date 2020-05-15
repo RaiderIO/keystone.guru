@@ -100,18 +100,18 @@ class MapObjectGroup extends Signalable {
 
         // Only when not in try mode!
         if (!this.manager.map.isTryModeEnabled() && (remoteMapObject.faction !== 'any' && faction !== 'any' && faction !== remoteMapObject.faction)) {
-            console.warn('Skipping map object that does not belong to the requested faction ', remoteMapObject, faction);
+            // console.warn('Skipping map object that does not belong to the requested faction ', remoteMapObject, faction);
             result = false;
         }
 
         // If the map isn't teeming, but the enemy is teeming..
         if (!this.manager.map.options.teeming && remoteMapObject.teeming === 'visible') {
-            console.warn('Skipping teeming map object', remoteMapObject);
+            // console.warn('Skipping teeming map object', remoteMapObject);
             result = false;
         }
         // If the map is teeming, but the enemy shouldn't be there for teeming maps..
         else if (this.manager.map.options.teeming && remoteMapObject.teeming === 'invisible') {
-            console.warn('Skipping teeming-filtered map object', remoteMapObject.id);
+            // console.warn('Skipping teeming-filtered map object', remoteMapObject.id);
             result = false;
         }
 

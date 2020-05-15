@@ -4,8 +4,7 @@ class CommonMapsEditsidebar extends InlineCode {
     constructor(options) {
         super(options);
 
-        this.sidebar = new Sidebar(options);
-        this.sidebar.activate();
+        this.sidebar = new SidebarNavigation(options);
 
         this._colorPicker = null;
     }
@@ -14,6 +13,8 @@ class CommonMapsEditsidebar extends InlineCode {
      *
      */
     activate() {
+        this.sidebar.activate();
+
         let self = this;
 
         // Copy to clipboard functionality
@@ -77,5 +78,11 @@ class CommonMapsEditsidebar extends InlineCode {
         $('#edit_route_freedraw_options_color').bind('click', function () {
             self._colorPicker.show();
         });
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        this.sidebar.cleanup();
     }
 }
