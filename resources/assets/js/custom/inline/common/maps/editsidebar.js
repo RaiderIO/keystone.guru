@@ -1,5 +1,3 @@
-let grapick = null;
-
 class CommonMapsEditsidebar extends InlineCode {
     constructor(options) {
         super(options);
@@ -53,7 +51,26 @@ class CommonMapsEditsidebar extends InlineCode {
         $weight.val(c.map.polyline.defaultWeight - 1);
 
         // Gradient setup
-        this._grapick = new Grapick({el: '#edit_route_freedraw_options_gradient'});
+        this._grapick = new Grapick({
+            el: '#edit_route_freedraw_options_gradient',
+            colorEl: '<div id="grapick_color_picker" class="handler-color-wrap"></div>'
+        });
+        this._grapick.setColorPicker(handler => {
+            console.log(handler.getColor());
+            Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
+                el: `#grapick_color_picker`,
+                default: handler.getColor()
+            })).on('save', (color, instance) => {
+                // Apply the new color
+                handler.setColor('#' + color.toHEXA().join(''));
+
+                // Reset ourselves
+                instance.hide();
+            });
+
+            $('.draw_settings_tools .pickr').addClass('grapick_color_picker_button grapick_color_picker_button_outer');
+            $('.draw_settings_tools .pcr-button').addClass('grapick_color_picker_button');
+        });
 
         // Restore pull_gradient if set
         let handlers = this._getHandlersFromCookie();
@@ -62,8 +79,6 @@ class CommonMapsEditsidebar extends InlineCode {
                 this._grapick.addHandler(handlers[index][0], handlers[index][1]);
             }
         }
-
-        grapick = this._grapick;
 
         // Do stuff on change of the gradient
         this._grapick.on('change', complete => {

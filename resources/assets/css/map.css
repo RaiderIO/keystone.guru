@@ -190,6 +190,16 @@ html, body, #map, #app, .wrapper {
     height: 100%;
 }
 
+.grapick_color_picker_button_outer {
+    left: -6px;
+    top: -9px;
+}
+.grapick_color_picker_button {
+    width: 12px !important;
+    height: 12px !important;
+    padding: 0 !important;
+}
+
 /*#killzonesidebar .map_killzonessidebar_killzone.selected {*/
 /*    border: #DF691A 3px solid;*/
 
