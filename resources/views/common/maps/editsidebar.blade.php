@@ -96,7 +96,7 @@ if (isset($model)) {
     <div class="form-group draw_settings_tools">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Draw Settings') }}</h5>
+                <h5 class="card-title">{{ __('Draw settings') }}</h5>
                 <?php // Weight ?>
                 <div class="row view_dungeonroute_details_row">
                     <div class="col font-weight-bold">
@@ -109,6 +109,24 @@ if (isset($model)) {
                         {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
                             isset($_COOKIE['polyline_default_weight']) ? $_COOKIE['polyline_default_weight'] : 0,
                             ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
+                    </div>
+                </div>
+
+                <div class="row view_dungeonroute_details_row mt-2">
+                    <div class="col font-weight-bold">
+                        {{ __('Pull gradient') }}:
+                    </div>
+                </div>
+                <div class="row no-gutters view_dungeonroute_details_row mt-3">
+                    <div id="edit_route_freedraw_options_gradient" class="col">
+
+                    </div>
+                </div>
+                <div class="row no-gutters view_dungeonroute_details_row mt-3">
+                    <div class="col">
+                        <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-info w-100">
+                            <i class="fas fa-palette"></i> {{ __('Apply to pulls') }}
+                        </button>
                     </div>
                 </div>
             </div>

@@ -15,7 +15,9 @@ class EnemyVisualControls extends MapControl {
 
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
                 console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', self);
-                enemy.visual.setVisualType(changedEvent.data.enemyDisplayType);
+                if( enemy.visual !== null ) {
+                    enemy.visual.setVisualType(changedEvent.data.enemyDisplayType);
+                }
             });
         });
 

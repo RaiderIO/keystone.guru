@@ -68,3 +68,70 @@ function hexToRgb(hex) {
         b: parseInt(result[3], 16)
     } : null;
 }
+
+function _componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+/**
+ * @param rgb [r, g, b]
+ * @returns {string}
+ */
+function rgbToHex(rgb) {
+  return "#" + _componentToHex(rgb[0]) + _componentToHex(rgb[1]) + _componentToHex(rgb[2]);
+}
+
+/**
+ * Handlers is an array in the form of [[<0-100>, 'hex'], ....]
+ * @param handlers
+ * @param weight
+ * @returns {[number, number, number]}
+ */
+function pickHexFromHandlers(handlers, weight) {
+    console.assert(handlers.length > 1, 'Handlers.length <= 1!', handlers);
+
+    console.log('>> pickHexFromHandlers', handlers, weight);
+
+    // If color is before the start or after the end of any gradients, return last known color
+    let result = null;
+    if (handlers[0][0] >= weight) {
+        result = handlers[0][1];
+    } else if (handlers[handlers.length - 1][0] <= weight) {
+        result = handlers[handlers.length - 1][1];
+    } else {
+        // Color is in between gradients now, determine which gradient it is
+        let color1 = null;
+        let color2 = null;
+        let scaledWeight = 0;
+        for (let i = 0; i < handlers.length; i++) {
+            let a = handlers[i];
+            let b = handlers[i + 1];
+            console.log(`${weight} -> ${a[0]} & ${b[0]}`)
+            if (weight >= a[0] && weight <= b[0]) {
+                console.log(`${weight} is between ${a[0]} and ${b[0]}`)
+                color1 = hexToRgb(a[1]);
+                color2 = hexToRgb(b[1]);
+
+                let gradientRange = b[0] - a[0];
+                let weightOnGradientRange = weight - a[0];
+                scaledWeight = (weightOnGradientRange / gradientRange);
+
+                console.log(a, b, weight, gradientRange, weightOnGradientRange, scaledWeight);
+                break;
+            }
+        }
+        console.assert(color1 !== null, 'color1 === null!', handlers);
+        console.assert(color2 !== null, 'color2 === null!', handlers);
+
+        let invertedScaledWeight = 1 - scaledWeight;
+        let rgb = [Math.round(color2.r * scaledWeight + color1.r * invertedScaledWeight),
+            Math.round(color2.g * scaledWeight + color1.g * invertedScaledWeight),
+            Math.round(color2.b * scaledWeight + color1.b * invertedScaledWeight)];
+        console.log(rgb);
+        result = rgbToHex(rgb);
+    }
+
+    console.log('OK pickHexFromHandlers', result);
+    return result;
+}

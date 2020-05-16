@@ -101,8 +101,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
             default: killZone.color
         })).on('save', (color, instance) => {
             // Apply the new color
-            killZone.color = '#' + color.toHEXA().join('');
-            killZone.save();
+            let newColor = '#' + color.toHEXA().join('');
+            if( killZone.color !== newColor ) {
+                killZone.color = newColor;
+                killZone.save();
+            }
 
             // Reset ourselves
             instance.hide();
@@ -237,6 +240,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _refreshKillZone(killZone) {
+        console.warn('refreshing killzone!', killZone.color);
         let enemyForcesPercent = (killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100;
         enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
@@ -246,8 +250,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // $(`#map_killzonessidebar_killzone_${killZone.id}_expand`)
         //     .css('background-color', killZone.color);
-        $(`#map_killzonessidebar_killzone_${killZone.id}_color`)
-            .css('background-color', killZone.color);
+
+        this._colorPickers[killZone.id].setColor(killZone.color);
+        // $(`#map_killzonessidebar_killzone_${killZone.id}_color`)
+        //     .css('background-color', killZone.color);
 
         // Fill the enemy list
         let npcs = [];
