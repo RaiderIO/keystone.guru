@@ -354,90 +354,7 @@ class KillZone extends MapObject {
 
         // Add connections from each enemy to our location
         let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        let latLngs = [];
-        let otherFloorsWithEnemies = [];
-        $.each(this.enemies, function (i, id) {
-            let enemy = enemyMapObjectGroup.findMapObjectById(id);
-
-            if (enemy !== null) {
-                if (enemy.layer !== null) {
-                    let latLng = enemy.layer.getLatLng();
-                    latLngs.push([latLng.lat, latLng.lng]);
-
-                    // Draw lines to self if killzone mode is enabled
-                    if (self.map.currentSelectModeKillZone === self) {
-                        let layer = L.polyline([
-                            latLng,
-                            self.layer.getLatLng()
-                        ], c.map.killzone.polylineOptions);
-                        // do not prevent clicking on anything else
-                        self.enemyConnectionsLayerGroup.setZIndex(-1000);
-
-                        self.enemyConnectionsLayerGroup.addLayer(layer);
-                    }
-                }
-                // The enemy was not on this floor; add its floor to the 'add floor switch as part of pack' list
-                else if (!otherFloorsWithEnemies.includes(enemy.floor_id)) {
-                    otherFloorsWithEnemies.push(enemy.floor_id);
-                }
-            } else {
-                console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + 'on floor ' + self.floor_id + ', ' +
-                    'cannot draw connection, this enemy was probably removed during a migration?');
-            }
-        });
-
-
-        // Alpha shapes
-        if (this.isKillZoneVisible()) {
-            let selfLatLng = this.layer.getLatLng();
-            latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
-        }
-
-        // If there are other floors with enemies..
-        if (otherFloorsWithEnemies.length > 0) {
-            let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
-            $.each(otherFloorsWithEnemies, function (i, floorId) {
-                // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
-                // In the case of Waycrest, we want to select the closest floor switch marker, not the 1st index which
-                // may be really far away
-                let floorSwitchMarkerCandidates = [];
-                $.each(floorSwitchMapObjectGroup.objects, function (j, floorSwitchMapObject) {
-                    console.log(floorSwitchMapObject.target_floor_id, floorId);
-                    if (floorSwitchMapObject.target_floor_id === floorId) {
-                        floorSwitchMarkerCandidates.push(floorSwitchMapObject);
-                    }
-                });
-
-                console.assert(floorSwitchMarkerCandidates.length > 0, 'floorSwitchMarkerCandidates.length is <= 0', self);
-
-                // https://stackoverflow.com/questions/22796520/finding-the-center-of-leaflet-polygon
-                let getCentroid = function (arr) {
-                    return arr.reduce(function (x, y) {
-                        return [x[0] + y[0] / arr.length, x[1] + y[1] / arr.length]
-                    }, [0, 0])
-                }
-                // Calculate a rough center of our bounds
-                let centeroid = getCentroid(latLngs);
-                let ourCenterLatLng = L.latLng(centeroid[0], centeroid[1]);
-                let closestFloorSwitchMarker = null;
-                let closestDistance = 9999999;
-                // Find the closest floor switch marker
-                $.each(floorSwitchMarkerCandidates, function (j, floorSwitchMapObject) {
-                    let distance = floorSwitchMapObject.layer.getLatLng().distanceTo(ourCenterLatLng);
-                    if (closestDistance > distance) {
-                        closestDistance = distance;
-                        closestFloorSwitchMarker = floorSwitchMapObject;
-                    }
-                });
-                console.assert(closestFloorSwitchMarker instanceof DungeonFloorSwitchMarker,
-                    'closestFloorSwitchMarker is not a DungeonFloorSwitchMarker', closestFloorSwitchMarker);
-                console.log(centeroid, ourCenterLatLng, closestFloorSwitchMarker, closestDistance);
-
-                // Add its location to the list!
-                let latLng = closestFloorSwitchMarker.layer.getLatLng();
-                latLngs.push([latLng.lat, latLng.lng]);
-            });
-        }
+        let latLngs = this._getVisibleEntitiesLatLngs();
 
         let p = hull(latLngs, 100);
 
@@ -510,6 +427,119 @@ class KillZone extends MapObject {
                 this.save();
             }
         }
+    }
+
+    /**
+     * Get the LatLngs of all enemies that are visible on the current floor.
+     * @returns {[]}
+     * @private
+     */
+    _getVisibleEntitiesLatLngs() {
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
+        let self = this;
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        let latLngs = [];
+        let otherFloorsWithEnemies = [];
+        $.each(this.enemies, function (i, id) {
+            let enemy = enemyMapObjectGroup.findMapObjectById(id);
+
+            if (enemy !== null) {
+                if (enemy.layer !== null) {
+                    let latLng = enemy.layer.getLatLng();
+                    latLngs.push([latLng.lat, latLng.lng]);
+
+                    // Draw lines to self if killzone mode is enabled
+                    if (self.map.currentSelectModeKillZone === self) {
+                        let layer = L.polyline([
+                            latLng,
+                            self.layer.getLatLng()
+                        ], c.map.killzone.polylineOptions);
+                        // do not prevent clicking on anything else
+                        self.enemyConnectionsLayerGroup.setZIndex(-1000);
+
+                        self.enemyConnectionsLayerGroup.addLayer(layer);
+                    }
+                }
+                // The enemy was not on this floor; add its floor to the 'add floor switch as part of pack' list
+                else if (!otherFloorsWithEnemies.includes(enemy.floor_id)) {
+                    otherFloorsWithEnemies.push(enemy.floor_id);
+                }
+            } else {
+                console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + 'on floor ' + self.floor_id + ', ' +
+                    'cannot draw connection, this enemy was probably removed during a migration?');
+            }
+        });
+
+
+        // Alpha shapes
+        if (this.isKillZoneVisible()) {
+            let selfLatLng = this.layer.getLatLng();
+            latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
+        }
+
+        // If there are other floors with enemies..
+        if (otherFloorsWithEnemies.length > 0) {
+            let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+            $.each(otherFloorsWithEnemies, function (i, floorId) {
+                // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
+                // In the case of Waycrest, we want to select the closest floor switch marker, not the 1st index which
+                // may be really far away
+                let floorSwitchMarkerCandidates = [];
+                $.each(floorSwitchMapObjectGroup.objects, function (j, floorSwitchMapObject) {
+                    if (floorSwitchMapObject.target_floor_id === floorId) {
+                        floorSwitchMarkerCandidates.push(floorSwitchMapObject);
+                    }
+                });
+
+                console.assert(floorSwitchMarkerCandidates.length > 0, 'floorSwitchMarkerCandidates.length is <= 0', self);
+
+                // Calculate a rough center of our bounds
+                let ourCenterLatLng = self._getLayerCenteroid(latLngs);
+                let closestFloorSwitchMarker = null;
+                let closestDistance = 9999999;
+
+                // Find the closest floor switch marker
+                $.each(floorSwitchMarkerCandidates, function (j, floorSwitchMapObject) {
+                    let distance = floorSwitchMapObject.layer.getLatLng().distanceTo(ourCenterLatLng);
+                    if (closestDistance > distance) {
+                        closestDistance = distance;
+                        closestFloorSwitchMarker = floorSwitchMapObject;
+                    }
+                });
+                console.assert(closestFloorSwitchMarker instanceof DungeonFloorSwitchMarker,
+                    'closestFloorSwitchMarker is not a DungeonFloorSwitchMarker', closestFloorSwitchMarker);
+
+                // Add its location to the list!
+                let latLng = closestFloorSwitchMarker.layer.getLatLng();
+                latLngs.push([latLng.lat, latLng.lng]);
+            });
+        }
+
+        return latLngs;
+    }
+
+    /**
+     * Get the center LatLng of this killzone's layer
+     * @param arr
+     * @see https://stackoverflow.com/questions/22796520/finding-the-center-of-leaflet-polygon
+     * @return {object}
+     */
+    _getLayerCenteroid(arr) {
+        let reduce = arr.reduce(function (x, y) {
+            return [x[0] + y[0] / arr.length, x[1] + y[1] / arr.length]
+        }, [0, 0]);
+
+        return L.latLng(reduce[0], reduce[1]);
+    }
+
+    /**
+     * Get a
+     * @returns {object}
+     */
+    getLayerCenteroid() {
+        return this._getLayerCenteroid(this._getVisibleEntitiesLatLngs());
     }
 
     // To be overridden by any implementing classes

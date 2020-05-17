@@ -33,6 +33,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
     /**
      * Triggered whenever the user has selected a killzone
+     * @param killZone {KillZone}
+     * @param selected {Boolean}
      * @private
      */
     _killZoneSelected(killZone, selected) {
@@ -84,6 +86,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 } else {
                     // Just highlight the pull when the user clicked a pull
                     newMapState = new ViewKillZoneEnemySelection(map, killZone);
+                }
+
+                // Center the map to this killzone
+                if (killZone.floor_id === getState().getCurrentFloor().id) {
+                    getState().getDungeonMap().leafletMap.setView(killZone.getLayerCenteroid(), getState().getMapZoomLevel())
                 }
             }
         }
