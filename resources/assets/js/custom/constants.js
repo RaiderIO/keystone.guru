@@ -156,6 +156,11 @@ let c = {
             }
         },
         placeholderColors: {},
+        editsidebar: {
+            pullGradient: {
+                defaultHandlers: [[0, '#FF0000'], [100, '#00FF00']]
+            }
+        },
         colorPickerDefaultOptions: {
             theme: 'nano', // 'classic' or 'monolith', or 'nano',
 

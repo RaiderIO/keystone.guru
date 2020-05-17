@@ -56,13 +56,15 @@ class CommonMapsEditsidebar extends InlineCode {
             colorEl: '<div id="grapick_color_picker" class="handler-color-wrap"></div>'
         });
         this._grapick.setColorPicker(handler => {
-            console.log(handler.getColor());
+            let defaultColor = self._parseHandlerColor(handler.getColor());
             Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
                 el: `#grapick_color_picker`,
-                default: handler.getColor()
+                // Convert if necessary
+                default: defaultColor
             })).on('save', (color, instance) => {
+                let newColor = '#' + color.toHEXA().join('');
                 // Apply the new color
-                handler.setColor('#' + color.toHEXA().join(''));
+                handler.setColor(newColor);
 
                 // Reset ourselves
                 instance.hide();
@@ -82,7 +84,14 @@ class CommonMapsEditsidebar extends InlineCode {
 
         // Do stuff on change of the gradient
         this._grapick.on('change', complete => {
-            Cookies.set('pull_gradient', self._grapick.getColorValue());
+            // construct pull_gradient string from handlers
+            let pullGradient = [];
+            for (let i = 0; i < self._grapick.getHandlers().length; i++) {
+                let handler = self._grapick.getHandler(i);
+                pullGradient.push(handler.position + ' ' + self._parseHandlerColor(handler.color));
+            }
+            let result = pullGradient.join(',');
+            Cookies.set('pull_gradient', result);
         });
 
         $('#edit_route_freedraw_options_gradient_apply_to_pulls').bind('click', function () {
@@ -112,21 +121,35 @@ class CommonMapsEditsidebar extends InlineCode {
         let result = [];
 
         let pullGradient = Cookies.get('pull_gradient');
-        if (typeof pullGradient !== 'undefined') {
+        if (typeof pullGradient !== 'undefined' && pullGradient.length > 0) {
             let handlers = pullGradient.split(',');
             for (let index in handlers) {
                 if (handlers.hasOwnProperty(index)) {
                     let handler = handlers[index];
                     let values = handler.trim().split(' ');
-                    // console.log(('' + values[1]), parseInt(('' + values[1]).replace('%', '')), values[0]);
-                    result.push([parseInt(('' + values[1]).replace('%', '')), values[0]]);
+                    // Only RGB values
+                    if (values[1].indexOf('#') === 0) {
+                        result.push([parseInt(('' + values[0]).replace('%', '')), values[1]]);
+                    } else {
+                        console.warn('Invalid handler found:', handler);
+                    }
                 }
             }
         } else {
-            result.push([0, 'red'], 100, 'blue');
+            result = c.map.editsidebar.pullGradient.defaultHandlers;
         }
 
         return result;
+    }
+
+    /**
+     * Parses a color from a handler, and return an #FF0000 hex color.
+     * @param handlerColor
+     * @returns {*}
+     * @private
+     */
+    _parseHandlerColor(handlerColor) {
+        return handlerColor.indexOf('rgba') === 0 ? rgbToHex(parseRgba(handlerColor)) : handlerColor;
     }
 
     cleanup() {

@@ -70,8 +70,8 @@ function hexToRgb(hex) {
 }
 
 function _componentToHex(c) {
-  var hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
+    let hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
 }
 
 /**
@@ -79,7 +79,17 @@ function _componentToHex(c) {
  * @returns {string}
  */
 function rgbToHex(rgb) {
-  return "#" + _componentToHex(rgb[0]) + _componentToHex(rgb[1]) + _componentToHex(rgb[2]);
+    return "#" + _componentToHex(rgb.r) + _componentToHex(rgb.g) + _componentToHex(rgb.b);
+}
+
+/**
+ * Parse an RGB string (such as rgba(171, 212, 115, 255)) to a parsed object.
+ * @param rgbaString
+ * @returns {{r: int, g: int, b: int, a: int}}
+ */
+function parseRgba(rgbaString) {
+    let split = rgbaString.replace('rgba(', '').replace(')', '').replace(' ', '').split(',');
+    return {r: parseInt(split[0]), g: parseInt(split[1]), b: parseInt(split[2]), a: parseInt(split[3])};
 }
 
 /**
@@ -125,10 +135,11 @@ function pickHexFromHandlers(handlers, weight) {
         console.assert(color2 !== null, 'color2 === null!', handlers);
 
         let invertedScaledWeight = 1 - scaledWeight;
-        let rgb = [Math.round(color2.r * scaledWeight + color1.r * invertedScaledWeight),
-            Math.round(color2.g * scaledWeight + color1.g * invertedScaledWeight),
-            Math.round(color2.b * scaledWeight + color1.b * invertedScaledWeight)];
-        console.log(rgb);
+        let rgb = {
+            r: Math.round(color2.r * scaledWeight + color1.r * invertedScaledWeight),
+            g: Math.round(color2.g * scaledWeight + color1.g * invertedScaledWeight),
+            b: Math.round(color2.b * scaledWeight + color1.b * invertedScaledWeight)
+        };
         result = rgbToHex(rgb);
     }
 
