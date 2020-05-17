@@ -23,7 +23,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
         ])
 
         @include('common.maps.killzonessidebar', [
-
+            'edit' => true
         ])
     </div>
 

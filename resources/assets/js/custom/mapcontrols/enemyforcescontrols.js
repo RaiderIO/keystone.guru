@@ -114,7 +114,7 @@ class EnemyForcesControls extends MapControl {
                     $('#map_enemy_forces_success').show();
                     $('#map_enemy_forces_warning').hide();
                 } else if (enemyForcesPercent > 110) {
-                    $enemyForces.attr('title', 'Warning: your route kills too much enemy forces.');
+                    $enemyForces.attr('title', 'Warning: your route has too much enemy forces.');
                     $numbers.addClass('map_enemy_forces_too_much_warning');
                     $('#map_enemy_forces_success').hide();
                     $('#map_enemy_forces_warning').show();
@@ -128,7 +128,7 @@ class EnemyForcesControls extends MapControl {
                     $('#map_enemy_forces_success').show();
                     $('#map_enemy_forces_warning').hide();
                 } else if (enemyForcesPercent > 110) {
-                    $enemyForces.attr('title', 'Warning: this route kills too much enemy forces.');
+                    $enemyForces.attr('title', 'Warning: this route has too much enemy forces.');
                     $numbers.addClass('map_enemy_forces_too_much_warning');
                     $('#map_enemy_forces_success').hide();
                     $('#map_enemy_forces_warning').show();
@@ -138,7 +138,7 @@ class EnemyForcesControls extends MapControl {
             // Only on view
             if (!this.map.options.edit) {
                 if (enemyForcesPercent < 100) {
-                    $enemyForces.attr('title', 'Warning: this route does not kill enough enemy forces!');
+                    $enemyForces.attr('title', 'Warning: this route does not have enough enemy forces!');
                     $numbers.addClass('map_enemy_forces_too_little_warning');
                     $('#map_enemy_forces_success').hide();
                     $('#map_enemy_forces_warning').show();

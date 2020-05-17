@@ -61,7 +61,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // Get the currently selected killzone ID, if any (so we may deselect it)
         let currentlySelectedKillZoneId = 0;
         let currentMapState = map.getMapState();
-        if (currentMapState !== null && currentMapState instanceof KillZoneEnemySelection) {
+        if (currentMapState !== null && currentMapState instanceof EnemySelection) {
             currentlySelectedKillZoneId = currentMapState.getMapObject().id;
         }
 
@@ -78,7 +78,13 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let killZoneMapObjectGroup = map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
             if (killZone !== null) {
-                newMapState = new KillZoneEnemySelection(map, killZone);
+                // Same as this.options.edit, really
+                if (map.options.edit) {
+                    newMapState = new KillZoneEnemySelection(map, killZone);
+                } else {
+                    // Just highlight the pull when the user clicked a pull
+                    newMapState = new ViewKillZoneEnemySelection(map, killZone);
+                }
             }
         }
 
@@ -102,7 +108,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         })).on('save', (color, instance) => {
             // Apply the new color
             let newColor = '#' + color.toHEXA().join('');
-            if( killZone.color !== newColor ) {
+            if (killZone.color !== newColor) {
                 killZone.color = newColor;
                 killZone.save();
             }
@@ -121,11 +127,14 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
         let self = this;
 
-        let template = Handlebars.templates['map_killzonessidebar_killzone_row_template'];
+        let template = Handlebars.templates[
+            this.options.edit ? 'map_killzonessidebar_killzone_row_edit_template' : 'map_killzonessidebar_killzone_row_view_template'
+            ];
 
         let data = $.extend({
             'id': killZone.id,
-            'text-class': 'text-white'
+            'text-class': 'text-white',
+            'color': killZone.color // For viewing
         }, getHandlebarsDefaultVariables());
 
         $(this.options.killZonesContainerSelector).append(
@@ -134,47 +143,50 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index', $($(this.options.killZonesContainerSelector).children()).length);
         $(`#map_killzonessidebar_killzone_${killZone.id} .selectable`).bind('click', this._killZoneRowClicked);
-        $(`#map_killzonessidebar_killzone_${killZone.id}_color`).bind('click', function () {
-            // Only one at a time
-            if (self._currentlyActiveColorPicker !== null) {
-                self._currentlyActiveColorPicker.hide();
+
+        if (this.options.edit) {
+            $(`#map_killzonessidebar_killzone_${killZone.id}_color`).bind('click', function () {
+                // Only one at a time
+                if (self._currentlyActiveColorPicker !== null) {
+                    self._currentlyActiveColorPicker.hide();
+                }
+
+                // Show the new color picker
+                self._currentlyActiveColorPicker = self._colorPickers[killZone.id];
+                self._currentlyActiveColorPicker.show();
+            });
+            let $hasKillZone = $(`#map_killzonessidebar_killzone_${killZone.id}_has_killzone`).bind('click', function () {
+                // Inject the selectable in the _selectKillZone call to simulate selecting the actual killzone
+                self._selectKillZoneByMapObject(killZone);
+
+                if (killZone.layer === null) {
+                    // Start drawing a killzone
+                    $('.leaflet-draw-draw-killzone')[0].click();
+                } else {
+                    // @TODO This entire piece of code is hacky, should be done differently eventually
+                    getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
+                    getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
+
+                    let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+                    // It's been removed; unset it
+                    killZoneMapObjectGroup.setLayerToMapObject(null, killZone);
+
+                    killZone.floor_id = getState().getCurrentFloor().id;
+                    // Update its visuals
+                    killZone.redrawConnectionsToEnemies();
+                    killZone.save();
+                }
+            });
+            // If we have a killzone layer
+            if (killZone.isKillZoneVisible()) {
+                // Was inactive (always starts inactive), is active now
+                $hasKillZone.button('toggle');
             }
-
-            // Show the new color picker
-            self._currentlyActiveColorPicker = self._colorPickers[killZone.id];
-            self._currentlyActiveColorPicker.show();
-        });
-        let $hasKillZone = $(`#map_killzonessidebar_killzone_${killZone.id}_has_killzone`).bind('click', function () {
-            // Inject the selectable in the _selectKillZone call to simulate selecting the actual killzone
-            self._selectKillZoneByMapObject(killZone);
-
-            if (killZone.layer === null) {
-                // Start drawing a killzone
-                $('.leaflet-draw-draw-killzone')[0].click();
-            } else {
-                // @TODO This entire piece of code is hacky, should be done differently eventually
-                getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
-                getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
-
-                let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-                // It's been removed; unset it
-                killZoneMapObjectGroup.setLayerToMapObject(null, killZone);
-
-                killZone.floor_id = getState().getCurrentFloor().id;
-                // Update its visuals
-                killZone.redrawConnectionsToEnemies();
-                killZone.save();
-            }
-        });
-        // If we have a killzone layer
-        if (killZone.isKillZoneVisible()) {
-            // Was inactive (always starts inactive), is active now
-            $hasKillZone.button('toggle');
+            $(`#map_killzonessidebar_killzone_${killZone.id}_delete`).bind('click', this._deleteKillZone);
+            this._colorPickers[killZone.id] = this._initColorPicker(killZone);
+            // Small hack to get it to look better
+            $(`#map_killzonessidebar_killzone_${killZone.id} .pcr-button`).addClass('h-100 w-100');
         }
-        $(`#map_killzonessidebar_killzone_${killZone.id}_delete`).bind('click', this._deleteKillZone);
-        this._colorPickers[killZone.id] = this._initColorPicker(killZone);
-        // Small hack to get it to look better
-        $(`#map_killzonessidebar_killzone_${killZone.id} .pcr-button`).addClass('h-100 w-100');
 
         // Set some additional properties
         this._refreshKillZone(killZone);
@@ -248,13 +260,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $(`#map_killzonessidebar_killzone_${killZone.id}_title`)
             .text(`${index}: ${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);
 
-        // $(`#map_killzonessidebar_killzone_${killZone.id}_expand`)
-        //     .css('background-color', killZone.color);
-
-        this._colorPickers[killZone.id].setColor(killZone.color);
-        // $(`#map_killzonessidebar_killzone_${killZone.id}_color`)
-        //     .css('background-color', killZone.color);
-
         // Fill the enemy list
         let npcs = [];
         let enemies = getState().getEnemies();
@@ -296,6 +301,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
         }
 
+        if (this.options.edit) {
+            this._colorPickers[killZone.id].setColor(killZone.color);
+        }
     }
 
     /**
@@ -316,11 +324,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Update the UI based on the new map states
             let previousMapState = mapStateChangedEvent.data.previousMapState;
-            if (previousMapState instanceof KillZoneEnemySelection) {
+            if (previousMapState instanceof EnemySelection) {
                 self._killZoneSelected(previousMapState.getMapObject(), false);
             }
             let newMapState = mapStateChangedEvent.data.newMapState;
-            if (newMapState instanceof KillZoneEnemySelection) {
+            if (newMapState instanceof EnemySelection) {
                 self._killZoneSelected(newMapState.getMapObject(), true);
             }
         });

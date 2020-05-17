@@ -9,7 +9,8 @@
     'sidebarToggleSelector' => '#killzonesidebarToggle',
     'anchor' => 'right',
     'newKillZoneSelector' => '#new_pull_btn',
-    'killZonesContainerSelector' => '#killzones_container'
+    'killZonesContainerSelector' => '#killzones_container',
+    'edit' => $edit
 ]])
 
 @section('sidebar-content')
@@ -19,7 +20,7 @@
     'header' => __('Pulls'),
     'anchor' => 'right',
     'id' => 'killzonesidebar',
-    'customSubHeader' => '<div class="sidebar-header-pulls-spacer"></div><button id="new_pull_btn" class="btn btn-primary w-100"><i class="fas fa-plus"></i> ' . __('New Pull') . '</button>'
+    'customSubHeader' => $edit ? '<div class="sidebar-header-pulls-spacer"></div><button id="new_pull_btn" class="btn btn-primary w-100"><i class="fas fa-plus"></i> ' . __('New Pull') . '</button>' : ''
 ])
     <div id="killzones_container">
 

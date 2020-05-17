@@ -131,6 +131,7 @@ let scripts = [
     'resources/assets/js/custom/mapstate/enemyselection/enemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/killzoneenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',
 
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
@@ -151,7 +152,6 @@ let scripts = [
     'resources/assets/js/custom/mapcontrol.js',
     'resources/assets/js/custom/mapcontrols/addisplaycontrols.js',
     'resources/assets/js/custom/mapcontrols/echocontrols.js',
-    'resources/assets/js/custom/mapcontrols/mapobjectgroupcontrols.js',
     'resources/assets/js/custom/mapcontrols/drawcontrols.js',
     'resources/assets/js/custom/mapcontrols/enemyforcescontrols.js',
     'resources/assets/js/custom/mapcontrols/enemyvisualcontrols.js',

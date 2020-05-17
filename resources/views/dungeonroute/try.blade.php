@@ -37,7 +37,7 @@
         ])
 
         @include('common.maps.killzonessidebar', [
-
+            'edit' => true
         ])
     </div>
 

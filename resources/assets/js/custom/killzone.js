@@ -449,7 +449,7 @@ class KillZone extends MapObject {
             let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color, fillColor: this.color});
 
             let layer;
-            if (this.map.getMapState() instanceof KillZoneEnemySelection && this.map.getMapState().getMapObject().id === this.id) {
+            if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
                 opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
                 // Change the pulse color to be dark or light depending on the KZ color
                 opts.pulseColor = isColorDark(this.color) ? opts.pulseColorLight : opts.pulseColorDark;
@@ -465,17 +465,19 @@ class KillZone extends MapObject {
             this.enemyConnectionsLayerGroup.addLayer(layer);
 
             // Only add popup to the killzone
-            if (this.isEditable() && this.map.options.edit) {
+            if (this.isEditable()) {
                 layer.on('click', function () {
                     // We're now selecting this killzone
                     let currentMapState = self.map.getMapState();
                     let newMapState = currentMapState;
                     if (!(currentMapState instanceof EditMapState) && !(currentMapState instanceof DeleteMapState)) {
                         // If we're already being selected..
-                        if (currentMapState instanceof KillZoneEnemySelection && currentMapState.getMapObject().id === self.id) {
+                        if (currentMapState instanceof EnemySelection && currentMapState.getMapObject().id === self.id) {
                             newMapState = null;
-                        } else {
+                        } else if (self.map.options.edit) {
                             newMapState = new KillZoneEnemySelection(self.map, self);
+                        } else {
+                            newMapState = new ViewKillZoneEnemySelection(self.map, self);
                         }
                     }
 

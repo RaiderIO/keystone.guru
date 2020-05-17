@@ -26,6 +26,10 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
             'dungeonroute' => $model,
             'edit' => false
         ])
+
+        @include('common.maps.killzonessidebar', [
+            'edit' => false
+        ])
     </div>
 @endsection
 
