@@ -4,6 +4,10 @@
     color: #495057;
 }
 
+.border-dark {
+    border-color: #2B3E50 !important;
+}
+
 .dropdown .dropdown-menu {
     background-color: #58697A;
 }

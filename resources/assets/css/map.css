@@ -140,7 +140,8 @@ html, body, #map, #app, .wrapper {
 
 .sidebar .sidebar-content {
     padding-top: 10px;
-    height: 100vh;
+    /** Bit of a hack, but the 106 is the height of the header which somehow isn't taken into account */
+    height: calc(100vh - 106px);
 }
 
 .sidebar .sidebar-content .card-body {
@@ -148,7 +149,16 @@ html, body, #map, #app, .wrapper {
 }
 
 #killzonesidebar .sidebar-content .card-body {
-    padding: 0.75rem 0.75rem;
+    padding: 0.2rem 0.5rem;
+}
+
+#killzonesidebar .sidebar-content .card-title {
+    margin-bottom: 0.4rem;
+}
+
+
+#killzonesidebar .form-group {
+    margin-bottom: 0.6rem;
 }
 
 .sidebar .sidebar-panel {
