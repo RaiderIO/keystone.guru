@@ -195,8 +195,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
             $(`#map_killzonessidebar_killzone_${killZone.id} .pcr-button`).addClass('h-100 w-100');
         }
 
-        // Set some additional properties
-        this._refreshKillZone(killZone);
+        // No need to refresh - synced will be set to true, then this function will be triggered (because we listen for it)
+        // this._refreshKillZone(killZone);
 
         // If this killzone was created as a result of clicking the 'new pull' button
         if (this._newPullKillZone instanceof KillZone) {

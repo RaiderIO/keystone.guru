@@ -145,136 +145,12 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Checks if this killzone should be visible or not.
-     * @returns {boolean|boolean}
-     */
-    isKillZoneVisible() {
-        return this.layer !== null && getState().getCurrentFloor().id === this.floor_id;
-    }
-
-    /**
-     * Get the enemy forces that will be added if this enemy pack is killed.
-     */
-    getEnemyForces() {
-        let result = 0;
-
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < this.enemies.length; i++) {
-            let enemyId = this.enemies[i];
-            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
-            if (enemy !== null && enemy.npc !== null) {
-                result += enemy.npc.enemy_forces;
-            }
-        }
-
-        return result;
-    }
-
-    edit() {
-        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
-        this.save();
-        this.redrawConnectionsToEnemies();
-        this.signal('killzone:changed');
-    }
-
-    delete() {
-        let self = this;
-        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
-
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone/' + self.id,
-            dataType: 'json',
-            data: {
-                _method: 'DELETE'
-            },
-            success: function (json) {
-                // Detach from all enemies upon deletion
-                self._detachFromEnemies();
-                self.localDelete();
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-
-                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
-            }
-        });
-    }
-
-    save() {
-        let self = this;
-        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
-
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                floor_id: getState().getCurrentFloor().id,
-                color: self.color,
-                lat: self.layer !== null ? self.layer.getLatLng().lat : null,
-                lng: self.layer !== null ? self.layer.getLatLng().lng : null,
-                enemies: self.enemies
-            },
-            success: function (json) {
-                self.id = json.id;
-
-                self.setSynced(true);
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-
-                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
-            }
-        });
-    }
-
-    /**
-     * Bulk sets the enemies for this killzone.
-     * @param enemies
-     */
-    setEnemies(enemies) {
-        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
-        let self = this;
-
-        // Remove any enemies that we may have had
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-
-        // Copy enemies array as we're making changes in it by removing enemies
-        let currentEnemies = [...this.enemies];
-        $.each(currentEnemies, function (i, id) {
-            let enemy = enemyMapObjectGroup.findMapObjectById(id);
-            if (enemy !== null) {
-                self._removeEnemy(enemy);
-            } else {
-                console.warn('Remove: unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
-                    'this enemy was probably removed during a migration?');
-            }
-        });
-
-        $.each(enemies, function (i, id) {
-            let enemy = enemyMapObjectGroup.findMapObjectById(id);
-            if (enemy !== null) {
-                self._addEnemy(enemy);
-            } else {
-                console.warn('Add: unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
-                    'this enemy was probably removed during a migration?');
-            }
-        });
-
-        this.redrawConnectionsToEnemies();
-    }
-
-    /**
      * Triggered when an enemy was selected by the user when edit mode was enabled.
-     * @param enemy The enemy that was selected (or de-selected). Will add/remove the enemy to the list to be redrawn.
+     * @param enemySelectedEvent {object} The event that was triggered when an enemy was selected (or de-selected).
+     * Will add/remove the enemy to the list to be redrawn.
      */
-    enemySelected(enemy) {
+    _enemySelected(enemySelectedEvent) {
+        let enemy = enemySelectedEvent.data.enemy;
         console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
@@ -324,91 +200,6 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Removes any existing UI connections to enemies.
-     */
-    removeExistingConnectionsToEnemies() {
-        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
-
-        // Remove previous layers if it's needed
-        if (this.enemyConnectionsLayerGroup !== null) {
-            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-            killZoneMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionsLayerGroup);
-        }
-    }
-
-    /**
-     * Throws away all current visible connections to enemies, and rebuilds the visuals.
-     */
-    redrawConnectionsToEnemies() {
-        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
-
-        let self = this;
-
-        this.removeExistingConnectionsToEnemies();
-
-        // Create & add new layer
-        this.enemyConnectionsLayerGroup = new L.LayerGroup();
-
-        let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
-
-        // Add connections from each enemy to our location
-        let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        let latLngs = this._getVisibleEntitiesLatLngs();
-
-        let p = hull(latLngs, 100);
-
-        // Only if we can actually make an offset
-        if (latLngs.length > 1 && p.length > 1) {
-            let offset = new Offset();
-            p = offset.data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
-
-            let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color, fillColor: this.color});
-
-            let layer;
-            if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
-                opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
-                // Change the pulse color to be dark or light depending on the KZ color
-                opts.pulseColor = isColorDark(this.color) ? opts.pulseColorLight : opts.pulseColorDark;
-                layer = L.polyline.antPath(p, opts);
-            } else {
-                layer = L.polygon(p, opts);
-            }
-
-
-            // do not prevent clicking on anything else
-            this.enemyConnectionsLayerGroup.setZIndex(-1000);
-
-            this.enemyConnectionsLayerGroup.addLayer(layer);
-
-            // Only add popup to the killzone
-            if (this.isEditable()) {
-                layer.on('click', function () {
-                    // We're now selecting this killzone
-                    let currentMapState = self.map.getMapState();
-                    let newMapState = currentMapState;
-                    if (!(currentMapState instanceof EditMapState) && !(currentMapState instanceof DeleteMapState)) {
-                        // If we're already being selected..
-                        if (currentMapState instanceof EnemySelection && currentMapState.getMapObject().id === self.id) {
-                            newMapState = null;
-                        } else if (self.map.options.edit) {
-                            newMapState = new KillZoneEnemySelection(self.map, self);
-                        } else {
-                            newMapState = new ViewKillZoneEnemySelection(self.map, self);
-                        }
-                    }
-
-                    // Only if there would be a change
-                    if (newMapState !== currentMapState) {
-                        // Set to null or not
-                        self.map.setMapState(newMapState);
-                    }
-                });
-            }
-        }
-    }
-
-    /**
      * Called when enemy selection for this killzone has changed (started/finished)
      * @param mapStateChangedEvent
      * @private
@@ -419,6 +210,18 @@ class KillZone extends MapObject {
         let previousState = mapStateChangedEvent.data.previousMapState;
         let newState = mapStateChangedEvent.data.newMapState;
         if (previousState instanceof EnemySelection || newState instanceof EnemySelection) {
+            // Unreg always
+            // if( previousState instanceof EnemySelection ) {
+            //     console.log('Unregging');
+            //     previousState.unregister('enemyselection:enemyselected', this);
+            // }
+            //
+            // // Reg if necessary
+            // if( newState instanceof EnemySelection ) {
+            //     console.log('Regging');
+            //     newState.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
+            // }
+
             // Redraw any changes as necessary (for example, user (de-)selected a killzone, must redraw to update selection visuals)
             this.redrawConnectionsToEnemies();
 
@@ -535,6 +338,153 @@ class KillZone extends MapObject {
     }
 
     /**
+     * Checks if this killzone should be visible or not.
+     * @returns {boolean|boolean}
+     */
+    isKillZoneVisible() {
+        return this.layer !== null && getState().getCurrentFloor().id === this.floor_id;
+    }
+
+    /**
+     * Get the enemy forces that will be added if this enemy pack is killed.
+     */
+    getEnemyForces() {
+        let result = 0;
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < this.enemies.length; i++) {
+            let enemyId = this.enemies[i];
+            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+            if (enemy !== null && enemy.npc !== null) {
+                result += enemy.npc.enemy_forces;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Bulk sets the enemies for this killzone.
+     * @param enemies
+     */
+    setEnemies(enemies) {
+        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+        let self = this;
+
+        // Remove any enemies that we may have had
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        // Copy enemies array as we're making changes in it by removing enemies
+        let currentEnemies = [...this.enemies];
+        $.each(currentEnemies, function (i, id) {
+            let enemy = enemyMapObjectGroup.findMapObjectById(id);
+            if (enemy !== null) {
+                self._removeEnemy(enemy);
+            } else {
+                console.warn('Remove: unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
+                    'this enemy was probably removed during a migration?');
+            }
+        });
+
+        $.each(enemies, function (i, id) {
+            let enemy = enemyMapObjectGroup.findMapObjectById(id);
+            if (enemy !== null) {
+                self._addEnemy(enemy);
+            } else {
+                console.warn('Add: unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
+                    'this enemy was probably removed during a migration?');
+            }
+        });
+
+        this.redrawConnectionsToEnemies();
+    }
+
+    /**
+     * Removes any existing UI connections to enemies.
+     */
+    removeExistingConnectionsToEnemies() {
+        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+
+        // Remove previous layers if it's needed
+        if (this.enemyConnectionsLayerGroup !== null) {
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            killZoneMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionsLayerGroup);
+        }
+    }
+
+    /**
+     * Throws away all current visible connections to enemies, and rebuilds the visuals.
+     */
+    redrawConnectionsToEnemies() {
+        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+
+        let self = this;
+
+        this.removeExistingConnectionsToEnemies();
+
+        // Create & add new layer
+        this.enemyConnectionsLayerGroup = new L.LayerGroup();
+
+        let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
+
+        // Add connections from each enemy to our location
+        let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let latLngs = this._getVisibleEntitiesLatLngs();
+
+        let p = hull(latLngs, 100);
+
+        // Only if we can actually make an offset
+        if (latLngs.length > 1 && p.length > 1) {
+            let offset = new Offset();
+            p = offset.data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
+
+            let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color, fillColor: this.color});
+
+            let layer;
+            if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
+                opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
+                // Change the pulse color to be dark or light depending on the KZ color
+                opts.pulseColor = isColorDark(this.color) ? opts.pulseColorLight : opts.pulseColorDark;
+                layer = L.polyline.antPath(p, opts);
+            } else {
+                layer = L.polygon(p, opts);
+            }
+
+
+            // do not prevent clicking on anything else
+            this.enemyConnectionsLayerGroup.setZIndex(-1000);
+
+            this.enemyConnectionsLayerGroup.addLayer(layer);
+
+            // Only add popup to the killzone
+            if (this.isEditable()) {
+                layer.on('click', function () {
+                    // We're now selecting this killzone
+                    let currentMapState = self.map.getMapState();
+                    let newMapState = currentMapState;
+                    if (!(currentMapState instanceof EditMapState) && !(currentMapState instanceof DeleteMapState)) {
+                        // If we're already being selected..
+                        if (currentMapState instanceof EnemySelection && currentMapState.getMapObject().id === self.id) {
+                            newMapState = null;
+                        } else if (self.map.options.edit) {
+                            newMapState = new KillZoneEnemySelection(self.map, self);
+                        } else {
+                            newMapState = new ViewKillZoneEnemySelection(self.map, self);
+                        }
+                    }
+
+                    // Only if there would be a change
+                    if (newMapState !== currentMapState) {
+                        // Set to null or not
+                        self.map.setMapState(newMapState);
+                    }
+                });
+            }
+        }
+    }
+
+    /**
      * Get a
      * @returns {object}
      */
@@ -597,7 +547,73 @@ class KillZone extends MapObject {
         });
     }
 
+    edit() {
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+        this.save();
+        this.redrawConnectionsToEnemies();
+        this.signal('killzone:changed');
+    }
+
+    delete() {
+        let self = this;
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone/' + self.id,
+            dataType: 'json',
+            data: {
+                _method: 'DELETE'
+            },
+            success: function (json) {
+                // Detach from all enemies upon deletion
+                self._detachFromEnemies();
+                self.localDelete();
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+            }
+        });
+    }
+
+    save() {
+        let self = this;
+        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone',
+            dataType: 'json',
+            data: {
+                id: self.id,
+                floor_id: getState().getCurrentFloor().id,
+                color: self.color,
+                lat: self.layer !== null ? self.layer.getLatLng().lat : null,
+                lng: self.layer !== null ? self.layer.getLatLng().lng : null,
+                enemies: self.enemies
+            },
+            success: function (json) {
+                self.id = json.id;
+
+                self.setSynced(true);
+                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // Even if we were synced, make sure user knows it's no longer / an error occurred
+                self.setSynced(false);
+
+                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+            }
+        });
+    }
+
     cleanup() {
+        let self = this;
+
         // this.unregister('synced', this); // Not needed as super.cleanup() does this
         this.map.unregister('map:mapstatechanged', this);
         this.map.unregister('killzone:selectionchanged', this);

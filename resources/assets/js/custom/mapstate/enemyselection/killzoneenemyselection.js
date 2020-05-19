@@ -9,7 +9,7 @@ class KillZoneEnemySelection extends EnemySelection {
         console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
 
         /** @type KillZone sourceMapObject */
-        this.sourceMapObject.enemySelected(enemySelectedEvent.data.enemy);
+        this.sourceMapObject._enemySelected(enemySelectedEvent);
     }
 
     /**
