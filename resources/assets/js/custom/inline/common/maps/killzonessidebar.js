@@ -259,7 +259,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _refreshKillZone(killZone) {
-        console.warn('refreshing killzone!', killZone.color);
+        // console.warn('refreshing killzone!', killZone.color);
         let enemyForcesPercent = (killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100;
         enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 

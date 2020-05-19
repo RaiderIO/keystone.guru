@@ -46,6 +46,14 @@ class DungeonMap extends Signalable {
                         self.editableLayers.addLayer(object.layer);
                     }
                 }
+                // @TODO register enemy:clicked
+            });
+
+            mapObjectGroup.register('object:deleted', this, function (deletedEvent){
+                // Provide functionality for when an enemy gets clicked and we need to create a new killzone for it
+                if( object instanceof Enemy ){
+                    // @TODO unregister enemy:clicked
+                }
             });
 
             // Make sure we don't try to edit layers that aren't visible because they're hidden

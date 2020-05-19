@@ -247,6 +247,8 @@ class Enemy extends MapObject {
         this.layer.on('click', function () {
             if (self.map.getMapState() instanceof EnemySelection && self.selectable) {
                 self.signal('enemy:selected');
+            } else {
+                self.signal('enemy:clicked');
             }
         });
 

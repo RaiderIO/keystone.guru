@@ -1,17 +1,4 @@
 class KillZoneEnemySelection extends EnemySelection {
-    constructor(map, sourceMapObject) {
-        super(map, sourceMapObject);
-
-        this.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
-    }
-
-    _enemySelected(enemySelectedEvent){
-        console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
-
-        /** @type KillZone sourceMapObject */
-        this.sourceMapObject._enemySelected(enemySelectedEvent);
-    }
-
     /**
      * Filters an enemy if it should be selected or not.
      * @param source MapObject

@@ -210,24 +210,19 @@ class KillZone extends MapObject {
         let previousState = mapStateChangedEvent.data.previousMapState;
         let newState = mapStateChangedEvent.data.newMapState;
         if (previousState instanceof EnemySelection || newState instanceof EnemySelection) {
-            // Unreg always
-            // if( previousState instanceof EnemySelection ) {
-            //     console.log('Unregging');
-            //     previousState.unregister('enemyselection:enemyselected', this);
-            // }
-            //
-            // // Reg if necessary
-            // if( newState instanceof EnemySelection ) {
-            //     console.log('Regging');
-            //     newState.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
-            // }
-
             // Redraw any changes as necessary (for example, user (de-)selected a killzone, must redraw to update selection visuals)
             this.redrawConnectionsToEnemies();
 
             if (previousState instanceof EnemySelection && previousState.getMapObject().id === this.id) {
                 // May save when nothing has changed, but that's okay
                 this.save();
+                // Unreg if we were listening
+                previousState.unregister('enemyselection:enemyselected', this);
+            }
+
+            if( newState instanceof EnemySelection && newState.getMapObject().id === this.id ) {
+            // Reg for changes to our killzone if necessary
+                newState.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
             }
         }
     }
