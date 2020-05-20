@@ -277,9 +277,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
             Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', 'APIDungeonFloorSwitchMarkerController@delete');
 
-            Route::post('/dungeonstartmarker', 'APIDungeonStartMarkerController@store')->where(['dungeon' => '[0-9]+']);
-            Route::delete('/dungeonstartmarker/{dungeonstartmarker}', 'APIDungeonStartMarkerController@delete');
-
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
 
             Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');

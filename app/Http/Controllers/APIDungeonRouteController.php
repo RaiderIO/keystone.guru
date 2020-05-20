@@ -25,6 +25,7 @@ use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +46,7 @@ class APIDungeonRouteController extends Controller
     /**
      * @param Request $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     function list(Request $request)
     {
@@ -178,7 +179,7 @@ class APIDungeonRouteController extends Controller
      * @param DungeonRoute $dungeonroute
      * @param SeasonService $seasonService
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function store(APIDungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
     {
@@ -200,7 +201,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function delete(Request $request, DungeonRoute $dungeonroute)
     {
@@ -217,7 +218,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function publish(Request $request, DungeonRoute $dungeonroute)
     {
@@ -233,7 +234,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function rate(Request $request, DungeonRoute $dungeonroute)
     {
@@ -257,7 +258,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function rateDelete(Request $request, DungeonRoute $dungeonroute)
     {
@@ -279,7 +280,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function favorite(Request $request, DungeonRoute $dungeonroute)
     {
@@ -298,7 +299,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function favoriteDelete(Request $request, DungeonRoute $dungeonroute)
     {
@@ -319,7 +320,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param string $publickey
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function data(Request $request, $publickey)
     {
@@ -388,12 +389,7 @@ class APIDungeonRouteController extends Controller
             $result['mapicon'] = $this->listMapIcons($request->get('floor'), $publickey);
         }
 
-        // Enemy patrols
-        if (in_array('dungeonstartmarker', $fields)) {
-            $result['dungeonstartmarker'] = $this->listDungeonStartMarkers($request->get('floor'));
-        }
-
-        // Enemy patrols
+        // Dungeon floor switch markers
         if (in_array('dungeonfloorswitchmarker', $fields)) {
             $result['dungeonfloorswitchmarker'] = $this->listDungeonFloorSwitchMarkers($request->get('floor'));
         }

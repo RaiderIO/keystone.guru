@@ -51,7 +51,6 @@ return [
     'dungeonfloorswitchmarker_map_object_group_label' => 'Floor switch',
     'brushline_map_object_group_label' => 'Drawn lines',
     'mapicon_map_object_group_label' => 'Icons',
-    'dungeonstartmarker_map_object_group_label' => 'Dungeon start',
     'killzone_map_object_group_label' => 'Pulls',
 
     'clone_label' => 'Clone',
@@ -85,7 +84,6 @@ return [
     'enemypack' => 'Pack',
     'enemy' => 'Enemy',
     'enemypatrol' => 'Patrol',
-    'dungeonstartmarker' => 'Start',
     'dungeonfloorswitchmarker' => 'Floor',
 
     // Raid markers
