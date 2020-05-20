@@ -7,7 +7,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         this._colorPickers = [];
         this._currentlyActiveColorPicker = null;
-
         this._newPullKillZone = null;
     }
 
@@ -15,9 +14,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * Called when the 'new pull' button has been pressed
      * @private
      */
-    _newPull() {
+    _newPullClicked() {
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        this._newPullKillZone = killZoneMapObjectGroup.createNewPull();
+        killZoneMapObjectGroup.createNewPull();
     }
 
     /**
@@ -46,6 +45,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
         if (selected) {
             $(`#map_killzonessidebar_killzone_${killZone.id} .selectable`).addClass(classes);
         }
+
+        // Make sure we can see the killzone in the sidebar
+        if( !$(`#map_killzonessidebar_killzone_${killZone.id}`).visible() ){
+            $(this.options.sidebarScrollSelector).mCustomScrollbar('scrollTo', `#map_killzonessidebar_killzone_${killZone.id}`);
+        }
     }
 
     /**
@@ -53,9 +57,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _killZoneRowClicked(clickEvent) {
+        console.log(clickEvent);
         // If there was an event, prevent clicking the 'expand' button also selecting the killzone
         if (clickEvent !== null && typeof clickEvent !== 'undefined' &&
-            ($(clickEvent.target).hasClass('btn') || $(clickEvent.target).hasClass('fa'))) {
+            ($(clickEvent.target).hasClass('btn') || $(clickEvent.target).hasClass('pcr-button') || $(clickEvent.target).hasClass('fa'))) {
             return;
         }
 
@@ -107,6 +112,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     _initColorPicker(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+        let self = this;
 
         // Simple example, see optional options for more configuration.
         return Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
@@ -152,7 +158,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $(`#map_killzonessidebar_killzone_${killZone.id} .selectable`).bind('click', this._killZoneRowClicked);
 
         if (this.options.edit) {
-            $(`#map_killzonessidebar_killzone_${killZone.id}_color`).bind('click', function () {
+            $(`#map_killzonessidebar_killzone_${killZone.id}_color`).bind('click', function (clickedEvent) {
                 // Only one at a time
                 if (self._currentlyActiveColorPicker !== null) {
                     self._currentlyActiveColorPicker.hide();
@@ -189,7 +195,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 // Was inactive (always starts inactive), is active now
                 $hasKillZone.button('toggle');
             }
-            $(`#map_killzonessidebar_killzone_${killZone.id}_delete`).bind('click', this._deleteKillZone);
+            $(`#map_killzonessidebar_killzone_${killZone.id}_delete`).bind('click', this._deleteKillZoneClicked);
             this._colorPickers[killZone.id] = this._initColorPicker(killZone);
             // Small hack to get it to look better
             $(`#map_killzonessidebar_killzone_${killZone.id} .pcr-button`).addClass('h-100 w-100');
@@ -198,19 +204,19 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // No need to refresh - synced will be set to true, then this function will be triggered (because we listen for it)
         // this._refreshKillZone(killZone);
 
-        // If this killzone was created as a result of clicking the 'new pull' button
-        if (this._newPullKillZone instanceof KillZone) {
-            this._selectKillZoneByMapObject(this._newPullKillZone);
+        // A new pull was created; make sure it's selected by default
+        if (this._newPullKillZone !== null) {
+            this._killZoneSelected(this._newPullKillZone, true);
 
             this._newPullKillZone = null;
         }
     }
 
     /**
-     *
+     * Called whenever the trash icon is clicked and the killzone should be deleted
      * @private
      */
-    _deleteKillZone() {
+    _deleteKillZoneClicked() {
         let self = this;
 
         let selectedKillZoneId = parseInt($(this).closest('.map_killzonessidebar_killzone').data('id'));
@@ -221,7 +227,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         killZone.register('object:deleted', '123123', function () {
             showSuccessNotification(lang.get('messages.object.deleted'));
-            $('#map_killzonessidebar_killzone_' + killZone.id).remove();
 
             // Bit hacky?
             if (killZone.isKillZoneVisible()) {
@@ -230,7 +235,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
 
             killZone.unregister('object:deleted', '123123');
-            killZone.cleanup();
         });
         // Failed to delete
         killZone.register('synced', '123123', function () {
@@ -250,7 +254,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _removeKillZone(killZone) {
-        $('#map_killzonessidebar_killzone_' + killZone.id).remove();
+        $(`#map_killzonessidebar_killzone_${killZone.id}`).fadeOut({
+            complete: function () {
+                // When done, remove completely
+                $(`#map_killzonessidebar_killzone_${killZone.id}`).remove();
+            }
+        });
     }
 
     /**
@@ -266,6 +275,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let index = $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index');
         $(`#map_killzonessidebar_killzone_${killZone.id}_title`)
             .text(`${index}: ${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_kill_area_label`)
+            .attr('title', lang.get(killZone.isKillZoneVisible() ? 'messages.remove_kill_area_label' : 'messages.add_kill_area_label'));
+
 
         // Fill the enemy list
         let npcs = [];
@@ -311,6 +323,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         if (this.options.edit) {
             this._colorPickers[killZone.id].setColor(killZone.color);
         }
+
+        refreshTooltips();
     }
 
     /**
@@ -326,7 +340,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Setup new pull button
 
-        $(this.options.newKillZoneSelector).bind('click', this._newPull.bind(this));
+        $(this.options.newKillZoneSelector).bind('click', this._newPullClicked.bind(this));
 
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Update the UI based on the new map states
@@ -341,6 +355,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
         });
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        // User interface action created a new killzone
+        killZoneMapObjectGroup.register('killzone:new', this, function (killZoneCreatedEvent) {
+            self._newPullKillZone = killZoneCreatedEvent.data.newKillZone;
+        });
         killZoneMapObjectGroup.register('object:add', this, function (killZoneAddedEvent) {
             let killZone = killZoneAddedEvent.data.object;
             // Add the killzone to our list
@@ -368,7 +386,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         this.map.unregister('map:mapstatechanged', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.unregister('object:add', this);
+        killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new'], this);
 
         this.sidebar.cleanup();
     }

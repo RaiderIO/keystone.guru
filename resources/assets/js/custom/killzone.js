@@ -84,6 +84,7 @@ class KillZone extends MapObject {
      */
     _removeEnemy(enemy) {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+        console.warn('_removeEnemy', enemy);
 
         // Deselect if necessary
         if (enemy.getKillZone() !== null && enemy.getKillZone().id === this.id) {
@@ -110,6 +111,7 @@ class KillZone extends MapObject {
      */
     _addEnemy(enemy) {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+        console.log('_addEnemy', enemy);
 
         enemy.setKillZone(this);
         // Add it, but don't double add it

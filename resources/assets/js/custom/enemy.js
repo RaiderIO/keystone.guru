@@ -100,18 +100,21 @@ class Enemy extends MapObject {
      */
     getPackBuddies() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-
         let self = this;
 
-        // Add all the enemies in said pack to the toggle display
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-
         let result = [];
-        $.each(enemyMapObjectGroup.objects, function (index, enemy) {
-            if (enemy.enemy_pack_id === self.enemy_pack_id) {
-                result.push(enemy);
-            }
-        });
+
+        // Only if we're part of a pack
+        if (this.enemy_pack_id >= 0) {
+            // Add all the enemies in said pack to the toggle display
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+            $.each(enemyMapObjectGroup.objects, function (index, enemy) {
+                if (enemy.enemy_pack_id === self.enemy_pack_id) {
+                    result.push(enemy);
+                }
+            });
+        }
 
         return result;
     }

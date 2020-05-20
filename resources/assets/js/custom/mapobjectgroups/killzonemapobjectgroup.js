@@ -101,14 +101,21 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     /**
      * Creates a whole new pull.
+     * @param enemyIds array Any enemies that must be in the pull from the start
      * @returns {KillZone}
      */
-    createNewPull() {
+    createNewPull(enemyIds = []) {
+        // Construct an object equal to that received from the server
+        let killzoneEnemies = [];
+        for(let i = 0; i < enemyIds.length; i++ ){
+            killzoneEnemies.push({enemy_id: enemyIds[i]});
+        }
+
         let killZone = this._restoreObject({
             id: -1,
             color: c.map.killzone.polygonOptions.color(),
             floor_id: -1, // Only for the killzone location which is not set from a 'new pull'
-            killzoneenemies: [],
+            killzoneenemies: killzoneEnemies,
             lat: null,
             lng: null,
             // Bit of a hack, we don't want the synced event to be fired in this case, we only want it _after_ the ID has been
@@ -116,6 +123,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             local: true
         });
         killZone.save();
+
+        this.signal('killzone:new', {newKillZone: killZone});
         return killZone;
     }
 }

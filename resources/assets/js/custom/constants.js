@@ -103,7 +103,10 @@ let c = {
             },
         },
         enemypatrol: {
-            defaultColor: randomColor
+            // Function so that you could do custom stuff with it if you want
+            defaultColor: function(){
+                return '#E25D5D';
+            }
         },
         /* These colors may be overriden by drawcontrols.js */
         path: {

@@ -68,6 +68,7 @@ return [
 
     'show_enemies_label' => 'Show enemies',
     'add_kill_area_label' => 'Add kill area',
+    'remove_kill_area_label' => 'Remove kill area',
     'delete_killzone_label' => 'Delete pull',
 
     // Route edit tools

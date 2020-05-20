@@ -72,6 +72,7 @@ window.Noty = require('noty');
 window.Pickr = require('@simonwep/pickr');
 window.AntPath = require('leaflet-ant-path');
 window.Grapick = require('grapick');
+window.jqueryVisible = require('jquery-visible');
 
 require('@fortawesome/fontawesome-free');
 

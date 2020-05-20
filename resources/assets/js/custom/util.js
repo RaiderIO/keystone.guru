@@ -11,7 +11,14 @@ function _getHandlebarsTranslations() {
     return lang.messages[locale + '.messages'];
 }
 
-const randomColor = () => '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+const randomColor = () => {
+    function c() {
+        let hex = Math.floor(Math.random() * 256).toString(16);
+        return ("0" + String(hex)).substr(-2); // pad with zero
+    }
+
+    return "#" + c() + c() + c();
+};
 
 /** Some built-in caching since this function is called a lot */
 let _defaultVariables = null;

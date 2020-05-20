@@ -46,13 +46,17 @@ class DungeonMap extends Signalable {
                         self.editableLayers.addLayer(object.layer);
                     }
                 }
-                // @TODO register enemy:clicked
+
+                if (object instanceof Enemy) {
+                    object.register('enemy:clicked', self, self._enemyClicked.bind(self));
+                }
             });
 
-            mapObjectGroup.register('object:deleted', this, function (deletedEvent){
+            mapObjectGroup.register('object:deleted', this, function (deletedEvent) {
+                let object = deletedEvent.data.object;
                 // Provide functionality for when an enemy gets clicked and we need to create a new killzone for it
-                if( object instanceof Enemy ){
-                    // @TODO unregister enemy:clicked
+                if (object instanceof Enemy) {
+                    object.unregister('enemy:clicked', self);
                 }
             });
 
@@ -309,6 +313,34 @@ class DungeonMap extends Signalable {
             this.leafletMap.keyboard.disable();
             if (this.leafletMap.tap) this.leafletMap.tap.disable();
             document.getElementById('map').style.cursor = 'default';
+        }
+    }
+
+    /**
+     * Someone clicked on an enemy
+     * @private
+     */
+    _enemyClicked(enemyClickedEvent) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        if (this.options.edit && this.mapState === null) {
+            let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+            // Add ourselves to this new pull
+            let enemyIds = [];
+            // Add all buddies in this pack to the list of ids (if any)
+            let packBuddies = enemyClickedEvent.context.getPackBuddies();
+
+            for (let index in packBuddies) {
+                if (packBuddies.hasOwnProperty(index)) {
+                    enemyIds.push(packBuddies[index].id);
+                }
+            }
+
+            // Create a new pull; all UI will update based on the events fired here.
+            let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds);
+
+            this.setMapState(new KillZoneEnemySelection(this, newKillZone));
         }
     }
 

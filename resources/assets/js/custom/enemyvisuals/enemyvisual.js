@@ -73,14 +73,11 @@ class EnemyVisual extends Signalable {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
         let visuals = [this];
 
-        // If enemy is part of a pack..
-        if (this.enemy.enemy_pack_id >= 0) {
-            // Add all the enemies in said pack to the toggle display
-            let packBuddies = this.enemy.getPackBuddies();
-            $.each(packBuddies, function (index, enemy) {
-                visuals.push(enemy.visual);
-            });
-        }
+        // Add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
+        let packBuddies = this.enemy.getPackBuddies();
+        $.each(packBuddies, function (index, enemy) {
+            visuals.push(enemy.visual);
+        });
 
         for (let i = 0; i < visuals.length; i++) {
             visuals[i].setVisualType('enemy_forces');
@@ -96,14 +93,11 @@ class EnemyVisual extends Signalable {
         if (this.circleMenu === null) {
             let visuals = [this];
 
-            // If enemy is part of a pack..
-            if (this.enemy.enemy_pack_id >= 0) {
-                // Add all the enemies in said pack to the toggle display
-                let packBuddies = this.enemy.getPackBuddies();
-                $.each(packBuddies, function (index, enemy) {
-                    visuals.push(enemy.visual);
-                });
-            }
+            // Add all the enemies in said pack to the toggle display (may be empty if enemy not part of a pack)
+            let packBuddies = this.enemy.getPackBuddies();
+            $.each(packBuddies, function (index, enemy) {
+                visuals.push(enemy.visual);
+            });
 
             for (let i = 0; i < visuals.length; i++) {
                 visuals[i].setVisualType(getState().getEnemyDisplayType());

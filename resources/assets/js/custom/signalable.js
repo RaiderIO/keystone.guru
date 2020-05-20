@@ -6,7 +6,7 @@ class Signalable {
 
     /**
      * Registers for listening to a signal sent by this Signalable.
-     * @param name string The name of the event you want to listen for.
+     * @param name string|array The name of the event you want to listen for.
      * @param listener object Who are you? Pass this.
      * @param fn function The function that should be triggered.
      */
@@ -25,8 +25,8 @@ class Signalable {
         for (let i = 0; i < name.length; i++) {
             for (let j = 0; j < this.signals.length; j++) {
                 let signal = this.signals[j];
-                if (signal.name === name && signal.listener === listener && signal.callback === fn) {
-                    console.warn('About to hook the same signal for the 2nd time!', name, listener);
+                if (signal.name === name[i] && signal.listener === listener && signal.callback === fn) {
+                    console.warn('About to hook the same signal for the 2nd time!', name[i], listener);
                 }
             }
             this.signals.push({
@@ -39,27 +39,36 @@ class Signalable {
 
     /**
      * Stop listening to a signal.
-     * @param name string The name of the event you want to stop listening to.
+     * @param name string|array The name of the event you want to stop listening to.
      * @param listener object Whoever you are and what you used to register yourself with.
      * @param fn callable|null The function you wish to unregister. Null to remove everything.
      */
     unregister(name, listener, fn = null) {
         console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
-        let toRemove = [];
+        console.assert(typeof name === 'string' || Array.isArray(name), 'name is not a string|array!', name);
 
-        for (let i = 0; i < this.signals.length; i++) {
-            let caller = this.signals[i];
-            if (caller.name === name && caller.listener === listener && (fn === null || caller.callback === fn)) {
-                toRemove.push(i);
-            }
+        if (typeof name === 'string') {
+            // Convert to array
+            name = [name];
         }
 
-        // console.assert(toRemove.length > 0, 'Unregistered event "' + name + '" for listener ', listener, ' but said listener was not found on our ', this);
+        for (let i = 0; i < name.length; i++) {
+            let toRemove = [];
 
-        // Reverse the loop, we're removing multiple indices. If we start with smallest first,
-        // we're going to remove the wrong indexes after the first one. Not good. Reverse preserves the proper order.
-        for (let i = toRemove.length - 1; i >= 0; i--) {
-            this.signals.splice(toRemove[i], 1);
+            for (let j = 0; j < this.signals.length; j++) {
+                let caller = this.signals[j];
+                if (caller.name === name[i] && caller.listener === listener && (fn === null || caller.callback === fn)) {
+                    toRemove.push(j);
+                }
+            }
+
+            // console.assert(toRemove.length > 0, 'Unregistered event "' + name + '" for listener ', listener, ' but said listener was not found on our ', this);
+
+            // Reverse the loop, we're removing multiple indices. If we start with smallest first,
+            // we're going to remove the wrong indexes after the first one. Not good. Reverse preserves the proper order.
+            for (let j = toRemove.length - 1; j >= 0; j--) {
+                this.signals.splice(toRemove[j], 1);
+            }
         }
 
     }
