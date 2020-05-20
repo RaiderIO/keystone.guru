@@ -47,7 +47,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         }
 
         // Make sure we can see the killzone in the sidebar
-        if( !$(`#map_killzonessidebar_killzone_${killZone.id}`).visible() ){
+        if (!$(`#map_killzonessidebar_killzone_${killZone.id}`).visible()) {
             $(this.options.sidebarScrollSelector).mCustomScrollbar('scrollTo', `#map_killzonessidebar_killzone_${killZone.id}`);
         }
     }
@@ -57,7 +57,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _killZoneRowClicked(clickEvent) {
-        console.log(clickEvent);
         // If there was an event, prevent clicking the 'expand' button also selecting the killzone
         if (clickEvent !== null && typeof clickEvent !== 'undefined' &&
             ($(clickEvent.target).hasClass('btn') || $(clickEvent.target).hasClass('pcr-button') || $(clickEvent.target).hasClass('fa'))) {
@@ -115,7 +114,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let self = this;
 
         // Simple example, see optional options for more configuration.
-        return Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
+        let picker = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
             el: `#map_killzonessidebar_killzone_${killZone.id}_color`,
             default: killZone.color
         })).on('save', (color, instance) => {
@@ -129,6 +128,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // Reset ourselves
             instance.hide();
         });
+
+        return picker;
     }
 
     /**
@@ -153,6 +154,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $(this.options.killZonesContainerSelector).append(
             $(template(data))
         );
+
+        $('#killzones_no_pulls').hide();
 
         $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index', $($(this.options.killZonesContainerSelector).children()).length);
         $(`#map_killzonessidebar_killzone_${killZone.id} .selectable`).bind('click', this._killZoneRowClicked);
@@ -258,8 +261,17 @@ class CommonMapsKillzonessidebar extends InlineCode {
             complete: function () {
                 // When done, remove completely
                 $(`#map_killzonessidebar_killzone_${killZone.id}`).remove();
+
+                // Tell the user what to do next!
+                if ($('#killzones_container .selectable').length === 0) {
+                    $('#killzones_no_pulls').show();
+                }
             }
         });
+
+        // Unset it, ish
+        this._colorPickers[killZone.id] = null;
+        $('#killzones_no_pulls').hide();
     }
 
     /**
@@ -321,7 +333,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
         }
 
         if (this.options.edit) {
-            this._colorPickers[killZone.id].setColor(killZone.color);
+            if (this._colorPickers.hasOwnProperty(killZone.id)) {
+                this._colorPickers[killZone.id].setColor(killZone.color);
+            } else {
+                console.warn('Color picker not found!', killZone, killZone.id);
+            }
         }
 
         refreshTooltips();

@@ -75,6 +75,7 @@ class EnemyVisual extends Signalable {
 
         // Add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
         let packBuddies = this.enemy.getPackBuddies();
+            packBuddies.push(this.enemy);
         $.each(packBuddies, function (index, enemy) {
             visuals.push(enemy.visual);
         });
@@ -95,6 +96,7 @@ class EnemyVisual extends Signalable {
 
             // Add all the enemies in said pack to the toggle display (may be empty if enemy not part of a pack)
             let packBuddies = this.enemy.getPackBuddies();
+            packBuddies.push(this.enemy);
             $.each(packBuddies, function (index, enemy) {
                 visuals.push(enemy.visual);
             });

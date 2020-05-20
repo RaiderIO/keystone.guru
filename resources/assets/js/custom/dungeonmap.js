@@ -330,6 +330,7 @@ class DungeonMap extends Signalable {
             let enemyIds = [];
             // Add all buddies in this pack to the list of ids (if any)
             let packBuddies = enemyClickedEvent.context.getPackBuddies();
+            packBuddies.push(enemyClickedEvent.context);
 
             for (let index in packBuddies) {
                 if (packBuddies.hasOwnProperty(index)) {

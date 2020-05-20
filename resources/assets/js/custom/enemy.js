@@ -110,7 +110,7 @@ class Enemy extends MapObject {
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
             $.each(enemyMapObjectGroup.objects, function (index, enemy) {
-                if (enemy.enemy_pack_id === self.enemy_pack_id) {
+                if (enemy.enemy_pack_id === self.enemy_pack_id && enemy.id !== self.id) {
                     result.push(enemy);
                 }
             });

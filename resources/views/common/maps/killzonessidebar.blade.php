@@ -20,9 +20,13 @@
     'header' => __('Pulls'),
     'anchor' => 'right',
     'id' => 'killzonesidebar',
-    'customSubHeader' => $edit ? '<div class="sidebar-header-pulls-spacer"></div><button id="new_pull_btn" class="btn btn-primary w-100"><i class="fas fa-plus"></i> ' . __('New Pull') . '</button>' : ''
+    'customSubHeader' => '&nbsp;'
 ])
     <div id="killzones_container">
-
+        <div id="killzones_no_pulls" class="row">
+            <div class="col text-center">
+                <h5>{{ __('No pulls created. Click on an enemy to add them to your first pull!') }}</h5>
+            </div>
+        </div>
     </div>
 @endcomponent

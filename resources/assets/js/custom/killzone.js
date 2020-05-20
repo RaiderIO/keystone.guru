@@ -84,7 +84,6 @@ class KillZone extends MapObject {
      */
     _removeEnemy(enemy) {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
-        console.warn('_removeEnemy', enemy);
 
         // Deselect if necessary
         if (enemy.getKillZone() !== null && enemy.getKillZone().id === this.id) {
@@ -111,7 +110,6 @@ class KillZone extends MapObject {
      */
     _addEnemy(enemy) {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
-        console.log('_addEnemy', enemy);
 
         enemy.setKillZone(this);
         // Add it, but don't double add it
@@ -156,48 +154,53 @@ class KillZone extends MapObject {
         console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
         console.assert(this instanceof KillZone, 'this is not an KillZone', this);
 
-        let index = $.inArray(enemy.id, this.enemies);
-        // Already exists, user wants to deselect the enemy
-        let removed = index >= 0;
+        // Only when
+        if (this.id > 0) {
+            let index = $.inArray(enemy.id, this.enemies);
+            // Already exists, user wants to deselect the enemy
+            let removed = index >= 0;
 
-        // Keep track of the killzone it may have been attached to, we need to refresh it ourselves here since then
-        // the actions only get done once. If the previous enemy was part of a pack of 10 enemies, which were part of
-        // the same killzone, it would otherwise send 10 save messages (if this.save() was part of killzone:detached
-        // logic. By removing that there and adding it here, we get one clean save message.
-        let previousKillZone = enemy.getKillZone();
+            // Keep track of the killzone it may have been attached to, we need to refresh it ourselves here since then
+            // the actions only get done once. If the previous enemy was part of a pack of 10 enemies, which were part of
+            // the same killzone, it would otherwise send 10 save messages (if this.save() was part of killzone:detached
+            // logic. By removing that there and adding it here, we get one clean save message.
+            let previousKillZone = enemy.getKillZone();
 
-        // If the enemy was part of a pack..
-        if (enemy.enemy_pack_id > 0) {
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-            for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-                let enemyCandidate = enemyMapObjectGroup.objects[i];
-                // If we should couple the enemy in addition to our own..
-                if (enemyCandidate.enemy_pack_id === enemy.enemy_pack_id) {
-                    // Remove it too if we should
-                    if (removed) {
-                        this._removeEnemy(enemyCandidate);
-                    }
-                    // Or add it too if we need
-                    else {
-                        this._addEnemy(enemyCandidate);
+            // If the enemy was part of a pack..
+            if (enemy.enemy_pack_id > 0) {
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+                    let enemyCandidate = enemyMapObjectGroup.objects[i];
+                    // If we should couple the enemy in addition to our own..
+                    if (enemyCandidate.enemy_pack_id === enemy.enemy_pack_id) {
+                        // Remove it too if we should
+                        if (removed) {
+                            this._removeEnemy(enemyCandidate);
+                        }
+                        // Or add it too if we need
+                        else {
+                            this._addEnemy(enemyCandidate);
+                        }
                     }
                 }
+            } else {
+                if (removed) {
+                    this._removeEnemy(enemy);
+                } else {
+                    this._addEnemy(enemy);
+                }
+            }
+
+            this.redrawConnectionsToEnemies();
+            this.save();
+
+            // The previous killzone lost a member, we have to notify it and save it
+            if (previousKillZone !== null && previousKillZone.id !== this.id) {
+                previousKillZone.redrawConnectionsToEnemies();
+                previousKillZone.save();
             }
         } else {
-            if (removed) {
-                this._removeEnemy(enemy);
-            } else {
-                this._addEnemy(enemy);
-            }
-        }
-
-        this.redrawConnectionsToEnemies();
-        this.save();
-
-        // The previous killzone lost a member, we have to notify it and save it
-        if (previousKillZone !== null && previousKillZone.id !== this.id) {
-            previousKillZone.redrawConnectionsToEnemies();
-            previousKillZone.save();
+            console.warn('Not handling _enemySelected; killzone not (yet) saved!', this, enemy.id);
         }
     }
 
@@ -222,8 +225,8 @@ class KillZone extends MapObject {
                 previousState.unregister('enemyselection:enemyselected', this);
             }
 
-            if( newState instanceof EnemySelection && newState.getMapObject().id === this.id ) {
-            // Reg for changes to our killzone if necessary
+            if (newState instanceof EnemySelection && newState.getMapObject().id === this.id) {
+                // Reg for changes to our killzone if necessary
                 newState.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
             }
         }
