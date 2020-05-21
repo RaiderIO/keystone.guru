@@ -1,0 +1,50 @@
+{
+    "id": 41,
+    "release_changelog_id": 45,
+    "version": "v3.0",
+    "created_at": "2020-05-21 10:59:22",
+    "updated_at": "2020-05-21 10:59:22",
+    "changelog": {
+        "id": 45,
+        "release_id": 41,
+        "description": "A major rework of the mapping experience. The goal is to make it much easier and quicker to plan your route. Killzones have been made optional, you now create the pulls your route needs by clicking on the enemies you wish to add to your current pull. You can quickly switch between pulls",
+        "changes": [
+            {
+                "release_changelog_id": 45,
+                "release_changelog_category_id": 3,
+                "ticket_id": 116,
+                "change": "Killzones have been made optional. Killzones are now called 'Pulls', while the killzone is now an optional indicator for where to kill the Pull."
+            },
+            {
+                "release_changelog_id": 45,
+                "release_changelog_category_id": 3,
+                "ticket_id": 275,
+                "change": "You can now define a gradient for how you wish to color your pulls. For example, if you define a gradient from red to green and apply that color to your Pulls, the first pull will be red, while the last pull will be green and everything else in between will be on the gradient between red and green. This will more easily allow you to identify which pulls are done at what time in a non-linear dungeon."
+            },
+            {
+                "release_changelog_id": 45,
+                "release_changelog_category_id": 3,
+                "ticket_id": 276,
+                "change": "Selecting a pull is now done from the map (or the new sidebar), and having a pull selected highlights it with an animated dashed border."
+            },
+            {
+                "release_changelog_id": 45,
+                "release_changelog_category_id": 3,
+                "ticket_id": 281,
+                "change": "Pulls are now independent of floors. You can have a pull that starts on one floor and ends on another. Don't forget to add an optional killzone to indicate where you're killing them!"
+            },
+            {
+                "release_changelog_id": 45,
+                "release_changelog_category_id": 3,
+                "ticket_id": 287,
+                "change": "Hiding\/showing layers have been moved from the top right to the sidebar on the left. It will now also remember your choice between sessions."
+            },
+            {
+                "release_changelog_id": 45,
+                "release_changelog_category_id": 1,
+                "ticket_id": 277,
+                "change": "Various error messages when using the Routes page have been resolved."
+            }
+        ]
+    }
+}
