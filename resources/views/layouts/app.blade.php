@@ -55,6 +55,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     <!-- Styles -->
     <link href="{{ asset('css/app-' . $version . '.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom-' . $version . '.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/lib-' . $version . '.css') }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
@@ -486,6 +487,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 <script src="{{ asset('js/app-' . $version . '.js') }}"></script>
 <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
 <script src="{{ asset('js/custom-' . $version . '.js') }}"></script>
+<script src="{{ asset('js/lib-' . $version . '.js') }}"></script>
 @yield('scripts')
 </body>
 </html>

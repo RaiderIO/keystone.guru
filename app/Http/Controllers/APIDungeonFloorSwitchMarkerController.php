@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Models\DungeonFloorSwitchMarker;
-use App\Models\DungeonStartMarker;
 use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
 
@@ -48,13 +47,13 @@ class APIDungeonFloorSwitchMarkerController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonFloorSwitchMarker $dungeonFloorSwitchMarker
+     * @param DungeonFloorSwitchMarker $dungeonfloorswitchmarker
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     function delete(Request $request, DungeonFloorSwitchMarker $dungeonfloorswitchmarker)
     {
         try {
-            dd($dungeonfloorswitchmarker->delete());
+            $dungeonfloorswitchmarker->delete();
             $result = ['result' => 'success'];
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

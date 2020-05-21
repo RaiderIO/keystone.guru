@@ -1,8 +1,8 @@
-class CommonMapsSidebar extends InlineCode {
+class Sidebar {
 
 
     constructor(options) {
-        super(options);
+        this.options = options;
     }
 
     /**
@@ -14,11 +14,14 @@ class CommonMapsSidebar extends InlineCode {
         // Make sure that the select options have a valid value
         this._refreshFloorSelect();
 
+        // Switch floors
         $(this.options.switchDungeonFloorSelect).val(this.options.defaultSelectedFloorId);
 
-        $('#sidebarToggle').on('click', function () {
+        // Sidebar toggle
+        let $sidebar = $(this.options.sidebarSelector);
+        $(this.options.sidebarToggleSelector).on('click', function () {
             // Dismiss
-            if ($('#sidebar').hasClass('active')) {
+            if ($sidebar.hasClass('active')) {
                 self._hideSidebar();
             }
             // Show
@@ -29,8 +32,8 @@ class CommonMapsSidebar extends InlineCode {
             refreshTooltips();
         });
 
-        $("#sidebar").mCustomScrollbar({
-            theme: "minimal"
+        $(this.options.sidebarScrollSelector).mCustomScrollbar({
+            theme: 'minimal'
         });
 
         this._showSidebar();
@@ -46,7 +49,7 @@ class CommonMapsSidebar extends InlineCode {
             // Clear of all options
             $switchDungeonFloorSelect.find('option').remove();
             // Add each new floor to the select
-            $.each(dungeonData.floors, function (index, floor) {
+            $.each(getState().getDungeonData().floors, function (index, floor) {
                 // Reconstruct the dungeon floor select
                 $switchDungeonFloorSelect.append($('<option>', {
                     text: floor.name,
@@ -63,8 +66,8 @@ class CommonMapsSidebar extends InlineCode {
      * @private
      */
     _hideSidebar() {
-        let $sidebar = $('#sidebar');
-        let $sidebarToggle = $('#sidebarToggle');
+        let $sidebar = $(this.options.sidebarSelector);
+        let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
         // Hide sidebar
         $sidebar.removeClass('active');
@@ -72,7 +75,11 @@ class CommonMapsSidebar extends InlineCode {
         $sidebarToggle.removeClass('active');
         $sidebarToggle.attr('title', lang.get('messages.sidebar_expand'));
         // Toggle image
-        $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
+        if (this.options.anchor === 'left') {
+            $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
+        } else {
+            $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
+        }
     }
 
     /**
@@ -80,8 +87,8 @@ class CommonMapsSidebar extends InlineCode {
      * @private
      */
     _showSidebar() {
-        let $sidebar = $('#sidebar');
-        let $sidebarToggle = $('#sidebarToggle');
+        let $sidebar = $(this.options.sidebarSelector);
+        let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
         // Open sidebar
         $sidebar.addClass('active');
@@ -89,6 +96,14 @@ class CommonMapsSidebar extends InlineCode {
         $sidebarToggle.addClass('active');
         $sidebarToggle.attr('title', lang.get('messages.sidebar_collapse'));
         // Toggle image
-        $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
+        if (this.options.anchor === 'left') {
+            $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
+        } else {
+            $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
+        }
+    }
+    
+    cleanup() {
+
     }
 }

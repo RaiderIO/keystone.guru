@@ -12,7 +12,7 @@ class MapIconType {
     }
 
     isEditable() {
-        return (getState().getDungeonRoute().publicKey === '') || !this.admin_only;
+        return (getState().getDungeonRoute().publicKey === 'admin') || !this.admin_only;
     }
 
     isDeletable(){

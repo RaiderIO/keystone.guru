@@ -74,25 +74,25 @@
                             <div class="probootstrap-image-showcase">
                                 <ul class="probootstrap-images-list">
                                     <li class="active">
-                                        <img src="images/home/1.jpg" alt="Image" class="img-responsive">
+                                        <img src="images/home/1.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
                                     <li>
-                                        <img src="images/home/2.jpg" alt="Image" class="img-responsive">
+                                        <img src="images/home/2.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
                                     <li>
-                                        <img src="images/home/3.jpg" alt="Image" class="img-responsive">
+                                        <img src="images/home/3.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
                                     <li>
-                                        <img src="images/home/4.jpg" alt="Image" class="img-responsive">
+                                        <img src="images/home/4.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
                                     <li>
-                                        <img src="images/home/5.jpg" alt="Image" class="img-responsive">
+                                        <img src="images/home/5.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
                                     <li>
-                                        <img src="images/home/6.jpg" alt="Image" class="img-responsive">
+                                        <img src="images/home/6.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
                                     <li>
-                                        <img src="images/home/7.jpg" alt="Image" class="img-responsive">
+                                        <img src="images/home/7.jpg" alt="Image" class="img-responsive" loading="lazy">
                                     </li>
                                 </ul>
                             </div>

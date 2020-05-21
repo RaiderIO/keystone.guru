@@ -10,8 +10,8 @@
         "id": 13,
         "floor_id": 60,
         "target_floor_id": 61,
-        "lat": -197.25,
-        "lng": 132
+        "lat": -190.75,
+        "lng": 131.94
     },
     {
         "id": 14,
@@ -30,7 +30,7 @@
     {
         "id": 16,
         "floor_id": 60,
-        "target_floor_id": 61,
+        "target_floor_id": 62,
         "lat": -104.75,
         "lng": 152.88
     },

@@ -1,9 +1,18 @@
 class CommonMapsViewsidebar extends InlineCode {
+
+
+    constructor(options) {
+        super(options);
+
+        this.sidebar = new SidebarNavigation(options);
+    }
+
     /**
      *
      */
     activate() {
         let self = this;
+        this.sidebar.activate();
 
         $('#view_dungeonroute_group_setup').html(
             handlebarsGroupSetupParse(self.options.setup)
@@ -67,5 +76,11 @@ class CommonMapsViewsidebar extends InlineCode {
 
             }
         });
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        this.sidebar.cleanup();
     }
 }

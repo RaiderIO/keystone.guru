@@ -32,7 +32,7 @@ class EnemyVisual extends Signalable {
         });
 
         // If it changed, refresh the entire visual
-        this.enemy.register('enemy:set_raid_marker', this, this._buildVisual.bind(this));
+        this.enemy.register(['enemy:set_raid_marker', 'synced'], this, this._buildVisual.bind(this));
         this.enemy.register('killzone:attached', this, function () {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();
@@ -49,7 +49,12 @@ class EnemyVisual extends Signalable {
             }
             self._buildVisual();
         });
-        this.map.register('map:editmodetoggled', this, this._buildVisual.bind(this));
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof EditMapState) {
+                self._buildVisual();
+            }
+        });
 
         this.layer.on('mouseover', function () {
             self._mouseOver();
@@ -68,14 +73,12 @@ class EnemyVisual extends Signalable {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
         let visuals = [this];
 
-        // If enemy is part of a pack..
-        if (this.enemy.enemy_pack_id >= 0) {
-            // Add all the enemies in said pack to the toggle display
-            let packBuddies = this.enemy.getPackBuddies();
-            $.each(packBuddies, function (index, enemy) {
-                visuals.push(enemy.visual);
-            });
-        }
+        // Add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
+        let packBuddies = this.enemy.getPackBuddies();
+            packBuddies.push(this.enemy);
+        $.each(packBuddies, function (index, enemy) {
+            visuals.push(enemy.visual);
+        });
 
         for (let i = 0; i < visuals.length; i++) {
             visuals[i].setVisualType('enemy_forces');
@@ -91,14 +94,12 @@ class EnemyVisual extends Signalable {
         if (this.circleMenu === null) {
             let visuals = [this];
 
-            // If enemy is part of a pack..
-            if (this.enemy.enemy_pack_id >= 0) {
-                // Add all the enemies in said pack to the toggle display
-                let packBuddies = this.enemy.getPackBuddies();
-                $.each(packBuddies, function (index, enemy) {
-                    visuals.push(enemy.visual);
-                });
-            }
+            // Add all the enemies in said pack to the toggle display (may be empty if enemy not part of a pack)
+            let packBuddies = this.enemy.getPackBuddies();
+            packBuddies.push(this.enemy);
+            $.each(packBuddies, function (index, enemy) {
+                visuals.push(enemy.visual);
+            });
 
             for (let i = 0; i < visuals.length; i++) {
                 visuals[i].setVisualType(getState().getEnemyDisplayType());
@@ -160,7 +161,7 @@ class EnemyVisual extends Signalable {
 
         // Some exclusions as to when the menu should not pop up
         if (self.map.options.edit &&
-            !self.map.isEnemySelectionEnabled() &&
+            self.map.getMapState() === null &&
             self.enemy.constructor.name !== 'AdminEnemy') {
 
             if (self.circleMenu === null) {
@@ -198,7 +199,7 @@ class EnemyVisual extends Signalable {
                     circle_radius: size + margin,
                     // Positioning
                     item_diameter: 24,
-                    speed: 200,
+                    speed: 300,
                     init: function () {
                         refreshTooltips();
                     },
@@ -265,8 +266,8 @@ class EnemyVisual extends Signalable {
             self._mouseOut();
 
             // Re-bind this function
-            $enemyDiv.unbind('click');
-            $enemyDiv.bind('click', self._visualClicked.bind(self));
+            $enemyDiv.unbind('contextmenu');
+            $enemyDiv.bind('contextmenu', self._visualClicked.bind(self));
         });
     }
 
@@ -286,11 +287,18 @@ class EnemyVisual extends Signalable {
             let template = Handlebars.templates['map_enemy_visual_template'];
 
             // Set a default color which may be overridden by any visuals
-            let data = {
-                outer_background_color: this.enemy.getKillZone() instanceof KillZone ? this.enemy.getKillZone().color : 'white'
-            };
+            let data = {};
 
-            if (this.enemy.isSelectable() || this.map.editModeActive) {
+            // Either no border or a solid border in the color of the killzone
+            let border = `${getState().getMapZoomLevel()}px solid white`;
+            if( this.enemy.getKillZone() instanceof KillZone ){
+                border = `${getState().getMapZoomLevel()}px solid ${this.enemy.getKillZone().color}`;
+            }
+
+            data.outer_border = border;
+
+            if ((this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) ||
+                (this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable())) {
                 data = {
                     selection_classes_base: 'leaflet-edit-marker-selected selected_enemy_icon'
                 };
@@ -336,8 +344,8 @@ class EnemyVisual extends Signalable {
 
             // When the visual exists, bind a click method to it (to increase performance)
             let $enemyIcon = $('#map_enemy_visual_' + this.enemy.id).find('.enemy_icon');
-            $enemyIcon.unbind('click');
-            $enemyIcon.bind('click', this._visualClicked.bind(this));
+            $enemyIcon.unbind('contextmenu');
+            $enemyIcon.bind('contextmenu', this._visualClicked.bind(this));
 
             this.signal('enemyvisual:builtvisual', {});
         }
@@ -396,7 +404,7 @@ class EnemyVisual extends Signalable {
         this.enemy.unregister('killzone:detached', this);
         this.enemy.unregister('killzone:attached', this);
         this.enemy.unregister('enemy:set_raid_marker', this);
-        this.map.unregister('map:editmodetoggled', this);
+        this.map.unregister('map:mapstatechanged', this);
 
         this._cleanupCircleMenu();
     }

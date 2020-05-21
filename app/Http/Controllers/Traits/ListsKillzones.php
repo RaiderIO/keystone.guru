@@ -10,23 +10,23 @@ namespace App\Http\Controllers\Traits;
 
 use App\Models\KillZone;
 use App\Models\Path;
+use Illuminate\Support\Collection;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
 trait ListsKillzones
 {
     /**
-     * Lists all killzones on a specific floor of a dungeon route.
+     * Lists all killzones of a dungeon route.
      *
-     * @param $floorId
      * @param $publicKey
-     * @return Path[]
+     * @return Collection
      */
-    function listKillzones($floorId, $publicKey)
+    function listKillzones($publicKey)
     {
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($publicKey, false);
-            $result = KillZone::where('dungeon_route_id', $dungeonRoute->id)->where('floor_id', $floorId)->get();
+            $result = KillZone::where('dungeon_route_id', $dungeonRoute->id)->get();
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

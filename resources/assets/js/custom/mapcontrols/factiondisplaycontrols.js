@@ -11,18 +11,21 @@ class FactionDisplayControls extends MapControl {
                 let template = Handlebars.templates['map_faction_display_controls_template'];
 
                 // factionsData is defined in map.blade.php
-                let factions = [];
-                for (let index in factionsData) {
-                    let faction = factionsData[index];
-                    factions.push({
-                        name: faction.name,
-                        name_lc: faction.name.toLowerCase(),
-                        icon_url: faction.iconfile.icon_url,
-                        fa_class: parseInt(index) === 0 ? 'fas' : 'far'
-                    });
+                let factionsData = [];
+                let stateFactions = getState().getFactions();
+                for (let index in stateFactions) {
+                    if (stateFactions.hasOwnProperty(index)) {
+                        let faction = stateFactions[index];
+                        factionsData.push({
+                            name: faction.name,
+                            name_lc: faction.name.toLowerCase(),
+                            icon_url: faction.iconfile.icon_url,
+                            fa_class: parseInt(index) === 0 ? 'fas' : 'far'
+                        });
+                    }
                 }
 
-                let data = {factions: factions};
+                let data = {factions: factionsData};
 
                 // Build the status bar from the template
                 self.domElement = $(template(data));

@@ -1,6 +1,6 @@
 class KillZoneMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, editable) {
-        super(manager, name, editable);
+    constructor(manager, editable) {
+        super(manager, MAP_OBJECT_GROUP_KILLZONE, editable);
 
         let self = this;
 
@@ -28,6 +28,13 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return new KillZone(this.manager.map, layer);
     }
 
+    /**
+     *
+     * @param remoteMapObject
+     * @param username
+     * @returns {KillZone}
+     * @private
+     */
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
         // Fetch the existing killzone if it exists
@@ -35,8 +42,13 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         // Only create a new one if it's new for us
         if (killzone === null) {
-            let layer = new LeafletKillZoneMarker();
-            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+            let layer = null;
+            // Only if it was set, and if it was on this floor
+            if (remoteMapObject.lat !== null && remoteMapObject.lng !== null &&
+                remoteMapObject.floor_id === getState().getCurrentFloor().id) {
+                layer = new LeafletKillZoneMarker();
+                layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+            }
 
             /** @var KillZone killzone */
             killzone = this.createNew(layer);
@@ -57,16 +69,19 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 let enemy = remoteMapObject.killzoneenemies[i];
                 enemies.push(enemy.enemy_id);
             }
-            // Restore the enemies, STILL NEED TO CALL SETENEMIES WHEN EVERYTHING'S DONE LOADING
-            // Should be handled by the killzone itself
-            killzone.enemies = enemies;
+
+            killzone.setEnemies(enemies);
         }
 
         // We just downloaded the kill zone, it's synced alright!
-        killzone.setSynced(true);
+        if (!remoteMapObject.local) {
+            killzone.setSynced(true);
+        }
 
         // Show echo notification or not
         this._showReceivedFromEcho(killzone, username);
+
+        return killzone;
     }
 
     _fetchSuccess(response) {
@@ -82,5 +97,34 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 this._restoreObject(killzones[index]);
             }
         }
+    }
+
+    /**
+     * Creates a whole new pull.
+     * @param enemyIds array Any enemies that must be in the pull from the start
+     * @returns {KillZone}
+     */
+    createNewPull(enemyIds = []) {
+        // Construct an object equal to that received from the server
+        let killzoneEnemies = [];
+        for(let i = 0; i < enemyIds.length; i++ ){
+            killzoneEnemies.push({enemy_id: enemyIds[i]});
+        }
+
+        let killZone = this._restoreObject({
+            id: -1,
+            color: c.map.killzone.polygonOptions.color(),
+            floor_id: -1, // Only for the killzone location which is not set from a 'new pull'
+            killzoneenemies: killzoneEnemies,
+            lat: null,
+            lng: null,
+            // Bit of a hack, we don't want the synced event to be fired in this case, we only want it _after_ the ID has been
+            // set by calling save() below. That will then trigger object:add and the killzone will have it's ID for the UI
+            local: true
+        });
+        killZone.save();
+
+        this.signal('killzone:new', {newKillZone: killZone});
+        return killZone;
     }
 }

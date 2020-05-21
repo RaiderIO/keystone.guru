@@ -46,9 +46,9 @@ class Enemy extends MapObject {
         this.mdt_id = -1;
 
         let self = this;
-        this.map.register('map:enemyselectionmodechanged', this, function (selectionModeChangedEvent) {
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Remove/enable the popup
-            self.setPopupEnabled(selectionModeChangedEvent.data.finished);
+            self.setPopupEnabled(mapStateChangedEvent.data.newMapState instanceof MapState);
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -69,17 +69,20 @@ class Enemy extends MapObject {
     _synced(event) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        // Synced, can now build the popup since we know our ID
-        this._rebuildPopup(event);
+        // Only if we should display this enemy
+        if (this.layer !== null) {
+            // Synced, can now build the popup since we know our ID
+            this._rebuildPopup(event);
 
-        // Create the visual now that we know all data to construct it properly
-        if (this.visual !== null) {
-            this.visual.cleanup();
+            // Create the visual now that we know all data to construct it properly
+            if (this.visual !== null) {
+                this.visual.cleanup();
+            }
+            this.visual = new EnemyVisual(this.map, this, this.layer);
+
+            // Recreate the tooltip
+            this.bindTooltip();
         }
-        this.visual = new EnemyVisual(this.map, this, this.layer);
-
-        // Recreate the tooltip
-        this.bindTooltip();
     }
 
     /**
@@ -97,18 +100,21 @@ class Enemy extends MapObject {
      */
     getPackBuddies() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-
         let self = this;
 
-        // Add all the enemies in said pack to the toggle display
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-
         let result = [];
-        $.each(enemyMapObjectGroup.objects, function (index, enemy) {
-            if (enemy.enemy_pack_id === self.enemy_pack_id) {
-                result.push(enemy);
-            }
-        });
+
+        // Only if we're part of a pack
+        if (this.enemy_pack_id >= 0) {
+            // Add all the enemies in said pack to the toggle display
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+            $.each(enemyMapObjectGroup.objects, function (index, enemy) {
+                if (enemy.enemy_pack_id === self.enemy_pack_id && enemy.id !== self.id) {
+                    result.push(enemy);
+                }
+            });
+        }
 
         return result;
     }
@@ -119,10 +125,12 @@ class Enemy extends MapObject {
      */
     setPopupEnabled(enabled) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        if (enabled) {
-            this._rebuildPopup();
-        } else {
-            this.layer.unbindPopup();
+        if (this.layer !== null) {
+            if (enabled) {
+                this._rebuildPopup();
+            } else {
+                this.layer.unbindPopup();
+            }
         }
     }
 
@@ -138,18 +146,20 @@ class Enemy extends MapObject {
     bindTooltip() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        let text = '';
-        if (this.npc !== null) {
-            text = this.npc.name;
-        } else {
-            text = lang.get('messages.no_npc_found_label');
-        }
+        if (this.layer !== null) {
+            let text = '';
+            if (this.npc !== null) {
+                text = this.npc.name;
+            } else {
+                text = lang.get('messages.no_npc_found_label');
+            }
 
-        // Remove any previous tooltip
-        this.unbindTooltip();
-        this.layer.bindTooltip(text, {
-            direction: 'top'
-        });
+            // Remove any previous tooltip
+            this.unbindTooltip();
+            this.layer.bindTooltip(text, {
+                direction: 'top'
+            });
+        }
     }
 
     /**
@@ -187,7 +197,7 @@ class Enemy extends MapObject {
 
     /**
      * Gets the killzone for this enemy.
-     * @returns {null}
+     * @returns {KillZone|null}
      */
     getKillZone() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -205,7 +215,10 @@ class Enemy extends MapObject {
 
         if (this.kill_zone instanceof KillZone) {
             this.signal('killzone:attached', {previous: oldKillZone});
-        } else {
+        }
+
+        // We should notify it that we have detached from it
+        if (oldKillZone !== null) {
             this.signal('killzone:detached', {previous: oldKillZone});
         }
     }
@@ -235,8 +248,10 @@ class Enemy extends MapObject {
 
         // Show a permanent tooltip for the enemy's name
         this.layer.on('click', function () {
-            if (self.map.isEnemySelectionEnabled() && self.selectable) {
+            if (self.map.getMapState() instanceof EnemySelection && self.selectable) {
                 self.signal('enemy:selected');
+            } else {
+                self.signal('enemy:clicked');
             }
         });
 
@@ -257,12 +272,20 @@ class Enemy extends MapObject {
         });
     }
 
+    isDeletable() {
+        return false;
+    }
+
+    isEditable() {
+        return false;
+    }
+
     /**
      * Checks if this enemy is possibly selectable when selecting enemies.
      * @returns {*}
      */
     isSelectable() {
-        return this.selectable;
+        return this.selectable && this.visual !== null;
     }
 
     /**
@@ -272,8 +295,10 @@ class Enemy extends MapObject {
     setSelectable(value) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.selectable = value;
-        // Refresh the icon
-        this.visual.refresh();
+        if (this.visual !== null) {
+            // Refresh the icon
+            this.visual.refresh();
+        }
     }
 
     /**
@@ -303,6 +328,6 @@ class Enemy extends MapObject {
         super.cleanup();
 
         this.unregister('synced', this, this._synced.bind(this));
-        this.map.unregister('map:enemyselectionmodechanged', this);
+        this.map.unregister('map:mapstatechanged', this);
     }
 }

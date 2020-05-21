@@ -39,24 +39,37 @@ html, body, #map, #app, .wrapper {
     max-width: 80%;
 }
 
-#sidebar {
+.sidebar {
     width: 300px;
     position: fixed;
     top: 0;
-    left: -300px;
     height: 100vh;
     z-index: 1030;
     transition: all 0.2s;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     background-color: #4E5D6C;
+}
+
+.sidebar.anchor-left {
+    left: -300px;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     border-right: #2B3E50 solid 1px;
 }
 
-#sidebar.active {
+.sidebar.anchor-left.active {
     left: 0;
 }
 
-#sidebarToggle {
+.sidebar.anchor-right {
+    right: -300px;
+    box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.2);
+    border-left: #2B3E50 solid 1px;
+}
+
+.sidebar.anchor-right.active {
+    right: 0;
+}
+
+.sidebar-toggle {
     width: 35px;
     height: 35px;
     line-height: 35px;
@@ -68,60 +81,140 @@ html, body, #map, #app, .wrapper {
 
     position: fixed;
     top: 106px;
-    left: 0;
     cursor: pointer;
     z-index: 1050;
 
     background: #4E5D6C;
     color: #DF691A;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
-#sidebarToggle.active {
+.sidebar-toggle.anchor-left {
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    left: 0;
+}
+
+.sidebar-toggle.anchor-right {
+    box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.2);
+    right: 0;
+}
+
+.sidebar-toggle.anchor-left.active {
     left: 300px;
 }
 
-#sidebarToggle:hover {
+.sidebar-toggle.anchor-right.active {
+    right: 300px;
+}
+
+.sidebar-toggle:hover {
     background: #DF691A;
     color: #FFF;
 }
 
-#sidebar .sidebar-header {
+.sidebar .sidebar-header {
     padding: 10px 20px;
     background: #2B3E50;
 }
 
 /* Force reserve height */
-#sidebar .sidebar-header h4 {
+.sidebar .sidebar-header h4 {
     -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap
 }
 
-#sidebar .sidebar-header-subtitle {
+.sidebar .sidebar-header-subtitle {
     padding-left: 10px;
     min-height: 25px;
     color: #C1C1C1;
 }
 
-#sidebar .sidebar-content .container {
+.sidebar .sidebar-header-pulls-spacer {
+    min-height: 11px;
+}
+
+.sidebar .sidebar-content .container {
     padding: 0 15px;
 }
 
-#sidebar .sidebar-content {
+.sidebar .sidebar-content {
     padding-top: 10px;
+    /** Bit of a hack, but the 106 is the height of the header which somehow isn't taken into account */
+    height: calc(100vh - 106px);
 }
 
-#sidebar .sidebar-content .card-body {
+.sidebar .sidebar-content .card-body {
     padding: 0.75rem 1.25rem;
 }
 
-#sidebar .sidebar-panel {
+#killzonesidebar .sidebar-content .card-body {
+    padding: 0.2rem 0.5rem;
+}
+
+#killzonesidebar .sidebar-content .card-title {
+    margin-bottom: 0.4rem;
+}
+
+
+#killzonesidebar .form-group {
+    margin-bottom: 0.6rem;
+}
+
+.sidebar .sidebar-panel {
     /*padding: 10px;*/
     /*border: #2B3E50 solid 1px;*/
     margin: 4px;
 }
+
+#killzonesidebar .map_killzonessidebar_killzone {
+    /*background-color: #2B3E50;*/
+    /*padding: 6px;*/
+}
+
+#killzonesidebar .map_killzonessidebar_killzone_fill_space {
+    flex: 1 1 auto
+}
+
+#killzonesidebar [data-toggle="collapse"] .fa:before {
+    content: "\f077";
+}
+
+#killzonesidebar [data-toggle="collapse"].collapsed .fa:before {
+    content: "\f078";
+}
+
+#killzonesidebar .map_killzonessidebar_killzone .selectable {
+    cursor: pointer;
+}
+
+#killzonesidebar .map_killzonessidebar_color_btn {
+    cursor: pointer;
+}
+
+#killzonesidebar .pickr {
+    flex: 1 1 auto;
+}
+
+.draw_settings_tools .pickr {
+    height: 100%;
+}
+
+.grapick_color_picker_button_outer {
+    left: -6px;
+    top: -9px;
+}
+.grapick_color_picker_button {
+    width: 12px !important;
+    height: 12px !important;
+    padding: 0 !important;
+}
+
+/*#killzonesidebar .map_killzonessidebar_killzone.selected {*/
+/*    border: #DF691A 3px solid;*/
+
+/*    padding: 3px;*/
+/*}*/
 
 #edit_route_echo_members_container .list-group-item,
 #edit_route_echo_status_container .list-group-item {
@@ -153,7 +246,7 @@ html, body, #map, #app, .wrapper {
     }
 
     .route_manipulation_tools {
-        width: 1100px;
+        width: 900px;
     }
 }
 
@@ -196,8 +289,7 @@ html, body, #map, #app, .wrapper {
     margin-top: 8px;
 }
 
-.route_manipulation_tools .draw_element .bootstrap-select,
-.route_manipulation_tools .draw_element button {
+.route_manipulation_tools .draw_element .bootstrap-select {
     height: 100%;
 }
 
@@ -216,7 +308,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .floating_panel,
-#sidebar .card {
+.sidebar .card {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -457,31 +549,37 @@ html, body, #map, #app, .wrapper {
 }
 
 .enemy_icon_npc_mdt {
-    border-color: hotpink;
+    background-color: hotpink;
 }
 
 .enemy_icon_npc_enemy_forces.aggressive,
 .enemy_icon_npc_class.aggressive,
 .enemy_icon_npc_type.aggressive {
-    border-color: #dc3c3c;
+    background-color: #dc3c3c !important;
 }
 
 .enemy_icon_npc_enemy_forces.neutral,
 .enemy_icon_npc_class.neutral,
 .enemy_icon_npc_type.neutral {
-    border-color: #cccc2d !important;
+    background-color: #cccc2d !important;
 }
 
 .enemy_icon_npc_enemy_forces.unfriendly,
 .enemy_icon_npc_class.unfriendly,
 .enemy_icon_npc_type.unfriendly {
-    border-color: #ff9900 !important;
+    background-color: #ff9900 !important;
 }
 
 .enemy_icon_npc_enemy_forces.friendly,
 .enemy_icon_npc_class.friendly,
 .enemy_icon_npc_type.friendly {
-    border-color: #15c415 !important;
+    background-color: #15c415 !important;
+}
+
+.enemy_icon_npc_enemy_forces.awakened,
+.enemy_icon_npc_class.awakened,
+.enemy_icon_npc_type.awakened {
+    background-color: #9200c4 !important;
 }
 
 .aberration {
@@ -557,7 +655,7 @@ html, body, #map, #app, .wrapper {
     border-radius: 18px;
 }
 
-.awakened {
+.awakened_obelisk {
     background: white url('/images/enemymodifiers/awakened_obelisk.png') no-repeat -5px -11px !important;
     border: 1px black solid;
     border-radius: 18px;
@@ -648,12 +746,12 @@ html, body, #map, #app, .wrapper {
     margin-left: -4px !important;
 }
 
-#map_enemy_forces h5 {
-    margin-bottom: 0;
+#map_enemy_forces {
+    font-size: 1.3em;
 }
 
 /* When in the sidebar, spread it out fully */
-#sidebar #map_enemy_visuals {
+.sidebar #map_enemy_visuals {
     width: 100%;
 }
 

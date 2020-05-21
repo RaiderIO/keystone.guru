@@ -34,9 +34,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         // Any additional classes to add for when the enemy is selectable
         let selectionClasses = [];
-        if (this.enemyvisual.enemy.isSelectable()) {
-            selectionClasses.push('selected_enemy_icon');
-        }
+        // if (this.enemyvisual.enemy.isSelectable()) {
+        //     selectionClasses.push('selected_enemy_icon');
+        // }
 
         return $.extend(data, {
             // Set the main icon
@@ -71,13 +71,13 @@ class EnemyVisualMain extends EnemyVisualIcon {
         );
 
         // Smaller MDT icons to make it easier to link them
-        if( this.enemyvisual.enemy.is_mdt ){
+        if (this.enemyvisual.enemy.is_mdt) {
             calculatedSize /= 2;
         }
 
+        let zoomLevelOffset = getState().getMapZoomLevel() * 2;
         return {
-            // 2px border; so + 4
-            iconSize: [calculatedSize + 4, calculatedSize + 4]
+            iconSize: [calculatedSize + zoomLevelOffset, calculatedSize + zoomLevelOffset]
         };
     }
 

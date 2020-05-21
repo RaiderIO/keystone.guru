@@ -1,6 +1,6 @@
 class EnemyPackMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, editable) {
-        super(manager, name, editable);
+    constructor(manager, editable) {
+        super(manager, MAP_OBJECT_GROUP_ENEMY_PACK, editable);
 
         this.title = 'Hide/show enemy packs';
         this.fa_class = 'fa-draw-polygon';
@@ -9,7 +9,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof EnemyPackMapObjectGroup, 'this is not an EnemyPackMapObjectGroup', this);
 
-        if (isMapAdmin) {
+        if (getState().isMapAdmin()) {
             return new AdminEnemyPack(this.manager.map, layer);
         } else {
             return new EnemyPack(this.manager.map, layer);

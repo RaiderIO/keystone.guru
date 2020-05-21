@@ -62,27 +62,31 @@ class MDTDungeon
      */
     public function getMDTNPCs()
     {
-        $lua = new \Lua();
-        $lua->eval(
-            'local MethodDungeonTools = {}
-            MethodDungeonTools.dungeonTotalCount = {}
-            MethodDungeonTools.mapInfo = {}
-            MethodDungeonTools.mapPOIs = {}
-            MethodDungeonTools.dungeonEnemies = {}
-            MethodDungeonTools.scaleMultiplier = {}
-            ' .
-            // Some files require LibStub
-            file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
-            file_get_contents(
-                base_path('vendor/nnoggie/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
-            ) .
-            // Insert dummy function to get what we need
-            '
-            function GetDungeonEnemies() 
-                return MethodDungeonTools.dungeonEnemies[dungeonIndex]
-            end
-        ');
-        return $lua->call('GetDungeonEnemies');
+        $result = [];
+        if (Conversion::hasMDTDungeonName($this->_dungeonName)) {
+            $lua = new \Lua();
+            $lua->eval(
+                    'local MethodDungeonTools = {}
+                MethodDungeonTools.dungeonTotalCount = {}
+                MethodDungeonTools.mapInfo = {}
+                MethodDungeonTools.mapPOIs = {}
+                MethodDungeonTools.dungeonEnemies = {}
+                MethodDungeonTools.scaleMultiplier = {}
+                ' .
+                    // Some files require LibStub
+                    file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
+                    file_get_contents(
+                        base_path('vendor/nnoggie/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
+                    ) .
+                    // Insert dummy function to get what we need
+                    '
+                function GetDungeonEnemies() 
+                    return MethodDungeonTools.dungeonEnemies[dungeonIndex]
+                end
+            ');
+            $result = $lua->call('GetDungeonEnemies');
+        }
+        return $result;
     }
 
 

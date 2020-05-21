@@ -8,9 +8,21 @@ if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
 ?>
-@include('common.general.inline', ['path' => 'common/maps/editsidebar'])
+@include('common.general.inline', ['path' => 'common/maps/editsidebar', 'options' => [
+    'dependencies' => ['common/maps/map'],
+    'sidebarSelector' => '#editsidebar',
+    'sidebarScrollSelector' => '#editsidebar .sidebar-content',
+    'sidebarToggleSelector' => '#editsidebarToggle',
+    'switchDungeonFloorSelect' => '#map_floor_selection',
+    'defaultSelectedFloorId' => $dungeon->floors[0]->id,
+    'anchor' => 'left'
+]])
 
-@section('sidebar-content')
+@component('common.maps.sidebar', [
+    'header' => __('Toolbox'),
+    'anchor' => 'left',
+    'id' => 'editsidebar'
+])
 
     @isset($show['shareable-link'])
         <!-- Shareable link -->
@@ -19,14 +31,15 @@ if (isset($model)) {
                 <div class="card-body">
                     <h5 class="card-title">{{ __('Shareable link') }}</h5>
                     <div class="row">
-                        <div class="col">
+                        <div class="input-group-append">
                             {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
                             ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col mt-2">
-                            {!! Form::button('<i class="far fa-copy"></i> ' . __('Copy to clipboard'), ['id' => 'map_copy_to_clipboard', 'class' => 'btn btn-info col-md']) !!}
+                            <div class="input-group-append">
+                                <button id="map_copy_to_clipboard" class="btn btn-info"
+                                        data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -44,8 +57,24 @@ if (isset($model)) {
                     </div>
                 </div>
 
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col font-weight-bold">
+                        {{ __('Map elements') }}:
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col">
+                        {!! Form::select('map_map_object_group_visibility', [], 0,
+                            ['id' => 'map_map_object_group_visibility',
+                            'class' => 'form-control selectpicker',
+                            'multiple' => 'multiple',
+                            'data-selected-text-format' => 'count > 1',
+                            'data-count-selected-text' => __('{0} visible')]) !!}
+                    </div>
+                </div>
+
                 @if($floorSelection)
-                    <div class="row view_dungeonroute_details_row">
+                    <div class="row view_dungeonroute_details_row mt-3">
                         <div class="col font-weight-bold">
                             {{ __('Floor') }}:
                         </div>
@@ -59,6 +88,47 @@ if (isset($model)) {
                 @else
                     {!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
                 @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Draw Settings -->
+    <div class="form-group draw_settings_tools">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ __('Draw settings') }}</h5>
+                <?php // Weight ?>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col font-weight-bold">
+                        {{ __('Line weight') }}:
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col line_weight_selection">
+                        <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+                        {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
+                            isset($_COOKIE['polyline_default_weight']) ? $_COOKIE['polyline_default_weight'] : 0,
+                            ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
+                    </div>
+                </div>
+
+                <div class="row view_dungeonroute_details_row mt-2">
+                    <div class="col font-weight-bold">
+                        {{ __('Pull gradient') }}:
+                    </div>
+                </div>
+                <div class="row no-gutters view_dungeonroute_details_row mt-3">
+                    <div id="edit_route_freedraw_options_gradient" class="col">
+
+                    </div>
+                </div>
+                <div class="row no-gutters view_dungeonroute_details_row mt-3">
+                    <div class="col">
+                        <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-info w-100">
+                            <i class="fas fa-palette"></i> {{ __('Apply to pulls') }}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -152,6 +222,4 @@ if (isset($model)) {
             </div>
         </div>
     @endisset
-@endsection
-
-@include('common.maps.sidebar', ['header' => __('Toolbox'), 'selectedFloorId' => $dungeon->floors[0]->id])
+@endcomponent

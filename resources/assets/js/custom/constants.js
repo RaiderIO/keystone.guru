@@ -1,13 +1,9 @@
-if (typeof Cookies.get('polyline_default_color') === 'undefined') {
-    Cookies.set('polyline_default_color', '#9DFF56');
-}
 if (typeof Cookies.get('polyline_default_weight') === 'undefined') {
     Cookies.set('polyline_default_weight', 3);
 }
-
-Cookies.defaults = $.extend(Cookies.defaults, {
-    polyline_default_color: '#9DFF56',
-});
+if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
+    Cookies.set('hidden_map_object_groups', []);
+}
 
 let c = {
     map: {
@@ -51,7 +47,7 @@ let c = {
             minSize: 12,
             maxSize: 26,
             margin: 2,
-            calculateMargin: function(size) {
+            calculateMargin: function (size) {
                 let range = c.map.enemy.maxSize - c.map.enemy.minSize;
                 let zeroBased = (size - c.map.enemy.minSize);
                 return (zeroBased / range) * c.map.enemy.margin;
@@ -97,7 +93,7 @@ let c = {
             },
             margin: 2,
             arcSegments: function (nr) {
-                return Math.max(5, 11 - nr);
+                return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             },
             polygonOptions: {
                 color: '#9DFF56',
@@ -107,14 +103,17 @@ let c = {
             },
         },
         enemypatrol: {
-            defaultColor: '#E25D5D'
+            // Function so that you could do custom stuff with it if you want
+            defaultColor: function(){
+                return '#E25D5D';
+            }
         },
         /* These colors may be overriden by drawcontrols.js */
         path: {
-            defaultColor: Cookies.get('polyline_default_color'),
+            defaultColor: randomColor,
         },
         polyline: {
-            defaultColor: Cookies.get('polyline_default_color'),
+            defaultColor: randomColor,
             defaultWeight: Cookies.get('polyline_default_weight'),
         },
         brushline: {
@@ -140,16 +139,56 @@ let c = {
                 weight: 1
             },
             polygonOptions: {
-                color: Cookies.get('polyline_default_color'),
+                color: randomColor, //Cookies.get('polyline_default_color'),
                 weight: 2,
                 fillOpacity: 0.3,
-                opacity: 1
+                opacity: 1,
+            },
+            // Whenever the killzone is selected or focussed by the user to adjust it
+            polygonOptionsSelected: {
+                delay: 400,
+                dashArray: [10, 20],
+                pulseColorLight: '#FFF',
+                pulseColorDark: '#000',
+                hardwareAccelerated: true,
+                use: L.polygon
             },
             margin: 2,
             arcSegments: function (nr) {
-                return Math.max(5, 11 - nr);
+                return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
         },
-        placeholderColors: {}
+        placeholderColors: {},
+        editsidebar: {
+            pullGradient: {
+                defaultHandlers: [[0, '#FF0000'], [100, '#00FF00']]
+            }
+        },
+        colorPickerDefaultOptions: {
+            theme: 'nano', // 'classic' or 'monolith', or 'nano',
+
+            // Set in state manager when class colors are set
+            swatches: [],
+
+            components: {
+
+                // Main components
+                preview: true,
+                opacity: true,
+                hue: true,
+
+                // Input / output Options
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: false,
+                    hsva: false,
+                    cmyk: false,
+                    input: true,
+                    clear: false,
+                    save: true
+                }
+            }
+        }
     }
 };

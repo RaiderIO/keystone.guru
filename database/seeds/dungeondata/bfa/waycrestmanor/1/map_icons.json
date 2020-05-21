@@ -15,13 +15,6 @@
     },
     {
         "floor_id": 60,
-        "map_icon_type_id": 19,
-        "lat": -178.25,
-        "lng": 196.875,
-        "comment": ""
-    },
-    {
-        "floor_id": 60,
         "map_icon_type_id": 17,
         "lat": -109.5625,
         "lng": 196.5625,

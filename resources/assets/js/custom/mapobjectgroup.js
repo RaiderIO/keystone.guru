@@ -25,8 +25,10 @@ class MapObjectGroup extends Signalable {
                 self.manager.map.leafletMap.removeLayer(self.layerGroup);
             }
 
-            for (let i = self.objects.length - 1; i >= 0; i--) {
-                self.objects[i].cleanup();
+            while (self.objects.length > 0) {
+                let obj = self.objects[0];
+                obj.localDelete();
+                obj.cleanup();
             }
             self.objects = [];
         });
@@ -58,7 +60,9 @@ class MapObjectGroup extends Signalable {
         // Remove any layers that were added before
         for (let i = 0; i < this.objects.length; i++) {
             // Remove all layers
-            this.manager.map.leafletMap.removeLayer(this.objects[i].layer);
+            if (this.objects[i].layer !== null) {
+                this.manager.map.leafletMap.removeLayer(this.objects[i].layer);
+            }
         }
     }
 
@@ -96,18 +100,18 @@ class MapObjectGroup extends Signalable {
 
         // Only when not in try mode!
         if (!this.manager.map.isTryModeEnabled() && (remoteMapObject.faction !== 'any' && faction !== 'any' && faction !== remoteMapObject.faction)) {
-            console.warn('Skipping map object that does not belong to the requested faction ', remoteMapObject, faction);
+            // console.warn('Skipping map object that does not belong to the requested faction ', remoteMapObject, faction);
             result = false;
         }
 
         // If the map isn't teeming, but the enemy is teeming..
         if (!this.manager.map.options.teeming && remoteMapObject.teeming === 'visible') {
-            console.warn('Skipping teeming map object', remoteMapObject);
+            // console.warn('Skipping teeming map object', remoteMapObject);
             result = false;
         }
         // If the map is teeming, but the enemy shouldn't be there for teeming maps..
         else if (this.manager.map.options.teeming && remoteMapObject.teeming === 'invisible') {
-            console.warn('Skipping teeming-filtered map object', remoteMapObject.id);
+            // console.warn('Skipping teeming-filtered map object', remoteMapObject.id);
             result = false;
         }
 
@@ -128,11 +132,7 @@ class MapObjectGroup extends Signalable {
             // Must be a hex color
             if (userColor.indexOf('#') === 0) {
                 // Check if the user's color is 'dark' or 'light'. When it's dark we want a white font, black otherwise.
-                if (isColorDark(userColor)) {
-                    fontClass = 'text-white';
-                } else {
-                    fontClass = 'text-dark';
-                }
+                fontClass = isColorDark(userColor) ? 'text-white' : 'text-dark';
             }
 
             let tooltip = localMapObject.layer.bindTooltip(username, {
@@ -172,9 +172,11 @@ class MapObjectGroup extends Signalable {
     _onObjectDeleted(data) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        this.layerGroup.removeLayer(data.context.layer);
-        // @TODO Should this be put in the dungeonmap instead?
-        this.manager.map.leafletMap.removeLayer(data.context.layer);
+        if (data.context.layer !== null) {
+            this.layerGroup.removeLayer(data.context.layer);
+            // @TODO Should this be put in the dungeonmap instead?
+            this.manager.map.leafletMap.removeLayer(data.context.layer);
+        }
 
         let object = data.context;
 
@@ -187,6 +189,9 @@ class MapObjectGroup extends Signalable {
             }
         }
         this.objects = newObjects;
+
+        // Fire the event
+        this.signal('object:deleted', {object: object, objectgroup: this});
     }
 
     /**
@@ -263,6 +268,28 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Sets a layer to an existing map object.
+     * @param layer
+     * @param mapObject
+     */
+    setLayerToMapObject(layer, mapObject) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+        console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
+
+        if (layer !== null) {
+            mapObject.layer = layer;
+            this.layerGroup.addLayer(mapObject.layer);
+            mapObject.onLayerInit();
+        }
+        // User wants to unset the mapObject's layer, remove its references
+        else if (mapObject.layer !== null) {
+            this.layerGroup.removeLayer(mapObject.layer);
+            // Set to null
+            mapObject.layer = layer;
+        }
+    }
+
+    /**
      *
      * @param layer L.Layer
      * @param options Object
@@ -271,16 +298,14 @@ class MapObjectGroup extends Signalable {
     createNew(layer, options) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        let object = this._createObject(layer, options);
-        this.objects.push(object);
-        this.layerGroup.addLayer(layer);
+        let mapObject = this._createObject(layer, options);
+        this.objects.push(mapObject);
+        this.setLayerToMapObject(layer, mapObject);
 
-        object.onLayerInit();
+        mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
+        mapObject.register('synced', this, (this._onObjectSynced).bind(this));
 
-        object.register('object:deleted', this, (this._onObjectDeleted).bind(this));
-        object.register('synced', this, (this._onObjectSynced).bind(this));
-
-        return object;
+        return mapObject;
     }
 
     /**

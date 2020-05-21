@@ -10,8 +10,12 @@ if (isset($model)) {
 // Set correctly displayed floor
 $floorId = isset($floorId) ? $floorId : $dungeon->floors[0]->id;
 ?>
-
-@section('sidebar-content')
+@component('common.maps.sidebar', [
+'header' => __('Admin toolbox'),
+'anchor' => 'left',
+'id' => 'admineditsidebar',
+'selectedFloorId' => $floorId
+])
     <!-- Visibility -->
     <div class="form-group visibility_tools">
         <div class="card">
@@ -76,6 +80,4 @@ $floorId = isset($floorId) ? $floorId : $dungeon->floors[0]->id;
             </div>
         </div>
     </div>
-@endsection
-
-@include('common.maps.sidebar', ['header' => __('Admin toolbox'), 'selectedFloorId' => $floorId])
+@endcomponent

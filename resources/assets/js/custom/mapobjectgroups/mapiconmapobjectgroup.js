@@ -1,6 +1,6 @@
 class MapIconMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, editable) {
-        super(manager, name, editable);
+    constructor(manager, editable) {
+        super(manager, MAP_OBJECT_GROUP_MAPICON, editable);
 
         let self = this;
 
@@ -26,7 +26,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not an MapIconMapObjectGroup', this);
 
         let mapIcon;
-        if (isMapAdmin) {
+        if (getState().isMapAdmin()) {
             mapIcon = new AdminMapIcon(this.manager.map, layer);
         } else {
             mapIcon = new MapIcon(this.manager.map, layer);
