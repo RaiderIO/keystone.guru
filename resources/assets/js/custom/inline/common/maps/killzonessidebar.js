@@ -111,10 +111,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     _initColorPicker(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
-        let self = this;
 
         // Simple example, see optional options for more configuration.
-        let picker = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
+        return Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
             el: `#map_killzonessidebar_killzone_${killZone.id}_color`,
             default: killZone.color
         })).on('save', (color, instance) => {
@@ -128,8 +127,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // Reset ourselves
             instance.hide();
         });
-
-        return picker;
     }
 
     /**
@@ -156,7 +153,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         );
 
         $('#killzones_no_pulls').hide();
-
+        // Set initial index when adding a killzone (already added, so length is correct index)
         $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index', $($(this.options.killZonesContainerSelector).children()).length);
         $(`#map_killzonessidebar_killzone_${killZone.id} .selectable`).bind('click', this._killZoneRowClicked);
 
@@ -222,33 +219,68 @@ class CommonMapsKillzonessidebar extends InlineCode {
     _deleteKillZoneClicked() {
         let self = this;
 
-        let selectedKillZoneId = parseInt($(this).closest('.map_killzonessidebar_killzone').data('id'));
-        let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
+        let trashIcon = 'fa-trash';
+        let loadingIcon = 'fa-circle-notch fa-spin';
 
-        $(this).find('i').removeClass('fa-trash').addClass('fa fa-circle-notch fa-spin');
+        // Prevent double deletes if user presses the button twice in a row
+        if ($(self).find('i').hasClass(trashIcon)) {
+            let selectedKillZoneId = parseInt($(this).closest('.map_killzonessidebar_killzone').data('id'));
+            let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
 
-        killZone.register('object:deleted', '123123', function () {
-            showSuccessNotification(lang.get('messages.object.deleted'));
+            $(this).find('i').removeClass(trashIcon).addClass(loadingIcon);
 
-            // Bit hacky?
-            if (killZone.isKillZoneVisible()) {
-                getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
-                getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
-            }
+            killZone.register('object:deleted', '123123', function () {
+                showSuccessNotification(lang.get('messages.object.deleted'));
 
-            killZone.unregister('object:deleted', '123123');
-        });
-        // Failed to delete
-        killZone.register('synced', '123123', function () {
-            if (!killZone.synced) {
-                $(self).find('i').addClass('fa-trash').removeClass('fa fa-circle-notch fa-spin')
-            }
+                // Bit hacky?
+                if (killZone.isKillZoneVisible()) {
+                    getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
+                    getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
+                }
 
-            killZone.unregister('synced', '123123');
-        });
+                killZone.unregister('object:deleted', '123123');
+            });
+            killZone.register('synced', '123123', function () {
+                if (!killZone.synced) {
+                    // Failed to delete
+                    $(self).find('i').addClass(trashIcon).removeClass(loadingIcon)
+                }
 
-        killZone.delete();
+                killZone.unregister('synced', '123123');
+            });
+
+            killZone.delete();
+        }
+    }
+
+    /**
+     *
+     * @private
+     */
+    _rebuildPullIndices() {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+
+        let children = $('#killzones_container').children();
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        for (let i = 0; i < children.length; i++) {
+            let killZoneId = parseInt($(children[i]).data('id'));
+            this._setPullText(killZoneMapObjectGroup.findMapObjectById(killZoneId), i + 1);
+        }
+    }
+
+    /**
+     * Rebuilds the upper text of a killzone (${index}: ${x} enemies (${enemyForces})
+     * @param killZone {KillZone}
+     * @param index int
+     * @private
+     */
+    _setPullText(killZone, index) {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+
+        $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index', index);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_index`).text(index);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_enemies`).text(`${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);
     }
 
     /**
@@ -257,6 +289,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _removeKillZone(killZone) {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+        let self = this;
+
         $(`#map_killzonessidebar_killzone_${killZone.id}`).fadeOut({
             complete: function () {
                 // When done, remove completely
@@ -266,6 +301,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 if ($('#killzones_container .selectable').length === 0) {
                     $('#killzones_no_pulls').show();
                 }
+
+                // We deleted this pull, all other indices may be messed up because of it
+                self._rebuildPullIndices();
             }
         });
 
@@ -280,13 +318,13 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _refreshKillZone(killZone) {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
         // console.warn('refreshing killzone!', killZone.color);
-        let enemyForcesPercent = (killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100;
-        enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
+        // let enemyForcesPercent = (killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100;
+        // enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
         let index = $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index');
-        $(`#map_killzonessidebar_killzone_${killZone.id}_title`)
-            .text(`${index}: ${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);
+        this._setPullText(killZone, index);
         $(`#map_killzonessidebar_killzone_${killZone.id}_kill_area_label`)
             .attr('title', lang.get(killZone.isKillZoneVisible() ? 'messages.remove_kill_area_label' : 'messages.add_kill_area_label'));
 

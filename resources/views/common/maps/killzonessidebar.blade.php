@@ -22,11 +22,11 @@
     'id' => 'killzonesidebar',
     'customSubHeader' => '&nbsp;'
 ])
-    <div id="killzones_container">
-        <div id="killzones_no_pulls" class="row">
-            <div class="col text-center">
-                <h5>{{ __('No pulls created. Click on an enemy to add them to your first pull!') }}</h5>
-            </div>
+    <div id="killzones_no_pulls" class="row">
+        <div class="col text-center">
+            <h5>{{ __('No pulls created. Click on an enemy to add them to your first pull!') }}</h5>
         </div>
+    </div>
+    <div id="killzones_container">
     </div>
 @endcomponent
