@@ -40,5 +40,12 @@
         "lat": -104.28125,
         "lng": 178.1875,
         "comment": ""
+    },
+    {
+        "floor_id": 51,
+        "map_icon_type_id": 10,
+        "lat": -233.25,
+        "lng": 175.25,
+        "comment": ""
     }
 ]

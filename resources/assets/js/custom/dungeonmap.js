@@ -1,10 +1,8 @@
 class DungeonMap extends Signalable {
 
-    constructor(mapid, dungeonData, options) { // floorID, edit, teeming
+    constructor(mapid, options) { // floorID, edit, teeming
         super();
         let self = this;
-
-        this.dungeonData = dungeonData;
 
         this.options = options;
 
@@ -19,14 +17,15 @@ class DungeonMap extends Signalable {
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());
         this.mapObjectGroupManager.register('fetchsuccess', this, function () {
+            // Add new controls; we're all loaded now and user should now be able to edit their route
+            self._addMapControls(self.editableLayers);
+
             // All layers have been fetched, refresh tooltips to update "No layers to edit" state
             refreshTooltips();
 
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
 
-        // The current enemy selection class in-use. Used for selecting enemies for whatever reason
-        this.currentEnemySelection = null;
         //  Whatever killzone is currently in select mode
         this.currentSelectModeKillZone = null;
         // Pather instance
@@ -39,11 +38,25 @@ class DungeonMap extends Signalable {
             mapObjectGroup.register('object:add', this, function (addEvent) {
                 let object = addEvent.data.object;
                 self.mapObjects.push(object);
-                self.drawnLayers.addLayer(object.layer);
+                if (object.layer !== null) {
+                    self.drawnLayers.addLayer(object.layer);
 
-                // Make sure we know it's editable
-                if (object.isEditable() && addEvent.data.objectgroup.editable && self.options.edit) {
-                    self.editableLayers.addLayer(object.layer);
+                    // Make sure we know it's editable
+                    if (object.isEditable() && addEvent.data.objectgroup.editable && self.options.edit) {
+                        self.editableLayers.addLayer(object.layer);
+                    }
+                }
+
+                if (object instanceof Enemy) {
+                    object.register('enemy:clicked', self, self._enemyClicked.bind(self));
+                }
+            });
+
+            mapObjectGroup.register('object:deleted', this, function (deletedEvent) {
+                let object = deletedEvent.data.object;
+                // Provide functionality for when an enemy gets clicked and we need to create a new killzone for it
+                if (object instanceof Enemy) {
+                    object.unregister('enemy:clicked', self);
                 }
             });
 
@@ -52,19 +65,21 @@ class DungeonMap extends Signalable {
             mapObjectGroup.register(['object:shown', 'object:hidden'], this, function (visibilityEvent) {
                 let object = visibilityEvent.data.object;
                 // If it's visible now and the layer is not added already
-                if (visibilityEvent.data.visible && !self.drawnLayers.hasLayer(object.layer)) {
-                    // Add it
-                    self.drawnLayers.addLayer(object.layer);
-                    // Only if we may add the layer
-                    if (object.isEditable() && visibilityEvent.data.objectgroup.editable && self.options.edit) {
-                        self.editableLayers.addLayer(object.layer);
+                if (object.layer !== null) {
+                    if (visibilityEvent.data.visible && !self.drawnLayers.hasLayer(object.layer)) {
+                        // Add it
+                        self.drawnLayers.addLayer(object.layer);
+                        // Only if we may add the layer
+                        if (object.isEditable() && visibilityEvent.data.objectgroup.editable && self.options.edit) {
+                            self.editableLayers.addLayer(object.layer);
+                        }
                     }
-                }
-                // If it should not be visible but it's visible now
-                else if (!visibilityEvent.data.visible && self.drawnLayers.hasLayer(object.layer)) {
-                    // Remove it from the layer
-                    self.drawnLayers.removeLayer(object.layer);
-                    self.editableLayers.removeLayer(object.layer);
+                    // If it should not be visible but it's visible now
+                    else if (!visibilityEvent.data.visible && self.drawnLayers.hasLayer(object.layer)) {
+                        // Remove it from the layer
+                        self.drawnLayers.removeLayer(object.layer);
+                        self.editableLayers.removeLayer(object.layer);
+                    }
                 }
             });
         }
@@ -73,10 +88,8 @@ class DungeonMap extends Signalable {
         this.mapObjects = [];
         /** @var Array Stores all UI elements that are drawn on the map */
         this.mapControls = [];
-        // Keeps track of if we're in edit or delete mode
-        this.toolbarActive = false;
-        this.deleteModeActive = false;
-        this.editModeActive = false;
+        /** @type MapState */
+        this.mapState = null;
 
         this.mapTileLayer = null;
 
@@ -102,10 +115,12 @@ class DungeonMap extends Signalable {
         this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function (e) {
             // Disable pather if we were doing it
             self.togglePather(false);
+            // @TODO Start a new map state
         });
         this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
             // After adding, there may be layers when there were none. Fix the edit/delete tooltips
             refreshTooltips();
+            // @TODO Stop the new map state
         });
         // Set all edited layers to no longer be synced.
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
@@ -160,59 +175,24 @@ class DungeonMap extends Signalable {
 
         this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
             self.toolbarActive = true;
-            // If a killzone was selected, unselect it now
-            if (self.isEnemySelectionEnabled()) {
-                self.finishEnemySelection();
-            }
+            // If we were doing anything, we're no longer doing it
+            // self.setMapState(null);
         });
         this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
             self.toolbarActive = false;
         });
         this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
-            self.deleteModeActive = true;
-            // Loop through each element to see if they are NOT editable, but ARE deleteable.
-            // If so, we have to add them to the 'can delete this' list, and remove them after
-            $.each(self.mapObjects, function (index, mapObject) {
-                if (!mapObject.isEditable() && mapObject.isDeletable()) {
-                    self.editableLayers.addLayer(mapObject.layer);
-                }
-            });
+            self.setMapState(new DeleteMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
-            self.deleteModeActive = false;
-
-            // Now we make them un-editable again.
-            $.each(self.mapObjects, function (index, mapObject) {
-                if (!mapObject.isEditable() && mapObject.isDeletable()) {
-                    self.editableLayers.removeLayer(mapObject.layer);
-                }
-            });
-
-            // Fix an issue where it'd remove all layers just because it got removed from the editable layers. Strange.
-            self.leafletMap.removeLayer(self.drawnLayers);
-            self.leafletMap.addLayer(self.drawnLayers);
-
-            // Re-draw the enemies to restore their attributes etc
-            let mapObjectGroup = self.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-
-            // All enemies
-            for (let index in mapObjectGroup.objects) {
-                if (mapObjectGroup.objects.hasOwnProperty(index)) {
-                    let enemy = mapObjectGroup.objects[index];
-                    // Refresh
-                    enemy.visual.refresh();
-                }
-            }
-
+            self.setMapState(null);
         });
 
         this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
-            self.editModeActive = true;
-            self.signal('map:editmodetoggled', {dungeonmap: self});
+            self.setMapState(new EditMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
-            self.editModeActive = false;
-            self.signal('map:editmodetoggled', {dungeonmap: self});
+            self.setMapState(null);
         });
 
         // If we created something
@@ -220,9 +200,21 @@ class DungeonMap extends Signalable {
             // Find the corresponding map object group
             let mapObjectGroup = self.mapObjectGroupManager.getByName(event.layerType);
             if (mapObjectGroup !== false) {
-                let object = mapObjectGroup.createNew(event.layer);
+                let mapObject;
+                // Catch creating a KillZone - we want to add a layer to an existing KillZone, not create a new KillZone object
+                if (mapObjectGroup instanceof KillZoneMapObjectGroup) {
+                    let mapState = self.getMapState();
+                    console.assert(mapState instanceof KillZoneEnemySelection, 'MapState was not in KillZoneEnemySelection!', mapState);
+                    // Get the killzone that we should add this layer to
+                    mapObject = mapState.getMapObject();
+                    console.assert(mapObject instanceof KillZone, 'object is not a KillZone!', mapObject);
+                    // Apply the layer to the killzone
+                    mapObjectGroup.setLayerToMapObject(event.layer, mapObject);
+                } else {
+                    mapObject = mapObjectGroup.createNew(event.layer);
+                }
                 // Save it to server instantly, manually saving is meh
-                object.save();
+                mapObject.save();
             } else {
                 console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
             }
@@ -325,6 +317,35 @@ class DungeonMap extends Signalable {
     }
 
     /**
+     * Someone clicked on an enemy
+     * @private
+     */
+    _enemyClicked(enemyClickedEvent) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        if (this.options.edit && this.mapState === null) {
+            let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+            // Add ourselves to this new pull
+            let enemyIds = [];
+            // Add all buddies in this pack to the list of ids (if any)
+            let packBuddies = enemyClickedEvent.context.getPackBuddies();
+            packBuddies.push(enemyClickedEvent.context);
+
+            for (let index in packBuddies) {
+                if (packBuddies.hasOwnProperty(index)) {
+                    enemyIds.push(packBuddies[index].id);
+                }
+            }
+
+            // Create a new pull; all UI will update based on the events fired here.
+            let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds);
+
+            this.setMapState(new KillZoneEnemySelection(this, newKillZone));
+        }
+    }
+
+    /**
      * Get the current HotKeys object used for binding actions to hotkeys.
      * @returns {Hotkeys}
      * @private
@@ -377,36 +398,55 @@ class DungeonMap extends Signalable {
      * @returns {*[]}
      * @private
      */
-    _createMapControls(editableLayers) {
+    _getMapControls(editableLayers) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        let result = [];
-
+        let mapControls = [];
         // No UI = no map controls at all
         if (!this.options.noUI) {
             if (this.options.edit) {
-                result.push(new DrawControls(this, editableLayers));
+                mapControls.push(new DrawControls(this, editableLayers));
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
             if (getState().getDungeonRoute().publicKey !== '' || this.options.edit) {
-                result.push(new EnemyForcesControls(this));
+                mapControls.push(new EnemyForcesControls(this));
             }
-            result.push(new EnemyVisualControls(this));
-            result.push(new MapObjectGroupControls(this));
+            mapControls.push(new EnemyVisualControls(this));
 
-            if (this.isTryModeEnabled() && this.dungeonData.name === 'Siege of Boralus') {
-                result.push(new FactionDisplayControls(this));
+            if (this.isTryModeEnabled() && getState().getDungeonData().name === 'Siege of Boralus') {
+                mapControls.push(new FactionDisplayControls(this));
             }
 
             if (this.options.echo) {
-                result.push(new EchoControls(this));
+                mapControls.push(new EchoControls(this));
             }
 
             // result.push(new AdDisplayControls(this));
         }
 
-        return result;
+        return mapControls;
+    }
+
+    /**
+     * Create instances of all controls that will be added to the map (UI on the map itself)
+     * @param editableLayers
+     * @returns {*[]}
+     * @private
+     */
+    _addMapControls(editableLayers) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        // Remove existing map controls
+        for (let i = 0; i < this.mapControls.length; i++) {
+            this.mapControls[i].cleanup();
+        }
+
+        this.mapControls = this._getMapControls(editableLayers);
+
+        for (let i = 0; i < this.mapControls.length; i++) {
+            this.mapControls[i].addControl();
+        }
     }
 
     /**
@@ -419,7 +459,7 @@ class DungeonMap extends Signalable {
 
         for (let i = 0; i < this.mapObjects.length; i++) {
             let layer = this.mapObjects[i].layer;
-            if (layer.hasOwnProperty('setStyle')) {
+            if (layer !== null && layer.hasOwnProperty('setStyle')) {
                 let zoomStep = Math.max(2, this.leafletMap.getZoom());
                 if (layer instanceof L.Polyline) {
                     layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
@@ -441,10 +481,12 @@ class DungeonMap extends Signalable {
         let result = false;
         for (let i = 0; i < this.mapObjects.length; i++) {
             let mapObject = this.mapObjects[i];
-            let popup = mapObject.layer.getPopup();
-            if (typeof popup !== 'undefined' && popup !== null && popup.isOpen()) {
-                result = true;
-                break;
+            if (mapObject.layer !== null) {
+                let popup = mapObject.layer.getPopup();
+                if (typeof popup !== 'undefined' && popup !== null && popup.isOpen()) {
+                    result = true;
+                    break;
+                }
             }
         }
         return result;
@@ -459,8 +501,9 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = false;
 
-        for (let i = 0; i < this.dungeonData.floors.length; i++) {
-            let floor = this.dungeonData.floors[i];
+        let dungeonData = getState().getDungeonData();
+        for (let i = 0; i < dungeonData.floors.length; i++) {
+            let floor = dungeonData.floors[i];
             if (floor.id === floorId) {
                 result = floor;
                 break;
@@ -493,7 +536,8 @@ class DungeonMap extends Signalable {
      * @returns {*}
      */
     getEnemyForcesRequired() {
-        return this.teeming ? this.dungeonData.enemy_forces_required_teeming : this.dungeonData.enemy_forces_required;
+        let dungeonData = getState().getDungeonData();
+        return this.teeming ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
     }
 
     /**
@@ -506,10 +550,8 @@ class DungeonMap extends Signalable {
 
         this.signal('map:beforerefresh', {dungeonmap: this});
 
-        // If we were selecting enemies, stop doing that now
-        if (this.isEnemySelectionEnabled()) {
-            this.finishEnemySelection();
-        }
+        // If we were doing anything, we're no longer doing it
+        this.setMapState(null);
 
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
@@ -519,7 +561,8 @@ class DungeonMap extends Signalable {
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
 
-        this.mapTileLayer = L.tileLayer('/images/tiles/' + this.dungeonData.expansion.shortname + '/' + this.dungeonData.key + '/' + getState().getCurrentFloor().index + '/{z}/{x}_{y}.png', {
+        let dungeonData = getState().getDungeonData();
+        this.mapTileLayer = L.tileLayer('/images/tiles/' + dungeonData.expansion.shortname + '/' + dungeonData.key + '/' + getState().getCurrentFloor().index + '/{z}/{x}_{y}.png', {
             maxZoom: 5,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: L.point(384, 256),
@@ -528,18 +571,7 @@ class DungeonMap extends Signalable {
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
 
-        // Remove existing map controls
-        for (let i = 0; i < this.mapControls.length; i++) {
-            this.mapControls[i].cleanup();
-        }
-
         this.editableLayers = new L.FeatureGroup();
-        this.mapControls = this._createMapControls(this.editableLayers);
-
-        // Add new controls
-        for (let i = 0; i < this.mapControls.length; i++) {
-            this.mapControls[i].addControl();
-        }
 
         // Refresh the list of drawn items
         this.drawnLayers = new L.FeatureGroup();
@@ -583,6 +615,7 @@ class DungeonMap extends Signalable {
             self.pather.removePath(patherEvent.polyline);
         });
         this.leafletMap.addLayer(this.pather);
+        this.pather.setMode(L.Pather.MODE.VIEW);
         // Set its options properly
         this.refreshPather();
         // Not enabled at this time
@@ -590,53 +623,34 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Gets if enemy selection is enabled or not.
-     * @returns {boolean}
-     */
-    isEnemySelectionEnabled() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        return this.currentEnemySelection !== null;
-    }
-
-    /**
      * Gets the current enemy selection instance.
-     * @returns {null}
+     * @returns MapState|null
      */
-    getEnemySelection() {
+    getMapState() {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        return this.currentEnemySelection;
+        return this.mapState;
     }
 
     /**
-     * Start the enemy selection
-     * @param enemySelection The instance of an EnemySelection object which defines what may be selected.
+     * Sets the current map state to a new state.
+     * @param mapState
      */
-    startEnemySelection(enemySelection) {
-        console.assert(enemySelection instanceof EnemySelection, 'enemySelection is not an EnemySelection', this);
+    setMapState(mapState) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+        console.assert(mapState instanceof MapState || mapState === null, 'mapState is not a MapState|null', mapState);
 
-        if (this.currentEnemySelection === null) {
-            this.currentEnemySelection = enemySelection;
-            this.signal('map:enemyselectionmodechanged', {enemySelection: this.currentEnemySelection, finished: false});
-            this.currentEnemySelection.startSelectMode();
-        } else {
-            console.error('Unable to assign enemy selection when we\'re already selecting enemies!', this.currentEnemySelection, enemySelection);
+        // Stop if necessary
+        if (this.mapState instanceof MapState && this.mapState.isStarted() && !this.mapState.isStopped()) {
+            this.mapState.stop();
         }
-    }
 
-    /**
-     * Finishes the current enemy selection, if there's one going on at the moment.
-     */
-    finishEnemySelection() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        if (this.currentEnemySelection !== null) {
-            this.currentEnemySelection.cancelSelectMode();
-            this.signal('map:enemyselectionmodechanged', {enemySelection: this.currentEnemySelection, finished: true});
-            this.currentEnemySelection = null;
-        } else {
-            console.error('Unable to finish enemy selection; we\'re currently not selecting any enemies now');
+        // Start new map state
+        let previousMapState = this.mapState;
+        this.mapState = mapState;
+        this.signal('map:mapstatechanged', {previousMapState: previousMapState, newMapState: this.mapState});
+        if (this.mapState instanceof MapState) {
+            this.mapState.start();
         }
     }
 
@@ -651,16 +665,6 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Checks if pather is currently active or not.
-     * @returns {boolean}
-     */
-    isPatherActive() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        return this.pather !== null && this.pather.getMode() === L.Pather.MODE.CREATE;
-    }
-
-    /**
      * Toggle pather to be enabled or not.
      * @param enabled
      */
@@ -671,12 +675,14 @@ class DungeonMap extends Signalable {
         if (this.pather !== null) {
             //  When enabled, add to the map
             if (enabled) {
-                this.pather.setMode(L.Pather.MODE.CREATE);
-            } else {
-                this.pather.setMode(L.Pather.MODE.VIEW);
+                this.setMapState(new PatherMapState(this));
+                this.signal('map:pathertoggled', {enabled: enabled});
             }
-
-            this.signal('map:pathertoggled', {enabled: enabled});
+            // Only disable it when we're actively in the pather map state
+            else if (this.getMapState() instanceof PatherMapState) {
+                this.setMapState(null);
+                this.signal('map:pathertoggled', {enabled: enabled});
+            }
         }
     }
 
@@ -689,7 +695,7 @@ class DungeonMap extends Signalable {
         this.pather.setOptions({
             strokeWidth: c.map.polyline.defaultWeight,
             smoothFactor: 5,
-            pathColour: c.map.polyline.defaultColor
+            pathColour: c.map.polyline.defaultColor()
         });
     }
 

@@ -8,7 +8,7 @@ $isAdmin = isset($admin) && $admin;
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? true : false;
-$routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : '';
+$routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
 // Set the key to 'try' if try mode is enabled
 $tryMode = isset($tryMode) && $tryMode ? true : false;
 // Set the enemy forces of the current route. May not be set if just editing the route from admin
@@ -66,6 +66,7 @@ if ($isAdmin) {
 }
 
 ?>
+@php($dependencies = $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null)
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'username' => Auth::check() ? $user->name : '',
     // Only activate Echo when we are a member of the team in which this route is a member of
@@ -80,36 +81,31 @@ if ($isAdmin) {
     'defaultZoom' => $defaultZoom,
     'showAttribution' => $showAttribution,
     'npcsMinHealth' => $dungeon->getNpcsMinHealth(),
-    'npcsMaxHealth' => $dungeon->getNpcsMaxHealth()
+    'npcsMaxHealth' => $dungeon->getNpcsMaxHealth(),
+    'dependencies' => $dependencies
 ], $adminOptions)])
 
 @section('scripts')
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
 
-    @include('common.general.statemanager', [
+    @include('common.general.statemanager', array_merge([
         'mapIconTypes' => \App\Models\MapIconType::all(),
+        'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
+        'raidMarkers' => \App\Models\RaidMarker::all(),
+        'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
+        'dungeonData' => $dungeon,
         'dungeonroute' => [
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,
             'enemyForces' => $routeEnemyForces
         ],
-    ])
+    ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>
-        // Data of the dungeon(s) we're selecting in the map
-        var dungeonData = {!! $dungeon !!};
-        var isMapAdmin = {{ $isAdmin ? 'true' : 'false' }};
-        var factionsData = {!! \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get() !!};
-        var classColors = {!! \App\Models\CharacterClass::all()->pluck('color') !!};
-
         var dungeonMap;
 
         $(function () {
             let code = _inlineManager.getInlineCode('common/maps/map');
-
-            // Must be done here, otherwise it's too soon. I don't really know why either, but otherwise the draw controls
-            // get fucked up
-            code.initDungeonMap();
 
             // Expose the dungeon map in a global variable
             dungeonMap = code.getDungeonMap();
@@ -120,100 +116,22 @@ if ($isAdmin) {
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
                 @php($i = 0)
-                @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
-                    <a class="map_faction_display_control map_controls_custom" href="#"
-                       data-faction="{{ strtolower($faction->name) }}"
+        @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
+            <a class="map_faction_display_control map_controls_custom" href="#"
+               data-faction="{{ strtolower($faction->name) }}"
                        title="{{ $faction->name }}">
                         <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                            style="width: 15px"></i>
                         <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
                              data-toggle="tooltip" title="{{ $faction->name }}"/>
                         @php($i++)
-                    </a>
-                @endforeach
-            </div>
-            <ul class="leaflet-draw-actions"></ul>
+            </a>
+@endforeach
         </div>
+        <ul class="leaflet-draw-actions"></ul>
+    </div>
+
     </script>
-
-    <script id="map_path_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_path_edit_popup_inner" class="popupCustom">
-            <div class="form-group">
-                {!! Form::label('map_path_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('map_path_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
-
-                @php($classes = \App\Models\CharacterClass::all())
-                @php($half = ($classes->count() / 2))
-                @for($i = 0; $i < $classes->count(); $i++)
-                    @php($class = $classes->get($i))
-                    @if($i % $half === 0)
-                        <div class="row no-gutters pt-1">
-                            @endif
-                            <div class="col map_polyline_edit_popup_class_color border-dark"
-                                 data-color="{{ $class->color }}"
-                                 style="background-color: {{ $class->color }};">
-                            </div>
-                            @if($i % $half === $half - 1)
-                        </div>
-                    @endif
-                @endfor
-            </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_path_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
-    </script>
-
-    <script id="map_brushline_edit_popup_template" type="text/x-handlebars-template">
-        <div id="map_brushline_edit_popup_inner" class="popupCustom">
-            <div class="form-group">
-                {!! Form::label('map_brushline_edit_popup_color_@{{id}}', __('Color')) !!}
-                {!! Form::color('map_brushline_edit_popup_color_@{{id}}', null, ['class' => 'form-control']) !!}
-
-                @php($classes = \App\Models\CharacterClass::all())
-                @php($half = ($classes->count() / 2))
-                @for($i = 0; $i < $classes->count(); $i++)
-                    @php($class = $classes->get($i))
-                    @if($i % $half === 0)
-                        <div class="row no-gutters pt-1">
-                            @endif
-                            <div class="col map_polyline_edit_popup_class_color border-dark"
-                                 data-color="{{ $class->color }}"
-                                 style="background-color: {{ $class->color }};">
-                            </div>
-                            @if($i % $half === $half - 1)
-                        </div>
-                    @endif
-                @endfor
-            </div>
-            <div class="form-group">
-                {!! Form::label('map_brushline_edit_popup_weight_@{{id}}', __('Weight')) !!}
-                {!! Form::select('map_brushline_edit_popup_weight_@{{id}}', [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6], 3,
-                ['id' => 'map_brushline_edit_popup_weight_@{{id}}', 'class' => 'form-control selectpicker']) !!}
-            </div>
-            {!! Form::button(__('Submit'), ['id' => 'map_brushline_edit_popup_submit_@{{id}}', 'class' => 'btn btn-info']) !!}
-        </div>
-    </script>
-
-    @if(!$isAdmin)
-        <script id="enemy_edit_popup_template" type="text/x-handlebars-template">
-            <div id="enemy_edit_popup_inner" class="popupCustom">
-                @php($raidMarkers = \App\Models\RaidMarker::all())
-                @for($i = 0; $i < $raidMarkers->count(); $i++)
-                    @php($raidMarker = $raidMarkers->get($i))
-                    @if($i % 4 === 0)
-                        <div class="row no-gutters">
-                            @endif
-                            <div class="enemy_raid_marker_icon enemy_raid_marker_icon_{{ $raidMarker->name }}"
-                                 data-name="{{ $raidMarker->name }}">
-                            </div>
-                            @if($i % 4 === 3)
-                        </div>
-                    @endif
-                @endfor
-                <div id="enemy_raid_marker_clear_@{{id}}" class="btn btn-warning col-12 mt-2"><i
-                            class="fa fa-times"></i> {{ __('Clear marker') }}</div>
-            </div>
-        </script>
-    @endif
 @endsection
 
 <div id="map" class="virtual-tour-element"

@@ -8,7 +8,14 @@ class InlineCode {
     /**
      *
      */
-    activate(){
+    activate() {
+
+    }
+
+    /**
+     * Cleans up the inline code (though this is not called anywhere just yet).
+     */
+    cleanup() {
 
     }
 }

@@ -67,6 +67,8 @@ class MapIcon extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
+        let self = this;
+
         this.id = 0;
         this.map_icon_type_id = 0;
         this.map_icon_type = getState().getUnknownMapIcon();
@@ -76,7 +78,12 @@ class MapIcon extends MapObject {
 
         this.setSynced(false);
         this.register('synced', this, this._synced.bind(this));
-        this.map.register('map:editmodetoggled', this, this._refreshVisual.bind(this))
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof EditMapState) {
+                self._refreshVisual();
+            }
+        });
     }
 
     _synced() {
@@ -99,7 +106,12 @@ class MapIcon extends MapObject {
     _refreshVisual() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
-        this.layer.setIcon(getMapIconLeafletIcon(this.map_icon_type, this.map.editModeActive && this.isEditable()));
+        this.layer.setIcon(
+            getMapIconLeafletIcon(this.map_icon_type,
+                (this.map.getMapState() instanceof EditMapState && this.isEditable()) ||
+                (this.map.getMapState() instanceof DeleteMapState && this.isDeletable())
+            )
+        );
         // // @TODO Refresh the layer; required as a workaround since in mapiconmapobjectgroup we don't know the map_icon_type upon init,
         // // thus we don't know if this will be editable or not. In the sync this will get called and the edit state is known
         // // after which this function will function properly
@@ -270,7 +282,7 @@ class MapIcon extends MapObject {
     cleanup() {
         super.cleanup();
 
-        this.map.unregister('map:editmodetoggled', this);
+        this.map.unregister('map:mapstatechanged', this);
     }
 
 }

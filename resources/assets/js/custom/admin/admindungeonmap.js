@@ -7,21 +7,20 @@ class AdminDungeonMap extends DungeonMap {
 
     /**
      * Create instances of all controls that will be added to the map (UI on the map itself)
-     * @param drawnItemsLayer
+     * @param editableLayers
      * @returns {*[]}
      * @private
      */
-    _createMapControls(drawnItemsLayer) {
+    _getMapControls(editableLayers) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = [];
 
-        if (this.dungeonData.name === 'Siege of Boralus') {
+        if (getState().getDungeonData().name === 'Siege of Boralus') {
             result.push(new FactionDisplayControls(this));
         }
 
-        result.push(new AdminDrawControls(this, drawnItemsLayer));
+        result.push(new AdminDrawControls(this, editableLayers));
         result.push(new EnemyVisualControls(this));
-        result.push(new MapObjectGroupControls(this));
         result.push(new AdminPanelControls(this));
 
         return result;
@@ -35,12 +34,11 @@ class AdminDungeonMap extends DungeonMap {
     _createMapObjectGroups() {
         // For this page, let the enemy pack be the admin version with more functions which are otherwise hidden from the user
         return [
-            new EnemyMapObjectGroup(this, 'enemy', 'AdminEnemy', true),
-            new EnemyPatrolMapObjectGroup(this, 'enemypatrol', 'AdminEnemyPatrol', true),
-            new EnemyPackMapObjectGroup(this, 'enemypack', 'AdminEnemyPack', true),
-            new DungeonStartMarkerMapObjectGroup(this, 'dungeonstartmarker', 'AdminDungeonStartMarker', true),
-            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'dungeonfloorswitchmarker', 'AdminDungeonFloorSwitchMarker', true),
-            new MapIconMapObjectGroup(this, 'mapicon', 'AdminMapComment', true),
+            new EnemyMapObjectGroup(this, 'AdminEnemy', true),
+            new EnemyPatrolMapObjectGroup(this, 'AdminEnemyPatrol', true),
+            new EnemyPackMapObjectGroup(this, 'AdminEnemyPack', true),
+            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'AdminDungeonFloorSwitchMarker', true),
+            new MapIconMapObjectGroup(this, 'AdminMapComment', true),
         ];
     }
 

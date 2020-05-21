@@ -46,7 +46,7 @@ class Path extends Polyline {
         this.label = 'Path';
         this.decorator = null;
 
-        this.setColor(c.map.path.defaultColor);
+        this.setColor(c.map.path.defaultColor());
         this.setSynced(false);
     }
 
@@ -151,7 +151,7 @@ class Path extends Polyline {
                 $color.val(self.polylineColor);
 
                 // Class color buttons
-                let $classColors = $('.map_polyline_edit_popup_class_color ');
+                let $classColors = $('.map_polyline_edit_popup_class_color');
                 $classColors.unbind('click');
                 $classColors.bind('click', function () {
                     $color.val($(this).data('color'));
@@ -173,6 +173,7 @@ class Path extends Polyline {
 
                 // Two rows
                 let rows = [];
+                let classColors = getState().getClassColors();
                 let half = classColors.length / 2;
                 let currentRow;
 

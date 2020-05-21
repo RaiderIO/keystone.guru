@@ -8,7 +8,7 @@
         "name": "Urg'roth, Breaker of Heroes",
         "base_health": 700000,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive",
+        "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0
     },
@@ -21,7 +21,7 @@
         "name": "Voidweaver Mal'thir",
         "base_health": 700000,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive",
+        "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0
     },
@@ -34,7 +34,7 @@
         "name": "Samh'rek, Beckoner of Chaos",
         "base_health": 700000,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive",
+        "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0
     },
@@ -47,7 +47,7 @@
         "name": "Blood of the Corruptor",
         "base_health": 700000,
         "enemy_forces": 4,
-        "aggressiveness": "aggressive",
+        "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0
     }

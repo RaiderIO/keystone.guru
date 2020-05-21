@@ -1,6 +1,6 @@
 class EnemyMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, editable) {
-        super(manager, name, editable);
+    constructor(manager, editable) {
+        super(manager, MAP_OBJECT_GROUP_ENEMY, editable);
 
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
@@ -9,7 +9,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _createObject(layer) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
-        if (isMapAdmin) {
+        if (getState().isMapAdmin()) {
             return new AdminEnemy(this.manager.map, layer);
         } else {
             return new Enemy(this.manager.map, layer);
@@ -23,8 +23,12 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         // Check teeming, faction status
         if (this._isObjectVisible(remoteMapObject)) {
-            let layer = new LeafletEnemyMarker();
-            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+            // Only create a visual if we should display this enemy
+            let layer = null;
+            if (remoteMapObject.floor_id === getState().getCurrentFloor().id) {
+                layer = new LeafletEnemyMarker();
+                layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+            }
 
             let enemy = this.createNew(layer);
             enemy.id = remoteMapObject.id;
@@ -66,25 +70,30 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     }
 
     _fetchSuccess(response) {
-        super._fetchSuccess(response);
         // no super call required
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
-        let enemies = [
-            response.enemy.enemies,
-            response.enemy.mdt_enemies
+        // The enemies are no longer returned from the response; get it from the getState() instead
+        let enemySets = [
+            getState().getRawEnemies(),
+            getState().getMdtEnemies(),
         ];
 
         // For each set of enemies..
-        for (let i = 0; i < enemies.length; i++) {
-            let enemySet = enemies[i];
+        for (let i = 0; i < enemySets.length; i++) {
+            let enemySet = enemySets[i];
             // Now draw the enemies on the map, if any
             for (let index in enemySet) {
                 // Only if actually set
                 if (enemySet.hasOwnProperty(index)) {
-                    this._restoreObject(enemySet[index]);
+                    let enemy = enemySet[index];
+                    // Only restore enemies for the current floor
+                    this._restoreObject(enemy);
                 }
             }
         }
+
+        // Set the enemies back to our state
+        getState().setEnemies(this.objects);
     }
 }

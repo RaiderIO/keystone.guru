@@ -30,6 +30,7 @@ class MapIconDeletedEvent implements ShouldBroadcast
      *
      * @param $dungeonroute DungeonRoute
      * @param $mapIcon MapIcon
+     * @param $user User
      * @return void
      */
     public function __construct(DungeonRoute $dungeonroute, MapIcon $mapIcon, User $user)

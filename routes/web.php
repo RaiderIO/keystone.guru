@@ -163,6 +163,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::get('users', 'UserController@list')->name('admin.users');
             Route::post('user/{user}/makeadmin', 'UserController@makeadmin')->name('admin.user.makeadmin');
             Route::post('user/{user}/makeuser', 'UserController@makeuser')->name('admin.user.makeuser');
+            Route::delete('user/{user}/delete', 'UserController@delete')->name('admin.user.delete');
 
             Route::get('userreports', 'UserReportController@list')->name('admin.userreports');
 
@@ -275,9 +276,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
             Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', 'APIDungeonFloorSwitchMarkerController@delete');
-
-            Route::post('/dungeonstartmarker', 'APIDungeonStartMarkerController@store')->where(['dungeon' => '[0-9]+']);
-            Route::delete('/dungeonstartmarker/{dungeonstartmarker}', 'APIDungeonStartMarkerController@delete');
 
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
 

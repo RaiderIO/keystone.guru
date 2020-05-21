@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
-use App\Http\Controllers\Traits\ListsDungeonStartMarkers;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
@@ -15,6 +14,7 @@ use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\APIDungeonRouteFormRequest;
 use App\Logic\Datatables\AuthorNameColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
+use App\Logic\Datatables\DungeonColumnHandler;
 use App\Logic\Datatables\DungeonRouteAffixesColumnHandler;
 use App\Logic\Datatables\DungeonRouteAttributesColumnHandler;
 use App\Logic\Datatables\EnemyForcesColumnHandler;
@@ -23,13 +23,12 @@ use App\Logic\Datatables\ViewsColumnHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
-use App\Models\MapIconType;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Teapot\StatusCode;
 
 class APIDungeonRouteController extends Controller
 {
@@ -42,13 +41,12 @@ class APIDungeonRouteController extends Controller
     use ListsKillzones;
     use ListsBrushlines;
     use ListsMapIcons;
-    use ListsDungeonStartMarkers;
     use ListsDungeonFloorSwitchMarkers;
 
     /**
      * @param Request $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     function list(Request $request)
     {
@@ -64,7 +62,8 @@ class APIDungeonRouteController extends Controller
             ->leftJoin('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
-            ->where(function ($query) {
+            ->where(function ($query)
+            {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
@@ -108,7 +107,8 @@ class APIDungeonRouteController extends Controller
 
             // Handle favorites
             if (array_search('favorite', $requirements) !== false) {
-                $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
+                $routes = $routes->whereHas('favorites', function ($query) use (&$user)
+                {
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
@@ -155,6 +155,8 @@ class APIDungeonRouteController extends Controller
         $dtHandler = new DatatablesHandler($request);
 
         $result = $dtHandler->setBuilder($routes)->addColumnHandler([
+            // Handles any searching/filtering based on dungeon
+            new DungeonColumnHandler($dtHandler),
             // Handles any searching/filtering based on DR Affixes
             new DungeonRouteAffixesColumnHandler($dtHandler),
             // Sort by the amount of attributes
@@ -177,7 +179,7 @@ class APIDungeonRouteController extends Controller
      * @param DungeonRoute $dungeonroute
      * @param SeasonService $seasonService
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function store(APIDungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
     {
@@ -199,7 +201,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function delete(Request $request, DungeonRoute $dungeonroute)
     {
@@ -216,7 +218,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function publish(Request $request, DungeonRoute $dungeonroute)
     {
@@ -232,7 +234,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function rate(Request $request, DungeonRoute $dungeonroute)
     {
@@ -256,7 +258,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function rateDelete(Request $request, DungeonRoute $dungeonroute)
     {
@@ -278,7 +280,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function favorite(Request $request, DungeonRoute $dungeonroute)
     {
@@ -297,7 +299,7 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function favoriteDelete(Request $request, DungeonRoute $dungeonroute)
     {
@@ -318,18 +320,18 @@ class APIDungeonRouteController extends Controller
      * @param Request $request
      * @param string $publickey
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function data(Request $request, $publickey)
     {
         $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
 
         // Init the fields we should get for this request
-        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonstartmarker,dungeonfloorswitchmarker']);
+        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker']);
         $fields = explode(',', $fields);
 
         // Show enemies or raw data when fetching enemy packs
-        $enemies = (int)$request->get('enemies', true) === 1;
+        $enemyPackEnemies = (int)$request->get('enemyPackEnemies', true) === 1;
         $teeming = (int)$request->get('teeming', false) === 1;
 
         // Start parsing
@@ -346,7 +348,7 @@ class APIDungeonRouteController extends Controller
 
             // Killzone
             if (in_array('killzone', $fields)) {
-                $result['killzone'] = $this->listKillzones($request->get('floor'), $publickey);
+                $result['killzone'] = $this->listKillzones($publickey);
             }
 
             // Brushline
@@ -356,25 +358,25 @@ class APIDungeonRouteController extends Controller
         }
 
         // Enemies
-        if (in_array('enemy', $fields)) {
-            $showMdtEnemies = false;
-            // Only admins are allowed to see this
-            if (Auth::check() && Auth::user()->hasRole('admin')) {
-                // Only fetch it now
-                $showMdtEnemies = (int)$request->get('show_mdt_enemies', 0) === 1;
-            }
-
-            $result['enemy'] = $this->listEnemies($request->get('floor'), $showMdtEnemies, $publickey);
-        }
+//        if (in_array('enemy', $fields)) {
+//            $showMdtEnemies = false;
+//            // Only admins are allowed to see this
+//            if (Auth::check() && Auth::user()->hasRole('admin')) {
+//                // Only fetch it now
+//                $showMdtEnemies = (int)$request->get('show_mdt_enemies', 0) === 1;
+//            }
+//
+//            $result['enemy'] = $this->listEnemies($request->get('floor'), $showMdtEnemies, $publickey);
+//        }
 
         // Enemy packs
         if (in_array('enemypack', $fields)) {
             // If logged in, and we're NOT an admin
             if (Auth::check() && !Auth::user()->hasRole('admin')) {
                 // Don't expose vertices
-                $enemies = true;
+                $enemyPackEnemies = true;
             }
-            $result['enemypack'] = $this->listEnemyPacks($request->get('floor'), $enemies, $teeming);
+            $result['enemypack'] = $this->listEnemyPacks($request->get('floor'), $enemyPackEnemies, $teeming);
         }
 
         // Enemy patrols
@@ -387,12 +389,7 @@ class APIDungeonRouteController extends Controller
             $result['mapicon'] = $this->listMapIcons($request->get('floor'), $publickey);
         }
 
-        // Enemy patrols
-        if (in_array('dungeonstartmarker', $fields)) {
-            $result['dungeonstartmarker'] = $this->listDungeonStartMarkers($request->get('floor'));
-        }
-
-        // Enemy patrols
+        // Dungeon floor switch markers
         if (in_array('dungeonfloorswitchmarker', $fields)) {
             $result['dungeonfloorswitchmarker'] = $this->listDungeonFloorSwitchMarkers($request->get('floor'));
         }

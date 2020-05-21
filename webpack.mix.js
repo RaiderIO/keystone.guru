@@ -84,20 +84,19 @@ let scripts = [
     // Home page only
     'resources/assets/js/custom/home.js',
     // Doesn't depend on anything
+    'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/constants.js',
 
     // Pre-compiled handlebars
     'resources/assets/js/handlebars.js',
 
     // Include in proper order
-    'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/signalable.js',
 
     // Map object groups
     'resources/assets/js/custom/mapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
-    'resources/assets/js/custom/mapobjectgroups/dungeonstartmarkermapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
@@ -121,14 +120,18 @@ let scripts = [
     'resources/assets/js/custom/killzone.js',
     'resources/assets/js/custom/mapicon.js',
     'resources/assets/js/custom/mapicontype.js',
-    'resources/assets/js/custom/dungeonstartmarker.js',
     'resources/assets/js/custom/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/hotkeys.js',
     'resources/assets/js/custom/brushline.js',
 
-    'resources/assets/js/custom/enemyselection/enemyselection.js',
-    'resources/assets/js/custom/enemyselection/killzoneenemyselection.js',
-    'resources/assets/js/custom/enemyselection/mdtenemyselection.js',
+    'resources/assets/js/custom/mapstate/mapstate.js',
+    'resources/assets/js/custom/mapstate/editmapstate.js',
+    'resources/assets/js/custom/mapstate/deletemapstate.js',
+    'resources/assets/js/custom/mapstate/pathermapstate.js',
+    'resources/assets/js/custom/mapstate/enemyselection/enemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/killzoneenemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',
 
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
@@ -149,7 +152,6 @@ let scripts = [
     'resources/assets/js/custom/mapcontrol.js',
     'resources/assets/js/custom/mapcontrols/addisplaycontrols.js',
     'resources/assets/js/custom/mapcontrols/echocontrols.js',
-    'resources/assets/js/custom/mapcontrols/mapobjectgroupcontrols.js',
     'resources/assets/js/custom/mapcontrols/drawcontrols.js',
     'resources/assets/js/custom/mapcontrols/enemyforcescontrols.js',
     'resources/assets/js/custom/mapcontrols/enemyvisualcontrols.js',
@@ -162,7 +164,6 @@ let scripts = [
     'resources/assets/js/custom/admin/adminenemypack.js',
     'resources/assets/js/custom/admin/admindrawcontrols.js',
     'resources/assets/js/custom/admin/adminpanelcontrols.js',
-    'resources/assets/js/custom/admin/admindungeonstartmarker.js',
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
     'resources/assets/js/custom/admin/adminmapicon.js',
 

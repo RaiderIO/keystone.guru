@@ -1,6 +1,6 @@
 class PathMapObjectGroup extends MapObjectGroup {
-    constructor(manager, name, editable) {
-        super(manager, name, editable);
+    constructor(manager, editable) {
+        super(manager, MAP_OBJECT_GROUP_PATH, editable);
 
         let self = this;
 

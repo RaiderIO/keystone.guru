@@ -35,6 +35,10 @@
             'edit' => true,
             'tryMode' => true
         ])
+
+        @include('common.maps.killzonessidebar', [
+            'edit' => true
+        ])
     </div>
 
     <?php } ?>

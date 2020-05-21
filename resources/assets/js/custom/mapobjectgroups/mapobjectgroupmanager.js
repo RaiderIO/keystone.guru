@@ -5,7 +5,6 @@ const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
 const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
-const MAP_OBJECT_GROUP_DUNGEON_START_MARKER = 'dungeonstartmarker';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
@@ -13,11 +12,11 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_ENEMY_PATROL,
     MAP_OBJECT_GROUP_ENEMY_PACK,
     MAP_OBJECT_GROUP_PATH,
-    MAP_OBJECT_GROUP_KILLZONE,
+    MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
     MAP_OBJECT_GROUP_BRUSHLINE,
     MAP_OBJECT_GROUP_MAPICON,
-    MAP_OBJECT_GROUP_DUNGEON_START_MARKER,
-    MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
+    // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
+    MAP_OBJECT_GROUP_KILLZONE
 ];
 
 class MapObjectGroupManager extends Signalable {
@@ -46,23 +45,21 @@ class MapObjectGroupManager extends Signalable {
         let result = null;
 
         if (name === MAP_OBJECT_GROUP_ENEMY) {
-            result = new EnemyMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY, isMapAdmin);
+            result = new EnemyMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_ENEMY_PATROL) {
-            result = new EnemyPatrolMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PATROL, isMapAdmin);
+            result = new EnemyPatrolMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_ENEMY_PACK) {
-            result = new EnemyPackMapObjectGroup(this, MAP_OBJECT_GROUP_ENEMY_PACK, isMapAdmin);
+            result = new EnemyPackMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_PATH) {
-            result = new PathMapObjectGroup(this, MAP_OBJECT_GROUP_PATH, !isMapAdmin);
+            result = new PathMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_KILLZONE) {
-            result = new KillZoneMapObjectGroup(this, MAP_OBJECT_GROUP_KILLZONE, !isMapAdmin);
+            result = new KillZoneMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_BRUSHLINE) {
-            result = new BrushlineMapObjectGroup(this, MAP_OBJECT_GROUP_BRUSHLINE, !isMapAdmin);
+            result = new BrushlineMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_MAPICON) {
-            result = new MapIconMapObjectGroup(this, MAP_OBJECT_GROUP_MAPICON, true);
-        } else if (name === MAP_OBJECT_GROUP_DUNGEON_START_MARKER) {
-            result = new DungeonStartMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_START_MARKER, isMapAdmin);
+            result = new MapIconMapObjectGroup(this, true);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER) {
-            result = new DungeonFloorSwitchMarkerMapObjectGroup(this, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, isMapAdmin);
+            result = new DungeonFloorSwitchMarkerMapObjectGroup(this, getState().isMapAdmin());
         }
 
         console.assert(result !== null, 'Unable to find map object group ' + name, this);
@@ -89,7 +86,7 @@ class MapObjectGroupManager extends Signalable {
     /**
      * Retrieves a map object group by its name.
      * @param name
-     * @returns {boolean}|{MapObjectGroup}
+     * @returns {boolean|MapObjectGroup}
      */
     getByName(name) {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
@@ -127,22 +124,14 @@ class MapObjectGroupManager extends Signalable {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
 
         let self = this;
-
-        // @TODO This should probably be different but atm I can't think of a better way
-        let publicKey = getState().getDungeonRoute().publicKey;
-        if (isMapAdmin) {
-            publicKey = 'admin';
-        }
-
         $.ajax({
             type: 'GET',
-            url: '/ajax/' + publicKey + '/data',
+            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/data',
             dataType: 'json',
             data: {
                 fields: this._getLoadedNames().join(','),
                 floor: getState().getCurrentFloor().id,
-                show_mdt_enemies: isMapAdmin ? 1 : 0,
-                enemies: isMapAdmin ? 0 : 1,
+                enemyPackEnemies: getState().isMapAdmin() ? 0 : 1,
                 teeming: self.map.options.teeming ? 1 : 0
             },
             success: function (json) {

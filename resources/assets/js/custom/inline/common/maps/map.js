@@ -27,6 +27,7 @@ class CommonMapsMap extends InlineCode {
      *
      */
     activate() {
+        this.initDungeonMap();
     }
 
     /**
@@ -35,21 +36,10 @@ class CommonMapsMap extends InlineCode {
     initDungeonMap() {
         let self = this;
 
-        if (isMapAdmin) {
-            this._dungeonMap = new AdminDungeonMap('map', dungeonData, this.options);
+        if (getState().isMapAdmin()) {
+            this._dungeonMap = new AdminDungeonMap('map', this.options);
         } else {
-            this._dungeonMap = new DungeonMap('map', dungeonData, this.options);
-        }
-
-        // Support not having a sidebar (preview map)
-
-        let sidebar = _inlineManager.getInlineCode('common/maps/sidebar');
-        if (sidebar !== false) {
-            $(sidebar.options.switchDungeonFloorSelect).change(function () {
-                // Pass the new floor ID to the map
-                getState().setFloorId($(sidebar.options.switchDungeonFloorSelect).val());
-                self._dungeonMap.refreshLeafletMap();
-            });
+            this._dungeonMap = new DungeonMap('map', this.options);
         }
 
         $('#start_virtual_tour').bind('click', function () {

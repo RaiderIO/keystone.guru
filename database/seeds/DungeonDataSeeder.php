@@ -27,7 +27,6 @@ class DungeonDataSeeder extends Seeder
             'enemy_packs' => 'App\Models\EnemyPack',
             'enemy_patrols' => 'App\Models\EnemyPatrol',
             'dungeon_floor_switch_markers' => 'App\Models\DungeonFloorSwitchMarker',
-            'dungeon_start_markers' => 'App\Models\DungeonStartMarker',
             'map_icons' => 'App\Models\MapIcon'
         ];
 
@@ -212,7 +211,6 @@ class DungeonDataSeeder extends Seeder
         DB::table('enemies')->truncate();
         DB::table('enemy_packs')->truncate();
         DB::table('enemy_patrols')->truncate();
-        DB::table('dungeon_start_markers')->truncate();
         DB::table('dungeon_floor_switch_markers')->truncate();
         // Delete all map icons that are always there
         DB::table('map_icons')->where('dungeon_route_id', -1)->delete();

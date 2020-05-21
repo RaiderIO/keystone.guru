@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class KillZone extends Model
 {
-    public $visible = ['id', 'lat', 'lng', 'color', 'killzoneenemies'];
+    public $visible = ['id', 'floor_id', 'lat', 'lng', 'color', 'killzoneenemies'];
     public $with = ['killzoneenemies'];
 
     /**

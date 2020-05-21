@@ -19,7 +19,7 @@ class EnemyPatrol extends Polyline {
         // console.log(rand);
         // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
 
-        this.setColor(c.map.enemypatrol.defaultColor);
+        this.setColor(c.map.enemypatrol.defaultColor());
     }
 
     /**

@@ -57,4 +57,21 @@ class UserController extends Controller
 
         return redirect()->route('admin.users');
     }
+
+    /**
+     * @param Request $request
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete(Request $request, User $user)
+    {
+        try {
+            $user->delete();
+            \Session::flash('status', __('Account deleted successfully.'));
+        } catch (\Exception $e) {
+            \Session::flash('warning', __('An error occurred. Please try again.'));
+        }
+
+        return redirect()->route('admin.users');
+    }
 }

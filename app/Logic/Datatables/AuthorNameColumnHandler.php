@@ -24,7 +24,7 @@ class AuthorNameColumnHandler extends DatatablesColumnHandler
     {
         // Only order
         if ($order !== null) {
-            $builder->leftJoin('users', 'dungeonroutes.author_id', '=', 'users.id');
+            $builder->leftJoin('users', 'dungeon_routes.author_id', '=', 'users.id');
             $builder->orderBy('users.name', $order['dir'] === 'asc' ? 'asc' : 'desc');
         }
     }

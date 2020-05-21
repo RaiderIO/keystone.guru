@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Models\Path;
+use Illuminate\Support\Collection;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
@@ -19,7 +20,7 @@ trait ListsPaths
      *
      * @param $floorId
      * @param $publicKey
-     * @return Path[]
+     * @return Collection
      */
     function listPaths($floorId, $publicKey)
     {

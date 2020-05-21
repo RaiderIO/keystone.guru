@@ -69,6 +69,10 @@ window.d3 = require('d3'); // v3.5.14 since Pather uses an out-of-date version
 window.Pather = require('leaflet-pather');
 window.circleMenu = require('zikes-circlemenu');
 window.Noty = require('noty');
+window.Pickr = require('@simonwep/pickr');
+window.AntPath = require('leaflet-ant-path');
+window.Grapick = require('grapick');
+window.jqueryVisible = require('jquery-visible');
 
 require('@fortawesome/fontawesome-free');
 
@@ -97,7 +101,30 @@ window.Handlebars.registerHelper('select', function (value, options) {
     return $el.html();
 });
 
-// https://stackoverflow.com/questions/34252817/handlebarsjs-check-if-a-string-is-equal-to-a-value
-window.Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
-    return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+// https://stackoverflow.com/questions/8853396/logical-operator-in-a-handlebars-js-if-conditional
+window.Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+    switch (operator) {
+        case '==':
+            return (v1 == v2) ? options.fn(this) : options.inverse(this);
+        case '===':
+            return (v1 === v2) ? options.fn(this) : options.inverse(this);
+        case '!=':
+            return (v1 != v2) ? options.fn(this) : options.inverse(this);
+        case '!==':
+            return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+        case '<':
+            return (v1 < v2) ? options.fn(this) : options.inverse(this);
+        case '<=':
+            return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+        case '>':
+            return (v1 > v2) ? options.fn(this) : options.inverse(this);
+        case '>=':
+            return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+        case '&&':
+            return (v1 && v2) ? options.fn(this) : options.inverse(this);
+        case '||':
+            return (v1 || v2) ? options.fn(this) : options.inverse(this);
+        default:
+            return options.inverse(this);
+    }
 });

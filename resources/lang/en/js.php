@@ -40,6 +40,18 @@ return [
     'add_label' => 'Add',
 
     'color_label' => 'Color',
+    'weight_label' => 'Weight',
+    'mapobject_visibility_label' => 'Visibility',
+
+    // Map object translations
+    'enemy_map_object_group_label' => 'Enemies',
+    'enemypatrol_map_object_group_label' => 'Patrols',
+    'enemypack_map_object_group_label' => 'Packs',
+    'path_map_object_group_label' => 'Paths',
+    'dungeonfloorswitchmarker_map_object_group_label' => 'Floor switch',
+    'brushline_map_object_group_label' => 'Drawn lines',
+    'mapicon_map_object_group_label' => 'Icons',
+    'killzone_map_object_group_label' => 'Pulls',
 
     'clone_label' => 'Clone',
     'delete_label' => 'Delete',
@@ -53,6 +65,11 @@ return [
     'submit_label' => 'Submit',
 
     'select_category_label' => 'Select category...',
+
+    'show_enemies_label' => 'Show enemies',
+    'add_kill_area_label' => 'Add kill area',
+    'remove_kill_area_label' => 'Remove kill area',
+    'delete_killzone_label' => 'Delete pull',
 
     // Route edit tools
     'path' => 'Path',
@@ -68,7 +85,6 @@ return [
     'enemypack' => 'Pack',
     'enemy' => 'Enemy',
     'enemypatrol' => 'Patrol',
-    'dungeonstartmarker' => 'Start',
     'dungeonfloorswitchmarker' => 'Floor',
 
     // Raid markers
@@ -143,6 +159,9 @@ return [
     'sidebar_expand' => 'Expand the sidebar',
     'sidebar_collapse' => 'Collapse the sidebar',
     'copied_to_clipboard' => 'Copied to clipboard',
+
+    // Killzone sidebar
+    'killzone_sidebar_kill_location_label' => 'Kill location',
 
 
     // General site modals etc

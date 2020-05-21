@@ -136,14 +136,30 @@ class Brushline extends Polyline {
 
             // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
             self.register('synced', this, function (event) {
-                let customPopupHtml = $('#map_brushline_edit_popup_template').html();
-                // Remove template so our
-                let template = Handlebars.compile(customPopupHtml);
+                let template = Handlebars.templates['map_brushline_edit_popup_template'];
 
-                let data = {id: self.id};
+                // Two rows
+                let rows = [];
+                let classColors = getState().getClassColors();
+                let half = classColors.length / 2;
+                let currentRow;
+
+                // Construct the array required
+                for (let i = 0; i < classColors.length; i++) {
+                    if (i === 0 || i === half) {
+                        currentRow = {colors: []};
+                        rows.push(currentRow);
+                    }
+
+                    currentRow.colors.push({
+                        color: classColors[i]
+                    });
+                }
+
+                let data = {id: self.id, rows: rows};
 
                 // Build the status bar from the template
-                customPopupHtml = template(data);
+                let customPopupHtml = template(data);
 
                 let customOptions = {
                     'maxWidth': '400',

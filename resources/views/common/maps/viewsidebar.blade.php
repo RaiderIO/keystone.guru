@@ -14,7 +14,17 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
 
 @include('common.general.inline', ['path' => 'common/maps/viewsidebar', 'options' => $model])
 
-@section('sidebar-content')
+@section('modal-content')
+    @include('common.userreport.dungeonroute')
+@overwrite
+@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+
+@component('common.maps.sidebar', [
+'header' => $model->title,
+'subHeader' => $subTitle,
+'anchor' => 'left',
+'id' => 'viewsidebar',
+'selectedFloorId' => $model->dungeon->floors[0]->id])
     <!-- Enemy forces -->
     <div class="form-group">
         <div class="card">
@@ -98,8 +108,24 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                     </div>
                 </div>
 
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col font-weight-bold">
+                        {{ __('Map elements') }}:
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col">
+                        {!! Form::select('map_map_object_group_visibility', [], 0,
+                            ['id' => 'map_map_object_group_visibility',
+                            'class' => 'form-control selectpicker',
+                            'multiple' => 'multiple',
+                            'data-selected-text-format' => 'count > 1',
+                            'data-count-selected-text' => __('{0} visible')]) !!}
+                    </div>
+                </div>
+
                 @if($floorSelection)
-                    <div class="row view_dungeonroute_details_row">
+                    <div class="row view_dungeonroute_details_row mt-3">
                         <div class="col font-weight-bold">
                             {{ __('Floor') }}:
                         </div>
@@ -197,11 +223,4 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
             </div>
         </div>
     </div>
-@endsection
-
-@section('modal-content')
-    @include('common.userreport.dungeonroute')
-@overwrite
-@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
-
-@include('common.maps.sidebar', ['header' => $model->title, 'subHeader' => $subTitle, 'selectedFloorId' => $model->dungeon->floors[0]->id])
+@endcomponent
