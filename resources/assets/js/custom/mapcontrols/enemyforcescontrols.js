@@ -13,7 +13,7 @@ class EnemyForcesControls extends MapControl {
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
-                let template = Handlebars.templates['map_enemy_forces_template' + (!map.options.edit ? '_view' : '')];
+                let template = Handlebars.templates['map_enemy_forces_template_view'];
 
                 let data = $.extend({
                     enemy_forces_total: self.map.getEnemyForcesRequired()
@@ -134,16 +134,11 @@ class EnemyForcesControls extends MapControl {
                     $('#map_enemy_forces_warning').show();
                 }
             }
-        } else {
-            // Only on view
-            if (!this.map.options.edit) {
-                if (enemyForcesPercent < 100) {
-                    $enemyForces.attr('title', 'Warning: this route does not have enough enemy forces!');
-                    $numbers.addClass('map_enemy_forces_too_little_warning');
-                    $('#map_enemy_forces_success').hide();
-                    $('#map_enemy_forces_warning').show();
-                }
-            }
+        } else if (enemyForcesPercent < 100) {
+            $enemyForces.attr('title', 'Warning: this route does not have enough enemy forces!');
+            $numbers.addClass('map_enemy_forces_too_little_warning');
+            $('#map_enemy_forces_success').hide();
+            $('#map_enemy_forces_warning').show();
         }
 
         $('#map_enemy_forces_count').html(this.enemyForces);

@@ -12,7 +12,15 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
 }
 ?>
 
-@include('common.general.inline', ['path' => 'common/maps/viewsidebar', 'options' => $model])
+@include('common.general.inline', ['path' => 'common/maps/viewsidebar', 'options' => [
+    'dependencies' => ['common/maps/map'],
+    'sidebarSelector' => '#viewsidebar',
+    'sidebarScrollSelector' => '#viewsidebar .sidebar-content',
+    'sidebarToggleSelector' => '#viewsidebarToggle',
+    'anchor' => 'left',
+    'switchDungeonFloorSelect' => '#map_floor_selection',
+    'dungeonroute' => $model
+]])
 
 @section('modal-content')
     @include('common.userreport.dungeonroute')
@@ -20,25 +28,11 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
 @include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
 
 @component('common.maps.sidebar', [
-'header' => $model->title,
-'subHeader' => $subTitle,
-'anchor' => 'left',
-'id' => 'viewsidebar',
-'selectedFloorId' => $model->dungeon->floors[0]->id])
-    <!-- Enemy forces -->
-    <div class="form-group">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Enemy forces') }}</h5>
-                <!-- Draw controls are injected here through drawcontrols.js -->
-                <div id="edit_route_enemy_forces_container">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    'header' => $model->title,
+    'subHeader' => $subTitle,
+    'anchor' => 'left',
+    'id' => 'viewsidebar',
+    'selectedFloorId' => $model->dungeon->floors[0]->id])
     <!-- Details -->
     <div class="form-group">
         <div class="card">

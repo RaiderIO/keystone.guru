@@ -154,13 +154,6 @@ if ($isAdmin) {
                 </div>
             </div>
 
-            <!-- Enemy forces controls are injected here through enemyforces.js -->
-            <div class="row m-auto text-center">
-                <div id="edit_route_enemy_forces_container" class="col">
-
-                </div>
-            </div>
-
             <!-- Draw controls are injected here through drawcontrols.js -->
             <div id="edit_route_draw_container" class="row">
 

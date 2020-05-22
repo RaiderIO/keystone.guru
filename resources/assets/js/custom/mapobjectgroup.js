@@ -60,6 +60,8 @@ class MapObjectGroup extends Signalable {
                 this._restoreObject(mapObjects[i]);
             }
         }
+
+        this.signal('restorecomplete');
     }
 
     /**
