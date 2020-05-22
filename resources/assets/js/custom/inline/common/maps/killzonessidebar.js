@@ -430,6 +430,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // Stop listening to changes in the killzone
             killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self);
         });
+        killZoneMapObjectGroup.register('restorecomplete', this, function () {
+            $('#killzones_loading').hide();
+            if (killZoneMapObjectGroup.objects.length === 0) {
+                $('#killzones_no_pulls').show();
+            }
+        });
     }
 
     /**

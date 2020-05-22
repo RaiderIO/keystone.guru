@@ -1,6 +1,6 @@
 class KillZoneMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_KILLZONE, editable);
+        super(manager, MAP_OBJECT_GROUP_KILLZONE, 'killzone', editable);
 
         let self = this;
 
@@ -82,21 +82,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this._showReceivedFromEcho(killzone, username);
 
         return killzone;
-    }
-
-    _fetchSuccess(response) {
-        super._fetchSuccess(response);
-        // no super call required
-        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
-
-        let killzones = response.killzone;
-
-        // Now draw the killzones on the map
-        for (let index in killzones) {
-            if (killzones.hasOwnProperty(index)) {
-                this._restoreObject(killzones[index]);
-            }
-        }
     }
 
     /**

@@ -70,7 +70,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     }
 
     _fetchSuccess(response) {
-        // no super call required
+        // no super call, we're handling this by ourselves
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
         // The enemies are no longer returned from the response; get it from the getState() instead

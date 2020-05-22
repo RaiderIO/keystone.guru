@@ -20,9 +20,15 @@
     'header' => __('Pulls'),
     'anchor' => 'right',
     'id' => 'killzonesidebar',
-    'customSubHeader' => '&nbsp;'
+    /* Draw controls are injected here through drawcontrols.js */
+    'customSubHeader' => '<div class="mt-4"><div id="edit_route_enemy_forces_container"></div></div>'
 ])
-    <div id="killzones_no_pulls" class="row">
+    <div id="killzones_loading" class="row">
+        <div class="col text-center">
+            <h5>{{ __('Loading...') }}</h5>
+        </div>
+    </div>
+    <div id="killzones_no_pulls" class="row" style="display: none;">
         <div class="col text-center">
             <h5>{{ __('No pulls created. Click on an enemy to add them to your first pull!') }}</h5>
         </div>

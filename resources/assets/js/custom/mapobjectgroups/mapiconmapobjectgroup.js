@@ -1,6 +1,6 @@
 class MapIconMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_MAPICON, editable);
+        super(manager, MAP_OBJECT_GROUP_MAPICON, 'mapicon', editable);
 
         let self = this;
 
@@ -65,20 +65,5 @@ class MapIconMapObjectGroup extends MapObjectGroup {
 
         // Show echo notification or not
         this._showReceivedFromEcho(mapIcon, username);
-    }
-
-    _fetchSuccess(response) {
-        super._fetchSuccess(response);
-        // no super call required
-        console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
-
-        let mapIcons = response.mapicon;
-
-        // Now draw the map icons on the map
-        for (let index in mapIcons) {
-            if (mapIcons.hasOwnProperty(index)) {
-                this._restoreObject(mapIcons[index]);
-            }
-        }
     }
 }

@@ -1,9 +1,10 @@
 class MapObjectGroup extends Signalable {
 
-    constructor(manager, name, editable = false) {
+    constructor(manager, name, field, editable = false) {
         super();
         this.manager = manager;
         this.name = name;
+        this.field = field;
         this.editable = editable;
 
         this.objects = [];
@@ -48,6 +49,19 @@ class MapObjectGroup extends Signalable {
      */
     _fetchSuccess(response) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
+        let mapObjects = response[this.field];
+
+        console.assert(typeof mapObjects === 'object', 'mapObjects is not an array', mapObjects);
+
+        // Now draw the map objects on the map
+        for (let i = 0; i < mapObjects.length; i++) {
+            if (mapObjects.hasOwnProperty(i)) {
+                this._restoreObject(mapObjects[i]);
+            }
+        }
+
+        this.signal('restorecomplete');
     }
 
     /**
@@ -135,16 +149,27 @@ class MapObjectGroup extends Signalable {
                 fontClass = isColorDark(userColor) ? 'text-white' : 'text-dark';
             }
 
-            let tooltip = localMapObject.layer.bindTooltip(username, {
-                permanent: true,
-                className: 'user_color_' + username + ' ' + fontClass,
-                direction: 'top'
-            });
+            // @TODO Bit hacky?
+            let layer = localMapObject.layer;
+            if (localMapObject instanceof KillZone) {
+                // First layer should contain the polygon that is displayed
+                layer = localMapObject.enemyConnectionsLayerGroup.getLayers().length > 0 ? localMapObject.enemyConnectionsLayerGroup.getLayers()[0] : null;
+            }
 
-            // Fadeout after some time
-            setTimeout(function () {
-                tooltip.closeTooltip();
-            }, 5000);
+            if (layer !== null) {
+                let tooltip = layer.bindTooltip(username, {
+                    permanent: true,
+                    className: 'user_color_' + username + ' ' + fontClass,
+                    direction: 'top'
+                });
+
+                // Fadeout after some time
+                setTimeout(function () {
+                    tooltip.closeTooltip();
+                }, 5000);
+            } else {
+                console.warn('Unable to display echo received action to user, layer was null', localMapObject);
+            }
         }
     }
 

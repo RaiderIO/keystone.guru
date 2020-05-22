@@ -15,13 +15,13 @@ class CommonMapsViewsidebar extends InlineCode {
         this.sidebar.activate();
 
         $('#view_dungeonroute_group_setup').html(
-            handlebarsGroupSetupParse(self.options.setup)
+            handlebarsGroupSetupParse(self.options.dungeonroute.setup)
         );
 
         $('#rating').barrating({
             theme: 'bars-1to10',
             readonly: true,
-            initialRating: self.options.avg_rating
+            initialRating: self.options.dungeonroute.avg_rating
         });
 
         $('#your_rating').barrating({
@@ -49,7 +49,7 @@ class CommonMapsViewsidebar extends InlineCode {
         let isDelete = value === '';
         $.ajax({
             type: isDelete ? 'DELETE' : 'POST',
-            url: '/ajax/' + self.options.public_key + '/rate',
+            url: '/ajax/' + self.options.dungeonroute.public_key + '/rate',
             dataType: 'json',
             data: {
                 rating: value
@@ -70,7 +70,7 @@ class CommonMapsViewsidebar extends InlineCode {
 
         $.ajax({
             type: !value ? 'DELETE' : 'POST',
-            url: '/ajax/' + self.options.public_key + '/favorite',
+            url: '/ajax/' + self.options.dungeonroute.public_key + '/favorite',
             dataType: 'json',
             success: function (json) {
 

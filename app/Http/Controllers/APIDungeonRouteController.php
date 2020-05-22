@@ -324,8 +324,6 @@ class APIDungeonRouteController extends Controller
      */
     function data(Request $request, $publickey)
     {
-        $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
-
         // Init the fields we should get for this request
         $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker']);
         $fields = explode(',', $fields);

@@ -6,7 +6,7 @@ tput sgr0;
 
 # Restore echo server clients
 cd config/echo
-for folder in local staging live
+for folder in jastola live local staging
 do
     echo $folder
     cd $folder
