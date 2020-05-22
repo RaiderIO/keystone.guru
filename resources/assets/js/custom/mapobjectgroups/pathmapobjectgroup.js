@@ -1,6 +1,6 @@
 class PathMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_PATH, editable);
+        super(manager, MAP_OBJECT_GROUP_PATH, 'path', editable);
 
         let self = this;
 
@@ -61,21 +61,5 @@ class PathMapObjectGroup extends MapObjectGroup {
 
         // Show echo notification or not
         this._showReceivedFromEcho(path, username);
-    }
-
-    _fetchSuccess(response) {
-        super._fetchSuccess(response);
-
-        console.assert(this instanceof PathMapObjectGroup, 'this is not a PathMapObjectGroup', this);
-
-        // Should always exist
-        let paths = response.path;
-
-        // Now draw the paths on the map
-        for (let index in paths) {
-            if (paths.hasOwnProperty(index)) {
-                this._restoreObject(paths[index]);
-            }
-        }
     }
 }

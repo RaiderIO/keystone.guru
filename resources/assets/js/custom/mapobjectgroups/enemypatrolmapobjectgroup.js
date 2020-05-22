@@ -1,6 +1,6 @@
 class EnemyPatrolMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_ENEMY_PATROL, editable);
+        super(manager, MAP_OBJECT_GROUP_ENEMY_PATROL, 'enemypatrol', editable);
 
         this.title = 'Hide/show enemy patrol routes';
         this.fa_class = 'fa-exchange-alt';
@@ -42,20 +42,6 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
 
             // We just downloaded the enemy patrol, it's synced alright!
             enemyPatrol.setSynced(true);
-        }
-    }
-
-    _fetchSuccess(response) {
-        // no super call required
-        console.assert(this instanceof EnemyPatrolMapObjectGroup, 'this is not a EnemyPatrolMapObjectGroup', this);
-
-        let enemyPatrols = response.enemypatrol;
-
-        // Now draw the patrols on the map
-        for (let index in enemyPatrols) {
-            if (enemyPatrols.hasOwnProperty(index)) {
-                this._restoreObject(enemyPatrols[index]);
-            }
         }
     }
 }

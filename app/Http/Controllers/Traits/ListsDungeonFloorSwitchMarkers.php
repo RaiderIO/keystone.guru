@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Models\DungeonFloorSwitchMarker;
+use Illuminate\Support\Collection;
 
 trait ListsDungeonFloorSwitchMarkers
 {
@@ -17,10 +18,10 @@ trait ListsDungeonFloorSwitchMarkers
      * Lists all dungeon floor switch markers on a floor.
      *
      * @param $floorId
-     * @return DungeonFloorSwitchMarker[]
+     * @return Collection
      */
     function listDungeonFloorSwitchMarkers($floorId)
     {
-        return DungeonFloorSwitchMarker::all()->where('floor_id', $floorId);
+        return DungeonFloorSwitchMarker::where('floor_id', $floorId)->get();
     }
 }

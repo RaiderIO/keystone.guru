@@ -1,6 +1,6 @@
 class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, editable);
+        super(manager, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, 'dungeonfloorswitchmarker', editable);
 
         this.title = 'Hide/show floor switch markers';
         this.fa_class = 'fa-door-open';
@@ -48,19 +48,5 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
 
         // We just downloaded the floor switch marker, it's synced alright!
         dungeonFloorSwitchMarker.setSynced(true);
-    }
-
-    _fetchSuccess(response) {
-        // no super call required
-        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup', this);
-
-        let floorSwitchMarkers = response.dungeonfloorswitchmarker;
-
-        // Now draw the enemies on the map
-        for (let index in floorSwitchMarkers) {
-            if (floorSwitchMarkers.hasOwnProperty(index)) {
-                this._restoreObject(floorSwitchMarkers[index]);
-            }
-        }
     }
 }

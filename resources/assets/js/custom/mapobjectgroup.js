@@ -1,9 +1,10 @@
 class MapObjectGroup extends Signalable {
 
-    constructor(manager, name, editable = false) {
+    constructor(manager, name, field, editable = false) {
         super();
         this.manager = manager;
         this.name = name;
+        this.field = field;
         this.editable = editable;
 
         this.objects = [];
@@ -48,6 +49,17 @@ class MapObjectGroup extends Signalable {
      */
     _fetchSuccess(response) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
+        let mapObjects = response[this.field];
+
+        console.assert(typeof mapObjects === 'object', 'mapObjects is not an array', mapObjects);
+
+        // Now draw the map objects on the map
+        for (let i = 0; i < mapObjects.length; i++) {
+            if (mapObjects.hasOwnProperty(i)) {
+                this._restoreObject(mapObjects[i]);
+            }
+        }
     }
 
     /**

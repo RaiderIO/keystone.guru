@@ -1,6 +1,6 @@
 class EnemyPackMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_ENEMY_PACK, editable);
+        super(manager, MAP_OBJECT_GROUP_ENEMY_PACK, 'enemypack', editable);
 
         this.title = 'Hide/show enemy packs';
         this.fa_class = 'fa-draw-polygon';
@@ -71,20 +71,6 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
             } else {
                 console.warn('Unable to create layer for enemypack ' + remoteMapObject.id + '; not enough data points');
             }
-        }
-    }
-
-    _fetchSuccess(response) {
-        super._fetchSuccess(response);
-
-        // no super call required
-        console.assert(this instanceof EnemyPackMapObjectGroup, 'this is not a EnemyPackMapObjectGroup', this);
-
-        let enemyPacks = response.enemypack;
-
-        // Now draw the packs on the map
-        for (let i = 0; i < enemyPacks.length; i++) {
-            this._restoreObject(enemyPacks[i]);
         }
     }
 }

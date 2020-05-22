@@ -1,6 +1,6 @@
 class BrushlineMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_BRUSHLINE, editable);
+        super(manager, MAP_OBJECT_GROUP_BRUSHLINE, 'brushline', editable);
 
         let self = this;
 
@@ -64,20 +64,5 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
 
         // Show echo notification or not
         this._showReceivedFromEcho(brushline, username);
-    }
-
-    _fetchSuccess(response) {
-        super._fetchSuccess(response);
-        // no super call required
-        console.assert(this instanceof BrushlineMapObjectGroup, 'this is not a BrushlineMapObjectGroup', this);
-
-        let brushlines = response.brushline;
-
-        // Now draw the brushlines on the map
-        for (let index in brushlines) {
-            if (brushlines.hasOwnProperty(index)) {
-                this._restoreObject(brushlines[index]);
-            }
-        }
     }
 }
