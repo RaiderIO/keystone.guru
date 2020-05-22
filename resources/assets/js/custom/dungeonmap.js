@@ -26,8 +26,6 @@ class DungeonMap extends Signalable {
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
 
-        //  Whatever killzone is currently in select mode
-        this.currentSelectModeKillZone = null;
         // Pather instance
         this.pather = null;
 

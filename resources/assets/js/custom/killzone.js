@@ -252,18 +252,6 @@ class KillZone extends MapObject {
                 if (enemy.layer !== null) {
                     let latLng = enemy.layer.getLatLng();
                     latLngs.push([latLng.lat, latLng.lng]);
-
-                    // Draw lines to self if killzone mode is enabled
-                    if (self.map.currentSelectModeKillZone === self) {
-                        let layer = L.polyline([
-                            latLng,
-                            self.layer.getLatLng()
-                        ], c.map.killzone.polylineOptions);
-                        // do not prevent clicking on anything else
-                        self.enemyConnectionsLayerGroup.setZIndex(-1000);
-
-                        self.enemyConnectionsLayerGroup.addLayer(layer);
-                    }
                 }
                 // The enemy was not on this floor; add its floor to the 'add floor switch as part of pack' list
                 else if (!otherFloorsWithEnemies.includes(enemy.floor_id)) {

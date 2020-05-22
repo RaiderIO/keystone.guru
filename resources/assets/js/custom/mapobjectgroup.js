@@ -149,16 +149,27 @@ class MapObjectGroup extends Signalable {
                 fontClass = isColorDark(userColor) ? 'text-white' : 'text-dark';
             }
 
-            let tooltip = localMapObject.layer.bindTooltip(username, {
-                permanent: true,
-                className: 'user_color_' + username + ' ' + fontClass,
-                direction: 'top'
-            });
+            // @TODO Bit hacky?
+            let layer = localMapObject.layer;
+            if (localMapObject instanceof KillZone) {
+                // First layer should contain the polygon that is displayed
+                layer = localMapObject.enemyConnectionsLayerGroup.getLayers().length > 0 ? localMapObject.enemyConnectionsLayerGroup.getLayers()[0] : null;
+            }
 
-            // Fadeout after some time
-            setTimeout(function () {
-                tooltip.closeTooltip();
-            }, 5000);
+            if (layer !== null) {
+                let tooltip = layer.bindTooltip(username, {
+                    permanent: true,
+                    className: 'user_color_' + username + ' ' + fontClass,
+                    direction: 'top'
+                });
+
+                // Fadeout after some time
+                setTimeout(function () {
+                    tooltip.closeTooltip();
+                }, 5000);
+            } else {
+                console.warn('Unable to display echo received action to user, layer was null', localMapObject);
+            }
         }
     }
 
