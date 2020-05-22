@@ -108,30 +108,30 @@ class EnemyForcesControls extends MapControl {
         if (this.enemyForces >= enemyForcesRequired) {
             // When editing the route..
             if (this.map.options.edit) {
-                if (enemyForcesPercent >= 100) {
-                    $enemyForces.attr('title', '');
-                    $numbers.addClass('map_enemy_forces_ok');
-                    $('#map_enemy_forces_success').show();
-                    $('#map_enemy_forces_warning').hide();
-                } else if (enemyForcesPercent > 110) {
+                if (enemyForcesPercent > 110) {
                     $enemyForces.attr('title', 'Warning: your route has too much enemy forces.');
                     $numbers.addClass('map_enemy_forces_too_much_warning');
                     $('#map_enemy_forces_success').hide();
                     $('#map_enemy_forces_warning').show();
-                }
-            }
-            // Only when viewing a route with less than 100% enemy forces
-            else {
-                if (enemyForcesPercent >= 100) {
+                } else if (enemyForcesPercent >= 100) {
                     $enemyForces.attr('title', '');
                     $numbers.addClass('map_enemy_forces_ok');
                     $('#map_enemy_forces_success').show();
                     $('#map_enemy_forces_warning').hide();
-                } else if (enemyForcesPercent > 110) {
+                }
+            }
+            // Only when viewing a route with less than 100% enemy forces
+            else {
+                if (enemyForcesPercent > 110) {
                     $enemyForces.attr('title', 'Warning: this route has too much enemy forces.');
                     $numbers.addClass('map_enemy_forces_too_much_warning');
                     $('#map_enemy_forces_success').hide();
                     $('#map_enemy_forces_warning').show();
+                } else if (enemyForcesPercent >= 100) {
+                    $enemyForces.attr('title', '');
+                    $numbers.addClass('map_enemy_forces_ok');
+                    $('#map_enemy_forces_success').show();
+                    $('#map_enemy_forces_warning').hide();
                 }
             }
         } else if (enemyForcesPercent < 100) {
