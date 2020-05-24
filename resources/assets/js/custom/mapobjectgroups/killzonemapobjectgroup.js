@@ -40,18 +40,21 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         // Fetch the existing killzone if it exists
         let killzone = this.findMapObjectById(remoteMapObject.id);
 
+        let layer = null;
+        // Only if it was set, and if it was on this floor
+        if (remoteMapObject.lat !== null && remoteMapObject.lng !== null &&
+            remoteMapObject.floor_id === getState().getCurrentFloor().id) {
+            layer = new LeafletKillZoneMarker();
+            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+        }
+
         // Only create a new one if it's new for us
         if (killzone === null) {
-            let layer = null;
-            // Only if it was set, and if it was on this floor
-            if (remoteMapObject.lat !== null && remoteMapObject.lng !== null &&
-                remoteMapObject.floor_id === getState().getCurrentFloor().id) {
-                layer = new LeafletKillZoneMarker();
-                layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-            }
-
             /** @var KillZone killzone */
             killzone = this.createNew(layer);
+        } else {
+            // Update the killzone layer with that of the remote
+            killzone.layer = layer;
         }
 
         // Now update the killzone to its new properties
@@ -92,7 +95,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     createNewPull(enemyIds = []) {
         // Construct an object equal to that received from the server
         let killzoneEnemies = [];
-        for(let i = 0; i < enemyIds.length; i++ ){
+        for (let i = 0; i < enemyIds.length; i++) {
             killzoneEnemies.push({enemy_id: enemyIds[i]});
         }
 
