@@ -19,17 +19,6 @@ class SeasonService implements SeasonServiceInterface
     private $_seasons = null;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    private function _getSeasons()
-    {
-        if ($this->_seasons === null) {
-            $this->_seasons = Season::all();
-        }
-        return $this->_seasons;
-    }
-
-    /**
      * @return Carbon Get a date of now with the timezone set properly.
      */
     private function _getNow()
@@ -46,11 +35,22 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getSeasons()
+    {
+        if ($this->_seasons === null) {
+            $this->_seasons = Season::all();
+        }
+        return $this->_seasons;
+    }
+
+    /**
      * @return Season
      */
     public function getFirstSeason()
     {
-        return $this->_getSeasons()->first();
+        return $this->getSeasons()->first();
     }
 
     /**
@@ -63,7 +63,7 @@ class SeasonService implements SeasonServiceInterface
         // Find the
         /** @var Season $season */
         $season = null;
-        foreach ($this->_getSeasons() as $seasonCandidate) {
+        foreach ($this->getSeasons() as $seasonCandidate) {
             /** @var Season $seasonCandidate */
             // Get the season that's the most recent
             if ($date->gte($seasonCandidate->start())) {

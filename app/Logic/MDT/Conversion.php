@@ -9,6 +9,7 @@
 namespace App\Logic\MDT;
 
 use App\Models\AffixGroup;
+use App\Service\Season\SeasonService;
 
 class Conversion
 {
@@ -97,13 +98,14 @@ class Conversion
 
     /**
      * Convert a MDT week to a matching affix group
+     * @param SeasonService $seasonService
      * @param $mdtWeek int
      * @return AffixGroup
      */
-    public static function convertWeekToAffixGroup($mdtWeek)
+    public static function convertWeekToAffixGroup(SeasonService $seasonService, int $mdtWeek)
     {
         $mdtWeek = (int)$mdtWeek;
         // Weeks neatly match the IDs in our database
-        return AffixGroup::find($mdtWeek);
+        return AffixGroup::find(($mdtWeek - 1) + (($seasonService->getSeasons()->count() - 1) * config('keystoneguru.season_interation_affix_group_count')));
     }
 }

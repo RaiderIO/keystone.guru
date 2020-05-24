@@ -5,6 +5,8 @@ namespace App\Service\Season;
 
 interface SeasonServiceInterface
 {
+    function getSeasons();
+
     function getFirstSeason();
 
     function getSeasonAt($date);
