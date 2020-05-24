@@ -187,13 +187,28 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                     </div>
                 </div>
                 @auth
+                    @if($model->mayUserEdit(Auth::user()))
+                        <div class="row view_dungeonroute_details_row mt-2">
+                            <div class="col-12 font-weight-bold">
+                                <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $model->public_key]) }}"
+                                   target="_blank">
+                                    <button class="btn btn-info w-100">
+                                        <i class="fas fa-edit"></i>
+                                        {{ __('Edit this route') }}
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    @endif
                     @if($model->dungeon->active)
                         <div class="row view_dungeonroute_details_row mt-2">
                             <div class="col-12 font-weight-bold">
-                                <i class="fa fa-clone"></i>
                                 <a href="{{ route('dungeonroute.clone', ['dungeonroute' => $model->public_key]) }}"
                                    target="_blank">
-                                    {{ __('Clone this route') }}
+                                    <button class="btn btn-info w-100">
+                                        <i class="fa fa-clone"></i>
+                                        {{ __('Clone this route') }}
+                                    </button>
                                 </a>
                             </div>
                         </div>
@@ -205,10 +220,12 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                                     <i class="fa fa-exclamation-triangle"></i> {{ __('You have reported this route for moderation.') }}
                                 </span>
                             @else
-                                <i class="fa fa-flag"></i>
                                 <a id="featherlight_trigger" href="#" data-toggle="modal"
                                    data-target="#userreport_dungeonroute_modal">
-                                    {{ __('Report for moderation') }}
+                                    <button class="btn btn-warning w-100">
+                                        <i class="fa fa-flag"></i>
+                                        {{ __('Report for moderation') }}
+                                    </button>
                                 </a>
                             @endisset
                         </div>

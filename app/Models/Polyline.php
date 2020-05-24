@@ -20,6 +20,7 @@ class Polyline extends Model
 {
     public $timestamps = false;
     public $visible = ['color', 'weight', 'vertices_json'];
+    public $fillable = ['model_id', 'model_class', 'color', 'weight', 'vertices_json'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

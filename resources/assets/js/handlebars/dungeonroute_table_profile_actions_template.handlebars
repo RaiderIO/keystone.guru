@@ -1,10 +1,28 @@
 <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
         {{actions_label}}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item dungeonroute-clone cursor-pointer" data-publickey="{{public_key}}"><i class="fas fa-clone"></i> {{clone_label}}</a>
+        {{#if published}}
+            <a class="dropdown-item dungeonroute-unpublish text-warning cursor-pointer" data-publickey="{{public_key}}">
+                <i class="fas fa-plane-arrival"></i> {{unpublish_label}}
+            </a>
+        {{else}}
+            <a class="dropdown-item dungeonroute-publish text-success cursor-pointer" data-publickey="{{public_key}}">
+                <i class="fas fa-plane-departure"></i> {{publish_label}}
+            </a>
+        {{/if}}
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item dungeonroute-delete text-danger cursor-pointer" data-publickey="{{public_key}}"><i class="fas fa-minus"></i> {{delete_label}}</a>
+        <a class="dropdown-item dungeonroute-clone cursor-pointer" data-publickey="{{public_key}}">
+            <i class="fas fa-clone"></i> {{clone_label}}
+        </a>
+        <a class="dropdown-item dungeonroute-clone-to-team cursor-pointer" data-publickey="{{public_key}}">
+            <i class="fas fa-clone"></i> {{clone_to_team_label}}
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item dungeonroute-delete text-danger cursor-pointer" data-publickey="{{public_key}}">
+            <i class="fas fa-trash"></i> {{delete_label}}
+        </a>
     </div>
 </div>

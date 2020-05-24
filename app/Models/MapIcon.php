@@ -13,14 +13,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $lng
  * @property string $comment
  *
+ * @property \App\Models\Floor $floor
  * @property \App\Models\DungeonRoute $dungeonroute
- * @property \App\User $user
+ * @property \App\Models\MapIconType $mapicontype
  *
  * @mixin \Eloquent
  */
 class MapIcon extends Model
 {
     protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'lat', 'lng', 'comment'];
+    protected $fillable = ['floor_id', 'dungeon_route_id', 'map_icon_type_id', 'lat', 'lng', 'comment'];
+
+    protected $with = ['mapicontype'];
 
     protected $appends = ['has_dungeon_route'];
 
@@ -44,5 +48,14 @@ class MapIcon extends Model
     function dungeonroute()
     {
         return $this->belongsTo('App\Models\DungeonRoute');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function mapicontype()
+    {
+        // Need the foreign key for some reason
+        return $this->belongsTo('App\Models\MapIconType', 'map_icon_type_id');
     }
 }

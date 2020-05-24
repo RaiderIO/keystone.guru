@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
+use Faker\Provider\Color;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
@@ -78,6 +79,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'echo_color' => Color::hexColor(),
             'game_server_region_id' => $data['region'],
             'password' => bcrypt($data['password']),
             'legal_agreed' => $data['legal_agreed'],

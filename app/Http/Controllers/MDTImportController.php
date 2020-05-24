@@ -6,6 +6,7 @@ use App\Logic\MDT\IO\ImportString;
 use App\Logic\MDT\IO\ImportWarning;
 use App\Models\AffixGroup;
 use App\Models\MDTImport;
+use App\Service\Season\SeasonService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -15,14 +16,15 @@ class MDTImportController extends Controller
     /**
      * Returns some details about the passed string.
      * @param Request $request
-     * @return array
+     * @param SeasonService $seasonService
+     * @return array|void
      * @throws \Exception
      */
-    public function details(Request $request)
+    public function details(Request $request, SeasonService $seasonService)
     {
         $string = $request->get('import_string');
 
-        $importString = new ImportString();
+        $importString = new ImportString($seasonService);
 
         try {
             $warnings = new Collection();
@@ -67,10 +69,11 @@ class MDTImportController extends Controller
 
     /**
      * @param Request $request
+     * @param SeasonService $seasonService
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      */
-    public function import(Request $request)
+    public function import(Request $request, SeasonService $seasonService)
     {
         $user = Auth::user();
 
@@ -78,7 +81,7 @@ class MDTImportController extends Controller
         if ($user->canCreateDungeonRoute()) {
             $string = $request->get('import_string');
             $try = (bool)$request->get('try', false);
-            $importString = new ImportString();
+            $importString = new ImportString($seasonService);
 
             try {
                 // @TODO improve exception handling

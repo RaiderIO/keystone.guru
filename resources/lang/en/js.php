@@ -53,7 +53,11 @@ return [
     'mapicon_map_object_group_label' => 'Icons',
     'killzone_map_object_group_label' => 'Pulls',
 
+    'publish_label' => 'Publish',
+    'unpublish_label' => 'Unpublish',
     'clone_label' => 'Clone',
+    'clone_to_profile_label' => 'Clone to my profile',
+    'clone_to_team_label' => 'Clone to Team',
     'delete_label' => 'Delete',
 
     'selected_label' => 'selected',
@@ -123,6 +127,9 @@ return [
     'votes' => 'votes',
     'route_delete_confirm' => 'Are you sure you wish to delete this route?',
     'route_delete_successful' => 'Route deleted successfully',
+    'route_clone_successful' => 'Route cloned successfully',
+    'route_publish_successful' => 'Route published',
+    'route_unpublish_successful' => 'Route unpublished',
 
     // Map
     'intro_1' => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',

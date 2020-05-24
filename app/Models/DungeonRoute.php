@@ -423,10 +423,10 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @param $user User
+     * @param User $user
      * @return bool
      */
-    public function mayUserEdit($user)
+    public function mayUserEdit(User $user)
     {
         return $this->isTry() || $this->isOwnedByUser($user) || $user->hasRole('admin')
             || ($this->team !== null && $this->team->isUserCollaborator($user));
@@ -626,19 +626,20 @@ class DungeonRoute extends Model
     /**
      *  Clones this route into another route, adding all of our killzones, drawables etc etc to it.
      *
+     * @param bool $published
      * @return DungeonRoute The newly cloned route.
      */
-    public function clone()
+    public function clone(bool $published = false)
     {
         // Must save the new route first
         $dungeonroute = new DungeonRoute();
-        $dungeonroute->author_id = Auth::user()->id;
+        $dungeonroute->author_id = Auth::id();
         $dungeonroute->dungeon_id = $this->dungeon_id;
         $dungeonroute->faction_id = $this->faction_id;
         $dungeonroute->title = sprintf('%s (%s)', $this->title, __('clone'));
         $dungeonroute->clone_of = $this->public_key;
         $dungeonroute->public_key = DungeonRoute::generateRandomPublicKey();
-        $dungeonroute->published = false;
+        $dungeonroute->published = $published;
         $dungeonroute->save();
 
         // Clone the relations of this route into the new route.

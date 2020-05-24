@@ -50,7 +50,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'oauth_id', 'game_server_region_id', 'name', 'email', 'password', 'legal_agreed', 'legal_agreed_ms'
+        'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms'
     ];
 
     /**
@@ -225,6 +225,7 @@ class User extends Authenticatable
                     $team->delete();
                 }
             }
+            return true;
         });
     }
 }

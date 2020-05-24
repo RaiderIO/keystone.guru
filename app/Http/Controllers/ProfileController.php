@@ -172,7 +172,7 @@ class ProfileController extends Controller
         }
 
         try {
-            Auth::getUser()->delete();
+            User::findOrFail(Auth::id())->delete();
             Auth::logout();
             \Session::flash('status', __('Account deleted successfully.'));
         } catch (\Exception $e) {

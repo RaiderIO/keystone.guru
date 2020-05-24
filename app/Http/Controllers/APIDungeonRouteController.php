@@ -29,6 +29,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Teapot\StatusCode\Http;
 
 class APIDungeonRouteController extends Controller
 {
@@ -228,6 +229,29 @@ class APIDungeonRouteController extends Controller
         $dungeonroute->save();
 
         return ['result' => 'success'];
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param Team $team
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    function cloneToTeam(Request $request, DungeonRoute $dungeonroute, Team $team){
+        $this->authorize('clone', $dungeonroute);
+
+        $user = Auth::user();
+
+        if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
+
+            $newRoute = $dungeonroute->clone(true);
+            $team->addRoute($newRoute);
+
+            return response('', Http::NO_CONTENT);
+        } else {
+            return response(['result' => 'error']);
+        }
     }
 
     /**

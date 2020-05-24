@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 class Path extends Model
 {
     public $visible = ['id', 'polyline'];
+    public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id'];
     public $with = ['polyline'];
 
     /**
