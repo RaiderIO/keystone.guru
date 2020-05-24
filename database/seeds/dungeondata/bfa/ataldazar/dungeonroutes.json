@@ -194,13 +194,6 @@
         ],
         "killzones": [
             {
-                "floor_id": 41,
-                "color": "#9DFF56",
-                "lat": -117.625,
-                "lng": 215.75,
-                "killzoneenemies": []
-            },
-            {
                 "floor_id": 42,
                 "color": "",
                 "lat": -87.25,

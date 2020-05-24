@@ -36,7 +36,7 @@ class TeamFormRequest extends FormRequest
 
         $rules = [
             'name' => $nameRules,
-            'description' => 'string',
+            'description' => 'string|nullable',
             'logo' => 'image|mimes:png|max:256'
         ];
 

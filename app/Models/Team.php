@@ -3,6 +3,11 @@
 namespace App\Models;
 
 use App\User;
+use Eloquent;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,10 +22,11 @@ use Illuminate\Support\Facades\Auth;
  * @property Collection $members
  * @property Collection $dungeonroutes
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Team extends IconFileModel
 {
+    protected $visible = ['name', 'description'];
 
     public function getRouteKeyName()
     {
@@ -28,7 +34,7 @@ class Team extends IconFileModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function teamusers()
     {
@@ -36,7 +42,7 @@ class Team extends IconFileModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function members()
     {
@@ -44,7 +50,7 @@ class Team extends IconFileModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function dungeonroutes()
     {
@@ -273,7 +279,7 @@ class Team extends IconFileModel
             $teamUser = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->firstOrFail();
             try {
                 $result = $teamUser->delete();
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 // YOLO
             }
         }

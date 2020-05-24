@@ -20,7 +20,11 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
         'options' =>  [
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
-            'teamName' => $team ? $team->name : ''
+            'teamName' => $team ? $team->name : '',
+            'teams' => Auth::check() ? \App\User::findOrFail(Auth::id())->teams()->whereHas('teamusers', function($teamuser){
+                /** @var $teamuser \App\Models\TeamUser  */
+                $teamuser->isModerator(Auth::id());
+            })->get() : []
             ]
 ])
 

@@ -90,7 +90,11 @@ foreach ($model->teamusers as $teamuser) {
                                 </div>
                             @else
                                 <div class="card-body">
-                                    {{ $model->description }}
+                                    @isset($model->description)
+                                        {{ $model->description }}
+                                    @else
+                                        <h1>&nbsp;</h1>
+                                    @endisset
                                 </div>
                             @endisset
                         </div>

@@ -1,4 +1,18 @@
-<button class="btn btn-danger dungeonroute-remove-from-this-team" type="button" data-publickey="{{public_key}}">
-    <span class="d-xl-none"><i class="fas fa-minus"></i></span>
-    <span class="d-none d-xl-block"><i class="fas fa-minus"></i> {{remove_route_label}}</span>
-</button>
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+        {{actions_label}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item dungeonroute-clone cursor-pointer" data-publickey="{{public_key}}">
+            <i class="fas fa-clone"></i> {{clone_to_profile_label}}
+        </a>
+        <a class="dropdown-item dungeonroute-clone-to-team cursor-pointer" data-publickey="{{public_key}}">
+            <i class="fas fa-clone"></i> {{clone_to_team_label}}
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item dungeonroute-remove-from-this-team text-danger cursor-pointer" data-publickey="{{public_key}}">
+            <i class="fas fa-minus"></i> {{remove_route_label}}
+        </a>
+    </div>
+</div>

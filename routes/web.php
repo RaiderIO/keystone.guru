@@ -225,6 +225,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::delete('/path/{path}', 'APIPathController@delete');
 
             Route::post('/raidmarker/{enemy}', 'APIEnemyController@setRaidMarker');
+
+            // Clone a route from the 'my routes' section
+            Route::post('/clone/team/{team}', 'APIDungeonRouteController@cloneToTeam');
         });
 
         // Must be logged in to perform these actions
