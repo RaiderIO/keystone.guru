@@ -108,8 +108,6 @@ function parseRgba(rgbaString) {
 function pickHexFromHandlers(handlers, weight) {
     console.assert(handlers.length > 1, 'Handlers.length <= 1!', handlers);
 
-    console.log('>> pickHexFromHandlers', handlers, weight);
-
     // If color is before the start or after the end of any gradients, return last known color
     let result = null;
     if (handlers[0][0] >= weight) {
@@ -124,9 +122,7 @@ function pickHexFromHandlers(handlers, weight) {
         for (let i = 0; i < handlers.length; i++) {
             let a = handlers[i];
             let b = handlers[i + 1];
-            console.log(`${weight} -> ${a[0]} & ${b[0]}`)
             if (weight >= a[0] && weight <= b[0]) {
-                console.log(`${weight} is between ${a[0]} and ${b[0]}`)
                 color1 = hexToRgb(a[1]);
                 color2 = hexToRgb(b[1]);
 
@@ -134,7 +130,6 @@ function pickHexFromHandlers(handlers, weight) {
                 let weightOnGradientRange = weight - a[0];
                 scaledWeight = (weightOnGradientRange / gradientRange);
 
-                console.log(a, b, weight, gradientRange, weightOnGradientRange, scaledWeight);
                 break;
             }
         }
@@ -150,6 +145,5 @@ function pickHexFromHandlers(handlers, weight) {
         result = rgbToHex(rgb);
     }
 
-    console.log('OK pickHexFromHandlers', result);
     return result;
 }

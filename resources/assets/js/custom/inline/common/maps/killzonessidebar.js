@@ -119,7 +119,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         })).on('save', (color, instance) => {
             // Apply the new color
             let newColor = '#' + color.toHEXA().join('');
-            if (killZone.color !== newColor) {
+            // Only save when the color is valid
+            if (killZone.color !== newColor && newColor.length === 7) {
                 killZone.color = newColor;
                 killZone.save();
             }
