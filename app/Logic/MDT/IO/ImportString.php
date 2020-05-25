@@ -116,15 +116,6 @@ class ImportString
                 /** @var MapIcon $obeliskMapIcon */
                 $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
 
-                $mapIconStart = new MapIcon([
-                    'floor_id'         => $enemy->floor_id,
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'map_icon_type_id' => $gatewayIconType->id,
-                    'comment'          => $obeliskMapIcon->mapicontype->name,
-                    'lat'              => $obeliskMapIcon->lat,
-                    'lng'              => $obeliskMapIcon->lng,
-                ]);
-
                 $mapIconEnd = new MapIcon(array_merge([
                     'floor_id'         => $enemy->floor_id,
                     'dungeon_route_id' => $dungeonRoute->id,
@@ -140,8 +131,8 @@ class ImportString
                     'weight'        => 3,
                     'vertices_json' => json_encode([
                         [
-                            'lat' => $mapIconStart->lat,
-                            'lng' => $mapIconStart->lng
+                            'lat' => $obeliskMapIcon->lat,
+                            'lng' => $obeliskMapIcon->lng
                         ],
                         [
                             'lat' => $mapIconEnd->lat,
@@ -161,14 +152,13 @@ class ImportString
                 ]);
 
                 if ($save) {
-                    $mapIconStart->save();
                     $mapIconEnd->save();
 
                     $mdtXY->save();
                     $polyLine->model_id = $mdtXY->id;
                     $polyLine->save();
                 } else {
-                    $dungeonRoute->mapicons->push($mapIconStart)->push($mapIconEnd);
+                    $dungeonRoute->mapicons->push($mapIconEnd);
                     $dungeonRoute->paths->push($mdtXY);
                 }
             }

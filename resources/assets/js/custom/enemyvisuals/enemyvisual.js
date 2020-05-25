@@ -4,6 +4,9 @@ class EnemyVisual extends Signalable {
         console.assert(map instanceof DungeonMap, 'map was not a DungeonMap', map);
         console.assert(enemy instanceof Enemy, 'enemy was not an Enemy', enemy);
 
+        /** Override for showing fade or not **/
+        this._hideFade = false;
+
         /** @type DungeonMap */
         this.map = map;
         /** @type Enemy */
@@ -75,12 +78,13 @@ class EnemyVisual extends Signalable {
 
         // Add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
         let packBuddies = this.enemy.getPackBuddies();
-            packBuddies.push(this.enemy);
+        packBuddies.push(this.enemy);
         $.each(packBuddies, function (index, enemy) {
             visuals.push(enemy.visual);
         });
 
         for (let i = 0; i < visuals.length; i++) {
+            visuals[i]._hideFade = true;
             visuals[i].setVisualType('enemy_forces');
         }
     }
@@ -102,6 +106,7 @@ class EnemyVisual extends Signalable {
             });
 
             for (let i = 0; i < visuals.length; i++) {
+                visuals[i]._hideFade = false;
                 visuals[i].setVisualType(getState().getEnemyDisplayType());
             }
         }
@@ -291,17 +296,18 @@ class EnemyVisual extends Signalable {
 
             // Either no border or a solid border in the color of the killzone
             let border = `${getState().getMapZoomLevel()}px solid white`;
-            if( this.enemy.getKillZone() instanceof KillZone ){
+            if (this.enemy.getKillZone() instanceof KillZone) {
                 border = `${getState().getMapZoomLevel()}px solid ${this.enemy.getKillZone().color}`;
+            } else if (!this._hideFade) {
+                // If not selected in a killzone, fade the enemy
+                data.root_classes = 'map_enemy_visual_fade';
             }
 
             data.outer_border = border;
 
             if ((this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) ||
                 (this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable())) {
-                data = {
-                    selection_classes_base: 'leaflet-edit-marker-selected selected_enemy_icon'
-                };
+                data.selection_classes_base += ' leaflet-edit-marker-selected selected_enemy_icon';
             }
 
             data = $.extend(data, this.mainVisual._getTemplateData());
