@@ -22,9 +22,9 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         // Remove template so our
         let template = Handlebars.templates['map_dungeon_floor_switch_template'];
 
-        let data = $.extend({
+        let data = $.extend({}, getHandlebarsDefaultVariables(), {
             floors: []
-        }, getHandlebarsDefaultVariables());
+        });
 
         // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
         let currentFloorId = getState().getCurrentFloor().id;

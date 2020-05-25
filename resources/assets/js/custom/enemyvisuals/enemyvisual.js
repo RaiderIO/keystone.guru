@@ -168,9 +168,9 @@ class EnemyVisual extends Signalable {
                 let template = Handlebars.templates['map_enemy_raid_marker_template'];
                 let id = self.enemy.id;
 
-                let data = $.extend({
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     id: id
-                }, getHandlebarsDefaultVariables());
+                });
 
                 let $container = $('#map_enemy_visual_' + id);
                 $container.append(template(data));

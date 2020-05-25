@@ -104,7 +104,7 @@ class LayoutsApp extends InlineCode {
             success: function (responseData) {
                 let detailsTemplate = Handlebars.templates['import_string_details_template'];
 
-                let data = $.extend({
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     details: [
                         {key: lang.get('messages.mdt_faction'), value: responseData.faction},
                         {key: lang.get('messages.mdt_dungeon'), value: responseData.dungeon},
@@ -117,7 +117,7 @@ class LayoutsApp extends InlineCode {
                             value: responseData.enemy_forces + '/' + responseData.enemy_forces_max
                         }
                     ]
-                }, getHandlebarsDefaultVariables());
+                });
 
                 // Build the preview from the template
                 $details.html(detailsTemplate(data));
@@ -126,9 +126,9 @@ class LayoutsApp extends InlineCode {
                 if (responseData.warnings.length > 0) {
                     let warningsTemplate = Handlebars.templates['import_string_warnings_template'];
 
-                    let warningsData = $.extend({
+                    let warningsData = $.extend({}, getHandlebarsDefaultVariables(), {
                         warnings: []
-                    }, getHandlebarsDefaultVariables());
+                    });
 
                     // construct the handlebars data
                     for (let i = 0; i < responseData.warnings.length; i++) {

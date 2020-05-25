@@ -259,11 +259,11 @@ class MapIcon extends MapObject {
                     }
                 }
 
-                let data = $.extend({
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     id: self.id,
                     map_icon_type_id: self.map_icon_type_id,
                     mapicontypes: editableMapIconTypes
-                }, getHandlebarsDefaultVariables());
+                });
 
                 self.layer.unbindPopup();
                 self.layer.bindPopup(template(data), {

@@ -189,7 +189,7 @@ class Path extends Polyline {
                     });
                 }
 
-                let data = $.extend({id: self.id, rows: rows}, getHandlebarsDefaultVariables());
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {id: self.id, rows: rows});
 
                 self.layer.unbindPopup();
                 self.layer.bindPopup(template(data), {

@@ -363,12 +363,12 @@ class AdminEnemy extends Enemy {
 
             let template = Handlebars.templates['map_enemy_popup_template'];
 
-            let data = $.extend({
+            let data = $.extend({}, getHandlebarsDefaultVariables(), {
                 id: self.id,
                 teeming: this.map.options.teeming,
                 factions: this.map.options.factions,
                 npcs: this.map.options.npcs
-            }, getHandlebarsDefaultVariables());
+            });
 
             let customOptions = {
                 'maxWidth': '400',
@@ -409,7 +409,7 @@ class AdminEnemy extends Enemy {
                 }
             }
 
-            data = $.extend({
+            data = $.extend({}, getHandlebarsDefaultVariables(), {
                 npc_name: this.npc.name,
                 enemy_forces: enemy_forces,
                 base_health: this.npc.base_health,
@@ -429,7 +429,7 @@ class AdminEnemy extends Enemy {
                 enemy_id: this.enemy_id,
                 attached_to_pack: this.enemy_pack_id >= 0 ? 'true (' + this.enemy_pack_id + ')' : 'false',
                 visual: this.visual !== null ? this.visual.constructor.name : 'undefined'
-            }, getHandlebarsDefaultVariables());
+            });
         } else {
             template = function (data) {
                 return lang.get('messages.no_npc_found_label');
