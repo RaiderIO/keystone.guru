@@ -59,6 +59,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         mapIcon.map_icon_type_id = remoteMapObject.map_icon_type_id;
         mapIcon.has_dungeon_route = remoteMapObject.has_dungeon_route;
         mapIcon.comment = remoteMapObject.comment;
+        mapIcon.permanent_tooltip = remoteMapObject.permanent_tooltip;
 
         // We just downloaded the map icon, it's synced alright!
         mapIcon.setSynced(true);
