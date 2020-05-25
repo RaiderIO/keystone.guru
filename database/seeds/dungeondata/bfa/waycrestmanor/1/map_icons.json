@@ -4,34 +4,39 @@
         "map_icon_type_id": 12,
         "lat": -220.375,
         "lng": 197.875,
-        "comment": ""
+        "comment": "",
+        "permanent_tooltip": 0
     },
     {
         "floor_id": 60,
         "map_icon_type_id": 19,
         "lat": -178,
         "lng": 200.875,
-        "comment": ""
+        "comment": "",
+        "permanent_tooltip": 0
     },
     {
         "floor_id": 60,
         "map_icon_type_id": 17,
         "lat": -109.5625,
         "lng": 196.5625,
-        "comment": ""
+        "comment": "",
+        "permanent_tooltip": 0
     },
     {
         "floor_id": 60,
         "map_icon_type_id": 20,
         "lat": -72.1875,
         "lng": 242.5625,
-        "comment": ""
+        "comment": "",
+        "permanent_tooltip": 0
     },
     {
         "floor_id": 60,
         "map_icon_type_id": 10,
         "lat": -224.25,
         "lng": 198.125,
-        "comment": ""
+        "comment": "",
+        "permanent_tooltip": 0
     }
 ]
