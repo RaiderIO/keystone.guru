@@ -196,6 +196,7 @@ return [
     // Map icon comment popup
     'map_icon_comment_label' => 'Comment',
     'map_icon_type_label' => 'Icon',
+    'map_icon_permanent_tooltip_label' => 'Permanent tooltip',
     'select_map_icon_type_label' => 'Select icon',
 
     // Dungeonroute table
