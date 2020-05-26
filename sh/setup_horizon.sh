@@ -2,4 +2,4 @@
 
 cd ..
 php artisan horizon:install
-php artisan horizon:assets
+php artisan horizon:publish
