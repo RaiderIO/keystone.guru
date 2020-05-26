@@ -59,12 +59,12 @@ class EnemyVisual extends Signalable {
             }
         });
 
-        this.layer.on('mouseover', function () {
-            self._mouseOver();
-        });
-        this.layer.on('mouseout', function () {
-            self._mouseOut();
-        });
+        // this.layer.on('mouseover', function () {
+        //     self._mouseOver();
+        // });
+        // this.layer.on('mouseout', function () {
+        //     self._mouseOut();
+        // });
 
     }
 
@@ -348,6 +348,11 @@ class EnemyVisual extends Signalable {
             // Set the structure as HTML for the layer
             this.layer.setIcon(this.divIcon);
 
+            $(`#map_enemy_visual_${data.id}`).hover(
+                this._mouseOver.bind(this),
+                this._mouseOut.bind(this)
+            );
+
             // When the visual exists, bind a click method to it (to increase performance)
             let $enemyIcon = $('#map_enemy_visual_' + this.enemy.id).find('.enemy_icon');
             $enemyIcon.unbind('contextmenu');
@@ -404,8 +409,8 @@ class EnemyVisual extends Signalable {
     }
 
     cleanup() {
-        this.layer.off('mouseover');
-        this.layer.off('mouseout');
+        // this.layer.off('mouseover');
+        // this.layer.off('mouseout');
 
         this.enemy.unregister('killzone:detached', this);
         this.enemy.unregister('killzone:attached', this);
