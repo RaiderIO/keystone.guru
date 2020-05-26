@@ -24,7 +24,7 @@
                     <p>
                         <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-ghost btn-lg mt-1"
                            data-toggle="modal" data-target="#try_modal">{{ __('Try it!') }}</a>
-                        <a href="{{ route('dungeonroute.view', ['public_key' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}"
+                        <a href="{{ route('dungeonroute.view', ['dungeonroute' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}"
                            class="btn btn-primary btn-ghost btn-lg mt-1"
                            role="button">{{ __('Demo') }}</a>
                         @guest

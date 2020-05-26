@@ -100,7 +100,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                             <div class="dropdown-menu text-center text-lg-left" aria-labelledby="demo_dropdown">
                                 @foreach(\App\Models\DungeonRoute::where('demo', true)->where('published', true)->get() as $route)
                                     <a class="dropdown-item test-dropdown-menu"
-                                       href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
+                                       href="{{ route('dungeonroute.view', ['dungeonroute' => $route->public_key]) }}">
                                         {{ $route->dungeon->name }}
                                     </a>
                                 @endforeach
