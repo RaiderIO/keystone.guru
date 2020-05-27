@@ -252,7 +252,7 @@ class AdminToolsController extends Controller
                 }
                 foreach ($demoRoute->killzones as $item) {
                     // Hidden by default to save data
-                    $item->addVisible(['floor_id']);
+                    $item->makeVisible(['floor_id']);
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->enemyraidmarkers as $item) {
@@ -314,7 +314,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param $dataArr array
+     * @param $dataArr Collection
      * @param $dir string
      * @param $filename string
      */
@@ -326,7 +326,7 @@ class AdminToolsController extends Controller
 
         $filePath = $dir . '/' . $filename;
         $file = fopen($filePath, 'w') or die('Cannot create file');
-        fwrite($file, json_encode($dataArr, JSON_PRETTY_PRINT));
+        fwrite($file, json_encode($dataArr->toArray(), JSON_PRETTY_PRINT));
         fclose($file);
     }
 }
