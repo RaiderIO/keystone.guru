@@ -90,7 +90,7 @@
         <td>{{ $floor->index }}</td>
         <td>{{ $floor->name }}</td>
         <td>
-            <a class="btn btn-primary" href="{{ route('admin.floor.edit', ['id' => $floor->id]) }}">
+            <a class="btn btn-primary" href="{{ route('admin.floor.edit', ['floor' => $floor->id]) }}">
                 <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
             </a>
         </td>

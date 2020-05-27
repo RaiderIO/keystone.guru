@@ -51,7 +51,7 @@ $floorId = isset($floorId) ? $floorId : $dungeon->floors[0]->id;
             <div class="card-body">
                 <h5 class="card-title">{{ __('Floor settings') }}</h5>
                 @isset($model)
-                    {{ Form::model($model, ['route' => ['admin.floor.update', 'id' => $model->id], 'method' => 'patch']) }}
+                    {{ Form::model($model, ['route' => ['admin.floor.update', 'floor' => $model->id], 'method' => 'patch']) }}
                 @else
                     {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $dungeon->id]]) }}
                 @endisset

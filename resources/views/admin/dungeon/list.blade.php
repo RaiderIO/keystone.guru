@@ -54,7 +54,7 @@
         <td>{{ $dungeon->enemy_forces_required }}</td>
         <td>{{ $dungeon->enemy_forces_required_teeming }}</td>
         <td>
-            <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['id' => $dungeon->id]) }}">
+            <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon->id]) }}">
                 <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
             </a>
         </td>

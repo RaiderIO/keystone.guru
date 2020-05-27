@@ -249,7 +249,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                             @foreach($menuModels as $menuModel)
                                 @php($hasIcon = isset($menuModel->iconfile))
                                 <option
-                                        data-url="{{ route($menuModelsRoute, ['id' => $menuModel->id]) }}"
+                                        data-url="{{ route($menuModelsRoute, ['team' => $menuModel->id]) }}"
                                         @if($hasIcon)
                                         data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
                                         @endif
