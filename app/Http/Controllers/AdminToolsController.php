@@ -197,7 +197,7 @@ class AdminToolsController extends Controller
 
         // Save NPC data in the root of folder
         $dungeonDataDir = database_path('/seeds/dungeondata/');
-        $this->_saveData($npcs, $dungeonDataDir, 'npcs.json');
+        $this->_saveData($npcs->toArray(), $dungeonDataDir, 'npcs.json');
 
         foreach (Dungeon::all() as $dungeon) {
             /** @var $dungeon Dungeon */
@@ -267,7 +267,7 @@ class AdminToolsController extends Controller
                 }
             }
 
-            $this->_saveData($demoRoutes, $rootDirPath, 'dungeonroutes.json');
+            $this->_saveData($demoRoutes->toArray(), $rootDirPath, 'dungeonroutes.json');
 
             $npcs = Npc::all()->where('dungeon_id', $dungeon->id)->values();
             $npcs->makeHidden(['type', 'class']);
@@ -314,7 +314,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param $dataArr Collection
+     * @param $dataArr array
      * @param $dir string
      * @param $filename string
      */
@@ -326,7 +326,7 @@ class AdminToolsController extends Controller
 
         $filePath = $dir . '/' . $filename;
         $file = fopen($filePath, 'w') or die('Cannot create file');
-        fwrite($file, json_encode($dataArr->toArray(), JSON_PRETTY_PRINT));
+        fwrite($file, json_encode($dataArr, JSON_PRETTY_PRINT));
         fclose($file);
     }
 }
