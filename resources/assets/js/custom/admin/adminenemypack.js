@@ -41,11 +41,11 @@ class AdminEnemyPack extends EnemyPack {
             // Remove template so our
             let template = Handlebars.templates['map_enemy_pack_template'];
 
-            let data = $.extend({
+            let data = $.extend({}, getHandlebarsDefaultVariables(), {
                 id: self.id,
                 teeming: self.map.options.teeming,
                 factions: self.map.options.factions
-            }, getHandlebarsDefaultVariables());
+            });
 
             let customOptions = {
                 'maxWidth': '400',

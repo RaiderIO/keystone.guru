@@ -548,6 +548,10 @@ html, body, #map, #app, .wrapper {
     background-blend-mode: luminosity;
 }
 
+.map_enemy_visual_fade {
+    opacity: 40%;
+}
+
 .enemy_icon_npc_mdt {
     background-color: hotpink;
 }
@@ -811,8 +815,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .map_map_icon_comment_tooltip {
-    min-width: 150px;
-    max-width: 240px;
+    min-width: 240px;
     white-space: normal;
     display: inline-block;
 }

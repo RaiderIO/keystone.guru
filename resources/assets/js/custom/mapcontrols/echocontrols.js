@@ -94,9 +94,7 @@ class EchoControls extends MapControl {
         // May be unset when not our own user, but this confuses handlebars
         user.self = user.name === this.map.options.username;
 
-        let data = getHandlebarsDefaultVariables();
-
-        let result = template($.extend(data, user));
+        let result = template($.extend({}, getHandlebarsDefaultVariables(), user));
         $('#edit_route_echo_members_container').append(
             result
         );

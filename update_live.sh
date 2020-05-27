@@ -12,6 +12,9 @@ git pull
 
 ./update_dependencies.sh production
 
+# see https://github.com/laravel/horizon/blob/master/UPGRADE.md
+php artisan horizon:publish
+
 # Restore echo server clients
 ./update_echo_clients.sh
 

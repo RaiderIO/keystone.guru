@@ -178,23 +178,23 @@ class TeamEdit extends InlineCode {
 
                         // Handlebars the entire thing
                         let template = Handlebars.templates['team_member_table_permissions_self_template'];
-                        let templateData = $.extend({
+                        let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
                             icon: icon.icon,
                             label: icon.label,
                             self: self.options.currentUserName === row.name
-                        }, getHandlebarsDefaultVariables());
+                        });
 
                         result = template(templateData);
                     } else {
                         // Handlebars the entire thing
                         let template = Handlebars.templates['team_member_table_permissions_template'];
-                        let templateData = $.extend({
+                        let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
                             username: row.name,
                             role: row.role,
                             is_admin: row.role === 'admin',
                             roles: roles,
                             self: self.options.currentUserName === row.name
-                        }, getHandlebarsDefaultVariables());
+                        });
 
                         result = template(templateData);
                     }
@@ -217,9 +217,9 @@ class TeamEdit extends InlineCode {
                             // Handlebars the entire thing
                             template = Handlebars.templates['team_member_table_actions_template'];
                         }
-                        let templateData = $.extend({
+                        let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
                             user_id: row.user_id
-                        }, getHandlebarsDefaultVariables());
+                        });
 
                         result = template(templateData);
                     }

@@ -535,7 +535,7 @@ class DungeonMap extends Signalable {
      */
     getEnemyForcesRequired() {
         let dungeonData = getState().getDungeonData();
-        return this.teeming ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
+        return this.options.teeming ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
     }
 
     /**

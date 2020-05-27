@@ -284,11 +284,11 @@ class DungeonrouteTable extends InlineCode {
                     let enemyForcesRequired = row.teeming === 1 ? row.dungeon.enemy_forces_required_teeming : row.dungeon.enemy_forces_required;
                     let template = Handlebars.templates['dungeonroute_table_profile_enemy_forces_template'];
 
-                    return template($.extend({
+                    return template($.extend({}, getHandlebarsDefaultVariables(), {
                         enemy_forces: row.enemy_forces,
                         enemy_forces_required: enemyForcesRequired,
                         enough: row.enemy_forces >= enemyForcesRequired
-                    }, getHandlebarsDefaultVariables()));
+                    }));
                 }
             },
             views: {
@@ -327,10 +327,10 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
 
-                    return template($.extend({
+                    return template($.extend({}, getHandlebarsDefaultVariables(), {
                         public_key: row.public_key,
                         published: row.published === 1
-                    }, getHandlebarsDefaultVariables()));
+                    }));
                 }
             },
             addremoveroute: {
@@ -339,10 +339,10 @@ class DungeonrouteTable extends InlineCode {
                     let result = null;
                     if (row.has_team) {
                         let template = Handlebars.templates['team_dungeonroute_table_remove_route_template'];
-                        result = template($.extend({public_key: row.public_key}, getHandlebarsDefaultVariables()))
+                        result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     } else {
                         let template = Handlebars.templates['team_dungeonroute_table_add_route_template'];
-                        result = template($.extend({public_key: row.public_key}, getHandlebarsDefaultVariables()))
+                        result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     }
                     return result;
                 }
@@ -485,10 +485,10 @@ class DungeonrouteTable extends InlineCode {
         //     }
         // }
 
-        showConfirmYesCancel(template($.extend({
+        showConfirmYesCancel(template($.extend({}, getHandlebarsDefaultVariables(), {
             publicKey: publicKey,
             teams: this.options.teams
-        }, getHandlebarsDefaultVariables())), function () {
+        })), function () {
             let targetTeam = $('#clone-to-teams-' + publicKey).val();
 
             $.ajax({

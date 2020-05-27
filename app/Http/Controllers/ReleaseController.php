@@ -128,7 +128,7 @@ class ReleaseController extends Controller
         // Message to the user
         \Session::flash('status', __('Release created'));
 
-        return redirect()->route('admin.release.edit', ['model' => $release]);
+        return redirect()->route('admin.release.edit', ['release' => $release]);
     }
 
     /**

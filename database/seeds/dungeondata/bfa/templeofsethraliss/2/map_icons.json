@@ -4,6 +4,7 @@
         "map_icon_type_id": 18,
         "lat": -184.625,
         "lng": 226.5,
-        "comment": ""
+        "comment": "",
+        "permanent_tooltip": 0
     }
 ]

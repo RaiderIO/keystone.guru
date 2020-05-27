@@ -15,9 +15,9 @@ class EnemyForcesControls extends MapControl {
             onAdd: function (leafletMap) {
                 let template = Handlebars.templates['map_enemy_forces_template_view'];
 
-                let data = $.extend({
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     enemy_forces_total: self.map.getEnemyForcesRequired()
-                }, getHandlebarsDefaultVariables());
+                });
 
                 // Build the status bar from the template
                 self.statusbar = $(template(data));

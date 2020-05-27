@@ -72,6 +72,7 @@ class MapIcon extends MapObject {
         this.id = 0;
         this.map_icon_type_id = 0;
         this.map_icon_type = getState().getUnknownMapIcon();
+        this.permanent_tooltip = false;
         this.has_dungeon_route = false;
         this.comment = '';
         this.label = 'MapIcon';
@@ -98,9 +99,11 @@ class MapIcon extends MapObject {
         console.assert(this instanceof MapIcon, 'this was not a MapIcon', this);
         this.comment = $('#map_map_icon_edit_popup_comment_' + this.id).val();
         this.map_icon_type_id = parseInt($('#map_map_icon_edit_popup_map_icon_type_id_' + this.id).val());
+        this.permanent_tooltip = $('#map_map_icon_edit_popup_permanent_tooltip_' + this.id).is(':checked') ? 1 : 0;
         this.setMapIconType(getState().getMapIconType(this.map_icon_type_id));
 
         this.edit();
+        this.bindTooltip();
     }
 
     _refreshVisual() {
@@ -141,10 +144,24 @@ class MapIcon extends MapObject {
         this.unbindTooltip();
 
         if (this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
-            this.layer.bindTooltip(this.comment.length > 0 ? this.comment : this.map_icon_type.name, {
-                    direction: 'top'
-                }
-            );
+            let text = this.comment.length > 0 ? this.comment : this.map_icon_type.name;
+
+            // Wrap the text
+            if (text.length > 75) {
+                this.layer.bindTooltip(
+                    jQuery('<div/>', {
+                        class: 'map_map_icon_comment_tooltip'
+                    }).text(text)[0].outerHTML, {
+                        direction: 'top',
+                        permanent: this.permanent_tooltip
+                    }
+                );
+            } else {
+                this.layer.bindTooltip(text, {
+                    direction: 'top',
+                    permanent: this.permanent_tooltip
+                });
+            }
         }
     }
 
@@ -189,6 +206,7 @@ class MapIcon extends MapObject {
                 floor_id: getState().getCurrentFloor().id,
                 map_icon_type_id: this.map_icon_type_id,
                 comment: this.comment,
+                permanent_tooltip: this.permanent_tooltip,
                 lat: this.layer.getLatLng().lat,
                 lng: this.layer.getLatLng().lng,
             },
@@ -226,6 +244,9 @@ class MapIcon extends MapObject {
             let popupOpenFn = function (event) {
                 $('#map_map_icon_edit_popup_comment_' + self.id).val(self.comment);
                 $('#map_map_icon_edit_popup_map_icon_type_id_' + self.id).val(self.map_icon_type_id);
+                if( self.permanent_tooltip === 1 ){
+                    $('#map_map_icon_edit_popup_permanent_tooltip_' + self.id).attr('checked', 'checked');
+                }
 
                 // Prevent multiple binds to click
                 let $submitBtn = $('#map_map_icon_edit_popup_submit_' + self.id);
@@ -259,11 +280,12 @@ class MapIcon extends MapObject {
                     }
                 }
 
-                let data = $.extend({
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     id: self.id,
                     map_icon_type_id: self.map_icon_type_id,
-                    mapicontypes: editableMapIconTypes
-                }, getHandlebarsDefaultVariables());
+                    mapicontypes: editableMapIconTypes,
+                    permanent_tooltip: self.permanent_tooltip ? 1 : 0
+                });
 
                 self.layer.unbindPopup();
                 self.layer.bindPopup(template(data), {

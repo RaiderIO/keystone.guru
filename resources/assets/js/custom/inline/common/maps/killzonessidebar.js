@@ -119,7 +119,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         })).on('save', (color, instance) => {
             // Apply the new color
             let newColor = '#' + color.toHEXA().join('');
-            if (killZone.color !== newColor) {
+            // Only save when the color is valid
+            if (killZone.color !== newColor && newColor.length === 7) {
                 killZone.color = newColor;
                 killZone.save();
             }
@@ -142,11 +143,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
             this.options.edit ? 'map_killzonessidebar_killzone_row_edit_template' : 'map_killzonessidebar_killzone_row_view_template'
             ];
 
-        let data = $.extend({
+        let data = $.extend({}, getHandlebarsDefaultVariables(), {
             'id': killZone.id,
             'text-class': 'text-white',
             'color': killZone.color // For viewing
-        }, getHandlebarsDefaultVariables());
+        });
 
         $(this.options.killZonesContainerSelector).append(
             $(template(data))
@@ -359,12 +360,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
                 let template = Handlebars.templates['map_killzonessidebar_killzone_row_enemy_row_template'];
 
-                let data = $.extend({
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     'enemy_forces': obj.count * obj.npc.enemy_forces,
                     'count': obj.count,
                     'name': obj.npc.name,
                     'dangerous': obj.npc.dangerous === 1
-                }, getHandlebarsDefaultVariables());
+                });
 
                 $enemyList.append($(template(data)));
             }

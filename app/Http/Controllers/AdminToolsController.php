@@ -197,7 +197,7 @@ class AdminToolsController extends Controller
 
         // Save NPC data in the root of folder
         $dungeonDataDir = database_path('/seeds/dungeondata/');
-        $this->_saveData($npcs, $dungeonDataDir, 'npcs.json');
+        $this->_saveData($npcs->toArray(), $dungeonDataDir, 'npcs.json');
 
         foreach (Dungeon::all() as $dungeon) {
             /** @var $dungeon Dungeon */
@@ -252,7 +252,7 @@ class AdminToolsController extends Controller
                 }
                 foreach ($demoRoute->killzones as $item) {
                     // Hidden by default to save data
-                    $item->addVisible(['floor_id']);
+                    $item->makeVisible(['floor_id']);
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->enemyraidmarkers as $item) {
@@ -267,7 +267,7 @@ class AdminToolsController extends Controller
                 }
             }
 
-            $this->_saveData($demoRoutes, $rootDirPath, 'dungeonroutes.json');
+            $this->_saveData($demoRoutes->toArray(), $rootDirPath, 'dungeonroutes.json');
 
             $npcs = Npc::all()->where('dungeon_id', $dungeon->id)->values();
             $npcs->makeHidden(['type', 'class']);

@@ -100,7 +100,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                             <div class="dropdown-menu text-center text-lg-left" aria-labelledby="demo_dropdown">
                                 @foreach(\App\Models\DungeonRoute::where('demo', true)->where('published', true)->get() as $route)
                                     <a class="dropdown-item test-dropdown-menu"
-                                       href="{{ route('dungeonroute.view', ['public_key' => $route->public_key]) }}">
+                                       href="{{ route('dungeonroute.view', ['dungeonroute' => $route->public_key]) }}">
                                         {{ $route->dungeon->name }}
                                     </a>
                                 @endforeach
@@ -193,15 +193,15 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item"
                                            href="{{ route('admin.releases') }}">{{__('View releases')}}</a>
-                                        @if( $user->can('read-expansions') )
+                                        @if( $user->isAbleTo('read-expansions') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
                                         @endif
-                                        @if( $user->can('read-dungeons') )
+                                        @if( $user->isAbleTo('read-dungeons') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
                                         @endif
-                                        @if( $user->can('read-npcs') )
+                                        @if( $user->isAbleTo('read-npcs') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
                                         @endif
@@ -249,7 +249,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                             @foreach($menuModels as $menuModel)
                                 @php($hasIcon = isset($menuModel->iconfile))
                                 <option
-                                        data-url="{{ route($menuModelsRoute, ['id' => $menuModel->id]) }}"
+                                        data-url="{{ route($menuModelsRoute, ['team' => $menuModel->id]) }}"
                                         @if($hasIcon)
                                         data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
                                         @endif

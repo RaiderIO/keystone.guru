@@ -4,6 +4,9 @@ class EnemyVisual extends Signalable {
         console.assert(map instanceof DungeonMap, 'map was not a DungeonMap', map);
         console.assert(enemy instanceof Enemy, 'enemy was not an Enemy', enemy);
 
+        /** Override for showing fade or not **/
+        this._hideFade = false;
+
         /** @type DungeonMap */
         this.map = map;
         /** @type Enemy */
@@ -56,12 +59,12 @@ class EnemyVisual extends Signalable {
             }
         });
 
-        this.layer.on('mouseover', function () {
-            self._mouseOver();
-        });
-        this.layer.on('mouseout', function () {
-            self._mouseOut();
-        });
+        // this.layer.on('mouseover', function () {
+        //     self._mouseOver();
+        // });
+        // this.layer.on('mouseout', function () {
+        //     self._mouseOut();
+        // });
 
     }
 
@@ -75,12 +78,13 @@ class EnemyVisual extends Signalable {
 
         // Add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
         let packBuddies = this.enemy.getPackBuddies();
-            packBuddies.push(this.enemy);
+        packBuddies.push(this.enemy);
         $.each(packBuddies, function (index, enemy) {
             visuals.push(enemy.visual);
         });
 
         for (let i = 0; i < visuals.length; i++) {
+            visuals[i]._hideFade = true;
             visuals[i].setVisualType('enemy_forces');
         }
     }
@@ -102,6 +106,7 @@ class EnemyVisual extends Signalable {
             });
 
             for (let i = 0; i < visuals.length; i++) {
+                visuals[i]._hideFade = false;
                 visuals[i].setVisualType(getState().getEnemyDisplayType());
             }
         }
@@ -168,9 +173,9 @@ class EnemyVisual extends Signalable {
                 let template = Handlebars.templates['map_enemy_raid_marker_template'];
                 let id = self.enemy.id;
 
-                let data = $.extend({
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     id: id
-                }, getHandlebarsDefaultVariables());
+                });
 
                 let $container = $('#map_enemy_visual_' + id);
                 $container.append(template(data));
@@ -291,17 +296,18 @@ class EnemyVisual extends Signalable {
 
             // Either no border or a solid border in the color of the killzone
             let border = `${getState().getMapZoomLevel()}px solid white`;
-            if( this.enemy.getKillZone() instanceof KillZone ){
+            if (this.enemy.getKillZone() instanceof KillZone) {
                 border = `${getState().getMapZoomLevel()}px solid ${this.enemy.getKillZone().color}`;
+            } else if (!this._hideFade) {
+                // If not selected in a killzone, fade the enemy
+                data.root_classes = 'map_enemy_visual_fade';
             }
 
             data.outer_border = border;
 
             if ((this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) ||
                 (this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable())) {
-                data = {
-                    selection_classes_base: 'leaflet-edit-marker-selected selected_enemy_icon'
-                };
+                data.selection_classes_base += ' leaflet-edit-marker-selected selected_enemy_icon';
             }
 
             data = $.extend(data, this.mainVisual._getTemplateData());
@@ -341,6 +347,11 @@ class EnemyVisual extends Signalable {
 
             // Set the structure as HTML for the layer
             this.layer.setIcon(this.divIcon);
+
+            $(`#map_enemy_visual_${data.id}`).hover(
+                this._mouseOver.bind(this),
+                this._mouseOut.bind(this)
+            );
 
             // When the visual exists, bind a click method to it (to increase performance)
             let $enemyIcon = $('#map_enemy_visual_' + this.enemy.id).find('.enemy_icon');
@@ -398,8 +409,8 @@ class EnemyVisual extends Signalable {
     }
 
     cleanup() {
-        this.layer.off('mouseover');
-        this.layer.off('mouseout');
+        // this.layer.off('mouseover');
+        // this.layer.off('mouseout');
 
         this.enemy.unregister('killzone:detached', this);
         this.enemy.unregister('killzone:attached', this);
