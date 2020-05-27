@@ -29,6 +29,12 @@
             },
             {
                 "release_changelog_id": 48,
+                "release_changelog_category_id": 3,
+                "ticket_id": 306,
+                "change": "Enemies that are not part of your Pulls are now faded out to help visibility."
+            },
+            {
+                "release_changelog_id": 48,
                 "release_changelog_category_id": 5,
                 "ticket_id": 304,
                 "change": "Ensured a Pull color is always set - this was causing some issues in various places if a color is missing."
