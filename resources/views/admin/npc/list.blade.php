@@ -56,7 +56,7 @@
                 <td>{{ $npc->enemy_forces }}</td>
                 <td>{{ $npc->classification->name }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('admin.npc.edit', ['id' => $npc->id]) }}">
+                    <a class="btn btn-primary" href="{{ route('admin.npc.edit', ['npc' => $npc->id]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
                     </a>
                 </td>

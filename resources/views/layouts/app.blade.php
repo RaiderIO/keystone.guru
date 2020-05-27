@@ -193,15 +193,15 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item"
                                            href="{{ route('admin.releases') }}">{{__('View releases')}}</a>
-                                        @if( $user->can('read-expansions') )
+                                        @if( $user->isAbleTo('read-expansions') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.expansions') }}">{{__('View expansions')}}</a>
                                         @endif
-                                        @if( $user->can('read-dungeons') )
+                                        @if( $user->isAbleTo('read-dungeons') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.dungeons') }}">{{__('View dungeons')}}</a>
                                         @endif
-                                        @if( $user->can('read-npcs') )
+                                        @if( $user->isAbleTo('read-npcs') )
                                             <a class="dropdown-item"
                                                href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
                                         @endif
