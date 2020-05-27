@@ -5,7 +5,7 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":161.88,\"lng\":-110},{\"lat\":162.5,\"lng\":-117.25},{\"lat\":168.88,\"lng\":-112.63}]"
+        "vertices_json": "[{\"lat\":-110,\"lng\":161.88},{\"lat\":-117.25,\"lng\":162.5},{\"lat\":-112.63,\"lng\":168.88}]"
     },
     {
         "id": 31,
@@ -13,7 +13,7 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":123.12,\"lng\":-137},{\"lat\":119.88,\"lng\":-145.25},{\"lat\":129,\"lng\":-143.38}]"
+        "vertices_json": "[{\"lat\":-137,\"lng\":123.12},{\"lat\":-145.25,\"lng\":119.88},{\"lat\":-143.38,\"lng\":129}]"
     },
     {
         "id": 32,
@@ -21,7 +21,7 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":104.25,\"lng\":-139.75},{\"lat\":107.12,\"lng\":-146.75},{\"lat\":113.12,\"lng\":-142.13}]"
+        "vertices_json": "[{\"lat\":-139.75,\"lng\":104.25},{\"lat\":-146.75,\"lng\":107.12},{\"lat\":-142.13,\"lng\":113.12}]"
     },
     {
         "id": 33,
@@ -29,7 +29,7 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":103.5,\"lng\":-155.88},{\"lat\":96.5,\"lng\":-163.38},{\"lat\":104.38,\"lng\":-167.38}]"
+        "vertices_json": "[{\"lat\":-155.88,\"lng\":103.5},{\"lat\":-163.38,\"lng\":96.5},{\"lat\":-167.38,\"lng\":104.38}]"
     },
     {
         "id": 34,
@@ -37,7 +37,7 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":171.25,\"lng\":-88.75},{\"lat\":173.38,\"lng\":-98.25},{\"lat\":181.25,\"lng\":-92.5}]"
+        "vertices_json": "[{\"lat\":-88.75,\"lng\":171.25},{\"lat\":-98.25,\"lng\":173.38},{\"lat\":-92.5,\"lng\":181.25}]"
     },
     {
         "id": 35,
@@ -45,6 +45,6 @@
         "teeming": null,
         "faction": "any",
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":147.5,\"lng\":-167.88},{\"lat\":142.88,\"lng\":-172.06},{\"lat\":148.19,\"lng\":-175.88},{\"lat\":152.31,\"lng\":-171.88}]"
+        "vertices_json": "[{\"lat\":-167.88,\"lng\":147.5},{\"lat\":-172.06,\"lng\":142.88},{\"lat\":-175.88,\"lng\":148.19},{\"lat\":-171.88,\"lng\":152.31}]"
     }
 ]
