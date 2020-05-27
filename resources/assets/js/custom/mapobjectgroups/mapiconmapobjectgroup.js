@@ -10,7 +10,9 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         if (this.manager.map.options.echo) {
             window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.mapicon-changed', (e) => {
-                    self._restoreObject(e.mapicon, e.user);
+                    if( e.mapicon.floor_id === getState().getCurrentFloor().id ){
+                        self._restoreObject(e.mapicon, e.user);
+                    }
                 })
                 .listen('.mapicon-deleted', (e) => {
                     let mapObject = self.findMapObjectById(e.id);

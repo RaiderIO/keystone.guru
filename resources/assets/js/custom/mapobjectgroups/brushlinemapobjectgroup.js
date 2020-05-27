@@ -10,7 +10,9 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         if (this.manager.map.options.echo) {
             window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.brushline-changed', (e) => {
-                    self._restoreObject(e.brushline, e.user);
+                    if( e.brushline.floor_id === getState().getCurrentFloor().id ) {
+                        self._restoreObject(e.brushline, e.user);
+                    }
                 })
                 .listen('.brushline-deleted', (e) => {
                     let mapObject = self.findMapObjectById(e.id);

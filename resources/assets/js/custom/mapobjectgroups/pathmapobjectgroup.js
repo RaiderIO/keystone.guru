@@ -10,7 +10,9 @@ class PathMapObjectGroup extends MapObjectGroup {
         if (this.manager.map.options.echo) {
             window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.path-changed', (e) => {
-                    self._restoreObject(e.path, e.user);
+                    if( e.mapicon.floor_id === getState().getCurrentFloor().id ){
+                        self._restoreObject(e.path, e.user);
+                    }
                 })
                 .listen('.path-deleted', (e) => {
                     let mapObject = self.findMapObjectById(e.id);
