@@ -7,7 +7,7 @@
         "polyline": {
             "color": "#E25D5D",
             "weight": 2,
-            "vertices_json": "[{\"lat\":251.25,\"lng\":-73.12},{\"lat\":263.62,\"lng\":-83.25}]"
+            "vertices_json": "[{\"lat\":-73.12,\"lng\":251.25},{\"lat\":-83.25,\"lng\":263.62}]"
         }
     },
     {
@@ -18,7 +18,7 @@
         "polyline": {
             "color": "#E25D5D",
             "weight": 2,
-            "vertices_json": "[{\"lat\":204.81,\"lng\":-124.25},{\"lat\":218.44,\"lng\":-124.25}]"
+            "vertices_json": "[{\"lat\":-124.25,\"lng\":204.81},{\"lat\":-124.25,\"lng\":218.44}]"
         }
     },
     {
@@ -29,7 +29,7 @@
         "polyline": {
             "color": "#E25D5D",
             "weight": 2,
-            "vertices_json": "[{\"lat\":254.38,\"lng\":-179.63},{\"lat\":265.5,\"lng\":-179.63}]"
+            "vertices_json": "[{\"lat\":-179.63,\"lng\":254.38},{\"lat\":-179.63,\"lng\":265.5}]"
         }
     },
     {
@@ -40,7 +40,7 @@
         "polyline": {
             "color": "#E25D5D",
             "weight": 2,
-            "vertices_json": "[{\"lat\":235.12,\"lng\":-177.63},{\"lat\":249,\"lng\":-177.69}]"
+            "vertices_json": "[{\"lat\":-177.63,\"lng\":235.12},{\"lat\":-177.69,\"lng\":249}]"
         }
     },
     {
@@ -51,7 +51,7 @@
         "polyline": {
             "color": "#E25D5D",
             "weight": 2,
-            "vertices_json": "[{\"lat\":264.5,\"lng\":-117.5},{\"lat\":264.62,\"lng\":-101.5}]"
+            "vertices_json": "[{\"lat\":-117.5,\"lng\":264.5},{\"lat\":-101.5,\"lng\":264.62}]"
         }
     },
     {
@@ -62,7 +62,7 @@
         "polyline": {
             "color": "#E25D5D",
             "weight": 2,
-            "vertices_json": "[{\"lat\":211,\"lng\":-76.13},{\"lat\":211.12,\"lng\":-60.88}]"
+            "vertices_json": "[{\"lat\":-76.13,\"lng\":211},{\"lat\":-60.88,\"lng\":211.12}]"
         }
     },
     {
@@ -73,7 +73,7 @@
         "polyline": {
             "color": "#E25D5D",
             "weight": 2,
-            "vertices_json": "[{\"lat\":238.75,\"lng\":-66.44},{\"lat\":250.19,\"lng\":-74.13}]"
+            "vertices_json": "[{\"lat\":-66.44,\"lng\":238.75},{\"lat\":-74.13,\"lng\":250.19}]"
         }
     }
 ]

@@ -71,6 +71,8 @@ if ($isAdmin) {
     'username' => Auth::check() ? $user->name : '',
     // Only activate Echo when we are a member of the team in which this route is a member of
     'echo' => !isset($dungeonroute) || $dungeonroute->team === null ? false : $dungeonroute->team->isUserMember($user),
+    // Required by echo to join the correct channels
+    'appType' => env('APP_TYPE'),
     'floorId' => $floorId,
     'edit' => $edit,
     'try' => $tryMode,

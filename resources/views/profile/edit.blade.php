@@ -118,16 +118,16 @@ $deleteConsequences = $user->getDeleteConsequences();
                 {{ __('If you delete your Keystone.guru account the following will happen:') }}
             </div>
             @if( !empty($deleteConsequences['dungeonroutes']) && $deleteConsequences['dungeonroutes']['delete_count'] > 0 )
-            <div class="form-group">
-                <h5>
-                    {{ __('Routes') }}
-                </h5>
-                <ul>
-                    <li>
-                        {{ __(sprintf('Your %s route(s) will be deleted.', $deleteConsequences['dungeonroutes']['delete_count'])) }}
-                    </li>
-                </ul>
-            </div>
+                <div class="form-group">
+                    <h5>
+                        {{ __('Routes') }}
+                    </h5>
+                    <ul>
+                        <li>
+                            {{ __(sprintf('Your %s route(s) will be deleted.', $deleteConsequences['dungeonroutes']['delete_count'])) }}
+                        </li>
+                    </ul>
+                </div>
             @endif
             @if( !empty($deleteConsequences['teams']) )
                 <div class="form-group">
@@ -140,7 +140,11 @@ $deleteConsequences = $user->getDeleteConsequences();
                             <?php
                             $consequenceText = '';
                             if ($consequence['result'] === 'new_owner') {
-                                $consequenceText = sprintf(__('%s will be appointed Admin of this team.'), $consequence['new_owner']->name);
+                                if ($consequence['new_owner'] === null) {
+                                    $consequenceText = __('You will be removed from this team.');
+                                } else {
+                                    $consequenceText = sprintf(__('%s will be appointed Admin of this team.'), $consequence['new_owner']->name);
+                                }
                             } else if ($consequence['result'] === 'deleted') {
                                 $consequenceText = __('This team will be deleted (you are the only user in this team).');
                             }

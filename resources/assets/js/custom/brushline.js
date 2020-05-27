@@ -156,7 +156,7 @@ class Brushline extends Polyline {
                     });
                 }
 
-                let data = {id: self.id, rows: rows};
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {id: self.id, rows: rows});
 
                 // Build the status bar from the template
                 let customPopupHtml = template(data);

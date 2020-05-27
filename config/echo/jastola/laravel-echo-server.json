@@ -4,7 +4,7 @@
 	"clients": [
 		{
 			"appId": "DEADBEEFDEADBEEF",
-			"key": "88cb7c62603213449822e8bf5ebd5c6c"
+			"key": "a94fe684bcd9af5e1dc5f887fc260813"
 		}
 	],
 	"database": "redis",
@@ -18,7 +18,7 @@
 		},
 		"publishPresence": true
 	},
-	"devMode": true,
+	"devMode": false,
 	"host": null,
 	"port": "6003",
 	"protocol": "http",

@@ -8,9 +8,11 @@ class PathMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-route';
 
         if (this.manager.map.options.echo) {
-            window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
+            window.Echo.join(this.manager.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.path-changed', (e) => {
-                    self._restoreObject(e.path, e.user);
+                    if( e.mapicon.floor_id === getState().getCurrentFloor().id ){
+                        self._restoreObject(e.path, e.user);
+                    }
                 })
                 .listen('.path-deleted', (e) => {
                     let mapObject = self.findMapObjectById(e.id);
@@ -39,7 +41,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         let points = [];
         for (let j = 0; j < vertices.length; j++) {
             let vertex = vertices[j];
-            points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
+            points.push([vertex.lat, vertex.lng]);
         }
 
         // Only create a new one if it's new for us

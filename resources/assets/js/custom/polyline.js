@@ -60,7 +60,8 @@ class Polyline extends MapObject {
         let coordinates = this.layer.toGeoJSON().geometry.coordinates;
         let result = [];
         for (let i = 0; i < coordinates.length; i++) {
-            result.push({lat: coordinates[i][0], lng: coordinates[i][1]});
+            // 0 is lng, 1 is lat
+            result.push({lat: coordinates[i][1], lng: coordinates[i][0]});
         }
         return result;
     }

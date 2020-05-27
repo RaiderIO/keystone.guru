@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property $id int
- * @property $model_id int
- * @property $model_class string
- * @property $color string
- * @property $weight int
- * @property $vertices_json string JSON encoded vertices
+ * @property int $id
+ * @property int $model_id
+ * @property string $model_class
+ * @property string $color
+ * @property int $weight
+ * @property string $vertices_json JSON encoded vertices
  *
  * @property Model $model
  *

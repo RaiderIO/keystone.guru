@@ -266,7 +266,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         for (let i = 0; i < children.length; i++) {
             let killZoneId = parseInt($(children[i]).data('id'));
-            this._setPullText(killZoneMapObjectGroup.findMapObjectById(killZoneId), i + 1);
+            let killZone = killZoneMapObjectGroup.findMapObjectById(killZoneId);
+            // May be null when switching floors
+            if (killZone !== null) {
+                this._setPullText(killZone, i + 1);
+            }
         }
     }
 
@@ -278,6 +282,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     _setPullText(killZone, index) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+        console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
         $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index', index);
         $(`#map_killzonessidebar_killzone_${killZone.id}_index`).text(index);

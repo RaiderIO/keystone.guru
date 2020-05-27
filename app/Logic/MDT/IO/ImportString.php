@@ -122,7 +122,7 @@ class ImportString
                     'map_icon_type_id' => $gatewayIconType->id,
                     'comment'          => $obeliskMapIcon->mapicontype->name
                     // MDT has the x and y inverted here
-                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXY['y'], 'y' => $mdtXY['x']])));
+                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXY['x'], 'y' => $mdtXY['y']])));
 
                 $polyLine = new Polyline([
                     'model_id'      => -1,
@@ -357,7 +357,7 @@ class ImportString
 
                         $vertices = [];
                         for ($i = 1; $i < count($line); $i += 2) {
-                            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i + 1]), 'y' => doubleval($line[$i])]);
+                            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])]);
                         }
 
                         $polyline->vertices_json = json_encode($vertices);

@@ -56,6 +56,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
 
+    Route::post('new/mdtimport', 'MDTImportController@import')->name('dungeonroute.new.mdtimport');
+
     // ['auth', 'role:admin|user']
 
     Route::get('patreon-unlink', 'PatreonController@unlink')->name('patreon.unlink');
@@ -77,8 +79,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         // Must be logged in to create a new dungeon route
         Route::get('new', 'DungeonRouteController@new')->name('dungeonroute.new');
         Route::post('new', 'DungeonRouteController@savenew')->name('dungeonroute.savenew');
-
-        Route::post('new/mdtimport', 'MDTImportController@import')->name('dungeonroute.new.mdtimport');
 
         // Legacy redirects
         Route::get('edit/{dungeonroute}', 'DungeonRouteController@editLegacy');

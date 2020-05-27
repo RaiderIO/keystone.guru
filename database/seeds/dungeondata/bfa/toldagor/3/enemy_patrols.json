@@ -7,7 +7,7 @@
         "polyline": {
             "color": "#E25D5D",
             "weight": 2,
-            "vertices_json": "[{\"lat\":190.38,\"lng\":-155.63},{\"lat\":167.38,\"lng\":-140}]"
+            "vertices_json": "[{\"lat\":-155.63,\"lng\":190.38},{\"lat\":-140,\"lng\":167.38}]"
         }
     }
 ]

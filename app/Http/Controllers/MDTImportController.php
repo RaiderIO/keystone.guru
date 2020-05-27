@@ -77,10 +77,10 @@ class MDTImportController extends Controller
     {
         $user = Auth::user();
 
+        $try = (bool)$request->get('try', false);
         // @TODO This should be handled differently imho
-        if ($user->canCreateDungeonRoute()) {
+        if ($try || $user->canCreateDungeonRoute()) {
             $string = $request->get('import_string');
-            $try = (bool)$request->get('try', false);
             $importString = new ImportString($seasonService);
 
             try {
