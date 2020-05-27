@@ -357,7 +357,7 @@ class ImportString
 
                         $vertices = [];
                         for ($i = 1; $i < count($line); $i += 2) {
-                            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i + 1]), 'y' => doubleval($line[$i])]);
+                            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])]);
                         }
 
                         $polyline->vertices_json = json_encode($vertices);
