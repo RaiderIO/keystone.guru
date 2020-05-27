@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1e1b2033b81c218e572f0f61c73f4f7",
+    "content-hash": "58a38796d1b4201aa1f8d9c2bec9a85f",
     "packages": [
         {
             "name": "art4/json-api-client",
@@ -1178,6 +1178,59 @@
                 "watermark"
             ],
             "time": "2016-05-30T16:02:53+00:00"
+        },
+        {
+            "name": "geoip2/geoip2",
+            "version": "v2.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maxmind/GeoIP2-php.git",
+                "reference": "419557cd21d9fe039721a83490701a58c8ce784a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maxmind/GeoIP2-php/zipball/419557cd21d9fe039721a83490701a58c8ce784a",
+                "reference": "419557cd21d9fe039721a83490701a58c8ce784a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "maxmind-db/reader": "~1.5",
+                "maxmind/web-service-common": "~0.6",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "2.*",
+                "phpunit/phpunit": "5.*",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GeoIp2\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Gregory J. Oschwald",
+                    "email": "goschwald@maxmind.com",
+                    "homepage": "https://www.maxmind.com/"
+                }
+            ],
+            "description": "MaxMind GeoIP2 PHP API",
+            "homepage": "https://github.com/maxmind/GeoIP2-php",
+            "keywords": [
+                "IP",
+                "geoip",
+                "geoip2",
+                "geolocation",
+                "maxmind"
+            ],
+            "time": "2019-12-12T18:48:39+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2373,9 +2426,9 @@
             "authors": [
                 {
                     "name": "Ben Corlett",
+                    "role": "Developer",
                     "email": "bencorlett@me.com",
-                    "homepage": "http://www.webcomm.com.au",
-                    "role": "Developer"
+                    "homepage": "http://www.webcomm.com.au"
                 }
             ],
             "description": "OAuth 1.0 Client Library",
@@ -2446,6 +2499,112 @@
                 "webhook"
             ],
             "time": "2019-08-01T20:48:19+00:00"
+        },
+        {
+            "name": "maxmind-db/reader",
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maxmind/MaxMind-DB-Reader-php.git",
+                "reference": "febd4920bf17c1da84cef58e56a8227dfb37fbe4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maxmind/MaxMind-DB-Reader-php/zipball/febd4920bf17c1da84cef58e56a8227dfb37fbe4",
+                "reference": "febd4920bf17c1da84cef58e56a8227dfb37fbe4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "conflict": {
+                "ext-maxminddb": "<1.6.0,>=2.0.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "2.*",
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpcov": "^3.0",
+                "phpunit/phpunit": "5.*",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "suggest": {
+                "ext-bcmath": "bcmath or gmp is required for decoding larger integers with the pure PHP decoder",
+                "ext-gmp": "bcmath or gmp is required for decoding larger integers with the pure PHP decoder",
+                "ext-maxminddb": "A C-based database decoder that provides significantly faster lookups"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MaxMind\\Db\\": "src/MaxMind/Db"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Gregory J. Oschwald",
+                    "email": "goschwald@maxmind.com",
+                    "homepage": "https://www.maxmind.com/"
+                }
+            ],
+            "description": "MaxMind DB Reader API",
+            "homepage": "https://github.com/maxmind/MaxMind-DB-Reader-php",
+            "keywords": [
+                "database",
+                "geoip",
+                "geoip2",
+                "geolocation",
+                "maxmind"
+            ],
+            "time": "2019-12-19T22:59:03+00:00"
+        },
+        {
+            "name": "maxmind/web-service-common",
+            "version": "v0.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maxmind/web-service-common-php.git",
+                "reference": "74c996c218ada5c639c8c2f076756e059f5552fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maxmind/web-service-common-php/zipball/74c996c218ada5c639c8c2f076756e059f5552fc",
+                "reference": "74c996c218ada5c639c8c2f076756e059f5552fc",
+                "shasum": ""
+            },
+            "require": {
+                "composer/ca-bundle": "^1.0.3",
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "2.*",
+                "phpunit/phpunit": "^4.8.36 || ^5.7 || ^6.5 || ^7.0",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MaxMind\\Exception\\": "src/Exception",
+                    "MaxMind\\WebService\\": "src/WebService"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Gregory Oschwald",
+                    "email": "goschwald@maxmind.com"
+                }
+            ],
+            "description": "Internal MaxMind Web Service API",
+            "homepage": "https://github.com/maxmind/web-service-common-php",
+            "time": "2020-05-06T14:07:26+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -2870,16 +3029,16 @@
         },
         {
             "name": "pragmarx/datatables",
-            "version": "v1.4.12",
+            "version": "dev-wotuu-bugfix",
             "source": {
                 "type": "git",
-                "url": "https://github.com/antonioribeiro/laravel4-datatables-package.git",
-                "reference": "142631346d01c074248b80c8bc55fdfea255e23e"
+                "url": "https://github.com/Wotuu/laravel4-datatables-package.git",
+                "reference": "0dcadb66ca8801c5da1e506dc946d2c42817b565"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/laravel4-datatables-package/zipball/142631346d01c074248b80c8bc55fdfea255e23e",
-                "reference": "142631346d01c074248b80c8bc55fdfea255e23e",
+                "url": "https://api.github.com/repos/Wotuu/laravel4-datatables-package/zipball/0dcadb66ca8801c5da1e506dc946d2c42817b565",
+                "reference": "0dcadb66ca8801c5da1e506dc946d2c42817b565",
                 "shasum": ""
             },
             "require": {
@@ -2903,7 +3062,6 @@
                     "Bllim\\Datatables": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2921,7 +3079,10 @@
                 "laravel",
                 "laravel4"
             ],
-            "time": "2019-09-13T13:59:39+00:00"
+            "support": {
+                "source": "https://github.com/Wotuu/laravel4-datatables-package/tree/wotuu-bugfix"
+            },
+            "time": "2020-05-27T10:14:55+00:00"
         },
         {
             "name": "pragmarx/support",
@@ -2981,12 +3142,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/tracker.git",
-                "reference": "438566580edc3b0f356e91ee8adc3e0640826c2c"
+                "reference": "df8d831e3baa7c4fa4e37c623063caf328c08076"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Wotuu/tracker/zipball/438566580edc3b0f356e91ee8adc3e0640826c2c",
-                "reference": "438566580edc3b0f356e91ee8adc3e0640826c2c",
+                "url": "https://api.github.com/repos/Wotuu/tracker/zipball/df8d831e3baa7c4fa4e37c623063caf328c08076",
+                "reference": "df8d831e3baa7c4fa4e37c623063caf328c08076",
                 "shasum": ""
             },
             "require": {
@@ -2995,7 +3156,7 @@
                 "jenssegers/agent": "~2.1",
                 "laravel/framework": "~5|~6|~7",
                 "php": ">=7.0",
-                "pragmarx/datatables": "^1.4.12",
+                "pragmarx/datatables": "dev-wotuu-bugfix#0dcadb66ca8801c5da1e506dc946d2c42817b565",
                 "pragmarx/support": "~0.6|~0.7|~0.8|~0.9",
                 "psr/log": "~1.0",
                 "ramsey/uuid": "^3 || ^4",
@@ -3052,7 +3213,7 @@
             "support": {
                 "source": "https://github.com/Wotuu/tracker/tree/wotuu-bugfix"
             },
-            "time": "2020-05-13T22:11:56+00:00"
+            "time": "2020-05-27T10:58:58+00:00"
         },
         {
             "name": "predis/predis",
@@ -6605,8 +6766,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "Library that provides collection, processing, and rendering functionality for PHP code coverage information.",
