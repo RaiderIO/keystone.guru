@@ -39,7 +39,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         let points = [];
         for (let j = 0; j < vertices.length; j++) {
             let vertex = vertices[j];
-            points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
+            points.push([vertex.lat, vertex.lng]);
         }
 
         // Only create a new one if it's new for us

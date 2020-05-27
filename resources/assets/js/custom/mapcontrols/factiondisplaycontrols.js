@@ -25,7 +25,7 @@ class FactionDisplayControls extends MapControl {
                     }
                 }
 
-                let data = {factions: factionsData};
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {factions: factionsData});
 
                 // Build the status bar from the template
                 self.domElement = $(template(data));

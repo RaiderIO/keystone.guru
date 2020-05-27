@@ -29,7 +29,7 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
 
             for (let j = 0; j < vertices.length; j++) {
                 let vertex = vertices[j];
-                points.push([vertex.lng, vertex.lat]); // dunno why it must be lng/lat
+                points.push([vertex.lat, vertex.lng]);
             }
 
             let layer = L.polyline(points);
