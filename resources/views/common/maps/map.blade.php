@@ -64,7 +64,6 @@ if ($isAdmin) {
         'npcs' => $npcOptions
     ];
 }
-
 ?>
 @php($dependencies = $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null)
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
@@ -101,7 +100,7 @@ if ($isAdmin) {
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,
             'enemyForces' => $routeEnemyForces
-        ],
+        ]
     ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>
         var dungeonMap;

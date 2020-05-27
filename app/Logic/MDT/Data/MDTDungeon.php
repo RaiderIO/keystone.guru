@@ -66,20 +66,20 @@ class MDTDungeon
         if (Conversion::hasMDTDungeonName($this->_dungeonName)) {
             $lua = new \Lua();
             $lua->eval(
-                    'local MethodDungeonTools = {}
+                'local MethodDungeonTools = {}
                 MethodDungeonTools.dungeonTotalCount = {}
                 MethodDungeonTools.mapInfo = {}
                 MethodDungeonTools.mapPOIs = {}
                 MethodDungeonTools.dungeonEnemies = {}
                 MethodDungeonTools.scaleMultiplier = {}
                 ' .
-                    // Some files require LibStub
-                    file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
-                    file_get_contents(
-                        base_path('vendor/nnoggie/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
-                    ) .
-                    // Insert dummy function to get what we need
-                    '
+                // Some files require LibStub
+                file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) .
+                file_get_contents(
+                    base_path('vendor/nnoggie/methoddungeontools/BattleForAzeroth/' . Conversion::getMDTDungeonName($this->_dungeonName) . '.lua')
+                ) .
+                // Insert dummy function to get what we need
+                '
                 function GetDungeonEnemies() 
                     return MethodDungeonTools.dungeonEnemies[dungeonIndex]
                 end
@@ -145,35 +145,42 @@ class MDTDungeon
             /** @var Collection $npcs */
             $npcs = Npc::whereIn('dungeon_id', [$floor->dungeon->id, -1])->get();
             foreach ($npcClones as $npcId => $clones) {
+                // Skip Emissaries (Season 3), season is over
+                if (in_array($npcId, [155432, 155433, 155434])) {
+                    break 2;
+                }
+
                 foreach ($clones as $mdtCloneIndex => $clone) {
-                    $enemy = new Enemy();
-                    // Dummy so we can ID them later on
-                    $enemy->is_mdt = true;
-                    $enemy->floor_id = $floor->id;
-                    $enemy->enemy_pack_id = (int)$clone['g'];
-                    $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
-                    $enemy->npc_id = $npcId;
-                    // All MDT_IDs are 1-indexed, because LUA
-                    $enemy->mdt_id = $mdtCloneIndex;
-                    $enemy->enemy_id = -1;
-                    $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
-                    $enemy->faction = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
-                    $enemy->enemy_forces_override = -1;
+                    if ((int)$clone['sublevel'] === $floor->index) {
+                        $enemy = new Enemy();
+                        // Dummy so we can ID them later on
+                        $enemy->is_mdt = true;
+                        $enemy->floor_id = $floor->id;
+                        $enemy->enemy_pack_id = (int)$clone['g'];
+                        $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
+                        $enemy->npc_id = $npcId;
+                        // All MDT_IDs are 1-indexed, because LUA
+                        $enemy->mdt_id = $mdtCloneIndex;
+                        $enemy->enemy_id = -1;
+                        $enemy->teeming = isset($clone['teeming']) && $clone['teeming'] ? 'visible' : null;
+                        $enemy->faction = isset($clone['faction']) ? ((int)$clone['faction'] === 1 ? 'horde' : 'alliance') : 'any';
+                        $enemy->enemy_forces_override = -1;
 
-                    $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
-                    $enemy->lat = $latLng['lat'];
-                    $enemy->lng = $latLng['lng'];
+                        $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
+                        $enemy->lat = $latLng['lat'];
+                        $enemy->lng = $latLng['lng'];
 
-                    $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
+                        $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
 
-                    if ($enemy->npc === null) {
-                        $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);
+                        if ($enemy->npc === null) {
+                            $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);
+                        }
+
+                        // Some properties which are dynamic on a normal enemy but static here
+                        $enemy->raid_marker_name = null;
+
+                        $enemies[] = $enemy;
                     }
-
-                    // Some properties which are dynamic on a normal enemy but static here
-                    $enemy->raid_marker_name = null;
-
-                    $enemies[] = $enemy;
                 }
             }
         }

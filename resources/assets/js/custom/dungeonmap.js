@@ -45,7 +45,7 @@ class DungeonMap extends Signalable {
                     }
                 }
 
-                if (object instanceof Enemy) {
+                if (object instanceof Enemy && !(self instanceof AdminDungeonMap)) {
                     object.register('enemy:clicked', self, self._enemyClicked.bind(self));
                 }
             });
@@ -53,7 +53,7 @@ class DungeonMap extends Signalable {
             mapObjectGroup.register('object:deleted', this, function (deletedEvent) {
                 let object = deletedEvent.data.object;
                 // Provide functionality for when an enemy gets clicked and we need to create a new killzone for it
-                if (object instanceof Enemy) {
+                if (object instanceof Enemy && !(self instanceof AdminDungeonMap)) {
                     object.unregister('enemy:clicked', self);
                 }
             });

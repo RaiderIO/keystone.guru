@@ -56,7 +56,7 @@ class EnemyVisualControls extends MapControl {
         // Hide or show any MDT enemies
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (index, value) {
-            if (value.is_mdt) {
+            if (value.is_mdt && value.floor_id === getState().getCurrentFloor().id) {
                 enemyMapObjectGroup.setMapObjectVisibility(value, mdtEnemiesEnabled);
             }
         });

@@ -57,7 +57,7 @@ class AdminEnemy extends Enemy {
             mapStateChangedEvent.data.newMapState;
 
         // Only if we WERE ever selecting enemies
-        if (enemySelection instanceof EnemySelection) {
+        if (enemySelection instanceof EnemySelection && this.layer !== null) {
             let selectedMapObject = enemySelection.getMapObject();
 
             // We calculate this because tooltip binding is expensive for 100s of enemies on screen. Generally a MDT

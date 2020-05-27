@@ -248,19 +248,21 @@ class MapObjectGroup extends Signalable {
 
         // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
-        if (visible) {
-            if (!this.layerGroup.hasLayer(object.layer)) {
-                this.layerGroup.addLayer(object.layer);
-                // Trigger this on the object
-                object.signal('shown', {object: object, visible: true});
-                this.signal('object:shown', {object: object, objectgroup: this, visible: true});
-            }
-        } else {
-            if (this.layerGroup.hasLayer(object.layer)) {
-                this.layerGroup.removeLayer(object.layer);
-                // Trigger this on the object
-                object.signal('hidden', {object: object, visible: false});
-                this.signal('object:hidden', {object: object, objectgroup: this, visible: false});
+        if( object.layer !== null ) {
+            if (visible) {
+                if (!this.layerGroup.hasLayer(object.layer)) {
+                    this.layerGroup.addLayer(object.layer);
+                    // Trigger this on the object
+                    object.signal('shown', {object: object, visible: true});
+                    this.signal('object:shown', {object: object, objectgroup: this, visible: true});
+                }
+            } else {
+                if (this.layerGroup.hasLayer(object.layer)) {
+                    this.layerGroup.removeLayer(object.layer);
+                    // Trigger this on the object
+                    object.signal('hidden', {object: object, visible: false});
+                    this.signal('object:hidden', {object: object, objectgroup: this, visible: false});
+                }
             }
         }
     }

@@ -298,7 +298,7 @@ class EnemyVisual extends Signalable {
             let border = `${getState().getMapZoomLevel()}px solid white`;
             if (this.enemy.getKillZone() instanceof KillZone) {
                 border = `${getState().getMapZoomLevel()}px solid ${this.enemy.getKillZone().color}`;
-            } else if (!this._hideFade) {
+            } else if (!this._hideFade && !this.enemy.is_mdt) {
                 // If not selected in a killzone, fade the enemy
                 data.root_classes = 'map_enemy_visual_fade';
             }

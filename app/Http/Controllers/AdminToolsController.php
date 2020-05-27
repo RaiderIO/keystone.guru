@@ -16,6 +16,7 @@ use App\Models\MapIcon;
 use App\Models\Npc;
 use App\Models\NpcType;
 use App\Models\Release;
+use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -42,10 +43,10 @@ class AdminToolsController extends Controller
     /**
      * @param Request $request
      */
-    public function mdtviewsubmit(Request $request)
+    public function mdtviewsubmit(Request $request, SeasonService $seasonService)
     {
         $string = $request->get('import_string');
-        $importString = new ImportString();
+        $importString = new ImportString($seasonService);
         echo json_encode($importString->setEncodedString($string)->getDecoded());
     }
 
