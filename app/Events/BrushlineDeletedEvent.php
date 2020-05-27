@@ -46,7 +46,7 @@ class BrushlineDeletedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel(sprintf('route-edit.%s', $this->_dungeonroute->public_key));
+        return new PresenceChannel(sprintf('%s-route-edit.%s', env('APP_TYPE'), $this->_dungeonroute->public_key));
     }
 
     public function broadcastAs()

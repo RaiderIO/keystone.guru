@@ -8,7 +8,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-icons';
 
         if (this.manager.map.options.echo) {
-            window.Echo.join('route-edit.' + getState().getDungeonRoute().publicKey)
+            window.Echo.join(this.manager.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.mapicon-changed', (e) => {
                     if( e.mapicon.floor_id === getState().getCurrentFloor().id ){
                         self._restoreObject(e.mapicon, e.user);
@@ -65,6 +65,8 @@ class MapIconMapObjectGroup extends MapObjectGroup {
 
         // We just downloaded the map icon, it's synced alright!
         mapIcon.setSynced(true);
+        // Refresh the tooltip; it may have been permanent before and no longer, or vice versa
+        mapIcon.bindTooltip();
 
         // Show echo notification or not
         this._showReceivedFromEcho(mapIcon, username);
