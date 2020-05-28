@@ -414,6 +414,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
         });
 
+        // this.map.register('map:beforerefresh', this, function(beforeRefreshEvent){
+        //     $('#killzones_no_pulls').hide();
+        //     $('#killzones_loading').show();
+        // });
+
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         // User interface action created a new killzone
         killZoneMapObjectGroup.register('killzone:new', this, function (killZoneCreatedEvent) {
@@ -451,6 +456,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
         this.map.unregister('map:mapstatechanged', this);
+        // this.map.unregister('map:beforerefresh', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new'], this);
 
