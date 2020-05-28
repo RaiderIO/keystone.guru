@@ -62,8 +62,9 @@
             </h1>
             <table class="w-100">
                 <tr>
-                    <th width="25%">{{ __('NPC') }}</th>
-                    <th width="60%">{{ __('Message') }}</th>
+                    <th width="15%">{{ __('Dungeon') }}</th>
+                    <th width="20%">{{ __('NPC') }}</th>
+                    <th width="30%">{{ __('Message') }}</th>
                     <th width="15%">{{ __('Actions') }}</th>
                 </tr>
                 @foreach($category as $importWarning)
@@ -74,8 +75,12 @@
                     $old = isset($data['old']) ? $data['old'] : '';
                     $new = isset($data['new']) ? $data['new'] : '';
                     $count = isset($data['npc']) ? $data['npc']->enemies->count() : 0;
+                    $dungeonName = isset($data['npc']) ? $data['npc']->dungeon->name : 0;
                     ?>
                     <tr id="{{ $key . '_' . $mdtNpc->id }}">
+                        <td>
+                            {{ $dungeonName }}
+                        </td>
                         <td>
                             {{ sprintf( '%s (%s, %s usages)', $mdtNpc->name, $mdtNpc->id, $count) }}
                         </td>

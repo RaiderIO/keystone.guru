@@ -10,6 +10,7 @@ namespace App\Logic\MDT\Data;
 
 
 use App\Logic\MDT\Conversion;
+use App\Logic\MDT\Entity\MDTNpc;
 use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\Npc;
@@ -59,10 +60,11 @@ class MDTDungeon
 
     /**
      * Get a list of NPCs
+     * @return Collection|MDTNpc[]
      */
     public function getMDTNPCs()
     {
-        $result = [];
+        $result = new Collection();
         if (Conversion::hasMDTDungeonName($this->_dungeonName)) {
             $lua = new \Lua();
             $lua->eval(
@@ -84,8 +86,13 @@ class MDTDungeon
                     return MethodDungeonTools.dungeonEnemies[dungeonIndex]
                 end
             ');
-            $result = $lua->call('GetDungeonEnemies');
+            $rawMdtEnemies = $lua->call('GetDungeonEnemies');
+
+            foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
+                $result->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
+            }
         }
+
         return $result;
     }
 
@@ -107,18 +114,18 @@ class MDTDungeon
         // NPC_ID => list of clones
         $npcClones = [];
         // Find the enemy in a list of enemies
-        foreach ($mdtNpcs as $mdtNpcIndex => $mdtNpc) {
+        foreach ($mdtNpcs as $mdtNpc) {
             $cloneCount = 0;
-            foreach ($mdtNpc['clones'] as $mdtCloneIndex => $clone) {
+            foreach ($mdtNpc->getClones() as $mdtCloneIndex => $clone) {
                 //Only clones that are on the same floor
                 foreach ($floors as $floor) {
                     if ((int)$clone['sublevel'] === $floor->index) {
                         // Set some additional props that come in handy when converting to an enemy
-                        $clone['mdtNpcIndex'] = (int)$mdtNpcIndex;
+                        $clone['mdtNpcIndex'] = $mdtNpc->getIndex();
                         // Group ID
                         $clone['g'] = isset($clone['g']) ? $clone['g'] : -1;
 
-                        $npcId = (int)$mdtNpc['id'];
+                        $npcId = $mdtNpc->getId();
                         // Make sure array is set
                         if (!isset($npcClones[$npcId])) {
                             $npcClones[$npcId] = [];
@@ -145,11 +152,6 @@ class MDTDungeon
             /** @var Collection $npcs */
             $npcs = Npc::whereIn('dungeon_id', [$floor->dungeon->id, -1])->get();
             foreach ($npcClones as $npcId => $clones) {
-                // Skip Emissaries (Season 3), season is over
-                if (in_array($npcId, [155432, 155433, 155434])) {
-                    break 2;
-                }
-
                 foreach ($clones as $mdtCloneIndex => $clone) {
                     if ((int)$clone['sublevel'] === $floor->index) {
                         $enemy = new Enemy();
