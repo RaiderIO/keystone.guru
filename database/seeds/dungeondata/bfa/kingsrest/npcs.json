@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "name": "Animated Guardian",
         "base_health": 1306442,
-        "enemy_forces": 5,
+        "enemy_forces": 8,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,

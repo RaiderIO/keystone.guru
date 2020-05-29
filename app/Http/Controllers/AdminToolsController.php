@@ -105,7 +105,7 @@ class AdminToolsController extends Controller
                     }
 
                     // Match enemy forces teeming
-                    if ($npc->enemy_forces_teeming !== $mdtNpc->getCount()) {
+                    if ($npc->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces_teeming',
                                 sprintf(__('NPC %s has mismatched enemy forces teeming, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npc->enemy_forces_teeming),

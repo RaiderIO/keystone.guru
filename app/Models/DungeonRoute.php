@@ -71,8 +71,8 @@ use Illuminate\Support\Facades\DB;
  * @property Collection $routeattributes
  * @property Collection $routeattributesraw
  *
- * @method static Builder visibleWithUnlisted()
- * @method static Builder visible()
+ * @method static \Illuminate\Database\Eloquent\Builder visible()
+ * @method static \Illuminate\Database\Eloquent\Builder visibleWithUnlisted()
  *
  * @mixin \Eloquent
  */
