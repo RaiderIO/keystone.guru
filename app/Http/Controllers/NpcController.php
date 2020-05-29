@@ -47,6 +47,7 @@ class NpcController extends Controller
         $npc->base_health = str_replace(',', '', $request->get('base_health'));
         $npc->base_health = str_replace('.', '', $npc->base_health);
         $npc->enemy_forces = $request->get('enemy_forces');
+        $npc->enemy_forces_teeming = $request->get('enemy_forces_teeming', -1);
         $npc->aggressiveness = $request->get('aggressiveness');
         $npc->dangerous = $request->get('dangerous', 0);
         $npc->truesight = $request->get('truesight', 0);

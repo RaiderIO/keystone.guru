@@ -104,6 +104,16 @@ class AdminToolsController extends Controller
                         );
                     }
 
+                    // Match enemy forces teeming
+                    if ($npc->enemy_forces_teeming !== $mdtNpc->getCount()) {
+                        $warnings->push(
+                            new ImportWarning('mismatched_enemy_forces_teeming',
+                                sprintf(__('NPC %s has mismatched enemy forces teeming, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npc->enemy_forces_teeming),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
+                            )
+                        );
+                    }
+
                     // Match clone count, should be equal
                     if ($npc->enemies->count() !== count($mdtNpc->getClones())) {
                         $warnings->push(
@@ -152,6 +162,10 @@ class AdminToolsController extends Controller
                 break;
             case 'mismatched_enemy_forces':
                 $npc->enemy_forces = $value;
+                $npc->save();
+                break;
+            case 'mismatched_enemy_forces_teeming':
+                $npc->enemy_forces_teeming = $value;
                 $npc->save();
                 break;
             case 'mismatched_enemy_type':

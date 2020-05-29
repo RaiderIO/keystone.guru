@@ -74,6 +74,12 @@
         @include('common.forms.form-error', ['key' => 'enemy_forces'])
     </div>
 
+    <div class="form-group{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">
+        {!! Form::label('enemy_forces_teeming', __('Enemy forces teeming (-1 for same as normal)')) !!}
+        {!! Form::text('enemy_forces_teeming', isset($model) ? $model->enemy_forces_teeming : -1, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'enemy_forces_teeming'])
+    </div>
+
     <div class="form-group{{ $errors->has('dangerous') ? ' has-error' : '' }}">
         {!! Form::label('dangerous', __('Dangerous')) !!}
         {!! Form::checkbox('dangerous', 1, isset($model) ? $model->dangerous : 1, ['class' => 'form-control left_checkbox']) !!}

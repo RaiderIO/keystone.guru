@@ -38,12 +38,12 @@ class EnemyForcesControls extends MapControl {
                 enemy.register('killzone:attached', self, function (data) {
                     // This is also triggered
                     if (self.map.getMapState() instanceof EnemySelection) {
-                        self._setEnemyForces(self.enemyForces + data.context.enemy_forces);
+                        self._setEnemyForces(self.enemyForces + data.context.getEnemyForces());
                     }
                 });
                 enemy.register('killzone:detached', self, function (data) {
                     if (self.map.getMapState() instanceof EnemySelection) {
-                        self._setEnemyForces(self.enemyForces - data.context.enemy_forces);
+                        self._setEnemyForces(self.enemyForces - data.context.getEnemyForces());
                     }
                 });
             });

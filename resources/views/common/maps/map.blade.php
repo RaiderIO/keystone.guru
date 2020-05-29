@@ -12,7 +12,7 @@ $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
 // Set the key to 'try' if try mode is enabled
 $tryMode = isset($tryMode) && $tryMode ? true : false;
 // Set the enemy forces of the current route. May not be set if just editing the route from admin
-$routeEnemyForces = isset($dungeonroute) ? $dungeonroute->enemy_forces : 0;
+$routeEnemyForces = isset($dungeonroute) ? $dungeonroute->getEnemyForces() : 0;
 // For Siege of Boralus
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.

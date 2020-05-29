@@ -10,7 +10,7 @@
 @endsection
 
 <?php
-/** @var $models \Illuminate\Support\Collection */
+/** @var $models \Illuminate\Support\Collection|\App\Models\Npc[] */
 // eager load the classification
 ?>
 
@@ -53,7 +53,11 @@
                 <td>{{ $npc->id }}</td>
                 <td>{{ $npc->name }}</td>
                 <td>{{ isset($npc->dungeon) ? $npc->dungeon->name : 'Any' }}</td>
-                <td>{{ $npc->enemy_forces }}</td>
+                <td>{{ $npc->enemy_forces }}
+                    @if( $npc->enemy_forces_teeming >= 0)
+                        ({{ $npc->enemy_forces_teeming }})
+                    @endif
+                </td>
                 <td>{{ $npc->classification->name }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.npc.edit', ['npc' => $npc->id]) }}">

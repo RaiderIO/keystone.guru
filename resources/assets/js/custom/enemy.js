@@ -140,7 +140,18 @@ class Enemy extends MapObject {
      */
     getEnemyForces() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.enemy_forces_override >= 0 ? this.enemy_forces_override : (this.npc === null ? 0 : this.npc.enemy_forces);
+
+        let result = this.npc.enemy_forces;
+        // Override first
+        if (this.enemy_forces_override >= 0) {
+            result = this.enemy_forces_override;
+        }
+        // If teeming and npc provides an override, use that instead
+        else if (this.map.options.teeming && this.npc.enemy_forces_teeming >= 0) {
+            result = this.npc.enemy_forces_teeming;
+        }
+
+        return result;
     }
 
     bindTooltip() {
@@ -175,6 +186,7 @@ class Enemy extends MapObject {
         if (npc !== null) {
             this.npc_id = npc.id;
             this.enemy_forces = npc.enemy_forces;
+            this.enemy_forces_teeming = npc.enemy_forces_teeming;
         } else {
             // Not set :(
             this.npc_id = -1;

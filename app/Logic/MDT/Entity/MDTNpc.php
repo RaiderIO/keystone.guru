@@ -28,6 +28,9 @@ class MDTNpc
     private $_scale = 0.0;
 
     /** @var int */
+    private $_countTeeming = 0;
+
+    /** @var int */
     private $_count = 0;
 
     /** @var string */
@@ -56,6 +59,7 @@ class MDTNpc
         $this->_id = (int)$rawMdtNpc['id'];
         $this->_spells = isset($rawMdtNpc['spells']) ? $rawMdtNpc['spells'] : [];
         $this->_scale = (float)$rawMdtNpc['scale'];
+        $this->_countTeeming = isset($rawMdtNpc['countTeeming']) ? (int)$rawMdtNpc['countTeeming'] : -1;
         $this->_count = (int)$rawMdtNpc['count'];
         $this->_name = $rawMdtNpc['name'];
         $this->_displayId = (int)$rawMdtNpc['displayId'];
@@ -144,6 +148,14 @@ class MDTNpc
     public function getScale(): float
     {
         return $this->_scale;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountTeeming(): int
+    {
+        return $this->_countTeeming;
     }
 
     /**

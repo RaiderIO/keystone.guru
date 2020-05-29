@@ -54,7 +54,23 @@ class APIDungeonRouteController extends Controller
         $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
-            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required, IFNULL(SUM(npcs.enemy_forces), 0) as enemy_forces')
+            ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required,
+             IFNULL(
+                 IF(dungeon_routes.teeming = 1,
+                      SUM(
+                          IF(
+                                  enemies.enemy_forces_override >= 0,
+                                  enemies.enemy_forces_override,
+                                  IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
+                          )
+                      ),
+                      SUM(IF(
+                              enemies.enemy_forces_override >= 0,
+                              enemies.enemy_forces_override,
+                              npcs.enemy_forces
+                      )
+                 )
+             ), 0) as enemy_forces')
             // Select enemy forces
             ->leftJoin('kill_zones', 'kill_zones.dungeon_route_id', '=', 'dungeon_routes.id')
             ->leftJoin('kill_zone_enemies', 'kill_zone_enemies.kill_zone_id', '=', 'kill_zones.id')
@@ -238,7 +254,8 @@ class APIDungeonRouteController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    function cloneToTeam(Request $request, DungeonRoute $dungeonroute, Team $team){
+    function cloneToTeam(Request $request, DungeonRoute $dungeonroute, Team $team)
+    {
         $this->authorize('clone', $dungeonroute);
 
         $user = Auth::user();
