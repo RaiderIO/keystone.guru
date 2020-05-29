@@ -10,11 +10,19 @@ if (isset($model)) {
 // Set correctly displayed floor
 $floorId = isset($floorId) ? $floorId : $dungeon->floors[0]->id;
 ?>
+@include('common.general.inline', ['path' => 'common/maps/admineditsidebar', 'options' => [
+    'dependencies' => ['common/maps/map'],
+    'sidebarSelector' => '#admineditsidebar',
+    'sidebarScrollSelector' => '#admineditsidebar .sidebar-content',
+    'sidebarToggleSelector' => '#admineditsidebarToggle',
+    'switchDungeonFloorSelect' => '#map_floor_selection',
+    'defaultSelectedFloorId' => $floorId,
+]])
+
 @component('common.maps.sidebar', [
-'header' => __('Admin toolbox'),
-'anchor' => 'left',
-'id' => 'admineditsidebar',
-'selectedFloorId' => $floorId
+    'header' => __('Admin toolbox'),
+    'anchor' => 'left',
+    'id' => 'admineditsidebar'
 ])
     <!-- Visibility -->
     <div class="form-group visibility_tools">

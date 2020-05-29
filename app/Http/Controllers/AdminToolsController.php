@@ -16,6 +16,7 @@ use App\Models\MapIcon;
 use App\Models\Npc;
 use App\Models\NpcType;
 use App\Models\Release;
+use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -42,10 +43,10 @@ class AdminToolsController extends Controller
     /**
      * @param Request $request
      */
-    public function mdtviewsubmit(Request $request)
+    public function mdtviewsubmit(Request $request, SeasonService $seasonService)
     {
         $string = $request->get('import_string');
-        $importString = new ImportString();
+        $importString = new ImportString($seasonService);
         echo json_encode($importString->setEncodedString($string)->getDecoded());
     }
 
@@ -63,59 +64,74 @@ class AdminToolsController extends Controller
 
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {
-                $mdtNpc = (object)$mdtNpc;
+                // Ignore mobs we should ignore
+                if (!$mdtNpc->isValid() || $mdtNpc->isAwakened()) {
+                    continue;
+                }
+
                 // Find our own NPC
                 /** @var Npc $npc */
-                $npc = $npcs->where('id', $mdtNpc->id)->first();
+                $npc = $npcs->where('id', $mdtNpc->getId())->first();
 
                 // Not found..
                 if ($npc === null) {
                     $warnings->push(
                         new ImportWarning('missing_npc',
-                            sprintf(__('Unable to find npc for id %s'), $mdtNpc->id),
-                            ['mdt_npc' => $mdtNpc, 'npc' => $npc]
+                            sprintf(__('Unable to find npc for id %s'), $mdtNpc->getId()),
+                            ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
                         )
                     );
                 } // Found, compare
                 else {
+
                     // Match health
-                    if ($npc->base_health !== (int)$mdtNpc->health) {
+                    if ($npc->base_health !== $mdtNpc->getHealth()) {
                         $warnings->push(
                             new ImportWarning('mismatched_health',
-                                sprintf(__('NPC %s has mismatched health values, MDT: %s, KG: %s'), $mdtNpc->id, (int)$mdtNpc->health, $npc->base_health),
-                                ['mdt_npc' => $mdtNpc, 'npc' => $npc, 'old' => $npc->base_health, 'new' => (int)$mdtNpc->health]
+                                sprintf(__('NPC %s has mismatched health values, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npc->base_health),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->base_health, 'new' => $mdtNpc->getHealth()]
                             )
                         );
                     }
 
                     // Match enemy forces
-                    if ($npc->enemy_forces !== (int)$mdtNpc->count) {
+                    if ($npc->enemy_forces !== $mdtNpc->getCount()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces',
-                                sprintf(__('NPC %s has mismatched enemy forces, MDT: %s, KG: %s'), $mdtNpc->id, (int)$mdtNpc->count, $npc->enemy_forces),
-                                ['mdt_npc' => $mdtNpc, 'npc' => $npc, 'old' => $npc->enemy_forces, 'new' => (int)$mdtNpc->count]
+                                sprintf(__('NPC %s has mismatched enemy forces, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getCount(), $npc->enemy_forces),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces, 'new' => $mdtNpc->getCount()]
+                            )
+                        );
+                    }
+
+                    // Match enemy forces teeming
+                    if ($npc->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
+                        $warnings->push(
+                            new ImportWarning('mismatched_enemy_forces_teeming',
+                                sprintf(__('NPC %s has mismatched enemy forces teeming, MDT: %s, KG: %s'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npc->enemy_forces_teeming),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
                             )
                         );
                     }
 
                     // Match clone count, should be equal
-                    if ($npc->enemies->count() !== count($mdtNpc->clones)) {
+                    if ($npc->enemies->count() !== count($mdtNpc->getClones())) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_count',
                                 sprintf(__('NPC %s has mismatched enemy count, MDT: %s, KG: %s'),
-                                    $mdtNpc->id, count($mdtNpc->clones), $npc->enemies === null ? 0 : $npc->enemies->count()),
-                                ['mdt_npc' => $mdtNpc, 'npc' => $npc]
+                                    $mdtNpc->getId(), count($mdtNpc->getClones()), $npc->enemies === null ? 0 : $npc->enemies->count()),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
                             )
                         );
                     }
 
                     // Match npc type, should be equal
-                    if ($npc->type->type !== $mdtNpc->creatureType) {
+                    if ($npc->type->type !== $mdtNpc->getCreatureType()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_type',
                                 sprintf(__('NPC %s has mismatched enemy type, MDT: %s, KG: %s'),
-                                    $mdtNpc->id, $mdtNpc->creatureType, $npc->type->type),
-                                ['mdt_npc' => $mdtNpc, 'npc' => $npc, 'old' => $npc->type->type, 'new' => $mdtNpc->creatureType]
+                                    $mdtNpc->getId(), $mdtNpc->getCreatureType(), $npc->type->type),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->type->type, 'new' => $mdtNpc->getCreatureType()]
                             )
                         );
                     }
@@ -146,6 +162,10 @@ class AdminToolsController extends Controller
                 break;
             case 'mismatched_enemy_forces':
                 $npc->enemy_forces = $value;
+                $npc->save();
+                break;
+            case 'mismatched_enemy_forces_teeming':
+                $npc->enemy_forces_teeming = $value;
                 $npc->save();
                 break;
             case 'mismatched_enemy_type':
@@ -219,7 +239,7 @@ class AdminToolsController extends Controller
                 // for each and every re-import
                 $demoRoute->setHidden(['id']);
                 $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
-                    'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapicons']);
+                                  'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapicons']);
 
                 // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
                 // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance

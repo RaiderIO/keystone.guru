@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property int $base_health
  * @property int $enemy_forces
+ * @property int $enemy_forces_teeming
  * @property string $aggressiveness
  * @property bool $dangerous
  * @property bool $truesight
@@ -32,7 +33,7 @@ class Npc extends Model
     public $timestamps = false;
 
     protected $with = ['type', 'class'];
-    protected $fillable = ['id', 'dungeon_id', 'name', 'base_health', 'enemy_forces'];
+    protected $fillable = ['id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming'];
 
     /**
      * Gets all derived enemies from this Npc.

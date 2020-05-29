@@ -14,11 +14,8 @@ use App\Models\NpcClass;
 use App\Models\NpcType;
 use Error;
 use Exception;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Teapot\StatusCode\Http;
 
 trait ListsEnemies
 {
@@ -56,7 +53,7 @@ trait ListsEnemies
                 where `floors`.dungeon_id = :dungeonId
                 group by `enemies`.`id`;
                 ', $params = [
-            'routeId' => isset($dungeonRoute) ? $dungeonRoute->id : -1,
+            'routeId'   => isset($dungeonRoute) ? $dungeonRoute->id : -1,
             'dungeonId' => $dungeonId
         ]);
 
@@ -69,11 +66,19 @@ trait ListsEnemies
         $npcClasses = NpcClass::all();
 
         // Only if we should show MDT enemies
-        $mdtEnemies = [];
+        $filteredEnemies = [];
         if ($showMdtEnemies) {
             try {
                 $dungeon = Dungeon::findOrFail($dungeonId);
                 $mdtEnemies = (new MDTDungeon($dungeon->name))->getClonesAsEnemies($dungeon->floors);
+
+                foreach ($mdtEnemies as $mdtEnemy) {
+                    // Skip Emissaries (Season 3), season is over
+                    if (!in_array($mdtEnemy->npc_id, [155432, 155433, 155434])) {
+                        $filteredEnemies[] = $mdtEnemy;
+                    }
+                }
+
             } // Thrown when Lua hasn't been configured
             catch (Error $ex) {
                 return false;
@@ -82,17 +87,18 @@ trait ListsEnemies
 
         // Post process enemies
         foreach ($result as $enemy) {
-            $enemy->npc = $npcs->filter(function ($item) use ($enemy) {
+            $enemy->npc = $npcs->filter(function ($item) use ($enemy)
+            {
                 return $enemy->npc_id === $item->id;
             })->first();
 
-            if( $enemy->npc !== null ) {
+            if ($enemy->npc !== null) {
                 $enemy->npc->type = $npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
                 $enemy->npc->class = $npcClasses->get($enemy->npc->npc_class_id - 1);
             }
 
             // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
-            foreach ($mdtEnemies as $mdtEnemy) {
+            foreach ($filteredEnemies as $mdtEnemy) {
                 // Match them
                 if ($mdtEnemy->mdt_id === $enemy->mdt_id && $mdtEnemy->npc_id === $enemy->npc_id) {
                     // Match found, assign and quit
@@ -105,6 +111,6 @@ trait ListsEnemies
             unset($enemy->npc_id);
         }
 
-        return ['enemies' => collect($result), 'mdt_enemies' => collect($mdtEnemies)];
+        return ['enemies' => collect($result), 'mdt_enemies' => collect($filteredEnemies)];
     }
 }

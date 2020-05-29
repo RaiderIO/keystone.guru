@@ -35,7 +35,6 @@ use Illuminate\Support\Facades\DB;
  * @property $setup array
  * @property $avg_rating double
  * @property $rating_count int
- * @property $enemy_forces int
  *
  * @property $thumbnail_updated_at string
  * @property $updated_at string
@@ -61,9 +60,9 @@ use Illuminate\Support\Facades\DB;
  * @property Collection $affixes
  * @property Collection $ratings
  *
- * @property Collection $brushlines
- * @property Collection $paths
- * @property Collection $killzones
+ * @property Collection|Brushline[] $brushlines
+ * @property Collection|Path[] $paths
+ * @property Collection|KillZone[] $killzones
  *
  * @property Collection $enemyraidmarkers
  * @property Collection $mapicons
@@ -72,8 +71,8 @@ use Illuminate\Support\Facades\DB;
  * @property Collection $routeattributes
  * @property Collection $routeattributesraw
  *
- * @method static Builder visibleWithUnlisted()
- * @method static Builder visible()
+ * @method static \Illuminate\Database\Eloquent\Builder visible()
+ * @method static \Illuminate\Database\Eloquent\Builder visibleWithUnlisted()
  *
  * @mixin \Eloquent
  */
@@ -378,31 +377,27 @@ class DungeonRoute extends Model
     /**
      * Gets the current amount of enemy forces that have been targeted for killing in this dungeon route.
      */
-    public function getEnemyForcesAttribute()
+    public function getEnemyForces()
     {
         // Build an ID => amount array of NPCs we've killed in this route
-        $killedNPCs = [];
+        /** @var Collection|Npc[] $npcs */
+        $npcs = Npc::whereIn('dungeon_id', [$this->dungeon_id, -1])->select(['id', 'enemy_forces', 'enemy_forces_teeming'])->get();
+
+        // Find all Npcs that we've killed
+        $result = 0;
         foreach ($this->killzones as $killzone) {
             /** @var KillZone $killzone */
             foreach ($killzone->enemies as $enemy) {
-                /** @var Enemy $enemy */
-                if (isset($killedNPCs[$enemy->npc_id])) {
-                    $killedNPCs[$enemy->npc_id]++;
-                } else {
-                    $killedNPCs[$enemy->npc_id] = 1;
-                }
-            }
-        }
+                $npc = $npcs->where('id', $enemy->npc_id)->first();
 
-        // Find all Npcs that we've killed
-        $npcs = Npc::findMany(array_keys($killedNPCs));
-        $result = 0;
-        // Build the result
-        foreach ($npcs as $npc) {
-            // Only if they're set (> -1) and if it makes sense (> 0)
-            if ($npc->enemy_forces > 0) {
-                /** @var $npc Npc */
-                $result += $killedNPCs[$npc->id] * $npc->enemy_forces;
+                /** @var Enemy $enemy */
+                if( $enemy->enemy_forces_override >= 0 ){
+                    $result += $enemy->enemy_forces_override;
+                } else if( $this->teeming && $npc->enemy_forces_teeming >= 0 ) {
+                    $result += $npc->enemy_forces_teeming;
+                } else {
+                    $result += $npc->enemy_forces;
+                }
             }
         }
 

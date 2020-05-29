@@ -52,6 +52,7 @@
         'mismatched_enemy_type' => __('Mismatched enemy type'),
         'missing_npc' => __('Missing NPC'),
         'mismatched_enemy_forces' => __('Mismatched enemy forces'),
+        'mismatched_enemy_forces_teeming' => __('Mismatched enemy forces (teeming)'),
     ]
     ?>
 
@@ -62,8 +63,9 @@
             </h1>
             <table class="w-100">
                 <tr>
-                    <th width="25%">{{ __('NPC') }}</th>
-                    <th width="60%">{{ __('Message') }}</th>
+                    <th width="15%">{{ __('Dungeon') }}</th>
+                    <th width="20%">{{ __('NPC') }}</th>
+                    <th width="30%">{{ __('Message') }}</th>
                     <th width="15%">{{ __('Actions') }}</th>
                 </tr>
                 @foreach($category as $importWarning)
@@ -74,8 +76,12 @@
                     $old = isset($data['old']) ? $data['old'] : '';
                     $new = isset($data['new']) ? $data['new'] : '';
                     $count = isset($data['npc']) ? $data['npc']->enemies->count() : 0;
+                    $dungeonName = isset($data['npc']) ? $data['npc']->dungeon->name : 0;
                     ?>
                     <tr id="{{ $key . '_' . $mdtNpc->id }}">
+                        <td>
+                            {{ $dungeonName }}
+                        </td>
                         <td>
                             {{ sprintf( '%s (%s, %s usages)', $mdtNpc->name, $mdtNpc->id, $count) }}
                         </td>
@@ -83,10 +89,10 @@
                             {{ $importWarning->getMessage() }}
                         </td>
                         <td>
-                            @if( $key === 'mismatched_health' || $key === 'mismatched_enemy_forces' || $key === 'mismatched_enemy_type')
+                            @if( $key === 'mismatched_health' || $key === 'mismatched_enemy_forces' || $key === 'mismatched_enemy_forces_teeming' || $key === 'mismatched_enemy_type')
                                 <button class="btn btn-primary apply_btn"
-                                   data-id="{{ $mdtNpc->id }}" data-category="{{ $key }}"
-                                   data-new="{{ $new }}">
+                                        data-id="{{ $mdtNpc->id }}" data-category="{{ $key }}"
+                                        data-new="{{ $new }}">
                                     {{ __('Apply (MDT -> KG)') }}
                                 </button>
                             @endif
