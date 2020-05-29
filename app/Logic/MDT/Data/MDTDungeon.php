@@ -100,7 +100,7 @@ class MDTDungeon
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
      * @param $floors Floor|Collection The floors that you want to get the clones for.
-     * @return Enemy[]
+     * @return Collection|Enemy[]
      */
     public function getClonesAsEnemies($floors)
     {
@@ -147,7 +147,7 @@ class MDTDungeon
         }
 
         // We now know a list of clones that we want to display, convert those clones to TEMP enemies
-        $enemies = [];
+        $enemies = new Collection();
         foreach ($floors as $floor) {
             /** @var Collection $npcs */
             $npcs = Npc::whereIn('dungeon_id', [$floor->dungeon->id, -1])->get();
@@ -181,7 +181,7 @@ class MDTDungeon
                         // Some properties which are dynamic on a normal enemy but static here
                         $enemy->raid_marker_name = null;
 
-                        $enemies[] = $enemy;
+                        $enemies->push($enemy);
                     }
                 }
             }

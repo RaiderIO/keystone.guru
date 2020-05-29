@@ -216,10 +216,6 @@ class ImportString
                             /** @var Enemy $mdtEnemy */
                             $mdtEnemy = null;
                             foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                                // Skip Emissaries (Season 3), season is over
-                                if (in_array($mdtEnemyCandidate->npc_id, [155432, 155433, 155434])) {
-                                    break 2;
-                                }
 
                                 // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
                                 // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
@@ -228,6 +224,12 @@ class ImportString
                                 if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
                                     // Found it
                                     $mdtEnemy = $mdtEnemyCandidate;
+
+                                    // Skip Emissaries (Season 3), season is over
+                                    if (in_array($mdtEnemy->npc_id, [155432, 155433, 155434])) {
+                                        break 2;
+                                    }
+
                                     break;
                                 }
                             }
@@ -235,7 +237,7 @@ class ImportString
                             if ($mdtEnemy === null) {
                                 throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
                                     sprintf(__('Unable to find MDT enemy for clone index %s and npc index %s.'), $cloneIndex, $npcIndex),
-                                    ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
+                                    ['details' => __('This indicates MDT has mapped an enemy that is not known in Keystone.guru yet.')]
                                 );
                             }
 
@@ -252,8 +254,8 @@ class ImportString
 
                             if ($enemy === null) {
                                 throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
-                                    sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC id %s.'), $mdtEnemy->mdt_id, $mdtEnemy->npc_id),
-                                    ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
+                                    sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC %s (id: %s).'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
+                                    ['details' => __('This indicates that your route kills an enemy of which its NPC is known to Keystone.guru, but Keystone.guru doesn\'t have that enemy mapped yet.')]
                                 );
                             }
 
