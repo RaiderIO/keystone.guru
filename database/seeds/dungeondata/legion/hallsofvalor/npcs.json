@@ -8,6 +8,7 @@
         "name": "Hymdall",
         "base_health": 253595,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -21,6 +22,7 @@
         "name": "God-King Skovald",
         "base_health": 247255,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -34,6 +36,7 @@
         "name": "Odyn",
         "base_health": 1302095,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -47,6 +50,7 @@
         "name": "Valarjar Shieldmaiden",
         "base_health": 34764,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -60,6 +64,7 @@
         "name": "Hyrja",
         "base_health": 260419,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -73,6 +78,7 @@
         "name": "Valarjar Mystic",
         "base_health": 34764,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -86,6 +92,7 @@
         "name": "Valarjar Thundercaller",
         "base_health": 36369,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -99,6 +106,7 @@
         "name": "King Haldor",
         "base_health": 82990,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -112,6 +120,7 @@
         "name": "Stormforged Sentinel",
         "base_health": 57539,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -125,6 +134,7 @@
         "name": "Ebonclaw Worg",
         "base_health": 31288,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -138,6 +148,7 @@
         "name": "Gildedfur Stag",
         "base_health": 10429,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -151,6 +162,7 @@
         "name": "Angerhoof Bull",
         "base_health": 38241,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -164,6 +176,7 @@
         "name": "Valarjar Marksman",
         "base_health": 34069,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -177,6 +190,7 @@
         "name": "Valarjar Runecarver",
         "base_health": 34764,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -190,6 +204,7 @@
         "name": "Steeljaw Grizzly",
         "base_health": 41717,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -203,6 +218,7 @@
         "name": "Valarjar Trapper",
         "base_health": 35807,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -216,6 +232,7 @@
         "name": "King Bjorn",
         "base_health": 82990,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -229,6 +246,7 @@
         "name": "King Ranulf",
         "base_health": 82990,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -242,6 +260,7 @@
         "name": "King Tor",
         "base_health": 82990,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -255,6 +274,7 @@
         "name": "Valarjar Champion",
         "base_health": 24335,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -268,6 +288,7 @@
         "name": "Valarjar Purifier",
         "base_health": 34764,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -281,6 +302,7 @@
         "name": "Olmyr the Enlightened",
         "base_health": 115079,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -294,6 +316,7 @@
         "name": "Solsten",
         "base_health": 115079,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -307,6 +330,7 @@
         "name": "Valarjar Falconer",
         "base_health": 31288,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -320,6 +344,7 @@
         "name": "Trained Hawk",
         "base_health": 15001,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -333,6 +358,7 @@
         "name": "Fenryr",
         "base_health": 284114,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -346,6 +372,7 @@
         "name": "Storm Drake",
         "base_health": 61136,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -359,6 +386,7 @@
         "name": "Valarjar Aspirant",
         "base_health": 34764,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0

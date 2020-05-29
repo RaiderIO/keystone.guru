@@ -8,6 +8,7 @@
         "name": "Coin-Operated Crowd Pummeler",
         "base_health": 8914542,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -21,6 +22,7 @@
         "name": "Azerokk",
         "base_health": 4733929,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -34,6 +36,7 @@
         "name": "Rixxa Fluxflame",
         "base_health": 5379465,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -47,6 +50,7 @@
         "name": "Mogul Razdunk",
         "base_health": 5994261,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -60,6 +64,7 @@
         "name": "Earthrager",
         "base_health": 768495,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -73,6 +78,7 @@
         "name": "Addled Thug",
         "base_health": 999044,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -86,6 +92,7 @@
         "name": "Off-Duty Laborer",
         "base_health": 307398,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -99,6 +106,7 @@
         "name": "Mine Rat",
         "base_health": 461097,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -112,6 +120,7 @@
         "name": "Mechanized Peacekeeper",
         "base_health": 1229592,
         "enemy_forces": 12,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0
@@ -125,6 +134,7 @@
         "name": "Mech Jockey",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -138,6 +148,7 @@
         "name": "Stonefury",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -151,6 +162,7 @@
         "name": "Wanton Sapper",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -164,6 +176,7 @@
         "name": "Venture Co. Earthshaper",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -177,6 +190,7 @@
         "name": "Feckless Assistant",
         "base_health": 768495,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -190,6 +204,7 @@
         "name": "Venture Co. Mastermind",
         "base_health": 1229592,
         "enemy_forces": 8,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -203,6 +218,7 @@
         "name": "Venture Co. Alchemist",
         "base_health": 768495,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -216,6 +232,7 @@
         "name": "Venture Co. Skyscorcher",
         "base_health": 768495,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -229,6 +246,7 @@
         "name": "Venture Co. War Machine",
         "base_health": 1229592,
         "enemy_forces": 8,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1
@@ -242,6 +260,7 @@
         "name": "Crawler Mine",
         "base_health": 19707,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -255,6 +274,7 @@
         "name": "Expert Technician",
         "base_health": 768495,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -268,6 +288,7 @@
         "name": "Test Subject",
         "base_health": 153699,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -281,6 +302,7 @@
         "name": "Shalebiter",
         "base_health": 153699,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -294,6 +316,7 @@
         "name": "Taskmaster Askari",
         "base_health": 1229592,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -307,6 +330,7 @@
         "name": "Hired Assassin",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -320,6 +344,7 @@
         "name": "Off-Duty Laborer",
         "base_health": 307398,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -333,6 +358,7 @@
         "name": "Rowdy Reveler",
         "base_health": 153699,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -346,6 +372,7 @@
         "name": "Mechanized Peacekeeper",
         "base_health": 1229592,
         "enemy_forces": 12,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0
@@ -359,6 +386,7 @@
         "name": "Refreshment Vendor",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -372,6 +400,7 @@
         "name": "Azerite Extractor",
         "base_health": 1229592,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -385,6 +414,7 @@
         "name": "Fanatical Driller",
         "base_health": 176601,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -398,6 +428,7 @@
         "name": "Weapons Tester",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -411,6 +442,7 @@
         "name": "Ordnance Specialist",
         "base_health": 768495,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -424,6 +456,7 @@
         "name": "Big Money Crab",
         "base_health": 153699,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -437,6 +470,7 @@
         "name": "Bottom Feeder",
         "base_health": 153699,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -450,6 +484,7 @@
         "name": "Safety Shark",
         "base_health": 3073980,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -463,6 +498,7 @@
         "name": "Venture Co. Longshoreman",
         "base_health": 307398,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -476,6 +512,7 @@
         "name": "Posh Vacationer",
         "base_health": 153699,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -489,6 +526,7 @@
         "name": "Footbomb Hooligan",
         "base_health": 153699,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -502,6 +540,7 @@
         "name": "Dr. Wrenchly von Boom",
         "base_health": 183935,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0
@@ -515,6 +554,7 @@
         "name": "Drix Bassbolter",
         "base_health": 36787,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0

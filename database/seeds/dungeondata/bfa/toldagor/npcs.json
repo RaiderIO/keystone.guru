@@ -8,6 +8,7 @@
         "name": "Silt Crab",
         "base_health": 768495,
         "enemy_forces": 3,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -21,6 +22,7 @@
         "name": "Saltwater Snapper",
         "base_health": 922194,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -34,6 +36,7 @@
         "name": "The Sand Queen",
         "base_health": 5379465,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -47,6 +50,7 @@
         "name": "Stinging Parasite",
         "base_health": 230549,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -60,6 +64,7 @@
         "name": "Sewer Vicejaw",
         "base_health": 845345,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -73,6 +78,7 @@
         "name": "Jes Howlis",
         "base_health": 4610970,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -86,6 +92,7 @@
         "name": "Bilge Rat Looter",
         "base_health": 461097,
         "enemy_forces": 3,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -99,6 +106,7 @@
         "name": "Ashvane Officer",
         "base_health": 1229592,
         "enemy_forces": 7,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1
@@ -112,6 +120,7 @@
         "name": "Ashvane Flamecaster",
         "base_health": 1075893,
         "enemy_forces": 7,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -125,6 +134,7 @@
         "name": "Knight Captain Valyri",
         "base_health": 5379465,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -138,6 +148,7 @@
         "name": "Ashvane Warden",
         "base_health": 1383291,
         "enemy_forces": 9,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -151,6 +162,7 @@
         "name": "Overseer Korgus",
         "base_health": 6609057,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -164,6 +176,7 @@
         "name": "Irontide Thug",
         "base_health": 1152743,
         "enemy_forces": 7,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1
@@ -177,6 +190,7 @@
         "name": "Bilge Rat Seaspeaker",
         "base_health": 691646,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -190,6 +204,7 @@
         "name": "Ashvane Marine",
         "base_health": 1229592,
         "enemy_forces": 7,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -203,6 +218,7 @@
         "name": "Ashvane Priest",
         "base_health": 1229592,
         "enemy_forces": 7,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -216,6 +232,7 @@
         "name": "Despondent Scallywag",
         "base_health": 230549,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -229,6 +246,7 @@
         "name": "Cutwater Striker",
         "base_health": 768495,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -242,6 +260,7 @@
         "name": "Block Warden",
         "base_health": 1383289,
         "enemy_forces": 9,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -255,6 +274,7 @@
         "name": "Irontide Raider",
         "base_health": 461096,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -268,6 +288,7 @@
         "name": "Blacktooth Arsonist",
         "base_health": 845345,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -281,6 +302,7 @@
         "name": "Ashvane Jailer",
         "base_health": 1229590,
         "enemy_forces": 7,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -294,6 +316,7 @@
         "name": "Bilge Rat Looter",
         "base_health": 461096,
         "enemy_forces": 3,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -307,6 +330,7 @@
         "name": "Ashvane Spotter",
         "base_health": 1229592,
         "enemy_forces": 7,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0

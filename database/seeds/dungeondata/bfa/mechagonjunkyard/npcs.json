@@ -8,6 +8,7 @@
         "name": "Scrapbone Trashtosser",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -21,6 +22,7 @@
         "name": "Scrapbone Grinder",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -34,6 +36,7 @@
         "name": "Scrapbone Shaman",
         "base_health": 614795,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -47,6 +50,7 @@
         "name": "Saurolisk Bonenipper",
         "base_health": 768495,
         "enemy_forces": 8,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -60,6 +64,7 @@
         "name": "King Gobbamak",
         "base_health": 5379465,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -73,6 +78,7 @@
         "name": "Scrapbone Bully",
         "base_health": 1229592,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -86,6 +92,7 @@
         "name": "Slime Elemental",
         "base_health": 1229592,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -99,6 +106,7 @@
         "name": "Toxic Monstrosity",
         "base_health": 1383291,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -112,6 +120,7 @@
         "name": "Toxic Lurker",
         "base_health": 799234,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -125,6 +134,7 @@
         "name": "HK-8 Aerial Oppression Unit",
         "base_health": 5994261,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -138,6 +148,7 @@
         "name": "Gnome-Eating Slime",
         "base_health": 384248,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -151,6 +162,7 @@
         "name": "Gunker",
         "base_health": 3228015,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -164,6 +176,7 @@
         "name": "Pistonhead Scrapper",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -177,6 +190,7 @@
         "name": "Pistonhead Blaster",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -190,6 +204,7 @@
         "name": "Pistonhead Mechanic",
         "base_health": 922194,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -203,6 +218,7 @@
         "name": "Weaponized Crawler",
         "base_health": 1536990,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -216,6 +232,7 @@
         "name": "Scraphound",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1
@@ -229,6 +246,7 @@
         "name": "Heavy Scrapbot",
         "base_health": 1229592,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -242,6 +260,7 @@
         "name": "Mechagon Cavalry",
         "base_health": 1229592,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1
@@ -255,6 +274,7 @@
         "name": "Mechagon Prowler",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -268,6 +288,7 @@
         "name": "Tank Buster MK1",
         "base_health": 3073980,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1
@@ -281,6 +302,7 @@
         "name": "Mechagon Renormalizer",
         "base_health": 614795,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -294,6 +316,7 @@
         "name": "Scrapbone Grunter",
         "base_health": 384248,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -307,6 +330,7 @@
         "name": "Trixie Tazer",
         "base_health": 2766582,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -320,6 +344,7 @@
         "name": "Malfunctioning Scrapbot",
         "base_health": 1229592,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -333,6 +358,7 @@
         "name": "Naeno Megacrash",
         "base_health": 2074937,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -346,6 +372,7 @@
         "name": "Gnome-Eating Droplet",
         "base_health": 144491,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -359,6 +386,7 @@
         "name": "Squirt Bot",
         "base_health": 15412300,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0
@@ -372,6 +400,7 @@
         "name": "Anodized Coilbearer",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -385,6 +414,7 @@
         "name": "Mechagon Trooper",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0

@@ -8,6 +8,7 @@
         "name": "Animated Guardian",
         "base_health": 1306442,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -21,6 +22,7 @@
         "name": "Minion of Zul",
         "base_health": 36,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -34,6 +36,7 @@
         "name": "Shadow-Borne Warrior",
         "base_health": 768494,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -47,6 +50,7 @@
         "name": "Shadow-Borne Champion",
         "base_health": 1229590,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -60,6 +64,7 @@
         "name": "Shadow-Borne Witch Doctor",
         "base_health": 1152741,
         "enemy_forces": 5,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -73,6 +78,7 @@
         "name": "Seneschal M'bara",
         "base_health": 768494,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -86,6 +92,7 @@
         "name": "King Rahu'ai",
         "base_health": 1229590,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -99,6 +106,7 @@
         "name": "Purification Construct",
         "base_health": 1844388,
         "enemy_forces": 8,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -112,6 +120,7 @@
         "name": "Mchimba the Embalmer",
         "base_health": 5379459,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -125,6 +134,7 @@
         "name": "Spectral Headhunter",
         "base_health": 249760,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -138,6 +148,7 @@
         "name": "Spectral Berserker",
         "base_health": 922193,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -151,6 +162,7 @@
         "name": "Honored Raptor",
         "base_health": 768494,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -164,6 +176,7 @@
         "name": "Spectral Hex Priest",
         "base_health": 691644,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -177,6 +190,7 @@
         "name": "Spectral Brute",
         "base_health": 1536988,
         "enemy_forces": 8,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -190,6 +204,7 @@
         "name": "Spectral Beastmaster",
         "base_health": 730070,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -203,6 +218,7 @@
         "name": "Spectral Witch Doctor",
         "base_health": 768494,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -216,6 +232,7 @@
         "name": "The Golden Serpent",
         "base_health": 5379459,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -229,6 +246,7 @@
         "name": "Aka'ali the Conqueror",
         "base_health": 2766579,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -242,6 +260,7 @@
         "name": "Zanazal the Wise",
         "base_health": 2766579,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -255,6 +274,7 @@
         "name": "Kula the Butcher",
         "base_health": 2766579,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -268,6 +288,7 @@
         "name": "King Dazar",
         "base_health": 5994255,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -281,6 +302,7 @@
         "name": "Guard Captain Atu",
         "base_health": 1248802,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -294,6 +316,7 @@
         "name": "King Timalji",
         "base_health": 1229590,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -307,6 +330,7 @@
         "name": "Queen Wasi",
         "base_health": 1229590,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -320,6 +344,7 @@
         "name": "King A'akul",
         "base_health": 1998085,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -333,6 +358,7 @@
         "name": "Bloodsworn Agent",
         "base_health": 768494,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -346,6 +372,7 @@
         "name": "Queen Patlaa",
         "base_health": 1229590,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -359,6 +386,7 @@
         "name": "Skeletal Hunting Raptor",
         "base_health": 768494,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -372,6 +400,7 @@
         "name": "Interment Construct",
         "base_health": 1536988,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -385,6 +414,7 @@
         "name": "Embalming Fluid",
         "base_health": 461096,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -398,6 +428,7 @@
         "name": "Shadow of Zul",
         "base_health": 2612880,
         "enemy_forces": 8,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0

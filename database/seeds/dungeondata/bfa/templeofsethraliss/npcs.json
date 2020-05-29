@@ -8,6 +8,7 @@
         "name": "Eye of Sethraliss",
         "base_health": 0,
         "enemy_forces": 12,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -21,6 +22,7 @@
         "name": "Adderis",
         "base_health": 3073980,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -34,6 +36,7 @@
         "name": "Merektha",
         "base_health": 3535073,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -47,6 +50,7 @@
         "name": "Galvazzt",
         "base_health": 5379459,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -60,6 +64,7 @@
         "name": "Avatar of Sethraliss",
         "base_health": 1536990,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -73,6 +78,7 @@
         "name": "Aspix",
         "base_health": 3073980,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -86,6 +92,7 @@
         "name": "Faithless Tender",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -99,6 +106,7 @@
         "name": "Imbued Stormcaller",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -112,6 +120,7 @@
         "name": "Sandswept Marksman",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -125,6 +134,7 @@
         "name": "Shrouded Fang",
         "base_health": 614796,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -138,6 +148,7 @@
         "name": "Krolusk Pup",
         "base_health": 461097,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -151,6 +162,7 @@
         "name": "Krolusk Hatchling",
         "base_health": 5631,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -164,6 +176,7 @@
         "name": "Scaled Krolusk Rider",
         "base_health": 1229592,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -177,6 +190,7 @@
         "name": "Mature Krolusk",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -190,6 +204,7 @@
         "name": "Static-charged Dervish",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -203,6 +218,7 @@
         "name": "Charged Dust Devil",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -216,6 +232,7 @@
         "name": "Sandfury Stonefist",
         "base_health": 1229592,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -229,6 +246,7 @@
         "name": "Orb Guardian",
         "base_health": 383065,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -242,6 +260,7 @@
         "name": "Venomous Ophidian",
         "base_health": 307398,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -255,6 +274,7 @@
         "name": "Sand-crusted Striker",
         "base_health": 307398,
         "enemy_forces": 2,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -268,6 +288,7 @@
         "name": "Faithless Conscript",
         "base_health": 88301,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -281,6 +302,7 @@
         "name": "Agitated Nimbus",
         "base_health": 1229592,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -294,6 +316,7 @@
         "name": "Hoodoo Hexer",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -307,6 +330,7 @@
         "name": "Spark Channeler",
         "base_health": 1229590,
         "enemy_forces": 11,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -320,6 +344,7 @@
         "name": "Scaled Krolusk Tamer",
         "base_health": 1229592,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -333,6 +358,7 @@
         "name": "Crazed Incubator",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -346,6 +372,7 @@
         "name": "Heart Guardian",
         "base_health": 1229592,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0
@@ -359,6 +386,7 @@
         "name": "Plague Doctor",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0

@@ -8,6 +8,7 @@
         "name": "Fetid Maggot",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -21,6 +22,7 @@
         "name": "Elder Leaxa",
         "base_health": 3688770,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -34,6 +36,7 @@
         "name": "Sporecaller Zancha",
         "base_health": 5379465,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -47,6 +50,7 @@
         "name": "Underrot Tick",
         "base_health": 153699,
         "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -60,6 +64,7 @@
         "name": "Chosen Blood Matron",
         "base_health": 1229592,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1
@@ -73,6 +78,7 @@
         "name": "Devout Blood Priest",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -86,6 +92,7 @@
         "name": "Cragmaw the Infested",
         "base_health": 5379465,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -99,6 +106,7 @@
         "name": "Unbound Abomination",
         "base_health": 5994261,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -112,6 +120,7 @@
         "name": "Fanatical Headhunter",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -125,6 +134,7 @@
         "name": "Befouled Spirit",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -138,6 +148,7 @@
         "name": "Feral Bloodswarmer",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -151,6 +162,7 @@
         "name": "Reanimated Guardian",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -164,6 +176,7 @@
         "name": "Living Rot",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -177,6 +190,7 @@
         "name": "Diseased Lasher",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -190,6 +204,7 @@
         "name": "Bloodsworn Defiler",
         "base_health": 768495,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
@@ -203,6 +218,7 @@
         "name": "Fallen Deathspeaker",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -216,6 +232,7 @@
         "name": "Titan Keeper Hezrel",
         "base_health": 470936,
         "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0
@@ -229,6 +246,7 @@
         "name": "Grotesque Horror",
         "base_health": 768495,
         "enemy_forces": 4,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0
@@ -242,6 +260,7 @@
         "name": "Faceless Corruptor",
         "base_health": 1229592,
         "enemy_forces": 6,
+        "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0
