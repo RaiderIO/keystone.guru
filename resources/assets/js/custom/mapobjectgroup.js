@@ -157,6 +157,8 @@ class MapObjectGroup extends Signalable {
             }
 
             if (layer !== null) {
+                let oldTooltip = layer.getTooltip();
+
                 let tooltip = layer.bindTooltip(username, {
                     permanent: true,
                     className: 'user_color_' + username + ' ' + fontClass,
@@ -166,7 +168,13 @@ class MapObjectGroup extends Signalable {
                 // Fadeout after some time
                 setTimeout(function () {
                     tooltip.closeTooltip();
-                }, 5000);
+
+                    // Do not re-bind a tooltip that shouldn't be there permanently
+                    if (!oldTooltip.options.className.includes('user_color_')) {
+                        // Rebind killzone pull index tooltip
+                        layer.bindTooltip(oldTooltip._content, oldTooltip.options);
+                    }
+                }, c.map.echo.tooltipFadeOutTimeout);
             } else {
                 console.warn('Unable to display echo received action to user, layer was null', localMapObject);
             }
@@ -248,7 +256,7 @@ class MapObjectGroup extends Signalable {
 
         // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
-        if( object.layer !== null ) {
+        if (object.layer !== null) {
             if (visible) {
                 if (!this.layerGroup.hasLayer(object.layer)) {
                     this.layerGroup.addLayer(object.layer);

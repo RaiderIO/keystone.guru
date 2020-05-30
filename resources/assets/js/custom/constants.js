@@ -189,6 +189,9 @@ let c = {
                     save: true
                 }
             }
+        },
+        echo: {
+            tooltipFadeOutTimeout: 3000
         }
     }
 };

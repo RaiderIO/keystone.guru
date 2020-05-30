@@ -23,6 +23,14 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
     }
 
+    _onObjectDeleted(data){
+        super._onObjectDeleted(data);
+
+        $.each(this.objects, function(i, obj){
+            obj.setIndex(i + 1);
+        });
+    }
+
     _createObject(layer) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
 
@@ -61,6 +69,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         // Now update the killzone to its new properties
         killzone.id = remoteMapObject.id;
         killzone.floor_id = remoteMapObject.floor_id;
+        killzone.index = this.objects.length;
         // Use default if not set
         if (remoteMapObject.color !== '') {
             killzone.color = remoteMapObject.color;

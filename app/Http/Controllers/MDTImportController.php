@@ -50,8 +50,8 @@ class MDTImportController extends Controller
                 'pulls'            => $dungeonRoute->killzones->count(),
                 'lines'            => $dungeonRoute->brushlines->count(),
                 'notes'            => $dungeonRoute->mapicons->count(),
-                'enemy_forces'     => $dungeonRoute->getEnemyForcesAttribute(),
-                'enemy_forces_max' => $dungeonRoute->hasTeemingAffix() ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
+                'enemy_forces'     => $dungeonRoute->getEnemyForces(),
+                'enemy_forces_max' => $dungeonRoute->teeming ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
                 'warnings'         => $warningResult
             ];
 

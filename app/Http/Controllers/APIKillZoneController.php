@@ -74,7 +74,7 @@ class APIKillZoneController extends Controller
                 $dungeonroute->touch();
             }
 
-            $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonroute->getEnemyForcesAttribute()];
+            $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonroute->getEnemyForces()];
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
@@ -109,7 +109,7 @@ class APIKillZoneController extends Controller
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
 
-                $result = ['result' => 'success', 'enemy_forces' => $dungeonroute->getEnemyForcesAttribute()];
+                $result = ['result' => 'success', 'enemy_forces' => $dungeonroute->getEnemyForces()];
             } else {
                 $result = ['result' => 'error'];
             }

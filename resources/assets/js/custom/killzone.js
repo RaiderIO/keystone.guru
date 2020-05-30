@@ -40,11 +40,14 @@ class KillZone extends MapObject {
         this.id = 0;
         this.label = 'KillZone';
         this.color = c.map.killzone.polygonOptions.color();
+        this.index = 0;
         // List of IDs of selected enemies
         this.enemies = [];
         // Temporary list of enemies when we received them from the server
         this.remoteEnemies = [];
         this.enemyConnectionsLayerGroup = null;
+        // Layer that is shown to the user and that he/she can click on to make adjustments to this killzone. May be null
+        this.enemiesLayer = null;
 
         this.setColors(c.map.killzone.colors);
         this.setSynced(false);
@@ -270,8 +273,8 @@ class KillZone extends MapObject {
             latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
         }
 
-        // If there are other floors with enemies..
-        if (otherFloorsWithEnemies.length > 0) {
+        // If there are other floors with enemies AND enemies on this floor..
+        if (otherFloorsWithEnemies.length > 0 && latLngs.length > 0) {
             let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
             $.each(otherFloorsWithEnemies, function (i, floorId) {
                 // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
@@ -287,13 +290,17 @@ class KillZone extends MapObject {
                 console.assert(floorSwitchMarkerCandidates.length > 0, 'floorSwitchMarkerCandidates.length is <= 0', self);
 
                 // Calculate a rough center of our bounds
-                let ourCenterLatLng = self._getLayerCenteroid(latLngs);
+                let ourCenterLatLng = latLngs.length === 1 ? latLngs[0] : self._getLayerCenteroid(latLngs);
                 let closestFloorSwitchMarker = null;
                 let closestDistance = 9999999;
 
+                console.log('ourCenterLatLng', ourCenterLatLng);
+
+                console.log('floorSwitchMarkerCandidates', floorSwitchMarkerCandidates);
                 // Find the closest floor switch marker
                 $.each(floorSwitchMarkerCandidates, function (j, floorSwitchMapObject) {
                     let distance = floorSwitchMapObject.layer.getLatLng().distanceTo(ourCenterLatLng);
+                    console.log(closestDistance, distance);
                     if (closestDistance > distance) {
                         closestDistance = distance;
                         closestFloorSwitchMarker = floorSwitchMapObject;
@@ -412,6 +419,8 @@ class KillZone extends MapObject {
 
         // Create & add new layer
         this.enemyConnectionsLayerGroup = new L.LayerGroup();
+        // Unset the previous layer
+        this.enemiesLayer = null;
 
         let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
@@ -429,25 +438,27 @@ class KillZone extends MapObject {
 
             let opts = $.extend({}, c.map.killzone.polygonOptions, {color: this.color, fillColor: this.color});
 
-            let layer;
             if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
                 opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
                 // Change the pulse color to be dark or light depending on the KZ color
                 opts.pulseColor = isColorDark(this.color) ? opts.pulseColorLight : opts.pulseColorDark;
-                layer = L.polyline.antPath(p, opts);
+                this.enemiesLayer = L.polyline.antPath(p, opts);
+                this.enemiesLayer._map = this.map;
             } else {
-                layer = L.polygon(p, opts);
+                this.enemiesLayer = L.polygon(p, opts);
             }
 
 
             // do not prevent clicking on anything else
             this.enemyConnectionsLayerGroup.setZIndex(-1000);
 
-            this.enemyConnectionsLayerGroup.addLayer(layer);
+            this.enemyConnectionsLayerGroup.addLayer(this.enemiesLayer);
+
+            this.bindTooltip();
 
             // Only add popup to the killzone
             if (this.isEditable()) {
-                layer.on('click', function () {
+                this.enemiesLayer.on('click', function () {
                     // We're now selecting this killzone
                     let currentMapState = self.map.getMapState();
                     let newMapState = currentMapState;
@@ -478,6 +489,41 @@ class KillZone extends MapObject {
      */
     getLayerCenteroid() {
         return this._getLayerCenteroid(this._getVisibleEntitiesLatLngs());
+    }
+
+    /**
+     * The index of this KillZone.
+     * @returns {number}
+     */
+    getIndex(){
+        return this.index;
+    }
+
+    /**
+     * Sets the index of this pull.
+     * @param index
+     */
+    setIndex(index) {
+        this.index = index;
+
+        this.bindTooltip();
+    }
+
+    bindTooltip() {
+        super.bindTooltip();
+        if (this.enemiesLayer !== null) {
+
+            this.enemiesLayer.unbindTooltip();
+
+            // Only when NOT currently editing the layer
+            if (!(this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id)) {
+                this.enemiesLayer.bindTooltip(this.index + '', {
+                    direction: 'center',
+                    className: 'leaflet-tooltip-killzone-index',
+                    permanent: true
+                });
+            }
+        }
     }
 
     // To be overridden by any implementing classes

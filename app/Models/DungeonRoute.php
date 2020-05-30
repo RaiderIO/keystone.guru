@@ -453,24 +453,6 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return bool True if the route contains an affix group which contains the Teeming affix, false if this is not the case.
-     */
-    public function hasTeemingAffix()
-    {
-        $result = false;
-        if ($this->affixes->count() !== 0) {
-            foreach ($this->affixes as $affixGroup) {
-                /** @var $affixGroup AffixGroup */
-                if ($result = $affixGroup->isTeeming()) {
-                    break;
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Saves this DungeonRoute with information from the passed Request.
      *
      * @param Request $request
