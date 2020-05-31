@@ -105,7 +105,7 @@
         "npc_class_id": 1,
         "name": "Purification Construct",
         "base_health": 1844388,
-        "enemy_forces": 8,
+        "enemy_forces": 10,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,

@@ -59,7 +59,9 @@ class APIEnemyController extends Controller
         // Only when set, otherwise default of -1
         $mdtId = $request->get('mdt_id', -1);
         $enemy->mdt_id = $mdtId === null ? -1 : $mdtId;
-        $enemy->seasonal_index = empty($request->get('seasonal_index')) ? null : $request->get('seasonal_index');
+        $seasonalIndex = $request->get('seasonal_index');
+        // don't use is_empty since 0 is valid
+        $enemy->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : $seasonalIndex;
         $enemy->floor_id = $request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');

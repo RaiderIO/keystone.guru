@@ -142,14 +142,18 @@ class Enemy extends MapObject {
     getEnemyForces() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        let result = this.npc.enemy_forces;
-        // Override first
-        if (this.enemy_forces_override >= 0) {
-            result = this.enemy_forces_override;
-        }
-        // If teeming and npc provides an override, use that instead
-        else if (this.map.options.teeming && this.npc.enemy_forces_teeming >= 0) {
-            result = this.npc.enemy_forces_teeming;
+        let result = 0;
+        if( this.npc !== null ) {
+            result = this.npc.enemy_forces;
+
+            // Override first
+            if (this.enemy_forces_override >= 0) {
+                result = this.enemy_forces_override;
+            }
+            // If teeming and npc provides an override, use that instead
+            else if (this.map.options.teeming && this.npc.enemy_forces_teeming >= 0) {
+                result = this.npc.enemy_forces_teeming;
+            }
         }
 
         return result;

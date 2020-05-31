@@ -95,17 +95,19 @@ class EnemyAttaching {
                 $.each(enemyMapObjectGroup.objects, function (i, enemy) {
 
                     // Check if it falls in the layer
-                    let latLng = enemy.layer.getLatLng();
-                    if (gju.pointInPolygon({
-                        type: 'Point',
-                        coordinates: [latLng.lng, latLng.lat]
-                    }, enemyPackPolygon.toGeoJSON().geometry) && enemyMapObjectGroup.isMapObjectVisible(enemy)) {
-                        // Only if something changed; we don't want to make unnecessary requests
-                        if (enemy.enemy_pack_id !== newEnemyPack.id && !enemy.is_mdt) {
-                            // Bind the enemies
-                            enemy.enemy_pack_id = newEnemyPack.id;
-                            // Save all enemies so their pack connection is never broken
-                            enemy.save();
+                    if( enemy.layer !== null ) {
+                        let latLng = enemy.layer.getLatLng();
+                        if (gju.pointInPolygon({
+                            type: 'Point',
+                            coordinates: [latLng.lng, latLng.lat]
+                        }, enemyPackPolygon.toGeoJSON().geometry) && enemyMapObjectGroup.isMapObjectVisible(enemy)) {
+                            // Only if something changed; we don't want to make unnecessary requests
+                            if (enemy.enemy_pack_id !== newEnemyPack.id && !enemy.is_mdt) {
+                                // Bind the enemies
+                                enemy.enemy_pack_id = newEnemyPack.id;
+                                // Save all enemies so their pack connection is never broken
+                                enemy.save();
+                            }
                         }
                     }
                 });

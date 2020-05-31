@@ -11,7 +11,7 @@ class DeleteMapState extends MapState {
         // Loop through each element to see if they are NOT editable, but ARE deleteable.
         // If so, we have to add them to the 'can delete this' list, and remove them after
         $.each(self.map.mapObjects, function (index, mapObject) {
-            if (!mapObject.isEditable() && mapObject.isDeletable()) {
+            if (!mapObject.isEditable() && mapObject.isDeletable() && mapObject.layer !== null) {
                 self.map.editableLayers.addLayer(mapObject.layer);
             }
         });
@@ -23,7 +23,7 @@ class DeleteMapState extends MapState {
 
         // Now we make them un-editable again.
         $.each(self.map.mapObjects, function (index, mapObject) {
-            if (!mapObject.isEditable() && mapObject.isDeletable()) {
+            if (!mapObject.isEditable() && mapObject.isDeletable() && mapObject.layer !== null) {
                 self.map.editableLayers.removeLayer(mapObject.layer);
             }
         });
@@ -40,7 +40,7 @@ class DeleteMapState extends MapState {
             if (mapObjectGroup.objects.hasOwnProperty(index)) {
                 let enemy = mapObjectGroup.objects[index];
                 // Refresh
-                if( enemy.visual !== null ) {
+                if (enemy.visual !== null) {
                     enemy.visual.refresh();
                 }
             }

@@ -294,7 +294,7 @@ class EnemyVisual extends Signalable {
             // Set a default color which may be overridden by any visuals
             let data = {};
 
-            let isSelectable = (this.map.getMapState() instanceof MDTEnemySelection && this.enemy.isEditable()) ||
+            let isSelectable = (this.map.getMapState() instanceof MDTEnemySelection && this.enemy.isSelectable()) ||
                 (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) ||
                 (this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable());
 

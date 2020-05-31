@@ -228,7 +228,7 @@
         "id": 4198,
         "enemy_pack_id": -1,
         "floor_id": 62,
-        "mdt_id": -1,
+        "mdt_id": 1,
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",

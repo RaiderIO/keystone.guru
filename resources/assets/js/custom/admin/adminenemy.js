@@ -501,6 +501,7 @@ class AdminEnemy extends Enemy {
                     npc_id: self.npc_id,
                     floor_id: getState().getCurrentFloor().id,
                     mdt_id: self.mdt_id,
+                    seasonal_index: self.seasonal_index,
                     teeming: self.teeming,
                     faction: self.faction,
                     enemy_forces_override: self.enemy_forces_override,

@@ -97,23 +97,24 @@ class AffixSeeder extends Seeder
             ['season_id' => 3, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Beguiling']],
             ['season_id' => 3, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Beguiling']],
 
-            ['season_id' => 4, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Bursting', 'Necrotic', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Fortified', 'Sanguine', 'Quaking', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Fortified', 'Bolstering', 'Grievous', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Raging', 'Explosive', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Awakened']],
-            ['season_id' => 4, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 0, 'affixes' => ['Fortified', 'Bolstering', 'Skittish', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Bursting', 'Necrotic', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Sanguine', 'Quaking', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 1, 'affixes' => ['Tyrannical', 'Bolstering', 'Explosive', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 0, 'affixes' => ['Fortified', 'Bursting', 'Volcanic', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Raging', 'Necrotic', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Teeming', 'Quaking', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 1, 'affixes' => ['Tyrannical', 'Bursting', 'Skittish', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 0, 'affixes' => ['Fortified', 'Bolstering', 'Grievous', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 0, 'affixes' => ['Tyrannical', 'Raging', 'Explosive', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 1, 'affixes' => ['Fortified', 'Sanguine', 'Grievous', 'Awakened']],
+            ['season_id' => 4, 'seasonal_index' => 1, 'affixes' => ['Tyrannical', 'Teeming', 'Volcanic', 'Awakened']],
         ];
 
         foreach ($groups as $groupArr) {
             $group = new AffixGroup();
             $group->season_id = $groupArr['season_id'];
+            $group->seasonal_index = isset($groupArr['seasonal_index']) ? $groupArr['seasonal_index'] : null;
             $group->save();
 
             foreach ($groupArr['affixes'] as $affixName) {

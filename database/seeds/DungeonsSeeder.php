@@ -378,12 +378,12 @@ class DungeonsSeeder extends Seeder
                     [
                         'from' => 'Temple of Sethraliss',
                         'to' => 'Atrium of the Wardens',
-                        'direction' => 'down'
+                        'direction' => 'left'
                     ],
                     [
                         'from' => 'Atrium of the Wardens',
                         'to' => 'Temple of Sethraliss',
-                        'direction' => 'up'
+                        'direction' => 'right'
                     ],
                 ]
             ],
