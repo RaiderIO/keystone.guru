@@ -37,6 +37,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             enemy.teeming = remoteMapObject.teeming;
             enemy.faction = remoteMapObject.faction;
             enemy.enemy_forces_override = remoteMapObject.enemy_forces_override;
+            enemy.seasonal_index = remoteMapObject.seasonal_index;
             enemy.raid_marker_name = remoteMapObject.raid_marker_name;
             enemy.dangerous = remoteMapObject.dangerous === 1;
             // MDT id is always set

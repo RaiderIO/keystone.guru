@@ -35,6 +35,7 @@ class Enemy extends MapObject {
         /** @type KillZone */
         this.kill_zone = null;
         this.enemy_forces_override = -1;
+        this.seasonal_index = null;
         /** @type Object May be set when loaded from server */
         this.npc = null;
         this.raid_marker_name = '';

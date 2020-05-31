@@ -8,6 +8,7 @@ class CommonGroupAffixes extends InlineCode {
         let self = this;
 
         $(this.options.teemingSelector).bind('change', function () {
+            $('#affixes').val('');
             self._applyAffixRowSelectionOnList();
         });
         $('.affix_list_row').bind('click', this._affixRowClicked.bind(this));

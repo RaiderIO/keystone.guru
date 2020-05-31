@@ -343,6 +343,7 @@ class AdminEnemy extends Enemy {
                 $('#enemy_edit_popup_teeming_' + self.id).val(self.teeming);
                 $('#enemy_edit_popup_faction_' + self.id).val(self.faction);
                 $('#enemy_edit_popup_enemy_forces_override_' + self.id).val(self.enemy_forces_override);
+                $('#enemy_edit_popup_seasonal_index_' + self.id).val(self.seasonal_index);
                 $('#enemy_edit_popup_npc_' + self.id).val(self.npc_id);
 
                 // Refresh all select pickers so they work again
@@ -355,6 +356,7 @@ class AdminEnemy extends Enemy {
                     self.teeming = $('#enemy_edit_popup_teeming_' + self.id).val();
                     self.faction = $('#enemy_edit_popup_faction_' + self.id).val();
                     self.enemy_forces_override = $('#enemy_edit_popup_enemy_forces_override_' + self.id).val();
+                    self.seasonal_index = $('#enemy_edit_popup_seasonal_index_' + self.id).val();
                     self.npc_id = $('#enemy_edit_popup_npc_' + self.id).val();
 
                     self.edit();

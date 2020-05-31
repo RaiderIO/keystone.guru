@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property $id int The ID of this Affix.
  * @property $season_id int
+ * @property $seasonal_index int
  *
  * @property \Illuminate\Database\Eloquent\Collection $affixes
  * @property Season $season

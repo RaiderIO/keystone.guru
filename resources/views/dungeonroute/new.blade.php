@@ -1,6 +1,13 @@
+@inject('seasonService', 'App\Service\Season\SeasonService')
+<?php
+/** @var \App\Service\Season\SeasonService $seasonService */
+$currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+$teeming = old('teeming') ?? $currentAffixGroup->isTeeming();
+$defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
+?>
+
 @extends('layouts.app', ['wide' => true, 'title' => __('New route')])
 @section('header-title', $headerTitle)
-
 
 @section('scripts')
     @parent
@@ -46,7 +53,6 @@
                 {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
             </div>
         </div>
-        @include('common.dungeonroute.attributes')
 
         <div class="form-group">
             <label for="teeming">
@@ -55,7 +61,7 @@
                 __('Check to change the dungeon to resemble Teeming week. Warning: once set, you cannot change this later on without creating a new route.')
                  }}"></i>
             </label>
-            {!! Form::checkbox('teeming', 1, 0, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}
+            {!! Form::checkbox('teeming', 1, $teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}
         </div>
 
 {{--        <div class="form-group">--}}
@@ -67,17 +73,19 @@
 {{--            </label>--}}
 {{--            {!! Form::checkbox('template', 1, 0, ['class' => 'form-control left_checkbox']) !!}--}}
 {{--        </div>--}}
+        <h3>
+            {{ __('Affixes') }} <span class="form-required">*</span>
+        </h3>
+
+        @include('common.group.affixes', ['teemingselector' => '#teeming', 'defaultSelected' => $defaultSelectedAffixes])
+
+        @include('common.dungeonroute.attributes')
 
         <h3>
             {{ __('Group composition (optional)') }}
         </h3>
         @include('common.group.composition')
 
-        <h3>
-            {{ __('Affixes (optional)') }}
-        </h3>
-
-        @include('common.group.affixes', ['teemingselector' => '#teeming'])
 
         @if(Auth::user()->hasPaidTier('unlisted-routes'))
             <h3>

@@ -42,7 +42,8 @@ class DungeonRouteFormRequest extends FormRequest
             'race.*' => 'nullable|numeric',
             'class.*' => 'nullable|numeric',
 
-            'affixes.*' => 'nullable|numeric',
+            'affixes' => 'required|array',
+            'affixes.*' => 'required|numeric',
             'attributes.*' => 'nullable|numeric',
 
             'unlisted' => 'nullable|int',

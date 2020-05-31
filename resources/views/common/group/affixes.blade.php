@@ -5,6 +5,7 @@
 
 $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
 $affixes = \App\Models\Affix::all();
+$defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => ['teemingSelector' => $teemingselector]])
@@ -12,7 +13,7 @@ $affixes = \App\Models\Affix::all();
 <div class="form-group">
     {!! Form::label('affixes[]', __('Select affixes')) !!}
     {!! Form::select('affixes[]', $affixgroups->pluck('id', 'id'),
-        !isset($dungeonroute) ? 0 : $dungeonroute->affixgroups->pluck(['affix_group_id']),
+        !isset($dungeonroute) ? $defaultSelected : $dungeonroute->affixgroups->pluck(['affix_group_id']),
         ['id' => 'affixes', 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
     {{--<select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple--}}
     {{--data-selected-text-format="count > 2">--}}

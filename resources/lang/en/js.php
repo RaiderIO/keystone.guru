@@ -20,6 +20,7 @@ return [
     'no_npc_found_label' => 'No NPC found for this enemy',
 
     'enemy_popup_enemy_forces_label' => 'Enemy forces (override, -1 to inherit)',
+    'enemy_popup_seasonal_index_label' => 'Seasonal index (empty to unset)',
     'teeming_label' => 'Teeming',
     'npc_label' => 'Npc',
 

@@ -495,7 +495,7 @@ class KillZone extends MapObject {
      * The index of this KillZone.
      * @returns {number}
      */
-    getIndex(){
+    getIndex() {
         return this.index;
     }
 
