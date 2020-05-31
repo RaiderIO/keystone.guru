@@ -566,7 +566,7 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Kul Tiran Footman",
-        "base_health": 153699,
+        "base_health": 58864,
         "enemy_forces": 1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",

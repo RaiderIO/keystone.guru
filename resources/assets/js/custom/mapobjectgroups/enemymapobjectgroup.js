@@ -1,6 +1,6 @@
 class EnemyMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_ENEMY, editable);
+        super(manager, MAP_OBJECT_GROUP_ENEMY, '', editable);
 
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
