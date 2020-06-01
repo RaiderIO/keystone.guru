@@ -70,4 +70,19 @@ class AffixGroup extends Model
 
         return $result;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getSeasonalIndexAsLetter()
+    {
+        $result = null;
+
+        if ($this->seasonal_index !== null) {
+            $seasonalIndices = ['A', 'B', 'C', 'D', 'E'];
+            $result = $seasonalIndices[$this->seasonal_index];
+        }
+
+        return $result;
+    }
 }

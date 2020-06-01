@@ -11,6 +11,12 @@ class Sidebar {
     activate() {
         let self = this;
 
+        $(this.options.switchDungeonFloorSelect).change(function () {
+            // Pass the new floor ID to the map
+            getState().setFloorId($(self.options.switchDungeonFloorSelect).val());
+            getState().getDungeonMap().refreshLeafletMap();
+        });
+
         // Make sure that the select options have a valid value
         this._refreshFloorSelect();
 

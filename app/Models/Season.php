@@ -162,4 +162,13 @@ class Season extends Model
         // Only if the current season has presets do we calculate, otherwise return 0
         return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets + 1 : 0;
     }
+
+    public function getSeasonalIndexesAsLetters()
+    {
+        $seasonalIndexLetters = [];
+        foreach ($this->affixgroups as $affixGroup) {
+            $seasonalIndexLetters[] = $affixGroup->getSeasonalIndexAsLetter();
+        }
+        return array_values(array_unique($seasonalIndexLetters));
+    }
 }

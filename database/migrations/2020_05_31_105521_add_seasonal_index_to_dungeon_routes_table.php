@@ -15,7 +15,7 @@ class AddSeasonalIndexToDungeonRoutesTable extends Migration
     {
         Schema::table('dungeon_routes', function (Blueprint $table)
         {
-            $table->integer('seasonal_index')->after('difficulty')->nullable();
+            $table->integer('seasonal_index')->after('difficulty')->default(0);
         });
     }
 

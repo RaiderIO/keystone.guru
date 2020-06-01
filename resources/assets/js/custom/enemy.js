@@ -53,9 +53,9 @@ class Enemy extends MapObject {
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
-        getState().register('mapzoomlevel:changed', this, function () {
-            self.bindTooltip();
-        });
+        // getState().register('mapzoomlevel:changed', this, function () {
+        //     self.bindTooltip();
+        // });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, this._synced.bind(this));
@@ -67,13 +67,13 @@ class Enemy extends MapObject {
         return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
     }
 
-    _synced(event) {
+    _synced(syncedEvent) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
         // Only if we should display this enemy
         if (this.layer !== null) {
             // Synced, can now build the popup since we know our ID
-            this._rebuildPopup(event);
+            this._rebuildPopup(syncedEvent);
 
             // Create the visual now that we know all data to construct it properly
             if (this.visual !== null) {

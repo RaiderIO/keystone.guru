@@ -33,6 +33,7 @@ class DungeonRouteFormRequest extends FormRequest
             // 'difficulty' => ['required', Rule::in(config('keystoneguru.dungeonroute_difficulty'))],
             'teeming' => 'nullable|int',
             'template' => 'nullable|int',
+            'seasonal_index' => 'required|int',
 
             'faction_id' => ['required', Rule::exists('factions', 'id'), new SiegeOfBoralusFactionRule($this->request)],
 

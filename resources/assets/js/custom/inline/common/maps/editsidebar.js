@@ -28,12 +28,6 @@ class CommonMapsEditsidebar extends InlineCode {
             showInfoNotification(lang.get('messages.copied_to_clipboard'));
         });
 
-        $(this.options.switchDungeonFloorSelect).change(function () {
-            // Pass the new floor ID to the map
-            getState().setFloorId($(self.options.switchDungeonFloorSelect).val());
-            getState().getDungeonMap().refreshLeafletMap();
-        });
-
         // Setup line weight
         let $weight = $('#edit_route_freedraw_options_weight');
         $weight.bind('change', function (changeEvent) {

@@ -14,6 +14,8 @@ class StateManager extends Signalable {
         this.floorId = null;
         // Map zoom level (default = 2)
         this.mapZoomLevel = 2;
+        // Seasonal index (shows certain enemies or not
+        this.seasonalIndex = 0;
 
         // List of static arrays
         this.mapIconTypes = [];
@@ -39,13 +41,32 @@ class StateManager extends Signalable {
         console.assert(dungeonRoute instanceof Object, 'dungeonRoute is not an Object', dungeonRoute);
 
         this.dungeonRoute = dungeonRoute;
+        // Load this from the start here
+        this.setSeasonalIndex(parseInt(this.dungeonRoute.seasonalIndex));
     }
 
+    /**
+     * Sets the data that describes the current dungeon.
+     * @param dungeonData
+     */
     setDungeonData(dungeonData) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         console.assert(dungeonData instanceof Object, 'dungeonData is not an Object', dungeonData);
 
         this.dungeonData = dungeonData;
+    }
+
+    /**
+     *
+     * @param seasonalIndex
+     */
+    setSeasonalIndex(seasonalIndex) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this.seasonalIndex = seasonalIndex;
+
+        // Let everyone know it's changed
+        this.signal('seasonalindex:changed', {seasonalIndex: this.seasonalIndex});
     }
 
     /**
@@ -208,6 +229,16 @@ class StateManager extends Signalable {
     getDungeonRoute() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.dungeonRoute;
+    }
+
+    /**
+     * Gets the current seasonal index.
+     * @returns {number}
+     */
+    getSeasonalIndex() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this.seasonalIndex;
     }
 
     /**

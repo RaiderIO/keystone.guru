@@ -8,6 +8,7 @@
         "team_id": -1,
         "title": "Freehold Demo",
         "difficulty": "Casual",
+        "seasonal_index": 0,
         "teeming": 0,
         "published": 0,
         "unlisted": 0,

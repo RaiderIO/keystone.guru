@@ -1,5 +1,9 @@
 class SidebarNavigation extends Sidebar {
 
+    constructor(options) {
+        super(options);
+    }
+
     /**
      *
      */

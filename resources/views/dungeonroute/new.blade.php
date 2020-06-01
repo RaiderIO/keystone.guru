@@ -82,7 +82,7 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
         @include('common.dungeonroute.attributes')
 
         <h3>
-            {{ __('Group composition (optional)') }}
+            {{ __('Group composition') }}
         </h3>
         @include('common.group.composition')
 

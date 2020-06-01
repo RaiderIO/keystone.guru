@@ -8,13 +8,14 @@
         "team_id": -1,
         "title": "Atal'Dazar Demo",
         "difficulty": "Casual",
+        "seasonal_index": 0,
         "teeming": 0,
         "published": 1,
         "unlisted": 1,
         "demo": 1,
         "thumbnail_updated_at": "2019-05-27 13:05:54",
         "created_at": "2018-11-04T05:49:22.000000Z",
-        "updated_at": "2020-05-02T00:38:03.000000Z",
+        "updated_at": "2020-06-01T08:51:41.000000Z",
         "expires_at": null,
         "playerspecializations": [
             {
@@ -128,22 +129,6 @@
         ],
         "paths": [
             {
-                "floor_id": 41,
-                "polyline": {
-                    "color": "#07f343",
-                    "weight": 4,
-                    "vertices_json": "[{\"lat\":\"-173.25\",\"lng\":\"174.5\"},{\"lat\":\"-159.5\",\"lng\":\"187.375\"},{\"lat\":\"-171.25\",\"lng\":\"195.5\"},{\"lat\":\"-176.25\",\"lng\":\"184.25\"}]"
-                }
-            },
-            {
-                "floor_id": 41,
-                "polyline": {
-                    "color": "#07f343",
-                    "weight": 4,
-                    "vertices_json": "[{\"lat\":\"-89.21875\",\"lng\":\"266.0625\"},{\"lat\":\"-85.75\",\"lng\":\"273\"},{\"lat\":\"-90.75\",\"lng\":\"262.625\"},{\"lat\":\"-91.40625\",\"lng\":\"271.65625\"},{\"lat\":\"-88.03125\",\"lng\":\"271.65625\"}]"
-                }
-            },
-            {
                 "floor_id": 42,
                 "polyline": {
                     "color": "#07f343",
@@ -237,48 +222,6 @@
                 "lng": 265.31,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4041
-                    },
-                    {
-                        "enemy_id": 4042
-                    },
-                    {
-                        "enemy_id": 4043
-                    },
-                    {
-                        "enemy_id": 4045
-                    },
-                    {
-                        "enemy_id": 4046
-                    },
-                    {
-                        "enemy_id": 4047
-                    },
-                    {
-                        "enemy_id": 4048
-                    },
-                    {
-                        "enemy_id": 4049
-                    },
-                    {
-                        "enemy_id": 4050
-                    },
-                    {
-                        "enemy_id": 4090
-                    },
-                    {
-                        "enemy_id": 3934
-                    },
-                    {
-                        "enemy_id": 3935
-                    },
-                    {
-                        "enemy_id": 3936
-                    },
-                    {
-                        "enemy_id": 4044
-                    },
-                    {
                         "enemy_id": 275
                     },
                     {
@@ -296,12 +239,6 @@
                 "lng": 262.12,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4051
-                    },
-                    {
-                        "enemy_id": 4052
-                    },
-                    {
                         "enemy_id": 186
                     },
                     {
@@ -315,24 +252,6 @@
                 "lat": -80.75,
                 "lng": 254.31,
                 "killzoneenemies": [
-                    {
-                        "enemy_id": 4057
-                    },
-                    {
-                        "enemy_id": 4058
-                    },
-                    {
-                        "enemy_id": 4054
-                    },
-                    {
-                        "enemy_id": 4055
-                    },
-                    {
-                        "enemy_id": 4056
-                    },
-                    {
-                        "enemy_id": 4061
-                    },
                     {
                         "enemy_id": 191
                     },
@@ -695,22 +614,6 @@
             }
         ],
         "mapicons": [
-            {
-                "floor_id": 41,
-                "map_icon_type_id": 9,
-                "lat": -113,
-                "lng": 224.3125,
-                "comment": "",
-                "permanent_tooltip": 0
-            },
-            {
-                "floor_id": 41,
-                "map_icon_type_id": 11,
-                "lat": -118.875,
-                "lng": 246.1875,
-                "comment": "zzz",
-                "permanent_tooltip": 0
-            },
             {
                 "floor_id": 41,
                 "map_icon_type_id": 2,

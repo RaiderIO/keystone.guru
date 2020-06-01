@@ -11,7 +11,6 @@ if (Auth::check()) {
 if ($timezone === null) {
     $timezone = config('app.timezone');
 }
-$seasonalIndices = ['A', 'B', 'C', 'D', 'E'];
 ?>
 
 @section('header-title', __('Weekly affixes in ' . $region->name))
@@ -90,7 +89,7 @@ $seasonalIndices = ['A', 'B', 'C', 'D', 'E'];
                                     {{ __(sprintf('preset %s', $affixGroup->season->getPresetAt($startDate))) }}
                                 @endif
                                 @isset($affixGroup->seasonal_index)
-                                    {{ __(sprintf('(%s)', $seasonalIndices[$affixGroup->seasonal_index])) }}
+                                    {{ __(sprintf('(%s)', $affixGroup->getSeasonalIndexAsLetter())) }}
                                 @endisset
                             @endif
                         </div>

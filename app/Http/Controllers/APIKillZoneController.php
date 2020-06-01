@@ -6,6 +6,7 @@ use App\Events\KillZoneChangedEvent;
 use App\Events\KillZoneDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use Illuminate\Http\Request;
@@ -50,16 +51,21 @@ class APIKillZoneController extends Controller
                 $killZone->deleteEnemies();
 
                 // Get the new enemies, only unique values in case there's some bug allowing selection of the same enemy multiple times
-                $enemies = array_unique($request->get('enemies', []));
+                $enemyIds = array_unique($request->get('enemies', []));
 
-                // Store them
+                // Store them, but only if the enemies are part of the same dungeon as the dungeonroute
                 $killZoneEnemies = [];
-                foreach ($enemies as $enemyId) {
-                    // Assign kill zone to each passed enemy
-                    $killZoneEnemies[] = [
-                        'kill_zone_id' => $killZone->id,
-                        'enemy_id'     => $enemyId
-                    ];
+                $enemyModels = Enemy::with('floor')->whereIn('id', $enemyIds)->get();
+                foreach ($enemyIds as $enemyId) {
+                    /** @var Enemy $enemy */
+                    $enemy = $enemyModels->where('id', $enemyId)->first();
+                    if( $dungeonroute->dungeon_id === $enemy->floor->dungeon_id  ){
+                        // Assign kill zone to each passed enemy
+                        $killZoneEnemies[] = [
+                            'kill_zone_id' => $killZone->id,
+                            'enemy_id'     => $enemyId
+                        ];
+                    }
                 }
 
                 // Bulk insert
