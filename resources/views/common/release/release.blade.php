@@ -15,11 +15,14 @@ $showHeader = isset($showHeader) ? $showHeader : true;
             </h4>
         </div>
         @if(Auth::check() && Auth::getUser()->hasRole('admin'))
-            <div class="col-auto text-primary copy_release_format_reddit" data-id="{{$release->id}}">
+            <div class="col-auto cursor-pointer text-primary copy_release_format_reddit" data-id="{{$release->id}}">
                 <i class="fab fa-reddit"></i>
             </div>
-            <div class="col-auto text-primary copy_release_format_discord ml-1" data-id="{{$release->id}}">
+            <div class="col-auto cursor-pointer text-primary copy_release_format_discord ml-1" data-id="{{$release->id}}">
                 <i class="fab fa-discord"></i>
+            </div>
+            <div class="col-auto cursor-pointer text-primary copy_release_format_github ml-1" data-id="{{$release->id}}">
+                <i class="fab fa-github"></i>
             </div>
         @endif
     </div>

@@ -5,7 +5,8 @@ class ReleaseView extends InlineCode {
      */
     activate() {
         let key = 'changelog_release';
-        console.log(this.options);
+
+        let self = this;
 
         let lastReadRelease = Cookies.get(key);
         if (typeof lastReadRelease === 'undefined' || lastReadRelease < this.options.max_release) {
@@ -15,21 +16,60 @@ class ReleaseView extends InlineCode {
         if (typeof this.options.releases === 'object') {
             let $copyReleaseReddit = $('.copy_release_format_reddit');
             $copyReleaseReddit.bind('click', function () {
-                let template = Handlebars.templates['release_copy_to_reddit'];
-
-                let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    releases: self._getReleaseById(parseInt($(this).data('id')))
-                });
-
-                // Build the status bar from the template
-                self.statusbar = $(template(data));
+                self._copyToClipboard(parseInt($(this).data('id')), 'release_copy_to_reddit');
             });
 
             let $copyReleaseDiscord = $('.copy_release_format_discord');
             $copyReleaseDiscord.bind('click', function () {
+                self._copyToClipboard(parseInt($(this).data('id')), 'release_copy_to_discord');
+            });
 
+            let $copyReleaseGithub = $('.copy_release_format_github');
+            $copyReleaseGithub.bind('click', function () {
+                self._copyToClipboard(parseInt($(this).data('id')), 'release_copy_to_github');
             });
         }
+    }
+
+    /**
+     * Copies a release to the clipboard
+     * @param releaseId
+     * @param handlebarsTemplate
+     * @private
+     */
+    _copyToClipboard(releaseId, handlebarsTemplate) {
+        let template = Handlebars.templates[handlebarsTemplate];
+
+        let release = this._getReleaseById(releaseId);
+
+        let data = $.extend({}, getHandlebarsDefaultVariables(), {
+            version: release.version,
+            categories: []
+        });
+
+        let currentCategory = null;
+        let currentCategoryChanges;
+        for (let i = 0; i < release.changelog.changes.length; i++) {
+            let currentChange = release.changelog.changes[i];
+            if (currentCategory !== currentChange.category.category) {
+                currentCategory = currentChange.category.category;
+                currentCategoryChanges = []
+                data.categories.push({
+                    category: currentCategory,
+                    changes: currentCategoryChanges
+                });
+            }
+
+            currentCategoryChanges.push(currentChange);
+        }
+        // https://codepen.io/shaikmaqsood/pen/XmydxJ
+        let $temp = $('<textarea>');
+        $('body').append($temp);
+        $temp.val(template(data)).select();
+        document.execCommand('copy');
+        $temp.remove();
+
+        showInfoNotification(lang.get('messages.copied_to_clipboard'));
     }
 
     /**
