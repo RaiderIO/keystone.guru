@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ReleaseChangelogChange extends Model
 {
-    protected $visible = ['ticket_id', 'change', 'release_changelog_category_id', 'release_changelog_id'];
+    protected $visible = ['ticket_id', 'change', 'category', 'release_changelog_category_id', 'release_changelog_id'];
     protected $with = ['category'];
     public $timestamps = false;
 
@@ -28,14 +28,14 @@ class ReleaseChangelogChange extends Model
      */
     function category()
     {
-        return $this->belongsTo('App\Models\ReleaseChangelogCategory');
+        return $this->belongsTo('App\Models\ReleaseChangelogCategory', 'release_changelog_category_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     function changelog()
     {
-        return $this->belongsTo('App\Models\ReleaseChangelog');
+        return $this->hasOne('App\Models\ReleaseChangelog');
     }
 }
