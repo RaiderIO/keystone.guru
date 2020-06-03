@@ -457,7 +457,7 @@ class KillZone extends MapObject {
             this.bindTooltip();
 
             // Only add popup to the killzone
-            if (this.isEditable()) {
+            if (this.map.options.edit && this.isEditable()) {
                 this.enemiesLayer.on('click', function () {
                     // We're now selecting this killzone
                     let currentMapState = self.map.getMapState();
@@ -533,16 +533,6 @@ class KillZone extends MapObject {
         super.onLayerInit();
 
         let self = this;
-
-        if (this.map.options.edit) {
-            this.layer.on('click', function (clickEvent) {
-                let mapState = self.map.getMapState();
-                // Can only assign
-                if (mapState === null) {
-
-                }
-            });
-        }
 
         // When we're moved, keep drawing the connections anew
         this.layer.on('move', function () {

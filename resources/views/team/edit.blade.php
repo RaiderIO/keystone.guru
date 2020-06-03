@@ -181,10 +181,12 @@ foreach ($model->teamusers as $teamuser) {
                                         data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
                                     <i class="far fa-copy"></i>
                                 </button>
+                                @if($model->isUserModerator(Auth::user()))
                                 <button id="team_invite_link_refresh" class="btn btn-info"
                                         data-toggle="tooltip" title="{{ __('Refresh invite link') }}">
                                     <i class="fa fa-sync"></i>
                                 </button>
+                                @endif
                             </div>
                         </div>
                     </div>

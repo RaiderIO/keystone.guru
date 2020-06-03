@@ -35,7 +35,7 @@ $member = isset($member) ? $member : false;
                         </a>
                     @else
                         @auth
-                            <a href="{{ route('team.invite.accept', ['invitelink' => $team->invite_code ]) }}"
+                            <a href="{{ route('team.invite.accept', ['invitecode' => $team->invite_code ]) }}"
                                class="btn btn-primary col-lg-auto">
                                 <i class="fas fa-user-plus"></i> {{ __('Accept invitation') }}
                             </a>
