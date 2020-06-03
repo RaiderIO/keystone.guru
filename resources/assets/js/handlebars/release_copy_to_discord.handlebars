@@ -1,4 +1,8 @@
 {{ version }} ({{ date }})(https://keystone.guru/release/{{ version }})
+{{#ifCond description '!=' null}}
+{{description}}
+
+{{/ifCond}}
 {{#each categories }}
 {{category}}
 {{#each changes}}

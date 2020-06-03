@@ -14,6 +14,6 @@ class ReleaseChangelogCategory extends Model
 {
     public $table = 'release_changelog_categories';
     public $timestamps = false;
-    protected $visible = ['category'];
+    protected $visible = ['id', 'category'];
     protected $fillable = ['category'];
 }

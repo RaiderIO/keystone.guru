@@ -79,7 +79,7 @@ class ReleaseController extends Controller
     {
         return view('admin.release.edit', [
             'headerTitle' => __('New release'),
-            'categories' => ReleaseChangelogCategory::all()
+            'categories'  => ReleaseChangelogCategory::all()
         ]);
     }
 
@@ -91,9 +91,9 @@ class ReleaseController extends Controller
     public function edit(Request $request, Release $release)
     {
         return view('admin.release.edit', [
-            'model' => $release,
+            'model'       => $release,
             'headerTitle' => __('Edit release'),
-            'categories' => ReleaseChangelogCategory::all()
+            'categories'  => ReleaseChangelogCategory::all()
         ]);
     }
 

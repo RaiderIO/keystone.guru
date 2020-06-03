@@ -47,6 +47,7 @@ class ReleaseView extends InlineCode {
         let data = $.extend({}, getHandlebarsDefaultVariables(), {
             version: release.version,
             date: createdAtDate.getFullYear() + '/' + _.padStart(createdAtDate.getMonth(), 2, '0') + '/' + _.padStart(createdAtDate.getDay(), 2, '0'),
+            description: release.changelog.description,
             categories: []
         });
 

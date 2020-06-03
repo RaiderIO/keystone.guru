@@ -2,6 +2,7 @@
 /** @var $release \App\Models\Release */
 $showHeader = isset($showHeader) ? $showHeader : true;
 ?>
+<div class="form-group">
 @if($showHeader)
     <div class="row no-gutters">
         <div class="col">
@@ -27,6 +28,15 @@ $showHeader = isset($showHeader) ? $showHeader : true;
         @endif
     </div>
 @endif
+@if($release->changelog->description !== null)
+    <div class="row">
+        <div class="col">
+            <p>
+                {{ $release->changelog->description }}
+            </p>
+        </div>
+    </div>
+@endisset
 <?php
 /** @var \App\Models\ReleaseChangelogCategory $category */
 ?>
@@ -34,6 +44,7 @@ $showHeader = isset($showHeader) ? $showHeader : true;
     <p>
         <?php /** @var $change \App\Models\ReleaseChangelogChange */?>
         {{ \App\Models\ReleaseChangelogCategory::findOrFail($categoryId)->category }}:
+    </p>
     <ul>
         @foreach ($groupedChange as $category => $change)
             <li>
@@ -44,5 +55,5 @@ $showHeader = isset($showHeader) ? $showHeader : true;
             </li>
         @endforeach
     </ul>
-    </p>
 @endforeach
+</div>
