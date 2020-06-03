@@ -5,7 +5,7 @@
 
 {{/ifCond}}
 {{#each categories }}
-{{category}}
+{{category}}:
 {{#each changes}}
 {{#ifCond ticket_id '>' 0 }}* [\#{{ticket_id}}](https://github.com/Wotuu/keystone.guru/issues/{{ticket_id}}) {{/ifCond}}{{change}}
 {{/each}}

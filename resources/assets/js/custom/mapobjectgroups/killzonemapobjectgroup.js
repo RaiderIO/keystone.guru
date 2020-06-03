@@ -1,6 +1,6 @@
 class KillZoneMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_KILLZONE, 'killzone', editable);
+        super(manager, MAP_OBJECT_GROUP_KILLZONE, '', editable);
 
         let self = this;
 
@@ -21,6 +21,18 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     }
                 });
         }
+    }
+
+    _onBeforeRefresh(beforeRefreshEvent){
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
+
+        // Prevent writing our empty state back to the killzone list upon initial load
+        if( this.initialized ) {
+            // Write the killzones we know back in the state so we can restore them later on
+            getState().updateKillZones(this.objects);
+        }
+
+        super._onBeforeRefresh(beforeRefreshEvent);
     }
 
     _onObjectDeleted(data){
@@ -69,7 +81,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         // Now update the killzone to its new properties
         killzone.id = remoteMapObject.id;
         killzone.floor_id = remoteMapObject.floor_id;
-        killzone.index = this.objects.length;
+        killzone.setIndex(this.objects.length);
         // Use default if not set
         if (remoteMapObject.color !== '') {
             killzone.color = remoteMapObject.color;
@@ -124,5 +136,24 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         this.signal('killzone:new', {newKillZone: killZone});
         return killZone;
+    }
+
+    _fetchSuccess(response) {
+        // no super call, we're handling this by ourselves
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
+
+        let killZones = getState().getKillZones();
+
+        // Now draw the enemies on the map, if any
+        for (let index in killZones) {
+            // Only if actually set
+            if (killZones.hasOwnProperty(index)) {
+                let killZone = killZones[index];
+                // Only restore enemies for the current floor
+                this._restoreObject(killZone);
+            }
+        }
+
+        this.signal('restorecomplete');
     }
 }

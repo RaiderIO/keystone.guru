@@ -223,7 +223,11 @@ class MapObject extends Signalable {
     }
 
     cleanup() {
+        this.map.unregister('map:beforerefresh', this);
+
         this._cleanupSignals();
         this._cleanDecorator();
+        
+        super.cleanup();
     }
 }

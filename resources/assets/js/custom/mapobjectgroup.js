@@ -12,6 +12,9 @@ class MapObjectGroup extends Signalable {
         this.field = field;
         this.editable = editable;
 
+        // False initially when not loaded anything in yet (from server). True after the initial loading.
+        this.initialized = false;
+
         this.objects = [];
         this.layerGroup = null;
 
@@ -19,25 +22,12 @@ class MapObjectGroup extends Signalable {
 
         // Callback to when the manager has received data from the server
         this.manager.register('fetchsuccess', this, function (fetchEvent) {
+            console.assert(self.objects.length === 0, self.constructor.name + ' objects must be empty after refresh', self.objects.length);
+
             self._fetchSuccess(fetchEvent.data.response);
         });
 
-        this.manager.map.register('map:beforerefresh', this, function () {
-            // Remove any layers that were added before
-            self._removeObjectsFromLayer.call(self);
-
-            if (self.layerGroup !== null) {
-                // Remove ourselves from the map prior to refreshing
-                self.manager.map.leafletMap.removeLayer(self.layerGroup);
-            }
-
-            while (self.objects.length > 0) {
-                let obj = self.objects[0];
-                obj.localDelete();
-                obj.cleanup();
-            }
-            self.objects = [];
-        });
+        this.manager.map.register('map:beforerefresh', this, this._onBeforeRefresh.bind(this));
         // Whenever the map refreshes, we need to add ourselves to the map again
         this.manager.map.register('map:refresh', this, (function (data) {
             // Rebuild the layer group
@@ -47,6 +37,29 @@ class MapObjectGroup extends Signalable {
             // @todo self.isShown(), currently the layer will ALWAYS show regardless of MapControl status
             self.setVisibility(true);
         }).bind(this));
+    }
+
+    /**
+     *
+     * @protected
+     */
+    _onBeforeRefresh(){
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
+        // Remove any layers that were added before
+        this._removeObjectsFromLayer.call(this);
+
+        if (this.layerGroup !== null) {
+            // Remove ourselves from the map prior to refreshing
+            this.manager.map.leafletMap.removeLayer(this.layerGroup);
+        }
+
+        while (this.objects.length > 0) {
+            let obj = this.objects[0];
+            obj.localDelete();
+            obj.cleanup();
+        }
+        this.objects = [];
     }
 
     /**
@@ -65,6 +78,8 @@ class MapObjectGroup extends Signalable {
                 this._restoreObject(mapObjects[i]);
             }
         }
+
+        this.initialized = true;
 
         this.signal('restorecomplete');
     }

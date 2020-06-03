@@ -277,6 +277,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
+        console.warn('_setPullText', killZone.id, killZone.getIndex(), killZone);
+
         $(`#map_killzonessidebar_killzone_${killZone.id}_index`).text(killZone.getIndex());
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemies`).text(`${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);
     }
