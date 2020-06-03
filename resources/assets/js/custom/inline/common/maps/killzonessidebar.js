@@ -93,7 +93,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 }
 
                 // Center the map to this killzone
-                if (killZone.floor_id === getState().getCurrentFloor().id) {
+                if (killZone.floor_id === getState().getCurrentFloor().id && killZone.enemies.length > 0) {
                     getState().getDungeonMap().leafletMap.setView(killZone.getLayerCenteroid(), getState().getMapZoomLevel())
                 }
             }
@@ -154,8 +154,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
         );
 
         $('#killzones_no_pulls').hide();
-        // Set initial index when adding a killzone (already added, so length is correct index)
-        $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index', $($(this.options.killZonesContainerSelector).children()).length);
         $(`#map_killzonessidebar_killzone_${killZone.id} .selectable`).bind('click', this._killZoneRowClicked);
 
         if (this.options.edit) {
@@ -262,30 +260,24 @@ class CommonMapsKillzonessidebar extends InlineCode {
     _rebuildPullIndices() {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
-        let children = $('#killzones_container').children();
+        let self = this;
+
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        for (let i = 0; i < children.length; i++) {
-            let killZoneId = parseInt($(children[i]).data('id'));
-            let killZone = killZoneMapObjectGroup.findMapObjectById(killZoneId);
-            // May be null when switching floors
-            if (killZone !== null) {
-                this._setPullText(killZone, i + 1);
-            }
-        }
+        $.each(killZoneMapObjectGroup.objects, function(index, killZone){
+            self._setPullText(killZone);
+        });
     }
 
     /**
      * Rebuilds the upper text of a killzone (${index}: ${x} enemies (${enemyForces})
      * @param killZone {KillZone}
-     * @param index int
      * @private
      */
-    _setPullText(killZone, index) {
+    _setPullText(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
-        $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index', index);
-        $(`#map_killzonessidebar_killzone_${killZone.id}_index`).text(index);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_index`).text(killZone.getIndex());
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemies`).text(`${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);
     }
 
@@ -329,8 +321,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // let enemyForcesPercent = (killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100;
         // enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
-        let index = $(`#map_killzonessidebar_killzone_${killZone.id}`).data('index');
-        this._setPullText(killZone, index);
+        this._setPullText(killZone);
         $(`#map_killzonessidebar_killzone_${killZone.id}_kill_area_label`)
             .attr('title', lang.get(killZone.isKillZoneVisible() ? 'messages.remove_kill_area_label' : 'messages.add_kill_area_label'));
 

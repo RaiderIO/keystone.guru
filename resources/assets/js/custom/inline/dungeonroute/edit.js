@@ -62,6 +62,7 @@ class DungeonrouteEdit extends InlineCode {
                 dungeon_route_title: $('#dungeon_route_title').val(),
                 attributes: $('#attributes').val(),
                 faction_id: $('#faction_id').val(),
+                seasonal_index: $('#seasonal_index').val(),
                 specialization:
                     $('.specializationselect select').map(function () {
                         return $(this).val();
@@ -88,6 +89,8 @@ class DungeonrouteEdit extends InlineCode {
             },
             success: function (json) {
                 showSuccessNotification(lang.get('messages.settings_saved'));
+
+                getState().setSeasonalIndex(parseInt($('#seasonal_index').val()));
             },
             complete: function () {
                 $('#save_settings').show();

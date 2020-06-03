@@ -16,6 +16,16 @@ html, body, #map, #app, .wrapper {
     color: #234c5e;
 }
 
+.leaflet-tooltip-killzone-index {
+    font-size: 24px;
+    background-color: unset;
+    border: unset;
+    box-shadow: unset;
+    font-weight: bold;
+    color: white;
+    text-shadow: black 2px 2px;
+}
+
 .popup_select {
     width: 300px;
 }

@@ -45,7 +45,7 @@ class APIMapIconController extends Controller
                 throw new \Exception('Unable to save map icon!');
             }
         } // We're editing a map comment for the user, carry on
-        else if (!$dungeonroute->isTry()) {
+        else if ($dungeonroute !== null && !$dungeonroute->isTry()) {
             $this->authorize('edit', $dungeonroute);
         }
 
@@ -102,7 +102,7 @@ class APIMapIconController extends Controller
         if (!$isAdmin && ($dungeonroute === null || $mapicon->dungeon_route_id === -1)) {
             return response(null, StatusCode::FORBIDDEN);
         } // We're editing a map comment for the user, carry on
-        else if (!$dungeonroute->isTry()) {
+        else if ($dungeonroute !== null && !$dungeonroute->isTry()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
             $this->authorize('edit', $dungeonroute);
         }

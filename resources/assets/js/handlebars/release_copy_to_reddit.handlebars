@@ -1,0 +1,13 @@
+{{ version }} ({{ date }})
+[https://keystone.guru/release/{{ version }}](https://keystone.guru/release/{{ version }})
+{{#ifCond description '!=' null}}
+{{description}}
+
+{{/ifCond}}
+{{#each categories }}
+{{category}}
+{{#each changes}}
+{{#ifCond ticket_id '>' 0 }}* [\#{{ticket_id}}](https://github.com/Wotuu/keystone.guru/issues/{{ticket_id}}) {{/ifCond}}{{change}}
+{{/each}}
+
+{{/each}}

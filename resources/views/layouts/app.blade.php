@@ -26,6 +26,7 @@ if (isset($_COOKIE['cookieconsent_status']) && $_COOKIE['cookieconsent_status'] 
 }
 // Easy switch
 $isProduction = config('app.env') === 'production';
+$devCacheBuster = config('app.env') === 'local' ? '?t=' . time() : '';
 // Show ads if not set
 $showAds = isset($showAds) ? $showAds : true;
 // If we should show ads, are logged in, user has paid for no ads, or we're not in production..
@@ -53,9 +54,9 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     <title>{{ $title . config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app-' . $version . '.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/custom-' . $version . '.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/lib-' . $version . '.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset('css/custom-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset('css/lib-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
     <link rel="icon" href="/images/icon/favicon.ico">
     @yield('head')
 
@@ -141,7 +142,8 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#try_modal">
                                         {{__('New route')}}
                                     </a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#try_mdt_import_modal">
+                                    <a class="dropdown-item" href="#" data-toggle="modal"
+                                       data-target="#try_mdt_import_modal">
                                         {{__('Import from MDT')}}
                                     </a>
                                 </div>
@@ -171,7 +173,8 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                         <a class="dropdown-item" href="{{ route('dungeonroute.new') }}">
                                             {{ __('New route') }}
                                         </a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdt_import_modal">
+                                        <a class="dropdown-item" href="#" data-toggle="modal"
+                                           data-target="#mdt_import_modal">
                                             {{__('Import from MDT')}}
                                         </a>
                                     </div>
@@ -249,11 +252,11 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                             @foreach($menuModels as $menuModel)
                                 @php($hasIcon = isset($menuModel->iconfile))
                                 <option
-                                        data-url="{{ route($menuModelsRoute, ['team' => $menuModel->id]) }}"
-                                        @if($hasIcon)
-                                        data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
-                                        @endif
-                                        {{ $model->id === $menuModel->id ? 'selected' : '' }}
+                                    data-url="{{ route($menuModelsRoute, ['team' => $menuModel->id]) }}"
+                                    @if($hasIcon)
+                                    data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
+                                    @endif
+                                    {{ $model->id === $menuModel->id ? 'selected' : '' }}
                                 >{{ $hasIcon ? '' : $menuModel->name }}</option>
                             @endforeach
                         </select>
@@ -484,10 +487,10 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 @endguest
 
 <!-- Scripts -->
-<script src="{{ asset('js/app-' . $version . '.js') }}"></script>
+<script src="{{ asset('js/app-' . $version . '.js') . $devCacheBuster }}"></script>
 <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
-<script src="{{ asset('js/custom-' . $version . '.js') }}"></script>
-<script src="{{ asset('js/lib-' . $version . '.js') }}"></script>
+<script src="{{ asset('js/custom-' . $version . '.js') .$devCacheBuster }}"></script>
+<script src="{{ asset('js/lib-' . $version . '.js') . $devCacheBuster }}"></script>
 @yield('scripts')
 </body>
 </html>

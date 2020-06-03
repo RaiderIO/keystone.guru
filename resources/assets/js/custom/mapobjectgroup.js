@@ -2,6 +2,11 @@ class MapObjectGroup extends Signalable {
 
     constructor(manager, name, field, editable = false) {
         super();
+        console.assert(manager instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
+        console.assert(typeof name === 'string', 'name is not a String', this);
+        console.assert(typeof field === 'string', 'this is not a String', this);
+        console.assert(typeof editable === 'boolean', 'editable is not a boolean', this);
+
         this.manager = manager;
         this.name = name;
         this.field = field;
@@ -157,6 +162,8 @@ class MapObjectGroup extends Signalable {
             }
 
             if (layer !== null) {
+                let oldTooltip = layer.getTooltip();
+
                 let tooltip = layer.bindTooltip(username, {
                     permanent: true,
                     className: 'user_color_' + username + ' ' + fontClass,
@@ -166,7 +173,13 @@ class MapObjectGroup extends Signalable {
                 // Fadeout after some time
                 setTimeout(function () {
                     tooltip.closeTooltip();
-                }, 5000);
+
+                    // Do not re-bind a tooltip that shouldn't be there permanently
+                    if (!oldTooltip.options.className.includes('user_color_')) {
+                        // Rebind killzone pull index tooltip
+                        layer.bindTooltip(oldTooltip._content, oldTooltip.options);
+                    }
+                }, c.map.echo.tooltipFadeOutTimeout);
             } else {
                 console.warn('Unable to display echo received action to user, layer was null', localMapObject);
             }
@@ -248,7 +261,7 @@ class MapObjectGroup extends Signalable {
 
         // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
-        if( object.layer !== null ) {
+        if (object.layer !== null) {
             if (visible) {
                 if (!this.layerGroup.hasLayer(object.layer)) {
                     this.layerGroup.addLayer(object.layer);

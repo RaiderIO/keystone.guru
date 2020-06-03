@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Release;
+use App\Models\ReleaseChangelog;
 use App\Service\Season\SeasonService;
 use Illuminate\Http\Request;
 

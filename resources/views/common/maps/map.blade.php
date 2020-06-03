@@ -9,6 +9,7 @@ $isAdmin = isset($admin) && $admin;
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? true : false;
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
+$routeSeasonalIndex = isset($dungeonroute) ? $dungeonroute->seasonal_index : 0;
 // Set the key to 'try' if try mode is enabled
 $tryMode = isset($tryMode) && $tryMode ? true : false;
 // Set the enemy forces of the current route. May not be set if just editing the route from admin
@@ -99,7 +100,8 @@ if ($isAdmin) {
         'dungeonroute' => [
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,
-            'enemyForces' => $routeEnemyForces
+            'enemyForces' => $routeEnemyForces,
+            'seasonalIndex' => $routeSeasonalIndex
         ]
     ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>

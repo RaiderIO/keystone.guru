@@ -5,13 +5,11 @@ namespace App\Models;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Service\Season\SeasonService;
 use App\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +25,7 @@ use Illuminate\Support\Facades\DB;
  * @property $clone_of string
  * @property $title string
  * @property $difficulty string
+ * @property $seasonal_index int
  * @property $teeming boolean
  * @property $published boolean
  * @property $unlisted boolean
@@ -86,8 +85,8 @@ class DungeonRoute extends Model
     protected $appends = ['setup', 'avg_rating', 'rating_count', 'views', 'has_team'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'team_id', 'unlisted', 'demo',
-        'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
-        'created_at', 'updated_at', 'expires_at', 'thumbnail_updated_at'];
+                         'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
+                         'created_at', 'updated_at', 'expires_at', 'thumbnail_updated_at'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -304,7 +303,8 @@ class DungeonRoute extends Model
     {
         return $query->where('unlisted', false)
             ->where('demo', false)
-            ->whereHas('dungeon', function ($dungeon) {
+            ->whereHas('dungeon', function ($dungeon)
+            {
                 /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
                 $dungeon->active();
             });
@@ -319,7 +319,8 @@ class DungeonRoute extends Model
     public function scopeVisibleWithUnlisted($query)
     {
         return $query->where('demo', false)
-            ->whereHas('dungeon', function ($dungeon) {
+            ->whereHas('dungeon', function ($dungeon)
+            {
                 /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
                 $dungeon->active();
             });
@@ -388,15 +389,21 @@ class DungeonRoute extends Model
         foreach ($this->killzones as $killzone) {
             /** @var KillZone $killzone */
             foreach ($killzone->enemies as $enemy) {
-                $npc = $npcs->where('id', $enemy->npc_id)->first();
 
                 /** @var Enemy $enemy */
-                if( $enemy->enemy_forces_override >= 0 ){
+                if ($enemy->enemy_forces_override >= 0) {
                     $result += $enemy->enemy_forces_override;
-                } else if( $this->teeming && $npc->enemy_forces_teeming >= 0 ) {
-                    $result += $npc->enemy_forces_teeming;
                 } else {
-                    $result += $npc->enemy_forces;
+                    $npc = $npcs->where('id', $enemy->npc_id)->first();
+
+                    // May be null if an enemy was removed?
+                    if ($npc !== null) {
+                        if ($this->teeming && $npc->enemy_forces_teeming >= 0) {
+                            $result += $npc->enemy_forces_teeming;
+                        } else {
+                            $result += $npc->enemy_forces;
+                        }
+                    }
                 }
             }
         }
@@ -410,10 +417,10 @@ class DungeonRoute extends Model
     public function getSetupAttribute()
     {
         return [
-            'faction' => $this->faction,
+            'faction'         => $this->faction,
             'specializations' => $this->specializations,
-            'classes' => $this->classes,
-            'races' => $this->races
+            'classes'         => $this->classes,
+            'races'           => $this->races
         ];
     }
 
@@ -453,24 +460,6 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return bool True if the route contains an affix group which contains the Teeming affix, false if this is not the case.
-     */
-    public function hasTeemingAffix()
-    {
-        $result = false;
-        if ($this->affixes->count() !== 0) {
-            foreach ($this->affixes as $affixGroup) {
-                /** @var $affixGroup AffixGroup */
-                if ($result = $affixGroup->isTeeming()) {
-                    break;
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Saves this DungeonRoute with information from the passed Request.
      *
      * @param Request $request
@@ -493,6 +482,7 @@ class DungeonRoute extends Model
         $this->title = $request->get('dungeon_route_title', $this->title);
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
+        $this->seasonal_index = $request->get('seasonal_index', $this->seasonal_index);
         $this->teeming = $request->get('teeming', $this->teeming);
         // @TODO TEMP FIX
         if ($this->teeming === null) {
@@ -785,7 +775,8 @@ class DungeonRoute extends Model
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function ($item) {
+        static::deleting(function ($item)
+        {
             /** @var $item DungeonRoute */
 
             // Delete thumbnails

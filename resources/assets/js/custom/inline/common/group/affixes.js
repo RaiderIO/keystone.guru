@@ -7,13 +7,20 @@ class CommonGroupAffixes extends InlineCode {
 
         let self = this;
 
+        this._automaticSeasonalIndexChange = typeof this.options.dungeonroute !== 'object';
+
         $(this.options.teemingSelector).bind('change', function () {
+            $('#affixes').val('');
             self._applyAffixRowSelectionOnList();
         });
         $('.affix_list_row').bind('click', this._affixRowClicked.bind(this));
 
         // Perform loading of existing affix groups
         this._applyAffixRowSelectionOnList();
+
+        $('#seasonal_index').bind('change', function () {
+            console.log('change');
+        });
     }
 
     /**
@@ -55,22 +62,45 @@ class CommonGroupAffixes extends InlineCode {
         this._applyAffixRowSelectionOnList();
     }
 
+    _getAffixGroupById(id) {
+        let result = null;
+
+        for (let i = 0; i < this.options.affixGroups.length; i++) {
+            if (this.options.affixGroups[i].id === id) {
+                result = this.options.affixGroups[i];
+                break;
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Applies the current selection to the list of affixes that are being displayed.
      * @private
      */
     _applyAffixRowSelectionOnList() {
         console.assert(this instanceof CommonGroupAffixes, 'this was not a CommonGroupAffixes', this);
-        
+        let self = this;
+
         let $list = $('#affixes_list_custom');
-        let currentSelection = $('#affixes').val();
+        let selection = $('#affixes').val();
+        let selectedSeasonalIndices = [];
 
         $.each($list.children(), function (index, child) {
             let $child = $(child);
             let found = false;
 
-            for (let i = 0; i < currentSelection.length; i++) {
-                if (parseInt(currentSelection[i]) === $child.data('id')) {
+            for (let i = 0; i < selection.length; i++) {
+                let currentSelection = parseInt(selection[i]);
+
+                if (currentSelection === $child.data('id')) {
+                    let affixGroup = self._getAffixGroupById(currentSelection);
+                    if (!selectedSeasonalIndices.hasOwnProperty(affixGroup.seasonal_index)) {
+                        selectedSeasonalIndices[affixGroup.seasonal_index] = 0;
+                    }
+                    selectedSeasonalIndices[affixGroup.seasonal_index]++;
+
                     $child.addClass('affix_list_row_selected');
                     $child.find('.check').show();
                     found = true;
@@ -83,6 +113,28 @@ class CommonGroupAffixes extends InlineCode {
                 $child.find('.check').hide();
             }
         });
+
+        // Will stop if user manually changed it
+        if (this._automaticSeasonalIndexChange) {
+            let max = 0;
+            let maxIndex = -1;
+            for (let index in selectedSeasonalIndices) {
+                if (selectedSeasonalIndices.hasOwnProperty(index)) {
+                    let seasonalIndexCount = selectedSeasonalIndices[index];
+
+                    if (max < seasonalIndexCount) {
+                        max = seasonalIndexCount;
+                        maxIndex = index;
+                    }
+                }
+            }
+
+            if (maxIndex >= 0) {
+                $('#seasonal_index').val(maxIndex);
+                refreshSelectPickers();
+            }
+        }
+
 
         if (this._isTeemingSelected()) {
             $('.affix_row_no_teeming').hide();

@@ -236,6 +236,10 @@
     margin-bottom: 0;
 }
 
+#try_modal .modal-dialog {
+    max-width: 600px;
+}
+
 .modal .probootstrap-modal-flex .probootstrap-modal-content {
     width: 100%;
     padding: 40px;

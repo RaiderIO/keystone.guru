@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property $id int The ID of this Affix.
  * @property $season_id int
+ * @property $seasonal_index int
  *
  * @property \Illuminate\Database\Eloquent\Collection $affixes
  * @property Season $season
@@ -65,6 +66,21 @@ class AffixGroup extends Model
             if ($result = ($affix->name === 'Teeming')) {
                 break;
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSeasonalIndexAsLetter()
+    {
+        $result = null;
+
+        if ($this->seasonal_index !== null) {
+            $seasonalIndices = ['A', 'B', 'C', 'D', 'E'];
+            $result = $seasonalIndices[$this->seasonal_index];
         }
 
         return $result;

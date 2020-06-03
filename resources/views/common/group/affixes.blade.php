@@ -3,32 +3,40 @@
 /** @var $seasonService \App\Service\Season\SeasonService */
 /** This is the display of affixes when selecting them when creating a new route */
 
-$affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
+/** @var \Illuminate\Support\Collection|\App\Models\AffixGroup[] $affixGroups */
+$currentSeason = $seasonService->getCurrentSeason();
+$seasonalIndexLetters = $currentSeason->getSeasonalIndexesAsLetters();
+$affixGroups = $currentSeason->affixgroups()->with(['affixes:affixes.id,affixes.name,affixes.description'])->get();
 $affixes = \App\Models\Affix::all();
+$defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
 ?>
 
-@include('common.general.inline', ['path' => 'common/group/affixes', 'options' => ['teemingSelector' => $teemingselector]])
+@include('common.general.inline', ['path' => 'common/group/affixes', 'options' => ['teemingSelector' => $teemingselector, 'affixGroups' => $affixGroups]])
 
 <div class="form-group">
     {!! Form::label('affixes[]', __('Select affixes')) !!}
-    {!! Form::select('affixes[]', $affixgroups->pluck('id', 'id'),
-        !isset($dungeonroute) ? 0 : $dungeonroute->affixgroups->pluck(['affix_group_id']),
+    {!! Form::select('affixes[]', $affixGroups->pluck('id', 'id'),
+        !isset($dungeonroute) ? $defaultSelected : $dungeonroute->affixgroups->pluck(['affix_group_id']),
         ['id' => 'affixes', 'class' => 'form-control affixselect d-none', 'multiple'=>'multiple']) !!}
     {{--<select name="affixes[]" id="affixes" class="form-control affixselect hidden" multiple--}}
     {{--data-selected-text-format="count > 2">--}}
-    {{--@foreach($affixgroups as $group)--}}
+    {{--@foreach($affixGroups as $group)--}}
     {{--<option value="{{ $group->id }}">{{ $group->id }}</option>--}}
     {{--@endforeach--}}
     {{--</select>--}}
 
     <div id="affixes_list_custom" class="affix_list col-lg-12">
-        @foreach($affixgroups as $affixGroup)
-            <div class="row affix_list_row {{ $affixGroup->isTeeming() ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
-                 {{ $affixGroup->isTeeming() ? 'style="display: none;"' : '' }}
-                 data-id="{{ $affixGroup->id }}">
+        @foreach($affixGroups as $affixGroup)
+            <div
+                class="row affix_list_row {{ $affixGroup->isTeeming() ? 'affix_row_teeming' : 'affix_row_no_teeming' }}"
+                {{ $affixGroup->isTeeming() ? 'style="display: none;"' : '' }}
+                data-id="{{ $affixGroup->id }}">
                 @php( $count = 0 )
                 @foreach($affixGroup->affixes as $affix)
-                    @php( $number = count($affixGroup->affixes) - 1 === $count ? '2' : '3' )
+                    <?php
+                    $last = count($affixGroup->affixes) - 1 === $count;
+                    $number = $last ? '2' : '3'
+                    ?>
                     <div class="col col-md-{{ $number }} affix_row">
                         <div class="row no-gutters">
                             <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
@@ -38,6 +46,11 @@ $affixes = \App\Models\Affix::all();
                             </div>
                             <div class="col d-md-block d-none pl-1">
                                 {{ $affix->name }}
+                                @if($last)
+                                    @isset($affixGroup->seasonal_index)
+                                        {{ __(sprintf('(%s)', $affixGroup->getSeasonalIndexAsLetter())) }}
+                                    @endisset
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -52,3 +65,16 @@ $affixes = \App\Models\Affix::all();
         @endforeach
     </div>
 </div>
+
+@if(!empty($seasonalIndexLetters))
+    <div class="form-group">
+        {!! Form::label('seasonal_index', __('Awakened enemy set')) !!} <span class="form-required">*</span>
+        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+    __('Awakened enemies (pillar bosses) for M+ levels 10 and higher come in two sets. Each set of affixes is marked either A or B.
+    You may attach multiple affixes to your route whom can have both A and B sets. Choose here which set will be displayed on the map.
+    You can always adjust your selection from the Route Settings menu later.')
+     }}"></i>
+        {!! Form::select('seasonal_index', $seasonalIndexLetters, isset($dungeonroute) ? $dungeonroute->seasonal_index : 0,
+            ['id' => 'seasonal_index', 'class' => 'form-control selectpicker']) !!}
+    </div>
+@endif

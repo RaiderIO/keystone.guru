@@ -1,14 +1,6 @@
 [
     {
         "floor_id": 65,
-        "map_icon_type_id": 2,
-        "lat": -100.1875,
-        "lng": 282.75,
-        "comment": "",
-        "permanent_tooltip": 0
-    },
-    {
-        "floor_id": 65,
         "map_icon_type_id": 13,
         "lat": -67.78125,
         "lng": 253,

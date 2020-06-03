@@ -52,21 +52,21 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
                             </div>
                             @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
 
-                            <h3>
-                                {{ __('Group composition (optional)') }}
-                            </h3>
-
-                            @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
-                            @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions])
-
                             <h3 class='mt-1'>
-                                {{ __('Affixes (optional)') }}
+                                {{ __('Affixes') }} <span class="form-required">*</span>
                             </h3>
 
                             <div class='container mt-1'>
                                 {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox d-none']) !!}
                                 @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming'])
                             </div>
+
+                            <h3>
+                                {{ __('Group composition') }}
+                            </h3>
+
+                            @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
+                            @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions])
 
                             @if(Auth::user()->hasPaidTier('unlisted-routes') )
                                 <h3>

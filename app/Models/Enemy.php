@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int $id
@@ -12,7 +10,8 @@ use Illuminate\Support\Facades\Auth;
  * @property int $npc_id
  * @property int $floor_id
  * @property int $mdt_id The ID in MDT (clone index) that this enemy is coupled to
- * @property int $mdt_npc_index The index of the NPC in MDT
+ * @property int $seasonal_index Shows/hides this enemy based on the seasonal index as defined in Affix Group. If they match, the enemy is shown, otherwise hidden. If not set enemy is always shown.
+ * @property int $mdt_npc_index The index of the NPC in MDT (not saved in DB)
  * @property int $enemy_id Only used for temp MDT enemies
  * @property bool $is_mdt Only used for temp MDT enemies
  * @property string $teeming

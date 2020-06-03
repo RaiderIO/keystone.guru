@@ -35,6 +35,7 @@ class Enemy extends MapObject {
         /** @type KillZone */
         this.kill_zone = null;
         this.enemy_forces_override = -1;
+        this.seasonal_index = null;
         /** @type Object May be set when loaded from server */
         this.npc = null;
         this.raid_marker_name = '';
@@ -52,9 +53,9 @@ class Enemy extends MapObject {
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
-        getState().register('mapzoomlevel:changed', this, function () {
-            self.bindTooltip();
-        });
+        // getState().register('mapzoomlevel:changed', this, function () {
+        //     self.bindTooltip();
+        // });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, this._synced.bind(this));
@@ -66,13 +67,13 @@ class Enemy extends MapObject {
         return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
     }
 
-    _synced(event) {
+    _synced(syncedEvent) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
         // Only if we should display this enemy
         if (this.layer !== null) {
             // Synced, can now build the popup since we know our ID
-            this._rebuildPopup(event);
+            this._rebuildPopup(syncedEvent);
 
             // Create the visual now that we know all data to construct it properly
             if (this.visual !== null) {
@@ -141,14 +142,18 @@ class Enemy extends MapObject {
     getEnemyForces() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        let result = this.npc.enemy_forces;
-        // Override first
-        if (this.enemy_forces_override >= 0) {
-            result = this.enemy_forces_override;
-        }
-        // If teeming and npc provides an override, use that instead
-        else if (this.map.options.teeming && this.npc.enemy_forces_teeming >= 0) {
-            result = this.npc.enemy_forces_teeming;
+        let result = 0;
+        if( this.npc !== null ) {
+            result = this.npc.enemy_forces;
+
+            // Override first
+            if (this.enemy_forces_override >= 0) {
+                result = this.enemy_forces_override;
+            }
+            // If teeming and npc provides an override, use that instead
+            else if (this.map.options.teeming && this.npc.enemy_forces_teeming >= 0) {
+                result = this.npc.enemy_forces_teeming;
+            }
         }
 
         return result;

@@ -16,7 +16,7 @@ class EnemySelection extends MapState {
      * @returns {boolean}
      * @protected
      */
-    _filter(source, enemyCandidate){
+    _filter(source, enemyCandidate) {
         return true;
     }
 
@@ -25,7 +25,7 @@ class EnemySelection extends MapState {
      * @returns {null}
      * @protected
      */
-    _getLayerIcon(){
+    _getLayerIcon() {
         return null;
     }
 
@@ -33,7 +33,7 @@ class EnemySelection extends MapState {
      * Get the map object that initiated this selection.
      * @returns {*}
      */
-    getMapObject(){
+    getMapObject() {
         return this.sourceMapObject;
     }
 
@@ -52,9 +52,7 @@ class EnemySelection extends MapState {
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             // Check if we should set this enemy to be selectable or not
-            if (self._filter(self.sourceMapObject, enemy)) {
-                enemy.setSelectable(!enemy.isSelectable());
-            }
+            enemy.setSelectable(self._filter(self.sourceMapObject, enemy));
 
             enemy.register('enemy:selected', self, function (data) {
                 let enemy = data.context;
@@ -86,7 +84,9 @@ class EnemySelection extends MapState {
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             // Enemies no longer present themselves as selectable
-            enemy.setSelectable(false);
+            if (enemy.isSelectable()) {
+                enemy.setSelectable(false);
+            }
             enemy.unregister('enemy:selected', self);
         });
 

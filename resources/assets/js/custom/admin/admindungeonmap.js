@@ -26,22 +26,6 @@ class AdminDungeonMap extends DungeonMap {
         return result;
     }
 
-    /**
-     *
-     * @returns {[]}
-     * @protected
-     */
-    _createMapObjectGroups() {
-        // For this page, let the enemy pack be the admin version with more functions which are otherwise hidden from the user
-        return [
-            new EnemyMapObjectGroup(this, 'AdminEnemy', true),
-            new EnemyPatrolMapObjectGroup(this, 'AdminEnemyPatrol', true),
-            new EnemyPackMapObjectGroup(this, 'AdminEnemyPack', true),
-            new DungeonFloorSwitchMarkerMapObjectGroup(this, 'AdminDungeonFloorSwitchMarker', true),
-            new MapIconMapObjectGroup(this, 'AdminMapComment', true),
-        ];
-    }
-
     refreshLeafletMap() {
         super.refreshLeafletMap();
 

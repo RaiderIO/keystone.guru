@@ -19,6 +19,7 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
     'sidebarToggleSelector' => '#viewsidebarToggle',
     'anchor' => 'left',
     'switchDungeonFloorSelect' => '#map_floor_selection',
+    'defaultSelectedFloorId' => $model->dungeon->floors[0]->id,
     'dungeonroute' => $model
 ]])
 
@@ -31,8 +32,7 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
     'header' => $model->title,
     'subHeader' => $subTitle,
     'anchor' => 'left',
-    'id' => 'viewsidebar',
-    'selectedFloorId' => $model->dungeon->floors[0]->id])
+    'id' => 'viewsidebar'])
     <!-- Details -->
     <div class="form-group">
         <div class="card">
