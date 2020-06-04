@@ -58,8 +58,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     _killZoneRowClicked(clickEvent) {
         // If there was an event, prevent clicking the 'expand' button also selecting the killzone
+        let $target = $(clickEvent.target);
         if (clickEvent !== null && typeof clickEvent !== 'undefined' &&
-            ($(clickEvent.target).hasClass('btn') || $(clickEvent.target).hasClass('pcr-button') || $(clickEvent.target).hasClass('fas'))) {
+            ($target.hasClass('btn') || $target.hasClass('pcr-button') ||
+                $target.hasClass('fas') || $target.hasClass('fas'))) {
             return;
         }
 
