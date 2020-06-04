@@ -3,29 +3,38 @@ class CommonGroupComposition extends InlineCode {
         super.activate();
 
         let self = this;
+        this._loadingDefaults = false;
 
         $('#faction_id').bind('change', function (changeEvent) {
             self._factionChanged(changeEvent);
 
-            refreshSelectPickers();
+            if( !self._loadingDefaults ) {
+                refreshSelectPickers();
+            }
         });
 
         $('.raceselect').bind('change', function (changeEvent) {
             self._raceChanged(changeEvent);
 
-            refreshSelectPickers();
+            if( !self._loadingDefaults ) {
+                refreshSelectPickers();
+            }
         });
 
         $('.classselect').bind('change', function (changeEvent) {
             self._classChanged(changeEvent);
 
-            refreshSelectPickers();
+            if( !self._loadingDefaults ) {
+                refreshSelectPickers();
+            }
         });
 
         $('.specializationselect').bind('change', function (changeEvent) {
             self._specializationChanged(changeEvent);
 
-            refreshSelectPickers();
+            if( !self._loadingDefaults ) {
+                refreshSelectPickers();
+            }
         });
 
         $('#reload_button').bind('click', function (e) {
@@ -514,6 +523,8 @@ class CommonGroupComposition extends InlineCode {
      * @private
      */
     _loadDungeonRouteDefaults() {
+        this._loadingDefaults = true;
+
         let $faction = $("#faction_id");
         $faction.val(_oldFaction);
         // Have to manually trigger change..
@@ -551,5 +562,6 @@ class CommonGroupComposition extends InlineCode {
         }
 
         refreshSelectPickers();
+        this._loadingDefaults = false;
     }
 }

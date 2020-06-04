@@ -38,6 +38,7 @@ class KillZone extends MapObject {
 
         let self = this;
         this.id = 0;
+        this.floor_id = 0;
         this.label = 'KillZone';
         this.color = c.map.killzone.polygonOptions.color();
         this.index = 0;
@@ -60,7 +61,9 @@ class KillZone extends MapObject {
         // });
         //
         // // External change (due to delete mode being started, for example)
-        this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
+        if (this.map.options.edit) {
+            this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
+        }
     }
 
     /**
@@ -558,8 +561,9 @@ class KillZone extends MapObject {
                     // Detach ourselves
                     enemy.setKillZone(null);
                 } else {
-                    console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
-                        'this enemy was probably removed during a migration?');
+                    // Also triggered when multiple floors and the enemies we're attached to are not loaded
+                    // console.warn('Unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
+                    //     'this enemy was probably removed during a migration?');
                 }
             });
         });

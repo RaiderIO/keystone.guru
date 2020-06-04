@@ -2,6 +2,7 @@ class Signalable {
 
     constructor() {
         this.signals = [];
+        this.cleanedUp = false;
     }
 
     /**
@@ -21,6 +22,17 @@ class Signalable {
             name = [name];
         }
 
+        // Check if we're already registered, if so throw an error
+        for (let i = 0; i < name.length; i++) {
+            for (let j = 0; j < this.signals.length; j++) {
+                let caller = this.signals[j];
+
+                if (caller.name === name[i] && caller.listener === listener && caller.callback === fn) {
+                    console.error(`Already registered for '${name[i]}'! Unable to double register, aborting`, caller);
+                    return false;
+                }
+            }
+        }
 
         for (let i = 0; i < name.length; i++) {
             for (let j = 0; j < this.signals.length; j++) {
@@ -86,7 +98,11 @@ class Signalable {
             let caller = this.signals[i];
 
             if (caller.name === name) {
-                caller.callback({context: self, data: data});
+                if( caller.listener instanceof Signalable && caller.listener.cleanedUp ){
+                    console.error(`Unable to send signal '${caller.name}' to object because it's cleaned up and it should have unregged!`, caller);
+                } else {
+                    caller.callback({context: self, data: data});
+                }
             }
         }
     }
@@ -98,5 +114,9 @@ class Signalable {
     _cleanupSignals() {
         // Should be enough to get rid of all signals
         this.signals = [];
+    }
+
+    cleanup(){
+        this.cleanedUp = true;
     }
 }

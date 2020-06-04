@@ -25,6 +25,7 @@ class StateManager extends Signalable {
         this.mdtEnemies = [];
         this.factions = [];
         this.raidMarkers = [];
+        this.killZones = [];
 
         // Bit of a hack? But for now best solution
         this.unknownMapIconId = 1;
@@ -134,6 +135,14 @@ class StateManager extends Signalable {
     }
 
     /**
+     *
+     * @param killZones
+     */
+    setKillZones(killZones) {
+        this.killZones = killZones;
+    }
+
+    /**
      * Sets the dungeon map for the state manager.
      * @param map DungeonMap
      */
@@ -216,7 +225,7 @@ class StateManager extends Signalable {
 
     /**
      * Gets the dungeon map if it's set before.
-     * @returns {null}
+     * @returns {DungeonMap}
      */
     getDungeonMap() {
         return this._map;
@@ -351,6 +360,49 @@ class StateManager extends Signalable {
     getRaidMarkers() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.raidMarkers;
+    }
+
+    /**
+     * Get all killzones
+     * @returns {[]}
+     */
+    getKillZones() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.killZones;
+    }
+
+    /**
+     * Updates the killzones in the local list to the list that was edited by the user.
+     * @param killZones {KillZone[]}
+     */
+    updateKillZones(killZones) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        let result = [];
+
+        for (let index in killZones) {
+            let killZone = killZones[index];
+
+            let killzonenemies = [];
+            for (let enemyIndex in killZone.enemies) {
+                if (killZone.enemies.hasOwnProperty(enemyIndex)) {
+                    killzonenemies.push({
+                        enemy_id: killZone.enemies[enemyIndex]
+                    });
+                }
+            }
+
+            result.push({
+                id: killZone.id,
+                floor_id: killZone.floor_id,
+                color: killZone.color,
+                killzonenemies: killzonenemies,
+                lat: killZone.layer !== null ? killZone.layer.getLatLng().lat : null,
+                lng: killZone.layer !== null ? killZone.layer.getLatLng().lng : null,
+            })
+        }
+
+        this.killZones = result;
     }
 
     /**

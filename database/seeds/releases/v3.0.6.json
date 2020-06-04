@@ -18,6 +18,16 @@
                     "id": 3,
                     "category": "Map changes"
                 }
+            },
+            {
+                "release_changelog_id": 51,
+                "release_changelog_category_id": 3,
+                "ticket_id": 330,
+                "change": "Pulls are now loaded once instead of every time you switch a floor. Fixed various issues when switching floors. Increased general performance.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             }
         ]
     }

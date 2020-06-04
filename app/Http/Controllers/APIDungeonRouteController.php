@@ -39,7 +39,6 @@ class APIDungeonRouteController extends Controller
     use ListsEnemyPacks;
     use ListsEnemyPatrols;
     use ListsPaths;
-    use ListsKillzones;
     use ListsBrushlines;
     use ListsMapIcons;
     use ListsDungeonFloorSwitchMarkers;
@@ -385,28 +384,11 @@ class APIDungeonRouteController extends Controller
                 $result['path'] = $this->listPaths($request->get('floor'), $publickey);
             }
 
-            // Killzone
-            if (in_array('killzone', $fields)) {
-                $result['killzone'] = $this->listKillzones($publickey);
-            }
-
             // Brushline
             if (in_array('brushline', $fields)) {
                 $result['brushline'] = $this->listBrushlines($request->get('floor'), $publickey);
             }
         }
-
-        // Enemies
-//        if (in_array('enemy', $fields)) {
-//            $showMdtEnemies = false;
-//            // Only admins are allowed to see this
-//            if (Auth::check() && Auth::user()->hasRole('admin')) {
-//                // Only fetch it now
-//                $showMdtEnemies = (int)$request->get('show_mdt_enemies', 0) === 1;
-//            }
-//
-//            $result['enemy'] = $this->listEnemies($request->get('floor'), $showMdtEnemies, $publickey);
-//        }
 
         // Enemy packs
         if (in_array('enemypack', $fields)) {

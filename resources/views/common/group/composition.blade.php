@@ -78,9 +78,22 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
             _oldRaces = {!! json_encode($newRaces)  !!};
 
             <?php } ?>
+
+
+            <?php
+            /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
+            if( isset($modal) ){ ?>
+            $('{{$modal}}').on('shown.bs.modal', function () {
+            <?php } ?>
             let composition = _inlineManager.getInlineCode('common/group/composition');
             composition._loadDungeonRouteDefaults();
-            <?php }
+
+            <?php if( isset($modal) ){ ?>
+            });
+            <?php } ?>
+
+            <?php
+            }
             // @formatter:on
             ?>
         });

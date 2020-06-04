@@ -10,6 +10,7 @@ $isAdmin = isset($admin) && $admin;
 $edit = isset($edit) && $edit ? true : false;
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
 $routeSeasonalIndex = isset($dungeonroute) ? $dungeonroute->seasonal_index : 0;
+$routeKillZones = isset($dungeonroute) ? \App\Models\KillZone::where('dungeon_route_id', $dungeonroute->id)->get() : [];
 // Set the key to 'try' if try mode is enabled
 $tryMode = isset($tryMode) && $tryMode ? true : false;
 // Set the enemy forces of the current route. May not be set if just editing the route from admin
@@ -96,6 +97,7 @@ if ($isAdmin) {
         'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
         'raidMarkers' => \App\Models\RaidMarker::all(),
         'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
+        'killZones' => $routeKillZones,
         'dungeonData' => $dungeon,
         'dungeonroute' => [
             'publicKey' => $routePublicKey,

@@ -66,7 +66,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
                             </h3>
 
                             @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
-                            @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions])
+                            @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions, 'modal' => '#settings_modal'])
 
                             @if(Auth::user()->hasPaidTier('unlisted-routes') )
                                 <h3>

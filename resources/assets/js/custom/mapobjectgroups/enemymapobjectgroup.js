@@ -119,5 +119,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         // Set the enemies back to our state
         getState().setEnemies(this.objects);
+
+        this.signal('restorecomplete');
     }
 }

@@ -58,8 +58,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     _killZoneRowClicked(clickEvent) {
         // If there was an event, prevent clicking the 'expand' button also selecting the killzone
+        let $target = $(clickEvent.target);
         if (clickEvent !== null && typeof clickEvent !== 'undefined' &&
-            ($(clickEvent.target).hasClass('btn') || $(clickEvent.target).hasClass('pcr-button') || $(clickEvent.target).hasClass('fa'))) {
+            ($target.hasClass('btn') || $target.hasClass('pcr-button') ||
+                $target.hasClass('fas') || $target.hasClass('fas'))) {
             return;
         }
 
@@ -172,6 +174,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 self._selectKillZoneByMapObject(killZone);
 
                 if (killZone.layer === null) {
+                    getState().getDungeonMap().setMapState(
+                        new AddKillZoneMapState(getState().getDungeonMap(), killZone)
+                    );
                     // Start drawing a killzone
                     $('.leaflet-draw-draw-killzone')[0].click();
                 } else {

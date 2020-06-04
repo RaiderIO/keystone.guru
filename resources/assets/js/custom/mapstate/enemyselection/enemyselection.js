@@ -1,12 +1,6 @@
-class EnemySelection extends MapState {
+class EnemySelection extends MapObjectMapState {
     constructor(map, sourceMapObject) {
-        super(map);
-        console.assert(sourceMapObject instanceof MapObject, 'sourceMapObject is not a MapObject', sourceMapObject);
-
-        /** @type MapObject */
-        this.sourceMapObject = sourceMapObject;
-
-        // this._oldMapObjectIcon = null;
+        super(map, sourceMapObject);
     }
 
     /**
@@ -27,14 +21,6 @@ class EnemySelection extends MapState {
      */
     _getLayerIcon() {
         return null;
-    }
-
-    /**
-     * Get the map object that initiated this selection.
-     * @returns {*}
-     */
-    getMapObject() {
-        return this.sourceMapObject;
     }
 
     /**
