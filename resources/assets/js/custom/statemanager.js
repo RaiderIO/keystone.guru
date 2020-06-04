@@ -225,7 +225,7 @@ class StateManager extends Signalable {
 
     /**
      * Gets the dungeon map if it's set before.
-     * @returns {null}
+     * @returns {DungeonMap}
      */
     getDungeonMap() {
         return this._map;

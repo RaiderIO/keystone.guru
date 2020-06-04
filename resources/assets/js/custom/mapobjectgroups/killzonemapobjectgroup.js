@@ -23,22 +23,45 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    _onBeforeRefresh(beforeRefreshEvent){
+    /**
+     * We override this function because we do not want to destroy all killzones upon refresh. Instead, we want to hide
+     * everything and show that which needs to be shown.
+     * @param beforeRefreshEvent
+     * @private
+     */
+    _onBeforeRefresh(beforeRefreshEvent) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
 
-        // Prevent writing our empty state back to the killzone list upon initial load
-        if( this.initialized ) {
-            // Write the killzones we know back in the state so we can restore them later on
-            getState().updateKillZones(this.objects);
+        // Remove any layers that were added before
+        this._removeObjectsFromLayer.call(this);
+
+        if (this.layerGroup !== null) {
+            console.warn('Removing layer group from map');
+            // Remove ourselves from the map prior to refreshing
+            this.manager.map.leafletMap.removeLayer(this.layerGroup);
         }
 
-        super._onBeforeRefresh(beforeRefreshEvent);
+        // Prevent writing our empty state back to the killzone list upon initial load
+        if (this.initialized) {
+            // Write the killzones we know back in the state so we can restore them later on
+            // getState().updateKillZones(this.objects);
+        }
     }
 
-    _onObjectDeleted(data){
+    /**
+     * May be overridden by implementing classes
+     * @param fetchEvent
+     * @private
+     */
+    _onFetchSuccess(fetchEvent) {
+        // No assert here, we manage the killzones ourselves and they are persistent across refreshes
+        this._fetchSuccess(fetchEvent.data.response);
+    }
+
+    _onObjectDeleted(data) {
         super._onObjectDeleted(data);
 
-        $.each(this.objects, function(i, obj){
+        $.each(this.objects, function (i, obj) {
             obj.setIndex(i + 1);
         });
     }
@@ -141,19 +164,39 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     _fetchSuccess(response) {
         // no super call, we're handling this by ourselves
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
+        console.log('_fetchSuccess!');
 
-        let killZones = getState().getKillZones();
+        if (!this.initialized) {
+            let killZones = getState().getKillZones();
 
-        // Now draw the enemies on the map, if any
-        for (let index in killZones) {
-            // Only if actually set
-            if (killZones.hasOwnProperty(index)) {
-                let killZone = killZones[index];
-                // Only restore enemies for the current floor
-                this._restoreObject(killZone);
+            // Now draw the enemies on the map, if any
+            for (let index in killZones) {
+                // Only if actually set
+                if (killZones.hasOwnProperty(index)) {
+                    let killZone = killZones[index];
+                    // Only restore enemies for the current floor
+                    this._restoreObject(killZone);
+                }
             }
-        }
 
-        this.signal('restorecomplete');
+            this.initialized = true;
+
+            this.signal('restorecomplete');
+        } else {
+            // Show any killzones that are on the new floor
+            for (let index in this.objects) {
+                if (this.objects.hasOwnProperty(index)) {
+                    let killZone = this.objects[index];
+                    if (killZone.floor_id === getState().getCurrentFloor().id) {
+                        // Re-set the enemy list
+                        killZone.setEnemies([...killZone.enemies]);
+
+                        this.setMapObjectVisibility(killZone, true);
+                    }
+                }
+            }
+
+            this.setVisibility(true);
+        }
     }
 }

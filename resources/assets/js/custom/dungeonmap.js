@@ -202,7 +202,8 @@ class DungeonMap extends Signalable {
                 // Catch creating a KillZone - we want to add a layer to an existing KillZone, not create a new KillZone object
                 if (mapObjectGroup instanceof KillZoneMapObjectGroup) {
                     let mapState = self.getMapState();
-                    console.assert(mapState instanceof KillZoneEnemySelection, 'MapState was not in KillZoneEnemySelection!', mapState);
+                    console.assert(mapState instanceof AddKillZoneMapState, 'MapState was not in AddKillZoneMapState!', mapState);
+
                     // Get the killzone that we should add this layer to
                     mapObject = mapState.getMapObject();
                     console.assert(mapObject instanceof KillZone, 'object is not a KillZone!', mapObject);

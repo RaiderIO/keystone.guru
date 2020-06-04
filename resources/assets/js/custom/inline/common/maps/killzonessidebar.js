@@ -59,7 +59,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
     _killZoneRowClicked(clickEvent) {
         // If there was an event, prevent clicking the 'expand' button also selecting the killzone
         if (clickEvent !== null && typeof clickEvent !== 'undefined' &&
-            ($(clickEvent.target).hasClass('btn') || $(clickEvent.target).hasClass('pcr-button') || $(clickEvent.target).hasClass('fa'))) {
+            ($(clickEvent.target).hasClass('btn') || $(clickEvent.target).hasClass('pcr-button') || $(clickEvent.target).hasClass('fas'))) {
             return;
         }
 
@@ -172,6 +172,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 self._selectKillZoneByMapObject(killZone);
 
                 if (killZone.layer === null) {
+                    getState().getDungeonMap().setMapState(
+                        new AddKillZoneMapState(getState().getDungeonMap(), killZone)
+                    );
                     // Start drawing a killzone
                     $('.leaflet-draw-draw-killzone')[0].click();
                 } else {
@@ -276,8 +279,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
     _setPullText(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
-
-        console.warn('_setPullText', killZone.id, killZone.getIndex(), killZone);
 
         $(`#map_killzonessidebar_killzone_${killZone.id}_index`).text(killZone.getIndex());
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemies`).text(`${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);

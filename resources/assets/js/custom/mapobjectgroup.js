@@ -21,12 +21,7 @@ class MapObjectGroup extends Signalable {
         let self = this;
 
         // Callback to when the manager has received data from the server
-        this.manager.register('fetchsuccess', this, function (fetchEvent) {
-            console.assert(self.objects.length === 0, self.constructor.name + ' objects must be empty after refresh', self.objects.length);
-
-            self._fetchSuccess(fetchEvent.data.response);
-        });
-
+        this.manager.register('fetchsuccess', this, this._onFetchSuccess.bind(this));
         this.manager.map.register('map:beforerefresh', this, this._onBeforeRefresh.bind(this));
         // Whenever the map refreshes, we need to add ourselves to the map again
         this.manager.map.register('map:refresh', this, (function (data) {
@@ -40,19 +35,27 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * May be overridden by implementing classes
+     * @param fetchEvent
+     * @private
+     */
+    _onFetchSuccess(fetchEvent) {
+        console.assert(this.objects.length === 0, this.constructor.name + ' objects must be empty after refresh', this.objects.length);
+
+        this._fetchSuccess(fetchEvent.data.response);
+    }
+
+    /**
      *
      * @protected
      */
-    _onBeforeRefresh(){
+    _onBeforeRefresh() {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         // Remove any layers that were added before
         this._removeObjectsFromLayer.call(this);
 
-        if (this.layerGroup !== null) {
-            // Remove ourselves from the map prior to refreshing
-            this.manager.map.leafletMap.removeLayer(this.layerGroup);
-        }
+        this.setVisibility(false);
 
         while (this.objects.length > 0) {
             let obj = this.objects[0];
@@ -378,10 +381,12 @@ class MapObjectGroup extends Signalable {
      */
     setVisibility(visible) {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
-        if (!this.isShown() && visible) {
-            this.manager.map.leafletMap.addLayer(this.layerGroup);
-        } else if (this.isShown() && !visible) {
-            this.manager.map.leafletMap.removeLayer(this.layerGroup);
+        if (this.layerGroup !== null) {
+            if (!this.isShown() && visible) {
+                this.manager.map.leafletMap.addLayer(this.layerGroup);
+            } else if (this.isShown() && !visible) {
+                this.manager.map.leafletMap.removeLayer(this.layerGroup);
+            }
         }
     }
 }

@@ -23,12 +23,14 @@ class Signalable {
         }
 
         // Check if we're already registered, if so throw an error
-        for (let i = 0; i < this.signals.length; i++) {
-            let caller = this.signals[i];
+        for (let i = 0; i < name.length; i++) {
+            for (let j = 0; j < this.signals.length; j++) {
+                let caller = this.signals[j];
 
-            if (caller.name === name && caller.listener === listener) {
-                console.error(`Already registered for '${name}'! Unable to double register, aborting`, caller);
-                return false;
+                if (caller.name === name[i] && caller.listener === listener && caller.callback === fn) {
+                    console.error(`Already registered for '${name[i]}'! Unable to double register, aborting`, caller);
+                    return false;
+                }
             }
         }
 
