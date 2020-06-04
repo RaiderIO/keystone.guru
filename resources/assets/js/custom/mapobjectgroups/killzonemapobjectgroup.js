@@ -187,12 +187,10 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             for (let index in this.objects) {
                 if (this.objects.hasOwnProperty(index)) {
                     let killZone = this.objects[index];
-                    if (killZone.floor_id === getState().getCurrentFloor().id) {
-                        // Re-set the enemy list
-                        killZone.setEnemies([...killZone.enemies]);
+                    // Re-set the enemy list
+                    killZone.setEnemies([...killZone.enemies]);
 
-                        this.setMapObjectVisibility(killZone, true);
-                    }
+                    this.setMapObjectVisibility(killZone, true);
                 }
             }
 
