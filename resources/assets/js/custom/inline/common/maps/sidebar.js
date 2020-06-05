@@ -14,25 +14,31 @@ class Sidebar {
         let self = this;
 
         // Register for external changes so that we update our dropdown
-        getState().register('floorid:changed', this, function(floorIdChangedEvent){
-            if( self._floorIdChangeSource === null ) {
+        getState().register('floorid:changed', this, function (floorIdChangedEvent) {
+            if (self._floorIdChangeSource === null) {
                 self._floorIdChangeSource = 'external';
 
                 $(self.options.switchDungeonFloorSelect).val(floorIdChangedEvent.data.floorId);
                 self._floorIdChangeSource = null;
             }
 
-            // let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            //
-            // if( !newUrl.endsWith(''))
-            //
-            // history.pushState({page: 1},
-            //     'some title',
-            //      + '');
+            let pathname = window.location.pathname;
+            let pathSplit = window.location.pathname.split('/');
+            if (Number.isInteger(parseInt(pathSplit[pathSplit.length - 1]))) {
+                // Strip the last one from it
+                pathSplit.splice(-1, 1);
+                pathname = pathSplit.join('/');
+            }
+
+            let newUrl = window.location.protocol + '//' + window.location.host + pathname + '/' + getState().getCurrentFloor().index;
+
+            history.pushState({page: 1},
+                newUrl,
+                newUrl);
         });
 
         $(this.options.switchDungeonFloorSelect).change(function () {
-            if( self._floorIdChangeSource === null ) {
+            if (self._floorIdChangeSource === null) {
                 self._floorIdChangeSource = 'select';
 
                 // Pass the new floor ID to the map
@@ -132,7 +138,7 @@ class Sidebar {
             $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
         }
     }
-    
+
     cleanup() {
 
     }
