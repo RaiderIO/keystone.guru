@@ -13,6 +13,11 @@ class DungeonMap extends Signalable {
             window.startEcho();
         }
 
+        // Listen for floor changes
+        getState().register('floorid:changed', this, function(){
+            self.refreshLeafletMap();
+        });
+
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());

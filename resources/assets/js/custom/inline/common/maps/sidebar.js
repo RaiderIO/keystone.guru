@@ -3,6 +3,8 @@ class Sidebar {
 
     constructor(options) {
         this.options = options;
+
+        this._floorIdChangeSource = null;
     }
 
     /**
@@ -11,10 +13,32 @@ class Sidebar {
     activate() {
         let self = this;
 
+        // Register for external changes so that we update our dropdown
+        getState().register('floorid:changed', this, function(floorIdChangedEvent){
+            if( self._floorIdChangeSource === null ) {
+                self._floorIdChangeSource = 'external';
+
+                $(self.options.switchDungeonFloorSelect).val(floorIdChangedEvent.data.floorId);
+                self._floorIdChangeSource = null;
+            }
+
+            // let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            //
+            // if( !newUrl.endsWith(''))
+            //
+            // history.pushState({page: 1},
+            //     'some title',
+            //      + '');
+        });
+
         $(this.options.switchDungeonFloorSelect).change(function () {
-            // Pass the new floor ID to the map
-            getState().setFloorId($(self.options.switchDungeonFloorSelect).val());
-            getState().getDungeonMap().refreshLeafletMap();
+            if( self._floorIdChangeSource === null ) {
+                self._floorIdChangeSource = 'select';
+
+                // Pass the new floor ID to the map
+                getState().setFloorId($(self.options.switchDungeonFloorSelect).val());
+                self._floorIdChangeSource = null;
+            }
         });
 
         // Make sure that the select options have a valid value

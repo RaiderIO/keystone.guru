@@ -1,6 +1,7 @@
 @extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
 <?php
 /** @var $model \App\Models\DungeonRoute */
+/** @var $floor \App\Models\Floor */
 $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/edit'])
@@ -19,7 +20,8 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'dungeonroute' => $model,
-            'edit' => true
+            'edit' => true,
+            'floorId' => $floor->id
         ])
 
         @include('common.maps.killzonessidebar', [

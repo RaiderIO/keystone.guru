@@ -86,6 +86,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         // Edit your own dungeon routes
         Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')->name('dungeonroute.edit');
+        Route::get('{dungeonroute}/edit/{floor}', 'DungeonRouteController@editFloor')->name('dungeonroute.edit.floor');
         // Submit a patch for your own dungeon route
         Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')->name('dungeonroute.update');
         // Clone a route

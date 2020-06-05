@@ -176,14 +176,38 @@ class DungeonRouteController extends Controller
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
+        return $this->editFloor($request, $dungeonroute, 1);
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param int $floorIndex
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @throws AuthorizationException
+     */
+    public function editFloor(Request $request, DungeonRoute $dungeonroute, int $floorIndex)
+    {
         $this->authorize('edit', $dungeonroute);
 
         // Make sure the dungeon route is owned by this user if it was in try mode.
         // Don't share your try routes if you don't want someone else to claim the route!
         $dungeonroute->claim(Auth::user());
 
-        return view('dungeonroute.edit', ['model' => $dungeonroute, 'headerTitle' => __('Edit route')]);
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+
+        if( $floor === null ) {
+            return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
+        } else {
+            return view('dungeonroute.edit', [
+                'headerTitle' => __('Edit route'),
+                'model' => $dungeonroute,
+                'floor' => $floor
+            ]);
+        }
     }
+
+
 
     /**
      * Override to give the type hint which is required.
