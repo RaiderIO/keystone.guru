@@ -61,7 +61,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         if (clickEvent !== null && typeof clickEvent !== 'undefined') {
             let $target = $(clickEvent.target);
             if (($target.hasClass('btn') || $target.hasClass('pcr-button') ||
-                $target.hasClass('fas') || $target.hasClass('fas'))) {
+                $target.hasClass('fa') || $target.hasClass('fas'))) {
                 return;
             }
         }
@@ -189,14 +189,14 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     // It's been removed; unset it
                     killZoneMapObjectGroup.setLayerToMapObject(null, killZone);
 
-                    killZone.floor_id = getState().getCurrentFloor().id;
+                    killZone.floor_id = null;
                     // Update its visuals
                     killZone.redrawConnectionsToEnemies();
                     killZone.save();
                 }
             });
             // If we have a killzone layer
-            if (killZone.isKillZoneVisible()) {
+            if (killZone.hasKillArea()) {
                 // Was inactive (always starts inactive), is active now
                 $hasKillZone.button('toggle');
             }
@@ -239,7 +239,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 showSuccessNotification(lang.get('messages.object.deleted'));
 
                 // Bit hacky?
-                if (killZone.isKillZoneVisible()) {
+                if (killZone.isKillAreaVisible()) {
                     getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
                     getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
                 }
@@ -329,7 +329,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         this._setPullText(killZone);
         $(`#map_killzonessidebar_killzone_${killZone.id}_kill_area_label`)
-            .attr('title', lang.get(killZone.isKillZoneVisible() ? 'messages.remove_kill_area_label' : 'messages.add_kill_area_label'));
+            .attr('title', lang.get(killZone.hasKillArea() ? 'messages.remove_kill_area_label' : 'messages.add_kill_area_label'));
 
 
         // Fill the enemy list

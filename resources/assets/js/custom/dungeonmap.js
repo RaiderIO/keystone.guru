@@ -209,6 +209,9 @@ class DungeonMap extends Signalable {
                     console.assert(mapObject instanceof KillZone, 'object is not a KillZone!', mapObject);
                     // Apply the layer to the killzone
                     mapObjectGroup.setLayerToMapObject(event.layer, mapObject);
+
+                    // No longer in AddKillZoneMapState; we finished
+                    self.setMapState(null);
                 } else {
                     mapObject = mapObjectGroup.createNew(event.layer);
                 }

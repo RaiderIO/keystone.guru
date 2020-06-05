@@ -273,7 +273,7 @@ class KillZone extends MapObject {
         // Alpha shapes
         if (this.layer !== null) {
             // Killzone not on this floor, draw a line to the floor that it is
-            if (getState().getCurrentFloor().id !== this.floor_id) {
+            if (getState().getCurrentFloor().id !== this.floor_id && this.floor_id !== null) {
                 otherFloorsWithEnemies.push(this.floor_id);
             }
             // Killzone on this floor, include the lat/lng in our bounds
@@ -304,13 +304,13 @@ class KillZone extends MapObject {
                 let closestFloorSwitchMarker = null;
                 let closestDistance = 9999999;
 
-                console.log('ourCenterLatLng', ourCenterLatLng);
-
-                console.log('floorSwitchMarkerCandidates', floorSwitchMarkerCandidates);
+                // console.log('ourCenterLatLng', ourCenterLatLng);
+                //
+                // console.log('floorSwitchMarkerCandidates', floorSwitchMarkerCandidates);
                 // Find the closest floor switch marker
                 $.each(floorSwitchMarkerCandidates, function (j, floorSwitchMapObject) {
                     let distance = floorSwitchMapObject.layer.getLatLng().distanceTo(ourCenterLatLng);
-                    console.log(closestDistance, distance);
+                    // console.log(closestDistance, distance);
                     if (closestDistance > distance) {
                         closestDistance = distance;
                         closestFloorSwitchMarker = floorSwitchMapObject;
@@ -343,11 +343,19 @@ class KillZone extends MapObject {
     }
 
     /**
+     * Checks if this killzone has a kill area or not.
+     * @returns {boolean}
+     */
+    hasKillArea() {
+        return this.layer !== null;
+    }
+
+    /**
      * Checks if this killzone should be visible or not.
      * @returns {boolean|boolean}
      */
-    isKillZoneVisible() {
-        return this.layer !== null && getState().getCurrentFloor().id === this.floor_id;
+    isKillAreaVisible() {
+        return this.hasKillArea() && getState().getCurrentFloor().id === this.floor_id;
     }
 
     /**

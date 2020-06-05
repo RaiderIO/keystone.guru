@@ -86,8 +86,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         let layer = null;
         // Only if it was set, and if it was on this floor
-        if (remoteMapObject.lat !== null && remoteMapObject.lng !== null &&
-            remoteMapObject.floor_id === getState().getCurrentFloor().id) {
+        if (remoteMapObject.lat !== null && remoteMapObject.lng !== null) {
             layer = new LeafletKillZoneMarker();
             layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
@@ -120,6 +119,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
             killzone.setEnemies(enemies);
         }
+
+        // Hide the layer of the killzone
+        killzone.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
 
         // We just downloaded the kill zone, it's synced alright!
         if (!remoteMapObject.local) {
