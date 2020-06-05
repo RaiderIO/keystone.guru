@@ -190,7 +190,10 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     // Re-set the enemy list
                     killZone.setEnemies([...killZone.enemies]);
 
-                    this.setMapObjectVisibility(killZone, true);
+                    // Only display the kill zone's kill area if it's on our current floor
+                    if( killZone.layer !== null && killZone.floor_id === getState().getCurrentFloor().id ) {
+                        this.setMapObjectVisibility(killZone, true);
+                    }
                 }
             }
 

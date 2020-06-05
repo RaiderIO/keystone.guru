@@ -271,9 +271,16 @@ class KillZone extends MapObject {
 
 
         // Alpha shapes
-        if (this.isKillZoneVisible()) {
-            let selfLatLng = this.layer.getLatLng();
-            latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
+        if (this.layer !== null) {
+            // Killzone not on this floor, draw a line to the floor that it is
+            if (getState().getCurrentFloor().id !== this.floor_id) {
+                otherFloorsWithEnemies.push(this.floor_id);
+            }
+            // Killzone on this floor, include the lat/lng in our bounds
+            else {
+                let selfLatLng = this.layer.getLatLng();
+                latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
+            }
         }
 
         // If there are other floors with enemies AND enemies on this floor..
@@ -429,7 +436,6 @@ class KillZone extends MapObject {
         killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
 
         // Add connections from each enemy to our location
-        let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         let latLngs = this._getVisibleEntitiesLatLngs();
 
         let p = hull(latLngs, 100);

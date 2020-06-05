@@ -58,11 +58,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     _killZoneRowClicked(clickEvent) {
         // If there was an event, prevent clicking the 'expand' button also selecting the killzone
-        let $target = $(clickEvent.target);
-        if (clickEvent !== null && typeof clickEvent !== 'undefined' &&
-            ($target.hasClass('btn') || $target.hasClass('pcr-button') ||
+        if (clickEvent !== null && typeof clickEvent !== 'undefined') {
+            let $target = $(clickEvent.target);
+            if (($target.hasClass('btn') || $target.hasClass('pcr-button') ||
                 $target.hasClass('fas') || $target.hasClass('fas'))) {
-            return;
+                return;
+            }
         }
 
         let map = getState().getDungeonMap();
@@ -268,7 +269,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let self = this;
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        $.each(killZoneMapObjectGroup.objects, function(index, killZone){
+        $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
             self._setPullText(killZone);
         });
     }
