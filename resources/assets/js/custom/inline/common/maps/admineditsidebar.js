@@ -9,6 +9,8 @@ class CommonMapsAdmineditsidebar extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+
         this.sidebar.activate();
 
         let self = this;

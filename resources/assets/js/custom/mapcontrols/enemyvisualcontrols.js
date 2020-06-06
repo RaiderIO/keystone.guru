@@ -5,9 +5,6 @@ class EnemyVisualControls extends MapControl {
         let self = this;
 
         this.map = map;
-        this.map.register('map:refresh', this, function () {
-            refreshSelectPickers();
-        });
 
         // When we or someone else changed the enemy display type
         getState().register('enemydisplaytype:changed', this, function (changedEvent) {
@@ -99,7 +96,8 @@ class EnemyVisualControls extends MapControl {
         // Restore what the user had selected
         $('#map_enemy_visuals_dropdown').val(getState().getEnemyDisplayType());
 
-        refreshSelectPickers();
+        // Now handled by dungeonmap refresh
+        // refreshSelectPickers();
     }
 
     cleanup() {
@@ -107,7 +105,6 @@ class EnemyVisualControls extends MapControl {
 
         console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
-        this.map.unregister('map:refresh', this);
         getState().unregister('enemydisplaytype:changed', this);
     }
 }

@@ -409,9 +409,9 @@ class DrawControls extends MapControl {
         // Edit and delete buttons need to be moved to the same container as the other buttons
         this._addControlSetupEditDeleteButtons();
 
-        // Refresh some basics that need to be regenerated when html gets changed
-        refreshTooltips();
-        refreshSelectPickers();
+        // Now done by the dungeonmap at the end of refresh
+        // refreshTooltips();
+        // refreshSelectPickers();
     }
 
     cleanup() {

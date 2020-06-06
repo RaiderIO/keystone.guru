@@ -3,6 +3,8 @@ class LayoutsApp extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+
         // Default error handler
         $.ajaxSetup({
             error: defaultAjaxErrorFn
@@ -207,10 +209,14 @@ function defaultAjaxErrorFn(xhr, textStatus, errorThrown)
 /**
  * Refreshes fancy tooltips on all elements that request for them.
  */
-function refreshTooltips() {
+function refreshTooltips($element = null) {
+    console.warn('refreshing tooltips', $element);
     if (!isMobile()) {
         $('.tooltip').remove();
-        $('[data-toggle="tooltip"]').tooltip('_fixTitle').tooltip();
+        if( $element === null ){
+            $element = $('[data-toggle="tooltip"]');
+        }
+        $element.tooltip('_fixTitle').tooltip();
     }
 }
 

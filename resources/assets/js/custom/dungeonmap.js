@@ -25,9 +25,6 @@ class DungeonMap extends Signalable {
             // Add new controls; we're all loaded now and user should now be able to edit their route
             self._addMapControls(self.editableLayers);
 
-            // All layers have been fetched, refresh tooltips to update "No layers to edit" state
-            refreshTooltips();
-
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
 
@@ -454,6 +451,11 @@ class DungeonMap extends Signalable {
         for (let i = 0; i < this.mapControls.length; i++) {
             this.mapControls[i].addControl();
         }
+
+        // Do this once and not a bunch of times for all different elements
+        refreshSelectPickers();
+        // All layers have been fetched and everything rebuilt, refresh tooltips for all elements
+        refreshTooltips();
     }
 
     /**

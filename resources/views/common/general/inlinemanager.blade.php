@@ -2,7 +2,7 @@
     /** Instance that handles all inline code for specific pages */
     let _inlineManager;
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener('DOMContentLoaded', function () {
         _inlineManager = new InlineManager();
     });
 

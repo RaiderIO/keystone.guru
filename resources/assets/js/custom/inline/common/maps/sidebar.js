@@ -93,7 +93,8 @@ class Sidebar {
                 }));
             });
 
-            refreshSelectPickers();
+            // Now handled by dungeonmap refresh
+            // refreshSelectPickers();
         }
     }
 

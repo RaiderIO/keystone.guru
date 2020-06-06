@@ -3,6 +3,8 @@ class CommonGroupAffixes extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+
         console.assert(this instanceof CommonGroupAffixes, 'this was not a CommonGroupAffixes', this);
 
         let self = this;

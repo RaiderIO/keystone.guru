@@ -10,6 +10,8 @@ class TeamList extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+
         this._dt = $('#team_table').DataTable({
             'searching': false,
             'bLengthChange': false,

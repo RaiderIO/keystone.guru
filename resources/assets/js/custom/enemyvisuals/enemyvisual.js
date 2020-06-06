@@ -35,7 +35,7 @@ class EnemyVisual extends Signalable {
         });
 
         // If it changed, refresh the entire visual
-        this.enemy.register(['enemy:set_raid_marker', 'synced'], this, this._buildVisual.bind(this));
+        this.enemy.register(['enemy:set_raid_marker'], this, this._buildVisual.bind(this));
         this.enemy.register('killzone:attached', this, function () {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();

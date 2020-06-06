@@ -26,6 +26,15 @@ html, body, #map, #app, .wrapper {
     text-shadow: black 2px 2px;
 }
 
+.leaflet-tooltip-killzone-index.leaflet-tooltip-right {
+    margin-left: 20px;
+}
+
+/** Don't show a chevron when having a single enemy in your pull */
+.leaflet-tooltip-killzone-index.leaflet-tooltip-right:before {
+    content: unset;
+}
+
 .popup_select {
     width: 300px;
 }
@@ -214,6 +223,7 @@ html, body, #map, #app, .wrapper {
     left: -6px;
     top: -9px;
 }
+
 .grapick_color_picker_button {
     width: 12px !important;
     height: 12px !important;

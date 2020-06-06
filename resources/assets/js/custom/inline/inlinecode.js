@@ -3,13 +3,23 @@ class InlineCode {
 
     constructor(options) {
         this.options = options;
+
+        this._activated = false;
+    }
+
+    /**
+     * Checks if activate() has been called already.
+     * @returns {boolean}
+     */
+    isActivated() {
+        return this._activated;
     }
 
     /**
      *
      */
     activate() {
-
+        this._activated = true;
     }
 
     /**
