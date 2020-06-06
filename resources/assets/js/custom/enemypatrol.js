@@ -49,4 +49,8 @@ class EnemyPatrol extends Polyline {
             ]
         });
     }
+
+    toString() {
+        return 'Enemy patrol-' + this.id;
+    }
 }

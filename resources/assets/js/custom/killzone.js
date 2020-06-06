@@ -688,4 +688,8 @@ class KillZone extends MapObject {
 
         super.cleanup();
     }
+
+    toString() {
+        return 'Pull ' + this.index;
+    }
 }

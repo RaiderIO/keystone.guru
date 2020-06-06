@@ -222,6 +222,10 @@ class MapObject extends Signalable {
         });
     }
 
+    toString() {
+        return 'MapObject-' + this.id;
+    }
+
     cleanup() {
         this.map.unregister('map:beforerefresh', this);
 
