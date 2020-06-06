@@ -42,6 +42,8 @@ class KillZone extends MapObject {
         this.label = 'KillZone';
         this.color = c.map.killzone.polygonOptions.color();
         this.index = 0;
+        // May be changed based on the amount of enemies in our pull (see redrawConnectionsToEnemies())
+        this.indexLabelDirection = 'center';
         // List of IDs of selected enemies
         this.enemies = [];
         // Temporary list of enemies when we received them from the server
@@ -76,8 +78,7 @@ class KillZone extends MapObject {
 
         // Only remove it when it concerns us
         if (enemyDetachedEvent.data.previous === null ||
-            enemyDetachedEvent.data.previous.id === this.id
-        ) {
+            enemyDetachedEvent.data.previous.id === this.id) {
             this._removeEnemy(enemyDetachedEvent.context);
             this.redrawConnectionsToEnemies();
         }
@@ -325,6 +326,18 @@ class KillZone extends MapObject {
             });
         }
 
+        // If finally we only have one enemy and that's it, add a dummy location so that the pull index will be shown on the layer
+        if (latLngs.length === 1) {
+            latLngs.push([
+                latLngs[0][0] + 0.1,
+                latLngs[0][1] + 0.1,
+            ]);
+
+            this.indexLabelDirection = 'right';
+        } else {
+            this.indexLabelDirection = 'center';
+        }
+
         return latLngs;
     }
 
@@ -389,25 +402,27 @@ class KillZone extends MapObject {
 
         // Copy enemies array as we're making changes in it by removing enemies
         let currentEnemies = [...this.enemies];
-        $.each(currentEnemies, function (i, id) {
-            let enemy = enemyMapObjectGroup.findMapObjectById(id);
+        for (let i = 0; i < currentEnemies.length; i++) {
+            let enemyId = currentEnemies[i];
+            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             if (enemy !== null) {
                 self._removeEnemy(enemy);
             } else {
-                console.warn('Remove: unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
+                console.warn('Remove: unable to find enemy with id ' + enemyId + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
                     'this enemy was probably removed during a migration?');
             }
-        });
+        }
 
-        $.each(enemies, function (i, id) {
-            let enemy = enemyMapObjectGroup.findMapObjectById(id);
+        for (let i = 0; i < enemies.length; i++) {
+            let enemyId = enemies[i];
+            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             if (enemy !== null) {
                 self._addEnemy(enemy);
             } else {
-                console.warn('Add: unable to find enemy with id ' + id + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
+                console.warn('Add: unable to find enemy with id ' + enemyId + ' for KZ ' + self.id + ' on floor ' + self.floor_id + ', ' +
                     'this enemy was probably removed during a migration?');
             }
-        });
+        }
 
         this.redrawConnectionsToEnemies();
     }
@@ -535,7 +550,7 @@ class KillZone extends MapObject {
             // Only when NOT currently editing the layer
             if (!(this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id)) {
                 this.enemiesLayer.bindTooltip(this.index + '', {
-                    direction: 'center',
+                    direction: this.indexLabelDirection,
                     className: 'leaflet-tooltip-killzone-index',
                     permanent: true
                 });
