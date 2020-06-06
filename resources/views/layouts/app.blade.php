@@ -1,4 +1,5 @@
 <?php
+/** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
 $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
 
 $user = \Illuminate\Support\Facades\Auth::user();
@@ -252,11 +253,11 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                             @foreach($menuModels as $menuModel)
                                 @php($hasIcon = isset($menuModel->iconfile))
                                 <option
-                                    data-url="{{ route($menuModelsRoute, ['team' => $menuModel->id]) }}"
+                                    data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
                                     @if($hasIcon)
                                     data-content="<img src='{{ url('storage/' . $menuModel->iconfile->getUrl()) }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
                                     @endif
-                                    {{ $model->id === $menuModel->id ? 'selected' : '' }}
+                                    {{ $model->getKey() === $menuModel->getKey() ? 'selected' : '' }}
                                 >{{ $hasIcon ? '' : $menuModel->name }}</option>
                             @endforeach
                         </select>

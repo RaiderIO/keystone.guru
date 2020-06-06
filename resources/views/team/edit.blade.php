@@ -30,7 +30,9 @@ foreach ($model->teamusers as $teamuser) {
 @extends('layouts.app', ['title' => $title,
     'menuTitle' => __('Teams'), 'menuItems' => $menuItems,
     // The models to display as an option in the menu, plus the route to take when selecting them
-    'menuModels' => $user->teams, 'menuModelsRoute' => 'team.edit',
+    'menuModels' => $user->teams,
+    'menuModelsRoute' => 'team.edit',
+    'menuModelsRouteParameterName' => 'team',
     'model' => $model])
 @section('header-title', $title)
 @section('header-addition')
