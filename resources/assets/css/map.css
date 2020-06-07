@@ -161,6 +161,7 @@ html, body, #map, #app, .wrapper {
     padding-top: 10px;
     /** Bit of a hack, but the 106 is the height of the header which somehow isn't taken into account */
     height: calc(100vh - 106px);
+    overflow: auto;
 }
 
 .sidebar .sidebar-content .card-body {

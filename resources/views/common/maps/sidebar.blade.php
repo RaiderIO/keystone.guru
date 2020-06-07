@@ -25,7 +25,7 @@ $selectedFloorId = isset($selectedFloorId) ? $selectedFloorId : 0;
         @endisset
     </div>
 
-    <div class="sidebar-content">
+    <div class="sidebar-content" data-simplebar>
         <div class="container">
             {{ $slot }}
         </div>

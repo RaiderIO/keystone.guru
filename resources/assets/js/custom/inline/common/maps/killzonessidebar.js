@@ -47,8 +47,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
         }
 
         // Make sure we can see the killzone in the sidebar
-        if (!$(`#map_killzonessidebar_killzone_${killZone.id}`).visible()) {
-            $(this.options.sidebarScrollSelector).mCustomScrollbar('scrollTo', `#map_killzonessidebar_killzone_${killZone.id}`);
+        let $killzone = $(`#map_killzonessidebar_killzone_${killZone.id}`);
+        if ($killzone.length > 0 && !$killzone.visible()) {
+            $killzone[0].scrollIntoView({behavior: 'smooth'});
         }
     }
 
@@ -209,13 +210,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // No need to refresh - synced will be set to true, then this function will be triggered (because we listen for it)
         // this._refreshKillZone(killZone);
-
-        // A new pull was created; make sure it's selected by default
-        if (this._newPullKillZone !== null) {
-            this._killZoneSelected(this._newPullKillZone, true);
-
-            this._newPullKillZone = null;
-        }
     }
 
     /**
@@ -408,6 +402,13 @@ class CommonMapsKillzonessidebar extends InlineCode {
             } else {
                 console.warn('Color picker not found!', killZone, killZone.id);
             }
+
+            // A new pull was created; make sure it's selected by default
+            if (this._newPullKillZone !== null && this._newPullKillZone.id > 0) {
+                this._killZoneSelected(this._newPullKillZone, true);
+
+                this._newPullKillZone = null;
+            }
         }
 
     }
@@ -449,6 +450,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         // User interface action created a new killzone
         killZoneMapObjectGroup.register('killzone:new', this, function (killZoneCreatedEvent) {
+            // We do not know the ID before this so we cannot scroll to the new killzone instantly
             self._newPullKillZone = killZoneCreatedEvent.data.newKillZone;
         });
         killZoneMapObjectGroup.register('object:add', this, function (killZoneAddedEvent) {

@@ -68,10 +68,6 @@ class Sidebar {
             refreshTooltips();
         });
 
-        $(this.options.sidebarScrollSelector).mCustomScrollbar({
-            theme: 'minimal'
-        });
-
         this._showSidebar();
     }
 

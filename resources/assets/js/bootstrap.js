@@ -60,7 +60,6 @@ window.owlCarousel = require('owl.carousel');
 window.introjs = require('intro.js');
 window.pwstrengthmeter = require('password-strength-meter');
 window.jqueryMousewheel = require('jquery-mousewheel');
-window.mCustomScrollbar = require('malihu-custom-scrollbar-plugin');
 window.Cookies = require('js-cookie');
 window.hull = require('hull.js'); // Find the 'hull' of a random set of points
 window.Offset = require('polygon-offset'); // Offsetting polygons to get a smooth padding around them
@@ -73,6 +72,7 @@ window.Pickr = require('@simonwep/pickr');
 window.AntPath = require('leaflet-ant-path');
 window.Grapick = require('grapick');
 window.jqueryVisible = require('jquery-visible');
+window.simplebar = require('simplebar');
 
 require('@fortawesome/fontawesome-free');
 
