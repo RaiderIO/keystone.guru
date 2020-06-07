@@ -6,9 +6,15 @@ class EchoControls extends MapControl {
 
         let self = this;
 
-        this.users = [];
-
         this._mapControl = null;
+
+        this.map.echo.register('status:changed', this, this._onStatusChanged.bind(this));
+        this.map.echo.register('user:add', this, this._onUserAdd.bind(this));
+        this.map.echo.register('user:remove', this, this._onUserRemove.bind(this));
+        this.map.echo.register('user:colorchanged', this, this._onUserColorChanged.bind(this));
+
+        this.map.register('map:mapobjectgroupsfetchsuccess', this, this._onMapObjectGroupsFetchSuccess.bind(this));
+
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
@@ -16,49 +22,46 @@ class EchoControls extends MapControl {
 
                 let data = getHandlebarsDefaultVariables();
 
-                // Build the status bar from the template
-                self.domElement = $(template(data));
-                self.domElement = self.domElement[0];
-
-                return self.domElement;
+                return $(template(data))[0];
             }
         };
 
-        this._setStatus('connecting');
+        // Initial status while we wait for status changes
+        this._setStatus(this.map.echo.getStatus());
+    }
 
-        // This will probably not trigger the first time around, but it will trigger upon reconnect
-        window.Echo.connector.socket.on('connect', function () {
-            self._setStatus('connected');
-        });
+    _onStatusChanged(statusChangedEvent) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        // Whenever disconnected..
-        window.Echo.connector.socket.on('disconnect', function () {
-            self._setStatus('connecting');
+        this._setStatus(statusChangedEvent.data.newStatus);
+    }
 
-            // Reset the users that we have to prevent double users from showing up
-            self._clearUsers();
-        });
+    _onUserAdd(userAddEvent) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        // Keep track of the current users in this channel
-        window.Echo.join(this.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
-            .here(users => {
-                for (let index in users) {
-                    if (users.hasOwnProperty(index)) {
-                        self._addUser(users[index]);
-                    }
-                }
-                // Will probably initially set the connected state
-                self._setStatus('connected');
-            })
-            .joining(user => {
-                self._addUser(user);
-            })
-            .leaving(user => {
-                self._removeUser(user);
-            })
-            .listen('.user-color-changed', (e) => {
-                self._setUserColor(e.name, e.color);
-            });
+        this._addUser(userAddEvent.data.user);
+    }
+
+    _onUserRemove(userRemoveEvent) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+
+        this._removeUser(userRemoveEvent.data.user);
+    }
+
+    _onUserColorChanged(userRemoveEvent) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+
+        this._applyUserColor(userRemoveEvent.data.user);
+    }
+
+    _onMapObjectGroupsFetchSuccess(fetchSuccessEvent) {
+        console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+
+        // We can only add existing users at this point because that's when our control is fully built.
+        let existingUsers = this.map.echo.getUsers();
+        for (let i = 0; i < existingUsers.length; i++) {
+            this._addUser(existingUsers[i]);
+        }
     }
 
     /**
@@ -68,16 +71,20 @@ class EchoControls extends MapControl {
      */
     _setStatus(status) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+
         let $connecting = $('.connecting');
         let $connected = $('.connected');
         switch (status) {
-            case 'connecting':
+            case ECHO_STATUS_DISCONNECTED:
                 $connecting.show();
                 $connected.hide();
                 break;
-            case 'connected':
+            case ECHO_STATUS_CONNECTED:
                 $connecting.hide();
                 $connected.show();
+                break;
+            default:
+                console.error('Invalid echo state found!');
                 break;
         }
     }
@@ -99,9 +106,8 @@ class EchoControls extends MapControl {
             result
         );
 
-        this.users.push(user);
         // Update the color
-        this._setUserColor(user.name, user.color);
+        this._applyUserColor(user);
 
         refreshTooltips();
     }
@@ -115,90 +121,38 @@ class EchoControls extends MapControl {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         // Remove element
         $('.echo_user_' + user.name).remove();
-
-        for (let index in this.users) {
-            if (this.users[index].name === user.name) {
-                this.users = this.users.splice(index, 1);
-                break;
-            }
-        }
-    }
-
-    /**
-     * Clears all users stored in memory and in the user interface.
-     * @private
-     */
-    _clearUsers() {
-        // Remove all from interface
-        for (let index in this.users) {
-            $('.echo_user_' + this.users[index].name).remove();
-        }
-
-        // Reset array
-        this.users = [];
-    }
-
-    /**
-     * Gets a specific user.
-     * @param name
-     * @returns {object}
-     * @private
-     */
-    _getUser(name) {
-        let result = null;
-        for (let index in this.users) {
-            if (this.users[index].name === name) {
-                result = this.users[index];
-                break;
-            }
-        }
-        return result;
     }
 
     /**
      * Sets the display color of a user.
-     * @param name string
-     * @param color string
+     * @param user {object}
      * @private
      */
-    _setUserColor(name, color) {
+    _applyUserColor(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        let styleID = 'style_color_' + name;
+        let styleID = 'style_color_' + user.name;
         // Delete any previous styles
         $('#' + styleID).remove();
 
         // Gets funky here, create a new CSS class with the user's color so we can direct some elements to use this class
         $("<style id='" + styleID + "'>")
-            .prop("type", "text/css")
+            .prop('type', 'text/css')
             .html("\
-            .user_color_" + name + " {\
-                background-color: " + color + " !important\
+            .user_color_" + user.name + " {\
+                background-color: " + user.color + " !important\
             }")
-            .appendTo("head");
+            .appendTo('head');
 
-        // Update the user's color
-        this._getUser(name).color = color;
         // Update the text color depending on the luminance
-        let $user = $('.echo_user_' + name);
-        if (isColorDark(color)) {
+        let $user = $('.echo_user_' + user.name);
+        if (isColorDark(user.color)) {
             $user.addClass('text-white');
             $user.removeClass('text-dark');
         } else {
             $user.addClass('text-dark');
             $user.removeClass('text-white');
         }
-    }
-
-    /**
-     * Gets the color of a specific user.
-     * @param name
-     * @returns {string}
-     * @private
-     */
-    getUserColor(name) {
-        let user = this._getUser(name);
-        return user === null ? '#000' : user.color;
     }
 
     /**
@@ -225,6 +179,13 @@ class EchoControls extends MapControl {
 
     cleanup() {
         super.cleanup();
+
+        this.map.echo.unregister('status:changed', this);
+        this.map.echo.unregister('user:add', this);
+        this.map.echo.unregister('user:remove', this);
+        this.map.echo.unregister('user:colorchanged', this);
+
+        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
 
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
     }

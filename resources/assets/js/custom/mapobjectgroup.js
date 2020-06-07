@@ -163,7 +163,7 @@ class MapObjectGroup extends Signalable {
      */
     _showReceivedFromEcho(localMapObject, username) {
         if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
-            let userColor = this.manager.map.getEchoControls().getUserColor(username);
+            let userColor = this.manager.map.echo.getUserColor(username);
             let fontClass = '';
 
             // Must be a hex color

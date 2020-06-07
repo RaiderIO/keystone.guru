@@ -9,8 +9,10 @@ class DungeonMap extends Signalable {
         // Apply the map to our state first thing
         getState().setDungeonMap(this);
 
+        // Build echo if we need it
         if (this.options.echo) {
-            window.startEcho();
+            this.echo = new Echo(this);
+            this.echo.connect();
         }
 
         // Listen for floor changes
@@ -706,26 +708,6 @@ class DungeonMap extends Signalable {
             smoothFactor: 5,
             pathColour: c.map.polyline.defaultColor()
         });
-    }
-
-    /**
-     * Get the echo controls, if any.
-     * @returns {boolean} False if echo was not set, or the Echo Controls.
-     */
-    getEchoControls() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        let result = false;
-        for (let index in this.mapControls) {
-            if (this.mapControls.hasOwnProperty(index)) {
-                let control = this.mapControls[index];
-                if (control instanceof EchoControls) {
-                    result = control;
-                    break;
-                }
-            }
-        }
-        return result;
     }
 
     /**
