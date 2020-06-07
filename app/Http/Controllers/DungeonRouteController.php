@@ -83,6 +83,18 @@ class DungeonRouteController extends Controller
      */
     public function view(Request $request, DungeonRoute $dungeonroute)
     {
+        return $this->viewfloor($request, $dungeonroute, 1);
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @param int $floorIndex
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @throws AuthorizationException
+     */
+    public function viewfloor(Request $request, DungeonRoute $dungeonroute, int $floorIndex)
+    {
         $this->authorize('view', $dungeonroute);
 
         $currentReport = null;
@@ -96,11 +108,17 @@ class DungeonRouteController extends Controller
         }
 
         PageView::trackPageView($dungeonroute->id, get_class($dungeonroute));
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
-        return view('dungeonroute.view', [
-            'model' => $dungeonroute,
-            'current_report' => $currentReport
-        ]);
+        if ($floor === null) {
+            return redirect()->route('dungeonroute.view', ['dungeonroute' => $dungeonroute->public_key]);
+        } else {
+            return view('dungeonroute.view', [
+                'model'          => $dungeonroute,
+                'current_report' => $currentReport,
+                'floor'          => $floor
+            ]);
+        }
     }
 
     /**
@@ -112,7 +130,7 @@ class DungeonRouteController extends Controller
     public function preview(Request $request, DungeonRoute $dungeonroute, int $floorindex)
     {
         $result = view('dungeonroute.preview', [
-            'model' => $dungeonroute,
+            'model'   => $dungeonroute,
             'floorId' => Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first()->id
         ]);
 
@@ -176,7 +194,7 @@ class DungeonRouteController extends Controller
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
-        return $this->editFloor($request, $dungeonroute, 1);
+        return $this->editfloor($request, $dungeonroute, 1);
     }
 
     /**
@@ -186,7 +204,7 @@ class DungeonRouteController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      * @throws AuthorizationException
      */
-    public function editFloor(Request $request, DungeonRoute $dungeonroute, int $floorIndex)
+    public function editfloor(Request $request, DungeonRoute $dungeonroute, int $floorIndex)
     {
         $this->authorize('edit', $dungeonroute);
 
@@ -196,17 +214,16 @@ class DungeonRouteController extends Controller
 
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
-        if( $floor === null ) {
+        if ($floor === null) {
             return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
         } else {
             return view('dungeonroute.edit', [
                 'headerTitle' => __('Edit route'),
-                'model' => $dungeonroute,
-                'floor' => $floor
+                'model'       => $dungeonroute,
+                'floor'       => $floor
             ]);
         }
     }
-
 
 
     /**

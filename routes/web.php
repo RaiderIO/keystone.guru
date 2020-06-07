@@ -86,7 +86,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         // Edit your own dungeon routes
         Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')->name('dungeonroute.edit');
-        Route::get('{dungeonroute}/edit/{floor}', 'DungeonRouteController@editFloor')->name('dungeonroute.edit.floor');
+        Route::get('{dungeonroute}/edit/{floor}', 'DungeonRouteController@editfloor')->name('dungeonroute.edit.floor');
         // Submit a patch for your own dungeon route
         Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')->name('dungeonroute.update');
         // Clone a route
@@ -292,6 +292,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     // View any dungeon route (catch all)
     Route::get('{dungeonroute}', 'DungeonRouteController@view')->name('dungeonroute.view');
+    Route::get('{dungeonroute}/{floor}', 'DungeonRouteController@viewfloor')->name('dungeonroute.view.floor');
     // Preview of a route for image capturing library
     Route::get('{dungeonroute}/preview/{floorindex}', 'DungeonRouteController@preview')->name('dungeonroute.preview');
 });
