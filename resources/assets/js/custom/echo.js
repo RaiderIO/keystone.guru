@@ -43,8 +43,6 @@ class Echo extends Signalable {
                     }
                 }
                 self.signal('status:changed', {newStatus: ECHO_STATUS_CONNECTED});
-                // Will probably initially set the connected state
-                self._setStatus('connected');
             })
             .joining(user => {
                 self._addUser(user);

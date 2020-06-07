@@ -25,9 +25,6 @@ class EchoControls extends MapControl {
                 return $(template(data))[0];
             }
         };
-
-        // Initial status while we wait for status changes
-        this._setStatus(this.map.echo.getStatus());
     }
 
     _onStatusChanged(statusChangedEvent) {
@@ -56,6 +53,9 @@ class EchoControls extends MapControl {
 
     _onMapObjectGroupsFetchSuccess(fetchSuccessEvent) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
+
+        // Initial status while we wait for status changes
+        this._setStatus(this.map.echo.getStatus());
 
         // We can only add existing users at this point because that's when our control is fully built.
         let existingUsers = this.map.echo.getUsers();

@@ -193,7 +193,8 @@ class MapObjectGroup extends Signalable {
                     tooltip.closeTooltip();
 
                     // Do not re-bind a tooltip that shouldn't be there permanently
-                    if (!oldTooltip.options.className.includes('user_color_')) {
+                    if (typeof oldTooltip !== 'undefined' &&
+                        !oldTooltip.options.className.includes('user_color_')) {
                         // Rebind killzone pull index tooltip
                         layer.bindTooltip(oldTooltip._content, oldTooltip.options);
                     }
