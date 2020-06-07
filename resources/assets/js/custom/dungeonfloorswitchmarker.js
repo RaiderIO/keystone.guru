@@ -65,13 +65,9 @@ class DungeonFloorSwitchMarker extends MapObject {
         let self = this;
 
         this.layer.on('click', function () {
-            // Reference to the sidebar floor is stored in the sidebar. Bit of a hack but eh.
-            let sidebar = _inlineManager.getInlineCode(self.map.options.edit ? 'common/maps/editsidebar' : 'common/maps/viewsidebar');
-
             // Tol'dagor doors don't have a target (locked doors)
             if (self.target_floor_id > 0) {
-                $(sidebar.options.switchDungeonFloorSelect).val(self.target_floor_id).trigger('change');
-                refreshSelectPickers();
+                getState().setFloorId(self.target_floor_id);
             }
         });
 

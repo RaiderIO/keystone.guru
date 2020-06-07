@@ -1,7 +1,6 @@
 <script>
     /** Instance that handles the internal state for the dungeon map */
     let _stateManager;
-
     // Init it right away
     _stateManager = new StateManager();
     _stateManager.setDungeonRoute({!! new \Illuminate\Support\Collection($dungeonroute) !!});

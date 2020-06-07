@@ -69,6 +69,10 @@ class EnemyPack extends MapObject {
         return result;
     }
 
+    toString() {
+        return 'Enemy pack-' + this.id;
+    }
+
     cleanup() {
         super.cleanup();
     }

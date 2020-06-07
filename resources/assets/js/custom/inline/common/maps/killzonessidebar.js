@@ -47,8 +47,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
         }
 
         // Make sure we can see the killzone in the sidebar
-        if (!$(`#map_killzonessidebar_killzone_${killZone.id}`).visible()) {
-            $(this.options.sidebarScrollSelector).mCustomScrollbar('scrollTo', `#map_killzonessidebar_killzone_${killZone.id}`);
+        let $killzone = $(`#map_killzonessidebar_killzone_${killZone.id}`);
+        if ($killzone.length > 0 && !$killzone.visible()) {
+            $killzone[0].scrollIntoView({behavior: 'smooth'});
         }
     }
 
@@ -58,11 +59,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
      */
     _killZoneRowClicked(clickEvent) {
         // If there was an event, prevent clicking the 'expand' button also selecting the killzone
-        let $target = $(clickEvent.target);
-        if (clickEvent !== null && typeof clickEvent !== 'undefined' &&
-            ($target.hasClass('btn') || $target.hasClass('pcr-button') ||
-                $target.hasClass('fas') || $target.hasClass('fas'))) {
-            return;
+        if (clickEvent !== null && typeof clickEvent !== 'undefined') {
+            let $target = $(clickEvent.target);
+            if (($target.hasClass('btn') || $target.hasClass('pcr-button') ||
+                $target.hasClass('fa') || $target.hasClass('fas'))) {
+                return;
+            }
         }
 
         let map = getState().getDungeonMap();
@@ -148,7 +150,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let data = $.extend({}, getHandlebarsDefaultVariables(), {
             'id': killZone.id,
             'text-class': 'text-white',
-            'color': killZone.color // For viewing
+            'color': killZone.color, // For viewing
+            'has_kill_area': killZone.hasKillArea() ? '1' : '0'
         });
 
         $(this.options.killZonesContainerSelector).append(
@@ -188,14 +191,14 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     // It's been removed; unset it
                     killZoneMapObjectGroup.setLayerToMapObject(null, killZone);
 
-                    killZone.floor_id = getState().getCurrentFloor().id;
+                    killZone.floor_id = null;
                     // Update its visuals
                     killZone.redrawConnectionsToEnemies();
                     killZone.save();
                 }
             });
             // If we have a killzone layer
-            if (killZone.isKillZoneVisible()) {
+            if (killZone.hasKillArea()) {
                 // Was inactive (always starts inactive), is active now
                 $hasKillZone.button('toggle');
             }
@@ -207,13 +210,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // No need to refresh - synced will be set to true, then this function will be triggered (because we listen for it)
         // this._refreshKillZone(killZone);
-
-        // A new pull was created; make sure it's selected by default
-        if (this._newPullKillZone !== null) {
-            this._killZoneSelected(this._newPullKillZone, true);
-
-            this._newPullKillZone = null;
-        }
     }
 
     /**
@@ -238,7 +234,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 showSuccessNotification(lang.get('messages.object.deleted'));
 
                 // Bit hacky?
-                if (killZone.isKillZoneVisible()) {
+                if (killZone.isKillAreaVisible()) {
                     getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
                     getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
                 }
@@ -268,7 +264,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let self = this;
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        $.each(killZoneMapObjectGroup.objects, function(index, killZone){
+        $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
             self._setPullText(killZone);
         });
     }
@@ -327,8 +323,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
         this._setPullText(killZone);
-        $(`#map_killzonessidebar_killzone_${killZone.id}_kill_area_label`)
-            .attr('title', lang.get(killZone.isKillZoneVisible() ? 'messages.remove_kill_area_label' : 'messages.add_kill_area_label'));
 
 
         // Fill the enemy list
@@ -373,20 +367,58 @@ class CommonMapsKillzonessidebar extends InlineCode {
         }
 
         if (this.options.edit) {
+            /**
+             * Code to prevent calling refreshTooltips too often
+             */
+            let $killAreaLabel = $(`#map_killzonessidebar_killzone_${killZone.id}_kill_area_label`);
+            // We are displaying 'has kill area' now (somehow using .data() does not work at all)
+            let $hasKillArea = $killAreaLabel.attr('data-haskillarea');
+
+            let resultMessage = '';
+            // Set and is currently 0
+            if ($hasKillArea === '1' && !killZone.hasKillArea()) {
+                // It was not, update it
+                resultMessage = lang.get('messages.remove_kill_area_label');
+            } else {
+                // Default
+                resultMessage = lang.get('messages.add_kill_area_label');
+            }
+
+            // Write result regardless
+            // $killAreaLabel.attr('data-haskillarea', killZone.hasKillArea() ? '1' : '0');
+            // If something was changed
+            if ($hasKillArea !== (killZone.hasKillArea() ? '1' : '0')) {
+                $killAreaLabel.attr('title', resultMessage);
+                refreshTooltips($killAreaLabel);
+            }
+
+
             if (this._colorPickers.hasOwnProperty(killZone.id)) {
-                this._colorPickers[killZone.id].setColor(killZone.color);
+                // SetColor is slow, check if we really need to set it
+                let oldColor = '#' + this._colorPickers[killZone.id].getColor().toHEXA().join('');
+                if (oldColor !== killZone.color) {
+                    this._colorPickers[killZone.id].setColor(killZone.color);
+                }
             } else {
                 console.warn('Color picker not found!', killZone, killZone.id);
             }
+
+            // A new pull was created; make sure it's selected by default
+            if (this._newPullKillZone !== null && this._newPullKillZone.id > 0) {
+                this._killZoneSelected(this._newPullKillZone, true);
+
+                this._newPullKillZone = null;
+            }
         }
 
-        refreshTooltips();
     }
 
     /**
      *
      */
     activate() {
+        super.activate();
+
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
         this.sidebar.activate();
 
@@ -418,6 +450,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         // User interface action created a new killzone
         killZoneMapObjectGroup.register('killzone:new', this, function (killZoneCreatedEvent) {
+            // We do not know the ID before this so we cannot scroll to the new killzone instantly
             self._newPullKillZone = killZoneCreatedEvent.data.newKillZone;
         });
         killZoneMapObjectGroup.register('object:add', this, function (killZoneAddedEvent) {

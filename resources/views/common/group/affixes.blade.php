@@ -11,7 +11,11 @@ $affixes = \App\Models\Affix::all();
 $defaultSelected = isset($defaultSelected) ? $defaultSelected : [];
 ?>
 
-@include('common.general.inline', ['path' => 'common/group/affixes', 'options' => ['teemingSelector' => $teemingselector, 'affixGroups' => $affixGroups]])
+@include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
+    'teemingSelector' => $teemingselector,
+    'affixGroups' => $affixGroups,
+    'modal' => isset($modal) ? $modal : false
+    ]])
 
 <div class="form-group">
     {!! Form::label('affixes[]', __('Select affixes')) !!}

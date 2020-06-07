@@ -175,4 +175,8 @@ class Brushline extends Polyline {
             });
         }
     }
+
+    toString() {
+        return 'Line';
+    }
 }

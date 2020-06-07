@@ -27,6 +27,8 @@ class CommonMapsMap extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+
         this.initDungeonMap();
     }
 

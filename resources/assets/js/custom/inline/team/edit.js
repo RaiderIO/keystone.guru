@@ -9,6 +9,8 @@ class TeamEdit extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+        
         let self = this;
         let code = _inlineManager.getInlineCode('dungeonroute/table');
         let tableView = code.getTableView();

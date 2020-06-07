@@ -20,6 +20,8 @@ class DungeonrouteTable extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+
         let self = this;
 
         $('#dungeonroute_filter').bind('click', function () {

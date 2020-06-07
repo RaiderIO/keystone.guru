@@ -9,9 +9,16 @@ class DungeonMap extends Signalable {
         // Apply the map to our state first thing
         getState().setDungeonMap(this);
 
+        // Build echo if we need it
         if (this.options.echo) {
-            window.startEcho();
+            this.echo = new Echo(this);
+            this.echo.connect();
         }
+
+        // Listen for floor changes
+        getState().register('floorid:changed', this, function(){
+            self.refreshLeafletMap();
+        });
 
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
@@ -19,9 +26,6 @@ class DungeonMap extends Signalable {
         this.mapObjectGroupManager.register('fetchsuccess', this, function () {
             // Add new controls; we're all loaded now and user should now be able to edit their route
             self._addMapControls(self.editableLayers);
-
-            // All layers have been fetched, refresh tooltips to update "No layers to edit" state
-            refreshTooltips();
 
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
@@ -209,6 +213,9 @@ class DungeonMap extends Signalable {
                     console.assert(mapObject instanceof KillZone, 'object is not a KillZone!', mapObject);
                     // Apply the layer to the killzone
                     mapObjectGroup.setLayerToMapObject(event.layer, mapObject);
+
+                    // No longer in AddKillZoneMapState; we finished
+                    self.setMapState(null);
                 } else {
                     mapObject = mapObjectGroup.createNew(event.layer);
                 }
@@ -446,6 +453,11 @@ class DungeonMap extends Signalable {
         for (let i = 0; i < this.mapControls.length; i++) {
             this.mapControls[i].addControl();
         }
+
+        // Do this once and not a bunch of times for all different elements
+        refreshSelectPickers();
+        // All layers have been fetched and everything rebuilt, refresh tooltips for all elements
+        refreshTooltips();
     }
 
     /**
@@ -696,26 +708,6 @@ class DungeonMap extends Signalable {
             smoothFactor: 5,
             pathColour: c.map.polyline.defaultColor()
         });
-    }
-
-    /**
-     * Get the echo controls, if any.
-     * @returns {boolean} False if echo was not set, or the Echo Controls.
-     */
-    getEchoControls() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        let result = false;
-        for (let index in this.mapControls) {
-            if (this.mapControls.hasOwnProperty(index)) {
-                let control = this.mapControls[index];
-                if (control instanceof EchoControls) {
-                    result = control;
-                    break;
-                }
-            }
-        }
-        return result;
     }
 
     /**

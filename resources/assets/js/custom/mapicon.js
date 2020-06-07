@@ -301,10 +301,13 @@ class MapIcon extends MapObject {
         }
     }
 
+    toString() {
+        return 'Map icon (' + this.comment.substring(0, 25) + ')';
+    }
+
     cleanup() {
         super.cleanup();
 
         this.map.unregister('map:mapstatechanged', this);
     }
-
 }

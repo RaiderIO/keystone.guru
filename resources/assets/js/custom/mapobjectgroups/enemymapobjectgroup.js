@@ -5,7 +5,9 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
 
-        getState().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
+        if( !(this.manager.map instanceof AdminDungeonMap) ) {
+            getState().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
+        }
     }
 
     /**
@@ -71,7 +73,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 enemy.setDefaultVisible(false);
             }
 
-            if (enemy.seasonal_index !== null && getState().getSeasonalIndex() !== enemy.seasonal_index) {
+            // When in admin mode, show all enemies
+            if (!(this.manager.map instanceof AdminDungeonMap) && (enemy.seasonal_index !== null && getState().getSeasonalIndex() !== enemy.seasonal_index)) {
                 // Hide this enemy by default
                 enemy.setDefaultVisible(false);
             }

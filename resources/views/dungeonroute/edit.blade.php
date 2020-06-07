@@ -1,6 +1,7 @@
 @extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
 <?php
 /** @var $model \App\Models\DungeonRoute */
+/** @var $floor \App\Models\Floor */
 $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/edit'])
@@ -19,7 +20,8 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'dungeonroute' => $model,
-            'edit' => true
+            'edit' => true,
+            'floorId' => $floor->id
         ])
 
         @include('common.maps.killzonessidebar', [
@@ -58,7 +60,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
 
                             <div class='container mt-1'>
                                 {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox d-none']) !!}
-                                @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming'])
+                                @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming', 'modal' => '#settings_modal'])
                             </div>
 
                             <h3>

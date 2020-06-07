@@ -203,4 +203,8 @@ class Path extends Polyline {
             });
         }
     }
+
+    toString() {
+        return 'Path';
+    }
 }

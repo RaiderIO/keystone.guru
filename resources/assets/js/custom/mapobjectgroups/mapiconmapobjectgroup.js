@@ -10,7 +10,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         if (this.manager.map.options.echo) {
             window.Echo.join(this.manager.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.mapicon-changed', (e) => {
-                    if( e.mapicon.floor_id === getState().getCurrentFloor().id ){
+                    if (e.mapicon.floor_id === getState().getCurrentFloor().id) {
                         self._restoreObject(e.mapicon, e.user);
                     }
                 })
@@ -45,9 +45,10 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
         // Fetch the existing map icon if it exists
         let mapIcon = this.findMapObjectById(remoteMapObject.id);
+        let createdNew;
 
         // Only create a new one if it's new for us
-        if (mapIcon === null) {
+        if (createdNew = (mapIcon === null)) {
             // Find the layer we should display on the map
             let layer = new LeafletMapIconMarker();
             layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
@@ -59,6 +60,10 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         mapIcon.id = remoteMapObject.id;
         mapIcon.floor_id = remoteMapObject.floor_id;
         mapIcon.map_icon_type_id = remoteMapObject.map_icon_type_id;
+        // If refreshed from Echo
+        if (!createdNew) {
+            mapIcon.setMapIconType(getState().getMapIconType(mapIcon.map_icon_type_id));
+        }
         mapIcon.has_dungeon_route = remoteMapObject.has_dungeon_route;
         mapIcon.comment = remoteMapObject.comment;
         mapIcon.permanent_tooltip = remoteMapObject.permanent_tooltip;

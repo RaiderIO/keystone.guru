@@ -1,6 +1,8 @@
 @extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $model->title])
 <?php
 /** @var $model \App\Models\DungeonRoute */
+/** @var $floor \App\Models\Floor */
+
 $affixes = $model->affixes->pluck('text', 'id');
 $selectedAffixes = $model->affixes->pluck('id');
 if (count($affixes) == 0) {
@@ -24,7 +26,8 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'dungeonroute' => $model,
-            'edit' => false
+            'edit' => false,
+            'floorId' => $floor->id
         ])
 
         @include('common.maps.killzonessidebar', [

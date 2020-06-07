@@ -163,7 +163,7 @@ class MapObjectGroup extends Signalable {
      */
     _showReceivedFromEcho(localMapObject, username) {
         if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
-            let userColor = this.manager.map.getEchoControls().getUserColor(username);
+            let userColor = this.manager.map.echo.getUserColor(username);
             let fontClass = '';
 
             // Must be a hex color
@@ -193,7 +193,8 @@ class MapObjectGroup extends Signalable {
                     tooltip.closeTooltip();
 
                     // Do not re-bind a tooltip that shouldn't be there permanently
-                    if (!oldTooltip.options.className.includes('user_color_')) {
+                    if (typeof oldTooltip !== 'undefined' &&
+                        !oldTooltip.options.className.includes('user_color_')) {
                         // Rebind killzone pull index tooltip
                         layer.bindTooltip(oldTooltip._content, oldTooltip.options);
                     }
@@ -214,7 +215,7 @@ class MapObjectGroup extends Signalable {
         if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
             showInfoNotification(
                 lang.get('messages.echo_object_deleted_notification')
-                    .replace('{object}', _.upperFirst(localMapObject.constructor.name.toLowerCase()))
+                    .replace('{object}', localMapObject.toString())
                     .replace('{user}', username)
             );
         }

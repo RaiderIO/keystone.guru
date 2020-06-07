@@ -3,6 +3,8 @@ class Sidebar {
 
     constructor(options) {
         this.options = options;
+
+        this._floorIdChangeSource = null;
     }
 
     /**
@@ -11,10 +13,38 @@ class Sidebar {
     activate() {
         let self = this;
 
+        // Register for external changes so that we update our dropdown
+        getState().register('floorid:changed', this, function (floorIdChangedEvent) {
+            if (self._floorIdChangeSource === null) {
+                self._floorIdChangeSource = 'external';
+
+                $(self.options.switchDungeonFloorSelect).val(floorIdChangedEvent.data.floorId);
+                self._floorIdChangeSource = null;
+            }
+
+            let pathname = window.location.pathname;
+            let pathSplit = window.location.pathname.split('/');
+            if (Number.isInteger(parseInt(pathSplit[pathSplit.length - 1]))) {
+                // Strip the last one from it
+                pathSplit.splice(-1, 1);
+                pathname = pathSplit.join('/');
+            }
+
+            let newUrl = window.location.protocol + '//' + window.location.host + pathname + '/' + getState().getCurrentFloor().index;
+
+            history.pushState({page: 1},
+                newUrl,
+                newUrl);
+        });
+
         $(this.options.switchDungeonFloorSelect).change(function () {
-            // Pass the new floor ID to the map
-            getState().setFloorId($(self.options.switchDungeonFloorSelect).val());
-            getState().getDungeonMap().refreshLeafletMap();
+            if (self._floorIdChangeSource === null) {
+                self._floorIdChangeSource = 'select';
+
+                // Pass the new floor ID to the map
+                getState().setFloorId($(self.options.switchDungeonFloorSelect).val());
+                self._floorIdChangeSource = null;
+            }
         });
 
         // Make sure that the select options have a valid value
@@ -38,10 +68,6 @@ class Sidebar {
             refreshTooltips();
         });
 
-        $(this.options.sidebarScrollSelector).mCustomScrollbar({
-            theme: 'minimal'
-        });
-
         this._showSidebar();
     }
 
@@ -63,7 +89,8 @@ class Sidebar {
                 }));
             });
 
-            refreshSelectPickers();
+            // Now handled by dungeonmap refresh
+            // refreshSelectPickers();
         }
     }
 
@@ -108,7 +135,7 @@ class Sidebar {
             $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
         }
     }
-    
+
     cleanup() {
 
     }

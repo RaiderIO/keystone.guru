@@ -340,6 +340,10 @@ class Enemy extends MapObject {
         });
     }
 
+    toString() {
+        return 'Enemy-' + this.id;
+    }
+
     cleanup() {
         console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         super.cleanup();

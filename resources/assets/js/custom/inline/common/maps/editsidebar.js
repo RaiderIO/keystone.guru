@@ -12,6 +12,8 @@ class CommonMapsEditsidebar extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+
         this.sidebar.activate();
 
         let self = this;
@@ -91,7 +93,7 @@ class CommonMapsEditsidebar extends InlineCode {
         $('#edit_route_freedraw_options_gradient_apply_to_pulls').bind('click', function () {
             let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
-            let count = killZoneMapObjectGroup.objects.length
+            let count = killZoneMapObjectGroup.objects.length;
             for (let index in killZoneMapObjectGroup.objects) {
                 if (killZoneMapObjectGroup.objects.hasOwnProperty(index)) {
 

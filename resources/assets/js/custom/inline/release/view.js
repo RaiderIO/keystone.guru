@@ -4,6 +4,8 @@ class ReleaseView extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+
         let key = 'changelog_release';
 
         let self = this;

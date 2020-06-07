@@ -11,6 +11,8 @@ class CommonMapsViewsidebar extends InlineCode {
      *
      */
     activate() {
+        super.activate();
+
         let self = this;
         this.sidebar.activate();
 
