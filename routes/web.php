@@ -174,8 +174,13 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             {
                 Route::get('/', 'AdminToolsController@index')->name('admin.tools');
 
+                // View string contents
                 Route::get('mdt/string', 'AdminToolsController@mdtview')->name('admin.tools.mdt.string.view');
                 Route::post('mdt/string', 'AdminToolsController@mdtviewsubmit')->name('admin.tools.mdt.string.submit');
+
+                // View string contents as a dungeonroute
+                Route::get('mdt/string/dungeonroute', 'AdminToolsController@mdtviewasdungeonroute')->name('admin.tools.mdt.string.viewasdungeonroute');
+                Route::post('mdt/string/dungeonroute', 'AdminToolsController@mdtviewasdungeonroutesubmit')->name('admin.tools.mdt.string.viewasdungeonroute.submit');
                 Route::get('mdt/diff', 'AdminToolsController@mdtdiff')->name('admin.tools.mdt.diff');
 
                 Route::get('datadump/exportdungeondata', 'AdminToolsController@exportdungeondata')->name('admin.tools.datadump.exportdungeondata');

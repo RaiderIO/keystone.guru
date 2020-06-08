@@ -1,9 +1,13 @@
+<?php
+$dungeonroute = isset($dungeonroute) ? $dungeonroute : false;
+?>
+
 @extends('layouts.app', ['showAds' => false, 'title' => __('View MDT String')])
 
 @section('header-title', __('View MDT String contents'))
 
 @section('content')
-    {{ Form::open(['route' => 'admin.tools.mdt.string.submit']) }}
+    {{ Form::open(['route' => $dungeonroute ? 'admin.tools.mdt.string.viewasdungeonroute.submit' : 'admin.tools.mdt.string.submit']) }}
     <div class="form-group">
         {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
         {{ Form::textarea('import_string', '', ['class' => 'form-control']) }}
