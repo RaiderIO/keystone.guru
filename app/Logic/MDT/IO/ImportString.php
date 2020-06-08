@@ -255,6 +255,11 @@ class ImportString
                                 );
                             }
 
+                            // Don't add any teeming enemies
+                            if( !$dungeonRoute->teeming && $enemy->teeming === 'visible' ) {
+                                continue;
+                            }
+
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
                                 // Couple the KillZoneEnemy to its KillZone

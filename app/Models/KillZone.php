@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property \App\Models\DungeonRoute $dungeonroute
  * @property \App\Models\Floor $floor
  *
- * @property \Illuminate\Support\Collection $enemies
- * @property \Illuminate\Support\Collection $killzoneenemies
+ * @property \Illuminate\Support\Collection|Enemy[] $enemies
+ * @property \Illuminate\Support\Collection|KillZoneEnemy[] $killzoneenemies
  *
  * @mixin \Eloquent
  */
