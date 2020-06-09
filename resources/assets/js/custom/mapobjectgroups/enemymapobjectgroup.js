@@ -4,26 +4,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
-
-        if( !(this.manager.map instanceof AdminDungeonMap) ) {
-            getState().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
-        }
-    }
-
-    /**
-     * Triggered when the seasonal index was changed.
-     * @param seasonalIndexChangedEvent
-     * @private
-     */
-    _seasonalIndexChanged(seasonalIndexChangedEvent) {
-        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-
-        for (let i = 0; i < this.objects.length; i++) {
-            let enemy = this.objects[i];
-            if (enemy.seasonal_index !== null) {
-                this.setMapObjectVisibility(enemy, enemy.seasonal_index === seasonalIndexChangedEvent.data.seasonalIndex);
-            }
-        }
     }
 
     _createObject(layer) {

@@ -32,6 +32,26 @@ class MapObjectGroup extends Signalable {
             // @todo self.isShown(), currently the layer will ALWAYS show regardless of MapControl status
             self.setVisibility(true);
         }).bind(this));
+
+        if (!(this.manager.map instanceof AdminDungeonMap)) {
+            getState().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
+        }
+    }
+
+    /**
+     * Triggered when the seasonal index was changed.
+     * @param seasonalIndexChangedEvent
+     * @private
+     */
+    _seasonalIndexChanged(seasonalIndexChangedEvent) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
+        for (let i = 0; i < this.objects.length; i++) {
+            let mapObject = this.objects[i];
+            if (mapObject.hasOwnProperty('seasonal_index') && mapObject.seasonal_index !== null) {
+                this.setMapObjectVisibility(mapObject, mapObject.seasonal_index === seasonalIndexChangedEvent.data.seasonalIndex);
+            }
+        }
     }
 
     /**

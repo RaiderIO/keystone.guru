@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $lng
  * @property string $comment
  * @property boolean $permanent_tooltip
+ * @property int $seasonal_index
  *
  * @property \App\Models\Floor $floor
  * @property \App\Models\DungeonRoute $dungeonroute
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MapIcon extends Model
 {
-    protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
+    protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
     protected $fillable = ['floor_id', 'dungeon_route_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
 
     protected $with = ['mapicontype'];
