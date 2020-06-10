@@ -5,6 +5,7 @@
 # Create databases?
 # Create users & permissions?
 
+sudo apt-get install -y redis-server supervisor pngquant
 
 # create directories
 tput setaf 2;
@@ -26,7 +27,7 @@ chown -R www-data:www-data bootstrap/cache
 tput setaf 2;
 echo "Ensuring file permissions..."
 tput sgr0;
-chmod 755 *.sh
+chmod 755 ./*.sh
 chmod -R 755 storage
 chmod -R 755 bootstrap/cache
 
@@ -34,6 +35,9 @@ chmod -R 755 bootstrap/cache
 sudo apt-get install acl
 # Give www-data user permission to write in this folder regardless of ownership. See https://stackoverflow.com/a/29882246/771270
 setfacl -d -m g:www-data:rwx storage/logs
+
+apt-get install composer
+apt-get install npm
 
 # Prior to performing any artisan commands, we need to update composer. Normally composer also calls artisan, but the
 # --no-scripts tag prevents that from happening. After this, artisan will work normally. Otherwise you get this error:
@@ -75,10 +79,10 @@ tput sgr0;
 php artisan tracker:tables
 
 # Generate encryption key
-tput setaf 2;
-echo "Setting up private encryption key..."
-tput sgr0;
-php artisan key:generate
+#tput setaf 2;
+#echo "Setting up private encryption key..."
+#tput sgr0;
+#php artisan key:generate
 
 # Run migrate again to fix the tracker
 ./migrate.sh
@@ -93,7 +97,7 @@ git checkout -b v3.3.7+1
 cd ../../..
 
 # Setup argon dashboard
-php artisan preset argon
+php artisan ui argon
 # This does way too much though, undo the damage it did (we require SOME of it though)
 git checkout .
 git clean -f
@@ -104,8 +108,6 @@ rm -rf resources/views/users
 
 sudo npm install -g laravel-echo-server
 sudo npm install -g handlebars
-sudo apt-get install supervisor
-sudo apt-get install pngquant
 
 tput setaf 2;
 echo "Seeding database..."

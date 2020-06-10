@@ -209,7 +209,6 @@ class MapIcon extends MapObject {
                 map_icon_type_id: this.map_icon_type_id,
                 comment: this.comment,
                 permanent_tooltip: this.permanent_tooltip,
-                seasonal_index: this.seasonal_index,
                 lat: this.layer.getLatLng().lat,
                 lng: this.layer.getLatLng().lng,
             },

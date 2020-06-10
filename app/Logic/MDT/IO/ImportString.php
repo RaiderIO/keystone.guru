@@ -84,9 +84,9 @@ class ImportString
 
         $i = 0;
         if (isset($decoded['value']['riftOffsets'])) {
-            foreach ($decoded['value']['riftOffsets'] as $weekIndex => $riffOffsets) {
-                if ($weekIndex === $decoded['week']) {
-                    $rifts = $riffOffsets;
+            foreach ($decoded['value']['riftOffsets'] as $weekIndex => $riftOffsets) {
+                if ($weekIndex === ($decoded['week'] - 1) % config('keystoneguru.season_interation_affix_group_count')) {
+                    $rifts = $riftOffsets;
                     break;
                 }
             }

@@ -41,6 +41,7 @@ class AdminMapIcon extends MapIcon {
                 floor_id: getState().getCurrentFloor().id,
                 map_icon_type_id: this.map_icon_type_id,
                 comment: this.comment,
+                seasonal_index: this.seasonal_index,
                 lat: this.layer.getLatLng().lat,
                 lng: this.layer.getLatLng().lng,
             },
