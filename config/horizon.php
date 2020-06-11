@@ -142,14 +142,14 @@ return [
         'production' => [
             'supervisor-default' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => [sprintf('%s-production-default', env('APP_TYPE'))],
                 'balance' => 'simple',
                 'processes' => 1,
                 'tries' => 3,
             ],
             'supervisor-thumbnail' => [
                 'connection' => 'redis',
-                'queue' => ['thumbnail'],
+                'queue' => [sprintf('%s-production-thumbnail', env('APP_TYPE'))],
                 'balance' => 'simple',
                 'processes' => 1,
                 'tries' => 1,
@@ -159,14 +159,14 @@ return [
         'local' => [
             'supervisor-default' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => [sprintf('%s-local-default', env('APP_TYPE'))],
                 'balance' => 'simple',
                 'processes' => 1,
                 'tries' => 3,
             ],
             'supervisor-thumbnail' => [
                 'connection' => 'redis',
-                'queue' => ['thumbnail'],
+                'queue' => [sprintf('%s-local-thumbnail', env('APP_TYPE'))],
                 'balance' => 'simple',
                 'processes' => 1,
                 'tries' => 1,

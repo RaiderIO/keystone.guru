@@ -10,7 +10,7 @@ $dungeonroute = isset($dungeonroute) ? $dungeonroute : false;
     {{ Form::open(['route' => $dungeonroute ? 'admin.tools.mdt.string.viewasdungeonroute.submit' : 'admin.tools.mdt.string.submit']) }}
     <div class="form-group">
         {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
-        {{ Form::textarea('import_string', '', ['class' => 'form-control']) }}
+        {{ Form::textarea('import_string', '', ['class' => 'form-control', 'data-simplebar' => '']) }}
     </div>
     <div class="form-group">
         {!! Form::submit(__('Submit'), ['class' => 'btn btn-primary col-md-auto']) !!}

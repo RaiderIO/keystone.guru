@@ -47,10 +47,10 @@ class FindOutdatedThumbnails
                 ((// Updated at is greater than the thumbnail updated at (don't keep updating thumbnails..)
                         $updatedAt->greaterThan($thumbnailUpdatedAt) &&
                         // If the route has been updated in the past x minutes...
-                        $updatedAt->addMinute(config('keystoneguru.thumbnail_refresh_min'))->isPast())
+                        $updatedAt->addMinutes(config('keystoneguru.thumbnail_refresh_min'))->isPast())
                     ||
                     // Update every month regardless
-                    $thumbnailUpdatedAt->addMonth(1)->isPast()
+                    $thumbnailUpdatedAt->addMonth()->isPast()
                     ||
                     // Thumbnail does not exist in the folder it should
                     !ProcessRouteFloorThumbnail::thumbnailsExistsForRoute($dungeonRoute)
