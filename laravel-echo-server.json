@@ -1,10 +1,10 @@
 {
-	"authHost": "https://jastola.keystone.guru",
+	"authHost": null,
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [
 		{
 			"appId": "DEADBEEFDEADBEEF",
-			"key": "a94fe684bcd9af5e1dc5f887fc260813"
+			"key": "79aca79e7d277b589a07a5a2475b6660"
 		}
 	],
 	"database": "redis",
@@ -13,14 +13,11 @@
 			"port": 6379,
 			"host": "localhost"
 		},
-		"sqlite": {
-			"databasePath": "/database/laravel-echo-server-jastola.sqlite"
-		},
 		"publishPresence": true
 	},
-	"devMode": false,
+	"devMode": true,
 	"host": null,
-	"port": "6003",
+	"port": null,
 	"protocol": "http",
 	"socketio": {},
 	"sslCertPath": "",

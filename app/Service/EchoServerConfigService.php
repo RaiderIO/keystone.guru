@@ -19,7 +19,7 @@ class EchoServerConfigService implements EchoServerConfigServiceInterface
     {
         $json = file_get_contents(
             base_path(
-                sprintf('config/echo/%s/laravel-echo-server.json', env('APP_TYPE'))
+                sprintf('/etc/supervisor/conf.d/echo/laravel-echo-server-%s.json', env('APP_TYPE'))
             )
         );
 

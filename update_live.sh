@@ -16,7 +16,7 @@ git pull
 php artisan horizon:publish
 
 # Restore echo server clients
-./update_echo_clients.sh
+./update_echo_client.sh
 
 ./migrate.sh
 
