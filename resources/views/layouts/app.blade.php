@@ -439,7 +439,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     </h3>
     <div class="form-group">
         {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
-        {{ Form::textarea('import_string_textarea', '', ['class' => 'form-control import_mdt_string_textarea']) }}
+        {{ Form::textarea('import_string_textarea', '', ['class' => 'form-control import_mdt_string_textarea', 'data-simplebar' => '']) }}
         {{ Form::hidden('import_string', '', ['class' => 'import_string']) }}
     </div>
     <div class="form-group">

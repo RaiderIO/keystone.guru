@@ -27,13 +27,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        Log::channel('scheduler')->debug("Starting scheduler");
-
-        // $schedule->command('inspire')
-        //          ->hourly();
+        Log::channel('scheduler')->debug('Starting scheduler');
         $schedule->call(new FindOutdatedThumbnails)->everyFiveMinutes();
         $schedule->call(new DeleteExpiredDungeonRoutes)->hourly();
-        Log::channel('scheduler')->debug("Finished scheduler");
+        Log::channel('scheduler')->debug('Finished scheduler');
     }
 
     /**
