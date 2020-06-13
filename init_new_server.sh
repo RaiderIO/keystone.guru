@@ -5,8 +5,6 @@
 # Create databases?
 # Create users & permissions?
 
-sudo apt-get install -y redis-server supervisor pngquant
-
 # create directories
 tput setaf 2;
 echo "Creating directories..."
@@ -35,13 +33,6 @@ chmod -R 755 bootstrap/cache
 sudo apt-get install acl
 # Give www-data user permission to write in this folder regardless of ownership. See https://stackoverflow.com/a/29882246/771270
 setfacl -d -m g:www-data:rwx storage/logs
-
-# Install composer, npm dependencies and then npm itself
-apt-get install composer \
-                nodejs-dev \
-                node-gyp \
-                libssl1.0-dev \
-                npm
 
 # Prior to performing any artisan commands, we need to update composer. Normally composer also calls artisan, but the
 # --no-scripts tag prevents that from happening. After this, artisan will work normally. Otherwise you get this error:
@@ -116,11 +107,8 @@ rm -rf resources/views/layouts/headers
 rm -rf resources/views/layouts/navbars
 rm -rf resources/views/users
 
-sudo npm install -g laravel-echo-server
-sudo npm install -g handlebars
-
 tput setaf 2;
-echo "Seeding database..."
+echo "Seeding Laratrust..."
 tput sgr0;
 # Seed Laratrust (initial users etc)
 php artisan db:seed --class=LaratrustSeeder --database=migrate
