@@ -107,6 +107,10 @@ rm -rf resources/views/layouts/headers
 rm -rf resources/views/layouts/navbars
 rm -rf resources/views/users
 
+# Setup Horizon
+php artisan horizon:install
+php artisan horizon:publish
+
 tput setaf 2;
 echo "Seeding Laratrust..."
 tput sgr0;

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'role_structure' => [
+    'roles_structure' => [
         'admin' => [
             'dungeons' => 'c,r,u,d',
             'expansions' => 'c,r,u,d',

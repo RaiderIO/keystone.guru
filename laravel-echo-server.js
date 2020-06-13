@@ -4,10 +4,7 @@ require('dotenv').config();
 const env = process.env;
 const EchoServer = require('laravel-echo-server');
 
-// You can pass here any options you need.
-// This is simple example how is work.
-
-const options = {
+EchoServer.run({
     "authHost": env.APP_URL,
     "authEndpoint": "/broadcasting/auth",
     "clients": [
@@ -24,7 +21,7 @@ const options = {
         },
         "publishPresence": true
     },
-    "devMode": true,
+    "devMode": env.APP_DEBUG,
     "host": null,
     "port": env.LARAVEL_ECHO_SERVER_PORT,
     "protocol": "http",
@@ -43,6 +40,4 @@ const options = {
         "allowMethods": "",
         "allowHeaders": ""
     }
-};
-
-EchoServer.run(options);
+});

@@ -33,7 +33,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      */
     public function __construct(DungeonRoute $dungeonRoute, $floorIndex)
     {
-        $this->queue = 'thumbnail';
+        $this->queue = sprintf('%s-%s-thumbnail', env('APP_TYPE'), env('APP_ENV'));
         $this->model = $dungeonRoute;
         $this->floorIndex = $floorIndex;
     }
