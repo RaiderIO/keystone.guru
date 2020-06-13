@@ -125,7 +125,7 @@ return [
     |
     */
 
-    'memory_limit' => 64,
+    'memory_limit' => 1028,
 
     /*
     |--------------------------------------------------------------------------
@@ -144,14 +144,14 @@ return [
                 'connection' => 'redis',
                 'queue' => [sprintf('%s-production-default', env('APP_TYPE'))],
                 'balance' => 'simple',
-                'processes' => 1,
+                'processes' => 2,
                 'tries' => 3,
             ],
             'supervisor-thumbnail' => [
                 'connection' => 'redis',
                 'queue' => [sprintf('%s-production-thumbnail', env('APP_TYPE'))],
                 'balance' => 'simple',
-                'processes' => 1,
+                'processes' => 4,
                 'tries' => 1,
             ],
         ],
@@ -161,14 +161,14 @@ return [
                 'connection' => 'redis',
                 'queue' => [sprintf('%s-local-default', env('APP_TYPE'))],
                 'balance' => 'simple',
-                'processes' => 1,
+                'processes' => 2,
                 'tries' => 3,
             ],
             'supervisor-thumbnail' => [
                 'connection' => 'redis',
                 'queue' => [sprintf('%s-local-thumbnail', env('APP_TYPE'))],
                 'balance' => 'simple',
-                'processes' => 1,
+                'processes' => 2,
                 'tries' => 1,
             ],
         ],
