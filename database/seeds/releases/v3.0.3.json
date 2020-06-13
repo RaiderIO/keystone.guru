@@ -2,8 +2,8 @@
     "id": 44,
     "release_changelog_id": 48,
     "version": "v3.0.3",
-    "created_at": "2020-05-27T06:22:42.000000Z",
-    "updated_at": "2020-05-27T06:22:42.000000Z",
+    "created_at": "2020-05-27T04:22:42.000000Z",
+    "updated_at": "2020-05-27T04:22:42.000000Z",
     "changelog": {
         "id": 48,
         "release_id": 44,
@@ -13,31 +13,51 @@
                 "release_changelog_id": 48,
                 "release_changelog_category_id": 1,
                 "ticket_id": 286,
-                "change": "Upgraded internals to the latest and greatest."
+                "change": "Upgraded internals to the latest and greatest.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 48,
                 "release_changelog_category_id": 3,
                 "ticket_id": 299,
-                "change": "When editing a route cooperatively, selecting a Pull will no longer change all enemy names into the currently logged in user name."
+                "change": "When editing a route cooperatively, selecting a Pull will no longer change all enemy names into the currently logged in user name.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 48,
                 "release_changelog_category_id": 3,
                 "ticket_id": 300,
-                "change": "You can now set a map icon's comment to show permanently. Enemy tooltips are now also no longer linger around if you mouse over them quickly."
+                "change": "You can now set a map icon's comment to show permanently. Enemy tooltips are now also no longer linger around if you mouse over them quickly.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 48,
                 "release_changelog_category_id": 3,
                 "ticket_id": 306,
-                "change": "Enemies that are not part of your Pulls are now faded out to help visibility."
+                "change": "Enemies that are not part of your Pulls are now faded out to help visibility.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 48,
                 "release_changelog_category_id": 5,
                 "ticket_id": 304,
-                "change": "Ensured a Pull color is always set - this was causing some issues in various places if a color is missing."
+                "change": "Ensured a Pull color is always set - this was causing some issues in various places if a color is missing.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
             }
         ]
     }

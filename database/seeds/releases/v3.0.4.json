@@ -2,8 +2,8 @@
     "id": 45,
     "release_changelog_id": 49,
     "version": "v3.0.4",
-    "created_at": "2020-05-27T19:13:05.000000Z",
-    "updated_at": "2020-05-27T19:13:05.000000Z",
+    "created_at": "2020-05-27T17:13:05.000000Z",
+    "updated_at": "2020-05-27T17:13:05.000000Z",
     "changelog": {
         "id": 49,
         "release_id": 45,
@@ -13,25 +13,41 @@
                 "release_changelog_id": 49,
                 "release_changelog_category_id": 1,
                 "ticket_id": 310,
-                "change": "Accessing your profile would sometimes give a 500 error code, depending on your various Team memberships. This has been resolved."
+                "change": "Accessing your profile would sometimes give a 500 error code, depending on your various Team memberships. This has been resolved.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 49,
                 "release_changelog_category_id": 1,
                 "ticket_id": 312,
-                "change": "You can now import MDT strings while not logged in (from the Try menu) as was intended."
+                "change": "You can now import MDT strings while not logged in (from the Try menu) as was intended.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 49,
                 "release_changelog_category_id": 3,
                 "ticket_id": 311,
-                "change": "Cooperative route editing should now be bug-free across multiple floors."
+                "change": "Cooperative route editing should now be bug-free across multiple floors.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 49,
                 "release_changelog_category_id": 3,
                 "ticket_id": 313,
-                "change": "Internal lat\/lng data was sometimes saved in the wrong order. This has been corrected."
+                "change": "Internal lat\/lng data was sometimes saved in the wrong order. This has been corrected.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             }
         ]
     }

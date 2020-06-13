@@ -2,8 +2,8 @@
     "id": 35,
     "release_changelog_id": 39,
     "version": "v2.7.3",
-    "created_at": "2019-12-05T06:22:13.000000Z",
-    "updated_at": "2019-12-05T06:22:13.000000Z",
+    "created_at": "2019-12-05T05:22:13.000000Z",
+    "updated_at": "2019-12-05T05:22:13.000000Z",
     "changelog": {
         "id": 39,
         "release_id": 35,
@@ -13,25 +13,41 @@
                 "release_changelog_id": 39,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed being unable to delete routes."
+                "change": "Fixed being unable to delete routes.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
             },
             {
                 "release_changelog_id": 39,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed issue where if someone edited ?offset=something it'd crash."
+                "change": "Fixed issue where if someone edited ?offset=something it'd crash.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
             },
             {
                 "release_changelog_id": 39,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed affixes not being saved."
+                "change": "Fixed affixes not being saved.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
             },
             {
                 "release_changelog_id": 39,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed crash when attempting to edit route details."
+                "change": "Fixed crash when attempting to edit route details.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
             }
         ]
     }

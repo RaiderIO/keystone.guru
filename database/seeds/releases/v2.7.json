@@ -2,8 +2,8 @@
     "id": 32,
     "release_changelog_id": 36,
     "version": "v2.7",
-    "created_at": "2019-08-11T07:49:36.000000Z",
-    "updated_at": "2019-08-11T07:49:36.000000Z",
+    "created_at": "2019-08-11T05:49:36.000000Z",
+    "updated_at": "2019-08-11T05:49:36.000000Z",
     "changelog": {
         "id": 36,
         "release_id": 32,
@@ -13,73 +13,121 @@
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 1,
                 "ticket_id": 209,
-                "change": "Fixed pagination in the main routes table."
+                "change": "Fixed pagination in the main routes table.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 1,
                 "ticket_id": 211,
-                "change": "Removed ads from the login\/register pages (ads provider didn't like it)."
+                "change": "Removed ads from the login\/register pages (ads provider didn't like it).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 1,
                 "ticket_id": 210,
-                "change": "Various columns in the main routes table were flagged for sorting when they shouldn't have been. Furthermore, the sorting of all other columns have been repaired (some were broken, such as views)."
+                "change": "Various columns in the main routes table were flagged for sorting when they shouldn't have been. Furthermore, the sorting of all other columns have been repaired (some were broken, such as views).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 3,
                 "ticket_id": 205,
-                "change": "Enemy visuals now scale according to their health. The lowest and highest health of non-boss enemies is taken and the size of the enemy is calculated based on their health, interpolated between the min\/max."
+                "change": "Enemy visuals now scale according to their health. The lowest and highest health of non-boss enemies is taken and the size of the enemy is calculated based on their health, interpolated between the min\/max.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 3,
                 "ticket_id": 212,
-                "change": "Enemy visuals now also scale according to zoom level. If you're zoomed out, enemies are displayed smaller than when you're fully zoomed in."
+                "change": "Enemy visuals now also scale according to zoom level. If you're zoomed out, enemies are displayed smaller than when you're fully zoomed in.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 3,
                 "ticket_id": 214,
-                "change": "Enemy visuals now display an orange dotted border if an enemy is deemed 'dangerous'. Dangerous enemies are manually marked by me and generally mean that either an enemy is exceptionally strong compared to other enemies, or if they have an ability that may easily wipe your group if ignored."
+                "change": "Enemy visuals now display an orange dotted border if an enemy is deemed 'dangerous'. Dangerous enemies are manually marked by me and generally mean that either an enemy is exceptionally strong compared to other enemies, or if they have an ability that may easily wipe your group if ignored.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 3,
                 "ticket_id": 215,
-                "change": "Enemy visuals now display a star when an enemy is an elite, and you're zoomed in enough."
+                "change": "Enemy visuals now display a star when an enemy is an elite, and you're zoomed in enough.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 3,
                 "ticket_id": 207,
-                "change": "Enemy visuals now display an eye icon if an enemy may see through stealth (Truesight)."
+                "change": "Enemy visuals now display an eye icon if an enemy may see through stealth (Truesight).",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 3,
                 "ticket_id": 213,
-                "change": "Added new enemy visual display: enemy classes. There's a differentiation between melee, ranged, caster and healer-type enemies. Each enemy has now been marked accordingly. An enemy is ranged when it uses non-magical ranged attacks, caster when using magical ranged attacks and healer when it can cast heals. Note: enemies are only marked ranged\/caster if they will stand in place and not move unless line of sighted. If an enemy sometimes casts a spell it is probably still marked as melee."
+                "change": "Added new enemy visual display: enemy classes. There's a differentiation between melee, ranged, caster and healer-type enemies. Each enemy has now been marked accordingly. An enemy is ranged when it uses non-magical ranged attacks, caster when using magical ranged attacks and healer when it can cast heals. Note: enemies are only marked ranged\/caster if they will stand in place and not move unless line of sighted. If an enemy sometimes casts a spell it is probably still marked as melee.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 3,
                 "ticket_id": 208,
-                "change": "Added new enemy visual display: enemy types. These are icons for humanoids, beasts, dragonkin etc. This will help determine what CC an enemy is susceptible to."
+                "change": "Added new enemy visual display: enemy types. These are icons for humanoids, beasts, dragonkin etc. This will help determine what CC an enemy is susceptible to.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 3,
                 "ticket_id": 219,
-                "change": "Enemy display type selection now persists across sessions."
+                "change": "Enemy display type selection now persists across sessions.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 36,
                 "release_changelog_category_id": 3,
                 "ticket_id": 217,
-                "change": "Enemy forces are now displayed whenever you mouse over an enemy. If the enemy is part of a pack, all its pack-members' enemy forces are shown."
+                "change": "Enemy forces are now displayed whenever you mouse over an enemy. If the enemy is part of a pack, all its pack-members' enemy forces are shown.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             }
         ]
     }

@@ -141,14 +141,14 @@ return [
     'environments' => [
         'production' => [
             'supervisor-default' => [
-                'connection' => 'redis_db',
+                'connection' => 'redis',
                 'queue' => [sprintf('%s-production-default', env('APP_TYPE'))],
                 'balance' => 'simple',
                 'processes' => 1,
                 'tries' => 3,
             ],
             'supervisor-thumbnail' => [
-                'connection' => 'redis_db',
+                'connection' => 'redis',
                 'queue' => [sprintf('%s-production-thumbnail', env('APP_TYPE'))],
                 'balance' => 'simple',
                 'processes' => 1,
@@ -158,14 +158,14 @@ return [
 
         'local' => [
             'supervisor-default' => [
-                'connection' => 'redis_db',
+                'connection' => 'redis',
                 'queue' => [sprintf('%s-local-default', env('APP_TYPE'))],
                 'balance' => 'simple',
                 'processes' => 1,
                 'tries' => 3,
             ],
             'supervisor-thumbnail' => [
-                'connection' => 'redis_db',
+                'connection' => 'redis',
                 'queue' => [sprintf('%s-local-thumbnail', env('APP_TYPE'))],
                 'balance' => 'simple',
                 'processes' => 1,

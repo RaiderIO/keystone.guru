@@ -2,8 +2,8 @@
     "id": 24,
     "release_changelog_id": 28,
     "version": "v2.3",
-    "created_at": "2019-04-10T17:16:01.000000Z",
-    "updated_at": "2019-04-10T17:16:01.000000Z",
+    "created_at": "2019-04-10T15:16:01.000000Z",
+    "updated_at": "2019-04-10T15:16:01.000000Z",
     "changelog": {
         "id": 28,
         "release_id": 24,
@@ -13,109 +13,181 @@
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 1,
                 "ticket_id": 154,
-                "change": "Reduced loading times of various pages and increased performance."
+                "change": "Reduced loading times of various pages and increased performance.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 1,
                 "ticket_id": 150,
-                "change": "Switching floors in 'Try' mode no longer clears all mapping progress. As a result of changes for this, I've added functionality to save the current mapping as a new Route. If you're not logged in, there's an option to log in and continue mapping, if you do not have an account you can now also register from the same page and continue mapping. Furthermore, changes for this ticket will allow me to more easily allow people to create anonymous Routes."
+                "change": "Switching floors in 'Try' mode no longer clears all mapping progress. As a result of changes for this, I've added functionality to save the current mapping as a new Route. If you're not logged in, there's an option to log in and continue mapping, if you do not have an account you can now also register from the same page and continue mapping. Furthermore, changes for this ticket will allow me to more easily allow people to create anonymous Routes.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 1,
                 "ticket_id": 153,
-                "change": "Cloning a route now properly clones free drawn shapes."
+                "change": "Cloning a route now properly clones free drawn shapes.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 1,
                 "ticket_id": 160,
-                "change": "Updated notifications so they no longer show in a bar at the bottom, but neatly in the top right corner instead."
+                "change": "Updated notifications so they no longer show in a bar at the bottom, but neatly in the top right corner instead.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "I've done some fine-tuning and bug fixing for the general layout of the map, in both desktop and mobile versions."
+                "change": "I've done some fine-tuning and bug fixing for the general layout of the map, in both desktop and mobile versions.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 3,
                 "ticket_id": 156,
-                "change": "Worked around an issue where sometimes a Route would cause freezing of the entire browser tab. I cannot directly fix this issue as I believe it lays in another library I use, but I've contacted the author of said library and hopefully I'll have a proper fix soon. For now it seems fixed and is very rare regardless, so hopefully it stays gone til the fix is there."
+                "change": "Worked around an issue where sometimes a Route would cause freezing of the entire browser tab. I cannot directly fix this issue as I believe it lays in another library I use, but I've contacted the author of said library and hopefully I'll have a proper fix soon. For now it seems fixed and is very rare regardless, so hopefully it stays gone til the fix is there.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": 158,
-                "change": "Patch 8.1.5:"
+                "change": "Patch 8.1.5:",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Atal'Dazar<ul>                 <li>                     Added a Teeming Dazar'ai Confessor towards the south side of the dungeon, after the first two packs                     in a pack with two Dazar'ai Colossi.                 <\/li>                 <li>                     Removed two Teeming Shieldbearer of Zul in the pack before Vol'kaal.                 <\/li>             <\/ul>"
+                "change": "Atal'Dazar<ul>                 <li>                     Added a Teeming Dazar'ai Confessor towards the south side of the dungeon, after the first two packs                     in a pack with two Dazar'ai Colossi.                 <\/li>                 <li>                     Removed two Teeming Shieldbearer of Zul in the pack before Vol'kaal.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Freehold<ul>                 <li>                     The start of the dungeon is now correctly marked on the map.                 <\/li>                 <li>                     Removed a Teeming Irontide Bonesaw, a non-Teeming Irontide Bonesaw and a Teeming Irontide Enforcer                     from the large patrolling pack right before Skycap'n Kragg.                 <\/li>                 <li>                     Removed a Teeming Irontide Officer in the large pack before Harlan Sweete.                 <\/li>             <\/ul>"
+                "change": "Freehold<ul>                 <li>                     The start of the dungeon is now correctly marked on the map.                 <\/li>                 <li>                     Removed a Teeming Irontide Bonesaw, a non-Teeming Irontide Bonesaw and a Teeming Irontide Enforcer                     from the large patrolling pack right before Skycap'n Kragg.                 <\/li>                 <li>                     Removed a Teeming Irontide Officer in the large pack before Harlan Sweete.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "King's Rest<ul>                 <li>                     Removed a Teeming Spectral Brute before the second to last boss.                 <\/li>             <\/ul>"
+                "change": "King's Rest<ul>                 <li>                     Removed a Teeming Spectral Brute before the second to last boss.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Siege of Boralus (Alliance)<ul>                 <li>                     Added a Dockhound Packmaster and Snarling Dockhound in a pack after passing through the first gate,                     after the market section, before the first boss.                 <\/li>                 <li>                     In that same pack, added a Teeming Scrimshaw Enforcer.                 <\/li>             <\/ul>"
+                "change": "Siege of Boralus (Alliance)<ul>                 <li>                     Added a Dockhound Packmaster and Snarling Dockhound in a pack after passing through the first gate,                     after the market section, before the first boss.                 <\/li>                 <li>                     In that same pack, added a Teeming Scrimshaw Enforcer.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Shrine of the Storm<ul>                 <li>                     Removed multiple Abyss Dweller in the room before the bridge to the last section.                 <\/li>                 <li>                     Removed multiple duplicate Abyssal Eel in the last room.                 <\/li>             <\/ul>"
+                "change": "Shrine of the Storm<ul>                 <li>                     Removed multiple Abyss Dweller in the room before the bridge to the last section.                 <\/li>                 <li>                     Removed multiple duplicate Abyssal Eel in the last room.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Temple of Sethraliss<ul>                 <li>                     Removed a duplicate Sandswept Marksman in the pack entering Aspix' and Adderis' room, when taking                     a left initially.                 <\/li>                 <li>                     Aspix is no longer incorrectly marked as an Eye of Sethraliss.                 <\/li>             <\/ul>"
+                "change": "Temple of Sethraliss<ul>                 <li>                     Removed a duplicate Sandswept Marksman in the pack entering Aspix' and Adderis' room, when taking                     a left initially.                 <\/li>                 <li>                     Aspix is no longer incorrectly marked as an Eye of Sethraliss.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "The MOTHERLODE!!<ul>                 <li>                     Added Mech Jockeys in the first section next to their respective Mechanized Peacekeepers.                 <\/li>                 <li>                     Removed 3 Teeming Wanton Sappers in the big pack after the first boss.                 <\/li>                 <li>                     Removed a lot of the Teeming Crawler Mines in the last section.                 <\/li>             <\/ul>"
+                "change": "The MOTHERLODE!!<ul>                 <li>                     Added Mech Jockeys in the first section next to their respective Mechanized Peacekeepers.                 <\/li>                 <li>                     Removed 3 Teeming Wanton Sappers in the big pack after the first boss.                 <\/li>                 <li>                     Removed a lot of the Teeming Crawler Mines in the last section.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "The Underrot<ul>                 <li>                     Removed a Underrot Tick in the second pack from the start before the first boss.                 <\/li>                 <li>                     Removed a Teeming Living Rot in a pack right after the first boss.                 <\/li>             <\/ul>"
+                "change": "The Underrot<ul>                 <li>                     Removed a Underrot Tick in the second pack from the start before the first boss.                 <\/li>                 <li>                     Removed a Teeming Living Rot in a pack right after the first boss.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Tol Dagor<ul>                 <li>                     Removed a Teeming Sewer Vicejaw in the Sodden Depths.                 <\/li>                 <li>                     Removed a duplicate Ashvane Marine in the pack right before Knight Captain Valyri.                 <\/li>                 <li>                     Removed a duplicate Ashvane Warden right after Knight Captain Valyri.                 <\/li>             <\/ul>"
+                "change": "Tol Dagor<ul>                 <li>                     Removed a Teeming Sewer Vicejaw in the Sodden Depths.                 <\/li>                 <li>                     Removed a duplicate Ashvane Marine in the pack right before Knight Captain Valyri.                 <\/li>                 <li>                     Removed a duplicate Ashvane Warden right after Knight Captain Valyri.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Waycrest Manor<ul>                 <li>                     Removed a pack of Devouring Maggots and Infested Peasants when coming from the south towards Raal                     the Gluttonous' room.                 <\/li>                 <li>                     Removed two Teeming Heartsbane Soulcharmers in Lady Waycrest's room.                 <\/li>             <\/ul>"
+                "change": "Waycrest Manor<ul>                 <li>                     Removed a pack of Devouring Maggots and Infested Peasants when coming from the south towards Raal                     the Gluttonous' room.                 <\/li>                 <li>                     Removed two Teeming Heartsbane Soulcharmers in Lady Waycrest's room.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 28,
                 "release_changelog_category_id": 6,
                 "ticket_id": 157,
-                "change": "Updated to MDT version 2.5.6, all changes since 2.3.2 will now properly import, such as pull colors."
+                "change": "Updated to MDT version 2.5.6, all changes since 2.3.2 will now properly import, such as pull colors.",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
             }
         ]
     }
