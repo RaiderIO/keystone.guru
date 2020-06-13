@@ -59,7 +59,7 @@ return [
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => 'default',
+            'connection' => 'redis_db',
             'queue' => env('REDIS_QUEUE', sprintf('%s-%s-default', env('APP_TYPE'), env('APP_ENV'))),
             'retry_after' => 90,
         ],
