@@ -247,6 +247,8 @@ return [
     // Teams
     'remove_member_confirm_label' => 'Are you sure you want remove this user from the team?',
     'remove_member_success' => 'Member removed successfully',
+    'leave_team_confirm_label' => 'Are you sure you wish to leave this team?',
+    'leave_team_disband_confirm_label' => 'Are you sure you wish to leave this team? WARNING: this will disband the team.',
 
     'name_label' => 'Name',
     'join_date_label' => 'Join date',

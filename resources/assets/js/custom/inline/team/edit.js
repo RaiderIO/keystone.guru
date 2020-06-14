@@ -10,7 +10,7 @@ class TeamEdit extends InlineCode {
      */
     activate() {
         super.activate();
-        
+
         let self = this;
         let code = _inlineManager.getInlineCode('dungeonroute/table');
         let tableView = code.getTableView();
@@ -116,16 +116,51 @@ class TeamEdit extends InlineCode {
 
         // For each role there exists
         for (let roleCandidateIndex in icons) {
-            let roleCandidate = icons[roleCandidateIndex];
-            // Match assignable role with candidate
-            if (roleName === roleCandidate.name) {
-                // Found what we're looking for, push the result
-                result = roleCandidate;
-                break;
+            if (icons.hasOwnProperty(roleCandidateIndex)) {
+                let roleCandidate = icons[roleCandidateIndex];
+                // Match assignable role with candidate
+                if (roleName === roleCandidate.name) {
+                    // Found what we're looking for, push the result
+                    result = roleCandidate;
+                    break;
+                }
             }
         }
 
         return result;
+    }
+
+    _removeUserFromTeam(userId) {
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/team/${self.options.teamName}/member/${userId}`,
+            data: {
+                _method: 'DELETE'
+            },
+            dataType: 'json',
+            success: function () {
+                showSuccessNotification(lang.get('messages.remove_member_success'));
+
+                // Remove the user from the data
+                for (let index in self.options.data) {
+                    // If we found the index in the data of the row we just removed..
+                    if (self.options.data.hasOwnProperty(index) && self.options.data[index].user_id === userId) {
+                        // Remove it from the data array
+                        self.options.data.splice(index, 1);
+                        break;
+                    }
+                }
+
+                // Redirect to the home page
+                if (userId === self.options.currentUserId) {
+                    window.location.href = '/';
+                } else {
+                    self.refreshTable();
+                }
+            }
+        });
     }
 
     /**
@@ -210,15 +245,16 @@ class TeamEdit extends InlineCode {
                 'width': '15%',
                 'render': function (data, type, row, meta) {
                     let result = '';
-                    if (self.options.currentUserRole !== 'admin') {
-                        let template = null;
-                        if (row.user_id === self.options.currentUserId) {
-                            // Handlebars the entire thing
-                            template = Handlebars.templates['team_member_table_actions_self_template'];
-                        } else {
-                            // Handlebars the entire thing
-                            template = Handlebars.templates['team_member_table_actions_template'];
-                        }
+                    let template = null;
+                    if (row.user_id === self.options.currentUserId) {
+                        // Handlebars the entire thing
+                        template = Handlebars.templates['team_member_table_actions_self_template'];
+                    } else if (self.options.currentUserRole !== 'admin') {
+                        // Handlebars the entire thing
+                        template = Handlebars.templates['team_member_table_actions_template'];
+                    }
+
+                    if (template !== null) {
                         let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
                             user_id: row.user_id
                         });
@@ -253,30 +289,16 @@ class TeamEdit extends InlineCode {
         $('.remove_user_btn').bind('click', function (e) {
             let userId = parseInt($(this).data('userid'));
             showConfirmYesCancel(lang.get('messages.remove_member_confirm_label'), function () {
-                $.ajax({
-                    type: 'POST',
-                    url: '/ajax/team/' + self.options.teamName + '/member/' + userId,
-                    data: {
-                        _method: 'DELETE'
-                    },
-                    dataType: 'json',
-                    success: function () {
-                        showSuccessNotification(lang.get('messages.remove_member_success'));
+                self._removeUserFromTeam(userId);
+            }, null, {type: 'error'});
+        });
 
-
-                        // Remove the user from the data
-                        for (let index in self.options.data) {
-                            // If we found the index in the data of the row we just removed..
-                            if (self.options.data.hasOwnProperty(index) && self.options.data[index].user_id === userId) {
-                                // Remove it from the data array
-                                self.options.data.splice(index, 1);
-                                break;
-                            }
-                        }
-
-                        self.refreshTable();
-                    }
-                });
+        $('.leave_team_btn').bind('click', function (e) {
+            let userId = parseInt($(this).data('userid'));
+            showConfirmYesCancel(lang.get(self.options.data.length === 1 ?
+                'messages.leave_team_disband_confirm_label' :
+                'messages.leave_team_confirm_label'), function () {
+                self._removeUserFromTeam(userId);
             }, null, {type: 'error'});
         });
     }

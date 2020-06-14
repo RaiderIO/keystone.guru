@@ -111,6 +111,20 @@ class APITeamController extends Controller
             if ($team->removeMember($user)) {
                 $result = ['result' => 'success'];
             }
+
+            // Disband if no team members are left
+            if ($team->members->isEmpty()) {
+                $team->delete();
+            } else {
+                // Promote someone else to be the new admin
+                $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
+                if ($newAdmin !== null) {
+                    $team->changeRole(
+                        $newAdmin,
+                        'admin'
+                    );
+                }
+            }
         } else {
             abort(403, 'Unauthorized');
         }
