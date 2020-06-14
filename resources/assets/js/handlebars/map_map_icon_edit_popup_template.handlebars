@@ -16,6 +16,13 @@
             {{/select}}
         </select>
     </div>
+    {{#if is_map_admin}}
+    <div class="form-group">
+        <label for="map_map_icon_edit_popup_seasonal_index_{{id}}">{{map_icon_popup_seasonal_index_label}}</label>
+        <input type="text" class="form-control"
+               id="map_map_icon_edit_popup_seasonal_index_{{id}}" name="map_map_icon_edit_popup_seasonal_index_{{id}}"/>
+    </div>
+    {{/if}}
     <div class="form-group">
         <label for="map_map_icon_edit_popup_permanent_tooltip_{{id}}">{{map_icon_permanent_tooltip_label}}</label>
         <input type="checkbox" class="form-control left_checkbox" value="{{permanent_tooltip}}"

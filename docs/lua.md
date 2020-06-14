@@ -2,7 +2,7 @@
 So, hopefully I won't have to read this file ever again but here's some pointers about what needs to be done to install LUA on PHP.
 
 ## To install LUA and configure it
-Run `storage/sh/setup_lua.sh`.
+Run `./sh/setup_lua.sh`.
 
 ## Lua
 ```

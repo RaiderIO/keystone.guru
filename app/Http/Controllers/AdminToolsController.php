@@ -45,10 +45,37 @@ class AdminToolsController extends Controller
      */
     public function mdtviewsubmit(Request $request, SeasonService $seasonService)
     {
-        $string = $request->get('import_string');
-        $importString = new ImportString($seasonService);
-        echo json_encode($importString->setEncodedString($string)->getDecoded());
+        return response()->json((new ImportString($seasonService))
+            ->setEncodedString($request->get('import_string'))
+            ->getDecoded());
     }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     */
+    public function mdtviewasdungeonroute()
+    {
+        return view('admin.tools.mdt.string', ['dungeonroute' => true]);
+    }
+
+    /**
+     * @param Request $request
+     * @param SeasonService $seasonService
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function mdtviewasdungeonroutesubmit(Request $request, SeasonService $seasonService)
+    {
+        $dungeonRoute = (new ImportString($seasonService))
+            ->setEncodedString($request->get('import_string'))
+            ->getDungeonRoute(new Collection(), false, false);
+        $dungeonRoute->makeVisible(['killzones']);
+
+//        return response()->json($dungeonRoute);
+
+        dd($dungeonRoute);
+    }
+
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\

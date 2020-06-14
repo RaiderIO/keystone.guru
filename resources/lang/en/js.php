@@ -21,6 +21,7 @@ return [
 
     'enemy_popup_enemy_forces_label' => 'Enemy forces (override, -1 to inherit)',
     'enemy_popup_seasonal_index_label' => 'Seasonal index (empty to unset)',
+    'map_icon_popup_seasonal_index_label' => 'Seasonal index (empty to unset)',
     'teeming_label' => 'Teeming',
     'npc_label' => 'Npc',
 

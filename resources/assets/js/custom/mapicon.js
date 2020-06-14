@@ -73,6 +73,7 @@ class MapIcon extends MapObject {
         this.map_icon_type_id = 0;
         this.map_icon_type = getState().getUnknownMapIcon();
         this.permanent_tooltip = false;
+        this.seasonal_index = null;
         this.has_dungeon_route = false;
         this.comment = '';
         this.label = 'MapIcon';
@@ -100,6 +101,7 @@ class MapIcon extends MapObject {
         this.comment = $('#map_map_icon_edit_popup_comment_' + this.id).val();
         this.map_icon_type_id = parseInt($('#map_map_icon_edit_popup_map_icon_type_id_' + this.id).val());
         this.permanent_tooltip = $('#map_map_icon_edit_popup_permanent_tooltip_' + this.id).is(':checked') ? 1 : 0;
+        this.seasonal_index = parseInt($('#map_map_icon_edit_popup_seasonal_index_' + this.id).val());
         this.setMapIconType(getState().getMapIconType(this.map_icon_type_id));
 
         this.edit();
@@ -247,6 +249,7 @@ class MapIcon extends MapObject {
                 if( self.permanent_tooltip === 1 ){
                     $('#map_map_icon_edit_popup_permanent_tooltip_' + self.id).attr('checked', 'checked');
                 }
+                $('#map_map_icon_edit_popup_seasonal_index_' + self.id).val(self.seasonal_index);
 
                 // Prevent multiple binds to click
                 let $submitBtn = $('#map_map_icon_edit_popup_submit_' + self.id);
@@ -284,7 +287,8 @@ class MapIcon extends MapObject {
                     id: self.id,
                     map_icon_type_id: self.map_icon_type_id,
                     mapicontypes: editableMapIconTypes,
-                    permanent_tooltip: self.permanent_tooltip ? 1 : 0
+                    permanent_tooltip: self.permanent_tooltip ? 1 : 0,
+                    seasonal_index: self.seasonal_index
                 });
 
                 self.layer.unbindPopup();

@@ -10,6 +10,7 @@ namespace App\Logic\MDT\IO;
 
 
 use App\Logic\MDT\Conversion;
+use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\AffixGroup;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
@@ -23,9 +24,11 @@ use App\Models\MapIconType;
 use App\Models\Path;
 use App\Models\Polyline;
 use App\Service\Season\SeasonService;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Lua;
 
 /**
  * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
@@ -52,11 +55,11 @@ class ImportString
 
     /**
      * Gets a Lua instance and load all the required files in it.
-     * @return \Lua
+     * @return Lua
      */
     private function _getLua()
     {
-        $lua = new \Lua();
+        $lua = new Lua();
 
         // Load libraries (yeah can do this with ->library function as well)
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')));
@@ -81,88 +84,81 @@ class ImportString
 
         $i = 0;
         if (isset($decoded['value']['riftOffsets'])) {
-            foreach ($decoded['value']['riftOffsets'] as $weekIndex => $riffOffsets) {
-                if ($i > 0) {
-                    $warnings->push(
-                        new ImportWarning('Awakened Obelisks',
-                            __('Your route has specified different Awakened Obelisk routes for different affixes. 
-                    Keystone.guru has no support for this (yet). 
-                    The Awakened Obelisk routes for the first encountered affix is imported.')
-                        )
-                    );
-                }
-
-                $rifts = $riffOffsets;
-                $i++;
-            }
-
-            // Loaded for the comment import
-            $floorIds = $dungeonRoute->dungeon->floors->pluck('id');
-            $npcIdToMapIconMapping = [
-                161124 => MapIcon::where('map_icon_type_id', 17)->whereIn('floor_id', $floorIds)->firstOrFail(), // Urg'roth, Brutal spire
-                161241 => MapIcon::where('map_icon_type_id', 18)->whereIn('floor_id', $floorIds)->firstOrFail(), // Cursed spire
-
-                161244 => MapIcon::where('map_icon_type_id', 19)->whereIn('floor_id', $floorIds)->firstOrFail(), // Blood of the Corruptor, Defiled spire
-                161243 => MapIcon::where('map_icon_type_id', 20)->whereIn('floor_id', $floorIds)->firstOrFail(), // Samh'rek, Entropic spire
-            ];
-
-            $gatewayIconType = MapIconType::where('key', 'gateway')->firstOrFail();
-
-            // From the built array, construct our map icons / paths
-            foreach ($rifts as $npcId => $mdtXY) {
-                // Find out the floor where the NPC is standing on
-                /** @var Enemy $enemy */
-                $enemy = Enemy::where('npc_id', $npcId)->whereIn('floor_id', $floorIds)->firstOrFail();
-                /** @var MapIcon $obeliskMapIcon */
-                $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
-
-                $mapIconEnd = new MapIcon(array_merge([
-                    'floor_id'         => $enemy->floor_id,
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'map_icon_type_id' => $gatewayIconType->id,
-                    'comment'          => $obeliskMapIcon->mapicontype->name
-                    // MDT has the x and y inverted here
-                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXY['x'], 'y' => $mdtXY['y']])));
-
-                $polyLine = new Polyline([
-                    'model_id'      => -1,
-                    'model_class'   => Path::class,
-                    'color'         => '#80FF1A',
-                    'weight'        => 3,
-                    'vertices_json' => json_encode([
-                        [
-                            'lat' => $obeliskMapIcon->lat,
-                            'lng' => $obeliskMapIcon->lng
-                        ],
-                        [
-                            'lat' => $mapIconEnd->lat,
-                            'lng' => $mapIconEnd->lng
-                        ]
-                    ])
-                ]);
-
-                if ($save) {
-                    $polyLine->save();
-                }
-
-                $mdtXY = new Path([
-                    'floor_id'         => $enemy->floor_id,
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'polyline_id'      => $polyLine->id
-                ]);
-
-                if ($save) {
-                    $mapIconEnd->save();
-
-                    $mdtXY->save();
-                    $polyLine->model_id = $mdtXY->id;
-                    $polyLine->save();
-                } else {
-                    $dungeonRoute->mapicons->push($mapIconEnd);
-                    $dungeonRoute->paths->push($mdtXY);
+            foreach ($decoded['value']['riftOffsets'] as $weekIndex => $riftOffsets) {
+                if ($weekIndex === ($decoded['week'] - 1) % config('keystoneguru.season_interation_affix_group_count')) {
+                    $rifts = $riftOffsets;
+                    break;
                 }
             }
 
+            if (!empty($rifts)) {
+                // Loaded for the comment import
+                $floorIds = $dungeonRoute->dungeon->floors->pluck('id');
+                $npcIdToMapIconMapping = [
+                    161124 => MapIcon::where('map_icon_type_id', 17)->whereIn('floor_id', $floorIds)->firstOrFail(), // Urg'roth, Brutal spire
+                    161241 => MapIcon::where('map_icon_type_id', 18)->whereIn('floor_id', $floorIds)->firstOrFail(), // Cursed spire
+
+                    161244 => MapIcon::where('map_icon_type_id', 19)->whereIn('floor_id', $floorIds)->firstOrFail(), // Blood of the Corruptor, Defiled spire
+                    161243 => MapIcon::where('map_icon_type_id', 20)->whereIn('floor_id', $floorIds)->firstOrFail(), // Samh'rek, Entropic spire
+                ];
+
+                $gatewayIconType = MapIconType::where('key', 'gateway')->firstOrFail();
+
+                // From the built array, construct our map icons / paths
+                foreach ($rifts as $npcId => $mdtXY) {
+                    // Find out the floor where the NPC is standing on
+                    /** @var Enemy $enemy */
+                    $enemy = Enemy::where('npc_id', $npcId)->whereIn('floor_id', $floorIds)->firstOrFail();
+                    /** @var MapIcon $obeliskMapIcon */
+                    $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
+
+                    $mapIconEnd = new MapIcon(array_merge([
+                        'floor_id'         => $enemy->floor_id,
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'map_icon_type_id' => $gatewayIconType->id,
+                        'comment'          => $obeliskMapIcon->mapicontype->name
+                        // MDT has the x and y inverted here
+                    ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXY['x'], 'y' => $mdtXY['y']])));
+
+                    $polyLine = new Polyline([
+                        'model_id'      => -1,
+                        'model_class'   => Path::class,
+                        'color'         => '#80FF1A',
+                        'weight'        => 3,
+                        'vertices_json' => json_encode([
+                            [
+                                'lat' => $obeliskMapIcon->lat,
+                                'lng' => $obeliskMapIcon->lng
+                            ],
+                            [
+                                'lat' => $mapIconEnd->lat,
+                                'lng' => $mapIconEnd->lng
+                            ]
+                        ])
+                    ]);
+
+                    if ($save) {
+                        $polyLine->save();
+                    }
+
+                    $mdtXY = new Path([
+                        'floor_id'         => $enemy->floor_id,
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'polyline_id'      => $polyLine->id
+                    ]);
+
+                    if ($save) {
+                        $mapIconEnd->save();
+
+                        $mdtXY->save();
+                        $polyLine->model_id = $mdtXY->id;
+                        $polyLine->save();
+                    } else {
+                        $dungeonRoute->mapicons->push($mapIconEnd);
+                        $dungeonRoute->paths->push($mdtXY);
+                    }
+                }
+            }
         }
     }
 
@@ -173,7 +169,7 @@ class ImportString
      * @param $decoded array
      * @param $dungeonRoute DungeonRoute
      * @param $save boolean
-     * @throws \Exception
+     * @throws Exception
      */
     private function _parseValuePulls($warnings, $decoded, $dungeonRoute, $save)
     {
@@ -181,7 +177,7 @@ class ImportString
         $enemies = Enemy::whereIn('floor_id', $floors->pluck(['id']))->get();
 
         // Fetch all enemies of this
-        $mdtEnemies = (new \App\Logic\MDT\Data\MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
+        $mdtEnemies = (new MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
 
         // For each pull the user created
         foreach ($decoded['value']['pulls'] as $pullIndex => $pull) {
@@ -197,9 +193,10 @@ class ImportString
 
             // Init some variables
             $totalEnemiesKilled = 0;
-            $floorId = -1;
 
             try {
+                $seasonalIndexSkip = false;
+
                 // For each NPC that is killed in this pull (and their clones)
                 foreach ($pull as $pullKey => $pullValue) {
                     // Numeric means it's an index of the dungeon's NPCs
@@ -207,7 +204,6 @@ class ImportString
                         $npcIndex = (int)$pullKey;
                         $mdtClones = $pullValue;
                         // Only if filled
-                        $enemyCount = count($mdtClones);
                         foreach ($mdtClones as $index => $cloneIndex) {
                             // This comes in through as a double, cast to int
                             $cloneIndex = (int)$cloneIndex;
@@ -259,21 +255,29 @@ class ImportString
                                 );
                             }
 
-                            // Couple the KillZoneEnemy to its KillZone
-                            if ($save) {
-                                $kzEnemy = new KillZoneEnemy();
-                                $kzEnemy->enemy_id = $enemy->id;
-                                $kzEnemy->kill_zone_id = $killZone->id;
-                                $kzEnemy->save();
-                            } else {
-                                $killZone->enemies->push($enemy);
+                            // Don't add any teeming enemies
+                            if( !$dungeonRoute->teeming && $enemy->teeming === 'visible' ) {
+                                continue;
                             }
 
-                            // Should be the same floor_id all the time, but we need it anyways
-                            $floorId = $enemy->floor_id;
+                            // Skip enemies that don't belong to our current seasonal index
+                            if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
+                                // Couple the KillZoneEnemy to its KillZone
+                                if ($save) {
+                                    $kzEnemy = new KillZoneEnemy();
+                                    $kzEnemy->enemy_id = $enemy->id;
+                                    $kzEnemy->kill_zone_id = $killZone->id;
+                                    $kzEnemy->save();
+                                }
+
+                                // Save enemies to the killzones regardless
+                                $killZone->enemies->push($enemy);
+                                $totalEnemiesKilled++;
+                            } else {
+                                $seasonalIndexSkip = true;
+                            }
                         }
 
-                        $totalEnemiesKilled += $enemyCount;
                     } // Color is randomly put in here
                     else if ($pullKey === 'color') {
                         // Make sure there is a pound sign in front of the value at all times, but never double up should
@@ -283,15 +287,17 @@ class ImportString
                 }
 
                 if ($totalEnemiesKilled > 0) {
-                    // KillZones at the average position of all killed enemies
-                    $killZone->floor_id = $floorId;
-
                     if ($save) {
                         $killZone->save();
                     } else {
                         $dungeonRoute->killzones->push($killZone);
                     }
-                } else {
+                }
+                // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
+                else if (!$seasonalIndexSkip) {
+                    if ($save) {
+                        $killZone->delete();
+                    }
                     throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
                         __('Failure to find enemies resulted in a pull being skipped.'),
                         ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
@@ -440,7 +446,7 @@ class ImportString
      * @param $try boolean True to mark the dungeon as a try route which will be automatically deleted at a later stage.
      * @param $save boolean True to save the route and all associated models, false to not save & couple.
      * @return DungeonRoute|bool DungeonRoute if the route could be constructed, false if the string was invalid.
-     * @throws \Exception
+     * @throws Exception
      */
     public function getDungeonRoute($warnings, $try = false, $save = false)
     {
@@ -492,6 +498,15 @@ class ImportString
                     // Something we can just return and have the user read
                     $dungeonRoute->affixes->push($affixGroup);
                 }
+                // Apply the seasonal index to the route
+                $dungeonRoute->seasonal_index = $affixGroup->seasonal_index;
+            } else {
+                $dungeonRoute->seasonal_index = 0;
+            }
+
+            // Update seasonal index
+            if ($save) {
+                $dungeonRoute->save();
             }
 
             // Create a path and map icons for MDT rift offsets

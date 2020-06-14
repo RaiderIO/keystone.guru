@@ -5,11 +5,11 @@ namespace App\Service;
 
 interface EchoServerHttpApiInterface
 {
-    public function getStatus($appId = '');
+    public function getStatus();
 
-    public function getChannels($appId = '');
+    public function getChannels();
 
-    public function getChannelInfo($channelName, $appId = '');
+    public function getChannelInfo($channelName);
 
-    public function getChannelUsers($channelName, $appId = '');
+    public function getChannelUsers($channelName);
 }

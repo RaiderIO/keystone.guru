@@ -7,9 +7,13 @@ use App\Logic\MDT\IO\ImportWarning;
 use App\Models\AffixGroup;
 use App\Models\MDTImport;
 use App\Service\Season\SeasonService;
+use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Throwable;
 
 class MDTImportController extends Controller
 {
@@ -18,7 +22,8 @@ class MDTImportController extends Controller
      * @param Request $request
      * @param SeasonService $seasonService
      * @return array|void
-     * @throws \Exception
+     * @throws Exception
+     * @throws Throwable
      */
     public function details(Request $request, SeasonService $seasonService)
     {
@@ -56,7 +61,7 @@ class MDTImportController extends Controller
             ];
 
             return $result;
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             // Different message based on our deployment settings
             if (config('app.debug')) {
                 $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
@@ -64,14 +69,21 @@ class MDTImportController extends Controller
                 $message = __('Invalid MDT string');
             }
             return abort(400, $message);
+        } catch (Throwable $error) {
+            if ($error->getMessage() === "Class 'Lua' not found") {
+                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+            }
+
+            throw $error;
         }
     }
 
     /**
      * @param Request $request
      * @param SeasonService $seasonService
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View|void
+     * @throws Exception
+     * @throws Throwable
      */
     public function import(Request $request, SeasonService $seasonService)
     {
@@ -93,8 +105,14 @@ class MDTImportController extends Controller
                 $mdtImport->dungeon_route_id = $dungeonRoute->id;
                 $mdtImport->import_string = $string;
                 $mdtImport->save();
-            } catch (\Exception $ex) {
-                abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+            } catch (Exception $ex) {
+                return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+            } catch (Throwable $error) {
+                if ($error->getMessage() === "Class 'Lua' not found") {
+                    return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+                }
+
+                throw $error;
             }
             if ($try) {
                 $result = view('dungeonroute.try', ['model' => $dungeonRoute]);

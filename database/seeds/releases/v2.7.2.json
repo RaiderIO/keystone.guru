@@ -2,8 +2,8 @@
     "id": 34,
     "release_changelog_id": 38,
     "version": "v2.7.2",
-    "created_at": "2019-08-26T05:46:40.000000Z",
-    "updated_at": "2019-08-26T05:46:40.000000Z",
+    "created_at": "2019-08-26T03:46:40.000000Z",
+    "updated_at": "2019-08-26T03:46:40.000000Z",
     "changelog": {
         "id": 38,
         "release_id": 34,
@@ -13,19 +13,31 @@
                 "release_changelog_id": 38,
                 "release_changelog_category_id": 1,
                 "ticket_id": 230,
-                "change": "On the \/affixes page, the preset for the affix is now displayed. This should aid you in selecting the proper beguiling preset for your route. By default, the beguiling preset is now also set to the current preset which is active for your region (based on profile settings)."
+                "change": "On the \/affixes page, the preset for the affix is now displayed. This should aid you in selecting the proper beguiling preset for your route. By default, the beguiling preset is now also set to the current preset which is active for your region (based on profile settings).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 38,
                 "release_changelog_category_id": 1,
                 "ticket_id": 232,
-                "change": "Required fields are now highlighted in orange (the asterisk)."
+                "change": "Required fields are now highlighted in orange (the asterisk).",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 38,
                 "release_changelog_category_id": 5,
                 "ticket_id": 231,
-                "change": "Fixed an issue where cloning a public route would fail unless it was owned by you."
+                "change": "Fixed an issue where cloning a public route would fail unless it was owned by you.",
+                "category": {
+                    "id": 5,
+                    "category": "Bugfixes"
+                }
             }
         ]
     }

@@ -2,8 +2,8 @@
     "id": 12,
     "release_changelog_id": 16,
     "version": "v1.3.1",
-    "created_at": "2018-10-31T19:16:06.000000Z",
-    "updated_at": "2018-10-31T19:16:06.000000Z",
+    "created_at": "2018-10-31T18:16:06.000000Z",
+    "updated_at": "2018-10-31T18:16:06.000000Z",
     "changelog": {
         "id": 16,
         "release_id": 12,
@@ -13,31 +13,51 @@
                 "release_changelog_id": 16,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Atal'Dazar<ul>                 <li>                     Added a missing pack of 5 before the south boss, when going south from the start. They pop in once                     you get close, hence me missing those.                 <\/li>             <\/ul>"
+                "change": "Atal'Dazar<ul>                 <li>                     Added a missing pack of 5 before the south boss, when going south from the start. They pop in once                     you get close, hence me missing those.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 16,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Kings' Rest<ul>                 <li>                     Added Minions of Zul. They do not give trash %-age, but they are a non-trivial enemy so they should                     be included.                 <\/li>                 <li>                     Added Shadow of Zul. Same as above, though he does give some %-age (I never realised due to always                     being at 100% prior to reaching him).                 <\/li>                 <li>                     Spectral Brute now patrols the entire hallway before the third boss.                 <\/li>             <\/ul>"
+                "change": "Kings' Rest<ul>                 <li>                     Added Minions of Zul. They do not give trash %-age, but they are a non-trivial enemy so they should                     be included.                 <\/li>                 <li>                     Added Shadow of Zul. Same as above, though he does give some %-age (I never realised due to always                     being at 100% prior to reaching him).                 <\/li>                 <li>                     Spectral Brute now patrols the entire hallway before the third boss.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 16,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Shrine of the Storm<ul>                 <li>                     Added to Template Attendants on the far right before the first boss.                 <\/li>                 <li>                     Corrected patrol of Tidesage Enforcer after the second boss (prior to the room with tentacles).                 <\/li>             <\/ul>"
+                "change": "Shrine of the Storm<ul>                 <li>                     Added to Template Attendants on the far right before the first boss.                 <\/li>                 <li>                     Corrected patrol of Tidesage Enforcer after the second boss (prior to the room with tentacles).                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 16,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Temple of Sethraliss<ul>                 <li>                     Moved a pack of Agitated Nimbus and Imbued Stormcallers a bit further north before the third boss.                 <\/li>             <\/ul>"
+                "change": "Temple of Sethraliss<ul>                 <li>                     Moved a pack of Agitated Nimbus and Imbued Stormcallers a bit further north before the third boss.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 16,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Waycrest Manor<ul>                 <li>                     Added Dreadwing Ravens to the Upstairs floor.                 <\/li>                 <li>                     Updated some patrols on Upstairs floor, added dungeon floor switches.                 <\/li>             <\/ul>"
+                "change": "Waycrest Manor<ul>                 <li>                     Added Dreadwing Ravens to the Upstairs floor.                 <\/li>                 <li>                     Updated some patrols on Upstairs floor, added dungeon floor switches.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             }
         ]
     }

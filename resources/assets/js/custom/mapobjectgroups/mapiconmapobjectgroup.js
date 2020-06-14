@@ -67,6 +67,13 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         mapIcon.has_dungeon_route = remoteMapObject.has_dungeon_route;
         mapIcon.comment = remoteMapObject.comment;
         mapIcon.permanent_tooltip = remoteMapObject.permanent_tooltip;
+        mapIcon.seasonal_index = remoteMapObject.seasonal_index;
+
+        // When in admin mode, show all map icons
+        if (!(this.manager.map instanceof AdminDungeonMap) && (mapIcon.seasonal_index !== null && getState().getSeasonalIndex() !== mapIcon.seasonal_index)) {
+            // Hide this enemy by default
+            mapIcon.setDefaultVisible(false);
+        }
 
         // We just downloaded the map icon, it's synced alright!
         mapIcon.setSynced(true);

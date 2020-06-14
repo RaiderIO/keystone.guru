@@ -63,9 +63,9 @@ use Illuminate\Support\Facades\DB;
  * @property Collection|Path[] $paths
  * @property Collection|KillZone[] $killzones
  *
- * @property Collection $enemyraidmarkers
- * @property Collection $mapicons
- * @property Collection $pageviews
+ * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyraidmarkers
+ * @property Collection|MapIcon[] $mapicons
+ * @property Collection|PageView[] $pageviews
  *
  * @property Collection $routeattributes
  * @property Collection $routeattributesraw
@@ -387,13 +387,18 @@ class DungeonRoute extends Model
         // Find all Npcs that we've killed
         $result = 0;
         foreach ($this->killzones as $killzone) {
-            /** @var KillZone $killzone */
+            $resultByPull[$killzone->id] = [];
             foreach ($killzone->enemies as $enemy) {
+                // Prevent adding teeming enemies that we shouldn't
+                if (!$this->teeming && $enemy->teeming === 'visible') {
+                    continue;
+                }
 
                 /** @var Enemy $enemy */
                 if ($enemy->enemy_forces_override >= 0) {
                     $result += $enemy->enemy_forces_override;
                 } else {
+                    /** @var Npc $npc */
                     $npc = $npcs->where('id', $enemy->npc_id)->first();
 
                     // May be null if an enemy was removed?

@@ -2,8 +2,8 @@
     "id": 3,
     "release_changelog_id": 7,
     "version": "v1.0.2",
-    "created_at": "2018-10-09T16:16:06.000000Z",
-    "updated_at": "2018-10-09T16:16:06.000000Z",
+    "created_at": "2018-10-09T14:16:06.000000Z",
+    "updated_at": "2018-10-09T14:16:06.000000Z",
     "changelog": {
         "id": 7,
         "release_id": 3,
@@ -13,31 +13,51 @@
                 "release_changelog_id": 7,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Your routes are now unpublished by default. You have to publish them in order to have them show up in the search and to have other people see your route."
+                "change": "Your routes are now unpublished by default. You have to publish them in order to have them show up in the search and to have other people see your route.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 7,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Route search can no longer sort on rating as it was broken. I will fix this at a later stage."
+                "change": "Route search can no longer sort on rating as it was broken. I will fix this at a later stage.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 7,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Fixed some inconsistencies with Saurids in the middle part of the dungeon."
+                "change": "Fixed some inconsistencies with Saurids in the middle part of the dungeon.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 7,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Fixed a host of issues in Shrine of the Storm."
+                "change": "Fixed a host of issues in Shrine of the Storm.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             },
             {
                 "release_changelog_id": 7,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Fixed map comments not showing up for logged in users."
+                "change": "Fixed map comments not showing up for logged in users.",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             }
         ]
     }

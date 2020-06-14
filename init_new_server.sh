@@ -5,7 +5,6 @@
 # Create databases?
 # Create users & permissions?
 
-
 # create directories
 tput setaf 2;
 echo "Creating directories..."
@@ -26,7 +25,7 @@ chown -R www-data:www-data bootstrap/cache
 tput setaf 2;
 echo "Ensuring file permissions..."
 tput sgr0;
-chmod 755 *.sh
+chmod 755 ./*.sh
 chmod -R 755 storage
 chmod -R 755 bootstrap/cache
 
@@ -54,6 +53,12 @@ echo "Installing cross-env globally..."
 tput sgr0;
 sudo npm install --global cross-env
 
+# Install globally for echo server
+tput setaf 2;
+echo "Installing dotenv globally..."
+tput sgr0;
+sudo npm install --global dotenv
+
 #make sure we have the correct versions for everything
 tput setaf 2;
 echo "Updating dependencies..."
@@ -75,10 +80,10 @@ tput sgr0;
 php artisan tracker:tables
 
 # Generate encryption key
-tput setaf 2;
-echo "Setting up private encryption key..."
-tput sgr0;
-php artisan key:generate
+#tput setaf 2;
+#echo "Setting up private encryption key..."
+#tput sgr0;
+#php artisan key:generate
 
 # Run migrate again to fix the tracker
 ./migrate.sh
@@ -93,7 +98,7 @@ git checkout -b v3.3.7+1
 cd ../../..
 
 # Setup argon dashboard
-php artisan preset argon
+php artisan ui argon
 # This does way too much though, undo the damage it did (we require SOME of it though)
 git checkout .
 git clean -f
@@ -102,13 +107,12 @@ rm -rf resources/views/layouts/headers
 rm -rf resources/views/layouts/navbars
 rm -rf resources/views/users
 
-sudo npm install -g laravel-echo-server
-sudo npm install -g handlebars
-sudo apt-get install supervisor
-sudo apt-get install pngquant
+# Setup Horizon
+php artisan horizon:install
+php artisan horizon:publish
 
 tput setaf 2;
-echo "Seeding database..."
+echo "Seeding Laratrust..."
 tput sgr0;
 # Seed Laratrust (initial users etc)
 php artisan db:seed --class=LaratrustSeeder --database=migrate

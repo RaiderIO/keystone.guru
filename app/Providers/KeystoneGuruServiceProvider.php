@@ -14,7 +14,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     public function register()
     {
         // Bind the interface to the actual service
-        $this->app->bind('App\Service\EchoServerConfigServiceInterface', 'App\Service\EchoServerConfigService');
         $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\EchoServerHttpApiService');
 
         // Dashboard

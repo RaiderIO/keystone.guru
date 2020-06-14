@@ -2,8 +2,8 @@
     "id": 42,
     "release_changelog_id": 46,
     "version": "v3.0.1",
-    "created_at": "2020-05-22T19:21:18.000000Z",
-    "updated_at": "2020-05-22T19:21:18.000000Z",
+    "created_at": "2020-05-22T17:21:18.000000Z",
+    "updated_at": "2020-05-22T17:21:18.000000Z",
     "changelog": {
         "id": 46,
         "release_id": 42,
@@ -13,7 +13,11 @@
                 "release_changelog_id": 46,
                 "release_changelog_category_id": 3,
                 "ticket_id": 292,
-                "change": "Fixed cooperative route sharing synchronization of pulls. Fixed left sidebar in map view not being able to be collapsed. Fixed pull top text not showing when viewing a route. Added a 'Loading' message when Pulls are still loading, rather than a 'No pulls created yet' message."
+                "change": "Fixed cooperative route sharing synchronization of pulls. Fixed left sidebar in map view not being able to be collapsed. Fixed pull top text not showing when viewing a route. Added a 'Loading' message when Pulls are still loading, rather than a 'No pulls created yet' message.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             }
         ]
     }

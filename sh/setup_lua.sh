@@ -3,8 +3,10 @@
 # Install actual LUA language
 sudo apt-get remove liblua5.3
 sudo apt-get remove lua5.3
-sudo apt-get install lua5.3
-sudo apt-get install liblua5.3
+sudo apt-get install -y lua5.3 \
+    liblua5.3 \
+    unzip \
+    php-dev
 
 sudo ln -s /usr/include/lua5.3/ /usr/include/lua
 sudo cp /usr/lib/x86_64-linux-gnu/liblua5.3.a /usr/lib/liblua.a

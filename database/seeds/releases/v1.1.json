@@ -2,8 +2,8 @@
     "id": 8,
     "release_changelog_id": 12,
     "version": "v1.1",
-    "created_at": "2018-10-16T17:16:06.000000Z",
-    "updated_at": "2018-10-16T17:16:06.000000Z",
+    "created_at": "2018-10-16T15:16:06.000000Z",
+    "updated_at": "2018-10-16T15:16:06.000000Z",
     "changelog": {
         "id": 12,
         "release_id": 8,
@@ -13,37 +13,61 @@
                 "release_changelog_id": 12,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "You can now clone your own route or someone else's! You don't need to redo your entire route just to make some small changes between affixes. More routes = better!"
+                "change": "You can now clone your own route or someone else's! You don't need to redo your entire route just to make some small changes between affixes. More routes = better!",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 12,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Added password strength hint; increased minimum password length to 8 (but really, do more characters!)"
+                "change": "Added password strength hint; increased minimum password length to 8 (but really, do more characters!)",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 12,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Entering incorrect login credentials will now redirect you to a login page. Upon successful login, you are now redirected to where you came from."
+                "change": "Entering incorrect login credentials will now redirect you to a login page. Upon successful login, you are now redirected to where you came from.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 12,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "Viewer: clicking a comment will no longer give you a prompt to edit the comment (which won't work even if you tried)."
+                "change": "Viewer: clicking a comment will no longer give you a prompt to edit the comment (which won't work even if you tried).",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 12,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "Fixed enemy forces display in tryout mode."
+                "change": "Fixed enemy forces display in tryout mode.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
             },
             {
                 "release_changelog_id": 12,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "The Underrot             <ul>                 <li>                     Removed an enemy from the pack of 4 just before the third boss which isn't there in-game.                 <\/li>                 <li>                     Added a Grotesque Horror that's only there on teeming, removed another that was never there.                 <\/li>             <\/ul>"
+                "change": "The Underrot             <ul>                 <li>                     Removed an enemy from the pack of 4 just before the third boss which isn't there in-game.                 <\/li>                 <li>                     Added a Grotesque Horror that's only there on teeming, removed another that was never there.                 <\/li>             <\/ul>",
+                "category": {
+                    "id": 4,
+                    "category": "Mapping changes"
+                }
             }
         ]
     }

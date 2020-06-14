@@ -2,8 +2,8 @@
     "id": 16,
     "release_changelog_id": 20,
     "version": "v1.5.1",
-    "created_at": "2018-12-17T18:46:19.000000Z",
-    "updated_at": "2018-12-17T18:46:19.000000Z",
+    "created_at": "2018-12-17T17:46:19.000000Z",
+    "updated_at": "2018-12-17T17:46:19.000000Z",
     "changelog": {
         "id": 20,
         "release_id": 16,
@@ -13,19 +13,31 @@
                 "release_changelog_id": 20,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by dungeon."
+                "change": "Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by dungeon.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 20,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Fixed some route thumbnails not being generated."
+                "change": "Fixed some route thumbnails not being generated.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             },
             {
                 "release_changelog_id": 20,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Fixed creating a new route with Attributes assigned from the start giving a 500 server error."
+                "change": "Fixed creating a new route with Attributes assigned from the start giving a 500 server error.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
             }
         ]
     }

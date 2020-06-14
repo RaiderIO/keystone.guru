@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'prefix' => env('HORIZON_PREFIX', 'horizon:'),
+    'prefix' => env('HORIZON_PREFIX', sprintf('horizon-%s:', env('APP_TYPE'))),
 
     /*
     |--------------------------------------------------------------------------
@@ -125,7 +125,7 @@ return [
     |
     */
 
-    'memory_limit' => 64,
+    'memory_limit' => 1028,
 
     /*
     |--------------------------------------------------------------------------
@@ -142,16 +142,16 @@ return [
         'production' => [
             'supervisor-default' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => [sprintf('%s-production-default', env('APP_TYPE'))],
                 'balance' => 'simple',
-                'processes' => 1,
+                'processes' => 2,
                 'tries' => 3,
             ],
             'supervisor-thumbnail' => [
                 'connection' => 'redis',
-                'queue' => ['thumbnail'],
+                'queue' => [sprintf('%s-production-thumbnail', env('APP_TYPE'))],
                 'balance' => 'simple',
-                'processes' => 1,
+                'processes' => 4,
                 'tries' => 1,
             ],
         ],
@@ -159,16 +159,16 @@ return [
         'local' => [
             'supervisor-default' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => [sprintf('%s-local-default', env('APP_TYPE'))],
                 'balance' => 'simple',
-                'processes' => 1,
+                'processes' => 2,
                 'tries' => 3,
             ],
             'supervisor-thumbnail' => [
                 'connection' => 'redis',
-                'queue' => ['thumbnail'],
+                'queue' => [sprintf('%s-local-thumbnail', env('APP_TYPE'))],
                 'balance' => 'simple',
-                'processes' => 1,
+                'processes' => 2,
                 'tries' => 1,
             ],
         ],

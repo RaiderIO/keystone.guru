@@ -15,9 +15,6 @@ git pull
 # see https://github.com/laravel/horizon/blob/master/UPGRADE.md
 php artisan horizon:publish
 
-# Restore echo server clients
-./update_echo_clients.sh
-
 ./migrate.sh
 
 # Drop and re-populate all dungeon data, it's designed to do this no worries

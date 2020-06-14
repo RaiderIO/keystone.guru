@@ -8,6 +8,9 @@
         <a href="{{ route('admin.tools.mdt.string.view') }}">{{ __('View MDT String contents') }}</a>
     </div>
     <div class="form-group">
+        <a href="{{ route('admin.tools.mdt.string.viewasdungeonroute') }}">{{ __('View MDT String as DungeonRoute') }}</a>
+    </div>
+    <div class="form-group">
         <a href="{{ route('admin.tools.mdt.diff') }}">{{ __('View MDT Diff') }}</a>
     </div>
     <h3>{{ __('Actions') }}</h3>
