@@ -5,7 +5,8 @@
         "lat": -44.0625,
         "lng": 289.5,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 47,
@@ -13,7 +14,8 @@
         "lat": -50.5625,
         "lng": 240.8125,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 47,
@@ -21,7 +23,8 @@
         "lat": -152.125,
         "lng": 207.9375,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 47,
@@ -29,15 +32,17 @@
         "lat": -211.375,
         "lng": 185.6875,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 47,
         "map_icon_type_id": 17,
-        "lat": -51.65625,
-        "lng": 246.5,
+        "lat": -49.0625,
+        "lng": 245.6875,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": 0
     },
     {
         "floor_id": 47,
@@ -45,7 +50,8 @@
         "lat": -99.375,
         "lng": 225.75,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 47,
@@ -53,15 +59,17 @@
         "lat": -147.875,
         "lng": 244.625,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 47,
         "map_icon_type_id": 20,
-        "lat": -180.84375,
-        "lng": 194.5625,
+        "lat": -179.9375,
+        "lng": 195.84375,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": 0
     },
     {
         "floor_id": 47,
@@ -69,6 +77,25 @@
         "lat": -50.84375,
         "lng": 294.53125,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 20,
+        "lat": -52.1875,
+        "lng": 245.78125,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 1
+    },
+    {
+        "floor_id": 47,
+        "map_icon_type_id": 17,
+        "lat": -179.9375,
+        "lng": 194.5,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 1
     }
 ]

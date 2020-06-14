@@ -5,7 +5,8 @@
         "lat": -124.875,
         "lng": 221,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 57,
@@ -13,6 +14,7 @@
         "lat": -134.875,
         "lng": 216.875,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     }
 ]

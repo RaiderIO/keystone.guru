@@ -42,6 +42,7 @@ class Enemy extends MapObject {
         this.dangerous = false;
         // The visual display of this enemy
         this.visual = null;
+        this.isPopupEnabled = false;
 
         // MDT
         this.mdt_id = -1;
@@ -49,7 +50,7 @@ class Enemy extends MapObject {
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Remove/enable the popup
-            self.setPopupEnabled(mapStateChangedEvent.data.newMapState instanceof MapState);
+            self.setPopupEnabled(!(mapStateChangedEvent.data.newMapState instanceof MapState));
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -126,13 +127,16 @@ class Enemy extends MapObject {
      */
     setPopupEnabled(enabled) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
         if (this.layer !== null) {
-            if (enabled) {
+            if (enabled && !this.isPopupEnabled) {
                 this._rebuildPopup();
-            } else {
+            } else if (!enabled && this.isPopupEnabled) {
                 this.layer.unbindPopup();
             }
         }
+
+        this.isPopupEnabled = enabled;
     }
 
     /**
@@ -143,7 +147,7 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
         let result = 0;
-        if( this.npc !== null ) {
+        if (this.npc !== null) {
             result = this.npc.enemy_forces;
 
             // Override first

@@ -5,7 +5,8 @@
         "lat": -161,
         "lng": 244.625,
         "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 51,
@@ -13,7 +14,8 @@
         "lat": -197.5,
         "lng": 182.25,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": 0
     },
     {
         "floor_id": 51,
@@ -21,7 +23,8 @@
         "lat": -132,
         "lng": 218.5,
         "comment": "Skip unlocks after killing Sporecaller Zancha",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 51,
@@ -29,7 +32,8 @@
         "lat": -120.21875,
         "lng": 287.84375,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 51,
@@ -37,7 +41,8 @@
         "lat": -40.75,
         "lng": 219.875,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 51,
@@ -45,7 +50,8 @@
         "lat": -104.28125,
         "lng": 178.1875,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": 0
     },
     {
         "floor_id": 51,
@@ -53,6 +59,25 @@
         "lat": -233.25,
         "lng": 175.25,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
+    },
+    {
+        "floor_id": 51,
+        "map_icon_type_id": 20,
+        "lat": -197.78125,
+        "lng": 179.375,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 1
+    },
+    {
+        "floor_id": 51,
+        "map_icon_type_id": 19,
+        "lat": -101.96875,
+        "lng": 178.65625,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 1
     }
 ]
