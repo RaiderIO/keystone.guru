@@ -21,7 +21,7 @@ EchoServer.run({
         },
         "publishPresence": true
     },
-    "devMode": env.APP_DEBUG,
+    "devMode": env.APP_DEBUG === 'true',
     "host": null,
     "port": env.LARAVEL_ECHO_SERVER_PORT,
     "protocol": "http",
