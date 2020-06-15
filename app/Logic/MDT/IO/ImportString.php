@@ -82,10 +82,9 @@ class ImportString
         // Build an array with a structure that makes more sense
         $rifts = [];
 
-        $i = 0;
         if (isset($decoded['value']['riftOffsets'])) {
             foreach ($decoded['value']['riftOffsets'] as $weekIndex => $riftOffsets) {
-                if ($weekIndex === ($decoded['week'] - 1) % config('keystoneguru.season_interation_affix_group_count')) {
+                if ($weekIndex === (int)$decoded['week']) {
                     $rifts = $riftOffsets;
                     break;
                 }
@@ -256,7 +255,7 @@ class ImportString
                             }
 
                             // Don't add any teeming enemies
-                            if( !$dungeonRoute->teeming && $enemy->teeming === 'visible' ) {
+                            if (!$dungeonRoute->teeming && $enemy->teeming === 'visible') {
                                 continue;
                             }
 
@@ -292,8 +291,7 @@ class ImportString
                     } else {
                         $dungeonRoute->killzones->push($killZone);
                     }
-                }
-                // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
+                } // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
                 else if (!$seasonalIndexSkip) {
                     if ($save) {
                         $killZone->delete();
