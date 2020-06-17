@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\DungeonRoute;
 use App\Models\Team;
 use App\User;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Teapot\StatusCode\Http;
 
 class APITeamController extends Controller
 {
@@ -18,8 +23,8 @@ class APITeamController extends Controller
     /**
      * @param Request $request
      * @param Team $team
-     * @return array
-     * @throws \Exception
+     * @return array|Application|ResponseFactory|Response
+     * @throws Exception
      */
     public function changeRole(Request $request, Team $team)
     {
@@ -31,14 +36,12 @@ class APITeamController extends Controller
         $targetUser = User::where('name', $request->get('username'))->firstOrFail();
         $role = $request->get('role');
 
-        $result = ['result' => 'error'];
-
         // Only if the current user may do such a thing
         if ($team->canChangeRole($user, $targetUser, $role)) {
             $team->changeRole($targetUser, $role);
-            $result = ['result' => 'success'];
+            $result = response()->noContent();
         } else {
-            abort(403, 'Unauthorized');
+            $result = response('Forbidden', Http::FORBIDDEN);
         }
 
         return $result;
@@ -48,8 +51,8 @@ class APITeamController extends Controller
      * @param Request $request
      * @param Team $team
      * @param DungeonRoute $dungeonroute
-     * @return array
-     * @throws \Exception
+     * @return array|Application|ResponseFactory|Response
+     * @throws Exception
      */
     public function addRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
@@ -58,12 +61,11 @@ class APITeamController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $result = ['result' => 'error'];
         if ($team->canAddRemoveRoute($user)) {
             $team->addRoute($dungeonroute);
-            $result = ['result' => 'success'];
+            $result = response()->noContent();
         } else {
-            abort(403, 'Unauthorized');
+            $result = response('Forbidden', Http::FORBIDDEN);
         }
 
         return $result;
@@ -73,8 +75,8 @@ class APITeamController extends Controller
      * @param Request $request
      * @param Team $team
      * @param DungeonRoute $dungeonroute
-     * @return array
-     * @throws \Exception
+     * @return array|Application|ResponseFactory|Response
+     * @throws Exception
      */
     public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
@@ -83,12 +85,11 @@ class APITeamController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $result = ['result' => 'error'];
         if ($team->canAddRemoveRoute($user)) {
             $team->removeRoute($dungeonroute);
-            $result = ['result' => 'success'];
+            $result = response()->noContent();
         } else {
-            abort(403, 'Unauthorized');
+            $result = response('Forbidden', Http::FORBIDDEN);
         }
 
         return $result;
@@ -98,35 +99,36 @@ class APITeamController extends Controller
      * @param Request $request
      * @param Team $team
      * @param User $user
-     * @return array
-     * @throws \Exception
+     * @return array|Application|ResponseFactory|Response
+     * @throws Exception
      */
     public function removeMember(Request $request, Team $team, User $user)
     {
         $this->authorize('remove-member', $team);
 
-        $result = ['result' => 'error'];
         if ($team->canRemoveMember(Auth::user(), $user)) {
             // Only when successful
             if ($team->removeMember($user)) {
-                $result = ['result' => 'success'];
-            }
+                $result = response()->noContent();
 
-            // Disband if no team members are left
-            if ($team->members->isEmpty()) {
-                $team->delete();
-            } else {
-                // Promote someone else to be the new admin
-                $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
-                if ($newAdmin !== null) {
-                    $team->changeRole(
-                        $newAdmin,
-                        'admin'
-                    );
+                // Disband if no team members are left
+                if ($team->members->isEmpty()) {
+                    $team->delete();
+                } else {
+                    // Promote someone else to be the new admin
+                    $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
+                    if ($newAdmin !== null) {
+                        $team->changeRole(
+                            $newAdmin,
+                            'admin'
+                        );
+                    }
                 }
+            } else {
+                $result = response('Unable to remove member from team', Http::INTERNAL_SERVER_ERROR);
             }
         } else {
-            abort(403, 'Unauthorized');
+            $result = response('Forbidden', Http::FORBIDDEN);
         }
 
         return $result;
@@ -137,7 +139,7 @@ class APITeamController extends Controller
      * @param Request $request
      * @param Team $team
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function refreshInviteLink(Request $request, Team $team)
     {

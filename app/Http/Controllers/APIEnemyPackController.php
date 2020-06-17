@@ -65,7 +65,7 @@ class APIEnemyPackController extends Controller
     {
         try {
             $enemypack->delete();
-            $result = ['result' => 'success'];
+            $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

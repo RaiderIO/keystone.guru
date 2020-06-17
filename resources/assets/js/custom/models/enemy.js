@@ -63,38 +63,16 @@ class Enemy extends MapObject {
     }
 
     /**
-     * @returns {object}
-     * @protected
+     * @inheritDoc
      */
-    _getAttributes() {
+    _getAttributes(force) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        let attributes = super._getAttributes();
 
-        let self = this;
-        let mapIconTypes = getState().getMapIconTypes();
-        let unknownMapIcon = getState().getUnknownMapIcon();
-
-        let editableMapIconTypes = [];
-        for (let i in mapIconTypes) {
-            // Only editable types!
-            if (mapIconTypes.hasOwnProperty(i)) {
-                let mapIconType = mapIconTypes[i];
-                if (mapIconType.isEditable() &&
-                    // Skip unknown map icons, that should be a one time state when placing the icon, not a selectable state
-                    mapIconType.id !== unknownMapIcon.id) {
-                    // Generate html if necessary
-                    if (typeof mapIconType.html === 'undefined') {
-                        let template = Handlebars.templates['map_map_icon_select_option_template'];
-
-                        // Direct assign to the object that is in the array so we're sure this change sticks for others
-                        mapIconTypes[i].html = template(mapIconType);
-                    }
-
-                    editableMapIconTypes.push(mapIconType);
-                }
-            }
+        if (this._cachedAttributes !== null && !force) {
+            return this._cachedAttributes;
         }
 
+        let self = this;
         let selectNpcs = [];
         let npcs = this.map.options.npcs;
         for (let index in npcs) {
@@ -107,7 +85,7 @@ class Enemy extends MapObject {
             }
         }
 
-        return $.extend(attributes, {
+        return $.extend(super._getAttributes(force), {
             enemy_pack_id: new Attribute({
                 type: 'int',
                 edit: false, // Not directly changeable by user
@@ -122,7 +100,7 @@ class Enemy extends MapObject {
             floor_id: new Attribute({
                 type: 'int',
                 edit: false, // Not directly changeable by user
-                default: -1
+                default: getState().getCurrentFloor().id
             }),
             mdt_id: new Attribute({
                 type: 'int',

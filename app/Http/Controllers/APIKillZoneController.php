@@ -115,9 +115,9 @@ class APIKillZoneController extends Controller
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
 
-                $result = ['result' => 'success', 'enemy_forces' => $dungeonroute->getEnemyForces()];
+                $result = ['enemy_forces' => $dungeonroute->getEnemyForces()];
             } else {
-                $result = ['result' => 'error'];
+                $result = response('Unable to delete pull', Http::INTERNAL_SERVER_ERROR);
             }
 
         } catch (\Exception $ex) {

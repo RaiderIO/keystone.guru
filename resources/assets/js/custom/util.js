@@ -163,11 +163,16 @@ function pickHexFromHandlers(handlers, weight) {
  * Helper functions to help debug the site.
  */
 function getEnemy(id){
-    let enemyMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-    return enemyMapObjectGroup.findMapObjectById(id);
+    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+    return mapObjectGroup.findMapObjectById(id);
 }
 
 function getKillZone(id){
-    let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-    return killZoneMapObjectGroup.findMapObjectById(id);
+    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+    return mapObjectGroup.findMapObjectById(id);
+}
+
+function getPath(id){
+    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
+    return mapObjectGroup.findMapObjectById(id);
 }

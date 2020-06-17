@@ -43,7 +43,7 @@ class EnemyPatrol extends Polyline {
                     repeat: 50,
                     symbol: L.Symbol.arrowHead({
                         pixelSize: 12,
-                        pathOptions: {fillOpacity: 1, weight: 0, color: this.polylineColor}
+                        pathOptions: {fillOpacity: 1, weight: 0, color: this.color}
                     })
                 }
             ]

@@ -91,12 +91,14 @@ class MapIcon extends MapObject {
     }
 
     /**
-     * @returns {object}
-     * @protected
+     * @inheritDoc
      */
-    _getAttributes() {
+    _getAttributes(force) {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
-        let attributes = super._getAttributes();
+
+        if (this._cachedAttributes !== null && !force) {
+            return this._cachedAttributes;
+        }
 
         let self = this;
         let mapIconTypes = getState().getMapIconTypes();
@@ -123,11 +125,11 @@ class MapIcon extends MapObject {
             }
         }
 
-        return $.extend(attributes, {
+        return $.extend(super._getAttributes(force), {
             floor_id: new Attribute({
                 type: 'int',
                 edit: false, // Not directly changeable by user
-                default: -1
+                default: getState().getCurrentFloor().id
             }),
             map_icon_type_id: new Attribute({
                 type: 'select',

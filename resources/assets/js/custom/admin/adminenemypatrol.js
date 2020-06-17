@@ -119,7 +119,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
                 enemy_id: self.enemy_id,
                 teeming: self.teeming,
                 faction: self.faction,
-                color: self.polylineColor,
+                color: self.color,
                 weight: self.weight,
                 vertices: self.getVertices()
             },

@@ -115,7 +115,7 @@ class APIMapIconController extends Controller
                 if ($dungeonroute !== null && Auth::check()) {
                     broadcast(new MapIconDeletedEvent($dungeonroute, $mapicon, Auth::user()));
                 }
-                $result = ['result' => 'success'];
+                $result = response()->noContent();
             } else {
                 $result = ['result' => 'error'];
             }

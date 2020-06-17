@@ -115,6 +115,8 @@ let c = {
         polyline: {
             defaultColor: randomColor,
             defaultWeight: Cookies.get('polyline_default_weight'),
+            minWeight: 1,
+            maxWeight: 5
         },
         brushline: {
             /**

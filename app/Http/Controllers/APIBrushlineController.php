@@ -57,8 +57,8 @@ class APIBrushlineController extends Controller
             $polyline = Polyline::findOrNew($brushline->polyline_id);
             $polyline->model_id = $brushline->id;
             $polyline->model_class = get_class($brushline);
-            $polyline->color = $request->get('color');
-            $polyline->weight = $request->get('weight');
+            $polyline->color = $request->get('color', '#f00');
+            $polyline->weight = $request->get('weight', 2);
             $polyline->vertices_json = json_encode($request->get('vertices'));
             $polyline->save();
 
@@ -105,9 +105,9 @@ class APIBrushlineController extends Controller
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
 
-                $result = ['result' => 'success'];
+                $result = response()->noContent();
             } else {
-                $result = ['result' => 'error'];
+                $result = response('Unable to save Brushline', Http::INTERNAL_SERVER_ERROR);
             }
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

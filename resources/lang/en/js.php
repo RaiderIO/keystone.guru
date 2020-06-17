@@ -213,6 +213,14 @@ return [
     'admin_enemy_enemy_forces_override_label'         => 'Enemy forces override (-1 to inherit)',
     'admin_enemy_enemy_forces_override_teeming_label' => 'Enemy forces override teeming (-1 to inherit)',
 
+    // Brushline
+    'brushline_color_label'                           => 'Color',
+    'brushline_weight_label'                          => 'Weight',
+
+    // Path
+    'path_color_label'                                => 'Color',
+    'path_weight_label'                               => 'Weight',
+
     // Dungeonroute table
     'actions_label'                                   => 'Actions',
     'add_to_team_label'                               => 'Add to team...',

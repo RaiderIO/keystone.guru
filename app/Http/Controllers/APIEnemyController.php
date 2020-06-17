@@ -128,7 +128,7 @@ class APIEnemyController extends Controller
     {
         try {
             $enemy->delete();
-            $result = ['result' => 'success'];
+            $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
