@@ -55,9 +55,10 @@ class DungeonFloorSwitchMarker extends MapObject {
 
         this.label = 'DungeonFloorSwitchMarker';
     }
-
-
-    // To be overridden by any implementing classes
+    
+    /**
+     * @inheritDoc
+     */
     onLayerInit() {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
         super.onLayerInit();

@@ -42,7 +42,6 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
 
         let dungeonFloorSwitchMarker = this.createNew(layer);
         dungeonFloorSwitchMarker.id = remoteMapObject.id;
-        dungeonFloorSwitchMarker.direction = remoteMapObject.direction;
         dungeonFloorSwitchMarker.floor_id = remoteMapObject.floor_id;
         dungeonFloorSwitchMarker.target_floor_id = remoteMapObject.target_floor_id;
 

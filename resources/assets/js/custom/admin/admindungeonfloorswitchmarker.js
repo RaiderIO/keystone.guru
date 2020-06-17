@@ -14,26 +14,22 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         this.target_floor_id = -1;
     }
 
-    onLayerInit() {
-        // do not call super; we don't want an on-click to redirect us to the target floor
-        // super.onLayerInit();
+    /**
+     * @inheritDoc
+     */
+    _getAttributes(force = false) {
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
         let self = this;
-
-        // Remove template so our
-        let template = Handlebars.templates['map_dungeon_floor_switch_template'];
-
-        let data = $.extend({}, getHandlebarsDefaultVariables(), {
-            floors: []
-        });
 
         // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
         let currentFloorId = getState().getCurrentFloor().id;
         let dungeonData = getState().getDungeonData();
+        let selectFloors = [];
         for (let i in dungeonData.floors) {
-            if( dungeonData.floors.hasOwnProperty(i) ){
+            if (dungeonData.floors.hasOwnProperty(i)) {
                 let floor = dungeonData.floors[i];
                 if (floor.id !== currentFloorId) {
-                    data.floors.push({
+                    selectFloors.push({
                         id: floor.id,
                         name: floor.name,
                     });
@@ -41,92 +37,60 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
             }
         }
 
-        let customOptions = {
-            'maxWidth': '400',
-            'minWidth': '300',
-            'className': 'popupCustom'
-        };
-
-        // Apply the popup
-        this.layer.unbindPopup();
-        this.layer.bindPopup(template(data), customOptions);
-
-        let fn = function () {
-            $("#dungeon_floor_switch_edit_popup_target_floor").val(self.target_floor_id);
-
-            // Refresh all select pickers so they work again
-            refreshSelectPickers();
-
-            let $submitBtn = $("#dungeon_floor_switch_edit_popup_submit");
-            $submitBtn.unbind('click');
-            $submitBtn.bind('click', function () {
-                self.target_floor_id = $("#dungeon_floor_switch_edit_popup_target_floor").val();
-
-                self.save();
-            });
-        };
-
-        this.layer.off('popupopen');
-        this.layer.on('popupopen', fn);
-    }
-
-    edit() {
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
-        this.save();
-    }
-
-    save() {
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
-        let self = this;
-
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/dungeonfloorswitchmarker',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                floor_id: getState().getCurrentFloor().id,
-                target_floor_id: self.target_floor_id,
-                lat: self.layer.getLatLng().lat,
-                lng: self.layer.getLatLng().lng
-            },
-            success: function (json) {
-                self.id = json.id;
-                self.setSynced(true);
-                self.layer.closePopup();
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-
-                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
-            }
+        return $.extend(super._getAttributes(force), {
+            floor_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: getState().getCurrentFloor().id
+            }),
+            target_floor_id: new Attribute({
+                type: 'select',
+                values: selectFloors,
+                default: -1
+            }),
+            lat: new Attribute({
+                type: 'float',
+                edit: false,
+                getter: function () {
+                    return self.layer.getLatLng().lat;
+                }
+            }),
+            lng: new Attribute({
+                type: 'float',
+                edit: false,
+                getter: function () {
+                    return self.layer.getLatLng().lng;
+                }
+            })
         });
     }
 
-    delete() {
-        let self = this;
-        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this was not an AdminDungeonFloorSwitchMarker', this);
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/dungeonfloorswitchmarker/' + self.id,
-            dataType: 'json',
-            data: {
-                _method: 'DELETE'
-            },
-            success: function (json) {
-                self.localDelete();
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                self.layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.unsaved,
-                    color: c.map.admin.mapobject.colors.unsavedBorder
+    /**
+     * @inheritDoc
+     */
+    onLayerInit() {
+        console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this is not a AdminDungeonFloorSwitchMarker', this);
+        super.onLayerInit();
+
+        this.layer.off('click');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    setSynced(value) {
+        super.setSynced(value);
+        console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
+
+        // If we've fully loaded this marker
+        if (this.layer !== 'undefined') {
+            let targetFloor = this.map.getFloorById(this.target_floor_id);
+
+            if (targetFloor !== false) {
+                this.layer.bindTooltip(targetFloor.name, {
+                    direction: 'top'
                 });
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-
-                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
             }
-        });
+        }
     }
 }

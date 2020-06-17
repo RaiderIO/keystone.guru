@@ -552,6 +552,9 @@ class MapObject extends Signalable {
         this.synced = value;
     }
 
+    /**
+     * Called when the layer should be initialized.
+     */
     onLayerInit() {
         let self = this;
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
