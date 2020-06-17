@@ -292,7 +292,7 @@
         "seasonal_index": 0,
         "teeming": null,
         "faction": "any",
-        "enemy_forces_override": -1,
+        "enemy_forces_override": 7,
         "lat": -167,
         "lng": 95.375,
         "npc": {
@@ -307,7 +307,7 @@
         "seasonal_index": 1,
         "teeming": null,
         "faction": "any",
-        "enemy_forces_override": -1,
+        "enemy_forces_override": 7,
         "lat": -166.8125,
         "lng": 100.125,
         "npc": {
