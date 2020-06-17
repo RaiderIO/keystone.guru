@@ -94,7 +94,7 @@ let scripts = [
     'resources/assets/js/custom/signalable.js',
 
     // Map object groups
-    'resources/assets/js/custom/mapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/mapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
@@ -111,19 +111,21 @@ let scripts = [
     'resources/assets/js/custom/statemanager.js',
     'resources/assets/js/custom/echo.js',
     'resources/assets/js/custom/dungeonmap.js',
-    'resources/assets/js/custom/mapobject.js',
-    'resources/assets/js/custom/polyline.js',
-
-    'resources/assets/js/custom/enemy.js',
-    'resources/assets/js/custom/enemypatrol.js',
-    'resources/assets/js/custom/enemypack.js',
-    'resources/assets/js/custom/path.js',
-    'resources/assets/js/custom/killzone.js',
-    'resources/assets/js/custom/mapicon.js',
-    'resources/assets/js/custom/mapicontype.js',
-    'resources/assets/js/custom/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/hotkeys.js',
-    'resources/assets/js/custom/brushline.js',
+
+    // Models
+    'resources/assets/js/custom/models/attribute.js',
+    'resources/assets/js/custom/models/mapobject.js',
+    'resources/assets/js/custom/models/polyline.js',
+    'resources/assets/js/custom/models/enemy.js',
+    'resources/assets/js/custom/models/enemypatrol.js',
+    'resources/assets/js/custom/models/enemypack.js',
+    'resources/assets/js/custom/models/path.js',
+    'resources/assets/js/custom/models/killzone.js',
+    'resources/assets/js/custom/models/mapicon.js',
+    'resources/assets/js/custom/models/mapicontype.js',
+    'resources/assets/js/custom/models/dungeonfloorswitchmarker.js',
+    'resources/assets/js/custom/models/brushline.js',
 
     'resources/assets/js/custom/mapstate/mapstate.js',
     'resources/assets/js/custom/mapstate/editmapstate.js',
@@ -152,7 +154,7 @@ let scripts = [
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierteeming.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifiertruesight.js',
 
-    'resources/assets/js/custom/mapcontrol.js',
+    'resources/assets/js/custom/mapcontrols/mapcontrol.js',
     'resources/assets/js/custom/mapcontrols/addisplaycontrols.js',
     'resources/assets/js/custom/mapcontrols/echocontrols.js',
     'resources/assets/js/custom/mapcontrols/drawcontrols.js',

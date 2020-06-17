@@ -274,24 +274,27 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         // Must be an admin to perform these actions
         Route::group(['middleware' => ['auth', 'role:admin']], function ()
         {
-            Route::post('/enemy', 'APIEnemyController@store');
-            Route::delete('/enemy/{enemy}', 'APIEnemyController@delete');
+            Route::group(['prefix' => 'admin'], function ()
+            {
+                Route::post('/enemy', 'APIEnemyController@store');
+                Route::delete('/enemy/{enemy}', 'APIEnemyController@delete');
 
-            Route::post('/enemypack', 'APIEnemyPackController@store');
-            Route::delete('/enemypack/{enemypack}', 'APIEnemyPackController@delete');
+                Route::post('/enemypack', 'APIEnemyPackController@store');
+                Route::delete('/enemypack/{enemypack}', 'APIEnemyPackController@delete');
 
-            Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
-            Route::delete('/enemypatrol/{enemypatrol}', 'APIEnemyPatrolController@delete');
+                Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
+                Route::delete('/enemypatrol/{enemypatrol}', 'APIEnemyPatrolController@delete');
 
-            Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
-            Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', 'APIDungeonFloorSwitchMarkerController@delete');
+                Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
+                Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', 'APIDungeonFloorSwitchMarkerController@delete');
+
+                Route::post('/mapicon', 'APIMapIconController@adminStore');
+                Route::delete('/mapicon/{mapicon}', 'APIMapIconController@adminDelete');
+            });
 
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
 
             Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
-
-            Route::post('/mapicon', 'APIMapIconController@adminStore');
-            Route::delete('/mapicon/{mapicon}', 'APIMapIconController@adminDelete');
         });
     });
 

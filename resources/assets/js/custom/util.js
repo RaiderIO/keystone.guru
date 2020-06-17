@@ -37,6 +37,16 @@ function getHandlebarsDefaultVariables() {
 }
 
 /**
+ *
+ * @param key {string}
+ * @returns {string}
+ */
+function toSnakeCase(key) {
+   let result = key.replace( /([A-Z])/g, " $1" );
+   return result.split(' ').join('_').toLowerCase().substring(1);
+}
+
+/**
  * Checks if a given hex color is 'dark' or not.
  * @param hex
  * @returns {boolean}
@@ -146,4 +156,18 @@ function pickHexFromHandlers(handlers, weight) {
     }
 
     return result;
+}
+
+
+/**
+ * Helper functions to help debug the site.
+ */
+function getEnemy(id){
+    let enemyMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+    return enemyMapObjectGroup.findMapObjectById(id);
+}
+
+function getKillZone(id){
+    let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+    return killZoneMapObjectGroup.findMapObjectById(id);
 }

@@ -62,6 +62,107 @@ class Enemy extends MapObject {
         this.register('synced', this, this._synced.bind(this));
     }
 
+    /**
+     * @returns {object}
+     * @protected
+     */
+    _getAttributes() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        let attributes = super._getAttributes();
+
+        let self = this;
+        let mapIconTypes = getState().getMapIconTypes();
+        let unknownMapIcon = getState().getUnknownMapIcon();
+
+        let editableMapIconTypes = [];
+        for (let i in mapIconTypes) {
+            // Only editable types!
+            if (mapIconTypes.hasOwnProperty(i)) {
+                let mapIconType = mapIconTypes[i];
+                if (mapIconType.isEditable() &&
+                    // Skip unknown map icons, that should be a one time state when placing the icon, not a selectable state
+                    mapIconType.id !== unknownMapIcon.id) {
+                    // Generate html if necessary
+                    if (typeof mapIconType.html === 'undefined') {
+                        let template = Handlebars.templates['map_map_icon_select_option_template'];
+
+                        // Direct assign to the object that is in the array so we're sure this change sticks for others
+                        mapIconTypes[i].html = template(mapIconType);
+                    }
+
+                    editableMapIconTypes.push(mapIconType);
+                }
+            }
+        }
+
+        let selectNpcs = [];
+        let npcs = this.map.options.npcs;
+        for (let index in npcs) {
+            if (npcs.hasOwnProperty(index)) {
+                let npc = npcs[index];
+                selectNpcs.push({
+                    id: npc.id,
+                    name: npc.name + ' (' + npc.id + ')'
+                });
+            }
+        }
+
+        return $.extend(attributes, {
+            enemy_pack_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: -1
+            }),
+            npc_id: new Attribute({
+                type: 'select',
+                admin: true,
+                values: selectNpcs,
+                default: -1
+            }),
+            floor_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: -1
+            }),
+            mdt_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: -1
+            }),
+            seasonal_index: new Attribute({
+                type: 'int',
+                admin: true,
+                default: null,
+                setter: function(value) {
+                    // NaN check
+                    if( value === '' || value !== value ){
+                        value = null;
+                    }
+                    self.seasonal_index = value;
+                }
+            }),
+            enemy_forces_override: new Attribute({
+                type: 'int',
+                admin: true,
+                default: -1
+            }),
+            lat: new Attribute({
+                type: 'float',
+                edit: false,
+                getter: function () {
+                    return self.layer.getLatLng().lat;
+                }
+            }),
+            lng: new Attribute({
+                type: 'float',
+                edit: false,
+                getter: function () {
+                    return self.layer.getLatLng().lng;
+                }
+            })
+        });
+    }
+
     _getPercentageString(enemyForces) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         // Do some fuckery to round to two decimal places

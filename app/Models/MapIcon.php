@@ -28,14 +28,6 @@ class MapIcon extends Model
 
     protected $with = ['mapicontype'];
 
-    protected $appends = ['has_dungeon_route'];
-
-
-    public function getEditableAttribute()
-    {
-        return $this->dungeon_route_id > 0;
-    }
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

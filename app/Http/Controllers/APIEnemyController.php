@@ -70,7 +70,7 @@ class APIEnemyController extends Controller
         $enemy->lng = $request->get('lng');
 
         if (!$enemy->save()) {
-            throw new \Exception("Unable to save enemy!");
+            throw new \Exception('Unable to save enemy!');
         }
 
         $result = ['id' => $enemy->id];
