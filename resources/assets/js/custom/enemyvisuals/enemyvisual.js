@@ -211,6 +211,8 @@ class EnemyVisual extends Signalable {
                     open: function () {
                         self.enemy.unbindTooltip();
                         self.signal('circlemenu:open');
+
+                        self.map.setMapState(new RaidMarkerSelectMapState(self.map, self.enemy));
                     },
                     close: function () {
                         // Unassigned when opened
@@ -218,7 +220,6 @@ class EnemyVisual extends Signalable {
 
                         // Delete ourselves again
                         self._cleanupCircleMenu();
-                        self.signal('circlemenu:close');
                     },
                     select: function (evt, index) {
                         // Unassigned when opened
@@ -229,7 +230,6 @@ class EnemyVisual extends Signalable {
 
                         // Delete ourselves again
                         self._cleanupCircleMenu();
-                        self.signal('circlemenu:close');
                     }
                 });
 
@@ -273,6 +273,10 @@ class EnemyVisual extends Signalable {
             // Re-bind this function
             $enemyDiv.unbind('contextmenu');
             $enemyDiv.bind('contextmenu', self._visualClicked.bind(self));
+
+            // Only stop the map state at this point
+            self.map.setMapState(null);
+            self.signal('circlemenu:close');
         });
     }
 

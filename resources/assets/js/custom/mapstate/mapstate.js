@@ -20,6 +20,9 @@ class MapState extends Signalable {
         this._stopped = true;
     }
 
+    isModal() {
+        return false;
+    }
 
     isStarted() {
         return this._started;
