@@ -65,7 +65,6 @@ class ProfileTableView extends TableView {
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
                 // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'enemy_forces', width: '10%'},
-                {name: 'published', width: '10%'},
                 {name: 'actions', width: '10%', clickable: false},
             ],
             biglist: [
@@ -73,7 +72,6 @@ class ProfileTableView extends TableView {
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
                 {name: 'features', width: '25%'},
-                {name: 'published', width: '5%'},
                 {name: 'actions', width: '7%', clickable: false},
             ]
         };
@@ -146,7 +144,6 @@ class TeamTableView extends TableView {
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
                 // {name: 'setup', width: '15%'},
                 {name: 'enemy_forces', width: '10%'},
-                {name: 'published', width: '10%'},
                 {name: 'author', width: '10%'},
             ],
             biglist: [

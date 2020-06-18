@@ -129,6 +129,8 @@ return [
     'route_clone_successful'         => 'Route cloned successfully',
     'route_publish_successful'       => 'Route published',
     'route_unpublish_successful'     => 'Route unpublished',
+    'route_published'                => 'This route is published',
+    'route_unpublished'              => 'This route is unpublished',
 
     // Map
     'intro_1'                        => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
