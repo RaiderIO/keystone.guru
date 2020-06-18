@@ -337,12 +337,14 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     // If not in our array, add it
                     if (!npcs.hasOwnProperty(enemy.npc.id)) {
                         npcs[enemy.npc.id] = {
-                            'npc': enemy.npc,
-                            'count': 0
+                            npc: enemy.npc,
+                            count: 0,
+                            enemy_forces: 0
                         };
                     }
 
                     npcs[enemy.npc.id].count++;
+                    npcs[enemy.npc.id].enemy_forces += enemy.getEnemyForces();
                 }
             }
         }
@@ -356,7 +358,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 let template = Handlebars.templates['map_killzonessidebar_killzone_row_enemy_row_template'];
 
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    'enemy_forces': killZone.getEnemyForces(),
+                    'enemy_forces': obj.enemy_forces,
                     'count': obj.count,
                     'name': obj.npc.name,
                     'dangerous': obj.npc.dangerous === 1

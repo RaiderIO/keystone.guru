@@ -175,7 +175,7 @@ class MapObject extends Signalable {
 
         let self = this;
 
-        if (this.layer !== null && this.isEditable()) {
+        if (this.layer !== null && this.map.options.edit && this.isEditable()) {
             this.layer.unbindPopup();
             this.layer.bindPopup(this._getPopupHtml(), {
                 'maxWidth': '400',
