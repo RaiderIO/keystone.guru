@@ -25,6 +25,7 @@ use App\Models\Path;
 use App\Models\Polyline;
 use App\Service\Season\SeasonService;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -38,14 +39,14 @@ use Lua;
  */
 class ImportString
 {
-    /** @var string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
-    private $_encodedString;
+    /** @var $_encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
+    private string $_encodedString;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
-    private $_dungeonRoute;
+    private DungeonRoute $_dungeonRoute;
 
     /** @var SeasonService Used for grabbing info about the current M+ season. */
-    private $_seasonService;
+    private SeasonService $_seasonService;
 
 
     function __construct(SeasonService $seasonService)
@@ -93,12 +94,25 @@ class ImportString
             if (!empty($rifts)) {
                 // Loaded for the comment import
                 $floorIds = $dungeonRoute->dungeon->floors->pluck('id');
-                $npcIdToMapIconMapping = [
-                    161124 => MapIcon::where('map_icon_type_id', 17)->whereIn('floor_id', $floorIds)->firstOrFail(), // Urg'roth, Brutal spire
-                    161241 => MapIcon::where('map_icon_type_id', 18)->whereIn('floor_id', $floorIds)->firstOrFail(), // Cursed spire
+                $seasonalIndexWhere = function (Builder $query) use ($dungeonRoute)
+                {
+                    $query->whereNull('seasonal_index')
+                        ->orWhere('seasonal_index', $dungeonRoute->seasonal_index);
+                };
 
-                    161244 => MapIcon::where('map_icon_type_id', 19)->whereIn('floor_id', $floorIds)->firstOrFail(), // Blood of the Corruptor, Defiled spire
-                    161243 => MapIcon::where('map_icon_type_id', 20)->whereIn('floor_id', $floorIds)->firstOrFail(), // Samh'rek, Entropic spire
+                $npcIdToMapIconMapping = [
+                    161124 => MapIcon::where('map_icon_type_id', 17)
+                        ->whereIn('floor_id', $floorIds) // Urg'roth, Brutal spire
+                        ->where($seasonalIndexWhere)->firstOrFail(),
+                    161241 => MapIcon::where('map_icon_type_id', 18)
+                        ->whereIn('floor_id', $floorIds) // Cursed spire
+                        ->where($seasonalIndexWhere)->firstOrFail(),
+                    161244 => MapIcon::where('map_icon_type_id', 19)
+                        ->whereIn('floor_id', $floorIds) // Blood of the Corruptor, Defiled spire
+                        ->where($seasonalIndexWhere)->firstOrFail(),
+                    161243 => MapIcon::where('map_icon_type_id', 20)
+                        ->whereIn('floor_id', $floorIds) // Samh'rek, Entropic spire
+                        ->where($seasonalIndexWhere)->firstOrFail(),
                 ];
 
                 $gatewayIconType = MapIconType::where('key', 'gateway')->firstOrFail();
