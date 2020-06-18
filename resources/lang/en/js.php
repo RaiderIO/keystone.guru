@@ -205,7 +205,16 @@ return [
     'map_icon_comment_label'                                  => 'Comment',
     'map_icon_map_icon_type_id_select_default_label'          => 'Select icon',
 
-    // Enemy
+    // Admin map icon
+    'admin_map_icon_faction_label'                            => 'Faction',
+    'admin_map_icon_teeming_label'                            => 'Teeming',
+    'admin_map_icon_permanent_tooltip_label'                  => 'Permanent tooltip',
+    'admin_map_icon_map_icon_type_id_label'                   => 'Icon',
+    'admin_map_icon_comment_label'                            => 'Comment',
+    'admin_map_icon_map_icon_type_id_select_default_label'    => 'Select icon',
+    'admin_map_icon_seasonal_index_label'                     => 'Seasonal index (empty to unset)',
+
+    // Admin enemy
     'admin_enemy_faction_label'                               => 'Faction',
     'admin_enemy_teeming_label'                               => 'Teeming',
     'admin_enemy_npc_id_label'                                => 'Npc',

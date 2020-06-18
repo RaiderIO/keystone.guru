@@ -49,9 +49,9 @@
         "teeming": null,
         "faction": "any",
         "polyline": {
-            "color": "#E25D5D",
-            "weight": 2,
-            "vertices_json": "[{\"lat\":-117.5,\"lng\":264.5},{\"lat\":-101.5,\"lng\":264.62}]"
+            "color": "#e25d5d",
+            "weight": 4,
+            "vertices_json": "[{\"lat\":\"-117.5\",\"lng\":\"264.5\"},{\"lat\":\"-101.5\",\"lng\":\"264.62\"}]"
         }
     },
     {

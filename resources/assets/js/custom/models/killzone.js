@@ -381,8 +381,8 @@ class KillZone extends MapObject {
         for (let i = 0; i < this.enemies.length; i++) {
             let enemyId = this.enemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
-            if (enemy !== null && enemy.npc !== null) {
-                result += enemy.npc.enemy_forces;
+            if (enemy !== null) {
+                result += enemy.getEnemyForces();
             }
         }
 

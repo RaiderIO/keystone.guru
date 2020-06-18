@@ -31,18 +31,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             }
 
             let enemy = this.createNew(layer);
-            enemy.id = remoteMapObject.id;
-            enemy.enemy_pack_id = remoteMapObject.enemy_pack_id;
-            enemy.floor_id = remoteMapObject.floor_id;
-            enemy.teeming = remoteMapObject.teeming;
-            enemy.faction = remoteMapObject.faction;
-            enemy.enemy_forces_override = remoteMapObject.enemy_forces_override;
-            enemy.seasonal_index = remoteMapObject.seasonal_index;
-            enemy.raid_marker_name = remoteMapObject.raid_marker_name;
-            enemy.dangerous = remoteMapObject.dangerous === 1;
-            // MDT id is always set
-            enemy.mdt_id = remoteMapObject.mdt_id;
-            enemy.is_mdt = false;
+            enemy.loadRemoteMapObject(remoteMapObject);
 
             if (remoteMapObject.hasOwnProperty('is_mdt')) {
                 // Exception for MDT enemies
@@ -57,11 +46,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             if (!(this.manager.map instanceof AdminDungeonMap) && (enemy.seasonal_index !== null && getState().getSeasonalIndex() !== enemy.seasonal_index)) {
                 // Hide this enemy by default
                 enemy.setDefaultVisible(false);
-            }
-
-            // If actually set..
-            if (remoteMapObject.hasOwnProperty('raid_marker_name') && remoteMapObject.raid_marker_name !== null) {
-                enemy.setRaidMarkerName(remoteMapObject.raid_marker_name);
             }
 
             // Do this last

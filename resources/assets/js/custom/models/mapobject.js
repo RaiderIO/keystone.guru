@@ -418,11 +418,18 @@ class MapObject extends Signalable {
             if (attributes.hasOwnProperty(property)) {
                 let attribute = attributes[property];
                 if (remoteMapObject.hasOwnProperty(property)) {
+                    let value = remoteMapObject[property];
+                    // Do some preprocessing if necessary
+                    switch (attribute.type) {
+                        case 'bool':
+                            value = value === 1;
+                            break;
+                    }
                     // Assign the attributes from the object
                     if (typeof attribute.setter === 'function') {
-                        attribute.setter(remoteMapObject[property]);
+                        attribute.setter(value);
                     } else {
-                        this[property] = remoteMapObject[property];
+                        this[property] = value;
                     }
                 } else {
                     // @TODO MapIcons don't have Teeming and Faction properties so this gets thrown a lot

@@ -356,7 +356,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 let template = Handlebars.templates['map_killzonessidebar_killzone_row_enemy_row_template'];
 
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    'enemy_forces': obj.count * obj.npc.enemy_forces,
+                    'enemy_forces': killZone.getEnemyForces(),
                     'count': obj.count,
                     'name': obj.npc.name,
                     'dangerous': obj.npc.dangerous === 1
