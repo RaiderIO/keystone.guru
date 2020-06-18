@@ -425,7 +425,8 @@ class MapObject extends Signalable {
                         this[property] = remoteMapObject[property];
                     }
                 } else {
-                    console.error(`Wanted to load attribute '${property}' from remoteMapObject but it didn't have this property!`);
+                    // @TODO MapIcons don't have Teeming and Faction properties so this gets thrown a lot
+                    // console.error(`Wanted to load attribute '${property}' from remoteMapObject but it didn't have this property!`);
                 }
             }
         }

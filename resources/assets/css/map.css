@@ -9,11 +9,9 @@ html, body, #map, #app, .wrapper {
     width: 100%;
 }
 
-/* css to customize Leaflet default styles  */
-.popupCustom .leaflet-popup-tip,
-.popupCustom .leaflet-popup-content-wrapper {
-    background: #e0e0e0;
-    color: #234c5e;
+#map.leaflet-container {
+    font: unset;
+    font-size: 12px;
 }
 
 .leaflet-tooltip-killzone-index {

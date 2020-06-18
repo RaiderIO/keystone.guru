@@ -50,6 +50,22 @@ class EnemyPatrol extends Polyline {
         });
     }
 
+    /**
+     * Users cannot delete this. AdminEnemyPatrols may be deleted instead.
+     * @returns {boolean}
+     */
+    isDeletable() {
+        return false;
+    }
+
+    /**
+     * Users cannot edit this. AdminEnemyPatrols may be edited instead.
+     * @returns {boolean}
+     */
+    isEditable() {
+        return false;
+    }
+
     toString() {
         return 'Enemy patrol-' + this.id;
     }

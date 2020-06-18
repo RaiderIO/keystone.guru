@@ -8,6 +8,14 @@ class AdminEnemyPatrol extends EnemyPatrol {
         this.enemy_id = -1;
     }
 
+    /**
+     * Users cannot edit this. AdminEnemyPatrols may be edited instead.
+     * @returns {boolean}
+     */
+    isEditable() {
+        return true;
+    }
+
     _getRouteSuffix() {
         return 'enemypatrol';
     }
