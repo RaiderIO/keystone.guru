@@ -56,6 +56,14 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
 
+    // Edit your own dungeon routes
+    Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')->name('dungeonroute.edit');
+    Route::get('{dungeonroute}/edit/{floor}', 'DungeonRouteController@editfloor')->name('dungeonroute.edit.floor');
+    // Submit a patch for your own dungeon route
+    Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')->name('dungeonroute.update');
+    // Claiming a route that was made by /try functionality
+    Route::get('{dungeonroute}/claim', 'DungeonRouteController@claim')->name('dungeonroute.claim');
+
     Route::post('new/mdtimport', 'MDTImportController@import')->name('dungeonroute.new.mdtimport');
 
     // ['auth', 'role:admin|user']
@@ -84,11 +92,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::get('edit/{dungeonroute}', 'DungeonRouteController@editLegacy');
         Route::patch('edit/{dungeonroute}', 'DungeonRouteController@updateLegacy');
 
-        // Edit your own dungeon routes
-        Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')->name('dungeonroute.edit');
-        Route::get('{dungeonroute}/edit/{floor}', 'DungeonRouteController@editfloor')->name('dungeonroute.edit.floor');
-        // Submit a patch for your own dungeon route
-        Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')->name('dungeonroute.update');
         // Clone a route
         Route::get('{dungeonroute}/clone', 'DungeonRouteController@clone')->name('dungeonroute.clone');
 
