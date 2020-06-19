@@ -625,16 +625,17 @@ class DungeonsSeeder extends Seeder
                 'expansion_id' => $bfa->id,
                 'enemy_forces_required' => 160,
                 'enemy_forces_required_teeming' => 192,
-                'active' => false,
+                'active' => true,
                 'floors' => [
                     'The Robodrome' => [
                         'index' => 1
                     ],
+                    // Floor 2 is the waste pipes and don't contain any mobs
                     'The Under Junk' => [
-                        'index' => 2
+                        'index' => 3
                     ],
                     'Mechagon City' => [
-                        'index' => 3
+                        'index' => 4
                     ],
                 ],
                 'floor_couplings' => [
