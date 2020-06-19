@@ -104,7 +104,8 @@ class Enemy extends MapObject {
                 type: 'select',
                 admin: true,
                 values: selectNpcs,
-                default: -1
+                default: -1,
+                live_search: true
             }),
             floor_id: new Attribute({
                 type: 'int',

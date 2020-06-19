@@ -35,10 +35,7 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
             let layer = L.polyline(points);
 
             let enemyPatrol = this.createNew(layer);
-            enemyPatrol.id = remoteMapObject.id;
-            enemyPatrol.enemy_id = remoteMapObject.enemy_id;
-            enemyPatrol.teeming = remoteMapObject.teeming;
-            enemyPatrol.faction = remoteMapObject.faction;
+            enemyPatrol.loadRemoteMapObject(remoteMapObject);
 
             // We just downloaded the enemy patrol, it's synced alright!
             enemyPatrol.setSynced(true);

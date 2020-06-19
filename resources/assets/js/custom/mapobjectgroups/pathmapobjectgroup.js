@@ -55,8 +55,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         }
 
         path.id = remoteMapObject.id;
-        path.setColor(polyline.color);
-        path.setWeight(polyline.weight);
+        path.loadRemoteMapObject(remoteMapObject.polyline);
 
         // We just downloaded the path, it's synced alright!
         path.setSynced(true);

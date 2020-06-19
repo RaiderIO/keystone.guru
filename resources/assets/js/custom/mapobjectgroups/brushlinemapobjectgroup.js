@@ -56,10 +56,8 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
             brushline.layer.setLatLngs(points);
         }
 
-        // Now that we have the layer, create the brushline
         brushline.id = remoteMapObject.id;
-        brushline.setColor(polyline.color);
-        brushline.setWeight(polyline.weight);
+        brushline.loadRemoteMapObject(remoteMapObject.polyline);
 
         // We just downloaded the brushline, make it synced
         brushline.setSynced(true);

@@ -228,9 +228,9 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let published = '';
                     if (row.published === 1) {
-                        published = `<i class="fa fa-plane-departure text-success" data-toggle="tooltip" title="${lang.get('messages.route_published')}"></i>`
+                        published = `<i class="fa fa-plane-departure text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_route_published')}"></i>`
                     } else {
-                        published = `<i class="fa fa-plane-arrival text-warning" data-toggle="tooltip" title="${lang.get('messages.route_unpublished')}"></i>`
+                        published = `<i class="fa fa-plane-arrival text-warning" data-toggle="tooltip" title="${lang.get('messages.route_table_route_unpublished')}"></i>`
                     }
                     return `${published} ${row.title}`;
                 }

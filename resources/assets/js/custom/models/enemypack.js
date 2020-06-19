@@ -17,12 +17,42 @@ class EnemyPack extends MapObject {
     constructor(map, layer) {
         super(map, layer);
 
-        let self = this;
-
         this.label = 'Enemy pack';
         this.setColors(c.map.enemypack.colors);
 
         this.color = null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getAttributes(force) {
+        console.assert(this instanceof EnemyPack, 'this was not an EnemyPack', this);
+
+        if (this._cachedAttributes !== null && !force) {
+            return this._cachedAttributes;
+        }
+
+        let self = this;
+
+        return $.extend(super._getAttributes(force), {
+            floor_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: getState().getCurrentFloor().id
+            }),
+            label: new Attribute({
+                type: 'text',
+                default: 'Enemy pack'
+            }),
+            vertices: new Attribute({
+                type: 'array',
+                edit: false,
+                getter: function(){
+                    return self.getVertices();
+                }
+            })
+        });
     }
 
     /**
@@ -64,7 +94,7 @@ class EnemyPack extends MapObject {
         let coordinates = this.layer.toGeoJSON().geometry.coordinates[0];
         let result = [];
         for (let i = 0; i < coordinates.length - 1; i++) {
-            result.push({lat: coordinates[i][0], lng: coordinates[i][1]});
+            result.push({lat: coordinates[i][1], lng: coordinates[i][0]});
         }
         return result;
     }

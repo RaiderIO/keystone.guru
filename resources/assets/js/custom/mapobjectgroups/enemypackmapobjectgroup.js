@@ -63,8 +63,7 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
             if (layer !== null) {
                 let enemyPack = this.createNew(layer);
                 enemyPack.id = remoteMapObject.id;
-                enemyPack.teeming = remoteMapObject.teeming;
-                enemyPack.faction = remoteMapObject.faction;
+                enemyPack.loadRemoteMapObject(remoteMapObject);
 
                 // We just downloaded the enemy pack, it's synced alright!
                 enemyPack.setSynced(true);

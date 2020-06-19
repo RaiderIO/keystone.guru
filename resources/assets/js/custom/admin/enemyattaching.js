@@ -86,31 +86,28 @@ class EnemyAttaching {
         // When an enemy pack is added..
         enemyPackMapObjectGroup.register('object:add', this, function (event) {
             // Gather some data
-            let enemyPack = event.data.object;
+            let newEnemyPack = event.data.object;
+            let enemyPackPolygon = newEnemyPack.layer;
 
-            enemyPack.register('synced', enemyPack, function (syncedEvent) {
-                let newEnemyPack = syncedEvent.context;
-                let enemyPackPolygon = newEnemyPack.layer;
-                // For each enemy we know of
-                $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+            // For each enemy we know of
+            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
 
-                    // Check if it falls in the layer
-                    if( enemy.layer !== null ) {
-                        let latLng = enemy.layer.getLatLng();
-                        if (gju.pointInPolygon({
-                            type: 'Point',
-                            coordinates: [latLng.lng, latLng.lat]
-                        }, enemyPackPolygon.toGeoJSON().geometry) && enemyMapObjectGroup.isMapObjectVisible(enemy)) {
-                            // Only if something changed; we don't want to make unnecessary requests
-                            if (enemy.enemy_pack_id !== newEnemyPack.id && !enemy.is_mdt) {
-                                // Bind the enemies
-                                enemy.enemy_pack_id = newEnemyPack.id;
-                                // Save all enemies so their pack connection is never broken
-                                enemy.save();
-                            }
+                // Check if it falls in the layer
+                if (enemy.layer !== null) {
+                    let latLng = enemy.layer.getLatLng();
+                    if (gju.pointInPolygon({
+                        type: 'Point',
+                        coordinates: [latLng.lng, latLng.lat]
+                    }, enemyPackPolygon.toGeoJSON().geometry) && enemyMapObjectGroup.isMapObjectVisible(enemy)) {
+                        // Only if something changed; we don't want to make unnecessary requests
+                        if (enemy.enemy_pack_id !== newEnemyPack.id && !enemy.is_mdt) {
+                            // Bind the enemies
+                            enemy.enemy_pack_id = newEnemyPack.id;
+                            // Save all enemies so their pack connection is never broken
+                            enemy.save();
                         }
                     }
-                });
+                }
             });
         });
     }

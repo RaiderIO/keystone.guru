@@ -133,11 +133,7 @@ class DungeonMap extends Signalable {
 
                 // No longer synced
                 mapObject.setSynced(false);
-                if (typeof mapObject.edit === 'function') {
-                    mapObject.edit();
-                } else {
-                    console.error(mapObject, ' does not have an edit() function!');
-                }
+                mapObject.save();
             });
         });
 
