@@ -5,6 +5,7 @@ const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
 const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
+const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
@@ -15,6 +16,7 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
     MAP_OBJECT_GROUP_BRUSHLINE,
     MAP_OBJECT_GROUP_MAPICON,
+    // MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK is missing on purpose; it's an alias for MAPICON
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
     MAP_OBJECT_GROUP_KILLZONE
 ];
@@ -41,6 +43,7 @@ class MapObjectGroupManager extends Signalable {
      */
     _createMapObjectGroup(name) {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
+        console.assert(name !== MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK, 'unable to create map object group for ' + name, this);
 
         let result = null;
 
@@ -77,7 +80,10 @@ class MapObjectGroupManager extends Signalable {
 
         let result = [];
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
-            result.push(this.mapObjectGroups[i].name);
+            let names = this.mapObjectGroups[i].names;
+            for (let j = 0; j < names.length; j++) {
+                result.push(names[j]);
+            }
         }
 
         return result;
@@ -93,10 +99,13 @@ class MapObjectGroupManager extends Signalable {
 
         let result = false;
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
-            if (this.mapObjectGroups[i].name === name) {
+            if (this.mapObjectGroups[i].names.includes(name)) {
                 result = this.mapObjectGroups[i];
+                break;
             }
         }
+
+        console.assert(result !== false, 'Unable to find MapObjectGroup ' + name, this);
 
         return result;
     }

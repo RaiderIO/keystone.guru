@@ -29,8 +29,10 @@ class StateManager extends Signalable {
 
         // Bit of a hack? But for now best solution
         this.unknownMapIconId = 1;
+        this.awakenedObeliskGatewayMapIconId = 11;
         // The map icon as found using above ID once the list of map icons is known
         this.unknownMapIcon = null;
+        this.awakenedObeliskGatewayMapIcon = null;
     }
 
     /**
@@ -82,6 +84,10 @@ class StateManager extends Signalable {
             )
         }
         this.unknownMapIcon = this.getMapIconType(this.unknownMapIconId);
+        this.awakenedObeliskGatewayMapIcon = this.getMapIconType(this.awakenedObeliskGatewayMapIconId);
+
+        // Defined in mapicon.js, need to fix this somehow
+        initAwakenedObeliskGatewayIcon();
     }
 
     /**
@@ -437,10 +443,18 @@ class StateManager extends Signalable {
 
     /**
      * Gets the default map icon for initializing; when the map icon is unknown.
-     * @returns {null}
+     * @returns {MapIconType}
      */
-    getUnknownMapIcon() {
+    getUnknownMapIconType() {
         return this.unknownMapIcon;
+    }
+
+    /**
+     * Gets the map icon when clicking the obelisk to place a gateway.
+     * @returns {number}
+     */
+    getAwakenedObeliskGatewayMapIconType() {
+        return this.awakenedObeliskGatewayMapIcon;
     }
 
     /**

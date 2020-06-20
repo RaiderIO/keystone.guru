@@ -56,6 +56,13 @@ class Polyline extends MapObject {
     }
 
     /**
+     * @inheritDoc
+     */
+    isEditable(){
+        return !this.isLocal();
+    }
+
+    /**
      * Sets the color for the polyline.
      * @param color
      */

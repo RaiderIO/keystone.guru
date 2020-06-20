@@ -180,8 +180,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     getState().getDungeonMap().setMapState(
                         new AddKillZoneMapState(getState().getDungeonMap(), killZone)
                     );
-                    // Start drawing a killzone
-                    $('.leaflet-draw-draw-killzone')[0].click();
                 } else {
                     // @TODO This entire piece of code is hacky, should be done differently eventually
                     getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);

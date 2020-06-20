@@ -160,6 +160,10 @@ let c = {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
         },
+        mapicon: {
+            awakenedObeliskGatewayPolylineColor: '#80FF1A',
+            awakenedObeliskGatewayPolylineWeight: 3,
+        },
         placeholderColors: {},
         editsidebar: {
             pullGradient: {

@@ -2,6 +2,7 @@
  * @property id int
  * @property faction string
  * @property teeming string
+ * @property local bool
  */
 class MapObject extends Signalable {
 
@@ -27,6 +28,7 @@ class MapObject extends Signalable {
         this.id = 0;
         this.faction = 'any'; // sensible default
         this.teeming = null; // visible, hidden, null
+        this.local = false;
         this.label = 'default label';
         this.decorator = null;
 
@@ -444,6 +446,7 @@ class MapObject extends Signalable {
      */
     localDelete() {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
+
         this.signal('object:deleted');
     }
 
@@ -470,6 +473,22 @@ class MapObject extends Signalable {
      */
     isDeletable() {
         return true;
+    }
+
+    /**
+     * Local objects will never be synced to the server.
+     * @returns {boolean}
+     */
+    isLocal() {
+        return this.local;
+    }
+
+    /**
+     * Sets this map object to be local or not. Local objects will never be synchronized to the server.
+     * @param local bool True to sync to the server, false to never sync it.
+     */
+    setIsLocal(local) {
+        this.local = local;
     }
 
     /**
@@ -584,13 +603,17 @@ class MapObject extends Signalable {
     }
 
     /**
-     * Saves thiss map object to the server.
+     * Saves this map object to the server.
      */
     save() {
+        if (this.isLocal()) {
+            return;
+        }
+
         let self = this;
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
 
-        // Construct the
+        // Construct the data to send to the server
         let data = {};
         let mapObjectName = this._getSnakeCaseName();
         let attributes = this._getAttributes();
@@ -639,6 +662,10 @@ class MapObject extends Signalable {
     }
 
     delete() {
+        if (this.isLocal()) {
+            return;
+        }
+
         let self = this;
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
 

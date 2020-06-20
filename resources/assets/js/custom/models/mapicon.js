@@ -12,6 +12,8 @@ $(function () {
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
+
+    // L.Draw.ObeliskGatewayMapIcon is defined in init function down below!
 });
 
 /**
@@ -28,7 +30,7 @@ function getMapIconLeafletIcon(mapIconType, editModeEnabled) {
     } else {
         let template = Handlebars.templates['map_map_icon_visual_template'];
 
-        let handlebarsData = $.extend(mapIconType, {
+        let handlebarsData = $.extend({}, mapIconType, {
             selectedclass: (editModeEnabled ? ' leaflet-edit-marker-selected' : ''),
             width: mapIconType.width,
             height: mapIconType.height
@@ -66,6 +68,7 @@ let LeafletMapIconMarker = L.Marker.extend({
 /**
  * @property floor_id int
  * @property map_icon_type_id int
+ * @property linked_map_icon_id int
  * @property permanent_tooltip int
  * @property seasonal_index int
  * @property comment string
@@ -76,12 +79,12 @@ class MapIcon extends MapObject {
 
         let self = this;
 
-        this.map_icon_type = getState().getUnknownMapIcon();
+        this.map_icon_type = getState().getUnknownMapIconType();
+        this.linked_map_icon_polyline = null;
         this.label = 'MapIcon';
 
         this.setSynced(false);
         this.register('synced', this, this._synced.bind(this));
-        this.register('property:changed', this, this._propertyChanged.bind(this));
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
                 mapStateChangedEvent.data.newMapState instanceof EditMapState) {
@@ -102,7 +105,7 @@ class MapIcon extends MapObject {
 
         let self = this;
         let mapIconTypes = getState().getMapIconTypes();
-        let unknownMapIcon = getState().getUnknownMapIcon();
+        let unknownMapIcon = getState().getUnknownMapIconType();
 
         let editableMapIconTypes = [];
         for (let i in mapIconTypes) {
@@ -134,7 +137,14 @@ class MapIcon extends MapObject {
             map_icon_type_id: new Attribute({
                 type: 'select',
                 values: editableMapIconTypes,
-                default: -1
+                default: -1,
+                setter: this.setMapIconTypeId.bind(this)
+            }),
+            linked_map_icon_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: null,
+                setter: this.setLinkedMapIconId.bind(this)
             }),
             permanent_tooltip: new Attribute({
                 type: 'bool',
@@ -166,20 +176,6 @@ class MapIcon extends MapObject {
         });
     }
 
-    /**
-     * Called whenever a property is changed on this map icon.
-     * @param propertyChangedEvent
-     * @private
-     */
-    _propertyChanged(propertyChangedEvent) {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
-
-        // Refresh the map icon if it was changed
-        if (propertyChangedEvent.data.property === 'map_icon_type_id') {
-            this.setMapIconType(getState().getMapIconType(this.map_icon_type_id));
-        }
-    }
-
     _synced() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
@@ -203,11 +199,64 @@ class MapIcon extends MapObject {
         // this.onLayerInit();
     }
 
-    setMapIconType(mapIconType) {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
-        console.assert(mapIconType instanceof MapIconType, 'mapIconType is not a MapIconType', mapIconType);
+    localDelete() {
+        super.localDelete();
 
-        this.map_icon_type = mapIconType;
+        if (this.linked_map_icon_polyline !== null) {
+            this.linked_map_icon_polyline.localDelete();
+        }
+    }
+
+    setLinkedMapIconId(linkedMapIconId) {
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        this.linked_map_icon_id = linkedMapIconId;
+
+        // Delete what we had, always
+        if (this.linked_map_icon_polyline !== null) {
+            // This local brushline is a bit different, is not deleted through Leaflet.DRAW which will cause it to not be cleaned up properly
+            // The gist is, delete it from the drawn layers to get rid of it (it was already gone from editableLayers)
+
+            this.linked_map_icon_polyline.localDelete();
+            this.linked_map_icon_polyline = null;
+        }
+
+        // Rebuild if necessary
+        if (typeof this.linked_map_icon_id === 'number') {
+            let mapIconMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
+            let linkedMapIcon = mapIconMapObjectGroup.findMapObjectById(this.linked_map_icon_id);
+
+            console.assert(linkedMapIcon !== null, `Unable to find MapIcon for linked_map_icon_id ${this.linked_map_icon_id}`, this)
+
+            let brushlineMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
+            this.linked_map_icon_polyline = brushlineMapObjectGroup.createNewLocalBrushline([{
+                lat: linkedMapIcon.lat,
+                lng: linkedMapIcon.lng
+            }, {
+                lat: this.layer.getLatLng().lat,
+                lng: this.layer.getLatLng().lng
+            }]);
+        }
+    }
+
+    /**
+     * Sets the map icon type ID and refreshes the layer for it.
+     * @param mapIconTypeId
+     */
+    setMapIconTypeId(mapIconTypeId) {
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+        this.map_icon_type_id = mapIconTypeId;
+
+        // Set the icon and refresh the visual
+        this.map_icon_type = getState().getMapIconType(this.map_icon_type_id);
+        this._refreshVisual();
+    }
+
+    /**
+     * @returns {MapIconType}
+     */
+    getMapIconType() {
+        console.assert(this.map_icon_type instanceof MapIconType, 'mapIconType is not a MapIconType', this.map_icon_type);
+        return this.map_icon_type;
     }
 
     isEditable() {
@@ -255,6 +304,6 @@ class MapIcon extends MapObject {
         super.cleanup();
 
         this.map.unregister('map:mapstatechanged', this);
-        this.unregister('property:changed', this);
+        this.unregister('synced', this);
     }
 }

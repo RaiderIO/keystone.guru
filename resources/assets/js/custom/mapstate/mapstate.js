@@ -3,6 +3,7 @@ class MapState extends Signalable {
         super();
         console.assert(map instanceof DungeonMap, 'map is not a Map', map);
 
+        /** @type {DungeonMap} */
         this.map = map;
         this._started = false;
         this._stopped = false;

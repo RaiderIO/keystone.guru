@@ -16,7 +16,7 @@ class DungeonMap extends Signalable {
         }
 
         // Listen for floor changes
-        getState().register('floorid:changed', this, function(){
+        getState().register('floorid:changed', this, function () {
             self.refreshLeafletMap();
         });
 
@@ -56,6 +56,21 @@ class DungeonMap extends Signalable {
 
             mapObjectGroup.register('object:deleted', this, function (deletedEvent) {
                 let object = deletedEvent.data.object;
+                for (let index in self.mapObjects) {
+                    if (self.mapObjects.hasOwnProperty(index)) {
+                        let mapObject = self.mapObjects[index];
+                        if (mapObject === object) {
+                            // Remove it from the list of tracked map objects
+                            self.mapObjects.splice(index, 1);
+                        }
+                    }
+                }
+
+                if (object.layer !== null) {
+                    self.editableLayers.removeLayer(object.layer);
+                    self.drawnLayers.removeLayer(object.layer);
+                }
+
                 // Provide functionality for when an enemy gets clicked and we need to create a new killzone for it
                 if (object instanceof Enemy && !(self instanceof AdminDungeonMap)) {
                     object.unregister('enemy:clicked', self);
@@ -523,6 +538,7 @@ class DungeonMap extends Signalable {
     /**
      * Finds a map object by means of a Leaflet layer.
      * @param layer object The layer you want the map object for.
+     * @return {MapObject|bool}
      */
     findMapObjectByLayer(layer) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);

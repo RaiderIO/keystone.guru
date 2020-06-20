@@ -14,6 +14,10 @@ $(function () {
                 handler: new L.Draw.MapIcon(map, this.options.mapicon),
                 title: this.options.mapicon.title
             }, {
+                enabled: this.options.awakenedobeliskgatewaymapicon,
+                handler: new L.Draw.AwakenedObeliskGatewayMapIcon(map, this.options.awakenedobeliskgatewaymapicon),
+                title: this.options.awakenedobeliskgatewaymapicon.title
+            }, {
                 enabled: this.options.brushline,
                 handler: new L.Draw.Brushline(map, this.options.brushline),
                 title: this.options.brushline.title
@@ -197,6 +201,13 @@ class DrawControls extends MapControl {
                     faClass: 'fa-icons',
                     title: 'Create an icon',
                     hotkey: this._findHotkeyByCssClass('icon')
+                },
+                awakenedobeliskgatewaymapicon: {
+                    repeatMode: false,
+                    zIndexOffset: 1000,
+                    cssClass: 'd-none',
+                    faClass: 'fa-icons',
+                    title: 'Create an awakened obelisk gateway icon',
                 },
                 brushline: false,
                 // Brushlines are added in a custom way since I'm using Pather for this

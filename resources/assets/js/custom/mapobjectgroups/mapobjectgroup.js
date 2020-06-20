@@ -1,14 +1,18 @@
 class MapObjectGroup extends Signalable {
 
-    constructor(manager, name, field, editable = false) {
+    constructor(manager, names, field, editable = false) {
         super();
+        // Ensure its an array
+        if (typeof names === 'string') {
+            names = [names];
+        }
         console.assert(manager instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
-        console.assert(typeof name === 'string', 'name is not a String', this);
+        console.assert(typeof names === 'object', 'name is not an object', this);
         console.assert(typeof field === 'string', 'this is not a String', this);
         console.assert(typeof editable === 'boolean', 'editable is not a boolean', this);
 
         this.manager = manager;
-        this.name = name;
+        this.names = names;
         this.field = field;
         this.editable = editable;
 

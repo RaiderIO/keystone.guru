@@ -11,11 +11,19 @@ class MapIconType {
         this.admin_only = remoteObject.admin_only === 1;
     }
 
+    /**
+     * Checks if this map icon type is an awakened obelisk or not.
+     * @returns {boolean}
+     */
+    isAwakenedObelisk() {
+        return this.id >= 17 && this.id <= 20;
+    }
+
     isEditable() {
         return (getState().getDungeonRoute().publicKey === 'admin') || !this.admin_only;
     }
 
-    isDeletable(){
+    isDeletable() {
         return this.isEditable();
     }
 }
