@@ -15,8 +15,4 @@ class AdminEnemyPatrol extends EnemyPatrol {
     isEditable() {
         return true;
     }
-
-    _getRouteSuffix() {
-        return 'enemypatrol';
-    }
 }

@@ -4,8 +4,4 @@ class AdminMapIcon extends MapIcon {
     constructor(map, layer) {
         super(map, layer);
     }
-
-    _getRouteSuffix() {
-        return 'mapicon';
-    }
 }

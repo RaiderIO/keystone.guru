@@ -5,8 +5,4 @@ class AdminEnemyPack extends EnemyPack {
 
         this.setSynced(false);
     }
-
-    _getRouteSuffix() {
-        return 'enemypack';
-    }
 }

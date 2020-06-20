@@ -171,6 +171,13 @@ class Enemy extends MapObject {
         });
     }
 
+    /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'enemy';
+    }
+
     _getPercentageString(enemyForces) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         // Do some fuckery to round to two decimal places

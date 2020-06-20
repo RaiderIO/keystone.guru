@@ -176,6 +176,13 @@ class MapIcon extends MapObject {
         });
     }
 
+    /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'mapicon';
+    }
+
     _synced() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 

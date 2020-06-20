@@ -23,6 +23,13 @@ class Brushline extends Polyline {
         this.setSynced(false);
     }
 
+    /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'brushline';
+    }
+
     isEditable() {
         return true;
     }

@@ -56,6 +56,13 @@ class EnemyPack extends MapObject {
     }
 
     /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'enemypack';
+    }
+
+    /**
      * Rebuild the decorators for this route (directional arrows etc).
      * @private
      */

@@ -165,7 +165,7 @@ class MapObject extends Signalable {
      * @protected
      */
     _getRouteSuffix() {
-        return this.constructor.name.toLowerCase();
+        console.error('Implement the _getRouteSuffix() function!');
     }
 
     /**

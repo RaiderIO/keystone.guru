@@ -69,6 +69,13 @@ class KillZone extends MapObject {
     }
 
     /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'killzone';
+    }
+
+    /**
      * An enemy that was added to us has now detached itself.
      * @param enemyDetachedEvent
      * @private

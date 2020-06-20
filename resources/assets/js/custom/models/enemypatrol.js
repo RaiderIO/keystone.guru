@@ -51,6 +51,13 @@ class EnemyPatrol extends Polyline {
     }
 
     /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'enemypatrol';
+    }
+
+    /**
      * Users cannot delete this. AdminEnemyPatrols may be deleted instead.
      * @returns {boolean}
      */

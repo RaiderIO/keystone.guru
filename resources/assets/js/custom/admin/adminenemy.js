@@ -50,13 +50,6 @@ class AdminEnemy extends Enemy {
     }
 
     /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'enemy';
-    }
-
-    /**
      * Called when enemy selection for this enemy has changed (started/finished)
      * @param mapStateChangedEvent
      * @private

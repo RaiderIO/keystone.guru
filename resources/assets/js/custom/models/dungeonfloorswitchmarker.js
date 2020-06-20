@@ -106,6 +106,13 @@ class DungeonFloorSwitchMarker extends MapObject {
             })
         });
     }
+
+    /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'dungeonfloorswitchmarker';
+    }
     
     /**
      * @inheritDoc

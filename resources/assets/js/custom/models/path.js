@@ -70,6 +70,13 @@ class Path extends Polyline {
         });
     }
 
+    /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'path';
+    }
+
     toString() {
         return 'Path';
     }
