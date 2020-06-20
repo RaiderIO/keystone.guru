@@ -2,8 +2,64 @@ class Polyline extends MapObject {
     constructor(map, layer) {
         super(map, layer);
         this.weight = c.map.polyline.defaultWeight;
+        this.color = null;
 
         this.setColor(c.map.polyline.defaultColor());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getAttributes(force) {
+        console.assert(this instanceof Polyline, 'this was not a Polyline', this);
+
+        if (this._cachedAttributes !== null && !force) {
+            return this._cachedAttributes;
+        }
+
+        let self = this;
+
+        let weights = [];
+        for(let i = c.map.polyline.minWeight; i <= c.map.polyline.maxWeight; i++ ){
+            weights.push({
+                id: i,
+                name: i
+            });
+        }
+
+        return $.extend(super._getAttributes(force), {
+            floor_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: getState().getCurrentFloor().id
+            }),
+            color: new Attribute({
+                type: 'color',
+                setter: this.setColor.bind(this),
+                default: c.map.polyline.defaultColor
+            }),
+            weight: new Attribute({
+                type: 'select',
+                setter: this.setWeight.bind(this),
+                values: weights,
+                show_default: false,
+                default: c.map.polyline.defaultWeight
+            }),
+            vertices: new Attribute({
+                type: 'array',
+                edit: false,
+                getter: function(){
+                    return self.getVertices();
+                }
+            })
+        });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    isEditable(){
+        return !this.isLocal();
     }
 
     /**
@@ -13,7 +69,7 @@ class Polyline extends MapObject {
     setColor(color) {
         console.assert(this instanceof Polyline, 'this was not a Polyline', this);
 
-        this.polylineColor = color;
+        this.color = color;
         this.setColors({
             unsavedBorder: color,
             unsaved: color,

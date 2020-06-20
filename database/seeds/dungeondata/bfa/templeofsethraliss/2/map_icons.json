@@ -5,6 +5,7 @@
         "lat": -184.625,
         "lng": 226.5,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     }
 ]

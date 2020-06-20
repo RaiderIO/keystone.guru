@@ -17,11 +17,11 @@ EchoServer.run({
     "databaseConfig": {
         "redis": {
             "port": 6379,
-            "host": "localhost"
+            "host": "127.0.0.1"
         },
         "publishPresence": true
     },
-    "devMode": env.APP_DEBUG,
+    "devMode": env.APP_DEBUG === 'true',
     "host": null,
     "port": env.LARAVEL_ECHO_SERVER_PORT,
     "protocol": "http",

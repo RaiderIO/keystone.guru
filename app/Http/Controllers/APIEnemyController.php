@@ -66,11 +66,12 @@ class APIEnemyController extends Controller
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');
         $enemy->enemy_forces_override = $request->get('enemy_forces_override', -1);
+        $enemy->enemy_forces_override_teeming = $request->get('enemy_forces_override_teeming', -1);
         $enemy->lat = $request->get('lat');
         $enemy->lng = $request->get('lng');
 
         if (!$enemy->save()) {
-            throw new \Exception("Unable to save enemy!");
+            throw new \Exception('Unable to save enemy!');
         }
 
         $result = ['id' => $enemy->id];
@@ -128,7 +129,7 @@ class APIEnemyController extends Controller
     {
         try {
             $enemy->delete();
-            $result = ['result' => 'success'];
+            $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

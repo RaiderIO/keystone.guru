@@ -48,8 +48,8 @@ class APIEnemyPatrolController extends Controller
             $polyline = Polyline::findOrNew($enemyPatrol->polyline_id);
             $polyline->model_id = $enemyPatrol->id;
             $polyline->model_class = get_class($enemyPatrol);
-            $polyline->color = $request->get('color');
-            $polyline->weight = $request->get('weight');
+            $polyline->color = $request->get('color', '#f00');
+            $polyline->weight = $request->get('weight', 2);
             $polyline->vertices_json = json_encode($request->get('vertices'));
             $polyline->save();
 
@@ -70,7 +70,7 @@ class APIEnemyPatrolController extends Controller
     {
         try {
             $enemypatrol->delete();
-            $result = ['result' => 'success'];
+            $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

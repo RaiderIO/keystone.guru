@@ -224,7 +224,16 @@ class DungeonrouteTable extends InlineCode {
             title: {
                 'title': lang.get('messages.title_label'),
                 'data': 'title',
-                'name': 'title'
+                'name': 'title',
+                'render': function (data, type, row, meta) {
+                    let published = '';
+                    if (row.published === 1) {
+                        published = `<i class="fa fa-plane-departure text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_route_published')}"></i>`
+                    } else {
+                        published = `<i class="fa fa-plane-arrival text-warning" data-toggle="tooltip" title="${lang.get('messages.route_table_route_unpublished')}"></i>`
+                    }
+                    return `${published} ${row.title}`;
+                }
             },
             dungeon: {
                 'title': lang.get('messages.dungeon_label'),
@@ -316,13 +325,6 @@ class DungeonrouteTable extends InlineCode {
 
                     return result;
                 }
-            },
-            published: {
-                'title': lang.get('messages.published_label'),
-                'render': function (data, type, row, meta) {
-                    return row.published === 1 ? 'Yes' : 'No';
-                },
-                'className': 'd-none d-lg-table-cell',
             },
             actions: {
                 'title': lang.get('messages.actions_label'),

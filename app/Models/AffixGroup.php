@@ -50,7 +50,13 @@ class AffixGroup extends Model
             /** @var $affix Affix */
             $result[] = $affix->name;
         }
-        return implode(', ', $result);
+        $result = implode(', ', $result);
+
+        if ($this->seasonal_index !== null) {
+            $result .= sprintf(' (%s)', $this->getSeasonalIndexAsLetter());
+        }
+
+        return $result;
     }
 
     /**

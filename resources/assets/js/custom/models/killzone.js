@@ -69,6 +69,13 @@ class KillZone extends MapObject {
     }
 
     /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'killzone';
+    }
+
+    /**
      * An enemy that was added to us has now detached itself.
      * @param enemyDetachedEvent
      * @private
@@ -381,8 +388,8 @@ class KillZone extends MapObject {
         for (let i = 0; i < this.enemies.length; i++) {
             let enemyId = this.enemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
-            if (enemy !== null && enemy.npc !== null) {
-                result += enemy.npc.enemy_forces;
+            if (enemy !== null) {
+                result += enemy.getEnemyForces();
             }
         }
 
@@ -494,7 +501,9 @@ class KillZone extends MapObject {
                     // We're now selecting this killzone
                     let currentMapState = self.map.getMapState();
                     let newMapState = currentMapState;
-                    if (!(currentMapState instanceof EditMapState) && !(currentMapState instanceof DeleteMapState)) {
+                    if (!(currentMapState instanceof EditMapState) &&
+                        !(currentMapState instanceof DeleteMapState) &&
+                        !(currentMapState instanceof RaidMarkerSelectMapState)) {
                         // If we're already being selected..
                         if (currentMapState instanceof EnemySelection && currentMapState.getMapObject().id === self.id) {
                             newMapState = null;

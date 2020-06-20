@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $floor_id
  * @property int $dungeon_route_id
  * @property int $map_icon_type_id
+ * @property int $linked_map_icon_id
  * @property float $lat
  * @property float $lng
  * @property string $comment
@@ -23,18 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MapIcon extends Model
 {
-    protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
-    protected $fillable = ['floor_id', 'dungeon_route_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
+    protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'linked_map_icon_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
+    protected $fillable = ['floor_id', 'dungeon_route_id', 'map_icon_type_id', 'linked_map_icon_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
 
     protected $with = ['mapicontype'];
-
-    protected $appends = ['has_dungeon_route'];
-
-
-    public function getEditableAttribute()
-    {
-        return $this->dungeon_route_id > 0;
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -59,5 +52,13 @@ class MapIcon extends Model
     {
         // Need the foreign key for some reason
         return $this->belongsTo('App\Models\MapIconType', 'map_icon_type_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function linkedmapicon()
+    {
+        return $this->belongsTo('App\Models\MapIcon', 'linked_map_icon_id');
     }
 }

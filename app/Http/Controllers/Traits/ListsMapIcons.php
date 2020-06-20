@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Traits;
 
 use App\Models\MapIcon;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 
 trait ListsMapIcons
 {
@@ -18,7 +19,7 @@ trait ListsMapIcons
      *
      * @param $floorId
      * @param $publicKey
-     * @return MapIcon[]
+     * @return MapIcon[]|Collection
      */
     function listMapIcons($floorId, $publicKey)
     {
@@ -31,9 +32,12 @@ trait ListsMapIcons
         }
 
         return MapIcon::where('floor_id', $floorId)
-            ->where(function ($query) use ($floorId, $dungeonRouteId) {
+            ->where(function ($query) use ($floorId, $dungeonRouteId)
+            {
                 /** @var $query Builder */
                 return $query->where('dungeon_route_id', $dungeonRouteId)->orWhere('dungeon_route_id', -1);
-            })->get();
+            })
+            // Order by non-linked map icons so that they are loaded first in the front end, and the linked map icons can always find them
+            ->orderBy('linked_map_icon_id')->get();
     }
 }

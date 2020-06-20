@@ -51,7 +51,7 @@ if ($isAdmin) {
 
     $adminOptions = [
         // Display options for changing Teeming status for map objects
-        'teeming' => [
+        'teemingOptions' => [
             ['key' => '', 'description' => __('Always visible')],
             ['key' => 'visible', 'description' => __('Visible when Teeming only')],
             ['key' => 'hidden', 'description' => __('Hidden when Teeming only')],

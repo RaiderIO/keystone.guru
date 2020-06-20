@@ -5,7 +5,8 @@
         "lat": -248.1875,
         "lng": 261.5625,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 48,
@@ -13,7 +14,8 @@
         "lat": -238.625,
         "lng": 257.4375,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 48,
@@ -21,7 +23,8 @@
         "lat": -184.8125,
         "lng": 204.6875,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": 1
     },
     {
         "floor_id": 48,
@@ -29,7 +32,8 @@
         "lat": -122.625,
         "lng": 170.9375,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 48,
@@ -37,6 +41,25 @@
         "lat": -81.9375,
         "lng": 195.875,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": 0
+    },
+    {
+        "floor_id": 48,
+        "map_icon_type_id": 17,
+        "lat": -188.40625,
+        "lng": 203.875,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0
+    },
+    {
+        "floor_id": 48,
+        "map_icon_type_id": 17,
+        "lat": -83.8125,
+        "lng": 195.5625,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 1
     }
 ]

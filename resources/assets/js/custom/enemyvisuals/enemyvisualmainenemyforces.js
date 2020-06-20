@@ -35,7 +35,8 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
 
         // Just append a single class
         data.main_visual_outer_classes += ' enemy_icon_npc_enemy_forces text-white text-center';
-        data.main_visual_html = '<div style="font-size: ' + width + 'px; line-height: ' + width + 'px;">' + enemyForces + '</div>';
+        // Slightly hacky fix to get the enemy forces to show up properly (font was changed away from Leaflet default to site default for all others)
+        data.main_visual_html = `<div style="font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif; font-size: ${width}px; line-height: ${width}px;">${enemyForces}</div>`;
 
         return data;
     }

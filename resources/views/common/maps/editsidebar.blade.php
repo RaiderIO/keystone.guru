@@ -199,7 +199,7 @@ if (isset($model)) {
                         </div>
                     @else
                         <div class="form-group">
-                            <a href="{{ route('dungeonroute.edit', ['dungeonroute' => $model->public_key]) }}"
+                            <a href="{{ route('dungeonroute.claim', ['dungeonroute' => $model->public_key]) }}"
                                class="btn btn-primary mt-1 w-100" role="button">
                                 <i class="fas fa-save"></i> {{ __('Save and continue') }}
                             </a>

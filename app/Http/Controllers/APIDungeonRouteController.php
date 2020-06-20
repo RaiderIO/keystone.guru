@@ -58,18 +58,20 @@ class APIDungeonRouteController extends Controller
                  IF(dungeon_routes.teeming = 1,
                       SUM(
                           IF(
-                                  enemies.enemy_forces_override >= 0,
-                                  enemies.enemy_forces_override,
-                                  IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
+                              enemies.enemy_forces_override_teeming >= 0,
+                              enemies.enemy_forces_override_teeming,
+                              IF(npcs.enemy_forces_teeming >= 0, npcs.enemy_forces_teeming, npcs.enemy_forces)
                           )
                       ),
-                      SUM(IF(
+                      SUM(
+                          IF(
                               enemies.enemy_forces_override >= 0,
                               enemies.enemy_forces_override,
                               npcs.enemy_forces
+                          )
                       )
-                 )
-             ), 0) as enemy_forces')
+                ),  0
+            ) as enemy_forces')
             // Select enemy forces
             ->leftJoin('kill_zones', 'kill_zones.dungeon_route_id', '=', 'dungeon_routes.id')
             ->leftJoin('kill_zone_enemies', 'kill_zone_enemies.kill_zone_id', '=', 'kill_zones.id')

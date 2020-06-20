@@ -1,6 +1,6 @@
 class MapIconMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_MAPICON, 'mapicon', editable);
+        super(manager, [MAP_OBJECT_GROUP_MAPICON, MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK], 'mapicon', editable);
 
         let self = this;
 
@@ -30,13 +30,17 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         let mapIcon;
         if (getState().isMapAdmin()) {
             mapIcon = new AdminMapIcon(this.manager.map, layer);
+        }
+        // If we're actively placing the obelisk, make sure we create the correct map icon, or if we're restoring the gateway
+        else if (typeof options !== 'undefined' && options.mapIconType.isAwakenedObelisk()) {
+            mapIcon = new MapIconAwakenedObelisk(this.manager.map, layer);
         } else {
             mapIcon = new MapIcon(this.manager.map, layer);
         }
-        // Pass the map icon type here so layer initialization can take the type into account
-        if (typeof options !== 'undefined' && typeof options.mapIconType !== 'undefined') {
-            mapIcon.setMapIconType(options.mapIconType);
-        }
+        // // Pass the map icon type here so layer initialization can take the type into account
+        // if (typeof options !== 'undefined' && typeof options.mapIconType !== 'undefined') {
+        //     mapIcon._setMapIconType(options.mapIconType);
+        // }
 
         return mapIcon;
     }
@@ -44,6 +48,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
         // Fetch the existing map icon if it exists
+        /** @type {MapIcon} */
         let mapIcon = this.findMapObjectById(remoteMapObject.id);
         let createdNew;
 
@@ -57,17 +62,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
             mapIcon = this.createNew(layer, {mapIconType: getState().getMapIconType(remoteMapObject.map_icon_type_id)});
         }
 
-        mapIcon.id = remoteMapObject.id;
-        mapIcon.floor_id = remoteMapObject.floor_id;
-        mapIcon.map_icon_type_id = remoteMapObject.map_icon_type_id;
-        // If refreshed from Echo
-        if (!createdNew) {
-            mapIcon.setMapIconType(getState().getMapIconType(mapIcon.map_icon_type_id));
-        }
-        mapIcon.has_dungeon_route = remoteMapObject.has_dungeon_route;
-        mapIcon.comment = remoteMapObject.comment;
-        mapIcon.permanent_tooltip = remoteMapObject.permanent_tooltip;
-        mapIcon.seasonal_index = remoteMapObject.seasonal_index;
+        mapIcon.loadRemoteMapObject(remoteMapObject);
 
         // When in admin mode, show all map icons
         if (!(this.manager.map instanceof AdminDungeonMap) && (mapIcon.seasonal_index !== null && getState().getSeasonalIndex() !== mapIcon.seasonal_index)) {

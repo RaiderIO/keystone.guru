@@ -558,5 +558,19 @@
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0
+    },
+    {
+        "id": 144286,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Asset Manager",
+        "base_health": 153699,
+        "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0
     }
 ]

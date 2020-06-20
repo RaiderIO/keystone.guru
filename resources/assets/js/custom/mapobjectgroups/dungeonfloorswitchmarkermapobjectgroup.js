@@ -41,10 +41,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
 
         let dungeonFloorSwitchMarker = this.createNew(layer);
-        dungeonFloorSwitchMarker.id = remoteMapObject.id;
-        dungeonFloorSwitchMarker.direction = remoteMapObject.direction;
-        dungeonFloorSwitchMarker.floor_id = remoteMapObject.floor_id;
-        dungeonFloorSwitchMarker.target_floor_id = remoteMapObject.target_floor_id;
+        dungeonFloorSwitchMarker.loadRemoteMapObject(remoteMapObject);
 
         // We just downloaded the floor switch marker, it's synced alright!
         dungeonFloorSwitchMarker.setSynced(true);

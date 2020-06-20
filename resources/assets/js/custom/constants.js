@@ -115,6 +115,8 @@ let c = {
         polyline: {
             defaultColor: randomColor,
             defaultWeight: Cookies.get('polyline_default_weight'),
+            minWeight: 1,
+            maxWeight: 5
         },
         brushline: {
             /**
@@ -157,6 +159,10 @@ let c = {
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
+        },
+        mapicon: {
+            awakenedObeliskGatewayPolylineColor: '#80FF1A',
+            awakenedObeliskGatewayPolylineWeight: 3,
         },
         placeholderColors: {},
         editsidebar: {

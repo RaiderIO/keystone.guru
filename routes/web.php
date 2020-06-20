@@ -56,6 +56,14 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
     Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
 
+    // Edit your own dungeon routes
+    Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')->name('dungeonroute.edit');
+    Route::get('{dungeonroute}/edit/{floor}', 'DungeonRouteController@editfloor')->name('dungeonroute.edit.floor');
+    // Submit a patch for your own dungeon route
+    Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')->name('dungeonroute.update');
+    // Claiming a route that was made by /try functionality
+    Route::get('{dungeonroute}/claim', 'DungeonRouteController@claim')->name('dungeonroute.claim');
+
     Route::post('new/mdtimport', 'MDTImportController@import')->name('dungeonroute.new.mdtimport');
 
     // ['auth', 'role:admin|user']
@@ -84,11 +92,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         Route::get('edit/{dungeonroute}', 'DungeonRouteController@editLegacy');
         Route::patch('edit/{dungeonroute}', 'DungeonRouteController@updateLegacy');
 
-        // Edit your own dungeon routes
-        Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')->name('dungeonroute.edit');
-        Route::get('{dungeonroute}/edit/{floor}', 'DungeonRouteController@editfloor')->name('dungeonroute.edit.floor');
-        // Submit a patch for your own dungeon route
-        Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')->name('dungeonroute.update');
         // Clone a route
         Route::get('{dungeonroute}/clone', 'DungeonRouteController@clone')->name('dungeonroute.clone');
 
@@ -215,6 +218,32 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
         Route::post('/profile/legal', 'APIProfileController@legalAgree');
 
+        // Must be an admin to perform these actions
+        Route::group(['middleware' => ['auth', 'role:admin']], function ()
+        {
+            Route::group(['prefix' => 'admin'], function ()
+            {
+                Route::post('/enemy', 'APIEnemyController@store');
+                Route::delete('/enemy/{enemy}', 'APIEnemyController@delete');
+
+                Route::post('/enemypack', 'APIEnemyPackController@store');
+                Route::delete('/enemypack/{enemypack}', 'APIEnemyPackController@delete');
+
+                Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
+                Route::delete('/enemypatrol/{enemypatrol}', 'APIEnemyPatrolController@delete');
+
+                Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
+                Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', 'APIDungeonFloorSwitchMarkerController@delete');
+
+                Route::post('/mapicon', 'APIMapIconController@adminStore');
+                Route::delete('/mapicon/{mapicon}', 'APIMapIconController@adminDelete');
+            });
+
+            Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
+
+            Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
+        });
+
         // May be performed without being logged in (try functionality)
         Route::group(['prefix' => '{dungeonroute}'], function ()
         {
@@ -269,29 +298,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
                 Route::delete('/route/{dungeonroute}', 'APITeamController@removeRoute');
                 Route::get('/refreshlink', 'APITeamController@refreshInviteLink');
             });
-        });
-
-        // Must be an admin to perform these actions
-        Route::group(['middleware' => ['auth', 'role:admin']], function ()
-        {
-            Route::post('/enemy', 'APIEnemyController@store');
-            Route::delete('/enemy/{enemy}', 'APIEnemyController@delete');
-
-            Route::post('/enemypack', 'APIEnemyPackController@store');
-            Route::delete('/enemypack/{enemypack}', 'APIEnemyPackController@delete');
-
-            Route::post('/enemypatrol', 'APIEnemyPatrolController@store');
-            Route::delete('/enemypatrol/{enemypatrol}', 'APIEnemyPatrolController@delete');
-
-            Route::post('/dungeonfloorswitchmarker', 'APIDungeonFloorSwitchMarkerController@store')->where(['floor_id' => '[0-9]+']);
-            Route::delete('/dungeonfloorswitchmarker/{dungeonfloorswitchmarker}', 'APIDungeonFloorSwitchMarkerController@delete');
-
-            Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
-
-            Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
-
-            Route::post('/mapicon', 'APIMapIconController@adminStore');
-            Route::delete('/mapicon/{mapicon}', 'APIMapIconController@adminDelete');
         });
     });
 

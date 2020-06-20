@@ -26,6 +26,19 @@ let LeafletEnemyMarker = L.Marker.extend({
     }
 });
 
+/**
+ * @property floor_id int
+ * @property enemy_pack_id int
+ * @property npc_id int
+ * @property mdt_id int
+ * @property seasonal_index int
+ * @property enemy_forces_override int
+ * @property enemy_forces_override_teeming int
+ * @property raid_marker_name string
+ * @property dangerous bool
+ * @property lat float
+ * @property lng float
+ */
 class Enemy extends MapObject {
     constructor(map, layer) {
         super(map, layer);
@@ -34,14 +47,11 @@ class Enemy extends MapObject {
         // Used for keeping track of what kill zone this enemy is attached to
         /** @type KillZone */
         this.kill_zone = null;
-        this.enemy_forces_override = -1;
-        this.seasonal_index = null;
         /** @type Object May be set when loaded from server */
         this.npc = null;
-        this.raid_marker_name = '';
-        this.dangerous = false;
         // The visual display of this enemy
         this.visual = null;
+        this.isPopupEnabled = false;
 
         // MDT
         this.mdt_id = -1;
@@ -49,7 +59,7 @@ class Enemy extends MapObject {
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Remove/enable the popup
-            self.setPopupEnabled(mapStateChangedEvent.data.newMapState instanceof MapState);
+            self.setPopupEnabled(!(mapStateChangedEvent.data.newMapState instanceof MapState));
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -59,6 +69,113 @@ class Enemy extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, this._synced.bind(this));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getAttributes(force) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (this._cachedAttributes !== null && !force) {
+            return this._cachedAttributes;
+        }
+
+        let self = this;
+        let selectNpcs = [];
+        let npcs = this.map.options.npcs;
+        for (let index in npcs) {
+            if (npcs.hasOwnProperty(index)) {
+                let npc = npcs[index];
+                selectNpcs.push({
+                    id: npc.id,
+                    name: npc.name + ' (' + npc.id + ')'
+                });
+            }
+        }
+
+        return $.extend(super._getAttributes(force), {
+            enemy_pack_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: -1
+            }),
+            npc_id: new Attribute({
+                type: 'select',
+                admin: true,
+                values: selectNpcs,
+                default: -1,
+                live_search: true
+            }),
+            floor_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: getState().getCurrentFloor().id
+            }),
+            mdt_id: new Attribute({
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: -1
+            }),
+            seasonal_index: new Attribute({
+                type: 'int',
+                admin: true,
+                default: null,
+                setter: function (value) {
+                    // NaN check
+                    if (value === '' || value !== value) {
+                        value = null;
+                    }
+                    self.seasonal_index = value;
+                }
+            }),
+            enemy_forces_override: new Attribute({
+                type: 'int',
+                admin: true,
+                default: -1
+            }),
+            enemy_forces_override_teeming: new Attribute({
+                type: 'int',
+                admin: true,
+                default: -1
+            }),
+            lat: new Attribute({
+                type: 'float',
+                edit: false,
+                getter: function () {
+                    return self.layer.getLatLng().lat;
+                },
+                default: 0
+            }),
+            lng: new Attribute({
+                type: 'float',
+                edit: false,
+                getter: function () {
+                    return self.layer.getLatLng().lng;
+                },
+                default: 0
+            }),
+            raid_marker_name: new Attribute({
+                type: 'string',
+                edit: false,
+                save: false,
+                setter: this.setRaidMarkerName.bind(this),
+                default: ''
+            }),
+            dangerous: new Attribute({
+                type: 'bool',
+                edit: false,
+                save: false,
+                default: false
+            })
+        });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'enemy';
     }
 
     _getPercentageString(enemyForces) {
@@ -126,13 +243,16 @@ class Enemy extends MapObject {
      */
     setPopupEnabled(enabled) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
         if (this.layer !== null) {
-            if (enabled) {
+            if (enabled && !this.isPopupEnabled) {
                 this._rebuildPopup();
-            } else {
+            } else if (!enabled && this.isPopupEnabled) {
                 this.layer.unbindPopup();
             }
         }
+
+        this.isPopupEnabled = enabled;
     }
 
     /**
@@ -143,16 +263,18 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
         let result = 0;
-        if( this.npc !== null ) {
+        if (this.npc !== null) {
             result = this.npc.enemy_forces;
 
             // Override first
-            if (this.enemy_forces_override >= 0) {
+            if (this.map.options.teeming) {
+                if (this.enemy_forces_override_teeming >= 0) {
+                    result = this.enemy_forces_override_teeming;
+                } else if (this.npc.enemy_forces_teeming >= 0) {
+                    result = this.npc.enemy_forces_teeming;
+                }
+            } else if (this.enemy_forces_override >= 0) {
                 result = this.enemy_forces_override;
-            }
-            // If teeming and npc provides an override, use that instead
-            else if (this.map.options.teeming && this.npc.enemy_forces_teeming >= 0) {
-                result = this.npc.enemy_forces_teeming;
             }
         }
 

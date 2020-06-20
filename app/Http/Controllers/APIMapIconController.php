@@ -11,7 +11,6 @@ use App\Models\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
@@ -38,10 +37,10 @@ class APIMapIconController extends Controller
      */
     function store(Request $request, ?DungeonRoute $dungeonroute)
     {
-        $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
+        $isUserAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
         if ($dungeonroute === null) {
-            if (!$isAdmin) {
+            if (!$isUserAdmin) {
                 throw new \Exception('Unable to save map icon!');
             }
         } // We're editing a map comment for the user, carry on
@@ -56,21 +55,27 @@ class APIMapIconController extends Controller
             $mapIconType = MapIconType::where('id', $mapIconTypeId)->first();
 
             // Only allow admins to save admin_only icons
-            if ($mapIconType === null || $mapIconType->admin_only && !$isAdmin) {
+            if ($mapIconType === null || $mapIconType->admin_only && !$isUserAdmin) {
                 throw new \Exception('Unable to save map icon!');
             }
         }
 
         /** @var MapIcon $mapIcon */
         $mapIcon = MapIcon::findOrNew($request->get('id'));
+        // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
+        if ($mapIcon->exists && $mapIcon->dungeon_route_id === -1 && $dungeonroute !== null) {
+            throw new \Exception('Unable to save map icon!');
+        }
 
         // Only admins may make global comments for all routes
         $mapIcon->floor_id = $request->get('floor_id');
         $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
         $mapIcon->map_icon_type_id = $mapIconTypeId;
+        $linkedMapIconId = $request->get('linked_map_icon_id', null);
+        $mapIcon->linked_map_icon_id = empty($linkedMapIconId) ? null : $linkedMapIconId;
         $mapIcon->permanent_tooltip = $request->get('permanent_tooltip', false);
         $seasonalIndex = $request->get('seasonal_index');
-        // don't use is_empty since 0 is valid
+        // don't use empty() since 0 is valid
         $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : $seasonalIndex;
         $mapIcon->comment = $request->get('comment', '') ?? '';
         $mapIcon->lat = $request->get('lat');
@@ -115,7 +120,7 @@ class APIMapIconController extends Controller
                 if ($dungeonroute !== null && Auth::check()) {
                     broadcast(new MapIconDeletedEvent($dungeonroute, $mapicon, Auth::user()));
                 }
-                $result = ['result' => 'success'];
+                $result = response()->noContent();
             } else {
                 $result = ['result' => 'error'];
             }

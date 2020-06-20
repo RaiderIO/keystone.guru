@@ -29,10 +29,19 @@ class AdminEnemy extends Enemy {
         this.register(['shown', 'hidden'], this, function (hiddenEvent) {
             if (self.mdt_id > 0) {
                 if (hiddenEvent.data.visible) {
-                    self.redrawConnectionToEnemy();
+                    self.redrawConnectionToMDTEnemy();
                 } else {
                     self.removeExistingConnectionToEnemy();
                 }
+            }
+        });
+
+        // When successfull, re-set our NPC
+        this.register('save:success', this, function (saveSuccessEvent) {
+            let json = saveSuccessEvent.data.json;
+            // May be null if not set at all (yet)
+            if (json.hasOwnProperty('npc') && json.npc !== null) {
+                self.setNpc(json.npc);
             }
         });
 
@@ -49,7 +58,7 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
 
         // Redraw any changes as necessary
-        // this.redrawConnectionToEnemy();
+        // this.redrawConnectionToMDTEnemy();
 
         // Get whatever object is handling the enemy selection
         let enemySelection = mapStateChangedEvent.data.newMapState === null ?
@@ -75,7 +84,7 @@ class AdminEnemy extends Enemy {
 
                 if (selectedMapObject === this) {
                     // May save when nothing has changed, but that's okay
-                    let connectedEnemy = this.getConnectedEnemy();
+                    let connectedEnemy = this.getConnectedMDTEnemy();
                     if (connectedEnemy !== null) {
                         // Save them, not us
                         connectedEnemy.save();
@@ -105,8 +114,9 @@ class AdminEnemy extends Enemy {
 
     /**
      * Get the MDT enemy that is attached to this enemy. NOT the other way around.
+     * @return {Enemy}
      */
-    getConnectedEnemy() {
+    getConnectedMDTEnemy() {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
         let result = null;
 
@@ -179,7 +189,7 @@ class AdminEnemy extends Enemy {
      * @returns {boolean}
      */
     isMismatched() {
-        let connectedEnemy = this.getConnectedEnemy();
+        let connectedEnemy = this.getConnectedMDTEnemy();
 
         return connectedEnemy.faction !== this.faction ||
             ((connectedEnemy.teeming === 'visible' && this.teeming !== 'visible') ||
@@ -212,7 +222,7 @@ class AdminEnemy extends Enemy {
         this.enemy_id = enemy.id;
 
         // Redraw ourselves
-        this.redrawConnectionToEnemy();
+        this.redrawConnectionToMDTEnemy();
 
         // Fire an event to notify everyone an enemy has been selected for this
         this.signal('mdt_connected', {target: enemy});
@@ -238,13 +248,13 @@ class AdminEnemy extends Enemy {
     /**
      * Redraw connections to the enemy
      */
-    redrawConnectionToEnemy() {
+    redrawConnectionToMDTEnemy() {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
 
         this.removeExistingConnectionToEnemy();
 
         // If this enemy is connected to an MDT enemy
-        let connectedEnemy = this.getConnectedEnemy();
+        let connectedEnemy = this.getConnectedMDTEnemy();
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
         // Only when we should..
@@ -277,6 +287,9 @@ class AdminEnemy extends Enemy {
         }
     }
 
+    /**
+     * Called when the layer is initialized.
+     */
     onLayerInit() {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
         super.onLayerInit();
@@ -315,76 +328,13 @@ class AdminEnemy extends Enemy {
 
         // When we're moved, keep drawing the connections anew
         self.layer.on('move', function () {
-            self.redrawConnectionToEnemy();
+            self.redrawConnectionToMDTEnemy();
 
-            let connectedEnemy = self.getConnectedEnemy();
+            let connectedEnemy = self.getConnectedMDTEnemy();
             if (connectedEnemy !== null) {
                 connectedEnemy.redrawConnectionToEnemy();
             }
         });
-    }
-
-    /**
-     * Since the ID may not be known at spawn time, this needs to be callable from when it is known (when it's synced to server).
-     *
-     * @param event
-     * @private
-     */
-    _rebuildPopup(event) {
-        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
-
-        // MDT enemies should not be editable directly
-        if (!this.is_mdt) {
-            let self = this;
-
-            // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
-            // This also cannot be a private function since that'll apparently give different signatures as well.
-            let popupOpenFn = function (event) {
-                $('#enemy_edit_popup_teeming_' + self.id).val(self.teeming);
-                $('#enemy_edit_popup_faction_' + self.id).val(self.faction);
-                $('#enemy_edit_popup_enemy_forces_override_' + self.id).val(self.enemy_forces_override);
-                $('#enemy_edit_popup_seasonal_index_' + self.id).val(self.seasonal_index);
-                $('#enemy_edit_popup_npc_' + self.id).val(self.npc_id);
-
-                // Refresh all select pickers so they work again
-                refreshSelectPickers();
-
-                let $submitBtn = $('#enemy_edit_popup_submit_' + self.id);
-
-                $submitBtn.unbind('click');
-                $submitBtn.bind('click', function () {
-                    self.teeming = $('#enemy_edit_popup_teeming_' + self.id).val();
-                    self.faction = $('#enemy_edit_popup_faction_' + self.id).val();
-                    self.enemy_forces_override = $('#enemy_edit_popup_enemy_forces_override_' + self.id).val();
-                    self.seasonal_index = $('#enemy_edit_popup_seasonal_index_' + self.id).val();
-                    self.npc_id = $('#enemy_edit_popup_npc_' + self.id).val();
-
-                    self.edit();
-                });
-            };
-
-            let template = Handlebars.templates['map_enemy_popup_template'];
-
-            let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                id: self.id,
-                teeming: this.map.options.teeming,
-                factions: this.map.options.factions,
-                npcs: this.map.options.npcs
-            });
-
-            let customOptions = {
-                'maxWidth': '400',
-                'minWidth': '300',
-                'className': 'popupCustom'
-            };
-
-            self.layer.unbindPopup();
-            self.layer.bindPopup(template(data), customOptions);
-
-            // Have you tried turning it off and on again?
-            self.layer.off('popupopen');
-            self.layer.on('popupopen', popupOpenFn);
-        }
     }
 
     bindTooltip() {
@@ -447,103 +397,11 @@ class AdminEnemy extends Enemy {
         }
     }
 
-    onPopupInit() {
-        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
-        // Don't actually init the popup here since we may not know the ID yet.
-        // Called multiple times, so unreg first
-        this.unregister('synced', this, this._rebuildPopup.bind(this));
-        // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, this._rebuildPopup.bind(this));
-    }
-
-    edit() {
-        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
-
-        this.save();
-    }
-
-    delete() {
-        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
-        let self = this;
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/enemy/' + self.id,
-            dataType: 'json',
-            data: {
-                _method: 'DELETE'
-            },
-            success: function (json) {
-                self.localDelete();
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                self.layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.unsaved,
-                    color: c.map.admin.mapobject.colors.unsavedBorder
-                });
-
-                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
-            }
-        });
-    }
-
-    save() {
-        console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
-        let self = this;
-
-        if (!this.is_mdt) {
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/enemy',
-                dataType: 'json',
-                data: {
-                    id: self.id,
-                    enemy_pack_id: self.enemy_pack_id,
-                    npc_id: self.npc_id,
-                    floor_id: getState().getCurrentFloor().id,
-                    mdt_id: self.mdt_id,
-                    seasonal_index: self.seasonal_index,
-                    teeming: self.teeming,
-                    faction: self.faction,
-                    enemy_forces_override: self.enemy_forces_override,
-                    lat: self.layer.getLatLng().lat,
-                    lng: self.layer.getLatLng().lng
-                },
-                beforeSend: function () {
-                    $('#enemy_edit_popup_submit_' + self.id).attr('disabled', 'disabled');
-                },
-                success: function (json) {
-                    self.setSynced(true);
-                    self.map.leafletMap.closePopup();
-                    // We just received ID from creating the enemy
-                    if (json.hasOwnProperty('id')) {
-                        self.id = json.id;
-                        // ID has changed, rebuild the popup
-                        self._rebuildPopup();
-                    }
-                    // May be null if not set at all (yet)
-                    if (json.hasOwnProperty('npc') && json.npc !== null) {
-                        self.setNpc(json.npc);
-                    }
-                },
-                complete: function () {
-                    $('#enemy_edit_popup_submit_' + self.id).removeAttr('disabled');
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    // Even if we were synced, make sure user knows it's no longer / an error occurred
-                    self.setSynced(false);
-
-                    defaultAjaxErrorFn(xhr, textStatus, errorThrown);
-                }
-            });
-        } else {
-            console.error('Cannot save an MDT enemy!');
-        }
-    }
-
     cleanup() {
         super.cleanup();
 
         // We're done with this event now (after finishing! otherwise we won't process the result)
         this.map.unregister('map:mapstatechanged', this);
+        this.unregister('save:success');
     }
 }

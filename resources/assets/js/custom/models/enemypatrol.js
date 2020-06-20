@@ -43,11 +43,34 @@ class EnemyPatrol extends Polyline {
                     repeat: 50,
                     symbol: L.Symbol.arrowHead({
                         pixelSize: 12,
-                        pathOptions: {fillOpacity: 1, weight: 0, color: this.polylineColor}
+                        pathOptions: {fillOpacity: 1, weight: 0, color: this.color}
                     })
                 }
             ]
         });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getRouteSuffix() {
+        return 'enemypatrol';
+    }
+
+    /**
+     * Users cannot delete this. AdminEnemyPatrols may be deleted instead.
+     * @returns {boolean}
+     */
+    isDeletable() {
+        return false;
+    }
+
+    /**
+     * Users cannot edit this. AdminEnemyPatrols may be edited instead.
+     * @returns {boolean}
+     */
+    isEditable() {
+        return false;
     }
 
     toString() {

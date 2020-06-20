@@ -9,17 +9,25 @@ use App\Models\Floor;
 use App\Models\PageView;
 use App\Models\UserReport;
 use App\Service\Season\SeasonService;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Session;
+use Teapot\StatusCode;
 
 class DungeonRouteController extends Controller
 {
     /**
      * @param Request $request
      * @param SeasonService $seasonService
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|null
+     * @return Factory|View|null
      */
     public function try(Request $request, SeasonService $seasonService)
     {
@@ -29,14 +37,15 @@ class DungeonRouteController extends Controller
         if ($request->has('dungeon_id')) {
             $dungeonRoute = new DungeonRoute();
             $dungeonRoute->dungeon_id = $request->get('dungeon_id');
-            $dungeonRoute->author_id = Auth::check() ? Auth::id() : -1;
+            $dungeonRoute->title = sprintf('Trying %s', $dungeonRoute->dungeon->name);
+            $dungeonRoute->author_id = -1;
             $dungeonRoute->faction_id = 1; // Unspecified
             $dungeonRoute->public_key = DungeonRoute::generateRandomPublicKey();
             $dungeonRoute->teeming = (int)$request->get('teeming', 0) === 1;
-            $dungeonRoute->expires_at = Carbon::now()->addHour(config('keystoneguru.try_dungeon_route_expires_hours'))->toDateTimeString();
+            $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.try_dungeon_route_expires_hours'))->toDateTimeString();
             $dungeonRoute->save();
 
-            $result = view('dungeonroute.try', ['model' => $dungeonRoute]);
+            $result = redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]));
         } else if ($request->has('dungeonroute')) {
             // Navigation to /try
             // Only routes that are in try mode
@@ -44,8 +53,8 @@ class DungeonRouteController extends Controller
                 $dungeonRoute = DungeonRoute::where('public_key', $request->get('dungeonroute'))
                     ->isTry()->firstOrFail();
 
-                $result = view('dungeonroute.try', ['model' => $dungeonRoute]);
-            } catch (\Exception $exception) {
+                $result = redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]));
+            } catch (Exception $exception) {
                 $result = view('dungeonroute.tryclaimed');
             }
         } else {
@@ -58,7 +67,7 @@ class DungeonRouteController extends Controller
     /**
      * Show a page for creating a new dungeon route.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function new()
     {
@@ -78,7 +87,7 @@ class DungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      * @throws AuthorizationException
      */
     public function view(Request $request, DungeonRoute $dungeonroute)
@@ -90,7 +99,7 @@ class DungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param int $floorIndex
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      */
     public function viewfloor(Request $request, DungeonRoute $dungeonroute, int $floorIndex)
@@ -125,16 +134,14 @@ class DungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param int $floorindex
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function preview(Request $request, DungeonRoute $dungeonroute, int $floorindex)
     {
-        $result = view('dungeonroute.preview', [
+        return view('dungeonroute.preview', [
             'model'   => $dungeonroute,
             'floorId' => Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first()->id
         ]);
-
-        return $result;
     }
 
     /**
@@ -142,7 +149,7 @@ class DungeonRouteController extends Controller
      * @param SeasonService $seasonService
      * @param DungeonRoute $dungeonroute
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(DungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
     {
@@ -161,7 +168,7 @@ class DungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array
+     * @return Application|RedirectResponse|Redirector
      * @throws AuthorizationException
      */
     function clone(Request $request, DungeonRoute $dungeonroute)
@@ -175,9 +182,9 @@ class DungeonRouteController extends Controller
             $newRoute = $dungeonroute->clone();
 
             if (!Auth::user()->hasPaidTier('unlimited-routes')) {
-                \Session::flash('status', sprintf(__('Route cloned. You can create %s more routes.'), $user->getRemainingRouteCount()));
+                Session::flash('status', sprintf(__('Route cloned. You can create %s more routes.'), $user->getRemainingRouteCount()));
             } else {
-                \Session::flash('status', __('Route cloned'));
+                Session::flash('status', __('Route cloned'));
             }
 
             return redirect(route('dungeonroute.edit', ['dungeonroute' => $newRoute->public_key]));
@@ -189,7 +196,20 @@ class DungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return RedirectResponse
+     */
+    public function claim(Request $request, DungeonRoute $dungeonroute)
+    {
+        if ($dungeonroute->isTry()) {
+            $dungeonroute->claim(Auth::id());
+        }
+        return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return Factory|View
      * @throws AuthorizationException
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
@@ -201,21 +221,22 @@ class DungeonRouteController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param int $floorIndex
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      */
     public function editfloor(Request $request, DungeonRoute $dungeonroute, int $floorIndex)
     {
         $this->authorize('edit', $dungeonroute);
 
-        // Make sure the dungeon route is owned by this user if it was in try mode.
-        // Don't share your try routes if you don't want someone else to claim the route!
-        $dungeonroute->claim(Auth::user());
-
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         if ($floor === null) {
             return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
+        } else if ($dungeonroute->isTry()) {
+            return view('dungeonroute.try', [
+                'model' => $dungeonroute,
+                'floor' => $floor
+            ]);
         } else {
             return view('dungeonroute.edit', [
                 'headerTitle' => __('Edit route'),
@@ -232,8 +253,8 @@ class DungeonRouteController extends Controller
      * @param DungeonRouteFormRequest $request
      * @param SeasonService $seasonService
      * @param DungeonRoute $dungeonroute
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function update(DungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
     {
@@ -243,7 +264,7 @@ class DungeonRouteController extends Controller
         $dungeonroute = $this->store($request, $seasonService, $dungeonroute);
 
         // Message to the user
-        \Session::flash('status', __('Dungeonroute updated'));
+        Session::flash('status', __('Dungeonroute updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeonroute);
@@ -252,8 +273,8 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonService $seasonService
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function savenew(DungeonRouteFormRequest $request, SeasonService $seasonService)
     {
@@ -261,7 +282,7 @@ class DungeonRouteController extends Controller
         $dungeonroute = $this->store($request, $seasonService);
 
         // Message to the user
-        \Session::flash('status', __('Route created'));
+        Session::flash('status', __('Route created'));
 
         return redirect()->route('dungeonroute.edit', ["dungeonroute" => $dungeonroute]);
     }
@@ -269,7 +290,7 @@ class DungeonRouteController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory|
      */
     public function list()
     {
@@ -279,20 +300,20 @@ class DungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function editLegacy(Request $request, DungeonRoute $dungeonroute)
     {
-        return redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]), 301);
+        return redirect(route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]), StatusCode::MOVED_PERMANENTLY);
     }
 
     /**
      * @param DungeonRouteFormRequest $request
      * @param DungeonRoute $dungeonroute
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function updateLegacy(DungeonRouteFormRequest $request, DungeonRoute $dungeonroute)
     {
-        return redirect(route('dungeonroute.update', ['dungeonroute' => $dungeonroute->public_key]), 301);
+        return redirect(route('dungeonroute.update', ['dungeonroute' => $dungeonroute->public_key]), StatusCode::MOVED_PERMANENTLY);
     }
 }

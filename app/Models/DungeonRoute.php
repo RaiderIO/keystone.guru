@@ -395,7 +395,21 @@ class DungeonRoute extends Model
                 }
 
                 /** @var Enemy $enemy */
-                if ($enemy->enemy_forces_override >= 0) {
+                if ($this->teeming) {
+                    if ($enemy->enemy_forces_override_teeming >= 0) {
+                        $result += $enemy->enemy_forces_override_teeming;
+                    } else {
+                        /** @var Npc $npc */
+                        $npc = $npcs->where('id', $enemy->npc_id)->first();
+
+                        // May be null if an enemy was removed?
+                        if ($npc !== null) {
+                            // If teeming set, use that value, otherwise use the default
+                            $result += ($npc->enemy_forces_teeming >= 0 ? $npc->enemy_forces_teeming : $npc->enemy_forces);
+                        }
+                    }
+                } // No teeming, check if override is set
+                else if ($enemy->enemy_forces_override >= 0) {
                     $result += $enemy->enemy_forces_override;
                 } else {
                     /** @var Npc $npc */
@@ -403,11 +417,7 @@ class DungeonRoute extends Model
 
                     // May be null if an enemy was removed?
                     if ($npc !== null) {
-                        if ($this->teeming && $npc->enemy_forces_teeming >= 0) {
-                            $result += $npc->enemy_forces_teeming;
-                        } else {
-                            $result += $npc->enemy_forces;
-                        }
+                        $result += $npc->enemy_forces;
                     }
                 }
             }
@@ -442,16 +452,15 @@ class DungeonRoute extends Model
     /**
      * If this dungeon is in try mode, have a specific user claim this route as theirs.
      *
-     * @param $user User
+     * @param int $userId
      * @return bool
      */
-    public function claim($user)
+    public function claim(int $userId)
     {
         if ($result = $this->isTry()) {
-            $this->author_id = $user->id;
+            $this->author_id = $userId;
             $this->expires_at = null;
             $this->save();
-            $result = true;
         }
         return $result;
     }

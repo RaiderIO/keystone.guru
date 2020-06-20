@@ -16,7 +16,7 @@ class APINpcController extends Controller
             $npc = Npc::findOrFail($request->get('id'));
 
             $npc->delete();
-            $result = ['result' => 'success'];
+            $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

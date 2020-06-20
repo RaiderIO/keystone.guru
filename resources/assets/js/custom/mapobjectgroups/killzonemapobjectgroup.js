@@ -166,7 +166,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     _fetchSuccess(response) {
         // no super call, we're handling this by ourselves
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
-        console.log('_fetchSuccess!');
 
         if (!this.initialized) {
             let killZones = getState().getKillZones();

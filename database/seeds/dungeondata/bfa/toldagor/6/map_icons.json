@@ -2,10 +2,11 @@
     {
         "floor_id": 58,
         "map_icon_type_id": 17,
-        "lat": -166.625,
-        "lng": 110.125,
+        "lat": -171.5625,
+        "lng": 97.0625,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
     },
     {
         "floor_id": 58,
@@ -13,6 +14,16 @@
         "lat": -215.25,
         "lng": 189.625,
         "comment": "",
-        "permanent_tooltip": 0
+        "permanent_tooltip": 0,
+        "seasonal_index": null
+    },
+    {
+        "floor_id": 58,
+        "map_icon_type_id": 18,
+        "lat": -171.5625,
+        "lng": 100.625,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 1
     }
 ]
