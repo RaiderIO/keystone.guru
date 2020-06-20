@@ -2,8 +2,8 @@
     "id": 32,
     "release_changelog_id": 36,
     "version": "v2.7",
-    "created_at": "Sun, 11 Aug 2019 03:49:36 +0200",
-    "updated_at": "Sun, 11 Aug 2019 03:49:36 +0200",
+    "created_at": "2019-08-11T01:49:36.000000Z",
+    "updated_at": "2019-08-11T01:49:36.000000Z",
     "changelog": {
         "id": 36,
         "release_id": 32,
