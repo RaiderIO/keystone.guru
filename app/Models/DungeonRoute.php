@@ -636,6 +636,8 @@ class DungeonRoute extends Model
         $dungeonroute->dungeon_id = $this->dungeon_id;
         $dungeonroute->faction_id = $this->faction_id;
         $dungeonroute->title = sprintf('%s (%s)', $this->title, __('clone'));
+        $dungeonroute->teeming = $this->teeming;
+        $dungeonroute->seasonal_index = $this->seasonal_index;
         $dungeonroute->clone_of = $this->public_key;
         $dungeonroute->public_key = DungeonRoute::generateRandomPublicKey();
         $dungeonroute->published = $published;
