@@ -1,6 +1,6 @@
 <?php
 /** @var \App\Models\Team $model */
-$title = __('Edit team');
+$title = sprintf(__('Team %s'), $model->name);
 /** @var \App\User $user */
 $user = Auth::user();
 $userIsModerator = $model->isUserModerator($user);
@@ -184,10 +184,10 @@ foreach ($model->teamusers as $teamuser) {
                                     <i class="far fa-copy"></i>
                                 </button>
                                 @if($model->isUserModerator(\App\User::findOrFail(Auth::id())))
-                                <button id="team_invite_link_refresh" class="btn btn-info"
-                                        data-toggle="tooltip" title="{{ __('Refresh invite link') }}">
-                                    <i class="fa fa-sync"></i>
-                                </button>
+                                    <button id="team_invite_link_refresh" class="btn btn-info"
+                                            data-toggle="tooltip" title="{{ __('Refresh invite link') }}">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
                                 @endif
                             </div>
                         </div>

@@ -37,13 +37,22 @@ function getHandlebarsDefaultVariables() {
 }
 
 /**
+ * Hacked this myself to suit my needs.
+ * @param str
+ * @returns {*}
+ */
+function decodeHtmlEntity(str) {
+    return str.replace(/&#x27;/g, '\'').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+}
+
+/**
  *
  * @param key {string}
  * @returns {string}
  */
 function toSnakeCase(key) {
-   let result = key.replace( /([A-Z])/g, " $1" );
-   return result.split(' ').join('_').toLowerCase().substring(1);
+    let result = key.replace(/([A-Z])/g, " $1");
+    return result.split(' ').join('_').toLowerCase().substring(1);
 }
 
 /**
@@ -162,17 +171,17 @@ function pickHexFromHandlers(handlers, weight) {
 /**
  * Helper functions to help debug the site.
  */
-function getEnemy(id){
+function getEnemy(id) {
     let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
     return mapObjectGroup.findMapObjectById(id);
 }
 
-function getKillZone(id){
+function getKillZone(id) {
     let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
     return mapObjectGroup.findMapObjectById(id);
 }
 
-function getPath(id){
+function getPath(id) {
     let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
     return mapObjectGroup.findMapObjectById(id);
 }

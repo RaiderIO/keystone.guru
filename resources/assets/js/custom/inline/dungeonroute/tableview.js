@@ -140,8 +140,7 @@ class TeamTableView extends TableView {
             list: [
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '15%'},
-                {name: 'affixes', width: '15%', className: 'd-none d-md-table-cell'},
-                {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
+                {name: 'features', width: '25%'},
                 // {name: 'setup', width: '15%'},
                 {name: 'enemy_forces', width: '10%'},
                 {name: 'author', width: '10%'},
