@@ -64,6 +64,7 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         }
 
         brushline.id = remoteMapObject.id;
+        brushline.setIsLocal(remoteMapObject.hasOwnProperty('local') && remoteMapObject.local);
         brushline.loadRemoteMapObject(remoteMapObject.polyline);
 
         // We just downloaded the brushline, make it synced
@@ -80,8 +81,6 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
      * @returns {Brushline}
      */
     createNewLocalBrushline(vertices) {
-        console.log(JSON.stringify(vertices));
-
         let brushline = this._restoreObject({
             // Make a random ID so they don't overlap
             id: _.random(-99999999, -2),
@@ -92,8 +91,6 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
                 vertices_json: JSON.stringify(vertices)
             }
         });
-
-        brushline.setIsLocal(true);
 
         this.signal('brushline:new', {newBrushline: brushline});
         return brushline;

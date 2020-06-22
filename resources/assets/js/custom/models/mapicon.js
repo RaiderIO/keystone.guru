@@ -269,7 +269,7 @@ class MapIcon extends MapObject {
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        return this.map_icon_type.isEditable();
+        return this.map_icon_type.isEditable() && typeof this.linked_map_icon_id !== 'number';
     }
 
     isDeletable() {

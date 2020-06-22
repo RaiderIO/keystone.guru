@@ -31,7 +31,7 @@ class Brushline extends Polyline {
     }
 
     isEditable() {
-        return true;
+        return !this.isLocal();
     }
 
     toString() {
