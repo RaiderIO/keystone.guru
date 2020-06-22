@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property string $key
- * @property integer $width
- * @property integer $height
+ * @property int $width
+ * @property int $height
  * @property boolean $admin_only
  *
  * @property \App\Models\MapIcon $mapicons
