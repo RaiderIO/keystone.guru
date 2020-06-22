@@ -443,10 +443,14 @@ class DungeonRoute extends Model
      * @param User $user
      * @return bool
      */
-    public function mayUserEdit(User $user)
+    public function mayUserEdit(?User $user)
     {
-        return $this->isTry() || $this->isOwnedByUser($user) || $user->hasRole('admin')
-            || ($this->team !== null && $this->team->isUserCollaborator($user));
+        if ($user === null) {
+            return $this->isTry();
+        } else {
+            return $this->isOwnedByUser($user) || $user->hasRole('admin')
+                || ($this->team !== null && $this->team->isUserCollaborator($user));
+        }
     }
 
     /**
