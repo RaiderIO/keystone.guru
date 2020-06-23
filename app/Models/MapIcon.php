@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasLinkedAwakenedObelisk;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,8 +25,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MapIcon extends Model
 {
+    use HasLinkedAwakenedObelisk;
+
     protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'linked_map_icon_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
     protected $fillable = ['floor_id', 'dungeon_route_id', 'map_icon_type_id', 'linked_map_icon_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
+    protected $appends = ['linked_awakened_obelisk_id'];
 
     protected $with = ['mapicontype'];
 
