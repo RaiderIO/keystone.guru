@@ -62,4 +62,17 @@ trait HasLinkedAwakenedObelisk
 
         return $result;
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete Path properly if it gets deleted
+        static::deleting(function ($item) {
+            /** @var $item HasLinkedAwakenedObelisk */
+            if ($item->linkedawakenedobelisks !== null) {
+                $item->linkedawakenedobelisks()->delete();
+            }
+        });
+    }
 }
