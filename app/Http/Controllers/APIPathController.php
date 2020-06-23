@@ -68,6 +68,9 @@ class APIPathController extends Controller
                 $path->polyline_id = $polyline->id;
                 $path->save();
 
+                // Set or unset the linked awakened obelisks now that we have an ID
+                $path->setLinkedAwakenedObeliskByMapIconId($request->get('linked_awakened_obelisk_id', null));
+
                 // Something's updated; broadcast it
                 if (Auth::check()) {
                     broadcast(new PathChangedEvent($dungeonroute, $path, Auth::user()));

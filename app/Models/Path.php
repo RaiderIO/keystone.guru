@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasLinkedAwakenedObelisk;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,9 +19,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Path extends Model
 {
-    public $visible = ['id', 'floor_id', 'polyline'];
+    use HasLinkedAwakenedObelisk;
+
+    public $visible = ['id', 'floor_id', 'linked_awakened_obelisk_id', 'polyline'];
     public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id'];
     public $with = ['polyline'];
+    protected $appends = ['linked_awakened_obelisk_id'];
 
     /**
      * Get the dungeon route that this route is attached to.
@@ -45,7 +49,13 @@ class Path extends Model
         parent::boot();
 
         // Delete Path properly if it gets deleted
-        static::deleting(function ($item) {
+        static::deleting(function ($item)
+        {
+            /** @var $item HasLinkedAwakenedObelisk */
+            if ($item->linkedawakenedobelisks !== null) {
+                $item->linkedawakenedobelisks()->delete();
+            }
+
             /** @var $item Path */
             if ($item->polyline !== null) {
                 $item->polyline->delete();

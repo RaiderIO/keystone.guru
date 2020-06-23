@@ -23,6 +23,10 @@ trait HasLinkedAwakenedObelisk
             ->where('source_map_object_class_name', get_class($this));
     }
 
+    /**
+     * Gets the ID of the awakened obelisk that this model is linked to.
+     * @return int|null Null if not linked to any awakened obelisk.
+     */
     public function getLinkedAwakenedObeliskIdAttribute()
     {
         $result = null;
@@ -41,6 +45,11 @@ trait HasLinkedAwakenedObelisk
         return $result;
     }
 
+    /**
+     * Adds a link to an awakened obelisk by its map icon ID.
+     * @param int|null $mapIconId Null to unset any previous relation.
+     * @return bool True if a new relation was added successfully, false otherwise
+     */
     public function setLinkedAwakenedObeliskByMapIconId(?int $mapIconId)
     {
         $result = false;
@@ -60,7 +69,7 @@ trait HasLinkedAwakenedObelisk
             ]))->save();
         }
 
-        return $result;
+        return $result || $mapIcon === null;
     }
 
     public static function boot()
@@ -68,7 +77,8 @@ trait HasLinkedAwakenedObelisk
         parent::boot();
 
         // Delete Path properly if it gets deleted
-        static::deleting(function ($item) {
+        static::deleting(function ($item)
+        {
             /** @var $item HasLinkedAwakenedObelisk */
             if ($item->linkedawakenedobelisks !== null) {
                 $item->linkedawakenedobelisks()->delete();
