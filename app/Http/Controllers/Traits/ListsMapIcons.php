@@ -37,7 +37,7 @@ trait ListsMapIcons
                 /** @var $query Builder */
                 return $query->where('dungeon_route_id', $dungeonRouteId)->orWhere('dungeon_route_id', -1);
             })
-            // Order by non-linked map icons so that they are loaded first in the front end, and the linked map icons can always find them
-            ->orderBy('linked_map_icon_id')->get();
+            // Order by dungeon route so that route-agnostic icons are loaded first in the front end, and the linked map icons can always find them
+            ->orderBy('dungeon_route_id')->get();
     }
 }

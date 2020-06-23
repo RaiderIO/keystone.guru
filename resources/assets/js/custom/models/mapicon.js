@@ -68,7 +68,7 @@ let LeafletMapIconMarker = L.Marker.extend({
 /**
  * @property floor_id int
  * @property map_icon_type_id int
- * @property linked_map_icon_id int
+ * @property linked_awakened_obelisk_id int
  * @property permanent_tooltip int
  * @property seasonal_index int
  * @property comment string
@@ -80,7 +80,7 @@ class MapIcon extends MapObject {
         let self = this;
 
         this.map_icon_type = getState().getUnknownMapIconType();
-        this.linked_map_icon_polyline = null;
+        this.linked_awakened_obelisk_polyline = null;
         this.label = 'MapIcon';
 
         this.setSynced(false);
@@ -140,11 +140,11 @@ class MapIcon extends MapObject {
                 default: -1,
                 setter: this.setMapIconTypeId.bind(this)
             }),
-            linked_map_icon_id: new Attribute({
+            linked_awakened_obelisk_id: new Attribute({
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: null,
-                setter: this.setLinkedMapIconId.bind(this)
+                setter: this.setLinkedAwakenedObeliskId.bind(this)
             }),
             permanent_tooltip: new Attribute({
                 type: 'bool',
@@ -209,33 +209,33 @@ class MapIcon extends MapObject {
     localDelete() {
         super.localDelete();
 
-        if (this.linked_map_icon_polyline !== null) {
-            this.linked_map_icon_polyline.localDelete();
+        if (this.linked_awakened_obelisk_polyline !== null) {
+            this.linked_awakened_obelisk_polyline.localDelete();
         }
     }
 
-    setLinkedMapIconId(linkedMapIconId) {
+    setLinkedAwakenedObeliskId(linkedAwakenedObeliskId) {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
-        this.linked_map_icon_id = linkedMapIconId;
+        this.linked_awakened_obelisk_id = linkedAwakenedObeliskId;
 
         // Delete what we had, always
-        if (this.linked_map_icon_polyline !== null) {
+        if (this.linked_awakened_obelisk_polyline !== null) {
             // This local brushline is a bit different, is not deleted through Leaflet.DRAW which will cause it to not be cleaned up properly
             // The gist is, delete it from the drawn layers to get rid of it (it was already gone from editableLayers)
 
-            this.linked_map_icon_polyline.localDelete();
-            this.linked_map_icon_polyline = null;
+            this.linked_awakened_obelisk_polyline.localDelete();
+            this.linked_awakened_obelisk_polyline = null;
         }
 
         // Rebuild if necessary
-        if (typeof this.linked_map_icon_id === 'number') {
+        if (typeof this.linked_awakened_obelisk_id === 'number') {
             let mapIconMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
-            let linkedMapIcon = mapIconMapObjectGroup.findMapObjectById(this.linked_map_icon_id);
+            let linkedMapIcon = mapIconMapObjectGroup.findMapObjectById(this.linked_awakened_obelisk_id);
 
-            console.assert(linkedMapIcon !== null, `Unable to find MapIcon for linked_map_icon_id ${this.linked_map_icon_id}`, this)
+            console.assert(linkedMapIcon !== null, `Unable to find MapIcon for linked_awakened_obelisk_id ${this.linked_awakened_obelisk_id}`, this)
 
             let brushlineMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
-            this.linked_map_icon_polyline = brushlineMapObjectGroup.createNewLocalBrushline([{
+            this.linked_awakened_obelisk_polyline = brushlineMapObjectGroup.createNewLocalBrushline([{
                 lat: linkedMapIcon.lat,
                 lng: linkedMapIcon.lng
             }, {
@@ -269,7 +269,7 @@ class MapIcon extends MapObject {
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        return this.map_icon_type.isEditable() && typeof this.linked_map_icon_id !== 'number';
+        return this.map_icon_type.isEditable() && typeof this.linked_awakened_obelisk_id !== 'number';
     }
 
     isDeletable() {

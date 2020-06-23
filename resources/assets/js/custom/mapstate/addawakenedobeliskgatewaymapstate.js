@@ -41,7 +41,7 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
             let mapIconCandidate = mapIconManager.objects[i];
 
             // Found a match..
-            if( mapIconCandidate.linked_map_icon_id === this.sourceMapObject.id ){
+            if( mapIconCandidate.linked_awakened_obelisk_id === this.sourceMapObject.id ){
                 // Get rid of it, we've made a new one
                 mapIconCandidate.delete();
 
@@ -52,7 +52,7 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
 
         // Link the gateway to the obelisk
         addedGateway.setMapIconTypeId(getState().getAwakenedObeliskGatewayMapIconType().id);
-        addedGateway.setLinkedMapIconId(this.sourceMapObject.id);
+        addedGateway.setLinkedAwakenedObeliskId(this.sourceMapObject.id);
         addedGateway.save();
 
         this.stop();
