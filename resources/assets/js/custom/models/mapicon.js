@@ -80,7 +80,6 @@ class MapIcon extends MapObject {
         let self = this;
 
         this.map_icon_type = getState().getUnknownMapIconType();
-        this.linked_awakened_obelisk_polyline = null;
         this.label = 'MapIcon';
 
         this.setSynced(false);
@@ -143,8 +142,7 @@ class MapIcon extends MapObject {
             linked_awakened_obelisk_id: new Attribute({
                 type: 'int',
                 edit: false, // Not directly changeable by user
-                default: null,
-                setter: this.setLinkedAwakenedObeliskId.bind(this)
+                default: null
             }),
             permanent_tooltip: new Attribute({
                 type: 'bool',
@@ -206,45 +204,6 @@ class MapIcon extends MapObject {
         // this.onLayerInit();
     }
 
-    localDelete() {
-        super.localDelete();
-
-        if (this.linked_awakened_obelisk_polyline !== null) {
-            this.linked_awakened_obelisk_polyline.localDelete();
-        }
-    }
-
-    setLinkedAwakenedObeliskId(linkedAwakenedObeliskId) {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
-        this.linked_awakened_obelisk_id = linkedAwakenedObeliskId;
-
-        // Delete what we had, always
-        if (this.linked_awakened_obelisk_polyline !== null) {
-            // This local brushline is a bit different, is not deleted through Leaflet.DRAW which will cause it to not be cleaned up properly
-            // The gist is, delete it from the drawn layers to get rid of it (it was already gone from editableLayers)
-
-            this.linked_awakened_obelisk_polyline.localDelete();
-            this.linked_awakened_obelisk_polyline = null;
-        }
-
-        // Rebuild if necessary
-        if (typeof this.linked_awakened_obelisk_id === 'number') {
-            let mapIconMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
-            let linkedMapIcon = mapIconMapObjectGroup.findMapObjectById(this.linked_awakened_obelisk_id);
-
-            console.assert(linkedMapIcon !== null, `Unable to find MapIcon for linked_awakened_obelisk_id ${this.linked_awakened_obelisk_id}`, this)
-
-            let brushlineMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
-            this.linked_awakened_obelisk_polyline = brushlineMapObjectGroup.createNewLocalBrushline([{
-                lat: linkedMapIcon.lat,
-                lng: linkedMapIcon.lng
-            }, {
-                lat: this.layer.getLatLng().lat,
-                lng: this.layer.getLatLng().lng
-            }]);
-        }
-    }
-
     /**
      * Sets the map icon type ID and refreshes the layer for it.
      * @param mapIconTypeId
@@ -266,16 +225,25 @@ class MapIcon extends MapObject {
         return this.map_icon_type;
     }
 
+    /**
+     * @inheritDoc
+     */
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        return this.map_icon_type.isEditable() && typeof this.linked_awakened_obelisk_id !== 'number';
+        return this.map_icon_type.isEditable() && this.linked_awakened_obelisk_id === null;
     }
 
+    /**
+     * @inheritDoc
+     */
     isDeletable() {
-        return this.map_icon_type.isDeletable();
+        return this.map_icon_type.isDeletable() && this.linked_awakened_obelisk_id === null;
     }
 
+    /**
+     * @inheritDoc
+     */
     bindTooltip() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 

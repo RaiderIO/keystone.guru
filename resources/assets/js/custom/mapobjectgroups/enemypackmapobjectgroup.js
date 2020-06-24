@@ -16,8 +16,13 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    _restoreObject(remoteMapObject) {
+    /**
+     * @inheritDoc
+     */
+    _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof EnemyPackMapObjectGroup, 'this is not an EnemyPackMapObjectGroup', this);
+
+        let enemyPack = null;
 
         // Check teeming, faction status
         if (this._isObjectVisible(remoteMapObject)) {
@@ -61,15 +66,17 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
             }
 
             if (layer !== null) {
-                let enemyPack = this.createNew(layer);
+                enemyPack = this.createNew(layer);
                 enemyPack.id = remoteMapObject.id;
                 enemyPack.loadRemoteMapObject(remoteMapObject);
 
                 // We just downloaded the enemy pack, it's synced alright!
                 enemyPack.setSynced(true);
             } else {
-                console.warn('Unable to create layer for enemypack ' + remoteMapObject.id + '; not enough data points');
+                console.warn(`Unable to create layer for enemypack ${remoteMapObject.id}; not enough data points`);
             }
         }
+
+        return enemyPack;
     }
 }

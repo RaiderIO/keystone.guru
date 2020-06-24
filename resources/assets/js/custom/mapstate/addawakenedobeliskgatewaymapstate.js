@@ -37,11 +37,11 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
 
         // Find the gateway that was potentially already there
         let mapIconManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
-        for(let i = 0; i < mapIconManager.objects.length; i++ ){
+        for (let i = 0; i < mapIconManager.objects.length; i++) {
             let mapIconCandidate = mapIconManager.objects[i];
 
             // Found a match..
-            if( mapIconCandidate.linked_awakened_obelisk_id === this.sourceMapObject.id ){
+            if (mapIconCandidate.linked_awakened_obelisk_id === this.sourceMapObject.id) {
                 // Get rid of it, we've made a new one
                 mapIconCandidate.delete();
 
@@ -50,11 +50,35 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
             }
         }
 
+        // Find the path that was potentially already there
+        let pathManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
+        for (let i = 0; i < pathManager.objects.length; i++) {
+            let pathCandidate = pathManager.objects[i];
+
+            // Found a match..
+            if (pathCandidate.linked_awakened_obelisk_id === this.sourceMapObject.id) {
+                // Get rid of it, we've made a new one
+                pathCandidate.delete();
+
+                // Hide it right away, otherwise we get some brief overlap with 2 lines
+                pathCandidate.localDelete();
+            }
+        }
+
         // Link the gateway to the obelisk
         addedGateway.setMapIconTypeId(getState().getAwakenedObeliskGatewayMapIconType().id);
-        addedGateway.setLinkedAwakenedObeliskId(this.sourceMapObject.id);
+        addedGateway.linked_awakened_obelisk_id = this.sourceMapObject.id;
         addedGateway.save();
 
-        this.stop();
+        let addedPath = pathManager.createNewPath([{
+            lat: this.sourceMapObject.layer.getLatLng().lat,
+            lng: this.sourceMapObject.layer.getLatLng().lng
+        }, {
+            lat: addedGateway.layer.getLatLng().lat,
+            lng: addedGateway.layer.getLatLng().lng,
+        }], {linked_awakened_obelisk_id: this.sourceMapObject.id});
+
+        // Reset map state to null so this map state ends
+        this.map.setMapState(null);
     }
 }

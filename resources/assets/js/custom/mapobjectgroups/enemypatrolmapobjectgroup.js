@@ -16,9 +16,13 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    _restoreObject(remoteMapObject) {
+    /**
+     * @inheritDoc
+     */
+    _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof EnemyPatrolMapObjectGroup, 'this is not a EnemyPatrolMapObjectGroup', this);
 
+        let enemyPatrol = null;
         // Check teeming, faction status
         if (this._isObjectVisible(remoteMapObject)) {
             let points = [];
@@ -34,11 +38,13 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
 
             let layer = L.polyline(points);
 
-            let enemyPatrol = this.createNew(layer);
+            enemyPatrol = this.createNew(layer);
             enemyPatrol.loadRemoteMapObject(remoteMapObject);
 
             // We just downloaded the enemy patrol, it's synced alright!
             enemyPatrol.setSynced(true);
         }
+
+        return enemyPatrol;
     }
 }

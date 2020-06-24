@@ -141,7 +141,8 @@ class MapObjectGroup extends Signalable {
      * Restores an object that was received from the server
      * @param remoteMapObject object
      * @param username string
-     * @private
+     * @return {MapObject}
+     * @protected
      */
     _restoreObject(remoteMapObject, username = null) {
         console.error('override the _restoreObject function!');

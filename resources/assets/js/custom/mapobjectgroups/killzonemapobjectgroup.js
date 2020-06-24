@@ -73,11 +73,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     }
 
     /**
-     *
-     * @param remoteMapObject
-     * @param username
-     * @returns {KillZone}
-     * @private
+     * @inheritDoc
      */
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);

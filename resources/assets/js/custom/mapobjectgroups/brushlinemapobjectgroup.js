@@ -31,11 +31,7 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
     }
 
     /**
-     *
-     * @param remoteMapObject
-     * @param username
-     * @returns {Brushline}
-     * @private
+     * @inheritDoc
      */
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof BrushlineMapObjectGroup, 'this is not an BrushlineMapObjectGroup', this);
@@ -64,7 +60,6 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         }
 
         brushline.id = remoteMapObject.id;
-        brushline.setIsLocal(remoteMapObject.hasOwnProperty('local') && remoteMapObject.local);
         brushline.loadRemoteMapObject(remoteMapObject.polyline);
 
         // We just downloaded the brushline, make it synced
@@ -73,26 +68,6 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         // Show echo notification or not
         this._showReceivedFromEcho(brushline, username);
 
-        return brushline;
-    }
-
-    /**
-     * Creates a new local brushline that will not be synced
-     * @returns {Brushline}
-     */
-    createNewLocalBrushline(vertices) {
-        let brushline = this._restoreObject({
-            // Make a random ID so they don't overlap
-            id: _.random(-99999999, -2),
-            local: true,
-            polyline: {
-                color: c.map.mapicon.awakenedObeliskGatewayPolylineColor,
-                weight: c.map.mapicon.awakenedObeliskGatewayPolylineWeight,
-                vertices_json: JSON.stringify(vertices)
-            }
-        });
-
-        this.signal('brushline:new', {newBrushline: brushline});
         return brushline;
     }
 }

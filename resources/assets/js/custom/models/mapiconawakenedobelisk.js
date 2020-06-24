@@ -33,9 +33,12 @@ class MapIconAwakenedObelisk extends MapIcon {
 
         if (!getState().isMapAdmin()) {
             this.layer.on('click', function () {
-                self.map.setMapState(
-                    new AddAwakenedObeliskGatewayMapState(self.map, self)
-                )
+                console.log(self.map.getMapState());
+                if (self.map.getMapState() === null) {
+                    self.map.setMapState(
+                        new AddAwakenedObeliskGatewayMapState(self.map, self)
+                    )
+                }
             });
         }
     }
