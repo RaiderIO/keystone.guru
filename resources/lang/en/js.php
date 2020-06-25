@@ -237,6 +237,7 @@ return [
 
     // Path
     'path_color_label'                                        => 'Color',
+    'path_color_animated_label'                               => 'Animated color',
     'path_weight_label'                                       => 'Weight',
 
     // Enemy patrol

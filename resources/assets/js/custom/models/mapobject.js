@@ -172,14 +172,18 @@ class MapObject extends Signalable {
      * Assigns the popup to this map object
      * @protected
      */
-    _assignPopup() {
+    _assignPopup(layer = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
+
+        if( layer === null ) {
+            layer = this.layer;
+        }
 
         let self = this;
 
-        if (this.layer !== null && this.map.options.edit && this.isEditable()) {
-            this.layer.unbindPopup();
-            this.layer.bindPopup(this._getPopupHtml(), {
+        if (layer !== null && this.map.options.edit && this.isEditable()) {
+            layer.unbindPopup();
+            layer.bindPopup(this._getPopupHtml(), {
                 'maxWidth': '400',
                 'minWidth': '300',
                 'className': 'popupCustom'
@@ -199,8 +203,8 @@ class MapObject extends Signalable {
                 self._initPopup();
             };
 
-            this.layer.off('popupopen');
-            this.layer.on('popupopen', popupOpenFn);
+            layer.off('popupopen');
+            layer.on('popupopen', popupOpenFn);
         }
     }
 
@@ -239,7 +243,7 @@ class MapObject extends Signalable {
                         let newColor = '#' + color.toHEXA().join('');
                         // Only save when the color is valid
                         if (self._getValue(property, attribute) !== newColor && newColor.length === 7) {
-                            $(`#map_${mapObjectName}_edit_popup_${property}_${this.id}`).val(newColor);
+                            $(`#map_${mapObjectName}_edit_popup_${property}_${self.id}`).val(newColor);
                         }
 
                         // Reset ourselves
@@ -250,6 +254,10 @@ class MapObject extends Signalable {
         }
     }
 
+    /**
+     * Called when the popup submit button was clicked
+     * @private
+     */
     _popupSubmitClicked() {
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
         let mapObjectName = this._getSnakeCaseName();
@@ -297,7 +305,6 @@ class MapObject extends Signalable {
         }
 
         this.save();
-        // this.bindTooltip();
     }
 
     /**
@@ -394,19 +401,17 @@ class MapObject extends Signalable {
         // Only if set after the getter finished
         if (this.decorator !== null) {
             this.decorator.addTo(this.map.leafletMap);
+            this._assignPopup(this.decorator);
         }
     }
 
+    /**
+     * May be overridden by implementing classes to assign a decorator to the layer.
+     * @returns {L.Layer}|null
+     * @protected
+     */
     _getDecorator() {
         return null;
-    }
-
-    _updateContextMenuOptions() {
-        return {
-            contextmenuWidth: 140,
-            // Handled by loop in onLayerInit(), we want to refresh the list on every click
-            // contextmenuItems: this.getContextMenuItems()
-        };
     }
 
     /**
@@ -448,15 +453,6 @@ class MapObject extends Signalable {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         this.signal('object:deleted');
-    }
-
-    getContextMenuItems() {
-        return [
-            //     {
-            //     text: this.label + ' (synced: ' + this.synced + ')',
-            //     disabled: true
-            // }
-        ];
     }
 
     /**
@@ -586,16 +582,6 @@ class MapObject extends Signalable {
         let self = this;
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        // self.layer.bindContextMenu(self._updateContextMenuOptions());
-        // self.layer.on('contextmenu', function () {
-        //     let items = self.getContextMenuItems();
-        //     self.map.leafletMap.contextmenu.removeAllItems();
-        //
-        //     $.each(items, function (index, value) {
-        //         self.map.leafletMap.contextmenu.addItem(value);
-        //     });
-        //     return true;
-        // });
         self.layer.on('draw:edited', function () {
             // Changed = gone out of sync
             self.setSynced(false);
@@ -661,6 +647,9 @@ class MapObject extends Signalable {
         });
     }
 
+    /**
+     * Deletes this object from the server.
+     */
     delete() {
         if (this.isLocal()) {
             return;
