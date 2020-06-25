@@ -586,16 +586,16 @@ class MapObject extends Signalable {
         let self = this;
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        self.layer.bindContextMenu(self._updateContextMenuOptions());
-        self.layer.on('contextmenu', function () {
-            let items = self.getContextMenuItems();
-            self.map.leafletMap.contextmenu.removeAllItems();
-
-            $.each(items, function (index, value) {
-                self.map.leafletMap.contextmenu.addItem(value);
-            });
-            return true;
-        });
+        // self.layer.bindContextMenu(self._updateContextMenuOptions());
+        // self.layer.on('contextmenu', function () {
+        //     let items = self.getContextMenuItems();
+        //     self.map.leafletMap.contextmenu.removeAllItems();
+        //
+        //     $.each(items, function (index, value) {
+        //         self.map.leafletMap.contextmenu.addItem(value);
+        //     });
+        //     return true;
+        // });
         self.layer.on('draw:edited', function () {
             // Changed = gone out of sync
             self.setSynced(false);

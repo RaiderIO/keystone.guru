@@ -38,6 +38,11 @@ class Polyline extends MapObject {
                 setter: this.setColor.bind(this),
                 default: c.map.polyline.defaultColor
             }),
+            color_animated: new Attribute({
+                type: 'color',
+                setter: this.setColorAnimated.bind(this),
+                default: null
+            }),
             weight: new Attribute({
                 type: 'select',
                 setter: this.setWeight.bind(this),
@@ -80,6 +85,14 @@ class Polyline extends MapObject {
             savedBorder: color,
             saved: color
         });
+    }
+
+    /**
+     * Sets the animated color for this polyline.
+     * @param color
+     */
+    setColorAnimated(color) {
+        this.color_animated = color;
     }
 
     /**

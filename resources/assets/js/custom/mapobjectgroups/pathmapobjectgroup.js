@@ -50,7 +50,16 @@ class PathMapObjectGroup extends MapObjectGroup {
         // Only create a new one if it's new for us
         if (path === null) {
             // Create new layer
-            let layer = L.polyline(points);
+            let layer;
+            if (polyline.color_animated !== null) {
+                layer = L.polyline.antPath(points,
+                    $.extend({}, c.map.polyline.polylineOptionsAnimated, {
+                        pulseColor: polyline.color_animated
+                    })
+                );
+            } else {
+                layer = L.polyline(points);
+            }
             path = this.createNew(layer);
         } else {
             // Update latlngs

@@ -51,8 +51,16 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
 
         // Only create a new one if it's new for us
         if (brushline === null) {
-            // Create new layer
-            let layer = L.polyline(points);
+            let layer;
+            if (polyline.color_animated !== null) {
+                layer = L.polyline.antPath(points,
+                    $.extend({}, c.map.polyline.polylineOptionsAnimated, {
+                        pulseColor: polyline.color_animated
+                    })
+                );
+            } else {
+                layer = L.polyline(points);
+            }
             brushline = this.createNew(layer);
         } else {
             // Update latlngs

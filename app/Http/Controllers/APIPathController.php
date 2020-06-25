@@ -60,6 +60,7 @@ class APIPathController extends Controller
                 $polyline->model_id = $path->id;
                 $polyline->model_class = get_class($path);
                 $polyline->color = $request->get('color', '#f00');
+                $polyline->color_animated = $request->get('color_animated', null);
                 $polyline->weight = $request->get('weight', 2);
                 $polyline->vertices_json = json_encode($request->get('vertices'));
                 $polyline->save();

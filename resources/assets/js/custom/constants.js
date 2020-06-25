@@ -116,7 +116,15 @@ let c = {
             defaultColor: randomColor,
             defaultWeight: Cookies.get('polyline_default_weight'),
             minWeight: 1,
-            maxWeight: 5
+            maxWeight: 5,
+            polylineOptionsAnimated: {
+                delay: 400,
+                dashArray: [10, 20],
+                // pulseColorLight: '#FFF',
+                // pulseColorDark: '#000',
+                hardwareAccelerated: true,
+                use: L.polyline
+            },
         },
         brushline: {
             /**
@@ -146,7 +154,7 @@ let c = {
                 fillOpacity: 0.3,
                 opacity: 1,
             },
-            // Whenever the killzone is selected or focussed by the user to adjust it
+            // Whenever the killzone is selected or focused by the user to adjust it
             polygonOptionsSelected: {
                 delay: 400,
                 dashArray: [10, 20],
