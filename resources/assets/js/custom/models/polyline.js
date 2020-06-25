@@ -1,10 +1,34 @@
 class Polyline extends MapObject {
     constructor(map, layer) {
         super(map, layer);
+        let self = this;
+
         this.weight = c.map.polyline.defaultWeight;
-        this.color = null;
+
+        /** Separate layer which represents the animated state of this line, if any */
+        this.layerAnimated = null;
 
         this.setColor(c.map.polyline.defaultColor());
+
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            self._setAnimatedLayerVisibility(!(mapStateChangedEvent.data.newMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof DeleteMapState))
+        });
+        this.register('synced', this, function () {
+            // Create a separate animated layer if we need to
+            if (self.color_animated !== null) {
+                console.log('Making a new animated layer!');
+                // Remove if necessary
+                self._setAnimatedLayerVisibility(false);
+                self.layerAnimated = L.polyline.antPath(self.getVertices(),
+                    $.extend({}, c.map.polyline.polylineOptionsAnimated, {
+                        pulseColor: self.color_animated
+                    })
+                );
+
+                self._setAnimatedLayerVisibility(true);
+            }
+        });
     }
 
     /**
@@ -20,7 +44,7 @@ class Polyline extends MapObject {
         let self = this;
 
         let weights = [];
-        for(let i = c.map.polyline.minWeight; i <= c.map.polyline.maxWeight; i++ ){
+        for (let i = c.map.polyline.minWeight; i <= c.map.polyline.maxWeight; i++) {
             weights.push({
                 id: i,
                 name: i
@@ -53,7 +77,7 @@ class Polyline extends MapObject {
             vertices: new Attribute({
                 type: 'array',
                 edit: false,
-                getter: function(){
+                getter: function () {
                     return self.getVertices();
                 }
             })
@@ -61,9 +85,34 @@ class Polyline extends MapObject {
     }
 
     /**
+     * Sets the animated layer to be visible or not.
+     * @param visible True to be visible, false to be hidden.
+     * @private
+     */
+    _setAnimatedLayerVisibility(visible) {
+        console.assert(this instanceof Polyline, 'this was not a Polyline', this);
+        console.log('_setAnimatedLayerVisibility', visible);
+        if (visible) {
+            if (this.map.drawnLayers.hasLayer(this.layer)) {
+                this.map.drawnLayers.removeLayer(this.layer);
+            }
+            if (!this.map.drawnLayers.hasLayer(this.layerAnimated)) {
+                this.map.drawnLayers.addLayer(this.layerAnimated);
+            }
+        } else {
+            if (!this.map.drawnLayers.hasLayer(this.layer)) {
+                this.map.drawnLayers.addLayer(this.layer);
+            }
+            if (this.map.drawnLayers.hasLayer(this.layerAnimated)) {
+                this.map.drawnLayers.removeLayer(this.layerAnimated);
+            }
+        }
+    }
+
+    /**
      * @inheritDoc
      */
-    isEditable(){
+    isEditable() {
         return !this.isLocal();
     }
 
@@ -133,5 +182,12 @@ class Polyline extends MapObject {
             result.push({lat: coordinates[i][1], lng: coordinates[i][0]});
         }
         return result;
+    }
+
+    cleanup() {
+        super.cleanup();
+
+        this.map.unregister('map:mapstatechanged', this);
+        this.unregister('synced', this);
     }
 }

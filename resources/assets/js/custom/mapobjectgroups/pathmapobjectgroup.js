@@ -50,16 +50,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         // Only create a new one if it's new for us
         if (path === null) {
             // Create new layer
-            let layer;
-            if (polyline.color_animated !== null) {
-                layer = L.polyline.antPath(points,
-                    $.extend({}, c.map.polyline.polylineOptionsAnimated, {
-                        pulseColor: polyline.color_animated
-                    })
-                );
-            } else {
-                layer = L.polyline(points);
-            }
+            let layer = L.polyline(points);
             path = this.createNew(layer);
         } else {
             // Update latlngs
@@ -88,8 +79,9 @@ class PathMapObjectGroup extends MapObjectGroup {
     createNewPath(vertices, options) {
         let path = this._restoreObject($.extend({}, {
             polyline: {
-                color: c.map.mapicon.awakenedObeliskGatewayPolylineColor,
-                weight: c.map.mapicon.awakenedObeliskGatewayPolylineWeight,
+                color: c.map.polyline.awakenedObeliskGatewayPolylineColor,
+                color_animated: c.map.polyline.awakenedObeliskGatewayPolylineColorAnimated,
+                weight: c.map.polyline.awakenedObeliskGatewayPolylineWeight,
                 vertices_json: JSON.stringify(vertices)
             }
         }, options));

@@ -118,6 +118,7 @@ let c = {
             minWeight: 1,
             maxWeight: 5,
             polylineOptionsAnimated: {
+                opacity: 1,
                 delay: 400,
                 dashArray: [10, 20],
                 // pulseColorLight: '#FFF',
@@ -125,6 +126,9 @@ let c = {
                 hardwareAccelerated: true,
                 use: L.polyline
             },
+            awakenedObeliskGatewayPolylineColor: '#80FF1A',
+            awakenedObeliskGatewayPolylineColorAnimated: '#244812',
+            awakenedObeliskGatewayPolylineWeight: 3,
         },
         brushline: {
             /**
@@ -167,10 +171,6 @@ let c = {
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
-        },
-        mapicon: {
-            awakenedObeliskGatewayPolylineColor: '#80FF1A',
-            awakenedObeliskGatewayPolylineWeight: 3,
         },
         placeholderColors: {},
         editsidebar: {
