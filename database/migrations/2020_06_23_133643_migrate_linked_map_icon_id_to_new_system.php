@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\MapIcon;
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Collection;
 
 class MigrateLinkedMapIconIdToNewSystem extends Migration
 {
@@ -11,9 +14,10 @@ class MigrateLinkedMapIconIdToNewSystem extends Migration
      */
     public function up()
     {
+        /** @var Collection|MapIcon[] $linkedMapIcons */
         $linkedMapIcons = DB::table('map_icons')->select(['id', 'linked_map_icon_id'])->whereNotNull('linked_map_icon_id')->get();
         foreach ($linkedMapIcons as $linkedMapIcon) {
-            /** @var \App\Models\MapIcon $awakenedObeliskMapIcon */
+            /** @var MapIcon $awakenedObeliskMapIcon */
             $awakenedObeliskMapIcon = DB::table('map_icons')->find($linkedMapIcon->linked_map_icon_id);
 
             // Insert any existing links into the links table
@@ -23,6 +27,35 @@ class MigrateLinkedMapIconIdToNewSystem extends Migration
                 'target_map_icon_type_id'        => $awakenedObeliskMapIcon->map_icon_type_id,
                 'target_map_icon_seasonal_index' => $awakenedObeliskMapIcon->seasonal_index,
             ]);
+
+            // Create a new Path that was normally generated and used locally
+            DB::table('paths')->insert([
+                'dungeon_route_id' => $linkedMapIcon->dungeon_route_id,
+                'floor_id'         => $linkedMapIcon->floor_id,
+                'created_at'       => Carbon::now(),
+                'updated_at'       => Carbon::now(),
+            ]);
+
+            $pathId = DB::getPdo()->lastInsertId();
+
+            DB::table('polyline')->insert([
+                'model_id'      => $pathId,
+                'model_class'   => 'App\Models\Path',
+                'color'         => '#80FF1A',
+                'weight'        => 3,
+                'vertices_json' => json_encode([
+                    [
+                        'lat' => $awakenedObeliskMapIcon->lat,
+                        'lng' => $awakenedObeliskMapIcon->lng,
+                    ], [
+                        'lat' => $linkedMapIcon->lat,
+                        'lng' => $linkedMapIcon->lng,
+                    ]
+                ])
+            ]);
+
+            $polylineId = DB::getPdo()->lastInsertId();
+            DB::table('paths')->where('id', $pathId)->update(['polyline_id' => $polylineId]);
         }
     }
 
