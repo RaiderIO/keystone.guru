@@ -13,7 +13,7 @@ $(function () {
 
 class EnemyPatrol extends Polyline {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'enemypatrol'});
 
         this.label = 'EnemyPatrol';
         // console.log(rand);
@@ -48,13 +48,6 @@ class EnemyPatrol extends Polyline {
                 }
             ]
         });
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'enemypatrol';
     }
 
     /**

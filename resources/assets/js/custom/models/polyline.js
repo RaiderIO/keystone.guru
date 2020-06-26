@@ -1,6 +1,6 @@
 class Polyline extends MapObject {
-    constructor(map, layer) {
-        super(map, layer);
+    constructor(map, layer, options) {
+        super(map, layer, options);
         let self = this;
 
         this.weight = c.map.polyline.defaultWeight;
@@ -114,6 +114,16 @@ class Polyline extends MapObject {
                 }
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    localDelete() {
+        this._setAnimatedLayerVisibility(false);
+        this.layerAnimated = null;
+
+        super.localDelete();
     }
 
     /**

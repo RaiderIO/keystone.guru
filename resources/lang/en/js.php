@@ -196,8 +196,8 @@ return [
 
     // Popups
     // Map Object
-    'map_icon_faction_select_default_label'                   => 'Select faction',
-    'map_icon_teeming_select_default_label'                   => 'Select teeming',
+    'mapicon_faction_select_default_label'                   => 'Select faction',
+    'mapicon_teeming_select_default_label'                   => 'Select teeming',
 
     // Map icon
     'map_icon_faction_label'                                  => 'Faction',

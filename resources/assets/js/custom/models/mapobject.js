@@ -10,10 +10,20 @@ class MapObject extends Signalable {
      *
      * @param map
      * @param layer {L.layer}
+     * @param options {Object}
      */
-    constructor(map, layer) {
+    constructor(map, layer, options) {
         super();
         console.assert(map instanceof DungeonMap, 'Passed map is not a DungeonMap!', map);
+        console.assert(typeof options === 'object', 'options must be set and an object!', options);
+        console.assert(typeof options.name === 'string', 'options.name must be set!', options);
+
+        // Set default options, no need to repeat ourselves a lot of times
+        if (typeof options.route_suffix === 'undefined') {
+            options.route_suffix = options.name;
+        }
+        console.assert(typeof options.route_suffix === 'string', 'options.route_suffix must be set!', options);
+
         let self = this;
 
         this._defaultVisible = true;
@@ -24,6 +34,8 @@ class MapObject extends Signalable {
         this.map = map;
         /** @type L.Layer|null */
         this.layer = layer;
+
+        this.options = options;
 
         this.id = 0;
         this.faction = 'any'; // sensible default
@@ -151,31 +163,13 @@ class MapObject extends Signalable {
     }
 
     /**
-     * Get the name of the current object (MapObject) and returns a snake cased version (map_object).
-     * @returns {string}
-     * @private
-     */
-    _getSnakeCaseName() {
-        return toSnakeCase(this.constructor.name);
-    }
-
-    /**
-     * Get the last part of the URL we're using to edit this map object.
-     * @returns {string}
-     * @protected
-     */
-    _getRouteSuffix() {
-        console.error('Implement the _getRouteSuffix() function!');
-    }
-
-    /**
      * Assigns the popup to this map object
      * @protected
      */
     _assignPopup(layer = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        if( layer === null ) {
+        if (layer === null) {
             layer = this.layer;
         }
 
@@ -193,10 +187,8 @@ class MapObject extends Signalable {
             // This also cannot be a private function since that'll apparently give different signatures as well
             // (and thus trigger the submit function multiple times when clicked once)
             let popupOpenFn = function (event) {
-                let mapObjectName = self._getSnakeCaseName();
-
                 // Prevent multiple binds to click
-                let $submitBtn = $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`);
+                let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
                 $submitBtn.unbind('click');
                 $submitBtn.bind('click', self._popupSubmitClicked.bind(self));
 
@@ -220,7 +212,7 @@ class MapObject extends Signalable {
 
         refreshSelectPickers();
 
-        let mapObjectName = this._getSnakeCaseName();
+        let mapObjectName = this.options.name;
         let attributes = this._getAttributes();
 
         for (let property in attributes) {
@@ -260,7 +252,8 @@ class MapObject extends Signalable {
      */
     _popupSubmitClicked() {
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
-        let mapObjectName = this._getSnakeCaseName();
+
+        let mapObjectName = this.options.name;
         let attributes = this._getAttributes();
 
         for (let property in attributes) {
@@ -316,7 +309,7 @@ class MapObject extends Signalable {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
         let result = '';
 
-        let mapObjectName = this._getSnakeCaseName();
+        let mapObjectName = this.options.name;
         let attributes = this._getAttributes();
 
         for (let property in attributes) {
@@ -601,7 +594,7 @@ class MapObject extends Signalable {
 
         // Construct the data to send to the server
         let data = {};
-        let mapObjectName = this._getSnakeCaseName();
+        let mapObjectName = this.options.name;
         let attributes = this._getAttributes();
 
         for (let property in attributes) {
@@ -616,7 +609,7 @@ class MapObject extends Signalable {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getDungeonRoute().publicKey}/${this._getRouteSuffix()}`,
+            url: `/ajax/${getState().getDungeonRoute().publicKey}/${this.options.route_suffix}`,
             dataType: 'json',
             data: data,
             beforeSend: function () {
@@ -660,7 +653,7 @@ class MapObject extends Signalable {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getDungeonRoute().publicKey}/${this._getRouteSuffix()}/${this.id}`,
+            url: `/ajax/${getState().getDungeonRoute().publicKey}/${this.options.route_suffix}/${this.id}`,
             dataType: 'json',
             data: {
                 _method: 'DELETE'

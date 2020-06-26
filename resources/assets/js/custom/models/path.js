@@ -44,7 +44,7 @@ $(function () {
  */
 class Path extends Polyline {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'path'});
 
         this.label = 'Path';
         this.decorator = null;
@@ -90,13 +90,6 @@ class Path extends Polyline {
                 }
             ]
         });
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'path';
     }
 
     /**

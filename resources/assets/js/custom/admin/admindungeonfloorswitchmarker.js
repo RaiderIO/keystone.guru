@@ -17,13 +17,6 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
     /**
      * @inheritDoc
      */
-    _getRouteSuffix() {
-        return 'dungeonfloorswitchmarker';
-    }
-
-    /**
-     * @inheritDoc
-     */
     onLayerInit() {
         console.assert(this instanceof AdminDungeonFloorSwitchMarker, 'this is not a AdminDungeonFloorSwitchMarker', this);
         super.onLayerInit();

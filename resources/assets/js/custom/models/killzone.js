@@ -34,7 +34,7 @@ let LeafletKillZoneMarker = L.Marker.extend({
 
 class KillZone extends MapObject {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'killzone'});
 
         let self = this;
         this.id = 0;
@@ -66,13 +66,6 @@ class KillZone extends MapObject {
         if (this.map.options.edit) {
             this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'killzone';
     }
 
     /**

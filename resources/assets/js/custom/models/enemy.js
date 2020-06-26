@@ -41,7 +41,7 @@ let LeafletEnemyMarker = L.Marker.extend({
  */
 class Enemy extends MapObject {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'enemy'});
 
         this.label = 'Enemy';
         // Used for keeping track of what kill zone this enemy is attached to
@@ -169,13 +169,6 @@ class Enemy extends MapObject {
                 default: false
             })
         });
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'enemy';
     }
 
     _getPercentageString(enemyForces) {

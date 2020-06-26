@@ -15,7 +15,7 @@ $(function () {
 
 class EnemyPack extends MapObject {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'enemypack'});
 
         this.label = 'Enemy pack';
         this.setColors(c.map.enemypack.colors);
@@ -53,13 +53,6 @@ class EnemyPack extends MapObject {
                 }
             })
         });
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'enemypack';
     }
 
     /**

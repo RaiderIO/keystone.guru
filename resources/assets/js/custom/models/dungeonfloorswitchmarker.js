@@ -51,7 +51,7 @@ let LeafletDungeonFloorSwitchMarkerRight = L.Marker.extend({
 class DungeonFloorSwitchMarker extends MapObject {
 
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'dungeonfloorswitchmarker'});
 
         this.label = 'DungeonFloorSwitchMarker';
     }
@@ -107,13 +107,6 @@ class DungeonFloorSwitchMarker extends MapObject {
         });
     }
 
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'dungeonfloorswitchmarker';
-    }
-    
     /**
      * @inheritDoc
      */

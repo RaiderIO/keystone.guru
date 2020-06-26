@@ -75,7 +75,7 @@ let LeafletMapIconMarker = L.Marker.extend({
  */
 class MapIcon extends MapObject {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'map_icon', route_suffix: 'mapicon'});
 
         let self = this;
 
@@ -172,13 +172,6 @@ class MapIcon extends MapObject {
                 }
             })
         });
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'mapicon';
     }
 
     _synced() {
