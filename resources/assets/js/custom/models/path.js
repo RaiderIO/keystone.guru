@@ -63,13 +63,14 @@ class Path extends Polyline {
             return this._cachedAttributes;
         }
 
-        return $.extend(super._getAttributes(force), {
-            linked_awakened_obelisk_id: new Attribute({
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'linked_awakened_obelisk_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: null
             }),
-        });
+        ]);
     }
 
     /**

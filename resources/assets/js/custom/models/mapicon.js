@@ -127,51 +127,59 @@ class MapIcon extends MapObject {
             }
         }
 
-        return $.extend(super._getAttributes(force), {
-            floor_id: new Attribute({
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'floor_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
             }),
-            map_icon_type_id: new Attribute({
+            new Attribute({
+                name: 'map_icon_type_id',
                 type: 'select',
                 values: editableMapIconTypes,
                 default: -1,
                 setter: this.setMapIconTypeId.bind(this)
             }),
-            linked_awakened_obelisk_id: new Attribute({
+            new Attribute({
+                name: 'linked_awakened_obelisk_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: null
             }),
-            permanent_tooltip: new Attribute({
+            new Attribute({
+                name: 'permanent_tooltip',
                 type: 'bool',
                 default: false
             }),
-            seasonal_index: new Attribute({
+            new Attribute({
+                name: 'seasonal_index',
                 type: 'int',
                 admin: true,
                 default: null
             }),
-            comment: new Attribute({
+            new Attribute({
+                name: 'comment',
                 type: 'textarea',
                 default: ''
             }),
-            lat: new Attribute({
+            new Attribute({
+                name: 'lat',
                 type: 'float',
                 edit: false,
                 getter: function () {
                     return self.layer.getLatLng().lat;
                 }
             }),
-            lng: new Attribute({
+            new Attribute({
+                name: 'lng',
                 type: 'float',
                 edit: false,
                 getter: function () {
                     return self.layer.getLatLng().lng;
                 }
             })
-        });
+        ]);
     }
 
     _synced() {

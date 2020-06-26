@@ -196,8 +196,8 @@ return [
 
     // Popups
     // Map Object
-    'mapicon_faction_select_default_label'                   => 'Select faction',
-    'mapicon_teeming_select_default_label'                   => 'Select teeming',
+    'mapicon_faction_select_default_label'                    => 'Select faction',
+    'mapicon_teeming_select_default_label'                    => 'Select teeming',
 
     // Map icon
     'map_icon_faction_label'                                  => 'Faction',
@@ -233,6 +233,7 @@ return [
 
     // Brushline
     'brushline_color_label'                                   => 'Color',
+    'brushline_color_animated_label'                          => 'Animated color',
     'brushline_weight_label'                                  => 'Weight',
 
     // Path

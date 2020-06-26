@@ -12,10 +12,8 @@ class Polyline extends MapObject {
 
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Hide it when we're going to edit. It will be visible again when we've synced the polyline
-            if (mapStateChangedEvent.data.newMapState instanceof EditMapState ||
-                mapStateChangedEvent.data.newMapState instanceof DeleteMapState) {
-                self._setAnimatedLayerVisibility(false);
-            }
+            self._setAnimatedLayerVisibility(!(mapStateChangedEvent.data.newMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof DeleteMapState));
         });
         this.register('synced', this, function () {
             // Create a separate animated layer if we need to
@@ -55,37 +53,42 @@ class Polyline extends MapObject {
             });
         }
 
-        return $.extend(super._getAttributes(force), {
-            floor_id: new Attribute({
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'floor_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
             }),
-            color: new Attribute({
+            new Attribute({
+                name: 'color',
                 type: 'color',
                 setter: this.setColor.bind(this),
                 default: c.map.polyline.defaultColor
             }),
-            color_animated: new Attribute({
+            new Attribute({
+                name: 'color_animated',
                 type: 'color',
                 setter: this.setColorAnimated.bind(this),
                 default: null
             }),
-            weight: new Attribute({
+            new Attribute({
+                name: 'weight',
                 type: 'select',
                 setter: this.setWeight.bind(this),
                 values: weights,
                 show_default: false,
                 default: c.map.polyline.defaultWeight
             }),
-            vertices: new Attribute({
+            new Attribute({
+                name: 'vertices',
                 type: 'array',
                 edit: false,
                 getter: function () {
                     return self.getVertices();
                 }
             })
-        });
+        ]);
     }
 
     /**
@@ -130,7 +133,7 @@ class Polyline extends MapObject {
      * @inheritDoc
      */
     isEditable() {
-        return !this.isLocal();
+        return !this.isLocal() && this.linked_awakened_obelisk_id === null;
     }
 
     /**

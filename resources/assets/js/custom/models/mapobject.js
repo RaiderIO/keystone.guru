@@ -27,7 +27,7 @@ class MapObject extends Signalable {
         let self = this;
 
         this._defaultVisible = true;
-        /** @type {object} */
+        /** @type {Array} */
         this._cachedAttributes = null;
         this.synced = false;
         /** @type DungeonMap */
@@ -63,14 +63,16 @@ class MapObject extends Signalable {
         });
 
         // Set the defaults for our attributes so we don't get any undefined errors
+        /** @type {Array} */
         let attributes = this._getAttributes();
 
-        for (let property in attributes) {
-            if (attributes.hasOwnProperty(property)) {
-                let attribute = attributes[property];
+        for (let index in attributes) {
+            if (attributes.hasOwnProperty(index)) {
+                let attribute = attributes[index];
+                let name = attribute.name;
 
                 if (typeof attribute.default !== 'undefined') {
-                    this[property] = attribute.default;
+                    this[name] = attribute.default;
                 }
             }
         }
@@ -79,7 +81,7 @@ class MapObject extends Signalable {
     /**
      * Get the attributes that belong to this map object and how to represent them.
      * @param force {boolean} True to force a rebuild of the attributes.
-     * @returns {object}
+     * @returns {Array}
      * @protected
      */
     _getAttributes(force = false) {
@@ -111,54 +113,87 @@ class MapObject extends Signalable {
             }
         }
 
-        return {
-            id: new Attribute({
+        return [
+            new Attribute({
+                name: 'id',
                 type: 'int', // Not changeable by user
                 edit: false, // Not directly changeable by user
             }),
-            faction: new Attribute({
+            new Attribute({
+                name: 'faction',
                 type: 'select',
                 values: selectFactions,
                 admin: true,
                 show_default: false
             }),
-            teeming: new Attribute({
+            new Attribute({
+                name: 'teeming',
                 type: 'select',
                 values: selectTeemingOptions,
                 admin: true,
                 show_default: false
             })
-        };
+        ];
+    }
+
+    /**
+     * Finds an attribute by the name of the attribute.
+     * @param name string
+     * @returns {Attribute}|{null}
+     * @private
+     */
+    _findAttributeByName(name) {
+        console.assert(name !== null, `Name must be a string ${name}`, name);
+
+        let attribute = null;
+        let attributes = this._getAttributes();
+        for (let index in attributes) {
+            if (attributes.hasOwnProperty(index)) {
+                let attributeCandidate = attributes[index];
+                if (attributeCandidate.name === name) {
+                    attribute = attributeCandidate;
+                    break;
+                }
+            }
+        }
+
+        return attribute;
     }
 
     /**
      * Gets the value of a property using either the getter or directly.
-     * @param property {string}
-     * @param attribute {Attribute}
+     * @param name {string}
      * @returns {*}
      * @private
      */
-    _getValue(property, attribute) {
-        console.assert(attribute instanceof Attribute, 'attribute is not an Attribute', this);
-        return attribute.hasOwnProperty('getter') ? attribute.getter() : this[property];
+    _getValue(name) {
+        let attribute = this._findAttributeByName(name);
+        let attributes = this._getAttributes();
+        console.assert(attribute !== null, `Unable to find attribute with name ${name}`, attributes);
+        if (attribute === null) {
+            return false;
+        } else {
+            return attribute.hasOwnProperty('getter') ? attribute.getter() : this[name];
+        }
     }
 
     /**
      * Sets the value of a property using either the setter or directly.
-     * @param attribute {Attribute}
-     * @param property {string}
+     * @param name {string}
      * @param value {*}
      * @private
      */
-    _setValue(attribute, property, value) {
-        console.assert(attribute instanceof Attribute, 'attribute is not an Attribute', this);
+    _setValue(name, value) {
+        let attribute = this._findAttributeByName(name);
+        let attributes = this._getAttributes();
+        console.assert(attribute !== null, `Unable to find attribute with name ${name}`, attributes);
 
         // Use setter if supplied
         if (attribute.hasOwnProperty('setter')) {
             attribute.setter(value);
         } else {
             // Assign variable back to us
-            this[property] = value;
+            this[name] = value;
         }
     }
 
@@ -215,27 +250,28 @@ class MapObject extends Signalable {
         let mapObjectName = this.options.name;
         let attributes = this._getAttributes();
 
-        for (let property in attributes) {
-            if (attributes.hasOwnProperty(property)) {
-                let attribute = attributes[property];
+        for (let index in attributes) {
+            if (attributes.hasOwnProperty(index)) {
+                let attribute = attributes[index];
+                let name = attribute.name;
 
                 if (attribute.type === 'color') {
                     // Clean up the previous instance if any
                     if (typeof attribute._pickr !== 'undefined') {
                         // Unset it after to be sure to clear it for the next time
-                        attributes[property]._tempPickrColor = null;
-                        attributes[property]._pickr.destroyAndRemove();
+                        attributes[index]._tempPickrColor = null;
+                        attributes[index]._pickr.destroyAndRemove();
                     }
                     //
                     attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
-                        el: `#map_${mapObjectName}_edit_popup_${property}_btn_${this.id}`,
-                        default: this._getValue(property, attribute)
+                        el: `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`,
+                        default: this._getValue(name)
                     })).on('save', (color, instance) => {
                         // Apply the new color
                         let newColor = '#' + color.toHEXA().join('');
                         // Only save when the color is valid
-                        if (self._getValue(property, attribute) !== newColor && newColor.length === 7) {
-                            $(`#map_${mapObjectName}_edit_popup_${property}_${self.id}`).val(newColor);
+                        if (self._getValue(name) !== newColor && newColor.length === 7) {
+                            $(`#map_${mapObjectName}_edit_popup_${name}_${self.id}`).val(newColor);
                         }
 
                         // Reset ourselves
@@ -256,12 +292,14 @@ class MapObject extends Signalable {
         let mapObjectName = this.options.name;
         let attributes = this._getAttributes();
 
-        for (let property in attributes) {
-            if (attributes.hasOwnProperty(property)) {
-                let attribute = attributes[property];
+        for (let index in attributes) {
+            if (attributes.hasOwnProperty(index)) {
+                let attribute = attributes[index];
+                let name = attribute.name;
+
                 // Color is already set by Pickr
                 if (attribute.isEditable()) {
-                    let $element = $(`#map_${mapObjectName}_edit_popup_${property}_${this.id}`);
+                    let $element = $(`#map_${mapObjectName}_edit_popup_${name}_${this.id}`);
                     console.assert($element.length > 0, 'Element must be found!', attribute);
 
                     // Read the value differently based on its type
@@ -290,9 +328,9 @@ class MapObject extends Signalable {
                             break;
                     }
 
-                    this._setValue(attribute, property, val);
+                    this._setValue(name, val);
                     // Let anyone else know it's changed so they may act upon it
-                    this.signal('property:changed', {property: property, value: val});
+                    this.signal('property:changed', {name: name, value: val});
                 }
             }
         }
@@ -312,9 +350,10 @@ class MapObject extends Signalable {
         let mapObjectName = this.options.name;
         let attributes = this._getAttributes();
 
-        for (let property in attributes) {
-            if (attributes.hasOwnProperty(property)) {
-                let attribute = attributes[property];
+        for (let index in attributes) {
+            if (attributes.hasOwnProperty(index)) {
+                let attribute = attributes[index];
+                let name = attribute.name;
 
                 if (attribute.isEditable()) {
                     let handlebarsString = '';
@@ -347,12 +386,12 @@ class MapObject extends Signalable {
 
                     result += typeTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                         id: this.id,
-                        property: property,
+                        property: name,
                         map_object_name: mapObjectName,
-                        label: lang.get(`messages.${mapObjectName}_${property}_label`),
-                        value: this._getValue(property, attribute),
+                        label: lang.get(`messages.${mapObjectName}_${name}_label`),
+                        value: this._getValue(name),
                         values: attribute.hasOwnProperty('values') ? attribute.values : [],
-                        select_default_label: attribute.type === 'select' ? lang.get(`messages.${mapObjectName}_${property}_select_default_label`) : '',
+                        select_default_label: attribute.type === 'select' ? lang.get(`messages.${mapObjectName}_${name}_select_default_label`) : '',
                         show_default: attribute.hasOwnProperty('show_default') ? attribute.show_default : true,
                         live_search: attribute.hasOwnProperty('live_search') ? attribute.live_search : false
                     }));
@@ -414,11 +453,13 @@ class MapObject extends Signalable {
     loadRemoteMapObject(remoteMapObject) {
         let attributes = this._getAttributes();
 
-        for (let property in attributes) {
-            if (attributes.hasOwnProperty(property)) {
-                let attribute = attributes[property];
-                if (remoteMapObject.hasOwnProperty(property)) {
-                    let value = remoteMapObject[property];
+        for (let index in attributes) {
+            if (attributes.hasOwnProperty(index)) {
+                let attribute = attributes[index];
+                let name = attribute.name;
+
+                if (remoteMapObject.hasOwnProperty(name)) {
+                    let value = remoteMapObject[name];
                     // Do some preprocessing if necessary
                     switch (attribute.type) {
                         case 'bool':
@@ -429,7 +470,7 @@ class MapObject extends Signalable {
                     if (typeof attribute.setter === 'function') {
                         attribute.setter(value);
                     } else {
-                        this[property] = value;
+                        this[name] = value;
                     }
                 } else {
                     // @TODO MapIcons don't have Teeming and Faction properties so this gets thrown a lot
@@ -597,12 +638,13 @@ class MapObject extends Signalable {
         let mapObjectName = this.options.name;
         let attributes = this._getAttributes();
 
-        for (let property in attributes) {
-            if (attributes.hasOwnProperty(property)) {
-                let attribute = attributes[property];
+        for (let index in attributes) {
+            if (attributes.hasOwnProperty(index)) {
+                let attribute = attributes[index];
+                let name = attribute.name;
 
                 if (attribute.isSaveable() && attribute.isEditableAdmin()) {
-                    data[property] = this._getValue(property, attribute);
+                    data[name] = this._getValue(name);
                 }
             }
         }

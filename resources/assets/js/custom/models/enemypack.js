@@ -35,24 +35,27 @@ class EnemyPack extends MapObject {
 
         let self = this;
 
-        return $.extend(super._getAttributes(force), {
-            floor_id: new Attribute({
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'floor_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
             }),
-            label: new Attribute({
+            new Attribute({
+                name: 'label',
                 type: 'text',
                 default: 'Enemy pack'
             }),
-            vertices: new Attribute({
+            new Attribute({
+                name: 'vertices',
                 type: 'array',
                 edit: false,
                 getter: function(){
                     return self.getVertices();
                 }
             })
-        });
+        ]);
     }
 
     /**

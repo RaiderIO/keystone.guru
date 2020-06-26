@@ -63,6 +63,10 @@ class DungeonFloorSwitchMarker extends MapObject {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this was not an DungeonFloorSwitchMarker', this);
         let self = this;
 
+        if (this._cachedAttributes !== null && !force) {
+            return this._cachedAttributes;
+        }
+
         // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
         let currentFloorId = getState().getCurrentFloor().id;
         let dungeonData = getState().getDungeonData();
@@ -79,32 +83,36 @@ class DungeonFloorSwitchMarker extends MapObject {
             }
         }
 
-        return $.extend(super._getAttributes(force), {
-            floor_id: new Attribute({
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'floor_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
             }),
-            target_floor_id: new Attribute({
+            new Attribute({
+                name: 'target_floor_id',
                 type: 'select',
                 values: selectFloors,
                 default: -1
             }),
-            lat: new Attribute({
+            new Attribute({
+                name: 'lat',
                 type: 'float',
                 edit: false,
                 getter: function () {
                     return self.layer.getLatLng().lat;
                 }
             }),
-            lng: new Attribute({
+            new Attribute({
+                name: 'lng',
                 type: 'float',
                 edit: false,
                 getter: function () {
                     return self.layer.getLatLng().lng;
                 }
             })
-        });
+        ]);
     }
 
     /**
