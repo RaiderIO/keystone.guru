@@ -69,8 +69,9 @@ class Polyline extends MapObject {
             new Attribute({
                 name: 'color_animated',
                 type: 'color',
+                edit: getState().hasPaidTier(c.paidtiers.animated_polylines),
                 setter: this.setColorAnimated.bind(this),
-                default: null
+                default: getState().hasPaidTier(c.paidtiers.animated_polylines) ? c.map.polyline.defaultColorAnimated : null
             }),
             new Attribute({
                 name: 'weight',

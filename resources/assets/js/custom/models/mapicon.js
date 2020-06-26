@@ -222,8 +222,19 @@ class MapIcon extends MapObject {
      * @returns {MapIconType}
      */
     getMapIconType() {
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         console.assert(this.map_icon_type instanceof MapIconType, 'mapIconType is not a MapIconType', this.map_icon_type);
         return this.map_icon_type;
+    }
+
+    /**
+     * Return the text that is displayed on the label of this Map Icon.
+     * @returns {string}
+     */
+    getDisplayText(){
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+
+        return this.comment.length > 0 ? this.comment : this.map_icon_type.name;
     }
 
     /**
@@ -251,7 +262,7 @@ class MapIcon extends MapObject {
         this.unbindTooltip();
 
         if (this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
-            let text = this.comment.length > 0 ? this.comment : this.map_icon_type.name;
+            let text = this.getDisplayText();
 
             // Wrap the text
             if (text.length > 75) {

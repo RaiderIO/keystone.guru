@@ -58,6 +58,8 @@ class APIBrushlineController extends Controller
             $polyline->model_id = $brushline->id;
             $polyline->model_class = get_class($brushline);
             $polyline->color = $request->get('color', '#f00');
+            $colorAnimated = $request->get('color_animated', null);
+            $polyline->color_animated = empty($colorAnimated) ? null : $colorAnimated;
             $polyline->weight = $request->get('weight', 2);
             $polyline->vertices_json = json_encode($request->get('vertices'));
             $polyline->save();
@@ -77,9 +79,7 @@ class APIBrushlineController extends Controller
             $dungeonroute->touch();
         }
 
-        $result = ['id' => $brushline->id];
-
-        return $result;
+        return ['id' => $brushline->id];
     }
 
     /**

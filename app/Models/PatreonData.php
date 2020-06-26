@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
  * @property $id int
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $expires_at datetime
  *
  * @property User $user
+ * @property Collection|PaidTier[] $paidtiers
  *
  * @mixin \Eloquent
  */

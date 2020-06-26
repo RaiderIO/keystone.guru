@@ -68,6 +68,7 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
         // Link the gateway to the obelisk
         addedGateway.setMapIconTypeId(getState().getAwakenedObeliskGatewayMapIconType().id);
         addedGateway.linked_awakened_obelisk_id = this.sourceMapObject.id;
+        addedGateway.comment = this.sourceMapObject.getDisplayText();
         addedGateway.save();
 
         let addedPath = pathManager.createNewPath([{

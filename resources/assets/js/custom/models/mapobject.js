@@ -255,7 +255,7 @@ class MapObject extends Signalable {
                 let attribute = attributes[index];
                 let name = attribute.name;
 
-                if (attribute.type === 'color') {
+                if (attribute.isEditable() && attribute.type === 'color') {
                     // Clean up the previous instance if any
                     if (typeof attribute._pickr !== 'undefined') {
                         // Unset it after to be sure to clear it for the next time

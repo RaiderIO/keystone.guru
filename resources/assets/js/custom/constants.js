@@ -6,6 +6,12 @@ if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
 }
 
 let c = {
+    paidtiers: {
+        adfree: 'ad-free',
+        unlimited_dungeonroutes: 'unlimited-dungeonroutes',
+        unlimited_routes: 'unlimited-routes',
+        animated_polylines: 'animated-polylines'
+    },
     map: {
         admin: {
             mapobject: {
@@ -104,7 +110,7 @@ let c = {
         },
         enemypatrol: {
             // Function so that you could do custom stuff with it if you want
-            defaultColor: function(){
+            defaultColor: function () {
                 return '#E25D5D';
             }
         },
@@ -114,6 +120,7 @@ let c = {
         },
         polyline: {
             defaultColor: randomColor,
+            defaultColorAnimated: '#F00',
             defaultWeight: Cookies.get('polyline_default_weight'),
             minWeight: 1,
             maxWeight: 5,

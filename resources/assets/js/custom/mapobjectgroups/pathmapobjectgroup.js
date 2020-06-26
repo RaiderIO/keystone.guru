@@ -80,7 +80,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         let path = this._restoreObject($.extend({}, {
             polyline: {
                 color: c.map.polyline.awakenedObeliskGatewayPolylineColor,
-                color_animated: c.map.polyline.awakenedObeliskGatewayPolylineColorAnimated,
+                color_animated: getState().hasPaidTier(c.paidtiers.animated_polylines) ? c.map.polyline.awakenedObeliskGatewayPolylineColorAnimated : null,
                 weight: c.map.polyline.awakenedObeliskGatewayPolylineWeight,
                 vertices_json: JSON.stringify(vertices)
             }

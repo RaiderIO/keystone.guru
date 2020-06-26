@@ -5,6 +5,7 @@ namespace App;
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
+use App\Models\PaidTier;
 use App\Models\PatreonData;
 use App\Models\Team;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -90,13 +91,30 @@ class User extends Authenticatable
         $result = $this->hasRole('admin');
 
         // If we weren't an admin, check patreon data
-        if (!$result && $this->patreonData !== null) {
-            foreach ($this->patreonData->paidtiers as $tier) {
+        if (!$result && $this->patreondata !== null) {
+            foreach ($this->patreondata->paidtiers as $tier) {
                 if ($tier->name === $name) {
                     $result = true;
                     break;
                 }
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get a list of tiers that this User has access to.
+     *
+     * @return Collection
+     */
+    function getPaidTiers()
+    {
+        // Admins have all paid tiers
+        if ($this->hasRole('admin')) {
+            $result = PaidTier::all()->pluck(['name']);
+        } else {
+            $result = $this->patreondata->paidtiers;
         }
 
         return $result;

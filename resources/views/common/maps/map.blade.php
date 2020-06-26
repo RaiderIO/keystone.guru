@@ -99,6 +99,7 @@ if ($isAdmin) {
         'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
         'killZones' => $routeKillZones,
         'dungeonData' => $dungeon,
+        'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'dungeonroute' => [
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,
