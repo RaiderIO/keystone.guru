@@ -21,6 +21,7 @@ use Illuminate\Support\Collection;
 class PatreonData extends Model
 {
     protected $table = 'patreon_data';
+    protected $with = 'paidtiers';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

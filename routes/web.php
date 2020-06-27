@@ -242,6 +242,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
 
             Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
+
+            Route::put('/user/{user}/patreon/paidtier', 'UserController@storepaidtiers');
         });
 
         // May be performed without being logged in (try functionality)

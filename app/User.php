@@ -70,6 +70,47 @@ class User extends Authenticatable
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function dungeonroutes()
+    {
+        return $this->hasMany('App\Models\DungeonRoute', 'author_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function reports()
+    {
+        return $this->hasMany('App\Models\UserReport', 'author_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    function patreondata()
+    {
+        return $this->hasOne('App\Models\PatreonData');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function gameserverregion()
+    {
+        // Don't know why it won't work without the foreign key specified..
+        return $this->belongsTo('App\Models\GameServerRegion', 'game_server_region_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function teams()
+    {
+        return $this->belongsToMany('App\Models\Team', 'team_users');
+    }
+
+    /**
      * Checks if this user has registered using OAuth or not.
      *
      * @return bool
@@ -140,47 +181,6 @@ class User extends Authenticatable
         return max(0,
             config('keystoneguru.registered_user_dungeonroute_limit') - \App\Models\DungeonRoute::where('author_id', $this->id)->count()
         );
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    function dungeonroutes()
-    {
-        return $this->hasMany('App\Models\DungeonRoute', 'author_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    function reports()
-    {
-        return $this->hasMany('App\Models\UserReport', 'author_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    function patreondata()
-    {
-        return $this->hasOne('App\Models\PatreonData');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    function gameserverregion()
-    {
-        // Don't know why it won't work without the foreign key specified..
-        return $this->belongsTo('App\Models\GameServerRegion', 'game_server_region_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    function teams()
-    {
-        return $this->belongsToMany('App\Models\Team', 'team_users');
     }
 
     /**

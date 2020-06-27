@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PaidTier;
+use App\Models\PatreonTier;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Teapot\StatusCode\Http;
 
 class UserController extends Controller
 {
@@ -15,7 +18,10 @@ class UserController extends Controller
      */
     public function list()
     {
-        return view('admin.user.list', ['models' => User::with('roles', 'dungeonroutes')->get()]);
+        return view('admin.user.list', [
+            'models'    => User::with('roles', 'dungeonroutes', 'patreondata')->get(),
+            'paidTiers' => PaidTier::all()
+        ]);
     }
 
     /**
@@ -73,5 +79,31 @@ class UserController extends Controller
         }
 
         return redirect()->route('admin.users');
+    }
+
+    /**
+     * @param Request $request
+     * @param User $user
+     */
+    public function storepaidtiers(Request $request, User $user)
+    {
+        $newPaidTierIds = $request->get('paidtiers', []);
+
+        if (isset($user->patreondata)) {
+            // Remove old paid tiers
+            $user->patreondata->tiers()->delete();
+
+            foreach ($newPaidTierIds as $newPaidTierId) {
+                $newPaidTier = new PatreonTier([
+                    'patreon_data_id' => $user->patreondata->id,
+                    'paid_tier_id'    => $newPaidTierId
+                ]);
+                $newPaidTier->save();
+            }
+
+            return response()->noContent();
+        } else {
+            return response('This user is not a Patron', Http::BAD_REQUEST);
+        }
     }
 }
