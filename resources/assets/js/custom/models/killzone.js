@@ -69,6 +69,90 @@ class KillZone extends MapObject {
     }
 
     /**
+     * @inheritDoc
+     */
+    _getAttributes(force) {
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
+
+        if (this._cachedAttributes !== null && !force) {
+            return this._cachedAttributes;
+        }
+
+        let self = this;
+
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'floor_id',
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: getState().getCurrentFloor().id
+            }),
+            new Attribute({
+                name: 'color',
+                type: 'color'
+            }),
+            new Attribute({
+                name: 'lat',
+                type: 'float',
+                edit: false,
+                getter: function () {
+                    return self.layer !== null ? self.layer.getLatLng().lat : null;
+                },
+                default: 0
+            }),
+            new Attribute({
+                name: 'lng',
+                type: 'float',
+                edit: false,
+                getter: function () {
+                    return self.layer !== null ? self.layer.getLatLng().lng : null;
+                },
+                default: 0
+            }),
+            new Attribute({
+                name: 'index',
+                type: 'int',
+                edit: false,
+                setter: this.setIndex.bind(this),
+                default: 1
+            }),
+            new Attribute({
+                name: 'killzoneenemies',
+                type: 'int',
+                edit: false,
+                save: false,
+                setter: this._setEnemiesFromRemote.bind(this),
+                default: []
+            }),
+            new Attribute({
+                name: 'enemies',
+                type: 'array',
+                edit: false,
+                default: []
+            }),
+        ]);
+    }
+
+    /**
+     *
+     * @param remoteEnemies
+     */
+    _setEnemiesFromRemote(remoteEnemies) {
+        console.assert(this instanceof KillZone, 'this is not an KillZone', this);
+
+        // Reconstruct the enemies we're coupled with in a format we expect
+        if (typeof remoteEnemies !== 'undefined') {
+            let enemies = [];
+            for (let i = 0; i < remoteEnemies.length; i++) {
+                let enemy = remoteEnemies[i];
+                enemies.push(enemy.enemy_id);
+            }
+
+            this.setEnemies(enemies);
+        }
+    }
+
+    /**
      * An enemy that was added to us has now detached itself.
      * @param enemyDetachedEvent
      * @private
@@ -356,6 +440,13 @@ class KillZone extends MapObject {
     }
 
     /**
+     * @inheritDoc
+     */
+    isEditableByPopup() {
+        return false;
+    }
+
+    /**
      * Checks if this killzone has a kill area or not.
      * @returns {boolean}
      */
@@ -383,6 +474,24 @@ class KillZone extends MapObject {
             let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
             if (enemy !== null) {
                 result += enemy.getEnemyForces();
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Get the amount of enemy forces that will be killed after this pack has been killed.
+     * @returns {number}
+     */
+    getEnemyForcesCumulative() {
+        let result = 0;
+
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
+            let killZone = killZoneMapObjectGroup.objects[i];
+            if (killZone.getIndex() <= this.getIndex()) {
+                result += killZone.getEnemyForces();
             }
         }
 
@@ -546,7 +655,6 @@ class KillZone extends MapObject {
     bindTooltip() {
         super.bindTooltip();
         if (this.enemiesLayer !== null) {
-
             this.enemiesLayer.unbindTooltip();
 
             // Only when NOT currently editing the layer
@@ -606,68 +714,23 @@ class KillZone extends MapObject {
         });
     }
 
-    edit() {
-        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
-        this.save();
-        this.redrawConnectionsToEnemies();
-        this.signal('killzone:changed');
+    localDelete() {
+        // Detach from all enemies upon deletion
+        this._detachFromEnemies();
+
+        super.localDelete();
     }
 
-    delete() {
-        let self = this;
-        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+    onSaveSuccess(json) {
+        super.onSaveSuccess(json);
 
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone/' + self.id,
-            dataType: 'json',
-            data: {
-                _method: 'DELETE'
-            },
-            success: function (json) {
-                // Detach from all enemies upon deletion
-                self._detachFromEnemies();
-                self.localDelete();
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-
-                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
-            }
-        });
+        this.signal('killzone:synced', {enemy_forces: json.enemy_forces});
     }
 
-    save() {
-        let self = this;
-        console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+    onDeleteSuccess(json) {
+        super.onDeleteSuccess(json);
 
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/killzone',
-            dataType: 'json',
-            data: {
-                id: self.id,
-                floor_id: getState().getCurrentFloor().id,
-                color: self.color,
-                lat: self.layer !== null ? self.layer.getLatLng().lat : null,
-                lng: self.layer !== null ? self.layer.getLatLng().lng : null,
-                enemies: self.enemies
-            },
-            success: function (json) {
-                self.id = json.id;
-
-                self.setSynced(true);
-                self.signal('killzone:synced', {enemy_forces: json.enemy_forces});
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
-
-                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
-            }
-        });
+        this.signal('killzone:synced', {enemy_forces: json.enemy_forces});
     }
 
     cleanup() {

@@ -73,6 +73,7 @@ window.AntPath = require('leaflet-ant-path');
 window.Grapick = require('grapick');
 window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
+window.Draggable = require('@shopify/draggable');
 
 require('@fortawesome/fontawesome-free');
 

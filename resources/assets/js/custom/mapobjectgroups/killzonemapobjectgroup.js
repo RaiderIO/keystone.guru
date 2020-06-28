@@ -1,3 +1,6 @@
+/**
+ * @property objects {KillZone[]}
+ */
 class KillZoneMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
         super(manager, MAP_OBJECT_GROUP_KILLZONE, '', editable);
@@ -97,24 +100,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
 
         // Now update the killzone to its new properties
-        killzone.id = remoteMapObject.id;
-        killzone.floor_id = remoteMapObject.floor_id;
-        killzone.setIndex(this.objects.length);
-        // Use default if not set
-        if (remoteMapObject.color !== '') {
-            killzone.color = remoteMapObject.color;
-        }
-
-        // Reconstruct the enemies we're coupled with in a format we expect
-        if (typeof remoteMapObject.killzoneenemies !== 'undefined') {
-            let enemies = [];
-            for (let i = 0; i < remoteMapObject.killzoneenemies.length; i++) {
-                let enemy = remoteMapObject.killzoneenemies[i];
-                enemies.push(enemy.enemy_id);
-            }
-
-            killzone.setEnemies(enemies);
-        }
+        killzone.loadRemoteMapObject(remoteMapObject);
 
         // Hide the layer of the killzone
         killzone.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
@@ -157,6 +143,36 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         this.signal('killzone:new', {newKillZone: killZone});
         return killZone;
+    }
+
+    /**
+     * Saves all KillZones using the mass update endpoint.
+     */
+    saveAll() {
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
+        let self = this;
+
+        let killZonesData = [];
+        for(let i = 0; i < this.objects.length; i++ ){
+            let killZone = this.objects[i];
+
+            killZonesData.push(killZone.getSaveData());
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: `/ajax/${getState().getDungeonRoute().publicKey}/${MAP_OBJECT_GROUP_KILLZONE}`,
+            dataType: 'json',
+            data: {
+                killzones: killZonesData
+            },
+            success: function(json){
+                for(let i = 0; i < self.objects.length; i++ ){
+                    self.objects[i].setSynced(true);
+                    self.objects[i].onSaveSuccess(json);
+                }
+            }
+        });
     }
 
     _fetchSuccess(response) {

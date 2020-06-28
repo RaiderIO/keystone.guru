@@ -40,6 +40,7 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
 
             enemyPatrol = this.createNew(layer);
             enemyPatrol.loadRemoteMapObject(remoteMapObject);
+            enemyPatrol.loadRemoteMapObject(remoteMapObject.polyline);
 
             // We just downloaded the enemy patrol, it's synced alright!
             enemyPatrol.setSynced(true);

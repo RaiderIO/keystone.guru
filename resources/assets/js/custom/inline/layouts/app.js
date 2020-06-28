@@ -203,7 +203,7 @@ function defaultAjaxErrorFn(xhr, textStatus, errorThrown)
         }
     }
 
-    showErrorNotification(message + " (" + xhr.status + ")");
+    showErrorNotification(`${message} (${xhr.status})`);
 }
 
 /**

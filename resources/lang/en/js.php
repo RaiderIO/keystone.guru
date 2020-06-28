@@ -69,7 +69,7 @@ return [
 
     'select_category_label' => 'Select category...',
 
-    'show_enemies_label'     => 'Show enemies',
+    'show_details_label'     => 'Show details',
     'add_kill_area_label'    => 'Add kill area',
     'remove_kill_area_label' => 'Remove kill area',
     'delete_killzone_label'  => 'Delete pull',

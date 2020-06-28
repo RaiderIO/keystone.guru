@@ -51,23 +51,14 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
 
         // Only create a new one if it's new for us
         if (brushline === null) {
-            let layer;
-            if (polyline.color_animated !== null) {
-                layer = L.polyline.antPath(points,
-                    $.extend({}, c.map.polyline.polylineOptionsAnimated, {
-                        pulseColor: polyline.color_animated
-                    })
-                );
-            } else {
-                layer = L.polyline(points);
-            }
+            let layer = L.polyline(points);
             brushline = this.createNew(layer);
         } else {
             // Update latlngs
             brushline.layer.setLatLngs(points);
         }
 
-        brushline.id = remoteMapObject.id;
+        brushline.loadRemoteMapObject(remoteMapObject);
         brushline.loadRemoteMapObject(remoteMapObject.polyline);
 
         // We just downloaded the brushline, make it synced

@@ -8,6 +8,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         this._colorPickers = [];
         this._currentlyActiveColorPicker = null;
         this._newPullKillZone = null;
+        this._draggable = null;
     }
 
     /**
@@ -263,7 +264,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
-            self._setPullText(killZone);
+            self._updatePullText(killZone);
         });
     }
 
@@ -272,12 +273,19 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @param killZone {KillZone}
      * @private
      */
-    _setPullText(killZone) {
+    _updatePullText(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
-        $(`#map_killzonessidebar_killzone_${killZone.id}_index`).text(killZone.getIndex());
-        $(`#map_killzonessidebar_killzone_${killZone.id}_enemies`).text(`${killZone.enemies.length} enemies (${killZone.getEnemyForces()})`);
+        // let color = isColorDark(killZone.color) ? 'white' : 'black';
+        // $(`#map_killzonessidebar_killzone_${killZone.id}_expand`).css('background-color', killZone.color).css('border-color', color).css('color', color);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_index:not(.draggable--original)`).text(killZone.getIndex());
+        $(`#map_killzonessidebar_killzone_${killZone.id}_enemies:not(.draggable--original)`)
+            .text(`${killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`)
+            .text(`${killZone.getEnemyForces()}`);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_grip:not(.draggable--original)`).css('color', killZone.color);
+        // .css('color', killZone.color).css('text-shadow', `1px 1px #222`);
     }
 
     /**
@@ -320,7 +328,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // let enemyForcesPercent = (killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100;
         // enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
-        this._setPullText(killZone);
+        this._updatePullText(killZone);
 
 
         // Fill the enemy list
@@ -475,7 +483,63 @@ class CommonMapsKillzonessidebar extends InlineCode {
             if (killZoneMapObjectGroup.objects.length === 0) {
                 $('#killzones_no_pulls').show();
             }
+
+            this._draggable = new Draggable.Sortable(document.querySelectorAll('#killzones_container'), {
+                draggable: '.map_killzonessidebar_killzone',
+                classes: 'bg-primary'
+            });
+            this._draggable.on('drag:out', self._draggedKillZoneRow.bind(self));
+            this._draggable.on('drag:stop', self._dragStop.bind(self));
+            let events = ['drag:start', 'drag:move', 'drag:over', 'drag:over:container', 'drag:out', 'drag:out:container', 'drag:stop', 'drag:pressure'];
+            for (let index in events) {
+                this._draggable.on(events[index], function () {
+                    console.log(events[index]);
+                });
+            }
         });
+    }
+
+    _draggedKillZoneRow() {
+        this._dragHasSwitchedOrder = true;
+    }
+
+    _dragStop() {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+
+        if (this._dragHasSwitchedOrder) {
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+            let $killZonesContainerChildren = $('#killzones_container').children();
+            let count = 1;
+            for (let index in $killZonesContainerChildren) {
+                if ($killZonesContainerChildren.hasOwnProperty(index)) {
+                    let $killZoneRow = $($killZonesContainerChildren[index]);
+                    let id = parseInt($killZoneRow.data('id'));
+
+                    // NaN check, there's a mirror created and inserted in the container, this filters it out
+                    if (id === id && !$killZoneRow.attr('class').includes('draggable-mirror') && !$killZoneRow.attr('class').includes('draggable--original')) {
+                        let killZone = killZoneMapObjectGroup.findMapObjectById(id);
+                        console.assert(killZone instanceof KillZone, 'Unable to find killZone!', $killZoneRow);
+
+                        // Re-set the indices
+                        killZone.setIndex(count);
+                        count++;
+                    }
+                }
+            }
+
+            // Update after all indices are set, otherwise cumulative enemy forces will not be correct
+            for (let index in killZoneMapObjectGroup.objects) {
+                if (killZoneMapObjectGroup.objects.hasOwnProperty(index)) {
+                    let killZone = killZoneMapObjectGroup.objects[index];
+
+                    this._updatePullText(killZone);
+                }
+            }
+
+            killZoneMapObjectGroup.saveAll();
+        }
+        this._dragHasSwitchedOrder = false;
     }
 
     /**

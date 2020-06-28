@@ -210,7 +210,7 @@ class MapObject extends Signalable {
 
         let self = this;
 
-        if (layer !== null && this.map.options.edit && this.isEditable()) {
+        if (layer !== null && this.map.options.edit && this.isEditable() && this.isEditableByPopup()) {
             layer.unbindPopup();
             layer.bindPopup(this._getPopupHtml(), {
                 'maxWidth': '400',
@@ -490,6 +490,14 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Gets if this map object is editable by a popup or through other means.
+     * @returns {boolean}
+     */
+    isEditableByPopup() {
+        return true;
+    }
+
+    /**
      * Gets if this map object is editable, default is true. May be overridden.
      * @returns {boolean}
      */
@@ -623,19 +631,30 @@ class MapObject extends Signalable {
     }
 
     /**
-     * Saves this map object to the server.
+     * Called when this map object was saved successfully.
+     * @param json {object} The JSON response (if any).
      */
-    save() {
-        if (this.isLocal()) {
-            return;
-        }
+    onSaveSuccess(json) {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        let self = this;
-        console.assert(this instanceof MapObject, 'this was not a MapObject', this);
+    }
 
+    /**
+     * Called when this map object was deleted successfully.
+     * @param json {object} The JSON response (if any).
+     */
+    onDeleteSuccess(json) {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
+
+    }
+
+    /**
+     * Get the data that should be sent to the server.
+     * @returns {{}}
+     */
+    getSaveData() {
         // Construct the data to send to the server
         let data = {};
-        let mapObjectName = this.options.name;
         let attributes = this._getAttributes();
 
         for (let index in attributes) {
@@ -649,11 +668,27 @@ class MapObject extends Signalable {
             }
         }
 
+        return data;
+    }
+
+    /**
+     * Saves this map object to the server.
+     */
+    save() {
+        if (this.isLocal()) {
+            return;
+        }
+        let mapObjectName = this.options.name;
+
+        let self = this;
+        console.assert(this instanceof MapObject, 'this was not a MapObject', this);
+
+
         $.ajax({
             type: 'POST',
             url: `/ajax/${getState().getDungeonRoute().publicKey}/${this.options.route_suffix}`,
             dataType: 'json',
-            data: data,
+            data: this.getSaveData(),
             beforeSend: function () {
                 $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`).attr('disabled', 'disabled');
                 self.signal('save:beforesend');
@@ -667,6 +702,8 @@ class MapObject extends Signalable {
                 self._assignPopup();
 
                 self.signal('save:success', {json: json});
+
+                self.onSaveSuccess(json);
             },
             complete: function () {
                 $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`).removeAttr('disabled');
@@ -702,6 +739,8 @@ class MapObject extends Signalable {
             },
             success: function (json) {
                 self.localDelete();
+
+                self.onDeleteSuccess(json);
             },
             error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred

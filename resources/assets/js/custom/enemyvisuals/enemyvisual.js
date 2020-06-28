@@ -36,12 +36,21 @@ class EnemyVisual extends Signalable {
 
         // If it changed, refresh the entire visual
         this.enemy.register(['enemy:set_raid_marker'], this, this._buildVisual.bind(this));
-        this.enemy.register('killzone:attached', this, function () {
+        this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();
             killZone.register('killzone:changed', self, self._buildVisual.bind(self));
             killZone.register('object:deleted', self, self._buildVisual.bind(self));
-            self._buildVisual();
+
+            // Check if we can shortcut by updating just the border
+            if ((killZoneAttachedEvent.data.previousKillZone instanceof KillZone && !(killZone instanceof KillZone)) ||
+                (!(killZoneAttachedEvent.data.previousKillZone instanceof KillZone) && killZone instanceof KillZone)) {
+                // We cannot
+                self._buildVisual();
+            } else {
+                // From killzone to killzone we can, otherwise we can't
+                self._updateBorder(killZone.color);
+            }
         });
         // Cleanup if it's detached
         this.enemy.register('killzone:detached', this, function (event) {
@@ -50,7 +59,7 @@ class EnemyVisual extends Signalable {
                 event.data.previous.unregister('object:deleted', self);
                 event.data.previous.unregister('killzone:changed', self);
             }
-            self._buildVisual();
+            self._updateBorder('white');
         });
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
@@ -367,6 +376,16 @@ class EnemyVisual extends Signalable {
 
             this.signal('enemyvisual:builtvisual', {});
         }
+    }
+
+    /**
+     * Updates the color of the border for this visual
+     * @param color string
+     * @private
+     */
+    _updateBorder(color) {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+        $('#map_enemy_visual_' + this.enemy.id).find('.outer').css('border-color', color);
     }
 
     // @TODO Listen to killzone selectable changed event

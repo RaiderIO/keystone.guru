@@ -1,3 +1,6 @@
+/**
+ * @property objects {MapObject[]}
+ */
 class MapObjectGroup extends Signalable {
 
     constructor(manager, names, field, editable = false) {

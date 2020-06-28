@@ -9,7 +9,10 @@ use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
@@ -19,26 +22,23 @@ class APIKillZoneController extends Controller
     use ChecksForDuplicates;
 
     /**
-     * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param array $data
+     * @return array|ResponseFactory|Response
      * @throws \Exception
      */
-    function store(Request $request, DungeonRoute $dungeonroute)
+    private function _saveKillZone(DungeonRoute $dungeonroute, array $data)
     {
-        if (!$dungeonroute->isTry()) {
-            $this->authorize('edit', $dungeonroute);
-        }
-
         /** @var KillZone $killZone */
-        $killZone = KillZone::findOrNew($request->get('id'));
+        $killZone = KillZone::findOrNew($data['id']);
 
         try {
             $killZone->dungeon_route_id = $dungeonroute->id;
-            $killZone->floor_id = $request->get('floor_id');
-            $killZone->color = $request->get('color');
-            $killZone->lat = $request->get('lat');
-            $killZone->lng = $request->get('lng');
+            $killZone->floor_id = $data['floor_id'];
+            $killZone->color = $data['color'];
+            $killZone->lat = $data['lat'];
+            $killZone->lng = $data['lng'];
+            $killZone->index = $data['index'];
 
             if (!$killZone->exists) {
                 // Find out of there is a duplicate
@@ -51,7 +51,7 @@ class APIKillZoneController extends Controller
                 $killZone->deleteEnemies();
 
                 // Get the new enemies, only unique values in case there's some bug allowing selection of the same enemy multiple times
-                $enemyIds = array_unique($request->get('enemies', []));
+                $enemyIds = array_unique($data['enemies'] ?? []);
 
                 // Store them, but only if the enemies are part of the same dungeon as the dungeonroute
                 $killZoneEnemies = [];
@@ -59,7 +59,7 @@ class APIKillZoneController extends Controller
                 foreach ($enemyIds as $enemyId) {
                     /** @var Enemy $enemy */
                     $enemy = $enemyModels->where('id', $enemyId)->first();
-                    if( $dungeonroute->dungeon_id === $enemy->floor->dungeon_id  ){
+                    if ($dungeonroute->dungeon_id === $enemy->floor->dungeon_id) {
                         // Assign kill zone to each passed enemy
                         $killZoneEnemies[] = [
                             'kill_zone_id' => $killZone->id,
@@ -88,11 +88,62 @@ class APIKillZoneController extends Controller
         return $result;
     }
 
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array|ResponseFactory|Response
+     * @throws \Exception
+     */
+    function store(Request $request, DungeonRoute $dungeonroute)
+    {
+        if (!$dungeonroute->isTry()) {
+            $this->authorize('edit', $dungeonroute);
+        }
+
+
+        return $this->_saveKillZone($dungeonroute, $request->all());
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     * @return array|ResponseFactory|Response|null
+     * @throws AuthorizationException
+     */
+    function storeall(Request $request, DungeonRoute $dungeonroute)
+    {
+        if (!$dungeonroute->isTry()) {
+            $this->authorize('edit', $dungeonroute);
+        }
+
+        // We're deliberately overwriting the $result constantly, we're only interested in the last result
+        $result = null;
+        foreach ($request->get('killzones', []) as $killZoneData) {
+            $result = $this->_saveKillZone($dungeonroute, $killZoneData);
+            // Had an error, abort!
+            if (!is_array($result)) {
+                break;
+            }
+        }
+
+        // User didn't set any items, bs
+        if ($result === null) {
+            $result = ['enemy_forces' => $dungeonroute->getEnemyForces()];
+        } // All was good
+        else if (is_array($result)) {
+            unset($result['id']);
+        }
+        // else we had an error and just return that
+
+        return $result;
+    }
+
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param KillZone $killzone
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return array|ResponseFactory|Response
      * @throws \Exception
      */
     function delete(Request $request, DungeonRoute $dungeonroute, KillZone $killzone)
