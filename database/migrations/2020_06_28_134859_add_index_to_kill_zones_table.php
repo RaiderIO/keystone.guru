@@ -19,7 +19,7 @@ class AddIndexToKillZonesTable extends Migration
         });
 
         // https://stackoverflow.com/a/47940669/771270
-        DB::raw('
+        DB::update('
             update kill_zones a
             join (
               select a.id, a.dungeon_route_id, count(*) pos
