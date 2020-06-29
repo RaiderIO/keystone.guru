@@ -73,7 +73,7 @@ return [
     'add_kill_area_label'       => 'Add kill area',
     'remove_kill_area_label'    => 'Remove kill area',
     'delete_killzone_label'     => 'Delete pull',
-    'kill_zone_has_boss_label'  => 'Boss enemy in pull',
+    'kill_zone_has_boss_label'  => 'Boss in pull',
 
     // Route edit tools
     'path'                      => 'Path',
