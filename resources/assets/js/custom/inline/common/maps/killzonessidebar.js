@@ -254,17 +254,19 @@ class CommonMapsKillzonessidebar extends InlineCode {
     }
 
     /**
-     *
+     * @param minIndex int
      * @private
      */
-    _rebuildPullIndices() {
+    _updatePullTexts(minIndex = 0) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
         let self = this;
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
-            self._updatePullText(killZone);
+            if (killZone.getIndex > minIndex) {
+                self._updatePullText(killZone);
+            }
         });
     }
 
@@ -308,7 +310,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 }
 
                 // We deleted this pull, all other indices may be messed up because of it
-                self._rebuildPullIndices();
+                self._updatePullTexts();
             }
         });
 
@@ -328,7 +330,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // let enemyForcesPercent = (killZone.getEnemyForces() / this.map.getEnemyForcesRequired()) * 100;
         // enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
-        this._updatePullText(killZone);
+        // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
+        this._updatePullTexts(killZone, killZone.getIndex());
 
 
         // Fill the enemy list

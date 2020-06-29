@@ -122,6 +122,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
      * @returns {KillZone}
      */
     createNewPull(enemyIds = []) {
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
         // Construct an object equal to that received from the server
         let killzoneEnemies = [];
         for (let i = 0; i < enemyIds.length; i++) {
@@ -135,6 +136,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             killzoneenemies: killzoneEnemies,
             lat: null,
             lng: null,
+            index: this.objects.length,
             // Bit of a hack, we don't want the synced event to be fired in this case, we only want it _after_ the ID has been
             // set by calling save() below. That will then trigger object:add and the killzone will have it's ID for the UI
             local: true

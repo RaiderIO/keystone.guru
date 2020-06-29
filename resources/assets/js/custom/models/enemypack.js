@@ -45,6 +45,7 @@ class EnemyPack extends MapObject {
             new Attribute({
                 name: 'label',
                 type: 'text',
+                edit: false, // Not directly changeable by user
                 default: 'Enemy pack'
             }),
             new Attribute({
