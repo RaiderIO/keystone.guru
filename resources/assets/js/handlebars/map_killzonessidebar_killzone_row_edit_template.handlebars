@@ -14,8 +14,15 @@
                 <div class="col p-2">
                     <h5 class="card-title map_killzonessidebar_killzone_text {{text-class}} pt-1">
                         <span id="map_killzonessidebar_killzone_{{id}}_enemies"></span>
-                        (<span class="text-success">+<span id="map_killzonessidebar_killzone_{{id}}_enemy_forces"></span></span>)
+                        <span id="map_killzonessidebar_killzone_{{id}}_enemy_forces_container">
+                            (<span class="text-success">+<span id="map_killzonessidebar_killzone_{{id}}_enemy_forces"></span></span>)
+                        </span>
                     </h5>
+                </div>
+
+                <div id="map_killzonessidebar_killzone_{{id}}_has_boss" class="col-auto p-2"
+                     data-toggle="tooltip" title="{{kill_zone_has_boss_label}}">
+                    <img src="/images/mapicon/raid_marker_skull.png" style="width: 16px; height: 16px;" />
                 </div>
 
                 <div id="map_killzonessidebar_killzone_{{id}}_grip" class="col-auto pt-2" style="font-size: 1.3em">

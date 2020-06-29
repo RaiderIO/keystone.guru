@@ -62,8 +62,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // If there was an event, prevent clicking the 'expand' button also selecting the killzone
         if (clickEvent !== null && typeof clickEvent !== 'undefined') {
             let $target = $(clickEvent.target);
-            if (($target.hasClass('btn') || $target.hasClass('pcr-button') ||
-                $target.hasClass('fa') || $target.hasClass('fas'))) {
+            let $parent = $($target.parent());
+            if ($target.hasClass('btn') || $target.hasClass('pcr-button') || $parent.is('button')) {
                 return;
             }
         }
@@ -279,13 +279,33 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
+        let killZoneEnemyForces = killZone.getEnemyForces();
+
         // let color = isColorDark(killZone.color) ? 'white' : 'black';
         // $(`#map_killzonessidebar_killzone_${killZone.id}_expand`).css('background-color', killZone.color).css('border-color', color).css('color', color);
         $(`#map_killzonessidebar_killzone_${killZone.id}_index:not(.draggable--original)`).text(killZone.getIndex());
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemies:not(.draggable--original)`)
             .text(`${killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`);
-        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`)
-            .text(`${killZone.getEnemyForces()}`);
+        
+        // Show enemy forces or not
+        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_container:not(.draggable--original)`).toggle(killZoneEnemyForces > 0);
+        $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`).text(`${killZoneEnemyForces}`);
+
+        // Show boss icon or not
+        let hasBoss = false;
+        let enemies = getState().getEnemies();
+        for (let i = 0; i < killZone.enemies.length; i++) {
+            let enemyId = killZone.enemies[i];
+            for (let j = 0; j < enemies.length; j++) {
+                let enemy = enemies[j];
+                if (enemy.id === enemyId && enemy.npc !== null && enemy.npc.classification_id === 3) {
+                    hasBoss = true;
+                    break;
+                }
+            }
+        }
+        $(`#map_killzonessidebar_killzone_${killZone.id}_has_boss:not(.draggable--original)`).toggle(hasBoss);
+
         $(`#map_killzonessidebar_killzone_${killZone.id}_grip:not(.draggable--original)`).css('color', killZone.color);
         // .css('color', killZone.color).css('text-shadow', `1px 1px #222`);
     }
@@ -493,12 +513,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
             });
             this._draggable.on('drag:out', self._draggedKillZoneRow.bind(self));
             this._draggable.on('drag:stop', self._dragStop.bind(self));
-            let events = ['drag:start', 'drag:move', 'drag:over', 'drag:over:container', 'drag:out', 'drag:out:container', 'drag:stop', 'drag:pressure'];
-            for (let index in events) {
-                this._draggable.on(events[index], function () {
-                    console.log(events[index]);
-                });
-            }
+            // let events = ['drag:start', 'drag:move', 'drag:over', 'drag:over:container', 'drag:out', 'drag:out:container', 'drag:stop', 'drag:pressure'];
+            // for (let index in events) {
+            //     this._draggable.on(events[index], function () {
+            //         console.log(events[index]);
+            //     });
+            // }
         });
     }
 
