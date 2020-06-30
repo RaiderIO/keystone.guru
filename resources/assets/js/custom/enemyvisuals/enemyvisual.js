@@ -169,7 +169,7 @@ class EnemyVisual extends Signalable {
      * Called whenever the root visual object was clicked
      * @private
      */
-    _visualClicked() {
+    _visualRightClicked() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
         let self = this;
 
@@ -281,7 +281,7 @@ class EnemyVisual extends Signalable {
 
             // Re-bind this function
             $enemyDiv.unbind('contextmenu');
-            $enemyDiv.bind('contextmenu', self._visualClicked.bind(self));
+            $enemyDiv.bind('contextmenu', self._visualRightClicked.bind(self));
 
             // Only stop the map state at this point
             self.map.setMapState(null);
@@ -372,7 +372,7 @@ class EnemyVisual extends Signalable {
             // When the visual exists, bind a click method to it (to increase performance)
             let $enemyIcon = $('#map_enemy_visual_' + this.enemy.id).find('.enemy_icon');
             $enemyIcon.unbind('contextmenu');
-            $enemyIcon.bind('contextmenu', this._visualClicked.bind(this));
+            $enemyIcon.bind('contextmenu', this._visualRightClicked.bind(this));
 
             this.signal('enemyvisual:builtvisual', {});
         }

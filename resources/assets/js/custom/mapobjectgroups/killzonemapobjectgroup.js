@@ -136,7 +136,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             killzoneenemies: killzoneEnemies,
             lat: null,
             lng: null,
-            index: this.objects.length,
+            index: this.objects.length + 1,
             // Bit of a hack, we don't want the synced event to be fired in this case, we only want it _after_ the ID has been
             // set by calling save() below. That will then trigger object:add and the killzone will have it's ID for the UI
             local: true
