@@ -154,8 +154,10 @@ class User extends Authenticatable
         // Admins have all paid tiers
         if ($this->hasRole('admin')) {
             $result = PaidTier::all()->pluck(['name']);
+        } else if( isset($this->patreondata) ){
+            $result = $this->patreondata->paidtiers->pluck(['name']);
         } else {
-            $result = $this->patreondata->paidtiers;
+            $result = [];
         }
 
         return $result;
