@@ -448,7 +448,7 @@ class DungeonRoute extends Model
         if ($user === null) {
             return $this->isTry();
         } else {
-            return $this->isOwnedByUser($user) || $user->hasRole('admin')
+            return $this->isOwnedByUser($user) || $this->isTry() || $user->hasRole('admin')
                 || ($this->team !== null && $this->team->isUserCollaborator($user));
         }
     }

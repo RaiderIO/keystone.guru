@@ -77,7 +77,9 @@ class EnemySelection extends MapObjectMapState {
         });
 
         // Ok we're clear, may edit again (there's always something to edit because this EnemySelectionMapState was triggered by one)
-        $('.leaflet-draw-edit-edit').removeClass('leaflet-disabled');
-        $('.leaflet-draw-edit-remove').removeClass('leaflet-disabled');
+        if (this.map.editableLayers.getLayers().length > 0) {
+            $('.leaflet-draw-edit-edit').removeClass('leaflet-disabled');
+            $('.leaflet-draw-edit-remove').removeClass('leaflet-disabled');
+        }
     }
 }

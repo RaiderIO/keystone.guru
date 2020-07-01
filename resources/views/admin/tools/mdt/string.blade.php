@@ -9,7 +9,7 @@ $dungeonroute = isset($dungeonroute) ? $dungeonroute : false;
 @section('content')
     {{ Form::open(['route' => $dungeonroute ? 'admin.tools.mdt.string.viewasdungeonroute.submit' : 'admin.tools.mdt.string.submit']) }}
     <div class="form-group">
-        {!! Form::label('import_string', __('Paste your Method Dungeon Tools export string')) !!}
+        {!! Form::label('import_string', __('Paste your Mythic Dungeon Tools export string')) !!}
         {{ Form::textarea('import_string', '', ['class' => 'form-control', 'data-simplebar' => '']) }}
     </div>
     <div class="form-group">

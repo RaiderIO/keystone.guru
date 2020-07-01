@@ -17,7 +17,9 @@
             meticulously.
         </li>
         <li>
-            <span class="font-weight-bold">Forced</span> for helping map bosses.
+            <span class="font-weight-bold">Sonskyn</span> and <span class="font-weight-bold">Doug</span> for making good
+            use of the site and providing me with valuable feedback across the board to greatly improve the website.
+            From bug reports to feature requests to general feedback and dungeon mapping, I owe you big time!
         </li>
         <li>
             Various members of
@@ -66,35 +68,35 @@
         Alliance & Horde icons
     </h4>
     <p>
-    {{ link_to('https://www.deviantart.com/atriace/art/Alliance-Horde-Faction-Logos-193328658', 'atriace on DeviantArt') }}
+        {{ link_to('https://www.deviantart.com/atriace/art/Alliance-Horde-Faction-Logos-193328658', 'atriace on DeviantArt') }}
     </p>
 
     <h4>
         Crossed swords icon
     </h4>
     <p>
-    {{ link_to('https://thenounproject.com/term/crossed-swords/152699/', 'The Noun Project') }}
+        {{ link_to('https://thenounproject.com/term/crossed-swords/152699/', 'The Noun Project') }}
     </p>
 
     <h4>
         Image upscaling
     </h4>
     <p>
-    {{ link_to('https://topazlabs.com/gigapixel-ai/', 'Topaz Gigapixel AI') }}
+        {{ link_to('https://topazlabs.com/gigapixel-ai/', 'Topaz Gigapixel AI') }}
     </p>
 
     <h4>
         In-game icon pack
     </h4>
     <p>
-    {{ link_to('https://barrens.chat/viewtopic.php?f=5&t=63&p=1726#p1726', 'barrens.chat') }}
+        {{ link_to('https://barrens.chat/viewtopic.php?f=5&t=63&p=1726#p1726', 'barrens.chat') }}
     </p>
 
     <h4>
         Radio icons
     </h4>
     <p>
-    {{ link_to('https://loading.io/spinner/radio') }}
+        {{ link_to('https://loading.io/spinner/radio') }}
     </p>
 
     <h4>
@@ -127,9 +129,9 @@
         <li>
             Humanoid:
             <div>Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
-                        href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a
-                        href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0"
-                        target="_blank">CC 3.0 BY</a></div>
+                    href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a
+                    href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0"
+                    target="_blank">CC 3.0 BY</a></div>
         </li>
         <li>
             Mechanical: {{ link_to('https://www.iconfinder.com/icons/2376279/android_bot_droid_robot_icon') }}
@@ -164,7 +166,8 @@
     <p>
     <ul>
         <li>
-            <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+            <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
+                    href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
         </li>
     </ul>
     </p>

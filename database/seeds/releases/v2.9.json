@@ -23,7 +23,7 @@
                 "release_changelog_id": 43,
                 "release_changelog_category_id": 6,
                 "ticket_id": 266,
-                "change": "MDT importer works again; fixed various errors and updated to the latest version of Method Dungeon Tools.",
+                "change": "MDT importer works again; fixed various errors and updated to the latest version of Mythic Dungeon Tools.",
                 "category": {
                     "id": 6,
                     "category": "MDT importer changes"

@@ -1,4 +1,12 @@
 class KillZoneEnemySelection extends EnemySelection {
+
+
+    constructor(map, sourceMapObject) {
+        super(map, sourceMapObject);
+
+        this.sourceMapObject.register('object:deleted', this, this._onSourceMapObjectDeleted.bind(this));
+    }
+
     /**
      * Filters an enemy if it should be selected or not.
      * @param source MapObject
@@ -20,5 +28,22 @@ class KillZoneEnemySelection extends EnemySelection {
     _getLayerIcon(){
         console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
         return LeafletKillZoneIconEditMode;
+    }
+
+    /**
+     * Called when the source map object was deleted by the user, while currently selecting enemies.
+     * @private
+     */
+    _onSourceMapObjectDeleted() {
+        console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
+
+        this.map.setMapState(null);
+    }
+
+
+    cleanup() {
+        super.cleanup();
+
+        this.sourceMapObject.unregister('object:deleted', this);
     }
 }
