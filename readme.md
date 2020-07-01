@@ -5,29 +5,36 @@ It uses a ton of other libraries such as Leaflet for map displaying, Puppeteer f
 
 # Features
 * Full interactive Leaflet map of all Battle for Azeroth™ dungeons
-* All known enemies and patrols inside dungeons are mapped and displayed on the map (updated to 8.1.5)
-* Enemy forces of all different NPCs in both normal and Teeming weeks are catalogued
+* All known enemies and patrols inside dungeons (updated to 8.3)
+* Enemy forces of all different NPCs in both normal and Teeming weeks
+* Easily import your Mythic Dungeon Tools strings and convert them to a Keystone.guru route
 * Route planning functions such as
-  * Plotting a route through the dungeon, allowing a route to split up should the need arise
+  * Plotting a path through the dungeon, allowing a route to split up should the need arise
   * Free-drawing of lines
-  * Selecting which enemies to kill and where
-  * Free-form comments to indicate difficult enemies, strategies to use or abilities to use
+  * Easy creation of pulls of which enemies to kill and optionally where
+    * Manage your pull colors by applying a custom gradient
+  * Various icons with optional comments to indicate difficult enemies, strategies to use or abilities to use
   * Publish your planned route whenever you're ready to share it
   * Attach attributes to your route to give an indication of difficulty (death/invisibility skips or classes required)
-* Option for creating private routes (Patreonage required)
 * Collaboration with your group members through Teams
   * Attach routes to a Team for easy sharing with your group members
-  * View/edit routes Google Docs style in real-time; your changes are synced to all other viewers
+  * View/edit routes in real-time Google Docs-style, synchronizing your changes to all other viewers or editors
+  * Permission management for who can view or edit routes attached to your team
 * User voting; increase visibility of your favorite routes
 * Favorite routes you liked best for easy reference later on
 * Search function for looking up routes others have made
   * Search by dungeon, affixes, attributes and/or favorite state
   * Full sorting by dungeon, affixes, author, views and ratings
   * Multiple route listing display modes to suit your needs
-* Up-to-date overview of upcoming affixes and their time based on your region
+* An up-to-date overview of upcoming affixes and their time based on your region
 * When not registered, you are free to view any routes found in the search function, or when directly linked by others
   * Tryout mode available in which you can sandbox your route/the website with no strings attached
 * Log in through Google, Discord or Battle.net if you don't want to register
+
+# Patreon features
+* Create animated lines on the map
+* Create private routes
+* No ads
   
 # Not included in this repository
 * Map tiles of all dungeons
@@ -42,8 +49,8 @@ Any security vulnerabilities should be reported directly to myself on Discord (W
 If you found a security vulnerability, do not abuse the vulnerability for more than is reasonably necessary to confirm the issue exists.
 
 # License
-Currently this project has [no license](https://choosealicense.com/no-permission/) attached to it while I explore the options of licensing. 
-If you have any suggestions for a fitting license please let me know!
+At this time this project has [no license](https://choosealicense.com/no-permission/) attached to it while I explore the options of licensing. 
+If you have any suggestions for a fitting license don't hesitate to raise an issue.
 
 # Contact
 Found an issue? Want to leave some feedback? Can't figure something out? Please drop by on [Discord](https://discord.gg/2KtWrqw), open an issue on GitHub
