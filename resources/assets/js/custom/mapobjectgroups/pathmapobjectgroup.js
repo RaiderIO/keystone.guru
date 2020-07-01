@@ -10,7 +10,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         if (this.manager.map.options.echo) {
             window.Echo.join(this.manager.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
                 .listen('.path-changed', (e) => {
-                    if( e.path.floor_id === getState().getCurrentFloor().id ){
+                    if (e.path.floor_id === getState().getCurrentFloor().id) {
                         self._restoreObject(e.path, e.user);
                     }
                 })
@@ -30,6 +30,9 @@ class PathMapObjectGroup extends MapObjectGroup {
         return new Path(this.manager.map, layer);
     }
 
+    /**
+     * @inheritDoc
+     */
     _restoreObject(remoteMapObject, username = null) {
         // Fetch the existing path if it exists
         let path = this.findMapObjectById(remoteMapObject.id);
@@ -55,6 +58,7 @@ class PathMapObjectGroup extends MapObjectGroup {
         }
 
         path.id = remoteMapObject.id;
+        path.loadRemoteMapObject(remoteMapObject);
         path.loadRemoteMapObject(remoteMapObject.polyline);
 
         // We just downloaded the path, it's synced alright!
@@ -62,5 +66,29 @@ class PathMapObjectGroup extends MapObjectGroup {
 
         // Show echo notification or not
         this._showReceivedFromEcho(path, username);
+
+        return path;
+    }
+
+    /**
+     * Creates a new Path based on some vertices and save it to the server.
+     * @param vertices {Object}
+     * @param options {Object}
+     * @returns {Path}
+     */
+    createNewPath(vertices, options) {
+        let path = this._restoreObject($.extend({}, {
+            polyline: {
+                color: c.map.polyline.awakenedObeliskGatewayPolylineColor,
+                color_animated: getState().hasPaidTier(c.paidtiers.animated_polylines) ? c.map.polyline.awakenedObeliskGatewayPolylineColorAnimated : null,
+                weight: c.map.polyline.awakenedObeliskGatewayPolylineWeight,
+                vertices_json: JSON.stringify(vertices)
+            }
+        }, options));
+
+        path.save();
+
+        this.signal('path:new', {newPath: path});
+        return path;
     }
 }

@@ -13,7 +13,7 @@
                 "release_changelog_id": 22,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "You can now create a new route from a Method Dungeon Tools export string! Keystone.guru will import your pulls, affix, free-drawn shapes and notes from your string.",
+                "change": "You can now create a new route from a Mythic Dungeon Tools export string! Keystone.guru will import your pulls, affix, free-drawn shapes and notes from your string.",
                 "category": {
                     "id": 1,
                     "category": "General changes"

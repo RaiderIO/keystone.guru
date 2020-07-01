@@ -5,6 +5,7 @@ namespace App;
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
+use App\Models\PaidTier;
 use App\Models\PatreonData;
 use App\Models\Team;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -69,62 +70,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Checks if this user has registered using OAuth or not.
-     *
-     * @return bool
-     */
-    public function isOAuth()
-    {
-        return empty($this->password);
-    }
-
-    /**
-     * Checks if this user has paid for a certain tier one way or the other.
-     *
-     * @param $name
-     * @return bool
-     */
-    function hasPaidTier($name)
-    {
-        // True for all admins
-        $result = $this->hasRole('admin');
-
-        // If we weren't an admin, check patreon data
-        if (!$result && $this->patreonData !== null) {
-            foreach ($this->patreonData->paidtiers as $tier) {
-                if ($tier->name === $name) {
-                    $result = true;
-                    break;
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Checks if this user can create a dungeon route or not (based on free account limits)
-     */
-    function canCreateDungeonRoute()
-    {
-        return DungeonRoute::where('author_id', $this->id)->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
-            $this->hasPaidTier('unlimited-dungeonroutes');
-    }
-
-    /**
-     * Get the amount of routes a user may still create.
-     *
-     * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
-     * @return mixed
-     */
-    function getRemainingRouteCount()
-    {
-        return max(0,
-            config('keystoneguru.registered_user_dungeonroute_limit') - \App\Models\DungeonRoute::where('author_id', $this->id)->count()
-        );
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     function dungeonroutes()
@@ -163,6 +108,79 @@ class User extends Authenticatable
     function teams()
     {
         return $this->belongsToMany('App\Models\Team', 'team_users');
+    }
+
+    /**
+     * Checks if this user has registered using OAuth or not.
+     *
+     * @return bool
+     */
+    public function isOAuth()
+    {
+        return empty($this->password);
+    }
+
+    /**
+     * Checks if this user has paid for a certain tier one way or the other.
+     *
+     * @param $name
+     * @return bool
+     */
+    function hasPaidTier($name)
+    {
+        // True for all admins
+        $result = $this->hasRole('admin');
+
+        // If we weren't an admin, check patreon data
+        if (!$result && $this->patreondata !== null) {
+            foreach ($this->patreondata->paidtiers as $tier) {
+                if ($tier->name === $name) {
+                    $result = true;
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get a list of tiers that this User has access to.
+     *
+     * @return Collection
+     */
+    function getPaidTiers()
+    {
+        // Admins have all paid tiers
+        if ($this->hasRole('admin')) {
+            $result = PaidTier::all()->pluck(['name']);
+        } else {
+            $result = $this->patreondata->paidtiers;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Checks if this user can create a dungeon route or not (based on free account limits)
+     */
+    function canCreateDungeonRoute()
+    {
+        return DungeonRoute::where('author_id', $this->id)->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
+            $this->hasPaidTier('unlimited-dungeonroutes');
+    }
+
+    /**
+     * Get the amount of routes a user may still create.
+     *
+     * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
+     * @return mixed
+     */
+    function getRemainingRouteCount()
+    {
+        return max(0,
+            config('keystoneguru.registered_user_dungeonroute_limit') - \App\Models\DungeonRoute::where('author_id', $this->id)->count()
+        );
     }
 
     /**

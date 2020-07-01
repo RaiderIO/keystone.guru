@@ -22,10 +22,6 @@ class MapIconAwakenedObelisk extends MapIcon {
         super(map, layer);
     }
 
-    _getRouteSuffix() {
-        return 'mapicon';
-    }
-
     _synced() {
         super._synced();
 
@@ -33,9 +29,11 @@ class MapIconAwakenedObelisk extends MapIcon {
 
         if (!getState().isMapAdmin()) {
             this.layer.on('click', function () {
-                self.map.setMapState(
-                    new AddAwakenedObeliskGatewayMapState(self.map, self)
-                )
+                if (self.map.getMapState() === null) {
+                    self.map.setMapState(
+                        new AddAwakenedObeliskGatewayMapState(self.map, self)
+                    )
+                }
             });
         }
     }

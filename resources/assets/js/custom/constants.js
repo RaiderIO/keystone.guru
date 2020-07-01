@@ -6,6 +6,12 @@ if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
 }
 
 let c = {
+    paidtiers: {
+        adfree: 'ad-free',
+        unlimited_dungeonroutes: 'unlimited-dungeonroutes',
+        unlimited_routes: 'unlimited-routes',
+        animated_polylines: 'animated-polylines'
+    },
     map: {
         admin: {
             mapobject: {
@@ -104,7 +110,7 @@ let c = {
         },
         enemypatrol: {
             // Function so that you could do custom stuff with it if you want
-            defaultColor: function(){
+            defaultColor: function () {
                 return '#E25D5D';
             }
         },
@@ -114,9 +120,22 @@ let c = {
         },
         polyline: {
             defaultColor: randomColor,
+            defaultColorAnimated: '#F00',
             defaultWeight: Cookies.get('polyline_default_weight'),
             minWeight: 1,
-            maxWeight: 5
+            maxWeight: 5,
+            polylineOptionsAnimated: {
+                opacity: 1,
+                delay: 400,
+                dashArray: [10, 20],
+                // pulseColorLight: '#FFF',
+                // pulseColorDark: '#000',
+                hardwareAccelerated: true,
+                use: L.polyline
+            },
+            awakenedObeliskGatewayPolylineColor: '#80FF1A',
+            awakenedObeliskGatewayPolylineColorAnimated: '#244812',
+            awakenedObeliskGatewayPolylineWeight: 3,
         },
         brushline: {
             /**
@@ -146,7 +165,7 @@ let c = {
                 fillOpacity: 0.3,
                 opacity: 1,
             },
-            // Whenever the killzone is selected or focussed by the user to adjust it
+            // Whenever the killzone is selected or focused by the user to adjust it
             polygonOptionsSelected: {
                 delay: 400,
                 dashArray: [10, 20],
@@ -159,10 +178,6 @@ let c = {
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
-        },
-        mapicon: {
-            awakenedObeliskGatewayPolylineColor: '#80FF1A',
-            awakenedObeliskGatewayPolylineWeight: 3,
         },
         placeholderColors: {},
         editsidebar: {

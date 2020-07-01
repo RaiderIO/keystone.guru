@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $dungeon_route_id
  * @property int $floor_id
  * @property string $color
+ * @property int $index
  * @property double $lat
  * @property double $lng
  *
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class KillZone extends Model
 {
-    public $visible = ['id', 'floor_id', 'lat', 'lng', 'color', 'killzoneenemies'];
+    public $visible = ['id', 'floor_id', 'color', 'lat', 'lng', 'index', 'killzoneenemies'];
     public $with = ['killzoneenemies'];
 
     /**
@@ -78,7 +79,8 @@ class KillZone extends Model
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function ($item) {
+        static::deleting(function ($item)
+        {
             /** @var $item KillZone */
             $item->deleteEnemies();
         });

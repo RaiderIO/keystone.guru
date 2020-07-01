@@ -80,7 +80,7 @@ class DungeonRoutePolicy
      * @param  \App\Models\DungeonRoute $dungeonroute
      * @return mixed
      */
-    public function edit(User $user, DungeonRoute $dungeonroute)
+    public function edit(?User $user, DungeonRoute $dungeonroute)
     {
         return $dungeonroute->mayUserEdit($user);
     }

@@ -242,6 +242,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
 
             Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
+
+            Route::put('/user/{user}/patreon/paidtier', 'UserController@storepaidtiers');
         });
 
         // May be performed without being logged in (try functionality)
@@ -252,6 +254,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::post('/killzone', 'APIKillZoneController@store');
             Route::delete('/killzone/{killzone}', 'APIKillZoneController@delete');
+            Route::put('/killzone', 'APIKillZoneController@storeall');
 
             Route::post('/mapicon', 'APIMapIconController@store');
             Route::delete('/mapicon/{mapicon}', 'APIMapIconController@delete');

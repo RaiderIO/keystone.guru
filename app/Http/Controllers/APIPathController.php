@@ -60,6 +60,8 @@ class APIPathController extends Controller
                 $polyline->model_id = $path->id;
                 $polyline->model_class = get_class($path);
                 $polyline->color = $request->get('color', '#f00');
+                $colorAnimated = $request->get('color_animated', null);
+                $polyline->color_animated = empty($colorAnimated) ? null : $colorAnimated;
                 $polyline->weight = $request->get('weight', 2);
                 $polyline->vertices_json = json_encode($request->get('vertices'));
                 $polyline->save();
@@ -67,6 +69,9 @@ class APIPathController extends Controller
                 // Couple the path to the polyline
                 $path->polyline_id = $polyline->id;
                 $path->save();
+
+                // Set or unset the linked awakened obelisks now that we have an ID
+                $path->setLinkedAwakenedObeliskByMapIconId($request->get('linked_awakened_obelisk_id', null));
 
                 // Something's updated; broadcast it
                 if (Auth::check()) {

@@ -71,8 +71,6 @@ class APIMapIconController extends Controller
         $mapIcon->floor_id = $request->get('floor_id');
         $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
         $mapIcon->map_icon_type_id = $mapIconTypeId;
-        $linkedMapIconId = $request->get('linked_map_icon_id', null);
-        $mapIcon->linked_map_icon_id = empty($linkedMapIconId) ? null : $linkedMapIconId;
         $mapIcon->permanent_tooltip = $request->get('permanent_tooltip', false);
         $seasonalIndex = $request->get('seasonal_index');
         // don't use empty() since 0 is valid
@@ -87,13 +85,16 @@ class APIMapIconController extends Controller
 
         if (!$mapIcon->save()) {
             throw new \Exception('Unable to save map icon!');
-        } else if ($dungeonroute !== null && Auth::check()) {
-            broadcast(new MapIconChangedEvent($dungeonroute, $mapIcon, Auth::user()));
+        } else {
+            // Set or unset the linked awakened obelisks now that we have an ID
+            $mapIcon->setLinkedAwakenedObeliskByMapIconId($request->get('linked_awakened_obelisk_id', null));
+
+            if ($dungeonroute !== null && Auth::check()) {
+                broadcast(new MapIconChangedEvent($dungeonroute, $mapIcon, Auth::user()));
+            }
         }
 
-        $result = ['id' => $mapIcon->id];
-
-        return $result;
+        return ['id' => $mapIcon->id];
     }
 
     /**

@@ -89,6 +89,12 @@
     }
 }
 
+@media (min-width: 1800px) {
+    .container_wide {
+        max-width: 1750px;
+    }
+}
+
 @media (min-width: 1440px) {
     .menu_sidebar {
         -ms-flex: 0 0 230px;

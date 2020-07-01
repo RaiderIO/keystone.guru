@@ -31,11 +31,7 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
     }
 
     /**
-     *
-     * @param remoteMapObject
-     * @param username
-     * @returns {Brushline}
-     * @private
+     * @inheritDoc
      */
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof BrushlineMapObjectGroup, 'this is not an BrushlineMapObjectGroup', this);
@@ -55,7 +51,6 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
 
         // Only create a new one if it's new for us
         if (brushline === null) {
-            // Create new layer
             let layer = L.polyline(points);
             brushline = this.createNew(layer);
         } else {
@@ -63,7 +58,7 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
             brushline.layer.setLatLngs(points);
         }
 
-        brushline.id = remoteMapObject.id;
+        brushline.loadRemoteMapObject(remoteMapObject);
         brushline.loadRemoteMapObject(remoteMapObject.polyline);
 
         // We just downloaded the brushline, make it synced
@@ -72,30 +67,6 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         // Show echo notification or not
         this._showReceivedFromEcho(brushline, username);
 
-        return brushline;
-    }
-
-    /**
-     * Creates a new local brushline that will not be synced
-     * @returns {Brushline}
-     */
-    createNewLocalBrushline(vertices) {
-        console.log(JSON.stringify(vertices));
-
-        let brushline = this._restoreObject({
-            // Make a random ID so they don't overlap
-            id: _.random(-99999999, -2),
-            local: true,
-            polyline: {
-                color: c.map.mapicon.awakenedObeliskGatewayPolylineColor,
-                weight: c.map.mapicon.awakenedObeliskGatewayPolylineWeight,
-                vertices_json: JSON.stringify(vertices)
-            }
-        });
-
-        brushline.setIsLocal(true);
-
-        this.signal('brushline:new', {newBrushline: brushline});
         return brushline;
     }
 }

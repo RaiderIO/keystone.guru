@@ -39,15 +39,38 @@ $(function () {
     }
 });
 
+/**
+ * @property int linked_awakened_obelisk_id
+ */
 class Path extends Polyline {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'path'});
 
         this.label = 'Path';
         this.decorator = null;
 
         this.setColor(c.map.path.defaultColor());
         this.setSynced(false);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getAttributes(force) {
+        console.assert(this instanceof Path, 'this is not a Path', this);
+
+        if (this._cachedAttributes !== null && !force) {
+            return this._cachedAttributes;
+        }
+
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'linked_awakened_obelisk_id',
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: null
+            }),
+        ]);
     }
 
     /**
@@ -73,8 +96,8 @@ class Path extends Polyline {
     /**
      * @inheritDoc
      */
-    _getRouteSuffix() {
-        return 'path';
+    isDeletable() {
+        return this.linked_awakened_obelisk_id === null;
     }
 
     toString() {

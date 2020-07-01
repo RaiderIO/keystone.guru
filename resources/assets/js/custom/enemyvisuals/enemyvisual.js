@@ -36,12 +36,21 @@ class EnemyVisual extends Signalable {
 
         // If it changed, refresh the entire visual
         this.enemy.register(['enemy:set_raid_marker'], this, this._buildVisual.bind(this));
-        this.enemy.register('killzone:attached', this, function () {
+        this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();
             killZone.register('killzone:changed', self, self._buildVisual.bind(self));
             killZone.register('object:deleted', self, self._buildVisual.bind(self));
-            self._buildVisual();
+
+            // Check if we can shortcut by updating just the border
+            if ((killZoneAttachedEvent.data.previousKillZone instanceof KillZone && !(killZone instanceof KillZone)) ||
+                (!(killZoneAttachedEvent.data.previousKillZone instanceof KillZone) && killZone instanceof KillZone)) {
+                // We cannot
+                self._buildVisual();
+            } else {
+                // From killzone to killzone we can, otherwise we can't
+                self._updateBorder(killZone.color);
+            }
         });
         // Cleanup if it's detached
         this.enemy.register('killzone:detached', this, function (event) {
@@ -50,7 +59,7 @@ class EnemyVisual extends Signalable {
                 event.data.previous.unregister('object:deleted', self);
                 event.data.previous.unregister('killzone:changed', self);
             }
-            self._buildVisual();
+            self._updateBorder('white');
         });
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
@@ -160,7 +169,7 @@ class EnemyVisual extends Signalable {
      * Called whenever the root visual object was clicked
      * @private
      */
-    _visualClicked() {
+    _visualRightClicked() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
         let self = this;
 
@@ -272,7 +281,7 @@ class EnemyVisual extends Signalable {
 
             // Re-bind this function
             $enemyDiv.unbind('contextmenu');
-            $enemyDiv.bind('contextmenu', self._visualClicked.bind(self));
+            $enemyDiv.bind('contextmenu', self._visualRightClicked.bind(self));
 
             // Only stop the map state at this point
             self.map.setMapState(null);
@@ -363,10 +372,20 @@ class EnemyVisual extends Signalable {
             // When the visual exists, bind a click method to it (to increase performance)
             let $enemyIcon = $('#map_enemy_visual_' + this.enemy.id).find('.enemy_icon');
             $enemyIcon.unbind('contextmenu');
-            $enemyIcon.bind('contextmenu', this._visualClicked.bind(this));
+            $enemyIcon.bind('contextmenu', this._visualRightClicked.bind(this));
 
             this.signal('enemyvisual:builtvisual', {});
         }
+    }
+
+    /**
+     * Updates the color of the border for this visual
+     * @param color string
+     * @private
+     */
+    _updateBorder(color) {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+        $('#map_enemy_visual_' + this.enemy.id).find('.outer').css('border-color', color);
     }
 
     // @TODO Listen to killzone selectable changed event

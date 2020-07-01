@@ -16,7 +16,10 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    _restoreObject(remoteMapObject) {
+    /**
+     * @inheritDoc
+     */
+    _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup', this);
 
         let layer;
@@ -45,5 +48,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
 
         // We just downloaded the floor switch marker, it's synced alright!
         dungeonFloorSwitchMarker.setSynced(true);
+
+        return dungeonFloorSwitchMarker;
     }
 }

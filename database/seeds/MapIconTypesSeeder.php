@@ -40,6 +40,22 @@ class MapIconTypesSeeder extends Seeder
             'skip_flight'   => ['name' => 'Skip', 'admin_only' => true],
             'skip_teleport' => ['name' => 'Skip', 'admin_only' => true],
             'skip_walk'     => ['name' => 'Skip', 'admin_only' => true],
+
+            'raid_marker_star'     => ['name' => 'Star'],
+            'raid_marker_circle'   => ['name' => 'Circle'],
+            'raid_marker_diamond'  => ['name' => 'Diamond'],
+            'raid_marker_triangle' => ['name' => 'Triangle'],
+            'raid_marker_moon'     => ['name' => 'Moon'],
+            'raid_marker_square'   => ['name' => 'Square'],
+            'raid_marker_cross'    => ['name' => 'Cross'],
+            'raid_marker_skull'    => ['name' => 'Skull'],
+
+            'spell_bloodlust'             => ['name' => 'Bloodlust'],
+            'spell_heroism'               => ['name' => 'Heroism'],
+            'spell_shadowmeld'            => ['name' => 'Shadowmeld'],
+            'spell_shroud_of_concealment' => ['name' => 'Shroud of Concealment'],
+
+            'item_invisibility' => ['name' => 'Invisibility Potion']
         ];
 
         foreach ($mapIconData as $key => $mapIcon) {

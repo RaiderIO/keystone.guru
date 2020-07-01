@@ -26,6 +26,7 @@ class StateManager extends Signalable {
         this.factions = [];
         this.raidMarkers = [];
         this.killZones = [];
+        this.paidTiers = [];
 
         // Bit of a hack? But for now best solution
         this.unknownMapIconId = 1;
@@ -146,6 +147,14 @@ class StateManager extends Signalable {
      */
     setKillZones(killZones) {
         this.killZones = killZones;
+    }
+
+    /**
+     *
+     * @param paidTiers
+     */
+    setPaidTiers(paidTiers) {
+        this.paidTiers = paidTiers;
     }
 
     /**
@@ -375,6 +384,22 @@ class StateManager extends Signalable {
     getKillZones() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.killZones;
+    }
+
+    /**
+     * Checks if the paid tier is enabled for the user or not.
+     * @returns {boolean}
+     */
+    hasPaidTier(paidTier) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        let result = false;
+        for (let i = 0; i < this.paidTiers.length; i++) {
+            if (this.paidTiers[i] === paidTier) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     /**

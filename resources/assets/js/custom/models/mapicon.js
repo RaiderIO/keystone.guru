@@ -68,19 +68,18 @@ let LeafletMapIconMarker = L.Marker.extend({
 /**
  * @property floor_id int
  * @property map_icon_type_id int
- * @property linked_map_icon_id int
+ * @property linked_awakened_obelisk_id int
  * @property permanent_tooltip int
  * @property seasonal_index int
  * @property comment string
  */
 class MapIcon extends MapObject {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'map_icon', route_suffix: 'mapicon'});
 
         let self = this;
 
         this.map_icon_type = getState().getUnknownMapIconType();
-        this.linked_map_icon_polyline = null;
         this.label = 'MapIcon';
 
         this.setSynced(false);
@@ -128,59 +127,59 @@ class MapIcon extends MapObject {
             }
         }
 
-        return $.extend(super._getAttributes(force), {
-            floor_id: new Attribute({
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'floor_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
             }),
-            map_icon_type_id: new Attribute({
+            new Attribute({
+                name: 'map_icon_type_id',
                 type: 'select',
                 values: editableMapIconTypes,
                 default: -1,
                 setter: this.setMapIconTypeId.bind(this)
             }),
-            linked_map_icon_id: new Attribute({
+            new Attribute({
+                name: 'linked_awakened_obelisk_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
-                default: null,
-                setter: this.setLinkedMapIconId.bind(this)
+                default: null
             }),
-            permanent_tooltip: new Attribute({
+            new Attribute({
+                name: 'permanent_tooltip',
                 type: 'bool',
                 default: false
             }),
-            seasonal_index: new Attribute({
+            new Attribute({
+                name: 'seasonal_index',
                 type: 'int',
                 admin: true,
                 default: null
             }),
-            comment: new Attribute({
+            new Attribute({
+                name: 'comment',
                 type: 'textarea',
                 default: ''
             }),
-            lat: new Attribute({
+            new Attribute({
+                name: 'lat',
                 type: 'float',
                 edit: false,
                 getter: function () {
                     return self.layer.getLatLng().lat;
                 }
             }),
-            lng: new Attribute({
+            new Attribute({
+                name: 'lng',
                 type: 'float',
                 edit: false,
                 getter: function () {
                     return self.layer.getLatLng().lng;
                 }
             })
-        });
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'mapicon';
+        ]);
     }
 
     _synced() {
@@ -206,45 +205,6 @@ class MapIcon extends MapObject {
         // this.onLayerInit();
     }
 
-    localDelete() {
-        super.localDelete();
-
-        if (this.linked_map_icon_polyline !== null) {
-            this.linked_map_icon_polyline.localDelete();
-        }
-    }
-
-    setLinkedMapIconId(linkedMapIconId) {
-        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
-        this.linked_map_icon_id = linkedMapIconId;
-
-        // Delete what we had, always
-        if (this.linked_map_icon_polyline !== null) {
-            // This local brushline is a bit different, is not deleted through Leaflet.DRAW which will cause it to not be cleaned up properly
-            // The gist is, delete it from the drawn layers to get rid of it (it was already gone from editableLayers)
-
-            this.linked_map_icon_polyline.localDelete();
-            this.linked_map_icon_polyline = null;
-        }
-
-        // Rebuild if necessary
-        if (typeof this.linked_map_icon_id === 'number') {
-            let mapIconMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
-            let linkedMapIcon = mapIconMapObjectGroup.findMapObjectById(this.linked_map_icon_id);
-
-            console.assert(linkedMapIcon !== null, `Unable to find MapIcon for linked_map_icon_id ${this.linked_map_icon_id}`, this)
-
-            let brushlineMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
-            this.linked_map_icon_polyline = brushlineMapObjectGroup.createNewLocalBrushline([{
-                lat: linkedMapIcon.lat,
-                lng: linkedMapIcon.lng
-            }, {
-                lat: this.layer.getLatLng().lat,
-                lng: this.layer.getLatLng().lng
-            }]);
-        }
-    }
-
     /**
      * Sets the map icon type ID and refreshes the layer for it.
      * @param mapIconTypeId
@@ -262,27 +222,47 @@ class MapIcon extends MapObject {
      * @returns {MapIconType}
      */
     getMapIconType() {
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         console.assert(this.map_icon_type instanceof MapIconType, 'mapIconType is not a MapIconType', this.map_icon_type);
         return this.map_icon_type;
     }
 
+    /**
+     * Return the text that is displayed on the label of this Map Icon.
+     * @returns {string}
+     */
+    getDisplayText(){
+        console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
+
+        return this.comment.length > 0 ? this.comment : this.map_icon_type.name;
+    }
+
+    /**
+     * @inheritDoc
+     */
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        return this.map_icon_type.isEditable();
+        return this.map_icon_type.isEditable() && this.linked_awakened_obelisk_id === null;
     }
 
+    /**
+     * @inheritDoc
+     */
     isDeletable() {
-        return this.map_icon_type.isDeletable();
+        return this.map_icon_type.isDeletable() && this.linked_awakened_obelisk_id === null;
     }
 
+    /**
+     * @inheritDoc
+     */
     bindTooltip() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
         this.unbindTooltip();
 
         if (this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
-            let text = this.comment.length > 0 ? this.comment : this.map_icon_type.name;
+            let text = this.getDisplayText();
 
             // Wrap the text
             if (text.length > 75) {

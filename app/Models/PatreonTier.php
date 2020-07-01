@@ -9,12 +9,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property $id int
  * @property $patreon_data_id int
  * @property $paid_tier_id int
- * @property User $user
  *
  * @mixin \Eloquent
  */
 class PatreonTier extends Model
 {
+    protected $fillable = ['patreon_data_id', 'paid_tier_id'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

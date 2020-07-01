@@ -10,7 +10,7 @@ $isAdmin = isset($admin) && $admin;
 $edit = isset($edit) && $edit ? true : false;
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
 $routeSeasonalIndex = isset($dungeonroute) ? $dungeonroute->seasonal_index : 0;
-$routeKillZones = isset($dungeonroute) ? \App\Models\KillZone::where('dungeon_route_id', $dungeonroute->id)->get() : new \Illuminate\Database\Eloquent\Collection();
+$routeKillZones = isset($dungeonroute) ? \App\Models\KillZone::where('dungeon_route_id', $dungeonroute->id)->orderBy('index')->get() : new \Illuminate\Database\Eloquent\Collection();
 // Set the key to 'try' if try mode is enabled
 $tryMode = isset($tryMode) && $tryMode ? true : false;
 // Set the enemy forces of the current route. May not be set if just editing the route from admin
@@ -99,6 +99,7 @@ if ($isAdmin) {
         'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
         'killZones' => $routeKillZones,
         'dungeonData' => $dungeon,
+        'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'dungeonroute' => [
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,

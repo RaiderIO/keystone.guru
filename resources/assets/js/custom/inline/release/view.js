@@ -48,7 +48,7 @@ class ReleaseView extends InlineCode {
 
         let data = $.extend({}, getHandlebarsDefaultVariables(), {
             version: release.version,
-            date: createdAtDate.getFullYear() + '/' + _.padStart(createdAtDate.getMonth(), 2, '0') + '/' + _.padStart(createdAtDate.getDay(), 2, '0'),
+            date: createdAtDate.getFullYear() + '/' + _.padStart(createdAtDate.getMonth() + 1, 2, '0') + '/' + _.padStart(createdAtDate.getDate(), 2, '0'),
             description: release.changelog.description,
             categories: []
         });
@@ -71,7 +71,7 @@ class ReleaseView extends InlineCode {
         // https://codepen.io/shaikmaqsood/pen/XmydxJ
         let $temp = $('<textarea>');
         $('body').append($temp);
-        $temp.val(template(data)).select();
+        $temp.val(decodeHtmlEntity(template(data))).select();
         document.execCommand('copy');
         $temp.remove();
 

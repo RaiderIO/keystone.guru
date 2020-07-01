@@ -41,7 +41,7 @@ let LeafletEnemyMarker = L.Marker.extend({
  */
 class Enemy extends MapObject {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'enemy'});
 
         this.label = 'Enemy';
         // Used for keeping track of what kill zone this enemy is attached to
@@ -94,30 +94,35 @@ class Enemy extends MapObject {
             }
         }
 
-        return $.extend(super._getAttributes(force), {
-            enemy_pack_id: new Attribute({
+        return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'enemy_pack_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: -1
             }),
-            npc_id: new Attribute({
+            new Attribute({
+                name: 'npc_id',
                 type: 'select',
                 admin: true,
                 values: selectNpcs,
                 default: -1,
                 live_search: true
             }),
-            floor_id: new Attribute({
+            new Attribute({
+                name: 'floor_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: getState().getCurrentFloor().id
             }),
-            mdt_id: new Attribute({
+            new Attribute({
+                name: 'mdt_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: -1
             }),
-            seasonal_index: new Attribute({
+            new Attribute({
+                name: 'seasonal_index',
                 type: 'int',
                 admin: true,
                 default: null,
@@ -129,17 +134,20 @@ class Enemy extends MapObject {
                     self.seasonal_index = value;
                 }
             }),
-            enemy_forces_override: new Attribute({
+            new Attribute({
+                name: 'enemy_forces_override',
                 type: 'int',
                 admin: true,
                 default: -1
             }),
-            enemy_forces_override_teeming: new Attribute({
+            new Attribute({
+                name: 'enemy_forces_override_teeming',
                 type: 'int',
                 admin: true,
                 default: -1
             }),
-            lat: new Attribute({
+            new Attribute({
+                name: 'lat',
                 type: 'float',
                 edit: false,
                 getter: function () {
@@ -147,7 +155,8 @@ class Enemy extends MapObject {
                 },
                 default: 0
             }),
-            lng: new Attribute({
+            new Attribute({
+                name: 'lng',
                 type: 'float',
                 edit: false,
                 getter: function () {
@@ -155,27 +164,22 @@ class Enemy extends MapObject {
                 },
                 default: 0
             }),
-            raid_marker_name: new Attribute({
+            new Attribute({
+                name: 'raid_marker_name',
                 type: 'string',
                 edit: false,
                 save: false,
                 setter: this.setRaidMarkerName.bind(this),
                 default: ''
             }),
-            dangerous: new Attribute({
+            new Attribute({
+                name: 'dangerous',
                 type: 'bool',
                 edit: false,
                 save: false,
                 default: false
             })
-        });
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'enemy';
+        ]);
     }
 
     _getPercentageString(enemyForces) {

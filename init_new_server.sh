@@ -14,6 +14,12 @@ mkdir storage/app/public/imagecache
 mkdir storage/app/public/expansions
 mkdir storage/debugbar
 
+# ensure any uploaded file may be accessed directly (symlinks public/storage to storage/app/public)
+tput setaf 2;
+echo "Ensuring storage link..."
+tput sgr0;
+php artisan storage:link
+
 # ensure www-data permissions
 tput setaf 2;
 echo "Setting www-data ownership to some folders..."
@@ -40,12 +46,6 @@ setfacl -d -m g:www-data:rwx storage/logs
 tput setaf 2;
 composer update --no-scripts
 tput sgr0;
-
-# ensure any uploaded file may be accessed directly (symlinks public/storage to storage/app/public)
-tput setaf 2;
-echo "Ensuring storage link..."
-tput sgr0;
-php artisan storage:link
 
 # Prevent not being able to compile because cross-env is missing
 tput setaf 2;

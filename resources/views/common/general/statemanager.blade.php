@@ -11,6 +11,7 @@
     _stateManager.setRaidMarkers({!! $raidMarkers !!});
     _stateManager.setFactions({!! $factions !!});
     _stateManager.setKillZones({!! $killZones !!});
+    _stateManager.setPaidTiers({!! $paidTiers !!});
     @isset($mdt_enemies)
         _stateManager.setMdtEnemies({!! $mdt_enemies !!});
      @endisset

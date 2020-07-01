@@ -16,7 +16,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
     }
 
-    _restoreObject(remoteMapObject) {
+    _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
         let result = null;

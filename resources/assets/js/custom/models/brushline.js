@@ -14,7 +14,7 @@ $(function () {
 
 class Brushline extends Polyline {
     constructor(map, layer) {
-        super(map, layer);
+        super(map, layer, {name: 'brushline'});
 
         this.label = 'Brushline';
         this.type = 'brushline';
@@ -30,8 +30,16 @@ class Brushline extends Polyline {
         return 'brushline';
     }
 
+    /**
+     * @returns {string}
+     * @private
+     */
+    _getSnakeCaseName() {
+        return 'brushline';
+    }
+
     isEditable() {
-        return true;
+        return !this.isLocal();
     }
 
     toString() {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasLinkedAwakenedObelisk;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -9,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $floor_id
  * @property int $dungeon_route_id
  * @property int $map_icon_type_id
- * @property int $linked_map_icon_id
  * @property float $lat
  * @property float $lng
  * @property string $comment
@@ -24,8 +24,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MapIcon extends Model
 {
-    protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'linked_map_icon_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
-    protected $fillable = ['floor_id', 'dungeon_route_id', 'map_icon_type_id', 'linked_map_icon_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
+    use HasLinkedAwakenedObelisk;
+
+    protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
+    protected $fillable = ['floor_id', 'dungeon_route_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
+    protected $appends = ['linked_awakened_obelisk_id'];
 
     protected $with = ['mapicontype'];
 
@@ -55,10 +58,10 @@ class MapIcon extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return bool
      */
-    function linkedmapicon()
+    public function isAwakenedObelisk()
     {
-        return $this->belongsTo('App\Models\MapIcon', 'linked_map_icon_id');
+        return $this->map_icon_type_id >= 17 && $this->map_icon_type_id <= 20;
     }
 }

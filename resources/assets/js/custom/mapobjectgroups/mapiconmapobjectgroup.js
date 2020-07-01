@@ -45,6 +45,9 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         return mapIcon;
     }
 
+    /**
+     * @inheritDoc
+     */
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
         // Fetch the existing map icon if it exists
@@ -77,5 +80,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
 
         // Show echo notification or not
         this._showReceivedFromEcho(mapIcon, username);
+
+        return mapIcon;
     }
 }

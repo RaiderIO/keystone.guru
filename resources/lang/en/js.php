@@ -69,21 +69,22 @@ return [
 
     'select_category_label' => 'Select category...',
 
-    'show_enemies_label'     => 'Show enemies',
-    'add_kill_area_label'    => 'Add kill area',
-    'remove_kill_area_label' => 'Remove kill area',
-    'delete_killzone_label'  => 'Delete pull',
+    'show_details_label'        => 'Show details',
+    'add_kill_area_label'       => 'Add kill area',
+    'remove_kill_area_label'    => 'Remove kill area',
+    'delete_killzone_label'     => 'Delete pull',
+    'kill_zone_has_boss_label'  => 'Boss in pull',
 
     // Route edit tools
-    'path'                   => 'Path',
-    'killzone'               => 'Killzone',
-    'mapicon'                => 'Icon',
-    'brushline'              => 'Draw',
-    'brushline_title'        => 'Draw a line',
-    'edit'                   => 'Edit',
-    'delete'                 => 'Delete',
-    'finish'                 => 'Finish',
-    'finish_drawing'         => 'Finish drawing',
+    'path'                      => 'Path',
+    'killzone'                  => 'Killzone',
+    'mapicon'                   => 'Icon',
+    'brushline'                 => 'Draw',
+    'brushline_title'           => 'Draw a line',
+    'edit'                      => 'Edit',
+    'delete'                    => 'Delete',
+    'finish'                    => 'Finish',
+    'finish_drawing'            => 'Finish drawing',
 
     'enemypack'                      => 'Pack',
     'enemy'                          => 'Enemy',
@@ -196,8 +197,8 @@ return [
 
     // Popups
     // Map Object
-    'map_icon_faction_select_default_label'                   => 'Select faction',
-    'map_icon_teeming_select_default_label'                   => 'Select teeming',
+    'mapicon_faction_select_default_label'                    => 'Select faction',
+    'mapicon_teeming_select_default_label'                    => 'Select teeming',
 
     // Map icon
     'map_icon_faction_label'                                  => 'Faction',
@@ -233,10 +234,12 @@ return [
 
     // Brushline
     'brushline_color_label'                                   => 'Color',
+    'brushline_color_animated_label'                          => 'Animated color',
     'brushline_weight_label'                                  => 'Weight',
 
     // Path
     'path_color_label'                                        => 'Color',
+    'path_color_animated_label'                               => 'Animated color',
     'path_weight_label'                                       => 'Weight',
 
     // Enemy patrol

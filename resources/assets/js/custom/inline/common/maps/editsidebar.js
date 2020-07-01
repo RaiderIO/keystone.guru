@@ -94,17 +94,21 @@ class CommonMapsEditsidebar extends InlineCode {
             let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
             let count = killZoneMapObjectGroup.objects.length;
-            for (let index in killZoneMapObjectGroup.objects) {
-                if (killZoneMapObjectGroup.objects.hasOwnProperty(index)) {
-
-                    let killZone = killZoneMapObjectGroup.objects[index];
-
-                    // Prevent division by 0
-                    killZone.color = pickHexFromHandlers(self._getHandlersFromCookie(), count === 1 ? 50 : (index / (count - 1)) * 100);
-                    killZone.setSynced(true);
-                    killZone.save();
+            for (let i = 0; i < count; i++) {
+                for (let killZoneIndex in killZoneMapObjectGroup.objects) {
+                    if (killZoneMapObjectGroup.objects.hasOwnProperty(killZoneIndex)) {
+                        let killZone = killZoneMapObjectGroup.objects[killZoneIndex];
+                        if (killZone.getIndex() === (i + 1)) {
+                            // Prevent division by 0
+                            killZone.color = pickHexFromHandlers(self._getHandlersFromCookie(), count === 1 ? 50 : (i / count) * 100);
+                            killZone.setSynced(true);
+                            break;
+                        }
+                    }
                 }
             }
+
+            killZoneMapObjectGroup.saveAll();
         });
     }
 
