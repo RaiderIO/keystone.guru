@@ -51,6 +51,16 @@
             },
             {
                 "release_changelog_id": 55,
+                "release_changelog_category_id": 3,
+                "ticket_id": 259,
+                "change": "Added a bunch more icons to select for a map icon.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 55,
                 "release_changelog_category_id": 5,
                 "ticket_id": 356,
                 "change": "Trying a route while not logged no longer leads to 403 Unauthorized.",
