@@ -93,7 +93,7 @@ class SeasonService implements SeasonServiceInterface
         $weeksSinceStart = $seasonsStart->getWeeksSinceStartAt($date);
 
         // Round down
-        return (int)($weeksSinceStart / config('keystoneguru.season_interation_affix_group_count'));
+        return (int)($weeksSinceStart / config('keystoneguru.season_iteration_affix_group_count'));
     }
 
     /**
@@ -110,7 +110,7 @@ class SeasonService implements SeasonServiceInterface
 
         //
         $currentDate = $this->getFirstSeason()->start();
-        $currentDate->addWeeks($iterationsSinceDate * config('keystoneguru.season_interation_affix_group_count'));
+        $currentDate->addWeeks($iterationsSinceDate * config('keystoneguru.season_iteration_affix_group_count'));
 
         if ($currentDate->gt($date)) {
             throw new \Exception('Iteration calculation is wrong; cannot find the affix group at a specific time because the current date is past the target date!');
@@ -144,7 +144,7 @@ class SeasonService implements SeasonServiceInterface
         // Since seasons may start/end at any time during the iteration of affix groups, we need to start at the
         // beginning and add affixes. Once we've simulated everything in the past up until and including the current
         // iteration, we can take off 12 affix groups and return those as those are the affixes we should display!
-        $affixCount = config('keystoneguru.season_interation_affix_group_count');
+        $affixCount = config('keystoneguru.season_iteration_affix_group_count');
         // This formula should be changed if there's seasons which deviate from the usual amount of affix groups in an
         // iteration (currently 12).
 

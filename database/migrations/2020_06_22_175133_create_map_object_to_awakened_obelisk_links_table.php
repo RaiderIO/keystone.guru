@@ -21,7 +21,7 @@ class CreateMapObjectToAwakenedObeliskLinksTable extends Migration
             // Which type of obelisk we're targeting
             $table->integer('target_map_icon_type_id');
             // And for which seasonal index it is (so that we can uniquely identify it)
-            $table->integer('target_map_icon_seasonal_index');
+            $table->integer('target_map_icon_seasonal_index')->nullable(true);
         });
     }
 

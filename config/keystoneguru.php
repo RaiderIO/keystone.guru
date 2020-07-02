@@ -30,7 +30,7 @@ return [
     /**
      * How many affix groups are in an iteration of a season.
      */
-    'season_interation_affix_group_count' => 12,
+    'season_iteration_affix_group_count' => 12,
 
     /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from
