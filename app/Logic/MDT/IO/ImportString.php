@@ -40,13 +40,13 @@ use Lua;
 class ImportString
 {
     /** @var $_encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
-    private string $_encodedString;
+    private $_encodedString;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
-    private DungeonRoute $_dungeonRoute;
+    private $_dungeonRoute;
 
     /** @var SeasonService Used for grabbing info about the current M+ season. */
-    private SeasonService $_seasonService;
+    private $_seasonService;
 
 
     function __construct(SeasonService $seasonService)
@@ -196,6 +196,7 @@ class ImportString
         foreach ($decoded['value']['pulls'] as $pullIndex => $pull) {
             // Create a killzone
             $killZone = new KillZone();
+            $killZone->index = $pullIndex;
             if ($save) {
                 $killZone->dungeon_route_id = $dungeonRoute->id;
                 // Save it so we have an ID that we can use later on
