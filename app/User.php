@@ -157,7 +157,7 @@ class User extends Authenticatable
         } else if( isset($this->patreondata) ){
             $result = $this->patreondata->paidtiers->pluck(['name']);
         } else {
-            $result = [];
+            $result = collect();
         }
 
         return $result;

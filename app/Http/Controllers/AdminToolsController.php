@@ -17,9 +17,11 @@ use App\Models\Npc;
 use App\Models\NpcType;
 use App\Models\Release;
 use App\Service\Season\SeasonService;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Throwable;
 
 class AdminToolsController extends Controller
 {
@@ -61,19 +63,35 @@ class AdminToolsController extends Controller
     /**
      * @param Request $request
      * @param SeasonService $seasonService
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     *
+     * @throws Exception
+     * @throws Throwable
      */
     public function mdtviewasdungeonroutesubmit(Request $request, SeasonService $seasonService)
     {
-        $dungeonRoute = (new ImportString($seasonService))
-            ->setEncodedString($request->get('import_string'))
-            ->getDungeonRoute(new Collection(), false, false);
-        $dungeonRoute->makeVisible(['killzones']);
+        try {
+            $dungeonRoute = (new ImportString($seasonService))
+                ->setEncodedString($request->get('import_string'))
+                ->getDungeonRoute(new Collection(), false, false);
+            $dungeonRoute->makeVisible(['killzones']);
 
-//        return response()->json($dungeonRoute);
+            dd($dungeonRoute);
+        } catch (Exception $ex) {
 
-        dd($dungeonRoute);
+            // Different message based on our deployment settings
+            if (config('app.debug')) {
+                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
+            } else {
+                $message = __('Invalid MDT string');
+            }
+            return abort(400, $message);
+        } catch (Throwable $error) {
+            if ($error->getMessage() === "Class 'Lua' not found") {
+                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+            }
+
+            throw $error;
+        }
     }
 
 
@@ -232,7 +250,7 @@ class AdminToolsController extends Controller
     /**
      * @param Request $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function exportdungeondata(Request $request)
     {
