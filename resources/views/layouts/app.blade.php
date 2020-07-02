@@ -1,6 +1,7 @@
 <?php
 /** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
 $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
+$demoRoutes = \App\Models\DungeonRoute::where('demo', true)->where('published', true)->orderBy('dungeon_id')->get();
 
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
@@ -100,7 +101,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                             </a>
 
                             <div class="dropdown-menu text-center text-lg-left" aria-labelledby="demo_dropdown">
-                                @foreach(\App\Models\DungeonRoute::where('demo', true)->where('published', true)->get() as $route)
+                                @foreach($demoRoutes as $route)
                                     <a class="dropdown-item test-dropdown-menu"
                                        href="{{ route('dungeonroute.view', ['dungeonroute' => $route->public_key]) }}">
                                         {{ $route->dungeon->name }}
