@@ -7,6 +7,8 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
     $subTitle = sprintf('%s %s', __('Clone of'),
         ' <a href="' . route('dungeonroute.view', ['dungeonroute' => $model->clone_of]) . '">' . $model->clone_of . '</a>'
     );
+} else if( $model->demo ) {
+    $subTitle = sprintf(__('Used with Dratnos\' permission'));
 } else {
     $subTitle = sprintf(__('By %s'), $model->author->name);
 }

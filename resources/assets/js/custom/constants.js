@@ -7,7 +7,7 @@ if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
 
 let c = {
     paidtiers: {
-        adfree: 'ad-free',
+        ad_free: 'ad-free',
         unlimited_dungeonroutes: 'unlimited-dungeonroutes',
         unlimited_routes: 'unlimited-routes',
         animated_polylines: 'animated-polylines'

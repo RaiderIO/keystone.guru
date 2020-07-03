@@ -324,6 +324,7 @@ class AdminToolsController extends Controller
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->mapicons as $item) {
+                    $item->makeHidden(['id', 'dungeon_route_id', 'linked_awakened_obelisk_id']);
                     $toHide->add($item);
                 }
                 foreach ($toHide as $item) {
@@ -360,7 +361,7 @@ class AdminToolsController extends Controller
                 $mapIcons = MapIcon::where('floor_id', $floor->id)->where('dungeon_route_id', -1)->get()->values();
                 // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
                 // at the end of the table instead.
-                $mapIcons->makeHidden(['id']);
+                $mapIcons->makeHidden(['id', 'linked_awakened_obelisk_id']);
 
                 $result['enemies'] = $enemies;
                 $result['enemy_packs'] = $enemyPacks;

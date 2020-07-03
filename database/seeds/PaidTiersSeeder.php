@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\PaidTier;
 use Illuminate\Database\Seeder;
-use App\Models\File;
 
 class PaidTiersSeeder extends Seeder
 {
@@ -16,15 +16,8 @@ class PaidTiersSeeder extends Seeder
 
         $this->command->info('Adding Paid Tiers');
 
-        $paidTiers = [
-            new \App\Models\PaidTier(['name' => 'ad-free']),
-            new \App\Models\PaidTier(['name' => 'unlimited-dungeonroutes']),
-            new \App\Models\PaidTier(['name' => 'unlisted-routes']),
-            new \App\Models\PaidTier(['name' => 'animated-polylines'])
-        ];
-
-        foreach ($paidTiers as $paidTier) {
-            $paidTier->save();
+        foreach (PaidTier::ALL as $paidTierName) {
+            (new PaidTier(['name' => $paidTierName]))->save();
         }
     }
 

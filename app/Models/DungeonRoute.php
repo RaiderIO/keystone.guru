@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Service\Season\SeasonService;
 use App\User;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -70,10 +72,10 @@ use Illuminate\Support\Facades\DB;
  * @property Collection $routeattributes
  * @property Collection $routeattributesraw
  *
- * @method static \Illuminate\Database\Eloquent\Builder visible()
- * @method static \Illuminate\Database\Eloquent\Builder visibleWithUnlisted()
+ * @method static Builder visible()
+ * @method static Builder visibleWithUnlisted()
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class DungeonRoute extends Model
 {
@@ -285,8 +287,8 @@ class DungeonRoute extends Model
     /**
      * Scope a query to only include dungeon routes that are set in try mode.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @return Builder
      */
     public function scopeIsTry($query)
     {
@@ -296,8 +298,8 @@ class DungeonRoute extends Model
     /**
      * Scope a query to only include active dungeons.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @return Builder
      */
     public function scopeVisible($query)
     {
@@ -313,8 +315,8 @@ class DungeonRoute extends Model
     /**
      * Scope a query to only include active dungeons but shows unlisted routes
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @return Builder
      */
     public function scopeVisibleWithUnlisted($query)
     {
@@ -507,7 +509,7 @@ class DungeonRoute extends Model
             $this->teeming = 0;
         }
 
-        if (Auth::user()->hasPaidTier('unlisted-routes')) {
+        if (Auth::user()->hasPaidTier(PaidTier::UNLISTED_ROUTES)) {
             $this->unlisted = intval($request->get('unlisted', 0)) > 0;
         }
         $this->demo = intval($request->get('demo', 0)) > 0;

@@ -6,6 +6,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-187.5,\"lng\":145.62},{\"lat\":-139.25,\"lng\":145.5}]"
         }
@@ -17,6 +18,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-110.75,\"lng\":142.5},{\"lat\":-131.5,\"lng\":142.25},{\"lat\":-131.62,\"lng\":152.88},{\"lat\":-110.5,\"lng\":152.88}]"
         }
@@ -28,6 +30,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-139.81,\"lng\":232.75},{\"lat\":-110,\"lng\":232.62}]"
         }
@@ -39,6 +42,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-124.38,\"lng\":252.5},{\"lat\":-124.5,\"lng\":263.38},{\"lat\":-92.94,\"lng\":263},{\"lat\":-84.75,\"lng\":261},{\"lat\":-64.44,\"lng\":260.62},{\"lat\":-64.44,\"lng\":240.31},{\"lat\":-74.06,\"lng\":240.5},{\"lat\":-74.31,\"lng\":257},{\"lat\":-84.69,\"lng\":256.94},{\"lat\":-92.94,\"lng\":252.06},{\"lat\":-124.31,\"lng\":252.38}]"
         }
@@ -50,6 +54,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-145.38,\"lng\":237.25},{\"lat\":-145.31,\"lng\":256.88}]"
         }
@@ -61,6 +66,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-136.63,\"lng\":186.88},{\"lat\":-124.19,\"lng\":184.81},{\"lat\":-103.88,\"lng\":184.88},{\"lat\":-80.75,\"lng\":185},{\"lat\":-80.88,\"lng\":210.69},{\"lat\":-133,\"lng\":210.88},{\"lat\":-139.5,\"lng\":203.75},{\"lat\":-139.88,\"lng\":191.62},{\"lat\":-136.5,\"lng\":186.88}]"
         }
@@ -72,6 +78,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-145,\"lng\":267},{\"lat\":-145,\"lng\":283.31}]"
         }

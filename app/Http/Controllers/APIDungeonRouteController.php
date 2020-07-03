@@ -118,11 +118,6 @@ class APIDungeonRouteController extends Controller
                 $routes = $routes->where('author_id', $user->id);
             }
 
-            // Never show demo routes here
-            if (!$user->hasRole('admin')) {
-                $routes = $routes->where('demo', '0');
-            }
-
             // Handle favorites
             if (array_search('favorite', $requirements) !== false) {
                 $routes = $routes->whereHas('favorites', function ($query) use (&$user)

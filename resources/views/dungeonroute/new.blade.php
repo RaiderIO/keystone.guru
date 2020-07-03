@@ -87,7 +87,7 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
         @include('common.group.composition')
 
 
-        @if(Auth::user()->hasPaidTier('unlisted-routes'))
+        @if(Auth::user()->hasPaidTier(\App\Models\PaidTier::UNLISTED_ROUTES))
             <h3>
                 {{ __('Sharing') }}
             </h3>

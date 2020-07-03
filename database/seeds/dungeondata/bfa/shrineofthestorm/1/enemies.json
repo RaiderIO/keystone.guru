@@ -3449,8 +3449,8 @@
         "faction": "any",
         "enemy_forces_override": 9,
         "enemy_forces_override_teeming": -1,
-        "lat": -106.8125,
-        "lng": 116.15625,
+        "lat": -101.71875,
+        "lng": 119.84375,
         "npc": {
             "id": 161243
         }
