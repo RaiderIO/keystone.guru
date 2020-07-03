@@ -118,7 +118,7 @@ class ImportString
                 $gatewayIconType = MapIconType::where('key', 'gateway')->firstOrFail();
 
                 // From the built array, construct our map icons / paths
-                foreach ($rifts as $npcId => $mdtXY) {
+                foreach ($rifts as $npcId => $mdtXy) {
                     // Find out the floor where the NPC is standing on
                     /** @var Enemy $enemy */
                     $enemy = Enemy::where('npc_id', $npcId)->whereIn('floor_id', $floorIds)->firstOrFail();
@@ -131,14 +131,15 @@ class ImportString
                         'map_icon_type_id' => $gatewayIconType->id,
                         'comment'          => $obeliskMapIcon->mapicontype->name
                         // MDT has the x and y inverted here
-                    ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXY['x'], 'y' => $mdtXY['y']])));
+                    ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])));
+
 
                     $polyLine = new Polyline([
-                        'model_id'      => -1,
-                        'model_class'   => Path::class,
-                        'color'         => '#80FF1A',
-                        'weight'        => 3,
-                        'vertices_json' => json_encode([
+                        'model_id'       => -1,
+                        'model_class'    => Path::class,
+                        'color'          => '#80FF1A',
+                        'weight'         => 3,
+                        'vertices_json'  => json_encode([
                             [
                                 'lat' => $obeliskMapIcon->lat,
                                 'lng' => $obeliskMapIcon->lng
@@ -154,7 +155,7 @@ class ImportString
                         $polyLine->save();
                     }
 
-                    $mdtXY = new Path([
+                    $path = new Path([
                         'floor_id'         => $enemy->floor_id,
                         'dungeon_route_id' => $dungeonRoute->id,
                         'polyline_id'      => $polyLine->id
@@ -162,13 +163,16 @@ class ImportString
 
                     if ($save) {
                         $mapIconEnd->save();
-
-                        $mdtXY->save();
-                        $polyLine->model_id = $mdtXY->id;
+                        $path->save();
+                        $polyLine->model_id = $path->id;
                         $polyLine->save();
+
+                        // Link it now that the IDs are known
+                        $mapIconEnd->setLinkedAwakenedObeliskByMapIconId($obeliskMapIcon->id);
+                        $path->setLinkedAwakenedObeliskByMapIconId($obeliskMapIcon->id);
                     } else {
                         $dungeonRoute->mapicons->push($mapIconEnd);
-                        $dungeonRoute->paths->push($mdtXY);
+                        $dungeonRoute->paths->push($mdtXy);
                     }
                 }
             }
