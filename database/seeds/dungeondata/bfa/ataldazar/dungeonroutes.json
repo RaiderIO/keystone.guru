@@ -1,6 +1,6 @@
 [
     {
-        "public_key": "IiDaGfu",
+        "public_key": "bbzlbOX",
         "clone_of": null,
         "author_id": 1,
         "dungeon_id": 14,
@@ -14,8 +14,8 @@
         "unlisted": 1,
         "demo": 1,
         "thumbnail_updated_at": "1970-01-01 12:00:00",
-        "created_at": "2020-07-03T06:01:34.000000Z",
-        "updated_at": "2020-07-03T06:01:34.000000Z",
+        "created_at": "2020-07-04T11:51:48.000000Z",
+        "updated_at": "2020-07-04T11:51:48.000000Z",
         "expires_at": null,
         "playerspecializations": [],
         "playerraces": [],
@@ -46,7 +46,12 @@
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-124.125,\"lng\":211.25},{\"lat\":-117.45,\"lng\":140.89}]"
                 },
-                "linkedawakenedobelisks": []
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 17,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
             },
             {
                 "floor_id": 41,
@@ -56,7 +61,12 @@
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-156.25,\"lng\":263.65625},{\"lat\":-206.87,\"lng\":223.17}]"
                 },
-                "linkedawakenedobelisks": []
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
             },
             {
                 "floor_id": 41,
@@ -66,7 +76,12 @@
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-87.375,\"lng\":266.625},{\"lat\":-45.14,\"lng\":223.92}]"
                 },
-                "linkedawakenedobelisks": []
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
             }
         ],
         "killzones": [
@@ -297,13 +312,13 @@
                 "index": 12,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 188
-                    },
-                    {
                         "enemy_id": 186
                     },
                     {
                         "enemy_id": 3344
+                    },
+                    {
+                        "enemy_id": 188
                     }
                 ]
             },
@@ -381,12 +396,6 @@
                 "index": 17,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 214
-                    },
-                    {
-                        "enemy_id": 213
-                    },
-                    {
                         "enemy_id": 222
                     },
                     {
@@ -397,6 +406,12 @@
                     },
                     {
                         "enemy_id": 219
+                    },
+                    {
+                        "enemy_id": 214
+                    },
+                    {
+                        "enemy_id": 213
                     }
                 ]
             },
@@ -492,7 +507,12 @@
                 "comment": "Brutal Spire of Ny'alotha (Urg'roth, Breaker of Heroes)",
                 "permanent_tooltip": 0,
                 "seasonal_index": null,
-                "linkedawakenedobelisks": []
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 17,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
             },
             {
                 "floor_id": 41,
@@ -502,7 +522,12 @@
                 "comment": "Defiled Spire of Ny'alotha (Blood of the Corruptor)",
                 "permanent_tooltip": 0,
                 "seasonal_index": null,
-                "linkedawakenedobelisks": []
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
             },
             {
                 "floor_id": 41,
@@ -512,7 +537,12 @@
                 "comment": "Entropic Spire of Ny'alotha (Samh'rek, Beckoner of Chaos)",
                 "permanent_tooltip": 0,
                 "seasonal_index": null,
-                "linkedawakenedobelisks": []
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
             },
             {
                 "floor_id": 41,

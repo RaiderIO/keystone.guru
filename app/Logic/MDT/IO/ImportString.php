@@ -246,18 +246,22 @@ class ImportString
                             // This comes in through as a double, cast to int
                             $cloneIndex = (int)$cloneIndex;
 
+                            // Hacky fix for a MDT bug where there's duplicate NPCs with the same npc_id etc.
+                            if ($dungeonRoute->dungeon->isSiegeOfBoralus()) {
+                                if( $npcIndex === 35 ){
+                                    $cloneIndex += 15;
+                                }
+                            } else if ($dungeonRoute->dungeon->isTolDagor()) {
+                                if( $npcIndex === 11 ){
+                                    $cloneIndex += 2;
+                                }
+                            }
+
                             // Find the matching enemy of the clones
                             /** @var Enemy $mdtEnemy */
                             $mdtEnemy = null;
                             foreach ($mdtEnemies as $mdtEnemyCandidate) {
-
-                                // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
-                                // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
-                                $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
-                                // Same deal for Cutwater Strikers on Tol Dagor
-                                $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 131112 ? 6 : $cloneIndexAddition;
-                                // NPC and clone index make for unique ID
-                                if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
+                                if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && $mdtEnemyCandidate->mdt_id === $cloneIndex) {
                                     // Found it
                                     $mdtEnemy = $mdtEnemyCandidate;
 

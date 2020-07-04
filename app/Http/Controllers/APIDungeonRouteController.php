@@ -157,7 +157,7 @@ class APIDungeonRouteController extends Controller
             $routes = $routes->where('published', true);
         }
 
-        // Visible here to allow proper usage of indexes
+//        // Visible here to allow proper usage of indexes
         if ($available === 1 || $team !== null) {
             $routes = $routes->visibleWithUnlisted();
         } else {

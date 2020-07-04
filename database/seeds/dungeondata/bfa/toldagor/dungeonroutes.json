@@ -1,6 +1,6 @@
 [
     {
-        "public_key": "kGHm9WP",
+        "public_key": "seg3zht",
         "clone_of": null,
         "author_id": 1,
         "dungeon_id": 22,
@@ -14,8 +14,8 @@
         "unlisted": 1,
         "demo": 1,
         "thumbnail_updated_at": "1970-01-01 12:00:00",
-        "created_at": "2020-07-03T12:53:55.000000Z",
-        "updated_at": "2020-07-04T07:25:47.000000Z",
+        "created_at": "2020-07-04T11:54:41.000000Z",
+        "updated_at": "2020-07-04T11:56:17.000000Z",
         "expires_at": null,
         "playerspecializations": [],
         "playerraces": [],
@@ -29,17 +29,32 @@
         "brushlines": [],
         "paths": [
             {
-                "floor_id": 53,
+                "floor_id": 55,
                 "polyline": {
                     "color": "#80FF1A",
                     "color_animated": "#244812",
                     "weight": 3,
-                    "vertices_json": "[{\"lat\":\"-116.3125\",\"lng\":\"212.625\"},{\"lat\":\"-104.125\",\"lng\":\"185.75\"}]"
+                    "vertices_json": "[{\"lat\":\"-91.875\",\"lng\":\"169.375\"},{\"lat\":\"-209.25\",\"lng\":\"139\"}]"
                 },
                 "linkedawakenedobelisks": [
                     {
-                        "target_map_icon_type_id": 17,
-                        "target_map_icon_seasonal_index": 1
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 57,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":\"-134.875\",\"lng\":\"216.875\"},{\"lat\":\"-33.5\",\"lng\":\"207.75\"}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": null
                     }
                 ]
             }
@@ -197,10 +212,10 @@
                         "enemy_id": 1567
                     },
                     {
-                        "enemy_id": 1590
+                        "enemy_id": 1571
                     },
                     {
-                        "enemy_id": 1626
+                        "enemy_id": 1570
                     },
                     {
                         "enemy_id": 1569
@@ -290,7 +305,7 @@
                         "enemy_id": 1772
                     },
                     {
-                        "enemy_id": 1577
+                        "enemy_id": 1626
                     },
                     {
                         "enemy_id": 1627
@@ -335,7 +350,7 @@
                         "enemy_id": 1632
                     },
                     {
-                        "enemy_id": 1636
+                        "enemy_id": 1633
                     },
                     {
                         "enemy_id": 1634
@@ -344,7 +359,7 @@
                         "enemy_id": 1635
                     },
                     {
-                        "enemy_id": 1633
+                        "enemy_id": 1636
                     }
                 ]
             },
@@ -356,10 +371,10 @@
                 "index": 14,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1637
+                        "enemy_id": 1638
                     },
                     {
-                        "enemy_id": 1638
+                        "enemy_id": 1637
                     }
                 ]
             },
@@ -434,9 +449,6 @@
                 "index": 19,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 1671
-                    },
-                    {
                         "enemy_id": 1675
                     },
                     {
@@ -450,6 +462,9 @@
                     },
                     {
                         "enemy_id": 1677
+                    },
+                    {
+                        "enemy_id": 1671
                     }
                 ]
             },
@@ -525,17 +540,32 @@
                 "linkedawakenedobelisks": []
             },
             {
-                "floor_id": 53,
+                "floor_id": 55,
                 "map_icon_type_id": 11,
-                "lat": -104.125,
-                "lng": 185.75,
-                "comment": "Brutal Spire of Ny'alotha (Urg'roth, Breaker of Heroes)",
+                "lat": -209.25,
+                "lng": 139,
+                "comment": "Defiled Spire of Ny'alotha (Blood of the Corruptor)",
                 "permanent_tooltip": 0,
                 "seasonal_index": null,
                 "linkedawakenedobelisks": [
                     {
-                        "target_map_icon_type_id": 17,
-                        "target_map_icon_seasonal_index": 1
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 57,
+                "map_icon_type_id": 11,
+                "lat": -33.5,
+                "lng": 207.75,
+                "comment": "Entropic Spire of Ny'alotha (Samh'rek, Beckoner of Chaos)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": null
                     }
                 ]
             }
