@@ -7,8 +7,10 @@ use App\Events\PathDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Models\DungeonRoute;
+use App\Models\PaidTier;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
@@ -60,8 +62,11 @@ class APIPathController extends Controller
                 $polyline->model_id = $path->id;
                 $polyline->model_class = get_class($path);
                 $polyline->color = $request->get('color', '#f00');
-                $colorAnimated = $request->get('color_animated', null);
-                $polyline->color_animated = empty($colorAnimated) ? null : $colorAnimated;
+                // Only set the animated color if the user has paid for it
+                if (Auth::check() && User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES)) {
+                    $colorAnimated = $request->get('color_animated', null);
+                    $polyline->color_animated = empty($colorAnimated) ? null : $colorAnimated;
+                }
                 $polyline->weight = $request->get('weight', 2);
                 $polyline->vertices_json = json_encode($request->get('vertices'));
                 $polyline->save();

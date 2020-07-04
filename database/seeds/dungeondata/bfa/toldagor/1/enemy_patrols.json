@@ -6,6 +6,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-132.75,\"lng\":221.75},{\"lat\":-123.13,\"lng\":244},{\"lat\":-85.13,\"lng\":257.12}]"
         }

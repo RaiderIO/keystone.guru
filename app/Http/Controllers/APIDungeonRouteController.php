@@ -118,11 +118,6 @@ class APIDungeonRouteController extends Controller
                 $routes = $routes->where('author_id', $user->id);
             }
 
-            // Never show demo routes here
-            if (!$user->hasRole('admin')) {
-                $routes = $routes->where('demo', '0');
-            }
-
             // Handle favorites
             if (array_search('favorite', $requirements) !== false) {
                 $routes = $routes->whereHas('favorites', function ($query) use (&$user)
@@ -162,7 +157,7 @@ class APIDungeonRouteController extends Controller
             $routes = $routes->where('published', true);
         }
 
-        // Visible here to allow proper usage of indexes
+//        // Visible here to allow proper usage of indexes
         if ($available === 1 || $team !== null) {
             $routes = $routes->visibleWithUnlisted();
         } else {

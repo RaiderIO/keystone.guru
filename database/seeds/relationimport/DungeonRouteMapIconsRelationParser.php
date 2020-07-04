@@ -1,7 +1,7 @@
 <?php
 
-
 use App\Models\MapIcon;
+use App\Models\MapObjectToAwakenedObeliskLink;
 
 class DungeonRouteMapIconsRelationParser implements RelationParser
 {
@@ -37,7 +37,18 @@ class DungeonRouteMapIconsRelationParser implements RelationParser
             // We now know the dungeon route ID, set it back to the map comment
             $mapIconData['dungeon_route_id'] = $modelData['id'];
 
-            MapIcon::insert($mapIconData);
+            $awakenedObeliskLinkData = $mapIconData['linkedawakenedobelisks'];
+            unset($mapIconData['linkedawakenedobelisks']);
+
+            $mapIcon = new MapIcon($mapIconData);
+            $mapIcon->save();
+
+            // Restore awakened obelisk data
+            foreach($awakenedObeliskLinkData as $data ){
+                $data['source_map_object_id'] = $mapIcon->id;
+                $data['source_map_object_class_name'] = get_class($mapIcon);
+                MapObjectToAwakenedObeliskLink::insert($data);
+            }
         }
 
         // Didn't really change anything so just return the value.

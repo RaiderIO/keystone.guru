@@ -1,1 +1,946 @@
-[]
+[
+    {
+        "public_key": "duS5nMi",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 18,
+        "faction_id": 2,
+        "team_id": -1,
+        "title": "4.12 SIEGE by Dratnos",
+        "difficulty": "Casual",
+        "seasonal_index": 1,
+        "teeming": 0,
+        "published": 1,
+        "unlisted": 1,
+        "demo": 1,
+        "thumbnail_updated_at": "1970-01-01 12:00:00",
+        "created_at": "2020-07-04T11:53:10.000000Z",
+        "updated_at": "2020-07-04T11:53:10.000000Z",
+        "expires_at": null,
+        "playerspecializations": [],
+        "playerraces": [],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 47
+            }
+        ],
+        "brushlines": [],
+        "paths": [
+            {
+                "floor_id": 47,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-179.9375,\"lng\":194.5},{\"lat\":-193.73,\"lng\":203.69}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 17,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-99.375,\"lng\":225.75},{\"lat\":-120.76,\"lng\":233.9}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 18,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-147.875,\"lng\":244.625},{\"lat\":-146.22,\"lng\":240.89}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-52.1875,\"lng\":245.78125},{\"lat\":-66.7,\"lng\":230.98}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            }
+        ],
+        "killzones": [
+            {
+                "floor_id": 0,
+                "color": "#ff3eff",
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1957
+                    },
+                    {
+                        "enemy_id": 1958
+                    },
+                    {
+                        "enemy_id": 1954
+                    },
+                    {
+                        "enemy_id": 1956
+                    },
+                    {
+                        "enemy_id": 1955
+                    },
+                    {
+                        "enemy_id": 3454
+                    },
+                    {
+                        "enemy_id": 3451
+                    },
+                    {
+                        "enemy_id": 3450
+                    },
+                    {
+                        "enemy_id": 3449
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff9e",
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 3479
+                    },
+                    {
+                        "enemy_id": 3478
+                    },
+                    {
+                        "enemy_id": 3480
+                    },
+                    {
+                        "enemy_id": 1959
+                    },
+                    {
+                        "enemy_id": 1960
+                    },
+                    {
+                        "enemy_id": 1962
+                    },
+                    {
+                        "enemy_id": 1963
+                    },
+                    {
+                        "enemy_id": 3467
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e3e",
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 3469
+                    },
+                    {
+                        "enemy_id": 3470
+                    },
+                    {
+                        "enemy_id": 3468
+                    },
+                    {
+                        "enemy_id": 3471
+                    },
+                    {
+                        "enemy_id": 1965
+                    },
+                    {
+                        "enemy_id": 1967
+                    },
+                    {
+                        "enemy_id": 1964
+                    },
+                    {
+                        "enemy_id": 1970
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e9eff",
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 2015
+                    },
+                    {
+                        "enemy_id": 1975
+                    },
+                    {
+                        "enemy_id": 1976
+                    },
+                    {
+                        "enemy_id": 1971
+                    },
+                    {
+                        "enemy_id": 1979
+                    },
+                    {
+                        "enemy_id": 1981
+                    },
+                    {
+                        "enemy_id": 1983
+                    },
+                    {
+                        "enemy_id": 2014
+                    },
+                    {
+                        "enemy_id": 1973
+                    },
+                    {
+                        "enemy_id": 1974
+                    },
+                    {
+                        "enemy_id": 1972
+                    },
+                    {
+                        "enemy_id": 1980
+                    },
+                    {
+                        "enemy_id": 1982
+                    },
+                    {
+                        "enemy_id": 1984
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#fffb3e",
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 4229
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff3e",
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1985
+                    },
+                    {
+                        "enemy_id": 1988
+                    },
+                    {
+                        "enemy_id": 1987
+                    },
+                    {
+                        "enemy_id": 1991
+                    },
+                    {
+                        "enemy_id": 1986
+                    },
+                    {
+                        "enemy_id": 1978
+                    },
+                    {
+                        "enemy_id": 1989
+                    },
+                    {
+                        "enemy_id": 1977
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e9e",
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1996
+                    },
+                    {
+                        "enemy_id": 1998
+                    },
+                    {
+                        "enemy_id": 1993
+                    },
+                    {
+                        "enemy_id": 1995
+                    },
+                    {
+                        "enemy_id": 1997
+                    },
+                    {
+                        "enemy_id": 1990
+                    },
+                    {
+                        "enemy_id": 1992
+                    },
+                    {
+                        "enemy_id": 1994
+                    },
+                    {
+                        "enemy_id": 1846
+                    },
+                    {
+                        "enemy_id": 1847
+                    },
+                    {
+                        "enemy_id": 1854
+                    },
+                    {
+                        "enemy_id": 1855
+                    },
+                    {
+                        "enemy_id": 1852
+                    },
+                    {
+                        "enemy_id": 1853
+                    },
+                    {
+                        "enemy_id": 1851
+                    },
+                    {
+                        "enemy_id": 1850
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3effff",
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 2003
+                    },
+                    {
+                        "enemy_id": 2001
+                    },
+                    {
+                        "enemy_id": 2000
+                    },
+                    {
+                        "enemy_id": 1999
+                    },
+                    {
+                        "enemy_id": 2004
+                    },
+                    {
+                        "enemy_id": 2002
+                    },
+                    {
+                        "enemy_id": 1862
+                    },
+                    {
+                        "enemy_id": 1856
+                    },
+                    {
+                        "enemy_id": 1858
+                    },
+                    {
+                        "enemy_id": 1857
+                    },
+                    {
+                        "enemy_id": 1861
+                    },
+                    {
+                        "enemy_id": 1860
+                    },
+                    {
+                        "enemy_id": 1859
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff9b3e",
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 3475
+                    },
+                    {
+                        "enemy_id": 167
+                    },
+                    {
+                        "enemy_id": 3476
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e3eff",
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1866
+                    },
+                    {
+                        "enemy_id": 1864
+                    },
+                    {
+                        "enemy_id": 1865
+                    },
+                    {
+                        "enemy_id": 1863
+                    },
+                    {
+                        "enemy_id": 2011
+                    },
+                    {
+                        "enemy_id": 2010
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#a1ff3e",
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1868
+                    },
+                    {
+                        "enemy_id": 1870
+                    },
+                    {
+                        "enemy_id": 1869
+                    },
+                    {
+                        "enemy_id": 1875
+                    },
+                    {
+                        "enemy_id": 1872
+                    },
+                    {
+                        "enemy_id": 1871
+                    },
+                    {
+                        "enemy_id": 1873
+                    },
+                    {
+                        "enemy_id": 1874
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3eff",
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 4177
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff9e",
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1880
+                    },
+                    {
+                        "enemy_id": 1879
+                    },
+                    {
+                        "enemy_id": 1876
+                    },
+                    {
+                        "enemy_id": 1878
+                    },
+                    {
+                        "enemy_id": 1877
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e3e",
+                "lat": null,
+                "lng": null,
+                "index": 14,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1884
+                    },
+                    {
+                        "enemy_id": 1881
+                    },
+                    {
+                        "enemy_id": 1882
+                    },
+                    {
+                        "enemy_id": 1883
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e9eff",
+                "lat": null,
+                "lng": null,
+                "index": 15,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 2028
+                    },
+                    {
+                        "enemy_id": 2030
+                    },
+                    {
+                        "enemy_id": 2032
+                    },
+                    {
+                        "enemy_id": 2021
+                    },
+                    {
+                        "enemy_id": 2025
+                    },
+                    {
+                        "enemy_id": 2023
+                    },
+                    {
+                        "enemy_id": 2033
+                    },
+                    {
+                        "enemy_id": 2037
+                    },
+                    {
+                        "enemy_id": 2035
+                    },
+                    {
+                        "enemy_id": 1885
+                    },
+                    {
+                        "enemy_id": 1886
+                    },
+                    {
+                        "enemy_id": 2026
+                    },
+                    {
+                        "enemy_id": 2024
+                    },
+                    {
+                        "enemy_id": 2031
+                    },
+                    {
+                        "enemy_id": 2022
+                    },
+                    {
+                        "enemy_id": 2034
+                    },
+                    {
+                        "enemy_id": 2029
+                    },
+                    {
+                        "enemy_id": 2027
+                    },
+                    {
+                        "enemy_id": 2038
+                    },
+                    {
+                        "enemy_id": 2036
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#fffb3e",
+                "lat": null,
+                "lng": null,
+                "index": 16,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 2182
+                    },
+                    {
+                        "enemy_id": 2042
+                    },
+                    {
+                        "enemy_id": 2040
+                    },
+                    {
+                        "enemy_id": 2181
+                    },
+                    {
+                        "enemy_id": 2184
+                    },
+                    {
+                        "enemy_id": 2041
+                    },
+                    {
+                        "enemy_id": 2179
+                    },
+                    {
+                        "enemy_id": 2039
+                    },
+                    {
+                        "enemy_id": 2178
+                    },
+                    {
+                        "enemy_id": 2180
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff3e",
+                "lat": null,
+                "lng": null,
+                "index": 17,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1893
+                    },
+                    {
+                        "enemy_id": 1892
+                    },
+                    {
+                        "enemy_id": 2045
+                    },
+                    {
+                        "enemy_id": 2046
+                    },
+                    {
+                        "enemy_id": 1891
+                    },
+                    {
+                        "enemy_id": 1895
+                    },
+                    {
+                        "enemy_id": 1894
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e9e",
+                "lat": null,
+                "lng": null,
+                "index": 18,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 4178
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3effff",
+                "lat": null,
+                "lng": null,
+                "index": 19,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 3424
+                    },
+                    {
+                        "enemy_id": 1896
+                    },
+                    {
+                        "enemy_id": 1897
+                    },
+                    {
+                        "enemy_id": 1904
+                    },
+                    {
+                        "enemy_id": 1903
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff9b3e",
+                "lat": null,
+                "lng": null,
+                "index": 20,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1902
+                    },
+                    {
+                        "enemy_id": 1899
+                    },
+                    {
+                        "enemy_id": 1898
+                    },
+                    {
+                        "enemy_id": 1900
+                    },
+                    {
+                        "enemy_id": 1901
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e3eff",
+                "lat": null,
+                "lng": null,
+                "index": 21,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 166
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#a1ff3e",
+                "lat": null,
+                "lng": null,
+                "index": 22,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1905
+                    },
+                    {
+                        "enemy_id": 1908
+                    },
+                    {
+                        "enemy_id": 1907
+                    },
+                    {
+                        "enemy_id": 1906
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3eff",
+                "lat": null,
+                "lng": null,
+                "index": 23,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 4230
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff9e",
+                "lat": null,
+                "lng": null,
+                "index": 24,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1931
+                    },
+                    {
+                        "enemy_id": 1930
+                    },
+                    {
+                        "enemy_id": 1933
+                    },
+                    {
+                        "enemy_id": 1932
+                    },
+                    {
+                        "enemy_id": 1934
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#ff3e3e",
+                "lat": null,
+                "lng": null,
+                "index": 25,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1937
+                    },
+                    {
+                        "enemy_id": 1936
+                    },
+                    {
+                        "enemy_id": 1935
+                    },
+                    {
+                        "enemy_id": 1938
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3e9eff",
+                "lat": null,
+                "lng": null,
+                "index": 26,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1943
+                    },
+                    {
+                        "enemy_id": 1939
+                    },
+                    {
+                        "enemy_id": 1940
+                    },
+                    {
+                        "enemy_id": 1941
+                    },
+                    {
+                        "enemy_id": 1942
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#fffb3e",
+                "lat": null,
+                "lng": null,
+                "index": 27,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 1946
+                    },
+                    {
+                        "enemy_id": 1944
+                    },
+                    {
+                        "enemy_id": 1945
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "#3eff3e",
+                "lat": null,
+                "lng": null,
+                "index": 28,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 165
+                    }
+                ]
+            },
+            {
+                "floor_id": 0,
+                "color": "",
+                "lat": null,
+                "lng": null,
+                "index": 29,
+                "killzoneenemies": []
+            }
+        ],
+        "enemyraidmarkers": [],
+        "mapicons": [
+            {
+                "floor_id": 47,
+                "map_icon_type_id": 11,
+                "lat": -193.73,
+                "lng": 203.69,
+                "comment": "Brutal Spire of Ny'alotha (Urg'roth, Breaker of Heroes)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 17,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "map_icon_type_id": 11,
+                "lat": -120.76,
+                "lng": 233.9,
+                "comment": "Cursed Spire of Ny'alotha (Voidweaver Mal'thir)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 18,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "map_icon_type_id": 11,
+                "lat": -146.22,
+                "lng": 240.89,
+                "comment": "Defiled Spire of Ny'alotha (Blood of the Corruptor)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "map_icon_type_id": 11,
+                "lat": -66.7,
+                "lng": 230.98,
+                "comment": "Entropic Spire of Ny'alotha (Samh'rek, Beckoner of Chaos)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            }
+        ]
+    }
+]

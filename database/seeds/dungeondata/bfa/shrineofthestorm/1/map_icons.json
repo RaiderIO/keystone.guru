@@ -56,8 +56,8 @@
     {
         "floor_id": 45,
         "map_icon_type_id": 20,
-        "lat": -108.3125,
-        "lng": 117.5625,
+        "lat": -103.0625,
+        "lng": 121.5625,
         "comment": "",
         "permanent_tooltip": 0,
         "seasonal_index": null

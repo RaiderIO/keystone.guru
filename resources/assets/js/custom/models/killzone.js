@@ -336,12 +336,14 @@ class KillZone extends MapObject {
 
         let latLngs = [];
         let otherFloorsWithEnemies = [];
+        console.log(`_getVisibleEntitiesLatLngs()`);
         $.each(this.enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
             if (enemy !== null) {
                 if (enemy.layer !== null) {
                     let latLng = enemy.layer.getLatLng();
+                    console.log(`Adding enemy ${enemy.id} ${enemy.floor_id}`);
                     latLngs.push([latLng.lat, latLng.lng]);
                 }
                 // The enemy was not on this floor; add its floor to the 'add floor switch as part of pack' list
@@ -356,7 +358,7 @@ class KillZone extends MapObject {
 
 
         // Alpha shapes
-        if (this.layer !== null) {
+        if (this.layer !== null && this.floor_id > 0) {
             // Killzone not on this floor, draw a line to the floor that it is
             if (getState().getCurrentFloor().id !== this.floor_id && this.floor_id !== null) {
                 otherFloorsWithEnemies.push(this.floor_id);
@@ -364,12 +366,14 @@ class KillZone extends MapObject {
             // Killzone on this floor, include the lat/lng in our bounds
             else {
                 let selfLatLng = this.layer.getLatLng();
+                console.log(`Adding self`);
                 latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
             }
         }
 
         // If there are other floors with enemies AND enemies on this floor..
         if (otherFloorsWithEnemies.length > 0 && latLngs.length > 0) {
+            console.warn(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
             let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
             $.each(otherFloorsWithEnemies, function (i, floorId) {
                 // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
@@ -387,7 +391,7 @@ class KillZone extends MapObject {
                 // Calculate a rough center of our bounds
                 let ourCenterLatLng = latLngs.length === 1 ? latLngs[0] : self._getLayerCenteroid(latLngs);
                 let closestFloorSwitchMarker = null;
-                let closestDistance = 9999999;
+                let closestDistance = 999999999999999;
 
                 // console.log('ourCenterLatLng', ourCenterLatLng);
                 //

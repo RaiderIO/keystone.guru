@@ -70,7 +70,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
                             @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
                             @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions, 'modal' => '#settings_modal'])
 
-                            @if(Auth::user()->hasPaidTier('unlisted-routes') )
+                            @if(Auth::user()->hasPaidTier(\App\Models\PaidTier::UNLISTED_ROUTES) )
                                 <h3>
                                     {{ __('Sharing') }}
                                 </h3>

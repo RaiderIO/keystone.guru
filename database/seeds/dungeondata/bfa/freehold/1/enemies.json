@@ -4065,7 +4065,7 @@
     },
     {
         "id": 3395,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 461,
         "floor_id": 43,
         "mdt_id": 1,
         "seasonal_index": null,
@@ -4081,7 +4081,7 @@
     },
     {
         "id": 3396,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 461,
         "floor_id": 43,
         "mdt_id": 5,
         "seasonal_index": null,
@@ -4129,7 +4129,7 @@
     },
     {
         "id": 3399,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 224,
         "floor_id": 43,
         "mdt_id": 11,
         "seasonal_index": null,
@@ -4209,7 +4209,7 @@
     },
     {
         "id": 3504,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 301,
         "floor_id": 43,
         "mdt_id": 14,
         "seasonal_index": null,
@@ -4225,7 +4225,7 @@
     },
     {
         "id": 3505,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 301,
         "floor_id": 43,
         "mdt_id": 11,
         "seasonal_index": null,
@@ -4241,7 +4241,7 @@
     },
     {
         "id": 3506,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 301,
         "floor_id": 43,
         "mdt_id": 12,
         "seasonal_index": null,
@@ -4257,7 +4257,7 @@
     },
     {
         "id": 3507,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 301,
         "floor_id": 43,
         "mdt_id": 13,
         "seasonal_index": null,

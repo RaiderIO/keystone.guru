@@ -26,7 +26,7 @@ $isProduction = config('app.env') === 'production';
 // Show ads or not
 $showAds = isset($showAds) ? $showAds : true;
 // If we should show ads, are logged in, user has paid for no ads, or we're not in production..
-if (($showAds && Auth::check() && $user->hasPaidTier('ad-free')) || !$isProduction) {
+if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) || !$isProduction) {
     $showAds = false;
 }
 // No UI on the map

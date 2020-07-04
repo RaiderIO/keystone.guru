@@ -21,9 +21,11 @@ use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\PaidTier;
 use App\Models\Path;
 use App\Models\Polyline;
 use App\Service\Season\SeasonService;
+use App\User;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -115,60 +117,82 @@ class ImportString
                         ->where($seasonalIndexWhere)->firstOrFail(),
                 ];
 
+                /** @var MapIconType $gatewayIconType */
                 $gatewayIconType = MapIconType::where('key', 'gateway')->firstOrFail();
 
                 // From the built array, construct our map icons / paths
-                foreach ($rifts as $npcId => $mdtXY) {
-                    // Find out the floor where the NPC is standing on
-                    /** @var Enemy $enemy */
-                    $enemy = Enemy::where('npc_id', $npcId)->whereIn('floor_id', $floorIds)->firstOrFail();
-                    /** @var MapIcon $obeliskMapIcon */
-                    $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
+                foreach ($rifts as $npcId => $mdtXy) {
+                    try {
+                        // Find out the floor where the NPC is standing on
+                        /** @var Enemy $enemy */
+                        $enemy = Enemy::where('npc_id', $npcId)->whereIn('floor_id', $floorIds)->firstOrFail();
+                        /** @var MapIcon $obeliskMapIcon */
+                        $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
 
-                    $mapIconEnd = new MapIcon(array_merge([
-                        'floor_id'         => $enemy->floor_id,
-                        'dungeon_route_id' => $dungeonRoute->id,
-                        'map_icon_type_id' => $gatewayIconType->id,
-                        'comment'          => $obeliskMapIcon->mapicontype->name
-                        // MDT has the x and y inverted here
-                    ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXY['x'], 'y' => $mdtXY['y']])));
+                        // @TODO #378 We do not support rifts on different floors
+                        if (isset($mdtXy['sublevel'])) {
+                            throw new ImportWarning('Awakened Obelisks',
+                                sprintf(
+                                    'Unable to import Awakened Obelisk %s, it is on a different floor than the Obelisk itself. Keystone.guru does not support this at this time.',
+                                    $obeliskMapIcon->mapicontype->name
+                                )
+                            );
+                        }
 
-                    $polyLine = new Polyline([
-                        'model_id'      => -1,
-                        'model_class'   => Path::class,
-                        'color'         => '#80FF1A',
-                        'weight'        => 3,
-                        'vertices_json' => json_encode([
-                            [
-                                'lat' => $obeliskMapIcon->lat,
-                                'lng' => $obeliskMapIcon->lng
-                            ],
-                            [
-                                'lat' => $mapIconEnd->lat,
-                                'lng' => $mapIconEnd->lng
-                            ]
-                        ])
-                    ]);
+                        $mapIconEnd = new MapIcon(array_merge([
+                            'floor_id'         => $enemy->floor_id,
+                            'dungeon_route_id' => $dungeonRoute->id,
+                            'map_icon_type_id' => $gatewayIconType->id,
+                            'comment'          => $obeliskMapIcon->mapicontype->name
+                            // MDT has the x and y inverted here
+                        ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])));
 
-                    if ($save) {
-                        $polyLine->save();
-                    }
+                        $hasAnimatedLines = Auth::check() ? User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES) : false;
 
-                    $mdtXY = new Path([
-                        'floor_id'         => $enemy->floor_id,
-                        'dungeon_route_id' => $dungeonRoute->id,
-                        'polyline_id'      => $polyLine->id
-                    ]);
+                        $polyLine = new Polyline([
+                            'model_id'       => -1,
+                            'model_class'    => Path::class,
+                            'color'          => '#80FF1A',
+                            'color_animated' => $hasAnimatedLines ? '#244812' : null,
+                            'weight'         => 3,
+                            'vertices_json'  => json_encode([
+                                [
+                                    'lat' => $obeliskMapIcon->lat,
+                                    'lng' => $obeliskMapIcon->lng
+                                ],
+                                [
+                                    'lat' => $mapIconEnd->lat,
+                                    'lng' => $mapIconEnd->lng
+                                ]
+                            ])
+                        ]);
 
-                    if ($save) {
-                        $mapIconEnd->save();
+                        if ($save) {
+                            $polyLine->save();
+                        }
 
-                        $mdtXY->save();
-                        $polyLine->model_id = $mdtXY->id;
-                        $polyLine->save();
-                    } else {
-                        $dungeonRoute->mapicons->push($mapIconEnd);
-                        $dungeonRoute->paths->push($mdtXY);
+                        $path = new Path([
+                            'floor_id'         => $enemy->floor_id,
+                            'dungeon_route_id' => $dungeonRoute->id,
+                            'polyline_id'      => $polyLine->id
+                        ]);
+
+                        if ($save) {
+                            $mapIconEnd->save();
+                            $path->save();
+                            $polyLine->model_id = $path->id;
+                            $polyLine->save();
+
+                            // Link it now that the IDs are known
+                            $mapIconEnd->setLinkedAwakenedObeliskByMapIconId($obeliskMapIcon->id);
+                            $path->setLinkedAwakenedObeliskByMapIconId($obeliskMapIcon->id);
+                        } else {
+                            $dungeonRoute->mapicons->push($mapIconEnd);
+                            $dungeonRoute->paths->push($path);
+                        }
+
+                    } catch (ImportWarning $warning) {
+                        $warnings->add($warning);
                     }
                 }
             }
@@ -222,16 +246,22 @@ class ImportString
                             // This comes in through as a double, cast to int
                             $cloneIndex = (int)$cloneIndex;
 
+                            // Hacky fix for a MDT bug where there's duplicate NPCs with the same npc_id etc.
+                            if ($dungeonRoute->dungeon->isSiegeOfBoralus()) {
+                                if( $npcIndex === 35 ){
+                                    $cloneIndex += 15;
+                                }
+                            } else if ($dungeonRoute->dungeon->isTolDagor()) {
+                                if( $npcIndex === 11 ){
+                                    $cloneIndex += 2;
+                                }
+                            }
+
                             // Find the matching enemy of the clones
                             /** @var Enemy $mdtEnemy */
                             $mdtEnemy = null;
                             foreach ($mdtEnemies as $mdtEnemyCandidate) {
-
-                                // Fix for Siege of Boralus NPC id = 141565, this is an error on MDT's side. It defines multiple
-                                // NPCs for one npc_id, 15 because of 15 clones @ SiegeofBoralus.lua:3539
-                                $cloneIndexAddition = $mdtEnemyCandidate->npc_id === 141565 ? 15 : 0;
-                                // NPC and clone index make for unique ID
-                                if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && ($mdtEnemyCandidate->mdt_id === $cloneIndex || $mdtEnemyCandidate->mdt_id === ($cloneIndex + $cloneIndexAddition))) {
+                                if ($mdtEnemyCandidate->mdt_npc_index === $npcIndex && $mdtEnemyCandidate->mdt_id === $cloneIndex) {
                                     // Found it
                                     $mdtEnemy = $mdtEnemyCandidate;
 

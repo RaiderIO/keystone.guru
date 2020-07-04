@@ -1,6 +1,9 @@
 <?php
 /** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
 $numUserReports = \App\Models\UserReport::where('handled', 0)->count();
+/** @var \Illuminate\Support\Collection|DungeonRoute[] $demoRoutes */
+$demoRoutes = \App\Models\DungeonRoute::where('demo', true)->where('published', true)->orderBy('dungeon_id')->get();
+$dungeons = \App\Models\Dungeon::all();
 
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
@@ -31,7 +34,7 @@ $devCacheBuster = config('app.env') === 'local' ? '?t=' . time() : '';
 // Show ads if not set
 $showAds = isset($showAds) ? $showAds : true;
 // If we should show ads, are logged in, user has paid for no ads, or we're not in production..
-if (($showAds && Auth::check() && $user->hasPaidTier('ad-free')) || !$isProduction) {
+if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) || !$isProduction) {
     // No ads
     $showAds = false;
 }
@@ -100,7 +103,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                             </a>
 
                             <div class="dropdown-menu text-center text-lg-left" aria-labelledby="demo_dropdown">
-                                @foreach(\App\Models\DungeonRoute::where('demo', true)->where('published', true)->get() as $route)
+                                @foreach($demoRoutes as $route)
                                     <a class="dropdown-item test-dropdown-menu"
                                        href="{{ route('dungeonroute.view', ['dungeonroute' => $route->public_key]) }}">
                                         {{ $route->dungeon->name }}

@@ -123,6 +123,16 @@ class Dungeon extends Model
     }
 
     /**
+     * Checks if this dungeon is Tol Dagor. It's a bit of a special dungeon because of a shitty MDT bug.
+     *
+     * @return bool
+     */
+    public function isTolDagor()
+    {
+        return $this->name === 'Tol Dagor';
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function expansion()

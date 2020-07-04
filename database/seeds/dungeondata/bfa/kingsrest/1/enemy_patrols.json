@@ -6,6 +6,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-140.5,\"lng\":169},{\"lat\":-69.79,\"lng\":169.19}]"
         }
@@ -17,6 +18,7 @@
         "faction": "any",
         "polyline": {
             "color": "#E25D5D",
+            "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-181.12,\"lng\":282.12},{\"lat\":-177.06,\"lng\":280.62},{\"lat\":-166.94,\"lng\":287.5},{\"lat\":-166.29,\"lng\":291},{\"lat\":-170.19,\"lng\":303.38},{\"lat\":-176.48,\"lng\":305.31},{\"lat\":-185.1,\"lng\":296.06},{\"lat\":-186.29,\"lng\":291.88},{\"lat\":-181.16,\"lng\":282.19}]"
         }
