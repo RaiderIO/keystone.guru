@@ -14,8 +14,8 @@
         "unlisted": 1,
         "demo": 1,
         "thumbnail_updated_at": "1970-01-01 12:00:00",
-        "created_at": "2020-07-03T14:53:55.000000Z",
-        "updated_at": "2020-07-03T14:53:55.000000Z",
+        "created_at": "2020-07-03T12:53:55.000000Z",
+        "updated_at": "2020-07-04T07:25:47.000000Z",
         "expires_at": null,
         "playerspecializations": [],
         "playerraces": [],
@@ -27,7 +27,23 @@
             }
         ],
         "brushlines": [],
-        "paths": [],
+        "paths": [
+            {
+                "floor_id": 53,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":\"-116.3125\",\"lng\":\"212.625\"},{\"lat\":\"-104.125\",\"lng\":\"185.75\"}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 17,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            }
+        ],
         "killzones": [
             {
                 "floor_id": 0,
@@ -495,7 +511,8 @@
                 "lng": 205.55,
                 "comment": "Bring this up to the Brig.",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 55,
@@ -504,7 +521,23 @@
                 "lng": 175.41,
                 "comment": "Kill these and grab buffs before taking spire to the next floor.",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 53,
+                "map_icon_type_id": 11,
+                "lat": -104.125,
+                "lng": 185.75,
+                "comment": "Brutal Spire of Ny'alotha (Urg'roth, Breaker of Heroes)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 17,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
             }
         ]
     }

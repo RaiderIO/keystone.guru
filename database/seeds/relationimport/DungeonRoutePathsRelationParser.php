@@ -1,6 +1,10 @@
 <?php
 
 
+use App\Models\MapObjectToAwakenedObeliskLink;
+use App\Models\Path;
+use App\Models\Polyline;
+
 class DungeonRoutePathsRelationParser implements RelationParser
 {
     /**
@@ -41,17 +45,27 @@ class DungeonRoutePathsRelationParser implements RelationParser
             // but keep a reference to it as we still need it later on
             $polyline = $pathData['polyline'];
             unset($pathData['polyline']);
+            // Ditto awakened obelisks
+            $awakenedObeliskLinkData = $pathData['linkedawakenedobelisks'];
+            unset($pathData['linkedawakenedobelisks']);
 
             // Gotta save the Path in order to get an ID
-            $path = new \App\Models\Path($pathData);
+            $path = new Path($pathData);
             $path->save();
 
             $polyline['model_class'] = get_class($path);
             $polyline['model_id'] = $path->id;
 
             // Insert polyline, while capturing the result and coupling to the path
-            $path->polyline_id = \App\Models\Polyline::insertGetId($polyline);
+            $path->polyline_id = Polyline::insertGetId($polyline);
             $path->save();
+
+            // Restore awakened obelisk data
+            foreach($awakenedObeliskLinkData as $data ){
+                $data['source_map_object_id'] = $path->id;
+                $data['source_map_object_class_name'] = get_class($path);
+                MapObjectToAwakenedObeliskLink::insert($data);
+            }
         }
 
         // Didn't really change anything so just return the value.

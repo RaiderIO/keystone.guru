@@ -14,8 +14,8 @@
         "unlisted": 1,
         "demo": 1,
         "thumbnail_updated_at": "1970-01-01 12:00:00",
-        "created_at": "2020-07-03T08:01:34.000000Z",
-        "updated_at": "2020-07-03T08:01:34.000000Z",
+        "created_at": "2020-07-03T06:01:34.000000Z",
+        "updated_at": "2020-07-03T06:01:34.000000Z",
         "expires_at": null,
         "playerspecializations": [],
         "playerraces": [],
@@ -45,7 +45,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-124.125,\"lng\":211.25},{\"lat\":-117.45,\"lng\":140.89}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 41,
@@ -54,7 +55,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-156.25,\"lng\":263.65625},{\"lat\":-206.87,\"lng\":223.17}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 41,
@@ -63,7 +65,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-87.375,\"lng\":266.625},{\"lat\":-45.14,\"lng\":223.92}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             }
         ],
         "killzones": [
@@ -488,7 +491,8 @@
                 "lng": 140.89,
                 "comment": "Brutal Spire of Ny'alotha (Urg'roth, Breaker of Heroes)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 41,
@@ -497,7 +501,8 @@
                 "lng": 223.17,
                 "comment": "Defiled Spire of Ny'alotha (Blood of the Corruptor)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 41,
@@ -506,7 +511,8 @@
                 "lng": 223.92,
                 "comment": "Entropic Spire of Ny'alotha (Samh'rek, Beckoner of Chaos)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 41,
@@ -515,7 +521,8 @@
                 "lng": 212.76,
                 "comment": "Someone needs to grab the middle pack and run away and either die or vanish\/feign\/meld\/invis, while the rest of the group enters the obelisk.",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 41,
@@ -524,7 +531,8 @@
                 "lng": 131.33,
                 "comment": "This route fights the Spider with Yazma - if this is too scary for you you'll need to find a way to activate the blob obelisk - the best option there is gonna be one person pulling the packs away and dying or vanishing while the rest of the group enters the obelisk.\n\nThis require a bunch of kicks to be able to avoid the boss or the Spider getting a cast off, so if you have people with bad kicks or no kicks in your group you may want to let Spider casts through on the tank or players with defensives.",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 41,
@@ -533,7 +541,8 @@
                 "lng": 202.45,
                 "comment": "After this boss dies, get out with shroud, or someone pulls this pack to the side and vanishes\/feigns\/dies\/melds and the rest of the group sneaks by",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             }
         ]
     }

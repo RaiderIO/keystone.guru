@@ -14,8 +14,8 @@
         "unlisted": 1,
         "demo": 1,
         "thumbnail_updated_at": "1970-01-01 12:00:00",
-        "created_at": "2020-07-03T08:21:21.000000Z",
-        "updated_at": "2020-07-03T08:27:18.000000Z",
+        "created_at": "2020-07-03T06:21:21.000000Z",
+        "updated_at": "2020-07-03T06:27:18.000000Z",
         "expires_at": null,
         "playerspecializations": [],
         "playerraces": [],
@@ -45,7 +45,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-106.5,\"lng\":164.5625},{\"lat\":-88.43,\"lng\":118.45}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 45,
@@ -54,7 +55,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-49.125,\"lng\":194.65625},{\"lat\":-111.91,\"lng\":184.74}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 45,
@@ -63,7 +65,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":\"-179.625\",\"lng\":\"164.75\"},{\"lat\":\"-207.375\",\"lng\":\"227\"}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 45,
@@ -72,7 +75,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":\"-103.0625\",\"lng\":\"121.5625\"},{\"lat\":\"-181.625\",\"lng\":\"157.125\"}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             }
         ],
         "killzones": [
@@ -902,7 +906,8 @@
                 "lng": 118.45,
                 "comment": "Brutal Spire of Ny'alotha (Urg'roth, Breaker of Heroes)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 45,
@@ -911,7 +916,8 @@
                 "lng": 184.74,
                 "comment": "Defiled Spire of Ny'alotha (Blood of the Corruptor)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 45,
@@ -920,7 +926,8 @@
                 "lng": 196.89,
                 "comment": "Do this as slowly as necessary for bursting!",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 45,
@@ -929,7 +936,8 @@
                 "lng": 227,
                 "comment": "Cursed Spire of Ny'alotha (Voidweaver Mal'thir)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 45,
@@ -938,7 +946,8 @@
                 "lng": 157.125,
                 "comment": "Entropic Spire of Ny'alotha (Samh'rek, Beckoner of Chaos)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             }
         ]
     }

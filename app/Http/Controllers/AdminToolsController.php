@@ -18,16 +18,16 @@ use App\Models\NpcType;
 use App\Models\Release;
 use App\Service\Season\SeasonService;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Throwable;
+use Illuminate\View\View;use Throwable;
 
 class AdminToolsController extends Controller
 {
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function index()
     {
@@ -35,7 +35,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory|
      */
     public function mdtview()
     {
@@ -44,6 +44,8 @@ class AdminToolsController extends Controller
 
     /**
      * @param Request $request
+     * @param SeasonService $seasonService
+     * @return JsonResponse
      */
     public function mdtviewsubmit(Request $request, SeasonService $seasonService)
     {
@@ -53,7 +55,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory|
      */
     public function mdtviewasdungeonroute()
     {
@@ -96,7 +98,7 @@ class AdminToolsController extends Controller
 
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory|
      */
     public function mdtdiff()
     {
@@ -312,7 +314,8 @@ class AdminToolsController extends Controller
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->paths as $item) {
-                    $item->setVisible(['floor_id', 'polyline']);
+                    $item->load(['linkedawakenedobelisks']);
+                    $item->setVisible(['floor_id', 'polyline', 'linkedawakenedobelisks']);
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->killzones as $item) {
@@ -324,7 +327,8 @@ class AdminToolsController extends Controller
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->mapicons as $item) {
-                    $item->makeHidden(['id', 'dungeon_route_id', 'linked_awakened_obelisk_id']);
+                    $item->load(['linkedawakenedobelisks']);
+                    $item->setVisible(['floor_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index', 'linkedawakenedobelisks']);
                     $toHide->add($item);
                 }
                 foreach ($toHide as $item) {

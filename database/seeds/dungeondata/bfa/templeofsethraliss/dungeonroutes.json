@@ -14,8 +14,8 @@
         "unlisted": 1,
         "demo": 1,
         "thumbnail_updated_at": "1970-01-01 12:00:00",
-        "created_at": "2020-07-03T08:34:33.000000Z",
-        "updated_at": "2020-07-03T10:16:28.000000Z",
+        "created_at": "2020-07-03T06:34:33.000000Z",
+        "updated_at": "2020-07-03T08:16:28.000000Z",
         "expires_at": null,
         "playerspecializations": [],
         "playerraces": [],
@@ -35,7 +35,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-184.625,\"lng\":226.5},{\"lat\":-69.77,\"lng\":152.43}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 48,
@@ -44,7 +45,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-238.625,\"lng\":257.4375},{\"lat\":-189.78,\"lng\":251.78}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 48,
@@ -53,7 +55,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":-184.8125,\"lng\":204.6875},{\"lat\":-130.52,\"lng\":148.41}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 48,
@@ -62,7 +65,8 @@
                     "color_animated": "#244812",
                     "weight": 3,
                     "vertices_json": "[{\"lat\":\"-83.8125\",\"lng\":\"195.5625\"},{\"lat\":\"-20.625\",\"lng\":\"145\"}]"
-                }
+                },
+                "linkedawakenedobelisks": []
             }
         ],
         "killzones": [
@@ -451,7 +455,8 @@
                 "lng": 152.43,
                 "comment": "Cursed Spire of Ny'alotha (Voidweaver Mal'thir)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 48,
@@ -460,7 +465,8 @@
                 "lng": 251.78,
                 "comment": "Defiled Spire of Ny'alotha (Blood of the Corruptor)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 48,
@@ -469,7 +475,8 @@
                 "lng": 148.41,
                 "comment": "Entropic Spire of Ny'alotha (Samh'rek, Beckoner of Chaos)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             },
             {
                 "floor_id": 48,
@@ -478,7 +485,8 @@
                 "lng": 145,
                 "comment": "Brutal Spire of Ny'alotha (Urg'roth, Breaker of Heroes)",
                 "permanent_tooltip": 0,
-                "seasonal_index": null
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
             }
         ]
     }
