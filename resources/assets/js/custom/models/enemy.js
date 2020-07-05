@@ -38,6 +38,8 @@ let LeafletEnemyMarker = L.Marker.extend({
  * @property dangerous bool
  * @property lat float
  * @property lng float
+ *
+ * @property L.Layer layer
  */
 class Enemy extends MapObject {
     constructor(map, layer) {

@@ -313,14 +313,14 @@ class MapObjectGroup extends Signalable {
                 if (!this.layerGroup.hasLayer(object.layer)) {
                     this.layerGroup.addLayer(object.layer);
                     // Trigger this on the object
-                    object.signal('shown', {object: object, visible: true});
+                    object.setVisible(true);
                     this.signal('object:shown', {object: object, objectgroup: this, visible: true});
                 }
             } else {
                 if (this.layerGroup.hasLayer(object.layer)) {
                     this.layerGroup.removeLayer(object.layer);
                     // Trigger this on the object
-                    object.signal('hidden', {object: object, visible: false});
+                    object.setVisible(false);
                     this.signal('object:hidden', {object: object, objectgroup: this, visible: false});
                 }
             }
@@ -366,6 +366,7 @@ class MapObjectGroup extends Signalable {
         if (layer !== null) {
             mapObject.layer = layer;
             this.layerGroup.addLayer(mapObject.layer);
+            mapObject.setVisible(true);
             mapObject.onLayerInit();
         }
         // User wants to unset the mapObject's layer, remove its references
@@ -373,6 +374,7 @@ class MapObjectGroup extends Signalable {
             this.layerGroup.removeLayer(mapObject.layer);
             // Set to null
             mapObject.layer = layer;
+            mapObject.setVisible(false);
         }
     }
 

@@ -6,16 +6,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         // Listen to changes in the NPC to update the icon and re-draw the visual
         this.enemyvisual.enemy.register('enemy:set_npc', this, this._refreshNpc.bind(this));
-
-        this.enemyvisual.map.leafletMap.on('zoomend', this._zoomEnd, this);
-
-        // getState().register('mapzoomlevel:changed', this, function () {
-        //     self.enemyvisual.refresh();
-        // });
-    }
-
-    _zoomEnd() {
-        this.enemyvisual.refresh();
+        this._sizeCache = [];
     }
 
     _getTemplateData(width, height, margin) {
@@ -47,7 +38,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
     }
 
     /**
-     * Must be overriden by implementing classes
+     * Must be overridden by implementing classes
      * @protected
      */
     _refreshNpc() {
@@ -55,6 +46,15 @@ class EnemyVisualMain extends EnemyVisualIcon {
     }
 
     getSize() {
+        console.assert(this instanceof EnemyVisualMain, 'this is not an EnemyVisualMain!', this);
+
+        let zoomLevelOffset = getState().getMapZoomLevel() * 2;
+
+        // Don't do expensive calculations if we don't need to
+        if( this._sizeCache.hasOwnProperty(zoomLevelOffset) ) {
+            return this._sizeCache[zoomLevelOffset];
+        }
+
         let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health;
         if (this.enemyvisual.enemy.npc === null) {
             console.warn('Enemy has no NPC!', this.enemyvisual.enemy);
@@ -75,10 +75,11 @@ class EnemyVisualMain extends EnemyVisualIcon {
             calculatedSize /= 2;
         }
 
-        let zoomLevelOffset = getState().getMapZoomLevel() * 2;
-        return {
+
+        this._sizeCache[zoomLevelOffset] = {
             iconSize: [calculatedSize + zoomLevelOffset, calculatedSize + zoomLevelOffset]
         };
+        return this.getSize();
     }
 
     cleanup() {
@@ -86,7 +87,5 @@ class EnemyVisualMain extends EnemyVisualIcon {
         console.assert(this instanceof EnemyVisualMain, 'this is not an EnemyVisualMain!', this);
 
         this.enemyvisual.enemy.unregister('enemy:set_npc', this);
-        // getState().unregister('mapzoomlevel:changed', this);
-        this.enemyvisual.map.leafletMap.off('zoomend', this._zoomEnd, this);
     }
 }

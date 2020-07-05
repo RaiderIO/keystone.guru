@@ -26,6 +26,8 @@ class MapObject extends Signalable {
 
         let self = this;
 
+        // Visible by default
+        this._visible = false;
         this._defaultVisible = true;
         /** @type {Array} */
         this._cachedAttributes = null;
@@ -545,6 +547,27 @@ class MapObject extends Signalable {
     isDefaultVisible() {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
         return this._defaultVisible;
+    }
+
+    /**
+     * Checks if the current MapObject is visible on the map or not.
+     * @returns {*}
+     */
+    isVisible() {
+        return this._visible;
+    }
+
+    /**
+     * Sets the map object's visibility state.
+     * @param visible
+     */
+    setVisible(visible) {
+        this._visible = visible;
+        if (visible) {
+            this.signal('shown', {visible: visible});
+        } else {
+            this.signal('hidden', {visible: visible});
+        }
     }
 
     /**

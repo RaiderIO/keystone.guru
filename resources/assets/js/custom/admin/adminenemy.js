@@ -74,7 +74,7 @@ class AdminEnemy extends Enemy {
             // are close by. If they're far away, we don't really care if we get a tooltip for the odd time it happens
             // Advantage is that this dramatically speeds up the JS.
             // 100 = 10 distance
-            let closeEnough = getDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) < 100;
+            let closeEnough = getLatLngDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) < 100;
             //
             if (!(mapStateChangedEvent.data.newMapState instanceof EnemySelection)) {
                 if (closeEnough) {
