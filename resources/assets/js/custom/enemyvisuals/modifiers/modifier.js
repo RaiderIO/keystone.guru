@@ -3,6 +3,9 @@ class EnemyVisualModifier extends EnemyVisualIcon {
         super(enemyvisual);
         this.index = index;
         this.enemyvisual.register('enemyvisual:builtvisual', this, this._visualBuilt.bind(this));
+
+        /** @type {boolean|null} */
+        this._wasVisible = null;
     }
 
     /**
@@ -84,14 +87,29 @@ class EnemyVisualModifier extends EnemyVisualIcon {
     updateVisibility(currentZoomLevel, width, height, margin) {
         console.assert(this instanceof EnemyVisualModifier, 'this is not an EnemyVisualModifier!', this);
 
-        // Hide or show based on the current zoom level
-        // console.log(this._getName(), this.enemyvisual.enemy.id, `#map_enemy_visual_attribute_${this._getName()}_${this.enemyvisual.enemy.id}`);
-        let $attribute = $(`#map_enemy_visual_attribute_${this._getName()}_${this.enemyvisual.enemy.id}`);
+        let visible = currentZoomLevel >= this._getVisibleAtZoomLevel();
+        let visibleChanged = this._wasVisible !== visible;
 
-        $attribute.toggle(currentZoomLevel >= this._getVisibleAtZoomLevel());
-        let size = this._getLocation(width, height, margin);
-        $attribute[0].style.left = `${size.left}px`;
-        $attribute[0].style.top = `${size.top}px`;
+        if (visible || visibleChanged) {
+            // Use plain JS for performance reasons
+            let attribute = document.getElementById(`map_enemy_visual_attribute_${this._getName()}_${this.enemyvisual.enemy.id}`);
+
+            // Only if there was a change in visibility
+            if (visibleChanged) {
+                // Hide or show based on the current zoom level
+                // Null = visible, none = invisible
+                attribute.style.display = visible ? null : 'none';
+            }
+
+            // Only update left/right
+            if (visible) {
+                let size = this._getLocation(width, height, margin);
+                attribute.style.left = `${size.left}px`;
+                attribute.style.top = `${size.top}px`;
+            }
+        }
+
+        this._wasVisible = visible;
     }
 
     /**

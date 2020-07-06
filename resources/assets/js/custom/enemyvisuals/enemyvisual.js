@@ -34,7 +34,7 @@ class EnemyVisual extends Signalable {
         // Build and/or destroy the visual based on visibility
         this.enemy.register(['shown', 'hidden'], this, function (event) {
             if (event.data.visible) {
-                self._buildVisual();
+                self.buildVisual();
             } else {
                 // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
                 // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
@@ -42,18 +42,18 @@ class EnemyVisual extends Signalable {
         });
 
         // If it changed, refresh the entire visual
-        this.enemy.register(['enemy:set_raid_marker'], this, this._buildVisual.bind(this));
+        this.enemy.register(['enemy:set_raid_marker'], this, this.buildVisual.bind(this));
         this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();
-            killZone.register('killzone:changed', self, self._buildVisual.bind(self));
-            killZone.register('object:deleted', self, self._buildVisual.bind(self));
+            killZone.register('killzone:changed', self, self.buildVisual.bind(self));
+            killZone.register('object:deleted', self, self.buildVisual.bind(self));
 
             // Check if we can shortcut by updating just the border
             if ((killZoneAttachedEvent.data.previousKillZone instanceof KillZone && !(killZone instanceof KillZone)) ||
                 (!(killZoneAttachedEvent.data.previousKillZone instanceof KillZone) && killZone instanceof KillZone)) {
                 // We cannot
-                self._buildVisual();
+                self.buildVisual();
             } else {
                 // From killzone to killzone we can, otherwise we can't
                 self._updateBorder(killZone.color);
@@ -71,13 +71,19 @@ class EnemyVisual extends Signalable {
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
                 mapStateChangedEvent.data.newMapState instanceof EditMapState) {
-                self._buildVisual();
+                self.buildVisual();
             }
         });
         getState().register('mapzoomlevel:changed', this, function () {
             // Only refresh what we can see
-            if (self.enemy.isVisible() ) {
-                self.refreshSize();
+            if (self.enemy.isVisible()) {
+                // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
+                // reworking to support a full refresh of the visual
+                if (self._hideFade) {
+                    window.requestAnimationFrame(self.buildVisual.bind(self));
+                } else {
+                    window.requestAnimationFrame(self.refreshSize.bind(self));
+                }
             }
         });
 
@@ -115,7 +121,9 @@ class EnemyVisual extends Signalable {
             let packBuddies = this.enemy.getPackBuddies();
             packBuddies.push(this.enemy);
             $.each(packBuddies, function (index, enemy) {
-                visuals.push(enemy.visual);
+                if (enemy.visual !== null) {
+                    visuals.push(enemy.visual);
+                }
             });
 
             for (let i = 0; i < visuals.length; i++) {
@@ -163,7 +171,6 @@ class EnemyVisual extends Signalable {
      * @private
      */
     _refreshModifierVisibility(width, height, margin) {
-        console.log(width, height, margin);
         let zoomLevel = getState().getMapZoomLevel();
         for (let i = 0; i < this._modifiers.length; i++) {
             this._modifiers[i].updateVisibility(zoomLevel, width, height, margin);
@@ -337,7 +344,7 @@ class EnemyVisual extends Signalable {
      * the interface.
      * @private
      */
-    _buildVisual() {
+    buildVisual() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         // Determine which modifiers the visual should have
@@ -525,7 +532,7 @@ class EnemyVisual extends Signalable {
                 }
             }
 
-            this._buildVisual();
+            this.buildVisual();
 
             this.visualType = name;
         }
