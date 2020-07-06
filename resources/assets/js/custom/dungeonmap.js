@@ -29,6 +29,7 @@ class DungeonMap extends Signalable {
 
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
+        this.enemyVisualManager = new EnemyVisualManager(this);
 
         // Pather instance
         this.pather = null;

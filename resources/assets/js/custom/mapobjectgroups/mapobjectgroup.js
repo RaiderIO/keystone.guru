@@ -123,9 +123,12 @@ class MapObjectGroup extends Signalable {
 
         // Remove any layers that were added before
         for (let i = 0; i < this.objects.length; i++) {
+            let obj = this.objects[i];
             // Remove all layers
-            if (this.objects[i].layer !== null) {
-                this.manager.map.leafletMap.removeLayer(this.objects[i].layer);
+            if (obj.layer !== null) {
+                this.manager.map.leafletMap.removeLayer(obj.layer);
+                // Clean it up properly
+                obj.setVisible(false);
             }
         }
     }
@@ -261,6 +264,8 @@ class MapObjectGroup extends Signalable {
             this.layerGroup.removeLayer(data.context.layer);
             // @TODO Should this be put in the dungeonmap instead?
             this.manager.map.leafletMap.removeLayer(data.context.layer);
+            // Clean it up properly
+            data.context.setVisible(false);
         }
 
         let object = data.context;
@@ -413,10 +418,24 @@ class MapObjectGroup extends Signalable {
     setVisibility(visible) {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
         if (this.layerGroup !== null) {
-            if (!this.isShown() && visible) {
+            let added = (!this.isShown() && visible);
+            let removed = (this.isShown() && !visible);
+            if (added) {
                 this.manager.map.leafletMap.addLayer(this.layerGroup);
-            } else if (this.isShown() && !visible) {
+            } else if (removed) {
                 this.manager.map.leafletMap.removeLayer(this.layerGroup);
+            }
+
+            if (added || removed) {
+                // Remove any layers that were added before
+                for (let i = 0; i < this.objects.length; i++) {
+                    let obj = this.objects[i];
+                    // Remove all layers
+                    if (obj.layer !== null) {
+                        // Clean it up properly (if added, it's visible, if removed, not visible)
+                        obj.setVisible(added);
+                    }
+                }
             }
         }
     }

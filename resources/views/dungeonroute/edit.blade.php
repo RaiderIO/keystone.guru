@@ -10,6 +10,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
     <div class="wrapper">
         @include('common.maps.editsidebar', [
             'dungeon' => $dungeon,
+            'floorId' => $floor->id,
             'show' => [
                 'shareable-link' => true,
                 'route-settings' => true,

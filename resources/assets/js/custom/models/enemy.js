@@ -71,6 +71,28 @@ class Enemy extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, this._synced.bind(this));
+
+        // Only create/hide visuals if we're actively being shown
+        this.register('shown', this, this._onShown.bind(this));
+        this.register('hidden', this, this._onHidden.bind(this));
+    }
+
+    _onShown(shownEvent) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        // Create the visual now that we know all data to construct it properly
+        if (this.visual === null && (this.id > 0 || this.is_mdt)) {
+            this.visual = new EnemyVisual(this.map, this, this.layer);
+        }
+    }
+
+    _onHidden(hiddenEvent) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (this.visual !== null) {
+            this.visual.cleanup();
+            this.visual = null;
+        }
     }
 
     /**
@@ -198,11 +220,8 @@ class Enemy extends MapObject {
             // Synced, can now build the popup since we know our ID
             this._rebuildPopup(syncedEvent);
 
-            // Create the visual now that we know all data to construct it properly
-            if (this.visual !== null) {
-                this.visual.cleanup();
-            }
-            this.visual = new EnemyVisual(this.map, this, this.layer);
+            // We're now shown so show ourselves
+            this._onShown(null);
 
             // Recreate the tooltip
             this.bindTooltip();

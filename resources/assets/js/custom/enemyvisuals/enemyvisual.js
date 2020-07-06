@@ -11,7 +11,7 @@ class EnemyVisual extends Signalable {
         this.layer = layer;
 
         /** Override for showing fade or not **/
-        this._hideFade = false;
+        this._highlighted = false;
         /** Used for managing mouse overs over our enemy pack. If one enemy is mouse overed, all are mouse overed */
         this._managedBy = this.enemy.id;
 
@@ -74,39 +74,6 @@ class EnemyVisual extends Signalable {
                 self.buildVisual();
             }
         });
-        getState().register('mapzoomlevel:changed', this, function () {
-            // Only refresh what we can see
-            if (self.enemy.isVisible()) {
-                // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
-                // reworking to support a full refresh of the visual
-                if (self._hideFade) {
-                    window.requestAnimationFrame(self.buildVisual.bind(self));
-                } else {
-                    window.requestAnimationFrame(self.refreshSize.bind(self));
-                }
-            }
-        });
-
-        let lastDistanceCheckTime = 0;
-        this.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
-            if (self._managedBy === self.enemy.id) {
-                let currTime = (new Date()).getTime();
-                // Once every 100 ms, calculation is expensive
-                if (currTime - lastDistanceCheckTime > 100) {
-                    let offset = self._$mainVisual.offset();
-                    let iconSize = self.mainVisual.getSize();
-                    let size = iconSize.iconSize[0];
-                    let margin = c.map.enemy.calculateMargin(size);
-                    let halfSize = (size / 2) + margin;
-
-                    if (getDistanceSquared([offset.left + halfSize, offset.top + halfSize], [mouseMoveEvent.originalEvent.pageX, mouseMoveEvent.originalEvent.pageY]) < halfSize * halfSize) {
-                        self._mouseOver();
-                    } else {
-                        self._mouseOut();
-                    }
-                }
-            }
-        });
     }
 
     /**
@@ -128,7 +95,7 @@ class EnemyVisual extends Signalable {
 
             for (let i = 0; i < visuals.length; i++) {
                 visuals[i]._managedBy = this.enemy.id;
-                visuals[i]._hideFade = true;
+                visuals[i]._highlighted = true;
                 visuals[i].setVisualType('enemy_forces');
             }
         }
@@ -154,7 +121,7 @@ class EnemyVisual extends Signalable {
                     let visual = visuals[i];
                     // Return management state to their own enemy
                     visual._managedBy = visual.enemy.id;
-                    visual._hideFade = false;
+                    visual._highlighted = false;
                     visual.setVisualType(getState().getEnemyDisplayType());
                 }
             }
@@ -342,7 +309,6 @@ class EnemyVisual extends Signalable {
     /**
      * Constructs the structure for the visuals and re-fetches the main visual's and modifier's data to re-apply to
      * the interface.
-     * @private
      */
     buildVisual() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
@@ -365,7 +331,7 @@ class EnemyVisual extends Signalable {
             let border = `${getState().getMapZoomLevel()}px solid white`;
             if (this.enemy.getKillZone() instanceof KillZone) {
                 border = `${getState().getMapZoomLevel()}px solid ${this.enemy.getKillZone().color}`;
-            } else if (!this._hideFade && !this.enemy.is_mdt && !isSelectable) {
+            } else if (!this._highlighted && !this.enemy.is_mdt && !isSelectable) {
                 // If not selected in a killzone, fade the enemy
                 data.root_classes = 'map_enemy_visual_fade';
             }
@@ -439,6 +405,14 @@ class EnemyVisual extends Signalable {
     }
 
     /**
+     * True if the visual was highlighted by the user, false if it was not
+     * @returns {boolean}
+     */
+    isHighlighted() {
+        return this._highlighted;
+    }
+
+    /**
      *
      */
     refreshSize(adjustParent = true) {
@@ -492,6 +466,29 @@ class EnemyVisual extends Signalable {
         this._refreshModifierVisibility(width, height, margin);
     }
 
+    /**
+     * Checks if we should be showing our mouse over state or not
+     * @param mouseX {int}
+     * @param mouseY {int}
+     */
+    checkMouseOver(mouseX, mouseY) {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+
+        if (this._managedBy === this.enemy.id) {
+            let offset = this._$mainVisual.offset();
+            let iconSize = this.mainVisual.getSize();
+            let size = iconSize.iconSize[0];
+            let margin = c.map.enemy.calculateMargin(size);
+            let halfSize = (size / 2) + margin;
+
+            if (getDistanceSquared([offset.left + halfSize, offset.top + halfSize], [mouseX, mouseY]) < halfSize * halfSize) {
+                this._mouseOver();
+            } else {
+                this._mouseOut();
+            }
+        }
+    }
+
     // @TODO Listen to killzone selectable changed event
     refresh() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
@@ -542,7 +539,6 @@ class EnemyVisual extends Signalable {
         // this.layer.off('mouseover');
         // this.layer.off('mouseout');
 
-        getState().unregister('mapzoomlevel:changed', this);
         this.enemy.unregister('killzone:detached', this);
         this.enemy.unregister('killzone:attached', this);
         this.enemy.unregister('enemy:set_raid_marker', this);

@@ -21,7 +21,11 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
 @endsection
 @section('content')
     <div class="wrapper">
-        @include('common.maps.viewsidebar', ['model' => $model, 'floorSelection' => $floorSelection])
+        @include('common.maps.viewsidebar', [
+            'model' => $model,
+            'floorSelection' => $floorSelection,
+            'floorId' => $floor->id
+        ])
 
         @include('common.maps.map', [
             'dungeon' => $dungeon,
