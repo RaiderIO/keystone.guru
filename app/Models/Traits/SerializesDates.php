@@ -24,6 +24,6 @@ trait SerializesDates
         if ($date instanceof \Illuminate\Support\Carbon) {
             $date->setTimezone('UTC');
         }
-        return $date->format(Carbon::ISO8601);
+        return $date->format('c');
     }
 }
