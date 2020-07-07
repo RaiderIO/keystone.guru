@@ -25,7 +25,7 @@ class EnemyVisual extends Signalable {
         /** @type EnemyVisualMain */
         this.mainVisual = null;
 
-        this.circleMenu = null;
+        this._circleMenu = null;
 
         // Default visual (after modifiers!)
         this.setVisualType(getState().getEnemyDisplayType());
@@ -107,7 +107,7 @@ class EnemyVisual extends Signalable {
     _mouseOut() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
         if (this._managedBy === this.enemy.id) {
-            if (this.circleMenu === null) {
+            if (this._circleMenu === null) {
                 let visuals = [this];
 
                 // Add all the enemies in said pack to the toggle display (may be empty if enemy not part of a pack)
@@ -536,14 +536,13 @@ class EnemyVisual extends Signalable {
     }
 
     cleanup() {
-        // this.layer.off('mouseover');
-        // this.layer.off('mouseout');
-
         this.enemy.unregister('killzone:detached', this);
         this.enemy.unregister('killzone:attached', this);
         this.enemy.unregister('enemy:set_raid_marker', this);
         this.map.unregister('map:mapstatechanged', this);
 
-        this._cleanupCircleMenu();
+        if (this._circleMenu !== null) {
+            this._cleanupCircleMenu();
+        }
     }
 }

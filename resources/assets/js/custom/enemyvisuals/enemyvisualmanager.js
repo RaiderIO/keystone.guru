@@ -31,7 +31,7 @@ class EnemyVisualManager extends Signalable {
 
             // Only refresh what we can see
             if (enemy.isVisible()) {
-                console.log(`Refreshing enemy ${enemy.id}`);
+                // console.log(`Refreshing enemy ${enemy.id}`);
                 // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
                 // reworking to support a full refresh of the visual
                 if (enemy.visual.isHighlighted()) {
