@@ -497,7 +497,10 @@ class Enemy extends MapObject {
 
         this.unregister('synced', this, this._synced.bind(this));
         this.map.unregister('map:mapstatechanged', this);
-        this.visual.cleanup();
-        this.visual = null;
+
+        if (this.visual !== null) {
+            this.visual.cleanup();
+            this.visual = null;
+        }
     }
 }

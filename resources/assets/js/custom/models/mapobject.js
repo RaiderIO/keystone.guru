@@ -576,8 +576,8 @@ class MapObject extends Signalable {
      */
     isVisibleOnMap() {
         let result = false;
-        if (this.layer !== null) {
-            result = this.isVisible() && this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
+        if (this.isVisible() && this.layer !== null) {
+            result = this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
         }
         return result;
     }

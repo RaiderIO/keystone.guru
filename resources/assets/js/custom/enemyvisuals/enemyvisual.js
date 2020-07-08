@@ -81,6 +81,7 @@ class EnemyVisual extends Signalable {
      */
     _mouseOver() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+        console.log(this._managedBy, this.enemy.id);
         if (this._managedBy === this.enemy.id) {
             let visuals = [this];
 
@@ -476,7 +477,8 @@ class EnemyVisual extends Signalable {
     checkMouseOver(mouseX, mouseY) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
-        let result = 9999999999;
+        // Sensible default for distance (approx 75% of the full map distance)
+        let result = 1000000;
 
         if (this._managedBy === this.enemy.id) {
             let offset = this._$mainVisual.offset();

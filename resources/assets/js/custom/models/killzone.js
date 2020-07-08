@@ -336,7 +336,6 @@ class KillZone extends MapObject {
 
         let latLngs = [];
         let otherFloorsWithEnemies = [];
-        console.log(`_getVisibleEntitiesLatLngs()`);
         $.each(this.enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
