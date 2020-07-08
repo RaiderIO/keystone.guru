@@ -470,9 +470,13 @@ class EnemyVisual extends Signalable {
      * Checks if we should be showing our mouse over state or not
      * @param mouseX {int}
      * @param mouseY {int}
+     *
+     * @return float Squared distance from the enemy to the mouse
      */
     checkMouseOver(mouseX, mouseY) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+
+        let result = 9999999999;
 
         if (this._managedBy === this.enemy.id) {
             let offset = this._$mainVisual.offset();
@@ -481,12 +485,16 @@ class EnemyVisual extends Signalable {
             let margin = c.map.enemy.calculateMargin(size);
             let halfSize = (size / 2) + margin;
 
-            if (getDistanceSquared([offset.left + halfSize, offset.top + halfSize], [mouseX, mouseY]) < halfSize * halfSize) {
+            result = getDistanceSquared([offset.left + halfSize, offset.top + halfSize], [mouseX, mouseY]);
+
+            if (result < halfSize * halfSize) {
                 this._mouseOver();
             } else {
                 this._mouseOut();
             }
         }
+
+        return result;
     }
 
     // @TODO Listen to killzone selectable changed event

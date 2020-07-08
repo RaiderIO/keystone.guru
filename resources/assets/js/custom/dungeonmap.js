@@ -297,12 +297,10 @@ class DungeonMap extends Signalable {
 
         this.leafletMap.on('zoomend', function () {
             if (typeof self.leafletMap !== 'undefined') {
-                self._adjustZoomForLayers();
                 // Propagate to any other listeners
                 getState().setMapZoomLevel(self.leafletMap.getZoom());
             }
         });
-        this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
 
     /**
@@ -470,29 +468,6 @@ class DungeonMap extends Signalable {
         refreshSelectPickers();
         // All layers have been fetched and everything rebuilt, refresh tooltips for all elements
         refreshTooltips();
-    }
-
-    /**
-     * Fixes the border width for based on current zoom of the map
-     * @TODO This should be moved to all layers that actually have a setStyle property and listen to getState() call instead.
-     * @private
-     */
-    _adjustZoomForLayers() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        for (let i = 0; i < this.mapObjects.length; i++) {
-            let layer = this.mapObjects[i].layer;
-            if (layer !== null && layer.hasOwnProperty('setStyle')) {
-                let zoomStep = Math.max(2, this.leafletMap.getZoom());
-                if (layer instanceof L.Polyline) {
-                    layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
-                } else if (layer instanceof L.CircleMarker) {
-                    layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
-                } else {
-                    layer.setStyle({weight: 3 / zoomStep});
-                }
-            }
-        }
     }
 
     /**

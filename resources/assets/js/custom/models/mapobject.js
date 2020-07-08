@@ -571,6 +571,18 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Checks if this map object is visible and if it's layer's bounds are actually on the map.
+     * @returns {*}
+     */
+    isVisibleOnMap() {
+        let result = false;
+        if (this.layer !== null) {
+            result = this.isVisible() && this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
+        }
+        return result;
+    }
+
+    /**
      * Unbinds the tooltip from this map object.
      */
     unbindTooltip() {
