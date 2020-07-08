@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $floor_id
- * @property int $enemy_id
  * @property int $polyline_id
  * @property string $teeming
  * @property string $faction
@@ -30,14 +29,6 @@ class EnemyPatrol extends Model
     function floor()
     {
         return $this->belongsTo('App\Models\Floor');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    function enemy()
-    {
-        return $this->belongsTo('App\Models\Enemy');
     }
 
     /**

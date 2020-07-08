@@ -213,7 +213,7 @@ class AdminEnemy extends Enemy {
             let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
             previousEnemy.detachConnectedEnemy();
             // Remove its visual connection, probably better served using events but that'd add too much complexity for now
-            previousEnemy.redrawConnectionToEnemy();
+            previousEnemy.redrawConnectionToMDTEnemy();
         }
 
         // We couple the enemy to ourselves (MDT enemy), not the other way around
@@ -332,7 +332,7 @@ class AdminEnemy extends Enemy {
 
             let connectedEnemy = self.getConnectedMDTEnemy();
             if (connectedEnemy !== null) {
-                connectedEnemy.redrawConnectionToEnemy();
+                connectedEnemy.redrawConnectionToMDTEnemy();
             }
         });
     }
