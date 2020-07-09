@@ -99,6 +99,7 @@ class EnemyVisualManager extends Signalable {
                     if (enemy.isVisibleOnMap()) {
                         let lastCheckData = this._enemyMouseMoveDistanceData[enemy.id];
                         if (currTime - lastCheckData.lastCheckTime > 500 * lastCheckData.lastDistanceSquared / 1000000) {
+                            console.log(enemy.id, enemy.shouldBeVisible());
                             this._enemyMouseMoveDistanceData[enemy.id].lastDistanceSquared =
                                 enemy.visual.checkMouseOver(mouseMoveEvent.originalEvent.pageX, mouseMoveEvent.originalEvent.pageY);
 
@@ -116,7 +117,6 @@ class EnemyVisualManager extends Signalable {
                     this._mouseStoppedMovingTimeoutId = setTimeout(this._onLeafletMapMouseMove.bind(this, mouseMoveEvent, false), 100);
                 }
             }
-
         }
     }
 

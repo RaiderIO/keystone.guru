@@ -25,56 +25,54 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
         let enemyPack = null;
 
         // Check teeming, faction status
-        if (this._isObjectVisible(remoteMapObject)) {
-            let points = [];
-            let layer = null;
+        let points = [];
+        let layer = null;
 
-            // Create a polygon from the vertices as normal
-            if (typeof remoteMapObject.vertices_json !== 'undefined') {
-                let vertices = JSON.parse(remoteMapObject.vertices_json);
+        // Create a polygon from the vertices as normal
+        if (typeof remoteMapObject.vertices_json !== 'undefined') {
+            let vertices = JSON.parse(remoteMapObject.vertices_json);
 
-                for (let j = 0; j < vertices.length; j++) {
-                    let vertex = vertices[j];
-                    points.push([vertex.lat, vertex.lng]);
-                }
-
-                layer = L.polygon(points);
-            }
-            // Create a polygon based on a hull of points from the enemies in this pack
-            else {
-                let vertices = remoteMapObject.enemies;
-
-                for (let j = 0; j < vertices.length; j++) {
-                    let vertex = vertices[j];
-                    points.push([vertex.lat, vertex.lng]);
-                }
-
-                // Build a layer based off a hull if we're supposed to
-                let p = hull(points, 100);
-                // Only if we can actually make an offset
-                if (points.length > 1 && p.length > 1) {
-                    try {
-                        let offset = new Offset();
-                        p = offset.data(p).arcSegments(c.map.enemypack.arcSegments(p.length)).margin(c.map.enemypack.margin);
-
-                        layer = L.polygon(p, c.map.enemypack.polygonOptions);
-                    } catch (error) {
-                        // Not particularly interesting to spam the console with
-                        // console.error('Unable to create offset for pack', remoteMapObject.id, error);
-                    }
-                }
+            for (let j = 0; j < vertices.length; j++) {
+                let vertex = vertices[j];
+                points.push([vertex.lat, vertex.lng]);
             }
 
-            if (layer !== null) {
-                enemyPack = this.createNew(layer);
-                enemyPack.id = remoteMapObject.id;
-                enemyPack.loadRemoteMapObject(remoteMapObject);
+            layer = L.polygon(points);
+        }
+        // Create a polygon based on a hull of points from the enemies in this pack
+        else {
+            let vertices = remoteMapObject.enemies;
 
-                // We just downloaded the enemy pack, it's synced alright!
-                enemyPack.setSynced(true);
-            } else {
-                console.warn(`Unable to create layer for enemypack ${remoteMapObject.id}; not enough data points`);
+            for (let j = 0; j < vertices.length; j++) {
+                let vertex = vertices[j];
+                points.push([vertex.lat, vertex.lng]);
             }
+
+            // Build a layer based off a hull if we're supposed to
+            let p = hull(points, 100);
+            // Only if we can actually make an offset
+            if (points.length > 1 && p.length > 1) {
+                try {
+                    let offset = new Offset();
+                    p = offset.data(p).arcSegments(c.map.enemypack.arcSegments(p.length)).margin(c.map.enemypack.margin);
+
+                    layer = L.polygon(p, c.map.enemypack.polygonOptions);
+                } catch (error) {
+                    // Not particularly interesting to spam the console with
+                    // console.error('Unable to create offset for pack', remoteMapObject.id, error);
+                }
+            }
+        }
+
+        if (layer !== null) {
+            enemyPack = this.createNew(layer);
+            enemyPack.id = remoteMapObject.id;
+            enemyPack.loadRemoteMapObject(remoteMapObject);
+
+            // We just downloaded the enemy pack, it's synced alright!
+            enemyPack.setSynced(true);
+        } else {
+            console.warn(`Unable to create layer for enemypack ${remoteMapObject.id}; not enough data points`);
         }
 
         return enemyPack;

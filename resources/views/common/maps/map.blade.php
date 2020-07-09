@@ -78,7 +78,6 @@ if ($isAdmin) {
     'edit' => $edit,
     'try' => $tryMode,
     'defaultEnemyVisualType' => $enemyVisualType,
-    'teeming' => $teeming,
     'noUI' => $noUI,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,

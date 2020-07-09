@@ -23,28 +23,25 @@ class EnemyPatrolMapObjectGroup extends MapObjectGroup {
         console.assert(this instanceof EnemyPatrolMapObjectGroup, 'this is not a EnemyPatrolMapObjectGroup', this);
 
         let enemyPatrol = null;
-        // Check teeming, faction status
-        if (this._isObjectVisible(remoteMapObject)) {
-            let points = [];
+        let points = [];
 
-            // Create the polyline first
-            let polyline = remoteMapObject.polyline;
-            let vertices = JSON.parse(polyline.vertices_json);
+        // Create the polyline first
+        let polyline = remoteMapObject.polyline;
+        let vertices = JSON.parse(polyline.vertices_json);
 
-            for (let j = 0; j < vertices.length; j++) {
-                let vertex = vertices[j];
-                points.push([vertex.lat, vertex.lng]);
-            }
-
-            let layer = L.polyline(points);
-
-            enemyPatrol = this.createNew(layer);
-            enemyPatrol.loadRemoteMapObject(remoteMapObject);
-            enemyPatrol.loadRemoteMapObject(remoteMapObject.polyline);
-
-            // We just downloaded the enemy patrol, it's synced alright!
-            enemyPatrol.setSynced(true);
+        for (let j = 0; j < vertices.length; j++) {
+            let vertex = vertices[j];
+            points.push([vertex.lat, vertex.lng]);
         }
+
+        let layer = L.polyline(points);
+
+        enemyPatrol = this.createNew(layer);
+        enemyPatrol.loadRemoteMapObject(remoteMapObject);
+        enemyPatrol.loadRemoteMapObject(remoteMapObject.polyline);
+
+        // We just downloaded the enemy patrol, it's synced alright!
+        enemyPatrol.setSynced(true);
 
         return enemyPatrol;
     }

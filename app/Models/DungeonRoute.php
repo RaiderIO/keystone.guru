@@ -506,7 +506,7 @@ class DungeonRoute extends Model
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
         $this->seasonal_index = $request->get('seasonal_index', $this->seasonal_index);
-        $this->teeming = $request->get('teeming', $this->teeming) ?? 0;
+        $this->teeming = intval($request->get('teeming', $this->teeming) ?? 0);
 
         if (Auth::check()) {
             $user = User::findOrFail(Auth::id());

@@ -92,6 +92,8 @@ class Enemy extends MapObject {
         if (this.visual !== null) {
             this.visual.cleanup();
             this.visual = null;
+
+            console.warn(`Hidden enemy ${this.id}`);
         }
     }
 
@@ -292,7 +294,7 @@ class Enemy extends MapObject {
             result = this.npc.enemy_forces;
 
             // Override first
-            if (this.map.options.teeming) {
+            if (getState().getTeeming()) {
                 if (this.enemy_forces_override_teeming >= 0) {
                     result = this.enemy_forces_override_teeming;
                 } else if (this.npc.enemy_forces_teeming >= 0) {
@@ -502,5 +504,7 @@ class Enemy extends MapObject {
             this.visual.cleanup();
             this.visual = null;
         }
+
+        console.warn(`Cleaned up enemy ${this.id}`);
     }
 }

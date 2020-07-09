@@ -48,6 +48,8 @@ class MapObject extends Signalable {
 
         this.register('synced', this, function () {
             self._rebuildDecorator();
+            // Show or hide ourselves
+            self._updateVisibility();
         });
         this.register('object:deleted', this, function () {
             self._cleanDecorator();
@@ -55,6 +57,7 @@ class MapObject extends Signalable {
         this.map.register('map:beforerefresh', this, function () {
             self._cleanDecorator();
         });
+        getState().register('teeming:changed', this, this._updateVisibility.bind(this));
 
         this.register(['shown', 'hidden'], this, function (event) {
             if (event.data.visible) {
@@ -411,6 +414,18 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Checks if this map object should be visible and update the visibility as necessary according to it.
+     * @private
+     */
+    _updateVisibility() {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
+
+
+        // Set this map object to be visible or not
+        this.setVisible(this.shouldBeVisible());
+    }
+
+    /**
      * Cleans up the decorator of this route, removing it from the map.
      * @private
      */
@@ -532,6 +547,15 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Checks if this object is visible by default.
+     * @returns {boolean}
+     */
+    isDefaultVisible() {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
+        return this._defaultVisible;
+    }
+
+    /**
      * Sets this enemy to be visible by default or not. Note: only read/used at initial load in!
      * @param value boolean
      */
@@ -541,12 +565,46 @@ class MapObject extends Signalable {
     }
 
     /**
-     * Checks if this object is visible by default.
-     * @returns {boolean}
+     * Checks if this map object should be visible on map or not.
+     * @return {boolean}
      */
-    isDefaultVisible() {
-        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
-        return this._defaultVisible;
+    shouldBeVisible() {
+        let result = true;
+
+        if (this.hasOwnProperty('seasonal_index')) {
+            if (this.seasonal_index !== null && getState().getSeasonalIndex() !== this.seasonal_index) {
+                result = false;
+            }
+        }
+
+        if (this.hasOwnProperty('faction')) {
+            let faction = getState().getDungeonRoute().faction;
+            // Only when not in try mode! (no idea why, it was like this)
+            if (!this.map.isTryModeEnabled() && (this.faction !== 'any' && faction !== 'any' && this.faction !== faction)) {
+                // console.warn('Skipping map object that does not belong to the requested faction ', remoteMapObject, faction);
+                result = false;
+            }
+        }
+
+        if (this.hasOwnProperty('teeming')) {
+            // If the map isn't teeming, but the enemy is teeming..
+            if (!getState().getTeeming() && this.teeming === 'visible') {
+                // console.warn('Skipping teeming map object', remoteMapObject);
+                result = false;
+            }
+            // If the map is teeming, but the enemy shouldn't be there for teeming maps..
+            else if (getState().getTeeming() && this.teeming === 'invisible') {
+                // console.warn('Skipping teeming-filtered map object', remoteMapObject.id);
+                result = false;
+            }
+        }
+
+        // Floor states
+        if (getState().getCurrentFloor().id !== this.floor_id) {
+            result = false;
+        }
+
+        return result;
     }
 
     /**

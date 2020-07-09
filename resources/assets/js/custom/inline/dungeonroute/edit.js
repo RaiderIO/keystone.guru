@@ -4,7 +4,7 @@ class DungeonrouteEdit extends InlineCode {
      */
     activate() {
         super.activate();
-        
+
         let self = this;
 
         // Save settings in the modal
@@ -22,7 +22,7 @@ class DungeonrouteEdit extends InlineCode {
     _setPublished(value) {
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/publish',
+            url: `/ajax/${getState().getDungeonRoute().publicKey}/publish`,
             dataType: 'json',
             data: {
                 published: value === true ? 1 : 0
@@ -58,11 +58,11 @@ class DungeonrouteEdit extends InlineCode {
     _saveSettings() {
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey,
+            url: `/ajax/${getState().getDungeonRoute().publicKey}`,
             dataType: 'json',
             data: {
                 dungeon_route_title: $('#dungeon_route_title').val(),
-                teeming: $('#teeming').val(),
+                teeming: $('#teeming').is(':checked') ? 1 : 0,
                 attributes: $('#attributes').val(),
                 faction_id: $('#faction_id').val(),
                 seasonal_index: $('#seasonal_index').val(),

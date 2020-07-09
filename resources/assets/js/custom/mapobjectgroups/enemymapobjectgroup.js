@@ -19,45 +19,38 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
-        let result = null;
-
-        // Check teeming, faction status
-        if (this._isObjectVisible(remoteMapObject)) {
-            // Only create a visual if we should display this enemy
-            let layer = null;
-            if (remoteMapObject.floor_id === getState().getCurrentFloor().id) {
-                layer = new LeafletEnemyMarker();
-                layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-            }
-
-            let enemy = this.createNew(layer);
-            enemy.loadRemoteMapObject(remoteMapObject);
-
-            if (remoteMapObject.hasOwnProperty('is_mdt')) {
-                // Exception for MDT enemies
-                enemy.is_mdt = remoteMapObject.is_mdt;
-                // Whatever enemy this MDT enemy is linked to
-                enemy.enemy_id = remoteMapObject.enemy_id;
-                // Hide this enemy by default
-                enemy.setDefaultVisible(false);
-            }
-
-            // When in admin mode, show all enemies
-            if (!(this.manager.map instanceof AdminDungeonMap) && (enemy.seasonal_index !== null && getState().getSeasonalIndex() !== enemy.seasonal_index)) {
-                // Hide this enemy by default
-                enemy.setDefaultVisible(false);
-            }
-
-            // Do this last
-            enemy.setNpc(remoteMapObject.npc);
-
-            // We just downloaded the enemy, it's synced alright!
-            enemy.setSynced(true);
-
-            result = enemy;
+        // Only create a visual if we should display this enemy
+        let layer = null;
+        if (remoteMapObject.floor_id === getState().getCurrentFloor().id) {
+            layer = new LeafletEnemyMarker();
+            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
 
-        return result;
+        let enemy = this.createNew(layer);
+        enemy.loadRemoteMapObject(remoteMapObject);
+
+        if (remoteMapObject.hasOwnProperty('is_mdt')) {
+            // Exception for MDT enemies
+            enemy.is_mdt = remoteMapObject.is_mdt;
+            // Whatever enemy this MDT enemy is linked to
+            enemy.enemy_id = remoteMapObject.enemy_id;
+            // Hide this enemy by default
+            enemy.setDefaultVisible(false);
+        }
+
+        // When in admin mode, show all enemies
+        if (!getState().isMapAdmin()) {
+            // Hide this enemy by default
+            enemy.setDefaultVisible(enemy.shouldBeVisible());
+        }
+
+        // Do this last
+        enemy.setNpc(remoteMapObject.npc);
+
+        // We just downloaded the enemy, it's synced alright!
+        enemy.setSynced(true);
+
+        return enemy;
     }
 
     _fetchSuccess(response) {
