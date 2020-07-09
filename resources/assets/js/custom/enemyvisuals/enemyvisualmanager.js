@@ -15,6 +15,12 @@ class EnemyVisualManager extends Signalable {
         // Used for storing previous visibility states so we know when to refresh the enemy or not
         this._enemyVisibilityMap = [];
 
+        // There is no mousemoveend function. Every time the mouse of moved a timeout is set for X MS to trigger the mouse
+        // move function one last time to properly wrap everything up. If mouse of moved before the timeout, the timeout
+        // is refreshed. This is because the final mouse move may not be executed due to optimizations (not executing every
+        // time but only once every 50 ms, for example).
+        this._mouseStoppedMovingTimeoutId = -1;
+
         let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         enemyMapObjectGroup.register('object:add', this, function (objectAddEvent) {
             self._enemyVisibilityMap[objectAddEvent.data.object.id] = {
@@ -37,6 +43,10 @@ class EnemyVisualManager extends Signalable {
         });
         this.map.register('map:beforerefresh', this, function () {
             self.map.leafletMap.off('mousemove', self._onLeafletMapMouseMove.bind(self));
+
+            self.map.leafletMap.off('movestart', self._onLeafletMapMoveStart.bind(self));
+            self.map.leafletMap.off('move', self._onLeafletMapMove.bind(self));
+            self.map.leafletMap.off('moveend', self._onLeafletMapMoveEnd.bind(self));
         });
     }
 
@@ -71,9 +81,10 @@ class EnemyVisualManager extends Signalable {
     /**
      * Called when the mouse has moved over the leaflet map
      * @param mouseMoveEvent
+     * @param organic boolean True if fired from organic source (user moving mouse), false if from a programmatic source
      * @private
      */
-    _onLeafletMapMouseMove(mouseMoveEvent) {
+    _onLeafletMapMouseMove(mouseMoveEvent, organic = true) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
         if (!this._isMapBeingDragged) {
@@ -88,8 +99,6 @@ class EnemyVisualManager extends Signalable {
                     if (enemy.isVisibleOnMap()) {
                         let lastCheckData = this._enemyMouseMoveDistanceData[enemy.id];
                         if (currTime - lastCheckData.lastCheckTime > 500 * lastCheckData.lastDistanceSquared / 1000000) {
-                            // console.log('checktime: ', 200 + (1000 * (lastCheckData.lastDistanceSquared / 1000000)));
-                            // console.log(this._enemyMouseMoveDistanceData[enemy.id].lastDistanceSquared);
                             this._enemyMouseMoveDistanceData[enemy.id].lastDistanceSquared =
                                 enemy.visual.checkMouseOver(mouseMoveEvent.originalEvent.pageX, mouseMoveEvent.originalEvent.pageY);
 
@@ -100,6 +109,12 @@ class EnemyVisualManager extends Signalable {
                 }
 
                 this._lastMouseMoveDistanceCheckTime = currTime;
+                // Cancel any previously set timeouts
+                clearTimeout(this._mouseStoppedMovingTimeoutId);
+                if (organic) {
+                    // Set a new timeout
+                    this._mouseStoppedMovingTimeoutId = setTimeout(this._onLeafletMapMouseMove.bind(this, mouseMoveEvent, false), 100);
+                }
             }
 
         }
@@ -138,7 +153,7 @@ class EnemyVisualManager extends Signalable {
                 // If panned into view AND we didn't already refresh the zoom earlier
                 if (this._enemyVisibilityMap[enemy.id].wasVisible === false && isVisible &&
                     this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel !== currentZoomLevel) {
-                    console.log(`Refreshing view of enemy ${enemy.id}`);
+                    // console.log(`Refreshing view of enemy ${enemy.id}`);
                     window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
                     this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = currentZoomLevel;
                 }

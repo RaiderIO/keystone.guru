@@ -81,7 +81,6 @@ class EnemyVisual extends Signalable {
      */
     _mouseOver() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
-        console.log(this._managedBy, this.enemy.id);
         if (this._managedBy === this.enemy.id) {
             let visuals = [this];
 
@@ -441,6 +440,7 @@ class EnemyVisual extends Signalable {
 
         this._$mainVisualOuter[0].style.width = outerWidthStr;
         this._$mainVisualOuter[0].style.height = outerHeightStr;
+        this._$mainVisualOuter[0].style.borderWidth = `${getState().getMapZoomLevel()}px`;
 
         this._$mainVisualInner[0].style.width = innerSizeStr;
         this._$mainVisualInner[0].style.height = innerSizeStr;
