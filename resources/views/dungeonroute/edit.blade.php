@@ -52,6 +52,14 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
                                  }}"></i>
                                 </label>
                                 {!! Form::text('dungeon_route_title', $model->title, ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
+
+                                <label for="teeming">
+                                    {{ __('Teeming') }}
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                                    __('Check to change the dungeon to resemble Teeming week. Warning: any selected Teeming enemies will be removed from your existing pulls (when disabling Teeming).')
+                                     }}"></i>
+                                </label>
+                                {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}
                             </div>
                             @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
 
@@ -60,7 +68,6 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
                             </h3>
 
                             <div class='container mt-1'>
-                                {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox d-none']) !!}
                                 @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming', 'modal' => '#settings_modal'])
                             </div>
 

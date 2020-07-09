@@ -475,7 +475,7 @@ class Enemy extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/raidmarker/' + self.id,
+            url: `/ajax/${getState().getDungeonRoute().publicKey}/raidmarker/${self.id}`,
             dataType: 'json',
             data: {
                 raid_marker_name: raidMarkerName

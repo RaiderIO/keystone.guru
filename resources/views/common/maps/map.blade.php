@@ -104,7 +104,8 @@ if ($isAdmin) {
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,
             'enemyForces' => $routeEnemyForces,
-            'seasonalIndex' => $routeSeasonalIndex
+            'seasonalIndex' => $routeSeasonalIndex,
+            'teeming' => $teeming
         ]
     ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>

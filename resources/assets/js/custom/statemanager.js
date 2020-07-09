@@ -14,8 +14,10 @@ class StateManager extends Signalable {
         this.floorId = null;
         // Map zoom level (default = 2)
         this.mapZoomLevel = 2;
-        // Seasonal index (shows certain enemies or not
+        // Seasonal index (shows certain enemies or not)
         this.seasonalIndex = 0;
+        // Teeming or not (shows certain enemies or not)
+        this.teeming = false;
 
         // List of static arrays
         this.mapIconTypes = [];
@@ -47,6 +49,7 @@ class StateManager extends Signalable {
         this.dungeonRoute = dungeonRoute;
         // Load this from the start here
         this.setSeasonalIndex(parseInt(this.dungeonRoute.seasonalIndex));
+        this.setTeeming(this.dungeonRoute.teeming);
     }
 
     /**
@@ -62,7 +65,7 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param seasonalIndex
+     * @param seasonalIndex {int}
      */
     setSeasonalIndex(seasonalIndex) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -71,6 +74,19 @@ class StateManager extends Signalable {
 
         // Let everyone know it's changed
         this.signal('seasonalindex:changed', {seasonalIndex: this.seasonalIndex});
+    }
+
+    /**
+     * Sets the Teeming state of the map.
+     * @param teeming {boolean}
+     */
+    setTeeming(teeming) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this.teeming = teeming;
+
+        // Let everyone know it's changed
+        this.signal('teeming:changed', {teeming: this.teeming});
     }
 
     /**
@@ -263,6 +279,16 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this.seasonalIndex;
+    }
+
+    /**
+     * Gets the current teeming state of the map.
+     * @returns {number}
+     */
+    getTeeming() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this.teeming;
     }
 
     /**

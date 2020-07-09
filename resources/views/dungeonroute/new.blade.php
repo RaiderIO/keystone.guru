@@ -58,7 +58,7 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
             <label for="teeming">
                 {{ __('Teeming') }}
                 <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __('Check to change the dungeon to resemble Teeming week. Warning: once set, you cannot change this later on without creating a new route.')
+                __('Check to change the dungeon to resemble Teeming week.')
                  }}"></i>
             </label>
             {!! Form::checkbox('teeming', 1, $teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}
