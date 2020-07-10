@@ -61,7 +61,32 @@ class KillZone extends MapObject {
         //     self.map.setSelectModeKillZone(null);
         //     self.removeExistingConnectionsToEnemies();
         // });
-        //
+
+        // Disconnect any enemies from us if they were teeming, but the new state is not teeming
+        getState().register('teeming:changed', this, function (teemingChangedEvent) {
+            let teeming = teemingChangedEvent.data.teeming;
+
+            // If we're visible for teeming, and we're now no longer teeming, remove ourselves from our current killzone
+
+            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let hasRemovedEnemy = false;
+            let currentEnemies = [...self.enemies];
+            for (let i = 0; i < currentEnemies.length; i++) {
+                let enemyId = currentEnemies[i];
+                let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+                if (enemy !== null && enemy.teeming === 'visible' && !teeming) {
+                    self._removeEnemy(enemy);
+                    hasRemovedEnemy = true;
+                }
+            }
+
+            // Commit changes if necessary
+            if (hasRemovedEnemy) {
+                self.save();
+                self.redrawConnectionsToEnemies();
+            }
+        });
+
         // // External change (due to delete mode being started, for example)
         if (this.map.options.edit) {
             this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
@@ -342,7 +367,6 @@ class KillZone extends MapObject {
             if (enemy !== null) {
                 if (enemy.layer !== null) {
                     let latLng = enemy.layer.getLatLng();
-                    console.log(`Adding enemy ${enemy.id} ${enemy.floor_id}`);
                     latLngs.push([latLng.lat, latLng.lng]);
                 }
                 // The enemy was not on this floor; add its floor to the 'add floor switch as part of pack' list
@@ -365,14 +389,13 @@ class KillZone extends MapObject {
             // Killzone on this floor, include the lat/lng in our bounds
             else {
                 let selfLatLng = this.layer.getLatLng();
-                console.log(`Adding self`);
                 latLngs.unshift([selfLatLng.lat, selfLatLng.lng]);
             }
         }
 
         // If there are other floors with enemies AND enemies on this floor..
         if (otherFloorsWithEnemies.length > 0 && latLngs.length > 0) {
-            console.warn(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
+            // console.warn(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
             let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
             $.each(otherFloorsWithEnemies, function (i, floorId) {
                 // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
@@ -740,6 +763,7 @@ class KillZone extends MapObject {
         let self = this;
 
         // this.unregister('synced', this); // Not needed as super.cleanup() does this
+        getState().unregister('teeming:changed', this);
         this.map.unregister('map:mapstatechanged', this);
         this.map.unregister('killzone:selectionchanged', this);
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);

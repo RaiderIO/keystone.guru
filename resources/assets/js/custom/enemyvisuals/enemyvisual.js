@@ -3,6 +3,7 @@ class EnemyVisual extends Signalable {
         super();
         console.assert(map instanceof DungeonMap, 'map was not a DungeonMap', map);
         console.assert(enemy instanceof Enemy, 'enemy was not an Enemy', enemy);
+        console.assert(layer instanceof L.Layer, 'layer is not an L.Layer', layer);
 
         /** @type DungeonMap */
         this.map = map;
@@ -114,7 +115,10 @@ class EnemyVisual extends Signalable {
                 let packBuddies = this.enemy.getPackBuddies();
                 packBuddies.push(this.enemy);
                 $.each(packBuddies, function (index, enemy) {
-                    visuals.push(enemy.visual);
+                    // Some packs may contain Teeming enemies which may be hidden
+                    if (enemy.isVisible()) {
+                        visuals.push(enemy.visual);
+                    }
                 });
 
                 for (let i = 0; i < visuals.length; i++) {

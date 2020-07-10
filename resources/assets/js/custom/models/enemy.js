@@ -82,7 +82,10 @@ class Enemy extends MapObject {
 
         // Create the visual now that we know all data to construct it properly
         if (this.visual === null && (this.id > 0 || this.is_mdt)) {
+            console.warn(`Constructing new visual _onShown ${this.id}`);
             this.visual = new EnemyVisual(this.map, this, this.layer);
+            // Construct the visual
+            this.visual.buildVisual();
         }
     }
 

@@ -48,8 +48,6 @@ class MapObject extends Signalable {
 
         this.register('synced', this, function () {
             self._rebuildDecorator();
-            // Show or hide ourselves
-            self._updateVisibility();
         });
         this.register('object:deleted', this, function () {
             self._cleanDecorator();
@@ -57,7 +55,6 @@ class MapObject extends Signalable {
         this.map.register('map:beforerefresh', this, function () {
             self._cleanDecorator();
         });
-        getState().register('teeming:changed', this, this._updateVisibility.bind(this));
 
         this.register(['shown', 'hidden'], this, function (event) {
             if (event.data.visible) {
@@ -414,18 +411,6 @@ class MapObject extends Signalable {
     }
 
     /**
-     * Checks if this map object should be visible and update the visibility as necessary according to it.
-     * @private
-     */
-    _updateVisibility() {
-        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
-
-
-        // Set this map object to be visible or not
-        this.setVisible(this.shouldBeVisible());
-    }
-
-    /**
      * Cleans up the decorator of this route, removing it from the map.
      * @private
      */
@@ -620,6 +605,9 @@ class MapObject extends Signalable {
      * @param visible
      */
     setVisible(visible) {
+        if( !this._visible && visible ){
+            console.warn(`Toggling visibility of ${this.id}; now visible!`);
+        }
         this._visible = visible;
         if (visible) {
             this.signal('shown', {visible: visible});

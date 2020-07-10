@@ -39,6 +39,7 @@ class MapObjectGroup extends Signalable {
             // @todo self.isShown(), currently the layer will ALWAYS show regardless of MapControl status
             self.setVisibility(true);
         }).bind(this));
+        getState().register('teeming:changed', this, this._updateVisibility.bind(this));
 
         if (!(this.manager.map instanceof AdminDungeonMap)) {
             getState().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
@@ -62,12 +63,26 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Checks if map objects should be visible and update the visibility as necessary according to it.
+     * @private
+     */
+    _updateVisibility() {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObject', this);
+
+        for (let i = 0; i < this.objects.length; i++) {
+            let mapObject = this.objects[i];
+            // Set this map object to be visible or not
+            this.setMapObjectVisibility(mapObject, mapObject.shouldBeVisible());
+        }
+    }
+
+    /**
      * May be overridden by implementing classes
      * @param fetchEvent
      * @private
      */
     _onFetchSuccess(fetchEvent) {
-        console.assert(this.objects.length === 0, this.constructor.name + ' objects must be empty after refresh', this.objects.length);
+        console.assert(this.objects.length === 0, 'objects must be empty after refresh', this.names, this.objects.length);
 
         this._fetchSuccess(fetchEvent.data.response);
     }
@@ -104,9 +119,7 @@ class MapObjectGroup extends Signalable {
 
         // Now draw the map objects on the map
         for (let i = 0; i < mapObjects.length; i++) {
-            if (mapObjects.hasOwnProperty(i)) {
-                this._restoreObject(mapObjects[i]);
-            }
+            this._restoreObject(mapObjects[i]);
         }
 
         this.initialized = true;

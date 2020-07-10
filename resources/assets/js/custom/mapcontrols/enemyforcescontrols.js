@@ -53,6 +53,12 @@ class EnemyForcesControls extends MapControl {
         killzoneMapObjectGroup.register('object:add', this, function (addEvent) {
             addEvent.data.object.register('killzone:synced', self, self._killzoneSynced.bind(self));
         });
+
+        // Update the total count when teeming was changed
+        getState().register('teeming:changed', this, function () {
+            self.refreshUI();
+        });
+
         this.loaded = true;
     }
 
@@ -142,6 +148,7 @@ class EnemyForcesControls extends MapControl {
         }
 
         $('#map_enemy_forces_count').html(this.enemyForces);
+        $('#map_enemy_forces_count_total').html(enemyForcesRequired);
         $('#map_enemy_forces_percent').html(enemyForcesPercent.toFixed(2));
 
         refreshTooltips($enemyForces);
@@ -182,6 +189,7 @@ class EnemyForcesControls extends MapControl {
         console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
         let self = this;
 
+        getState().unregister('teeming:changed', this);
         // Unreg from map
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
         // Unreg killzones
