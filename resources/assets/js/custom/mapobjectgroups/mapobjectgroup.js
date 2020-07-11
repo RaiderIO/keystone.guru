@@ -349,18 +349,19 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
         console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
 
+        // Unset previous layer
+        if( mapObject.layer !== null ){
+            this.layerGroup.removeLayer(mapObject.layer);
+            mapObject.layer = null;
+            mapObject.setVisible(false);
+        }
+
+        // Set new layer (if user wants to)
         if (layer !== null) {
             mapObject.layer = layer;
             this.layerGroup.addLayer(mapObject.layer);
             mapObject.setVisible(true);
             mapObject.onLayerInit();
-        }
-        // User wants to unset the mapObject's layer, remove its references
-        else if (mapObject.layer !== null) {
-            this.layerGroup.removeLayer(mapObject.layer);
-            // Set to null
-            mapObject.layer = layer;
-            mapObject.setVisible(false);
         }
     }
 

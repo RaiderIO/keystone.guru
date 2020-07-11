@@ -34,15 +34,13 @@ trait ListsEnemyPacks
                 if (!$teeming) {
                     $query->where('teeming', null);
                 }
-                $query->select(['enemy_pack_id', 'lat', 'lng']); // must select enemy_pack_id, else it won't return results /sadface
+                $query->select(['id', 'enemy_pack_id', 'lat', 'lng']); // must select enemy_pack_id, else it won't return results /sadface
             }]);
         } else {
             $fields[] = 'vertices_json';
             $result = EnemyPack::query();
         }
 
-        $enemyPacks = $result->where('floor_id', $floorId)->get($fields);
-
-        return $enemyPacks;
+        return $result->where('floor_id', $floorId)->get($fields);
     }
 }

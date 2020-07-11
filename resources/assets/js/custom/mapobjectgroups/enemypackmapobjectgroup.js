@@ -39,41 +39,20 @@ class EnemyPackMapObjectGroup extends MapObjectGroup {
 
             layer = L.polygon(points);
         }
-        // Create a polygon based on a hull of points from the enemies in this pack
-        else {
-            let vertices = remoteMapObject.enemies;
 
-            for (let j = 0; j < vertices.length; j++) {
-                let vertex = vertices[j];
-                points.push([vertex.lat, vertex.lng]);
-            }
+        /** @type {EnemyPack} */
+        enemyPack = this.createNew(layer);
+        enemyPack.loadRemoteMapObject(remoteMapObject);
 
-            // Build a layer based off a hull if we're supposed to
-            let p = hull(points, 100);
-            // Only if we can actually make an offset
-            if (points.length > 1 && p.length > 1) {
-                try {
-                    let offset = new Offset();
-                    p = offset.data(p).arcSegments(c.map.enemypack.arcSegments(p.length)).margin(c.map.enemypack.margin);
-
-                    layer = L.polygon(p, c.map.enemypack.polygonOptions);
-                } catch (error) {
-                    // Not particularly interesting to spam the console with
-                    // console.error('Unable to create offset for pack', remoteMapObject.id, error);
-                }
-            }
+        // Only called when not in admin state
+        if (layer === null) {
+            // Re-set the layer now that we know of the raw enemies
+            enemyPack.setRawEnemies(remoteMapObject.enemies);
+            this.setLayerToMapObject(enemyPack.createHullLayer(), enemyPack);
         }
 
-        if (layer !== null) {
-            enemyPack = this.createNew(layer);
-            enemyPack.id = remoteMapObject.id;
-            enemyPack.loadRemoteMapObject(remoteMapObject);
-
-            // We just downloaded the enemy pack, it's synced alright!
-            enemyPack.setSynced(true);
-        } else {
-            console.warn(`Unable to create layer for enemypack ${remoteMapObject.id}; not enough data points`);
-        }
+        // We just downloaded the enemy pack, it's synced alright!
+        enemyPack.setSynced(true);
 
         return enemyPack;
     }

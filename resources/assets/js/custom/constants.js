@@ -102,7 +102,7 @@ let c = {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             },
             polygonOptions: {
-                color: '#9DFF56',
+                color: '#5993D2',
                 weight: 1,
                 fillOpacity: 0.3,
                 opacity: 1

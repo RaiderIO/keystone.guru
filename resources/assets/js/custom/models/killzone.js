@@ -514,7 +514,7 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Checks if this killzone has a kill area or not.
+     * Checks if this kill zone has a kill area or not.
      * @returns {boolean}
      */
     hasKillArea() {
@@ -522,11 +522,30 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Checks if this killzone should be visible or not.
+     * Checks if this kill zone should be visible or not.
      * @returns {boolean|boolean}
      */
     isKillAreaVisible() {
         return this.hasKillArea() && getState().getCurrentFloor().id === this.floor_id;
+    }
+
+    /**
+     * Checks if this kill zone kills the last boss or not.
+     * @return {boolean}
+     */
+    isLinkedToLastBoss() {
+        let result = false;
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < this.enemies.length; i++) {
+            let enemy = enemyMapObjectGroup.findMapObjectById(this.enemies[i]);
+            if (enemy !== null && enemy.npc !== null && enemy.npc.classification_id === 4) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -537,8 +556,7 @@ class KillZone extends MapObject {
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < this.enemies.length; i++) {
-            let enemyId = this.enemies[i];
-            let enemy = enemyMapObjectGroup.findMapObjectById(enemyId);
+            let enemy = enemyMapObjectGroup.findMapObjectById(this.enemies[i]);
             if (enemy !== null) {
                 result += enemy.getEnemyForces();
             }

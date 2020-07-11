@@ -264,7 +264,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
-            if (killZone.getIndex > minIndex) {
+            if (killZone.getIndex() >= minIndex) {
                 self._updatePullText(killZone);
             }
         });
@@ -351,7 +351,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
         // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
-        this._updatePullTexts(killZone, killZone.getIndex());
+        this._updatePullTexts(killZone.getIndex());
 
 
         // Fill the enemy list
@@ -490,7 +490,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             self._addKillZone(killZone);
             // Listen to changes in the killzone
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self, function (killZoneChangedEvent) {
-                if( killZoneChangedEvent.context.id === 4284 ){
+                if (killZoneChangedEvent.context.id === 4284) {
                     console.log('killzonessidebar', killZoneChangedEvent.name, killZoneChangedEvent.context);
                 }
                 self._refreshKillZone(killZoneChangedEvent.context);
