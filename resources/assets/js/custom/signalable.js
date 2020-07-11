@@ -101,7 +101,7 @@ class Signalable {
                 if( caller.listener instanceof Signalable && caller.listener.cleanedUp ){
                     console.error(`Unable to send signal '${caller.name}' to object because it's cleaned up and it should have unregged!`, caller);
                 } else {
-                    caller.callback({context: self, data: data});
+                    caller.callback({name:name, context: self, data: data});
                 }
             }
         }

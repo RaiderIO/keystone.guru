@@ -34,6 +34,9 @@ class EnemyVisual extends Signalable {
         let self = this;
         // Build and/or destroy the visual based on visibility
         this.enemy.register(['shown', 'hidden'], this, function (event) {
+            if( event.context.id === 4284){
+                console.warn(event.name, event.context.id);
+            }
             if (event.data.visible) {
                 self.buildVisual();
             } else {
@@ -45,6 +48,9 @@ class EnemyVisual extends Signalable {
         // If it changed, refresh the entire visual
         this.enemy.register(['enemy:set_raid_marker'], this, this.buildVisual.bind(this));
         this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
+            if( self.enemy.id === 4284){
+                console.warn(killZoneAttachedEvent.name, self, self.enemy);
+            }
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();
             killZone.register('killzone:changed', self, self.buildVisual.bind(self));

@@ -18,7 +18,7 @@ class KillZoneEnemySelection extends EnemySelection {
         console.assert(this instanceof KillZoneEnemySelection, 'this is not a KillZoneEnemySelection', this);
         console.assert(source instanceof KillZone, 'source is not a KillZone', source);
         console.assert(enemyCandidate instanceof Enemy, 'enemyCandidate is not an Enemy', enemyCandidate);
-        return true; //enemyCandidate.getKillZone() === null || enemyCandidate.getKillZone().id === source.id;
+        return !enemyCandidate.isLinkedToLastBoss(); //enemyCandidate.getKillZone() === null || enemyCandidate.getKillZone().id === source.id;
     }
 
     /**
@@ -45,5 +45,18 @@ class KillZoneEnemySelection extends EnemySelection {
         super.cleanup();
 
         this.sourceMapObject.unregister('object:deleted', this);
+    }
+
+    /**
+     *
+     * @param enemy {Enemy}
+     * @returns {boolean}
+     */
+    static isEnemySelectable(enemy){
+        // If it's stupid and it works it's not stupid
+        let source = new KillZone(getState().getDungeonMap());
+        let result = (new KillZoneEnemySelection(getState().getDungeonMap(), source))._filter(source, enemy);
+        source.cleanup();
+        return result;
     }
 }

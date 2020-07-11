@@ -16,6 +16,13 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
     }
 
+    /**
+     *
+     * @param remoteMapObject
+     * @param username
+     * @returns {Enemy}
+     * @private
+     */
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
@@ -26,6 +33,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
 
+        /** @type {Enemy} */
         let enemy = this.createNew(layer);
         enemy.loadRemoteMapObject(remoteMapObject);
 
@@ -36,6 +44,10 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             enemy.enemy_id = remoteMapObject.enemy_id;
             // Hide this enemy by default
             enemy.setDefaultVisible(false);
+        }
+
+        if (remoteMapObject.hasOwnProperty('local')) {
+            enemy.setIsLocal(remoteMapObject.local);
         }
 
         // When in admin mode, show all enemies
@@ -70,9 +82,31 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             for (let index in enemySet) {
                 // Only if actually set
                 if (enemySet.hasOwnProperty(index)) {
-                    let enemy = enemySet[index];
                     // Only restore enemies for the current floor
-                    this._restoreObject(enemy);
+                    this._restoreObject(enemySet[index]);
+                }
+            }
+        }
+
+        // Couple awakened enemies to each other
+        for (let i = 0; i < this.objects.length; i++) {
+            let enemy = this.objects[i];
+
+            // Don't check
+            if (enemy.npc !== null && enemy.isAwakenedNpc() && enemy.getLinkedAwakenedEnemy() === null) {
+                for (let j = 0; j < this.objects.length; j++) {
+                    let enemyCandidate = this.objects[j];
+
+                    if (enemyCandidate.id !== enemy.id && enemyCandidate.npc !== null &&
+                        enemyCandidate.isAwakenedNpc() && enemyCandidate.npc.id === enemy.npc.id &&
+                        enemyCandidate.seasonal_index === enemy.seasonal_index) {
+
+                        console.log(`Linking ${enemy.id} to ${enemyCandidate.id}`);
+                        enemy.setLinkedAwakenedEnemy(enemyCandidate);
+                        enemyCandidate.setLinkedAwakenedEnemy(enemy);
+
+                        break;
+                    }
                 }
             }
         }
@@ -81,5 +115,23 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         getState().setEnemies(this.objects);
 
         this.signal('restorecomplete');
+    }
+
+    /**
+     * Helper function to fetch the final boss of this dungeon.
+     *
+     * @return {Enemy|null}
+     */
+    getFinalBoss() {
+        let finalBoss = null;
+        for (let i = 0; i < this.objects.length; i++) {
+            let enemy = this.objects[i];
+            if (enemy.npc !== null && enemy.npc.classification_id === 4) {
+                finalBoss = enemy;
+                break;
+            }
+        }
+
+        return finalBoss;
     }
 }

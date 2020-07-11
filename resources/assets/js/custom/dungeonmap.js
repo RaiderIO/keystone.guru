@@ -339,7 +339,7 @@ class DungeonMap extends Signalable {
     _enemyClicked(enemyClickedEvent) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        if (this.options.edit && this.mapState === null) {
+        if (this.options.edit && this.mapState === null && KillZoneEnemySelection.isEnemySelectable(enemyClickedEvent.context)) {
             let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
             // Add ourselves to this new pull

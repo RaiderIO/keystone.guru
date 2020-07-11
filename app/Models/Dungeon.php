@@ -70,7 +70,7 @@ class Dungeon extends Model
             foreach ($this->npcs as $npc) {
                 /** @var $npc Npc */
                 // @TODO Hard coded boss?
-                if ($npc !== null && $npc->classification_id !== 3) {
+                if ($npc !== null && $npc->classification_id < 3) {
                     $npcs[$npc->id] = $npc->enemy_forces >= 0;
                 }
             }

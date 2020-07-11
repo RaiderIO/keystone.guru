@@ -59,7 +59,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _killZoneRowClicked(clickEvent) {
-        // If there was an event, prevent clicking the 'expand' button also selecting the killzone
+        // If there was an event, prevent clicking the 'expand' button also selecting the kill zone
         if (clickEvent !== null && typeof clickEvent !== 'undefined') {
             let $target = $(clickEvent.target);
             let $parent = $($target.parent());
@@ -286,7 +286,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $(`#map_killzonessidebar_killzone_${killZone.id}_index:not(.draggable--original)`).text(killZone.getIndex());
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemies:not(.draggable--original)`)
             .text(`${killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`);
-        
+
         // Show enemy forces or not
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_container:not(.draggable--original)`).toggle(killZoneEnemyForces > 0);
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`).text(`${killZoneEnemyForces}`);
@@ -298,7 +298,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let enemyId = killZone.enemies[i];
             for (let j = 0; j < enemies.length; j++) {
                 let enemy = enemies[j];
-                if (enemy.id === enemyId && enemy.npc !== null && enemy.npc.classification_id === 3) {
+                if (enemy.id === enemyId && enemy.npc !== null && enemy.npc.classification_id >= 3) {
                     hasBoss = true;
                     break;
                 }
@@ -490,6 +490,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
             self._addKillZone(killZone);
             // Listen to changes in the killzone
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self, function (killZoneChangedEvent) {
+                if( killZoneChangedEvent.context.id === 4284 ){
+                    console.log('killzonessidebar', killZoneChangedEvent.name, killZoneChangedEvent.context);
+                }
                 self._refreshKillZone(killZoneChangedEvent.context);
             });
         });

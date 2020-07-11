@@ -217,6 +217,28 @@ class KillZone extends MapObject {
             }
             this.signal('killzone:enemyremoved', this, {enemy: enemy});
         }
+
+        // If the enemy we're adding to the pull is the real one
+        if (enemy.isAwakenedNpc() && !enemy.isLinkedToLastBoss()) {
+            // If we're detaching this awakened enemy from a pull, show the other
+            let linkedAwakenedEnemy = enemy.getLinkedAwakenedEnemy();
+            if (linkedAwakenedEnemy !== null) {
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                // Show the awakened enemy that's near the boss
+                enemyMapObjectGroup.setMapObjectVisibility(linkedAwakenedEnemy, true);
+
+                let finalBoss = enemyMapObjectGroup.getFinalBoss();
+
+                // Link it to the same pull as the final boss is part of
+                if (finalBoss !== null && finalBoss.getKillZone() instanceof KillZone) {
+                    // Add it to the target kill zone and save it; you cannot kill it twice
+                    let finalBossKillZone = finalBoss.getKillZone();
+                    console.warn('_removeEnemy', linkedAwakenedEnemy.id, finalBossKillZone, linkedAwakenedEnemy);
+                    finalBossKillZone._addEnemy(linkedAwakenedEnemy);
+                    finalBossKillZone.save();
+                }
+            }
+        }
     }
 
     /**
@@ -235,6 +257,24 @@ class KillZone extends MapObject {
             // We're interested in knowing when this enemy has detached itself (by assigning to another killzone, for example)
             enemy.register('killzone:detached', this, this._enemyDetached.bind(this));
             this.signal('killzone:enemyadded', this, {enemy: enemy});
+        }
+
+        // If the enemy we're adding to the pull is the real one
+        if (enemy.isAwakenedNpc() && !enemy.isLinkedToLastBoss()) {
+            // If we're attaching this awakened enemy to a pull, deselect the other
+            let linkedAwakenedEnemy = enemy.getLinkedAwakenedEnemy();
+            if (linkedAwakenedEnemy !== null) {
+                if (linkedAwakenedEnemy.getKillZone() instanceof KillZone) {
+                    // Remove it from the target kill zone and save it; you cannot kill it twice
+                    let linkedAwakenedEnemyKillZone = linkedAwakenedEnemy.getKillZone();
+                    linkedAwakenedEnemyKillZone._removeEnemy(linkedAwakenedEnemy);
+                    linkedAwakenedEnemyKillZone.save();
+                }
+
+                // Hide the awakened enemy that's near the boss
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                enemyMapObjectGroup.setMapObjectVisibility(linkedAwakenedEnemy, false);
+            }
         }
     }
 
@@ -284,18 +324,19 @@ class KillZone extends MapObject {
 
             // If the enemy was part of a pack..
             if (enemy.enemy_pack_id > 0) {
-                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-                    let enemyCandidate = enemyMapObjectGroup.objects[i];
+                let packBuddies = enemy.getPackBuddies();
+                packBuddies.push(enemy);
+                for (let i = 0; i < packBuddies.length; i++) {
+                    let packBuddy = packBuddies[i];
                     // If we should couple the enemy in addition to our own..
-                    if (enemyCandidate.enemy_pack_id === enemy.enemy_pack_id) {
+                    if (packBuddy.enemy_pack_id === enemy.enemy_pack_id) {
                         // Remove it too if we should
                         if (removed) {
-                            this._removeEnemy(enemyCandidate);
+                            this._removeEnemy(packBuddy);
                         }
                         // Or add it too if we need
                         else {
-                            this._addEnemy(enemyCandidate);
+                            this._addEnemy(packBuddy);
                         }
                     }
                 }
@@ -749,6 +790,8 @@ class KillZone extends MapObject {
 
     onSaveSuccess(json) {
         super.onSaveSuccess(json);
+
+        this.redrawConnectionsToEnemies();
 
         this.signal('killzone:synced', {enemy_forces: json.enemy_forces});
     }

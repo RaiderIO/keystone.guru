@@ -12,7 +12,7 @@ class MapObject extends Signalable {
      * @param layer {L.layer}
      * @param options {Object}
      */
-    constructor(map, layer, options) {
+    constructor(map, layer = null, options = {}) {
         super();
         console.assert(map instanceof DungeonMap, 'Passed map is not a DungeonMap!', map);
         console.assert(typeof options === 'object', 'options must be set and an object!', options);
@@ -605,9 +605,6 @@ class MapObject extends Signalable {
      * @param visible
      */
     setVisible(visible) {
-        if( !this._visible && visible ){
-            console.warn(`Toggling visibility of ${this.id}; now visible!`);
-        }
         this._visible = visible;
         if (visible) {
             this.signal('shown', {visible: visible});
@@ -620,9 +617,9 @@ class MapObject extends Signalable {
      * Checks if this map object is visible and if it's layer's bounds are actually on the map.
      * @returns {*}
      */
-    isVisibleOnMap() {
+    isVisibleOnScreen() {
         let result = false;
-        if (this.isVisible() && this.layer !== null) {
+        if (this.isVisible() && this.layer !== null && this.visual !== null) {
             result = this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
         }
         return result;
