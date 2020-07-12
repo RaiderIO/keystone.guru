@@ -26,12 +26,16 @@
         <div class="col-7 no-gutters">{{ id }}</div>
     </div>
     <div class="row">
-        <div class="col-5 no-gutters">{{ size_label }}</div>
-        <div class="col-7 no-gutters">{{ size }}</div>
+        <div class="col-5 no-gutters">{{ seasonal_index_label }}</div>
+        <div class="col-7 no-gutters">{{ seasonal_index }}</div>
     </div>
     <div class="row">
         <div class="col-5 no-gutters">{{ faction_label }}</div>
         <div class="col-7 no-gutters">{{ faction }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ size_label }}</div>
+        <div class="col-7 no-gutters">{{ size }}</div>
     </div>
     <div class="row">
         <div class="col-5 no-gutters">{{ npc_id_label }}</div>
@@ -42,20 +46,23 @@
         <div class="col-7 no-gutters">{{ attached_to_pack }}</div>
     </div>
     <div class="row">
-        <div class="col-5 no-gutters">{{ is_mdt_label }}</div>
-        <div class="col-7 no-gutters">{{ is_mdt }}</div>
-    </div>
-    <div class="row">
-        <div class="col-5 no-gutters">{{ mdt_id_label }}</div>
-        <div class="col-7 no-gutters">{{ mdt_id }}</div>
-    </div>
-    <div class="row">
         <div class="col-5 no-gutters">{{ enemy_id_label }}</div>
         <div class="col-7 no-gutters">{{ enemy_id }}</div>
     </div>
     <div class="row">
         <div class="col-5 no-gutters">{{ visual_label }}</div>
         <div class="col-7 no-gutters">{{ visual }}</div>
+    </div>
+    <div class="row">
+        <div class="col-12 font-weight-bold">{{ mdt_label }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ is_mdt_label }}</div>
+        <div class="col-7 no-gutters">{{ is_mdt }}</div>
+    </div>
+    <div class="row">
+        <div class="col-5 no-gutters">{{ mdt_id_label }}</div>
+        <div class="col-7 no-gutters">{{ mdt_id }}</div>
     </div>
     {{/if}}
 </div>

@@ -101,7 +101,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         enemyCandidate.isAwakenedNpc() && enemyCandidate.npc.id === enemy.npc.id &&
                         enemyCandidate.seasonal_index === enemy.seasonal_index) {
 
-                        console.log(`Linking ${enemy.id} to ${enemyCandidate.id}`);
                         enemy.setLinkedAwakenedEnemy(enemyCandidate);
                         enemyCandidate.setLinkedAwakenedEnemy(enemy);
 

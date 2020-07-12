@@ -36,6 +36,14 @@ class Npc extends Model
     protected $fillable = ['id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming'];
 
     /**
+     * @return bool
+     */
+    public function isAwakened()
+    {
+        return in_array($this->id, [161244, 161243, 161124, 161241]);
+    }
+
+    /**
      * Gets all derived enemies from this Npc.
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasMany

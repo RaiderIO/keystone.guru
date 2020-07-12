@@ -65,8 +65,8 @@
     {
         "floor_id": 45,
         "map_icon_type_id": 19,
-        "lat": -182.9375,
-        "lng": 163.34375,
+        "lat": -187.5,
+        "lng": 170.84375,
         "comment": "",
         "permanent_tooltip": 0,
         "seasonal_index": 0
@@ -83,8 +83,8 @@
     {
         "floor_id": 45,
         "map_icon_type_id": 18,
-        "lat": -179.625,
-        "lng": 164.75,
+        "lat": -184.75,
+        "lng": 172.59375,
         "comment": "",
         "permanent_tooltip": 0,
         "seasonal_index": 1

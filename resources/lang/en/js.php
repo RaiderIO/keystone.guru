@@ -26,14 +26,16 @@ return [
 
     'admin_only_label'       => 'Admin only',
     'id_label'               => 'ID',
+    'seasonal_index_label'   => 'Seasonal index',
     'size_label'             => 'Size',
     'faction_label'          => 'Faction',
     'npc_id_label'           => 'NPC_ID',
     'attached_to_pack_label' => 'Pack',
-    'is_mdt_label'           => 'MDT',
-    'mdt_id_label'           => 'MDT_ID',
     'enemy_id_label'         => 'ENEMY_ID',
     'visual_label'           => 'Visual',
+    'mdt_label'              => 'MDT section',
+    'is_mdt_label'           => 'MDT',
+    'mdt_id_label'           => 'MDT_ID',
 
     'preset_label' => 'Preset',
     'add_label'    => 'Add',

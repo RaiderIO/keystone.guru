@@ -504,7 +504,7 @@
         "teeming": null,
         "faction": "any",
         "enemy_forces_override": 7,
-        "enemy_forces_override_teeming": -1,
+        "enemy_forces_override_teeming": 10,
         "lat": -131.5,
         "lng": 211.125,
         "npc": {

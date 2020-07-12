@@ -125,7 +125,7 @@ class ImportString
                     try {
                         // Find out the floor where the NPC is standing on
                         /** @var Enemy $enemy */
-                        $enemy = Enemy::where('npc_id', $npcId)->whereIn('floor_id', $floorIds)->firstOrFail();
+                        $enemy = Enemy::where('npc_id', $npcId)->where('enemy_pack_id', -1)->whereIn('floor_id', $floorIds)->firstOrFail();
                         /** @var MapIcon $obeliskMapIcon */
                         $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
 
@@ -248,11 +248,11 @@ class ImportString
 
                             // Hacky fix for a MDT bug where there's duplicate NPCs with the same npc_id etc.
                             if ($dungeonRoute->dungeon->isSiegeOfBoralus()) {
-                                if( $npcIndex === 35 ){
+                                if ($npcIndex === 35) {
                                     $cloneIndex += 15;
                                 }
                             } else if ($dungeonRoute->dungeon->isTolDagor()) {
-                                if( $npcIndex === 11 ){
+                                if ($npcIndex === 11) {
                                     $cloneIndex += 2;
                                 }
                             }
@@ -306,15 +306,17 @@ class ImportString
 
                             // Skip enemies that don't belong to our current seasonal index
                             if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
+                                $kzEnemy = new KillZoneEnemy();
+                                $kzEnemy->enemy_id = $enemy->id;
+                                $kzEnemy->kill_zone_id = $killZone->id;
+
                                 // Couple the KillZoneEnemy to its KillZone
                                 if ($save) {
-                                    $kzEnemy = new KillZoneEnemy();
-                                    $kzEnemy->enemy_id = $enemy->id;
-                                    $kzEnemy->kill_zone_id = $killZone->id;
                                     $kzEnemy->save();
                                 }
 
                                 // Save enemies to the killzones regardless
+                                $killZone->killzoneenemies->push($kzEnemy);
                                 $killZone->enemies->push($enemy);
                                 $totalEnemiesKilled++;
                             } else {
@@ -331,6 +333,45 @@ class ImportString
                 }
 
                 if ($totalEnemiesKilled > 0) {
+                    // In order to import Awakened Bosses that are killed at the final boss, we need to identify if this
+                    // pull contains the final boss, and if so, convert all its Awakened enemies to the correct enemies
+                    // that are around the boss instead
+                    $hasFinalBoss = false;
+                    foreach ($killZone->killzoneenemies as $kzEnemy) {
+                        if ($kzEnemy->enemy->npc !== null && $kzEnemy->enemy->npc->classification_id === 4) {
+                            $hasFinalBoss = true;
+                            break;
+                        }
+                    }
+
+                    if ($hasFinalBoss) {
+                        foreach ($killZone->killzoneenemies as $kzEnemy) {
+                            if( $kzEnemy->enemy->npc !== null && $kzEnemy->enemy->npc->isAwakened() ){
+                                // Find the equivalent Awakened Enemy that's next to the boss.
+                                /** @var Enemy $bossAwakenedEnemy */
+                                $bossAwakenedEnemy = Enemy::where('npc_id', $kzEnemy->enemy->npc_id)
+                                    ->where('seasonal_index', $kzEnemy->enemy->seasonal_index)
+                                    ->where('enemy_pack_id', '>', 0)
+                                    ->first();
+
+                                if( $bossAwakenedEnemy !== null ) {
+                                    $kzEnemy->enemy_id = $bossAwakenedEnemy->id;
+                                    // Just to be sure
+                                    $kzEnemy->unsetRelation('enemy');
+
+                                    if ($save) {
+                                        $kzEnemy->save();
+                                    }
+                                } else {
+                                    throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                                        sprintf(__('Unable to find Awakened Enemy %s (%s) at the final boss in %s.'), $kzEnemy->enemy->npc_id, $kzEnemy->enemy->seasonal_index ?? -1, $dungeonRoute->dungeon->name),
+                                        ['details' => __('This indicates Keystone.guru has a mapping error that will need to be correct. Send the above warning to me and I\'ll correct it.')]
+                                    );
+                                }
+                            }
+                        }
+                    }
+
                     if ($save) {
                         $killZone->save();
                     } else {

@@ -75,6 +75,8 @@
         "enemy_forces_override_teeming": -1,
         "lat": -150.5625,
         "lng": 252.625,
-        "npc": null
+        "npc": {
+            "id": 150169
+        }
     }
 ]
