@@ -102,9 +102,6 @@ class AdjustKillZonesEnemiesLastBossAwakenedEnemies extends Migration
 
             foreach($awakenedEnemiesDungeonData as $npcId => $npcData ){
                 foreach($npcData as $seasonalIndex => $replacementData ){
-                    if( !isset($replacementData['new'])){
-                        dd($replacementData);
-                    }
                     DB::update("
                         UPDATE kill_zone_enemies
                         LEFT JOIN kill_zones ON kill_zone_enemies.kill_zone_id = kill_zones.id
