@@ -554,11 +554,10 @@ class MapObject extends Signalable {
      * @return {boolean}
      */
     shouldBeVisible() {
-        let result = true;
-
         if (this.hasOwnProperty('seasonal_index')) {
             if (this.seasonal_index !== null && getState().getSeasonalIndex() !== this.seasonal_index) {
-                result = false;
+                console.log(`Hiding enemy due to seasonal_index ${this.id}`);
+                return false;
             }
         }
 
@@ -566,30 +565,31 @@ class MapObject extends Signalable {
             let faction = getState().getDungeonRoute().faction;
             // Only when not in try mode! (no idea why, it was like this)
             if (!this.map.isTryModeEnabled() && (this.faction !== 'any' && faction !== 'any' && this.faction !== faction)) {
-                // console.warn('Skipping map object that does not belong to the requested faction ', remoteMapObject, faction);
-                result = false;
+                console.log(`Hiding enemy due to faction ${this.id}`);
+                return false;
             }
         }
 
         if (this.hasOwnProperty('teeming')) {
             // If the map isn't teeming, but the enemy is teeming..
             if (!getState().getTeeming() && this.teeming === 'visible') {
-                // console.warn('Skipping teeming map object', remoteMapObject);
-                result = false;
+                console.log(`Hiding enemy due to teeming A ${this.id}`);
+                return false;
             }
             // If the map is teeming, but the enemy shouldn't be there for teeming maps..
             else if (getState().getTeeming() && this.teeming === 'invisible') {
-                // console.warn('Skipping teeming-filtered map object', remoteMapObject.id);
-                result = false;
+                console.log(`Hiding enemy due to teeming B ${this.id}`);
+                return false;
             }
         }
 
         // Floor states
         if (getState().getCurrentFloor().id !== this.floor_id) {
-            result = false;
+            console.log(`Hiding enemy due to floor ${this.id}`);
+            return false;
         }
 
-        return result;
+        return true;
     }
 
     /**

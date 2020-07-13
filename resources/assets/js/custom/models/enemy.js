@@ -434,6 +434,16 @@ class Enemy extends MapObject {
         });
     }
 
+    shouldBeVisible() {
+        // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
+        if (this.linked_awakened_enemy !== null && this.linked_awakened_enemy.getKillZone() !== null && this.isLinkedToLastBoss()) {
+            console.log(`Hiding enemy ${this.id}`);
+            return false;
+        }
+
+        return super.shouldBeVisible();
+    }
+
     // To be overridden by any implementing classes
     onLayerInit() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);

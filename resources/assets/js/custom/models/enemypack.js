@@ -68,11 +68,13 @@ class EnemyPack extends MapObject {
     _onEnemyVisibilityToggled(triggeredEvent) {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
-        let newLayer = this.createHullLayer();
+        if (!this.map.isRefreshingMap()) {
+            let newLayer = this.createHullLayer();
 
-        // Refresh our enemy pack to neatly fit around the visible enemies
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
-        enemyMapObjectGroup.setLayerToMapObject(newLayer, this);
+            // Refresh our enemy pack to neatly fit around the visible enemies
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+            enemyMapObjectGroup.setLayerToMapObject(newLayer, this);
+        }
     }
 
     isEditableByPopup() {
@@ -112,7 +114,7 @@ class EnemyPack extends MapObject {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
 
-            if (enemy.layer !== null && enemy.isVisible()) {
+            if (enemy !== null && enemy.layer !== null && enemy.isVisible()) {
                 let enemyLatLng = enemy.layer.getLatLng();
                 latLngs.push([enemyLatLng.lat, enemyLatLng.lng]);
             }
@@ -179,6 +181,8 @@ class EnemyPack extends MapObject {
     }
 
     getVertices() {
+        console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
+
         let coordinates = this.layer.toGeoJSON().geometry.coordinates[0];
         let result = [];
         for (let i = 0; i < coordinates.length - 1; i++) {
@@ -188,10 +192,14 @@ class EnemyPack extends MapObject {
     }
 
     toString() {
+        console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
+
         return 'Enemy pack-' + this.id;
     }
 
     cleanup() {
+        console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
+
         super.cleanup();
     }
 }

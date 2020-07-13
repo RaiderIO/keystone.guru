@@ -4,6 +4,9 @@ class DungeonMap extends Signalable {
         super();
         let self = this;
 
+        /** @type Boolean */
+        this._refreshingMap = false;
+
         this.options = options;
 
         // Apply the map to our state first thing
@@ -547,6 +550,8 @@ class DungeonMap extends Signalable {
 
         let self = this;
 
+        this._refreshingMap = true;
+
         this.signal('map:beforerefresh', {dungeonmap: this});
 
         // If we were doing anything, we're no longer doing it
@@ -619,6 +624,12 @@ class DungeonMap extends Signalable {
         this.refreshPather();
         // Not enabled at this time
         this.togglePather(false);
+
+        this._refreshingMap = false;
+    }
+
+    isRefreshingMap(){
+        return this._refreshingMap;
     }
 
     /**

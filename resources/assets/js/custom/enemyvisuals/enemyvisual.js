@@ -34,9 +34,6 @@ class EnemyVisual extends Signalable {
         let self = this;
         // Build and/or destroy the visual based on visibility
         this.enemy.register(['shown', 'hidden'], this, function (event) {
-            if( event.context.id === 4284){
-                console.warn(event.name, event.context.id);
-            }
             if (event.data.visible) {
                 self.buildVisual();
             } else {
@@ -48,9 +45,6 @@ class EnemyVisual extends Signalable {
         // If it changed, refresh the entire visual
         this.enemy.register(['enemy:set_raid_marker'], this, this.buildVisual.bind(this));
         this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
-            if( self.enemy.id === 4284){
-                console.warn(killZoneAttachedEvent.name, self, self.enemy);
-            }
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();
             killZone.register('killzone:changed', self, self.buildVisual.bind(self));
@@ -122,7 +116,7 @@ class EnemyVisual extends Signalable {
                 packBuddies.push(this.enemy);
                 $.each(packBuddies, function (index, enemy) {
                     // Some packs may contain Teeming enemies which may be hidden
-                    if (enemy.isVisible()) {
+                    if (enemy.isVisible() && enemy.visual !== null) {
                         visuals.push(enemy.visual);
                     }
                 });
@@ -490,7 +484,7 @@ class EnemyVisual extends Signalable {
         // Sensible default for distance (approx 75% of the full map distance)
         let result = 1000000;
 
-        if (this._managedBy === this.enemy.id) {
+        if (this._$mainVisual !== null && this._$mainVisual.length > 0 && this._managedBy === this.enemy.id) {
             let offset = this._$mainVisual.offset();
             let iconSize = this.mainVisual.getSize();
             let size = iconSize.iconSize[0];

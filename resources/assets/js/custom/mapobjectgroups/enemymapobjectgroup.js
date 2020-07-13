@@ -6,6 +6,16 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-users';
     }
 
+    //
+    // _onBeforeRefresh() {
+    //     console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+    //
+    //     // Remove any layers that were added before
+    //     this._removeObjectsFromLayer.call(this);
+    //
+    //     this.setVisibility(false);
+    // }
+
     _createObject(layer) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
@@ -69,6 +79,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         // no super call, we're handling this by ourselves
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
+        // Only generate the enemies once
+        // if (getState().getEnemies().length === 0) {
         // The enemies are no longer returned from the response; get it from the getState() instead
         let enemySets = [
             getState().getRawEnemies(),
@@ -99,8 +111,10 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
                     if (enemyCandidate.id !== enemy.id && enemyCandidate.npc !== null &&
                         enemyCandidate.isAwakenedNpc() && enemyCandidate.npc.id === enemy.npc.id &&
-                        enemyCandidate.seasonal_index === enemy.seasonal_index) {
+                        enemyCandidate.seasonal_index === enemy.seasonal_index &&
+                        enemyCandidate.getLinkedAwakenedEnemy() === null && enemy.getLinkedAwakenedEnemy() === null) {
 
+                        console.log(`Linking ${enemyCandidate.id} to ${enemy.id}`);
                         enemy.setLinkedAwakenedEnemy(enemyCandidate);
                         enemyCandidate.setLinkedAwakenedEnemy(enemy);
 
@@ -112,6 +126,13 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         // Set the enemies back to our state
         getState().setEnemies(this.objects);
+        // } else {
+        //     // Update the visibility of the existing enemies
+        //     for (let i = 0; i < this.objects.length; i++) {
+        //         let enemy = this.objects[i];
+        //         this.setMapObjectVisibility(enemy, enemy.shouldBeVisible());
+        //     }
+        // }
 
         this.signal('restorecomplete');
     }

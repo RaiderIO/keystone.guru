@@ -490,10 +490,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
             self._addKillZone(killZone);
             // Listen to changes in the killzone
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self, function (killZoneChangedEvent) {
-                if (killZoneChangedEvent.context.id === 4284) {
-                    console.log('killzonessidebar', killZoneChangedEvent.name, killZoneChangedEvent.context);
+                // Do not change the sidebar as we're refreshing the map; that's pointless (lots of adds/removes going on)
+                if( !self.map.isRefreshingMap() ) {
+                    self._refreshKillZone(killZoneChangedEvent.context);
                 }
-                self._refreshKillZone(killZoneChangedEvent.context);
             });
         });
         // If the killzone was deleted, get rid of our display too

@@ -274,6 +274,8 @@ class KillZone extends MapObject {
                 // Hide the awakened enemy that's near the boss
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                 enemyMapObjectGroup.setMapObjectVisibility(linkedAwakenedEnemy, false);
+
+                console.log(`Hiding enemy ${linkedAwakenedEnemy.id} from killzone`);
             }
         }
     }
