@@ -202,7 +202,8 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
 
         // Deselect if necessary
-        if (enemy.getKillZone() !== null && enemy.getKillZone().id === this.id) {
+        let externalChange = enemy.getKillZone() === null || enemy.getKillZone().id !== this.id;
+        if (!externalChange) {
             enemy.setKillZone(null);
         }
 
@@ -218,8 +219,8 @@ class KillZone extends MapObject {
             this.signal('killzone:enemyremoved', this, {enemy: enemy});
         }
 
-        // If the enemy we're adding to the pull is the real one
-        if (enemy.isAwakenedNpc() && !enemy.isLinkedToLastBoss()) {
+        // If the enemy we're removing from the pull is the real one
+        if (!externalChange && enemy.isAwakenedNpc() && !enemy.isLinkedToLastBoss()) {
             // If we're detaching this awakened enemy from a pull, show the other
             let linkedAwakenedEnemy = enemy.getLinkedAwakenedEnemy();
             if (linkedAwakenedEnemy !== null) {
@@ -233,7 +234,6 @@ class KillZone extends MapObject {
                 if (finalBoss !== null && finalBoss.getKillZone() instanceof KillZone) {
                     // Add it to the target kill zone and save it; you cannot kill it twice
                     let finalBossKillZone = finalBoss.getKillZone();
-                    console.warn('_removeEnemy', linkedAwakenedEnemy.id, finalBossKillZone, linkedAwakenedEnemy);
                     finalBossKillZone._addEnemy(linkedAwakenedEnemy);
                     finalBossKillZone.save();
                 }
@@ -259,8 +259,8 @@ class KillZone extends MapObject {
             this.signal('killzone:enemyadded', this, {enemy: enemy});
         }
 
-        // If the enemy we're adding to the pull is the real one
-        if (enemy.isAwakenedNpc() && !enemy.isLinkedToLastBoss()) {
+        // If the enemy we're adding to the pull is the real one, not the one attached to a pack with the final boss
+        if (enemy.isAwakenedNpc() && enemy.enemy_pack_id === -1) {
             // If we're attaching this awakened enemy to a pull, deselect the other
             let linkedAwakenedEnemy = enemy.getLinkedAwakenedEnemy();
             if (linkedAwakenedEnemy !== null) {
@@ -274,8 +274,6 @@ class KillZone extends MapObject {
                 // Hide the awakened enemy that's near the boss
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                 enemyMapObjectGroup.setMapObjectVisibility(linkedAwakenedEnemy, false);
-
-                console.log(`Hiding enemy ${linkedAwakenedEnemy.id} from killzone`);
             }
         }
     }

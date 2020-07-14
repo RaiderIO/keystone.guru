@@ -343,24 +343,36 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         if (this.options.edit && this.mapState === null && KillZoneEnemySelection.isEnemySelectable(enemyClickedEvent.context)) {
-            let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-
-            // Add ourselves to this new pull
-            let enemyIds = [];
-            // Add all buddies in this pack to the list of ids (if any)
-            let packBuddies = enemyClickedEvent.context.getPackBuddies();
-            packBuddies.push(enemyClickedEvent.context);
-
-            for (let index in packBuddies) {
-                if (packBuddies.hasOwnProperty(index)) {
-                    enemyIds.push(packBuddies[index].id);
+            // If part of a pack, select the pack instead of creating a new one
+            let existingKillZone = enemyClickedEvent.context.getKillZone();
+            if (existingKillZone instanceof KillZone) {
+                // Only when we're not doing anything right now
+                if (this.options.edit) {
+                    this.setMapState(new KillZoneEnemySelection(this, existingKillZone));
+                } else {
+                    this.setMapState(new ViewKillZoneEnemySelection(this, existingKillZone));
                 }
+            } else {
+                // Create a new pack instead
+                let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+                // Add ourselves to this new pull
+                let enemyIds = [];
+                // Add all buddies in this pack to the list of ids (if any)
+                let packBuddies = enemyClickedEvent.context.getPackBuddies();
+                packBuddies.push(enemyClickedEvent.context);
+
+                for (let index in packBuddies) {
+                    if (packBuddies.hasOwnProperty(index)) {
+                        enemyIds.push(packBuddies[index].id);
+                    }
+                }
+
+                // Create a new pull; all UI will update based on the events fired here.
+                let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds);
+
+                this.setMapState(new KillZoneEnemySelection(this, newKillZone));
             }
-
-            // Create a new pull; all UI will update based on the events fired here.
-            let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds);
-
-            this.setMapState(new KillZoneEnemySelection(this, newKillZone));
         }
     }
 
@@ -628,7 +640,7 @@ class DungeonMap extends Signalable {
         this._refreshingMap = false;
     }
 
-    isRefreshingMap(){
+    isRefreshingMap() {
         return this._refreshingMap;
     }
 

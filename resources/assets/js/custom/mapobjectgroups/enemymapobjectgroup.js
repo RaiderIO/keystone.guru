@@ -104,20 +104,18 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         for (let i = 0; i < this.objects.length; i++) {
             let enemy = this.objects[i];
 
-            // Don't check
-            if (enemy.npc !== null && enemy.isAwakenedNpc() && enemy.getLinkedAwakenedEnemy() === null) {
+            // Check only those Awakened mobs that are not part of the final boss pack
+            if (enemy.npc !== null && enemy.isAwakenedNpc() && enemy.enemy_pack_id === -1) {
                 for (let j = 0; j < this.objects.length; j++) {
                     let enemyCandidate = this.objects[j];
 
+                    // Don't check ourselves, only match those enemies with the same npc id and seasonal_index that are part of the final boss pack
                     if (enemyCandidate.id !== enemy.id && enemyCandidate.npc !== null &&
                         enemyCandidate.isAwakenedNpc() && enemyCandidate.npc.id === enemy.npc.id &&
                         enemyCandidate.seasonal_index === enemy.seasonal_index &&
-                        enemyCandidate.getLinkedAwakenedEnemy() === null && enemy.getLinkedAwakenedEnemy() === null) {
+                        enemyCandidate.enemy_pack_id !== -1) {
 
-                        console.log(`Linking ${enemyCandidate.id} to ${enemy.id}`);
                         enemy.setLinkedAwakenedEnemy(enemyCandidate);
-                        enemyCandidate.setLinkedAwakenedEnemy(enemy);
-
                         break;
                     }
                 }

@@ -19,6 +19,7 @@ class KillZoneEnemySelection extends EnemySelection {
         console.assert(source instanceof KillZone, 'source is not a KillZone', source);
         console.assert(enemyCandidate instanceof Enemy, 'enemyCandidate is not an Enemy', enemyCandidate);
 
+        return true;
         // If we're editing a pull that contains the last boss, disallow selecting of ANY pillar bosses
         if (source.isLinkedToLastBoss()) {
             return !enemyCandidate.isAwakenedNpc();
