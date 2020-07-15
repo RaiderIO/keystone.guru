@@ -27,7 +27,7 @@ class MapIconAwakenedObelisk extends MapIcon {
 
         let self = this;
 
-        if (!getState().isMapAdmin()) {
+        if (!getState().isMapAdmin() && this.map.options.edit) {
             this.layer.on('click', function () {
                 if (self.map.getMapState() === null) {
                     self.map.setMapState(
