@@ -366,6 +366,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     // If not in our array, add it
                     if (!npcs.hasOwnProperty(enemy.npc.id)) {
                         npcs[enemy.npc.id] = {
+                            awakened: enemy.isAwakenedNpc(),
                             npc: enemy.npc,
                             count: 0,
                             enemy_forces: 0
@@ -390,6 +391,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     'enemy_forces': obj.enemy_forces,
                     'count': obj.count,
                     'name': obj.npc.name,
+                    'awakened': obj.awakened,
+                    'boss': obj.npc.classification_id >= 3,
                     'dangerous': obj.npc.dangerous === 1
                 });
 

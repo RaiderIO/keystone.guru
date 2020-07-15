@@ -2,14 +2,18 @@
     <div class="col">
         <div class="input-group">
             <div class="input-group-prepend" style="width: 24px;">
-                {{#if dangerous}}
-                <i class="fa fa-exclamation-triangle text-warning" title="Dangerous enemy" style="line-height: 1.6"></i>
+                {{#if awakened}}
+                    <img class="mt-1" src="/images/enemymodifiers/awakened.png" title="Awakened" data-toggle="tooltip" style="width: 16px; height: 16px; border-radius: 18px" />
+                {{else if boss}}
+                    <img class="mt-1" src="/images/mapicon/raid_marker_skull.png" title="Boss" data-toggle="tooltip" style="width: 16px; height: 16px;" />
+                {{else if dangerous}}
+                    <i class="fa fa-exclamation-triangle text-warning" title="Dangerous" data-toggle="tooltip" style="line-height: 1.6"></i>
                 {{/if}}
             </div>
             <div class="input-group-prepend" style="width: 24px;">
                 {{enemy_forces}}
             </div>
-            <div>
+            <div style="max-width: 200px;">
                 {{name}}
                 {{#ifCond count '>' 1}}
                     x{{count}}

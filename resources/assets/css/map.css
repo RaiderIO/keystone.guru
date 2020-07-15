@@ -679,7 +679,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .awakened_obelisk {
-    background: white url('/images/enemymodifiers/awakened_obelisk.png') no-repeat -5px -11px !important;
+    background: white url('/images/enemymodifiers/awakened.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
