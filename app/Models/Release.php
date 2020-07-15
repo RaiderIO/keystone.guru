@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SerializesDates;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Release extends Model
 {
+    use SerializesDates;
+
     public $timestamps = true;
 
     protected $with = ['changelog'];

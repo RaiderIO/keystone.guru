@@ -38,6 +38,8 @@ let LeafletEnemyMarker = L.Marker.extend({
  * @property dangerous bool
  * @property lat float
  * @property lng float
+ *
+ * @property L.Layer layer
  */
 class Enemy extends MapObject {
     constructor(map, layer) {
@@ -49,6 +51,8 @@ class Enemy extends MapObject {
         this.kill_zone = null;
         /** @type Object May be set when loaded from server */
         this.npc = null;
+        /** @type Enemy If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
+        this.linked_awakened_enemy = null;
         // The visual display of this enemy
         this.visual = null;
         this.isPopupEnabled = false;
@@ -69,6 +73,30 @@ class Enemy extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('synced', this, this._synced.bind(this));
+
+        // Only create/hide visuals if we're actively being shown
+        this.register('shown', this, this._onShown.bind(this));
+        this.register('hidden', this, this._onHidden.bind(this));
+    }
+
+    _onShown(shownEvent) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        // Create the visual now that we know all data to construct it properly
+        if (this.visual === null && (this.id > 0 || this.is_mdt)) {
+            this.visual = new EnemyVisual(this.map, this, this.layer);
+            // Construct the visual
+            this.visual.buildVisual();
+        }
+    }
+
+    _onHidden(hiddenEvent) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (this.visual !== null) {
+            this.visual.cleanup();
+            this.visual = null;
+        }
     }
 
     /**
@@ -196,11 +224,8 @@ class Enemy extends MapObject {
             // Synced, can now build the popup since we know our ID
             this._rebuildPopup(syncedEvent);
 
-            // Create the visual now that we know all data to construct it properly
-            if (this.visual !== null) {
-                this.visual.cleanup();
-            }
-            this.visual = new EnemyVisual(this.map, this, this.layer);
+            // We're now shown so show ourselves
+            this._onShown(null);
 
             // Recreate the tooltip
             this.bindTooltip();
@@ -218,11 +243,33 @@ class Enemy extends MapObject {
     }
 
     /**
+     * Checks if this enemy is linked to the last boss or not.
+     * @returns {boolean}
+     */
+    isLinkedToLastBoss() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        let result = false;
+
+        let packBuddies = this.getPackBuddies();
+        for (let i = 0; i < packBuddies.length; i++) {
+            let packBuddy = packBuddies[i];
+
+            if (packBuddy.npc !== null && packBuddy.npc.classification_id === 4) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Get all enemies that share the same pack as this enemy
+     * @return {Enemy[]}
      */
     getPackBuddies() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        let self = this;
 
         let result = [];
 
@@ -231,11 +278,13 @@ class Enemy extends MapObject {
             // Add all the enemies in said pack to the toggle display
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
-            $.each(enemyMapObjectGroup.objects, function (index, enemy) {
-                if (enemy.enemy_pack_id === self.enemy_pack_id && enemy.id !== self.id) {
+            for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+                let enemy = enemyMapObjectGroup.objects[i];
+                // Visible check for possible hidden Awakened Enemies on the last boss
+                if (enemy.enemy_pack_id === this.enemy_pack_id && enemy.id !== this.id && enemy.isVisible()) {
                     result.push(enemy);
                 }
-            });
+            }
         }
 
         return result;
@@ -271,7 +320,7 @@ class Enemy extends MapObject {
             result = this.npc.enemy_forces;
 
             // Override first
-            if (this.map.options.teeming) {
+            if (getState().getTeeming()) {
                 if (this.enemy_forces_override_teeming >= 0) {
                     result = this.enemy_forces_override_teeming;
                 } else if (this.npc.enemy_forces_teeming >= 0) {
@@ -339,7 +388,7 @@ class Enemy extends MapObject {
     }
 
     /**
-     * Gets the killzone for this enemy.
+     * Gets the kill zone for this enemy.
      * @returns {KillZone|null}
      */
     getKillZone() {
@@ -348,7 +397,7 @@ class Enemy extends MapObject {
     }
 
     /**
-     * Sets the killzone for this enemy.
+     * Sets the kill zone for this enemy.
      * @param killZone object
      */
     setKillZone(killZone) {
@@ -356,12 +405,15 @@ class Enemy extends MapObject {
         let oldKillZone = this.kill_zone;
         this.kill_zone = killZone;
 
+        if (this.id === 4284) {
+            console.warn('setKillZone', this, oldKillZone, this.kill_zone);
+        }
         if (this.kill_zone instanceof KillZone) {
             this.signal('killzone:attached', {previous: oldKillZone});
         }
 
         // We should notify it that we have detached from it
-        if (oldKillZone !== null) {
+        if (oldKillZone !== null && (this.kill_zone === null || oldKillZone.id !== this.kill_zone.id)) {
             this.signal('killzone:detached', {previous: oldKillZone});
         }
     }
@@ -380,6 +432,16 @@ class Enemy extends MapObject {
             edited: color,
             editedBorder: color
         });
+    }
+
+    shouldBeVisible() {
+        // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
+        if (this.linked_awakened_enemy !== null && this.linked_awakened_enemy.getKillZone() !== null && this.isLinkedToLastBoss()) {
+            console.log(`Hiding enemy ${this.id}`);
+            return false;
+        }
+
+        return super.shouldBeVisible();
     }
 
     // To be overridden by any implementing classes
@@ -445,6 +507,39 @@ class Enemy extends MapObject {
     }
 
     /**
+     *
+     * @returns {boolean}
+     */
+    isAwakenedNpc() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.npc !== null &&
+            (this.npc.id === 161124 || this.npc.id === 161241 || this.npc.id === 161244 || this.npc.id === 161243);
+    }
+
+    /**
+     * Get the Awakened NPC that is linked to this enemy (if any).
+     * @returns {Enemy|null}
+     */
+    getLinkedAwakenedEnemy() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.linked_awakened_enemy;
+    }
+
+    /**
+     * Sets this Awakened Enemy to be linked to another Awakened Enemy.
+     * @param awakenedEnemy {Enemy}
+     */
+    setLinkedAwakenedEnemy(awakenedEnemy) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        console.assert(this.isAwakenedNpc(), 'this must be an Awakened NPC!', this);
+        console.assert(awakenedEnemy.isAwakenedNpc(), 'awakenedEnemy must be an Awakened NPC!', awakenedEnemy);
+        console.assert(awakenedEnemy.id !== this.id, 'awakenedEnemy must have a different id as ourselves!', awakenedEnemy, this);
+        console.assert(awakenedEnemy.npc.id === this.npc.id, 'awakenedEnemy must have the same NPC id as ourselves!', awakenedEnemy.npc, this.npc);
+
+        this.linked_awakened_enemy = awakenedEnemy;
+    }
+
+    /**
      * Assigns a raid marker to this enemy.
      * @param raidMarkerName The name of the marker, or empty to unset it
      */
@@ -454,7 +549,7 @@ class Enemy extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/raidmarker/' + self.id,
+            url: `/ajax/${getState().getDungeonRoute().publicKey}/raidmarker/${self.id}`,
             dataType: 'json',
             data: {
                 raid_marker_name: raidMarkerName
@@ -476,5 +571,10 @@ class Enemy extends MapObject {
 
         this.unregister('synced', this, this._synced.bind(this));
         this.map.unregister('map:mapstatechanged', this);
+
+        if (this.visual !== null) {
+            this.visual.cleanup();
+            this.visual = null;
+        }
     }
 }

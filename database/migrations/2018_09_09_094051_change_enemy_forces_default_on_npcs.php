@@ -17,7 +17,7 @@ class ChangeEnemyForcesDefaultOnNpcs extends Migration
         DB::statement('ALTER TABLE npcs ALTER COLUMN enemy_forces SET DEFAULT -1;');
         DB::table('npcs')->where('enemy_forces', '=', 0)->update(['enemy_forces' => -1]);
         // Bosses give 0 enemy forces and that's intended
-        DB::table('npcs')->where('classification_id', '=', 3)->update(['enemy_forces' => 0]);
+        DB::table('npcs')->where('classification_id', '>', 3)->update(['enemy_forces' => 0]);
     }
 
     /**

@@ -1,9 +1,17 @@
-function getDistanceSquared(latLng1, latLng2) {
-    return Math.pow(latLng1.lat - latLng2.lat, 2) + Math.pow(latLng1.lng - latLng2.lng, 2);
+function getDistanceSquared(xy1, xy2) {
+    return Math.pow(xy1[0] - xy2[0], 2) + Math.pow(xy1[1] - xy2[1], 2);
 }
 
 function getDistance(latLng1, latLng2) {
-    return Math.sqrt(getDistanceSquared(latLng1, latLng2));
+    return Math.sqrt(getLatLngDistanceSquared(latLng1, latLng2));
+}
+
+function getLatLngDistanceSquared(latLng1, latLng2) {
+    return Math.pow(latLng1.lat - latLng2.lat, 2) + Math.pow(latLng1.lng - latLng2.lng, 2);
+}
+
+function getLatLngDistance(latLng1, latLng2) {
+    return Math.sqrt(getLatLngDistanceSquared(latLng1, latLng2));
 }
 
 function _getHandlebarsTranslations() {

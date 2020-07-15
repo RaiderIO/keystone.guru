@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
+use App\Models\Traits\SerializesDates;
 use App\Service\Season\SeasonService;
 use App\User;
 use Eloquent;
@@ -79,6 +80,8 @@ use Illuminate\Support\Facades\DB;
  */
 class DungeonRoute extends Model
 {
+    use SerializesDates;
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -503,16 +506,17 @@ class DungeonRoute extends Model
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
         $this->seasonal_index = $request->get('seasonal_index', $this->seasonal_index);
-        $this->teeming = $request->get('teeming', $this->teeming);
-        // @TODO TEMP FIX
-        if ($this->teeming === null) {
-            $this->teeming = 0;
-        }
+        $this->teeming = intval($request->get('teeming', $this->teeming) ?? 0);
 
-        if (Auth::user()->hasPaidTier(PaidTier::UNLISTED_ROUTES)) {
-            $this->unlisted = intval($request->get('unlisted', 0)) > 0;
+        if (Auth::check()) {
+            $user = User::findOrFail(Auth::id());
+            if ($user->hasPaidTier(PaidTier::UNLISTED_ROUTES)) {
+                $this->unlisted = intval($request->get('unlisted', 0)) > 0;
+            }
+            if ($user->hasRole('admin')) {
+                $this->demo = intval($request->get('demo', 0)) > 0;
+            }
         }
-        $this->demo = intval($request->get('demo', 0)) > 0;
 
 
         // Update or insert it

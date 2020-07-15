@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property $kill_zone_id int
  * @property $enemy_id int
  *
+ * @property KillZone $killzone
+ * @property Enemy $enemy
+ *
  * @mixin \Eloquent
  */
 class KillZoneEnemy extends Model

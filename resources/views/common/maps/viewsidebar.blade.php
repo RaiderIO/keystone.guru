@@ -21,7 +21,7 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
     'sidebarToggleSelector' => '#viewsidebarToggle',
     'anchor' => 'left',
     'switchDungeonFloorSelect' => '#map_floor_selection',
-    'defaultSelectedFloorId' => $model->dungeon->floors[0]->id,
+    'defaultSelectedFloorId' => $floorId,
     'dungeonroute' => $model
 ]])
 

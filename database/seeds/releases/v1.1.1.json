@@ -2,8 +2,8 @@
     "id": 9,
     "release_changelog_id": 13,
     "version": "v1.1.1",
-    "created_at": "2018-10-18T09:16:06.000000Z",
-    "updated_at": "2018-10-18T09:16:06.000000Z",
+    "created_at": "2018-10-18T05:16:06+00:00",
+    "updated_at": "2018-10-18T05:16:06+00:00",
     "changelog": {
         "id": 13,
         "release_id": 9,

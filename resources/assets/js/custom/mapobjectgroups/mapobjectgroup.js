@@ -39,6 +39,7 @@ class MapObjectGroup extends Signalable {
             // @todo self.isShown(), currently the layer will ALWAYS show regardless of MapControl status
             self.setVisibility(true);
         }).bind(this));
+        getState().register('teeming:changed', this, this._updateVisibility.bind(this));
 
         if (!(this.manager.map instanceof AdminDungeonMap)) {
             getState().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
@@ -62,12 +63,26 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Checks if map objects should be visible and update the visibility as necessary according to it.
+     * @private
+     */
+    _updateVisibility() {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObject', this);
+
+        for (let i = 0; i < this.objects.length; i++) {
+            let mapObject = this.objects[i];
+            // Set this map object to be visible or not
+            this.setMapObjectVisibility(mapObject, mapObject.shouldBeVisible());
+        }
+    }
+
+    /**
      * May be overridden by implementing classes
      * @param fetchEvent
      * @private
      */
     _onFetchSuccess(fetchEvent) {
-        console.assert(this.objects.length === 0, this.constructor.name + ' objects must be empty after refresh', this.objects.length);
+        console.assert(this.objects.length === 0, 'objects must be empty after refresh', this.names, this.objects.length);
 
         this._fetchSuccess(fetchEvent.data.response);
     }
@@ -104,9 +119,7 @@ class MapObjectGroup extends Signalable {
 
         // Now draw the map objects on the map
         for (let i = 0; i < mapObjects.length; i++) {
-            if (mapObjects.hasOwnProperty(i)) {
-                this._restoreObject(mapObjects[i]);
-            }
+            this._restoreObject(mapObjects[i]);
         }
 
         this.initialized = true;
@@ -123,9 +136,12 @@ class MapObjectGroup extends Signalable {
 
         // Remove any layers that were added before
         for (let i = 0; i < this.objects.length; i++) {
+            let obj = this.objects[i];
             // Remove all layers
-            if (this.objects[i].layer !== null) {
-                this.manager.map.leafletMap.removeLayer(this.objects[i].layer);
+            if (obj.layer !== null) {
+                this.manager.map.leafletMap.removeLayer(obj.layer);
+                // Clean it up properly
+                obj.setVisible(false);
             }
         }
     }
@@ -149,38 +165,6 @@ class MapObjectGroup extends Signalable {
      */
     _restoreObject(remoteMapObject, username = null) {
         console.error('override the _restoreObject function!');
-    }
-
-    /**
-     * Checks the object's faction and teeming status, compares it to our map's status of those variables and determines
-     * if it should be visible or not on the map.
-     * @param remoteMapObject The object you're looking to check for visibility
-     * @returns {boolean}
-     * @protected
-     */
-    _isObjectVisible(remoteMapObject) {
-        let result = true;
-
-        let faction = getState().getDungeonRoute().faction;
-
-        // Only when not in try mode!
-        if (!this.manager.map.isTryModeEnabled() && (remoteMapObject.faction !== 'any' && faction !== 'any' && faction !== remoteMapObject.faction)) {
-            // console.warn('Skipping map object that does not belong to the requested faction ', remoteMapObject, faction);
-            result = false;
-        }
-
-        // If the map isn't teeming, but the enemy is teeming..
-        if (!this.manager.map.options.teeming && remoteMapObject.teeming === 'visible') {
-            // console.warn('Skipping teeming map object', remoteMapObject);
-            result = false;
-        }
-        // If the map is teeming, but the enemy shouldn't be there for teeming maps..
-        else if (this.manager.map.options.teeming && remoteMapObject.teeming === 'invisible') {
-            // console.warn('Skipping teeming-filtered map object', remoteMapObject.id);
-            result = false;
-        }
-
-        return result;
     }
 
     /**
@@ -261,6 +245,8 @@ class MapObjectGroup extends Signalable {
             this.layerGroup.removeLayer(data.context.layer);
             // @TODO Should this be put in the dungeonmap instead?
             this.manager.map.leafletMap.removeLayer(data.context.layer);
+            // Clean it up properly
+            data.context.setVisible(false);
         }
 
         let object = data.context;
@@ -313,14 +299,14 @@ class MapObjectGroup extends Signalable {
                 if (!this.layerGroup.hasLayer(object.layer)) {
                     this.layerGroup.addLayer(object.layer);
                     // Trigger this on the object
-                    object.signal('shown', {object: object, visible: true});
+                    object.setVisible(true);
                     this.signal('object:shown', {object: object, objectgroup: this, visible: true});
                 }
             } else {
                 if (this.layerGroup.hasLayer(object.layer)) {
                     this.layerGroup.removeLayer(object.layer);
                     // Trigger this on the object
-                    object.signal('hidden', {object: object, visible: false});
+                    object.setVisible(false);
                     this.signal('object:hidden', {object: object, objectgroup: this, visible: false});
                 }
             }
@@ -363,16 +349,19 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
         console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
 
+        // Unset previous layer
+        if( mapObject.layer !== null ){
+            this.layerGroup.removeLayer(mapObject.layer);
+            mapObject.layer = null;
+            mapObject.setVisible(false);
+        }
+
+        // Set new layer (if user wants to)
         if (layer !== null) {
             mapObject.layer = layer;
             this.layerGroup.addLayer(mapObject.layer);
+            mapObject.setVisible(true);
             mapObject.onLayerInit();
-        }
-        // User wants to unset the mapObject's layer, remove its references
-        else if (mapObject.layer !== null) {
-            this.layerGroup.removeLayer(mapObject.layer);
-            // Set to null
-            mapObject.layer = layer;
         }
     }
 
@@ -411,10 +400,24 @@ class MapObjectGroup extends Signalable {
     setVisibility(visible) {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
         if (this.layerGroup !== null) {
-            if (!this.isShown() && visible) {
+            let added = (!this.isShown() && visible);
+            let removed = (this.isShown() && !visible);
+            if (added) {
                 this.manager.map.leafletMap.addLayer(this.layerGroup);
-            } else if (this.isShown() && !visible) {
+            } else if (removed) {
                 this.manager.map.leafletMap.removeLayer(this.layerGroup);
+            }
+
+            if (added || removed) {
+                // Remove any layers that were added before
+                for (let i = 0; i < this.objects.length; i++) {
+                    let obj = this.objects[i];
+                    // Remove all layers
+                    if (obj.layer !== null) {
+                        // Clean it up properly (if added, it's visible, if removed, not visible)
+                        obj.setVisible(added);
+                    }
+                }
             }
         }
     }

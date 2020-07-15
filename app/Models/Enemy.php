@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -21,11 +23,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property double $lat
  * @property double $lng
  *
- * @property \App\Models\EnemyPack $enemyPack
- * @property \App\Models\Npc $npc
- * @property \App\Models\Floor $floor
+ * @property EnemyPack $enemyPack
+ * @property Npc $npc
+ * @property Floor $floor
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Enemy extends Model
 {
@@ -34,7 +36,7 @@ class Enemy extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function pack()
     {
@@ -42,7 +44,7 @@ class Enemy extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function floor()
     {
@@ -50,7 +52,7 @@ class Enemy extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function npc()
     {

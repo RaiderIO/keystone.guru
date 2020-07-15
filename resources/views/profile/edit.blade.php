@@ -248,7 +248,7 @@ $deleteConsequences = $user->getDeleteConsequences();
             <h4>
                 {{ __('Privacy') }}
             </h4>
-            {{ Form::model($user, ['route' => ['profile.updateprivacy', $user->name], 'method' => 'patch']) }}
+            {{ Form::model($user, ['route' => ['profile.updateprivacy', $user->id], 'method' => 'patch']) }}
             <div class="form-group{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">
                 {!! Form::label('analytics_cookie_opt_out', __('Google Analytics cookies opt-out')) !!}
                 {!! Form::checkbox('analytics_cookie_opt_out', 1, $user->analytics_cookie_opt_out, ['class' => 'form-control left_checkbox']) !!}

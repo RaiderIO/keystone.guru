@@ -74,7 +74,7 @@ class AdminEnemy extends Enemy {
             // are close by. If they're far away, we don't really care if we get a tooltip for the odd time it happens
             // Advantage is that this dramatically speeds up the JS.
             // 100 = 10 distance
-            let closeEnough = getDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) < 100;
+            let closeEnough = getLatLngDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) < 100;
             //
             if (!(mapStateChangedEvent.data.newMapState instanceof EnemySelection)) {
                 if (closeEnough) {
@@ -213,7 +213,7 @@ class AdminEnemy extends Enemy {
             let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
             previousEnemy.detachConnectedEnemy();
             // Remove its visual connection, probably better served using events but that'd add too much complexity for now
-            previousEnemy.redrawConnectionToEnemy();
+            previousEnemy.redrawConnectionToMDTEnemy();
         }
 
         // We couple the enemy to ourselves (MDT enemy), not the other way around
@@ -332,7 +332,7 @@ class AdminEnemy extends Enemy {
 
             let connectedEnemy = self.getConnectedMDTEnemy();
             if (connectedEnemy !== null) {
-                connectedEnemy.redrawConnectionToEnemy();
+                connectedEnemy.redrawConnectionToMDTEnemy();
             }
         });
     }
@@ -374,6 +374,7 @@ class AdminEnemy extends Enemy {
                     this.map.options.npcsMaxHealth
                 ),
                 faction: this.faction,
+                seasonal_index: this.seasonal_index,
                 npc_id: this.npc_id,
                 npc_id_type: typeof this.npc_id,
                 is_mdt: this.is_mdt,

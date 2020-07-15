@@ -11,6 +11,7 @@ const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_ENEMY,
     MAP_OBJECT_GROUP_ENEMY_PATROL,
+    // Depends on MAP_OBJECT_GROUP_ENEMY
     MAP_OBJECT_GROUP_ENEMY_PACK,
     MAP_OBJECT_GROUP_PATH,
     MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
@@ -141,7 +142,7 @@ class MapObjectGroupManager extends Signalable {
                 fields: this._getLoadedNames().join(','),
                 floor: getState().getCurrentFloor().id,
                 enemyPackEnemies: getState().isMapAdmin() ? 0 : 1,
-                teeming: self.map.options.teeming ? 1 : 0
+                teeming: getState().getTeeming() ? 1 : 0
             },
             success: function (json) {
                 self.signal('fetchsuccess', {response: json});

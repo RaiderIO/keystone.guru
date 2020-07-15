@@ -5,6 +5,16 @@ class EnemyVisualModifierAwakened extends EnemyVisualModifier {
         this.iconName = this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dungeon_id === -1 ? 'awakened_obelisk' : '';
     }
 
+    /**
+     * @inheritDoc
+     */
+    _getName() {
+        return 'awakened';
+    }
+
+    /**
+     * @inheritDoc
+     */
     _getValidIconNames() {
         return [
             '', // we are allowed to have nothing
@@ -12,14 +22,32 @@ class EnemyVisualModifierAwakened extends EnemyVisualModifier {
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
+    _getVisibleAtZoomLevel(){
+        return c.map.enemy.awakened_display_zoom;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getLocation(width, height, margin) {
+        // Bottom left
+        return {
+            left: width,
+            top: height
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     _getTemplateData(width, height, margin) {
         console.assert(this instanceof EnemyVisualModifierAwakened, 'this is not an EnemyVisualModifierAwakened!', this);
 
-        // Bottom left corner
-        return {
+        return $.extend({}, super._getTemplateData(width, height, margin), this._getLocation(width, height, margin), {
             classes: 'modifier_external ' + this.iconName,
-            left: width,
-            top: height
-        };
+        });
     }
 }

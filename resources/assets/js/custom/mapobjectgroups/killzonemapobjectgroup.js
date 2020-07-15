@@ -67,6 +67,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         $.each(this.objects, function (i, obj) {
             obj.setIndex(i + 1);
         });
+
+        this.saveAll();
     }
 
     _createObject(layer) {

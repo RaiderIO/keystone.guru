@@ -5,4 +5,9 @@ class AdminEnemyPack extends EnemyPack {
 
         this.setSynced(false);
     }
+
+
+    isEditableByPopup() {
+        return true;
+    }
 }

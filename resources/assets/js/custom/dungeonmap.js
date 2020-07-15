@@ -4,6 +4,9 @@ class DungeonMap extends Signalable {
         super();
         let self = this;
 
+        /** @type Boolean */
+        this._refreshingMap = false;
+
         this.options = options;
 
         // Apply the map to our state first thing
@@ -29,6 +32,7 @@ class DungeonMap extends Signalable {
 
             self.signal('map:mapobjectgroupsfetchsuccess');
         });
+        this.enemyVisualManager = new EnemyVisualManager(this);
 
         // Pather instance
         this.pather = null;
@@ -296,12 +300,10 @@ class DungeonMap extends Signalable {
 
         this.leafletMap.on('zoomend', function () {
             if (typeof self.leafletMap !== 'undefined') {
-                self._adjustZoomForLayers();
                 // Propagate to any other listeners
                 getState().setMapZoomLevel(self.leafletMap.getZoom());
             }
         });
-        this.leafletMap.on('layeradd', (this._adjustZoomForLayers).bind(this));
     }
 
     /**
@@ -340,25 +342,37 @@ class DungeonMap extends Signalable {
     _enemyClicked(enemyClickedEvent) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        if (this.options.edit && this.mapState === null) {
-            let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-
-            // Add ourselves to this new pull
-            let enemyIds = [];
-            // Add all buddies in this pack to the list of ids (if any)
-            let packBuddies = enemyClickedEvent.context.getPackBuddies();
-            packBuddies.push(enemyClickedEvent.context);
-
-            for (let index in packBuddies) {
-                if (packBuddies.hasOwnProperty(index)) {
-                    enemyIds.push(packBuddies[index].id);
+        if (this.options.edit && this.mapState === null && KillZoneEnemySelection.isEnemySelectable(enemyClickedEvent.context)) {
+            // If part of a pack, select the pack instead of creating a new one
+            let existingKillZone = enemyClickedEvent.context.getKillZone();
+            if (existingKillZone instanceof KillZone) {
+                // Only when we're not doing anything right now
+                if (this.options.edit) {
+                    this.setMapState(new KillZoneEnemySelection(this, existingKillZone));
+                } else {
+                    this.setMapState(new ViewKillZoneEnemySelection(this, existingKillZone));
                 }
+            } else {
+                // Create a new pack instead
+                let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+                // Add ourselves to this new pull
+                let enemyIds = [];
+                // Add all buddies in this pack to the list of ids (if any)
+                let packBuddies = enemyClickedEvent.context.getPackBuddies();
+                packBuddies.push(enemyClickedEvent.context);
+
+                for (let index in packBuddies) {
+                    if (packBuddies.hasOwnProperty(index)) {
+                        enemyIds.push(packBuddies[index].id);
+                    }
+                }
+
+                // Create a new pull; all UI will update based on the events fired here.
+                let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds);
+
+                this.setMapState(new KillZoneEnemySelection(this, newKillZone));
             }
-
-            // Create a new pull; all UI will update based on the events fired here.
-            let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds);
-
-            this.setMapState(new KillZoneEnemySelection(this, newKillZone));
         }
     }
 
@@ -472,29 +486,6 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Fixes the border width for based on current zoom of the map
-     * @TODO This should be moved to all layers that actually have a setStyle property and listen to getState() call instead.
-     * @private
-     */
-    _adjustZoomForLayers() {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-
-        for (let i = 0; i < this.mapObjects.length; i++) {
-            let layer = this.mapObjects[i].layer;
-            if (layer !== null && layer.hasOwnProperty('setStyle')) {
-                let zoomStep = Math.max(2, this.leafletMap.getZoom());
-                if (layer instanceof L.Polyline) {
-                    layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
-                } else if (layer instanceof L.CircleMarker) {
-                    layer.setStyle({radius: 10 / Math.max(1, (this.leafletMap.getMaxZoom() - this.leafletMap.getZoom()))})
-                } else {
-                    layer.setStyle({weight: 3 / zoomStep});
-                }
-            }
-        }
-    }
-
-    /**
      *
      * @returns {boolean}
      */
@@ -560,7 +551,7 @@ class DungeonMap extends Signalable {
      */
     getEnemyForcesRequired() {
         let dungeonData = getState().getDungeonData();
-        return this.options.teeming ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
+        return getState().getTeeming() ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
     }
 
     /**
@@ -570,6 +561,8 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let self = this;
+
+        this._refreshingMap = true;
 
         this.signal('map:beforerefresh', {dungeonmap: this});
 
@@ -643,6 +636,12 @@ class DungeonMap extends Signalable {
         this.refreshPather();
         // Not enabled at this time
         this.togglePather(false);
+
+        this._refreshingMap = false;
+    }
+
+    isRefreshingMap() {
+        return this._refreshingMap;
     }
 
     /**

@@ -26,14 +26,16 @@ return [
 
     'admin_only_label'       => 'Admin only',
     'id_label'               => 'ID',
+    'seasonal_index_label'   => 'Seasonal index',
     'size_label'             => 'Size',
     'faction_label'          => 'Faction',
     'npc_id_label'           => 'NPC_ID',
     'attached_to_pack_label' => 'Pack',
-    'is_mdt_label'           => 'MDT',
-    'mdt_id_label'           => 'MDT_ID',
     'enemy_id_label'         => 'ENEMY_ID',
     'visual_label'           => 'Visual',
+    'mdt_label'              => 'MDT section',
+    'is_mdt_label'           => 'MDT',
+    'mdt_id_label'           => 'MDT_ID',
 
     'preset_label' => 'Preset',
     'add_label'    => 'Add',
@@ -69,22 +71,22 @@ return [
 
     'select_category_label' => 'Select category...',
 
-    'show_details_label'        => 'Show details',
-    'add_kill_area_label'       => 'Add kill area',
-    'remove_kill_area_label'    => 'Remove kill area',
-    'delete_killzone_label'     => 'Delete pull',
-    'kill_zone_has_boss_label'  => 'Boss in pull',
+    'show_details_label'       => 'Show details',
+    'add_kill_area_label'      => 'Add kill area',
+    'remove_kill_area_label'   => 'Remove kill area',
+    'delete_killzone_label'    => 'Delete pull',
+    'kill_zone_has_boss_label' => 'Boss in pull',
 
     // Route edit tools
-    'path'                      => 'Path',
-    'killzone'                  => 'Killzone',
-    'mapicon'                   => 'Icon',
-    'brushline'                 => 'Draw',
-    'brushline_title'           => 'Draw a line',
-    'edit'                      => 'Edit',
-    'delete'                    => 'Delete',
-    'finish'                    => 'Finish',
-    'finish_drawing'            => 'Finish drawing',
+    'path'                     => 'Path',
+    'killzone'                 => 'Killzone',
+    'mapicon'                  => 'Icon',
+    'brushline'                => 'Draw',
+    'brushline_title'          => 'Draw a line',
+    'edit'                     => 'Edit',
+    'delete'                   => 'Delete',
+    'finish'                   => 'Finish',
+    'finish_drawing'           => 'Finish drawing',
 
     'enemypack'                      => 'Pack',
     'enemy'                          => 'Enemy',
@@ -162,108 +164,114 @@ return [
     'intro_15' => 'The color selection affect newly placed free drawn lines and routes. Killzones get the selected color by default.',
     'intro_16' => 'The weight (thickness) of newly placed free drawn lines and routes.',
 
-    'intro_17'                                                => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map icons, start markers and floor switch markers.',
+    'intro_17'                                                      => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map icons, start markers and floor switch markers.',
 
     // Sidebar
-    'sidebar_expand'                                          => 'Expand the sidebar',
-    'sidebar_collapse'                                        => 'Collapse the sidebar',
-    'copied_to_clipboard'                                     => 'Copied to clipboard',
+    'sidebar_expand'                                                => 'Expand the sidebar',
+    'sidebar_collapse'                                              => 'Collapse the sidebar',
+    'copied_to_clipboard'                                           => 'Copied to clipboard',
 
     // Killzone sidebar
-    'killzone_sidebar_kill_location_label'                    => 'Kill location',
+    'killzone_sidebar_kill_location_label'                          => 'Kill location',
 
 
     // General site modals etc
-    'min_password_length'                                     => 'Minimum password length is 8',
-    'weak'                                                    => 'Weak',
-    'medium'                                                  => 'Medium',
-    'strong'                                                  => 'Strong',
-    'contains_username'                                       => 'Password cannot contain your username',
+    'min_password_length'                                           => 'Minimum password length is 8',
+    'weak'                                                          => 'Weak',
+    'medium'                                                        => 'Medium',
+    'strong'                                                        => 'Strong',
+    'contains_username'                                             => 'Password cannot contain your username',
 
     // MDT Modal
-    'mdt_faction'                                             => 'Faction',
-    'mdt_dungeon'                                             => 'Dungeon',
-    'mdt_affixes'                                             => 'Affixes',
-    'mdt_pulls'                                               => 'Pulls',
-    'mdt_drawn_lines'                                         => 'Drawn lines',
-    'mdt_notes'                                               => 'Notes',
-    'mdt_enemy_forces'                                        => 'Enemy forces',
+    'mdt_faction'                                                   => 'Faction',
+    'mdt_dungeon'                                                   => 'Dungeon',
+    'mdt_affixes'                                                   => 'Affixes',
+    'mdt_pulls'                                                     => 'Pulls',
+    'mdt_drawn_lines'                                               => 'Drawn lines',
+    'mdt_notes'                                                     => 'Notes',
+    'mdt_enemy_forces'                                              => 'Enemy forces',
 
     // Default AJAX failed messages
-    'ajax_error_default'                                      => 'An error occurred while performing your request. Please try again.',
-    'ajax_error_403'                                          => 'You are not authorized to perform this request.',
-    'ajax_error_404'                                          => 'The requested resource was not found.',
-    'ajax_error_419'                                          => 'Your session has expired. Refresh the page.',
+    'ajax_error_default'                                            => 'An error occurred while performing your request. Please try again.',
+    'ajax_error_403'                                                => 'You are not authorized to perform this request.',
+    'ajax_error_404'                                                => 'The requested resource was not found.',
+    'ajax_error_419'                                                => 'Your session has expired. Refresh the page.',
 
     // Popups
     // Map Object
-    'mapicon_faction_select_default_label'                    => 'Select faction',
-    'mapicon_teeming_select_default_label'                    => 'Select teeming',
+    'mapicon_faction_select_default_label'                          => 'Select faction',
+    'mapicon_teeming_select_default_label'                          => 'Select teeming',
 
     // Map icon
-    'map_icon_faction_label'                                  => 'Faction',
-    'map_icon_teeming_label'                                  => 'Teeming',
-    'map_icon_permanent_tooltip_label'                        => 'Permanent tooltip',
-    'map_icon_map_icon_type_id_label'                         => 'Icon',
-    'map_icon_comment_label'                                  => 'Comment',
-    'map_icon_map_icon_type_id_select_default_label'          => 'Select icon',
+    'map_icon_faction_label'                                        => 'Faction',
+    'map_icon_teeming_label'                                        => 'Teeming',
+    'map_icon_permanent_tooltip_label'                              => 'Permanent tooltip',
+    'map_icon_map_icon_type_id_label'                               => 'Icon',
+    'map_icon_comment_label'                                        => 'Comment',
+    'map_icon_map_icon_type_id_select_default_label'                => 'Select icon',
+    'map_icon_seasonal_index_label'                                 => 'Seasonal index (empty to unset)',
 
     // Admin map icon
-    'admin_map_icon_faction_label'                            => 'Faction',
-    'admin_map_icon_teeming_label'                            => 'Teeming',
-    'admin_map_icon_permanent_tooltip_label'                  => 'Permanent tooltip',
-    'admin_map_icon_map_icon_type_id_label'                   => 'Icon',
-    'admin_map_icon_comment_label'                            => 'Comment',
-    'admin_map_icon_map_icon_type_id_select_default_label'    => 'Select icon',
-    'admin_map_icon_seasonal_index_label'                     => 'Seasonal index (empty to unset)',
+    'admin_map_icon_faction_label'                                  => 'Faction',
+    'admin_map_icon_teeming_label'                                  => 'Teeming',
+    'admin_map_icon_permanent_tooltip_label'                        => 'Permanent tooltip',
+    'admin_map_icon_map_icon_type_id_label'                         => 'Icon',
+    'admin_map_icon_comment_label'                                  => 'Comment',
+    'admin_map_icon_map_icon_type_id_select_default_label'          => 'Select icon',
+    'admin_map_icon_seasonal_index_label'                           => 'Seasonal index (empty to unset)',
 
-    // Admin enemy
-    'admin_enemy_faction_label'                               => 'Faction',
-    'admin_enemy_teeming_label'                               => 'Teeming',
-    'admin_enemy_npc_id_label'                                => 'Npc',
-    'admin_enemy_seasonal_index_label'                        => 'Seasonal index (empty to unset)',
-    'admin_enemy_enemy_forces_override_label'                 => 'Enemy forces override (-1 to inherit)',
-    'admin_enemy_enemy_forces_override_teeming_label'         => 'Enemy forces override teeming (-1 to inherit)',
-    'admin_enemy_npc_id_select_default_label'                 => 'Select NPC',
+    // Enemy
+    'enemy_faction_label'                                           => 'Faction',
+    'enemy_teeming_label'                                           => 'Teeming',
+    'enemy_npc_id_label'                                            => 'Npc',
+    'enemy_seasonal_index_label'                                    => 'Seasonal index (empty to unset)',
+    'enemy_enemy_forces_override_label'                             => 'Enemy forces override (-1 to inherit)',
+    'enemy_enemy_forces_override_teeming_label'                     => 'Enemy forces override teeming (-1 to inherit)',
+    'enemy_npc_id_select_default_label'                             => 'Select NPC',
 
     // Admin enemy pack
-    'admin_enemy_pack_faction_label'                          => 'Faction',
-    'admin_enemy_pack_teeming_label'                          => 'Teeming',
-    'admin_enemy_pack_label_label'                            => 'Label',
+    'admin_enemy_pack_faction_label'                                => 'Faction',
+    'admin_enemy_pack_teeming_label'                                => 'Teeming',
+    'admin_enemy_pack_label_label'                                  => 'Label',
 
 
     // Brushline
-    'brushline_color_label'                                   => 'Color',
-    'brushline_color_animated_label'                          => 'Animated color',
-    'brushline_weight_label'                                  => 'Weight',
+    'brushline_color_label'                                         => 'Color',
+    'brushline_color_animated_label'                                => 'Animated color',
+    'brushline_weight_label'                                        => 'Weight',
 
     // Path
-    'path_color_label'                                        => 'Color',
-    'path_color_animated_label'                               => 'Animated color',
-    'path_weight_label'                                       => 'Weight',
+    'path_color_label'                                              => 'Color',
+    'path_color_animated_label'                                     => 'Animated color',
+    'path_weight_label'                                             => 'Weight',
 
     // Enemy patrol
-    'admin_enemy_patrol_faction_label'                        => 'Faction',
-    'admin_enemy_patrol_teeming_label'                        => 'Teeming',
-    'admin_enemy_patrol_color_label'                          => 'Color',
-    'admin_enemy_patrol_weight_label'                         => 'Weight',
+    'admin_enemy_patrol_faction_label'                              => 'Faction',
+    'admin_enemy_patrol_teeming_label'                              => 'Teeming',
+    'admin_enemy_patrol_color_label'                                => 'Color',
+    'admin_enemy_patrol_weight_label'                               => 'Weight',
+
+    // Enemy pack
+    'enemypack_faction_label'                                       => 'Faction',
+    'enemypack_teeming_label'                                       => 'Teeming',
 
     // Dungeon floor switch marker
-    'admin_dungeon_floor_switch_marker_faction_label'         => 'Faction',
-    'admin_dungeon_floor_switch_marker_teeming_label'         => 'Teeming',
-    'admin_dungeon_floor_switch_marker_target_floor_id_label' => 'Target floor',
-    'admin_dungeon_floor_switch_marker_direction_label'       => 'Direction',
+    'dungeonfloorswitchmarker_faction_label'                        => 'Faction',
+    'dungeonfloorswitchmarker_teeming_label'                        => 'Teeming',
+    'dungeonfloorswitchmarker_target_floor_id_label'                => 'Target floor',
+    'dungeonfloorswitchmarker_direction_label'                      => 'Direction',
+    'dungeonfloorswitchmarker_target_floor_id_select_default_label' => 'Select floor',
 
     // Dungeonroute table
-    'actions_label'                                           => 'Actions',
-    'add_to_team_label'                                       => 'Add to team...',
+    'actions_label'                                                 => 'Actions',
+    'add_to_team_label'                                             => 'Add to team...',
 
     // Teams
-    'view_label'                                              => 'View',
-    'collaborator_label'                                      => 'Edit',
-    'moderator_label'                                         => 'Moderate',
-    'admin_label'                                             => 'Own',
-    'change_role_success'                                     => 'Permissions updated',
+    'view_label'                                                    => 'View',
+    'collaborator_label'                                            => 'Edit',
+    'moderator_label'                                               => 'Moderate',
+    'admin_label'                                                   => 'Own',
+    'change_role_success'                                           => 'Permissions updated',
 
     'team_admin'                    => 'Administrate team',
     'team_moderator'                => 'Moderate team',

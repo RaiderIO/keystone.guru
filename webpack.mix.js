@@ -106,6 +106,7 @@ let scripts = [
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
+    'resources/assets/js/custom/enemyvisuals/enemyvisualmanager.js',
 
     // Depends on map object groups
     'resources/assets/js/custom/statemanager.js',

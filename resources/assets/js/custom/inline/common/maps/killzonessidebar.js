@@ -59,7 +59,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _killZoneRowClicked(clickEvent) {
-        // If there was an event, prevent clicking the 'expand' button also selecting the killzone
+        // If there was an event, prevent clicking the 'expand' button also selecting the kill zone
         if (clickEvent !== null && typeof clickEvent !== 'undefined') {
             let $target = $(clickEvent.target);
             let $parent = $($target.parent());
@@ -264,7 +264,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
-            if (killZone.getIndex > minIndex) {
+            if (killZone.getIndex() >= minIndex) {
                 self._updatePullText(killZone);
             }
         });
@@ -286,7 +286,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $(`#map_killzonessidebar_killzone_${killZone.id}_index:not(.draggable--original)`).text(killZone.getIndex());
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemies:not(.draggable--original)`)
             .text(`${killZone.getEnemyForcesCumulative()}/${this.map.getEnemyForcesRequired()}`);
-        
+
         // Show enemy forces or not
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces_container:not(.draggable--original)`).toggle(killZoneEnemyForces > 0);
         $(`#map_killzonessidebar_killzone_${killZone.id}_enemy_forces:not(.draggable--original)`).text(`${killZoneEnemyForces}`);
@@ -298,7 +298,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let enemyId = killZone.enemies[i];
             for (let j = 0; j < enemies.length; j++) {
                 let enemy = enemies[j];
-                if (enemy.id === enemyId && enemy.npc !== null && enemy.npc.classification_id === 3) {
+                if (enemy.id === enemyId && enemy.npc !== null && enemy.npc.classification_id >= 3) {
                     hasBoss = true;
                     break;
                 }
@@ -351,7 +351,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // enemyForcesPercent = Math.floor(enemyForcesPercent * 100) / 100;
 
         // Update everything after ourselves as well (cumulative enemy forces may be changed going forward).
-        this._updatePullTexts(killZone, killZone.getIndex());
+        this._updatePullTexts(killZone.getIndex());
 
 
         // Fill the enemy list
@@ -366,6 +366,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     // If not in our array, add it
                     if (!npcs.hasOwnProperty(enemy.npc.id)) {
                         npcs[enemy.npc.id] = {
+                            awakened: enemy.isAwakenedNpc(),
                             npc: enemy.npc,
                             count: 0,
                             enemy_forces: 0
@@ -390,6 +391,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     'enemy_forces': obj.enemy_forces,
                     'count': obj.count,
                     'name': obj.npc.name,
+                    'awakened': obj.awakened,
+                    'boss': obj.npc.classification_id >= 3,
                     'dangerous': obj.npc.dangerous === 1
                 });
 
@@ -490,7 +493,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
             self._addKillZone(killZone);
             // Listen to changes in the killzone
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self, function (killZoneChangedEvent) {
-                self._refreshKillZone(killZoneChangedEvent.context);
+                // Do not change the sidebar as we're refreshing the map; that's pointless (lots of adds/removes going on)
+                if( !self.map.isRefreshingMap() ) {
+                    self._refreshKillZone(killZoneChangedEvent.context);
+                }
             });
         });
         // If the killzone was deleted, get rid of our display too

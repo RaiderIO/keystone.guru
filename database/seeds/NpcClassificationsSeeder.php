@@ -18,6 +18,7 @@ class NpcClassificationsSeeder extends Seeder
             'Normal' => ['color' => 'white'],
             'Elite' => ['color' => 'yellow'],
             'Boss' => ['color' => 'red'],
+            'Final Boss' => ['color' => 'red'],
         ];
 
         foreach($classificationsData as $name => $classificationData){

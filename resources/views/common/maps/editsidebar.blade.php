@@ -14,7 +14,7 @@ if (isset($model)) {
     'sidebarScrollSelector' => '#editsidebar .sidebar-content',
     'sidebarToggleSelector' => '#editsidebarToggle',
     'switchDungeonFloorSelect' => '#map_floor_selection',
-    'defaultSelectedFloorId' => $dungeon->floors[0]->id,
+    'defaultSelectedFloorId' => $floorId,
     'anchor' => 'left'
 ]])
 

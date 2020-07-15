@@ -3,22 +3,30 @@ class EnemyVisual extends Signalable {
         super();
         console.assert(map instanceof DungeonMap, 'map was not a DungeonMap', map);
         console.assert(enemy instanceof Enemy, 'enemy was not an Enemy', enemy);
-
-        /** Override for showing fade or not **/
-        this._hideFade = false;
+        console.assert(layer instanceof L.Layer, 'layer is not an L.Layer', layer);
 
         /** @type DungeonMap */
         this.map = map;
         /** @type Enemy */
         this.enemy = enemy;
         this.layer = layer;
-        this.divIcon = null;
+
+        /** Override for showing fade or not **/
+        this._highlighted = false;
+        /** Used for managing mouse overs over our enemy pack. If one enemy is mouse overed, all are mouse overed */
+        this._managedBy = this.enemy.id;
+
+        this._divIcon = null;
+        this._modifiers = [];
+        this._$mainVisual = null;
+        this._$mainVisualOuter = null;
+        this._$mainVisualInner = null;
 
         this.visualType = '';
         /** @type EnemyVisualMain */
         this.mainVisual = null;
 
-        this.circleMenu = null;
+        this._circleMenu = null;
 
         // Default visual (after modifiers!)
         this.setVisualType(getState().getEnemyDisplayType());
@@ -27,7 +35,7 @@ class EnemyVisual extends Signalable {
         // Build and/or destroy the visual based on visibility
         this.enemy.register(['shown', 'hidden'], this, function (event) {
             if (event.data.visible) {
-                self._buildVisual();
+                self.buildVisual();
             } else {
                 // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
                 // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
@@ -35,18 +43,18 @@ class EnemyVisual extends Signalable {
         });
 
         // If it changed, refresh the entire visual
-        this.enemy.register(['enemy:set_raid_marker'], this, this._buildVisual.bind(this));
+        this.enemy.register(['enemy:set_raid_marker'], this, this.buildVisual.bind(this));
         this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();
-            killZone.register('killzone:changed', self, self._buildVisual.bind(self));
-            killZone.register('object:deleted', self, self._buildVisual.bind(self));
+            killZone.register('killzone:changed', self, self.buildVisual.bind(self));
+            killZone.register('object:deleted', self, self.buildVisual.bind(self));
 
             // Check if we can shortcut by updating just the border
             if ((killZoneAttachedEvent.data.previousKillZone instanceof KillZone && !(killZone instanceof KillZone)) ||
                 (!(killZoneAttachedEvent.data.previousKillZone instanceof KillZone) && killZone instanceof KillZone)) {
                 // We cannot
-                self._buildVisual();
+                self.buildVisual();
             } else {
                 // From killzone to killzone we can, otherwise we can't
                 self._updateBorder(killZone.color);
@@ -64,63 +72,80 @@ class EnemyVisual extends Signalable {
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
                 mapStateChangedEvent.data.newMapState instanceof EditMapState) {
-                self._buildVisual();
+                self.buildVisual();
             }
         });
-
-        // this.layer.on('mouseover', function () {
-        //     self._mouseOver();
-        // });
-        // this.layer.on('mouseout', function () {
-        //     self._mouseOut();
-        // });
-
     }
 
     /**
-     *
      * @protected
      */
     _mouseOver() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
-        let visuals = [this];
+        if (this._managedBy === this.enemy.id) {
+            let visuals = [this];
 
-        // Add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
-        let packBuddies = this.enemy.getPackBuddies();
-        packBuddies.push(this.enemy);
-        $.each(packBuddies, function (index, enemy) {
-            visuals.push(enemy.visual);
-        });
+            // Add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
+            let packBuddies = this.enemy.getPackBuddies();
+            packBuddies.push(this.enemy);
+            $.each(packBuddies, function (index, enemy) {
+                if (enemy.visual !== null) {
+                    visuals.push(enemy.visual);
+                }
+            });
 
-        for (let i = 0; i < visuals.length; i++) {
-            visuals[i]._hideFade = true;
-            visuals[i].setVisualType('enemy_forces');
+            for (let i = 0; i < visuals.length; i++) {
+                visuals[i]._managedBy = this.enemy.id;
+                visuals[i]._highlighted = true;
+                visuals[i].setVisualType('enemy_forces');
+            }
         }
     }
 
     /**
-     *
      * @protected
      */
     _mouseOut() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
-        if (this.circleMenu === null) {
-            let visuals = [this];
+        if (this._managedBy === this.enemy.id) {
+            if (this._circleMenu === null) {
+                let visuals = [this];
 
-            // Add all the enemies in said pack to the toggle display (may be empty if enemy not part of a pack)
-            let packBuddies = this.enemy.getPackBuddies();
-            packBuddies.push(this.enemy);
-            $.each(packBuddies, function (index, enemy) {
-                visuals.push(enemy.visual);
-            });
+                // Add all the enemies in said pack to the toggle display (may be empty if enemy not part of a pack)
+                let packBuddies = this.enemy.getPackBuddies();
+                packBuddies.push(this.enemy);
+                $.each(packBuddies, function (index, enemy) {
+                    // Some packs may contain Teeming enemies which may be hidden
+                    if (enemy.isVisible() && enemy.visual !== null) {
+                        visuals.push(enemy.visual);
+                    }
+                });
 
-            for (let i = 0; i < visuals.length; i++) {
-                visuals[i]._hideFade = false;
-                visuals[i].setVisualType(getState().getEnemyDisplayType());
+                for (let i = 0; i < visuals.length; i++) {
+                    let visual = visuals[i];
+                    // Return management state to their own enemy
+                    visual._managedBy = visual.enemy.id;
+                    visual._highlighted = false;
+                    visual.setVisualType(getState().getEnemyDisplayType());
+                }
             }
-        }
 
-        this.layer.closeTooltip();
+            this.layer.closeTooltip();
+        }
+    }
+
+    /**
+     * Refreshes the modifier's visibility based on current map zoom level.
+     * @param width {float}
+     * @param height {float}
+     * @param margin {float}
+     * @private
+     */
+    _refreshModifierVisibility(width, height, margin) {
+        let zoomLevel = getState().getMapZoomLevel();
+        for (let i = 0; i < this._modifiers.length; i++) {
+            this._modifiers[i].updateVisibility(zoomLevel, width, height, margin);
+        }
     }
 
     /**
@@ -139,26 +164,22 @@ class EnemyVisual extends Signalable {
 
         // Only for elite enemies
         if (this.enemy.npc !== null) {
-            if (this.enemy.npc.classification_id !== 1 &&
-                getState().getMapZoomLevel() > c.map.enemy.classification_display_zoom) {
+            if (this.enemy.npc.classification_id !== 1) {
                 modifiers.push(new EnemyVisualModifierClassification(this, 1));
             }
 
             // Truesight marker
-            if (this.enemy.npc.truesight === 1 &&
-                getState().getMapZoomLevel() > c.map.enemy.truesight_display_zoom) {
+            if (this.enemy.npc.truesight === 1) {
                 modifiers.push(new EnemyVisualModifierTruesight(this, 2));
             }
 
             // Awakened marker
-            if (this.enemy.npc.dungeon_id === -1 &&
-                getState().getMapZoomLevel() > c.map.enemy.awakened_display_zoom) {
+            if (this.enemy.npc.dungeon_id === -1) {
                 modifiers.push(new EnemyVisualModifierAwakened(this, 3));
             }
         }
 
-        if (this.enemy.teeming === 'visible' &&
-            getState().getMapZoomLevel() > c.map.enemy.teeming_display_zoom) {
+        if (this.enemy.teeming === 'visible') {
             modifiers.push(new EnemyVisualModifierTeeming(this, 4));
         }
 
@@ -292,9 +313,8 @@ class EnemyVisual extends Signalable {
     /**
      * Constructs the structure for the visuals and re-fetches the main visual's and modifier's data to re-apply to
      * the interface.
-     * @private
      */
-    _buildVisual() {
+    buildVisual() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         // Determine which modifiers the visual should have
@@ -315,7 +335,7 @@ class EnemyVisual extends Signalable {
             let border = `${getState().getMapZoomLevel()}px solid white`;
             if (this.enemy.getKillZone() instanceof KillZone) {
                 border = `${getState().getMapZoomLevel()}px solid ${this.enemy.getKillZone().color}`;
-            } else if (!this._hideFade && !this.enemy.is_mdt && !isSelectable) {
+            } else if (!this._highlighted && !this.enemy.is_mdt && !isSelectable) {
                 // If not selected in a killzone, fade the enemy
                 data.root_classes = 'map_enemy_visual_fade';
             }
@@ -336,25 +356,19 @@ class EnemyVisual extends Signalable {
             let margin = c.map.enemy.calculateMargin(width);
 
             data.id = this.enemy.id;
-            // Compensate for a 2px border on the inner, 2x border on the outer
-            data.inner_width = 'calc(100% - ' + (margin * 2) + 'px)';
-            data.inner_height = 'calc(100% - ' + (margin * 2) + 'px)';
-
-            data.outer_width = (width + (margin * 2)) + 'px';
-            data.outer_height = (height + (margin * 2)) + 'px';
 
             data.margin = margin;
 
             // Build modifiers object
             data.modifiers = [];
             // Fetch the modifiers we're displaying on our visual
-            let modifiers = this._createModifiers();
-            for (let i = 0; i < modifiers.length; i++) {
-                data.modifiers.push(modifiers[i]._getTemplateData(width, height, margin));
+            this._modifiers = this._createModifiers();
+            for (let i = 0; i < this._modifiers.length; i++) {
+                data.modifiers.push(this._modifiers[i]._getTemplateData(width, height, margin));
             }
 
             // Create a new div icon (the entire structure)
-            this.divIcon = new L.divIcon({
+            this._divIcon = new L.divIcon({
                 html: template(data),
                 iconSize: [width + (margin * 2), height + (margin * 2)],
                 tooltipAnchor: [0, ((height * -.5) - margin)],
@@ -362,12 +376,18 @@ class EnemyVisual extends Signalable {
             });
 
             // Set the structure as HTML for the layer
-            this.layer.setIcon(this.divIcon);
+            this.layer.setIcon(this._divIcon);
 
-            $(`#map_enemy_visual_${data.id}`).hover(
-                this._mouseOver.bind(this),
-                this._mouseOut.bind(this)
-            );
+            this._$mainVisual = $(`#map_enemy_visual_${this.enemy.id}`);
+            this._$mainVisualOuter = $(`#map_enemy_visual_${this.enemy.id}_outer`);
+            this._$mainVisualInner = $(`#map_enemy_visual_${this.enemy.id}_inner`);
+            this.$mainVisualParent = $(this._$mainVisual.closest('.leaflet-div-icon'));
+
+            // Apply current size to the icon
+            this.refreshSize(false);
+
+            // $(`#map_enemy_visual_${data.id}`).mouseover(this._mouseOver.bind(this));
+            // $(`#map_enemy_visual_${data.id}`).mouseout(this._mouseOut.bind(this));
 
             // When the visual exists, bind a click method to it (to increase performance)
             let $enemyIcon = $('#map_enemy_visual_' + this.enemy.id).find('.enemy_icon');
@@ -386,6 +406,101 @@ class EnemyVisual extends Signalable {
     _updateBorder(color) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
         $('#map_enemy_visual_' + this.enemy.id).find('.outer').css('border-color', color);
+    }
+
+    /**
+     * True if the visual was highlighted by the user, false if it was not
+     * @returns {boolean}
+     */
+    isHighlighted() {
+        return this._highlighted;
+    }
+
+    /**
+     *
+     */
+    refreshSize(adjustParent = true) {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+
+        let size = this.mainVisual.getSize();
+
+        let width = size.iconSize[0];
+        let height = size.iconSize[1];
+
+        let margin = c.map.enemy.calculateMargin(width);
+        let marginStr = `${margin}px`;
+
+        let outerWidth = (width + (margin * 2));
+        let outerHeight = (height + (margin * 2));
+
+        let outerWidthStr = `${outerWidth}px`;
+        let outerHeightStr = `${outerHeight}px`;
+
+        let innerSizeStr = `calc(100% - ${(margin * 2)}px)`;
+
+        // Compensate for a 2px border on the inner, 2x border on the outer
+        this._$mainVisual[0].style.width = outerWidthStr;
+        this._$mainVisual[0].style.height = outerHeightStr;
+
+        this._$mainVisualOuter[0].style.width = outerWidthStr;
+        this._$mainVisualOuter[0].style.height = outerHeightStr;
+        this._$mainVisualOuter[0].style.borderWidth = `${getState().getMapZoomLevel()}px`;
+
+        this._$mainVisualInner[0].style.width = innerSizeStr;
+        this._$mainVisualInner[0].style.height = innerSizeStr;
+        this._$mainVisualInner[0].style.margin = marginStr;
+
+        // this.$mainVisual.css('width', `${outerWidth}px`).css('height', `${outerHeight}px`);
+        // this.$mainVisualOuter.css('width', `${outerWidth}px`).css('height', `${outerHeight}px`);
+        // this.$mainVisualInner.css('width', innerWidth).css('height', innerHeight).css('margin', margin);
+
+        if (adjustParent) {
+            let parentMargin = outerWidth * -0.5;
+            let parentMarginStr = `${parentMargin}px`;
+
+            this.$mainVisualParent[0].style.marginLeft = parentMarginStr;
+            this.$mainVisualParent[0].style.marginTop = parentMarginStr;
+            this.$mainVisualParent[0].style.width = outerWidthStr;
+            this.$mainVisualParent[0].style.height = outerHeightStr;
+
+            // this.$mainVisualParent.css('margin-left', `${parentMargin}px`).css('margin-top', `${parentMargin}px`)
+            //     .css('width', `${outerWidth}px`).css('height', `${outerHeight}px`);
+        }
+
+        // Hide/show modifiers based on zoom level
+        this._refreshModifierVisibility(width, height, margin);
+    }
+
+    /**
+     * Checks if we should be showing our mouse over state or not
+     * @param mouseX {int}
+     * @param mouseY {int}
+     *
+     * @return float Squared distance from the enemy to the mouse
+     */
+    checkMouseOver(mouseX, mouseY) {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+
+        // Sensible default for distance (approx 75% of the full map distance)
+        let result = 1000000;
+
+        if (this._$mainVisual !== null && this._$mainVisual.length > 0 && this._managedBy === this.enemy.id) {
+            let offset = this._$mainVisual.offset();
+            let iconSize = this.mainVisual.getSize();
+            let size = iconSize.iconSize[0];
+            let margin = c.map.enemy.calculateMargin(size);
+            let halfSize = (size / 2) + margin;
+
+            result = getDistanceSquared([offset.left + halfSize, offset.top + halfSize], [mouseX, mouseY]);
+
+            if (result < halfSize * halfSize) {
+                this._mouseOver();
+            } else {
+                this._mouseOut();
+            }
+        }
+
+        return result;
     }
 
     // @TODO Listen to killzone selectable changed event
@@ -428,21 +543,20 @@ class EnemyVisual extends Signalable {
                 }
             }
 
-            this._buildVisual();
+            this.buildVisual();
 
             this.visualType = name;
         }
     }
 
     cleanup() {
-        // this.layer.off('mouseover');
-        // this.layer.off('mouseout');
-
         this.enemy.unregister('killzone:detached', this);
         this.enemy.unregister('killzone:attached', this);
         this.enemy.unregister('enemy:set_raid_marker', this);
         this.map.unregister('map:mapstatechanged', this);
 
-        this._cleanupCircleMenu();
+        if (this._circleMenu !== null) {
+            this._cleanupCircleMenu();
+        }
     }
 }

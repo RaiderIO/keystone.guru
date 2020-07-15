@@ -26,6 +26,7 @@
                 'virtual-tour' => true,
                 'tryout' => true
             ],
+            'floorId' => $floor->id,
             'dungeon' => $dungeon,
             'floorSelection' => $floorSelection
         ])
@@ -33,7 +34,8 @@
         @include('common.maps.map', [
             'dungeonroute' => $model,
             'edit' => true,
-            'tryMode' => true
+            'tryMode' => true,
+            'floorId' => $floor->id
         ])
 
         @include('common.maps.killzonessidebar', [

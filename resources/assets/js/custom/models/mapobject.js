@@ -12,7 +12,7 @@ class MapObject extends Signalable {
      * @param layer {L.layer}
      * @param options {Object}
      */
-    constructor(map, layer, options) {
+    constructor(map, layer = null, options = {}) {
         super();
         console.assert(map instanceof DungeonMap, 'Passed map is not a DungeonMap!', map);
         console.assert(typeof options === 'object', 'options must be set and an object!', options);
@@ -26,6 +26,8 @@ class MapObject extends Signalable {
 
         let self = this;
 
+        // Visible by default
+        this._visible = false;
         this._defaultVisible = true;
         /** @type {Array} */
         this._cachedAttributes = null;
@@ -530,6 +532,15 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Checks if this object is visible by default.
+     * @returns {boolean}
+     */
+    isDefaultVisible() {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
+        return this._defaultVisible;
+    }
+
+    /**
      * Sets this enemy to be visible by default or not. Note: only read/used at initial load in!
      * @param value boolean
      */
@@ -539,12 +550,79 @@ class MapObject extends Signalable {
     }
 
     /**
-     * Checks if this object is visible by default.
-     * @returns {boolean}
+     * Checks if this map object should be visible on map or not.
+     * @return {boolean}
      */
-    isDefaultVisible() {
-        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
-        return this._defaultVisible;
+    shouldBeVisible() {
+        if (this.hasOwnProperty('seasonal_index')) {
+            if (this.seasonal_index !== null && getState().getSeasonalIndex() !== this.seasonal_index) {
+                // console.log(`Hiding enemy due to seasonal_index ${this.id}`);
+                return false;
+            }
+        }
+
+        if (this.hasOwnProperty('faction')) {
+            let faction = getState().getDungeonRoute().faction;
+            // Only when not in try mode! (no idea why, it was like this)
+            if (!this.map.isTryModeEnabled() && (this.faction !== 'any' && faction !== 'any' && this.faction !== faction)) {
+                // console.log(`Hiding enemy due to faction ${this.id}`);
+                return false;
+            }
+        }
+
+        if (this.hasOwnProperty('teeming')) {
+            // If the map isn't teeming, but the enemy is teeming..
+            if (!getState().getTeeming() && this.teeming === 'visible') {
+                // console.log(`Hiding enemy due to teeming A ${this.id}`);
+                return false;
+            }
+            // If the map is teeming, but the enemy shouldn't be there for teeming maps..
+            else if (getState().getTeeming() && this.teeming === 'invisible') {
+                // console.log(`Hiding enemy due to teeming B ${this.id}`);
+                return false;
+            }
+        }
+
+        // Floor states
+        if (getState().getCurrentFloor().id !== this.floor_id) {
+            // console.log(`Hiding enemy due to floor ${this.id}`);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if the current MapObject is visible on the map or not.
+     * @returns {*}
+     */
+    isVisible() {
+        return this._visible;
+    }
+
+    /**
+     * Sets the map object's visibility state.
+     * @param visible
+     */
+    setVisible(visible) {
+        this._visible = visible;
+        if (visible) {
+            this.signal('shown', {visible: visible});
+        } else {
+            this.signal('hidden', {visible: visible});
+        }
+    }
+
+    /**
+     * Checks if this map object is visible and if it's layer's bounds are actually on the map.
+     * @returns {*}
+     */
+    isVisibleOnScreen() {
+        let result = false;
+        if (this.isVisible() && this.layer !== null && this.visual !== null) {
+            result = this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
+        }
+        return result;
     }
 
     /**

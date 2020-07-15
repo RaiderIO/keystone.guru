@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -13,13 +18,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property double $lat
  * @property double $lng
  *
- * @property \App\Models\DungeonRoute $dungeonroute
- * @property \App\Models\Floor $floor
+ * @property DungeonRoute $dungeonroute
+ * @property Floor $floor
  *
- * @property \Illuminate\Support\Collection|Enemy[] $enemies
- * @property \Illuminate\Support\Collection|KillZoneEnemy[] $killzoneenemies
+ * @property Collection|Enemy[] $enemies
+ * @property Collection|KillZoneEnemy[] $killzoneenemies
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class KillZone extends Model
 {
@@ -29,7 +34,7 @@ class KillZone extends Model
     /**
      * Get the dungeon route that this killzone is attached to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function dungeonroute()
     {
@@ -37,7 +42,7 @@ class KillZone extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function enemies()
     {
@@ -45,7 +50,7 @@ class KillZone extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function killzoneenemies()
     {
@@ -53,7 +58,7 @@ class KillZone extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function floor()
     {
