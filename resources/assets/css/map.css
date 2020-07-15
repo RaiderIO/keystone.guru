@@ -454,6 +454,10 @@ html, body, #map, #app, .wrapper {
     border-radius: 4px !important; /* Fixes weird border */
 }
 
+.leaflet-edit-marker-selected.delete {
+    border-color: red !important;
+}
+
 .map_icon.leaflet-edit-marker-selected {
     margin-top: -4px !important;
     margin-left: -4px !important;

@@ -20,18 +20,19 @@ $(function () {
  * Get the Leaflet Marker that represents said mapIconType
  * @param mapIconType null|obj When null, default unknown marker type is returned
  * @param editModeEnabled bool
+ * @param deleteModeEnabled bool
  * @returns {*}
  */
-function getMapIconLeafletIcon(mapIconType, editModeEnabled) {
+function getMapIconLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
     let icon;
     if (mapIconType === null) {
         console.warn('Unable to find mapIconType for null');
-        icon = editModeEnabled ? LeafletMapIconUnknownEditMode : LeafletMapIconUnknown;
+        icon = (editModeEnabled ? LeafletMapIconUnknownEditMode : (deleteModeEnabled ? LeafletMapIconUnknownDeleteMode : LeafletMapIconUnknown));
     } else {
         let template = Handlebars.templates['map_map_icon_visual_template'];
 
         let handlebarsData = $.extend({}, mapIconType, {
-            selectedclass: (editModeEnabled ? ' leaflet-edit-marker-selected' : ''),
+            selectedclass: (editModeEnabled ? ' leaflet-edit-marker-selected' : (deleteModeEnabled ? ' leaflet-edit-marker-selected delete' : '')),
             width: mapIconType.width,
             height: mapIconType.height
         });
@@ -57,6 +58,12 @@ let LeafletMapIconUnknownEditMode = L.divIcon({
     html: '<i class="fas fa-icons"></i>',
     iconSize: [32, 32],
     className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected'
+});
+
+let LeafletMapIconUnknownDeleteMode = L.divIcon({
+    html: '<i class="fas fa-icons"></i>',
+    iconSize: [32, 32],
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected delete'
 });
 
 let LeafletMapIconMarker = L.Marker.extend({
@@ -86,7 +93,9 @@ class MapIcon extends MapObject {
         this.register('synced', this, this._synced.bind(this));
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
-                mapStateChangedEvent.data.newMapState instanceof EditMapState) {
+                mapStateChangedEvent.data.newMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.previousMapState instanceof DeleteMapState ||
+                mapStateChangedEvent.data.newMapState instanceof DeleteMapState) {
                 self._refreshVisual();
             }
         });
@@ -195,8 +204,8 @@ class MapIcon extends MapObject {
 
         this.layer.setIcon(
             getMapIconLeafletIcon(this.map_icon_type,
-                (this.map.getMapState() instanceof EditMapState && this.isEditable()) ||
-                (this.map.getMapState() instanceof DeleteMapState && this.isDeletable())
+                this.map.getMapState() instanceof EditMapState && this.isEditable(),
+                this.map.getMapState() instanceof DeleteMapState && this.isDeletable()
             )
         );
         // // @TODO Refresh the layer; required as a workaround since in mapiconmapobjectgroup we don't know the map_icon_type upon init,
@@ -231,7 +240,7 @@ class MapIcon extends MapObject {
      * Return the text that is displayed on the label of this Map Icon.
      * @returns {string}
      */
-    getDisplayText(){
+    getDisplayText() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
         return this.comment.length > 0 ? this.comment : this.map_icon_type.name;
