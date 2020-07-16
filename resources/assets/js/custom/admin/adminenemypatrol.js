@@ -9,7 +9,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
     }
 
     /**
-     * Users cannot edit this. AdminEnemyPatrols may be edited instead.
+     * Must be explicitly overriden since EnemyPatrols cannot be deleted; admin ones can.
      * @returns {boolean}
      */
     isEditable() {
