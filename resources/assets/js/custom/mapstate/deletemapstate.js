@@ -9,6 +9,7 @@ class DeleteMapState extends MapState {
         let self = this;
 
         // Loop through each element to see if they are NOT editable, but ARE deletable.
+        // If they are editable, they are already on the layer and do not need to be added/removed later
         // If so, we have to add them to the 'can delete this' list, and remove them after
         $.each(self.map.mapObjects, function (index, mapObject) {
             if (!mapObject.isEditable() && mapObject.isDeletable() && mapObject.layer !== null) {
@@ -21,7 +22,7 @@ class DeleteMapState extends MapState {
         super.stop();
         let self = this;
 
-        // Now we make them un-editable again.
+        // Now we make them un-editable again (if required)
         $.each(self.map.mapObjects, function (index, mapObject) {
             if (!mapObject.isEditable() && mapObject.isDeletable() && mapObject.layer !== null) {
                 self.map.editableLayers.removeLayer(mapObject.layer);

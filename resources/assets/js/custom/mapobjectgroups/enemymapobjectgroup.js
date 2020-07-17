@@ -54,9 +54,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             enemy.enemy_id = remoteMapObject.enemy_id;
             // Hide this enemy by default
             enemy.setDefaultVisible(false);
-        }
-
-        if (remoteMapObject.hasOwnProperty('local')) {
             enemy.setIsLocal(remoteMapObject.local);
         }
 

@@ -509,6 +509,20 @@ class KillZone extends MapObject {
     /**
      * @inheritDoc
      */
+    isEditable() {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    isDeletable() {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
     isEditableByPopup() {
         return false;
     }

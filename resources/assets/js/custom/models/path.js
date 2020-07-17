@@ -96,6 +96,13 @@ class Path extends Polyline {
     /**
      * @inheritDoc
      */
+    isEditable() {
+        return this.linked_awakened_obelisk_id === null;
+    }
+
+    /**
+     * @inheritDoc
+     */
     isDeletable() {
         return this.linked_awakened_obelisk_id === null;
     }

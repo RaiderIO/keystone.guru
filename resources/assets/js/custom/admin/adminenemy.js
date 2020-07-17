@@ -181,7 +181,7 @@ class AdminEnemy extends Enemy {
      * @returns {boolean}
      */
     isDeletable() {
-        return true;
+        return !this.is_mdt
     }
 
     /**
