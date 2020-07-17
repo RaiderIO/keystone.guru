@@ -10,6 +10,7 @@ use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode;
@@ -62,8 +63,19 @@ class APIMapIconController extends Controller
 
         /** @var MapIcon $mapIcon */
         $mapIcon = MapIcon::findOrNew($request->get('id'));
+
+        // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
+        $teamId = $request->get('team_id', null);
+        if (is_numeric($teamId)) {
+            $team = Team::find($teamId);
+            if ($team !== null && $team->isUserCollaborator(Auth::user())) {
+                $mapIcon->team_id = $teamId;
+                $mapIcon->dungeon_route_id = -1;
+            }
+        }
+
         // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
-        if ($mapIcon->exists && $mapIcon->dungeon_route_id === -1 && $dungeonroute !== null) {
+        if ($mapIcon->exists && $mapIcon->dungeon_route_id === -1 && $dungeonroute !== null && $mapIcon->team_id === null) {
             throw new \Exception('Unable to save map icon!');
         }
 

@@ -26,16 +26,18 @@ trait ListsMapIcons
         try {
             $dungeonRoute = $this->_getDungeonRouteFromPublicKey($publicKey, false);
             $dungeonRouteId = $dungeonRoute->id;
+            $teamId = $dungeonRoute->team_id;
         } catch (\Exception $ex) {
             // this is okay, it can come from admin request
             $dungeonRouteId = -1;
+            $teamId = -1;
         }
 
         return MapIcon::where('floor_id', $floorId)
-            ->where(function ($query) use ($floorId, $dungeonRouteId)
+            ->where(function ($query) use ($floorId, $dungeonRouteId, $teamId)
             {
                 /** @var $query Builder */
-                return $query->where('dungeon_route_id', $dungeonRouteId)->orWhere('dungeon_route_id', -1);
+                return $query->where('dungeon_route_id', $dungeonRouteId)->orWhere('dungeon_route_id', -1)->orWhere('team_id', $teamId);
             })
             // Order by dungeon route so that route-agnostic icons are loaded first in the front end, and the linked map icons can always find them
             ->orderBy('dungeon_route_id')->get();

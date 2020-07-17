@@ -465,7 +465,7 @@ class MapObject extends Signalable {
                     // Do some preprocessing if necessary
                     switch (attribute.type) {
                         case 'bool':
-                            value = value === 1;
+                            value = value >= 1;
                             break;
                     }
                     // Assign the attributes from the object

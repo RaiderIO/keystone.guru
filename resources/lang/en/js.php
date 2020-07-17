@@ -205,6 +205,7 @@ return [
     // Map icon
     'map_icon_faction_label'                                        => 'Faction',
     'map_icon_teeming_label'                                        => 'Teeming',
+    'map_icon_team_id_label'                                        => 'Show across all routes in team',
     'map_icon_permanent_tooltip_label'                              => 'Permanent tooltip',
     'map_icon_map_icon_type_id_label'                               => 'Icon',
     'map_icon_comment_label'                                        => 'Comment',

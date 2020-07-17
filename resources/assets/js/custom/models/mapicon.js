@@ -151,6 +151,22 @@ class MapIcon extends MapObject {
                 setter: this.setMapIconTypeId.bind(this)
             }),
             new Attribute({
+                // Reads team_id, stores as show_across_team
+                name: 'team_id',
+                type: 'bool',
+                default: false,
+                edit: getState().getDungeonRoute().teamId >= 1,
+                setter: function (value) {
+                    console.log(`setting show_across_team to ${value}`);
+                    // If team_id is not null, we show this across the entire team
+                    this.show_across_team = value;
+                },
+                getter: function () {
+                    console.log(`getting show_across_team ${this.show_across_team ? getState().getDungeonRoute().teamId : null}`);
+                    return this.show_across_team ? getState().getDungeonRoute().teamId : null;
+                }
+            }),
+            new Attribute({
                 name: 'linked_awakened_obelisk_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
