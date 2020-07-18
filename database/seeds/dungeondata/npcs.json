@@ -11,7 +11,8 @@
         "enemy_forces_teeming": 6,
         "aggressiveness": "awakened",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 161241,
@@ -25,7 +26,8 @@
         "enemy_forces_teeming": 6,
         "aggressiveness": "awakened",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 161243,
@@ -39,7 +41,8 @@
         "enemy_forces_teeming": 6,
         "aggressiveness": "awakened",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 161244,
@@ -53,6 +56,7 @@
         "enemy_forces_teeming": 6,
         "aggressiveness": "awakened",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     }
 ]

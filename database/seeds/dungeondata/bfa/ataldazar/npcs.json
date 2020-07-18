@@ -11,7 +11,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 122965,
@@ -25,7 +26,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 122967,
@@ -39,7 +41,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 122968,
@@ -53,7 +56,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 122969,
@@ -67,7 +71,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 122970,
@@ -81,7 +86,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 122971,
@@ -95,7 +101,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 122972,
@@ -109,7 +116,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 122973,
@@ -123,7 +131,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 122984,
@@ -137,7 +146,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 127315,
@@ -150,8 +160,9 @@
         "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
-        "truesight": 0
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 0
     },
     {
         "id": 127757,
@@ -165,7 +176,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 127799,
@@ -179,7 +191,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 127879,
@@ -193,7 +206,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 1
+        "truesight": 1,
+        "bursting": 1
     },
     {
         "id": 128434,
@@ -207,7 +221,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 128435,
@@ -221,7 +236,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 128455,
@@ -235,7 +251,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 129552,
@@ -249,7 +266,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 129553,
@@ -263,7 +281,8 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     },
     {
         "id": 132126,
@@ -277,6 +296,7 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1
     }
 ]

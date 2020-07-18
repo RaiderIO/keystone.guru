@@ -92,6 +92,12 @@
         @include('common.forms.form-error', ['key' => 'truesight'])
     </div>
 
+    <div class="form-group{{ $errors->has('bursting') ? ' has-error' : '' }}">
+        {!! Form::label('bursting', __('Bursting')) !!}
+        {!! Form::checkbox('bursting', 1, isset($model) ? $model->bursting : 1, ['class' => 'form-control left_checkbox']) !!}
+        @include('common.forms.form-error', ['key' => 'bursting'])
+    </div>
+
 
 
     <div>
