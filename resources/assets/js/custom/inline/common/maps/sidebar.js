@@ -30,7 +30,8 @@ class Sidebar {
                 pathname = pathSplit.join('/');
             }
 
-            let newUrl = window.location.protocol + '//' + window.location.host + pathname + '/' + getState().getCurrentFloor().index;
+            let newUrl = window.location.protocol + '//' + window.location.host + pathname + '/' +
+                (getState().isMapAdmin() ? floorIdChangedEvent.data.floorId : getState().getCurrentFloor().index);
 
             history.pushState({page: 1},
                 newUrl,

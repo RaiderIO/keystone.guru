@@ -52,6 +52,7 @@ class NpcController extends Controller
         $npc->dangerous = $request->get('dangerous', 0);
         $npc->truesight = $request->get('truesight', 0);
         $npc->bursting = $request->get('bursting', 0);
+        $npc->bolstering = $request->get('bolstering', 0);
 
         if (!$npc->save()) {
             abort(500, 'Unable to save npc!');

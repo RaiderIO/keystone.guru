@@ -82,7 +82,6 @@ class StateManager extends Signalable {
      */
     setTeeming(teeming) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        console.log(`Changing teeming state`, this.teeming, teeming);
 
         this.teeming = teeming;
 

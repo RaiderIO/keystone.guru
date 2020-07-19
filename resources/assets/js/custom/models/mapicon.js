@@ -157,12 +157,10 @@ class MapIcon extends MapObject {
                 default: false,
                 edit: getState().getDungeonRoute().teamId >= 1,
                 setter: function (value) {
-                    console.log(`setting show_across_team to ${value}`);
                     // If team_id is not null, we show this across the entire team
                     this.show_across_team = value;
                 },
                 getter: function () {
-                    console.log(`getting show_across_team ${this.show_across_team ? getState().getDungeonRoute().teamId : null}`);
                     return this.show_across_team ? getState().getDungeonRoute().teamId : null;
                 }
             }),

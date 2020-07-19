@@ -477,6 +477,10 @@ class Enemy extends MapObject {
         });
     }
 
+    isVisibleOnScreen() {
+        return super.isVisibleOnScreen() && this.visual !== null;
+    }
+
     isDeletable() {
         return false;
     }

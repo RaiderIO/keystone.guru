@@ -619,7 +619,7 @@ class MapObject extends Signalable {
      */
     isVisibleOnScreen() {
         let result = false;
-        if (this.isVisible() && this.layer !== null && this.visual !== null) {
+        if (this.isVisible() && this.layer !== null) {
             result = this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
         }
         return result;

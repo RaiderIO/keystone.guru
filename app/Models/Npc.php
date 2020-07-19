@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $dangerous
  * @property bool $truesight
  * @property bool $bursting
+ * @property bool $bolstering
  *
  * @property Dungeon $dungeon
  * @property NpcClassification $classification

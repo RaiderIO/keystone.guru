@@ -98,6 +98,23 @@
         @include('common.forms.form-error', ['key' => 'bursting'])
     </div>
 
+    <div class="form-group{{ $errors->has('bolstering') ? ' has-error' : '' }}">
+        {!! Form::label('bolstering', __('Bolstering')) !!}
+        {!! Form::checkbox('bolstering', 1, isset($model) ? $model->bolstering : 1, ['class' => 'form-control left_checkbox']) !!}
+        @include('common.forms.form-error', ['key' => 'bolstering'])
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('bolstering_whitelist_npcs', __('Bolstering NPC Whitelist'), [], false) !!}
+        {!! Form::select('bolstering_whitelist_npcs', [-1 => __('All npcs')] + \App\Models\Npc::all()->pluck('name', 'id')->toArray(), null, [
+                'class' => 'form-control selectpicker',
+                'multiple' => 'multiple',
+                'data-live-search' => 'true',
+                'data-selected-text-format' => 'count > 1',
+                'data-count-selected-text' => __('{0} NPCs'),
+            ]) !!}
+    </div>
+
 
 
     <div>

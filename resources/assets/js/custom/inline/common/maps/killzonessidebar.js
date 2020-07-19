@@ -98,7 +98,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 }
 
                 // Center the map to this killzone
-                if (killZone.floor_id === getState().getCurrentFloor().id && killZone.enemies.length > 0) {
+                if (killZone.isVisibleOnScreen() && killZone.enemies.length > 0) {
                     getState().getDungeonMap().leafletMap.setView(killZone.getLayerCenteroid(), getState().getMapZoomLevel())
                 }
             }
