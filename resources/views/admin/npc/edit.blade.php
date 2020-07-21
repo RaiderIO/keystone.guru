@@ -12,6 +12,12 @@
  * @var $model \App\Models\Npc
  * @var $floor \App\Models\Floor
  */
+$bolsteringNpcs = [-1 => __('All npcs')];
+if (isset($model)) {
+    $bolsteringNpcs += \App\Models\Npc::where('dungeon_id', $model->dungeon_id)->orWhere('dungeon_id', -1)->pluck('name', 'id')->toArray();
+} else {
+    $bolsteringNpcs += \App\Models\Npc::all()->pluck('name', 'id')->toArray();
+}
 ?>
 
 @section('content')
@@ -105,8 +111,8 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('bolstering_whitelist_npcs', __('Bolstering NPC Whitelist'), [], false) !!}
-        {!! Form::select('bolstering_whitelist_npcs', [-1 => __('All npcs')] + \App\Models\Npc::all()->pluck('name', 'id')->toArray(), null, [
+        {!! Form::label('bolstering_whitelist_npcs[]', __('Bolstering NPC Whitelist'), [], false) !!}
+        {!! Form::select('bolstering_whitelist_npcs[]', $bolsteringNpcs, isset($model) ? $model->npcbolsteringwhitelists->pluck(['whitelist_npc_id'])->toArray() : [], [
                 'class' => 'form-control selectpicker',
                 'multiple' => 'multiple',
                 'data-live-search' => 'true',

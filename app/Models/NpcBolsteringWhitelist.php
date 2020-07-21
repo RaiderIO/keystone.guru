@@ -18,7 +18,6 @@ class NpcBolsteringWhitelist extends Model
 {
     public $timestamps = false;
 
-    protected $with = ['npc', 'whitelistnpc'];
     protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];
 
     /**
