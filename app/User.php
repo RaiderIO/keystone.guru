@@ -8,6 +8,12 @@ use App\Models\GameServerRegion;
 use App\Models\PaidTier;
 use App\Models\PatreonData;
 use App\Models\Team;
+use App\Models\UserReport;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -29,11 +35,12 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property PatreonData $patreondata
  * @property GameServerRegion $gameserverregion
  *
- * @property Collection $dungeonroutes
- * @property Collection $reports
- * @property Collection $teams
+ * @property DungeonRoute[]|Collection $dungeonroutes
+ * @property UserReport[]|Collection $reports
+ * @property Team[]|Collection $teams
+ * @property Role[]|Collection $roles
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class User extends Authenticatable
 {
@@ -70,7 +77,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function dungeonroutes()
     {
@@ -78,7 +85,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function reports()
     {
@@ -86,7 +93,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     function patreondata()
     {
@@ -94,7 +101,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function gameserverregion()
     {
@@ -103,7 +110,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function teams()
     {
@@ -154,7 +161,7 @@ class User extends Authenticatable
         // Admins have all paid tiers
         if ($this->hasRole('admin')) {
             $result = PaidTier::all()->pluck(['name']);
-        } else if( isset($this->patreondata) ){
+        } else if (isset($this->patreondata)) {
             $result = $this->patreondata->paidtiers->pluck(['name']);
         } else {
             $result = collect();
@@ -181,7 +188,7 @@ class User extends Authenticatable
     function getRemainingRouteCount()
     {
         return max(0,
-            config('keystoneguru.registered_user_dungeonroute_limit') - \App\Models\DungeonRoute::where('author_id', $this->id)->count()
+            config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
         );
     }
 

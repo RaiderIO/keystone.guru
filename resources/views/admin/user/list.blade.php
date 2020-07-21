@@ -18,7 +18,60 @@
 @section('scripts')
     <script type="text/javascript">
         $(function () {
-            $('#admin_user_table').DataTable({});
+            $('#admin_user_table').DataTable({
+                'processing': true,
+                'serverSide': true,
+                'responsive': true,
+                'ajax': {
+                    'url': '/ajax/admin/user'
+                },
+                'lengthMenu': [25],
+                'bLengthChange': false,
+                // Order by affixes by default
+                'order': [[0, 'asc']],
+                'columns': [
+                    {
+                        'title': lang.get('messages.id_label'),
+                        'data': 'id',
+                        'name': 'id'
+                    },
+                    {
+                        'title': lang.get('messages.name_label'),
+                        'data': 'name',
+                        'name': 'name'
+                    },
+                    {
+                        'title': lang.get('messages.route_count_label'),
+                        'data': 'routes',
+                        'name': 'routes'
+                    },
+                    {
+                        'title': lang.get('messages.roles_label'),
+                        'data': 'roles_string',
+                        'name': 'roles_string'
+                    },
+                    {
+                        'title': lang.get('messages.registered_label'),
+                        'data': 'created_at',
+                        'name': 'created_at'
+                    },
+                    {
+                        'title': lang.get('messages.actions_label'),
+                        'data': 'id',
+                        'name': 'id',
+                        'orderable': false
+                    },
+                    {
+                        'title': lang.get('messages.patreon_label'),
+                        'data': 'id',
+                        'name': 'id',
+                        'orderable': false
+                    },
+                ],
+                'language': {
+                    'emptyTable': lang.get('messages.datatable_no_users_in_table')
+                }
+            });
 
             refreshSelectPickers();
         });
@@ -39,64 +92,64 @@
         </tr>
         </thead>
 
-        <tbody>
-        @foreach ($models as $user)
-            <?php /** @var $user \App\User */?>
-            <tr>
-                <td>{{ $user->id }}</td>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->dungeonroutes->count() }}</td>
-                <td>{{ implode(', ', $user->roles->pluck('display_name')->toArray())}}</td>
-                <td>{{ $user->created_at->setTimezone('Europe/Amsterdam') }}</td>
-                <td>
-                    <?php
-                    // I really want to be the only one doing this
-                    if( Auth::user()->name === 'Admin' ){ ?>
+        {{--        <tbody>--}}
+        {{--        @foreach ($models as $user)--}}
+        {{--            <?php /** @var $user \App\User */?>--}}
+        {{--            <tr>--}}
+        {{--                <td>{{ $user->id }}</td>--}}
+        {{--                <td>{{ $user->name }}</td>--}}
+        {{--                <td>{{ $user->dungeonroutes->count() }}</td>--}}
+        {{--                <td>{{ implode(', ', $user->roles->pluck('display_name')->toArray())}}</td>--}}
+        {{--                <td>{{ $user->created_at->setTimezone('Europe/Amsterdam') }}</td>--}}
+        {{--                <td>--}}
+        {{--                    <?php--}}
+        {{--                    // I really want to be the only one doing this--}}
+        {{--                    if( Auth::user()->name === 'Admin' ){ ?>--}}
 
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="userActionsButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ __('Actions') }}
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="userActionsButton">
-                            <a class="dropdown-item" href="#">
-                                {{ Form::model($user, ['route' => ['admin.user.makeadmin', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}
-                                {!! Form::submit(__('Make admin'), ['class' => 'btn btn-info', 'name' => 'submit']) !!}
-                                {!! Form::close() !!}
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                {{ Form::model($user, ['route' => ['admin.user.makeuser', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}
-                                {!! Form::submit(__('Make user'), ['class' => 'btn btn-info ml-1', 'name' => 'submit']) !!}
-                                {!! Form::close() !!}
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                {{ Form::model($user, ['route' => ['admin.user.delete', $user->id], 'autocomplete' => 'off', 'method' => 'delete']) }}
-                                {!! Form::submit(__('Delete user'), ['class' => 'btn btn-danger ml-1', 'name' => 'submit']) !!}
-                                {!! Form::close() !!}
-                            </a>
-                        </div>
-                    </div>
-                    <?php } else {
-                        echo __('Please login as "Admin"');
-                    }
-                    ?>
-                </td>
-                <td>
-                    @if(!$user->hasRole('admin'))
-                        {!! Form::select('patreon_paid_tiers', $paidTiers->pluck('name', 'id'),
-                                isset($user->patreondata) ? $user->patreondata->paidtiers->pluck('id') : null, [
-                            'class' => 'form-control selectpicker patreon_paid_tiers',
-                            'multiple' => 'multiple',
-                            'data-selected-text-format' => 'count > 1',
-                            'data-count-selected-text' => __('{0} paid tiers'),
-                            'data-userid' => $user->id
-                            ])
-                        !!}
-                    @endif
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
+        {{--                    <div class="dropdown">--}}
+        {{--                        <button class="btn btn-secondary dropdown-toggle" type="button" id="userActionsButton"--}}
+        {{--                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
+        {{--                            {{ __('Actions') }}--}}
+        {{--                        </button>--}}
+        {{--                        <div class="dropdown-menu" aria-labelledby="userActionsButton">--}}
+        {{--                            <a class="dropdown-item" href="#">--}}
+        {{--                                {{ Form::model($user, ['route' => ['admin.user.makeadmin', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}--}}
+        {{--                                {!! Form::submit(__('Make admin'), ['class' => 'btn btn-info', 'name' => 'submit']) !!}--}}
+        {{--                                {!! Form::close() !!}--}}
+        {{--                            </a>--}}
+        {{--                            <a class="dropdown-item" href="#">--}}
+        {{--                                {{ Form::model($user, ['route' => ['admin.user.makeuser', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}--}}
+        {{--                                {!! Form::submit(__('Make user'), ['class' => 'btn btn-info ml-1', 'name' => 'submit']) !!}--}}
+        {{--                                {!! Form::close() !!}--}}
+        {{--                            </a>--}}
+        {{--                            <a class="dropdown-item" href="#">--}}
+        {{--                                {{ Form::model($user, ['route' => ['admin.user.delete', $user->id], 'autocomplete' => 'off', 'method' => 'delete']) }}--}}
+        {{--                                {!! Form::submit(__('Delete user'), ['class' => 'btn btn-danger ml-1', 'name' => 'submit']) !!}--}}
+        {{--                                {!! Form::close() !!}--}}
+        {{--                            </a>--}}
+        {{--                        </div>--}}
+        {{--                    </div>--}}
+        {{--                    <?php } else {--}}
+        {{--                        echo __('Please login as "Admin"');--}}
+        {{--                    }--}}
+        {{--                    ?>--}}
+        {{--                </td>--}}
+        {{--                <td>--}}
+        {{--                    @if(!$user->hasRole('admin'))--}}
+        {{--                        {!! Form::select('patreon_paid_tiers', $paidTiers->pluck('name', 'id'),--}}
+        {{--                                isset($user->patreondata) ? $user->patreondata->paidtiers->pluck('id') : null, [--}}
+        {{--                            'class' => 'form-control selectpicker patreon_paid_tiers',--}}
+        {{--                            'multiple' => 'multiple',--}}
+        {{--                            'data-selected-text-format' => 'count > 1',--}}
+        {{--                            'data-count-selected-text' => __('{0} paid tiers'),--}}
+        {{--                            'data-userid' => $user->id--}}
+        {{--                            ])--}}
+        {{--                        !!}--}}
+        {{--                    @endif--}}
+        {{--                </td>--}}
+        {{--            </tr>--}}
+        {{--        @endforeach--}}
+        {{--        </tbody>--}}
 
     </table>
 @endsection
