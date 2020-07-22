@@ -6,8 +6,9 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables;
+namespace App\Logic\Datatables\ColumnHandler;
 
+use App\Logic\Datatables\DatatablesHandler;
 use App\Models\RouteAttribute;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -36,7 +37,8 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
             // Compute the attribute IDs that the user does NOT want
             $invalidAttributeIds = array_diff($allRouteAttributeIds, $routeAttributeIds);
 
-            $filterFn = function ($query) use (&$invalidAttributeIds, &$routeAttributeIds) {
+            $filterFn = function ($query) use (&$invalidAttributeIds, &$routeAttributeIds)
+            {
                 /** @var $query Builder */
                 $query->whereIn('dungeon_route_attributes.route_attribute_id', $invalidAttributeIds);
             };
@@ -44,7 +46,8 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
             // If we should account for dungeon routes having no attributes
             if (in_array(-1, $routeAttributeIds)) {
                 // Wrap this in a where so both these statements get brackets around them
-                $builder->where(function ($query) use (&$filterFn) {
+                $builder->where(function ($query) use (&$filterFn)
+                {
                     /** @var $query Builder */
                     // May not have attributes at all
                     $query->whereHas('routeattributes', null, '=', 0);

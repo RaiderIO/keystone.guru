@@ -6,16 +6,17 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables;
+namespace App\Logic\Datatables\ColumnHandler;
 
+use App\Logic\Datatables\DatatablesHandler;
 use Illuminate\Database\Eloquent\Builder;
 
-class SimpleColumnHandler extends DatatablesColumnHandler
+class DungeonColumnHandler extends DatatablesColumnHandler
 {
 
-    public function __construct(DatatablesHandler $dtHandler, $columnName)
+    public function __construct(DatatablesHandler $dtHandler)
     {
-        parent::__construct($dtHandler, $columnName);
+        parent::__construct($dtHandler, 'dungeon_id');
     }
 
     protected function _applyFilter(Builder $builder, $columnData, $order)
@@ -24,7 +25,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         if ($columnData['searchable'] === 'true') {
             $searchValue = $columnData['search']['value'];
             if (!empty($searchValue)) {
-                $builder->where($this->getColumnName(), $searchValue);
+                $builder->where('dungeon_routes.dungeon_id', $searchValue);
             }
         }
 

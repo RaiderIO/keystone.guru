@@ -7,19 +7,18 @@ use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
-use App\Http\Controllers\Traits\ListsKillzones;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\APIDungeonRouteFormRequest;
-use App\Logic\Datatables\AuthorNameColumnHandler;
-use App\Logic\Datatables\DatatablesHandler;
-use App\Logic\Datatables\DungeonColumnHandler;
-use App\Logic\Datatables\DungeonRouteAffixesColumnHandler;
-use App\Logic\Datatables\DungeonRouteAttributesColumnHandler;
-use App\Logic\Datatables\EnemyForcesColumnHandler;
-use App\Logic\Datatables\RatingColumnHandler;
-use App\Logic\Datatables\ViewsColumnHandler;
+use App\Logic\Datatables\ColumnHandler\AuthorNameColumnHandler;
+use App\Logic\Datatables\ColumnHandler\DungeonColumnHandler;
+use App\Logic\Datatables\ColumnHandler\DungeonRouteAffixesColumnHandler;
+use App\Logic\Datatables\ColumnHandler\DungeonRouteAttributesColumnHandler;
+use App\Logic\Datatables\ColumnHandler\EnemyForcesColumnHandler;
+use App\Logic\Datatables\ColumnHandler\RatingColumnHandler;
+use App\Logic\Datatables\ColumnHandler\ViewsColumnHandler;
+use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
 use App\Models\DungeonRouteRating;
@@ -165,9 +164,9 @@ class APIDungeonRouteController extends Controller
             $routes = $routes->visible();
         }
 
-        $dtHandler = new DatatablesHandler($request);
+        $dtHandler = new DungeonRoutesDatatablesHandler($request);
 
-        $result = $dtHandler->setBuilder($routes)->addColumnHandler([
+        return $dtHandler->setBuilder($routes)->addColumnHandler([
             // Handles any searching/filtering based on dungeon
             new DungeonColumnHandler($dtHandler),
             // Handles any searching/filtering based on DR Affixes
@@ -183,8 +182,6 @@ class APIDungeonRouteController extends Controller
             // Allow sorting by rating
             new RatingColumnHandler($dtHandler)
         ])->applyRequestToBuilder()->getResult();
-
-        return $result;
     }
 
     /**

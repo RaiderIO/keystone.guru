@@ -55,7 +55,15 @@ class MapIconTypesSeeder extends Seeder
             'spell_shadowmeld'            => ['name' => 'Shadowmeld'],
             'spell_shroud_of_concealment' => ['name' => 'Shroud of Concealment'],
 
-            'item_invisibility' => ['name' => 'Invisibility Potion']
+            'item_invisibility' => ['name' => 'Invisibility Potion'],
+
+            'question_yellow' => ['name' => 'Question'],
+            'question_blue'   => ['name' => 'Question'],
+            'question_orange' => ['name' => 'Question'],
+
+            'exclamation_yellow' => ['name' => 'Exclamation'],
+            'exclamation_blue'   => ['name' => 'Exclamation'],
+            'exclamation_orange' => ['name' => 'Exclamation'],
         ];
 
         foreach ($mapIconData as $key => $mapIcon) {

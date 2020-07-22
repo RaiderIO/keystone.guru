@@ -6,8 +6,9 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables;
+namespace App\Logic\Datatables\ColumnHandler;
 
+use App\Logic\Datatables\DatatablesHandler;
 use App\Models\DungeonRoute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
@@ -35,7 +36,8 @@ class EnemyForcesColumnHandler extends DatatablesColumnHandler
         if ($order !== null) {
             $builder->addSelect(DB::raw('COUNT(page_views.id) as views'));
 
-            $builder->leftJoin('page_views', function ($join) {
+            $builder->leftJoin('page_views', function ($join)
+            {
                 /** @var $join JoinClause */
                 $join->on('page_views.model_id', '=', 'dungeon_routes.id');
                 $join->where('page_views.model_class', '=', DungeonRoute::class);

@@ -6,8 +6,9 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables;
+namespace App\Logic\Datatables\ColumnHandler;
 
+use App\Logic\Datatables\DatatablesHandler;
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class DatatablesColumnHandler

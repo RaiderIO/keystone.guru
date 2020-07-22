@@ -6,8 +6,9 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables;
+namespace App\Logic\Datatables\ColumnHandler;
 
+use App\Logic\Datatables\DatatablesHandler;
 use App\Models\DungeonRoute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
@@ -40,7 +41,8 @@ class ViewsColumnHandler extends DatatablesColumnHandler
                 ->where('model_class', DungeonRoute::class)
                 ->groupBy('model_id');
 
-            $builder->joinSub($subQuery, 'pv', function ($join) {
+            $builder->joinSub($subQuery, 'pv', function ($join)
+            {
                 /** @var $join JoinClause */
                 $join->on('dungeon_routes.id', '=', 'pv.model_id');
             });

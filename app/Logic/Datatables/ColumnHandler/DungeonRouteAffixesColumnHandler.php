@@ -6,8 +6,9 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables;
+namespace App\Logic\Datatables\ColumnHandler;
 
+use App\Logic\Datatables\DatatablesHandler;
 use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -26,7 +27,8 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
         if (!empty($affixes)) {
             $affixIds = explode(',', $affixes);
 
-            $builder->whereHas('affixes', function ($query) use (&$affixIds) {
+            $builder->whereHas('affixes', function ($query) use (&$affixIds)
+            {
                 /** @var $query Builder */
                 $query->whereIn('affix_groups.id', $affixIds);
             });
