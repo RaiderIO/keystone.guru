@@ -112,32 +112,40 @@ return [
 
     // Admin
     'object.deleted'                 => 'Objects deleted successfully.',
+    'route_count_label'              => '# of routes',
+    'roles_label'                    => 'Roles',
+    'registered_label'               => 'Registered at',
+    'patreon_label'                  => 'Patreon',
+
+    'make_user_label'               => 'Make user',
+    'make_admin_label'              => 'Make admin',
+    'delete_user_label'             => 'Delete user',
 
     // Home page
-    'warnings_label'                 => 'Warnings',
-    'category_label'                 => 'Category',
-    'message_label'                  => 'Message',
+    'warnings_label'                => 'Warnings',
+    'category_label'                => 'Category',
+    'message_label'                 => 'Message',
 
     // Dungeonroute edit
-    'settings_saved'                 => 'Settings saved successfully',
-    'route_published'                => 'Route published',
-    'route_unpublished'              => 'Route unpublished',
-    'datatable_no_routes_in_table'   => 'No routes found',
+    'settings_saved'                => 'Settings saved successfully',
+    'route_published'               => 'Route published',
+    'route_unpublished'             => 'Route unpublished',
+    'datatable_no_routes_in_table'  => 'No routes found',
 
     // Dungeonroute table
-    'vote'                           => 'vote',
-    'votes'                          => 'votes',
-    'route_delete_confirm'           => 'Are you sure you wish to delete this route?',
-    'route_delete_successful'        => 'Route deleted successfully',
-    'route_clone_successful'         => 'Route cloned successfully',
-    'route_publish_successful'       => 'Route published',
-    'route_unpublish_successful'     => 'Route unpublished',
-    'route_table_route_published'    => 'This route is published',
-    'route_table_route_unpublished'  => 'This route is unpublished',
+    'vote'                          => 'vote',
+    'votes'                         => 'votes',
+    'route_delete_confirm'          => 'Are you sure you wish to delete this route?',
+    'route_delete_successful'       => 'Route deleted successfully',
+    'route_clone_successful'        => 'Route cloned successfully',
+    'route_publish_successful'      => 'Route published',
+    'route_unpublish_successful'    => 'Route unpublished',
+    'route_table_route_published'   => 'This route is published',
+    'route_table_route_unpublished' => 'This route is unpublished',
 
     // Map
-    'intro_1'                        => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
-    'intro_2'                        => 'You can use this button to hide or show the sidebar.',
+    'intro_1'                       => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
+    'intro_2'                       => 'You can use this button to hide or show the sidebar.',
 
     'intro_3' => 'Here you can select different visualization options.',
     'intro_4' => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',

@@ -59,7 +59,8 @@ function getHandlebarsDefaultVariables() {
     if (_defaultVariables === null) {
         _defaultVariables = $.extend({}, _getHandlebarsTranslations(), {
             is_map_admin: typeof getState !== 'function' ? false : getState().isMapAdmin(),
-            is_user_admin: isUserAdmin
+            is_user_admin: isUserAdmin, // Defined in sitescripts
+            csrf_token: csrfToken // Defined in sitescripts
         });
     }
     return _defaultVariables;

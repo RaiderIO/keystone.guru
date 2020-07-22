@@ -16,15 +16,17 @@ class APIUserController
      */
     public function list(Request $request)
     {
-        $users = User::with(['patreondata', 'roles', 'dungeonroutes']);
+        $users = User::with(['patreondata', 'roles', 'dungeonroutes'])->selectRaw('users.*');
 
         $datatablesResult = (new UsersDatatablesHandler($request))->setBuilder($users)->applyRequestToBuilder()->getResult();
 
+
         foreach ($datatablesResult['data'] as $user) {
+            /** @var $user User */
             $user->makeVisible(['id', 'name', 'created_at', 'patreondata', 'roles_string', 'routes']);
             $user->roles_string = $user->roles->pluck(['display_name'])->join(', ');
             $user->routes = $user->dungeonroutes->count();
-            $user->unsetRelations(['roles', 'dungeonroutes']);
+            $user->unsetRelation('roles')->unsetRelation('dungeonroutes');
         }
 
         return $datatablesResult;

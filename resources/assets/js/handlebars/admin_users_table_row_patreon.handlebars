@@ -1,0 +1,9 @@
+<select class="form-control selectpicker patreon_paid_tiers" multiple="multiple" data-selected-text-format="count > 1"
+        data-count-selected-text="{0} paid tiers" data-userid="8" name="patreon_paid_tiers" tabindex="null">
+    {{#each paidtiers}}
+        <option value="{{id}}"
+        {{#if selected}}
+            selected="selected"
+        {{/if}}>{{name}}</option>
+    {{/each}}
+</select>

@@ -30,6 +30,8 @@ class PaidTier extends Model
         'name'
     ];
 
+    protected $hidden = ['pivot'];
+
     public static function boot()
     {
         parent::boot();

@@ -8,6 +8,8 @@
 
 namespace App\Logic\Datatables;
 
+use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
+use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -133,7 +135,7 @@ abstract class DatatablesHandler
             // The amount of records after filtering
             'data'            => $data,
             // The amount of rows there would have been, if it were not for the limits
-            'recordsFiltered' => $this->calculateRecordsFiltered(),
+            'recordsFiltered' => $data->count(),
             // Only show this info in dev instance
             'input'           => $isDev ? $this->_request->toArray() : [],
             // Debug sql queries for optimization
@@ -148,6 +150,4 @@ abstract class DatatablesHandler
     }
 
     protected abstract function calculateRecordsTotal(): int;
-
-    protected abstract function calculateRecordsFiltered(): int;
 }
