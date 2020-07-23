@@ -2,15 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: wouterkoppenol
- * Date: 21-07-2020
- * Time: 19:22
+ * Date: 23-07-2020
+ * Time: 13:46
  */
 
 namespace App\Logic\Datatables;
 
 use Illuminate\Support\Facades\DB;
 
-class UsersDatatablesHandler extends DatatablesHandler
+class NpcsDatatablesHandler extends DatatablesHandler
 {
     protected function calculateRecordsTotal(): int
     {
@@ -28,7 +28,7 @@ class UsersDatatablesHandler extends DatatablesHandler
         $foundRows = DB::select(DB::raw('SELECT FOUND_ROWS() as count'));
         return $foundRows[0]->count;
     }
-
+    
     protected function calculateRecordsFiltered(): ?int
     {
         return null;

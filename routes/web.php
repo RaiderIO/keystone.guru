@@ -224,6 +224,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::group(['prefix' => 'admin'], function ()
             {
                 Route::get('/user', 'APIUserController@list');
+                Route::get('/npc', 'APINpcController@list');
 
                 Route::post('/enemy', 'APIEnemyController@store');
                 Route::delete('/enemy/{enemy}', 'APIEnemyController@delete');

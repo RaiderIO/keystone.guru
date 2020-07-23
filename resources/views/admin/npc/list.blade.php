@@ -18,17 +18,60 @@
     <script type="text/javascript">
         $(function () {
             $('#admin_npc_table').DataTable({
-                columns: [
-                    {data: 'id'},
-                    {data: 'name'},
+                'processing': true,
+                'serverSide': true,
+                'responsive': true,
+                'ajax': {
+                    'url': '/ajax/admin/npc'
+                },
+                'lengthMenu': [25],
+                'bLengthChange': false,
+                // Order by affixes by default
+                'order': [[0, 'asc']],
+                'columns': [
                     {
-                        data: 'dungeon.name',
-                        name: 'dungeon_id'
+                        'title': lang.get('messages.id_label'),
+                        'data': 'id',
+                        'name': 'id'
                     },
-                    {data: 'enemy_forces'},
-                    {data: 'classification'},
-                    {data: 'actions'}
-                ]
+                    {
+                        'title': lang.get('messages.name_label'),
+                        'data': 'name',
+                        'name': 'name'
+                    },
+                    {
+                        'title': lang.get('messages.dungeon_label'),
+                        'data': 'dungeon.name',
+                        'name': 'dungeon_id',
+                        'render': function (data, type, row, meta) {
+                            return row.dungeon_id === -1 ? 'Any' : row.dungeon.name;
+                        }
+                    },
+                    {
+                        'title': lang.get('messages.enemy_forces_label'),
+                        'data': 'enemy_forces',
+                        'name': 'enemy_forces'
+                    },
+                    {
+                        'title': lang.get('messages.classification_label'),
+                        'data': 'classification.name',
+                        'name': 'classification.name'
+                    },
+                    {
+                        'title': lang.get('messages.actions_label'),
+                        'data': 'id',
+                        'name': 'id',
+                        'orderable': false,
+                        'render': function (data, type, row, meta) {
+                            return `<a class="btn btn-primary" href="/admin/npc/${row.id}">` +
+                                `    <i class="fas fa-edit"></i> ${lang.get('messages.edit_label')}` +
+                                `</a>`;
+                        }
+                    }
+                ],
+                'language': {
+                    'emptyTable': lang.get('messages.datatable_no_users_in_table')
+                }
             });
         });
     </script>
@@ -46,27 +89,5 @@
             <th width="10%">{{ __('Actions') }}</th>
         </tr>
         </thead>
-
-        <tbody>
-        @foreach ($models->all() as $npc)
-            <tr>
-                <td>{{ $npc->id }}</td>
-                <td>{{ $npc->name }}</td>
-                <td>{{ isset($npc->dungeon) ? $npc->dungeon->name : 'Any' }}</td>
-                <td>{{ $npc->enemy_forces }}
-                    @if( $npc->enemy_forces_teeming >= 0)
-                        ({{ $npc->enemy_forces_teeming }})
-                    @endif
-                </td>
-                <td>{{ $npc->classification->name }}</td>
-                <td>
-                    <a class="btn btn-primary" href="{{ route('admin.npc.edit', ['npc' => $npc->id]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
-                    </a>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-
     </table>
 @endsection

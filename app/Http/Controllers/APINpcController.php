@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Logic\Datatables\NpcsDatatablesHandler;
 use Illuminate\Http\Request;
 use App\Models\Npc;
 use Teapot\StatusCode\Http;
@@ -24,8 +25,15 @@ class APINpcController extends Controller
         return $result;
     }
 
+    /**
+     * @param $request
+     * @return array|mixed
+     * @throws \Exception
+     */
     public function list(Request $request)
     {
-        return Npc::all()->get(['id', 'name']);
+        $npcs = Npc::with(['dungeon', 'type', 'classification']);
+
+        return (new NpcsDatatablesHandler($request))->setBuilder($npcs)->applyRequestToBuilder()->getResult();
     }
 }

@@ -110,8 +110,6 @@
                     'emptyTable': lang.get('messages.datatable_no_users_in_table')
                 }
             });
-
-            refreshSelectPickers();
         });
     </script>
 @endsection

@@ -128,14 +128,15 @@ abstract class DatatablesHandler
         // Fetch the data
         $data = $this->_builder->get();
 
+        $recordsTotal = $this->calculateRecordsTotal();
         $result = [
             'draw'            => (int)$this->_request->get('draw'),
             // Initial amount of records
-            'recordsTotal'    => $this->calculateRecordsTotal(),
+            'recordsTotal'    => $recordsTotal,
             // The amount of records after filtering
             'data'            => $data,
             // The amount of rows there would have been, if it were not for the limits
-            'recordsFiltered' => $data->count(),
+            'recordsFiltered' => $this->calculateRecordsFiltered() ?? $recordsTotal,
             // Only show this info in dev instance
             'input'           => $isDev ? $this->_request->toArray() : [],
             // Debug sql queries for optimization
@@ -150,4 +151,6 @@ abstract class DatatablesHandler
     }
 
     protected abstract function calculateRecordsTotal(): int;
+
+    protected abstract function calculateRecordsFiltered(): ?int;
 }

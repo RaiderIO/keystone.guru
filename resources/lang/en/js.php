@@ -116,6 +116,10 @@ return [
     'roles_label'                    => 'Roles',
     'registered_label'               => 'Registered at',
     'patreon_label'                  => 'Patreon',
+    'datatable_no_users_in_table'    => 'No users found',
+
+    'classification_label' => 'Classification',
+    'edit_label'           => 'Edit',
 
     'make_user_label'               => 'Make user',
     'make_admin_label'              => 'Make admin',
