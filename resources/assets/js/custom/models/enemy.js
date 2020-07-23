@@ -250,10 +250,32 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         let result = {info: []};
 
+        // @formatter:off
         result.info.push({key: lang.get('messages.sidebar_enemy_name_label'), value: this.npc.name})
-        result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health})
+        result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()})
         result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting})
         result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering})
+        // @formatter:on
+
+        if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {
+            let npcBolsteringWhitelistValues = '';
+            let count = 0;
+            for (let index in this.npc.npcbolsteringwhitelists) {
+                if (this.npc.npcbolsteringwhitelists.hasOwnProperty(index)) {
+                    let whitelistedNpc = this.npc.npcbolsteringwhitelists[index];
+                    npcBolsteringWhitelistValues += whitelistedNpc.whitelistnpc.name;
+                    // Stop before the end
+                    if (count < this.npc.npcbolsteringwhitelists.length - 1) {
+                        npcBolsteringWhitelistValues += '<br>';
+                    }
+                }
+                count++;
+            }
+            result.info.push({
+                key: lang.get('messages.sidebar_enemy_bolstering_whitelist_npcs_label'),
+                value: npcBolsteringWhitelistValues
+            })
+        }
 
         return result;
     }

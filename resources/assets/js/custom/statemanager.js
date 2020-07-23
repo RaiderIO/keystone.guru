@@ -18,6 +18,8 @@ class StateManager extends Signalable {
         this.seasonalIndex = 0;
         // Teeming or not (shows certain enemies or not)
         this.teeming = false;
+        // The enemy that is focused by the user (mouse overed)
+        this.focusedEnemy = null;
 
         // List of static arrays
         this.mapIconTypes = [];
@@ -87,6 +89,17 @@ class StateManager extends Signalable {
 
         // Let everyone know it's changed
         this.signal('teeming:changed', {teeming: this.teeming});
+    }
+
+    /**
+     * Gets the currently focused enemy.
+     * @param enemy {Enemy}
+     */
+    setFocusedEnemy(enemy) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this.focusedEnemy = enemy;
+        this.signal('focusedenemy:changed', {focusedenemy: this.focusedEnemy});
     }
 
     /**

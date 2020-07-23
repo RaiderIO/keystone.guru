@@ -90,7 +90,7 @@ class EnemyVisualManager extends Signalable {
         if (!this._isMapBeingDragged) {
             let currTime = (new Date()).getTime();
 
-            // Once every 100 ms, calculation is expensive
+            // Once every 50 ms, calculation is expensive
             if (currTime - this._lastMouseMoveDistanceCheckTime > 50) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                 for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
@@ -98,7 +98,7 @@ class EnemyVisualManager extends Signalable {
 
                     if (enemy.isVisibleOnScreen()) {
                         let lastCheckData = this._enemyMouseMoveDistanceData[enemy.id];
-                        if (currTime - lastCheckData.lastCheckTime > 500 * lastCheckData.lastDistanceSquared / 1000000) {
+                        if (currTime - lastCheckData.lastCheckTime > 500 * (lastCheckData.lastDistanceSquared / 1000000)) {
                             this._enemyMouseMoveDistanceData[enemy.id].lastDistanceSquared =
                                 enemy.visual.checkMouseOver(mouseMoveEvent.originalEvent.pageX, mouseMoveEvent.originalEvent.pageY);
 
@@ -113,7 +113,7 @@ class EnemyVisualManager extends Signalable {
                 clearTimeout(this._mouseStoppedMovingTimeoutId);
                 if (organic) {
                     // Set a new timeout
-                    this._mouseStoppedMovingTimeoutId = setTimeout(this._onLeafletMapMouseMove.bind(this, mouseMoveEvent, false), 100);
+                    this._mouseStoppedMovingTimeoutId = setTimeout(this._onLeafletMapMouseMove.bind(this, mouseMoveEvent, false), 25);
                 }
             }
         }
@@ -142,7 +142,7 @@ class EnemyVisualManager extends Signalable {
 
         let currTime = (new Date()).getTime();
         // Once every 100 ms, calculation is expensive
-        if (currTime - this._lastMapMoveDistanceCheckTime > 100) {
+        if (currTime - this._lastMapMoveDistanceCheckTime > 50) {
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
                 let enemy = enemyMapObjectGroup.objects[i];
@@ -152,7 +152,6 @@ class EnemyVisualManager extends Signalable {
                 // If panned into view AND we didn't already refresh the zoom earlier
                 if (this._enemyVisibilityMap[enemy.id].wasVisible === false && isVisible &&
                     this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel !== currentZoomLevel) {
-                    // console.log(`Refreshing view of enemy ${enemy.id}`);
                     window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
                     this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = currentZoomLevel;
                 }

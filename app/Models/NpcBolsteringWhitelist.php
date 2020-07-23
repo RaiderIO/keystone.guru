@@ -20,6 +20,8 @@ class NpcBolsteringWhitelist extends Model
 
     protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];
 
+    public $with = ['whitelistnpc'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
@@ -33,6 +35,7 @@ class NpcBolsteringWhitelist extends Model
      */
     function whitelistnpc()
     {
-        return $this->belongsTo('App\Models\Npc', 'whitelist_npc_id');
+        // Without to prevent infinite recursion
+        return $this->belongsTo('App\Models\Npc', 'whitelist_npc_id')->without('npcbolsteringwhitelists');
     }
 }

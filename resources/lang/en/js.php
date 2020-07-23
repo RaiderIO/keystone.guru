@@ -184,8 +184,9 @@ return [
     'copied_to_clipboard'                                           => 'Copied to clipboard',
     'sidebar_enemy_name_label'                                      => 'Name:',
     'sidebar_enemy_health_label'                                    => 'Health:',
-    'sidebar_enemy_bursting_label'                                  => 'Bursting:',
-    'sidebar_enemy_bolstering_label'                                => 'Bolstering:',
+    'sidebar_enemy_bursting_label'                                  => 'Bursts:',
+    'sidebar_enemy_bolstering_label'                                => 'Bolsters:',
+    'sidebar_enemy_bolstering_whitelist_npcs_label'                 => 'Bolsters only:',
 
     // Killzone sidebar
     'killzone_sidebar_kill_location_label'                          => 'Kill location',

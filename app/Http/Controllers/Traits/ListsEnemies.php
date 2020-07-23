@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Traits;
 
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
+use App\Models\Npc;
 use App\Models\NpcClass;
 use App\Models\NpcType;
 use Error;
@@ -58,7 +59,8 @@ trait ListsEnemies
         ]);
 
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
-        $npcs = DB::table('npcs')->whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
+        /** @var Npc[]|Collection $npcs */
+        $npcs = Npc::whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
 
         /** @var Collection $npcTypes */
         $npcTypes = NpcType::all();

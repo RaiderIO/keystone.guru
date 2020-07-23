@@ -6,6 +6,8 @@ class CommonMapsEditsidebar extends InlineCode {
 
         this._colorPicker = null;
         this._grapick = null;
+
+        getState().register('focusedenemy:changed', this, this._onFocusedEnemyChanged.bind(this));
     }
 
     /**
@@ -113,6 +115,26 @@ class CommonMapsEditsidebar extends InlineCode {
     }
 
     /**
+     * Called when the focused enemy was changed
+     * @param focusedEnemyChangedEvent
+     * @private
+     */
+    _onFocusedEnemyChanged(focusedEnemyChangedEvent) {
+
+        let isNull = focusedEnemyChangedEvent.data.focusedenemy === null;
+        // Show/hide based on being set or not
+        $('#enemy_info_container').toggle(!isNull);
+        if (!isNull) {
+            // Update the focused enemy in the sidebar
+            let template = Handlebars.templates['map_sidebar_enemy_info_template'];
+
+            $('#enemy_info_key_value_container').html(
+                template(focusedEnemyChangedEvent.data.focusedenemy.getVisualData())
+            )
+        }
+    }
+
+    /**
      * Fetches a handler structure from a cookie
      * @returns {[]}
      * @private
@@ -156,5 +178,6 @@ class CommonMapsEditsidebar extends InlineCode {
         super.cleanup();
 
         this.sidebar.cleanup();
+        getState().unregister('focusedenemy:changed', this);
     }
 }

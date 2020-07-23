@@ -102,12 +102,7 @@ class EnemyVisual extends Signalable {
                 visuals[i].setVisualType('enemy_forces');
             }
 
-            // Update the mouse over in the sidebar
-            let template = Handlebars.templates['map_sidebar_enemy_info_template'];
-
-            $('#enemy_info_container').html(
-                template(this.enemy.getVisualData())
-            )
+            getState().setFocusedEnemy(this.enemy);
         }
     }
 
@@ -116,7 +111,8 @@ class EnemyVisual extends Signalable {
      */
     _mouseOut() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
-        if (this._managedBy === this.enemy.id) {
+        // Only actually when we're highlighted do we want to undo ourselves of it
+        if (this._highlighted && this._managedBy === this.enemy.id) {
             if (this._circleMenu === null) {
                 let visuals = [this];
 
@@ -137,6 +133,8 @@ class EnemyVisual extends Signalable {
                     visual._highlighted = false;
                     visual.setVisualType(getState().getEnemyDisplayType());
                 }
+
+                getState().setFocusedEnemy(null);
             }
 
             this.layer.closeTooltip();
