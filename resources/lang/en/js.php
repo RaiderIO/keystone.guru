@@ -182,10 +182,13 @@ return [
     'sidebar_expand'                                                => 'Expand the sidebar',
     'sidebar_collapse'                                              => 'Collapse the sidebar',
     'copied_to_clipboard'                                           => 'Copied to clipboard',
+    'sidebar_enemy_name_label'                                      => 'Name:',
+    'sidebar_enemy_health_label'                                    => 'Health:',
+    'sidebar_enemy_bursting_label'                                  => 'Bursting:',
+    'sidebar_enemy_bolstering_label'                                => 'Bolstering:',
 
     // Killzone sidebar
     'killzone_sidebar_kill_location_label'                          => 'Kill location',
-
 
     // General site modals etc
     'min_password_length'                                           => 'Minimum password length is 8',

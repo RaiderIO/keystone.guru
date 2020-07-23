@@ -101,6 +101,13 @@ class EnemyVisual extends Signalable {
                 visuals[i]._highlighted = true;
                 visuals[i].setVisualType('enemy_forces');
             }
+
+            // Update the mouse over in the sidebar
+            let template = Handlebars.templates['map_sidebar_enemy_info_template'];
+
+            $('#enemy_info_container').html(
+                template(this.enemy.getVisualData())
+            )
         }
     }
 

@@ -145,7 +145,9 @@ if (isset($model)) {
                         <div class="row">
                             <div class="col">
                                 <button id="map_route_publish"
-                                        class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}">
+                                        class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}"
+                                        data-toggle="tooltip"
+                                        title="{{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}">
                                     <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
                                 </button>
                                 <button id="map_route_unpublish"
@@ -183,18 +185,18 @@ if (isset($model)) {
         </div>
     </div>
 
-    @isset($show['route-publish'])
-        <div class="form-group">
-            <div class="row">
-                <div class="col">
-                    <div id="map_route_unpublished_info"
-                         class="alert alert-info text-center {{ $model->published === 1 ? 'd-none' : '' }}">
-                        <i class="fa fa-info-circle"></i> {{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}
-                    </div>
+    <!-- Mouseover enemy information -->
+    <div class="form-group">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ __('Enemy info') }}</h5>
+                <div id="enemy_info_container">
+
                 </div>
             </div>
         </div>
-    @endisset
+    </div>
+
 @endcomponent
 
 @isset($show['draw-settings'])
@@ -239,76 +241,76 @@ if (isset($model)) {
 @endisset
 
 @isset($show['route-settings'])
-    @section('modal-content')
-        <div class='col-lg-12'>
-            <h3>
-                {{ __('General') }}
-            </h3>
-            <div class='form-group'>
-                <label for="dungeon_route_title">
-                    {{ __('Title') }} <span class="form-required">*</span>
-                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+@section('modal-content')
+    <div class='col-lg-12'>
+        <h3>
+            {{ __('General') }}
+        </h3>
+        <div class='form-group'>
+            <label for="dungeon_route_title">
+                {{ __('Title') }} <span class="form-required">*</span>
+                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                                     __('Choose a title that will uniquely identify the route for you over other similar routes you may create.')
                                      }}"></i>
-                </label>
-                {!! Form::text('dungeon_route_title', $model->title, ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
+            </label>
+            {!! Form::text('dungeon_route_title', $model->title, ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
 
-                <label for="teeming">
-                    {{ __('Teeming') }}
-                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+            <label for="teeming">
+                {{ __('Teeming') }}
+                <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                                         __('Check to change the dungeon to resemble Teeming week. Warning: any selected Teeming enemies will be removed from your existing pulls (when disabling Teeming).')
                                          }}"></i>
-                </label>
-                {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}
-            </div>
-            @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
+            </label>
+            {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}
+        </div>
+        @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
 
-            <h3 class='mt-1'>
-                {{ __('Affixes') }} <span class="form-required">*</span>
-            </h3>
+        <h3 class='mt-1'>
+            {{ __('Affixes') }} <span class="form-required">*</span>
+        </h3>
 
-            <div class='container mt-1'>
-                @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming', 'modal' => '#route_settings_modal'])
-            </div>
+        <div class='container mt-1'>
+            @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming', 'modal' => '#route_settings_modal'])
+        </div>
 
+        <h3>
+            {{ __('Group composition') }}
+        </h3>
+
+        @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
+        @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions, 'modal' => '#route_settings_modal'])
+
+        @if(Auth::user()->hasPaidTier(\App\Models\PaidTier::UNLISTED_ROUTES) )
             <h3>
-                {{ __('Group composition') }}
+                {{ __('Sharing') }}
             </h3>
-
-            @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
-            @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions, 'modal' => '#route_settings_modal'])
-
-            @if(Auth::user()->hasPaidTier(\App\Models\PaidTier::UNLISTED_ROUTES) )
-                <h3>
-                    {{ __('Sharing') }}
-                </h3>
-                <div class='form-group'>
-                    {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
-                    {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
-                </div>
-            @endif
-
-            @if(Auth::user()->hasRole('admin'))
-                <h3>
-                    {{ __('Admin') }}
-                </h3>
-                <div class='form-group'>
-                    {!! Form::label('demo', __('Demo route')) !!}
-                    {!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}
-                </div>
-            @endif
-
             <div class='form-group'>
-                <div id='save_route_settings' class='offset-lg-5 col-lg-2 btn btn-success'>
-                    <i class='fas fa-save'></i> {{ __('Save settings') }}
-                </div>
-                <div id='save_route_settings_saving' class='offset-lg-5 col-lg-2 btn btn-success disabled'
-                     style='display: none;'>
-                    <i class='fas fa-circle-notch fa-spin'></i>
-                </div>
+                {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
+                {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
+            </div>
+        @endif
+
+        @if(Auth::user()->hasRole('admin'))
+            <h3>
+                {{ __('Admin') }}
+            </h3>
+            <div class='form-group'>
+                {!! Form::label('demo', __('Demo route')) !!}
+                {!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}
+            </div>
+        @endif
+
+        <div class='form-group'>
+            <div id='save_route_settings' class='offset-lg-5 col-lg-2 btn btn-success'>
+                <i class='fas fa-save'></i> {{ __('Save settings') }}
+            </div>
+            <div id='save_route_settings_saving' class='offset-lg-5 col-lg-2 btn btn-success disabled'
+                 style='display: none;'>
+                <i class='fas fa-circle-notch fa-spin'></i>
             </div>
         </div>
-    @overwrite
+    </div>
+@overwrite
 
-    @include('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'lg'])
+@include('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'lg'])
 @endisset

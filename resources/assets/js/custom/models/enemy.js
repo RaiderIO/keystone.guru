@@ -243,6 +243,22 @@ class Enemy extends MapObject {
     }
 
     /**
+     * Get data that may be displayed to the user in the front-end.
+     * @returns {[]}
+     */
+    getVisualData() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        let result = {info: []};
+
+        result.info.push({key: lang.get('messages.sidebar_enemy_name_label'), value: this.npc.name})
+        result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health})
+        result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting})
+        result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering})
+
+        return result;
+    }
+
+    /**
      * Checks if this enemy is linked to the last boss or not.
      * @returns {boolean}
      */

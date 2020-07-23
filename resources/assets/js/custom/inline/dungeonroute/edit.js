@@ -36,14 +36,12 @@ class DungeonrouteEdit extends InlineCode {
                     // Published
                     $('#map_route_publish').addClass('d-none');
                     $('#map_route_unpublish').removeClass('d-none');
-                    $('#map_route_unpublished_info').addClass('d-none');
 
                     showSuccessNotification(lang.get('messages.route_published'));
                 } else {
                     // Unpublished
                     $('#map_route_publish').removeClass('d-none');
                     $('#map_route_unpublish').addClass('d-none');
-                    $('#map_route_unpublished_info').removeClass('d-none');
 
                     showWarningNotification(lang.get('messages.route_unpublished'));
                 }
