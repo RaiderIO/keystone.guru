@@ -99,7 +99,7 @@ html, body, #map, #app, .wrapper {
     position: fixed;
     top: 106px;
     cursor: pointer;
-    z-index: 1050;
+    z-index: 1030;
 
     background: #4E5D6C;
     color: #DF691A;

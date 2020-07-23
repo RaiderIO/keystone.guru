@@ -8,7 +8,7 @@ class DungeonrouteEdit extends InlineCode {
         let self = this;
 
         // Save settings in the modal
-        $('#save_settings').bind('click', this._saveSettings);
+        $('#save_route_settings').bind('click', this._saveRouteSettings);
 
         $('#map_route_publish').bind('click', function () {
             self._setPublished(true);
@@ -55,7 +55,7 @@ class DungeonrouteEdit extends InlineCode {
         });
     }
 
-    _saveSettings() {
+    _saveRouteSettings() {
         $.ajax({
             type: 'POST',
             url: `/ajax/${getState().getDungeonRoute().publicKey}`,
@@ -87,8 +87,8 @@ class DungeonrouteEdit extends InlineCode {
                 _method: 'PATCH'
             },
             beforeSend: function () {
-                $('#save_settings').hide();
-                $('#save_settings_saving').show();
+                $('#save_route_settings').hide();
+                $('#save_route_settings_saving').show();
             },
             success: function (json) {
                 showSuccessNotification(lang.get('messages.settings_saved'));
@@ -97,8 +97,8 @@ class DungeonrouteEdit extends InlineCode {
                 getState().setTeeming($('#teeming').is(':checked'));
             },
             complete: function () {
-                $('#save_settings').show();
-                $('#save_settings_saving').hide();
+                $('#save_route_settings').show();
+                $('#save_route_settings_saving').hide();
             }
         });
     }

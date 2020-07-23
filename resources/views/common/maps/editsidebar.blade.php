@@ -92,47 +92,6 @@ if (isset($model)) {
         </div>
     </div>
 
-    <!-- Draw Settings -->
-    <div class="form-group draw_settings_tools">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Draw settings') }}</h5>
-                <?php // Weight ?>
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col font-weight-bold">
-                        {{ __('Line weight') }}:
-                    </div>
-                </div>
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col line_weight_selection">
-                        <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-                        {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
-                            isset($_COOKIE['polyline_default_weight']) ? $_COOKIE['polyline_default_weight'] : 0,
-                            ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
-                    </div>
-                </div>
-
-                <div class="row view_dungeonroute_details_row mt-2">
-                    <div class="col font-weight-bold">
-                        {{ __('Pull gradient') }}:
-                    </div>
-                </div>
-                <div class="row no-gutters view_dungeonroute_details_row mt-3">
-                    <div id="edit_route_freedraw_options_gradient" class="col">
-
-                    </div>
-                </div>
-                <div class="row no-gutters view_dungeonroute_details_row mt-3">
-                    <div class="col">
-                        <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-info w-100">
-                            <i class="fas fa-palette"></i> {{ __('Apply to pulls') }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Actions -->
     <div class="form-group route_actions">
         <div class="card">
@@ -152,12 +111,26 @@ if (isset($model)) {
                     </div>
                 @endisset
 
+                @isset($show['draw-settings'])
+                    <div class="form-group">
+                        <!-- Route settings -->
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-info col" data-toggle="modal" data-target="#draw_settings_modal">
+                                    <i class='fas fa-palette'></i> {{ __('Draw settings') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endisset
+
                 @isset($show['route-settings'])
                     <div class="form-group">
                         <!-- Route settings -->
                         <div class="row">
                             <div class="col">
-                                <button class="btn btn-info col" data-toggle="modal" data-target="#settings_modal">
+                                <button class="btn btn-info col" data-toggle="modal"
+                                        data-target="#route_settings_modal">
                                     <i class='fas fa-cog'></i> {{ __('Route settings') }}
                                 </button>
                             </div>
@@ -223,3 +196,119 @@ if (isset($model)) {
         </div>
     @endisset
 @endcomponent
+
+@isset($show['draw-settings'])
+@section('modal-content')
+    <div class="draw_settings_tools">
+        <?php // Weight ?>
+        <div class="row view_dungeonroute_details_row">
+            <div class="col font-weight-bold">
+                {{ __('Default line weight') }}:
+            </div>
+        </div>
+        <div class="row view_dungeonroute_details_row">
+            <div class="col line_weight_selection">
+                <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+                {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
+                    isset($_COOKIE['polyline_default_weight']) ? $_COOKIE['polyline_default_weight'] : 0,
+                    ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
+            </div>
+        </div>
+
+        <div class="row view_dungeonroute_details_row mt-2">
+            <div class="col font-weight-bold">
+                {{ __('Pull gradient') }}:
+            </div>
+        </div>
+        <div class="row no-gutters view_dungeonroute_details_row mt-3">
+            <div id="edit_route_freedraw_options_gradient" class="col">
+
+            </div>
+        </div>
+        <div class="row no-gutters view_dungeonroute_details_row mt-3">
+            <div class="col">
+                <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-info w-100">
+                    <i class="fas fa-palette"></i> {{ __('Apply gradient to pulls') }}
+                </button>
+            </div>
+        </div>
+    </div>
+@overwrite
+
+@include('common.general.modal', ['id' => 'draw_settings_modal'])
+@endisset
+
+@isset($show['route-settings'])
+    @section('modal-content')
+        <div class='col-lg-12'>
+            <h3>
+                {{ __('General') }}
+            </h3>
+            <div class='form-group'>
+                <label for="dungeon_route_title">
+                    {{ __('Title') }} <span class="form-required">*</span>
+                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                                    __('Choose a title that will uniquely identify the route for you over other similar routes you may create.')
+                                     }}"></i>
+                </label>
+                {!! Form::text('dungeon_route_title', $model->title, ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
+
+                <label for="teeming">
+                    {{ __('Teeming') }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                                        __('Check to change the dungeon to resemble Teeming week. Warning: any selected Teeming enemies will be removed from your existing pulls (when disabling Teeming).')
+                                         }}"></i>
+                </label>
+                {!! Form::checkbox('teeming', 1, $model->teeming, ['id' => 'teeming', 'class' => 'form-control left_checkbox']) !!}
+            </div>
+            @include('common.dungeonroute.attributes', ['dungeonroute' => $model])
+
+            <h3 class='mt-1'>
+                {{ __('Affixes') }} <span class="form-required">*</span>
+            </h3>
+
+            <div class='container mt-1'>
+                @include('common.group.affixes', ['dungeonroute' => $model, 'teemingselector' => '#teeming', 'modal' => '#route_settings_modal'])
+            </div>
+
+            <h3>
+                {{ __('Group composition') }}
+            </h3>
+
+            @php($factions = $model->dungeon->isSiegeOfBoralus() ? \App\Models\Faction::where('name', '<>', 'Unspecified')->get() : null)
+            @include('common.group.composition', ['dungeonroute' => $model, 'factions' => $factions, 'modal' => '#route_settings_modal'])
+
+            @if(Auth::user()->hasPaidTier(\App\Models\PaidTier::UNLISTED_ROUTES) )
+                <h3>
+                    {{ __('Sharing') }}
+                </h3>
+                <div class='form-group'>
+                    {!! Form::label('unlisted', __('Private (when checked, only people with the link can view your route)')) !!}
+                    {!! Form::checkbox('unlisted', 1, $model->unlisted, ['class' => 'form-control left_checkbox']) !!}
+                </div>
+            @endif
+
+            @if(Auth::user()->hasRole('admin'))
+                <h3>
+                    {{ __('Admin') }}
+                </h3>
+                <div class='form-group'>
+                    {!! Form::label('demo', __('Demo route')) !!}
+                    {!! Form::checkbox('demo', 1, $model->demo, ['class' => 'form-control left_checkbox']) !!}
+                </div>
+            @endif
+
+            <div class='form-group'>
+                <div id='save_route_settings' class='offset-lg-5 col-lg-2 btn btn-success'>
+                    <i class='fas fa-save'></i> {{ __('Save settings') }}
+                </div>
+                <div id='save_route_settings_saving' class='offset-lg-5 col-lg-2 btn btn-success disabled'
+                     style='display: none;'>
+                    <i class='fas fa-circle-notch fa-spin'></i>
+                </div>
+            </div>
+        </div>
+    @overwrite
+
+    @include('common.general.modal', ['id' => 'route_settings_modal', 'size' => 'lg'])
+@endisset
