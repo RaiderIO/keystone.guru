@@ -177,6 +177,22 @@
         </tr>
         <tr>
             <td>
+                pull_gradient
+            </td>
+            <td>
+                Remembers the gradient that you've selected for your pulls in the map editor.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                pull_gradient_apply_always
+            </td>
+            <td>
+                Remembers if you want the gradient that you've selected in the map editor to be applied automatically when performing changes to your pull.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 enemy_display_type
             </td>
             <td>

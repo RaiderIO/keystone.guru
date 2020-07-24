@@ -227,6 +227,15 @@ if (isset($model)) {
 
             </div>
         </div>
+            <div class="row no-gutters view_dungeonroute_details_row mt-3">
+                <div class="col">
+                    {!! Form::label('pull_gradient_apply_always', __('Active')) !!}
+                    {!! Form::checkbox('pull_gradient_apply_always', $_COOKIE['pull_gradient_apply_always'], isset($model) ? $model->active : 1, ['class' => 'form-control left_checkbox']) !!}
+                    <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-info w-100">
+                        <i class="fas fa-palette"></i> {{ __('Apply gradient to pulls') }}
+                    </button>
+                </div>
+            </div>
         <div class="row no-gutters view_dungeonroute_details_row mt-3">
             <div class="col">
                 <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-info w-100">

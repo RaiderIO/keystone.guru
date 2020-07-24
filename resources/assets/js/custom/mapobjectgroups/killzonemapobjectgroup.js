@@ -151,8 +151,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     /**
      * Saves all KillZones using the mass update endpoint.
+     * @param fields {string|array}
      */
-    saveAll() {
+    saveAll(fields = '*') {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
         let self = this;
 
@@ -160,7 +161,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         for(let i = 0; i < this.objects.length; i++ ){
             let killZone = this.objects[i];
 
-            killZonesData.push(killZone.getSaveData());
+            killZonesData.push(killZone.getSaveData(fields));
         }
 
         $.ajax({

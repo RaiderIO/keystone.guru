@@ -566,7 +566,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 }
             }
 
-            killZoneMapObjectGroup.saveAll();
+            killZoneMapObjectGroup.saveAll(['index']);
         }
         this._dragHasSwitchedOrder = false;
     }

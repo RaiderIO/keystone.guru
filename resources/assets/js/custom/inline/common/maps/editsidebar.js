@@ -110,7 +110,7 @@ class CommonMapsEditsidebar extends InlineCode {
                 }
             }
 
-            killZoneMapObjectGroup.saveAll();
+            killZoneMapObjectGroup.saveAll(['color']);
         });
     }
 
