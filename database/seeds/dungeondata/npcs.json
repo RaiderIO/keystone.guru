@@ -12,7 +12,9 @@
         "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 161241,
@@ -27,7 +29,9 @@
         "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 161243,
@@ -42,7 +46,9 @@
         "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 161244,
@@ -57,6 +63,8 @@
         "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     }
 ]

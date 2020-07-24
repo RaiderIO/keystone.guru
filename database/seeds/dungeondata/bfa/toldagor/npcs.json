@@ -12,7 +12,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127477,
@@ -27,7 +29,9 @@
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127479,
@@ -42,7 +46,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 0,
+        "bolstering": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127480,
@@ -57,7 +63,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127482,
@@ -72,7 +80,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127484,
@@ -87,7 +97,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 0,
+        "bolstering": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127485,
@@ -102,7 +114,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127486,
@@ -117,7 +131,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127488,
@@ -132,7 +148,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127490,
@@ -147,7 +165,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 0,
+        "bolstering": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127497,
@@ -162,7 +182,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127503,
@@ -177,7 +199,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 0,
+        "bolstering": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130025,
@@ -192,7 +216,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130026,
@@ -207,7 +233,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130027,
@@ -222,7 +250,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130028,
@@ -237,7 +267,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130582,
@@ -252,7 +284,9 @@
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 0
+        "bursting": 0,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 131112,
@@ -267,7 +301,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 131445,
@@ -282,7 +318,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 135254,
@@ -297,7 +335,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 135366,
@@ -312,7 +352,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 135699,
@@ -327,7 +369,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 135706,
@@ -342,7 +386,9 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 136665,
@@ -357,6 +403,8 @@
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1
+        "bursting": 1,
+        "bolstering": 1,
+        "npcbolsteringwhitelists": []
     }
 ]

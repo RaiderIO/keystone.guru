@@ -19,15 +19,15 @@ class DungeonDataSeeder extends Seeder
 
         $nameMapping = [
             // Loose files
-            'npcs' => 'App\Models\Npc',
-            'dungeonroutes' => 'App\Models\DungeonRoute',
+            'npcs'                         => 'App\Models\Npc',
+            'dungeonroutes'                => 'App\Models\DungeonRoute',
 
             // Files inside floor folder
-            'enemies' => 'App\Models\Enemy',
-            'enemy_packs' => 'App\Models\EnemyPack',
-            'enemy_patrols' => 'App\Models\EnemyPatrol',
+            'enemies'                      => 'App\Models\Enemy',
+            'enemy_packs'                  => 'App\Models\EnemyPack',
+            'enemy_patrols'                => 'App\Models\EnemyPatrol',
             'dungeon_floor_switch_markers' => 'App\Models\DungeonFloorSwitchMarker',
-            'map_icons' => 'App\Models\MapIcon'
+            'map_icons'                    => 'App\Models\MapIcon'
         ];
 
         $rootDir = database_path('/seeds/dungeondata/');
@@ -65,9 +65,8 @@ class DungeonDataSeeder extends Seeder
                         }
                     }
                 }
-            }
-            // It's a 'global' file, parse it
-            else if( strpos($rootDirChild, '.json') === strlen($rootDirChild) - 5 ) { // 5 for length of .json
+            } // It's a 'global' file, parse it
+            else if (strpos($rootDirChild, '.json') === strlen($rootDirChild) - 5) { // 5 for length of .json
                 $this->_parseRawFile($rootDir, $rootDirChild, $nameMapping, 1);
             }
         }
@@ -120,6 +119,9 @@ class DungeonDataSeeder extends Seeder
 
             // Enemy Patrols, Paths and Brushlines
             new EnemyPatrolPolylineRelationParser(),
+
+            // Npc
+            new NpcNpcBolsteringWhitelistRelationParser(),
         ];
 
         // Parse these attributes AFTER the model has been inserted into the database (so we know its ID)
@@ -208,6 +210,7 @@ class DungeonDataSeeder extends Seeder
     {
         $this->command->warn('Truncating all relevant data...');
         DB::table('npcs')->truncate();
+        DB::table('npc_bolstering_whitelists')->truncate();
         DB::table('enemies')->truncate();
         DB::table('enemy_packs')->truncate();
         DB::table('enemy_patrols')->truncate();

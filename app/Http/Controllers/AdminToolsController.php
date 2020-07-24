@@ -18,10 +18,13 @@ use App\Models\NpcType;
 use App\Models\Release;
 use App\Service\Season\SeasonService;
 use Exception;
-use Illuminate\Contracts\View\Factory;use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\View\View;use Throwable;
+use Illuminate\View\View;
+use Throwable;
 
 class AdminToolsController extends Controller
 {
@@ -261,6 +264,9 @@ class AdminToolsController extends Controller
         // Save all NPCs which aren't directly tied to a dungeon
         $npcs = Npc::all()->where('dungeon_id', -1)->values();
         $npcs->makeHidden(['type', 'class']);
+        foreach ($npcs as $item) {
+            $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
+        }
 
         // Save NPC data in the root of folder
         $dungeonDataDir = database_path('/seeds/dungeondata/');
@@ -341,6 +347,9 @@ class AdminToolsController extends Controller
 
             $npcs = Npc::all()->where('dungeon_id', $dungeon->id)->values();
             $npcs->makeHidden(['type', 'class']);
+            foreach ($npcs as $item) {
+                $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
+            }
 
             // Save NPC data in the root of the dungeon folder
             $this->_saveData($npcs, $rootDirPath, 'npcs.json');
@@ -353,6 +362,7 @@ class AdminToolsController extends Controller
                 foreach ($enemies as $enemy) {
                     /** @var $enemy Enemy */
                     if ($enemy->npc !== null) {
+                        $enemy->npc->unsetRelation('npcbolsteringwhitelists');
                         $enemy->npc->unsetRelation('type');
                         $enemy->npc->unsetRelation('class');
                     }
