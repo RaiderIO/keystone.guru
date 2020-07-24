@@ -4,7 +4,6 @@ class CommonMapsEditsidebar extends InlineCode {
 
         this.sidebar = new SidebarNavigation(options);
 
-        this._colorPicker = null;
         this._grapick = null;
 
         getState().register('focusedenemy:changed', this, this._onFocusedEnemyChanged.bind(this));
@@ -73,7 +72,7 @@ class CommonMapsEditsidebar extends InlineCode {
         });
 
         // Restore pull_gradient if set
-        let handlers = this._getHandlersFromCookie();
+        let handlers = getState().getPullGradientHandlers();
         for (let index in handlers) {
             if (handlers.hasOwnProperty(index)) {
                 this._grapick.addHandler(handlers[index][0], handlers[index][1]);
@@ -89,41 +88,35 @@ class CommonMapsEditsidebar extends InlineCode {
                 pullGradient.push(handler.position + ' ' + self._parseHandlerColor(handler.color));
             }
             let result = pullGradient.join(',');
-            Cookies.set('pull_gradient', result);
+
+            getState().setPullGradient(result);
         });
 
         $('#edit_route_freedraw_options_gradient_apply_to_pulls').bind('click', function () {
+            $('#edit_route_freedraw_options_gradient_apply_to_pulls').hide();
+            $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').show();
+
             let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
-            let count = killZoneMapObjectGroup.objects.length;
-            for (let i = 0; i < count; i++) {
-                for (let killZoneIndex in killZoneMapObjectGroup.objects) {
-                    if (killZoneMapObjectGroup.objects.hasOwnProperty(killZoneIndex)) {
-                        let killZone = killZoneMapObjectGroup.objects[killZoneIndex];
-                        if (killZone.getIndex() === (i + 1)) {
-                            // Prevent division by 0
-                            killZone.color = pickHexFromHandlers(self._getHandlersFromCookie(), count === 1 ? 50 : (i / count) * 100);
-                            killZone.setSynced(true);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            killZoneMapObjectGroup.saveAll(['color']);
+            killZoneMapObjectGroup.applyPullGradient(true, function(){
+                $('#edit_route_freedraw_options_gradient_apply_to_pulls').show();
+                $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').hide();
+            });
         });
 
         let $alwaysApplyPullGradient = $('#pull_gradient_apply_always');
-        let alwaysApplyPullGradient = Cookies.get('pull_gradient_apply_always');
-        if (typeof alwaysApplyPullGradient !== 'undefined' && alwaysApplyPullGradient === '1') {
+        let alwaysApplyPullGradient = getState().getPullGradientApplyAlways();
+        if (alwaysApplyPullGradient) {
             $alwaysApplyPullGradient.attr('checked', 'checked');
         } else {
             $alwaysApplyPullGradient.removeAttr('checked');
         }
         $alwaysApplyPullGradient.bind('change', function () {
-            console.log('change', $(this).is(':checked'));
-            Cookies.set('pull_gradient_apply_always', $(this).is(':checked') ? '1' : '0');
+            getState().setPullGradientApplyAlways($(this).is(':checked'));
         });
+
+        // Draw settings save button
+        $('#save_draw_settings').bind('click', this._savePullGradientSettings.bind(this));
     }
 
     /**
@@ -147,36 +140,6 @@ class CommonMapsEditsidebar extends InlineCode {
     }
 
     /**
-     * Fetches a handler structure from a cookie
-     * @returns {[]}
-     * @private
-     */
-    _getHandlersFromCookie() {
-        let result = [];
-
-        let pullGradient = Cookies.get('pull_gradient');
-        if (typeof pullGradient !== 'undefined' && pullGradient.length > 0) {
-            let handlers = pullGradient.split(',');
-            for (let index in handlers) {
-                if (handlers.hasOwnProperty(index)) {
-                    let handler = handlers[index];
-                    let values = handler.trim().split(' ');
-                    // Only RGB values
-                    if (values[1].indexOf('#') === 0) {
-                        result.push([parseInt(('' + values[0]).replace('%', '')), values[1]]);
-                    } else {
-                        console.warn('Invalid handler found:', handler);
-                    }
-                }
-            }
-        } else {
-            result = c.map.editsidebar.pullGradient.defaultHandlers;
-        }
-
-        return result;
-    }
-
-    /**
      * Parses a color from a handler, and return an #FF0000 hex color.
      * @param handlerColor
      * @returns {*}
@@ -184,6 +147,34 @@ class CommonMapsEditsidebar extends InlineCode {
      */
     _parseHandlerColor(handlerColor) {
         return handlerColor.indexOf('rgba') === 0 ? rgbToHex(parseRgba(handlerColor)) : handlerColor;
+    }
+
+    /**
+     *
+     * @private
+     */
+    _savePullGradientSettings() {
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/${getState().getDungeonRoute().publicKey}/pullgradient`,
+            dataType: 'json',
+            data: {
+                pull_gradient: getState().getPullGradient(),
+                pull_gradient_apply_always: getState().getPullGradientApplyAlways() ? '1' : '0',
+                _method: 'PATCH'
+            },
+            beforeSend: function () {
+                $('#save_draw_settings').hide();
+                $('#save_draw_settings_saving').show();
+            },
+            success: function (json) {
+                showSuccessNotification(lang.get('messages.pull_gradient_settings_saved'));
+            },
+            complete: function () {
+                $('#save_draw_settings').show();
+                $('#save_draw_settings_saving').hide();
+            }
+        });
     }
 
     cleanup() {

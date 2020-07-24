@@ -423,7 +423,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
         {{ __('I agree') }}
     </div>
 @overwrite
-@include('common.general.modal', ['id' => 'legal_modal'])
+@include('common.general.modal', ['id' => 'legal_modal', 'static' => true])
 @endif
 @endauth
 

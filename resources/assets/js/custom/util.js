@@ -194,7 +194,7 @@ function pickHexFromHandlers(handlers, weight) {
         result = rgbToHex(rgb);
     }
 
-    return result;
+    return result.toLowerCase();
 }
 
 

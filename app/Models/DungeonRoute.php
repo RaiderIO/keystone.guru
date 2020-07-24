@@ -38,6 +38,9 @@ use Illuminate\Support\Facades\DB;
  * @property $avg_rating double
  * @property $rating_count int
  *
+ * @property $pull_gradient string
+ * @property $pull_gradient_apply_always boolean
+ *
  * @property $thumbnail_updated_at string
  * @property $updated_at string
  * @property $created_at string
@@ -507,6 +510,9 @@ class DungeonRoute extends Model
         $this->difficulty = 1;
         $this->seasonal_index = $request->get('seasonal_index', $this->seasonal_index);
         $this->teeming = intval($request->get('teeming', $this->teeming) ?? 0);
+
+        $this->pull_gradient = $request->get('pull_gradient', '');
+        $this->pull_gradient_apply_always = $request->get('pull_gradient_apply_always', 0);
 
         if (Auth::check()) {
             $user = User::findOrFail(Auth::id());

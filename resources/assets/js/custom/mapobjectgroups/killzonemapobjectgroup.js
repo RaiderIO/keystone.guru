@@ -143,6 +143,12 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             // set by calling save() below. That will then trigger object:add and the killzone will have it's ID for the UI
             local: true
         });
+
+        // Change the color as necessary
+        if (getState().getPullGradientApplyAlways()) {
+            this.applyPullGradient();
+        }
+
         killZone.save();
 
         this.signal('killzone:new', {newKillZone: killZone});
@@ -150,15 +156,44 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     }
 
     /**
+     * Applies the pull gradient to killzones
+     * @param save {boolean}
+     * @param saveOnComplete {function|null}
+     */
+    applyPullGradient(save = false, saveOnComplete = null) {
+        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
+
+        let count = this.objects.length;
+        let handlers = getState().getPullGradientHandlers();
+        for (let i = 0; i < count; i++) {
+            for (let killZoneIndex in this.objects) {
+                if (this.objects.hasOwnProperty(killZoneIndex)) {
+                    let killZone = this.objects[killZoneIndex];
+                    if (killZone.getIndex() === (i + 1)) {
+                        // Prevent division by 0
+                        killZone.color = pickHexFromHandlers(handlers, count === 1 ? 50 : (i / count) * 100);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (save) {
+            this.saveAll(['color'], saveOnComplete);
+        }
+    }
+
+    /**
      * Saves all KillZones using the mass update endpoint.
      * @param fields {string|array}
+     * @param onComplete {function|null} Called when saveAll completed
      */
-    saveAll(fields = '*') {
+    saveAll(fields = '*', onComplete = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
         let self = this;
 
         let killZonesData = [];
-        for(let i = 0; i < this.objects.length; i++ ){
+        for (let i = 0; i < this.objects.length; i++) {
             let killZone = this.objects[i];
 
             killZonesData.push(killZone.getSaveData(fields));
@@ -171,10 +206,15 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             data: {
                 killzones: killZonesData
             },
-            success: function(json){
-                for(let i = 0; i < self.objects.length; i++ ){
+            success: function (json) {
+                for (let i = 0; i < self.objects.length; i++) {
                     self.objects[i].setSynced(true);
                     self.objects[i].onSaveSuccess(json);
+                }
+            },
+            complete: function () {
+                if (typeof onComplete === 'function') {
+                    onComplete();
                 }
             }
         });
@@ -209,7 +249,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     killZone.setEnemies([...killZone.enemies]);
 
                     // Only display the kill zone's kill area if it's on our current floor
-                    if( killZone.layer !== null && killZone.floor_id === getState().getCurrentFloor().id ) {
+                    if (killZone.layer !== null && killZone.floor_id === getState().getCurrentFloor().id) {
                         this.setMapObjectVisibility(killZone, true);
                     }
                 }

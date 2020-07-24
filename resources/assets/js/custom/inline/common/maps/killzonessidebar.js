@@ -126,6 +126,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let newColor = '#' + color.toHEXA().join('');
             // Only save when the color is valid
             if (killZone.color !== newColor && newColor.length === 7) {
+                console.log(newColor, killZone.color);
                 killZone.color = newColor;
                 killZone.save();
             }
@@ -494,7 +495,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // Listen to changes in the killzone
             killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self, function (killZoneChangedEvent) {
                 // Do not change the sidebar as we're refreshing the map; that's pointless (lots of adds/removes going on)
-                if( !self.map.isRefreshingMap() ) {
+                if (!self.map.isRefreshingMap()) {
                     self._refreshKillZone(killZoneChangedEvent.context);
                 }
             });
@@ -566,7 +567,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 }
             }
 
-            killZoneMapObjectGroup.saveAll(['index']);
+            if( getState().getPullGradientApplyAlways() ) {
+                killZoneMapObjectGroup.applyPullGradient();
+            }
+            killZoneMapObjectGroup.saveAll(['index', 'color']);
         }
         this._dragHasSwitchedOrder = false;
     }

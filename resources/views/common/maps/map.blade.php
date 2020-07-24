@@ -20,6 +20,8 @@ $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->getEnemyForces() : 0;
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
 $teeming = (isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin)) ? true : false;
+$pullGradient = (isset($dungeonroute) ? $dungeonroute->pull_gradient : '');
+$pullGradientApplyAlways = (isset($dungeonroute) ? $dungeonroute->pull_gradient_apply_always : false);
 $enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
@@ -106,7 +108,9 @@ if ($isAdmin) {
             'enemyForces' => $routeEnemyForces,
             'seasonalIndex' => $routeSeasonalIndex,
             'teeming' => $teeming,
-            'teamId' => $routeTeam
+            'teamId' => $routeTeam,
+            'pullGradient' => $pullGradient,
+            'pullGradientApplyAlways' => $pullGradientApplyAlways
         ]
     ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>

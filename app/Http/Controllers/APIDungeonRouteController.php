@@ -209,6 +209,26 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
+     * @param SeasonService $seasonService
+     * @param DungeonRoute $dungeonroute
+     */
+    function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonroute)
+    {
+        $this->authorize('edit', $dungeonroute);
+
+        $dungeonroute->pull_gradient = $request->get('pull_gradient', '');
+        $dungeonroute->pull_gradient_apply_always = $request->get('pull_gradient_apply_always', false);
+
+        // Update or insert it
+        if (!$dungeonroute->save()) {
+            abort(500, 'Unable to save dungeonroute');
+        }
+
+        return response()->noContent();
+    }
+
+    /**
+     * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @return array
      * @throws Exception

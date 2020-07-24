@@ -154,7 +154,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::get('release', 'ReleaseController@list')->name('admin.releases');
 
-
             // NPCs
             Route::get('npc/new', 'NpcController@new')->name('admin.npc.new');
             Route::get('npc/{npc}', 'NpcController@edit')->name('admin.npc.edit');
@@ -278,6 +277,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::group(['prefix' => '{dungeonroute}'], function ()
             {
                 Route::patch('/', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
+                Route::patch('/pullgradient', 'APIDungeonRouteController@storePullGradient')->name('api.dungeonroute.pullgradient.update');
                 Route::delete('/', 'APIDungeonRouteController@delete')->name('api.dungeonroute.delete');
 
                 Route::post('/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');

@@ -734,7 +734,7 @@ class MapObject extends Signalable {
     getSaveData(fields = '*') {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        if (!fields.includes('id')) {
+        if (typeof fields === 'object' && !fields.includes('id')) {
             fields.push('id');
         }
 
