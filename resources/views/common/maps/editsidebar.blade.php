@@ -222,25 +222,30 @@ if (isset($model)) {
                 {{ __('Pull gradient') }}:
             </div>
         </div>
-        <div class="row no-gutters view_dungeonroute_details_row mt-3">
-            <div id="edit_route_freedraw_options_gradient" class="col">
+        <div class="row view_dungeonroute_details_row mt-3">
+            <div id="edit_route_freedraw_options_gradient" class="col-10">
 
             </div>
-        </div>
-            <div class="row no-gutters view_dungeonroute_details_row mt-3">
-                <div class="col">
-                    {!! Form::label('pull_gradient_apply_always', __('Active')) !!}
-                    {!! Form::checkbox('pull_gradient_apply_always', $_COOKIE['pull_gradient_apply_always'], isset($model) ? $model->active : 1, ['class' => 'form-control left_checkbox']) !!}
-                    <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-info w-100">
-                        <i class="fas fa-palette"></i> {{ __('Apply gradient to pulls') }}
-                    </button>
-                </div>
-            </div>
-        <div class="row no-gutters view_dungeonroute_details_row mt-3">
-            <div class="col">
-                <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-info w-100">
-                    <i class="fas fa-palette"></i> {{ __('Apply gradient to pulls') }}
+            <div class="col-2">
+                <button id="edit_route_freedraw_options_gradient_apply_to_pulls" class="btn btn-success"
+                        data-toggle="tooltip" title="{{ __('Apply to current pulls') }}">
+                    <i class="fas fa-check-circle"></i>
                 </button>
+            </div>
+        </div>
+
+        <div class="row view_dungeonroute_details_row mt-3">
+            <div class="col-2">
+                {!! Form::checkbox('pull_gradient_apply_always', 1,
+                    isset($_COOKIE['pull_gradient_apply_always']) ? $_COOKIE['pull_gradient_apply_always'] === '1' : false,
+                    ['id' => 'pull_gradient_apply_always', 'class' => 'form-control left_checkbox'])
+                    !!}
+
+            </div>
+            <div class="col-10">
+                <label for="pull_gradient_apply_always">
+                    {{ __('Always apply when I change pulls') }}
+                </label>
             </div>
         </div>
     </div>

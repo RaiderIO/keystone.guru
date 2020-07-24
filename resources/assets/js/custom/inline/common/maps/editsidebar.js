@@ -112,6 +112,18 @@ class CommonMapsEditsidebar extends InlineCode {
 
             killZoneMapObjectGroup.saveAll(['color']);
         });
+
+        let $alwaysApplyPullGradient = $('#pull_gradient_apply_always');
+        let alwaysApplyPullGradient = Cookies.get('pull_gradient_apply_always');
+        if (typeof alwaysApplyPullGradient !== 'undefined' && alwaysApplyPullGradient === '1') {
+            $alwaysApplyPullGradient.attr('checked', 'checked');
+        } else {
+            $alwaysApplyPullGradient.removeAttr('checked');
+        }
+        $alwaysApplyPullGradient.bind('change', function () {
+            console.log('change', $(this).is(':checked'));
+            Cookies.set('pull_gradient_apply_always', $(this).is(':checked') ? '1' : '0');
+        });
     }
 
     /**
