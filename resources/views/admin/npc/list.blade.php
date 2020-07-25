@@ -21,6 +21,7 @@
                 'processing': true,
                 'serverSide': true,
                 'responsive': true,
+                'searching': true,
                 'ajax': {
                     'url': '/ajax/admin/npc'
                 },
@@ -32,12 +33,12 @@
                     {
                         'title': lang.get('messages.id_label'),
                         'data': 'id',
-                        'name': 'id'
+                        'name': 'id',
                     },
                     {
                         'title': lang.get('messages.name_label'),
                         'data': 'name',
-                        'name': 'name'
+                        'name': 'name',
                     },
                     {
                         'title': lang.get('messages.dungeon_label'),
@@ -45,23 +46,26 @@
                         'name': 'dungeon_id',
                         'render': function (data, type, row, meta) {
                             return row.dungeon_id === -1 ? 'Any' : row.dungeon.name;
-                        }
+                        },
                     },
                     {
                         'title': lang.get('messages.enemy_forces_label'),
                         'data': 'enemy_forces',
-                        'name': 'enemy_forces'
+                        'name': 'enemy_forces',
+                        'searchable': false
                     },
                     {
                         'title': lang.get('messages.classification_label'),
                         'data': 'classification.name',
-                        'name': 'classification.name'
+                        'name': 'classification.name',
+                        'searchable': false
                     },
                     {
                         'title': lang.get('messages.actions_label'),
                         'data': 'id',
                         'name': 'id',
                         'orderable': false,
+                        'searchable': false,
                         'render': function (data, type, row, meta) {
                             return `<a class="btn btn-primary" href="/admin/npc/${row.id}">` +
                                 `    <i class="fas fa-edit"></i> ${lang.get('messages.edit_label')}` +
@@ -70,7 +74,7 @@
                     }
                 ],
                 'language': {
-                    'emptyTable': lang.get('messages.datatable_no_users_in_table')
+                    'emptyTable': lang.get('messages.datatable_no_npcs_in_table')
                 }
             });
         });

@@ -117,6 +117,7 @@ return [
     'registered_label'               => 'Registered at',
     'patreon_label'                  => 'Patreon',
     'datatable_no_users_in_table'    => 'No users found',
+    'datatable_no_npcs_in_table'     => 'No npcs found',
 
     'classification_label' => 'Classification',
     'edit_label'           => 'Edit',
@@ -186,6 +187,7 @@ return [
     'sidebar_enemy_name_label'                                      => 'Name:',
     'sidebar_enemy_health_label'                                    => 'Health:',
     'sidebar_enemy_bursting_label'                                  => 'Bursts:',
+    'sidebar_enemy_sanguine_label'                                  => 'Sanguine:',
     'sidebar_enemy_bolstering_label'                                => 'Bolsters:',
     'sidebar_enemy_bolstering_whitelist_npcs_label'                 => 'Bolsters only:',
 

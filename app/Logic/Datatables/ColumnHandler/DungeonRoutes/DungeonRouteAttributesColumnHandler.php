@@ -6,8 +6,9 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables\ColumnHandler;
+namespace App\Logic\Datatables\ColumnHandler\DungeonRoutes;
 
+use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use App\Models\RouteAttribute;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,7 +21,7 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'routeattributes.name');
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order)
+    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
     {
         $routeattributes = $columnData['search']['value'];
         // If filtering or ordering

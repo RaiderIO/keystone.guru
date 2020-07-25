@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Logic\Datatables\ColumnHandler\Users\DungeonColumnHandler;
+use App\Logic\Datatables\ColumnHandler\Users\IdColumnHandler;
+use App\Logic\Datatables\ColumnHandler\Users\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
-use Illuminate\Http\Request;
 use App\Models\Npc;
+use Illuminate\Http\Request;
 use Teapot\StatusCode\Http;
 
 class APINpcController extends Controller
@@ -32,8 +35,15 @@ class APINpcController extends Controller
      */
     public function list(Request $request)
     {
-        $npcs = Npc::with(['dungeon', 'type', 'classification']);
+        $npcs = Npc::with(['dungeon', 'type', 'classification'])
+            ->select(['npcs.*'])
+            ->leftJoin('dungeons', 'npcs.dungeon_id', '=', 'dungeons.id');
 
-        return (new NpcsDatatablesHandler($request))->setBuilder($npcs)->applyRequestToBuilder()->getResult();
+        $datatablesHandler = (new NpcsDatatablesHandler($request));
+        return $datatablesHandler->setBuilder($npcs)->addColumnHandler([
+            new IdColumnHandler($datatablesHandler),
+            new NameColumnHandler($datatablesHandler),
+            new DungeonColumnHandler($datatablesHandler)
+        ])->applyRequestToBuilder()->getResult();
     }
 }

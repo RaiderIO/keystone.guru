@@ -13,19 +13,18 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SimpleColumnHandler extends DatatablesColumnHandler
 {
-
-    public function __construct(DatatablesHandler $dtHandler, $columnName)
+    public function __construct(DatatablesHandler $dtHandler, $columnName, $columnData = null)
     {
-        parent::__construct($dtHandler, $columnName);
+        parent::__construct($dtHandler, $columnName, $columnData);
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order)
+    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
     {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
-            $searchValue = $columnData['search']['value'];
+            $searchValue = $columnData['search']['value'] ?? $generalSearch;
             if (!empty($searchValue)) {
-                $builder->where($this->getColumnName(), $searchValue);
+                $builder->orWhere($this->getColumnData(), 'LIKE', sprintf('%%%s%%', $searchValue));
             }
         }
 
@@ -34,7 +33,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
             // Order on this column?
             if (!is_null($order)) {
                 // Order either asc or desc, nothing else
-                $builder->orderBy($this->getColumnName(), $order['dir'] === 'asc' ? 'asc' : 'desc');
+                $builder->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
             }
         }
     }

@@ -14,24 +14,25 @@ use Illuminate\Database\Eloquent\Builder;
 abstract class DatatablesColumnHandler
 {
 
-    /**
-     * @var DatatablesHandler
-     */
+    /** @var DatatablesHandler */
     private $_dtHandler;
 
-    /**
-     * @var string
-     */
+    /**  @var string */
     private $_columnName;
 
-    public function __construct(DatatablesHandler $dtHandler, string $columnName)
+    /** @var string */
+    private $_columnData;
+
+    public function __construct(DatatablesHandler $dtHandler, string $columnName, string $columnData = null)
     {
         $this->_dtHandler = $dtHandler;
 
         $this->_columnName = $columnName;
+        // If not set, just copy the column name
+        $this->_columnData = $columnData ?? $columnName;
     }
 
-    protected abstract function _applyFilter(Builder $builder, $columnData, $order);
+    protected abstract function _applyFilter(Builder $builder, $columnData, $order, $generalSearch);
 
     /**
      * @return DatatablesHandler
@@ -50,6 +51,14 @@ abstract class DatatablesColumnHandler
     }
 
     /**
+     * @return string Gets the column name of the handler.
+     */
+    public function getColumnData()
+    {
+        return $this->_columnData;
+    }
+
+    /**
      * @return $this
      * @throws \Exception
      */
@@ -63,6 +72,7 @@ abstract class DatatablesColumnHandler
 
         $columns = $request->get('columns');
         $order = ($request->get('order', []))[0];
+        $generalSearch = ($request->get('search'))['value'];
 
         // Find the column we should handle
         $column = null;
@@ -82,7 +92,7 @@ abstract class DatatablesColumnHandler
             $order = $order['column'] == $columnIndex ? $order : null;
 
             // Handle the filtering of this column
-            $this->_applyFilter($this->_dtHandler->getBuilder(), $column, $order);
+            $this->_applyFilter($this->_dtHandler->getBuilder(), $column, $order, $generalSearch);
             // throw new \Exception(sprintf("Unable to find column '%s' in Request->params->columns array", $this->_columnName));
         }
 

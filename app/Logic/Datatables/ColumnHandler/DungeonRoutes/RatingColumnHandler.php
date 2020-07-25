@@ -6,8 +6,9 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables\ColumnHandler;
+namespace App\Logic\Datatables\ColumnHandler\DungeonRoutes;
 
+use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class RatingColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'rating');
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order)
+    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
     {
 
         $rating = $columnData['search']['value'];
