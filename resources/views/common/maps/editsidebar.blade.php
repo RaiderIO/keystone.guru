@@ -24,178 +24,189 @@ if (isset($model)) {
     'id' => 'editsidebar'
 ])
 
-    @isset($show['shareable-link'])
-        <!-- Shareable link -->
-        <div class="form-group">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ __('Shareable link') }}</h5>
-                    <div class="row">
+@isset($show['shareable-link'])
+    <!-- Shareable link -->
+    <div class="form-group">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ __('Shareable link') }}</h5>
+                <div class="row">
+                    <div class="input-group-append">
+                        {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
+                        ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                         <div class="input-group-append">
-                            {!! Form::text('map_shareable_link', route('dungeonroute.view', ['dungeonroute' => $model->public_key]),
-                            ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
-                            <div class="input-group-append">
-                                <button id="map_copy_to_clipboard" class="btn btn-info"
-                                        data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
-                                    <i class="far fa-copy"></i>
-                                </button>
-                            </div>
+                            <button id="map_copy_to_clipboard" class="btn btn-info"
+                                    data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
+                                <i class="far fa-copy"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    @endisset
+    </div>
+@endisset
 
-    <!-- Visibility -->
-    <div class="form-group visibility_tools">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Visibility') }}</h5>
-                <div class="row">
-                    <div id="map_enemy_visuals_container" class="col">
-                    </div>
+<!-- Visibility -->
+<div class="form-group visibility_tools">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ __('Visibility') }}</h5>
+            <div class="row">
+                <div id="map_enemy_visuals_container" class="col">
                 </div>
+            </div>
 
-                <div class="row view_dungeonroute_details_row">
+            <div class="row view_dungeonroute_details_row">
+                <div class="col font-weight-bold">
+                    {{ __('Map elements') }}:
+                </div>
+            </div>
+            <div class="row view_dungeonroute_details_row">
+                <div class="col">
+                    {!! Form::select('map_map_object_group_visibility', [], 0,
+                        ['id' => 'map_map_object_group_visibility',
+                        'class' => 'form-control selectpicker',
+                        'multiple' => 'multiple',
+                        'data-selected-text-format' => 'count > 1',
+                        'data-count-selected-text' => __('{0} visible')]) !!}
+                </div>
+            </div>
+
+            @if($floorSelection)
+                <div class="row view_dungeonroute_details_row mt-3">
                     <div class="col font-weight-bold">
-                        {{ __('Map elements') }}:
+                        {{ __('Floor') }}:
                     </div>
                 </div>
                 <div class="row view_dungeonroute_details_row">
-                    <div class="col">
-                        {!! Form::select('map_map_object_group_visibility', [], 0,
-                            ['id' => 'map_map_object_group_visibility',
-                            'class' => 'form-control selectpicker',
-                            'multiple' => 'multiple',
-                            'data-selected-text-format' => 'count > 1',
-                            'data-count-selected-text' => __('{0} visible')]) !!}
+                    <div class="col floor_selection">
+                        <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+                        {!! Form::select('map_floor_selection', [__('Select floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
                     </div>
                 </div>
+            @else
+                {!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
+            @endif
+        </div>
+    </div>
+</div>
 
-                @if($floorSelection)
-                    <div class="row view_dungeonroute_details_row mt-3">
-                        <div class="col font-weight-bold">
-                            {{ __('Floor') }}:
+<!-- Actions -->
+<div class="form-group route_actions">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ __('Actions') }}</h5>
+
+            @isset($show['virtual-tour'])
+                <div class="form-group">
+                    <!-- Virtual tour -->
+                    <div class="row">
+                        <div class="col">
+                            <button id="start_virtual_tour" class="btn btn-info col">
+                                <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
+                            </button>
                         </div>
                     </div>
-                    <div class="row view_dungeonroute_details_row">
-                        <div class="col floor_selection">
-                            <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-                            {!! Form::select('map_floor_selection', [__('Select floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
+                </div>
+            @endisset
+
+            @isset($show['draw-settings'])
+                <div class="form-group">
+                    <!-- Route settings -->
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-info col" data-toggle="modal" data-target="#draw_settings_modal">
+                                <i class='fas fa-palette'></i> {{ __('Draw settings') }}
+                            </button>
                         </div>
+                    </div>
+                </div>
+            @endisset
+
+            @isset($show['route-settings'])
+                <div class="form-group">
+                    <!-- Route settings -->
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-info col" data-toggle="modal"
+                                    data-target="#route_settings_modal">
+                                <i class='fas fa-cog'></i> {{ __('Route settings') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endisset
+
+
+            @isset($show['route-publish'])
+            <!-- Published state -->
+                <div class="form-group mb-0">
+                    <div class="row">
+                        <div class="col">
+                            <button id="map_route_publish"
+                                    class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}"
+                                    data-toggle="tooltip"
+                                    title="{{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}">
+                                <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
+                            </button>
+                            <button id="map_route_unpublish"
+                                    class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
+                                <i class="fa fa-plane-arrival"></i> {{ __('Unpublish route') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endisset
+
+            @isset($show['tryout'])
+                @if (Auth::guest())
+                    <div class="form-group">
+                        <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
+                            <i class="fas fa-sign-in-alt"></i> {{__('Login and continue')}}
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
+                                data-target="#register_modal">
+                            <i class="fas fa-user-plus"></i> {{ __('Register and continue') }}
+                        </button>
                     </div>
                 @else
-                    {!! Form::input('hidden', 'map_floor_selection', $dungeon->floors[0]->id, ['id' => 'map_floor_selection']) !!}
+                    <div class="form-group">
+                        <a href="{{ route('dungeonroute.claim', ['dungeonroute' => $model->public_key]) }}"
+                           class="btn btn-primary mt-1 w-100" role="button">
+                            <i class="fas fa-save"></i> {{ __('Save and continue') }}
+                        </a>
+                    </div>
                 @endif
-            </div>
+            @endisset
         </div>
     </div>
+</div>
 
-    <!-- Actions -->
-    <div class="form-group route_actions">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Actions') }}</h5>
+<!-- Mouseover enemy information -->
+<div id="enemy_info_container" class="form-group" style="display: none">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ __('Enemy info') }}</h5>
+            <div id="enemy_info_key_value_container">
 
-                @isset($show['virtual-tour'])
-                    <div class="form-group">
-                        <!-- Virtual tour -->
-                        <div class="row">
-                            <div class="col">
-                                <button id="start_virtual_tour" class="btn btn-info col">
-                                    <i class="fas fa-info-circle"></i> {{ __('Start virtual tour') }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endisset
-
-                @isset($show['draw-settings'])
-                    <div class="form-group">
-                        <!-- Route settings -->
-                        <div class="row">
-                            <div class="col">
-                                <button class="btn btn-info col" data-toggle="modal" data-target="#draw_settings_modal">
-                                    <i class='fas fa-palette'></i> {{ __('Draw settings') }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endisset
-
-                @isset($show['route-settings'])
-                    <div class="form-group">
-                        <!-- Route settings -->
-                        <div class="row">
-                            <div class="col">
-                                <button class="btn btn-info col" data-toggle="modal"
-                                        data-target="#route_settings_modal">
-                                    <i class='fas fa-cog'></i> {{ __('Route settings') }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endisset
-
-
-                @isset($show['route-publish'])
-                <!-- Published state -->
-                    <div class="form-group mb-0">
-                        <div class="row">
-                            <div class="col">
-                                <button id="map_route_publish"
-                                        class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}"
-                                        data-toggle="tooltip"
-                                        title="{{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}">
-                                    <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
-                                </button>
-                                <button id="map_route_unpublish"
-                                        class="btn btn-warning col-md {{ $model->published === 0 ? 'd-none' : '' }}">
-                                    <i class="fa fa-plane-arrival"></i> {{ __('Unpublish route') }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endisset
-
-                @isset($show['tryout'])
-                    @if (Auth::guest())
-                        <div class="form-group">
-                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
-                                <i class="fas fa-sign-in-alt"></i> {{__('Login and continue')}}
-                            </button>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
-                                    data-target="#register_modal">
-                                <i class="fas fa-user-plus"></i> {{ __('Register and continue') }}
-                            </button>
-                        </div>
-                    @else
-                        <div class="form-group">
-                            <a href="{{ route('dungeonroute.claim', ['dungeonroute' => $model->public_key]) }}"
-                               class="btn btn-primary mt-1 w-100" role="button">
-                                <i class="fas fa-save"></i> {{ __('Save and continue') }}
-                            </a>
-                        </div>
-                    @endif
-                @endisset
             </div>
-        </div>
-    </div>
-
-    <!-- Mouseover enemy information -->
-    <div id="enemy_info_container" class="form-group" style="display: none">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('Enemy info') }}</h5>
-                <div id="enemy_info_key_value_container">
-
+            <div class="row mt-1">
+                <div class="col">
+                    <a href="#" data-toggle="modal"
+                       data-target="#userreport_enemy_modal">
+                        <button class="btn btn-warning w-100">
+                            <i class="fa fa-bug"></i>
+                            {{ __('Report an issue') }}
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 @endcomponent
 
@@ -234,7 +245,8 @@ if (isset($model)) {
                             data-toggle="tooltip" title="{{ __('Apply to current pulls') }}">
                         {{ __('Apply') }}
                     </button>
-                    <button id="edit_route_freedraw_options_gradient_apply_to_pulls_saving" class="btn btn-success disabled"
+                    <button id="edit_route_freedraw_options_gradient_apply_to_pulls_saving"
+                            class="btn btn-success disabled"
                             style="display: none">
                         <i class='fas fa-circle-notch fa-spin'></i>
                     </button>
@@ -260,13 +272,13 @@ if (isset($model)) {
         </div>
 
         <div class="form-group mb-0">
-            <div id="save_draw_settings" class="offset-lg-4 col-lg-4 btn btn-success">
+            <button id="save_draw_settings" class="offset-lg-4 col-lg-4 btn btn-success">
                 <i class="fas fa-save"></i> {{ __('Save') }}
-            </div>
-            <div id="save_draw_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"
+            </button>
+            <button id="save_draw_settings_saving" class="offset-lg-5 col-lg-2 btn btn-success disabled"
                  style="display: none;">
-                <i class="fas fa-circle-notch fa-spin"></i>
-            </div>
+                <i class="fas fa-circle-notch fa-spin"></i> {{ __('Save') }}
+            </button>
         </div>
     </div>
 @overwrite

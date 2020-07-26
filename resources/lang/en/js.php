@@ -190,6 +190,8 @@ return [
     'sidebar_enemy_sanguine_label'                                  => 'Sanguine:',
     'sidebar_enemy_bolstering_label'                                => 'Bolsters:',
     'sidebar_enemy_bolstering_whitelist_npcs_label'                 => 'Bolsters only:',
+    'user_report_enemy_success'                                     => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
+    'dungeonroute_report_enemy_success'                             => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
 
     // Killzone sidebar
     'killzone_sidebar_kill_location_label'                          => 'Kill location',
@@ -214,7 +216,7 @@ return [
     'ajax_error_default'                                            => 'An error occurred while performing your request. Please try again.',
     'ajax_error_403'                                                => 'You are not authorized to perform this request.',
     'ajax_error_404'                                                => 'The requested resource was not found.',
-    'ajax_error_419'                                                => 'Your session has expired. Refresh the page.',
+    'ajax_error_419'                                                => 'Your session has expired. Please refresh the page and try again.',
 
     // Popups
     // Map Object

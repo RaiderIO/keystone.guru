@@ -25,11 +25,6 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
     'dungeonroute' => $model
 ]])
 
-@section('modal-content')
-    @include('common.userreport.dungeonroute')
-@overwrite
-@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
-
 @component('common.maps.sidebar', [
     'header' => $model->title,
     'subHeader' => $subTitle,
@@ -222,7 +217,7 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                                     <i class="fa fa-exclamation-triangle"></i> {{ __('You have reported this route for moderation.') }}
                                 </span>
                             @else
-                                <a id="featherlight_trigger" href="#" data-toggle="modal"
+                                <a href="#" data-toggle="modal"
                                    data-target="#userreport_dungeonroute_modal">
                                     <button class="btn btn-warning w-100">
                                         <i class="fa fa-flag"></i>

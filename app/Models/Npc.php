@@ -23,6 +23,7 @@ use Illuminate\Support\Collection;
  * @property bool $truesight
  * @property bool $bursting
  * @property bool $bolstering
+ * @property bool $sanguine
  *
  * @property Dungeon $dungeon
  * @property NpcClassification $classification

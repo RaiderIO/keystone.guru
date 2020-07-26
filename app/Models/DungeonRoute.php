@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
+use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Service\Season\SeasonService;
 use App\User;
@@ -84,6 +85,7 @@ use Illuminate\Support\Facades\DB;
 class DungeonRoute extends Model
 {
     use SerializesDates;
+    use Reportable;
 
     /**
      * The accessors to append to the model's array form.
@@ -365,14 +367,6 @@ class DungeonRoute extends Model
     public function getViewsAttribute()
     {
         return $this->pageviews->count();
-    }
-
-    /**
-     * @return mixed Get the uniquely identifying context for this route.
-     */
-    public function getReportContext()
-    {
-        return $this->public_key;
     }
 
     /**

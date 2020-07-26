@@ -74,8 +74,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
 
-    Route::post('userreport/new', 'UserReportController@store')->name('userreport.new');
-
     Route::get('dungeonroutes', 'SiteController@dungeonroutes');
     Route::get('routes', 'DungeonRouteController@list')->name('dungeonroutes');
 
@@ -210,6 +208,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function ()
     {
         Route::get('/{publickey}/data', 'APIDungeonRouteController@data');
+
+        Route::post('userreport/dungeonroute/{dungeonroute}', 'APIUserReportController@dungeonrouteStore')->name('userreport.dungeonroute');
+        Route::post('userreport/enemy/{enemy}', 'APIUserReportController@enemyStore')->name('userreport.enemy');
 
         Route::get('/routes', 'APIDungeonRouteController@list');
 

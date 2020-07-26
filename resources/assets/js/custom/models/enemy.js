@@ -255,6 +255,7 @@ class Enemy extends MapObject {
         result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()})
         result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting})
         result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering})
+        result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine})
         // @formatter:on
 
         if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {

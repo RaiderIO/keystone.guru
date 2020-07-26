@@ -53,6 +53,7 @@ class NpcController extends Controller
         $npc->truesight = $request->get('truesight', 0);
         $npc->bursting = $request->get('bursting', 0);
         $npc->bolstering = $request->get('bolstering', 0);
+        $npc->sanguine = $request->get('sanguine', 0);
 
         // Bolstering whitelist, if set
         $bolsteringWhitelistNpcs = $request->get('bolstering_whitelist_npcs', []);

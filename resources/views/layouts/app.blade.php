@@ -1,6 +1,6 @@
 <?php
 /** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
-$numUserReports = \App\Models\UserReport::where('handled', 0)->count();
+$numUserReports = \App\Models\UserReport::where('status', 0)->count();
 /** @var \Illuminate\Support\Collection|DungeonRoute[] $demoRoutes */
 $demoRoutes = \App\Models\DungeonRoute::where('demo', true)->where('published', true)->orderBy('dungeon_id')->get();
 $dungeons = \App\Models\Dungeon::all();

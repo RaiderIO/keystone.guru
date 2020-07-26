@@ -31,12 +31,14 @@ class CommonMapsViewsidebar extends InlineCode {
             deselectable: true,
             allowEmpty: true,
             onSelect: function (value, text, event) {
-                self.rate(value);
+                self._rate(value);
             }
         });
         $('#favorite').bind('change', function (el) {
-            self.favorite($('#favorite').is(':checked'));
+            self._favorite($('#favorite').is(':checked'));
         });
+
+        $('#userreport_dungeonroute_modal_submit').bind('click', this._submitDungeonRouteUserReport.bind(this));
 
         refreshTooltips();
     }
@@ -45,7 +47,7 @@ class CommonMapsViewsidebar extends InlineCode {
      * Rates the current dungeon route or unset it.
      * @param value int
      */
-    rate(value) {
+    _rate(value) {
         let self = this;
 
         let isDelete = value === '';
@@ -67,7 +69,7 @@ class CommonMapsViewsidebar extends InlineCode {
      * Favorites the current dungeon route, or not.
      * @param value bool
      */
-    favorite(value) {
+    _favorite(value) {
         let self = this;
 
         $.ajax({
@@ -76,6 +78,36 @@ class CommonMapsViewsidebar extends InlineCode {
             dataType: 'json',
             success: function (json) {
 
+            }
+        });
+    }
+
+    /**
+     *
+     * @private
+     */
+    _submitDungeonRouteUserReport() {
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/userreport/dungeonroute/${getState().getDungeonRoute().publicKey}`,
+            dataType: 'json',
+            data: {
+                category: $('#dungeonroute_report_category').val(),
+                username: $('#dungeonroute_report_username').val(),
+                message: $('#dungeonroute_report_message').val(),
+                contact_ok: $('#dungeonroute_report_contact_ok').is(':checked') ? 1 : 0
+            },
+            beforeSend: function () {
+                $('#userreport_dungeonroute_modal_submit').hide();
+                $('#userreport_dungeonroute_modal_saving').show();
+            },
+            success: function (json) {
+                $('#userreport_dungeonroute_modal').modal('hide');
+                showSuccessNotification(lang.get('messages.dungeonroute_report_enemy_success'));
+            },
+            complete: function () {
+                $('#userreport_dungeonroute_modal_submit').show();
+                $('#userreport_dungeonroute_modal_saving').hide();
             }
         });
     }

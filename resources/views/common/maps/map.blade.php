@@ -156,6 +156,17 @@ if ($isAdmin) {
     <div id="route_echo_container" class="container">
     </div>
 </header>
+
+@section('modal-content')
+    @include('common.userreport.dungeonroute')
+@overwrite
+@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+
+@section('modal-content')
+    @include('common.userreport.enemy')
+@overwrite
+@include('common.general.modal', ['id' => 'userreport_enemy_modal'])
+
 @if($edit)
     <footer class="fixed-bottom route_manipulation_tools">
         <div class="container">

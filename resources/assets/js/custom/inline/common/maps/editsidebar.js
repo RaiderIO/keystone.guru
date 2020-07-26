@@ -98,7 +98,7 @@ class CommonMapsEditsidebar extends InlineCode {
 
             let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
-            killZoneMapObjectGroup.applyPullGradient(true, function(){
+            killZoneMapObjectGroup.applyPullGradient(true, function () {
                 $('#edit_route_freedraw_options_gradient_apply_to_pulls').show();
                 $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').hide();
             });
@@ -117,6 +117,8 @@ class CommonMapsEditsidebar extends InlineCode {
 
         // Draw settings save button
         $('#save_draw_settings').bind('click', this._savePullGradientSettings.bind(this));
+
+        $('#userreport_enemy_modal_submit').bind('click', this._submitEnemyUserReport.bind(this));
     }
 
     /**
@@ -125,18 +127,52 @@ class CommonMapsEditsidebar extends InlineCode {
      * @private
      */
     _onFocusedEnemyChanged(focusedEnemyChangedEvent) {
-
-        let isNull = focusedEnemyChangedEvent.data.focusedenemy === null;
+        let focusedEnemy = focusedEnemyChangedEvent.data.focusedenemy;
+        let isNull = focusedEnemy === null;
         // Show/hide based on being set or not
-        $('#enemy_info_container').toggle(!isNull);
+        // $('#enemy_info_container').toggle(!isNull);
+        $('#enemy_info_container').show();
         if (!isNull) {
             // Update the focused enemy in the sidebar
             let template = Handlebars.templates['map_sidebar_enemy_info_template'];
 
             $('#enemy_info_key_value_container').html(
-                template(focusedEnemyChangedEvent.data.focusedenemy.getVisualData())
+                template(focusedEnemy.getVisualData())
             )
+            $('#enemy_report_enemy_id').val(focusedEnemy.id);
         }
+    }
+
+    /**
+     *
+     * @private
+     */
+    _submitEnemyUserReport() {
+        let enemyId = $('#enemy_report_enemy_id').val();
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/userreport/enemy/${enemyId}`,
+            dataType: 'json',
+            data: {
+                category: $('#enemy_report_category').val(),
+                username: $('#enemy_report_username').val(),
+                message: $('#enemy_report_message').val(),
+                contact_ok: $('#enemy_report_contact_ok').is(':checked') ? 1 : 0
+            },
+            beforeSend: function () {
+                $('#userreport_enemy_modal_submit').hide();
+                $('#userreport_enemy_modal_saving').show();
+            },
+            success: function (json) {
+                $('#userreport_enemy_modal').modal('hide');
+                showSuccessNotification(lang.get('messages.user_report_enemy_success'));
+            },
+            complete: function () {
+                $('#userreport_enemy_modal_submit').show();
+                $('#userreport_enemy_modal_saving').hide();
+            }
+        });
     }
 
     /**

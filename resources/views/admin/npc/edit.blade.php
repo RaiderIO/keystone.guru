@@ -86,28 +86,44 @@ if (isset($model)) {
         @include('common.forms.form-error', ['key' => 'enemy_forces_teeming'])
     </div>
 
-    <div class="form-group{{ $errors->has('dangerous') ? ' has-error' : '' }}">
-        {!! Form::label('dangerous', __('Dangerous')) !!}
-        {!! Form::checkbox('dangerous', 1, isset($model) ? $model->dangerous : 1, ['class' => 'form-control left_checkbox']) !!}
-        @include('common.forms.form-error', ['key' => 'dangerous'])
-    </div>
-
-    <div class="form-group{{ $errors->has('truesight') ? ' has-error' : '' }}">
-        {!! Form::label('truesight', __('Truesight')) !!}
-        {!! Form::checkbox('truesight', 1, isset($model) ? $model->truesight : 1, ['class' => 'form-control left_checkbox']) !!}
-        @include('common.forms.form-error', ['key' => 'truesight'])
-    </div>
-
-    <div class="form-group{{ $errors->has('bursting') ? ' has-error' : '' }}">
-        {!! Form::label('bursting', __('Bursting')) !!}
-        {!! Form::checkbox('bursting', 1, isset($model) ? $model->bursting : 1, ['class' => 'form-control left_checkbox']) !!}
-        @include('common.forms.form-error', ['key' => 'bursting'])
-    </div>
-
-    <div class="form-group{{ $errors->has('bolstering') ? ' has-error' : '' }}">
-        {!! Form::label('bolstering', __('Bolstering')) !!}
-        {!! Form::checkbox('bolstering', 1, isset($model) ? $model->bolstering : 1, ['class' => 'form-control left_checkbox']) !!}
-        @include('common.forms.form-error', ['key' => 'bolstering'])
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <div class="{{ $errors->has('dangerous') ? ' has-error' : '' }}">
+                    {!! Form::label('dangerous', __('Dangerous')) !!}
+                    {!! Form::checkbox('dangerous', 1, isset($model) ? $model->dangerous : 1, ['class' => 'form-control left_checkbox']) !!}
+                    @include('common.forms.form-error', ['key' => 'dangerous'])
+                </div>
+            </div>
+            <div class="col">
+                <div class="{{ $errors->has('truesight') ? ' has-error' : '' }}">
+                    {!! Form::label('truesight', __('Truesight')) !!}
+                    {!! Form::checkbox('truesight', 1, isset($model) ? $model->truesight : 1, ['class' => 'form-control left_checkbox']) !!}
+                    @include('common.forms.form-error', ['key' => 'truesight'])
+                </div>
+            </div>
+            <div class="col">
+                <div class="{{ $errors->has('bursting') ? ' has-error' : '' }}">
+                    {!! Form::label('bursting', __('Bursting')) !!}
+                    {!! Form::checkbox('bursting', 1, isset($model) ? $model->bursting : 1, ['class' => 'form-control left_checkbox']) !!}
+                    @include('common.forms.form-error', ['key' => 'bursting'])
+                </div>
+            </div>
+            <div class="col">
+                <div class="{{ $errors->has('bolstering') ? ' has-error' : '' }}">
+                    {!! Form::label('bolstering', __('Bolstering')) !!}
+                    {!! Form::checkbox('bolstering', 1, isset($model) ? $model->bolstering : 1, ['class' => 'form-control left_checkbox']) !!}
+                    @include('common.forms.form-error', ['key' => 'bolstering'])
+                </div>
+            </div>
+            <div class="col">
+                <div class="{{ $errors->has('sanguine') ? ' has-error' : '' }}">
+                    {!! Form::label('sanguine', __('Sanguine')) !!}
+                    {!! Form::checkbox('sanguine', 1, isset($model) ? $model->sanguine : 1, ['class' => 'form-control left_checkbox']) !!}
+                    @include('common.forms.form-error', ['key' => 'sanguine'])
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="form-group">

@@ -8,10 +8,8 @@
 
 namespace App\Logic\Datatables\ColumnHandler\Users;
 
-use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
-use Illuminate\Database\Eloquent\Builder;
 
 class IdColumnHandler extends SimpleColumnHandler
 {
