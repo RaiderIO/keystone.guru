@@ -12,9 +12,9 @@
         "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
         "npcbolsteringwhitelists": []
     },
     {
@@ -30,9 +30,9 @@
         "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
         "npcbolsteringwhitelists": []
     },
     {
@@ -48,9 +48,9 @@
         "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
         "npcbolsteringwhitelists": []
     },
     {
@@ -66,9 +66,9 @@
         "aggressiveness": "awakened",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
         "npcbolsteringwhitelists": []
     }
 ]

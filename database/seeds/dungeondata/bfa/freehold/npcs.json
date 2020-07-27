@@ -553,11 +553,11 @@
         "dangerous": 0,
         "truesight": 0,
         "bursting": 0,
-        "bolstering": 1,
-        "sanguine": 1,
+        "bolstering": 0,
+        "sanguine": 0,
         "npcbolsteringwhitelists": [
             {
-                "id": 2,
+                "id": 13,
                 "npc_id": 130024,
                 "whitelist_npc_id": 130024
             }
@@ -579,7 +579,13 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [
+            {
+                "id": 12,
+                "npc_id": 130400,
+                "whitelist_npc_id": 130400
+            }
+        ]
     },
     {
         "id": 130404,
@@ -630,7 +636,7 @@
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1,
+        "bursting": 0,
         "bolstering": 1,
         "sanguine": 1,
         "npcbolsteringwhitelists": []
