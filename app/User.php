@@ -89,7 +89,7 @@ class User extends Authenticatable
      */
     function reports()
     {
-        return $this->hasMany('App\Models\UserReport', 'author_id');
+        return $this->hasMany('App\Models\UserReport');
     }
 
     /**
@@ -223,6 +223,9 @@ class User extends Authenticatable
             ],
             'dungeonroutes' => [
                 'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isTry()->count())
+            ],
+            'reports' => [
+                'delete_count' => ($this->reports()->where('status', 0)->count())
             ]
         ]);
     }

@@ -118,6 +118,7 @@ return [
     'patreon_label'                  => 'Patreon',
     'datatable_no_users_in_table'    => 'No users found',
     'datatable_no_npcs_in_table'     => 'No npcs found',
+    'user_report_handled_success'    => 'User report successfully marked as resolved',
 
     'classification_label' => 'Classification',
     'edit_label'           => 'Edit',

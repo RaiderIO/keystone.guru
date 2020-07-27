@@ -242,7 +242,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
                 Route::delete('/mapicon/{mapicon}', 'APIMapIconController@adminDelete');
             });
 
-            Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
+            Route::put('/userreport/{userreport}/status', 'APIUserReportController@status');
 
             Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
 

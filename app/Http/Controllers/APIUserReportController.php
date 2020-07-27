@@ -7,27 +7,28 @@ use App\Http\Requests\UserReportFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\UserReport;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
 class APIUserReportController
 {
     /**
      * @param Request $request
-     * @return UserReport|UserReport[]|\Illuminate\Database\Eloquent\Collection|Model
+     * @param UserReport $userreport
+     * @return UserReport|UserReport[]|Collection|Model
      */
-    public function markasresolved(Request $request)
+    public function status(Request $request, UserReport $userreport)
     {
-        $userReport = UserReport::findOrFail($request->get('id'));
-        $userReport->status = 1;
+        $userreport->status = $request->get('status', 0);
 
-        if (!$userReport->save()) {
-            abort(500, 'Unable to save report!');
+        if (!$userreport->save()) {
+            abort(500, 'Unable to update user report!');
         }
 
-        return $userReport;
+        return $userreport;
     }
 
     /**
@@ -55,7 +56,7 @@ class APIUserReportController
      * @param UserReportFormRequest $request
      * @param DungeonRoute $dungeonroute
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function dungeonrouteStore(UserReportFormRequest $request, DungeonRoute $dungeonroute)
     {
@@ -73,7 +74,7 @@ class APIUserReportController
      * @param UserReportFormRequest $request
      * @param Enemy $enemy
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function enemyStore(UserReportFormRequest $request, Enemy $enemy)
     {
