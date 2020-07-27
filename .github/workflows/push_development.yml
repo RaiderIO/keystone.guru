@@ -1,0 +1,22 @@
+name: Staging Deploy
+
+on:
+  push:
+    branches: [ development ]
+
+env:
+  private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+  server_ip: ${{ secrets.SERVER_IP }}
+
+jobs:
+  deploy-staging:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run update_live.sh on staging
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          script: ./var/www/html/keystone.guru.staging/update_live.sh
