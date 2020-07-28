@@ -27,7 +27,7 @@ jobs:
           mkdir -p database
           touch database/database.sqlite
       - name: Seed database with releases
-          run: php artisan db:seed --class=ReleasesSeeder
+        run: php artisan db:seed --class=ReleasesSeeder
 
       - name: Extract release version
         run: export release_version="$(php artisan keystoneguru:release)"

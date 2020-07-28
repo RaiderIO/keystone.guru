@@ -20,8 +20,3 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.staging/ && ./update_live.sh
-  export WEBHOOK_URL="https://discord.com/api/webhooks/203019812404264973/rptBmYgoehu70kw2rItSlhRqKi7kMJh1bM2KCUUD2vR6grZckvtdl62h4xR7XWUS5463"
-  curl -X POST \
--H "Content-Type: application/json" \
--d '{"username": "test", "content": "hello"}' \
-  $WEBHOOK_URL
