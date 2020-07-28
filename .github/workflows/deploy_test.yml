@@ -34,7 +34,8 @@ jobs:
         run: export release_body="$(php artisan keystoneguru:release ${release_version})"
 
       - name: Send Discord message
-        run:  curl -X POST \
-              -H "Content-Type: application/json" \
-              -d '{"username": "Keystone.guru", "content": '"${release_body}"'}' \
-              {{ secrets.DEPLOY_DISCORD_WEBHOOK }}
+        run: |
+          curl -X POST \
+          -H "Content-Type: application/json" \
+          -d '{"username": "Keystone.guru", "content": '"${release_body}"'}' \
+          {{ secrets.DEPLOY_DISCORD_WEBHOOK }}
