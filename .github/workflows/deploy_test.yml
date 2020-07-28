@@ -38,4 +38,4 @@ jobs:
           curl -X POST \
           -H "Content-Type: application/json" \
           -d '{"username": "Keystone.guru", "content": '"${release_body}"'}' \
-          {{ secrets.DEPLOY_DISCORD_WEBHOOK }}
+          ${{ secrets.DEPLOY_DISCORD_WEBHOOK }}
