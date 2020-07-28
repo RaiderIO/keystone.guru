@@ -6,7 +6,7 @@
 {{#each categories }}
 {{category}}:
 {{#each changes}}
-{{#ifCond ticket_id '>' 0 }}* #{{ticket_id}} {{/ifCond}}{{change}}
+* {{#ifCond ticket_id '>' 0 }}#{{ticket_id}} {{/ifCond}}{{change}}
 {{/each}}
 
 {{/each}}

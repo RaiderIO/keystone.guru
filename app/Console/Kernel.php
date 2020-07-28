@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\GetCurrentRelease;
+use App\Console\Commands\GetReleaseBody;
 use App\Logic\Scheduler\FindOutdatedThumbnails;
 use App\Logic\Scheduler\DeleteExpiredDungeonRoutes;
 use Illuminate\Console\Scheduling\Schedule;
@@ -16,7 +18,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        GetCurrentRelease::class,
+        GetReleaseBody::class
     ];
 
     /**
