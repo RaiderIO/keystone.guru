@@ -23,6 +23,9 @@ class ExpansionsSeeder extends Seeder
             ]), 'Battle for Azeroth' => new App\Models\Expansion([
                 'shortname' => 'bfa',
                 'color' => '#906554'
+            ]), 'Shadowlands' => new App\Models\Expansion([
+                'shortname' => 'shadowlands',
+                'color' => '#5832a8'
             ])
         ];
 
