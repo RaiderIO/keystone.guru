@@ -3,23 +3,26 @@
 namespace App\Console\Commands;
 
 use App\Models\Release;
+use Github\Api\Repo;
+use Github\Exception\MissingArgumentException;
+use GrahamCampbell\GitHub\Facades\GitHub;
 use Illuminate\Console\Command;
 
-class GetReleaseBody extends Command
+class ReportRelease extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'keystoneguru:release {version} {platform=github}';
+    protected $signature = 'report:release {platform} {version=latest}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Retrieves the latest/current release of Keystone.guru';
+    protected $description = 'Reports the creation of a release on Keystone.guru on various platforms';
 
     /**
      * Create a new command instance.
@@ -35,23 +38,25 @@ class GetReleaseBody extends Command
      * Execute the console command.
      *
      * @return void
+     * @throws MissingArgumentException
      */
     public function handle()
     {
         $version = $this->argument('version');
         $platform = $this->argument('platform');
 
-        if (substr($version, 0, 1) !== 'v') {
-            $version = 'v' . $version;
+        /** @var Release $release */
+        if( $version === 'latest' ) {
+            if (substr($version, 0, 1) !== 'v') {
+                $version = 'v' . $version;
+            }
+            $release = Release::where('version', $version)->first();
+        } else {
+            $release = Release::latest()->get();
         }
 
-        /** @var Release $release */
-        $release = Release::where('version', $version)->first();
 
         switch ($platform) {
-            case 'github':
-                $this->line($release->github_body);
-                break;
             case 'reddit':
                 $this->line($release->reddit_body);
                 break;

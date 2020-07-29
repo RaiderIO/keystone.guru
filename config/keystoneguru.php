@@ -2,6 +2,11 @@
 
 
 return [
+
+    'github_username' => 'Wotuu',
+
+    'github_repository' => 'Keystone.guru',
+
     /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
