@@ -707,23 +707,23 @@ class DungeonsSeeder extends Seeder
         ];
 
         $dungeonsDataShadowlands = [
-            'De Other Side' => [
+            'De Other Side'         => [
                 'expansion_id'                  => $shadowlands->id,
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
                 'floors'                        => [
-                    'De Other Side'      => [
-                        'index' => 1,
+                    'De Other Side' => [
+                        'index'   => 1,
                         'default' => true
                     ],
-                    'Mechagon' => [
+                    'Mechagon'      => [
                         'index' => 2
                     ],
-                    'Zul\'Gurub' => [
+                    'Zul\'Gurub'    => [
                         'index' => 3
                     ],
-                    'Ardenweald' => [
+                    'Ardenweald'    => [
                         'index' => 4
                     ],
                 ],
@@ -762,14 +762,14 @@ class DungeonsSeeder extends Seeder
                     ],
                 ]
             ],
-            'Halls of Atonement' => [
+            'Halls of Atonement'    => [
                 'expansion_id'                  => $shadowlands->id,
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
                 'floors'                        => [
-                    'Exterior <TEMP>'      => [
-                        'index' => 1,
+                    'Exterior <TEMP>'        => [
+                        'index'   => 1,
                         'default' => true
                     ],
                     'Lower Cathedral <TEMP>' => [
@@ -800,6 +800,238 @@ class DungeonsSeeder extends Seeder
                         'from'      => 'Upper Cathedral <TEMP>',
                         'to'        => 'Lower Cathedral <TEMP>',
                         'direction' => 'down'
+                    ],
+                ]
+            ],
+            'Mists of Tirna Scithe' => [
+                'expansion_id'                  => $shadowlands->id,
+                'enemy_forces_required'         => -1,
+                'enemy_forces_required_teeming' => -1,
+                'active'                        => true,
+                'floors'                        => [
+                    'Mists of Tirna Scithe' => [
+                        'index'   => 1,
+                        'default' => true
+                    ],
+                ],
+                'floor_couplings'               => []
+            ],
+            'Plaguefall' => [
+                'expansion_id'                  => $shadowlands->id,
+                'enemy_forces_required'         => -1,
+                'enemy_forces_required_teeming' => -1,
+                'active'                        => true,
+                'floors'                        => [
+                    'Plaguefall' => [
+                        'index'   => 1,
+                        'default' => true
+                    ],
+                    'The Festering Sanctum' => [
+                        'index'   => 2,
+                    ],
+                ],
+                'floor_couplings'               => [
+                    [
+                        'from'      => 'Plaguefall',
+                        'to'        => 'The Festering Sanctum',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from'      => 'The Festering Sanctum',
+                        'to'        => 'Plaguefall',
+                        'direction' => 'up'
+                    ],
+                ]
+            ],
+            'Sanguine Depths' => [
+                'expansion_id'                  => $shadowlands->id,
+                'enemy_forces_required'         => -1,
+                'enemy_forces_required_teeming' => -1,
+                'active'                        => true,
+                'floors'                        => [
+                    'A' => [
+                        'index'   => 1,
+                        'default' => true
+                    ],
+                    'B' => [
+                        'index'   => 2,
+                    ],
+                ],
+                'floor_couplings'               => [
+                    [
+                        'from'      => 'A',
+                        'to'        => 'B',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from'      => 'B',
+                        'to'        => 'A',
+                        'direction' => 'up'
+                    ],
+                ]
+            ],
+            'Spires of Ascension' => [
+                'expansion_id'                  => $shadowlands->id,
+                'enemy_forces_required'         => -1,
+                'enemy_forces_required_teeming' => -1,
+                'active'                        => true,
+                'floors'                        => [
+                    'Honor\'s Ascent' => [
+                        'index'   => 1,
+                    ],
+                    'Gardens of Repose' => [
+                        'index'   => 2,
+                        'default' => true
+                    ],
+                    'Spire of the Firstborne' => [
+                        'index'   => 3,
+                    ],
+                    'Seat of the Archon' => [
+                        'index'   => 4,
+                    ],
+                ],
+                'floor_couplings'               => [
+                    [
+                        'from'      => 'Gardens of Repose',
+                        'to'        => 'Honor\'s Ascent',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from'      => 'Honor\'s Ascent',
+                        'to'        => 'Gardens of Repose',
+                        'direction' => 'up'
+                    ],
+
+                    [
+                        'from'      => 'Gardens of Repose',
+                        'to'        => 'Spire of the Firstborne',
+                        'direction' => 'up'
+                    ],
+                    [
+                        'from'      => 'Spire of the Firstborne',
+                        'to'        => 'Gardens of Repose',
+                        'direction' => 'down'
+                    ],
+
+                    [
+                        'from'      => 'Seat of the Archon',
+                        'to'        => 'Spire of the Firstborne',
+                        'direction' => 'up'
+                    ],
+                    [
+                        'from'      => 'Spire of the Firstborne',
+                        'to'        => 'Seat of the Archon',
+                        'direction' => 'down'
+                    ],
+                ]
+            ],
+            'The Necrotic Wake' => [
+                'expansion_id'                  => $shadowlands->id,
+                'enemy_forces_required'         => -1,
+                'enemy_forces_required_teeming' => -1,
+                'active'                        => true,
+                'floors'                        => [
+                    'The Necrotic Wake' => [
+                        'index'   => 1,
+                        'default' => true
+                    ],
+                    'Necrotic Wake A' => [
+                        'index'   => 2,
+                    ],
+                    'Necrotic Wake B' => [
+                        'index'   => 3,
+                    ],
+                ],
+                'floor_couplings'               => [
+                    [
+                        'from'      => 'The Necrotic Wake',
+                        'to'        => 'Necrotic Wake A',
+                        'direction' => 'up'
+                    ],
+                    [
+                        'from'      => 'Necrotic Wake A',
+                        'to'        => 'The Necrotic Wake',
+                        'direction' => 'down'
+                    ],
+
+                    [
+                        'from'      => 'Necrotic Wake A',
+                        'to'        => 'Necrotic Wake B',
+                        'direction' => 'up'
+                    ],
+                    [
+                        'from'      => 'Necrotic Wake B',
+                        'to'        => 'Necrotic Wake A',
+                        'direction' => 'down'
+                    ],
+                ]
+            ],
+            'Theater of Pain' => [
+                'expansion_id'                  => $shadowlands->id,
+                'enemy_forces_required'         => -1,
+                'enemy_forces_required_teeming' => -1,
+                'active'                        => true,
+                'floors'                        => [
+                    'Theater of Pain' => [
+                        'index'   => 1,
+                        'default' => true
+                    ],
+                    'Warlord' => [
+                        'index'   => 2,
+                    ],
+                    'Lich' => [
+                        'index'   => 3,
+                    ],
+                    'Abomination Top' => [
+                        'index'   => 4,
+                    ],
+                    'Abomination Bottom' => [
+                        'index'   => 5,
+                    ],
+                ],
+                'floor_couplings'               => [
+                    [
+                        'from'      => 'Theater of Pain',
+                        'to'        => 'Warlord',
+                        'direction' => 'right'
+                    ],
+                    [
+                        'from'      => 'Warlord',
+                        'to'        => 'Theater of Pain',
+                        'direction' => 'left'
+                    ],
+
+                    [
+                        'from'      => 'Theater of Pain',
+                        'to'        => 'Lich',
+                        'direction' => 'up'
+                    ],
+                    [
+                        'from'      => 'Lich',
+                        'to'        => 'Theater of Pain',
+                        'direction' => 'down'
+                    ],
+
+                    [
+                        'from'      => 'Theater of Pain',
+                        'to'        => 'Abomination Top',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from'      => 'Abomination Top',
+                        'to'        => 'Theater of Pain',
+                        'direction' => 'up'
+                    ],
+
+                    [
+                        'from'      => 'Abomination Top',
+                        'to'        => 'Abomination Bottom',
+                        'direction' => 'down'
+                    ],
+                    [
+                        'from'      => 'Abomination Bottom',
+                        'to'        => 'Abomination Top',
+                        'direction' => 'up'
                     ],
                 ]
             ],
