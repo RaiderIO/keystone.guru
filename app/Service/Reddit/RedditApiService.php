@@ -12,8 +12,9 @@ class RedditApiService implements RedditApiServiceInterface
         curl_setopt_array($ch, [
             CURLOPT_URL        => 'https://www.reddit.com/api/v1/access_token',
             CURLOPT_POST       => true,
-            CURLOPT_POSTFIELDS => json_encode(['grant_type'    => 'refresh_token',
-                                               'refresh_token' => env('REDDIT_REFRESH_TOKEN')
+            CURLOPT_POSTFIELDS => json_encode([
+                'grant_type'    => 'refresh_token',
+                'refresh_token' => env('REDDIT_REFRESH_TOKEN')
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
             CURLOPT_HTTPHEADER => [
                 sprintf('Authorization: %s', base64_encode(sprintf('%s:%s', env('REDDIT_CLIENT_ID'), env('REDDIT_SECRET_KEY')))),
@@ -21,13 +22,36 @@ class RedditApiService implements RedditApiServiceInterface
             ]
         ]);
 
-        $response = json_decode(curl_exec($ch), true);
+        $responseString = curl_exec($ch);
+        echo $responseString . PHP_EOL;
+        $response = json_decode($responseString, true);
+
         curl_close($ch);
 
         if (isset($response['access_token'])) {
             $token = $response['access_token'];
 
-            // Use token to send message
+            $ch = curl_init();
+
+            curl_setopt_array($ch, [
+                CURLOPT_URL        => 'https://www.reddit.com/api/v1/access_token',
+                CURLOPT_POST       => true,
+                CURLOPT_POSTFIELDS => json_encode([
+                    'sr'            => 'Sandbox',
+                    'refresh_token' => env('REDDIT_REFRESH_TOKEN'),
+                    'title'         => $subject,
+                    'text'          => $body
+                ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+                CURLOPT_HTTPHEADER => [
+                    sprintf('Bearer: %s', $token),
+                    'Content-Type: x-www-form-urlencoded'
+                ]
+            ]);
+
+            $responseString = curl_exec($ch);
+            $response = json_decode($responseString, true);
+
+            curl_close($ch);
         } else {
             return false;
         }
