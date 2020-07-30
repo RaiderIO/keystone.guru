@@ -28,6 +28,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // External communication
         $this->app->bind('App\Service\Discord\DiscordApiServiceInterface', 'App\Service\Discord\DiscordApiService');
+        $this->app->bind('App\Service\Reddit\RedditApiServiceInterface', 'App\Service\Reddit\RedditApiService');
     }
 
     /**

@@ -4,9 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Release;
 use App\Service\Discord\DiscordApiService;
-use Github\Api\Repo;
-use Github\Exception\MissingArgumentException;
-use GrahamCampbell\GitHub\Facades\GitHub;
+use App\Service\Reddit\RedditApiService;
 use Illuminate\Console\Command;
 
 class ReportRelease extends Command
@@ -39,10 +37,11 @@ class ReportRelease extends Command
      * Execute the console command.
      *
      * @param DiscordApiService $discordApiService
+     * @param RedditApiService $redditApiService
      * @return void
      * @throws \Exception
      */
-    public function handle(DiscordApiService $discordApiService)
+    public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService)
     {
         $version = $this->argument('version');
         $platform = $this->argument('platform');
@@ -60,6 +59,7 @@ class ReportRelease extends Command
 
         switch ($platform) {
             case 'reddit':
+                $redditApiService->createPost(sprintf('%s (%s)', $release->version, $release->created_at->format('Y/M/d')), $release->reddit_body);
                 break;
             case 'discord':
                 $discordApiService->sendMessage(env('DISCORD_NEW_RELEASE_WEBHOOK'), $release->discord_body);
