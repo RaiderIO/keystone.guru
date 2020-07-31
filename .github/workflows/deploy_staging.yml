@@ -12,11 +12,14 @@ jobs:
 
     steps:
       - name: Run update_live.sh on staging
+        # Only trigger this pipeline when our source development
+        if: github.actor == 'Wotuu'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          script: cd /var/www/html/keystone.guru.staging/ &&
+          script: echo ${{github}} &&
+            cd /var/www/html/keystone.guru.staging/ &&
             ./update_live.sh &&
             php artisan report:release discord
