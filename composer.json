@@ -35,7 +35,6 @@
     "php": ">=7.4",
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-lua": "*",
     "barryvdh/laravel-ide-helper": "^2.4",
     "folklore/image": "0.3.*",
     "geoip2/geoip2": "~2.0",
