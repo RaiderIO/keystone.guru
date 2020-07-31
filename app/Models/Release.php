@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SerializesDates;
+use App\Vendor\SemVer\Version;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -58,7 +59,7 @@ class Release extends Model
      */
     public function getDiscordBodyAttribute()
     {
-        return trim(view('app.release.discord', ['model' => $this])->render());
+        return trim(view('app.release.discord', ['model' => $this, 'mention' => $this->isMajorUpgrade()])->render());
     }
 
     /**
@@ -68,5 +69,52 @@ class Release extends Model
     public function getRedditBodyAttribute()
     {
         return trim(view('app.release.reddit', ['model' => $this])->render());
+    }
+
+    public function getSymVer()
+    {
+        return new Version($this->version);
+    }
+
+    /**
+     * Checks if the release is a major upgrade over the previous version.
+     * @return bool
+     */
+    public function isMajorUpgrade()
+    {
+        if ($this->id === 1) {
+            $result = true;
+        } else {
+            $result = Release::findOrFail($this->id - 1)->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
+        }
+        return $result;
+    }
+
+    /**
+     * Checks if the release is a minor upgrade over the previous version.
+     * @return bool
+     */
+    public function isMinorUpgrade()
+    {
+        if ($this->id === 1) {
+            $result = true;
+        } else {
+            $result = Release::findOrFail($this->id - 1)->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
+        }
+        return $result;
+    }
+
+    /**
+     * Checks if the release is a bugfix upgrade over the previous version.
+     * @return bool
+     */
+    public function isBugfixUpgrade()
+    {
+        if ($this->id === 1) {
+            $result = true;
+        } else {
+            $result = Release::findOrFail($this->id - 1)->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
+        }
+        return $result;
     }
 }

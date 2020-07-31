@@ -1,4 +1,7 @@
 <?php /** @var $model \App\Models\Release */ ?>
+@if($mention)
+    <@everyone>
+@endif
 {{ $model->version }} ({{ $model->created_at->format('Y/m/d') }})
 @isset($model->description)
 {{ $model->description }}

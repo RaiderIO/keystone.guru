@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Release;
+use App\Models\ReportLog;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Reddit\RedditApiService;
 use Illuminate\Console\Command;
@@ -43,6 +44,7 @@ class ReportRelease extends Command
      */
     public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService)
     {
+        $result = false;
         $version = $this->argument('version');
         $platform = $this->argument('platform');
 
@@ -51,24 +53,36 @@ class ReportRelease extends Command
             $release = Release::latest()->first();
         } else {
             if (substr($version, 0, 1) !== 'v') {
-                $version = 'v' . $version;
+                $version = sprintf('v%s', $version);
             }
             $release = Release::where('version', $version)->first();
         }
 
-        switch ($platform) {
-            case 'reddit':
-                $result = $redditApiService->createPost(
-                    config('keystoneguru.reddit_subreddit'),
-                    sprintf('%s (%s)', $release->version, $release->created_at->format('Y/m/d')),
-                    $release->reddit_body
-                );
-                break;
-            case 'discord':
-                $result = $discordApiService->sendMessage(env('DISCORD_NEW_RELEASE_WEBHOOK'), $release->discord_body);
-                break;
-            default:
-                throw new \Exception(sprintf('Unsupport platform %s', $platform));
+        if (!ReportLog::where('release_id', $release->id)->where('platform', $platform)->exists()) {
+            switch ($platform) {
+                case 'reddit':
+                    $result = $redditApiService->createPost(
+                        config('keystoneguru.reddit_subreddit'),
+                        sprintf('%s (%s)', $release->version, $release->created_at->format('Y/m/d')),
+                        $release->reddit_body
+                    );
+                    break;
+                case 'discord':
+                    $result = $discordApiService->sendMessage(env('DISCORD_NEW_RELEASE_WEBHOOK'), $release->discord_body);
+                    break;
+                default:
+                    throw new \Exception(sprintf('Unsupported platform %s', $platform));
+            }
+
+            // Log this release so that we don't mention things multiple times
+            (new ReportLog([
+                'release_id' => $release->id,
+                'platform'   => $platform,
+            ]))->save();
+        } else {
+            $this->info('Not reporting release; it was already reported in the platform!');
+            // Not failed if we already did it
+            $result = true;
         }
 
         // If failed, return failed exit code
