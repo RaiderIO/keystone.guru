@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +32,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Enemy extends Model
 {
+    use Reportable;
+
     public $with = ['npc'];
     public $hidden = ['npc_id'];
     public $timestamps = false;

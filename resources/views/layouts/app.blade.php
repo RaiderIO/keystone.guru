@@ -1,7 +1,7 @@
 <?php
 /** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
-$numUserReports = \App\Models\UserReport::where('handled', 0)->count();
-/** @var \Illuminate\Support\Collection|DungeonRoute[] $demoRoutes */
+$numUserReports = \App\Models\UserReport::where('status', 0)->count();
+/** @var \Illuminate\Support\Collection|\App\Models\DungeonRoute[] $demoRoutes */
 $demoRoutes = \App\Models\DungeonRoute::where('demo', true)->where('published', true)->orderBy('dungeon_id')->get();
 $dungeons = \App\Models\Dungeon::all();
 
@@ -67,6 +67,10 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     @include('common.general.inlinemanager')
     @include('common.general.inline', ['path' => 'layouts/app', 'section' => false, 'options' => ['guest' => Auth::guest()]])
     @include('common.general.sitescripts', ['showLegalModal' => $showLegalModal])
+
+    @isset($menuItems)
+        @include('common.general.inline', ['path' => 'common/general/menuitemsanchor'])
+    @endisset
 
     @if($cookieConsent)
         @include('common.thirdparty.cookieconsent')
@@ -216,7 +220,10 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                            href="{{ route('admin.users') }}">{{__('View users')}}</a>
                                         <a class="dropdown-item"
                                            href="{{ route('admin.userreports') }}">{{__('View user reports') }}
-                                            <span class="badge badge-primary badge-pill">{{ $numUserReports }}</span>
+                                            @if($numUserReports > 0)
+                                                <span
+                                                    class="badge badge-primary badge-pill">{{ $numUserReports }}</span>
+                                            @endif
                                         </a>
                                         <div class="dropdown-divider"></div>
                                     @endif
@@ -269,8 +276,8 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                     <ul class="nav flex-column nav-pills">
                         @foreach($menuItems as $index => $menuItem)
                             <li class="nav-item">
-                                <a class="nav-link {{ $index === 0 ? 'active' : '' }}" id="routes-tab" data-toggle="tab"
-                                   href="{{ $menuItem['target'] }}" role="tab"
+                                <a class="nav-link {{ $index === 0 ? 'active' : '' }}"
+                                   data-toggle="tab" href="{{ $menuItem['target'] }}" role="tab"
                                    aria-controls="routes" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
                                     <i class="fas {{ $menuItem['icon'] }}"></i> {{ $menuItem['text'] }}
                                 </a>
@@ -423,7 +430,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
         {{ __('I agree') }}
     </div>
 @overwrite
-@include('common.general.modal', ['id' => 'legal_modal'])
+@include('common.general.modal', ['id' => 'legal_modal', 'static' => true])
 @endif
 @endauth
 

@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\belongsTo;
+use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -17,22 +21,26 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $aggressiveness
  * @property bool $dangerous
  * @property bool $truesight
+ * @property bool $bursting
+ * @property bool $bolstering
+ * @property bool $sanguine
  *
  * @property Dungeon $dungeon
  * @property NpcClassification $classification
  * @property NpcType $type
  * @property NpcClass $class
  *
- * @property \Illuminate\Support\Collection $enemies
+ * @property Enemy[]|Collection $enemies
+ * @property NpcBolsteringWhitelist[]|Collection $npcbolsteringwhitelists
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Npc extends Model
 {
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $with = ['type', 'class'];
+    protected $with = ['type', 'class', 'npcbolsteringwhitelists'];
     protected $fillable = ['id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming'];
 
     /**
@@ -46,7 +54,7 @@ class Npc extends Model
     /**
      * Gets all derived enemies from this Npc.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return hasMany
      */
     function enemies()
     {
@@ -54,7 +62,15 @@ class Npc extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @return hasMany
+     */
+    function npcbolsteringwhitelists()
+    {
+        return $this->hasMany('App\Models\NpcBolsteringWhitelist');
+    }
+
+    /**
+     * @return belongsTo
      */
     function dungeon()
     {
@@ -62,7 +78,7 @@ class Npc extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @return belongsTo
      */
     function classification()
     {
@@ -70,7 +86,7 @@ class Npc extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @return belongsTo
      */
     function type()
     {
@@ -79,7 +95,7 @@ class Npc extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @return belongsTo
      */
     function class()
     {

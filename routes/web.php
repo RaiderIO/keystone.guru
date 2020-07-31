@@ -74,8 +74,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     Route::get('profile/(user}', 'ProfileController@view')->name('profile.view');
 
-    Route::post('userreport/new', 'UserReportController@store')->name('userreport.new');
-
     Route::get('dungeonroutes', 'SiteController@dungeonroutes');
     Route::get('routes', 'DungeonRouteController@list')->name('dungeonroutes');
 
@@ -154,7 +152,6 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::get('release', 'ReleaseController@list')->name('admin.releases');
 
-
             // NPCs
             Route::get('npc/new', 'NpcController@new')->name('admin.npc.new');
             Route::get('npc/{npc}', 'NpcController@edit')->name('admin.npc.edit');
@@ -212,6 +209,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     {
         Route::get('/{publickey}/data', 'APIDungeonRouteController@data');
 
+        Route::post('userreport/dungeonroute/{dungeonroute}', 'APIUserReportController@dungeonrouteStore')->name('userreport.dungeonroute');
+        Route::post('userreport/enemy/{enemy}', 'APIUserReportController@enemyStore')->name('userreport.enemy');
+
         Route::get('/routes', 'APIDungeonRouteController@list');
 
         Route::post('/mdt/details', 'MDTImportController@details')->name('mdt.details');
@@ -223,6 +223,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
         {
             Route::group(['prefix' => 'admin'], function ()
             {
+                Route::get('/user', 'APIUserController@list');
+                Route::get('/npc', 'APINpcController@list');
+
                 Route::post('/enemy', 'APIEnemyController@store');
                 Route::delete('/enemy/{enemy}', 'APIEnemyController@delete');
 
@@ -239,7 +242,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
                 Route::delete('/mapicon/{mapicon}', 'APIMapIconController@adminDelete');
             });
 
-            Route::post('/userreport/{userreport}/markasresolved', 'APIUserReportController@markasresolved');
+            Route::put('/userreport/{userreport}/status', 'APIUserReportController@status');
 
             Route::post('/tools/mdt/diff/apply', 'AdminToolsController@applychange');
 
@@ -275,6 +278,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::group(['prefix' => '{dungeonroute}'], function ()
             {
                 Route::patch('/', 'APIDungeonRouteController@store')->name('api.dungeonroute.update');
+                Route::patch('/pullgradient', 'APIDungeonRouteController@storePullGradient')->name('api.dungeonroute.pullgradient.update');
                 Route::delete('/', 'APIDungeonRouteController@delete')->name('api.dungeonroute.delete');
 
                 Route::post('/favorite', 'APIDungeonRouteController@favorite')->name('api.dungeonroute.favorite');

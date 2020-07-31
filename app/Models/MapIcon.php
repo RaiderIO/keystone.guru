@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $floor_id
  * @property int $dungeon_route_id
+ * @property int $team_id
  * @property int $map_icon_type_id
  * @property float $lat
  * @property float $lng
@@ -26,8 +27,8 @@ class MapIcon extends Model
 {
     use HasLinkedAwakenedObelisk;
 
-    protected $visible = ['id', 'floor_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
-    protected $fillable = ['floor_id', 'dungeon_route_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
+    protected $visible = ['id', 'floor_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
+    protected $fillable = ['floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
     protected $appends = ['linked_awakened_obelisk_id'];
 
     protected $with = ['mapicontype'];

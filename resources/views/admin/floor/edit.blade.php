@@ -30,6 +30,7 @@
             'floorId' => $model->id,
             'show' => [
                 'shareable-link' => true,
+                'draw-settings' => true,
                 'route-settings' => true,
                 'route-publish' => true
             ]

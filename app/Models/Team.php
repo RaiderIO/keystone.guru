@@ -280,7 +280,7 @@ class Team extends IconFileModel
             try {
                 $result = $teamUser->delete();
             } catch (Exception $exception) {
-                // YOLO
+                $result = false;
             }
         }
 

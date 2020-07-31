@@ -3,6 +3,9 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
 ?>
 
 <script>
+    /** Token that should be included in all forms to prevent cross-site request forgery */
+    let csrfToken = "{{ csrf_token() }}";
+
     var isUserAdmin = {{ Auth::check() && Auth::user()->hasRole('admin') ? 'true' : 'false' }};
 
     var _legalStartTimer = new Date().getTime();

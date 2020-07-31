@@ -8,6 +8,7 @@ $isAdmin = isset($admin) && $admin;
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? true : false;
+$routeTeam = isset($dungeonroute) ? $dungeonroute->team_id : -1;
 $routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
 $routeSeasonalIndex = isset($dungeonroute) ? $dungeonroute->seasonal_index : 0;
 $routeKillZones = isset($dungeonroute) ? \App\Models\KillZone::where('dungeon_route_id', $dungeonroute->id)->orderBy('index')->get() : new \Illuminate\Database\Eloquent\Collection();
@@ -19,6 +20,8 @@ $routeEnemyForces = isset($dungeonroute) ? $dungeonroute->getEnemyForces() : 0;
 $routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
 // Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
 $teeming = (isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin)) ? true : false;
+$pullGradient = (isset($dungeonroute) ? $dungeonroute->pull_gradient : '');
+$pullGradientApplyAlways = (isset($dungeonroute) ? $dungeonroute->pull_gradient_apply_always : false);
 $enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
@@ -104,7 +107,10 @@ if ($isAdmin) {
             'faction' => $routeFaction,
             'enemyForces' => $routeEnemyForces,
             'seasonalIndex' => $routeSeasonalIndex,
-            'teeming' => $teeming
+            'teeming' => $teeming,
+            'teamId' => $routeTeam,
+            'pullGradient' => $pullGradient,
+            'pullGradientApplyAlways' => $pullGradientApplyAlways
         ]
     ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>
@@ -150,6 +156,17 @@ if ($isAdmin) {
     <div id="route_echo_container" class="container">
     </div>
 </header>
+
+@section('modal-content')
+    @include('common.userreport.dungeonroute')
+@overwrite
+@include('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+
+@section('modal-content')
+    @include('common.userreport.enemy')
+@overwrite
+@include('common.general.modal', ['id' => 'userreport_enemy_modal'])
+
 @if($edit)
     <footer class="fixed-bottom route_manipulation_tools">
         <div class="container">

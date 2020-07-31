@@ -2,6 +2,10 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CreateGithubRelease;
+use App\Console\Commands\GetCurrentRelease;
+use App\Console\Commands\GetReleaseBody;
+use App\Console\Commands\ReportRelease;
 use App\Logic\Scheduler\FindOutdatedThumbnails;
 use App\Logic\Scheduler\DeleteExpiredDungeonRoutes;
 use Illuminate\Console\Scheduling\Schedule;
@@ -16,7 +20,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        CreateGithubRelease::class,
+        GetCurrentRelease::class,
+        GetReleaseBody::class,
+        ReportRelease::class,
     ];
 
     /**

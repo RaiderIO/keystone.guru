@@ -1,6 +1,7 @@
 [
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 10,
         "lat": -219.3125,
         "lng": 199.5,
@@ -10,6 +11,7 @@
     },
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 17,
         "lat": -186.125,
         "lng": 208.8125,
@@ -19,6 +21,7 @@
     },
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 12,
         "lat": -119.3125,
         "lng": 167.375,
@@ -28,6 +31,7 @@
     },
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 19,
         "lat": -125.1875,
         "lng": 138.5625,
@@ -37,6 +41,7 @@
     },
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 12,
         "lat": -54.875,
         "lng": 128.75,
@@ -46,6 +51,7 @@
     },
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 18,
         "lat": -54.34375,
         "lng": 158.34375,
@@ -55,6 +61,7 @@
     },
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 12,
         "lat": -51.875,
         "lng": 219,
@@ -64,6 +71,7 @@
     },
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 20,
         "lat": -55.375,
         "lng": 242.6875,
@@ -73,6 +81,7 @@
     },
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 18,
         "lat": -125.375,
         "lng": 137.4375,
@@ -82,6 +91,7 @@
     },
     {
         "floor_id": 50,
+        "team_id": null,
         "map_icon_type_id": 19,
         "lat": -55.71875,
         "lng": 160.46875,

@@ -88,9 +88,7 @@ class KillZone extends MapObject {
         });
 
         // // External change (due to delete mode being started, for example)
-        if (this.map.options.edit) {
-            this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
-        }
+        this.map.register('map:mapstatechanged', this, this._mapStateChanged.bind(this));
     }
 
     /**
@@ -375,16 +373,18 @@ class KillZone extends MapObject {
             // Redraw any changes as necessary (for example, user (de-)selected a killzone, must redraw to update selection visuals)
             this.redrawConnectionsToEnemies();
 
-            if (previousState instanceof EnemySelection && previousState.getMapObject().id === this.id) {
-                // May save when nothing has changed, but that's okay
-                this.save();
-                // Unreg if we were listening
-                previousState.unregister('enemyselection:enemyselected', this);
-            }
+            if( this.map.options.edit ) {
+                if (previousState instanceof EnemySelection && previousState.getMapObject().id === this.id) {
+                    // May save when nothing has changed, but that's okay
+                    this.save();
+                    // Unreg if we were listening
+                    previousState.unregister('enemyselection:enemyselected', this);
+                }
 
-            if (newState instanceof EnemySelection && newState.getMapObject().id === this.id) {
-                // Reg for changes to our killzone if necessary
-                newState.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
+                if (newState instanceof EnemySelection && newState.getMapObject().id === this.id) {
+                    // Reg for changes to our killzone if necessary
+                    newState.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
+                }
             }
         }
     }
@@ -504,6 +504,20 @@ class KillZone extends MapObject {
         }, [0, 0]);
 
         return L.latLng(reduce[0], reduce[1]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    isEditable() {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    isDeletable() {
+        return false;
     }
 
     /**
@@ -683,36 +697,34 @@ class KillZone extends MapObject {
             this.bindTooltip();
 
             // Only add popup to the killzone
-            if (this.map.options.edit && this.isEditable()) {
-                this.enemiesLayer.on('click', function () {
-                    // We're now selecting this killzone
-                    let currentMapState = self.map.getMapState();
-                    let newMapState = currentMapState;
-                    if (!(currentMapState instanceof EditMapState) &&
-                        !(currentMapState instanceof DeleteMapState) &&
-                        !(currentMapState instanceof RaidMarkerSelectMapState)) {
-                        // If we're already being selected..
-                        if (currentMapState instanceof EnemySelection && currentMapState.getMapObject().id === self.id) {
-                            newMapState = null;
-                        } else if (self.map.options.edit) {
-                            newMapState = new KillZoneEnemySelection(self.map, self);
-                        } else {
-                            newMapState = new ViewKillZoneEnemySelection(self.map, self);
-                        }
+            this.enemiesLayer.on('click', function () {
+                // We're now selecting this killzone
+                let currentMapState = self.map.getMapState();
+                let newMapState = currentMapState;
+                if (!(currentMapState instanceof EditMapState) &&
+                    !(currentMapState instanceof DeleteMapState) &&
+                    !(currentMapState instanceof RaidMarkerSelectMapState)) {
+                    // If we're already being selected..
+                    if (currentMapState instanceof EnemySelection && currentMapState.getMapObject().id === self.id) {
+                        newMapState = null;
+                    } else if (self.map.options.edit) {
+                        newMapState = new KillZoneEnemySelection(self.map, self);
+                    } else {
+                        newMapState = new ViewKillZoneEnemySelection(self.map, self);
                     }
+                }
 
-                    // Only if there would be a change
-                    if (newMapState !== currentMapState) {
-                        // Set to null or not
-                        self.map.setMapState(newMapState);
-                    }
-                });
-            }
+                // Only if there would be a change
+                if (newMapState !== currentMapState) {
+                    // Set to null or not
+                    self.map.setMapState(newMapState);
+                }
+            });
         }
     }
 
     /**
-     * Get a
+     * Get a latlng object describing the centeroid of the enemies layer.
      * @returns {object}
      */
     getLayerCenteroid() {
@@ -735,6 +747,14 @@ class KillZone extends MapObject {
         this.index = index;
 
         this.bindTooltip();
+    }
+
+    isVisibleOnScreen() {
+        let result = false;
+        if (this.isVisible() && this.enemiesLayer !== null) {
+            result = this.map.leafletMap.getBounds().contains(this.getLayerCenteroid())
+        }
+        return result;
     }
 
     bindTooltip() {

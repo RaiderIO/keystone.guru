@@ -1,0 +1,30 @@
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="userActionsButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+        {{actions_label}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="userActionsButton">
+        <a class="dropdown-item" href="#">
+            <form method="POST" action="/admin/user/{{id}}/makeadmin" accept-charset="UTF-8"
+                  autocomplete="off">
+                <input name="_token" type="hidden" value="{{csrf_token}}">
+                <input class="btn btn-info" name="submit" type="submit" value="{{make_admin_label}}">
+            </form>
+        </a>
+        <a class="dropdown-item" href="#">
+            <form method="POST" action="/admin/user/{{id}}/makeuser" accept-charset="UTF-8"
+                  autocomplete="off">
+                <input name="_token" type="hidden" value="{{csrf_token}}">
+                <input class="btn btn-info ml-1" name="submit" type="submit" value="{{make_user_label}}">
+            </form>
+        </a>
+        <a class="dropdown-item" href="#">
+            <form method="POST" action="/admin/user/{{id}}/delete" accept-charset="UTF-8"
+                  autocomplete="off">
+                <input name="_method" type="hidden" value="DELETE">
+                <input name="_token" type="hidden" value="{{csrf_token}}">
+                <input class="btn btn-danger ml-1" name="submit" type="submit" value="{{delete_user_label}}">
+            </form>
+        </a>
+    </div>
+</div>

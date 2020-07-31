@@ -6,11 +6,11 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables;
+namespace App\Logic\Datatables\ColumnHandler\DungeonRoutes;
 
-use App\Models\GameServerRegion;
+use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
+use App\Logic\Datatables\DatatablesHandler;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 class AuthorNameColumnHandler extends DatatablesColumnHandler
 {
@@ -20,7 +20,7 @@ class AuthorNameColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'author.name');
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order)
+    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
     {
         // Only order
         if ($order !== null) {

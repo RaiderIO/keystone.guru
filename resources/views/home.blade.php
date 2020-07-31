@@ -157,8 +157,10 @@
                         <div class="icon"><i class="fab fa-reddit"></i></div>
                         <div class="text">
                             <h3>{{ __('Community') }}</h3>
-                            <p>{!! sprintf(__('Join the community on %s or %s for getting in-touch with fellow keystone runners and easy sharing of routes. I will be around to answer any questions you may have.'),
-                                    '<a href="https://reddit.com/r/keystoneguru" target="_blank"><i class="fab fa-reddit"></i> Reddit</a>', '<a href="https://discord.gg/2KtWrqw" target="_blank"><i class="fab fa-discord"></i> Discord</a>') !!}</p>
+                            <p>{!! sprintf(__('Join the community on %s, %s or %s for getting in-touch with fellow keystone runners and easy collaboration. I will be around to answer any questions you may have.'),
+                                    '<a href="https://reddit.com/r/keystoneguru" target="_blank"><i class="fab fa-reddit"></i> Reddit</a>',
+                                    '<a href="https://discord.gg/2KtWrqw" target="_blank"><i class="fab fa-discord"></i> Discord</a>',
+                                    '<a href="https://www.youtube.com/channel/UCtjlNmuS2kVQhNvPdW5D2Jg" target="_blank"><i class="fab fa-youtube"></i> Youtube</a>') !!}</p>
                         </div>
                     </div>
                 </div>

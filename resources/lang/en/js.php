@@ -112,32 +112,47 @@ return [
 
     // Admin
     'object.deleted'                 => 'Objects deleted successfully.',
+    'route_count_label'              => '# of routes',
+    'roles_label'                    => 'Roles',
+    'registered_label'               => 'Registered at',
+    'patreon_label'                  => 'Patreon',
+    'datatable_no_users_in_table'    => 'No users found',
+    'datatable_no_npcs_in_table'     => 'No npcs found',
+    'user_report_handled_success'    => 'User report successfully marked as resolved',
+
+    'classification_label' => 'Classification',
+    'edit_label'           => 'Edit',
+
+    'make_user_label'               => 'Make user',
+    'make_admin_label'              => 'Make admin',
+    'delete_user_label'             => 'Delete user',
 
     // Home page
-    'warnings_label'                 => 'Warnings',
-    'category_label'                 => 'Category',
-    'message_label'                  => 'Message',
+    'warnings_label'                => 'Warnings',
+    'category_label'                => 'Category',
+    'message_label'                 => 'Message',
 
     // Dungeonroute edit
-    'settings_saved'                 => 'Settings saved successfully',
-    'route_published'                => 'Route published',
-    'route_unpublished'              => 'Route unpublished',
-    'datatable_no_routes_in_table'   => 'No routes found',
+    'settings_saved'                => 'Settings saved successfully',
+    'pull_gradient_settings_saved'  => 'Pull gradient settings saved successfully',
+    'route_published'               => 'Route published',
+    'route_unpublished'             => 'Route unpublished',
+    'datatable_no_routes_in_table'  => 'No routes found',
 
     // Dungeonroute table
-    'vote'                           => 'vote',
-    'votes'                          => 'votes',
-    'route_delete_confirm'           => 'Are you sure you wish to delete this route?',
-    'route_delete_successful'        => 'Route deleted successfully',
-    'route_clone_successful'         => 'Route cloned successfully',
-    'route_publish_successful'       => 'Route published',
-    'route_unpublish_successful'     => 'Route unpublished',
-    'route_table_route_published'    => 'This route is published',
-    'route_table_route_unpublished'  => 'This route is unpublished',
+    'vote'                          => 'vote',
+    'votes'                         => 'votes',
+    'route_delete_confirm'          => 'Are you sure you wish to delete this route?',
+    'route_delete_successful'       => 'Route deleted successfully',
+    'route_clone_successful'        => 'Route cloned successfully',
+    'route_publish_successful'      => 'Route published',
+    'route_unpublish_successful'    => 'Route unpublished',
+    'route_table_route_published'   => 'This route is published',
+    'route_table_route_unpublished' => 'This route is unpublished',
 
     // Map
-    'intro_1'                        => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
-    'intro_2'                        => 'You can use this button to hide or show the sidebar.',
+    'intro_1'                       => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
+    'intro_2'                       => 'You can use this button to hide or show the sidebar.',
 
     'intro_3' => 'Here you can select different visualization options.',
     'intro_4' => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',
@@ -170,10 +185,17 @@ return [
     'sidebar_expand'                                                => 'Expand the sidebar',
     'sidebar_collapse'                                              => 'Collapse the sidebar',
     'copied_to_clipboard'                                           => 'Copied to clipboard',
+    'sidebar_enemy_name_label'                                      => 'Name:',
+    'sidebar_enemy_health_label'                                    => 'Health:',
+    'sidebar_enemy_bursting_label'                                  => 'Bursts:',
+    'sidebar_enemy_sanguine_label'                                  => 'Sanguine:',
+    'sidebar_enemy_bolstering_label'                                => 'Bolsters:',
+    'sidebar_enemy_bolstering_whitelist_npcs_label'                 => 'Bolsters only:',
+    'user_report_enemy_success'                                     => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
+    'dungeonroute_report_enemy_success'                             => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
 
     // Killzone sidebar
     'killzone_sidebar_kill_location_label'                          => 'Kill location',
-
 
     // General site modals etc
     'min_password_length'                                           => 'Minimum password length is 8',
@@ -195,7 +217,7 @@ return [
     'ajax_error_default'                                            => 'An error occurred while performing your request. Please try again.',
     'ajax_error_403'                                                => 'You are not authorized to perform this request.',
     'ajax_error_404'                                                => 'The requested resource was not found.',
-    'ajax_error_419'                                                => 'Your session has expired. Refresh the page.',
+    'ajax_error_419'                                                => 'Your session has expired. Please refresh the page and try again.',
 
     // Popups
     // Map Object
@@ -205,6 +227,7 @@ return [
     // Map icon
     'map_icon_faction_label'                                        => 'Faction',
     'map_icon_teeming_label'                                        => 'Teeming',
+    'map_icon_team_id_label'                                        => 'Show across all routes in team',
     'map_icon_permanent_tooltip_label'                              => 'Permanent tooltip',
     'map_icon_map_icon_type_id_label'                               => 'Icon',
     'map_icon_comment_label'                                        => 'Comment',

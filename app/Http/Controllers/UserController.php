@@ -35,10 +35,15 @@ class UserController extends Controller
         if ($currentUser !== null && $currentUser->name === 'Admin') {
             if (!$user->hasRole('admin')) {
                 $user->attachRole('admin');
-            }
 
-            // Message to the user
-            \Session::flash('status', sprintf(__('User %s is now an admin'), $user->name));
+                // Message to the user
+                \Session::flash('status', sprintf(__('User %s is now an admin'), $user->name));
+            } else {
+                $user->detachRole('admin');
+
+                // Message to the user
+                \Session::flash('status', sprintf(__('User %s is no longer an admin'), $user->name));
+            }
         }
 
         return redirect()->route('admin.users');

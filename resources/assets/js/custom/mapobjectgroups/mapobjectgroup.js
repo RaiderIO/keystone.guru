@@ -82,7 +82,7 @@ class MapObjectGroup extends Signalable {
      * @private
      */
     _onFetchSuccess(fetchEvent) {
-        console.assert(this.objects.length === 0, 'objects must be empty after refresh', this.names, this.objects.length);
+        console.assert(this.objects.length === 0, 'objects must be empty after refresh', this, this.names, this.objects.length);
 
         this._fetchSuccess(fetchEvent.data.response);
     }
@@ -350,7 +350,7 @@ class MapObjectGroup extends Signalable {
         console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
 
         // Unset previous layer
-        if( mapObject.layer !== null ){
+        if (mapObject.layer !== null) {
             this.layerGroup.removeLayer(mapObject.layer);
             mapObject.layer = null;
             mapObject.setVisible(false);

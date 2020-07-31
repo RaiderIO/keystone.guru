@@ -3,6 +3,7 @@
 $user = Auth::getUser();
 $isOAuth = $user->password === '';
 $menuItems = [
+    ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
     ['icon' => 'fa-user', 'text' => __('Profile'), 'target' => '#profile'],
     ['icon' => 'fa-cog', 'text' => __('Account'), 'target' => '#account'],
     ['icon' => 'fab fa-patreon', 'text' => __('Patreon'), 'target' => '#patreon'],
@@ -12,12 +13,14 @@ if (!$isOAuth) {
     $menuItems[] = ['icon' => 'fa-key', 'text' => __('Change password'), 'target' => '#change-password'];
 }
 $menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('Privacy'), 'target' => '#privacy'];
+$menuItems[] = ['icon' => 'fa-flag', 'text' => __('Reports'), 'target' => '#reports'];
 
 $menuTitle = sprintf(__('%s\'s profile'), $user->name);
 $deleteConsequences = $user->getDeleteConsequences();
 ?>
 @extends('layouts.app', ['wide' => true, 'title' => __('Profile'),
-    'menuTitle' => $menuTitle, 'menuItems' => $menuItems,
+    'menuTitle' => $menuTitle,
+    'menuItems' => $menuItems,
     'model' => $user
 ])
 
@@ -34,6 +37,8 @@ $deleteConsequences = $user->getDeleteConsequences();
             $classColors.bind('click', function () {
                 $('#echo_color').val($(this).data('color'));
             });
+
+            $('#profile_user_reports_table').DataTable({});
         });
     </script>
 @endsection
@@ -42,7 +47,14 @@ $deleteConsequences = $user->getDeleteConsequences();
     @include('common.general.modal', ['id' => 'team_select_modal'])
 
     <div class="tab-content">
-        <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+        <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
+            <h3>{{ __('My routes') }}</h3>
+
+            @include('common.dungeonroute.table', ['view' => 'profile'])
+        </div>
+
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             {{ Form::model($user, ['route' => ['profile.update', $user->id], 'method' => 'patch']) }}
             <h4>
                 {{ $menuTitle }}
@@ -102,12 +114,6 @@ $deleteConsequences = $user->getDeleteConsequences();
 
             {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
             {!! Form::close() !!}
-
-            <div class="mt-4">
-                <h3>{{ __('My routes') }}</h3>
-
-                @include('common.dungeonroute.table', ['view' => 'profile'])
-            </div>
         </div>
 
         <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="patreon-tab">
@@ -143,9 +149,10 @@ $deleteConsequences = $user->getDeleteConsequences();
                                 if ($consequence['new_owner'] === null) {
                                     $consequenceText = __('You will be removed from this team.');
                                 } else {
-                                    $consequenceText = sprintf(__('%s will be appointed Admin of this team.'), $consequence['new_owner']->name);
+                                    $consequenceText = sprintf(__('%s will be appointed Admin of this team.'),
+                                        $consequence['new_owner']->name);
                                 }
-                            } else if ($consequence['result'] === 'deleted') {
+                            } elseif ($consequence['result'] === 'deleted') {
                                 $consequenceText = __('This team will be deleted (you are the only user in this team).');
                             }
                             ?>
@@ -164,6 +171,18 @@ $deleteConsequences = $user->getDeleteConsequences();
                         <li>
                             {{ __('The connection between Patreon and Keystone.guru will be terminated. You will no longer receive
                             Patreon rewards.') }}
+                        </li>
+                    </ul>
+                </div>
+            @endif
+            @if( !empty($deleteConsequences['reports']))
+                <div class="form-group">
+                    <h5>
+                        {{ __('Reports') }}
+                    </h5>
+                    <ul>
+                        <li>
+                            {{ sprintf(__('Your %s unresolved report(s) will be deleted'), $deleteConsequences['reports']['delete_count']) }}
                         </li>
                     </ul>
                 </div>
@@ -259,6 +278,16 @@ $deleteConsequences = $user->getDeleteConsequences();
             </div>
             {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
             {!! Form::close() !!}
+        </div>
+
+        <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reports-tab">
+            <h4>
+                {{ __('Reports') }}
+            </h4>
+            <p>
+                {{ __('All routes, enemies and other reports you have made on the site will be listed here.') }}
+            </p>
+
         </div>
     </div>
 @endsection

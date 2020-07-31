@@ -4,8 +4,9 @@ class CommonMapsEditsidebar extends InlineCode {
 
         this.sidebar = new SidebarNavigation(options);
 
-        this._colorPicker = null;
         this._grapick = null;
+
+        getState().register('focusedenemy:changed', this, this._onFocusedEnemyChanged.bind(this));
     }
 
     /**
@@ -71,7 +72,7 @@ class CommonMapsEditsidebar extends InlineCode {
         });
 
         // Restore pull_gradient if set
-        let handlers = this._getHandlersFromCookie();
+        let handlers = getState().getPullGradientHandlers();
         for (let index in handlers) {
             if (handlers.hasOwnProperty(index)) {
                 this._grapick.addHandler(handlers[index][0], handlers[index][1]);
@@ -87,59 +88,91 @@ class CommonMapsEditsidebar extends InlineCode {
                 pullGradient.push(handler.position + ' ' + self._parseHandlerColor(handler.color));
             }
             let result = pullGradient.join(',');
-            Cookies.set('pull_gradient', result);
+
+            getState().setPullGradient(result);
         });
 
         $('#edit_route_freedraw_options_gradient_apply_to_pulls').bind('click', function () {
+            $('#edit_route_freedraw_options_gradient_apply_to_pulls').hide();
+            $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').show();
+
             let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
-            let count = killZoneMapObjectGroup.objects.length;
-            for (let i = 0; i < count; i++) {
-                for (let killZoneIndex in killZoneMapObjectGroup.objects) {
-                    if (killZoneMapObjectGroup.objects.hasOwnProperty(killZoneIndex)) {
-                        let killZone = killZoneMapObjectGroup.objects[killZoneIndex];
-                        if (killZone.getIndex() === (i + 1)) {
-                            // Prevent division by 0
-                            killZone.color = pickHexFromHandlers(self._getHandlersFromCookie(), count === 1 ? 50 : (i / count) * 100);
-                            killZone.setSynced(true);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            killZoneMapObjectGroup.saveAll();
+            killZoneMapObjectGroup.applyPullGradient(true, function () {
+                $('#edit_route_freedraw_options_gradient_apply_to_pulls').show();
+                $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').hide();
+            });
         });
+
+        let $alwaysApplyPullGradient = $('#pull_gradient_apply_always');
+        let alwaysApplyPullGradient = getState().getPullGradientApplyAlways();
+        if (alwaysApplyPullGradient) {
+            $alwaysApplyPullGradient.attr('checked', 'checked');
+        } else {
+            $alwaysApplyPullGradient.removeAttr('checked');
+        }
+        $alwaysApplyPullGradient.bind('change', function () {
+            getState().setPullGradientApplyAlways($(this).is(':checked'));
+        });
+
+        // Draw settings save button
+        $('#save_draw_settings').bind('click', this._savePullGradientSettings.bind(this));
+
+        $('#userreport_enemy_modal_submit').bind('click', this._submitEnemyUserReport.bind(this));
     }
 
     /**
-     * Fetches a handler structure from a cookie
-     * @returns {[]}
+     * Called when the focused enemy was changed
+     * @param focusedEnemyChangedEvent
      * @private
      */
-    _getHandlersFromCookie() {
-        let result = [];
+    _onFocusedEnemyChanged(focusedEnemyChangedEvent) {
+        let focusedEnemy = focusedEnemyChangedEvent.data.focusedenemy;
+        let isNull = focusedEnemy === null;
+        // Show/hide based on being set or not
+        // $('#enemy_info_container').toggle(!isNull);
+        $('#enemy_info_container').show();
+        if (!isNull) {
+            // Update the focused enemy in the sidebar
+            let template = Handlebars.templates['map_sidebar_enemy_info_template'];
 
-        let pullGradient = Cookies.get('pull_gradient');
-        if (typeof pullGradient !== 'undefined' && pullGradient.length > 0) {
-            let handlers = pullGradient.split(',');
-            for (let index in handlers) {
-                if (handlers.hasOwnProperty(index)) {
-                    let handler = handlers[index];
-                    let values = handler.trim().split(' ');
-                    // Only RGB values
-                    if (values[1].indexOf('#') === 0) {
-                        result.push([parseInt(('' + values[0]).replace('%', '')), values[1]]);
-                    } else {
-                        console.warn('Invalid handler found:', handler);
-                    }
-                }
-            }
-        } else {
-            result = c.map.editsidebar.pullGradient.defaultHandlers;
+            $('#enemy_info_key_value_container').html(
+                template(focusedEnemy.getVisualData())
+            )
+            $('#enemy_report_enemy_id').val(focusedEnemy.id);
         }
+    }
 
-        return result;
+    /**
+     *
+     * @private
+     */
+    _submitEnemyUserReport() {
+        let enemyId = $('#enemy_report_enemy_id').val();
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/userreport/enemy/${enemyId}`,
+            dataType: 'json',
+            data: {
+                category: $('#enemy_report_category').val(),
+                username: $('#enemy_report_username').val(),
+                message: $('#enemy_report_message').val(),
+                contact_ok: $('#enemy_report_contact_ok').is(':checked') ? 1 : 0
+            },
+            beforeSend: function () {
+                $('#userreport_enemy_modal_submit').hide();
+                $('#userreport_enemy_modal_saving').show();
+            },
+            success: function (json) {
+                $('#userreport_enemy_modal').modal('hide');
+                showSuccessNotification(lang.get('messages.user_report_enemy_success'));
+            },
+            complete: function () {
+                $('#userreport_enemy_modal_submit').show();
+                $('#userreport_enemy_modal_saving').hide();
+            }
+        });
     }
 
     /**
@@ -152,9 +185,38 @@ class CommonMapsEditsidebar extends InlineCode {
         return handlerColor.indexOf('rgba') === 0 ? rgbToHex(parseRgba(handlerColor)) : handlerColor;
     }
 
+    /**
+     *
+     * @private
+     */
+    _savePullGradientSettings() {
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/${getState().getDungeonRoute().publicKey}/pullgradient`,
+            dataType: 'json',
+            data: {
+                pull_gradient: getState().getPullGradient(),
+                pull_gradient_apply_always: getState().getPullGradientApplyAlways() ? '1' : '0',
+                _method: 'PATCH'
+            },
+            beforeSend: function () {
+                $('#save_draw_settings').hide();
+                $('#save_draw_settings_saving').show();
+            },
+            success: function (json) {
+                showSuccessNotification(lang.get('messages.pull_gradient_settings_saved'));
+            },
+            complete: function () {
+                $('#save_draw_settings').show();
+                $('#save_draw_settings_saving').hide();
+            }
+        });
+    }
+
     cleanup() {
         super.cleanup();
 
         this.sidebar.cleanup();
+        getState().unregister('focusedenemy:changed', this);
     }
 }

@@ -1,3 +1,24 @@
+// Gives access to Object.id() method which will uniquely identify an object
+(function() {
+    if ( typeof Object.id == "undefined" ) {
+        let id = 0;
+
+        Object.id = function(o) {
+            if ( typeof o.__uniqueid == "undefined" ) {
+                Object.defineProperty(o, "__uniqueid", {
+                    value: ++id,
+                    enumerable: false,
+                    // This could go either way, depending on your
+                    // interpretation of what an "id" is
+                    writable: false
+                });
+            }
+
+            return o.__uniqueid;
+        };
+    }
+})();
+
 function getDistanceSquared(xy1, xy2) {
     return Math.pow(xy1[0] - xy2[0], 2) + Math.pow(xy1[1] - xy2[1], 2);
 }
@@ -38,7 +59,8 @@ function getHandlebarsDefaultVariables() {
     if (_defaultVariables === null) {
         _defaultVariables = $.extend({}, _getHandlebarsTranslations(), {
             is_map_admin: typeof getState !== 'function' ? false : getState().isMapAdmin(),
-            is_user_admin: isUserAdmin
+            is_user_admin: isUserAdmin, // Defined in sitescripts
+            csrf_token: csrfToken // Defined in sitescripts
         });
     }
     return _defaultVariables;
@@ -172,7 +194,7 @@ function pickHexFromHandlers(handlers, weight) {
         result = rgbToHex(rgb);
     }
 
-    return result;
+    return result.toLowerCase();
 }
 
 
@@ -184,6 +206,16 @@ function getEnemy(id) {
     return mapObjectGroup.findMapObjectById(id);
 }
 
+function getEnemyPack(id) {
+    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+    return mapObjectGroup.findMapObjectById(id);
+}
+
+function getEnemyPatrol(id) {
+    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+    return mapObjectGroup.findMapObjectById(id);
+}
+
 function getKillZone(id) {
     let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
     return mapObjectGroup.findMapObjectById(id);
@@ -191,5 +223,15 @@ function getKillZone(id) {
 
 function getPath(id) {
     let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
+    return mapObjectGroup.findMapObjectById(id);
+}
+
+function getBrushline(id) {
+    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
+    return mapObjectGroup.findMapObjectById(id);
+}
+
+function getMapIcon(id) {
+    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
     return mapObjectGroup.findMapObjectById(id);
 }

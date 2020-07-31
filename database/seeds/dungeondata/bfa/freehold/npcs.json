@@ -11,7 +11,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 126845,
@@ -25,7 +29,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 126847,
@@ -39,7 +47,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 126848,
@@ -53,7 +65,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 126918,
@@ -67,7 +83,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 126919,
@@ -81,7 +101,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 126928,
@@ -95,7 +119,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 126969,
@@ -109,7 +137,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 126983,
@@ -123,7 +155,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127106,
@@ -137,7 +173,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127111,
@@ -151,7 +191,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127119,
@@ -165,7 +209,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 127124,
@@ -179,7 +227,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 128551,
@@ -193,7 +245,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129526,
@@ -207,7 +263,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129527,
@@ -221,7 +281,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129529,
@@ -235,7 +299,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129547,
@@ -249,7 +317,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129548,
@@ -263,7 +335,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129550,
@@ -277,7 +353,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129559,
@@ -291,7 +371,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129598,
@@ -305,7 +389,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129599,
@@ -319,7 +407,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129600,
@@ -333,7 +425,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129601,
@@ -347,7 +443,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129602,
@@ -361,7 +461,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129699,
@@ -375,7 +479,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129788,
@@ -389,7 +497,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130011,
@@ -403,7 +515,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130012,
@@ -417,7 +533,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130024,
@@ -431,7 +551,17 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [
+            {
+                "id": 13,
+                "npc_id": 130024,
+                "whitelist_npc_id": 130024
+            }
+        ]
     },
     {
         "id": 130400,
@@ -445,7 +575,17 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [
+            {
+                "id": 12,
+                "npc_id": 130400,
+                "whitelist_npc_id": 130400
+            }
+        ]
     },
     {
         "id": 130404,
@@ -459,7 +599,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130521,
@@ -473,7 +617,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 130522,
@@ -487,7 +635,11 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     },
     {
         "id": 129547000,
@@ -501,6 +653,10 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     }
 ]

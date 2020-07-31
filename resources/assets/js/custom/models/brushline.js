@@ -23,25 +23,6 @@ class Brushline extends Polyline {
         this.setSynced(false);
     }
 
-    /**
-     * @inheritDoc
-     */
-    _getRouteSuffix() {
-        return 'brushline';
-    }
-
-    /**
-     * @returns {string}
-     * @private
-     */
-    _getSnakeCaseName() {
-        return 'brushline';
-    }
-
-    isEditable() {
-        return !this.isLocal();
-    }
-
     toString() {
         return 'Line';
     }

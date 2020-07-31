@@ -13,8 +13,8 @@
     _stateManager.setKillZones({!! $killZones !!});
     _stateManager.setPaidTiers({!! $paidTiers !!});
     @isset($mdt_enemies)
-        _stateManager.setMdtEnemies({!! $mdt_enemies !!});
-     @endisset
+    _stateManager.setMdtEnemies({!! $mdt_enemies !!});
+        @endisset
 
     /**
      * Get the current state manager of the app.

@@ -9,15 +9,20 @@ class StateManager extends Signalable {
 
         this._map = null;
         // What enemy visual type we're displaying
-        this.enemyDisplayType = null;
+        this._enemyDisplayType = null;
         // The currently displayed floor ID
-        this.floorId = null;
+        this._floorId = null;
         // Map zoom level (default = 2)
-        this.mapZoomLevel = 2;
+        this._mapZoomLevel = 2;
         // Seasonal index (shows certain enemies or not)
-        this.seasonalIndex = 0;
+        this._seasonalIndex = 0;
         // Teeming or not (shows certain enemies or not)
-        this.teeming = false;
+        this._teeming = false;
+        // Pull gradient variables
+        this._pullGradient = '';
+        this._pullGradientApplyAlways = false;
+        // The enemy that is focused by the user (mouse overed)
+        this._focusedEnemy = null;
 
         // List of static arrays
         this.mapIconTypes = [];
@@ -50,6 +55,8 @@ class StateManager extends Signalable {
         // Load this from the start here
         this.setSeasonalIndex(parseInt(this.dungeonRoute.seasonalIndex));
         this.setTeeming(this.dungeonRoute.teeming);
+        this.setPullGradient(this.dungeonRoute.pullGradient);
+        this.setPullGradientApplyAlways(this.dungeonRoute.pullGradientApplyAlways);
     }
 
     /**
@@ -70,10 +77,10 @@ class StateManager extends Signalable {
     setSeasonalIndex(seasonalIndex) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        this.seasonalIndex = seasonalIndex;
+        this._seasonalIndex = seasonalIndex;
 
         // Let everyone know it's changed
-        this.signal('seasonalindex:changed', {seasonalIndex: this.seasonalIndex});
+        this.signal('seasonalindex:changed', {seasonalIndex: this._seasonalIndex});
     }
 
     /**
@@ -82,12 +89,44 @@ class StateManager extends Signalable {
      */
     setTeeming(teeming) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        console.log(`Changing teeming state`, this.teeming, teeming);
 
-        this.teeming = teeming;
+        this._teeming = teeming;
 
         // Let everyone know it's changed
-        this.signal('teeming:changed', {teeming: this.teeming});
+        this.signal('teeming:changed', {teeming: this._teeming});
+    }
+
+    /**
+     * Sets the pull gradient of the current dungeon route.
+     * @param value {string}
+     */
+    setPullGradient(value) {
+        this._pullGradient = value;
+
+        // Let everyone know it's changed
+        this.signal('pullgradient:changed', {pullgradient: this._pullGradient});
+    }
+
+    /**
+     * Sets the pull gradient to always apply when a change is made to any pulls.
+     * @param value {boolean}
+     */
+    setPullGradientApplyAlways(value) {
+        this._pullGradientApplyAlways = value;
+
+        // Let everyone know it's changed
+        this.signal('pullgradientapplyalways:changed', {pullgradientapplyalways: this._pullGradientApplyAlways});
+    }
+
+    /**
+     * Gets the currently focused enemy.
+     * @param enemy {Enemy}
+     */
+    setFocusedEnemy(enemy) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._focusedEnemy = enemy;
+        this.signal('focusedenemy:changed', {focusedenemy: this._focusedEnemy});
     }
 
     /**
@@ -219,12 +258,12 @@ class StateManager extends Signalable {
      */
     setEnemyDisplayType(enemyDisplayType) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        this.enemyDisplayType = enemyDisplayType;
+        this._enemyDisplayType = enemyDisplayType;
 
-        Cookies.set('enemy_display_type', this.enemyDisplayType);
+        Cookies.set('enemy_display_type', this._enemyDisplayType);
 
         // Let everyone know it's changed
-        this.signal('enemydisplaytype:changed', {enemyDisplayType: this.enemyDisplayType});
+        this.signal('enemydisplaytype:changed', {enemyDisplayType: this._enemyDisplayType});
     }
 
     /**
@@ -233,10 +272,10 @@ class StateManager extends Signalable {
      */
     setFloorId(floorId) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        this.floorId = floorId;
+        this._floorId = floorId;
 
         // Let everyone know it's changed
-        this.signal('floorid:changed', {floorId: this.floorId});
+        this.signal('floorid:changed', {floorId: this._floorId});
     }
 
     /**
@@ -247,11 +286,11 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         // Only when actually changed..
-        if (zoom !== this.mapZoomLevel) {
-            this.mapZoomLevel = zoom;
+        if (zoom !== this._mapZoomLevel) {
+            this._mapZoomLevel = zoom;
 
             // Let everyone know it's changed
-            this.signal('mapzoomlevel:changed', {mapZoomLevel: this.mapZoomLevel});
+            this.signal('mapzoomlevel:changed', {mapZoomLevel: this._mapZoomLevel});
         }
     }
 
@@ -260,6 +299,7 @@ class StateManager extends Signalable {
      * @returns {DungeonMap}
      */
     getDungeonMap() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this._map;
     }
 
@@ -278,8 +318,7 @@ class StateManager extends Signalable {
      */
     getSeasonalIndex() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        return this.seasonalIndex;
+        return this._seasonalIndex;
     }
 
     /**
@@ -288,8 +327,54 @@ class StateManager extends Signalable {
      */
     getTeeming() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._teeming;
+    }
 
-        return this.teeming;
+    /**
+     * Get the pull gradient for the current dungeon route.
+     * @returns {string}
+     */
+    getPullGradient() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._pullGradient;
+    }
+
+    /**
+     * Fetches a handler structure from a cookie
+     * @returns {[]}
+     * @private
+     */
+    getPullGradientHandlers() {
+        let result = [];
+
+        if (typeof this._pullGradient !== 'undefined' && this._pullGradient.length > 0) {
+            let handlers = this._pullGradient.split(',');
+            for (let index in handlers) {
+                if (handlers.hasOwnProperty(index)) {
+                    let handler = handlers[index];
+                    let values = handler.trim().split(' ');
+                    // Only RGB values
+                    if (values[1].indexOf('#') === 0) {
+                        result.push([parseInt(('' + values[0]).replace('%', '')), values[1]]);
+                    } else {
+                        console.warn('Invalid handler found:', handler);
+                    }
+                }
+            }
+        } else {
+            result = c.map.editsidebar.pullGradient.defaultHandlers;
+        }
+
+        return result;
+    }
+
+    /**
+     * Gets if the current pull gradient should always be applied when new pulls are added/re-ordered.
+     * @returns {boolean}
+     */
+    getPullGradientApplyAlways() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._pullGradientApplyAlways;
     }
 
     /**
@@ -307,7 +392,7 @@ class StateManager extends Signalable {
      */
     getEnemyDisplayType() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.enemyDisplayType;
+        return this._enemyDisplayType;
     }
 
     /**
@@ -469,7 +554,7 @@ class StateManager extends Signalable {
      */
     getMapZoomLevel() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.mapZoomLevel;
+        return this._mapZoomLevel;
     }
 
     /**
@@ -484,7 +569,7 @@ class StateManager extends Signalable {
         // Iterate over the found floors
         $.each(this.dungeonData.floors, function (index, value) {
             // Find the floor we're looking for
-            if (parseInt(value.id) === parseInt(self.floorId)) {
+            if (parseInt(value.id) === parseInt(self._floorId)) {
                 result = value;
                 return false;
             }

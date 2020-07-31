@@ -109,10 +109,11 @@ class DungeonRouteController extends Controller
         $currentReport = null;
         if (Auth::check()) {
             // Find any currently active report the user has made
-            $currentReport = UserReport::where('author_id', Auth::id())
-                ->where('context', $dungeonroute->getReportContext())
+            $currentReport = UserReport::where('user_id', Auth::id())
+                ->where('model_id', $dungeonroute->id)
+                ->where('model_class', get_class($dungeonroute))
                 ->where('category', 'dungeonroute')
-                ->where('handled', 0)
+                ->where('status', 0)
                 ->first();
         }
 

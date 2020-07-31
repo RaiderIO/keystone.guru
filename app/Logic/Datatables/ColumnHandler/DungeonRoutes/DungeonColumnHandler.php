@@ -6,8 +6,10 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables;
+namespace App\Logic\Datatables\ColumnHandler\DungeonRoutes;
 
+use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
+use App\Logic\Datatables\DatatablesHandler;
 use Illuminate\Database\Eloquent\Builder;
 
 class DungeonColumnHandler extends DatatablesColumnHandler
@@ -18,7 +20,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'dungeon_id');
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order)
+    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
     {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
@@ -33,7 +35,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
             // Order on this column?
             if (!is_null($order)) {
                 // Order either asc or desc, nothing else
-                $builder->orderBy($this->getColumnName(), $order['dir'] === 'asc' ? 'asc' : 'desc');
+                $builder->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
             }
         }
     }

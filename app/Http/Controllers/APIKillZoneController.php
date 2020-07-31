@@ -24,7 +24,7 @@ class APIKillZoneController extends Controller
     /**
      * @param DungeonRoute $dungeonroute
      * @param array $data
-     * @return array|ResponseFactory|Response
+     * @return KillZone
      * @throws \Exception
      */
     private function _saveKillZone(DungeonRoute $dungeonroute, array $data)
@@ -32,22 +32,24 @@ class APIKillZoneController extends Controller
         /** @var KillZone $killZone */
         $killZone = KillZone::findOrNew($data['id']);
 
-        try {
-            $killZone->dungeon_route_id = $dungeonroute->id;
-            $killZone->floor_id = $data['floor_id'];
-            $killZone->color = $data['color'];
-            $killZone->lat = $data['lat'];
-            $killZone->lng = $data['lng'];
-            $killZone->index = $data['index'];
+        $killZone->dungeon_route_id = $dungeonroute->id;
+        $killZone->floor_id = $data['floor_id'] ?? $killZone->floor_id;
+        $killZone->color = $data['color'] ?? $killZone->color;
+        $killZone->lat = $data['lat'] ?? $killZone->lat;
+        $killZone->lng = $data['lng'] ?? $killZone->lng;
+        $killZone->index = $data['index'] ?? $killZone->index;
 
-            if (!$killZone->exists) {
-                // Find out of there is a duplicate
-                $this->checkForDuplicate($killZone);
-            }
 
-            if (!$killZone->save()) {
-                throw new \Exception("Unable to save kill zone!");
-            } else {
+        if (!$killZone->exists) {
+            // Find out of there is a duplicate
+            $this->checkForDuplicate($killZone);
+        }
+
+        if (!$killZone->save()) {
+            throw new \Exception('Unable to save kill zone!');
+        } else {
+            // Only when the enemies are actually set
+            if (isset($data['enemies'])) {
                 $killZone->deleteEnemies();
 
                 // Get the new enemies, only unique values in case there's some bug allowing selection of the same enemy multiple times
@@ -70,22 +72,15 @@ class APIKillZoneController extends Controller
 
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
-
-                if (Auth::check()) {
-                    // Something's updated; broadcast it
-                    broadcast(new KillZoneChangedEvent($dungeonroute, $killZone, Auth::user()));
-                }
-
-                // Touch the route so that the thumbnail gets updated
-                $dungeonroute->touch();
             }
 
-            $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonroute->getEnemyForces()];
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            if (Auth::check()) {
+                // Something's updated; broadcast it
+                broadcast(new KillZoneChangedEvent($dungeonroute, $killZone, Auth::user()));
+            }
         }
 
-        return $result;
+        return $killZone;
     }
 
 
@@ -102,7 +97,18 @@ class APIKillZoneController extends Controller
         }
 
 
-        return $this->_saveKillZone($dungeonroute, $request->all());
+        try {
+            $killZone = $this->_saveKillZone($dungeonroute, $request->all());
+
+            // Touch the route so that the thumbnail gets updated
+            $dungeonroute->touch();
+
+            $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonroute->getEnemyForces()];
+        } catch (Exception $ex) {
+            $result = response('Not found', Http::NOT_FOUND);
+        }
+
+        return $result;
     }
 
     /**
@@ -120,23 +126,17 @@ class APIKillZoneController extends Controller
         // We're deliberately overwriting the $result constantly, we're only interested in the last result
         $result = null;
         foreach ($request->get('killzones', []) as $killZoneData) {
-            $result = $this->_saveKillZone($dungeonroute, $killZoneData);
-            // Had an error, abort!
-            if (!is_array($result)) {
-                break;
+            try {
+                $this->_saveKillZone($dungeonroute, $killZoneData);
+            } catch (Exception $ex) {
+                return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
             }
         }
 
-        // User didn't set any items, bs
-        if ($result === null) {
-            $result = ['enemy_forces' => $dungeonroute->getEnemyForces()];
-        } // All was good
-        else if (is_array($result)) {
-            unset($result['id']);
-        }
-        // else we had an error and just return that
+        // Touch the route so that the thumbnail gets updated
+        $dungeonroute->touch();
 
-        return $result;
+        return ['enemy_forces' => $dungeonroute->getEnemyForces()];
     }
 
     /**

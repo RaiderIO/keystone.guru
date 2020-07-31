@@ -1,0 +1,18 @@
+{{#each info}}
+    <div class="row">
+        <div class="col-6 font-weight-bold">
+            {{key}}
+        </div>
+        <div class="col-6">
+            {{#ifCond value '===' 1}}
+                <span class="text-success"><i class="fas fa-check-circle"></i></span>
+            {{else}}
+                {{#ifCond value '===' 0}}
+                    <span class="text-danger"><i class="fas fa-times-circle"></i></span>
+                {{else}}
+                    {{{value}}}
+                {{/ifCond}}
+            {{/ifCond}}
+        </div>
+    </div>
+{{/each}}

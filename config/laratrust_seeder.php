@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'create_users' => true,
     'roles_structure' => [
         'admin' => [
             'dungeons' => 'c,r,u,d',

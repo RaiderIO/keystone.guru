@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\NpcFormRequest;
 use App\Models\Enemy;
 use App\Models\Npc;
+use App\Models\NpcBolsteringWhitelist;
 use App\Models\NpcClassification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class NpcController extends Controller
 {
@@ -51,6 +51,20 @@ class NpcController extends Controller
         $npc->aggressiveness = $request->get('aggressiveness');
         $npc->dangerous = $request->get('dangerous', 0);
         $npc->truesight = $request->get('truesight', 0);
+        $npc->bursting = $request->get('bursting', 0);
+        $npc->bolstering = $request->get('bolstering', 0);
+        $npc->sanguine = $request->get('sanguine', 0);
+
+        // Bolstering whitelist, if set
+        $bolsteringWhitelistNpcs = $request->get('bolstering_whitelist_npcs', []);
+        // Clear current whitelists
+        $npc->npcbolsteringwhitelists()->delete();
+        foreach ($bolsteringWhitelistNpcs as $whitelistNpcId) {
+            NpcBolsteringWhitelist::insert([
+                'npc_id'           => $npc->id,
+                'whitelist_npc_id' => $whitelistNpcId
+            ]);
+        }
 
         if (!$npc->save()) {
             abort(500, 'Unable to save npc!');
@@ -79,7 +93,7 @@ class NpcController extends Controller
     {
         return view('admin.npc.edit', [
             'classifications' => NpcClassification::all()->pluck('name', 'id'),
-            'headerTitle' => __('New npc')
+            'headerTitle'     => __('New npc')
         ]);
     }
 
@@ -91,9 +105,9 @@ class NpcController extends Controller
     public function edit(Request $request, Npc $npc)
     {
         return view('admin.npc.edit', [
-            'model' => $npc,
+            'model'           => $npc,
             'classifications' => NpcClassification::all()->pluck('name', 'id'),
-            'headerTitle' => __('Edit npc')
+            'headerTitle'     => __('Edit npc')
         ]);
     }
 

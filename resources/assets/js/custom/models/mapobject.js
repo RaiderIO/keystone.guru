@@ -465,7 +465,7 @@ class MapObject extends Signalable {
                     // Do some preprocessing if necessary
                     switch (attribute.type) {
                         case 'bool':
-                            value = value === 1;
+                            value = value >= 1;
                             break;
                     }
                     // Assign the attributes from the object
@@ -619,7 +619,7 @@ class MapObject extends Signalable {
      */
     isVisibleOnScreen() {
         let result = false;
-        if (this.isVisible() && this.layer !== null && this.visual !== null) {
+        if (this.isVisible() && this.layer !== null) {
             result = this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
         }
         return result;
@@ -728,9 +728,16 @@ class MapObject extends Signalable {
 
     /**
      * Get the data that should be sent to the server.
+     * @param fields {string|array}
      * @returns {{}}
      */
-    getSaveData() {
+    getSaveData(fields = '*') {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
+
+        if (typeof fields === 'object' && !fields.includes('id')) {
+            fields.push('id');
+        }
+
         // Construct the data to send to the server
         let data = {};
         let attributes = this._getAttributes();
@@ -740,7 +747,8 @@ class MapObject extends Signalable {
                 let attribute = attributes[index];
                 let name = attribute.name;
 
-                if (attribute.isSaveable() && attribute.isEditableAdmin()) {
+                // Either do all when fields is *, or when it's whitelisted explicitly
+                if ((fields === '*' || fields.includes(name)) && attribute.isSaveable() && attribute.isEditableAdmin()) {
                     data[name] = this._getValue(name);
                 }
             }

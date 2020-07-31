@@ -6,8 +6,10 @@
  * Time: 15:22
  */
 
-namespace App\Logic\Datatables;
+namespace App\Logic\Datatables\ColumnHandler\DungeonRoutes;
 
+use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
+use App\Logic\Datatables\DatatablesHandler;
 use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -19,14 +21,15 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'affixes.id');
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order)
+    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
     {
 
         $affixes = $columnData['search']['value'];
         if (!empty($affixes)) {
             $affixIds = explode(',', $affixes);
 
-            $builder->whereHas('affixes', function ($query) use (&$affixIds) {
+            $builder->whereHas('affixes', function ($query) use (&$affixIds)
+            {
                 /** @var $query Builder */
                 $query->whereIn('affix_groups.id', $affixIds);
             });

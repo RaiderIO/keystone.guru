@@ -134,7 +134,7 @@ class Polyline extends MapObject {
      * @inheritDoc
      */
     isEditable() {
-        return !this.isLocal() && this.linked_awakened_obelisk_id === null;
+        return !this.isLocal();
     }
 
     /**

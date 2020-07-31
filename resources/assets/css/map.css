@@ -99,7 +99,7 @@ html, body, #map, #app, .wrapper {
     position: fixed;
     top: 106px;
     cursor: pointer;
-    z-index: 1050;
+    z-index: 1031;
 
     background: #4E5D6C;
     color: #DF691A;
@@ -452,6 +452,10 @@ html, body, #map, #app, .wrapper {
 .leaflet-edit-marker-selected {
     border-color: yellow !important;
     border-radius: 4px !important; /* Fixes weird border */
+}
+
+.leaflet-edit-marker-selected.delete {
+    border-color: red !important;
 }
 
 .map_icon.leaflet-edit-marker-selected {

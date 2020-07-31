@@ -1,0 +1,114 @@
+{
+    "id": 55,
+    "release_changelog_id": 59,
+    "version": "v3.3",
+    "created_at": "2020-07-27T15:03:12+00:00",
+    "updated_at": "2020-07-27T15:03:12+00:00",
+    "changelog": {
+        "id": 59,
+        "release_id": 55,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 1,
+                "ticket_id": 403,
+                "change": "When editing your Team\/Profile you can now instantly navigate to a specific section using URL anchors. Refreshing the page will now put you back where you were.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 1,
+                "ticket_id": 397,
+                "change": "Various admin page improvements.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 3,
+                "ticket_id": 399,
+                "change": "A list of information about an enemy is displayed in the edit sidebar as you mouse over enemies.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 3,
+                "ticket_id": 388,
+                "change": "From this information panel, you can now see if the enemy Bolsters others or not. This also shows what specific enemies the current enemy may also bolster. Think Soggy Shiprats, or the adds of Sam'rekh (fear Awakened enemy) (they don't bolster anything else but their own kind).",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 3,
+                "ticket_id": 389,
+                "change": "From this information panel, you can now see if the enemy Bursts or not.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 3,
+                "ticket_id": 401,
+                "change": "From this information panel, you can now see if the enemy spawns a Sanguine pool or not.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 3,
+                "ticket_id": 392,
+                "change": "To make space for the above, the draw settings have been moved to a modal, activated by a new \"Draw Settings\" button.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 3,
+                "ticket_id": 400,
+                "change": "From this modal, you can now select the draw gradient to be applied continuously as you make adjustments. The gradient is now also per-route and not per-browser.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 3,
+                "ticket_id": 402,
+                "change": "From the enemy information panel you can now report issues with enemies. I will review any reports manually and make adjustments as necessary.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 59,
+                "release_changelog_category_id": 3,
+                "ticket_id": 395,
+                "change": "Added various exclamation and question marks.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            }
+        ]
+    }
+}

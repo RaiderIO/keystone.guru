@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  * @property string $description
  *
  * @property Release $release
- * @property Collection $changes
+ * @property ReleaseChangelogChange[]|Collection $changes
  *
  * @mixin \Eloquent
  */

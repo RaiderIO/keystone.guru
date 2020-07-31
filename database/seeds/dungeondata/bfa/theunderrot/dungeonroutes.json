@@ -13,9 +13,11 @@
         "published": 1,
         "unlisted": 1,
         "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
         "thumbnail_updated_at": "1970-01-01 12:00:00",
         "created_at": "2020-07-04T09:54:22+00:00",
-        "updated_at": "2020-07-04T09:54:22+00:00",
+        "updated_at": "2020-07-14T11:24:02+00:00",
         "expires_at": null,
         "playerspecializations": [],
         "playerraces": [],
@@ -425,10 +427,58 @@
                 "index": 17,
                 "killzoneenemies": [
                     {
-                        "enemy_id": 4325
+                        "enemy_id": 155
+                    }
+                ]
+            },
+            {
+                "floor_id": -1,
+                "color": "#6f6e70",
+                "lat": null,
+                "lng": null,
+                "index": 18,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 3186
+                    }
+                ]
+            },
+            {
+                "floor_id": -1,
+                "color": "#cc5e38",
+                "lat": null,
+                "lng": null,
+                "index": 19,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 3186
                     },
                     {
-                        "enemy_id": 155
+                        "enemy_id": 4236
+                    }
+                ]
+            },
+            {
+                "floor_id": -1,
+                "color": "#d3c9f2",
+                "lat": null,
+                "lng": null,
+                "index": 20,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 3186
+                    }
+                ]
+            },
+            {
+                "floor_id": -1,
+                "color": "#78a9b5",
+                "lat": null,
+                "lng": null,
+                "index": 21,
+                "killzoneenemies": [
+                    {
+                        "enemy_id": 3186
                     }
                 ]
             }

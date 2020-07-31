@@ -12,14 +12,6 @@ class CommonMapsAdmineditsidebar extends InlineCode {
         super.activate();
 
         this.sidebar.activate();
-
-        let self = this;
-
-        $(this.options.switchDungeonFloorSelect).change(function () {
-            // Pass the new floor ID to the map
-            getState().setFloorId($(self.options.switchDungeonFloorSelect).val());
-            getState().getDungeonMap().refreshLeafletMap();
-        });
     }
 
     cleanup() {

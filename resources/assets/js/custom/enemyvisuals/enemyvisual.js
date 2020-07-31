@@ -71,7 +71,9 @@ class EnemyVisual extends Signalable {
         });
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
-                mapStateChangedEvent.data.newMapState instanceof EditMapState) {
+                mapStateChangedEvent.data.newMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.previousMapState instanceof DeleteMapState ||
+                mapStateChangedEvent.data.newMapState instanceof DeleteMapState) {
                 self.buildVisual();
             }
         });
@@ -99,6 +101,8 @@ class EnemyVisual extends Signalable {
                 visuals[i]._highlighted = true;
                 visuals[i].setVisualType('enemy_forces');
             }
+
+            getState().setFocusedEnemy(this.enemy);
         }
     }
 
@@ -107,7 +111,8 @@ class EnemyVisual extends Signalable {
      */
     _mouseOut() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
-        if (this._managedBy === this.enemy.id) {
+        // Only actually when we're highlighted do we want to undo ourselves of it
+        if (this._highlighted && this._managedBy === this.enemy.id) {
             if (this._circleMenu === null) {
                 let visuals = [this];
 
@@ -128,6 +133,8 @@ class EnemyVisual extends Signalable {
                     visual._highlighted = false;
                     visual.setVisualType(getState().getEnemyDisplayType());
                 }
+
+                getState().setFocusedEnemy(null);
             }
 
             this.layer.closeTooltip();
@@ -327,9 +334,9 @@ class EnemyVisual extends Signalable {
             // Set a default color which may be overridden by any visuals
             let data = {};
 
+            let isDeletable = this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable();
             let isSelectable = (this.map.getMapState() instanceof MDTEnemySelection && this.enemy.isSelectable()) ||
-                (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) ||
-                (this.map.getMapState() instanceof DeleteMapState && this.enemy.isDeletable());
+                (this.map.getMapState() instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
 
             // Either no border or a solid border in the color of the killzone
             let border = `${getState().getMapZoomLevel()}px solid white`;
@@ -344,6 +351,10 @@ class EnemyVisual extends Signalable {
 
             if (isSelectable) {
                 data.selection_classes_base += ' leaflet-edit-marker-selected selected_enemy_icon';
+            }
+
+            if (isDeletable) {
+                data.selection_classes_base += ' delete';
             }
 
             data = $.extend(data, this.mainVisual._getTemplateData());
