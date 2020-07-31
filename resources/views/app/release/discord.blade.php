@@ -1,6 +1,6 @@
 <?php /** @var $model \App\Models\Release */ ?>
 @if($mention)
-    <@everyone>
+    @everyone
 @endif
 {{ $model->version }} ({{ $model->created_at->format('Y/m/d') }})
 @isset($model->description)

@@ -5,7 +5,11 @@ namespace App\Models;
 use App\Models\Traits\SerializesDates;
 use App\Vendor\SemVer\Version;
 use Carbon\Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use PHLAK\SemVer\Exceptions\InvalidVersionException;
+use Throwable;
 
 /**
  * @property int $id
@@ -20,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property ReleaseChangelog $changelog
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Release extends Model
 {
@@ -37,7 +41,7 @@ class Release extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     function changelog()
     {
@@ -46,7 +50,7 @@ class Release extends Model
 
     /**
      * @return string
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function getGithubBodyAttribute()
     {
@@ -55,7 +59,7 @@ class Release extends Model
 
     /**
      * @return string
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function getDiscordBodyAttribute()
     {
@@ -64,21 +68,26 @@ class Release extends Model
 
     /**
      * @return string
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function getRedditBodyAttribute()
     {
         return trim(view('app.release.reddit', ['model' => $this])->render());
     }
 
+    /**
+     * @return Version|\PHLAK\SemVer\Version
+     * @throws InvalidVersionException
+     */
     public function getSymVer()
     {
-        return new Version($this->version);
+        return Version::parse($this->version);
     }
 
     /**
      * Checks if the release is a major upgrade over the previous version.
      * @return bool
+     * @throws InvalidVersionException
      */
     public function isMajorUpgrade()
     {
@@ -93,6 +102,7 @@ class Release extends Model
     /**
      * Checks if the release is a minor upgrade over the previous version.
      * @return bool
+     * @throws InvalidVersionException
      */
     public function isMinorUpgrade()
     {
@@ -107,6 +117,7 @@ class Release extends Model
     /**
      * Checks if the release is a bugfix upgrade over the previous version.
      * @return bool
+     * @throws InvalidVersionException
      */
     public function isBugfixUpgrade()
     {
