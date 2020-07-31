@@ -16,7 +16,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          script: cd /var/www/html/keystone.guru.live/ \
-            && ./update_live.sh \
-            && php artisan report:release discord \
-            && php artisan report:release reddit
+          script: cd /var/www/html/keystone.guru.live/ &&
+            ./update_live.sh &&
+            php artisan report:release discord &&
+            php artisan report:release reddit
