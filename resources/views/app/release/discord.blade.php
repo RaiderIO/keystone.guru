@@ -1,5 +1,5 @@
 <?php /** @var $model \App\Models\Release */ ?>
-{{ $model->version }} ({{ $model->created_at->format('Y/M/d') }})
+{{ $model->version }} ({{ $model->created_at->format('Y/m/d') }})
 @isset($model->description)
 {{ $model->description }}
 
