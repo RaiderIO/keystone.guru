@@ -19,4 +19,6 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          script: cd /var/www/html/keystone.guru.staging/ && ./update_live.sh
+          script: cd /var/www/html/keystone.guru.staging/ \
+            && ./update_live.sh \
+            && php artisan report:release discord \

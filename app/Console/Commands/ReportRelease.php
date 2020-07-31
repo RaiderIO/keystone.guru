@@ -56,16 +56,24 @@ class ReportRelease extends Command
             $release = Release::where('version', $version)->first();
         }
 
-
         switch ($platform) {
             case 'reddit':
-                $redditApiService->createPost(sprintf('%s (%s)', $release->version, $release->created_at->format('Y/M/d')), $release->reddit_body);
+                $result = $redditApiService->createPost(
+                    config('keystoneguru.reddit_subreddit'),
+                    sprintf('%s (%s)', $release->version, $release->created_at->format('Y/M/d')),
+                    $release->reddit_body
+                );
                 break;
             case 'discord':
-                $discordApiService->sendMessage(env('DISCORD_NEW_RELEASE_WEBHOOK'), $release->discord_body);
+                $result = $discordApiService->sendMessage(env('DISCORD_NEW_RELEASE_WEBHOOK'), $release->discord_body);
                 break;
             default:
                 throw new \Exception(sprintf('Unsupport platform %s', $platform));
+        }
+
+        // If failed, return failed exit code
+        if (!$result) {
+            exit(1);
         }
     }
 }
