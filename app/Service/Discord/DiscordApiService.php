@@ -5,7 +5,7 @@ namespace App\Service\Discord;
 
 class DiscordApiService implements DiscordApiServiceInterface
 {
-    function sendMessage(string $webhookUrl, string $message, string $username = null): boolean
+    function sendMessage(string $webhookUrl, string $message, string $username = null): bool
     {
         // https://stackoverflow.com/questions/51747829/how-to-send-a-embedded-webhook-using-php-discord
         $ch = curl_init();

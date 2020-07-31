@@ -5,5 +5,5 @@ namespace App\Service\Discord;
 
 interface DiscordApiServiceInterface
 {
-    function sendMessage(string $webhookUrl, string $message, string $username = null): boolean;
+    function sendMessage(string $webhookUrl, string $message, string $username = null): bool;
 }
