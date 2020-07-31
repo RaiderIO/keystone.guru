@@ -3,7 +3,7 @@ name: Staging Deploy
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ development ]
 
 jobs:
   deploy-staging:
