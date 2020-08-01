@@ -30,7 +30,7 @@ $member = isset($member) ? $member : false;
             <div class="row">
                 <div class="col">
                     @if( $member )
-                        <a href="{{ route('team.edit', ['team' => $team->id ]) }}" class="btn btn-primary col-lg-auto">
+                        <a href="{{ route('team.edit', ['team' => $team->name ]) }}" class="btn btn-primary col-lg-auto">
                             <i class="fas fa-backward"></i> {{ __('Return to team') }}
                         </a>
                     @else

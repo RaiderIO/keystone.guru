@@ -1,92 +1,98 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
-    "type": "project",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Wotuu/tracker"
-        },
-        {
-          "type": "vcs",
-          "url": "https://github.com/Wotuu/laravel4-datatables-package"
-        },
-        {
-            "type":"package",
-            "package": {
-                "name": "nnoggie/methoddungeontools",
-                "version": "3.0.4",
-                "source": {
-                    "url": "https://github.com/nnoggie/MethodDungeonTools.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
+  "name": "laravel/laravel",
+  "description": "The Laravel Framework.",
+  "keywords": [
+    "framework",
+    "laravel"
+  ],
+  "license": "MIT",
+  "type": "project",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Wotuu/tracker"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/Wotuu/laravel4-datatables-package"
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "nnoggie/methoddungeontools",
+        "version": "3.0.4",
+        "source": {
+          "url": "https://github.com/nnoggie/MethodDungeonTools.git",
+          "type": "git",
+          "reference": "master"
         }
-    ],
-    "require": {
-        "php": ">=7.4",
-        "ext-json": "*",
-        "ext-lua": "*",
-        "barryvdh/laravel-ide-helper": "^2.4",
-        "folklore/image": "0.3.*",
-        "geoip2/geoip2": "~2.0",
-        "jenssegers/agent": "^2.6",
-        "laravel-frontend-presets/argon": "^1.0",
-        "laravel/framework": "^7.0",
-        "laravel/horizon": "^4.0",
-        "laravel/socialite": "^4.1",
-        "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.0",
-        "laravelcollective/html": "6.1.*",
-        "lefuturiste/monolog-discord-handler": "^0.2.0",
-        "nnoggie/methoddungeontools": "*",
-        "patreon/patreon": "^0.3.1",
-        "pragmarx/tracker": "dev-wotuu-bugfix#df8d831e3baa7c4fa4e37c623063caf328c08076",
-        "predis/predis": "^1.1",
-        "santigarcor/laratrust": "^6.0",
-        "shrikeh/teapot": "^2.3",
-        "socialiteproviders/battlenet": "dev-master#4418c2dfd7823e883a83c292704cc90d2fe950a5",
-        "socialiteproviders/discord": "^2.0",
-        "tremby/laravel-git-version": "^1.1",
-        "yajra/laravel-datatables-oracle": "~9.0"
-    },
-    "require-dev": {
-        "filp/whoops": "^2.0",
-        "barryvdh/laravel-debugbar": "^3.1",
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^7.0"
-    },
-    "autoload": {
-        "classmap": [
-            "database"
-        ],
-        "psr-4": {
-            "App\\": "app/",
-            "Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "post-root-package-install": [
-            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ],
-        "post-create-project-cmd": [
-            "php artisan key:generate"
-        ],
-        "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall"
-        ],
-        "post-update-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate"
-        ]
-    },
-    "config": {
-        "preferred-install": "dist",
-        "sort-packages": true
+      }
     }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "barryvdh/laravel-ide-helper": "^2.4",
+    "folklore/image": "0.3.*",
+    "geoip2/geoip2": "~2.0",
+    "graham-campbell/github": "^9.3",
+    "jenssegers/agent": "^2.6",
+    "laravel-frontend-presets/argon": "^1.0",
+    "laravel/framework": "^7.0",
+    "laravel/horizon": "^4.0",
+    "laravel/socialite": "^4.1",
+    "laravel/tinker": "^2.0",
+    "laravel/ui": "^2.0",
+    "laravelcollective/html": "6.1.*",
+    "lefuturiste/monolog-discord-handler": "^0.2.0",
+    "nnoggie/methoddungeontools": "*",
+    "patreon/patreon": "^0.3.1",
+    "phlak/semver": "^3.2",
+    "php-http/guzzle6-adapter": "^2.0",
+    "pragmarx/tracker": "dev-wotuu-bugfix#df8d831e3baa7c4fa4e37c623063caf328c08076",
+    "predis/predis": "^1.1",
+    "santigarcor/laratrust": "^6.0",
+    "shrikeh/teapot": "^2.3",
+    "socialiteproviders/battlenet": "dev-master#4418c2dfd7823e883a83c292704cc90d2fe950a5",
+    "socialiteproviders/discord": "^2.0",
+    "tremby/laravel-git-version": "^1.1",
+    "yajra/laravel-datatables-oracle": "~9.0"
+  },
+  "require-dev": {
+    "filp/whoops": "^2.0",
+    "barryvdh/laravel-debugbar": "^3.1",
+    "fzaninotto/faker": "~1.4",
+    "mockery/mockery": "^1.0",
+    "phpunit/phpunit": "^7.0"
+  },
+  "autoload": {
+    "classmap": [
+      "database"
+    ],
+    "psr-4": {
+      "App\\": "app/",
+      "Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "post-root-package-install": [
+      "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ],
+    "post-create-project-cmd": [
+      "php artisan key:generate"
+    ],
+    "post-install-cmd": [
+      "Illuminate\\Foundation\\ComposerScripts::postInstall"
+    ],
+    "post-update-cmd": [
+      "Illuminate\\Foundation\\ComposerScripts::postUpdate"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true
+  }
 }

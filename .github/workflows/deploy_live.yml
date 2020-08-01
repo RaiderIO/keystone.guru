@@ -1,0 +1,22 @@
+# Dummy commits done: 0
+name: Live Deploy
+
+on:
+  push:
+    branches: master
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run update_live.sh on live
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          script: cd /var/www/html/keystone.guru.live/ &&
+            ./update_live.sh &&
+            php artisan report:release discord &&
+            php artisan report:release reddit

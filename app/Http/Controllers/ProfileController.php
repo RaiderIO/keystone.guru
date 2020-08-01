@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\UserColorChangedEvent;
 use App\Models\DungeonRoute;
-use App\Service\EchoServerHttpApiService;
+use App\Service\DiscordApiService;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,11 +21,11 @@ class ProfileController extends Controller
     /**
      * @param Request $request
      * @param User $user
-     * @param EchoServerHttpApiService $echoServerHttpApiService
+     * @param DiscordApiService $echoServerHttpApiService
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function update(Request $request, User $user, EchoServerHttpApiService $echoServerHttpApiService)
+    public function update(Request $request, User $user, DiscordApiService $echoServerHttpApiService)
     {
         // Allow username change once!
         if ($user->isOAuth()) {
