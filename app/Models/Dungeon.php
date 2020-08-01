@@ -32,22 +32,11 @@ class Dungeon extends Model
      *
      * @var array
      */
-    protected $appends = ['key', 'floor_count'];
+    protected $appends = ['floor_count'];
     public $with = ['expansion'];
 
     public $hidden = ['expansion_id', 'created_at', 'updated_at'];
     public $timestamps = false;
-
-    /**
-     * @return string The key as used in the front-end to identify the dungeon.
-     */
-    public function getKeyAttribute()
-    {
-        // https://stackoverflow.com/questions/14114411/remove-all-special-characters-from-a-string
-        $string = str_replace(' ', '', strtolower($this->name)); // Replaces all spaces with nothing.
-
-        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-    }
 
     /**
      * @return int The amount of floors this dungeon has.

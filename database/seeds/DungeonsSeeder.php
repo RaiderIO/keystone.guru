@@ -29,7 +29,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Arcway' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ]
                 ],
                 'floor_couplings'               => []
@@ -40,7 +41,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'The Ravenscrypt'            => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'The Grand Hall'             => [
                         'index' => 2
@@ -66,7 +68,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Hall of the Moon'     => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'Twilight Grove'       => [
                         'index' => 2
@@ -89,7 +92,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Court of Stars' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     // Missing two but whatever
                 ],
@@ -101,7 +105,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Darkheart Thicket' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ]
                 ],
                 'floor_couplings'               => []
@@ -112,7 +117,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Eye of Azshara' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ]
                 ],
                 'floor_couplings'               => []
@@ -124,7 +130,8 @@ class DungeonsSeeder extends Seeder
                 'floors'                        => [
                     // Yes the indices are intended
                     'The High Gate'              => [
-                        'index' => 2
+                        'index'   => 2,
+                        'default' => true
                     ],
                     'Fields of the Eternal Hunt' => [
                         'index' => 1
@@ -164,7 +171,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Master\'s Terrace'    => [
-                        'index' => 6
+                        'index'   => 6,
+                        'default' => true
                     ],
                     'Opera Hall Balcony'   => [
                         'index' => 5
@@ -190,7 +198,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Hellmouth Cliffs' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'The Hold'         => [
                         'index' => 2
@@ -207,7 +216,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Neltharion\'s Lair' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                 ],
                 'floor_couplings'               => []
@@ -218,7 +228,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Lower Broken Stair'  => [
-                        'index' => 7
+                        'index'   => 7,
+                        'default' => true
                     ],
                     'Upper Broken Stair'  => [
                         'index' => 8
@@ -261,7 +272,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'The Warden\'s Court'   => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'Vault of the Wardens'  => [
                         'index' => 2
@@ -283,7 +295,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'Atal\'Dazar'      => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'Sacrificial Pits' => [
                         'index' => 2
@@ -309,7 +322,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'Freehold' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                 ],
                 'floor_couplings'               => []
@@ -321,7 +335,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'Kings\' Rest' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ]
                 ],
                 'floor_couplings'               => []
@@ -333,7 +348,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'Shrine of the Storm' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'Storm\'s End'        => [
                         'index' => 2
@@ -359,7 +375,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'Siege of Boralus' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ]
                 ],
                 'floor_couplings'               => []
@@ -371,7 +388,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'Temple of Sethraliss'  => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'Atrium of the Wardens' => [
                         'index' => 2
@@ -397,7 +415,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'The Motherlode' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ]
                 ],
                 'floor_couplings'               => []
@@ -409,7 +428,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'The Underrot'    => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'Ruin\'s Descent' => [
                         'index' => 2
@@ -435,7 +455,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'Tol Dagor'           => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'The Drain'           => [
                         'index' => 2
@@ -536,7 +557,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'The Grand Foyer' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'Upstairs'        => [
                         'index' => 2
@@ -605,7 +627,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'Mechagon Island' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'Tunnels'         => [
                         'index' => 2
@@ -631,7 +654,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => true,
                 'floors'                        => [
                     'The Robodrome'  => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     // Floor 2 is the waste pipes and don't contain any mobs
                     'The Under Junk' => [
@@ -673,7 +697,8 @@ class DungeonsSeeder extends Seeder
                 'active'                        => false,
                 'floors'                        => [
                     'Orgrimmar' => [
-                        'index' => 1
+                        'index'   => 1,
+                        'default' => true
                     ],
                     'The Drag'  => [
                         'index' => 2
@@ -709,6 +734,7 @@ class DungeonsSeeder extends Seeder
         $dungeonsDataShadowlands = [
             'De Other Side'         => [
                 'expansion_id'                  => $shadowlands->id,
+                'key'                           => 'deotherside_ardenweald',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
@@ -764,6 +790,7 @@ class DungeonsSeeder extends Seeder
             ],
             'Halls of Atonement'    => [
                 'expansion_id'                  => $shadowlands->id,
+                'key'                           => 'hallsofatonement_a',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
@@ -805,6 +832,7 @@ class DungeonsSeeder extends Seeder
             ],
             'Mists of Tirna Scithe' => [
                 'expansion_id'                  => $shadowlands->id,
+                'key'                           => 'mistsoftirnescithe',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
@@ -816,18 +844,19 @@ class DungeonsSeeder extends Seeder
                 ],
                 'floor_couplings'               => []
             ],
-            'Plaguefall' => [
+            'Plaguefall'            => [
                 'expansion_id'                  => $shadowlands->id,
+                'key'                           => 'plaguefall',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
                 'floors'                        => [
-                    'Plaguefall' => [
+                    'Plaguefall'            => [
                         'index'   => 1,
                         'default' => true
                     ],
                     'The Festering Sanctum' => [
-                        'index'   => 2,
+                        'index' => 2,
                     ],
                 ],
                 'floor_couplings'               => [
@@ -843,8 +872,9 @@ class DungeonsSeeder extends Seeder
                     ],
                 ]
             ],
-            'Sanguine Depths' => [
+            'Sanguine Depths'       => [
                 'expansion_id'                  => $shadowlands->id,
+                'key'                           => 'sanguinedepths_a',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
@@ -854,7 +884,7 @@ class DungeonsSeeder extends Seeder
                         'default' => true
                     ],
                     'B' => [
-                        'index'   => 2,
+                        'index' => 2,
                     ],
                 ],
                 'floor_couplings'               => [
@@ -870,24 +900,25 @@ class DungeonsSeeder extends Seeder
                     ],
                 ]
             ],
-            'Spires of Ascension' => [
+            'Spires of Ascension'   => [
                 'expansion_id'                  => $shadowlands->id,
+                'key'                           => 'spiresofascension_a',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
                 'floors'                        => [
-                    'Honor\'s Ascent' => [
-                        'index'   => 1,
+                    'Honor\'s Ascent'         => [
+                        'index' => 1,
                     ],
-                    'Gardens of Repose' => [
+                    'Gardens of Repose'       => [
                         'index'   => 2,
                         'default' => true
                     ],
                     'Spire of the Firstborne' => [
-                        'index'   => 3,
+                        'index' => 3,
                     ],
-                    'Seat of the Archon' => [
-                        'index'   => 4,
+                    'Seat of the Archon'      => [
+                        'index' => 4,
                     ],
                 ],
                 'floor_couplings'               => [
@@ -925,8 +956,9 @@ class DungeonsSeeder extends Seeder
                     ],
                 ]
             ],
-            'The Necrotic Wake' => [
+            'The Necrotic Wake'     => [
                 'expansion_id'                  => $shadowlands->id,
+                'key'                           => 'necroticwake_a',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
@@ -935,11 +967,11 @@ class DungeonsSeeder extends Seeder
                         'index'   => 1,
                         'default' => true
                     ],
-                    'Necrotic Wake A' => [
-                        'index'   => 2,
+                    'Necrotic Wake A'   => [
+                        'index' => 2,
                     ],
-                    'Necrotic Wake B' => [
-                        'index'   => 3,
+                    'Necrotic Wake B'   => [
+                        'index' => 3,
                     ],
                 ],
                 'floor_couplings'               => [
@@ -966,27 +998,28 @@ class DungeonsSeeder extends Seeder
                     ],
                 ]
             ],
-            'Theater of Pain' => [
+            'Theater of Pain'       => [
                 'expansion_id'                  => $shadowlands->id,
+                'key'                           => 'theaterofpain',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
                 'active'                        => true,
                 'floors'                        => [
-                    'Theater of Pain' => [
+                    'Theater of Pain'    => [
                         'index'   => 1,
                         'default' => true
                     ],
-                    'Warlord' => [
-                        'index'   => 2,
+                    'Warlord'            => [
+                        'index' => 2,
                     ],
-                    'Lich' => [
-                        'index'   => 3,
+                    'Lich'               => [
+                        'index' => 3,
                     ],
-                    'Abomination Top' => [
-                        'index'   => 4,
+                    'Abomination Top'    => [
+                        'index' => 4,
                     ],
                     'Abomination Bottom' => [
-                        'index'   => 5,
+                        'index' => 5,
                     ],
                 ],
                 'floor_couplings'               => [
@@ -1048,6 +1081,15 @@ class DungeonsSeeder extends Seeder
             $dungeon->enemy_forces_required = $dungeonData['enemy_forces_required'];
             $dungeon->enemy_forces_required_teeming = $dungeonData['enemy_forces_required_teeming'];
             $dungeon->active = $dungeonData['active'];
+
+            if (!isset($dungeonData['key'])) {
+                // https://stackoverflow.com/questions/14114411/remove-all-special-characters-from-a-string
+                $string = str_replace(' ', '', strtolower($dungeon->name)); // Replaces all spaces with nothing.
+
+                $dungeon->key = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+            } else {
+                $dungeon->key = $dungeonData['key'];
+            }
 
             $dungeon->save();
 
