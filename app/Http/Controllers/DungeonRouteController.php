@@ -92,7 +92,8 @@ class DungeonRouteController extends Controller
      */
     public function view(Request $request, DungeonRoute $dungeonroute)
     {
-        return $this->viewfloor($request, $dungeonroute, 1);
+        $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
+        return $this->viewfloor($request, $dungeonroute, optional($defaultFloor)->index ?? 1);
     }
 
     /**
@@ -215,7 +216,8 @@ class DungeonRouteController extends Controller
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
-        return $this->editfloor($request, $dungeonroute, 1);
+        $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
+        return $this->editfloor($request, $dungeonroute, optional($defaultFloor)->index ?? 1);
     }
 
     /**
