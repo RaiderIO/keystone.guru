@@ -102,6 +102,7 @@ if ($isAdmin) {
         'killZones' => $routeKillZones,
         'dungeonData' => $dungeon,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
+        'userData' => $user,
         'dungeonroute' => [
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,

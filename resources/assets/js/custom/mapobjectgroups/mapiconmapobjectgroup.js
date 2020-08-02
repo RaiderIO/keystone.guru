@@ -63,6 +63,9 @@ class MapIconMapObjectGroup extends MapObjectGroup {
 
             // Pass the map icon type here so layer initialization can take the type into account
             mapIcon = this.createNew(layer, {mapIconType: getState().getMapIconType(remoteMapObject.map_icon_type_id)});
+        } else {
+            // Update position if it already existed
+            mapIcon.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
 
         mapIcon.loadRemoteMapObject(remoteMapObject);

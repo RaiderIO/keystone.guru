@@ -22,32 +22,47 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup', this);
 
+        // Fetch the existing dungeonFloorSwitchMarker if it exists
+        let dungeonFloorSwitchMarker = this.findMapObjectById(remoteMapObject.id);
+
+        // Only create a new one if it's new for us
         let layer;
-        switch(remoteMapObject.direction){
-            case 'up':
-                layer = new LeafletDungeonFloorSwitchMarkerUp();
-                break;
-            case 'down':
-                layer = new LeafletDungeonFloorSwitchMarkerDown();
-                break;
-            case 'left':
-                layer = new LeafletDungeonFloorSwitchMarkerLeft();
-                break;
-            case 'right':
-                layer = new LeafletDungeonFloorSwitchMarkerRight();
-                break;
-            default:
-                layer = new LeafletDungeonFloorSwitchMarker();
-                break;
+        if (dungeonFloorSwitchMarker === null) {
+            switch (remoteMapObject.direction) {
+                case 'up':
+                    layer = new LeafletDungeonFloorSwitchMarkerUp();
+                    break;
+                case 'down':
+                    layer = new LeafletDungeonFloorSwitchMarkerDown();
+                    break;
+                case 'left':
+                    layer = new LeafletDungeonFloorSwitchMarkerLeft();
+                    break;
+                case 'right':
+                    layer = new LeafletDungeonFloorSwitchMarkerRight();
+                    break;
+                default:
+                    layer = new LeafletDungeonFloorSwitchMarker();
+                    break;
+            }
+
+            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+
+            /** @type DungeonFloorSwitchMarker */
+            dungeonFloorSwitchMarker = this.createNew(layer);
+        } else {
+            // Update position
+            dungeonFloorSwitchMarker.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
 
-        layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
 
-        let dungeonFloorSwitchMarker = this.createNew(layer);
         dungeonFloorSwitchMarker.loadRemoteMapObject(remoteMapObject);
 
         // We just downloaded the floor switch marker, it's synced alright!
         dungeonFloorSwitchMarker.setSynced(true);
+
+        // Show echo notification or not
+        this._showReceivedFromEcho(dungeonFloorSwitchMarker, username);
 
         return dungeonFloorSwitchMarker;
     }

@@ -36,15 +36,23 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _restoreObject(remoteMapObject, username = null) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
-        // Only create a visual if we should display this enemy
-        let layer = null;
-        if (remoteMapObject.floor_id === getState().getCurrentFloor().id) {
-            layer = new LeafletEnemyMarker();
-            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+        // Fetch the existing dungeonFloorSwitchMarker if it exists
+        let enemy = this.findMapObjectById(remoteMapObject.id);
+
+        if (enemy === null) {
+            // Only create a visual if we should display this enemy
+            let layer = null;
+            if (remoteMapObject.floor_id === getState().getCurrentFloor().id) {
+                layer = new LeafletEnemyMarker();
+                layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+            }
+            enemy = this.createNew(layer);
+        } else {
+            // Update position of the enemy
+            enemy.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
 
         /** @type {Enemy} */
-        let enemy = this.createNew(layer);
         enemy.loadRemoteMapObject(remoteMapObject);
 
         if (remoteMapObject.hasOwnProperty('is_mdt')) {
@@ -68,6 +76,9 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         // We just downloaded the enemy, it's synced alright!
         enemy.setSynced(true);
+
+        // Show echo notification or not
+        this._showReceivedFromEcho(enemy, username);
 
         return enemy;
     }

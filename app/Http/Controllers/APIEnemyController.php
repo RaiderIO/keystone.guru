@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Dungeon\ModelChangedEvent;
+use App\Events\Dungeon\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
@@ -10,7 +12,11 @@ use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\RaidMarker;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
@@ -46,7 +52,7 @@ class APIEnemyController extends Controller
     /**
      * @param Request $request
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     function store(Request $request)
     {
@@ -71,13 +77,17 @@ class APIEnemyController extends Controller
         $enemy->lng = $request->get('lng');
 
         if (!$enemy->save()) {
-            throw new \Exception('Unable to save enemy!');
+            throw new Exception('Unable to save enemy!');
         }
 
         $result = ['id' => $enemy->id];
 
         if ($enemy->npc_id > 0) {
             $result['npc'] = Npc::findOrFail($enemy->npc_id);
+        }
+
+        if (Auth::check()) {
+            broadcast(new ModelChangedEvent($enemy->floor->dungeon, $enemy, Auth::getUser()));
         }
 
         return $result;
@@ -87,8 +97,8 @@ class APIEnemyController extends Controller
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param Enemy $enemy
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return array|ResponseFactory|Response
+     * @throws AuthorizationException
      */
     function setRaidMarker(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
     {
@@ -113,7 +123,7 @@ class APIEnemyController extends Controller
                 $result = ['name' => ''];
             }
 
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 
@@ -123,14 +133,18 @@ class APIEnemyController extends Controller
     /**
      * @param Request $request
      * @param Enemy $enemy
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return array|ResponseFactory|Response
      */
     function delete(Request $request, Enemy $enemy)
     {
         try {
-            $enemy->delete();
+            if( $enemy->delete() ){
+                if (Auth::check()) {
+                    broadcast(new ModelDeletedEvent($enemy->floor->dungeon, $enemy, Auth::getUser()));
+                }
+            }
             $result = response()->noContent();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 

@@ -44,6 +44,75 @@ class MapObjectGroup extends Signalable {
         if (!(this.manager.map instanceof AdminDungeonMap)) {
             getState().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
         }
+
+        if (this.manager.map.options.echo) {
+            window.Echo.join(getState().getEchoChannelName())
+                .listen('.model-changed', (e) => {
+                    if (self._shouldHandleChangedEchoEvent(e)) {
+                        self._restoreObject(e.model, e.user);
+                    }
+                })
+                .listen('.model-deleted', (e) => {
+                    if (self._shouldHandleDeletedEchoEvent(e)) {
+                        let mapObject = self.findMapObjectById(e.id);
+                        if (mapObject !== null) {
+                            mapObject.localDelete();
+                            self._showDeletedFromEcho(mapObject, e.user);
+                        }
+                    }
+                });
+        }
+    }
+
+    /**
+     * Basic checks for if a received echo event is applicable to this map object group.
+     * @param e {Object}
+     * @returns {boolean}
+     * @private
+     */
+    _shouldHandleEchoEvent(e) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
+        let result = false;
+
+        for (let i = 0; i < this.names.length; i++) {
+            let name = this.names[i];
+            // Only react to model-changed events of our own
+            if (e.class.toLowerCase() === `app\\models\\${name}`) {
+                result = true;
+                break;
+            }
+        }
+
+        // Do not handle our own events; no point
+        return result && e.user !== getState().getUserName();
+    }
+
+    /**
+     * Checks if a received _changed_ event is applicable to this map object group.
+     * @param e {Object}
+     * @returns {boolean|boolean}
+     * @private
+     */
+    _shouldHandleChangedEchoEvent(e) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+        console.assert(typeof e.model !== 'undefined', 'model was not defined in received event!', this, e);
+        console.assert(typeof e.model.floor_id !== 'undefined', 'model.floor_id was not defined in received event!', this, e);
+
+        return this._shouldHandleEchoEvent(e) && e.model.floor_id === getState().getCurrentFloor().id;
+    }
+
+    /**
+     * Checks if a received _deleted_ event is applicable to this map object group.
+     * @param e {Object}
+     * @returns {boolean|boolean}
+     * @private
+     */
+    _shouldHandleDeletedEchoEvent(e) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+        console.assert(typeof e.id !== 'undefined', 'id was not defined in received event!', this, e);
+
+        return this._shouldHandleEchoEvent(e);
     }
 
     /**

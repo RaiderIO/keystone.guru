@@ -25,6 +25,8 @@ class StateManager extends Signalable {
         this._pullGradientApplyAlways = false;
         // The enemy that is focused by the user (mouse overed)
         this._focusedEnemy = null;
+        // Details about the currently logged in user
+        this._userData = null;
 
         // List of static arrays
         this.mapIconTypes = [];
@@ -304,6 +306,16 @@ class StateManager extends Signalable {
             // Let everyone know it's changed
             this.signal('mapzoomlevel:changed', {mapZoomLevel: this._mapZoomLevel});
         }
+    }
+
+    /**
+     * Sets the data of the currently logged in user.
+     * @param userData {Object|null}
+     */
+    setUserData(userData) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._userData = userData;
     }
 
     /**
@@ -637,5 +649,15 @@ class StateManager extends Signalable {
         console.log(channelName);
 
         return channelName;
+    }
+
+    /**
+     * Gets the currently logged in user's name, or null if not logged in.
+     * @returns {*|null}
+     */
+    getUserName() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._userData !== null ? this._userData.name : null;
     }
 }
