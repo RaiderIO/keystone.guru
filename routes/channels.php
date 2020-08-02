@@ -27,10 +27,9 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
 
 Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', env('APP_TYPE')), function (\App\User $user, \App\Models\Dungeon $dungeon)
 {
-    $result = true;
-//    $result = false;
-//    if ($user->hasRole('admin')) {
-//        $result = ['name' => $user->name, 'color' => $user->echo_color];
-//    }
+    $result = false;
+    if ($user->hasRole('admin')) {
+        $result = ['name' => $user->name, 'color' => $user->echo_color];
+    }
     return $result;
 });
