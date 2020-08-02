@@ -5,7 +5,6 @@ namespace App\Models;
 use App\User;
 use Eloquent;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -277,6 +276,7 @@ class Team extends IconFileModel
         if ($this->isUserMember($member)) {
             /** @var TeamUser $teamUser */
             $teamUser = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->firstOrFail();
+            $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id', -1]);
             try {
                 $result = $teamUser->delete();
             } catch (Exception $exception) {

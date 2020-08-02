@@ -204,9 +204,9 @@ class EnemyVisual extends Signalable {
         // Some exclusions as to when the menu should not pop up
         if (self.map.options.edit &&
             self.map.getMapState() === null &&
-            self.enemy.constructor.name !== 'AdminEnemy') {
+            !(self.enemy instanceof AdminEnemy)) {
 
-            if (self.circleMenu === null) {
+            if (self._circleMenu === null) {
                 let template = Handlebars.templates['map_enemy_raid_marker_template'];
                 let id = self.enemy.id;
 
@@ -231,7 +231,7 @@ class EnemyVisual extends Signalable {
                 $circleMenu.css('top', ((size / 2) + margin - 12) + 'px');
 
                 // Init circle menu and open it
-                self.circleMenu = $circleMenu.circleMenu({
+                self._circleMenu = $circleMenu.circleMenu({
                     direction: 'full',
                     step_in: 5,
                     step_out: 0,
@@ -271,13 +271,13 @@ class EnemyVisual extends Signalable {
                 });
 
                 // Force open the menu
-                self.circleMenu.circleMenu('open');
+                self._circleMenu.circleMenu('open');
 
                 // Unbind this function so we don't get repeat clicks
                 $enemyDiv.unbind('click');
                 // Give the user a way to close the menu by clicking the enemy again
                 $enemyDiv.bind('click', function () {
-                    self.circleMenu.circleMenu('close', false);
+                    self._circleMenu.circleMenu('close', false);
                     // Prevent multiple clicks triggering the close
                     $enemyDiv.unbind('click');
                 });
@@ -302,7 +302,7 @@ class EnemyVisual extends Signalable {
         // Delay it by 500 ms so the animations have a chance to complete
         $('#map_enemy_raid_marker_radial_' + id).delay(500).queue(function () {
             $(this).remove().dequeue();
-            self.circleMenu = null;
+            self._circleMenu = null;
 
             // Slight hack to restore the state we were in prior to selecting the icon (otherwise we may get stuck in mouse over state)
             self._mouseOut();

@@ -20,7 +20,8 @@ class RedditApiService implements RedditApiServiceInterface
                 sprintf('Authorization: Basic %s', base64_encode(sprintf('%s:%s', env('REDDIT_CLIENT_ID'), env('REDDIT_SECRET_KEY')))),
                 'Content-Type: application/x-www-form-urlencoded',
                 'User-Agent: keystone.guru/v3.3'
-            ]
+            ],
+            CURLOPT_RETURNTRANSFER => 1
         ]);
 
         /**
@@ -33,9 +34,7 @@ class RedditApiService implements RedditApiServiceInterface
          * }
          */
 
-        $responseString = curl_exec($ch);
-        echo $responseString . PHP_EOL;
-        $response = json_decode($responseString, true);
+        $response = json_decode(curl_exec($ch), true);
 
         curl_close($ch);
 
@@ -45,7 +44,7 @@ class RedditApiService implements RedditApiServiceInterface
             $ch = curl_init();
 
             curl_setopt_array($ch, [
-                CURLOPT_URL        => 'https://www.reddit.com/api/submit',
+                CURLOPT_URL        => 'https://oauth.reddit.com/api/submit',
                 CURLOPT_POST       => true,
                 CURLOPT_POSTFIELDS => http_build_query([
                     'sr'    => $subreddit,
@@ -57,15 +56,16 @@ class RedditApiService implements RedditApiServiceInterface
                     sprintf('Authorization: Bearer %s', $token),
                     'Content-Type: application/x-www-form-urlencoded',
                     'User-Agent: keystone.guru/v3.3'
-                ]
+                ],
+                CURLOPT_RETURNTRANSFER => 1
             ]);
 
-            $responseString = curl_exec($ch);
-            echo $responseString . PHP_EOL;
-            $response = json_decode($responseString, true);
-
+            $response = json_decode(curl_exec($ch), true);
             curl_close($ch);
-            return true;
+
+            if( $response['success'] === true ) {
+                return true;
+            }
         }
 
         return false;

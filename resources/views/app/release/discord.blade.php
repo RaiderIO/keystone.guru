@@ -2,7 +2,7 @@
 @if($mention)
     @everyone
 @endif
-{{ $model->version }} ({{ $model->created_at->format('Y/m/d') }})
+{{ $model->version }} ({{ $model->created_at->format('Y/m/d') }})(https://keystone.guru/release/{{ $model->version }})
 @isset($model->description)
 {{ $model->description }}
 
