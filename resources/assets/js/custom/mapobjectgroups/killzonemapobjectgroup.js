@@ -11,7 +11,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-bullseye';
 
         if (this.manager.map.options.echo) {
-            window.Echo.join(this.manager.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
+            window.Echo.join(getState().getEchoChannelName())
                 .listen('.killzone-changed', (e) => {
                     // Always restore killzones; we can view them from the sidebar
                     self._restoreObject(e.killzone, e.user);

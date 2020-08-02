@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PathChangedEvent;
-use App\Events\PathDeletedEvent;
+use App\Events\DungeonRoute\PathChangedEvent;
+use App\Events\DungeonRoute\PathDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Models\DungeonRoute;

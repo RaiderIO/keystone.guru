@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\BrushlineChangedEvent;
-use App\Events\BrushlineDeletedEvent;
+use App\Events\DungeonRoute\BrushlineChangedEvent;
+use App\Events\DungeonRoute\BrushlineDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Models\Brushline;

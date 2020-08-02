@@ -1,26 +1,25 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\DungeonRoute;
 
+use App\Models\Brushline;
 use App\Models\DungeonRoute;
-use App\Models\KillZone;
 use App\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class KillZoneChangedEvent implements ShouldBroadcast
+class BrushlineChangedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /** @var DungeonRoute $_dungeonroute */
     private $_dungeonroute;
 
-    /** @var KillZone $_killZone */
-    private $_killZone;
+    /** @var Brushline $_brushline */
+    private $_brushline;
 
     /** @var User $_user */
     private $_user;
@@ -29,13 +28,14 @@ class KillZoneChangedEvent implements ShouldBroadcast
      * Create a new event instance.
      *
      * @param $dungeonroute DungeonRoute
-     * @param $killZone KillZone
+     * @param $brushline Brushline
+     * @param $user User
      * @return void
      */
-    public function __construct(DungeonRoute $dungeonroute, KillZone $killZone, User $user)
+    public function __construct(DungeonRoute $dungeonroute, Brushline $brushline, User $user)
     {
         $this->_dungeonroute = $dungeonroute;
-        $this->_killZone = $killZone;
+        $this->_brushline = $brushline;
         $this->_user = $user;
     }
 
@@ -51,15 +51,14 @@ class KillZoneChangedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'killzone-changed';
+        return 'brushline-changed';
     }
 
     public function broadcastWith()
     {
-        $this->_killZone->load('killzoneenemies');
         return [
-            'killzone' => $this->_killZone,
-            'user' => $this->_user->name
+            'brushline' => $this->_brushline,
+            'user'      => $this->_user->name
         ];
     }
 }

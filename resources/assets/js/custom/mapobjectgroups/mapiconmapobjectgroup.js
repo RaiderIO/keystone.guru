@@ -8,7 +8,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-icons';
 
         if (this.manager.map.options.echo) {
-            window.Echo.join(this.manager.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
+            window.Echo.join(getState().getEchoChannelName())
                 .listen('.mapicon-changed', (e) => {
                     if (e.mapicon.floor_id === getState().getCurrentFloor().id) {
                         self._restoreObject(e.mapicon, e.user);

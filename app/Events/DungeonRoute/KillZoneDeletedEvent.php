@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\DungeonRoute;
 
 use App\Models\DungeonRoute;
 use App\Models\KillZone;
 use App\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -57,7 +56,7 @@ class KillZoneDeletedEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'id' => $this->_id,
+            'id'   => $this->_id,
             'user' => $this->_user->name
         ];
     }

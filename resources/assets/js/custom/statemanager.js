@@ -2,6 +2,8 @@ class StateManager extends Signalable {
     constructor() {
         super();
 
+        // Used by Echo to join the correct channels
+        this._appType = '';
         // Any dungeon route we may be editing at this time
         this.dungeonRoute = null;
         // The data of the dungeon that we're editing
@@ -41,6 +43,16 @@ class StateManager extends Signalable {
         // The map icon as found using above ID once the list of map icons is known
         this.unknownMapIcon = null;
         this.awakenedObeliskGatewayMapIcon = null;
+    }
+
+    /**
+     * Set the app type (local, staging, live etc).
+     * @param appType {string}
+     */
+    setAppType(appType) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._appType = appType;
     }
 
     /**
@@ -583,6 +595,8 @@ class StateManager extends Signalable {
      * @returns {MapIconType}
      */
     getUnknownMapIconType() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
         return this.unknownMapIcon;
     }
 
@@ -591,6 +605,8 @@ class StateManager extends Signalable {
      * @returns {number}
      */
     getAwakenedObeliskGatewayMapIconType() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
         return this.awakenedObeliskGatewayMapIcon;
     }
 
@@ -599,6 +615,27 @@ class StateManager extends Signalable {
      * @returns {boolean}
      */
     isMapAdmin() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
         return this.dungeonRoute.publicKey === 'admin';
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getEchoChannelName() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        let channelName = '';
+
+        if (this.isMapAdmin()) {
+            channelName = `${this._appType}-dungeon-edit.${this.dungeonData.id}`;
+        } else {
+            channelName = `${this._appType}-route-edit.${this.dungeonRoute.publicKey}`;
+        }
+
+        console.log(channelName);
+
+        return channelName;
     }
 }

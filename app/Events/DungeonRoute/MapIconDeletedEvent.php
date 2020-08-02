@@ -1,26 +1,25 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\DungeonRoute;
 
 use App\Models\DungeonRoute;
-use App\Models\Path;
+use App\Models\MapIcon;
 use App\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PathChangedEvent implements ShouldBroadcast
+class MapIconDeletedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /** @var DungeonRoute $_dungeonroute */
     private $_dungeonroute;
 
-    /** @var Path $_path */
-    private $_path;
+    /** @var int $_id */
+    private $_id;
 
     /** @var User $_user */
     private $_user;
@@ -29,13 +28,14 @@ class PathChangedEvent implements ShouldBroadcast
      * Create a new event instance.
      *
      * @param $dungeonroute DungeonRoute
-     * @param $path Path
+     * @param $mapIcon MapIcon
+     * @param $user User
      * @return void
      */
-    public function __construct(DungeonRoute $dungeonroute, Path $path, User $user)
+    public function __construct(DungeonRoute $dungeonroute, MapIcon $mapIcon, User $user)
     {
         $this->_dungeonroute = $dungeonroute;
-        $this->_path = $path;
+        $this->_id = $mapIcon->id;
         $this->_user = $user;
     }
 
@@ -51,13 +51,13 @@ class PathChangedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'path-changed';
+        return 'mapicon-deleted';
     }
 
     public function broadcastWith()
     {
         return [
-            'path' => $this->_path,
+            'id'   => $this->_id,
             'user' => $this->_user->name
         ];
     }

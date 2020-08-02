@@ -74,9 +74,7 @@ if ($isAdmin) {
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'username' => Auth::check() ? $user->name : '',
     // Only activate Echo when we are a member of the team in which this route is a member of
-    'echo' => !isset($dungeonroute) || $dungeonroute->team === null ? false : $dungeonroute->team->isUserMember($user),
-    // Required by echo to join the correct channels
-    'appType' => env('APP_TYPE'),
+    'echo' => true,
     'floorId' => $floorId,
     'edit' => $edit,
     'try' => $tryMode,
@@ -95,6 +93,8 @@ if ($isAdmin) {
     @parent
 
     @include('common.general.statemanager', array_merge([
+        // Required by echo to join the correct channels
+        'appType' => env('APP_TYPE'),
         'mapIconTypes' => \App\Models\MapIconType::all(),
         'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
         'raidMarkers' => \App\Models\RaidMarker::all(),

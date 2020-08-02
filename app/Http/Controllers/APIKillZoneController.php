@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\KillZoneChangedEvent;
-use App\Events\KillZoneDeletedEvent;
+use App\Events\DungeonRoute\KillZoneChangedEvent;
+use App\Events\DungeonRoute\KillZoneDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;

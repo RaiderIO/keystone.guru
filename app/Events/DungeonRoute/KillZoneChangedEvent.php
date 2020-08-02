@@ -1,26 +1,25 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\DungeonRoute;
 
-use App\Models\Brushline;
 use App\Models\DungeonRoute;
+use App\Models\KillZone;
 use App\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class BrushlineDeletedEvent implements ShouldBroadcast
+class KillZoneChangedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /** @var DungeonRoute $_dungeonroute */
     private $_dungeonroute;
 
-    /** @var int $_id */
-    private $_id;
+    /** @var KillZone $_killZone */
+    private $_killZone;
 
     /** @var User $_user */
     private $_user;
@@ -29,13 +28,13 @@ class BrushlineDeletedEvent implements ShouldBroadcast
      * Create a new event instance.
      *
      * @param $dungeonroute DungeonRoute
-     * @param $brushline Brushline
+     * @param $killZone KillZone
      * @return void
      */
-    public function __construct(DungeonRoute $dungeonroute, Brushline $brushline, User $user)
+    public function __construct(DungeonRoute $dungeonroute, KillZone $killZone, User $user)
     {
         $this->_dungeonroute = $dungeonroute;
-        $this->_id = $brushline->id;
+        $this->_killZone = $killZone;
         $this->_user = $user;
     }
 
@@ -51,14 +50,15 @@ class BrushlineDeletedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'brushline-deleted';
+        return 'killzone-changed';
     }
 
     public function broadcastWith()
     {
+        $this->_killZone->load('killzoneenemies');
         return [
-            'id' => $this->_id,
-            'user' => $this->_user->name
+            'killzone' => $this->_killZone,
+            'user'     => $this->_user->name
         ];
     }
 }
