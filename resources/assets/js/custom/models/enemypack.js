@@ -77,6 +77,21 @@ class EnemyPack extends MapObject {
         }
     }
 
+    /**
+     * @inheritDoc
+     **/
+    loadRemoteMapObject(remoteMapObject) {
+        super.loadRemoteMapObject(remoteMapObject);
+
+        // Only called when not in admin state
+        if (this.layer === null) {
+            // Re-set the layer now that we know of the raw enemies
+            this.setRawEnemies(remoteMapObject.enemies);
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+            enemyMapObjectGroup.setLayerToMapObject(this.createHullLayer(), this);
+        }
+    }
+
     isEditableByPopup() {
         return false;
     }

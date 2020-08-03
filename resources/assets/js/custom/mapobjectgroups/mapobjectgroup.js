@@ -54,7 +54,7 @@ class MapObjectGroup extends Signalable {
                 })
                 .listen('.model-deleted', (e) => {
                     if (self._shouldHandleDeletedEchoEvent(e)) {
-                        let mapObject = self.findMapObjectById(e.id);
+                        let mapObject = self.findMapObjectById(e.model_id);
                         if (mapObject !== null) {
                             mapObject.localDelete();
                             self._showDeletedFromEcho(mapObject, e.user);
@@ -110,7 +110,7 @@ class MapObjectGroup extends Signalable {
      */
     _shouldHandleDeletedEchoEvent(e) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-        console.assert(typeof e.model.id !== 'undefined', 'model.id was not defined in received event!', this, e);
+        console.assert(typeof e.model_id !== 'undefined', 'model_id was not defined in received event!', this, e);
 
         return this._shouldHandleEchoEvent(e);
     }
@@ -216,13 +216,51 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
-     * @param layer
-     * @param options Object
+     *
+     * @param remoteMapObject {Object}
      * @protected
-     * @return MapObject
+     * @returns {{}}
      */
-    _createObject(layer, options = {}) {
-        console.error('override the _createObject function!');
+    _getOptions(remoteMapObject) {
+        return {};
+    }
+
+    /**
+     *
+     * @param remoteMapObject {Object}
+     * @protected
+     * @return {L.layer}|null
+     */
+    _createLayer(remoteMapObject) {
+        console.error('override the _createLayer function!');
+    }
+
+    /**
+     * @param layer {L.layer}
+     * @param options {Object}
+     * @protected
+     * @return {MapObject}
+     */
+    _createMapObject(layer, options = {}) {
+        console.error('override the _createMapObject function!');
+    }
+
+    /**
+     * @param remoteMapObject {Object}
+     * @param mapObject {MapObject}
+     * @param options {Object}
+     * @protected
+     * @return {MapObject}
+     */
+    _updateMapObject(remoteMapObject, mapObject, options = {}) {
+        console.assert(this instanceof MapObjectGroup, 'this is not an MapObjectGroup', this);
+        console.assert(mapObject instanceof MapObject, 'mapObject is not of type MapObject', mapObject);
+        console.assert(typeof options === 'object', 'options is not of type Object', options);
+
+        if (mapObject.layer !== null) {
+            mapObject.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+        }
+        return mapObject;
     }
 
     /**
@@ -233,7 +271,30 @@ class MapObjectGroup extends Signalable {
      * @protected
      */
     _restoreObject(remoteMapObject, username = null) {
-        console.error('override the _restoreObject function!');
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
+        let mapObject = this.findMapObjectById(remoteMapObject.id);
+        let options = this._getOptions(remoteMapObject);
+
+        if (mapObject === null) {
+            mapObject = this.createNew(this._createLayer(remoteMapObject), options);
+        } else {
+            mapObject = this._updateMapObject(remoteMapObject, mapObject, options);
+        }
+
+        mapObject.loadRemoteMapObject(remoteMapObject);
+
+        // Bit of a hack to properly load lines, may need to rework
+        if (typeof remoteMapObject.polyline !== 'undefined') {
+            mapObject.loadRemoteMapObject(remoteMapObject.polyline);
+        }
+
+        mapObject.setSynced(true);
+
+        // Show echo notification or not
+        this._showReceivedFromEcho(mapObject, username);
+
+        return mapObject;
     }
 
     /**
@@ -243,6 +304,8 @@ class MapObjectGroup extends Signalable {
      * @protected
      */
     _showReceivedFromEcho(localMapObject, username) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
         if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
             let userColor = this.manager.map.echo.getUserColor(username);
             let fontClass = '';
@@ -294,6 +357,8 @@ class MapObjectGroup extends Signalable {
      * @protected
      */
     _showDeletedFromEcho(localMapObject, username) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
         if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
             showInfoNotification(
                 lang.get('messages.echo_object_deleted_notification')
@@ -341,6 +406,8 @@ class MapObjectGroup extends Signalable {
      * @private
      */
     _onObjectSynced(data) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
         let object = data.context;
 
         // We only use this trigger once to fire the object:add event, so unregister..
@@ -388,6 +455,8 @@ class MapObjectGroup extends Signalable {
      * @returns {*|boolean}
      */
     isMapObjectVisible(object) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
         return this.layerGroup.hasLayer(object.layer);
     }
 
@@ -397,6 +466,8 @@ class MapObjectGroup extends Signalable {
      * @returns {*}
      */
     findMapObjectById(id) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
         let result = null;
 
         for (let i = 0; i < this.objects.length; i++) {
@@ -444,7 +515,7 @@ class MapObjectGroup extends Signalable {
     createNew(layer, options) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        let mapObject = this._createObject(layer, options);
+        let mapObject = this._createMapObject(layer, options);
         this.objects.push(mapObject);
         this.setLayerToMapObject(layer, mapObject);
 

@@ -6,17 +6,25 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-users';
     }
 
-    //
-    // _onBeforeRefresh() {
-    //     console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-    //
-    //     // Remove any layers that were added before
-    //     this._removeObjectsFromLayer.call(this);
-    //
-    //     this.setVisibility(false);
-    // }
+    /**
+     * @inheritDoc
+     */
+    _createLayer(remoteMapObject) {
+        let layer = null;
 
-    _createObject(layer) {
+        // Only create a visual if we should display this enemy
+        if (remoteMapObject.floor_id === getState().getCurrentFloor().id) {
+            layer = new LeafletEnemyMarker();
+            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+        }
+
+        return layer;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _createMapObject(layer, options = {}) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
         if (getState().isMapAdmin()) {
@@ -28,65 +36,19 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
     /**
      *
-     * @param remoteMapObject
-     * @param username
-     * @returns {Enemy}
-     * @private
+     * @param remoteMapObject {Object}
+     * @param mapObject {Enemy|MapObject}
+     * @param options {Object}
+     * @returns {MapObject}
+     * @protected
      */
-    _restoreObject(remoteMapObject, username = null) {
-        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
-
-        // Fetch the existing dungeonFloorSwitchMarker if it exists
-        let enemy = this.findMapObjectById(remoteMapObject.id);
-        let createdNew = enemy === null;
-
-        if (createdNew) {
-            // Only create a visual if we should display this enemy
-            let layer = null;
-            if (remoteMapObject.floor_id === getState().getCurrentFloor().id) {
-                layer = new LeafletEnemyMarker();
-                layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-            }
-            enemy = this.createNew(layer);
-        } else {
-            // Update position of the enemy
-            enemy.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-        }
-
-        /** @type {Enemy} */
-        enemy.loadRemoteMapObject(remoteMapObject);
-
-        if (remoteMapObject.hasOwnProperty('is_mdt')) {
-            // Exception for MDT enemies
-            enemy.is_mdt = remoteMapObject.is_mdt;
-            // Whatever enemy this MDT enemy is linked to
-            enemy.enemy_id = remoteMapObject.enemy_id;
-            // Hide this enemy by default
-            enemy.setDefaultVisible(false);
-            enemy.setIsLocal(remoteMapObject.local);
-        }
-
-        // When in admin mode, show all enemies
-        if (!getState().isMapAdmin()) {
-            // Hide this enemy by default
-            enemy.setDefaultVisible(enemy.shouldBeVisible());
-        }
-
-        // Do this last
-        enemy.setNpc(remoteMapObject.npc);
-
-        // We just downloaded the enemy, it's synced alright!
-        enemy.setSynced(true);
+    _updateMapObject(remoteMapObject, mapObject, options = {}) {
+        super._updateMapObject(remoteMapObject, mapObject, options);
 
         // Refresh visual if not created new, AFTER setting the NPC again etc.
-        if (!createdNew) {
-            enemy.visual.refresh();
-        }
+        mapObject.visual.refresh();
 
-        // Show echo notification or not
-        this._showReceivedFromEcho(enemy, username);
-
-        return enemy;
+        return mapObject;
     }
 
     _fetchSuccess(response) {
