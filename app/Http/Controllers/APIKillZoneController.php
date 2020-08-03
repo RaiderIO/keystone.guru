@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\KillZoneChangedEvent;
-use App\Events\KillZoneDeletedEvent;
+use App\Events\DungeonRoute\KillZoneChangedEvent;
+use App\Events\DungeonRoute\KillZoneDeletedEvent;
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
@@ -45,9 +47,7 @@ class APIKillZoneController extends Controller
             $this->checkForDuplicate($killZone);
         }
 
-        if (!$killZone->save()) {
-            throw new \Exception('Unable to save kill zone!');
-        } else {
+        if ($killZone->save()) {
             // Only when the enemies are actually set
             if (isset($data['enemies'])) {
                 $killZone->deleteEnemies();
@@ -76,8 +76,10 @@ class APIKillZoneController extends Controller
 
             if (Auth::check()) {
                 // Something's updated; broadcast it
-                broadcast(new KillZoneChangedEvent($dungeonroute, $killZone, Auth::user()));
+                broadcast(new ModelChangedEvent($dungeonroute, Auth::user(), $killZone));
             }
+        } else {
+            throw new \Exception('Unable to save kill zone!');
         }
 
         return $killZone;
@@ -95,7 +97,6 @@ class APIKillZoneController extends Controller
         if (!$dungeonroute->isTry()) {
             $this->authorize('edit', $dungeonroute);
         }
-
 
         try {
             $killZone = $this->_saveKillZone($dungeonroute, $request->all());
@@ -116,6 +117,7 @@ class APIKillZoneController extends Controller
      * @param DungeonRoute $dungeonroute
      * @return array|ResponseFactory|Response|null
      * @throws AuthorizationException
+     * @throws \Exception
      */
     function storeall(Request $request, DungeonRoute $dungeonroute)
     {
@@ -157,7 +159,7 @@ class APIKillZoneController extends Controller
 
             if ($killzone->delete()) {
                 if (Auth::check()) {
-                    broadcast(new KillZoneDeletedEvent($dungeonroute, $killzone, Auth::user()));
+                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $killzone));
                 }
 
                 // Refresh the killzones relation

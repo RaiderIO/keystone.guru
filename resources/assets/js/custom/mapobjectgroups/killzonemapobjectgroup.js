@@ -5,25 +5,19 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
         super(manager, MAP_OBJECT_GROUP_KILLZONE, '', editable);
 
-        let self = this;
-
         this.title = 'Hide/show killzone';
         this.fa_class = 'fa-bullseye';
+    }
 
-        if (this.manager.map.options.echo) {
-            window.Echo.join(this.manager.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
-                .listen('.killzone-changed', (e) => {
-                    // Always restore killzones; we can view them from the sidebar
-                    self._restoreObject(e.killzone, e.user);
-                })
-                .listen('.killzone-deleted', (e) => {
-                    let mapObject = self.findMapObjectById(e.id);
-                    if (mapObject !== null) {
-                        mapObject.localDelete();
-                        self._showDeletedFromEcho(mapObject, e.user);
-                    }
-                });
+    /**
+     * @inheritDoc
+     */
+    _createLayer(remoteMapObject) {
+        let layer = null;
+        if (remoteMapObject.lat !== null && remoteMapObject.lng !== null) {
+            layer = (new LeafletKillZoneMarker()).setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
+        return layer;
     }
 
     /**
@@ -71,51 +65,10 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.saveAll();
     }
 
-    _createObject(layer) {
+    _createMapObject(layer, options = {}) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
 
         return new KillZone(this.manager.map, layer);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _restoreObject(remoteMapObject, username = null) {
-        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
-        // Fetch the existing killzone if it exists
-        let killzone = this.findMapObjectById(remoteMapObject.id);
-
-        let layer = null;
-        // Only if it was set, and if it was on this floor
-        if (remoteMapObject.lat !== null && remoteMapObject.lng !== null) {
-            layer = new LeafletKillZoneMarker();
-            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-        }
-
-        // Only create a new one if it's new for us
-        if (killzone === null) {
-            /** @var KillZone killzone */
-            killzone = this.createNew(layer);
-        } else {
-            // Update the killzone layer with that of the remote
-            killzone.layer = layer;
-        }
-
-        // Now update the killzone to its new properties
-        killzone.loadRemoteMapObject(remoteMapObject);
-
-        // Hide the layer of the killzone
-        killzone.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
-
-        // We just downloaded the kill zone, it's synced alright!
-        if (!remoteMapObject.local) {
-            killzone.setSynced(true);
-        }
-
-        // Show echo notification or not
-        this._showReceivedFromEcho(killzone, username);
-
-        return killzone;
     }
 
     /**

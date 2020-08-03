@@ -433,6 +433,11 @@ class EnemyVisual extends Signalable {
     refreshSize(adjustParent = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
+        if( this._$mainVisual.length === 0 ){
+            console.warn('Unable to refresh size of visual that no longer exists');
+            return;
+        }
+
         let size = this.mainVisual.getSize();
 
         let width = size.iconSize[0];

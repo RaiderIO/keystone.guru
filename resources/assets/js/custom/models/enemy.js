@@ -130,6 +130,14 @@ class Enemy extends MapObject {
                 default: -1
             }),
             new Attribute({
+                name: 'npc',
+                type: 'object',
+                default: null,
+                setter: this.setNpc.bind(this),
+                edit: false,
+                save: false
+            }),
+            new Attribute({
                 name: 'npc_id',
                 type: 'select',
                 admin: true,
@@ -240,6 +248,29 @@ class Enemy extends MapObject {
      */
     _rebuildPopup(event) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+    }
+
+    /**
+     * @inheritDoc
+     **/
+    loadRemoteMapObject(remoteMapObject) {
+        super.loadRemoteMapObject(remoteMapObject);
+
+        if (remoteMapObject.hasOwnProperty('is_mdt')) {
+            // Exception for MDT enemies
+            this.is_mdt = remoteMapObject.is_mdt;
+            // Whatever enemy this MDT enemy is linked to
+            this.enemy_id = remoteMapObject.enemy_id;
+            // Hide this enemy by default
+            this.setDefaultVisible(false);
+            this.setIsLocal(remoteMapObject.local);
+        }
+
+        // When in admin mode, show all enemies
+        if (!getState().isMapAdmin()) {
+            // Hide this enemy by default
+            this.setDefaultVisible(this.shouldBeVisible());
+        }
     }
 
     /**

@@ -95,6 +95,8 @@ let scripts = [
 
     // Map object groups
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/polygonmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/polylinemapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',

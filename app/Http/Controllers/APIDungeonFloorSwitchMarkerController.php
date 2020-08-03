@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Models\DungeonFloorSwitchMarker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
 class APIDungeonFloorSwitchMarkerController extends Controller
@@ -38,8 +41,12 @@ class APIDungeonFloorSwitchMarkerController extends Controller
             $this->checkForDuplicate($dungeonFloorSwitchMarker);
         }
 
-        if (!$dungeonFloorSwitchMarker->save()) {
-            throw new \Exception("Unable to save dungeon start marker!");
+        if ($dungeonFloorSwitchMarker->save()) {
+            if (Auth::check()) {
+                broadcast(new ModelChangedEvent($dungeonFloorSwitchMarker->floor->dungeon, Auth::getUser(), $dungeonFloorSwitchMarker));
+            }
+        } else {
+            throw new \Exception('Unable to save dungeon floor switch marker!');
         }
 
         return ['id' => $dungeonFloorSwitchMarker->id];
@@ -53,7 +60,12 @@ class APIDungeonFloorSwitchMarkerController extends Controller
     function delete(Request $request, DungeonFloorSwitchMarker $dungeonfloorswitchmarker)
     {
         try {
-            $dungeonfloorswitchmarker->delete();
+            $dungeon = $dungeonfloorswitchmarker->floor->dungeon;
+            if( $dungeonfloorswitchmarker->delete() ) {
+                if (Auth::check()) {
+                    broadcast(new ModelDeletedEvent($dungeon, Auth::getUser(), $dungeonfloorswitchmarker));
+                }
+            }
             $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
