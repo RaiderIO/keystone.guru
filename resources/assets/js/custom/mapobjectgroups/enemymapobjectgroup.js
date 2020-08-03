@@ -38,8 +38,9 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         // Fetch the existing dungeonFloorSwitchMarker if it exists
         let enemy = this.findMapObjectById(remoteMapObject.id);
+        let createdNew = enemy === null;
 
-        if (enemy === null) {
+        if (createdNew) {
             // Only create a visual if we should display this enemy
             let layer = null;
             if (remoteMapObject.floor_id === getState().getCurrentFloor().id) {
@@ -76,6 +77,11 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         // We just downloaded the enemy, it's synced alright!
         enemy.setSynced(true);
+
+        // Refresh visual if not created new, AFTER setting the NPC again etc.
+        if (!createdNew) {
+            enemy.visual.refresh();
+        }
 
         // Show echo notification or not
         this._showReceivedFromEcho(enemy, username);

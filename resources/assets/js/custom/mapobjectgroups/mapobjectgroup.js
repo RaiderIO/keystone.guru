@@ -78,7 +78,7 @@ class MapObjectGroup extends Signalable {
         for (let i = 0; i < this.names.length; i++) {
             let name = this.names[i];
             // Only react to model-changed events of our own
-            if (e.class.toLowerCase() === `app\\models\\${name}`) {
+            if (e.model_class.toLowerCase() === `app\\models\\${name}`) {
                 result = true;
                 break;
             }
@@ -110,7 +110,7 @@ class MapObjectGroup extends Signalable {
      */
     _shouldHandleDeletedEchoEvent(e) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-        console.assert(typeof e.id !== 'undefined', 'id was not defined in received event!', this, e);
+        console.assert(typeof e.model.id !== 'undefined', 'model.id was not defined in received event!', this, e);
 
         return this._shouldHandleEchoEvent(e);
     }
@@ -275,6 +275,7 @@ class MapObjectGroup extends Signalable {
 
                     // Do not re-bind a tooltip that shouldn't be there permanently
                     if (typeof oldTooltip !== 'undefined' &&
+                        oldTooltip.options !== null &&
                         !oldTooltip.options.className.includes('user_color_')) {
                         // Rebind killzone pull index tooltip
                         layer.bindTooltip(oldTooltip._content, oldTooltip.options);

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Events\Dungeon;
+namespace App\Events;
 
-use App\Models\Dungeon;
 use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -12,31 +11,26 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ModelChangedEvent implements ShouldBroadcast
+class ContextEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var Dungeon $_dungeon */
-    private Dungeon $_dungeon;
-
-    /** @var Model $_model */
-    private Model $_model;
+    /** @var Model $_context */
+    protected Model $_context;
 
     /** @var User $_user */
-    private User $_user;
+    protected User $_user;
 
     /**
      * Create a new event instance.
      *
-     * @param $dungeon Dungeon
-     * @param $model Model
+     * @param $context Model
      * @param $user User
      * @return void
      */
-    public function __construct(Dungeon $dungeon, Model $model, User $user)
+    public function __construct(Model $context, User $user)
     {
-        $this->_dungeon = $dungeon;
-        $this->_model = $model;
+        $this->_context = $context;
         $this->_user = $user;
     }
 
@@ -47,20 +41,17 @@ class ModelChangedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel(sprintf('%s-dungeon-edit.%s', env('APP_TYPE'), $this->_dungeon->id));
-    }
-
-    public function broadcastAs()
-    {
-        return 'model-changed';
+        return [
+            new PresenceChannel(sprintf('%s-route-edit.%s', env('APP_TYPE'), $this->_context->getRouteKey())),
+            new PresenceChannel(sprintf('%s-dungeon-edit.%s', env('APP_TYPE'), $this->_context->getRouteKey()))
+        ];
     }
 
     public function broadcastWith()
     {
         return [
-            'model' => $this->_model,
-            'class'  => get_class($this->_model),
-            'user'  => $this->_user->name
+            'context_class' => get_class($this->_context),
+            'user'          => $this->_user->name
         ];
     }
 }

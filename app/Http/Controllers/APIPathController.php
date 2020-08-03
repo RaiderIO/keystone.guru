@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\DungeonRoute\PathChangedEvent;
-use App\Events\DungeonRoute\PathDeletedEvent;
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Models\DungeonRoute;
@@ -53,9 +53,7 @@ class APIPathController extends Controller
                 $path->polyline_id = -1;
             }
 
-            if (!$path->save()) {
-                throw new \Exception("Unable to save path!");
-            } else {
+            if ($path->save()) {
                 // Create a new polyline and save it
                 /** @var Polyline $polyline */
                 $polyline = Polyline::findOrNew($path->polyline_id);
@@ -80,11 +78,13 @@ class APIPathController extends Controller
 
                 // Something's updated; broadcast it
                 if (Auth::check()) {
-                    broadcast(new PathChangedEvent($dungeonroute, $path, Auth::user()));
+                    broadcast(new ModelChangedEvent($dungeonroute, Auth::user(), $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
+            } else {
+                throw new \Exception('Unable to save path!');
             }
 
             $result = ['id' => $path->id];
@@ -109,10 +109,9 @@ class APIPathController extends Controller
         }
 
         try {
-
             if ($path->delete()) {
                 if (Auth::check()) {
-                    broadcast(new PathDeletedEvent($dungeonroute, $path, Auth::user()));
+                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated
@@ -122,7 +121,6 @@ class APIPathController extends Controller
             } else {
                 $result = response('Unable to save Path', Http::INTERNAL_SERVER_ERROR);
             }
-
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

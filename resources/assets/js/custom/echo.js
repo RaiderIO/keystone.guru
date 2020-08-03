@@ -51,7 +51,7 @@ class Echo extends Signalable {
                 self._removeUser(user);
             })
             .listen('.user-color-changed', (e) => {
-                self._setUserColor(e.name, e.color);
+                self._setUserColor(e.user, e.color);
             });
     }
 

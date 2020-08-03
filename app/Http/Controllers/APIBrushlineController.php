@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\DungeonRoute\BrushlineChangedEvent;
-use App\Events\DungeonRoute\BrushlineDeletedEvent;
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Models\Brushline;
@@ -77,7 +77,7 @@ class APIBrushlineController extends Controller
             // $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
 
             if (Auth::check()) {
-                broadcast(new BrushlineChangedEvent($dungeonroute, $brushline, Auth::getUser()));
+                broadcast(new ModelChangedEvent($dungeonroute, Auth::getUser(), $brushline));
             }
 
             // Touch the route so that the thumbnail gets updated
@@ -104,7 +104,7 @@ class APIBrushlineController extends Controller
         try {
             if ($brushline->delete()) {
                 if (Auth::check()) {
-                    broadcast(new BrushlineDeletedEvent($dungeonroute, $brushline, Auth::user()));
+                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::getUser(), $brushline));
                 }
 
                 // Touch the route so that the thumbnail gets updated

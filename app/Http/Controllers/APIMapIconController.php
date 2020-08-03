@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Dungeon\MapIconChangedEvent as DungeonMapIconChangedEvent;
-use App\Events\Dungeon\MapIconDeletedEvent as DungeonMapIconDeletedEvent;
-use App\Events\DungeonRoute\MapIconChangedEvent as DungeonRouteMapIconChangedEvent;
-use App\Events\DungeonRoute\MapIconDeletedEvent as DungeonRouteMapIconDeletedEvent;
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
@@ -107,11 +105,7 @@ class APIMapIconController extends Controller
             $mapIcon->setLinkedAwakenedObeliskByMapIconId($request->get('linked_awakened_obelisk_id', null));
 
             if (Auth::check()) {
-                if ($dungeonroute !== null) {
-                    broadcast(new DungeonRouteMapIconChangedEvent($dungeonroute, $mapIcon, Auth::user()));
-                } else {
-                    broadcast(new DungeonMapIconChangedEvent($mapIcon->floor->dungeon, $mapIcon, Auth::user()));
-                }
+                broadcast(new ModelChangedEvent($dungeonroute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
             }
         }
 
@@ -120,7 +114,7 @@ class APIMapIconController extends Controller
 
     /**
      * @param Request $request
-     * @param ?DungeonRoute $dungeonroute
+     * @param DungeonRoute|null $dungeonroute
      * @param MapIcon $mapicon
      * @return array|ResponseFactory|Response
      * @throws Exception
@@ -140,11 +134,7 @@ class APIMapIconController extends Controller
         try {
             if ($mapicon->delete()) {
                 if (Auth::check()) {
-                    if ($dungeonroute !== null) {
-                        broadcast(new DungeonRouteMapIconDeletedEvent($dungeonroute, $mapicon, Auth::user()));
-                    } else {
-                        broadcast(new DungeonMapIconDeletedEvent($mapicon->floor->dungeon, $mapicon, Auth::user()));
-                    }
+                    broadcast(new ModelDeletedEvent($dungeonroute ?? $mapicon->floor->dungeon, Auth::user(), $mapicon));
                 }
                 $result = response()->noContent();
             } else {

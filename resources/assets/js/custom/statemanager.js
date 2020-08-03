@@ -646,8 +646,6 @@ class StateManager extends Signalable {
             channelName = `${this._appType}-route-edit.${this.dungeonRoute.publicKey}`;
         }
 
-        console.log(channelName);
-
         return channelName;
     }
 

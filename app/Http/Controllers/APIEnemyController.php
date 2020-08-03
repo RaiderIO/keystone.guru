@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Dungeon\ModelChangedEvent;
-use App\Events\Dungeon\ModelDeletedEvent;
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
@@ -87,7 +87,7 @@ class APIEnemyController extends Controller
         }
 
         if (Auth::check()) {
-            broadcast(new ModelChangedEvent($enemy->floor->dungeon, $enemy, Auth::getUser()));
+            broadcast(new ModelChangedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
         }
 
         return $result;
@@ -140,7 +140,7 @@ class APIEnemyController extends Controller
         try {
             if( $enemy->delete() ){
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($enemy->floor->dungeon, $enemy, Auth::getUser()));
+                    broadcast(new ModelDeletedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
                 }
             }
             $result = response()->noContent();
