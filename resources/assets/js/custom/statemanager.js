@@ -32,6 +32,7 @@ class StateManager extends Signalable {
         this.mapIconTypes = [];
         this.classColors = [];
         this.enemies = [];
+        this.rawNpcs = [];
         this.rawEnemies = [];
         this.mdtEnemies = [];
         this.factions = [];
@@ -177,6 +178,14 @@ class StateManager extends Signalable {
      */
     setEnemies(enemies) {
         this.enemies = enemies;
+    }
+
+    /**
+     * Sets the raw NPCs for the state.
+     * @param rawNpcs {Object[]}
+     */
+    setRawNpcs(rawNpcs) {
+        this.rawNpcs = rawNpcs;
     }
 
     /**
@@ -475,6 +484,15 @@ class StateManager extends Signalable {
             }
         }
         return enemy;
+    }
+
+    /**
+     * Get all the raw npcs of this dungeon.
+     * @returns {[]}
+     */
+    getRawNpcs() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.rawNpcs;
     }
 
     /**

@@ -8,6 +8,7 @@
     _stateManager.setDungeonData({!! $dungeonData !!});
     _stateManager.setMapIconTypes({!! $mapIconTypes !!});
     _stateManager.setClassColors({!! $classColors !!});
+    _stateManager.setRawNpcs({!! $npcs !!});
     _stateManager.setRawEnemies({!! $enemies !!});
     _stateManager.setRaidMarkers({!! $raidMarkers !!});
     _stateManager.setFactions({!! $factions !!});
