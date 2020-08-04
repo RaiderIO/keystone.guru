@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Mockery\Exception;
 
 /**
@@ -16,14 +21,14 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
- * @property \Illuminate\Support\Collection $floors
- * @property \Illuminate\Support\Collection $dungeonroutes
- * @property \Illuminate\Support\Collection $npcs
+ * @property Collection $floors
+ * @property Collection $dungeonroutes
+ * @property Collection $npcs
  *
- * @method static \Illuminate\Database\Eloquent\Builder active()
- * @method static \Illuminate\Database\Eloquent\Builder inactive()
+ * @method static Builder active()
+ * @method static Builder inactive()
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Dungeon extends Model
 {
@@ -89,7 +94,7 @@ class Dungeon extends Model
      */
     public function getNpcsMinHealth()
     {
-        return $this->npcs->where('classification_id', '<>', 3)->where('dungeon_id', '<>', -1)->min('base_health');
+        return $this->npcs->where('classification_id', '<', 3)->where('dungeon_id', '<>', -1)->min('base_health') ?? 10000;
     }
 
     /**
@@ -97,7 +102,7 @@ class Dungeon extends Model
      */
     public function getNpcsMaxHealth()
     {
-        return $this->npcs->where('classification_id', '<>', 3)->where('dungeon_id', '<>', -1)->max('base_health');
+        return $this->npcs->where('classification_id', '<', 3)->where('dungeon_id', '<>', -1)->max('base_health') ?? 100000;
     }
 
     /**
@@ -122,7 +127,7 @@ class Dungeon extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function expansion()
     {
@@ -130,7 +135,7 @@ class Dungeon extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function floors()
     {
@@ -138,7 +143,7 @@ class Dungeon extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function dungeonroutes()
     {
@@ -146,7 +151,7 @@ class Dungeon extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function npcs()
     {
@@ -156,8 +161,8 @@ class Dungeon extends Model
     /**
      * Scope a query to only the Siege of Boralus dungeon.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @return Builder
      */
     public function scopeSiegeOfBoralus($query)
     {
@@ -167,8 +172,8 @@ class Dungeon extends Model
     /**
      * Scope a query to only include active dungeons.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @return Builder
      */
     public function scopeActive($query)
     {
@@ -178,8 +183,8 @@ class Dungeon extends Model
     /**
      * Scope a query to only include inactive dungeons.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @return Builder
      */
     public function scopeInactive($query)
     {
