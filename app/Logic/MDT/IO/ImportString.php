@@ -217,10 +217,11 @@ class ImportString
         $mdtEnemies = (new MDTDungeon($dungeonRoute->dungeon->name))->getClonesAsEnemies($floors);
 
         // For each pull the user created
+        $newPullIndex = 1;
         foreach ($decoded['value']['pulls'] as $pullIndex => $pull) {
             // Create a killzone
             $killZone = new KillZone();
-            $killZone->index = $pullIndex;
+            $killZone->index = $newPullIndex;
             if ($save) {
                 $killZone->dungeon_route_id = $dungeonRoute->id;
                 // Save it so we have an ID that we can use later on
@@ -275,7 +276,7 @@ class ImportString
                             }
 
                             if ($mdtEnemy === null) {
-                                throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                                throw new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
                                     sprintf(__('Unable to find MDT enemy for clone index %s and npc index %s.'), $cloneIndex, $npcIndex),
                                     ['details' => __('This indicates MDT has mapped an enemy that is not known in Keystone.guru yet.')]
                                 );
@@ -293,7 +294,7 @@ class ImportString
                             }
 
                             if ($enemy === null) {
-                                throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                                throw new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
                                     sprintf(__('Unable to find Keystone.guru equivalent for MDT enemy %s with NPC %s (id: %s).'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
                                     ['details' => __('This indicates that your route kills an enemy of which its NPC is known to Keystone.guru, but Keystone.guru doesn\'t have that enemy mapped yet.')]
                                 );
@@ -363,7 +364,7 @@ class ImportString
                                         $kzEnemy->save();
                                     }
                                 } else {
-                                    throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                                    throw new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
                                         sprintf(__('Unable to find Awakened Enemy %s (%s) at the final boss in %s.'), $kzEnemy->enemy->npc_id, $kzEnemy->enemy->seasonal_index ?? -1, $dungeonRoute->dungeon->name),
                                         ['details' => __('This indicates Keystone.guru has a mapping error that will need to be correct. Send the above warning to me and I\'ll correct it.')]
                                     );
@@ -377,12 +378,13 @@ class ImportString
                     } else {
                         $dungeonRoute->killzones->push($killZone);
                     }
+                    $newPullIndex++;
                 } // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
                 else if (!$seasonalIndexSkip) {
                     if ($save) {
                         $killZone->delete();
                     }
-                    throw new ImportWarning(sprintf(__('Pull %s'), $pullIndex),
+                    throw new ImportWarning(sprintf(__('Pull %s'), $newPullIndex),
                         __('Failure to find enemies resulted in a pull being skipped.'),
                         ['details' => __('This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.')]
                     );
