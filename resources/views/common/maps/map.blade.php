@@ -42,11 +42,6 @@ $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups 
 $floorId = isset($floorId) ? $floorId : $dungeon->floors->first()->id;
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
-// Build options for displayed NPCs
-$npcOptions = new \Illuminate\Support\Collection();
-foreach ($npcs as $npc) {
-    $npcOptions->push(['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id]);
-}
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
@@ -100,7 +95,7 @@ if ($isAdmin) {
         'dungeonData' => $dungeon,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
-        'npcs' => $npcOptions,
+        'npcs' => $npcs,
         'dungeonroute' => [
             'publicKey' => $routePublicKey,
             'faction' => $routeFaction,

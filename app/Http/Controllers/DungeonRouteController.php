@@ -6,6 +6,7 @@ use App\Http\Requests\DungeonRouteFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
+use App\Models\Npc;
 use App\Models\PageView;
 use App\Models\UserReport;
 use App\Service\Season\SeasonService;
@@ -119,6 +120,7 @@ class DungeonRouteController extends Controller
         }
 
         PageView::trackPageView($dungeonroute->id, get_class($dungeonroute));
+        /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         if ($floor === null) {
@@ -127,7 +129,11 @@ class DungeonRouteController extends Controller
             return view('dungeonroute.view', [
                 'model'          => $dungeonroute,
                 'current_report' => $currentReport,
-                'floor'          => $floor
+                'floor'          => $floor,
+                'npcs'           => Npc::all()->whereIn('dungeon_id', [$floor->dungeon_id, -1])->map(function ($npc)
+                {
+                    return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
+                }),
             ]);
         }
     }
@@ -231,21 +237,31 @@ class DungeonRouteController extends Controller
     {
         $this->authorize('edit', $dungeonroute);
 
+        /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
 
         if ($floor === null) {
             return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
-        } else if ($dungeonroute->isTry()) {
-            return view('dungeonroute.try', [
-                'model' => $dungeonroute,
-                'floor' => $floor
-            ]);
         } else {
-            return view('dungeonroute.edit', [
-                'headerTitle' => __('Edit route'),
-                'model'       => $dungeonroute,
-                'floor'       => $floor
-            ]);
+            $npcs = Npc::all()->whereIn('dungeon_id', [$floor->dungeon_id, -1])->map(function ($npc)
+            {
+                return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
+            });
+
+            if ($dungeonroute->isTry()) {
+                return view('dungeonroute.try', [
+                    'model' => $dungeonroute,
+                    'floor' => $floor,
+                    'npcs'  => $npcs
+                ]);
+            } else {
+                return view('dungeonroute.edit', [
+                    'headerTitle' => __('Edit route'),
+                    'model'       => $dungeonroute,
+                    'floor'       => $floor,
+                    'npcs'        => $npcs
+                ]);
+            }
         }
     }
 
