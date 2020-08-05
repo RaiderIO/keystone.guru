@@ -1,10 +1,17 @@
+/** This is because PhpStorm won't shut up about how getState() is not defined. It really is defined in statemanager.blade.php */
+if (typeof getState !== 'function') {
+    function getState() {
+        console.error('getState() is not defined!');
+    }
+}
+
 // Gives access to Object.id() method which will uniquely identify an object
-(function() {
-    if ( typeof Object.id == "undefined" ) {
+(function () {
+    if (typeof Object.id == "undefined") {
         let id = 0;
 
-        Object.id = function(o) {
-            if ( typeof o.__uniqueid == "undefined" ) {
+        Object.id = function (o) {
+            if (typeof o.__uniqueid == "undefined") {
                 Object.defineProperty(o, "__uniqueid", {
                     value: ++id,
                     enumerable: false,

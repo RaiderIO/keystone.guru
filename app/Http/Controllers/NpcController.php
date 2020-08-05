@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ModelChangedEvent;
 use App\Http\Requests\NpcFormRequest;
 use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\NpcBolsteringWhitelist;
 use App\Models\NpcClassification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NpcController extends Controller
 {
@@ -66,11 +68,14 @@ class NpcController extends Controller
             ]);
         }
 
-        if (!$npc->save()) {
-            abort(500, 'Unable to save npc!');
+        if ($npc->save()) {
+            if ($oldId > 0) {
+                Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
+            }
+            broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
         } // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
-        else if ($oldId > 0) {
-            Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
+        else {
+            abort(500, 'Unable to save npc!');
         }
 
         $portrait = $request->file('portrait');

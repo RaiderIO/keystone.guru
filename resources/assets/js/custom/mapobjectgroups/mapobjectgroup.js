@@ -45,22 +45,26 @@ class MapObjectGroup extends Signalable {
             getState().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
         }
 
-        if (this.manager.map.options.echo) {
-            window.Echo.join(getState().getEchoChannelName())
-                .listen('.model-changed', (e) => {
-                    if (self._shouldHandleChangedEchoEvent(e)) {
-                        self._restoreObject(e.model, e.user);
-                    }
-                })
-                .listen('.model-deleted', (e) => {
-                    if (self._shouldHandleDeletedEchoEvent(e)) {
-                        let mapObject = self.findMapObjectById(e.model_id);
-                        if (mapObject !== null) {
-                            mapObject.localDelete();
-                            self._showDeletedFromEcho(mapObject, e.user);
+        if (getState().isEchoEnabled()) {
+            let presenceChannel = window.Echo.join(getState().getEchoChannelName());
+
+            for (let index in this.names) {
+                if (this.names.hasOwnProperty(index)) {
+                    presenceChannel.listen(`.${this.names[index]}-changed`, (e) => {
+                        if (self._shouldHandleChangedEchoEvent(e)) {
+                            self._restoreObject(e.model, e.user);
                         }
-                    }
-                });
+                    }).listen(`.${this.names[index]}-deleted`, (e) => {
+                        if (self._shouldHandleDeletedEchoEvent(e)) {
+                            let mapObject = self.findMapObjectById(e.model_id);
+                            if (mapObject !== null) {
+                                mapObject.localDelete();
+                                self._showDeletedFromEcho(mapObject, e.user);
+                            }
+                        }
+                    });
+                }
+            }
         }
     }
 
@@ -73,19 +77,7 @@ class MapObjectGroup extends Signalable {
     _shouldHandleEchoEvent(e) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        let result = false;
-
-        for (let i = 0; i < this.names.length; i++) {
-            let name = this.names[i];
-            // Only react to model-changed events of our own
-            if (e.model_class.toLowerCase() === `app\\models\\${name}`) {
-                result = true;
-                break;
-            }
-        }
-
-        // Do not handle our own events; no point
-        return result && e.user !== getState().getUserName();
+        return e.user !== getState().getUserName();
     }
 
     /**
@@ -306,8 +298,8 @@ class MapObjectGroup extends Signalable {
     _showReceivedFromEcho(localMapObject, username) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
-            let userColor = this.manager.map.echo.getUserColor(username);
+        if (getState().isEchoEnabled() && getState().getUserName() !== username && username !== null) {
+            let userColor = getState().getEcho().getUserColor(username);
             let fontClass = '';
 
             // Must be a hex color
@@ -359,7 +351,7 @@ class MapObjectGroup extends Signalable {
     _showDeletedFromEcho(localMapObject, username) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (this.manager.map.options.echo && this.manager.map.options.username !== username && username !== null) {
+        if (getState().isEchoEnabled() && getState().getUserName() !== username && username !== null) {
             showInfoNotification(
                 lang.get('messages.echo_object_deleted_notification')
                     .replace('{object}', localMapObject.toString())

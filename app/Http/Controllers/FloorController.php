@@ -72,7 +72,7 @@ class FloorController extends Controller
             'npcs'        => Npc::all()->whereIn('dungeon_id', [$floor->dungeon_id, -1])->map(function ($npc)
             {
                 return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
-            }),
+            })->values(),
             'headerTitle' => __('Edit floor')
         ]);
     }

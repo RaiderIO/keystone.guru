@@ -2,10 +2,13 @@
 
 namespace App\Events;
 
+use ReflectionClass;
+
 class ModelChangedEvent extends ContextModelEvent
 {
     public function broadcastAs()
     {
-        return 'model-changed';
+        // Quick enough
+        return sprintf('%s-changed', strtolower((new ReflectionClass($this->_model))->getShortName()));
     }
 }

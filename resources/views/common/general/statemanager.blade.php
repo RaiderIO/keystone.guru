@@ -21,6 +21,10 @@
     _stateManager.setMdtEnemies({!! $mdt_enemies !!});
 
     @endisset
+    @if($echo)
+    _stateManager.enableEcho();
+
+    @endif
 
     /**
      * Get the current state manager of the app.

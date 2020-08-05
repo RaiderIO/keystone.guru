@@ -62,11 +62,7 @@ if ($isAdmin) {
     ];
 }
 ?>
-@php($dependencies = $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null)
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
-    'username' => Auth::check() ? $user->name : '',
-    // Only activate Echo when we are a member of the team in which this route is a member of
-    'echo' => true,
     'floorId' => $floorId,
     'edit' => $edit,
     'try' => $tryMode,
@@ -77,7 +73,7 @@ if ($isAdmin) {
     'showAttribution' => $showAttribution,
     'npcsMinHealth' => $dungeon->getNpcsMinHealth(),
     'npcsMaxHealth' => $dungeon->getNpcsMaxHealth(),
-    'dependencies' => $dependencies
+    'dependencies' => $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null
 ], $adminOptions)])
 
 @section('scripts')
@@ -87,6 +83,7 @@ if ($isAdmin) {
     @include('common.general.statemanager', array_merge([
         // Required by echo to join the correct channels
         'appType' => env('APP_TYPE'),
+        'echo' => !$tryMode,
         'mapIconTypes' => \App\Models\MapIconType::all(),
         'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
         'raidMarkers' => \App\Models\RaidMarker::all(),
