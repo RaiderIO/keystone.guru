@@ -53,7 +53,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         mapIcon.loadRemoteMapObject(remoteMapObject);
 
         // When in admin mode, show all map icons
-        if (!(this.manager.map instanceof AdminDungeonMap) && (mapIcon.seasonal_index !== null && getState().getSeasonalIndex() !== mapIcon.seasonal_index)) {
+        if (!getState().isMapAdmin() && (mapIcon.seasonal_index !== null && getState().getMapContext().getSeasonalIndex() !== mapIcon.seasonal_index)) {
             // Hide this enemy by default
             mapIcon.setDefaultVisible(false);
         }

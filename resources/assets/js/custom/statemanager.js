@@ -5,7 +5,7 @@ class StateManager extends Signalable {
         // Used by Echo to join the correct channels
         this._appType = '';
         // Any dungeon route we may be editing at this time
-        this.dungeonRoute = null;
+        this._mapContext = null;
         // The data of the dungeon that we're editing
         this.dungeonData = null;
 
@@ -16,13 +16,6 @@ class StateManager extends Signalable {
         this._floorId = null;
         // Map zoom level (default = 2)
         this._mapZoomLevel = 2;
-        // Seasonal index (shows certain enemies or not)
-        this._seasonalIndex = 0;
-        // Teeming or not (shows certain enemies or not)
-        this._teeming = false;
-        // Pull gradient variables
-        this._pullGradient = '';
-        this._pullGradientApplyAlways = false;
         // The enemy that is focused by the user (mouse overed)
         this._focusedEnemy = null;
         // Details about the currently logged in user
@@ -58,19 +51,20 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Sets the dungeon route that we're currently editing (may be null)
-     * @param dungeonRoute
+     * Sets the mapContext, may either be options for a dungeonroute or options for a dungeon (admin pages)
+     * @param mapContext {Object}
      */
-    setDungeonRoute(dungeonRoute) {
+    setMapContext(mapContext) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        console.assert(dungeonRoute instanceof Object, 'dungeonRoute is not an Object', dungeonRoute);
+        console.assert(mapContext instanceof Object, 'mapContext is not an Object', mapContext);
 
-        this.dungeonRoute = dungeonRoute;
-        // Load this from the start here
-        this.setSeasonalIndex(parseInt(this.dungeonRoute.seasonalIndex));
-        this.setTeeming(this.dungeonRoute.teeming);
-        this.setPullGradient(this.dungeonRoute.pullGradient);
-        this.setPullGradientApplyAlways(this.dungeonRoute.pullGradientApplyAlways);
+        if (mapContext.type === 'dungeonroute') {
+            this._mapContext = new MapContextDungeonRoute(mapContext);
+        } else if (mapContext.type === 'dungeon') {
+            this._mapContext = new MapContextDungeon(mapContext);
+        } else {
+            console.error(`Unable to find map context type '${mapContext.type}'`);
+        }
     }
 
     /**
@@ -82,54 +76,6 @@ class StateManager extends Signalable {
         console.assert(dungeonData instanceof Object, 'dungeonData is not an Object', dungeonData);
 
         this.dungeonData = dungeonData;
-    }
-
-    /**
-     *
-     * @param seasonalIndex {int}
-     */
-    setSeasonalIndex(seasonalIndex) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        this._seasonalIndex = seasonalIndex;
-
-        // Let everyone know it's changed
-        this.signal('seasonalindex:changed', {seasonalIndex: this._seasonalIndex});
-    }
-
-    /**
-     * Sets the Teeming state of the map.
-     * @param teeming {boolean}
-     */
-    setTeeming(teeming) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        this._teeming = teeming;
-
-        // Let everyone know it's changed
-        this.signal('teeming:changed', {teeming: this._teeming});
-    }
-
-    /**
-     * Sets the pull gradient of the current dungeon route.
-     * @param value {string}
-     */
-    setPullGradient(value) {
-        this._pullGradient = value;
-
-        // Let everyone know it's changed
-        this.signal('pullgradient:changed', {pullgradient: this._pullGradient});
-    }
-
-    /**
-     * Sets the pull gradient to always apply when a change is made to any pulls.
-     * @param value {boolean}
-     */
-    setPullGradientApplyAlways(value) {
-        this._pullGradientApplyAlways = value;
-
-        // Let everyone know it's changed
-        this.signal('pullgradientapplyalways:changed', {pullgradientapplyalways: this._pullGradientApplyAlways});
     }
 
     /**
@@ -328,39 +274,12 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Get the dungeon route we may or may not be editing at this time.
-     * @returns {null}
+     * Get the context of the map we are editing at this point.
+     * @returns {MapContextDungeon|MapContextDungeonRoute}
      */
-    getDungeonRoute() {
+    getMapContext() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.dungeonRoute;
-    }
-
-    /**
-     * Gets the current seasonal index.
-     * @returns {number}
-     */
-    getSeasonalIndex() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._seasonalIndex;
-    }
-
-    /**
-     * Gets the current teeming state of the map.
-     * @returns {number}
-     */
-    getTeeming() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._teeming;
-    }
-
-    /**
-     * Get the pull gradient for the current dungeon route.
-     * @returns {string}
-     */
-    getPullGradient() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._pullGradient;
+        return this._mapContext;
     }
 
     /**
@@ -390,15 +309,6 @@ class StateManager extends Signalable {
         }
 
         return result;
-    }
-
-    /**
-     * Gets if the current pull gradient should always be applied when new pulls are added/re-ordered.
-     * @returns {boolean}
-     */
-    getPullGradientApplyAlways() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._pullGradientApplyAlways;
     }
 
     /**
@@ -629,7 +539,7 @@ class StateManager extends Signalable {
     isMapAdmin() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this.dungeonRoute.publicKey === 'admin';
+        return this._mapContext.type === 'dungeon';
     }
 
     /**
@@ -643,7 +553,7 @@ class StateManager extends Signalable {
         if (this.isMapAdmin()) {
             channelName = `${this._appType}-dungeon-edit.${this.dungeonData.id}`;
         } else {
-            channelName = `${this._appType}-route-edit.${this.dungeonRoute.publicKey}`;
+            channelName = `${this._appType}-route-edit.${this._mapContext.publicKey}`;
         }
 
         return channelName;

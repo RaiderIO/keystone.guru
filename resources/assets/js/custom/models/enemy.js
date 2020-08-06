@@ -390,7 +390,7 @@ class Enemy extends MapObject {
             result = this.npc.enemy_forces;
 
             // Override first
-            if (getState().getTeeming()) {
+            if (getState().getMapContext().getTeeming()) {
                 if (this.enemy_forces_override_teeming >= 0) {
                     result = this.enemy_forces_override_teeming;
                 } else if (this.npc.enemy_forces_teeming >= 0) {
@@ -623,7 +623,7 @@ class Enemy extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getDungeonRoute().publicKey}/raidmarker/${self.id}`,
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/raidmarker/${self.id}`,
             dataType: 'json',
             data: {
                 raid_marker_name: raidMarkerName

@@ -567,7 +567,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 }
             }
 
-            if( getState().getPullGradientApplyAlways() ) {
+            if( getState().getMapContext().getPullGradientApplyAlways() ) {
                 killZoneMapObjectGroup.applyPullGradient();
             }
             killZoneMapObjectGroup.saveAll(['index', 'color']);

@@ -440,7 +440,7 @@ class DungeonMap extends Signalable {
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
-            if (getState().getDungeonRoute().publicKey !== '' || this.options.edit) {
+            if (getState().getMapContext().getPublicKey() !== '' || this.options.edit) {
                 mapControls.push(new EnemyForcesControls(this));
             }
             mapControls.push(new EnemyVisualControls(this));
@@ -551,7 +551,7 @@ class DungeonMap extends Signalable {
      */
     getEnemyForcesRequired() {
         let dungeonData = getState().getDungeonData();
-        return getState().getTeeming() ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
+        return getState().getMapContext().getTeeming() ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
     }
 
     /**

@@ -9,7 +9,7 @@ class EnemyForcesControls extends MapControl {
         this.lastFooterMessage = null;
         this.map = map;
         // Just the initial enemy forces upon page load.
-        this._setEnemyForces(getState().getDungeonRoute().enemyForces); // Defined in map.blade.php
+        this._setEnemyForces(getState().getMapContext().getEnemyForces()); // Defined in map.blade.php
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
@@ -55,7 +55,7 @@ class EnemyForcesControls extends MapControl {
         });
 
         // Update the total count when teeming was changed
-        getState().register('teeming:changed', this, function () {
+        getState().getMapContext().register('teeming:changed', this, function () {
             self.refreshUI();
         });
 
@@ -82,7 +82,7 @@ class EnemyForcesControls extends MapControl {
 
         this.enemyForces = value;
         // Write the enemy forces into the state so we can remember it when switching floors and this control is re-created
-        getState().getDungeonRoute().enemyForces = value;
+        getState().getMapContext().setEnemyForces(value);
         this.refreshUI();
 
         // Don't trigger this when loading in the route and the value actually changed
@@ -189,7 +189,7 @@ class EnemyForcesControls extends MapControl {
         console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
         let self = this;
 
-        getState().unregister('teeming:changed', this);
+        getState().getMapContext().unregister('teeming:changed', this);
         // Unreg from map
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
         // Unreg killzones

@@ -155,13 +155,13 @@ class MapIcon extends MapObject {
                 name: 'team_id',
                 type: 'bool',
                 default: false,
-                edit: getState().getDungeonRoute().teamId >= 1,
+                edit: getState().getMapContext().getTeamId() >= 1,
                 setter: function (value) {
                     // If team_id is not null, we show this across the entire team
                     this.show_across_team = value;
                 },
                 getter: function () {
-                    return this.show_across_team ? getState().getDungeonRoute().teamId : null;
+                    return this.show_across_team ? getState().getMapContext().getTeamId() : null;
                 }
             }),
             new Attribute({

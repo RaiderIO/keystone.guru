@@ -4,7 +4,7 @@
     // Init it right away
     _stateManager = new StateManager();
     _stateManager.setAppType('{!! $appType !!}');
-    _stateManager.setDungeonRoute({!! new \Illuminate\Support\Collection($dungeonroute) !!});
+    _stateManager.setMapContext({!! new \Illuminate\Support\Collection($mapContext) !!});
     _stateManager.setDungeonData({!! $dungeonData !!});
     _stateManager.setMapIconTypes({!! $mapIconTypes !!});
     _stateManager.setClassColors({!! $classColors !!});

@@ -1,27 +1,47 @@
 <?php
 /** @var $npcs \Illuminate\Support\Collection */
 /** @var \App\User $user */
-$user = Auth::user();
+$user    = Auth::user();
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
 /** @var App\Models\DungeonRoute $dungeonroute */
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? true : false;
-$routeTeam = isset($dungeonroute) ? $dungeonroute->team_id : -1;
-$routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
+
+$mapContextOptions = [
+    'dungeonroute' => []
+];
+if (isset($dungeonroute)) {
+    $mapContextOptions['mapContext'] = [
+        'type'                    => 'dungeonroute',
+        'publicKey'               => $dungeonroute->public_key,
+        'seasonalIndex'           => $dungeonroute->seasonal_index,
+        'teeming'                 => $dungeonroute->teeming,
+        'teamId'                  => $dungeonroute->team_id,
+        'pullGradient'            => $dungeonroute->pull_gradient,
+        'pullGradientApplyAlways' => $dungeonroute->pull_gradient_apply_always,
+
+        // For Siege of Boralus
+        'faction'                 => strtolower($dungeonroute->faction->name),
+        'enemyForces'             => $dungeonroute->getEnemyForces(),
+        // Relations
+        'killZones'               => $dungeonroute->killzones()->orderBy('index')->get(),
+        'mapIcons'                => $dungeonroute->mapicons,
+    ]
+} else {
+    $mapContextOptions['mapContext'] = [
+        'type'          => 'dungeon',
+        'seasonalIndex' => $dungeonroute->seasonal_index,
+        'teeming'       => $dungeonroute->teeming
+    ]
+}
+
+$routeTeam          = isset($dungeonroute) ? $dungeonroute->team_id : -1;
+$routePublicKey     = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
 $routeSeasonalIndex = isset($dungeonroute) ? $dungeonroute->seasonal_index : 0;
-$routeKillZones = isset($dungeonroute) ? \App\Models\KillZone::where('dungeon_route_id', $dungeonroute->id)->orderBy('index')->get() : new \Illuminate\Database\Eloquent\Collection();
 // Set the key to 'try' if try mode is enabled
-$tryMode = isset($tryMode) && $tryMode ? true : false;
-// Set the enemy forces of the current route. May not be set if just editing the route from admin
-$routeEnemyForces = isset($dungeonroute) ? $dungeonroute->getEnemyForces() : 0;
-// For Siege of Boralus
-$routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
-// Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
-$teeming = (isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin)) ? true : false;
-$pullGradient = (isset($dungeonroute) ? $dungeonroute->pull_gradient : '');
-$pullGradientApplyAlways = (isset($dungeonroute) ? $dungeonroute->pull_gradient_apply_always : false);
+$tryMode         = isset($tryMode) && $tryMode ? true : false;
 $enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
@@ -60,13 +80,13 @@ if ($isAdmin) {
             ['key' => 'hidden', 'description' => __('Hidden when Teeming only')],
         ],
         // Display options for changing Faction status for map objects
-        'factions' => [
+        'factions'       => [
             ['key' => 'any', 'description' => __('Any')],
             ['key' => 'alliance', 'description' => __('Alliance')],
             ['key' => 'horde', 'description' => __('Horde')],
         ],
         // Display options for changing the NPC of an enemy
-        'npcs' => $npcOptions
+        'npcs'           => $npcOptions
     ];
 }
 ?>
@@ -99,21 +119,10 @@ if ($isAdmin) {
         'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
         'raidMarkers' => \App\Models\RaidMarker::all(),
         'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
-        'killZones' => $routeKillZones,
         'dungeonData' => $dungeon,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
-        'dungeonroute' => [
-            'publicKey' => $routePublicKey,
-            'faction' => $routeFaction,
-            'enemyForces' => $routeEnemyForces,
-            'seasonalIndex' => $routeSeasonalIndex,
-            'teeming' => $teeming,
-            'teamId' => $routeTeam,
-            'pullGradient' => $pullGradient,
-            'pullGradientApplyAlways' => $pullGradientApplyAlways
-        ]
-    ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
+    ], $mapContextOptions, (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>
         var dungeonMap;
 
@@ -143,6 +152,7 @@ if ($isAdmin) {
         </div>
         <ul class="leaflet-draw-actions"></ul>
     </div>
+
 
     </script>
 @endsection

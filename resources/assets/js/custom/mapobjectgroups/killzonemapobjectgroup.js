@@ -98,7 +98,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         });
 
         // Change the color as necessary
-        if (getState().getPullGradientApplyAlways()) {
+        if (getState().getMapContext().getPullGradientApplyAlways()) {
             this.applyPullGradient();
         }
 
@@ -154,7 +154,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         $.ajax({
             type: 'PUT',
-            url: `/ajax/${getState().getDungeonRoute().publicKey}/${MAP_OBJECT_GROUP_KILLZONE}`,
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/${MAP_OBJECT_GROUP_KILLZONE}`,
             dataType: 'json',
             data: {
                 killzones: killZonesData

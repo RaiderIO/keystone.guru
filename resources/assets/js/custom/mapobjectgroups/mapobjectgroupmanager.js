@@ -136,13 +136,13 @@ class MapObjectGroupManager extends Signalable {
         let self = this;
         $.ajax({
             type: 'GET',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/data',
+            url: '/ajax/' + getState().getMapContext().getPublicKey() + '/data',
             dataType: 'json',
             data: {
                 fields: this._getLoadedNames().join(','),
                 floor: getState().getCurrentFloor().id,
                 enemyPackEnemies: getState().isMapAdmin() ? 0 : 1,
-                teeming: getState().getTeeming() ? 1 : 0
+                teeming: getState().getMapContext().getTeeming() ? 1 : 0
             },
             success: function (json) {
                 self.signal('fetchsuccess', {response: json});

@@ -63,7 +63,7 @@ class KillZone extends MapObject {
         // });
 
         // Disconnect any enemies from us if they were teeming, but the new state is not teeming
-        getState().register('teeming:changed', this, function (teemingChangedEvent) {
+        getState().getMapContext().register('teeming:changed', this, function (teemingChangedEvent) {
             let teeming = teemingChangedEvent.data.teeming;
 
             // If we're visible for teeming, and we're now no longer teeming, remove ourselves from our current killzone
@@ -854,7 +854,7 @@ class KillZone extends MapObject {
         let self = this;
 
         // this.unregister('synced', this); // Not needed as super.cleanup() does this
-        getState().unregister('teeming:changed', this);
+        getState().getMapContext().unregister('teeming:changed', this);
         this.map.unregister('map:mapstatechanged', this);
         this.map.unregister('killzone:selectionchanged', this);
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);

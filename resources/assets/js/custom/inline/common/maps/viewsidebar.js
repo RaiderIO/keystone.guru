@@ -89,7 +89,7 @@ class CommonMapsViewsidebar extends InlineCode {
     _submitDungeonRouteUserReport() {
         $.ajax({
             type: 'POST',
-            url: `/ajax/userreport/dungeonroute/${getState().getDungeonRoute().publicKey}`,
+            url: `/ajax/userreport/dungeonroute/${getState().getMapContext().getPublicKey()}`,
             dataType: 'json',
             data: {
                 category: $('#dungeonroute_report_category').val(),

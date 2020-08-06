@@ -555,14 +555,14 @@ class MapObject extends Signalable {
      */
     shouldBeVisible() {
         if (this.hasOwnProperty('seasonal_index')) {
-            if (this.seasonal_index !== null && getState().getSeasonalIndex() !== this.seasonal_index) {
+            if (this.seasonal_index !== null && getState().getMapContext().getSeasonalIndex() !== this.seasonal_index) {
                 // console.log(`Hiding enemy due to seasonal_index ${this.id}`);
                 return false;
             }
         }
 
         if (this.hasOwnProperty('faction')) {
-            let faction = getState().getDungeonRoute().faction;
+            let faction = getState().getMapContext().getFaction();
             // Only when not in try mode! (no idea why, it was like this)
             if (!this.map.isTryModeEnabled() && (this.faction !== 'any' && faction !== 'any' && this.faction !== faction)) {
                 // console.log(`Hiding enemy due to faction ${this.id}`);
@@ -572,12 +572,12 @@ class MapObject extends Signalable {
 
         if (this.hasOwnProperty('teeming')) {
             // If the map isn't teeming, but the enemy is teeming..
-            if (!getState().getTeeming() && this.teeming === 'visible') {
+            if (!getState().getMapContext().getTeeming() && this.teeming === 'visible') {
                 // console.log(`Hiding enemy due to teeming A ${this.id}`);
                 return false;
             }
             // If the map is teeming, but the enemy shouldn't be there for teeming maps..
-            else if (getState().getTeeming() && this.teeming === 'invisible') {
+            else if (getState().getMapContext().getTeeming() && this.teeming === 'invisible') {
                 // console.log(`Hiding enemy due to teeming B ${this.id}`);
                 return false;
             }
@@ -772,7 +772,7 @@ class MapObject extends Signalable {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getDungeonRoute().publicKey}/${this.options.route_suffix}`,
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`,
             dataType: 'json',
             data: this.getSaveData(),
             beforeSend: function () {
@@ -818,7 +818,7 @@ class MapObject extends Signalable {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getDungeonRoute().publicKey}/${this.options.route_suffix}/${this.id}`,
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}/${this.id}`,
             dataType: 'json',
             data: {
                 _method: 'DELETE'
