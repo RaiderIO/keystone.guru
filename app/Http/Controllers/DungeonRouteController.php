@@ -155,9 +155,8 @@ class DungeonRouteController extends Controller
     /**
      * @param DungeonRouteFormRequest $request
      * @param SeasonService $seasonService
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute|null $dungeonroute
      * @return mixed
-     * @throws Exception
      */
     public function store(DungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
     {
