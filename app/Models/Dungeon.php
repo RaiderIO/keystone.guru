@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Logic\MapContext\MapContextDungeon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -197,7 +198,8 @@ class Dungeon extends Model
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
+        static::deleting(function ($someModel)
+        {
             return false;
         });
     }

@@ -178,7 +178,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
 
         if (!this.initialized) {
-            let killZones = getState().getKillZones();
+            let killZones = getState().getMapContext().getKillZones();
 
             // Now draw the enemies on the map, if any
             for (let index in killZones) {

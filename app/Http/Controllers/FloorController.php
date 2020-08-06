@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FloorFormRequest;
+use App\Logic\MapContext\MapContextDungeon;
 use App\Models\Dungeon;
 use App\Models\Floor;
 use App\Models\Npc;
@@ -49,13 +50,12 @@ class FloorController extends Controller
     public function new(Request $request)
     {
         /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::findOrFail($request->get("dungeon"));
+        $dungeon = Dungeon::findOrFail($request->get('dungeon'));
 
         return view('admin.floor.edit', [
-            'dungeon'     => $dungeon,
-            'floors'      => Floor::all()->where('dungeon_id', '=', $dungeon->id),
-            'headerTitle' => __('New floor')
-        ]); // xxx
+            'headerTitle' => __('New floor'),
+            'mapContext' => (new MapContextDungeon($dungeon, $dungeon->floors->first()))->toArray()
+        ]);
     }
 
     /**
@@ -65,15 +65,12 @@ class FloorController extends Controller
      */
     public function edit(Request $request, Floor $floor)
     {
+        $dungeon = $floor->dungeon->load('floors');
+
         return view('admin.floor.edit', [
-            'model'       => $floor,
-            'dungeon'     => $floor->dungeon->load('floors'),
-            'floors'      => Floor::all()->where('dungeon_id', $floor->dungeon_id)->where('id', '<>', $floor->id),
-            'npcs'        => Npc::all()->whereIn('dungeon_id', [$floor->dungeon_id, -1])->map(function ($npc)
-            {
-                return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
-            })->values(),
-            'headerTitle' => __('Edit floor')
+            'model' => $floor,
+            'headerTitle' => __('Edit floor'),
+            'mapContext' => (new MapContextDungeon($dungeon, $floor))->toArray(),
         ]);
     }
 

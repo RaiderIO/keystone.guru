@@ -5,9 +5,7 @@
 <?php
 /**
  * @var $model \App\Models\Floor
- * @var $dungeon \App\Models\Dungeon
- * @var $floors \Illuminate\Support\Collection
- * @var $npcs \Illuminate\Support\Collection
+ * @var $mapContext \App\Logic\MapContext\MapContextDungeon
  */
 ?>
 
@@ -16,9 +14,7 @@
         @include('common.maps.map', [
             'admin' => true,
             'edit' => true,
-            'dungeon' => $dungeon,
-            'npcs' => $npcs,
-            'floorId' => $model->id,
+            'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
                 'brushline',
                 'path',

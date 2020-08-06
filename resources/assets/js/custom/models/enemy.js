@@ -111,7 +111,7 @@ class Enemy extends MapObject {
 
         let self = this;
         let selectNpcs = [];
-        let npcs = getState().getRawNpcs();
+        let npcs = getState().getMapContext().getNpcs();
         for (let index in npcs) {
             if (npcs.hasOwnProperty(index)) {
                 let npc = npcs[index];

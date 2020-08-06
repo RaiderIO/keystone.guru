@@ -107,4 +107,32 @@ class MapContextDungeonRoute extends MapContext {
     setFaction(faction) {
         this._options.faction = faction;
     }
+
+    /**
+     * @returns {[]}
+     */
+    getKillZones() {
+        return this._options.killZones;
+    }
+
+    /**
+     * @returns {[]}
+     */
+    getMapIcons() {
+        return this._options.mapIcons;
+    }
+
+    /**
+     * @returns {[]}
+     */
+    getPaths() {
+        return this._options.paths;
+    }
+
+    /**
+     * @returns {[]}
+     */
+    getBrushlines() {
+        return this._options.brushlines;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DungeonRouteFormRequest;
+use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
@@ -146,9 +147,11 @@ class DungeonRouteController extends Controller
      */
     public function preview(Request $request, DungeonRoute $dungeonroute, int $floorindex)
     {
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first();
         return view('dungeonroute.preview', [
             'model'   => $dungeonroute,
-            'floorId' => Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first()->id
+            'floorId' => $floor->id,
+            'mapContext' => new MapContextDungeonRoute($dungeonroute, $floor)
         ]);
     }
 
@@ -242,23 +245,18 @@ class DungeonRouteController extends Controller
         if ($floor === null) {
             return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute->public_key]);
         } else {
-            $npcs = Npc::all()->whereIn('dungeon_id', [$floor->dungeon_id, -1])->map(function ($npc)
-            {
-                return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
-            });
-
             if ($dungeonroute->isTry()) {
                 return view('dungeonroute.try', [
-                    'model' => $dungeonroute,
-                    'floor' => $floor,
-                    'npcs'  => $npcs
+                    'model'      => $dungeonroute,
+                    'floor'      => $floor,
+                    'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))
                 ]);
             } else {
                 return view('dungeonroute.edit', [
                     'headerTitle' => __('Edit route'),
                     'model'       => $dungeonroute,
                     'floor'       => $floor,
-                    'npcs'        => $npcs
+                    'mapContext'  => (new MapContextDungeonRoute($dungeonroute, $floor))
                 ]);
             }
         }
@@ -302,7 +300,7 @@ class DungeonRouteController extends Controller
         // Message to the user
         Session::flash('status', __('Route created'));
 
-        return redirect()->route('dungeonroute.edit', ["dungeonroute" => $dungeonroute]);
+        return redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonroute]);
     }
 
     /**

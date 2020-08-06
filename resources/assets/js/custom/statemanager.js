@@ -28,12 +28,10 @@ class StateManager extends Signalable {
         this.mapIconTypes = [];
         this.classColors = [];
         this.enemies = [];
-        this.rawNpcs = [];
         this.rawEnemies = [];
         this.mdtEnemies = [];
         this.factions = [];
         this.raidMarkers = [];
-        this.killZones = [];
         this.paidTiers = [];
 
         // Bit of a hack? But for now best solution
@@ -45,48 +43,14 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Removes a raw NPC by its ID
-     * @param id {Number}
-     * @private
-     */
-    _removeRawNpcById(id) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        for (let index in this.rawNpcs) {
-            if (this.rawNpcs.hasOwnProperty(index)) {
-                let rawNpc = this.rawNpcs[index];
-                if (rawNpc.id === id) {
-                    // Remove it
-                    let removed = this.rawNpcs.splice(index, 1);
-                    console.log(`Removed npc`, removed);
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
      * Enables the Laravel Echo for this session.
      */
     enableEcho() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        let self = this;
-
         this._echo = new Echo(this);
         this._echo.connect();
 
-        window.Echo.join(getState().getEchoChannelName())
-            .listen(`.npc-changed`, (e) => {
-                // Remove any existing NPC
-                self._removeRawNpcById(e.model.id);
-
-                // Add the new NPC
-                self.rawNpcs.push(e.model);
-                console.log(`Adding new npc`, e.model);
-            }).listen(`.npc-deleted`, (e) => {
-            // Only remove the NPC
-            self._removeRawNpcById(e.model.id);
-        });
+        this.signal('echo:enabled');
     }
 
     /**
@@ -175,14 +139,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Sets the raw NPCs for the state.
-     * @param rawNpcs {Object[]}
-     */
-    setRawNpcs(rawNpcs) {
-        this.rawNpcs = rawNpcs;
-    }
-
-    /**
      * Sets the raw enemies (not converted to Enemy classes yet; pure objects)
      * @param rawEnemies
      */
@@ -216,14 +172,6 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param killZones
-     */
-    setKillZones(killZones) {
-        this.killZones = killZones;
-    }
-
-    /**
-     *
      * @param paidTiers
      */
     setPaidTiers(paidTiers) {
@@ -245,7 +193,7 @@ class StateManager extends Signalable {
         this._map = map;
 
         this.setEnemyDisplayType(this._map.options.defaultEnemyVisualType);
-        this.setFloorId(this._map.options.floorId);
+        this.setFloorId(this.getMapContext().getFloorId());
 
         // Change defaults based on the hash if necessary
         if (window.location.hash.length > 0) {
@@ -465,15 +413,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Get all the raw npcs of this dungeon.
-     * @returns {[]}
-     */
-    getRawNpcs() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.rawNpcs;
-    }
-
-    /**
      * Get all the raw enemies of this dungeon.
      * @returns {[]}
      */
@@ -507,15 +446,6 @@ class StateManager extends Signalable {
     getRaidMarkers() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.raidMarkers;
-    }
-
-    /**
-     * Get all killzones
-     * @returns {[]}
-     */
-    getKillZones() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.killZones;
     }
 
     /**

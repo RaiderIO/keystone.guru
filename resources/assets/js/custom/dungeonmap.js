@@ -714,29 +714,6 @@ class DungeonMap extends Signalable {
             pathColour: c.map.polyline.defaultColor()
         });
     }
-
-    /**
-     * Find an NPC by its ID in the local NPC storage.
-     * @param npcId int
-     * @returns {null|object}
-     */
-    getNpcById(npcId) {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-        let result = null;
-
-        // Find the actual NPC..
-        for (let npcIndex in this.options.npcs) {
-            if (this.options.npcs.hasOwnProperty(npcIndex)) {
-                let npc = this.options.npcs[npcIndex];
-                if (npc.id === npcId) {
-                    result = npc;
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
 }
 
 

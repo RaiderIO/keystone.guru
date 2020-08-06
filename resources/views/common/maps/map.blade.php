@@ -1,7 +1,7 @@
 <?php
-/** @var $npcs \Illuminate\Support\Collection */
 /** @var \App\User $user */
-$user    = Auth::user();
+/** @var \App\Logic\MapContext\MapContext $mapContext */
+$user = Auth::user();
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
 /** @var App\Models\DungeonRoute $dungeonroute */
@@ -9,39 +9,8 @@ $isAdmin = isset($admin) && $admin;
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? true : false;
 
-$mapContextOptions = [
-    'dungeonroute' => []
-];
-if (isset($dungeonroute)) {
-    $mapContextOptions['mapContext'] = [
-        'type'                    => 'dungeonroute',
-        'publicKey'               => $dungeonroute->public_key,
-        'seasonalIndex'           => $dungeonroute->seasonal_index,
-        'teeming'                 => $dungeonroute->teeming,
-        'teamId'                  => $dungeonroute->team_id,
-        'pullGradient'            => $dungeonroute->pull_gradient,
-        'pullGradientApplyAlways' => $dungeonroute->pull_gradient_apply_always,
-
-        // For Siege of Boralus
-        'faction'                 => strtolower($dungeonroute->faction->name),
-        'enemyForces'             => $dungeonroute->getEnemyForces(),
-        // Relations
-        'killZones'               => $dungeonroute->killzones()->orderBy('index')->get(),
-        'mapIcons'                => $dungeonroute->mapicons,
-    ]
-} else {
-    $mapContextOptions['mapContext'] = [
-        'type'          => 'dungeon',
-        'seasonalIndex' => $dungeonroute->seasonal_index,
-        'teeming'       => $dungeonroute->teeming
-    ]
-}
-
-$routeTeam          = isset($dungeonroute) ? $dungeonroute->team_id : -1;
-$routePublicKey     = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
-$routeSeasonalIndex = isset($dungeonroute) ? $dungeonroute->seasonal_index : 0;
 // Set the key to 'try' if try mode is enabled
-$tryMode         = isset($tryMode) && $tryMode ? true : false;
+$tryMode = isset($tryMode) && $tryMode ? true : false;
 $enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
@@ -58,8 +27,6 @@ $noUI = isset($noUI) && $noUI ? true : false;
 $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
-// Floor id to display (bit ugly with JS, but it works)
-$floorId = isset($floorId) ? $floorId : $dungeon->floors->first()->id;
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 
@@ -74,16 +41,17 @@ if ($isAdmin) {
             ['key' => 'hidden', 'description' => __('Hidden when Teeming only')],
         ],
         // Display options for changing Faction status for map objects
-        'factions'       => [
+        'factions' => [
             ['key' => 'any', 'description' => __('Any')],
             ['key' => 'alliance', 'description' => __('Alliance')],
             ['key' => 'horde', 'description' => __('Horde')],
-        ]
+        ],
     ];
 }
 ?>
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
-    'floorId' => $floorId,
+    // Only activate Echo when we are a member of the team in which this route is a member of
+    'echo' => true,
     'edit' => $edit,
     'try' => $tryMode,
     'defaultEnemyVisualType' => $enemyVisualType,
@@ -91,8 +59,9 @@ if ($isAdmin) {
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,
     'showAttribution' => $showAttribution,
-    'npcsMinHealth' => $dungeon->getNpcsMinHealth(),
-    'npcsMaxHealth' => $dungeon->getNpcsMaxHealth(),
+    // @TODO Temp fix
+    'npcsMinHealth' => $mapContext['npcsMinHealth'],
+    'npcsMaxHealth' => $mapContext['npcsMaxHealth'],
     'dependencies' => $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null
 ], $adminOptions)])
 
@@ -108,11 +77,10 @@ if ($isAdmin) {
         'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
         'raidMarkers' => \App\Models\RaidMarker::all(),
         'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
-        'dungeonData' => $dungeon,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
-        'npcs' => $npcs,
-    ], $mapContextOptions, (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
+        'mapContext' => $mapContext,
+    ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>
         var dungeonMap;
 
@@ -142,6 +110,7 @@ if ($isAdmin) {
         </div>
         <ul class="leaflet-draw-actions"></ul>
     </div>
+
 
 
     </script>

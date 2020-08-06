@@ -22,7 +22,6 @@ $dungeon->load('floors');
 @endsection
 @section('content')
     @include('common.maps.map', [
-        'dungeon' => $dungeon,
         'dungeonroute' => $model,
         'showAds' => false,
         'edit' => false,

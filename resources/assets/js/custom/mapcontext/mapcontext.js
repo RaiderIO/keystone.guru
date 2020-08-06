@@ -15,6 +15,14 @@ class MapContext extends Signalable {
 
     /**
      *
+     * @returns {null}
+     */
+    getFloorId(){
+        return this._options.floorId;
+    }
+
+    /**
+     *
      * @returns {Boolean}
      */
     getTeeming() {
