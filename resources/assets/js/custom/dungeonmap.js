@@ -12,12 +12,6 @@ class DungeonMap extends Signalable {
         // Apply the map to our state first thing
         getState().setDungeonMap(this);
 
-        // Build echo if we need it
-        if (this.options.echo) {
-            this.echo = new Echo(this);
-            this.echo.connect();
-        }
-
         // Listen for floor changes
         getState().register('floorid:changed', this, function () {
             self.refreshLeafletMap();
@@ -449,7 +443,7 @@ class DungeonMap extends Signalable {
                 mapControls.push(new FactionDisplayControls(this));
             }
 
-            if (this.options.echo) {
+            if (getState().isEchoEnabled()) {
                 mapControls.push(new EchoControls(this));
             }
 

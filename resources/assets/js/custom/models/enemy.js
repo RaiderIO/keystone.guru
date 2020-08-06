@@ -111,13 +111,13 @@ class Enemy extends MapObject {
 
         let self = this;
         let selectNpcs = [];
-        let npcs = this.map.options.npcs;
+        let npcs = getState().getRawNpcs();
         for (let index in npcs) {
             if (npcs.hasOwnProperty(index)) {
                 let npc = npcs[index];
                 selectNpcs.push({
                     id: npc.id,
-                    name: npc.name + ' (' + npc.id + ')'
+                    name: `${npc.name} (${npc.id})`
                 });
             }
         }

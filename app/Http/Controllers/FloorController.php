@@ -18,7 +18,7 @@ class FloorController extends Controller
      */
     public function store(Request $request, Floor $floor = null)
     {
-        if($floor === null ){
+        if ($floor === null) {
             $floor = new Floor();
             // May not be set when editing
             $floor->dungeon_id = $request->get('dungeon');
@@ -52,8 +52,8 @@ class FloorController extends Controller
         $dungeon = Dungeon::findOrFail($request->get("dungeon"));
 
         return view('admin.floor.edit', [
-            'dungeon' => $dungeon,
-            'floors' => Floor::all()->where('dungeon_id', '=', $dungeon->id),
+            'dungeon'     => $dungeon,
+            'floors'      => Floor::all()->where('dungeon_id', '=', $dungeon->id),
             'headerTitle' => __('New floor')
         ]); // xxx
     }
@@ -66,10 +66,13 @@ class FloorController extends Controller
     public function edit(Request $request, Floor $floor)
     {
         return view('admin.floor.edit', [
-            'model' => $floor,
-            'dungeon' => $floor->dungeon->load('floors'),
-            'floors' => Floor::all()->where('dungeon_id', $floor->dungeon_id)->where('id', '<>', $floor->id),
-            'npcs' => Npc::all()->whereIn('dungeon_id', [$floor->dungeon_id, -1]),
+            'model'       => $floor,
+            'dungeon'     => $floor->dungeon->load('floors'),
+            'floors'      => Floor::all()->where('dungeon_id', $floor->dungeon_id)->where('id', '<>', $floor->id),
+            'npcs'        => Npc::all()->whereIn('dungeon_id', [$floor->dungeon_id, -1])->map(function ($npc)
+            {
+                return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
+            })->values(),
             'headerTitle' => __('Edit floor')
         ]);
     }
@@ -107,7 +110,7 @@ class FloorController extends Controller
 
         return redirect()->route('admin.floor.edit', [
             'dungeon' => $request->get('dungeon'),
-            'floor' => $floor
+            'floor'   => $floor
         ]);
     }
 }

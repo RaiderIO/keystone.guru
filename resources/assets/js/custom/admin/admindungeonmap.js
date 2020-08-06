@@ -23,7 +23,7 @@ class AdminDungeonMap extends DungeonMap {
         result.push(new EnemyVisualControls(this));
         result.push(new AdminPanelControls(this));
 
-        if (this.options.echo) {
+        if (getState().isEchoEnabled()) {
             result.push(new EchoControls(this));
         }
 

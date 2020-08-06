@@ -4,14 +4,13 @@ class EchoControls extends MapControl {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         console.assert(map instanceof DungeonMap, 'map is not DungeonMap', map);
 
-        let self = this;
-
         this._mapControl = null;
 
-        this.map.echo.register('status:changed', this, this._onStatusChanged.bind(this));
-        this.map.echo.register('user:add', this, this._onUserAdd.bind(this));
-        this.map.echo.register('user:remove', this, this._onUserRemove.bind(this));
-        this.map.echo.register('user:colorchanged', this, this._onUserColorChanged.bind(this));
+        let echo = getState().getEcho();
+        echo.register('status:changed', this, this._onStatusChanged.bind(this));
+        echo.register('user:add', this, this._onUserAdd.bind(this));
+        echo.register('user:remove', this, this._onUserRemove.bind(this));
+        echo.register('user:colorchanged', this, this._onUserColorChanged.bind(this));
 
         this.map.register('map:mapobjectgroupsfetchsuccess', this, this._onMapObjectGroupsFetchSuccess.bind(this));
 
@@ -55,10 +54,11 @@ class EchoControls extends MapControl {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
         // Initial status while we wait for status changes
-        this._setStatus(this.map.echo.getStatus());
+        let echo = getState().getEcho();
+        this._setStatus(echo.getStatus());
 
         // We can only add existing users at this point because that's when our control is fully built.
-        let existingUsers = this.map.echo.getUsers();
+        let existingUsers = echo.getUsers();
         for (let i = 0; i < existingUsers.length; i++) {
             this._addUser(existingUsers[i]);
         }
@@ -99,7 +99,7 @@ class EchoControls extends MapControl {
         let template = Handlebars.templates['map_controls_route_echo_member_template'];
 
         // May be unset when not our own user, but this confuses handlebars
-        user.self = user.name === this.map.options.username;
+        user.self = user.name === getState().getUserName();
 
         let result = template($.extend({}, getHandlebarsDefaultVariables(), user));
         $('#edit_route_echo_members_container').append(
@@ -180,10 +180,11 @@ class EchoControls extends MapControl {
     cleanup() {
         super.cleanup();
 
-        this.map.echo.unregister('status:changed', this);
-        this.map.echo.unregister('user:add', this);
-        this.map.echo.unregister('user:remove', this);
-        this.map.echo.unregister('user:colorchanged', this);
+        let echo = getState().getEcho();
+        echo.unregister('status:changed', this);
+        echo.unregister('user:add', this);
+        echo.unregister('user:remove', this);
+        echo.unregister('user:colorchanged', this);
 
         this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
 

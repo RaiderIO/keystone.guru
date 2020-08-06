@@ -9,6 +9,9 @@ class StateManager extends Signalable {
         // The data of the dungeon that we're editing
         this.dungeonData = null;
 
+        // Echo handler
+        this._echo = null;
+        /** @type {DungeonMap} The DungeonMap instance */
         this._map = null;
         // What enemy visual type we're displaying
         this._enemyDisplayType = null;
@@ -25,6 +28,7 @@ class StateManager extends Signalable {
         this.mapIconTypes = [];
         this.classColors = [];
         this.enemies = [];
+        this.rawNpcs = [];
         this.rawEnemies = [];
         this.mdtEnemies = [];
         this.factions = [];
@@ -38,6 +42,51 @@ class StateManager extends Signalable {
         // The map icon as found using above ID once the list of map icons is known
         this.unknownMapIcon = null;
         this.awakenedObeliskGatewayMapIcon = null;
+    }
+
+    /**
+     * Removes a raw NPC by its ID
+     * @param id {Number}
+     * @private
+     */
+    _removeRawNpcById(id) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        for (let index in this.rawNpcs) {
+            if (this.rawNpcs.hasOwnProperty(index)) {
+                let rawNpc = this.rawNpcs[index];
+                if (rawNpc.id === id) {
+                    // Remove it
+                    let removed = this.rawNpcs.splice(index, 1);
+                    console.log(`Removed npc`, removed);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Enables the Laravel Echo for this session.
+     */
+    enableEcho() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        let self = this;
+
+        this._echo = new Echo(this);
+        this._echo.connect();
+
+        window.Echo.join(getState().getEchoChannelName())
+            .listen(`.npc-changed`, (e) => {
+                // Remove any existing NPC
+                self._removeRawNpcById(e.model.id);
+
+                // Add the new NPC
+                self.rawNpcs.push(e.model);
+                console.log(`Adding new npc`, e.model);
+            }).listen(`.npc-deleted`, (e) => {
+            // Only remove the NPC
+            self._removeRawNpcById(e.model.id);
+        });
     }
 
     /**
@@ -123,6 +172,14 @@ class StateManager extends Signalable {
      */
     setEnemies(enemies) {
         this.enemies = enemies;
+    }
+
+    /**
+     * Sets the raw NPCs for the state.
+     * @param rawNpcs {Object[]}
+     */
+    setRawNpcs(rawNpcs) {
+        this.rawNpcs = rawNpcs;
     }
 
     /**
@@ -265,6 +322,26 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Checks if Echo is enabled for the current session.
+     * @returns {boolean}
+     */
+    isEchoEnabled() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._echo !== null;
+    }
+
+    /**
+     * Gets the Echo instance used for Echo communication.
+     * @returns {Echo}
+     */
+    getEcho(){
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._echo;
+    }
+
+    /**
      * Gets the dungeon map if it's set before.
      * @returns {DungeonMap}
      */
@@ -385,6 +462,15 @@ class StateManager extends Signalable {
             }
         }
         return enemy;
+    }
+
+    /**
+     * Get all the raw npcs of this dungeon.
+     * @returns {[]}
+     */
+    getRawNpcs() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.rawNpcs;
     }
 
     /**

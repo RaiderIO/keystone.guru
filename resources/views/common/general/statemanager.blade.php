@@ -8,6 +8,7 @@
     _stateManager.setDungeonData({!! $dungeonData !!});
     _stateManager.setMapIconTypes({!! $mapIconTypes !!});
     _stateManager.setClassColors({!! $classColors !!});
+    _stateManager.setRawNpcs({!! $npcs !!});
     _stateManager.setRawEnemies({!! $enemies !!});
     _stateManager.setRaidMarkers({!! $raidMarkers !!});
     _stateManager.setFactions({!! $factions !!});
@@ -20,6 +21,10 @@
     _stateManager.setMdtEnemies({!! $mdt_enemies !!});
 
     @endisset
+    @if($echo)
+    _stateManager.enableEcho();
+
+    @endif
 
     /**
      * Get the current state manager of the app.

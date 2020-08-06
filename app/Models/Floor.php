@@ -2,29 +2,35 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property int $dungeon_id
  * @property int $index
+ * @property boolean $default
  * @property string $name
  *
  * @property Dungeon $dungeon
  *
- * @property \Illuminate\Support\Collection $enemypacks
- * @property \Illuminate\Support\Collection $connectedFloors
- * @property \Illuminate\Support\Collection $directConnectedFloors
- * @property \Illuminate\Support\Collection $reverseConnectedFloors
+ * @property Collection $enemypacks
+ * @property Collection $connectedFloors
+ * @property Collection $directConnectedFloors
+ * @property Collection $reverseConnectedFloors
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Floor extends Model
 {
     public $hidden = ['dungeon_id', 'created_at', 'updated_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function dungeon()
     {
@@ -32,7 +38,7 @@ class Floor extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function enemies()
     {
@@ -40,7 +46,7 @@ class Floor extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function enemypacks()
     {
@@ -48,7 +54,7 @@ class Floor extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function enemypatrols()
     {
@@ -56,7 +62,7 @@ class Floor extends Model
     }
 
     /**
-     * @return \Illuminate\Support\Collection A list of all connected floors, regardless of direction
+     * @return Collection A list of all connected floors, regardless of direction
      */
     public function connectedFloors()
     {
@@ -64,7 +70,7 @@ class Floor extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function directConnectedFloors()
     {
@@ -72,7 +78,7 @@ class Floor extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function reverseConnectedFloors()
     {

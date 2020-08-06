@@ -66,12 +66,6 @@ $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
 if ($isAdmin) {
-    // Build options for displayed NPCs
-    $npcOptions = [];
-    foreach ($npcs as $npc) {
-        $npcOptions[] = ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
-    }
-
     $adminOptions = [
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
@@ -84,17 +78,11 @@ if ($isAdmin) {
             ['key' => 'any', 'description' => __('Any')],
             ['key' => 'alliance', 'description' => __('Alliance')],
             ['key' => 'horde', 'description' => __('Horde')],
-        ],
-        // Display options for changing the NPC of an enemy
-        'npcs'           => $npcOptions
+        ]
     ];
 }
 ?>
-@php($dependencies = $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null)
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
-    'username' => Auth::check() ? $user->name : '',
-    // Only activate Echo when we are a member of the team in which this route is a member of
-    'echo' => true,
     'floorId' => $floorId,
     'edit' => $edit,
     'try' => $tryMode,
@@ -105,7 +93,7 @@ if ($isAdmin) {
     'showAttribution' => $showAttribution,
     'npcsMinHealth' => $dungeon->getNpcsMinHealth(),
     'npcsMaxHealth' => $dungeon->getNpcsMaxHealth(),
-    'dependencies' => $dependencies
+    'dependencies' => $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null
 ], $adminOptions)])
 
 @section('scripts')
@@ -115,6 +103,7 @@ if ($isAdmin) {
     @include('common.general.statemanager', array_merge([
         // Required by echo to join the correct channels
         'appType' => env('APP_TYPE'),
+        'echo' => !$tryMode,
         'mapIconTypes' => \App\Models\MapIconType::all(),
         'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
         'raidMarkers' => \App\Models\RaidMarker::all(),
@@ -122,6 +111,7 @@ if ($isAdmin) {
         'dungeonData' => $dungeon,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
+        'npcs' => $npcs,
     ], $mapContextOptions, (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
     <script>
         var dungeonMap;
