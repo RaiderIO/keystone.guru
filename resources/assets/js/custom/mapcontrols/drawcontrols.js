@@ -333,7 +333,9 @@ class DrawControls extends MapControl {
             style: 'top: 7px;'
         });
         // Add as the first child
-        $('#edit_route_draw_actions_container').append($drawActions);
+        let $drawActionsContainer = $('#edit_route_draw_actions_container');
+        $drawActionsContainer.find('.leaflet-draw-actions-pather').remove();
+        $drawActionsContainer.append($drawActions);
         // Remove all previous entries
         $drawActions.empty();
         // Create the button
