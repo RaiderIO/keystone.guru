@@ -16,9 +16,19 @@
 ////});
 
 // https://laravel.com/docs/5.8/broadcasting#presence-channels
-Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (\App\User $user, \App\Models\DungeonRoute $dungeonroute) {
+Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (\App\User $user, \App\Models\DungeonRoute $dungeonroute)
+{
     $result = false;
-    if ($dungeonroute->team !== null && $dungeonroute->team->isUserCollaborator($user)) {
+    if ($dungeonroute->published || $dungeonroute->author_id === $user->id) {
+        $result = ['name' => $user->name, 'color' => $user->echo_color];
+    }
+    return $result;
+});
+
+Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', env('APP_TYPE')), function (\App\User $user, \App\Models\Dungeon $dungeon)
+{
+    $result = false;
+    if ($user->hasRole('admin')) {
         $result = ['name' => $user->name, 'color' => $user->echo_color];
     }
     return $result;

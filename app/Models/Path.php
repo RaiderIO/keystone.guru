@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Models\Traits\HasLinkedAwakenedObelisk;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property $id int
@@ -13,9 +16,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property DungeonRoute $dungeonroute
  *
- * @property \App\Models\Polyline $polyline
+ * @property Polyline $polyline
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Path extends Model
 {
@@ -29,7 +32,7 @@ class Path extends Model
     /**
      * Get the dungeon route that this route is attached to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function dungeonroute()
     {
@@ -37,7 +40,7 @@ class Path extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     function polyline()
     {

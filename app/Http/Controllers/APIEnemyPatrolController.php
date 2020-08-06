@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Models\EnemyPatrol;
 use App\Models\EnemyPatrolVertex;
 use App\Models\Polyline;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
 class APIEnemyPatrolController extends Controller
@@ -39,9 +42,7 @@ class APIEnemyPatrolController extends Controller
             $enemyPatrol->polyline_id = -1;
         }
 
-        if (!$enemyPatrol->save()) {
-            throw new \Exception("Unable to save enemy patrol!");
-        } else {
+        if ($enemyPatrol->save()) {
             // Create a new polyline and save it
             /** @var Polyline $polyline */
             $polyline = Polyline::findOrNew($enemyPatrol->polyline_id);
@@ -54,7 +55,12 @@ class APIEnemyPatrolController extends Controller
 
             // Couple the patrol to the polyline
             $enemyPatrol->polyline_id = $polyline->id;
-            $enemyPatrol->save();
+
+            if ($enemyPatrol->save() && Auth::check()) {
+                broadcast(new ModelChangedEvent($enemyPatrol->floor->dungeon, Auth::getUser(), $enemyPatrol));
+            }
+        } else {
+            throw new \Exception("Unable to save enemy patrol!");
         }
 
         return ['id' => $enemyPatrol->id];
@@ -68,7 +74,11 @@ class APIEnemyPatrolController extends Controller
     function delete(Request $request, EnemyPatrol $enemypatrol)
     {
         try {
-            $enemypatrol->delete();
+            if ($enemypatrol->delete()) {
+                if (Auth::check()) {
+                    broadcast(new ModelDeletedEvent($enemypatrol->floor->dungeon, Auth::getUser(), $enemypack));
+                }
+            }
             $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

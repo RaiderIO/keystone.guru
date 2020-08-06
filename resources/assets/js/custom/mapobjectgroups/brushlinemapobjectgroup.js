@@ -2,29 +2,11 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
         super(manager, MAP_OBJECT_GROUP_BRUSHLINE, 'brushline', editable);
 
-        let self = this;
-
         this.title = 'Hide/show brushlines';
         this.fa_class = 'fa-paint-brush';
-
-        if (this.manager.map.options.echo) {
-            window.Echo.join(this.manager.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
-                .listen('.brushline-changed', (e) => {
-                    if (e.brushline.floor_id === getState().getCurrentFloor().id) {
-                        self._restoreObject(e.brushline, e.user);
-                    }
-                })
-                .listen('.brushline-deleted', (e) => {
-                    let mapObject = self.findMapObjectById(e.id);
-                    if (mapObject !== null) {
-                        mapObject.localDelete();
-                        self._showDeletedFromEcho(mapObject, e.user);
-                    }
-                });
-        }
     }
 
-    _createObject(layer) {
+    _createMapObject(layer, options = {}) {
         console.assert(this instanceof BrushlineMapObjectGroup, 'this is not an BrushlineMapObjectGroup', this);
 
         return new Brushline(this.manager.map, layer);

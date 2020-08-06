@@ -6,24 +6,14 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         this.fa_class = 'fa-door-open';
     }
 
-    _createObject(layer) {
-        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup', this);
-
-        if (getState().isMapAdmin()) {
-            return new AdminDungeonFloorSwitchMarker(this.manager.map, layer);
-        } else {
-            return new DungeonFloorSwitchMarker(this.manager.map, layer);
-        }
-    }
-
     /**
      * @inheritDoc
      */
-    _restoreObject(remoteMapObject, username = null) {
-        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not a DungeonFloorSwitchMarkerMapObjectGroup', this);
+    _createLayer(remoteMapObject) {
+        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup', this);
 
         let layer;
-        switch(remoteMapObject.direction){
+        switch (remoteMapObject.direction) {
             case 'up':
                 layer = new LeafletDungeonFloorSwitchMarkerUp();
                 break;
@@ -43,12 +33,19 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
 
         layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
 
-        let dungeonFloorSwitchMarker = this.createNew(layer);
-        dungeonFloorSwitchMarker.loadRemoteMapObject(remoteMapObject);
+        return layer;
+    }
 
-        // We just downloaded the floor switch marker, it's synced alright!
-        dungeonFloorSwitchMarker.setSynced(true);
+    /**
+     * @inheritDoc
+     */
+    _createMapObject(layer, options = {}) {
+        console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup', this);
 
-        return dungeonFloorSwitchMarker;
+        if (getState().isMapAdmin()) {
+            return new AdminDungeonFloorSwitchMarker(this.manager.map, layer);
+        } else {
+            return new DungeonFloorSwitchMarker(this.manager.map, layer);
+        }
     }
 }

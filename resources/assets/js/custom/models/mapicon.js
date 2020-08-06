@@ -307,7 +307,7 @@ class MapIcon extends MapObject {
     }
 
     toString() {
-        return 'Map icon (' + this.comment.substring(0, 25) + ')';
+        return `Map icon (${this.comment.substring(0, 25)})`;
     }
 
     cleanup() {

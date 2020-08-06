@@ -2,6 +2,8 @@ class StateManager extends Signalable {
     constructor() {
         super();
 
+        // Used by Echo to join the correct channels
+        this._appType = '';
         // Any dungeon route we may be editing at this time
         this.dungeonRoute = null;
         // The data of the dungeon that we're editing
@@ -23,6 +25,8 @@ class StateManager extends Signalable {
         this._pullGradientApplyAlways = false;
         // The enemy that is focused by the user (mouse overed)
         this._focusedEnemy = null;
+        // Details about the currently logged in user
+        this._userData = null;
 
         // List of static arrays
         this.mapIconTypes = [];
@@ -41,6 +45,16 @@ class StateManager extends Signalable {
         // The map icon as found using above ID once the list of map icons is known
         this.unknownMapIcon = null;
         this.awakenedObeliskGatewayMapIcon = null;
+    }
+
+    /**
+     * Set the app type (local, staging, live etc).
+     * @param appType {string}
+     */
+    setAppType(appType) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._appType = appType;
     }
 
     /**
@@ -292,6 +306,16 @@ class StateManager extends Signalable {
             // Let everyone know it's changed
             this.signal('mapzoomlevel:changed', {mapZoomLevel: this._mapZoomLevel});
         }
+    }
+
+    /**
+     * Sets the data of the currently logged in user.
+     * @param userData {Object|null}
+     */
+    setUserData(userData) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._userData = userData;
     }
 
     /**
@@ -583,6 +607,8 @@ class StateManager extends Signalable {
      * @returns {MapIconType}
      */
     getUnknownMapIconType() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
         return this.unknownMapIcon;
     }
 
@@ -591,6 +617,8 @@ class StateManager extends Signalable {
      * @returns {number}
      */
     getAwakenedObeliskGatewayMapIconType() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
         return this.awakenedObeliskGatewayMapIcon;
     }
 
@@ -599,6 +627,35 @@ class StateManager extends Signalable {
      * @returns {boolean}
      */
     isMapAdmin() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
         return this.dungeonRoute.publicKey === 'admin';
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getEchoChannelName() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        let channelName = '';
+
+        if (this.isMapAdmin()) {
+            channelName = `${this._appType}-dungeon-edit.${this.dungeonData.id}`;
+        } else {
+            channelName = `${this._appType}-route-edit.${this.dungeonRoute.publicKey}`;
+        }
+
+        return channelName;
+    }
+
+    /**
+     * Gets the currently logged in user's name, or null if not logged in.
+     * @returns {*|null}
+     */
+    getUserName() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._userData !== null ? this._userData.name : null;
     }
 }

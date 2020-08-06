@@ -157,6 +157,16 @@ class KillZone extends MapObject {
     }
 
     /**
+     * @inheritDoc
+     **/
+    loadRemoteMapObject(remoteMapObject) {
+        super.loadRemoteMapObject(remoteMapObject);
+
+        // Hide the layer of the killzone
+        this.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
+    }
+
+    /**
      *
      * @param remoteEnemies
      */
@@ -373,7 +383,7 @@ class KillZone extends MapObject {
             // Redraw any changes as necessary (for example, user (de-)selected a killzone, must redraw to update selection visuals)
             this.redrawConnectionsToEnemies();
 
-            if( this.map.options.edit ) {
+            if (this.map.options.edit) {
                 if (previousState instanceof EnemySelection && previousState.getMapObject().id === this.id) {
                     // May save when nothing has changed, but that's okay
                     this.save();
