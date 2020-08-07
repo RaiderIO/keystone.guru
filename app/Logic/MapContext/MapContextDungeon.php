@@ -4,6 +4,7 @@
 namespace App\Logic\MapContext;
 
 use App\Models\Dungeon;
+use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\Npc;
 
@@ -52,7 +53,9 @@ class MapContextDungeon extends MapContext
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
-            'npcs' => Npc::whereIn('dungeon_id', [$this->_context->id, -1])->get()->map(function ($npc)
+            // First should be unspecified
+            'faction' => strtolower(Faction::where('name', 'Unspecified')->first()->name),
+            'npcs'    => Npc::whereIn('dungeon_id', [$this->_context->id, -1])->get()->map(function ($npc)
             {
                 return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
             })->values(),

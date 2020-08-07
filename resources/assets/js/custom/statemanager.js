@@ -461,7 +461,7 @@ class StateManager extends Signalable {
         let self = this;
         let result = false;
         // Iterate over the found floors
-        $.each(this.dungeonData.floors, function (index, value) {
+        $.each(this._mapContext.getDungeon().floors, function (index, value) {
             // Find the floor we're looking for
             if (parseInt(value.id) === parseInt(self._floorId)) {
                 result = value;
@@ -499,7 +499,7 @@ class StateManager extends Signalable {
     isMapAdmin() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this._mapContext.type === 'dungeon';
+        return this._mapContext.getType() === 'dungeon';
     }
 
     /**
@@ -511,9 +511,9 @@ class StateManager extends Signalable {
         let channelName = '';
 
         if (this.isMapAdmin()) {
-            channelName = `${this._appType}-dungeon-edit.${this.dungeonData.id}`;
+            channelName = `${this._appType}-dungeon-edit.${this._mapContext.getDungeon().id}`;
         } else {
-            channelName = `${this._appType}-route-edit.${this._mapContext.publicKey}`;
+            channelName = `${this._appType}-route-edit.${this._mapContext.getPublicKey()}`;
         }
 
         return channelName;

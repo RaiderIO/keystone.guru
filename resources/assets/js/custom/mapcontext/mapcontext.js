@@ -15,10 +15,18 @@ class MapContext extends Signalable {
 
     /**
      *
-     * @returns {null}
+     * @returns {Number}
      */
-    getFloorId() {
-        return this._options.floorId;
+    getFaction() {
+        return this._options.faction;
+    }
+
+    /**
+     *
+     * @param faction {Number}
+     */
+    setFaction(faction) {
+        this._options.faction = faction;
     }
 
     /**
@@ -27,6 +35,25 @@ class MapContext extends Signalable {
      */
     getTeeming() {
         return this._options.teeming;
+    }
+
+    /**
+     *
+     * @param teeming {Boolean}
+     */
+    setTeeming(teeming) {
+        this._options.teeming = teeming;
+
+        // Let everyone know it's changed
+        this.signal('teeming:changed', {teeming: this._options.teeming});
+    }
+
+    /**
+     *
+     * @returns {null}
+     */
+    getFloorId() {
+        return this._options.floorId;
     }
 
     /**
@@ -79,12 +106,9 @@ class MapContext extends Signalable {
 
     /**
      *
-     * @param teeming {Boolean}
+     * @returns {[]}
      */
-    setTeeming(teeming) {
-        this._options.teeming = teeming;
-
-        // Let everyone know it's changed
-        this.signal('teeming:changed', {teeming: this._options.teeming});
+    getNpcs() {
+        return this._options.npcs;
     }
 }

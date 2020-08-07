@@ -24,7 +24,8 @@
         @include('common.maps.editsidebar', [
             'show' => [
                 'virtual-tour' => true,
-                'tryout' => true
+                'tryout' => true,
+                'draw-settings' => true
             ],
             'floorId' => $floor->id,
             'dungeon' => $dungeon,

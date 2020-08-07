@@ -1,7 +1,7 @@
 /** This is because PhpStorm won't shut up about how getState() is not defined. It really is defined in statemanager.blade.php */
 if (typeof getState !== 'function') {
     function getState() {
-        console.error('getState() is not defined!');
+        return false;
     }
 }
 
@@ -65,7 +65,7 @@ let _defaultVariables = null;
 function getHandlebarsDefaultVariables() {
     if (_defaultVariables === null) {
         _defaultVariables = $.extend({}, _getHandlebarsTranslations(), {
-            is_map_admin: typeof getState !== 'function' ? false : getState().isMapAdmin(),
+            is_map_admin: getState() ? getState().isMapAdmin() : false,
             is_user_admin: isUserAdmin, // Defined in sitescripts
             csrf_token: csrfToken // Defined in sitescripts
         });

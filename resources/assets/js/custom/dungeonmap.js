@@ -434,7 +434,7 @@ class DungeonMap extends Signalable {
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
-            if (getState().getMapContext().getPublicKey() !== '' || this.options.edit) {
+            if (!getState().isMapAdmin()) {
                 mapControls.push(new EnemyForcesControls(this));
             }
             mapControls.push(new EnemyVisualControls(this));

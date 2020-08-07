@@ -3,6 +3,7 @@
 
 namespace App\Logic\MapContext;
 
+use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 
@@ -16,6 +17,7 @@ use App\Models\Floor;
  */
 class MapContextDungeonRoute extends MapContext
 {
+    use PublicKeyDungeonRoute;
 
     public function __construct(DungeonRoute $dungeonRoute, Floor $floor)
     {
@@ -39,7 +41,7 @@ class MapContextDungeonRoute extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->_context->dungeon->id, false, $this->_context->getRouteKeyName());
+        return $this->listEnemies($this->_context->dungeon->id, false, $this->_context->getRouteKey());
     }
 
     public function toArray(): array

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $dungeon->name])
+@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->dungeon->name])
 @section('header-title')
     {{ $headerTitle }}
 @endsection
@@ -23,7 +23,6 @@
         ])
 
         @include('common.maps.admineditsidebar', [
-            'floorId' => $model->id,
             'show' => [
                 'shareable-link' => true,
                 'draw-settings' => true,

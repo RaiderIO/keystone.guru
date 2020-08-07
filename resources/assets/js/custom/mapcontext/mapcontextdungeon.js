@@ -58,10 +58,18 @@ class MapContextDungeon extends MapContext {
     }
 
     /**
-     *
-     * @returns {[]}
+     * We are both seasonal indexes at once.
+     * @returns {Number}
      */
-    getNpcs() {
-        return this._options.npcs;
+    getSeasonalIndex() {
+        return null;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getTeamId() {
+        return -1;
     }
 }

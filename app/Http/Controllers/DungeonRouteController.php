@@ -131,10 +131,7 @@ class DungeonRouteController extends Controller
                 'model'          => $dungeonroute,
                 'current_report' => $currentReport,
                 'floor'          => $floor,
-                'npcs'           => Npc::all()->whereIn('dungeon_id', [$floor->dungeon_id, -1])->map(function ($npc)
-                {
-                    return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
-                }),
+                'mapContext'  => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
             ]);
         }
     }
@@ -147,6 +144,7 @@ class DungeonRouteController extends Controller
      */
     public function preview(Request $request, DungeonRoute $dungeonroute, int $floorindex)
     {
+        /** @var FLoor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorindex)->first();
         return view('dungeonroute.preview', [
             'model'   => $dungeonroute,
@@ -249,14 +247,14 @@ class DungeonRouteController extends Controller
                 return view('dungeonroute.try', [
                     'model'      => $dungeonroute,
                     'floor'      => $floor,
-                    'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))
+                    'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
                 ]);
             } else {
                 return view('dungeonroute.edit', [
                     'headerTitle' => __('Edit route'),
                     'model'       => $dungeonroute,
                     'floor'       => $floor,
-                    'mapContext'  => (new MapContextDungeonRoute($dungeonroute, $floor))
+                    'mapContext'  => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
                 ]);
             }
         }
