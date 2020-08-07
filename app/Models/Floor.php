@@ -18,7 +18,10 @@ use Illuminate\Support\Collection;
  *
  * @property Dungeon $dungeon
  *
+ * @property Collection $enemies
  * @property Collection $enemypacks
+ * @property Collection $enemypatrols
+ * @property Collection $mapicons
  * @property Collection $connectedFloors
  * @property Collection $directConnectedFloors
  * @property Collection $reverseConnectedFloors
@@ -59,6 +62,14 @@ class Floor extends Model
     function enemypatrols()
     {
         return $this->hasMany('App\Models\EnemyPatrol');
+    }
+
+    /**
+     * @return HasMany
+     */
+    function mapicons()
+    {
+        return $this->hasMany('App\Models\MapIcon')->where('dungeon_route_id', -1);
     }
 
     /**

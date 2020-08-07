@@ -20,9 +20,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\UsersStatisticsService');
         $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\TeamsStatisticsService');
 
-        // Enemies List
-        $this->app->bind('App\Service\DungeonRoute\EnemiesListServiceInterface', 'App\Service\DungeonRoute\EnemiesListService');
-
         // M+ Seasons
         $this->app->bind('App\Service\Season\SeasonServiceInterface', 'App\Service\Season\SeasonService');
 

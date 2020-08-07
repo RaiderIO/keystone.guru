@@ -59,8 +59,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         // if (getState().getEnemies().length === 0) {
         // The enemies are no longer returned from the response; get it from the getState() instead
         let enemySets = [
-            getState().getRawEnemies(),
-            getState().getMdtEnemies(),
+            getState().getMapContext().getEnemies(),
+            getState().getMapContext().getMdtEnemies(),
         ];
 
         // For each set of enemies..

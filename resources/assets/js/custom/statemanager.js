@@ -28,8 +28,6 @@ class StateManager extends Signalable {
         this.mapIconTypes = [];
         this.classColors = [];
         this.enemies = [];
-        this.rawEnemies = [];
-        this.mdtEnemies = [];
         this.factions = [];
         this.raidMarkers = [];
         this.paidTiers = [];
@@ -81,17 +79,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Sets the data that describes the current dungeon.
-     * @param dungeonData
-     */
-    setDungeonData(dungeonData) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        console.assert(dungeonData instanceof Object, 'dungeonData is not an Object', dungeonData);
-
-        this.dungeonData = dungeonData;
-    }
-
-    /**
      * Gets the currently focused enemy.
      * @param enemy {Enemy}
      */
@@ -136,22 +123,6 @@ class StateManager extends Signalable {
      */
     setEnemies(enemies) {
         this.enemies = enemies;
-    }
-
-    /**
-     * Sets the raw enemies (not converted to Enemy classes yet; pure objects)
-     * @param rawEnemies
-     */
-    setRawEnemies(rawEnemies) {
-        this.rawEnemies = rawEnemies;
-    }
-
-    /**
-     * Sets the MDT enemies.
-     * @param mdtEnemies
-     */
-    setMdtEnemies(mdtEnemies) {
-        this.mdtEnemies = mdtEnemies;
     }
 
     /**
@@ -337,15 +308,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Gets the data of the dungeon that we're currently editing.
-     * @returns {null}
-     */
-    getDungeonData() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.dungeonData;
-    }
-
-    /**
      * Get the default visual to display for all enemies.
      * @returns {string}
      */
@@ -410,24 +372,6 @@ class StateManager extends Signalable {
             }
         }
         return enemy;
-    }
-
-    /**
-     * Get all the raw enemies of this dungeon.
-     * @returns {[]}
-     */
-    getRawEnemies() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.rawEnemies;
-    }
-
-    /**
-     * Get all the mdt enemies of this dungeon.
-     * @returns {[]}
-     */
-    getMdtEnemies() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.mdtEnemies;
     }
 
     /**

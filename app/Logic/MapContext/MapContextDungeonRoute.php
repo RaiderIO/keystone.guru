@@ -3,7 +3,6 @@
 
 namespace App\Logic\MapContext;
 
-use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 
@@ -36,6 +35,11 @@ class MapContextDungeonRoute extends MapContext
     public function getSeasonalIndex(): int
     {
         return $this->_context->seasonal_index;
+    }
+
+    public function getEnemies(): array
+    {
+        return $this->listEnemies($this->_context->dungeon->id, false, $this->_context->getRouteKeyName());
     }
 
     public function toArray(): array

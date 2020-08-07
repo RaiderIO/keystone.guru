@@ -43,6 +43,11 @@ class MapContextDungeon extends MapContext
         return -1;
     }
 
+    public function getEnemies(): array
+    {
+        return $this->listEnemies($this->_context->id, true);
+    }
+
 
     public function toArray(): array
     {

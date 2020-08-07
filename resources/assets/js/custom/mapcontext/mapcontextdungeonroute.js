@@ -119,7 +119,8 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {[]}
      */
     getMapIcons() {
-        return this._options.mapIcons;
+        // https://stackoverflow.com/a/1584377/771270
+        return _.union(this._options.mapIcons, this._options.dungeon.mapIcons);
     }
 
     /**

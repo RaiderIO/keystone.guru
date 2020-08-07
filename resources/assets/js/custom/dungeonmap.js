@@ -439,7 +439,7 @@ class DungeonMap extends Signalable {
             }
             mapControls.push(new EnemyVisualControls(this));
 
-            if (this.isTryModeEnabled() && getState().getDungeonData().name === 'Siege of Boralus') {
+            if (this.isTryModeEnabled() && getState().getMapContext().getDungeon().name === 'Siege of Boralus') {
                 mapControls.push(new FactionDisplayControls(this));
             }
 
@@ -508,7 +508,7 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = false;
 
-        let dungeonData = getState().getDungeonData();
+        let dungeonData = getState().getMapContext().getDungeon();
         for (let i = 0; i < dungeonData.floors.length; i++) {
             let floor = dungeonData.floors[i];
             if (floor.id === floorId) {
@@ -544,7 +544,7 @@ class DungeonMap extends Signalable {
      * @returns {*}
      */
     getEnemyForcesRequired() {
-        let dungeonData = getState().getDungeonData();
+        let dungeonData = getState().getMapContext().getDungeon();
         return getState().getMapContext().getTeeming() ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
     }
 
@@ -571,7 +571,7 @@ class DungeonMap extends Signalable {
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
 
-        let dungeonData = getState().getDungeonData();
+        let dungeonData = getState().getMapContext().getDungeon();
         this.mapTileLayer = L.tileLayer('/images/tiles/' + dungeonData.expansion.shortname + '/' + dungeonData.key + '/' + getState().getCurrentFloor().index + '/{z}/{x}_{y}.png', {
             maxZoom: 5,
             attribution: 'Map data © Blizzard Entertainment',

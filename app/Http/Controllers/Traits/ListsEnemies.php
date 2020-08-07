@@ -113,6 +113,6 @@ trait ListsEnemies
             unset($enemy->npc_id);
         }
 
-        return ['enemies' => collect($result), 'mdt_enemies' => collect($filteredEnemies)];
+        return ['enemies' => collect($result), 'enemiesMdt' => collect($filteredEnemies)];
     }
 }

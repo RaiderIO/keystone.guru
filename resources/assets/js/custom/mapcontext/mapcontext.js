@@ -17,7 +17,7 @@ class MapContext extends Signalable {
      *
      * @returns {null}
      */
-    getFloorId(){
+    getFloorId() {
         return this._options.floorId;
     }
 
@@ -27,6 +27,54 @@ class MapContext extends Signalable {
      */
     getTeeming() {
         return this._options.teeming;
+    }
+
+    /**
+     *
+     * @returns {{}}
+     */
+    getDungeon() {
+        return this._options.dungeon;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
+    getEnemies() {
+        return this._options.dungeon.enemies;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
+    getMdtEnemies() {
+        return this._options.dungeon.enemiesMdt;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
+    getEnemyPacks() {
+        return this._options.dungeon.enemyPacks;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
+    getEnemyPatrols() {
+        return this._options.dungeon.enemyPatrols;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
+    getMapIcons() {
+        return this._options.dungeon.mapIcons;
     }
 
     /**
