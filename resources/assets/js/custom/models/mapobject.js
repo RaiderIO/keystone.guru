@@ -426,8 +426,6 @@ class MapObject extends Signalable {
     _rebuildDecorator() {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        console.warn('_rebuildDecorator', this.constructor.name);
-
         this._cleanDecorator();
 
         this.decorator = this._getDecorator();

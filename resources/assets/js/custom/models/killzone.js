@@ -1,19 +1,3 @@
-$(function () {
-    L.Draw.KillZone = L.Draw.Marker.extend({
-        statics: {
-            TYPE: 'killzone'
-        },
-        options: {
-            icon: LeafletKillZoneIcon
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.KillZone.TYPE;
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
-});
-
 let LeafletKillZoneIcon = L.divIcon({
     html: '<i class="fas fa-bullseye"></i>',
     iconSize: [30, 30],
@@ -31,6 +15,22 @@ let LeafletKillZoneMarker = L.Marker.extend({
         icon: LeafletKillZoneIcon
     }
 });
+
+// $(function () {
+    L.Draw.KillZone = L.Draw.Marker.extend({
+        statics: {
+            TYPE: 'killzone'
+        },
+        options: {
+            icon: LeafletKillZoneIcon
+        },
+        initialize: function (map, options) {
+            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+            this.type = L.Draw.KillZone.TYPE;
+            L.Draw.Feature.prototype.initialize.call(this, map, options);
+        }
+    });
+// });
 
 class KillZone extends MapObject {
     constructor(map, layer) {

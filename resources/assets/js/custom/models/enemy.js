@@ -3,26 +3,24 @@
 let DefaultEnemyIcon = new L.divIcon({className: 'enemy_icon'});
 let MDTEnemyIconSelected = new L.divIcon({className: 'enemy_icon mdt_enemy_icon leaflet-edit-marker-selected'});
 
-$(function () {
-    L.Draw.Enemy = L.Draw.Marker.extend({
-        statics: {
-            TYPE: 'enemy'
-        },
-        options: {
-            icon: DefaultEnemyIcon
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.Enemy.TYPE;
-
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
-});
-
 let LeafletEnemyMarker = L.Marker.extend({
     options: {
         icon: DefaultEnemyIcon
+    }
+});
+
+L.Draw.Enemy = L.Draw.Marker.extend({
+    statics: {
+        TYPE: 'enemy'
+    },
+    options: {
+        icon: DefaultEnemyIcon
+    },
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.Enemy.TYPE;
+
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
     }
 });
 

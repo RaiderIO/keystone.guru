@@ -13,6 +13,22 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         return getState().getMapContext().getMapIcons();
     }
 
+    /**
+     * @inheritDoc
+     */
+    _getOptions(remoteMapObject) {
+        return {mapIconType: getState().getMapIconType(remoteMapObject.map_icon_type_id)};
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _createLayer(remoteMapObject) {
+        let layer = new LeafletMapIconMarker();
+        layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+        return layer;
+    }
+
     _createMapObject(layer, options = {}) {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not an MapIconMapObjectGroup', this);
 
@@ -30,48 +46,6 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         // if (typeof options !== 'undefined' && typeof options.mapIconType !== 'undefined') {
         //     mapIcon._setMapIconType(options.mapIconType);
         // }
-
-        return mapIcon;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _loadMapObject(remoteMapObject, username = null) {
-        console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
-        // Fetch the existing map icon if it exists
-        /** @type {MapIcon} */
-        let mapIcon = this.findMapObjectById(remoteMapObject.id);
-        let createdNew;
-
-        // Only create a new one if it's new for us
-        if (createdNew = (mapIcon === null)) {
-            // Find the layer we should display on the map
-            let layer = new LeafletMapIconMarker();
-            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-
-            // Pass the map icon type here so layer initialization can take the type into account
-            mapIcon = this.createNewMapObject(layer, {mapIconType: getState().getMapIconType(remoteMapObject.map_icon_type_id)});
-        } else {
-            // Update position if it already existed
-            mapIcon.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-        }
-
-        mapIcon.loadRemoteMapObject(remoteMapObject);
-
-        // When in admin mode, show all map icons
-        if (!getState().isMapAdmin() && (mapIcon.seasonal_index !== null && getState().getMapContext().getSeasonalIndex() !== mapIcon.seasonal_index)) {
-            // Hide this enemy by default
-            mapIcon.setDefaultVisible(false);
-        }
-
-        // We just downloaded the map icon, it's synced alright!
-        mapIcon.setSynced(true);
-        // Refresh the tooltip; it may have been permanent before and no longer, or vice versa
-        mapIcon.bindTooltip();
-
-        // Show echo notification or not
-        this._showReceivedFromEcho(mapIcon, username);
 
         return mapIcon;
     }

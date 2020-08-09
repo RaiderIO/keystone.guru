@@ -1,4 +1,28 @@
-$(function () {
+let LeafletMapIconUnknown = L.divIcon({
+    html: '<i class="fas fa-icons"></i>',
+    iconSize: [32, 32],
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown'
+});
+
+let LeafletMapIconUnknownEditMode = L.divIcon({
+    html: '<i class="fas fa-icons"></i>',
+    iconSize: [32, 32],
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected'
+});
+
+let LeafletMapIconUnknownDeleteMode = L.divIcon({
+    html: '<i class="fas fa-icons"></i>',
+    iconSize: [32, 32],
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected delete'
+});
+
+let LeafletMapIconMarker = L.Marker.extend({
+    options: {
+        icon: LeafletMapIconUnknown
+    }
+});
+
+// $(function () {
     L.Draw.MapIcon = L.Draw.Marker.extend({
         statics: {
             TYPE: 'mapicon'
@@ -14,7 +38,7 @@ $(function () {
     });
 
     // L.Draw.ObeliskGatewayMapIcon is defined in init function down below!
-});
+// });
 
 /**
  * Get the Leaflet Marker that represents said mapIconType
@@ -47,30 +71,6 @@ function getMapIconLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) 
     }
     return icon;
 }
-
-let LeafletMapIconUnknown = L.divIcon({
-    html: '<i class="fas fa-icons"></i>',
-    iconSize: [32, 32],
-    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown'
-});
-
-let LeafletMapIconUnknownEditMode = L.divIcon({
-    html: '<i class="fas fa-icons"></i>',
-    iconSize: [32, 32],
-    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected'
-});
-
-let LeafletMapIconUnknownDeleteMode = L.divIcon({
-    html: '<i class="fas fa-icons"></i>',
-    iconSize: [32, 32],
-    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected delete'
-});
-
-let LeafletMapIconMarker = L.Marker.extend({
-    options: {
-        icon: LeafletMapIconUnknown
-    }
-});
 
 /**
  * @property floor_id int
@@ -226,6 +226,19 @@ class MapIcon extends MapObject {
         // // thus we don't know if this will be editable or not. In the sync this will get called and the edit state is known
         // // after which this function will function properly
         // this.onLayerInit();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    loadRemoteMapObject(remoteMapObject) {
+        super.loadRemoteMapObject(remoteMapObject);
+
+        // When in admin mode, show all map icons
+        if (!getState().isMapAdmin() && (this.seasonal_index !== null && getState().getMapContext().getSeasonalIndex() !== this.seasonal_index)) {
+            // Hide this enemy by default
+            this.setDefaultVisible(false);
+        }
     }
 
     /**

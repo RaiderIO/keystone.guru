@@ -1,20 +1,3 @@
-$(function () {
-    L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
-        statics: {
-            TYPE: 'dungeonfloorswitchmarker'
-        },
-        options: {
-            icon: LeafletDungeonFloorSwitchIcon
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.DungeonFloorSwitchMarker.TYPE;
-
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
-});
-
 let defaultDungeonFloorSwitchIconSettings = {iconSize: [32, 32], tooltipAnchor: [0, -16], popupAnchor: [0, -16]};
 let LeafletDungeonFloorSwitchIcon = new L.divIcon($.extend({className: 'door_icon'}, defaultDungeonFloorSwitchIconSettings));
 let LeafletDungeonFloorSwitchIconUp = new L.divIcon($.extend({className: 'door_up_icon'}, defaultDungeonFloorSwitchIconSettings));
@@ -45,6 +28,21 @@ let LeafletDungeonFloorSwitchMarkerLeft = L.Marker.extend({
 let LeafletDungeonFloorSwitchMarkerRight = L.Marker.extend({
     options: {
         icon: LeafletDungeonFloorSwitchIconRight
+    }
+});
+
+L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
+    statics: {
+        TYPE: 'dungeonfloorswitchmarker'
+    },
+    options: {
+        icon: LeafletDungeonFloorSwitchIcon
+    },
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.DungeonFloorSwitchMarker.TYPE;
+
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
     }
 });
 

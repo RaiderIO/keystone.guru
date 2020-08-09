@@ -1,4 +1,4 @@
-$(function () {
+// $(function () {
     L.Draw.EnemyPatrol = L.Draw.Polyline.extend({
         statics: {
             TYPE: 'enemypatrol'
@@ -9,7 +9,7 @@ $(function () {
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
-});
+// });
 
 class EnemyPatrol extends Polyline {
     constructor(map, layer) {

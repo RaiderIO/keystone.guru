@@ -425,29 +425,25 @@ class MapObjectGroup extends Signalable {
     setMapObjectVisibility(mapObject, visible) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if( mapObject instanceof Path ){
-            console.warn(visible, mapObject.constructor.name);
-        }
-
         // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
         if (mapObject.layer !== null) {
             if (visible) {
                 if (!this.layerGroup.hasLayer(mapObject.layer)) {
                     this.layerGroup.addLayer(mapObject.layer);
-                    // Trigger this on the object
-                    mapObject.setVisible(true);
-
-                    this.signal('mapobject:shown', {object: mapObject, objectgroup: this, visible: true});
                 }
+                // Trigger this on the object
+                mapObject.setVisible(true);
+
+                this.signal('mapobject:shown', {object: mapObject, objectgroup: this, visible: true});
             } else {
                 if (this.layerGroup.hasLayer(mapObject.layer)) {
                     this.layerGroup.removeLayer(mapObject.layer);
-                    // Trigger this on the object
-                    mapObject.setVisible(false);
-
-                    this.signal('mapobject:hidden', {object: mapObject, objectgroup: this, visible: false});
                 }
+                // Trigger this on the object
+                mapObject.setVisible(false);
+
+                this.signal('mapobject:hidden', {object: mapObject, objectgroup: this, visible: false});
             }
         }
     }
@@ -519,7 +515,7 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let mapObject = this._createMapObject(layer, options);
-        if( layer !== null ) {
+        if (layer !== null) {
             mapObject.onLayerInit();
         }
         this.objects.push(mapObject);

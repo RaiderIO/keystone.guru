@@ -28,7 +28,7 @@ class Polyline extends MapObject {
                 );
                 self._assignPopup(self.layerAnimated);
                 // Do not set visible to true - this will happen in shown/hidden events
-                self._setAnimatedLayerVisibility(true);
+                // self._setAnimatedLayerVisibility(true);
             }
         });
         this.register(['shown', 'hidden'], this, function (shownHiddenEvent) {

@@ -39,9 +39,6 @@ class DungeonMap extends Signalable {
                 let mapObject = addEvent.data.object;
                 self.mapObjects.push(mapObject);
                 if (mapObject.shouldBeVisible() && mapObject.layer !== null) {
-                    if( mapObject instanceof Path ) {
-                        console.warn('dungeonmap path');
-                    }
                     self.drawnLayers.addLayer(mapObject.layer);
 
                     // Make sure we know it's editable
