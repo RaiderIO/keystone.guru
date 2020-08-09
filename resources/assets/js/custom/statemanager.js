@@ -158,7 +158,7 @@ class StateManager extends Signalable {
 
         // Unreg ourselves if necessary
         if (this._map !== null) {
-            this._map.unregister('map:mapobjectgroupsfetchsuccess', this);
+            this._map.unregister('map:mapobjectgroupsloaded', this);
         }
 
         this._map = map;
@@ -168,7 +168,7 @@ class StateManager extends Signalable {
 
         // Change defaults based on the hash if necessary
         if (window.location.hash.length > 0) {
-            this._map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+            this._map.register('map:mapobjectgroupsloaded', this, function () {
                 // Fill the hashVariables with key=>value pairs
                 let hashVariables = {};
                 let variables = window.location.hash.replace('#', '').split('&');

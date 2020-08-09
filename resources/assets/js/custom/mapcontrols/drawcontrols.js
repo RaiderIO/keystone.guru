@@ -307,7 +307,7 @@ class DrawControls extends MapControl {
         $brushlineButton.html(
             this._getButtonHtml('fa-paint-brush', lang.get('messages.brushline'), this._findHotkeyByCssClass('brushline'))
         );
-        $brushlineButton.bind('click', function (clickEvent) {
+        $brushlineButton.bind('click', function () {
             // Check if it's enabled now
             let wasEnabled = self.map.getMapState() instanceof PatherMapState;
             // Enable it now

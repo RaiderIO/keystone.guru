@@ -150,7 +150,7 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         // Remove any layers that were added before
-        this._removeObjectsFromLayer();
+        this._hideAllMapObjects();
 
         this.setVisibility(false);
     }
@@ -159,17 +159,16 @@ class MapObjectGroup extends Signalable {
      * Removes all objects' layer from the map layer.
      * @protected
      */
-    _removeObjectsFromLayer() {
+    _hideAllMapObjects() {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         // Remove any layers that were added before
         for (let i = 0; i < this.objects.length; i++) {
-            let obj = this.objects[i];
+            let mapObject = this.objects[i];
             // Remove all layers
-            if (obj.layer !== null) {
-                this.manager.map.leafletMap.removeLayer(obj.layer);
+            if (mapObject.layer !== null) {
                 // Clean it up properly
-                obj.setVisible(false);
+                this.setMapObjectVisibility(mapObject, false);
             }
         }
     }
@@ -426,6 +425,10 @@ class MapObjectGroup extends Signalable {
     setMapObjectVisibility(mapObject, visible) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
+        if( mapObject instanceof Path ){
+            console.warn(visible, mapObject.constructor.name);
+        }
+
         // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
         if (mapObject.layer !== null) {
@@ -490,10 +493,6 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
         console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
 
-        if( mapObject instanceof EnemyPatrol ){
-            console.warn(layer, mapObject, mapObject.shouldBeVisible());
-        }
-
         // Unset previous layer
         if (mapObject.layer !== null) {
             this.layerGroup.removeLayer(mapObject.layer);
@@ -550,19 +549,19 @@ class MapObjectGroup extends Signalable {
             let added = (!this.isShown() && visible);
             let removed = (this.isShown() && !visible);
             if (added) {
-                this.manager.map.leafletMap.addLayer(this.layerGroup);
+                this.signal('visibility:changed', {visible: true});
             } else if (removed) {
-                this.manager.map.leafletMap.removeLayer(this.layerGroup);
+                this.signal('visibility:changed', {visible: false});
             }
 
             if (added || removed) {
                 // Remove any layers that were added before
                 for (let i = 0; i < this.objects.length; i++) {
-                    let obj = this.objects[i];
+                    let mapObject = this.objects[i];
                     // Remove all layers
-                    if (obj.layer !== null) {
+                    if (mapObject.layer !== null) {
                         // Clean it up properly (if added, it's visible, if removed, not visible)
-                        obj.setVisible(added);
+                        mapObject.setVisible(added);
                     }
                 }
             }

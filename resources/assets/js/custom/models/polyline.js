@@ -27,9 +27,12 @@ class Polyline extends MapObject {
                     })
                 );
                 self._assignPopup(self.layerAnimated);
-
+                // Do not set visible to true - this will happen in shown/hidden events
                 self._setAnimatedLayerVisibility(true);
             }
+        });
+        this.register(['shown', 'hidden'], this, function (shownHiddenEvent) {
+            self._setAnimatedLayerVisibility(shownHiddenEvent.data.visible);
         });
     }
 
@@ -210,6 +213,7 @@ class Polyline extends MapObject {
         // Remove the animated layer if there was any
         this._setAnimatedLayerVisibility(false);
         this.map.unregister('map:mapstatechanged', this);
+        this.unregister(['shown', 'hidden'], this);
         this.unregister('synced', this);
     }
 }

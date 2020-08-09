@@ -24,7 +24,7 @@ class DungeonMap extends Signalable {
             // Add new controls; we're all loaded now and user should now be able to edit their route
             self._addMapControls(self.editableLayers);
 
-            self.signal('map:mapobjectgroupsfetchsuccess');
+            self.signal('map:mapobjectgroupsloaded');
         });
         this.enemyVisualManager = new EnemyVisualManager(this);
 
@@ -39,6 +39,9 @@ class DungeonMap extends Signalable {
                 let mapObject = addEvent.data.object;
                 self.mapObjects.push(mapObject);
                 if (mapObject.shouldBeVisible() && mapObject.layer !== null) {
+                    if( mapObject instanceof Path ) {
+                        console.warn('dungeonmap path');
+                    }
                     self.drawnLayers.addLayer(mapObject.layer);
 
                     // Make sure we know it's editable
@@ -95,6 +98,14 @@ class DungeonMap extends Signalable {
                         self.drawnLayers.removeLayer(object.layer);
                         self.editableLayers.removeLayer(object.layer);
                     }
+                }
+            });
+
+            mapObjectGroup.register('visibility:changed', this, function(visibilityChangedEvent) {
+                if( visibilityChangedEvent.data.visible ) {
+                    self.leafletMap.addLayer(visibilityChangedEvent.context.layerGroup);
+                } else {
+                    self.leafletMap.removeLayer(visibilityChangedEvent.context.layerGroup);
                 }
             });
         }

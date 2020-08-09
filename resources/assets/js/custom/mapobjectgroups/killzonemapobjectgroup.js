@@ -37,7 +37,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     //     console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
     //
     //     // Remove any layers that were added before
-    //     this._removeObjectsFromLayer.call(this);
+    //     this._hideAllMapObjects.call(this);
     //
     //     if (this.layerGroup !== null) {
     //         console.warn('Removing layer group from map');

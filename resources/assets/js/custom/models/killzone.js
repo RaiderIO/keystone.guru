@@ -799,7 +799,7 @@ class KillZone extends MapObject {
 
         this.map.register('killzone:selectionchanged', this, this.redrawConnectionsToEnemies.bind(this));
         // When we have all data, redraw the connections. Not sooner or otherwise we may not have the enemies back yet
-        this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+        this.map.register('map:mapobjectgroupsloaded', this, function () {
             // Hide the killzone layer when in preview mode
             if (self.map.options.noUI) {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
@@ -857,7 +857,7 @@ class KillZone extends MapObject {
         getState().getMapContext().unregister('teeming:changed', this);
         this.map.unregister('map:mapstatechanged', this);
         this.map.unregister('killzone:selectionchanged', this);
-        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
+        this.map.unregister('map:mapobjectgroupsloaded', this);
         this.map.unregister('map:beforerefresh', this);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);

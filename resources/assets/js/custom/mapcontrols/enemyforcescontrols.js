@@ -29,7 +29,7 @@ class EnemyForcesControls extends MapControl {
         };
 
         // Listen for when all enemies are loaded
-        this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+        this.map.register('map:mapobjectgroupsloaded', this, function () {
             let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
             // For each enemy we've loaded
@@ -191,7 +191,7 @@ class EnemyForcesControls extends MapControl {
 
         getState().getMapContext().unregister('teeming:changed', this);
         // Unreg from map
-        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
+        this.map.unregister('map:mapobjectgroupsloaded', this);
         // Unreg killzones
         let killzoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.unregister('object:add', this);

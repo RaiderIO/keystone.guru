@@ -61,7 +61,7 @@ class FactionDisplayControls extends MapControl {
             }
         };
 
-        this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+        this.map.register('map:mapobjectgroupsloaded', this, function () {
             // Start as Horde visible
             self._visibilityToggled('horde', true);
             self._visibilityToggled('alliance', false);
@@ -116,6 +116,6 @@ class FactionDisplayControls extends MapControl {
 
         console.assert(this instanceof FactionDisplayControls, 'this is not FactionDisplayControls', this);
 
-        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
+        this.map.unregister('map:mapobjectgroupsloaded', this);
     }
 }

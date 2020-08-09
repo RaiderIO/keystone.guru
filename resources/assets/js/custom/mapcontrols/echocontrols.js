@@ -12,7 +12,7 @@ class EchoControls extends MapControl {
         echo.register('user:remove', this, this._onUserRemove.bind(this));
         echo.register('user:colorchanged', this, this._onUserColorChanged.bind(this));
 
-        this.map.register('map:mapobjectgroupsfetchsuccess', this, this._onMapObjectGroupsFetchSuccess.bind(this));
+        this.map.register('map:mapobjectgroupsloaded', this, this._onMapObjectGroupsFetchSuccess.bind(this));
 
 
         this.mapControlOptions = {
@@ -189,7 +189,7 @@ class EchoControls extends MapControl {
         echo.unregister('user:remove', this);
         echo.unregister('user:colorchanged', this);
 
-        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
+        this.map.unregister('map:mapobjectgroupsloaded', this);
 
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
     }

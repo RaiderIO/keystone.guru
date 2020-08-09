@@ -426,6 +426,8 @@ class MapObject extends Signalable {
     _rebuildDecorator() {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
+        console.warn('_rebuildDecorator', this.constructor.name);
+
         this._cleanDecorator();
 
         this.decorator = this._getDecorator();
@@ -563,7 +565,7 @@ class MapObject extends Signalable {
             }
         }
 
-        if (this.hasOwnProperty('faction') ) {
+        if (this.hasOwnProperty('faction')) {
             let faction = mapContext.getFaction();
             // Only when not in try mode! (no idea why, it was like this)
             if (!this.map.isTryModeEnabled() && (this.faction !== 'any' && faction !== 'any' && this.faction !== faction)) {
