@@ -30,6 +30,7 @@ use Mockery\Exception;
  * @property Collection $enemypacks
  * @property Collection $enemypatrols
  * @property Collection $mapicons
+ * @property Collection $floorswitchmarkers
  *
  * @method static Builder active()
  * @method static Builder inactive()
@@ -157,6 +158,14 @@ class Dungeon extends Model
     public function mapicons()
     {
         return $this->hasManyThrough('App\Models\MapIcon', 'App\Models\Floor')->where('dungeon_route_id', -1);
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function floorswitchmarkers()
+    {
+        return $this->hasManyThrough('App\Models\DungeonFloorSwitchMarker', 'App\Models\Floor');
     }
 
     /**

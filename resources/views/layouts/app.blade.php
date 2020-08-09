@@ -197,8 +197,10 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                     @if( $user->hasRole('admin'))
                                         <a class="dropdown-item"
                                            href="{{ route('dashboard.home') }}">{{__('Admin dashboard')}}</a>
+                                        @if( env('TRACKER_ENABLED'))
                                         <a class="dropdown-item"
                                            href="{{ route('tracker.stats.index') }}">{{__('Admin stats')}}</a>
+                                        @endif
                                         <a class="dropdown-item"
                                            href="{{ route('admin.tools') }}">{{__('Admin tools')}}</a>
                                         <div class="dropdown-divider"></div>

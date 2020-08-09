@@ -3,7 +3,7 @@
  */
 class MapObjectGroup extends Signalable {
 
-    constructor(manager, names, field, editable = false) {
+    constructor(manager, names, editable = false) {
         super();
         // Ensure its an array
         if (typeof names === 'string') {
@@ -11,16 +11,14 @@ class MapObjectGroup extends Signalable {
         }
         console.assert(manager instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
         console.assert(typeof names === 'object', 'name is not an object', this);
-        console.assert(typeof field === 'string', 'this is not a String', this);
         console.assert(typeof editable === 'boolean', 'editable is not a boolean', this);
 
         this.manager = manager;
         this.names = names;
-        this.field = field;
         this.editable = editable;
 
         // False initially when not loaded anything in yet (from server). True after the initial loading.
-        this.initialized = false;
+        this._initialized = false;
 
         this.objects = [];
         this.layerGroup = null;
@@ -28,7 +26,6 @@ class MapObjectGroup extends Signalable {
         let self = this;
 
         // Callback to when the manager has received data from the server
-        this.manager.register('fetchsuccess', this, this._onFetchSuccess.bind(this));
         this.manager.map.register('map:beforerefresh', this, this._onBeforeRefresh.bind(this));
         // Whenever the map refreshes, we need to add ourselves to the map again
         this.manager.map.register('map:refresh', this, (function (data) {
@@ -52,7 +49,7 @@ class MapObjectGroup extends Signalable {
                 if (this.names.hasOwnProperty(index)) {
                     presenceChannel.listen(`.${this.names[index]}-changed`, (e) => {
                         if (self._shouldHandleChangedEchoEvent(e)) {
-                            self._restoreObject(e.model, e.user);
+                            self._loadMapObject(e.model, e.user);
                         }
                     }).listen(`.${this.names[index]}-deleted`, (e) => {
                         if (self._shouldHandleDeletedEchoEvent(e)) {
@@ -66,6 +63,14 @@ class MapObjectGroup extends Signalable {
                 }
             }
         }
+    }
+
+    /**
+     * @returns {[]}
+     * @protected
+     */
+    _getRawObjects() {
+        console.error('Implement _getRawObjects()!');
     }
 
     /**
@@ -83,7 +88,7 @@ class MapObjectGroup extends Signalable {
     /**
      * Checks if a received _changed_ event is applicable to this map object group.
      * @param e {Object}
-     * @returns {boolean|boolean}
+     * @returns {boolean}
      * @private
      */
     _shouldHandleChangedEchoEvent(e) {
@@ -109,7 +114,7 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Triggered when the seasonal index was changed.
-     * @param seasonalIndexChangedEvent
+     * @param seasonalIndexChangedEvent {object}
      * @private
      */
     _seasonalIndexChanged(seasonalIndexChangedEvent) {
@@ -138,17 +143,6 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
-     * May be overridden by implementing classes
-     * @param fetchEvent
-     * @private
-     */
-    _onFetchSuccess(fetchEvent) {
-        console.assert(this.objects.length === 0, 'objects must be empty after refresh', this, this.names, this.objects.length);
-
-        this._fetchSuccess(fetchEvent.data.response);
-    }
-
-    /**
      *
      * @protected
      */
@@ -156,36 +150,9 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         // Remove any layers that were added before
-        this._removeObjectsFromLayer.call(this);
+        this._removeObjectsFromLayer();
 
         this.setVisibility(false);
-
-        while (this.objects.length > 0) {
-            let obj = this.objects[0];
-            obj.localDelete();
-            obj.cleanup();
-        }
-        this.objects = [];
-    }
-
-    /**
-     * Refreshes the objects that are displayed on the map based on the current dungeon & selected floor.
-     */
-    _fetchSuccess(response) {
-        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-
-        let mapObjects = response[this.field];
-
-        console.assert(typeof mapObjects === 'object', 'mapObjects is not an array', mapObjects);
-
-        // Now draw the map objects on the map
-        for (let i = 0; i < mapObjects.length; i++) {
-            this._restoreObject(mapObjects[i]);
-        }
-
-        this.initialized = true;
-
-        this.signal('restorecomplete');
     }
 
     /**
@@ -252,24 +219,26 @@ class MapObjectGroup extends Signalable {
         if (mapObject.layer !== null) {
             mapObject.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
+
         return mapObject;
     }
 
     /**
-     * Restores an object that was received from the server
-     * @param remoteMapObject object
-     * @param username string
+     * Restores an object that was received from the server.
+     *
+     * @param remoteMapObject {object}
+     * @param username {string|null} The user that created this object (if done from Echo)
      * @return {MapObject}
      * @protected
      */
-    _restoreObject(remoteMapObject, username = null) {
+    _loadMapObject(remoteMapObject, username = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let mapObject = this.findMapObjectById(remoteMapObject.id);
         let options = this._getOptions(remoteMapObject);
 
         if (mapObject === null) {
-            mapObject = this.createNew(this._createLayer(remoteMapObject), options);
+            mapObject = this.createNewMapObject(this._createLayer(remoteMapObject), options);
         } else {
             mapObject = this._updateMapObject(remoteMapObject, mapObject, options);
         }
@@ -291,8 +260,8 @@ class MapObjectGroup extends Signalable {
 
     /**
      *
-     * @param localMapObject
-     * @param username
+     * @param localMapObject {MapObject}
+     * @param username {string}
      * @protected
      */
     _showReceivedFromEcho(localMapObject, username) {
@@ -320,7 +289,7 @@ class MapObjectGroup extends Signalable {
 
                 let tooltip = layer.bindTooltip(username, {
                     permanent: true,
-                    className: 'user_color_' + username + ' ' + fontClass,
+                    className: `user_color_${convertToSlug(username)} ${fontClass}`,
                     direction: 'top'
                 });
 
@@ -344,8 +313,8 @@ class MapObjectGroup extends Signalable {
 
     /**
      *
-     * @param localMapObject
-     * @param username
+     * @param localMapObject {MapObject}
+     * @param username {string}
      * @protected
      */
     _showDeletedFromEcho(localMapObject, username) {
@@ -362,21 +331,21 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Called whenever an object has deleted itself.
-     * @param data
+     * @param objectDeletedEvent {object}
      * @private
      */
-    _onObjectDeleted(data) {
+    _onObjectDeleted(objectDeletedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (data.context.layer !== null) {
-            this.layerGroup.removeLayer(data.context.layer);
+        if (objectDeletedEvent.context.layer !== null) {
+            this.layerGroup.removeLayer(objectDeletedEvent.context.layer);
             // @TODO Should this be put in the dungeonmap instead?
-            this.manager.map.leafletMap.removeLayer(data.context.layer);
+            this.manager.map.leafletMap.removeLayer(objectDeletedEvent.context.layer);
             // Clean it up properly
-            data.context.setVisible(false);
+            objectDeletedEvent.context.setVisible(false);
         }
 
-        let object = data.context;
+        let object = objectDeletedEvent.context;
 
         // Remove it from our records
         let newObjects = [];
@@ -394,13 +363,13 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Called whenever an object we created has finished wrapping up and is now synced
-     * @param data
+     * @param objectSyncedEvent {object}
      * @private
      */
-    _onObjectSynced(data) {
+    _onObjectSynced(objectSyncedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        let object = data.context;
+        let object = objectSyncedEvent.context;
 
         // We only use this trigger once to fire the object:add event, so unregister..
         object.unregister('synced', this);
@@ -414,29 +383,67 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
-     * Set the visibility of an individual object.
-     * @param object
-     * @param visible
+     * Loads MapObjects into this MapObjectGroup
      */
-    setMapObjectVisibility(object, visible) {
+    load() {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+        console.assert(!this._initialized, 'MapObjectGroup already loaded; cannot load again!', this);
+
+        if (!this._initialized) {
+            // Get the objects that we need to load
+            let mapObjects = this._getRawObjects();
+
+            console.assert(typeof mapObjects === 'object', 'mapObjects is not an array', mapObjects);
+
+            // Now draw the map objects on the map
+            for (let i = 0; i < mapObjects.length; i++) {
+                this._loadMapObject(mapObjects[i]);
+            }
+
+            this._initialized = true;
+
+            this.signal('loadcomplete');
+        }
+    }
+
+    /**
+     *
+     */
+    update() {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+        console.assert(this._initialized, 'MapObjectGroup is not yet loaded loaded!', this);
+
+        if (this._initialized) {
+            this._updateVisibility();
+        }
+    }
+
+    /**
+     * Set the visibility of an individual object.
+     * @param mapObject {MapObject}
+     * @param visible {boolean}
+     */
+    setMapObjectVisibility(mapObject, visible) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
-        if (object.layer !== null) {
+        if (mapObject.layer !== null) {
             if (visible) {
-                if (!this.layerGroup.hasLayer(object.layer)) {
-                    this.layerGroup.addLayer(object.layer);
+                if (!this.layerGroup.hasLayer(mapObject.layer)) {
+                    this.layerGroup.addLayer(mapObject.layer);
                     // Trigger this on the object
-                    object.setVisible(true);
-                    this.signal('object:shown', {object: object, objectgroup: this, visible: true});
+                    mapObject.setVisible(true);
+
+                    this.signal('mapobject:shown', {object: mapObject, objectgroup: this, visible: true});
                 }
             } else {
-                if (this.layerGroup.hasLayer(object.layer)) {
-                    this.layerGroup.removeLayer(object.layer);
+                if (this.layerGroup.hasLayer(mapObject.layer)) {
+                    this.layerGroup.removeLayer(mapObject.layer);
                     // Trigger this on the object
-                    object.setVisible(false);
-                    this.signal('object:hidden', {object: object, objectgroup: this, visible: false});
+                    mapObject.setVisible(false);
+
+                    this.signal('mapobject:hidden', {object: mapObject, objectgroup: this, visible: false});
                 }
             }
         }
@@ -444,18 +451,19 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Checks if a map object is visible on the map or not.
-     * @returns {*|boolean}
+     * @param mapObject {MapObject}
+     * @returns {boolean}
      */
-    isMapObjectVisible(object) {
+    isMapObjectVisible(mapObject) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        return this.layerGroup.hasLayer(object.layer);
+        return this.layerGroup.hasLayer(mapObject.layer);
     }
 
     /**
      * Finds an object in this map object group by its ID.
-     * @param id int
-     * @returns {*}
+     * @param id {Number}
+     * @returns {MapObject}
      */
     findMapObjectById(id) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
@@ -475,12 +483,16 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Sets a layer to an existing map object.
-     * @param layer
-     * @param mapObject
+     * @param layer {L.layer}
+     * @param mapObject {MapObject}
      */
     setLayerToMapObject(layer, mapObject) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
         console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
+
+        if( mapObject instanceof EnemyPatrol ){
+            console.warn(layer, mapObject, mapObject.shouldBeVisible());
+        }
 
         // Unset previous layer
         if (mapObject.layer !== null) {
@@ -500,16 +512,18 @@ class MapObjectGroup extends Signalable {
 
     /**
      *
-     * @param layer L.Layer
-     * @param options Object
+     * @param layer {L.layer}
+     * @param options {object}
      * @return MapObject
      */
-    createNew(layer, options) {
+    createNewMapObject(layer, options) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let mapObject = this._createMapObject(layer, options);
+        if( layer !== null ) {
+            mapObject.onLayerInit();
+        }
         this.objects.push(mapObject);
-        this.setLayerToMapObject(layer, mapObject);
 
         mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
         mapObject.register('synced', this, (this._onObjectSynced).bind(this));
@@ -519,7 +533,7 @@ class MapObjectGroup extends Signalable {
 
     /**
      * True if the object group is shown, false if it is hidden.
-     * @returns {*|boolean}
+     * @returns {boolean}
      */
     isShown() {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
@@ -528,7 +542,7 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Sets the visibility of this entire map object group
-     * @param visible
+     * @param visible {boolean}
      */
     setVisibility(visible) {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);

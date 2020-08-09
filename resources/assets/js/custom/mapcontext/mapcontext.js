@@ -108,6 +108,14 @@ class MapContext extends Signalable {
      *
      * @returns {[]}
      */
+    getDungeonFloorSwitchMarkers() {
+        return this._options.dungeon.dungeonFloorSwitchMarkers;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
     getNpcs() {
         return this._options.npcs;
     }

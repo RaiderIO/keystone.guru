@@ -1,9 +1,16 @@
 class BrushlineMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_BRUSHLINE, 'brushline', editable);
+        super(manager, MAP_OBJECT_GROUP_BRUSHLINE, editable);
 
         this.title = 'Hide/show brushlines';
         this.fa_class = 'fa-paint-brush';
+    }
+
+    /**
+     * @inheritDoc
+     **/
+    _getRawObjects() {
+        return getState().getMapContext().getBrushlines();
     }
 
     _createMapObject(layer, options = {}) {
@@ -15,7 +22,7 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
     /**
      * @inheritDoc
      */
-    _restoreObject(remoteMapObject, username = null) {
+    _loadMapObject(remoteMapObject, username = null) {
         console.assert(this instanceof BrushlineMapObjectGroup, 'this is not an BrushlineMapObjectGroup', this);
 
         // Fetch the existing path if it exists
@@ -34,7 +41,7 @@ class BrushlineMapObjectGroup extends MapObjectGroup {
         // Only create a new one if it's new for us
         if (brushline === null) {
             let layer = L.polyline(points);
-            brushline = this.createNew(layer);
+            brushline = this.createNewMapObject(layer);
         } else {
             // Update latlngs
             brushline.layer.setLatLngs(points);

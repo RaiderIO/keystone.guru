@@ -101,6 +101,9 @@ class EchoControls extends MapControl {
         // May be unset when not our own user, but this confuses handlebars
         user.self = user.name === getState().getUserName();
 
+        // Make sure spaces and special characters don't cause issues
+        user.slug = convertToSlug(user.name);
+
         let result = template($.extend({}, getHandlebarsDefaultVariables(), user));
         $('#edit_route_echo_members_container').append(
             result
@@ -120,7 +123,7 @@ class EchoControls extends MapControl {
     _removeUser(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         // Remove element
-        $('.echo_user_' + user.name).remove();
+        $(`.echo_user_${convertToSlug(user.name)}`).remove();
     }
 
     /**
@@ -139,13 +142,13 @@ class EchoControls extends MapControl {
         $("<style id='" + styleID + "'>")
             .prop('type', 'text/css')
             .html("\
-            .user_color_" + user.name + " {\
+            .user_color_" + convertToSlug(user.name) + " {\
                 background-color: " + user.color + " !important\
             }")
             .appendTo('head');
 
         // Update the text color depending on the luminance
-        let $user = $('.echo_user_' + user.name);
+        let $user = $(`.echo_user_${convertToSlug(user.name)}`);
         if (isColorDark(user.color)) {
             $user.addClass('text-white');
             $user.removeClass('text-dark');

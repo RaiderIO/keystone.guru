@@ -294,11 +294,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Show boss icon or not
         let hasBoss = false;
-        let enemies = getState().getEnemies();
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < killZone.enemies.length; i++) {
             let enemyId = killZone.enemies[i];
-            for (let j = 0; j < enemies.length; j++) {
-                let enemy = enemies[j];
+            for (let j = 0; j < enemyMapObjectGroup.objects.length; j++) {
+                let enemy = enemyMapObjectGroup.objects[j];
                 if (enemy.id === enemyId && enemy.npc !== null && enemy.npc.classification_id >= 3) {
                     hasBoss = true;
                     break;
@@ -357,11 +358,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         // Fill the enemy list
         let npcs = [];
-        let enemies = getState().getEnemies();
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < killZone.enemies.length; i++) {
             let enemyId = killZone.enemies[i];
-            for (let j = 0; j < enemies.length; j++) {
-                let enemy = enemies[j];
+            for (let j = 0; j < enemyMapObjectGroup.objects.length; j++) {
+                let enemy = enemyMapObjectGroup.objects[j];
                 // If enemy found and said enemy has an npc
                 if (enemy.id === enemyId && enemy.npc !== null) {
                     // If not in our array, add it
@@ -508,7 +509,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // Stop listening to changes in the killzone
             killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self);
         });
-        killZoneMapObjectGroup.register('restorecomplete', this, function () {
+        killZoneMapObjectGroup.register('loadcomplete', this, function () {
             $('#killzones_loading').hide();
             if (killZoneMapObjectGroup.objects.length === 0) {
                 $('#killzones_no_pulls').show();

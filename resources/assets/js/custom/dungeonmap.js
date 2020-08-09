@@ -20,7 +20,7 @@ class DungeonMap extends Signalable {
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());
-        this.mapObjectGroupManager.register('fetchsuccess', this, function () {
+        this.mapObjectGroupManager.register('loaded', this, function () {
             // Add new controls; we're all loaded now and user should now be able to edit their route
             self._addMapControls(self.editableLayers);
 
@@ -36,19 +36,19 @@ class DungeonMap extends Signalable {
             let mapObjectGroup = this.mapObjectGroupManager.mapObjectGroups[i];
 
             mapObjectGroup.register('object:add', this, function (addEvent) {
-                let object = addEvent.data.object;
-                self.mapObjects.push(object);
-                if (object.layer !== null) {
-                    self.drawnLayers.addLayer(object.layer);
+                let mapObject = addEvent.data.object;
+                self.mapObjects.push(mapObject);
+                if (mapObject.shouldBeVisible() && mapObject.layer !== null) {
+                    self.drawnLayers.addLayer(mapObject.layer);
 
                     // Make sure we know it's editable
-                    if (object.isEditable() && addEvent.data.objectgroup.editable && self.options.edit) {
-                        self.editableLayers.addLayer(object.layer);
+                    if (mapObject.isEditable() && addEvent.data.objectgroup.editable && self.options.edit) {
+                        self.editableLayers.addLayer(mapObject.layer);
                     }
                 }
 
-                if (object instanceof Enemy && !(self instanceof AdminDungeonMap)) {
-                    object.register('enemy:clicked', self, self._enemyClicked.bind(self));
+                if (mapObject instanceof Enemy && !(self instanceof AdminDungeonMap)) {
+                    mapObject.register('enemy:clicked', self, self._enemyClicked.bind(self));
                 }
             });
 
@@ -77,7 +77,7 @@ class DungeonMap extends Signalable {
 
             // Make sure we don't try to edit layers that aren't visible because they're hidden
             // If we don't do this and we have a hidden object, editing layers will break the moment you try to use it
-            mapObjectGroup.register(['object:shown', 'object:hidden'], this, function (visibilityEvent) {
+            mapObjectGroup.register(['mapobject:shown', 'mapobject:hidden'], this, function (visibilityEvent) {
                 let object = visibilityEvent.data.object;
                 // If it's visible now and the layer is not added already
                 if (object.layer !== null) {
@@ -226,7 +226,7 @@ class DungeonMap extends Signalable {
                     // No longer in AddKillZoneMapState; we finished
                     self.setMapState(null);
                 } else {
-                    mapObject = mapObjectGroup.createNew(event.layer);
+                    mapObject = mapObjectGroup.createNewMapObject(event.layer);
                 }
                 // Save it to server instantly, manually saving is meh
                 mapObject.save();
@@ -582,9 +582,9 @@ class DungeonMap extends Signalable {
         }).addTo(this.leafletMap);
 
         this.editableLayers = new L.FeatureGroup();
-
         // Refresh the list of drawn items
         this.drawnLayers = new L.FeatureGroup();
+
         this.leafletMap.addLayer(this.drawnLayers);
         this.leafletMap.addLayer(this.editableLayers);
 
@@ -618,7 +618,7 @@ class DungeonMap extends Signalable {
 
             let layer = L.polyline(points);
 
-            let object = mapObjectGroup.createNew(layer);
+            let object = mapObjectGroup.createNewMapObject(layer);
             object.save();
 
             // Remove it from Pather, we only use Pather for creating the actual layer

@@ -46,9 +46,6 @@ class MapObject extends Signalable {
         this.label = 'default label';
         this.decorator = null;
 
-        this.register('synced', this, function () {
-            self._rebuildDecorator();
-        });
         this.register('object:deleted', this, function () {
             self._cleanDecorator();
         });

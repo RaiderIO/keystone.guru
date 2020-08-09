@@ -3,10 +3,17 @@
  */
 class KillZoneMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_KILLZONE, '', editable);
+        super(manager, MAP_OBJECT_GROUP_KILLZONE, editable);
 
         this.title = 'Hide/show killzone';
         this.fa_class = 'fa-bullseye';
+    }
+
+    /**
+     * @inheritDoc
+     **/
+    _getRawObjects() {
+        return getState().getMapContext().getKillZones();
     }
 
     /**
@@ -20,40 +27,30 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return layer;
     }
 
-    /**
-     * We override this function because we do not want to destroy all killzones upon refresh. Instead, we want to hide
-     * everything and show that which needs to be shown.
-     * @param beforeRefreshEvent
-     * @private
-     */
-    _onBeforeRefresh(beforeRefreshEvent) {
-        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
-
-        // Remove any layers that were added before
-        this._removeObjectsFromLayer.call(this);
-
-        if (this.layerGroup !== null) {
-            console.warn('Removing layer group from map');
-            // Remove ourselves from the map prior to refreshing
-            this.manager.map.leafletMap.removeLayer(this.layerGroup);
-        }
-
-        // Prevent writing our empty state back to the killzone list upon initial load
-        if (this.initialized) {
-            // Write the killzones we know back in the state so we can restore them later on
-            // getState().updateKillZones(this.objects);
-        }
-    }
-
-    /**
-     * May be overridden by implementing classes
-     * @param fetchEvent
-     * @private
-     */
-    _onFetchSuccess(fetchEvent) {
-        // No assert here, we manage the killzones ourselves and they are persistent across refreshes
-        this._fetchSuccess(fetchEvent.data.response);
-    }
+    // /**
+    //  * We override this function because we do not want to destroy all killzones upon refresh. Instead, we want to hide
+    //  * everything and show that which needs to be shown.
+    //  * @param beforeRefreshEvent
+    //  * @private
+    //  */
+    // _onBeforeRefresh(beforeRefreshEvent) {
+    //     console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
+    //
+    //     // Remove any layers that were added before
+    //     this._removeObjectsFromLayer.call(this);
+    //
+    //     if (this.layerGroup !== null) {
+    //         console.warn('Removing layer group from map');
+    //         // Remove ourselves from the map prior to refreshing
+    //         this.manager.map.leafletMap.removeLayer(this.layerGroup);
+    //     }
+    //
+    //     // Prevent writing our empty state back to the killzone list upon initial load
+    //     if (this.initialized) {
+    //         // Write the killzones we know back in the state so we can restore them later on
+    //         // getState().updateKillZones(this.objects);
+    //     }
+    // }
 
     _onObjectDeleted(data) {
         super._onObjectDeleted(data);
@@ -84,7 +81,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             killzoneEnemies.push({enemy_id: enemyIds[i]});
         }
 
-        let killZone = this._restoreObject({
+        let killZone = this._loadMapObject({
             id: -1,
             color: c.map.killzone.polygonOptions.color(),
             floor_id: -1, // Only for the killzone location which is not set from a 'new pull'
@@ -173,42 +170,42 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         });
     }
 
-    _fetchSuccess(response) {
-        // no super call, we're handling this by ourselves
-        console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
-
-        if (!this.initialized) {
-            let killZones = getState().getMapContext().getKillZones();
-
-            // Now draw the enemies on the map, if any
-            for (let index in killZones) {
-                // Only if actually set
-                if (killZones.hasOwnProperty(index)) {
-                    let killZone = killZones[index];
-                    // Only restore enemies for the current floor
-                    this._restoreObject(killZone);
-                }
-            }
-
-            this.initialized = true;
-
-            this.signal('restorecomplete');
-        } else {
-            // Show any killzones that are on the new floor
-            for (let index in this.objects) {
-                if (this.objects.hasOwnProperty(index)) {
-                    let killZone = this.objects[index];
-                    // Re-set the enemy list
-                    killZone.setEnemies([...killZone.enemies]);
-
-                    // Only display the kill zone's kill area if it's on our current floor
-                    if (killZone.layer !== null && killZone.floor_id === getState().getCurrentFloor().id) {
-                        this.setMapObjectVisibility(killZone, true);
-                    }
-                }
-            }
-
-            this.setVisibility(true);
-        }
-    }
+    // _fetchSuccess(response) {
+    //     // no super call, we're handling this by ourselves
+    //     console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
+    //
+    //     if (!this.initialized) {
+    //         let killZones = getState().getMapContext().getKillZones();
+    //
+    //         // Now draw the enemies on the map, if any
+    //         for (let index in killZones) {
+    //             // Only if actually set
+    //             if (killZones.hasOwnProperty(index)) {
+    //                 let killZone = killZones[index];
+    //                 // Only restore enemies for the current floor
+    //                 this._loadMapObject(killZone);
+    //             }
+    //         }
+    //
+    //         this.initialized = true;
+    //
+    //         this.signal('loadcomplete');
+    //     } else {
+    //         // Show any killzones that are on the new floor
+    //         for (let index in this.objects) {
+    //             if (this.objects.hasOwnProperty(index)) {
+    //                 let killZone = this.objects[index];
+    //                 // Re-set the enemy list
+    //                 killZone.setEnemies([...killZone.enemies]);
+    //
+    //                 // Only display the kill zone's kill area if it's on our current floor
+    //                 if (killZone.layer !== null && killZone.floor_id === getState().getCurrentFloor().id) {
+    //                     this.setMapObjectVisibility(killZone, true);
+    //                 }
+    //             }
+    //         }
+    //
+    //         this.setVisibility(true);
+    //     }
+    // }
 }

@@ -1,9 +1,16 @@
 class MapIconMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, [MAP_OBJECT_GROUP_MAPICON, MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK], 'mapicon', editable);
+        super(manager, [MAP_OBJECT_GROUP_MAPICON, MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK], editable);
 
         this.title = 'Hide/show map icons';
         this.fa_class = 'fa-icons';
+    }
+
+    /**
+     * @inheritDoc
+     **/
+    _getRawObjects() {
+        return getState().getMapContext().getMapIcons();
     }
 
     _createMapObject(layer, options = {}) {
@@ -30,7 +37,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
     /**
      * @inheritDoc
      */
-    _restoreObject(remoteMapObject, username = null) {
+    _loadMapObject(remoteMapObject, username = null) {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
         // Fetch the existing map icon if it exists
         /** @type {MapIcon} */
@@ -44,7 +51,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
             layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
 
             // Pass the map icon type here so layer initialization can take the type into account
-            mapIcon = this.createNew(layer, {mapIconType: getState().getMapIconType(remoteMapObject.map_icon_type_id)});
+            mapIcon = this.createNewMapObject(layer, {mapIconType: getState().getMapIconType(remoteMapObject.map_icon_type_id)});
         } else {
             // Update position if it already existed
             mapIcon.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));

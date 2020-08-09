@@ -27,7 +27,7 @@ class EnemyPatrol extends Polyline {
      * @returns {*}
      * @private
      */
-    _getDecorator(){
+    _getDecorator() {
         return L.polylineDecorator(this.layer, {
             patterns: [
                 {

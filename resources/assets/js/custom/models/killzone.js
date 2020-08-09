@@ -416,7 +416,7 @@ class KillZone extends MapObject {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
             if (enemy !== null) {
-                if (enemy.layer !== null) {
+                if (enemy.shouldBeVisible()) {
                     let latLng = enemy.layer.getLatLng();
                     latLngs.push([latLng.lat, latLng.lng]);
                 }

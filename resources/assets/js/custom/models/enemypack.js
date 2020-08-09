@@ -84,7 +84,7 @@ class EnemyPack extends MapObject {
         super.loadRemoteMapObject(remoteMapObject);
 
         // Only called when not in admin state
-        if (this.layer === null) {
+        if (getState().getMapContext() instanceof MapContextDungeonRoute) {
             // Re-set the layer now that we know of the raw enemies
             this.setRawEnemies(remoteMapObject.enemies);
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
@@ -129,7 +129,7 @@ class EnemyPack extends MapObject {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
 
-            if (enemy !== null && enemy.layer !== null && enemy.isVisible()) {
+            if (enemy !== null && enemy.layer !== null && enemy.shouldBeVisible()) {
                 let enemyLatLng = enemy.layer.getLatLng();
                 latLngs.push([enemyLatLng.lat, enemyLatLng.lng]);
             }
@@ -153,7 +153,7 @@ class EnemyPack extends MapObject {
 
 
         if (result === null) {
-            console.warn(`Unable to create layer for enemypack ${this.id}; not enough data points`);
+            console.warn(`Unable to create hull layer for enemypack ${this.id}; not enough data points`);
         }
 
         // May be null

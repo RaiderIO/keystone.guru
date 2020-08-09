@@ -26,6 +26,18 @@ if (typeof getState !== 'function') {
     }
 })();
 
+/**
+ * Converts 'This is a text' to 'this-is-a-text'.
+ * @param text {string}
+ * @returns {string}
+ */
+function convertToSlug(text) {
+    return text
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-');
+}
+
 function getDistanceSquared(xy1, xy2) {
     return Math.pow(xy1[0] - xy2[0], 2) + Math.pow(xy1[1] - xy2[1], 2);
 }

@@ -58,9 +58,10 @@ abstract class MapContext
             'seasonalIndex' => $this->getSeasonalIndex(),
             'dungeon'       => array_merge($this->_floor->dungeon->toArray(), $this->getEnemies(), [
                 'enemies' => $dungeon->enemies,
-                'enemyPacks' => $dungeon->enemypacks,
+                'enemyPacks' => $dungeon->enemypacks()->with(['enemies:enemies.id,enemies.enemy_pack_id,enemies.lat,enemies.lng'])->get(),
                 'enemyPatrols' => $dungeon->enemypatrols,
                 'mapIcons' => $dungeon->mapicons,
+                'dungeonFloorSwitchMarkers' => $dungeon->floorswitchmarkers
             ]),
             // @TODO Probably move this? Temp fix
             'npcsMinHealth' => $this->_floor->dungeon->getNpcsMinHealth(),

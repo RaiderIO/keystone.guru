@@ -1,9 +1,16 @@
 class EnemyPatrolMapObjectGroup extends PolylineMapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_ENEMY_PATROL, 'enemypatrol', editable);
+        super(manager, MAP_OBJECT_GROUP_ENEMY_PATROL, editable);
 
         this.title = 'Hide/show enemy patrol routes';
         this.fa_class = 'fa-exchange-alt';
+    }
+
+    /**
+     * @inheritDoc
+     **/
+    _getRawObjects() {
+        return getState().getMapContext().getEnemyPatrols();
     }
 
     /**
