@@ -36,6 +36,10 @@ class EnemyVisual extends Signalable {
         this.enemy.register(['shown', 'hidden'], this, function (event) {
             if (event.data.visible) {
                 self.buildVisual();
+                // if( self._divIcon === null ) {
+                // } else {
+                //     self.refreshSize();
+                // }
             } else {
                 // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
                 // We don't need to do anything since if the visual is added again, we're going to re-create it anyways

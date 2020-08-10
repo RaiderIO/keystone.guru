@@ -98,10 +98,10 @@ class Signalable {
             let caller = this.signals[i];
 
             if (caller.name === name) {
-                if( caller.listener instanceof Signalable && caller.listener.cleanedUp ){
+                if (caller.listener instanceof Signalable && caller.listener.cleanedUp) {
                     console.error(`Unable to send signal '${caller.name}' to object because it's cleaned up and it should have unregged!`, caller);
                 } else {
-                    caller.callback({name:name, context: self, data: data});
+                    caller.callback({name: name, context: self, data: data});
                 }
             }
         }
@@ -116,7 +116,7 @@ class Signalable {
         this.signals = [];
     }
 
-    cleanup(){
+    cleanup() {
         this.cleanedUp = true;
     }
 }

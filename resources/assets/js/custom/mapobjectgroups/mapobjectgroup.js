@@ -28,7 +28,7 @@ class MapObjectGroup extends Signalable {
         // Callback to when the manager has received data from the server
         this.manager.map.register('map:beforerefresh', this, this._onBeforeRefresh.bind(this));
         // Whenever the map refreshes, we need to add ourselves to the map again
-        this.manager.map.register('map:refresh', this, (function (data) {
+        this.manager.map.register('map:refresh', this, (function (mapRefreshEvent) {
             // Rebuild the layer group
             self.layerGroup = new L.LayerGroup();
 
