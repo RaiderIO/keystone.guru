@@ -91,7 +91,7 @@ Note: change the `PATH_TO_PRIVATE_KEY` to your SSH private key. If you don't kno
 
 ## Vagrantfile
 
-Edit your `Vagrantfile` file to contain the following:
+Edit your `Vagrantfile` file(located in the Homestead folder) to contain the following:
 
 ```yaml
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -117,7 +117,7 @@ Open up `C:\Windows\system32\drivers\etc\hosts` file in an elevated notepad. Add
 ```
 
 ## Start your Vagrant box
-In an elevated command prompt (run as administrator) `cd` to where you checked out Homestead, and run `vagrant up`. This should boot up your VM. If you get any errors at this point, hit me up.
+In an elevated command prompt (run as administrator) `cd` to where you checked out Homestead, and run `vagrant up`. This should boot up your VM. Then run `vagrant ssh` to enter the VM. If you get any errors at this point, hit me up.
 
 ## Once you're in
 Run this bash to install PhpMyAdmin (skip if you use MySQLWorkbench or anything else to manage your database)
@@ -130,7 +130,7 @@ Now that you've installed PHPMyAdmin, reboot the VM so that all changes are appl
 
 ## Update crontab
 
-Add this line to your crontab:
+Add this line to your crontab(located /etc/crontab):
 
 ``` 
 *   * *   *   *   root php /home/vagrant/Git/keystone.guru/artisan schedule:run 
@@ -143,7 +143,7 @@ Warning! Make sure your `crontab` file ends with an empty line! Otherwise it won
 </aside>
 
 ## Setup database
-Go to `http://phpmyadmin.test` and log in using `homestead//password`. If you get `no input file specified` you need to either run `vagrant provision` and/or verify your file mapping in your Homestead.yaml is 100% correct.
+Go to `http://phpmyadmin.test` and log in using `homestead//secret`. If you get `no input file specified` you need to either run `vagrant provision` and/or verify your file mapping in your Homestead.yaml is 100% correct.
 
 Create a database for Keystone.guru to save its data. Create a user (or use the default one, I guess) for it as well.
 Create another database for the statistics tracker.
@@ -156,7 +156,7 @@ Open a SSH connection to your vagrant machine and run the following:
 
 ```bash
 cd /home/vagrant/Git/keystone.guru
-./update_dependencies.sh
+./init_new_server.sh
 ```
 
 The above installs all dependencies that are necessary for Keystone.guru to function. This will take a while. Once this has completed, continue.
