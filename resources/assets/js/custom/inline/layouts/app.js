@@ -210,7 +210,7 @@ function defaultAjaxErrorFn(xhr, textStatus, errorThrown)
  * Refreshes fancy tooltips on all elements that request for them.
  */
 function refreshTooltips($element = null) {
-    console.warn('refreshing tooltips', $element);
+    // console.warn('refreshing tooltips', $element);
     if (!isMobile()) {
         $('.tooltip').remove();
         if( $element === null ){

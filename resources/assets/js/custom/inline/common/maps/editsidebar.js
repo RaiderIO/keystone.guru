@@ -131,15 +131,19 @@ class CommonMapsEditsidebar extends InlineCode {
         let isNull = focusedEnemy === null;
         // Show/hide based on being set or not
         // $('#enemy_info_container').toggle(!isNull);
-        $('#enemy_info_container').show();
         if (!isNull) {
-            // Update the focused enemy in the sidebar
-            let template = Handlebars.templates['map_sidebar_enemy_info_template'];
+            let visualData = focusedEnemy.getVisualData();
+            if (visualData !== null) {
+                $('#enemy_info_container').show();
 
-            $('#enemy_info_key_value_container').html(
-                template(focusedEnemy.getVisualData())
-            )
-            $('#enemy_report_enemy_id').val(focusedEnemy.id);
+                // Update the focused enemy in the sidebar
+                let template = Handlebars.templates['map_sidebar_enemy_info_template'];
+
+                $('#enemy_info_key_value_container').html(
+                    template(visualData)
+                );
+                $('#enemy_report_enemy_id').val(focusedEnemy.id);
+            }
         }
     }
 

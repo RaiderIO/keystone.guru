@@ -168,6 +168,19 @@ class AdminEnemy extends Enemy {
     }
 
     /**
+     * Set this enemy to be selectable whenever the user wants to select enemies.
+     * @param value boolean True or false
+     */
+    setSelectable(value) {
+        super.setSelectable(value);
+
+        if (this.visual !== null) {
+            // Refresh the icon
+            this.visual.refresh();
+        }
+    }
+
+    /**
      * May only edit when we're not an MDT enemy
      * @returns {boolean}
      */

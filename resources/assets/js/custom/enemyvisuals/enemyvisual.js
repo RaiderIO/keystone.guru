@@ -34,12 +34,12 @@ class EnemyVisual extends Signalable {
         let self = this;
         // Build and/or destroy the visual based on visibility
         this.enemy.register(['shown', 'hidden'], this, function (shownHiddenEvent) {
-            if (shownHiddenEvent.data.visible) {
-                self.buildVisual();
-                // if( self._divIcon === null ) {
-                // } else {
-                //     self.refreshSize();
-                // }
+            if (shownHiddenEvent.data.visible && enemy.shouldBeVisible()) {
+                if (self._divIcon === null) {
+                    self.buildVisual();
+                } else {
+                    self.refreshSize();
+                }
             } else {
                 // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
                 // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
@@ -55,14 +55,14 @@ class EnemyVisual extends Signalable {
             killZone.register('object:deleted', self, self.buildVisual.bind(self));
 
             // Check if we can shortcut by updating just the border
-            if ((killZoneAttachedEvent.data.previousKillZone instanceof KillZone && !(killZone instanceof KillZone)) ||
-                (!(killZoneAttachedEvent.data.previousKillZone instanceof KillZone) && killZone instanceof KillZone)) {
-                // We cannot
-                self.buildVisual();
-            } else {
+            // if ((killZoneAttachedEvent.data.previousKillZone instanceof KillZone && !(killZone instanceof KillZone)) ||
+            //     (!(killZoneAttachedEvent.data.previousKillZone instanceof KillZone) && killZone instanceof KillZone)) {
+            //     // We cannot
+            //     self.buildVisual();
+            // } else {
                 // From killzone to killzone we can, otherwise we can't
                 self._updateBorder(killZone.color);
-            }
+            // }
         });
         // Cleanup if it's detached
         this.enemy.register('killzone:detached', this, function (event) {
@@ -328,6 +328,8 @@ class EnemyVisual extends Signalable {
     buildVisual() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
+        console.warn(`building visual`);
+
         // Determine which modifiers the visual should have
 
         // If the object is invisible, don't build the visual
@@ -437,7 +439,11 @@ class EnemyVisual extends Signalable {
     refreshSize(adjustParent = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
-        if( this._$mainVisual.length === 0 ){
+        if( adjustParent ) {
+            console.warn(`refreshing size`);
+        }
+
+        if (this._$mainVisual.length === 0) {
             console.warn('Unable to refresh size of visual that no longer exists');
             return;
         }

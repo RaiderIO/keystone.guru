@@ -21,7 +21,7 @@ class MapObjectGroup extends Signalable {
         this._initialized = false;
 
         this.objects = [];
-        this.layerGroup = null;
+        this.layerGroup = new L.LayerGroup();
 
         let self = this;
 
