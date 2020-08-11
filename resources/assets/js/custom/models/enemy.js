@@ -54,7 +54,6 @@ class Enemy extends MapObject {
         // The visual display of this enemy
         this.visual = null;
         this.isPopupEnabled = false;
-        this.visual = new EnemyVisual(this.map, this, this.layer);
 
         // MDT
         this.mdt_id = -1;
@@ -243,6 +242,8 @@ class Enemy extends MapObject {
             // Hide this enemy by default
             this.setDefaultVisible(this.shouldBeVisible());
         }
+
+        this.visual = new EnemyVisual(this.map, this, this.layer);
     }
 
     /**

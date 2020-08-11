@@ -554,7 +554,28 @@ class MapObject extends Signalable {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         let state = getState();
+
+        // Floor states; most common reason for not being visible
+        if (state.getCurrentFloor().id !== this.floor_id) {
+            // console.log(`Hiding enemy due to floor ${this.id}`);
+            return false;
+        }
+
+        // All other states
         let mapContext = state.getMapContext();
+
+        if (this.hasOwnProperty('teeming')) {
+            // If the map isn't teeming, but the enemy is teeming..
+            if (!mapContext.getTeeming() && this.teeming === 'visible') {
+                // console.log(`Hiding enemy due to teeming A ${this.id}`);
+                return false;
+            }
+            // If the map is teeming, but the enemy shouldn't be there for teeming maps..
+            else if (mapContext.getTeeming() && this.teeming === 'invisible') {
+                // console.log(`Hiding enemy due to teeming B ${this.id}`);
+                return false;
+            }
+        }
 
         if (this.hasOwnProperty('seasonal_index')) {
             if (this.seasonal_index !== null && mapContext.getSeasonalIndex() !== this.seasonal_index) {
@@ -570,25 +591,6 @@ class MapObject extends Signalable {
                 // console.log(`Hiding enemy due to faction ${this.id}`);
                 return false;
             }
-        }
-
-        if (this.hasOwnProperty('teeming')) {
-            // If the map isn't teeming, but the enemy is teeming..
-            if (!mapContext.getTeeming() && this.teeming === 'visible') {
-                // console.log(`Hiding enemy due to teeming A ${this.id}`);
-                return false;
-            }
-            // If the map is teeming, but the enemy shouldn't be there for teeming maps..
-            else if (mapContext.getTeeming() && this.teeming === 'invisible') {
-                // console.log(`Hiding enemy due to teeming B ${this.id}`);
-                return false;
-            }
-        }
-
-        // Floor states
-        if (state.getCurrentFloor().id !== this.floor_id) {
-            // console.log(`Hiding enemy due to floor ${this.id}`);
-            return false;
         }
 
         return true;

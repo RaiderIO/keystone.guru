@@ -33,8 +33,8 @@ class EnemyVisual extends Signalable {
 
         let self = this;
         // Build and/or destroy the visual based on visibility
-        this.enemy.register(['shown', 'hidden'], this, function (event) {
-            if (event.data.visible) {
+        this.enemy.register(['shown', 'hidden'], this, function (shownHiddenEvent) {
+            if (shownHiddenEvent.data.visible) {
                 self.buildVisual();
                 // if( self._divIcon === null ) {
                 // } else {
@@ -505,6 +505,7 @@ class EnemyVisual extends Signalable {
         let result = 1000000;
 
         if (this._$mainVisual !== null && this._$mainVisual.length > 0 && this._managedBy === this.enemy.id) {
+
             let offset = this._$mainVisual.offset();
             let iconSize = this.mainVisual.getSize();
             let size = iconSize.iconSize[0];
