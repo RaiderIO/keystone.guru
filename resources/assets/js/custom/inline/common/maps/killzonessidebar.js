@@ -98,7 +98,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 }
 
                 // Center the map to this killzone
-                if (killZone.isVisibleOnScreen() && killZone.enemies.length > 0) {
+                if (killZone.enemies.length > 0 && killZone.isVisible()) {
                     getState().getDungeonMap().leafletMap.setView(killZone.getLayerCenteroid(), getState().getMapZoomLevel())
                 }
             }
@@ -209,7 +209,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         }
 
         // No need to refresh - synced will be set to true, then this function will be triggered (because we listen for it)
-        // this._refreshKillZone(killZone);
+        this._refreshKillZone(killZone);
     }
 
     /**
@@ -490,16 +490,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             self._newPullKillZone = killZoneCreatedEvent.data.newKillZone;
         });
         killZoneMapObjectGroup.register('object:add', this, function (killZoneAddedEvent) {
-            let killZone = killZoneAddedEvent.data.object;
-            // Add the killzone to our list
-            self._addKillZone(killZone);
-            // Listen to changes in the killzone
-            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self, function (killZoneChangedEvent) {
-                // Do not change the sidebar as we're refreshing the map; that's pointless (lots of adds/removes going on)
-                if (!self.map.isRefreshingMap()) {
-                    self._refreshKillZone(killZoneChangedEvent.context);
-                }
-            });
+            self._onKillZoneAdded(killZoneAddedEvent.data.object);
         });
         // If the killzone was deleted, get rid of our display too
         killZoneMapObjectGroup.register('object:deleted', this, function (killZoneDeletedEvent) {
@@ -509,12 +500,20 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // Stop listening to changes in the killzone
             killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self);
         });
-        killZoneMapObjectGroup.register('loadcomplete', this, function () {
-            $('#killzones_loading').hide();
-            if (killZoneMapObjectGroup.objects.length === 0) {
-                $('#killzones_no_pulls').show();
-            }
 
+        console.assert(killZoneMapObjectGroup.isInitialized(), 'KillZoneMapObjectGroup must be initialized!', this);
+
+        $('#killzones_loading').hide();
+        if (killZoneMapObjectGroup.objects.length === 0) {
+            $('#killzones_no_pulls').show();
+        } else {
+            // Load all existing killzones
+            for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
+                self._onKillZoneAdded(killZoneMapObjectGroup.objects[i]);
+            }
+        }
+
+        if (this.map.options.edit) {
             this._draggable = new Draggable.Sortable(document.querySelectorAll('#killzones_container'), {
                 draggable: '.map_killzonessidebar_killzone',
                 classes: 'bg-primary'
@@ -527,10 +526,44 @@ class CommonMapsKillzonessidebar extends InlineCode {
             //         console.log(events[index]);
             //     });
             // }
+        }
+    }
+
+    /**
+     *
+     * @param killZone
+     * @private
+     */
+    _onKillZoneAdded(killZone) {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+
+        let self = this;
+
+        // Add the killzone to our list
+        this._addKillZone(killZone);
+        // Listen to changes in the killzone
+        killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], this, function (killZoneChangedEvent) {
+            self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
         });
     }
 
+    /**
+     *
+     * @param killZone
+     * @private
+     */
+    _onKillZoneEnemyChanged(killZone) {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+
+        // Do not change the sidebar as we're refreshing the map; that's pointless (lots of adds/removes going on)
+        if (!this.map.isRefreshingMap()) {
+            this._refreshKillZone(killZone);
+        }
+    }
+
     _draggedKillZoneRow() {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
+
         this._dragHasSwitchedOrder = true;
     }
 
@@ -568,7 +601,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 }
             }
 
-            if( getState().getMapContext().getPullGradientApplyAlways() ) {
+            if (getState().getMapContext().getPullGradientApplyAlways()) {
                 killZoneMapObjectGroup.applyPullGradient();
             }
             killZoneMapObjectGroup.saveAll(['index', 'color']);

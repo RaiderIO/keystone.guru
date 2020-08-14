@@ -27,31 +27,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return layer;
     }
 
-    // /**
-    //  * We override this function because we do not want to destroy all killzones upon refresh. Instead, we want to hide
-    //  * everything and show that which needs to be shown.
-    //  * @param beforeRefreshEvent
-    //  * @private
-    //  */
-    // _onBeforeRefresh(beforeRefreshEvent) {
-    //     console.assert(this instanceof KillZoneMapObjectGroup, 'this is not an KillZoneMapObjectGroup', this);
-    //
-    //     // Remove any layers that were added before
-    //     this._hideAllMapObjects.call(this);
-    //
-    //     if (this.layerGroup !== null) {
-    //         console.warn('Removing layer group from map');
-    //         // Remove ourselves from the map prior to refreshing
-    //         this.manager.map.leafletMap.removeLayer(this.layerGroup);
-    //     }
-    //
-    //     // Prevent writing our empty state back to the killzone list upon initial load
-    //     if (this.initialized) {
-    //         // Write the killzones we know back in the state so we can restore them later on
-    //         // getState().updateKillZones(this.objects);
-    //     }
-    // }
-
     _onObjectDeleted(data) {
         super._onObjectDeleted(data);
 

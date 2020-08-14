@@ -328,7 +328,7 @@ class EnemyVisual extends Signalable {
     buildVisual() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
-        console.warn(`building visual`);
+        // console.warn(`building visual`);
 
         // Determine which modifiers the visual should have
 
@@ -439,9 +439,9 @@ class EnemyVisual extends Signalable {
     refreshSize(adjustParent = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
-        if( adjustParent ) {
-            console.warn(`refreshing size`);
-        }
+        // if( adjustParent ) {
+        //     console.warn(`refreshing size`);
+        // }
 
         if (this._$mainVisual.length === 0) {
             console.warn('Unable to refresh size of visual that no longer exists');
@@ -570,7 +570,10 @@ class EnemyVisual extends Signalable {
                 }
             }
 
-            this.buildVisual();
+            // Don't do this on page load - it's pointless since show/hidden events will do this again
+            if( this.enemy.isVisible() ) {
+                this.buildVisual();
+            }
 
             this.visualType = name;
         }

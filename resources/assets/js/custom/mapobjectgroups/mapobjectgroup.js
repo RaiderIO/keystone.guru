@@ -449,6 +449,16 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     *
+     * @returns {boolean}
+     */
+    isInitialized() {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
+        return this._initialized;
+    }
+
+    /**
      * Checks if a map object is visible on the map or not.
      * @param mapObject {MapObject}
      * @returns {boolean}

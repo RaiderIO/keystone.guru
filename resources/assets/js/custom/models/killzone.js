@@ -17,19 +17,20 @@ let LeafletKillZoneMarker = L.Marker.extend({
 });
 
 // $(function () {
-    L.Draw.KillZone = L.Draw.Marker.extend({
-        statics: {
-            TYPE: 'killzone'
-        },
-        options: {
-            icon: LeafletKillZoneIcon
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.KillZone.TYPE;
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
+L.Draw.KillZone = L.Draw.Marker.extend({
+    statics: {
+        TYPE: 'killzone'
+    },
+    options: {
+        icon: LeafletKillZoneIcon
+    },
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.KillZone.TYPE;
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
+    }
+});
+
 // });
 
 class KillZone extends MapObject {
@@ -759,10 +760,21 @@ class KillZone extends MapObject {
         this.bindTooltip();
     }
 
+    /**
+     *
+     * @returns {boolean}
+     */
+    isVisible() {
+        // Visible is not tied to having a layer here; we are visible if we're on the same floor
+        return this._getVisibleEntitiesLatLngs().length > 0;
+    }
+
     isVisibleOnScreen() {
         let result = false;
+        console.log(this.isVisible(), this.enemiesLayer !== null);
         if (this.isVisible() && this.enemiesLayer !== null) {
             result = this.map.leafletMap.getBounds().contains(this.getLayerCenteroid())
+            console.log(result);
         }
         return result;
     }
