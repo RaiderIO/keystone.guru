@@ -9,15 +9,16 @@ return [
 
     'reddit_subreddit' => 'KeystoneGuru',
 
-    'cache_ttl' => [
-        'npcs' => '1 hour'
+    'cache_ttl'      => [
+        'npcs'        => '1 hour',
+        'dungeonData' => '1 hour'
     ],
 
     /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
      */
-    'party_size' => 5,
+    'party_size'     => 5,
 
     /**
      * States of aggressiveness of NPCs. Aggressive = will aggro upon getting close, unfriendly = will not aggro,
@@ -25,12 +26,12 @@ return [
      */
     'aggressiveness' => ['aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'],
 
-    'aggressiveness_pretty' => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly', 'Awakened'],
+    'aggressiveness_pretty'              => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly', 'Awakened'],
 
     /**
      * Some playful names for difficulties. I didn't want to offend anyone (looking at you non-casuals).
      */
-    'dungeonroute_difficulty' => ['Casual', 'Dedicated', 'Hardcore'],
+    'dungeonroute_difficulty'            => ['Casual', 'Dedicated', 'Hardcore'],
 
     /**
      * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming).
@@ -48,21 +49,21 @@ return [
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
      * the view is counted for a second time.
      */
-    'view_time_threshold_mins' => 30,
+    'view_time_threshold_mins'           => 30,
 
     /**
      * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
      */
-    'thumbnail_refresh_min' => 30,
+    'thumbnail_refresh_min'              => 30,
 
     /**
      * The amount of hours it takes before a dungeon route that is created through the 'try' functionality expires and
      * is deleted from the server.
      */
-    'try_dungeon_route_expires_hours' => 24,
+    'try_dungeon_route_expires_hours'    => 24,
 
     /**
      * @var array List of current roles for a user in a team.
      */
-    'team_roles' => ['member' => 1, 'collaborator' => 2, 'moderator' => 3, 'admin' => 4]
+    'team_roles'                         => ['member' => 1, 'collaborator' => 2, 'moderator' => 3, 'admin' => 4]
 ];

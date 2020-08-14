@@ -53,15 +53,18 @@ class MapContextDungeon extends MapContext
 
     public function toArray(): array
     {
-        $npcs = null;
         $npcCacheKey = sprintf('npcs_%s', $this->_context->id);
-        if( Cache::has($npcCacheKey) ) {
+        if (Cache::has($npcCacheKey)) {
             $npcs = Cache::get($npcCacheKey);
         } else {
-            $npcs = Cache::set($npcCacheKey, Npc::whereIn('dungeon_id', [$this->_context->id, -1])->get()->map(function ($npc)
+            $npcs = Npc::whereIn('dungeon_id', [$this->_context->id, -1])->get()->map(function ($npc)
             {
                 return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
-            })->values(), \DateInterval::createFromDateString(config('keystoneguru.cache_ttl.npcs')));
+            })->values();
+
+            if (!env('APP_DEBUG')) {
+                $npcs = Cache::set($npcCacheKey, $npcs, \DateInterval::createFromDateString(config('keystoneguru.cache_ttl.npcs')));
+            }
         }
 
         return array_merge(parent::toArray(), [
