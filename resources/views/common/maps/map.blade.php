@@ -50,8 +50,8 @@ if ($isAdmin) {
 }
 ?>
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
-    // Only activate Echo when we are a member of the team in which this route is a member of
-    'echo' => true,
+    // Only activate Echo when we are logged in (guest access WIP)
+    'echo' => Auth::check(),
     'edit' => $edit,
     'try' => $tryMode,
     'defaultEnemyVisualType' => $enemyVisualType,
