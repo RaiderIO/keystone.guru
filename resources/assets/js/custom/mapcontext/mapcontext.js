@@ -76,14 +76,6 @@ class MapContext extends Signalable {
      *
      * @returns {[]}
      */
-    getMdtEnemies() {
-        return this._options.dungeon.enemiesMdt;
-    }
-
-    /**
-     *
-     * @returns {[]}
-     */
     getEnemyPacks() {
         return this._options.dungeon.enemyPacks;
     }

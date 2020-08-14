@@ -6,8 +6,6 @@ class StateManager extends Signalable {
         this._appType = '';
         // Any dungeon route we may be editing at this time
         this._mapContext = null;
-        // The data of the dungeon that we're editing
-        this.dungeonData = null;
 
         // Echo handler
         this._echo = null;
@@ -23,6 +21,8 @@ class StateManager extends Signalable {
         this._focusedEnemy = null;
         // Details about the currently logged in user
         this._userData = null;
+        // Whether we're currently in MDT select mode or not
+        this._mdtMappingModeEnabled = false;
 
         // List of static arrays
         this.mapIconTypes = [];
@@ -87,6 +87,17 @@ class StateManager extends Signalable {
 
         this._focusedEnemy = enemy;
         this.signal('focusedenemy:changed', {focusedenemy: this._focusedEnemy});
+    }
+
+    /**
+     * Sets the MDT mapping mode to be enabled or not.
+     * @param enabled {boolean}
+     */
+    setMdtMappingModeEnabled(enabled ){
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._mdtMappingModeEnabled = enabled;
+        this.signal('mdtmappingmodeenabled:changed', {mdtmappingmodeenabled: this._mdtMappingModeEnabled});
     }
 
     /**
@@ -276,6 +287,15 @@ class StateManager extends Signalable {
     getMapContext() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this._mapContext;
+    }
+
+    /**
+     * Gets if the MDT mapping mode is currently enabled or not.
+     * @returns {boolean}
+     */
+    getMdtMappingModeEnabled() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._mdtMappingModeEnabled;
     }
 
     /**

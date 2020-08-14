@@ -1,5 +1,9 @@
 /** This is because PhpStorm won't shut up about how getState() is not defined. It really is defined in statemanager.blade.php */
 if (typeof getState !== 'function') {
+    /**
+     *
+     * @returns {StateManager}
+     */
     function getState() {
         return false;
     }

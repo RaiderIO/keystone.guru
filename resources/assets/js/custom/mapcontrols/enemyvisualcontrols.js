@@ -48,15 +48,9 @@ class EnemyVisualControls extends MapControl {
     _mdtEnemyMappingChanged(changedEvent) {
         console.assert(this instanceof EnemyVisualControls, 'this is not EnemyVisualControls', this);
 
-        let mdtEnemiesEnabled = $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(':checked');
-
-        // Hide or show any MDT enemies
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        $.each(enemyMapObjectGroup.objects, function (index, value) {
-            if (value.is_mdt && value.floor_id === getState().getCurrentFloor().id) {
-                enemyMapObjectGroup.setMapObjectVisibility(value, mdtEnemiesEnabled);
-            }
-        });
+        getState().setMdtMappingModeEnabled(
+            $('#map_enemy_visuals_map_mdt_clones_to_enemies').is(':checked')
+        );
     }
 
     /**

@@ -487,6 +487,11 @@ class Enemy extends MapObject {
             return false;
         }
 
+        // Hide MDT enemies
+        if (this.hasOwnProperty('is_mdt') && this.is_mdt && !getState().getMdtMappingModeEnabled()) {
+            return false;
+        }
+
         return super.shouldBeVisible();
     }
 

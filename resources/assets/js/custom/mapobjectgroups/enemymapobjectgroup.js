@@ -4,13 +4,30 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
+
+        getState().register('mdtmappingmodeenabled:changed', this, this._onMdtMappingModeEnabledChanged.bind(this));
+    }
+
+    /**
+     * Called when the MDT mapping mode enabled has changed
+     * @private
+     */
+    _onMdtMappingModeEnabledChanged() {
+        // Refresh visibility of all enemies
+        this._updateVisibility();
     }
 
     /**
      * @inheritDoc
      **/
     _getRawObjects() {
-        return getState().getMapContext().getEnemies();
+        let enemies = [];
+        let mapContext = getState().getMapContext();
+        if( mapContext instanceof MapContextDungeon ) {
+            // Union to create new array
+            enemies = _.union(enemies, mapContext.getMdtEnemies());
+        }
+        return _.union(enemies, mapContext.getEnemies());
     }
 
     /**

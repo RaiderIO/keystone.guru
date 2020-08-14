@@ -130,7 +130,7 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Checks if map objects should be visible and update the visibility as necessary according to it.
-     * @private
+     * @protected
      */
     _updateVisibility() {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObject', this);

@@ -72,4 +72,12 @@ class MapContextDungeon extends MapContext {
     getTeamId() {
         return -1;
     }
+
+    /**
+     *
+     * @returns {[]}
+     */
+    getMdtEnemies() {
+        return this._options.dungeon.enemiesMdt;
+    }
 }
