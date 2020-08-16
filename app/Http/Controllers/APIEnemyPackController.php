@@ -35,7 +35,7 @@ class APIEnemyPackController extends Controller
 
     /**
      * @param Request $request
-     * @return array
+     * @return EnemyPack
      * @throws \Exception
      */
     function store(Request $request)
@@ -46,7 +46,7 @@ class APIEnemyPackController extends Controller
         $enemyPack->teeming = $request->get('teeming');
         $enemyPack->faction = $request->get('faction', 'any');
         $enemyPack->label = $request->get('label');
-        $enemyPack->floor_id = $request->get('floor_id');
+        $enemyPack->floor_id = (int) $request->get('floor_id');
         $enemyPack->vertices_json = json_encode($request->get('vertices'));
 
         // Upon successful save!
@@ -58,7 +58,7 @@ class APIEnemyPackController extends Controller
             throw new \Exception("Unable to save pack!");
         }
 
-        return ['id' => $enemyPack->id];
+        return $enemyPack;
     }
 
     /**

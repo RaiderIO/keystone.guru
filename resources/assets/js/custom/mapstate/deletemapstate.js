@@ -32,19 +32,5 @@ class DeleteMapState extends MapState {
         // Fix an issue where it'd remove all layers just because it got removed from the editable layers. Strange.
         self.map.leafletMap.removeLayer(self.map.drawnLayers);
         self.map.leafletMap.addLayer(self.map.drawnLayers);
-
-        // Re-draw the enemies to restore their attributes etc
-        let mapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-
-        // All enemies
-        for (let index in mapObjectGroup.objects) {
-            if (mapObjectGroup.objects.hasOwnProperty(index)) {
-                let enemy = mapObjectGroup.objects[index];
-                // Refresh
-                if (enemy.visual !== null) {
-                    enemy.visual.refresh();
-                }
-            }
-        }
     }
 }

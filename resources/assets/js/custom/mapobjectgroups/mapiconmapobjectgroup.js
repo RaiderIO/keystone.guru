@@ -4,6 +4,9 @@ class MapIconMapObjectGroup extends MapObjectGroup {
 
         this.title = 'Hide/show map icons';
         this.fa_class = 'fa-icons';
+
+        // Defined in mapicon.js, need to fix this somehow
+        initAwakenedObeliskGatewayIcon();
     }
 
     /**
@@ -17,7 +20,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
      * @inheritDoc
      */
     _getOptions(remoteMapObject) {
-        return {mapIconType: getState().getMapIconType(remoteMapObject.map_icon_type_id)};
+        return {mapIconType: getState().getMapContext().getMapIconType(remoteMapObject.map_icon_type_id)};
     }
 
     /**
@@ -37,7 +40,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
             mapIcon = new AdminMapIcon(this.manager.map, layer);
         }
         // If we're actively placing the obelisk, make sure we create the correct map icon, or if we're restoring the gateway
-        else if (typeof options !== 'undefined' && options.mapIconType.isAwakenedObelisk()) {
+        else if (options.hasOwnProperty('mapIconType') && options.mapIconType.isAwakenedObelisk()) {
             mapIcon = new MapIconAwakenedObelisk(this.manager.map, layer);
         } else {
             mapIcon = new MapIcon(this.manager.map, layer);

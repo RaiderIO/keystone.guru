@@ -234,7 +234,7 @@ class DungeonMap extends Signalable {
                     // No longer in AddKillZoneMapState; we finished
                     self.setMapState(null);
                 } else {
-                    mapObject = mapObjectGroup.createNewMapObject(event.layer);
+                    mapObject = mapObjectGroup.onNewLayerCreated(event.layer);
                 }
                 // Save it to server instantly, manually saving is meh
                 mapObject.save();

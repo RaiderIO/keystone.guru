@@ -16,6 +16,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Bind the interface to the actual service
         $this->app->bind('App\Service\EchoServerHttpApiServiceInterface', 'App\Service\DiscordApiService');
 
+        // Internals
+        $this->app->bind('App\Service\Cache\CacheServiceInterface', 'App\Service\Cache\CacheService');
+
         // Dashboard
         $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\UsersStatisticsService');
         $this->app->bind('App\Service\Dashboard\StatisticsServiceInterface', 'App\Service\Dashboard\TeamsStatisticsService');

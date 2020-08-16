@@ -70,7 +70,7 @@ class Enemy extends MapObject {
         // });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, this._synced.bind(this));
+        this.register('object:changed', this, this._onObjectChanged.bind(this));
     }
 
     /**
@@ -198,7 +198,7 @@ class Enemy extends MapObject {
         return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
     }
 
-    _synced(syncedEvent) {
+    _onObjectChanged(syncedEvent) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
         // Only if we should display this enemy
@@ -224,8 +224,8 @@ class Enemy extends MapObject {
     /**
      * @inheritDoc
      **/
-    loadRemoteMapObject(remoteMapObject) {
-        super.loadRemoteMapObject(remoteMapObject);
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
         if (remoteMapObject.hasOwnProperty('is_mdt')) {
             // Exception for MDT enemies
@@ -464,22 +464,6 @@ class Enemy extends MapObject {
         }
     }
 
-    /**
-     * Get the color of an enemy based on rated difficulty by users.
-     * @param difficulty
-     */
-    getDifficultyColor(difficulty) {
-        let palette = window.interpolate(c.map.enemy.colors);
-        // let rand = Math.random();
-        let color = palette(difficulty);
-        this.setColors({
-            saved: color,
-            savedBorder: color,
-            edited: color,
-            editedBorder: color
-        });
-    }
-
     shouldBeVisible() {
         // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
         if (this.linked_awakened_enemy !== null && this.linked_awakened_enemy.getKillZone() !== null && this.isLinkedToLastBoss()) {
@@ -620,7 +604,7 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         super.cleanup();
 
-        this.unregister('synced', this, this._synced.bind(this));
+        this.unregister('object:changed', this, this._onObjectChanged.bind(this));
         this.map.unregister('map:mapstatechanged', this);
 
         if (this.visual !== null) {

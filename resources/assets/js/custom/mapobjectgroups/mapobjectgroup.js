@@ -31,10 +31,6 @@ class MapObjectGroup extends Signalable {
         this.manager.map.register('map:refresh', this, (function (mapRefreshEvent) {
             // Rebuild the layer group
             self.layerGroup = new L.LayerGroup();
-
-            // Set it to be visible if it was
-            // @todo self.isShown(), currently the layer will ALWAYS show regardless of MapControl status
-            self.setVisibility(true);
         }).bind(this));
         getState().getMapContext().register('teeming:changed', this, this._updateVisibility.bind(this));
 
@@ -130,15 +126,16 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Checks if map objects should be visible and update the visibility as necessary according to it.
+     * @param force {boolean|null} Null to let map object decide for itself, true/false to force
      * @protected
      */
-    _updateVisibility() {
+    _updateVisibility(force = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObject', this);
 
         for (let i = 0; i < this.objects.length; i++) {
             let mapObject = this.objects[i];
             // Set this map object to be visible or not
-            this.setMapObjectVisibility(mapObject, mapObject.shouldBeVisible());
+            this.setMapObjectVisibility(mapObject, force === null ? mapObject.shouldBeVisible() : force);
         }
     }
 
@@ -226,33 +223,56 @@ class MapObjectGroup extends Signalable {
      * Restores an object that was received from the server.
      *
      * @param remoteMapObject {object}
+     * @param layer {L.layer|null} Optional layer that was created already
      * @param username {string|null} The user that created this object (if done from Echo)
      * @return {MapObject}
      * @protected
      */
-    _loadMapObject(remoteMapObject, username = null) {
+    _loadMapObject(remoteMapObject, layer = null, username = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let mapObject = this.findMapObjectById(remoteMapObject.id);
         let options = this._getOptions(remoteMapObject);
 
         if (mapObject === null) {
-            mapObject = this.createNewMapObject(this._createLayer(remoteMapObject), options);
+            mapObject = this._createNewMapObject(layer === null ? this._createLayer(remoteMapObject) : layer, options);
         } else {
             mapObject = this._updateMapObject(remoteMapObject, mapObject, options);
         }
 
         mapObject.loadRemoteMapObject(remoteMapObject);
 
-        // Bit of a hack to properly load lines, may need to rework
-        if (typeof remoteMapObject.polyline !== 'undefined') {
-            mapObject.loadRemoteMapObject(remoteMapObject.polyline);
+        // If id = -1 we're creating a new Map Object from the map; at this point we should not sync
+        // since the ID still needs to be generated from the server.
+        // Sometimes, mapObject.id is 'undefined', for example MDT enemies. This simply means a MapObject is not dealing
+        // with IDs, but we still want to fire the Synced event at some point.
+        if (mapObject.id !== -1) {
+            mapObject.setSynced(true);
         }
-
-        mapObject.setSynced(true);
 
         // Show echo notification or not
         this._showReceivedFromEcho(mapObject, username);
+
+        return mapObject;
+    }
+
+    /**
+     *
+     * @param layer {L.layer}
+     * @param options {object}
+     * @return MapObject
+     */
+    _createNewMapObject(layer, options) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+
+        let mapObject = this._createMapObject(layer, options);
+        if (layer !== null) {
+            mapObject.onLayerInit();
+        }
+        this.objects.push(mapObject);
+
+        mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
+        mapObject.register('object:changed', this, (this._onObjectChanged).bind(this));
 
         return mapObject;
     }
@@ -362,16 +382,16 @@ class MapObjectGroup extends Signalable {
 
     /**
      * Called whenever an object we created has finished wrapping up and is now synced
-     * @param objectSyncedEvent {object}
+     * @param objectChangedEvent {object}
      * @private
      */
-    _onObjectSynced(objectSyncedEvent) {
+    _onObjectChanged(objectChangedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        let object = objectSyncedEvent.context;
+        let object = objectChangedEvent.context;
 
         // We only use this trigger once to fire the object:add event, so unregister..
-        object.unregister('synced', this);
+        object.unregister('object:changed', this);
         // Fire the event
         this.signal('object:add', {object: object, objectgroup: this});
 
@@ -413,7 +433,9 @@ class MapObjectGroup extends Signalable {
         console.assert(this._initialized, 'MapObjectGroup is not yet loaded loaded!', this);
 
         if (this._initialized) {
-            this._updateVisibility();
+            // Set it to be visible if it was
+            // @todo self.isShown(), currently the layer will ALWAYS show regardless of MapControl status
+            this.setVisibility(true);
         }
     }
 
@@ -515,25 +537,15 @@ class MapObjectGroup extends Signalable {
         }
     }
 
-    /**
-     *
-     * @param layer {L.layer}
-     * @param options {object}
-     * @return MapObject
-     */
-    createNewMapObject(layer, options) {
-        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+    onNewLayerCreated(layer) {
+        console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
 
-        let mapObject = this._createMapObject(layer, options);
-        if (layer !== null) {
-            mapObject.onLayerInit();
-        }
-        this.objects.push(mapObject);
+        let createdMapObject = this._loadMapObject({id: -1}, layer);
 
-        mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
-        mapObject.register('synced', this, (this._onObjectSynced).bind(this));
+        // Make sure it's visible on the map
+        this.setMapObjectVisibility(createdMapObject, true);
 
-        return mapObject;
+        return createdMapObject;
     }
 
     /**
@@ -560,17 +572,8 @@ class MapObjectGroup extends Signalable {
                 this.signal('visibility:changed', {visible: false});
             }
 
-            if (added || removed) {
-                // Remove any layers that were added before
-                for (let i = 0; i < this.objects.length; i++) {
-                    let mapObject = this.objects[i];
-                    // Remove all layers
-                    if (mapObject.layer !== null) {
-                        // Clean it up properly (if added, it's visible, if removed, not visible)
-                        mapObject.setVisible(added);
-                    }
-                }
-            }
+            // When true, let objects decide for themselves, when false, hide everything
+            this._updateVisibility(visible ? null : false);
         }
     }
 }

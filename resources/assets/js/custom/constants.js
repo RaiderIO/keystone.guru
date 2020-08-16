@@ -15,19 +15,6 @@ let c = {
     map: {
         admin: {
             mapobject: {
-                colors: {
-                    unsaved: '#E25D5D',
-                    unsavedBorder: '#7C3434',
-
-                    edited: '#E2915D',
-                    editedBorder: '#7C5034',
-
-                    saved: '#5DE27F',
-                    savedBorder: '#347D47',
-
-                    mouseoverAddEnemy: '#5993D2',
-                    mouseoverAddEnemyBorder: '#34577D',
-                }
             }
         },
         enemy: {
@@ -87,16 +74,6 @@ let c = {
             }
         },
         enemypack: {
-            colors: {
-                unsaved: '#E25D5D',
-                unsavedBorder: '#7C3434',
-
-                edited: '#E2915D',
-                editedBorder: '#7C5034',
-
-                saved: '#5993D2',
-                savedBorder: '#34577D'
-            },
             margin: 2,
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));

@@ -47,7 +47,6 @@ class Path extends Polyline {
         this.label = 'Path';
         this.decorator = null;
 
-        this.setColor(c.map.path.defaultColor());
         this.setSynced(false);
     }
 
@@ -72,6 +71,15 @@ class Path extends Polyline {
     }
 
     /**
+     *
+     * @returns {function}
+     * @protected
+     */
+    _getPolylineColorDefault() {
+        return c.map.path.defaultColor;
+    }
+
+    /**
      * Rebuild the decorators for this route (directional arrows etc).
      * @private
      */
@@ -84,7 +92,7 @@ class Path extends Polyline {
                     repeat: 100,
                     symbol: L.Symbol.arrowHead({
                         pixelSize: 12,
-                        pathOptions: {fillOpacity: 1, weight: 0, color: this.color}
+                        pathOptions: {fillOpacity: 1, weight: 0, color: this.polyline.color}
                     })
                 }
             ]

@@ -221,40 +221,61 @@ function pickHexFromHandlers(handlers, weight) {
 }
 
 
+function getEnemies() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+}
+
+function getEnemyPacks() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+}
+
+function getEnemyPatrols() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+}
+
+function getKillZones() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+}
+
+function getPaths() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
+}
+
+function getBrushlines() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
+}
+
+function getMapIcons() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
+}
+
 /**
  * Helper functions to help debug the site.
  */
 function getEnemy(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-    return mapObjectGroup.findMapObjectById(id);
+    return getEnemies().findMapObjectById(id);
 }
 
 function getEnemyPack(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
-    return mapObjectGroup.findMapObjectById(id);
+    return getEnemyPacks().findMapObjectById(id);
 }
 
 function getEnemyPatrol(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
-    return mapObjectGroup.findMapObjectById(id);
+    return getEnemyPatrols().findMapObjectById(id);
 }
 
 function getKillZone(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-    return mapObjectGroup.findMapObjectById(id);
+    return getKillZones().findMapObjectById(id);
 }
 
 function getPath(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
-    return mapObjectGroup.findMapObjectById(id);
+    return getPaths().findMapObjectById(id);
 }
 
 function getBrushline(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
-    return mapObjectGroup.findMapObjectById(id);
+    return getBrushlines().findMapObjectById(id);
 }
 
 function getMapIcon(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
-    return mapObjectGroup.findMapObjectById(id);
+    return getMapIcons().findMapObjectById(id);
 }

@@ -224,7 +224,6 @@ function refreshTooltips($element = null) {
  * Refreshes all select pickers on-screen
  **/
 function refreshSelectPickers() {
-    console.warn('refreshing select pickers');
     let $selectpicker = $('.selectpicker');
     $selectpicker.selectpicker('refresh');
     $selectpicker.selectpicker('render');

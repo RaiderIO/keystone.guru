@@ -18,7 +18,6 @@ class EnemyPack extends MapObject {
         super(map, layer, {name: 'enemypack'});
 
         this.label = 'Enemy pack';
-        this.setColors(c.map.enemypack.colors);
 
         this.color = null;
         this.rawEnemies = [];
@@ -80,8 +79,8 @@ class EnemyPack extends MapObject {
     /**
      * @inheritDoc
      **/
-    loadRemoteMapObject(remoteMapObject) {
-        super.loadRemoteMapObject(remoteMapObject);
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
         // Only called when not in admin state
         if (getState().getMapContext() instanceof MapContextDungeonRoute) {

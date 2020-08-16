@@ -28,16 +28,7 @@ class StateManager extends Signalable {
         this.mapIconTypes = [];
         this.classColors = [];
         this.enemies = [];
-        this.factions = [];
-        this.raidMarkers = [];
         this.paidTiers = [];
-
-        // Bit of a hack? But for now best solution
-        this.unknownMapIconId = 1;
-        this.awakenedObeliskGatewayMapIconId = 11;
-        // The map icon as found using above ID once the list of map icons is known
-        this.unknownMapIcon = null;
-        this.awakenedObeliskGatewayMapIcon = null;
     }
 
     /**
@@ -106,26 +97,6 @@ class StateManager extends Signalable {
      */
     setMapIconTypes(mapIconTypes) {
         this.mapIconTypes = [];
-        for (let i = 0; i < mapIconTypes.length; i++) {
-            this.mapIconTypes.push(
-                new MapIconType(mapIconTypes[i])
-            )
-        }
-        this.unknownMapIcon = this.getMapIconType(this.unknownMapIconId);
-        this.awakenedObeliskGatewayMapIcon = this.getMapIconType(this.awakenedObeliskGatewayMapIconId);
-
-        // Defined in mapicon.js, need to fix this somehow
-        initAwakenedObeliskGatewayIcon();
-    }
-
-    /**
-     * Sets the class colors.
-     * @param classColors
-     */
-    setClassColors(classColors) {
-        this.classColors = classColors;
-
-        c.map.colorPickerDefaultOptions.swatches = this.classColors;
     }
 
     /**
@@ -134,22 +105,6 @@ class StateManager extends Signalable {
      */
     setEnemies(enemies) {
         this.enemies = enemies;
-    }
-
-    /**
-     * Sets the raid markers.
-     * @param raidMarkers
-     */
-    setRaidMarkers(raidMarkers) {
-        this.raidMarkers = raidMarkers;
-    }
-
-    /**
-     *
-     * @param factions
-     */
-    setFactions(factions) {
-        this.factions = factions;
     }
 
     /**
@@ -337,36 +292,11 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Get all the colors of all current classes.
-     * @returns {[]}
-     */
-    getClassColors() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.classColors;
-    }
-
-    /**
      * Get a list of all map icon types.
      * @returns {[]|*[]}
      */
     getMapIconTypes() {
         return this.mapIconTypes;
-    }
-
-    /**
-     * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
-     * @param mapIconTypeId
-     * @returns {null}
-     */
-    getMapIconType(mapIconTypeId) {
-        let mapIconType = this.unknownMapIcon;
-        for (let i = 0; i < this.mapIconTypes.length; i++) {
-            if (this.mapIconTypes[i].id === mapIconTypeId) {
-                mapIconType = this.mapIconTypes[i];
-                break;
-            }
-        }
-        return mapIconType;
     }
 
     /**
@@ -392,24 +322,6 @@ class StateManager extends Signalable {
             }
         }
         return enemy;
-    }
-
-    /**
-     * Get all factions.
-     * @returns {[]}
-     */
-    getFactions() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.factions;
-    }
-
-    /**
-     * Get all raid markers.
-     * @returns {[]}
-     */
-    getRaidMarkers() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.raidMarkers;
     }
 
     /**
@@ -490,26 +402,6 @@ class StateManager extends Signalable {
         });
 
         return result;
-    }
-
-    /**
-     * Gets the default map icon for initializing; when the map icon is unknown.
-     * @returns {MapIconType}
-     */
-    getUnknownMapIconType() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        return this.unknownMapIcon;
-    }
-
-    /**
-     * Gets the map icon when clicking the obelisk to place a gateway.
-     * @returns {number}
-     */
-    getAwakenedObeliskGatewayMapIconType() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        return this.awakenedObeliskGatewayMapIcon;
     }
 
     /**

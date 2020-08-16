@@ -35,11 +35,11 @@ class APIKillZoneController extends Controller
         $killZone = KillZone::findOrNew($data['id']);
 
         $killZone->dungeon_route_id = $dungeonroute->id;
-        $killZone->floor_id = $data['floor_id'] ?? $killZone->floor_id;
+        $killZone->floor_id = (int) $data['floor_id'] ?? $killZone->floor_id;
         $killZone->color = $data['color'] ?? $killZone->color;
         $killZone->lat = $data['lat'] ?? $killZone->lat;
         $killZone->lng = $data['lng'] ?? $killZone->lng;
-        $killZone->index = $data['index'] ?? $killZone->index;
+        $killZone->index = (int) $data['index'] ?? $killZone->index;
 
 
         if (!$killZone->exists) {
@@ -89,7 +89,7 @@ class APIKillZoneController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array|ResponseFactory|Response
+     * @return KillZone
      * @throws \Exception
      */
     function store(Request $request, DungeonRoute $dungeonroute)
@@ -104,7 +104,7 @@ class APIKillZoneController extends Controller
             // Touch the route so that the thumbnail gets updated
             $dungeonroute->touch();
 
-            $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonroute->getEnemyForces()];
+            $result = $killZone;
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

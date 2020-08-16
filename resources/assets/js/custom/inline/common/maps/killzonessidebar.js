@@ -241,13 +241,13 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
                 killZone.unregister('object:deleted', '123123');
             });
-            killZone.register('synced', '123123', function () {
+            killZone.register('object:changed', '123123', function () {
                 if (!killZone.synced) {
                     // Failed to delete
                     $(self).find('i').addClass(trashIcon).removeClass(loadingIcon)
                 }
 
-                killZone.unregister('synced', '123123');
+                killZone.unregister('object:changed', '123123');
             });
 
             killZone.delete();
@@ -498,7 +498,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // Add the killzone to our list
             self._removeKillZone(killZone);
             // Stop listening to changes in the killzone
-            killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], self);
+            killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], self);
         });
 
         console.assert(killZoneMapObjectGroup.isInitialized(), 'KillZoneMapObjectGroup must be initialized!', this);
@@ -542,7 +542,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // Add the killzone to our list
         this._addKillZone(killZone);
         // Listen to changes in the killzone
-        killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'synced'], this, function (killZoneChangedEvent) {
+        killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], this, function (killZoneChangedEvent) {
             self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
         });
     }

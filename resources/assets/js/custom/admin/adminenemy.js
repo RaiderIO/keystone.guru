@@ -20,7 +20,6 @@ class AdminEnemy extends Enemy {
         // Whatever enemy we're connected with if we're an MDT enemy
         this.enemy_id = -1;
 
-        this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
 
         this.enemyConnectionLayerGroup = null;

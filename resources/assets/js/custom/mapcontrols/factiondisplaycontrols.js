@@ -12,7 +12,7 @@ class FactionDisplayControls extends MapControl {
 
                 // factionsData is defined in map.blade.php
                 let factionsData = [];
-                let stateFactions = getState().getFactions();
+                let stateFactions = getState().getMapContext().getStaticFactions();
                 for (let index in stateFactions) {
                     if (stateFactions.hasOwnProperty(index)) {
                         let faction = stateFactions[index];

@@ -53,7 +53,6 @@ class KillZone extends MapObject {
         // Layer that is shown to the user and that he/she can click on to make adjustments to this killzone. May be null
         this.enemiesLayer = null;
 
-        this.setColors(c.map.killzone.colors);
         this.setSynced(false);
 
         // // We gotta remove the connections manually since they're self managed here.
@@ -160,8 +159,8 @@ class KillZone extends MapObject {
     /**
      * @inheritDoc
      **/
-    loadRemoteMapObject(remoteMapObject) {
-        super.loadRemoteMapObject(remoteMapObject);
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
         // Hide the layer of the killzone
         this.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
@@ -835,7 +834,7 @@ class KillZone extends MapObject {
         });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, function (event) {
+        this.register('object:changed', this, function (event) {
             // Restore the connections to our enemies
             self.redrawConnectionsToEnemies();
         });
@@ -853,20 +852,21 @@ class KillZone extends MapObject {
 
         this.redrawConnectionsToEnemies();
 
-        this.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+        this.signal('killzone:changed', {enemy_forces: json.enemy_forces});
     }
 
     onDeleteSuccess(json) {
         super.onDeleteSuccess(json);
 
-        this.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+        this.signal('killzone:changed', {enemy_forces: json.enemy_forces});
     }
 
     cleanup() {
         let self = this;
 
-        // this.unregister('synced', this); // Not needed as super.cleanup() does this
         getState().getMapContext().unregister('teeming:changed', this);
+        this.unregister('object:deleted', this);
+        this.unregister('object:changed', this);
         this.map.unregister('map:mapstatechanged', this);
         this.map.unregister('killzone:selectionchanged', this);
         this.map.unregister('map:mapobjectgroupsloaded', this);

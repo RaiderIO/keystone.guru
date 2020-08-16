@@ -53,28 +53,15 @@ class MapObject extends Signalable {
             self._cleanDecorator();
         });
 
-        this.register(['shown', 'hidden'], this, function (event) {
-            if (event.data.visible) {
+        this.register(['shown', 'hidden', 'object:changed'], this, function (event) {
+            if (self.isVisible()) {
                 self._rebuildDecorator();
             } else {
                 self._cleanDecorator();
             }
         });
 
-        // Set the defaults for our attributes so we don't get any undefined errors
-        /** @type {Array} */
-        let attributes = this._getAttributes();
-
-        for (let index in attributes) {
-            if (attributes.hasOwnProperty(index)) {
-                let attribute = attributes[index];
-                let name = attribute.name;
-
-                if (typeof attribute.default !== 'undefined') {
-                    this[name] = attribute.default;
-                }
-            }
-        }
+        this._setDefaults();
     }
 
     /**
@@ -135,17 +122,55 @@ class MapObject extends Signalable {
         ];
     }
 
+
+    _setDefaults(parentAttribute = null) {
+        // Set the defaults for our attributes so we don't get any undefined errors
+        /** @type {Array} */
+        let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes') ? parentAttribute.attributes : this._getAttributes();
+
+        for (let index in attributes) {
+            if (attributes.hasOwnProperty(index)) {
+                let attribute = attributes[index];
+
+                // Recurse this function for objects with nested attributes
+                if (attribute.type === 'object' && attribute.hasOwnProperty('attributes')) {
+                    this[attribute.name] = {};
+                    this._setDefaults(attribute);
+                }
+                // Grab default from the attribute function, otherwise directly from the property
+                else if (typeof attribute.default === 'function') {
+                    // Do not use _setValue - this sets some INITIAL values, just to have something there
+                    if( parentAttribute !== null ) {
+                        this[parentAttribute.name][attribute.name] = attribute.default();
+                    } else {
+                        this[attribute.name] = attribute.default();
+                    }
+                } else if (typeof attribute.default !== 'undefined') {
+                    // Do not use _setValue - this sets some INITIAL values, just to have something there
+                    if( parentAttribute !== null ) {
+                        this[parentAttribute.name][attribute.name] = attribute.default;
+                    } else {
+                        this[attribute.name] = attribute.default;
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Finds an attribute by the name of the attribute.
-     * @param name string
+     * @param name {string}
+     * @param attributes {object|null}
      * @returns {Attribute}|{null}
      * @private
      */
-    _findAttributeByName(name) {
-        console.assert(name !== null, `Name must be a string ${name}`, name);
+    _findAttributeByName(name, attributes = null) {
+        console.assert(typeof name === 'string', `Name must be a string ${name}`, name);
 
+        if (attributes === null) {
+            attributes = this._getAttributes();
+        }
         let attribute = null;
-        let attributes = this._getAttributes();
         for (let index in attributes) {
             if (attributes.hasOwnProperty(index)) {
                 let attributeCandidate = attributes[index];
@@ -162,17 +187,20 @@ class MapObject extends Signalable {
     /**
      * Gets the value of a property using either the getter or directly.
      * @param name {string}
+     * @param parentAttribute {Attribute|null}
      * @returns {*}
      * @private
      */
-    _getValue(name) {
-        let attribute = this._findAttributeByName(name);
-        let attributes = this._getAttributes();
+    _getValue(name, parentAttribute = null) {
+        let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes') ? parentAttribute.attributes : this._getAttributes();
+        let attribute = this._findAttributeByName(name, attributes);
         console.assert(attribute !== null, `Unable to find attribute with name ${name}`, attributes);
         if (attribute === null) {
             return false;
         } else {
-            return attribute.hasOwnProperty('getter') ? attribute.getter() : this[name];
+            return attribute.hasOwnProperty('getter') ? attribute.getter() :
+                // If parent is set, grab it from the nested object
+                parentAttribute !== null ? this[parentAttribute.name][name] : this[name];
         }
     }
 
@@ -180,16 +208,19 @@ class MapObject extends Signalable {
      * Sets the value of a property using either the setter or directly.
      * @param name {string}
      * @param value {*}
+     * @param parentAttribute {Attribute}
      * @private
      */
-    _setValue(name, value) {
-        let attribute = this._findAttributeByName(name);
-        let attributes = this._getAttributes();
+    _setValue(name, value, parentAttribute = null) {
+        let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes') ? parentAttribute.attributes : this._getAttributes();
+        let attribute = this._findAttributeByName(name, attributes);
         console.assert(attribute !== null, `Unable to find attribute with name ${name}`, attributes);
 
         // Use setter if supplied
         if (attribute.hasOwnProperty('setter')) {
             attribute.setter(value);
+        } else if( parentAttribute !== null ) {
+            this[parentAttribute.name][name] = value;
         } else {
             // Assign variable back to us
             this[name] = value;
@@ -235,11 +266,12 @@ class MapObject extends Signalable {
     }
 
     /**
-     * Initializes the popup
+     * Initializes the popup AFTER it's been displayed to the user
+     * @param parentAttribute {Attribute|null}
      * @returns {*}
      * @private
      */
-    _initPopup() {
+    _initPopup(parentAttribute = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         let self = this;
@@ -247,14 +279,19 @@ class MapObject extends Signalable {
         refreshSelectPickers();
 
         let mapObjectName = this.options.name;
-        let attributes = this._getAttributes();
+        let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
+            ? parentAttribute.attributes : this._getAttributes();
 
         for (let index in attributes) {
             if (attributes.hasOwnProperty(index)) {
                 let attribute = attributes[index];
                 let name = attribute.name;
 
-                if (attribute.isEditable() && attribute.type === 'color') {
+                // Prevent infinite loops when having parentAttributes with no attributes set (enemy npc)
+                if( attribute.type === 'object' && attribute !== parentAttribute ) {
+                    // Recursively init the popup
+                    this._initPopup(attribute);
+                } else if (attribute.isEditable() && attribute.type === 'color') {
                     // Clean up the previous instance if any
                     if (typeof attribute._pickr !== 'undefined') {
                         // Unset it after to be sure to clear it for the next time
@@ -264,12 +301,12 @@ class MapObject extends Signalable {
                     //
                     attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
                         el: `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`,
-                        default: this._getValue(name)
+                        default: this._getValue(name, parentAttribute)
                     })).on('save', (color, instance) => {
                         // Apply the new color
                         let newColor = '#' + color.toHEXA().join('');
                         // Only save when the color is valid
-                        if (self._getValue(name) !== newColor && newColor.length === 7) {
+                        if (self._getValue(name, parentAttribute) !== newColor && newColor.length === 7) {
                             $(`#map_${mapObjectName}_edit_popup_${name}_${self.id}`).val(newColor);
                         }
 
@@ -283,13 +320,15 @@ class MapObject extends Signalable {
 
     /**
      * Called when the popup submit button was clicked
+     * @param parentAttribute {Attribute|null}
      * @private
      */
-    _popupSubmitClicked() {
+    _popupSubmitClicked(parentAttribute = null) {
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
 
         let mapObjectName = this.options.name;
-        let attributes = this._getAttributes();
+        let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
+            ? parentAttribute.attributes : this._getAttributes();
 
         for (let index in attributes) {
             if (attributes.hasOwnProperty(index)) {
@@ -297,7 +336,9 @@ class MapObject extends Signalable {
                 let name = attribute.name;
 
                 // Color is already set by Pickr
-                if (attribute.isEditable()) {
+                if( attribute.type === 'object' ) {
+                    this._popupSubmitClicked(attribute);
+                } else if (attribute.isEditable()) {
                     let $element = $(`#map_${mapObjectName}_edit_popup_${name}_${this.id}`);
                     console.assert($element.length > 0, 'Element must be found!', attribute);
 
@@ -327,27 +368,32 @@ class MapObject extends Signalable {
                             break;
                     }
 
-                    this._setValue(name, val);
+                    this._setValue(name, val, parentAttribute);
                     // Let anyone else know it's changed so they may act upon it
                     this.signal('property:changed', {name: name, value: val});
                 }
             }
         }
 
-        this.save();
+        // Only trigger if we're the root
+        if( parentAttribute === null ) {
+            this.save();
+        }
     }
 
     /**
      * Get the html for the popup as defined by the attributes of this map object
-     * @returns {jQuery}
+     * @param parentAttribute {Attribute|null}
+     * @returns {string}
      * @private
      */
-    _getPopupHtml() {
+    _getPopupHtml(parentAttribute = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
         let result = '';
 
         let mapObjectName = this.options.name;
-        let attributes = this._getAttributes();
+        let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
+            ? parentAttribute.attributes : this._getAttributes();
 
         for (let index in attributes) {
             if (attributes.hasOwnProperty(index)) {
@@ -358,6 +404,10 @@ class MapObject extends Signalable {
                     let handlebarsString = '';
 
                     switch (attribute.type) {
+                        // Nested objects should recursively handled
+                        case 'object':
+                            result += this._getPopupHtml(attribute);
+                            continue;
                         case 'select':
                             handlebarsString = 'map_popup_type_select_template';
                             console.assert(attribute.hasOwnProperty('values'), `Attribute must have 'values' property if you choose 'select'!`, attribute);
@@ -388,7 +438,7 @@ class MapObject extends Signalable {
                         property: name,
                         map_object_name: mapObjectName,
                         label: lang.get(`messages.${mapObjectName}_${name}_label`),
-                        value: this._getValue(name),
+                        value: this._getValue(name, parentAttribute),
                         values: attribute.hasOwnProperty('values') ? attribute.values : [],
                         select_default_label: attribute.type === 'select' ? lang.get(`messages.${mapObjectName}_${name}_select_default_label`) : '',
                         show_default: attribute.hasOwnProperty('show_default') ? attribute.show_default : true,
@@ -400,11 +450,15 @@ class MapObject extends Signalable {
 
         let popupTemplate = Handlebars.templates['map_popup_template'];
 
-        return popupTemplate($.extend({}, getHandlebarsDefaultVariables(), {
-            id: this.id,
-            html: result,
-            map_object_name: mapObjectName
-        }));
+        if( parentAttribute === null ) {
+            return popupTemplate($.extend({}, getHandlebarsDefaultVariables(), {
+                id: this.id,
+                html: result,
+                map_object_name: mapObjectName
+            }));
+        } else {
+            return result;
+        }
     }
 
     /**
@@ -448,9 +502,14 @@ class MapObject extends Signalable {
     /**
      * Populates this map object with a remote map object.
      * @param remoteMapObject {object} As received from the server
+     * @param parentAttribute {Attribute|null} If we're parsing a nested attribute, this will be set
      */
-    loadRemoteMapObject(remoteMapObject) {
-        let attributes = this._getAttributes();
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
+
+        // If we're parsing recursively, get the attributes of the parent instead of the root
+        let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
+            ? parentAttribute.attributes : this._getAttributes();
 
         for (let index in attributes) {
             if (attributes.hasOwnProperty(index)) {
@@ -459,17 +518,30 @@ class MapObject extends Signalable {
 
                 if (remoteMapObject.hasOwnProperty(name)) {
                     let value = remoteMapObject[name];
-                    // Do some preprocessing if necessary
-                    switch (attribute.type) {
-                        case 'bool':
-                            value = value >= 1;
-                            break;
-                    }
-                    // Assign the attributes from the object
-                    if (typeof attribute.setter === 'function') {
-                        attribute.setter(value);
+
+                    // If we're going to parse this object in a nested way (otherwise calling normal setter is good enough)
+                    if (attribute.type === 'object' && attribute.hasOwnProperty('attributes')) {
+                        this[name] = {};
+                        this.loadRemoteMapObject(value, attribute);
                     } else {
-                        this[name] = value;
+                        // Do some preprocessing if necessary
+                        switch (attribute.type) {
+                            case 'bool':
+                                value = value >= 1;
+                                break;
+                        }
+                        // Assign the attributes from the object
+                        if (typeof attribute.setter === 'function') {
+                            attribute.setter(value);
+                        }
+                        // If parent was set, account for it by setting the value inside the object
+                        else if (parentAttribute !== null) {
+                            this[parentAttribute.name][name] = value;
+                        }
+                        // Otherwise just set the attribute on the main object (most of the time)
+                        else {
+                            this[name] = value;
+                        }
                     }
                 } else {
                     // @TODO MapIcons don't have Teeming and Faction properties so this gets thrown a lot
@@ -645,15 +717,6 @@ class MapObject extends Signalable {
     }
 
     /**
-     * Sets the colors to use for a map object, if applicable.
-     * @param colors object The colors object as found in the constants.js file.
-     */
-    setColors(colors) {
-        console.assert(this instanceof MapObject, 'this is not a MapObject', this);
-        this.colors = colors;
-    }
-
-    /**
      * Sets the synced state of the map object. Will adjust the colors of the layer if colors are set.
      * @param value bool True to set the status to synced, false to unsynced.
      * @todo Somehow this does not work when trying to set edited colors. Very strange, couldn't get it to work
@@ -661,39 +724,13 @@ class MapObject extends Signalable {
     setSynced(value) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        // Only if the colors object was ever set by a parent
-        if (typeof this.colors !== 'undefined' && this.layer !== null && typeof this.layer.setStyle === 'function') {
-            // Now synced
-            if (value) {
-                this.layer.setStyle({
-                    fillColor: this.colors.saved,
-                    color: this.colors.savedBorder
-                });
-            }
-            // No longer synced when it was synced
-            else if (!value && this.synced) {
-                this.layer.setStyle({
-                    fillColor: this.colors.edited,
-                    color: this.colors.editedBorder
-                });
-            }
-            // No longer synced, possibly wasn't in the first place, so unsaved
-            else if (!value) {
-                this.layer.setStyle({
-                    fillColor: this.colors.unsaved,
-                    color: this.colors.unsavedBorder
-                });
-            }
-            this.layer.redraw();
-        }
-
         // If we're synced, trigger the synced event
         if (value) {
             // Refresh the tooltip
             this.bindTooltip();
             this._assignPopup();
 
-            this.signal('synced');
+            this.signal('object:changed');
         }
 
         this.synced = value;
@@ -753,7 +790,22 @@ class MapObject extends Signalable {
 
                 // Either do all when fields is *, or when it's whitelisted explicitly
                 if ((fields === '*' || fields.includes(name)) && attribute.isSaveable() && attribute.isEditableAdmin()) {
-                    data[name] = this._getValue(name);
+                    if (attribute.type === 'object' && attribute.hasOwnProperty('attributes')) {
+                        // Loop over all attributes in the object and assign
+                        let obj = {};
+                        for (let childIndex in attribute.attributes) {
+                            if (attribute.attributes.hasOwnProperty(childIndex)) {
+                                let childAttribute = attribute.attributes[childIndex];
+                                if (childAttribute.isSaveable() && childAttribute.isEditableAdmin()) {
+                                    obj[childAttribute.name] = this._getValue(childAttribute.name, attribute);
+                                }
+                            }
+                        }
+
+                        data[name] = obj;
+                    } else {
+                        data[name] = this._getValue(name);
+                    }
                 }
             }
         }
@@ -784,7 +836,8 @@ class MapObject extends Signalable {
                 self.signal('save:beforesend');
             },
             success: function (json) {
-                self.id = json.id;
+                // Apply all saved properties back our object
+                self.loadRemoteMapObject(json);
 
                 self.setSynced(true);
                 self.map.leafletMap.closePopup();

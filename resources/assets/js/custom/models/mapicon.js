@@ -23,21 +23,21 @@ let LeafletMapIconMarker = L.Marker.extend({
 });
 
 // $(function () {
-    L.Draw.MapIcon = L.Draw.Marker.extend({
-        statics: {
-            TYPE: 'mapicon'
-        },
-        options: {
-            icon: LeafletMapIconUnknown
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.MapIcon.TYPE;
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
+L.Draw.MapIcon = L.Draw.Marker.extend({
+    statics: {
+        TYPE: 'mapicon'
+    },
+    options: {
+        icon: LeafletMapIconUnknown
+    },
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.MapIcon.TYPE;
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
+    }
+});
 
-    // L.Draw.ObeliskGatewayMapIcon is defined in init function down below!
+// L.Draw.ObeliskGatewayMapIcon is defined in init function down below!
 // });
 
 /**
@@ -86,11 +86,11 @@ class MapIcon extends MapObject {
 
         let self = this;
 
-        this.map_icon_type = getState().getUnknownMapIconType();
+        this.map_icon_type = getState().getMapContext().getUnknownMapIconType();
         this.label = 'MapIcon';
 
         this.setSynced(false);
-        this.register('synced', this, this._synced.bind(this));
+        this.register('object:changed', this, this._onObjectChanged.bind(this));
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
                 mapStateChangedEvent.data.newMapState instanceof EditMapState ||
@@ -112,8 +112,8 @@ class MapIcon extends MapObject {
         }
 
         let self = this;
-        let mapIconTypes = getState().getMapIconTypes();
-        let unknownMapIcon = getState().getUnknownMapIconType();
+        let mapIconTypes = getState().getMapContext().getStaticMapIconTypes();
+        let unknownMapIcon = getState().getMapContext().getUnknownMapIconType();
 
         let editableMapIconTypes = [];
         for (let i in mapIconTypes) {
@@ -171,6 +171,12 @@ class MapIcon extends MapObject {
                 default: null
             }),
             new Attribute({
+                name: 'is_admin',
+                type: 'bool',
+                edit: false,
+                save: false
+            }),
+            new Attribute({
                 name: 'permanent_tooltip',
                 type: 'bool',
                 default: false
@@ -205,7 +211,7 @@ class MapIcon extends MapObject {
         ]);
     }
 
-    _synced() {
+    _onObjectChanged() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
         // Recreate the tooltip
@@ -231,8 +237,8 @@ class MapIcon extends MapObject {
     /**
      * @inheritDoc
      */
-    loadRemoteMapObject(remoteMapObject) {
-        super.loadRemoteMapObject(remoteMapObject);
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
         // When in admin mode, show all map icons
         if (!getState().isMapAdmin() && (this.seasonal_index !== null && getState().getMapContext().getSeasonalIndex() !== this.seasonal_index)) {
@@ -250,7 +256,7 @@ class MapIcon extends MapObject {
         this.map_icon_type_id = mapIconTypeId;
 
         // Set the icon and refresh the visual
-        this.map_icon_type = getState().getMapIconType(this.map_icon_type_id);
+        this.map_icon_type = getState().getMapContext().getMapIconType(this.map_icon_type_id);
         this._refreshVisual();
     }
 
@@ -279,14 +285,15 @@ class MapIcon extends MapObject {
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        return this.map_icon_type.isEditable() && this.linked_awakened_obelisk_id === null;
+        return this.map_icon_type.isEditable() && this.linked_awakened_obelisk_id === null &&
+            (getState().isMapAdmin() && this.is_admin);
     }
 
     /**
      * @inheritDoc
      */
     isDeletable() {
-        return this.map_icon_type.isDeletable() && this.linked_awakened_obelisk_id === null;
+        return this.isEditable();
     }
 
     /**
@@ -327,6 +334,6 @@ class MapIcon extends MapObject {
         super.cleanup();
 
         this.map.unregister('map:mapstatechanged', this);
-        this.unregister('synced', this);
+        this.unregister('object:changed', this);
     }
 }

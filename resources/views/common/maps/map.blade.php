@@ -73,10 +73,6 @@ if ($isAdmin) {
         // Required by echo to join the correct channels
         'appType' => env('APP_TYPE'),
         'echo' => !$tryMode,
-        'mapIconTypes' => \App\Models\MapIconType::all(),
-        'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
-        'raidMarkers' => \App\Models\RaidMarker::all(),
-        'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
         'mapContext' => $mapContext,

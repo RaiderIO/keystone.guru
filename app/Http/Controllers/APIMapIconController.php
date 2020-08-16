@@ -36,7 +36,7 @@ class APIMapIconController extends Controller
     /**
      * @param Request $request
      * @param ?DungeonRoute $dungeonroute
-     * @return array
+     * @return MapIcon
      * @throws Exception
      */
     function store(Request $request, ?DungeonRoute $dungeonroute)
@@ -109,7 +109,7 @@ class APIMapIconController extends Controller
             }
         }
 
-        return ['id' => $mapIcon->id];
+        return $mapIcon;
     }
 
     /**

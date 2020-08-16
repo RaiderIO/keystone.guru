@@ -8,7 +8,6 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
     constructor(map, layer) {
         super(map, layer);
 
-        this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
 
         this.target_floor_id = -1;

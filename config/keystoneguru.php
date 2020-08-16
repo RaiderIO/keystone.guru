@@ -9,9 +9,16 @@ return [
 
     'reddit_subreddit' => 'KeystoneGuru',
 
-    'cache_ttl'      => [
-        'npcs'        => '1 hour',
-        'dungeonData' => '1 hour'
+    'cache'          => [
+        'npcs'        => [
+            'ttl' => '1 hour'
+        ],
+        'dungeonData' => [
+            'ttl' => '1 hour'
+        ],
+        'static_data' => [
+            'ttl' => '1 day'
+        ]
     ],
 
     /**

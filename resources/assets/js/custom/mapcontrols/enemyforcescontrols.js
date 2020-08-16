@@ -51,7 +51,7 @@ class EnemyForcesControls extends MapControl {
 
         let killzoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.register('object:add', this, function (addEvent) {
-            addEvent.data.object.register('killzone:synced', self, self._killzoneSynced.bind(self));
+            addEvent.data.object.register('killzone:changed', self, self._onKillZoneChanged.bind(self));
         });
 
         // Update the total count when teeming was changed
@@ -62,11 +62,11 @@ class EnemyForcesControls extends MapControl {
         this.loaded = true;
     }
 
-    _killzoneSynced(syncedEvent) {
+    _onKillZoneChanged(objectChangedEvent) {
         console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
 
-        if (typeof syncedEvent.data.enemy_forces !== 'undefined') {
-            this._setEnemyForces(syncedEvent.data.enemy_forces);
+        if (typeof objectChangedEvent.data.enemy_forces !== 'undefined') {
+            this._setEnemyForces(objectChangedEvent.data.enemy_forces);
         }
     }
 
