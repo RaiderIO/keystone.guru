@@ -228,7 +228,7 @@ class MapObject extends Signalable {
     }
 
     /**
-     * Assigns the popup to this map object
+     * Assigns the popup to a layer
      * @protected
      */
     _assignPopup(layer = null) {
@@ -255,7 +255,9 @@ class MapObject extends Signalable {
                 // Prevent multiple binds to click
                 let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
                 $submitBtn.unbind('click');
-                $submitBtn.bind('click', self._popupSubmitClicked.bind(self));
+                $submitBtn.bind('click', function(){
+                    self._popupSubmitClicked();
+                });
 
                 self._initPopup();
             };
@@ -361,8 +363,6 @@ class MapObject extends Signalable {
                             val = parseInt(val);
                             break;
                         case 'float':
-                            val = parseFloat(val);
-                            break;
                         case 'double':
                             val = parseFloat(val);
                             break;

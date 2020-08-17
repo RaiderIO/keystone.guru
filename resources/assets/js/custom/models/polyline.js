@@ -9,9 +9,17 @@ class Polyline extends MapObject {
         this.layerAnimated = null;
 
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
-            // Hide it when we're going to edit. It will be visible again when we've synced the polyline
-            self._setAnimatedLayerVisibility(!(mapStateChangedEvent.data.newMapState instanceof EditMapState ||
-                mapStateChangedEvent.data.newMapState instanceof DeleteMapState));
+            // Don't interfere with refreshing map states; that's what the map:beforerefresh event is for
+            if( !self.map.isRefreshingMap() ){
+                // Hide it when we're going to edit. It will be visible again when we've synced the polyline
+                self._setAnimatedLayerVisibility(!(
+                    mapStateChangedEvent.data.newMapState instanceof EditMapState ||
+                    mapStateChangedEvent.data.newMapState instanceof DeleteMapState));
+            }
+        });
+        // Hide yo wife, hide yo children (and animated layers)
+        this.map.register(['map:beforerefresh'], this, function (mapBeforeRefreshEvent) {
+            self._setAnimatedLayerVisibility(false);
         });
         this.register(['shown', 'hidden'], this, function (shownHiddenEvent) {
             self._setAnimatedLayerVisibility(shownHiddenEvent.data.visible);
@@ -113,16 +121,16 @@ class Polyline extends MapObject {
 
         if (this.layerAnimated !== null) {
             if (visible) {
-                if (this.map.drawnLayers.hasLayer(this.layer)) {
-                    this.map.drawnLayers.removeLayer(this.layer);
-                }
+                // if (this.map.drawnLayers.hasLayer(this.layer)) {
+                //     this.map.drawnLayers.removeLayer(this.layer);
+                // }
                 if (!this.map.drawnLayers.hasLayer(this.layerAnimated)) {
                     this.map.drawnLayers.addLayer(this.layerAnimated);
                 }
             } else {
-                if (!this.map.drawnLayers.hasLayer(this.layer)) {
-                    this.map.drawnLayers.addLayer(this.layer);
-                }
+                // if (!this.map.drawnLayers.hasLayer(this.layer)) {
+                //     this.map.drawnLayers.addLayer(this.layer);
+                // }
                 if (this.map.drawnLayers.hasLayer(this.layerAnimated)) {
                     this.map.drawnLayers.removeLayer(this.layerAnimated);
                 }
@@ -180,9 +188,12 @@ class Polyline extends MapObject {
 
         this.polyline.color_animated = color;
 
+        // Remove if necessary
+        this._setAnimatedLayerVisibility(false);
+        this.layerAnimated = null;
+
         if (this.polyline.color_animated !== null) {
-            // Remove if necessary
-            this._setAnimatedLayerVisibility(false);
+            console.warn(this.id, this.constructor.name, 'Creating new layerAnimated!');
             this.layerAnimated = L.polyline.antPath(this.getVertices(),
                 $.extend({}, c.map.polyline.polylineOptionsAnimated, {
                     color: this.polyline.color,
@@ -235,6 +246,7 @@ class Polyline extends MapObject {
         // Remove the animated layer if there was any
         this._setAnimatedLayerVisibility(false);
         this.map.unregister('map:mapstatechanged', this);
+        this.map.unregister('map:beforerefresh', this);
         this.unregister(['shown', 'hidden'], this);
     }
 }

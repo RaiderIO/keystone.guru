@@ -589,6 +589,13 @@ class DungeonMap extends Signalable {
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
 
+        // if( typeof this.drawnLayers !== 'undefined' ) {
+        //     this.leafletMap.removeLayer(this.drawnLayers);
+        // }
+        // if( typeof this.editableLayers !== 'undefined' ) {
+        //     this.leafletMap.removeLayer(this.editableLayers);
+        // }
+
         this.editableLayers = new L.FeatureGroup();
         // Refresh the list of drawn items
         this.drawnLayers = new L.FeatureGroup();
@@ -626,7 +633,7 @@ class DungeonMap extends Signalable {
 
             let layer = L.polyline(points);
 
-            let object = mapObjectGroup.createNewMapObject(layer);
+            let object = mapObjectGroup.onNewLayerCreated(layer);
             object.save();
 
             // Remove it from Pather, we only use Pather for creating the actual layer

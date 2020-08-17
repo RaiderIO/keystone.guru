@@ -107,7 +107,7 @@ let c = {
                 dashArray: [10, 20],
                 // pulseColorLight: '#FFF',
                 // pulseColorDark: '#000',
-                hardwareAccelerated: true,
+                hardwareAcceleration: true,
                 use: L.polyline
             },
             awakenedObeliskGatewayPolylineColor: '#80FF1A',
@@ -148,7 +148,7 @@ let c = {
                 dashArray: [10, 20],
                 pulseColorLight: '#FFF',
                 pulseColorDark: '#000',
-                hardwareAccelerated: true,
+                hardwareAcceleration: true,
                 use: L.polygon
             },
             margin: 2,

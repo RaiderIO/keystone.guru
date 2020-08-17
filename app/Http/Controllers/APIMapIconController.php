@@ -52,7 +52,7 @@ class APIMapIconController extends Controller
             $this->authorize('edit', $dungeonroute);
         }
 
-        $mapIconTypeId = $request->get('map_icon_type_id', 0);
+        $mapIconTypeId = (int) $request->get('map_icon_type_id', 0);
 
         if ($mapIconTypeId > 0) {
             /** @var MapIconType $mapIconType */
@@ -83,13 +83,13 @@ class APIMapIconController extends Controller
         }
 
         // Only admins may make global comments for all routes
-        $mapIcon->floor_id = $request->get('floor_id');
+        $mapIcon->floor_id = (int) $request->get('floor_id');
         $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
         $mapIcon->map_icon_type_id = $mapIconTypeId;
-        $mapIcon->permanent_tooltip = $request->get('permanent_tooltip', false);
+        $mapIcon->permanent_tooltip = (int) $request->get('permanent_tooltip', false);
         $seasonalIndex = $request->get('seasonal_index');
         // don't use empty() since 0 is valid
-        $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : $seasonalIndex;
+        $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int) $seasonalIndex;
         $mapIcon->comment = $request->get('comment', '') ?? '';
         $mapIcon->lat = $request->get('lat');
         $mapIcon->lng = $request->get('lng');

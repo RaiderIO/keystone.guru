@@ -62,6 +62,14 @@ class KillZone extends MapObject {
         //     self.removeExistingConnectionsToEnemies();
         // });
 
+        this.register(['shown', 'hidden'], this, function(shownHiddenEvent){
+            if( shownHiddenEvent.data.visible ){
+                self.removeExistingConnectionsToEnemies();
+            } else {
+                self.redrawConnectionsToEnemies();
+            }
+        });
+
         // Disconnect any enemies from us if they were teeming, but the new state is not teeming
         getState().getMapContext().register('teeming:changed', this, function (teemingChangedEvent) {
             let teeming = teemingChangedEvent.data.teeming;
@@ -867,6 +875,7 @@ class KillZone extends MapObject {
         getState().getMapContext().unregister('teeming:changed', this);
         this.unregister('object:deleted', this);
         this.unregister('object:changed', this);
+        this.unregister(['shown', 'hidden'], this);
         this.map.unregister('map:mapstatechanged', this);
         this.map.unregister('killzone:selectionchanged', this);
         this.map.unregister('map:mapobjectgroupsloaded', this);
