@@ -23,7 +23,7 @@ class Sidebar {
             }
 
             let pathname = window.location.pathname;
-            let pathSplit = window.location.pathname.split('/');
+            let pathSplit = trimEnd(pathname, '/').split('/');
             if (Number.isInteger(parseInt(pathSplit[pathSplit.length - 1]))) {
                 // Strip the last one from it
                 pathSplit.splice(-1, 1);

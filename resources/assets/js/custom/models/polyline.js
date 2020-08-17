@@ -10,11 +10,16 @@ class Polyline extends MapObject {
 
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Don't interfere with refreshing map states; that's what the map:beforerefresh event is for
-            if( !self.map.isRefreshingMap() ){
+            if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.previousMapState instanceof DeleteMapState) {
+                // Show it again when the edit/delete map state was restored
+                self._setAnimatedLayerVisibility(true);
+            }
+            // Don't do else; we may transition from edit to delete map state
+            if (mapStateChangedEvent.data.newMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof DeleteMapState) {
                 // Hide it when we're going to edit. It will be visible again when we've synced the polyline
-                self._setAnimatedLayerVisibility(!(
-                    mapStateChangedEvent.data.newMapState instanceof EditMapState ||
-                    mapStateChangedEvent.data.newMapState instanceof DeleteMapState));
+                self._setAnimatedLayerVisibility(false);
             }
         });
         // Hide yo wife, hide yo children (and animated layers)
@@ -121,16 +126,16 @@ class Polyline extends MapObject {
 
         if (this.layerAnimated !== null) {
             if (visible) {
-                // if (this.map.drawnLayers.hasLayer(this.layer)) {
-                //     this.map.drawnLayers.removeLayer(this.layer);
-                // }
+                if (this.map.drawnLayers.hasLayer(this.layer)) {
+                    this.map.drawnLayers.removeLayer(this.layer);
+                }
                 if (!this.map.drawnLayers.hasLayer(this.layerAnimated)) {
                     this.map.drawnLayers.addLayer(this.layerAnimated);
                 }
             } else {
-                // if (!this.map.drawnLayers.hasLayer(this.layer)) {
-                //     this.map.drawnLayers.addLayer(this.layer);
-                // }
+                if (!this.map.drawnLayers.hasLayer(this.layer)) {
+                    this.map.drawnLayers.addLayer(this.layer);
+                }
                 if (this.map.drawnLayers.hasLayer(this.layerAnimated)) {
                     this.map.drawnLayers.removeLayer(this.layerAnimated);
                 }

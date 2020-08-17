@@ -480,11 +480,6 @@ class DungeonMap extends Signalable {
         for (let i = 0; i < this.mapControls.length; i++) {
             this.mapControls[i].addControl();
         }
-
-        // Do this once and not a bunch of times for all different elements
-        refreshSelectPickers();
-        // All layers have been fetched and everything rebuilt, refresh tooltips for all elements
-        refreshTooltips();
     }
 
     /**

@@ -55,19 +55,8 @@ class KillZone extends MapObject {
 
         this.setSynced(false);
 
-        // // We gotta remove the connections manually since they're self managed here.
-        // this.map.register('map:beforerefresh', this, function () {
-        //     // In case someone switched dungeons prior to finishing the kill zone edit
-        //     self.map.setSelectModeKillZone(null);
-        //     self.removeExistingConnectionsToEnemies();
-        // });
-
-        this.register(['shown', 'hidden'], this, function(shownHiddenEvent){
-            if( shownHiddenEvent.data.visible ){
-                self.removeExistingConnectionsToEnemies();
-            } else {
-                self.redrawConnectionsToEnemies();
-            }
+        this.map.register(['map:refresh'], this, function(shownHiddenEvent){
+            self.redrawConnectionsToEnemies();
         });
 
         // Disconnect any enemies from us if they were teeming, but the new state is not teeming
@@ -872,14 +861,14 @@ class KillZone extends MapObject {
     cleanup() {
         let self = this;
 
+
         getState().getMapContext().unregister('teeming:changed', this);
         this.unregister('object:deleted', this);
         this.unregister('object:changed', this);
-        this.unregister(['shown', 'hidden'], this);
+        this.map.unregister('map:refresh', this);
         this.map.unregister('map:mapstatechanged', this);
         this.map.unregister('killzone:selectionchanged', this);
         this.map.unregister('map:mapobjectgroupsloaded', this);
-        this.map.unregister('map:beforerefresh', this);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {

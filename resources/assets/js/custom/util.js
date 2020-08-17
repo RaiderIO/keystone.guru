@@ -109,6 +109,22 @@ function toSnakeCase(key) {
 }
 
 /**
+ * https://stackoverflow.com/a/55292366/771270
+ * @param str
+ * @param ch
+ * @returns {string|*}
+ */
+function trimEnd(str, ch) {
+    let end = str.length;
+
+    while (str[end - 1] === ch) {
+        --end;
+    }
+
+    return (end < str.length) ? str.substring(0, end) : str;
+}
+
+/**
  * Checks if a given hex color is 'dark' or not.
  * @param hex
  * @returns {boolean}

@@ -128,7 +128,7 @@ class EnemyPack extends MapObject {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
 
-            if (enemy !== null && enemy.layer !== null && enemy.shouldBeVisible()) {
+            if (enemy !== null && enemy.layer !== null) {
                 let enemyLatLng = enemy.layer.getLatLng();
                 latLngs.push([enemyLatLng.lat, enemyLatLng.lng]);
             }
