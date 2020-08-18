@@ -68,11 +68,7 @@ class EnemyPack extends MapObject {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
         if (!this.map.isRefreshingMap()) {
-            let newLayer = this.createHullLayer();
-
-            // Refresh our enemy pack to neatly fit around the visible enemies
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
-            enemyMapObjectGroup.setLayerToMapObject(newLayer, this);
+            this._updateHullLayer();
         }
     }
 
@@ -86,8 +82,7 @@ class EnemyPack extends MapObject {
         if (getState().getMapContext() instanceof MapContextDungeonRoute) {
             // Re-set the layer now that we know of the raw enemies
             this.setRawEnemies(remoteMapObject.enemies);
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
-            enemyMapObjectGroup.setLayerToMapObject(this.createHullLayer(), this);
+            this._updateHullLayer();
         }
     }
 
@@ -116,7 +111,7 @@ class EnemyPack extends MapObject {
      * Creates a new layer ready to be assigned somewhere.
      * @returns {L.Layer|null}
      */
-    createHullLayer() {
+    _updateHullLayer() {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
         let result = null;
@@ -128,7 +123,7 @@ class EnemyPack extends MapObject {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
 
-            if (enemy !== null && enemy.layer !== null) {
+            if (enemy !== null && enemy.layer !== null && enemy.shouldBeVisible()) {
                 let enemyLatLng = enemy.layer.getLatLng();
                 latLngs.push([enemyLatLng.lat, enemyLatLng.lng]);
             }
@@ -155,8 +150,8 @@ class EnemyPack extends MapObject {
             console.warn(`Unable to create hull layer for enemypack ${this.id}; not enough data points`);
         }
 
-        // May be null
-        return result;
+        let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+        enemyPackMapObjectGroup.setLayerToMapObject(result, this);
     }
 
     /**
