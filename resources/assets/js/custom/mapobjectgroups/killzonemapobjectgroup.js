@@ -71,7 +71,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         // Change the color as necessary
         if (getState().getMapContext().getPullGradientApplyAlways()) {
-            this.applyPullGradient();
+            this.applyPullGradient(true);
         }
 
         killZone.save();
@@ -121,7 +121,10 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         for (let i = 0; i < this.objects.length; i++) {
             let killZone = this.objects[i];
 
-            killZonesData.push(killZone.getSaveData(fields));
+            // Only those that can be saved
+            if (killZone.id > 0) {
+                killZonesData.push(killZone.getSaveData(fields));
+            }
         }
 
         $.ajax({
