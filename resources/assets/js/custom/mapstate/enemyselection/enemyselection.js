@@ -29,6 +29,7 @@ class EnemySelection extends MapObjectMapState {
     start() {
         super.start();
         console.assert(this instanceof EnemySelection, 'this is not an EnemySelectionMapState', this);
+
         let self = this;
 
         // https://stackoverflow.com/a/18008067/771270
@@ -36,18 +37,19 @@ class EnemySelection extends MapObjectMapState {
         // this.sourceMapObject.layer.setIcon(this._getLayerIcon());
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
             // Check if we should set this enemy to be selectable or not
-            enemy.setSelectable(self._filter(self.sourceMapObject, enemy));
+            enemy.setSelectable(this._filter(this.sourceMapObject, enemy));
 
-            enemy.register('enemy:selected', self, function (data) {
+            enemy.register('enemy:selected', this, function (data) {
                 let enemy = data.context;
                 console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
                 console.assert(self instanceof EnemySelection, 'this is not an EnemySelectionMapState', self);
 
                 self.signal('enemyselection:enemyselected', {enemy: enemy});
             });
-        });
+        }
 
         // Cannot start editing things while we're doing this.
         // @TODO https://stackoverflow.com/questions/40414970/disable-leaflet-draw-delete-button

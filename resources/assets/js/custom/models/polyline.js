@@ -126,16 +126,10 @@ class Polyline extends MapObject {
 
         if (this.layerAnimated !== null) {
             if (visible) {
-                if (this.map.drawnLayers.hasLayer(this.layer)) {
-                    this.map.drawnLayers.removeLayer(this.layer);
-                }
                 if (!this.map.drawnLayers.hasLayer(this.layerAnimated)) {
                     this.map.drawnLayers.addLayer(this.layerAnimated);
                 }
             } else {
-                if (!this.map.drawnLayers.hasLayer(this.layer)) {
-                    this.map.drawnLayers.addLayer(this.layer);
-                }
                 if (this.map.drawnLayers.hasLayer(this.layerAnimated)) {
                     this.map.drawnLayers.removeLayer(this.layerAnimated);
                 }

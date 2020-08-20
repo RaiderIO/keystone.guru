@@ -359,12 +359,12 @@ class KillZone extends MapObject {
             }
 
             this.redrawConnectionsToEnemies();
-            this.save();
+            // this.save();
 
             // The previous killzone lost a member, we have to notify it and save it
             if (previousKillZone !== null && previousKillZone.id !== this.id) {
                 previousKillZone.redrawConnectionsToEnemies();
-                previousKillZone.save();
+                // previousKillZone.save();
             }
         } else {
             console.warn('Not handling _enemySelected; killzone not (yet) saved!', this, enemy.id);
@@ -387,8 +387,6 @@ class KillZone extends MapObject {
 
             if (this.map.options.edit) {
                 if (previousState instanceof EnemySelection && previousState.getMapObject().id === this.id) {
-                    // May save when nothing has changed, but that's okay
-                    this.save();
                     // Unreg if we were listening
                     previousState.unregister('enemyselection:enemyselected', this);
                 }

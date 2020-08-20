@@ -286,7 +286,7 @@ class MapIcon extends MapObject {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
         return this.map_icon_type.isEditable() && this.linked_awakened_obelisk_id === null &&
-            (getState().isMapAdmin() && this.is_admin);
+            getState().isMapAdmin() === this.is_admin;
     }
 
     /**

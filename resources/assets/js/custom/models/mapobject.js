@@ -26,8 +26,8 @@ class MapObject extends Signalable {
 
         let self = this;
 
-        // Visible by default
-        this._visible = false;
+        // Null by default; TBD - false
+        this._visible = null;
         this._defaultVisible = true;
         /** @type {Array} */
         this._cachedAttributes = null;
@@ -240,30 +240,34 @@ class MapObject extends Signalable {
 
         let self = this;
 
-        if (layer !== null && this.map.options.edit && this.isEditable() && this.isEditableByPopup()) {
+        if (layer !== null) {
+            // Always remove the popupopen event
+            layer.off('popupopen');
             layer.unbindPopup();
-            layer.bindPopup(this._getPopupHtml(), {
-                'maxWidth': '400',
-                'minWidth': '300',
-                'className': 'popupCustom'
-            });
 
-            // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
-            // This also cannot be a private function since that'll apparently give different signatures as well
-            // (and thus trigger the submit function multiple times when clicked once)
-            let popupOpenFn = function (event) {
-                // Prevent multiple binds to click
-                let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
-                $submitBtn.unbind('click');
-                $submitBtn.bind('click', function () {
-                    self._popupSubmitClicked();
+            if (this.map.options.edit && this.isEditable() && this.isEditableByPopup()) {
+                layer.bindPopup(this._getPopupHtml(), {
+                    'maxWidth': '400',
+                    'minWidth': '300',
+                    'className': 'popupCustom'
                 });
 
-                self._initPopup();
-            };
+                // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
+                // This also cannot be a private function since that'll apparently give different signatures as well
+                // (and thus trigger the submit function multiple times when clicked once)
+                let popupOpenFn = function (event) {
+                    // Prevent multiple binds to click
+                    let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
+                    $submitBtn.unbind('click');
+                    $submitBtn.bind('click', function () {
+                        self._popupSubmitClicked();
+                    });
 
-            layer.off('popupopen');
-            layer.on('popupopen', popupOpenFn);
+                    self._initPopup();
+                };
+
+                layer.on('popupopen', popupOpenFn);
+            }
         }
     }
 
@@ -675,7 +679,7 @@ class MapObject extends Signalable {
      * @returns {*}
      */
     isVisible() {
-        return this._visible;
+        return this._visible === null ? false : this._visible;
     }
 
     /**
@@ -683,11 +687,15 @@ class MapObject extends Signalable {
      * @param visible
      */
     setVisible(visible) {
+        let wasVisible = this._visible;
         this._visible = visible;
-        if (visible) {
-            this.signal('shown', {visible: visible});
-        } else {
-            this.signal('hidden', {visible: visible});
+        // If there was a change
+        if (wasVisible !== visible) {
+            if (visible) {
+                this.signal('shown', {visible: visible});
+            } else {
+                this.signal('hidden', {visible: visible});
+            }
         }
     }
 

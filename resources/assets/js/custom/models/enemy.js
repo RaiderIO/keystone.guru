@@ -292,7 +292,7 @@ class Enemy extends MapObject {
      * Checks if this enemy is the last boss or not.
      * @returns {boolean}
      */
-    isLastBoss(){
+    isLastBoss() {
         return this.npc !== null && this.npc.classification_id === 4;
     }
 
@@ -473,10 +473,12 @@ class Enemy extends MapObject {
     }
 
     shouldBeVisible() {
-        // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
-        if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
-            // console.warn(`Hiding enemy due to being part of the last boss, but linked enemy is killed elsewhere ${this.id}`);
-            return false;
+        if (!getState().isMapAdmin()) {
+            // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
+            if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
+                // console.warn(`Hiding enemy due to being part of the last boss, but linked enemy is killed elsewhere ${this.id}`);
+                return false;
+            }
         }
 
         // Hide MDT enemies
