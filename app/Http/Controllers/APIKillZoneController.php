@@ -48,9 +48,10 @@ class APIKillZoneController extends Controller
         }
 
         if ($killZone->save()) {
+            $killZone->deleteEnemies();
+
             // Only when the enemies are actually set
             if (isset($data['enemies'])) {
-                $killZone->deleteEnemies();
 
                 // Get the new enemies, only unique values in case there's some bug allowing selection of the same enemy multiple times
                 $enemyIds = array_unique($data['enemies'] ?? []);
@@ -73,6 +74,9 @@ class APIKillZoneController extends Controller
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
             }
+
+            // Refresh the enemies that may or may not have been set
+            $killZone->load(['killzoneenemies']);
 
             if (Auth::check()) {
                 // Something's updated; broadcast it

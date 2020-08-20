@@ -55,7 +55,7 @@ class KillZone extends MapObject {
 
         this.setSynced(false);
 
-        this.map.register(['map:refresh'], this, function(shownHiddenEvent){
+        this.map.register(['map:refresh'], this, function (shownHiddenEvent) {
             self.redrawConnectionsToEnemies();
         });
 
@@ -208,6 +208,7 @@ class KillZone extends MapObject {
 
         // Deselect if necessary
         let externalChange = enemy.getKillZone() === null || enemy.getKillZone().id !== this.id;
+        // console.warn(`KZ ${this.id} (${this.index}) removing enemy ${enemy.id} (${enemy.npc.name}) (external: ${externalChange})`);
         if (!externalChange) {
             enemy.setKillZone(null);
         }
@@ -221,7 +222,7 @@ class KillZone extends MapObject {
                 // This enemy left us, no longer interested in it
                 enemyMapObjectGroup.findMapObjectById(deleted[0]).unregister('killzone:detached', this);
             }
-            this.signal('killzone:enemyremoved', this, {enemy: enemy});
+            this.signal('killzone:enemyremoved', {enemy: enemy});
         }
 
         // If the enemy we're removing from the pull is the real one
@@ -230,8 +231,6 @@ class KillZone extends MapObject {
             let linkedAwakenedEnemy = enemy.getLinkedAwakenedEnemy();
             if (linkedAwakenedEnemy !== null) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                // Show the awakened enemy that's near the boss
-                enemyMapObjectGroup.setMapObjectVisibility(linkedAwakenedEnemy, true);
 
                 let finalBoss = enemyMapObjectGroup.getFinalBoss();
 
@@ -242,6 +241,9 @@ class KillZone extends MapObject {
                     finalBossKillZone._addEnemy(linkedAwakenedEnemy);
                     finalBossKillZone.save();
                 }
+
+                // Show the awakened enemy that's near the boss
+                enemyMapObjectGroup.setMapObjectVisibility(linkedAwakenedEnemy, true);
             }
         }
     }
@@ -253,6 +255,9 @@ class KillZone extends MapObject {
      */
     _addEnemy(enemy) {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+        // console.warn(`KZ ${this.id} (${this.index}) adding enemy ${enemy.id} (${enemy.npc.name})`);
+
+        let self = this;
 
         enemy.setKillZone(this);
         // Add it, but don't double add it
@@ -261,7 +266,7 @@ class KillZone extends MapObject {
 
             // We're interested in knowing when this enemy has detached itself (by assigning to another killzone, for example)
             enemy.register('killzone:detached', this, this._enemyDetached.bind(this));
-            this.signal('killzone:enemyadded', this, {enemy: enemy});
+            this.signal('killzone:enemyadded', {enemy: enemy});
         }
 
         // If the enemy we're adding to the pull is the real one, not the one attached to a pack with the final boss
@@ -560,7 +565,7 @@ class KillZone extends MapObject {
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < this.enemies.length; i++) {
             let enemy = enemyMapObjectGroup.findMapObjectById(this.enemies[i]);
-            if (enemy !== null && enemy.npc !== null && enemy.npc.classification_id === 4) {
+            if (enemy !== null && enemy.isLastBoss()) {
                 result = true;
                 break;
             }

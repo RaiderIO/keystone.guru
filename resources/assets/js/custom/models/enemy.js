@@ -289,6 +289,14 @@ class Enemy extends MapObject {
     }
 
     /**
+     * Checks if this enemy is the last boss or not.
+     * @returns {boolean}
+     */
+    isLastBoss(){
+        return this.npc !== null && this.npc.classification_id === 4;
+    }
+
+    /**
      * Checks if this enemy is linked to the last boss or not.
      * @returns {boolean}
      */
@@ -301,7 +309,7 @@ class Enemy extends MapObject {
         for (let i = 0; i < packBuddies.length; i++) {
             let packBuddy = packBuddies[i];
 
-            if (packBuddy.npc !== null && packBuddy.npc.classification_id === 4) {
+            if (packBuddy.isLastBoss()) {
                 result = true;
                 break;
             }
@@ -466,8 +474,8 @@ class Enemy extends MapObject {
 
     shouldBeVisible() {
         // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
-        if (this.linked_awakened_enemy !== null && this.linked_awakened_enemy.getKillZone() !== null && this.isLinkedToLastBoss()) {
-            console.log(`Hiding enemy ${this.id}`);
+        if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
+            // console.warn(`Hiding enemy due to being part of the last boss, but linked enemy is killed elsewhere ${this.id}`);
             return false;
         }
 
@@ -570,6 +578,8 @@ class Enemy extends MapObject {
         console.assert(awakenedEnemy.isAwakenedNpc(), 'awakenedEnemy must be an Awakened NPC!', awakenedEnemy);
         console.assert(awakenedEnemy.id !== this.id, 'awakenedEnemy must have a different id as ourselves!', awakenedEnemy, this);
         console.assert(awakenedEnemy.npc.id === this.npc.id, 'awakenedEnemy must have the same NPC id as ourselves!', awakenedEnemy.npc, this.npc);
+
+        // console.warn('Setting linked awakened enemy', this.id, awakenedEnemy.id);
 
         this.linked_awakened_enemy = awakenedEnemy;
     }

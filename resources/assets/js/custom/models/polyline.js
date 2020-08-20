@@ -198,7 +198,6 @@ class Polyline extends MapObject {
         this.layerAnimated = null;
 
         if (this.polyline.color_animated !== null) {
-            console.warn(this.id, this.constructor.name, 'Creating new layerAnimated!');
             this.layerAnimated = L.polyline.antPath(this.getVertices(),
                 $.extend({}, c.map.polyline.polylineOptionsAnimated, {
                     color: this.polyline.color,

@@ -140,14 +140,14 @@ class MapObject extends Signalable {
                 // Grab default from the attribute function, otherwise directly from the property
                 else if (typeof attribute.default === 'function') {
                     // Do not use _setValue - this sets some INITIAL values, just to have something there
-                    if( parentAttribute !== null ) {
+                    if (parentAttribute !== null) {
                         this[parentAttribute.name][attribute.name] = attribute.default();
                     } else {
                         this[attribute.name] = attribute.default();
                     }
                 } else if (typeof attribute.default !== 'undefined') {
                     // Do not use _setValue - this sets some INITIAL values, just to have something there
-                    if( parentAttribute !== null ) {
+                    if (parentAttribute !== null) {
                         this[parentAttribute.name][attribute.name] = attribute.default;
                     } else {
                         this[attribute.name] = attribute.default;
@@ -219,7 +219,7 @@ class MapObject extends Signalable {
         // Use setter if supplied
         if (attribute.hasOwnProperty('setter')) {
             attribute.setter(value);
-        } else if( parentAttribute !== null ) {
+        } else if (parentAttribute !== null) {
             this[parentAttribute.name][name] = value;
         } else {
             // Assign variable back to us
@@ -255,7 +255,7 @@ class MapObject extends Signalable {
                 // Prevent multiple binds to click
                 let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
                 $submitBtn.unbind('click');
-                $submitBtn.bind('click', function(){
+                $submitBtn.bind('click', function () {
                     self._popupSubmitClicked();
                 });
 
@@ -290,7 +290,7 @@ class MapObject extends Signalable {
                 let name = attribute.name;
 
                 // Prevent infinite loops when having parentAttributes with no attributes set (enemy npc)
-                if( attribute.type === 'object' && attribute !== parentAttribute ) {
+                if (attribute.type === 'object' && attribute !== parentAttribute) {
                     // Recursively init the popup
                     this._initPopup(attribute);
                 } else if (attribute.isEditable() && attribute.type === 'color') {
@@ -338,7 +338,7 @@ class MapObject extends Signalable {
                 let name = attribute.name;
 
                 // Color is already set by Pickr
-                if( attribute.type === 'object' ) {
+                if (attribute.type === 'object') {
                     this._popupSubmitClicked(attribute);
                 } else if (attribute.isEditable()) {
                     let $element = $(`#map_${mapObjectName}_edit_popup_${name}_${this.id}`);
@@ -376,7 +376,7 @@ class MapObject extends Signalable {
         }
 
         // Only trigger if we're the root
-        if( parentAttribute === null ) {
+        if (parentAttribute === null) {
             this.save();
         }
     }
@@ -450,7 +450,7 @@ class MapObject extends Signalable {
 
         let popupTemplate = Handlebars.templates['map_popup_template'];
 
-        if( parentAttribute === null ) {
+        if (parentAttribute === null) {
             return popupTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                 id: this.id,
                 html: result,
@@ -636,23 +636,25 @@ class MapObject extends Signalable {
         // All other states
         let mapContext = state.getMapContext();
 
-        if (this.hasOwnProperty('teeming')) {
-            // If the map isn't teeming, but the enemy is teeming..
-            if (!mapContext.getTeeming() && this.teeming === 'visible') {
-                // console.log(`Hiding enemy due to teeming A ${this.id}`);
-                return false;
+        if (!state.isMapAdmin()) {
+            if (this.hasOwnProperty('teeming')) {
+                // If the map isn't teeming, but the enemy is teeming..
+                if (!mapContext.getTeeming() && this.teeming === 'visible') {
+                    // console.log(`Hiding enemy due to teeming A ${this.id}`);
+                    return false;
+                }
+                // If the map is teeming, but the enemy shouldn't be there for teeming maps..
+                else if (mapContext.getTeeming() && this.teeming === 'invisible') {
+                    // console.log(`Hiding enemy due to teeming B ${this.id}`);
+                    return false;
+                }
             }
-            // If the map is teeming, but the enemy shouldn't be there for teeming maps..
-            else if (mapContext.getTeeming() && this.teeming === 'invisible') {
-                // console.log(`Hiding enemy due to teeming B ${this.id}`);
-                return false;
-            }
-        }
 
-        if (this.hasOwnProperty('seasonal_index')) {
-            if (this.seasonal_index !== null && mapContext.getSeasonalIndex() !== this.seasonal_index) {
-                // console.log(`Hiding enemy due to seasonal_index ${this.id}`);
-                return false;
+            if (this.hasOwnProperty('seasonal_index')) {
+                if (this.seasonal_index !== null && mapContext.getSeasonalIndex() !== this.seasonal_index) {
+                    // console.warn(`Hiding enemy due to seasonal_index ${this.id}`);
+                    return false;
+                }
             }
         }
 
