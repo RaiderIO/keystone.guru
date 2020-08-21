@@ -149,7 +149,7 @@ class DungeonRouteController extends Controller
         return view('dungeonroute.preview', [
             'model'   => $dungeonroute,
             'floorId' => $floor->id,
-            'mapContext' => new MapContextDungeonRoute($dungeonroute, $floor)
+            'mapContext' => (new MapContextDungeonRoute($dungeonroute, $floor))->toArray()
         ]);
     }
 

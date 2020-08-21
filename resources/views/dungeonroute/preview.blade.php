@@ -32,7 +32,6 @@ $dungeon->load('floors');
         'hiddenMapObjectGroups' => [
             'enemypatrol',
             'enemypack',
-            'mapicon',
             'dungeonfloorswitchmarker',
         ]
     ])

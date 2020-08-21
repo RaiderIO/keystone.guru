@@ -780,7 +780,7 @@ class KillZone extends MapObject {
 
     bindTooltip() {
         super.bindTooltip();
-        if (this.enemiesLayer !== null) {
+        if (!this.map.options.noUI && this.enemiesLayer !== null) {
             this.enemiesLayer.unbindTooltip();
 
             // Only when NOT currently editing the layer
