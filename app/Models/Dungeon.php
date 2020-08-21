@@ -2,7 +2,13 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Collection;
 use Mockery\Exception;
 
 /**
@@ -16,14 +22,20 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
- * @property \Illuminate\Support\Collection $floors
- * @property \Illuminate\Support\Collection $dungeonroutes
- * @property \Illuminate\Support\Collection $npcs
+ * @property Collection $floors
+ * @property Collection $dungeonroutes
+ * @property Collection $npcs
  *
- * @method static \Illuminate\Database\Eloquent\Builder active()
- * @method static \Illuminate\Database\Eloquent\Builder inactive()
+ * @property Collection $enemies
+ * @property Collection $enemypacks
+ * @property Collection $enemypatrols
+ * @property Collection $mapicons
+ * @property Collection $floorswitchmarkers
  *
- * @mixin \Eloquent
+ * @method static Builder active()
+ * @method static Builder inactive()
+ *
+ * @mixin Eloquent
  */
 class Dungeon extends Model
 {
@@ -32,22 +44,11 @@ class Dungeon extends Model
      *
      * @var array
      */
-    protected $appends = ['key', 'floor_count'];
-    public $with = ['expansion'];
+    protected $appends = ['floor_count'];
+    public $with = ['expansion', 'floors'];
 
     public $hidden = ['expansion_id', 'created_at', 'updated_at'];
     public $timestamps = false;
-
-    /**
-     * @return string The key as used in the front-end to identify the dungeon.
-     */
-    public function getKeyAttribute()
-    {
-        // https://stackoverflow.com/questions/14114411/remove-all-special-characters-from-a-string
-        $string = str_replace(' ', '', strtolower($this->name)); // Replaces all spaces with nothing.
-
-        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-    }
 
     /**
      * @return int The amount of floors this dungeon has.
@@ -96,11 +97,116 @@ class Dungeon extends Model
     }
 
     /**
+     * @return BelongsTo
+     */
+    public function expansion()
+    {
+        return $this->belongsTo('App\Models\Expansion');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function floors()
+    {
+        return $this->hasMany('App\Models\Floor');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function dungeonroutes()
+    {
+        return $this->hasMany('App\Models\DungeonRoute');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function npcs()
+    {
+        return $this->hasMany('App\Models\Npc');
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function enemies()
+    {
+        return $this->hasManyThrough('App\Models\Enemy', 'App\Models\Floor');
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function enemypacks()
+    {
+        return $this->hasManyThrough('App\Models\EnemyPack', 'App\Models\Floor');
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function enemypatrols()
+    {
+        return $this->hasManyThrough('App\Models\EnemyPatrol', 'App\Models\Floor');
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function mapicons()
+    {
+        return $this->hasManyThrough('App\Models\MapIcon', 'App\Models\Floor')->where('dungeon_route_id', -1);
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function floorswitchmarkers()
+    {
+        return $this->hasManyThrough('App\Models\DungeonFloorSwitchMarker', 'App\Models\Floor');
+    }
+
+    /**
+     * Scope a query to only the Siege of Boralus dungeon.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeSiegeOfBoralus($query)
+    {
+        return $query->where('name', 'Siege of Boralus');
+    }
+
+    /**
+     * Scope a query to only include active dungeons.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
+    /**
+     * Scope a query to only include inactive dungeons.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('active', 0);
+    }
+
+    /**
      * Get the minimum amount of health of all NPCs in this dungeon.
      */
     public function getNpcsMinHealth()
     {
-        return $this->npcs->where('classification_id', '<>', 3)->where('dungeon_id', '<>', -1)->min('base_health');
+        return $this->npcs->where('classification_id', '<', 3)->where('dungeon_id', '<>', -1)->min('base_health') ?? 10000;
     }
 
     /**
@@ -108,7 +214,7 @@ class Dungeon extends Model
      */
     public function getNpcsMaxHealth()
     {
-        return $this->npcs->where('classification_id', '<>', 3)->where('dungeon_id', '<>', -1)->max('base_health');
+        return $this->npcs->where('classification_id', '<', 3)->where('dungeon_id', '<>', -1)->max('base_health') ?? 100000;
     }
 
     /**
@@ -132,78 +238,14 @@ class Dungeon extends Model
         return $this->name === 'Tol Dagor';
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function expansion()
-    {
-        return $this->belongsTo('App\Models\Expansion');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function floors()
-    {
-        return $this->hasMany('App\Models\Floor');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function dungeonroutes()
-    {
-        return $this->hasMany('App\Models\DungeonRoute');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function npcs()
-    {
-        return $this->hasMany('App\Models\Npc');
-    }
-
-    /**
-     * Scope a query to only the Siege of Boralus dungeon.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSiegeOfBoralus($query)
-    {
-        return $query->where('name', 'Siege of Boralus');
-    }
-
-    /**
-     * Scope a query to only include active dungeons.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('active', 1);
-    }
-
-    /**
-     * Scope a query to only include inactive dungeons.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeInactive($query)
-    {
-        return $query->where('active', 0);
-    }
-
 
     public static function boot()
     {
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
+        static::deleting(function ($someModel)
+        {
             return false;
         });
     }

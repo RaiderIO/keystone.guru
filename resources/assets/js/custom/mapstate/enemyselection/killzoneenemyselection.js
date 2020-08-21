@@ -5,6 +5,8 @@ class KillZoneEnemySelection extends EnemySelection {
         super(map, sourceMapObject);
 
         this.sourceMapObject.register('object:deleted', this, this._onSourceMapObjectDeleted.bind(this));
+
+        this._changedKillZoneIds = [];
     }
 
     /**
@@ -49,6 +51,41 @@ class KillZoneEnemySelection extends EnemySelection {
         this.map.setMapState(null);
     }
 
+
+    start() {
+        super.start();
+
+        let self = this;
+
+        // Register to all existing killzones so that we may find if there have been changes to them or not
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
+            let killZone = killZoneMapObjectGroup.objects[i];
+
+            // Keep track of all killzones that were ever changed
+            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved'], this, function (killZoneChangedEvent) {
+                if (!self._changedKillZoneIds.includes(killZoneChangedEvent.context.id)) {
+                    self._changedKillZoneIds.push(killZoneChangedEvent.context.id);
+                }
+            });
+        }
+    }
+
+    stop() {
+        super.stop();
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
+            let killZone = killZoneMapObjectGroup.objects[i];
+
+            killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved'], this);
+        }
+
+        // Save all the killzones that were changed
+        for (let i = 0; i < this._changedKillZoneIds.length; i++) {
+            let killZone = killZoneMapObjectGroup.findMapObjectById(this._changedKillZoneIds[i]);
+            killZone.save();
+        }
+    }
 
     cleanup() {
         super.cleanup();

@@ -1,13 +1,13 @@
 class PolygonMapObjectGroup extends MapObjectGroup {
-    constructor(manager, names, field, editable) {
-        super(manager, names, field, editable);
+    constructor(manager, names, editable) {
+        super(manager, names, editable);
     }
 
     /**
      * Converts vertices_json to a list of L.LatLngs
      * @param remoteMapObject {Object}
      * @returns {[]}
-     * @private
+     * @protected
      */
     _restorePoints(remoteMapObject) {
         let points = [];

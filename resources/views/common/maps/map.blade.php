@@ -1,6 +1,6 @@
 <?php
-/** @var $npcs \Illuminate\Support\Collection */
 /** @var \App\User $user */
+/** @var \App\Logic\MapContext\MapContext $mapContext */
 $user = Auth::user();
 $isAdmin = isset($admin) && $admin;
 /** @var App\Models\Dungeon $dungeon */
@@ -8,20 +8,9 @@ $isAdmin = isset($admin) && $admin;
 // Enabled by default if it's not set, but may be explicitly disabled
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? true : false;
-$routeTeam = isset($dungeonroute) ? $dungeonroute->team_id : -1;
-$routePublicKey = isset($dungeonroute) ? $dungeonroute->public_key : 'admin';
-$routeSeasonalIndex = isset($dungeonroute) ? $dungeonroute->seasonal_index : 0;
-$routeKillZones = isset($dungeonroute) ? \App\Models\KillZone::where('dungeon_route_id', $dungeonroute->id)->orderBy('index')->get() : new \Illuminate\Database\Eloquent\Collection();
+
 // Set the key to 'try' if try mode is enabled
 $tryMode = isset($tryMode) && $tryMode ? true : false;
-// Set the enemy forces of the current route. May not be set if just editing the route from admin
-$routeEnemyForces = isset($dungeonroute) ? $dungeonroute->getEnemyForces() : 0;
-// For Siege of Boralus
-$routeFaction = isset($dungeonroute) ? strtolower($dungeonroute->faction->name) : 'any';
-// Grab teeming from the route, if it's not set, grab it from a variable, or just be false. Admin teeming is always true.
-$teeming = (isset($dungeonroute) ? $dungeonroute->teeming : ((isset($teeming) && $teeming) || $isAdmin)) ? true : false;
-$pullGradient = (isset($dungeonroute) ? $dungeonroute->pull_gradient : '');
-$pullGradientApplyAlways = (isset($dungeonroute) ? $dungeonroute->pull_gradient_apply_always : false);
 $enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
@@ -38,20 +27,12 @@ $noUI = isset($noUI) && $noUI ? true : false;
 $defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
 // By default hidden elements
 $hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
-// Floor id to display (bit ugly with JS, but it works)
-$floorId = isset($floorId) ? $floorId : $dungeon->floors->first()->id;
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 
 // Additional options to pass to the map when we're in an admin environment
 $adminOptions = [];
 if ($isAdmin) {
-    // Build options for displayed NPCs
-    $npcOptions = [];
-    foreach ($npcs as $npc) {
-        $npcOptions[] = ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
-    }
-
     $adminOptions = [
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
@@ -65,17 +46,12 @@ if ($isAdmin) {
             ['key' => 'alliance', 'description' => __('Alliance')],
             ['key' => 'horde', 'description' => __('Horde')],
         ],
-        // Display options for changing the NPC of an enemy
-        'npcs' => $npcOptions
     ];
 }
 ?>
-@php($dependencies = $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null)
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
-    'username' => Auth::check() ? $user->name : '',
-    // Only activate Echo when we are a member of the team in which this route is a member of
-    'echo' => true,
-    'floorId' => $floorId,
+    // Only activate Echo when we are logged in (guest access WIP)
+    'echo' => Auth::check(),
     'edit' => $edit,
     'try' => $tryMode,
     'defaultEnemyVisualType' => $enemyVisualType,
@@ -83,37 +59,24 @@ if ($isAdmin) {
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,
     'showAttribution' => $showAttribution,
-    'npcsMinHealth' => $dungeon->getNpcsMinHealth(),
-    'npcsMaxHealth' => $dungeon->getNpcsMaxHealth(),
-    'dependencies' => $dependencies
+    // @TODO Temp fix
+    'npcsMinHealth' => $mapContext['npcsMinHealth'],
+    'npcsMaxHealth' => $mapContext['npcsMaxHealth'],
+    'dependencies' => $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null
 ], $adminOptions)])
 
 @section('scripts')
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
 
-    @include('common.general.statemanager', array_merge([
+    @include('common.general.statemanager', [
         // Required by echo to join the correct channels
         'appType' => env('APP_TYPE'),
-        'mapIconTypes' => \App\Models\MapIconType::all(),
-        'classColors' => \App\Models\CharacterClass::all()->pluck('color'),
-        'raidMarkers' => \App\Models\RaidMarker::all(),
-        'factions' => \App\Models\Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
-        'killZones' => $routeKillZones,
-        'dungeonData' => $dungeon,
+        'echo' => !$tryMode,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
-        'dungeonroute' => [
-            'publicKey' => $routePublicKey,
-            'faction' => $routeFaction,
-            'enemyForces' => $routeEnemyForces,
-            'seasonalIndex' => $routeSeasonalIndex,
-            'teeming' => $teeming,
-            'teamId' => $routeTeam,
-            'pullGradient' => $pullGradient,
-            'pullGradientApplyAlways' => $pullGradientApplyAlways
-        ]
-    ], (new \App\Service\DungeonRoute\EnemiesListService())->listEnemies($dungeon->id, $isAdmin, $routePublicKey === 'admin' ? null : $routePublicKey)))
+        'mapContext' => $mapContext,
+    ])
     <script>
         var dungeonMap;
 
@@ -143,6 +106,8 @@ if ($isAdmin) {
         </div>
         <ul class="leaflet-draw-actions"></ul>
     </div>
+
+
 
     </script>
 @endsection

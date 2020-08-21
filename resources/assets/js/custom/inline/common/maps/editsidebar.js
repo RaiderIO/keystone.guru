@@ -89,7 +89,7 @@ class CommonMapsEditsidebar extends InlineCode {
             }
             let result = pullGradient.join(',');
 
-            getState().setPullGradient(result);
+            getState().getMapContext().setPullGradient(result);
         });
 
         $('#edit_route_freedraw_options_gradient_apply_to_pulls').bind('click', function () {
@@ -105,14 +105,14 @@ class CommonMapsEditsidebar extends InlineCode {
         });
 
         let $alwaysApplyPullGradient = $('#pull_gradient_apply_always');
-        let alwaysApplyPullGradient = getState().getPullGradientApplyAlways();
+        let alwaysApplyPullGradient = getState().getMapContext().getPullGradientApplyAlways();
         if (alwaysApplyPullGradient) {
             $alwaysApplyPullGradient.attr('checked', 'checked');
         } else {
             $alwaysApplyPullGradient.removeAttr('checked');
         }
         $alwaysApplyPullGradient.bind('change', function () {
-            getState().setPullGradientApplyAlways($(this).is(':checked'));
+            getState().getMapContext().setPullGradientApplyAlways($(this).is(':checked'));
         });
 
         // Draw settings save button
@@ -131,15 +131,19 @@ class CommonMapsEditsidebar extends InlineCode {
         let isNull = focusedEnemy === null;
         // Show/hide based on being set or not
         // $('#enemy_info_container').toggle(!isNull);
-        $('#enemy_info_container').show();
         if (!isNull) {
-            // Update the focused enemy in the sidebar
-            let template = Handlebars.templates['map_sidebar_enemy_info_template'];
+            let visualData = focusedEnemy.getVisualData();
+            if (visualData !== null) {
+                $('#enemy_info_container').show();
 
-            $('#enemy_info_key_value_container').html(
-                template(focusedEnemy.getVisualData())
-            )
-            $('#enemy_report_enemy_id').val(focusedEnemy.id);
+                // Update the focused enemy in the sidebar
+                let template = Handlebars.templates['map_sidebar_enemy_info_template'];
+
+                $('#enemy_info_key_value_container').html(
+                    template(visualData)
+                );
+                $('#enemy_report_enemy_id').val(focusedEnemy.id);
+            }
         }
     }
 
@@ -192,11 +196,11 @@ class CommonMapsEditsidebar extends InlineCode {
     _savePullGradientSettings() {
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getDungeonRoute().publicKey}/pullgradient`,
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/pullgradient`,
             dataType: 'json',
             data: {
-                pull_gradient: getState().getPullGradient(),
-                pull_gradient_apply_always: getState().getPullGradientApplyAlways() ? '1' : '0',
+                pull_gradient: getState().getMapContext().getPullGradient(),
+                pull_gradient_apply_always: getState().getMapContext().getPullGradientApplyAlways() ? '1' : '0',
                 _method: 'PATCH'
             },
             beforeSend: function () {

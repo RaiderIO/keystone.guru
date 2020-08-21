@@ -1,20 +1,3 @@
-$(function () {
-    L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
-        statics: {
-            TYPE: 'dungeonfloorswitchmarker'
-        },
-        options: {
-            icon: LeafletDungeonFloorSwitchIcon
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.DungeonFloorSwitchMarker.TYPE;
-
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
-});
-
 let defaultDungeonFloorSwitchIconSettings = {iconSize: [32, 32], tooltipAnchor: [0, -16], popupAnchor: [0, -16]};
 let LeafletDungeonFloorSwitchIcon = new L.divIcon($.extend({className: 'door_icon'}, defaultDungeonFloorSwitchIconSettings));
 let LeafletDungeonFloorSwitchIconUp = new L.divIcon($.extend({className: 'door_up_icon'}, defaultDungeonFloorSwitchIconSettings));
@@ -48,6 +31,21 @@ let LeafletDungeonFloorSwitchMarkerRight = L.Marker.extend({
     }
 });
 
+L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
+    statics: {
+        TYPE: 'dungeonfloorswitchmarker'
+    },
+    options: {
+        icon: LeafletDungeonFloorSwitchIcon
+    },
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.DungeonFloorSwitchMarker.TYPE;
+
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
+    }
+});
+
 class DungeonFloorSwitchMarker extends MapObject {
 
     constructor(map, layer) {
@@ -69,7 +67,7 @@ class DungeonFloorSwitchMarker extends MapObject {
 
         // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
         let currentFloorId = getState().getCurrentFloor().id;
-        let dungeonData = getState().getDungeonData();
+        let dungeonData = getState().getMapContext().getDungeon();
         let selectFloors = [];
         for (let i in dungeonData.floors) {
             if (dungeonData.floors.hasOwnProperty(i)) {

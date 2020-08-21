@@ -497,16 +497,16 @@ class DungeonRoute extends Model
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
-        $this->dungeon_id = $request->get('dungeon_id', $this->dungeon_id);
-        $this->faction_id = $request->get('faction_id', $this->faction_id);
+        $this->dungeon_id = (int) $request->get('dungeon_id', $this->dungeon_id);
+        $this->faction_id = (int) $request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
-        $this->seasonal_index = $request->get('seasonal_index', $this->seasonal_index);
-        $this->teeming = intval($request->get('teeming', $this->teeming) ?? 0);
+        $this->seasonal_index = (int) $request->get('seasonal_index', $this->seasonal_index);
+        $this->teeming = (int) $request->get('teeming', $this->teeming) ?? 0;
 
         $this->pull_gradient = $request->get('pull_gradient', '');
-        $this->pull_gradient_apply_always = $request->get('pull_gradient_apply_always', 0);
+        $this->pull_gradient_apply_always = (int) $request->get('pull_gradient_apply_always', 0);
 
         if (Auth::check()) {
             $user = User::findOrFail(Auth::id());
@@ -545,7 +545,7 @@ class DungeonRoute extends Model
                     // Only if they exist
                     if (CharacterClassSpecialization::where('id', $value)->exists()) {
                         $drpSpec = new DungeonRoutePlayerSpecialization();
-                        $drpSpec->character_class_specialization_id = $value;
+                        $drpSpec->character_class_specialization_id = (int) $value;
                         $drpSpec->dungeon_route_id = $this->id;
                         $drpSpec->save();
                     }
@@ -559,7 +559,7 @@ class DungeonRoute extends Model
                 foreach ($newClasses as $key => $value) {
                     if (CharacterClass::where('id', $value)->exists()) {
                         $drpClass = new DungeonRoutePlayerClass();
-                        $drpClass->character_class_id = $value;
+                        $drpClass->character_class_id = (int) $value;
                         $drpClass->dungeon_route_id = $this->id;
                         $drpClass->save();
                     }
@@ -574,7 +574,7 @@ class DungeonRoute extends Model
                 // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
                 foreach ($newRaces as $key => $value) {
                     $drpRace = new DungeonRoutePlayerRace();
-                    $drpRace->character_race_id = $value;
+                    $drpRace->character_race_id = (int) $value;
                     $drpRace->dungeon_route_id = $this->id;
                     $drpRace->save();
                 }
@@ -594,7 +594,7 @@ class DungeonRoute extends Model
                     }
 
                     $drAffixGroup = new DungeonRouteAffixGroup();
-                    $drAffixGroup->affix_group_id = $value;
+                    $drAffixGroup->affix_group_id = $affixGroup->id;
                     $drAffixGroup->dungeon_route_id = $this->id;
                     $drAffixGroup->save();
                 }
@@ -642,14 +642,16 @@ class DungeonRoute extends Model
     {
         // Must save the new route first
         $dungeonroute = new DungeonRoute();
+        $dungeonroute->public_key = DungeonRoute::generateRandomPublicKey();
+        $dungeonroute->clone_of = $this->public_key;
         $dungeonroute->author_id = Auth::id();
         $dungeonroute->dungeon_id = $this->dungeon_id;
         $dungeonroute->faction_id = $this->faction_id;
+        // Do not clone team_id; user assigns the team himself
+        // $dungeonroute->team_id = $this->team_id;
         $dungeonroute->title = sprintf('%s (%s)', $this->title, __('clone'));
-        $dungeonroute->teeming = $this->teeming;
         $dungeonroute->seasonal_index = $this->seasonal_index;
-        $dungeonroute->clone_of = $this->public_key;
-        $dungeonroute->public_key = DungeonRoute::generateRandomPublicKey();
+        $dungeonroute->teeming = $this->teeming;
         $dungeonroute->published = $published;
         $dungeonroute->save();
 

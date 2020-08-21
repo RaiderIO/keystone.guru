@@ -87,6 +87,7 @@ class Echo extends Signalable {
         for (let i = 0; i < this._users.length; i++) {
             if (this._users[i].name === name) {
                 result = this._users[i];
+                break;
             }
         }
 

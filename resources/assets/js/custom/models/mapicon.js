@@ -1,20 +1,44 @@
-$(function () {
-    L.Draw.MapIcon = L.Draw.Marker.extend({
-        statics: {
-            TYPE: 'mapicon'
-        },
-        options: {
-            icon: LeafletMapIconUnknown
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.MapIcon.TYPE;
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
-
-    // L.Draw.ObeliskGatewayMapIcon is defined in init function down below!
+let LeafletMapIconUnknown = L.divIcon({
+    html: '<i class="fas fa-icons"></i>',
+    iconSize: [32, 32],
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown'
 });
+
+let LeafletMapIconUnknownEditMode = L.divIcon({
+    html: '<i class="fas fa-icons"></i>',
+    iconSize: [32, 32],
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected'
+});
+
+let LeafletMapIconUnknownDeleteMode = L.divIcon({
+    html: '<i class="fas fa-icons"></i>',
+    iconSize: [32, 32],
+    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected delete'
+});
+
+let LeafletMapIconMarker = L.Marker.extend({
+    options: {
+        icon: LeafletMapIconUnknown
+    }
+});
+
+// $(function () {
+L.Draw.MapIcon = L.Draw.Marker.extend({
+    statics: {
+        TYPE: 'mapicon'
+    },
+    options: {
+        icon: LeafletMapIconUnknown
+    },
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.MapIcon.TYPE;
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
+    }
+});
+
+// L.Draw.ObeliskGatewayMapIcon is defined in init function down below!
+// });
 
 /**
  * Get the Leaflet Marker that represents said mapIconType
@@ -48,30 +72,6 @@ function getMapIconLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) 
     return icon;
 }
 
-let LeafletMapIconUnknown = L.divIcon({
-    html: '<i class="fas fa-icons"></i>',
-    iconSize: [32, 32],
-    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown'
-});
-
-let LeafletMapIconUnknownEditMode = L.divIcon({
-    html: '<i class="fas fa-icons"></i>',
-    iconSize: [32, 32],
-    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected'
-});
-
-let LeafletMapIconUnknownDeleteMode = L.divIcon({
-    html: '<i class="fas fa-icons"></i>',
-    iconSize: [32, 32],
-    className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown leaflet-edit-marker-selected delete'
-});
-
-let LeafletMapIconMarker = L.Marker.extend({
-    options: {
-        icon: LeafletMapIconUnknown
-    }
-});
-
 /**
  * @property floor_id int
  * @property map_icon_type_id int
@@ -86,11 +86,11 @@ class MapIcon extends MapObject {
 
         let self = this;
 
-        this.map_icon_type = getState().getUnknownMapIconType();
+        this.map_icon_type = getState().getMapContext().getUnknownMapIconType();
         this.label = 'MapIcon';
 
         this.setSynced(false);
-        this.register('synced', this, this._synced.bind(this));
+        this.register('object:changed', this, this._onObjectChanged.bind(this));
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
                 mapStateChangedEvent.data.newMapState instanceof EditMapState ||
@@ -112,8 +112,8 @@ class MapIcon extends MapObject {
         }
 
         let self = this;
-        let mapIconTypes = getState().getMapIconTypes();
-        let unknownMapIcon = getState().getUnknownMapIconType();
+        let mapIconTypes = getState().getMapContext().getStaticMapIconTypes();
+        let unknownMapIcon = getState().getMapContext().getUnknownMapIconType();
 
         let editableMapIconTypes = [];
         for (let i in mapIconTypes) {
@@ -155,13 +155,13 @@ class MapIcon extends MapObject {
                 name: 'team_id',
                 type: 'bool',
                 default: false,
-                edit: getState().getDungeonRoute().teamId >= 1,
+                edit: getState().getMapContext().getTeamId() >= 1,
                 setter: function (value) {
                     // If team_id is not null, we show this across the entire team
                     this.show_across_team = value;
                 },
                 getter: function () {
-                    return this.show_across_team ? getState().getDungeonRoute().teamId : null;
+                    return this.show_across_team ? getState().getMapContext().getTeamId() : null;
                 }
             }),
             new Attribute({
@@ -169,6 +169,12 @@ class MapIcon extends MapObject {
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: null
+            }),
+            new Attribute({
+                name: 'is_admin',
+                type: 'bool',
+                edit: false,
+                save: false
             }),
             new Attribute({
                 name: 'permanent_tooltip',
@@ -205,7 +211,7 @@ class MapIcon extends MapObject {
         ]);
     }
 
-    _synced() {
+    _onObjectChanged() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
 
         // Recreate the tooltip
@@ -229,6 +235,19 @@ class MapIcon extends MapObject {
     }
 
     /**
+     * @inheritDoc
+     */
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
+
+        // When in admin mode, show all map icons
+        if (!getState().isMapAdmin() && (this.seasonal_index !== null && getState().getMapContext().getSeasonalIndex() !== this.seasonal_index)) {
+            // Hide this enemy by default
+            this.setDefaultVisible(false);
+        }
+    }
+
+    /**
      * Sets the map icon type ID and refreshes the layer for it.
      * @param mapIconTypeId
      */
@@ -237,7 +256,7 @@ class MapIcon extends MapObject {
         this.map_icon_type_id = mapIconTypeId;
 
         // Set the icon and refresh the visual
-        this.map_icon_type = getState().getMapIconType(this.map_icon_type_id);
+        this.map_icon_type = getState().getMapContext().getMapIconType(this.map_icon_type_id);
         this._refreshVisual();
     }
 
@@ -266,14 +285,15 @@ class MapIcon extends MapObject {
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        return this.map_icon_type.isEditable() && this.linked_awakened_obelisk_id === null;
+        return this.map_icon_type.isEditable() && this.linked_awakened_obelisk_id === null &&
+            getState().isMapAdmin() === this.is_admin;
     }
 
     /**
      * @inheritDoc
      */
     isDeletable() {
-        return this.map_icon_type.isDeletable() && this.linked_awakened_obelisk_id === null;
+        return this.isEditable();
     }
 
     /**
@@ -314,6 +334,6 @@ class MapIcon extends MapObject {
         super.cleanup();
 
         this.map.unregister('map:mapstatechanged', this);
-        this.unregister('synced', this);
+        this.unregister('object:changed', this);
     }
 }

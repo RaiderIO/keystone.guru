@@ -23,6 +23,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
             'dungeon' => $dungeon,
             'dungeonroute' => $model,
             'edit' => true,
+            'test' => 'test',
             'floorId' => $floor->id
         ])
 

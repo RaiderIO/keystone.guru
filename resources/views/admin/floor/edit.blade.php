@@ -1,13 +1,11 @@
-@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $dungeon->name])
+@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->dungeon->name])
 @section('header-title')
     {{ $headerTitle }}
 @endsection
 <?php
 /**
  * @var $model \App\Models\Floor
- * @var $dungeon \App\Models\Dungeon
- * @var $floors \Illuminate\Support\Collection
- * @var $npcs \Illuminate\Support\Collection
+ * @var $mapContext \App\Logic\MapContext\MapContextDungeon
  */
 ?>
 
@@ -16,9 +14,7 @@
         @include('common.maps.map', [
             'admin' => true,
             'edit' => true,
-            'dungeon' => $dungeon,
-            'npcs' => $npcs,
-            'floorId' => $model->id,
+            'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
                 'brushline',
                 'path',
@@ -27,7 +23,6 @@
         ])
 
         @include('common.maps.admineditsidebar', [
-            'floorId' => $model->id,
             'show' => [
                 'shareable-link' => true,
                 'draw-settings' => true,

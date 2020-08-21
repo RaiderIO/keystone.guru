@@ -15,7 +15,7 @@ class SidebarNavigation extends Sidebar {
 
         let map = getState().getDungeonMap();
         // After load complete, properly toggle the visibility. Then all layers get toggled properly
-        map.register('map:mapobjectgroupsfetchsuccess', this, this._mapObjectGroupVisibilityChanged);
+        map.register('map:mapobjectgroupsloaded', this, this._mapObjectGroupVisibilityChanged);
 
         let mapObjectGroups = map.mapObjectGroupManager.mapObjectGroups;
         let cookieHiddenMapObjectGroups = Cookies.get('hidden_map_object_groups');
@@ -67,6 +67,6 @@ class SidebarNavigation extends Sidebar {
     cleanup() {
         super.cleanup();
         // After load complete, properly toggle the visibility. Then all layers get toggled properly
-        getState().getDungeonMap().unregister('map:mapobjectgroupsfetchsuccess', this);
+        getState().getDungeonMap().unregister('map:mapobjectgroupsloaded', this);
     }
 }

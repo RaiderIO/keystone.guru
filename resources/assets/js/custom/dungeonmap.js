@@ -12,12 +12,6 @@ class DungeonMap extends Signalable {
         // Apply the map to our state first thing
         getState().setDungeonMap(this);
 
-        // Build echo if we need it
-        if (this.options.echo) {
-            this.echo = new Echo(this);
-            this.echo.connect();
-        }
-
         // Listen for floor changes
         getState().register('floorid:changed', this, function () {
             self.refreshLeafletMap();
@@ -26,11 +20,11 @@ class DungeonMap extends Signalable {
         // How many map objects have returned a success status
         this.hotkeys = this._getHotkeys();
         this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());
-        this.mapObjectGroupManager.register('fetchsuccess', this, function () {
+        this.mapObjectGroupManager.register('loaded', this, function () {
             // Add new controls; we're all loaded now and user should now be able to edit their route
             self._addMapControls(self.editableLayers);
 
-            self.signal('map:mapobjectgroupsfetchsuccess');
+            self.signal('map:mapobjectgroupsloaded');
         });
         this.enemyVisualManager = new EnemyVisualManager(this);
 
@@ -42,19 +36,40 @@ class DungeonMap extends Signalable {
             let mapObjectGroup = this.mapObjectGroupManager.mapObjectGroups[i];
 
             mapObjectGroup.register('object:add', this, function (addEvent) {
-                let object = addEvent.data.object;
-                self.mapObjects.push(object);
-                if (object.layer !== null) {
-                    self.drawnLayers.addLayer(object.layer);
+                let mapObject = addEvent.data.object;
+                self.mapObjects.push(mapObject);
 
-                    // Make sure we know it's editable
-                    if (object.isEditable() && addEvent.data.objectgroup.editable && self.options.edit) {
-                        self.editableLayers.addLayer(object.layer);
+                if (mapObject instanceof Enemy && !(self instanceof AdminDungeonMap)) {
+                    mapObject.register('enemy:clicked', self, self._enemyClicked.bind(self));
+                }
+            });
+
+            // Add and remove layers as they are added to the layer
+            mapObjectGroup.register('object:layerchanged', this, function (layerChangedEvent) {
+                let mapObject = layerChangedEvent.data.object;
+
+                // Remove the old layer if there was any
+                let oldLayer = layerChangedEvent.data.oldLayer;
+                if (oldLayer !== null) {
+                    if (self.drawnLayers.hasLayer(oldLayer)) {
+                        self.drawnLayers.removeLayer(oldLayer);
+                    }
+                    if (self.editableLayers.hasLayer(oldLayer)) {
+                        self.editableLayers.removeLayer(oldLayer);
                     }
                 }
 
-                if (object instanceof Enemy && !(self instanceof AdminDungeonMap)) {
-                    object.register('enemy:clicked', self, self._enemyClicked.bind(self));
+                // Add the new layer when we should
+                let newLayer = layerChangedEvent.data.newLayer;
+                if (newLayer !== null) {
+                    if (mapObject.shouldBeVisible()) {
+                        self.drawnLayers.addLayer(newLayer);
+
+                        // Make sure we know it's editable
+                        if (mapObject.isEditable() && layerChangedEvent.data.objectgroup.editable && self.options.edit) {
+                            self.editableLayers.addLayer(newLayer);
+                        }
+                    }
                 }
             });
 
@@ -83,7 +98,7 @@ class DungeonMap extends Signalable {
 
             // Make sure we don't try to edit layers that aren't visible because they're hidden
             // If we don't do this and we have a hidden object, editing layers will break the moment you try to use it
-            mapObjectGroup.register(['object:shown', 'object:hidden'], this, function (visibilityEvent) {
+            mapObjectGroup.register(['mapobject:shown', 'mapobject:hidden'], this, function (visibilityEvent) {
                 let object = visibilityEvent.data.object;
                 // If it's visible now and the layer is not added already
                 if (object.layer !== null) {
@@ -101,6 +116,14 @@ class DungeonMap extends Signalable {
                         self.drawnLayers.removeLayer(object.layer);
                         self.editableLayers.removeLayer(object.layer);
                     }
+                }
+            });
+
+            mapObjectGroup.register('visibility:changed', this, function (visibilityChangedEvent) {
+                if (visibilityChangedEvent.data.visible) {
+                    self.leafletMap.addLayer(visibilityChangedEvent.context.layerGroup);
+                } else {
+                    self.leafletMap.removeLayer(visibilityChangedEvent.context.layerGroup);
                 }
             });
         }
@@ -232,7 +255,7 @@ class DungeonMap extends Signalable {
                     // No longer in AddKillZoneMapState; we finished
                     self.setMapState(null);
                 } else {
-                    mapObject = mapObjectGroup.createNew(event.layer);
+                    mapObject = mapObjectGroup.onNewLayerCreated(event.layer);
                 }
                 // Save it to server instantly, manually saving is meh
                 mapObject.save();
@@ -440,16 +463,16 @@ class DungeonMap extends Signalable {
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
-            if (getState().getDungeonRoute().publicKey !== '' || this.options.edit) {
+            if (!getState().isMapAdmin()) {
                 mapControls.push(new EnemyForcesControls(this));
             }
             mapControls.push(new EnemyVisualControls(this));
 
-            if (this.isTryModeEnabled() && getState().getDungeonData().name === 'Siege of Boralus') {
+            if (this.isTryModeEnabled() && getState().getMapContext().getDungeon().name === 'Siege of Boralus') {
                 mapControls.push(new FactionDisplayControls(this));
             }
 
-            if (this.options.echo) {
+            if (getState().isEchoEnabled()) {
                 mapControls.push(new EchoControls(this));
             }
 
@@ -478,11 +501,6 @@ class DungeonMap extends Signalable {
         for (let i = 0; i < this.mapControls.length; i++) {
             this.mapControls[i].addControl();
         }
-
-        // Do this once and not a bunch of times for all different elements
-        refreshSelectPickers();
-        // All layers have been fetched and everything rebuilt, refresh tooltips for all elements
-        refreshTooltips();
     }
 
     /**
@@ -514,7 +532,7 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = false;
 
-        let dungeonData = getState().getDungeonData();
+        let dungeonData = getState().getMapContext().getDungeon();
         for (let i = 0; i < dungeonData.floors.length; i++) {
             let floor = dungeonData.floors[i];
             if (floor.id === floorId) {
@@ -550,8 +568,8 @@ class DungeonMap extends Signalable {
      * @returns {*}
      */
     getEnemyForcesRequired() {
-        let dungeonData = getState().getDungeonData();
-        return getState().getTeeming() ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
+        let dungeonData = getState().getMapContext().getDungeon();
+        return getState().getMapContext().getTeeming() ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
     }
 
     /**
@@ -577,7 +595,7 @@ class DungeonMap extends Signalable {
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
 
-        let dungeonData = getState().getDungeonData();
+        let dungeonData = getState().getMapContext().getDungeon();
         this.mapTileLayer = L.tileLayer('/images/tiles/' + dungeonData.expansion.shortname + '/' + dungeonData.key + '/' + getState().getCurrentFloor().index + '/{z}/{x}_{y}.png', {
             maxZoom: 5,
             attribution: 'Map data © Blizzard Entertainment',
@@ -587,10 +605,17 @@ class DungeonMap extends Signalable {
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
 
-        this.editableLayers = new L.FeatureGroup();
+        // if( typeof this.drawnLayers !== 'undefined' ) {
+        //     this.leafletMap.removeLayer(this.drawnLayers);
+        // }
+        // if( typeof this.editableLayers !== 'undefined' ) {
+        //     this.leafletMap.removeLayer(this.editableLayers);
+        // }
 
+        this.editableLayers = new L.FeatureGroup();
         // Refresh the list of drawn items
         this.drawnLayers = new L.FeatureGroup();
+
         this.leafletMap.addLayer(this.drawnLayers);
         this.leafletMap.addLayer(this.editableLayers);
 
@@ -624,7 +649,7 @@ class DungeonMap extends Signalable {
 
             let layer = L.polyline(points);
 
-            let object = mapObjectGroup.createNew(layer);
+            let object = mapObjectGroup.onNewLayerCreated(layer);
             object.save();
 
             // Remove it from Pather, we only use Pather for creating the actual layer
@@ -719,29 +744,6 @@ class DungeonMap extends Signalable {
             smoothFactor: 5,
             pathColour: c.map.polyline.defaultColor()
         });
-    }
-
-    /**
-     * Find an NPC by its ID in the local NPC storage.
-     * @param npcId int
-     * @returns {null|object}
-     */
-    getNpcById(npcId) {
-        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-        let result = null;
-
-        // Find the actual NPC..
-        for (let npcIndex in this.options.npcs) {
-            if (this.options.npcs.hasOwnProperty(npcIndex)) {
-                let npc = this.options.npcs[npcIndex];
-                if (npc.id === npcId) {
-                    result = npc;
-                    break;
-                }
-            }
-        }
-
-        return result;
     }
 }
 

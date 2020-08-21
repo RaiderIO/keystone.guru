@@ -1,64 +1,63 @@
-$(function () {
-    L.DrawToolbar.prototype.getModeHandlers = function (map) {
-        return [
-            {
-                enabled: this.options.path,
-                handler: new L.Draw.Path(map, this.options.path),
-                title: this.options.path.title
-            }, {
-                enabled: this.options.killzone,
-                handler: new L.Draw.KillZone(map, this.options.killzone),
-                title: this.options.killzone.title
-            }, {
-                enabled: this.options.mapicon,
-                handler: new L.Draw.MapIcon(map, this.options.mapicon),
-                title: this.options.mapicon.title
-            }, {
-                enabled: this.options.awakenedobeliskgatewaymapicon,
-                handler: new L.Draw.AwakenedObeliskGatewayMapIcon(map, this.options.awakenedobeliskgatewaymapicon),
-                title: this.options.awakenedobeliskgatewaymapicon.title
-            }, {
-                enabled: this.options.brushline,
-                handler: new L.Draw.Brushline(map, this.options.brushline),
-                title: this.options.brushline.title
-            }, {
-                enabled: this.options.enemypack,
-                handler: new L.Draw.EnemyPack(map, this.options.enemypack),
-                title: this.options.enemypack.title
-            }, {
-                enabled: this.options.enemy,
-                handler: new L.Draw.Enemy(map, this.options.enemy),
-                title: this.options.enemy.title
-            }, {
-                enabled: this.options.enemypatrol,
-                handler: new L.Draw.EnemyPatrol(map, this.options.enemypatrol),
-                title: this.options.enemypatrol.title
-            }, {
-                enabled: this.options.dungeonfloorswitchmarker,
-                handler: new L.Draw.DungeonFloorSwitchMarker(map, this.options.dungeonfloorswitchmarker),
-                title: this.options.dungeonfloorswitchmarker.title
-            }
-        ];
-    };
+L.DrawToolbar.prototype.getModeHandlers = function (map) {
 
-    // Add some new strings to the draw controls
-    // https://github.com/Leaflet/Leaflet.draw#customizing-language-and-text-in-leafletdraw
-    $.extend(L.drawLocal.draw.handlers, {
-        route: {
-            tooltip: {
-                start: 'Click to start drawing path.',
-                cont: 'Click to continue drawing path.',
-                end: 'Click the \'Finish\' button on the toolbar to complete your path.'
-            }
-        },
-        brushline: {
-            tooltip: {
-                start: 'Click to start drawing line.',
-                cont: 'Click and drag to continue drawing line.',
-                end: 'Continue clicking/dragging, when done, press the \'Finish\' button on the toolbar to complete your line.'
-            }
+    return [
+        {
+            enabled: this.options.path,
+            handler: new L.Draw.Path(map, this.options.path),
+            title: this.options.path.title
+        }, {
+            enabled: this.options.killzone,
+            handler: new L.Draw.KillZone(map, this.options.killzone),
+            title: this.options.killzone.title
+        }, {
+            enabled: this.options.mapicon,
+            handler: new L.Draw.MapIcon(map, this.options.mapicon),
+            title: this.options.mapicon.title
+        }, {
+            enabled: this.options.awakenedobeliskgatewaymapicon,
+            handler: new L.Draw.AwakenedObeliskGatewayMapIcon(map, this.options.awakenedobeliskgatewaymapicon),
+            title: this.options.awakenedobeliskgatewaymapicon.title
+        }, {
+            enabled: this.options.brushline,
+            handler: new L.Draw.Brushline(map, this.options.brushline),
+            title: this.options.brushline.title
+        }, {
+            enabled: this.options.enemypack,
+            handler: new L.Draw.EnemyPack(map, this.options.enemypack),
+            title: this.options.enemypack.title
+        }, {
+            enabled: this.options.enemy,
+            handler: new L.Draw.Enemy(map, this.options.enemy),
+            title: this.options.enemy.title
+        }, {
+            enabled: this.options.enemypatrol,
+            handler: new L.Draw.EnemyPatrol(map, this.options.enemypatrol),
+            title: this.options.enemypatrol.title
+        }, {
+            enabled: this.options.dungeonfloorswitchmarker,
+            handler: new L.Draw.DungeonFloorSwitchMarker(map, this.options.dungeonfloorswitchmarker),
+            title: this.options.dungeonfloorswitchmarker.title
         }
-    });
+    ];
+};
+
+// Add some new strings to the draw controls
+// https://github.com/Leaflet/Leaflet.draw#customizing-language-and-text-in-leafletdraw
+$.extend(L.drawLocal.draw.handlers, {
+    route: {
+        tooltip: {
+            start: 'Click to start drawing path.',
+            cont: 'Click to continue drawing path.',
+            end: 'Click the \'Finish\' button on the toolbar to complete your path.'
+        }
+    },
+    brushline: {
+        tooltip: {
+            start: 'Click to start drawing line.',
+            cont: 'Click and drag to continue drawing line.',
+            end: 'Continue clicking/dragging, when done, press the \'Finish\' button on the toolbar to complete your line.'
+        }
+    }
 });
 
 class DrawControls extends MapControl {
@@ -307,7 +306,7 @@ class DrawControls extends MapControl {
         $brushlineButton.html(
             this._getButtonHtml('fa-paint-brush', lang.get('messages.brushline'), this._findHotkeyByCssClass('brushline'))
         );
-        $brushlineButton.bind('click', function (clickEvent) {
+        $brushlineButton.bind('click', function () {
             // Check if it's enabled now
             let wasEnabled = self.map.getMapState() instanceof PatherMapState;
             // Enable it now
@@ -399,8 +398,8 @@ class DrawControls extends MapControl {
                 let option = this.drawControlOptions.draw[optionName];
                 if (option.hasOwnProperty('faClass')) {
                     // Set the FA icon and remove the background image that was initially there
-                    let $option = $('.leaflet-draw-draw-' + optionName)
-                        .html(this._getButtonHtml(option.faClass, lang.get('messages.' + optionName), option.hotkey))
+                    let $option = $(`.leaflet-draw-draw-${optionName}`)
+                        .html(this._getButtonHtml(option.faClass, lang.get(`messages.${optionName}`), option.hotkey))
                         .css('background-image', 'none');
 
                     // Add any css class that may or may not have been set

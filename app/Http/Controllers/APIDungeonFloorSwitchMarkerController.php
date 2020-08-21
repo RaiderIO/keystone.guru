@@ -23,7 +23,7 @@ class APIDungeonFloorSwitchMarkerController extends Controller
 
     /**
      * @param Request $request
-     * @return array
+     * @return DungeonFloorSwitchMarker
      * @throws \Exception
      */
     function store(Request $request)
@@ -31,8 +31,8 @@ class APIDungeonFloorSwitchMarkerController extends Controller
         /** @var DungeonFloorSwitchMarker $dungeonFloorSwitchMarker */
         $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::findOrNew($request->get('id'));
 
-        $dungeonFloorSwitchMarker->floor_id = $request->get('floor_id');
-        $dungeonFloorSwitchMarker->target_floor_id = $request->get('target_floor_id');
+        $dungeonFloorSwitchMarker->floor_id = (int) $request->get('floor_id');
+        $dungeonFloorSwitchMarker->target_floor_id = (int) $request->get('target_floor_id');
         $dungeonFloorSwitchMarker->lat = $request->get('lat');
         $dungeonFloorSwitchMarker->lng = $request->get('lng');
 
@@ -49,7 +49,7 @@ class APIDungeonFloorSwitchMarkerController extends Controller
             throw new \Exception('Unable to save dungeon floor switch marker!');
         }
 
-        return ['id' => $dungeonFloorSwitchMarker->id];
+        return $dungeonFloorSwitchMarker;
     }
 
     /**

@@ -1,19 +1,3 @@
-$(function () {
-    L.Draw.KillZone = L.Draw.Marker.extend({
-        statics: {
-            TYPE: 'killzone'
-        },
-        options: {
-            icon: LeafletKillZoneIcon
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.KillZone.TYPE;
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
-});
-
 let LeafletKillZoneIcon = L.divIcon({
     html: '<i class="fas fa-bullseye"></i>',
     iconSize: [30, 30],
@@ -31,6 +15,23 @@ let LeafletKillZoneMarker = L.Marker.extend({
         icon: LeafletKillZoneIcon
     }
 });
+
+// $(function () {
+L.Draw.KillZone = L.Draw.Marker.extend({
+    statics: {
+        TYPE: 'killzone'
+    },
+    options: {
+        icon: LeafletKillZoneIcon
+    },
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.KillZone.TYPE;
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
+    }
+});
+
+// });
 
 class KillZone extends MapObject {
     constructor(map, layer) {
@@ -52,18 +53,14 @@ class KillZone extends MapObject {
         // Layer that is shown to the user and that he/she can click on to make adjustments to this killzone. May be null
         this.enemiesLayer = null;
 
-        this.setColors(c.map.killzone.colors);
         this.setSynced(false);
 
-        // // We gotta remove the connections manually since they're self managed here.
-        // this.map.register('map:beforerefresh', this, function () {
-        //     // In case someone switched dungeons prior to finishing the kill zone edit
-        //     self.map.setSelectModeKillZone(null);
-        //     self.removeExistingConnectionsToEnemies();
-        // });
+        this.map.register(['map:refresh'], this, function (shownHiddenEvent) {
+            self.redrawConnectionsToEnemies();
+        });
 
         // Disconnect any enemies from us if they were teeming, but the new state is not teeming
-        getState().register('teeming:changed', this, function (teemingChangedEvent) {
+        getState().getMapContext().register('teeming:changed', this, function (teemingChangedEvent) {
             let teeming = teemingChangedEvent.data.teeming;
 
             // If we're visible for teeming, and we're now no longer teeming, remove ourselves from our current killzone
@@ -159,8 +156,8 @@ class KillZone extends MapObject {
     /**
      * @inheritDoc
      **/
-    loadRemoteMapObject(remoteMapObject) {
-        super.loadRemoteMapObject(remoteMapObject);
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
         // Hide the layer of the killzone
         this.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
@@ -211,6 +208,7 @@ class KillZone extends MapObject {
 
         // Deselect if necessary
         let externalChange = enemy.getKillZone() === null || enemy.getKillZone().id !== this.id;
+        // console.warn(`KZ ${this.id} (${this.index}) removing enemy ${enemy.id} (${enemy.npc.name}) (external: ${externalChange})`);
         if (!externalChange) {
             enemy.setKillZone(null);
         }
@@ -224,7 +222,7 @@ class KillZone extends MapObject {
                 // This enemy left us, no longer interested in it
                 enemyMapObjectGroup.findMapObjectById(deleted[0]).unregister('killzone:detached', this);
             }
-            this.signal('killzone:enemyremoved', this, {enemy: enemy});
+            this.signal('killzone:enemyremoved', {enemy: enemy});
         }
 
         // If the enemy we're removing from the pull is the real one
@@ -233,8 +231,6 @@ class KillZone extends MapObject {
             let linkedAwakenedEnemy = enemy.getLinkedAwakenedEnemy();
             if (linkedAwakenedEnemy !== null) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                // Show the awakened enemy that's near the boss
-                enemyMapObjectGroup.setMapObjectVisibility(linkedAwakenedEnemy, true);
 
                 let finalBoss = enemyMapObjectGroup.getFinalBoss();
 
@@ -245,6 +241,9 @@ class KillZone extends MapObject {
                     finalBossKillZone._addEnemy(linkedAwakenedEnemy);
                     finalBossKillZone.save();
                 }
+
+                // Show the awakened enemy that's near the boss
+                enemyMapObjectGroup.setMapObjectVisibility(linkedAwakenedEnemy, true);
             }
         }
     }
@@ -256,6 +255,9 @@ class KillZone extends MapObject {
      */
     _addEnemy(enemy) {
         console.assert(this instanceof KillZone, 'this was not a KillZone', this);
+        // console.warn(`KZ ${this.id} (${this.index}) adding enemy ${enemy.id} (${enemy.npc.name})`);
+
+        let self = this;
 
         enemy.setKillZone(this);
         // Add it, but don't double add it
@@ -264,7 +266,7 @@ class KillZone extends MapObject {
 
             // We're interested in knowing when this enemy has detached itself (by assigning to another killzone, for example)
             enemy.register('killzone:detached', this, this._enemyDetached.bind(this));
-            this.signal('killzone:enemyadded', this, {enemy: enemy});
+            this.signal('killzone:enemyadded', {enemy: enemy});
         }
 
         // If the enemy we're adding to the pull is the real one, not the one attached to a pack with the final boss
@@ -357,12 +359,12 @@ class KillZone extends MapObject {
             }
 
             this.redrawConnectionsToEnemies();
-            this.save();
+            // this.save();
 
             // The previous killzone lost a member, we have to notify it and save it
             if (previousKillZone !== null && previousKillZone.id !== this.id) {
                 previousKillZone.redrawConnectionsToEnemies();
-                previousKillZone.save();
+                // previousKillZone.save();
             }
         } else {
             console.warn('Not handling _enemySelected; killzone not (yet) saved!', this, enemy.id);
@@ -385,8 +387,6 @@ class KillZone extends MapObject {
 
             if (this.map.options.edit) {
                 if (previousState instanceof EnemySelection && previousState.getMapObject().id === this.id) {
-                    // May save when nothing has changed, but that's okay
-                    this.save();
                     // Unreg if we were listening
                     previousState.unregister('enemyselection:enemyselected', this);
                 }
@@ -416,7 +416,7 @@ class KillZone extends MapObject {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
             if (enemy !== null) {
-                if (enemy.layer !== null) {
+                if (enemy.shouldBeVisible()) {
                     let latLng = enemy.layer.getLatLng();
                     latLngs.push([latLng.lat, latLng.lng]);
                 }
@@ -563,7 +563,7 @@ class KillZone extends MapObject {
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < this.enemies.length; i++) {
             let enemy = enemyMapObjectGroup.findMapObjectById(this.enemies[i]);
-            if (enemy !== null && enemy.npc !== null && enemy.npc.classification_id === 4) {
+            if (enemy !== null && enemy.isLastBoss()) {
                 result = true;
                 break;
             }
@@ -759,17 +759,28 @@ class KillZone extends MapObject {
         this.bindTooltip();
     }
 
+    /**
+     *
+     * @returns {boolean}
+     */
+    isVisible() {
+        // Visible is not tied to having a layer here; we are visible if we're on the same floor
+        return this._getVisibleEntitiesLatLngs().length > 0;
+    }
+
     isVisibleOnScreen() {
         let result = false;
+        console.log(this.isVisible(), this.enemiesLayer !== null);
         if (this.isVisible() && this.enemiesLayer !== null) {
             result = this.map.leafletMap.getBounds().contains(this.getLayerCenteroid())
+            console.log(result);
         }
         return result;
     }
 
     bindTooltip() {
         super.bindTooltip();
-        if (this.enemiesLayer !== null) {
+        if (!this.map.options.noUI && this.enemiesLayer !== null) {
             this.enemiesLayer.unbindTooltip();
 
             // Only when NOT currently editing the layer
@@ -799,7 +810,7 @@ class KillZone extends MapObject {
 
         this.map.register('killzone:selectionchanged', this, this.redrawConnectionsToEnemies.bind(this));
         // When we have all data, redraw the connections. Not sooner or otherwise we may not have the enemies back yet
-        this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+        this.map.register('map:mapobjectgroupsloaded', this, function () {
             // Hide the killzone layer when in preview mode
             if (self.map.options.noUI) {
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
@@ -823,7 +834,7 @@ class KillZone extends MapObject {
         });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, function (event) {
+        this.register('object:changed', this, function (event) {
             // Restore the connections to our enemies
             self.redrawConnectionsToEnemies();
         });
@@ -841,24 +852,26 @@ class KillZone extends MapObject {
 
         this.redrawConnectionsToEnemies();
 
-        this.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+        this.signal('killzone:changed', {enemy_forces: json.enemy_forces});
     }
 
     onDeleteSuccess(json) {
         super.onDeleteSuccess(json);
 
-        this.signal('killzone:synced', {enemy_forces: json.enemy_forces});
+        this.signal('killzone:changed', {enemy_forces: json.enemy_forces});
     }
 
     cleanup() {
         let self = this;
 
-        // this.unregister('synced', this); // Not needed as super.cleanup() does this
-        getState().unregister('teeming:changed', this);
+
+        getState().getMapContext().unregister('teeming:changed', this);
+        this.unregister('object:deleted', this);
+        this.unregister('object:changed', this);
+        this.map.unregister('map:refresh', this);
         this.map.unregister('map:mapstatechanged', this);
         this.map.unregister('killzone:selectionchanged', this);
-        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
-        this.map.unregister('map:beforerefresh', this);
+        this.map.unregister('map:mapobjectgroupsloaded', this);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {

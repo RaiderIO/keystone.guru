@@ -26,14 +26,23 @@ class MapObjectGroupManager extends Signalable {
 
     constructor(map, mapObjectGroupNames) {
         super();
+        let self = this;
+
         this.map = map;
+
+        this._loaded = false;
 
         this.mapObjectGroups = [];
         for (let i = 0; i < mapObjectGroupNames.length; i++) {
             this.mapObjectGroups.push(this._createMapObjectGroup(mapObjectGroupNames[i]));
         }
 
-        this.map.register('map:refresh', this, this._fetchFromServer.bind(this));
+        this.map.register('map:refresh', this, function () {
+            if (!self._loaded) {
+                self._loadMapObjectGroups();
+            }
+            self._updateMapObjectGroups();
+        });
     }
 
     /**
@@ -106,7 +115,7 @@ class MapObjectGroupManager extends Signalable {
             }
         }
 
-        console.assert(result !== false, 'Unable to find MapObjectGroup ' + name, this);
+        console.assert(result !== false, `Unable to find MapObjectGroup ${name}`, this);
 
         return result;
     }
@@ -130,23 +139,26 @@ class MapObjectGroupManager extends Signalable {
     /**
      * Refreshes the objects that are displayed on the map based on the current dungeon & selected floor.
      */
-    _fetchFromServer() {
+    _loadMapObjectGroups() {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
 
-        let self = this;
-        $.ajax({
-            type: 'GET',
-            url: '/ajax/' + getState().getDungeonRoute().publicKey + '/data',
-            dataType: 'json',
-            data: {
-                fields: this._getLoadedNames().join(','),
-                floor: getState().getCurrentFloor().id,
-                enemyPackEnemies: getState().isMapAdmin() ? 0 : 1,
-                teeming: getState().getTeeming() ? 1 : 0
-            },
-            success: function (json) {
-                self.signal('fetchsuccess', {response: json});
-            }
-        });
+        for (let i = 0; i < this.mapObjectGroups.length; i++) {
+            this.mapObjectGroups[i].load();
+        }
+
+        this._loaded = true;
+        this.signal('loaded');
+    }
+
+    /**
+     * Update
+     * @private
+     */
+    _updateMapObjectGroups() {
+        for (let i = 0; i < this.mapObjectGroups.length; i++) {
+            this.mapObjectGroups[i].update();
+        }
+
+        this.signal('updated');
     }
 }

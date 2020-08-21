@@ -20,7 +20,6 @@ class AdminEnemy extends Enemy {
         // Whatever enemy we're connected with if we're an MDT enemy
         this.enemy_id = -1;
 
-        this.setColors(c.map.admin.mapobject.colors);
         this.setSynced(false);
 
         this.enemyConnectionLayerGroup = null;
@@ -165,6 +164,19 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
         this.mdt_id = -1;
         this._connectedEnemy = null;
+    }
+
+    /**
+     * Set this enemy to be selectable whenever the user wants to select enemies.
+     * @param value boolean True or false
+     */
+    setSelectable(value) {
+        super.setSelectable(value);
+
+        if (this.visual !== null) {
+            // Refresh the icon
+            this.visual.refresh();
+        }
     }
 
     /**

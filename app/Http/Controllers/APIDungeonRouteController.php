@@ -188,7 +188,7 @@ class APIDungeonRouteController extends Controller
      * @param APIDungeonRouteFormRequest $request
      * @param DungeonRoute $dungeonroute
      * @param SeasonService $seasonService
-     * @return array
+     * @return DungeonRoute
      * @throws Exception
      */
     function store(APIDungeonRouteFormRequest $request, SeasonService $seasonService, DungeonRoute $dungeonroute = null)
@@ -204,7 +204,7 @@ class APIDungeonRouteController extends Controller
             abort(500, 'Unable to save dungeonroute');
         }
 
-        return ['key' => $dungeonroute->public_key];
+        return $dungeonroute;
     }
 
     /**

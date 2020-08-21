@@ -1,5 +1,6 @@
 <?php
 
+use App\Service\Cache\CacheService;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -7,10 +8,12 @@ class DatabaseSeeder extends Seeder
     /**
      * Run the database seeds.
      *
+     * @param CacheService $cacheService
      * @return void
      */
-    public function run()
+    public function run(CacheService $cacheService)
     {
+        $cacheService->dropCaches();
         // $this->call(UsersTableSeeder::class);
         // $this->call(LaratrustSeeder::class);
 

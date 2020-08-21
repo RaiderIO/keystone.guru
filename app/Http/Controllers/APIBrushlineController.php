@@ -6,11 +6,10 @@ use App\Events\ModelChangedEvent;
 use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsBrushlines;
+use App\Http\Controllers\Traits\SavesPolylines;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
-use App\Models\PaidTier;
 use App\Models\Polyline;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
@@ -19,6 +18,7 @@ class APIBrushlineController extends Controller
 {
     use ChecksForDuplicates;
     use ListsBrushlines;
+    use SavesPolylines;
 
     function list(Request $request)
     {
@@ -31,7 +31,7 @@ class APIBrushlineController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array
+     * @return Brushline
      * @throws \Exception
      */
     function store(Request $request, DungeonRoute $dungeonroute)
@@ -44,7 +44,7 @@ class APIBrushlineController extends Controller
         $brushline = Brushline::findOrNew($request->get('id'));
 
         $brushline->dungeon_route_id = $dungeonroute->id;
-        $brushline->floor_id = $request->get('floor_id');
+        $brushline->floor_id = (int) $request->get('floor_id');
 
         // Init to a default value if new
         if (!$brushline->exists) {
@@ -55,26 +55,14 @@ class APIBrushlineController extends Controller
             throw new \Exception("Unable to save brushline!");
         } else {
             // Create a new polyline and save it
-            /** @var Polyline $polyline */
-            $polyline = Polyline::findOrNew($brushline->polyline_id);
-            $polyline->model_id = $brushline->id;
-            $polyline->model_class = get_class($brushline);
-            $polyline->color = $request->get('color', '#f00');
-            // Only set the animated color if the user has paid for it
-            if (Auth::check() && User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES)) {
-                $colorAnimated = $request->get('color_animated', null);
-                $polyline->color_animated = empty($colorAnimated) ? null : $colorAnimated;
-            }
-            $polyline->weight = $request->get('weight', 2);
-            $polyline->vertices_json = json_encode($request->get('vertices'));
-            $polyline->save();
+            $polyline = $this->_savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $request->get('polyline'));
 
             // Couple the brushline to the polyline
             $brushline->polyline_id = $polyline->id;
             $brushline->save();
 
-            // @TODO fix this?
-            // $this->checkForDuplicateVertices('App\Models\RouteVertex', $vertices);
+            // Refresh the polyline before echoing it out
+            $brushline->load(['polyline']);
 
             if (Auth::check()) {
                 broadcast(new ModelChangedEvent($dungeonroute, Auth::getUser(), $brushline));
@@ -84,7 +72,7 @@ class APIBrushlineController extends Controller
             $dungeonroute->touch();
         }
 
-        return ['id' => $brushline->id];
+        return $brushline;
     }
 
     /**

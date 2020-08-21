@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ModelDeletedEvent;
 use App\Logic\Datatables\ColumnHandler\Users\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Users\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Users\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
 use App\Models\Npc;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
 class APINpcController extends Controller
@@ -19,7 +21,9 @@ class APINpcController extends Controller
             /** @var Npc $npc */
             $npc = Npc::findOrFail($request->get('id'));
 
-            $npc->delete();
+            if ($npc->delete()) {
+                broadcast(new ModelDeletedEvent($npc->dungeon, Auth::user(), $npc));
+            }
             $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

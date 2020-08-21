@@ -210,7 +210,7 @@ function defaultAjaxErrorFn(xhr, textStatus, errorThrown)
  * Refreshes fancy tooltips on all elements that request for them.
  */
 function refreshTooltips($element = null) {
-    console.warn('refreshing tooltips', $element);
+    // console.warn('refreshing tooltips', $element);
     if (!isMobile()) {
         $('.tooltip').remove();
         if( $element === null ){
@@ -224,7 +224,6 @@ function refreshTooltips($element = null) {
  * Refreshes all select pickers on-screen
  **/
 function refreshSelectPickers() {
-    console.warn('refreshing select pickers');
     let $selectpicker = $('.selectpicker');
     $selectpicker.selectpicker('refresh');
     $selectpicker.selectpicker('render');

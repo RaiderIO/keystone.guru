@@ -110,7 +110,12 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmanager.js',
 
-    // Depends on map object groups
+    // Map Context
+    'resources/assets/js/custom/mapcontext/mapcontext.js',
+    'resources/assets/js/custom/mapcontext/mapcontextdungeon.js',
+    'resources/assets/js/custom/mapcontext/mapcontextdungeonroute.js',
+
+    // Depends on map object groups + Map Context
     'resources/assets/js/custom/statemanager.js',
     'resources/assets/js/custom/echo.js',
     'resources/assets/js/custom/dungeonmap.js',

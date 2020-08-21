@@ -3,26 +3,24 @@
 let DefaultEnemyIcon = new L.divIcon({className: 'enemy_icon'});
 let MDTEnemyIconSelected = new L.divIcon({className: 'enemy_icon mdt_enemy_icon leaflet-edit-marker-selected'});
 
-$(function () {
-    L.Draw.Enemy = L.Draw.Marker.extend({
-        statics: {
-            TYPE: 'enemy'
-        },
-        options: {
-            icon: DefaultEnemyIcon
-        },
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.Enemy.TYPE;
-
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
-});
-
 let LeafletEnemyMarker = L.Marker.extend({
     options: {
         icon: DefaultEnemyIcon
+    }
+});
+
+L.Draw.Enemy = L.Draw.Marker.extend({
+    statics: {
+        TYPE: 'enemy'
+    },
+    options: {
+        icon: DefaultEnemyIcon
+    },
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.Enemy.TYPE;
+
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
     }
 });
 
@@ -72,31 +70,7 @@ class Enemy extends MapObject {
         // });
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
-        this.register('synced', this, this._synced.bind(this));
-
-        // Only create/hide visuals if we're actively being shown
-        this.register('shown', this, this._onShown.bind(this));
-        this.register('hidden', this, this._onHidden.bind(this));
-    }
-
-    _onShown(shownEvent) {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-
-        // Create the visual now that we know all data to construct it properly
-        if (this.visual === null && (this.id > 0 || this.is_mdt)) {
-            this.visual = new EnemyVisual(this.map, this, this.layer);
-            // Construct the visual
-            this.visual.buildVisual();
-        }
-    }
-
-    _onHidden(hiddenEvent) {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-
-        if (this.visual !== null) {
-            this.visual.cleanup();
-            this.visual = null;
-        }
+        this.register('object:changed', this, this._onObjectChanged.bind(this));
     }
 
     /**
@@ -111,13 +85,13 @@ class Enemy extends MapObject {
 
         let self = this;
         let selectNpcs = [];
-        let npcs = this.map.options.npcs;
+        let npcs = getState().getMapContext().getNpcs();
         for (let index in npcs) {
             if (npcs.hasOwnProperty(index)) {
                 let npc = npcs[index];
                 selectNpcs.push({
                     id: npc.id,
-                    name: npc.name + ' (' + npc.id + ')'
+                    name: `${npc.name} (${npc.id})`
                 });
             }
         }
@@ -224,16 +198,13 @@ class Enemy extends MapObject {
         return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
     }
 
-    _synced(syncedEvent) {
+    _onObjectChanged(syncedEvent) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
         // Only if we should display this enemy
         if (this.layer !== null) {
             // Synced, can now build the popup since we know our ID
             this._rebuildPopup(syncedEvent);
-
-            // We're now shown so show ourselves
-            this._onShown(null);
 
             // Recreate the tooltip
             this.bindTooltip();
@@ -253,8 +224,8 @@ class Enemy extends MapObject {
     /**
      * @inheritDoc
      **/
-    loadRemoteMapObject(remoteMapObject) {
-        super.loadRemoteMapObject(remoteMapObject);
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
         if (remoteMapObject.hasOwnProperty('is_mdt')) {
             // Exception for MDT enemies
@@ -271,45 +242,58 @@ class Enemy extends MapObject {
             // Hide this enemy by default
             this.setDefaultVisible(this.shouldBeVisible());
         }
+
+        this.visual = new EnemyVisual(this.map, this, this.layer);
     }
 
     /**
      * Get data that may be displayed to the user in the front-end.
-     * @returns {[]}
+     * @returns {[]|null}
      */
     getVisualData() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        let result = {info: []};
+        let result = null;
 
-        // @formatter:off
-        result.info.push({key: lang.get('messages.sidebar_enemy_name_label'), value: this.npc.name})
-        result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()})
-        result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting})
-        result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering})
-        result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine})
-        // @formatter:on
+        if (this.npc !== null) {
+            result = {info: []};
+            // @formatter:off
+            result.info.push({key: lang.get('messages.sidebar_enemy_name_label'), value: this.npc.name})
+            result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()})
+            result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting})
+            result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering})
+            result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine})
+            // @formatter:on
 
-        if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {
-            let npcBolsteringWhitelistValues = '';
-            let count = 0;
-            for (let index in this.npc.npcbolsteringwhitelists) {
-                if (this.npc.npcbolsteringwhitelists.hasOwnProperty(index)) {
-                    let whitelistedNpc = this.npc.npcbolsteringwhitelists[index];
-                    npcBolsteringWhitelistValues += whitelistedNpc.whitelistnpc.name;
-                    // Stop before the end
-                    if (count < this.npc.npcbolsteringwhitelists.length - 1) {
-                        npcBolsteringWhitelistValues += '<br>';
+            if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {
+                let npcBolsteringWhitelistValues = '';
+                let count = 0;
+                for (let index in this.npc.npcbolsteringwhitelists) {
+                    if (this.npc.npcbolsteringwhitelists.hasOwnProperty(index)) {
+                        let whitelistedNpc = this.npc.npcbolsteringwhitelists[index];
+                        npcBolsteringWhitelistValues += whitelistedNpc.whitelistnpc.name;
+                        // Stop before the end
+                        if (count < this.npc.npcbolsteringwhitelists.length - 1) {
+                            npcBolsteringWhitelistValues += '<br>';
+                        }
                     }
+                    count++;
                 }
-                count++;
+                result.info.push({
+                    key: lang.get('messages.sidebar_enemy_bolstering_whitelist_npcs_label'),
+                    value: npcBolsteringWhitelistValues
+                })
             }
-            result.info.push({
-                key: lang.get('messages.sidebar_enemy_bolstering_whitelist_npcs_label'),
-                value: npcBolsteringWhitelistValues
-            })
         }
 
         return result;
+    }
+
+    /**
+     * Checks if this enemy is the last boss or not.
+     * @returns {boolean}
+     */
+    isLastBoss() {
+        return this.npc !== null && this.npc.classification_id === 4;
     }
 
     /**
@@ -325,7 +309,7 @@ class Enemy extends MapObject {
         for (let i = 0; i < packBuddies.length; i++) {
             let packBuddy = packBuddies[i];
 
-            if (packBuddy.npc !== null && packBuddy.npc.classification_id === 4) {
+            if (packBuddy.isLastBoss()) {
                 result = true;
                 break;
             }
@@ -390,7 +374,7 @@ class Enemy extends MapObject {
             result = this.npc.enemy_forces;
 
             // Override first
-            if (getState().getTeeming()) {
+            if (getState().getMapContext().getTeeming()) {
                 if (this.enemy_forces_override_teeming >= 0) {
                     result = this.enemy_forces_override_teeming;
                 } else if (this.npc.enemy_forces_teeming >= 0) {
@@ -488,26 +472,16 @@ class Enemy extends MapObject {
         }
     }
 
-    /**
-     * Get the color of an enemy based on rated difficulty by users.
-     * @param difficulty
-     */
-    getDifficultyColor(difficulty) {
-        let palette = window.interpolate(c.map.enemy.colors);
-        // let rand = Math.random();
-        let color = palette(difficulty);
-        this.setColors({
-            saved: color,
-            savedBorder: color,
-            edited: color,
-            editedBorder: color
-        });
-    }
-
     shouldBeVisible() {
-        // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
-        if (this.linked_awakened_enemy !== null && this.linked_awakened_enemy.getKillZone() !== null && this.isLinkedToLastBoss()) {
-            console.log(`Hiding enemy ${this.id}`);
+        if (!getState().isMapAdmin()) {
+            // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
+            if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
+                return false;
+            }
+        }
+
+        // Hide MDT enemies
+        if (this.hasOwnProperty('is_mdt') && this.is_mdt && !getState().getMdtMappingModeEnabled()) {
             return false;
         }
 
@@ -574,10 +548,6 @@ class Enemy extends MapObject {
     setSelectable(value) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.selectable = value;
-        if (this.visual !== null) {
-            // Refresh the icon
-            this.visual.refresh();
-        }
     }
 
     /**
@@ -610,6 +580,8 @@ class Enemy extends MapObject {
         console.assert(awakenedEnemy.id !== this.id, 'awakenedEnemy must have a different id as ourselves!', awakenedEnemy, this);
         console.assert(awakenedEnemy.npc.id === this.npc.id, 'awakenedEnemy must have the same NPC id as ourselves!', awakenedEnemy.npc, this.npc);
 
+        // console.warn('Setting linked awakened enemy', this.id, awakenedEnemy.id);
+
         this.linked_awakened_enemy = awakenedEnemy;
     }
 
@@ -623,7 +595,7 @@ class Enemy extends MapObject {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getDungeonRoute().publicKey}/raidmarker/${self.id}`,
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/raidmarker/${self.id}`,
             dataType: 'json',
             data: {
                 raid_marker_name: raidMarkerName
@@ -643,7 +615,7 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         super.cleanup();
 
-        this.unregister('synced', this, this._synced.bind(this));
+        this.unregister('object:changed', this, this._onObjectChanged.bind(this));
         this.map.unregister('map:mapstatechanged', this);
 
         if (this.visual !== null) {

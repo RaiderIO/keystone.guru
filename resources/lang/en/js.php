@@ -269,10 +269,11 @@ return [
     'path_weight_label'                                             => 'Weight',
 
     // Enemy patrol
-    'admin_enemy_patrol_faction_label'                              => 'Faction',
-    'admin_enemy_patrol_teeming_label'                              => 'Teeming',
-    'admin_enemy_patrol_color_label'                                => 'Color',
-    'admin_enemy_patrol_weight_label'                               => 'Weight',
+    'enemypatrol_faction_label'                                     => 'Faction',
+    'enemypatrol_teeming_label'                                     => 'Teeming',
+    'enemypatrol_color_label'                                       => 'Color',
+    'enemypatrol_color_animated_label'                              => 'Color animated',
+    'enemypatrol_weight_label'                                      => 'Weight',
 
     // Enemy pack
     'enemypack_faction_label'                                       => 'Faction',

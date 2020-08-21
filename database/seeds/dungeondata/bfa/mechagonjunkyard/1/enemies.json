@@ -10,7 +10,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -153.25,
-        "lng": 215.6875,
+        "lng": 215.69,
         "npc": {
             "id": 150190
         }
@@ -25,8 +25,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -102.4375,
-        "lng": 234.5625,
+        "lat": -102.44,
+        "lng": 234.56,
         "npc": {
             "id": 150712
         }
@@ -41,8 +41,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -98.8125,
-        "lng": 234.875,
+        "lat": -98.81,
+        "lng": 234.88,
         "npc": {
             "id": 153755
         }
@@ -57,7 +57,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -65.5625,
+        "lat": -65.56,
         "lng": 223.25,
         "npc": {
             "id": 150159
@@ -73,8 +73,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -83.8125,
-        "lng": 260.1875,
+        "lat": -83.81,
+        "lng": 260.19,
         "npc": {
             "id": 150142
         }
@@ -89,8 +89,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -81.875,
-        "lng": 262.28125,
+        "lat": -81.88,
+        "lng": 262.28,
         "npc": {
             "id": 150143
         }
@@ -105,8 +105,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -81.59375,
-        "lng": 259.9375,
+        "lat": -81.59,
+        "lng": 259.94,
         "npc": {
             "id": 150143
         }
@@ -121,8 +121,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -91.9375,
-        "lng": 255.65625,
+        "lat": -91.94,
+        "lng": 255.66,
         "npc": {
             "id": 150249
         }
@@ -137,7 +137,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -92.375,
+        "lat": -92.38,
         "lng": 257.5,
         "npc": {
             "id": 150249
@@ -153,8 +153,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -93.4375,
-        "lng": 256.0625,
+        "lat": -93.44,
+        "lng": 256.06,
         "npc": {
             "id": 150250
         }
@@ -169,7 +169,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -80.90625,
+        "lat": -80.91,
         "lng": 256,
         "npc": {
             "id": 150547
@@ -201,8 +201,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -80.8125,
-        "lng": 257.3125,
+        "lat": -80.81,
+        "lng": 257.31,
         "npc": {
             "id": 150142
         }
@@ -217,8 +217,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -78.4375,
-        "lng": 258.46875,
+        "lat": -78.44,
+        "lng": 258.47,
         "npc": {
             "id": 150142
         }
@@ -234,7 +234,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -76.75,
-        "lng": 257.40625,
+        "lng": 257.41,
         "npc": {
             "id": 150547
         }
@@ -249,8 +249,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -76.65625,
-        "lng": 259.5625,
+        "lat": -76.66,
+        "lng": 259.56,
         "npc": {
             "id": 150547
         }
@@ -265,8 +265,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -78.21875,
-        "lng": 261.625,
+        "lat": -78.22,
+        "lng": 261.62,
         "npc": {
             "id": 152009
         }
@@ -282,7 +282,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -76.75,
-        "lng": 266.46875,
+        "lng": 266.47,
         "npc": {
             "id": 150143
         }
@@ -297,8 +297,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -76.65625,
-        "lng": 264.46875,
+        "lat": -76.66,
+        "lng": 264.47,
         "npc": {
             "id": 150547
         }
@@ -313,8 +313,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -75.0625,
-        "lng": 264.8125,
+        "lat": -75.06,
+        "lng": 264.81,
         "npc": {
             "id": 150547
         }
@@ -329,8 +329,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -75.03125,
-        "lng": 266.90625,
+        "lat": -75.03,
+        "lng": 266.91,
         "npc": {
             "id": 150547
         }
@@ -345,7 +345,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -76.1875,
+        "lat": -76.19,
         "lng": 268.5,
         "npc": {
             "id": 150142
@@ -361,8 +361,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -71.9375,
-        "lng": 272.625,
+        "lat": -71.94,
+        "lng": 272.62,
         "npc": {
             "id": 150547
         }
@@ -377,8 +377,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -71.46875,
-        "lng": 275.53125,
+        "lat": -71.47,
+        "lng": 275.53,
         "npc": {
             "id": 150547
         }
@@ -393,8 +393,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -74.28125,
-        "lng": 273.9375,
+        "lat": -74.28,
+        "lng": 273.94,
         "npc": {
             "id": 150547
         }
@@ -409,8 +409,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -72.375,
-        "lng": 256.78125,
+        "lat": -72.38,
+        "lng": 256.78,
         "npc": {
             "id": 150154
         }
@@ -425,8 +425,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -73.1875,
-        "lng": 255.15625,
+        "lat": -73.19,
+        "lng": 255.16,
         "npc": {
             "id": 150154
         }
@@ -441,8 +441,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -75.3125,
-        "lng": 254.1875,
+        "lat": -75.31,
+        "lng": 254.19,
         "npc": {
             "id": 150154
         }
@@ -457,7 +457,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -76.71875,
+        "lat": -76.72,
         "lng": 255,
         "npc": {
             "id": 150154
@@ -473,8 +473,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -74.4375,
-        "lng": 246.28125,
+        "lat": -74.44,
+        "lng": 246.28,
         "npc": {
             "id": 150154
         }
@@ -490,7 +490,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -70.5,
-        "lng": 251.875,
+        "lng": 251.88,
         "npc": {
             "id": 150146
         }
@@ -505,8 +505,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -69.1875,
-        "lng": 251.46875,
+        "lat": -69.19,
+        "lng": 251.47,
         "npc": {
             "id": 150154
         }
@@ -521,8 +521,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -77.53125,
-        "lng": 247.71875,
+        "lat": -77.53,
+        "lng": 247.72,
         "npc": {
             "id": 150160
         }
@@ -537,8 +537,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -77.84375,
-        "lng": 246.1875,
+        "lat": -77.84,
+        "lng": 246.19,
         "npc": {
             "id": 150547
         }
@@ -553,8 +553,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -79.15625,
-        "lng": 247.0625,
+        "lat": -79.16,
+        "lng": 247.06,
         "npc": {
             "id": 150547
         }
@@ -569,8 +569,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -79.09375,
-        "lng": 248.59375,
+        "lat": -79.09,
+        "lng": 248.59,
         "npc": {
             "id": 150547
         }
@@ -585,8 +585,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -81.125,
-        "lng": 249.71875,
+        "lat": -81.12,
+        "lng": 249.72,
         "npc": {
             "id": 150143
         }
@@ -601,8 +601,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -82.21875,
-        "lng": 250.59375,
+        "lat": -82.22,
+        "lng": 250.59,
         "npc": {
             "id": 150142
         }
@@ -618,7 +618,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -82,
-        "lng": 248.46875,
+        "lng": 248.47,
         "npc": {
             "id": 150547
         }
@@ -633,7 +633,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -82.96875,
+        "lat": -82.97,
         "lng": 249.25,
         "npc": {
             "id": 150547
@@ -649,8 +649,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -86.09375,
-        "lng": 256.40625,
+        "lat": -86.09,
+        "lng": 256.41,
         "npc": {
             "id": 150146
         }
@@ -665,8 +665,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -86.5625,
-        "lng": 255.4375,
+        "lat": -86.56,
+        "lng": 255.44,
         "npc": {
             "id": 150547
         }
@@ -681,8 +681,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -87.15625,
-        "lng": 254.15625,
+        "lat": -87.16,
+        "lng": 254.16,
         "npc": {
             "id": 150143
         }
@@ -697,8 +697,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -88.34375,
-        "lng": 252.125,
+        "lat": -88.34,
+        "lng": 252.12,
         "npc": {
             "id": 150547
         }
@@ -713,7 +713,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -88.96875,
+        "lat": -88.97,
         "lng": 251,
         "npc": {
             "id": 150547
@@ -729,8 +729,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -84.84375,
-        "lng": 252.9375,
+        "lat": -84.84,
+        "lng": 252.94,
         "npc": {
             "id": 150142
         }
@@ -745,8 +745,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -84.125,
-        "lng": 251.96875,
+        "lat": -84.12,
+        "lng": 251.97,
         "npc": {
             "id": 150143
         }
@@ -761,8 +761,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -82.8125,
-        "lng": 254.375,
+        "lat": -82.81,
+        "lng": 254.38,
         "npc": {
             "id": 150547
         }
@@ -777,7 +777,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -83.15625,
+        "lat": -83.16,
         "lng": 252.75,
         "npc": {
             "id": 150547
@@ -793,7 +793,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -84.8125,
+        "lat": -84.81,
         "lng": 250.5,
         "npc": {
             "id": 150547
@@ -809,7 +809,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -73.28125,
+        "lat": -73.28,
         "lng": 242,
         "npc": {
             "id": 150143
@@ -825,8 +825,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -72.875,
-        "lng": 243.03125,
+        "lat": -72.88,
+        "lng": 243.03,
         "npc": {
             "id": 150143
         }
@@ -841,8 +841,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -71.625,
-        "lng": 242.5625,
+        "lat": -71.62,
+        "lng": 242.56,
         "npc": {
             "id": 150142
         }
@@ -857,8 +857,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -72.15625,
-        "lng": 241.125,
+        "lat": -72.16,
+        "lng": 241.12,
         "npc": {
             "id": 150146
         }
@@ -873,8 +873,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -78.59375,
-        "lng": 239.9375,
+        "lat": -78.59,
+        "lng": 239.94,
         "npc": {
             "id": 150547
         }
@@ -889,8 +889,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -79.6875,
-        "lng": 242.5625,
+        "lat": -79.69,
+        "lng": 242.56,
         "npc": {
             "id": 150547
         }
@@ -906,7 +906,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -76,
-        "lng": 240.03125,
+        "lng": 240.03,
         "npc": {
             "id": 150547
         }
@@ -921,8 +921,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -74.65625,
-        "lng": 239.96875,
+        "lat": -74.66,
+        "lng": 239.97,
         "npc": {
             "id": 150547
         }
@@ -937,7 +937,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -73.1875,
+        "lat": -73.19,
         "lng": 238.25,
         "npc": {
             "id": 150146
@@ -953,8 +953,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -72.0625,
-        "lng": 238.875,
+        "lat": -72.06,
+        "lng": 238.88,
         "npc": {
             "id": 150142
         }
@@ -970,7 +970,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -72.25,
-        "lng": 237.15625,
+        "lng": 237.16,
         "npc": {
             "id": 150143
         }
@@ -1001,7 +1001,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -68.3125,
+        "lat": -68.31,
         "lng": 237.5,
         "npc": {
             "id": 150547
@@ -1017,8 +1017,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -66.875,
-        "lng": 238.3125,
+        "lat": -66.88,
+        "lng": 238.31,
         "npc": {
             "id": 150547
         }
@@ -1033,8 +1033,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -66.34375,
-        "lng": 242.4375,
+        "lat": -66.34,
+        "lng": 242.44,
         "npc": {
             "id": 150160
         }
@@ -1049,8 +1049,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -70.59375,
-        "lng": 232.90625,
+        "lat": -70.59,
+        "lng": 232.91,
         "npc": {
             "id": 150547
         }
@@ -1065,8 +1065,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -71.65625,
-        "lng": 232.90625,
+        "lat": -71.66,
+        "lng": 232.91,
         "npc": {
             "id": 150547
         }
@@ -1081,8 +1081,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -68.0625,
-        "lng": 232.625,
+        "lat": -68.06,
+        "lng": 232.62,
         "npc": {
             "id": 150143
         }
@@ -1097,8 +1097,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -66.90625,
-        "lng": 233.1875,
+        "lat": -66.91,
+        "lng": 233.19,
         "npc": {
             "id": 150142
         }
@@ -1113,8 +1113,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -67.125,
-        "lng": 231.59375,
+        "lat": -67.12,
+        "lng": 231.59,
         "npc": {
             "id": 150142
         }
@@ -1129,8 +1129,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -70.21875,
-        "lng": 230.46875,
+        "lat": -70.22,
+        "lng": 230.47,
         "npc": {
             "id": 152009
         }
@@ -1145,8 +1145,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -66.375,
-        "lng": 226.375,
+        "lat": -66.38,
+        "lng": 226.38,
         "npc": {
             "id": 150160
         }
@@ -1161,8 +1161,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -68.0625,
-        "lng": 224.4375,
+        "lat": -68.06,
+        "lng": 224.44,
         "npc": {
             "id": 150160
         }
@@ -1177,8 +1177,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -59.125,
-        "lng": 225.3125,
+        "lat": -59.12,
+        "lng": 225.31,
         "npc": {
             "id": 150154
         }
@@ -1193,8 +1193,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -57.96875,
-        "lng": 222.9375,
+        "lat": -57.97,
+        "lng": 222.94,
         "npc": {
             "id": 150154
         }
@@ -1209,8 +1209,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -56.375,
-        "lng": 222.53125,
+        "lat": -56.38,
+        "lng": 222.53,
         "npc": {
             "id": 150547
         }
@@ -1225,8 +1225,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -56.125,
-        "lng": 224.28125,
+        "lat": -56.12,
+        "lng": 224.28,
         "npc": {
             "id": 150547
         }
@@ -1241,8 +1241,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -56.1875,
-        "lng": 226.09375,
+        "lat": -56.19,
+        "lng": 226.09,
         "npc": {
             "id": 150547
         }
@@ -1257,8 +1257,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -71.375,
-        "lng": 218.4375,
+        "lat": -71.38,
+        "lng": 218.44,
         "npc": {
             "id": 150547
         }
@@ -1273,8 +1273,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -70.8125,
-        "lng": 220.1875,
+        "lat": -70.81,
+        "lng": 220.19,
         "npc": {
             "id": 150547
         }
@@ -1289,7 +1289,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -72.5625,
+        "lat": -72.56,
         "lng": 219.75,
         "npc": {
             "id": 150547
@@ -1305,8 +1305,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -75.875,
-        "lng": 225.125,
+        "lat": -75.88,
+        "lng": 225.12,
         "npc": {
             "id": 152009
         }
@@ -1321,8 +1321,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -74.8125,
-        "lng": 228.1875,
+        "lat": -74.81,
+        "lng": 228.19,
         "npc": {
             "id": 150547
         }
@@ -1337,8 +1337,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -76.875,
-        "lng": 219.375,
+        "lat": -76.88,
+        "lng": 219.38,
         "npc": {
             "id": 150143
         }
@@ -1353,8 +1353,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -78.9375,
-        "lng": 219.625,
+        "lat": -78.94,
+        "lng": 219.62,
         "npc": {
             "id": 150146
         }
@@ -1369,8 +1369,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -77.8125,
-        "lng": 221.625,
+        "lat": -77.81,
+        "lng": 221.62,
         "npc": {
             "id": 150142
         }
@@ -1385,8 +1385,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -82.625,
-        "lng": 224.5625,
+        "lat": -82.62,
+        "lng": 224.56,
         "npc": {
             "id": 150547
         }
@@ -1401,8 +1401,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -82.8125,
-        "lng": 226.125,
+        "lat": -82.81,
+        "lng": 226.12,
         "npc": {
             "id": 150142
         }
@@ -1417,8 +1417,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -80.6875,
-        "lng": 224.6875,
+        "lat": -80.69,
+        "lng": 224.69,
         "npc": {
             "id": 150547
         }
@@ -1434,7 +1434,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -80.75,
-        "lng": 226.625,
+        "lng": 226.62,
         "npc": {
             "id": 150547
         }
@@ -1449,8 +1449,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -78.4375,
-        "lng": 225.3125,
+        "lat": -78.44,
+        "lng": 225.31,
         "npc": {
             "id": 150142
         }
@@ -1465,8 +1465,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -81.125,
-        "lng": 218.6875,
+        "lat": -81.12,
+        "lng": 218.69,
         "npc": {
             "id": 150154
         }
@@ -1482,7 +1482,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -82,
-        "lng": 217.375,
+        "lng": 217.38,
         "npc": {
             "id": 150547
         }
@@ -1497,8 +1497,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -79.5625,
-        "lng": 214.1875,
+        "lat": -79.56,
+        "lng": 214.19,
         "npc": {
             "id": 150154
         }
@@ -1514,7 +1514,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -83.75,
-        "lng": 221.375,
+        "lng": 221.38,
         "npc": {
             "id": 150160
         }
@@ -1529,7 +1529,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -86.375,
+        "lat": -86.38,
         "lng": 222.75,
         "npc": {
             "id": 152009
@@ -1545,8 +1545,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -84.1875,
-        "lng": 214.1875,
+        "lat": -84.19,
+        "lng": 214.19,
         "npc": {
             "id": 150547
         }
@@ -1561,8 +1561,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -85.6875,
-        "lng": 215.6875,
+        "lat": -85.69,
+        "lng": 215.69,
         "npc": {
             "id": 150547
         }
@@ -1577,7 +1577,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -89.375,
+        "lat": -89.38,
         "lng": 219.75,
         "npc": {
             "id": 150154
@@ -1593,8 +1593,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -87.4375,
-        "lng": 219.0625,
+        "lat": -87.44,
+        "lng": 219.06,
         "npc": {
             "id": 150154
         }
@@ -1609,8 +1609,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -88.5625,
-        "lng": 217.5625,
+        "lat": -88.56,
+        "lng": 217.56,
         "npc": {
             "id": 150154
         }
@@ -1625,8 +1625,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -85.9375,
-        "lng": 210.9375,
+        "lat": -85.94,
+        "lng": 210.94,
         "npc": {
             "id": 150154
         }
@@ -1641,8 +1641,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -86.375,
-        "lng": 229.34375,
+        "lat": -86.38,
+        "lng": 229.34,
         "npc": {
             "id": 150146
         }
@@ -1657,8 +1657,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -85.1875,
-        "lng": 229.78125,
+        "lat": -85.19,
+        "lng": 229.78,
         "npc": {
             "id": 150142
         }
@@ -1673,8 +1673,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -86.4375,
-        "lng": 231.53125,
+        "lat": -86.44,
+        "lng": 231.53,
         "npc": {
             "id": 150143
         }
@@ -1689,8 +1689,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -85.125,
-        "lng": 231.59375,
+        "lat": -85.12,
+        "lng": 231.59,
         "npc": {
             "id": 150143
         }
@@ -1706,7 +1706,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -83.75,
-        "lng": 235.59375,
+        "lng": 235.59,
         "npc": {
             "id": 150547
         }
@@ -1722,7 +1722,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -86.5,
-        "lng": 235.375,
+        "lng": 235.38,
         "npc": {
             "id": 150547
         }
@@ -1737,8 +1737,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -83.53125,
-        "lng": 237.4375,
+        "lat": -83.53,
+        "lng": 237.44,
         "npc": {
             "id": 150547
         }
@@ -1770,7 +1770,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -86,
-        "lng": 242.625,
+        "lng": 242.62,
         "npc": {
             "id": 150547
         }
@@ -1785,8 +1785,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -90.90625,
-        "lng": 247.21875,
+        "lat": -90.91,
+        "lng": 247.22,
         "npc": {
             "id": 152009
         }
@@ -1801,8 +1801,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -94.96875,
-        "lng": 239.6875,
+        "lat": -94.97,
+        "lng": 239.69,
         "npc": {
             "id": 150276
         }
@@ -1818,7 +1818,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -95,
-        "lng": 241.0625,
+        "lng": 241.06,
         "npc": {
             "id": 150276
         }
@@ -1833,8 +1833,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -103.8125,
-        "lng": 269.4375,
+        "lat": -103.81,
+        "lng": 269.44,
         "npc": {
             "id": 150250
         }
@@ -1849,8 +1849,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -105.9375,
-        "lng": 267.8125,
+        "lat": -105.94,
+        "lng": 267.81,
         "npc": {
             "id": 150254
         }
@@ -1865,8 +1865,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -105.875,
-        "lng": 270.9375,
+        "lat": -105.88,
+        "lng": 270.94,
         "npc": {
             "id": 150254
         }
@@ -1882,7 +1882,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -96.25,
-        "lng": 255.1875,
+        "lng": 255.19,
         "npc": {
             "id": 150253
         }
@@ -1897,8 +1897,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -109.4375,
-        "lng": 257.1875,
+        "lat": -109.44,
+        "lng": 257.19,
         "npc": {
             "id": 150250
         }
@@ -1914,7 +1914,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -111,
-        "lng": 255.8125,
+        "lng": 255.81,
         "npc": {
             "id": 150254
         }
@@ -1929,8 +1929,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -111.4375,
-        "lng": 257.875,
+        "lat": -111.44,
+        "lng": 257.88,
         "npc": {
             "id": 150254
         }
@@ -1945,7 +1945,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -102.125,
+        "lat": -102.12,
         "lng": 258.25,
         "npc": {
             "id": 150250
@@ -1962,7 +1962,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -102.25,
-        "lng": 260.3125,
+        "lng": 260.31,
         "npc": {
             "id": 150254
         }
@@ -1977,8 +1977,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -99.9375,
-        "lng": 259.3125,
+        "lat": -99.94,
+        "lng": 259.31,
         "npc": {
             "id": 150254
         }
@@ -1994,7 +1994,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -119.75,
-        "lng": 287.5625,
+        "lng": 287.56,
         "npc": {
             "id": 150169
         }
@@ -2009,7 +2009,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -121.6875,
+        "lat": -121.69,
         "lng": 290.25,
         "npc": {
             "id": 150195
@@ -2025,8 +2025,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -127.375,
-        "lng": 293.875,
+        "lat": -127.38,
+        "lng": 293.88,
         "npc": {
             "id": 150165
         }
@@ -2041,8 +2041,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -122.4375,
-        "lng": 296.4375,
+        "lat": -122.44,
+        "lng": 296.44,
         "npc": {
             "id": 150195
         }
@@ -2057,8 +2057,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -126.1875,
-        "lng": 296.5625,
+        "lat": -126.19,
+        "lng": 296.56,
         "npc": {
             "id": 150195
         }
@@ -2073,7 +2073,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -129.875,
+        "lat": -129.88,
         "lng": 300,
         "npc": {
             "id": 150165
@@ -2089,8 +2089,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -126.9375,
-        "lng": 306.0625,
+        "lat": -126.94,
+        "lng": 306.06,
         "npc": {
             "id": 150165
         }
@@ -2121,8 +2121,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -135.0625,
-        "lng": 296.4375,
+        "lat": -135.06,
+        "lng": 296.44,
         "npc": {
             "id": 150165
         }
@@ -2137,7 +2137,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -135.125,
+        "lat": -135.12,
         "lng": 301.5,
         "npc": {
             "id": 150169
@@ -2153,8 +2153,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -133.84375,
-        "lng": 305.3125,
+        "lat": -133.84,
+        "lng": 305.31,
         "npc": {
             "id": 150169
         }
@@ -2169,8 +2169,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -140.96875,
-        "lng": 290.84375,
+        "lat": -140.97,
+        "lng": 290.84,
         "npc": {
             "id": 150169
         }
@@ -2185,8 +2185,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -138.6875,
-        "lng": 287.15625,
+        "lat": -138.69,
+        "lng": 287.16,
         "npc": {
             "id": 150195
         }
@@ -2201,8 +2201,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -144.4375,
-        "lng": 299.15625,
+        "lat": -144.44,
+        "lng": 299.16,
         "npc": {
             "id": 150195
         }
@@ -2217,8 +2217,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -154.09375,
-        "lng": 301.40625,
+        "lat": -154.09,
+        "lng": 301.41,
         "npc": {
             "id": 150168
         }
@@ -2233,8 +2233,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -152.625,
-        "lng": 305.125,
+        "lat": -152.62,
+        "lng": 305.12,
         "npc": {
             "id": 150165
         }
@@ -2249,8 +2249,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -155.5625,
-        "lng": 304.625,
+        "lat": -155.56,
+        "lng": 304.62,
         "npc": {
             "id": 150165
         }
@@ -2265,7 +2265,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -161.90625,
+        "lat": -161.91,
         "lng": 306,
         "npc": {
             "id": 150165
@@ -2281,8 +2281,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -153.21875,
-        "lng": 293.78125,
+        "lat": -153.22,
+        "lng": 293.78,
         "npc": {
             "id": 150165
         }
@@ -2297,8 +2297,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -155.375,
-        "lng": 296.6875,
+        "lat": -155.38,
+        "lng": 296.69,
         "npc": {
             "id": 150195
         }
@@ -2313,8 +2313,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -149.90625,
-        "lng": 293.625,
+        "lat": -149.91,
+        "lng": 293.62,
         "npc": {
             "id": 150195
         }
@@ -2345,8 +2345,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -144.59375,
-        "lng": 286.6875,
+        "lat": -144.59,
+        "lng": 286.69,
         "npc": {
             "id": 150165
         }
@@ -2361,8 +2361,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -151.5625,
-        "lng": 287.59375,
+        "lat": -151.56,
+        "lng": 287.59,
         "npc": {
             "id": 150169
         }
@@ -2378,7 +2378,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -148.5,
-        "lng": 285.4375,
+        "lng": 285.44,
         "npc": {
             "id": 150195
         }
@@ -2393,8 +2393,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -162.90625,
-        "lng": 298.59375,
+        "lat": -162.91,
+        "lng": 298.59,
         "npc": {
             "id": 150169
         }
@@ -2410,7 +2410,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -158.25,
-        "lng": 292.1875,
+        "lng": 292.19,
         "npc": {
             "id": 150169
         }
@@ -2425,8 +2425,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -159.4375,
-        "lng": 287.21875,
+        "lat": -159.44,
+        "lng": 287.22,
         "npc": {
             "id": 150165
         }
@@ -2441,8 +2441,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -153.1875,
-        "lng": 281.53125,
+        "lat": -153.19,
+        "lng": 281.53,
         "npc": {
             "id": 150165
         }
@@ -2457,8 +2457,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -156.46875,
-        "lng": 276.6875,
+        "lat": -156.47,
+        "lng": 276.69,
         "npc": {
             "id": 150169
         }
@@ -2473,7 +2473,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -151.125,
+        "lat": -151.12,
         "lng": 274.75,
         "npc": {
             "id": 150169
@@ -2489,8 +2489,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -149.78125,
-        "lng": 274.65625,
+        "lat": -149.78,
+        "lng": 274.66,
         "npc": {
             "id": 150195
         }
@@ -2505,8 +2505,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -143.40625,
-        "lng": 275.78125,
+        "lat": -143.41,
+        "lng": 275.78,
         "npc": {
             "id": 150169
         }
@@ -2522,7 +2522,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -162.5,
-        "lng": 270.03125,
+        "lng": 270.03,
         "npc": {
             "id": 150169
         }
@@ -2537,8 +2537,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -158.15625,
-        "lng": 264.6875,
+        "lat": -158.16,
+        "lng": 264.69,
         "npc": {
             "id": 150165
         }
@@ -2553,7 +2553,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -156.8125,
+        "lat": -156.81,
         "lng": 265.5,
         "npc": {
             "id": 150165
@@ -2569,8 +2569,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -167.4375,
-        "lng": 249.125,
+        "lat": -167.44,
+        "lng": 249.12,
         "npc": {
             "id": 150165
         }
@@ -2601,7 +2601,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -149.6875,
+        "lat": -149.69,
         "lng": 262,
         "npc": {
             "id": 150195
@@ -2617,7 +2617,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -118.0625,
+        "lat": -118.06,
         "lng": 269.25,
         "npc": {
             "id": 152009
@@ -2633,7 +2633,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -128.1875,
+        "lat": -128.19,
         "lng": 279,
         "npc": {
             "id": 152009
@@ -2650,7 +2650,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -126.5,
-        "lng": 254.6875,
+        "lng": 254.69,
         "npc": {
             "id": 150253
         }
@@ -2681,7 +2681,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -132.4375,
+        "lat": -132.44,
         "lng": 249.5,
         "npc": {
             "id": 150195
@@ -2698,7 +2698,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -134.5,
-        "lng": 251.6875,
+        "lng": 251.69,
         "npc": {
             "id": 150195
         }
@@ -2714,7 +2714,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -133.5,
-        "lng": 254.875,
+        "lng": 254.88,
         "npc": {
             "id": 150195
         }
@@ -2729,7 +2729,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -115.0625,
+        "lat": -115.06,
         "lng": 245,
         "npc": {
             "id": 150276
@@ -2745,8 +2745,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -117.1875,
-        "lng": 244.1875,
+        "lat": -117.19,
+        "lng": 244.19,
         "npc": {
             "id": 150276
         }
@@ -2761,8 +2761,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -113.625,
-        "lng": 239.65625,
+        "lat": -113.62,
+        "lng": 239.66,
         "npc": {
             "id": 150249
         }
@@ -2777,8 +2777,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -112.53125,
-        "lng": 240.90625,
+        "lat": -112.53,
+        "lng": 240.91,
         "npc": {
             "id": 150249
         }
@@ -2793,8 +2793,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -111.96875,
-        "lng": 239.53125,
+        "lat": -111.97,
+        "lng": 239.53,
         "npc": {
             "id": 150250
         }
@@ -2809,8 +2809,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -106.96875,
-        "lng": 243.5625,
+        "lat": -106.97,
+        "lng": 243.56,
         "npc": {
             "id": 150253
         }
@@ -2825,8 +2825,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -109.15625,
-        "lng": 234.625,
+        "lat": -109.16,
+        "lng": 234.62,
         "npc": {
             "id": 150250
         }
@@ -2841,7 +2841,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -108.34375,
+        "lat": -108.34,
         "lng": 235.5,
         "npc": {
             "id": 150249
@@ -2857,8 +2857,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -107.96875,
-        "lng": 234.3125,
+        "lat": -107.97,
+        "lng": 234.31,
         "npc": {
             "id": 150250
         }
@@ -2873,8 +2873,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -102.15625,
-        "lng": 240.53125,
+        "lat": -102.16,
+        "lng": 240.53,
         "npc": {
             "id": 150249
         }
@@ -2889,8 +2889,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -102.53125,
-        "lng": 239.3125,
+        "lat": -102.53,
+        "lng": 239.31,
         "npc": {
             "id": 150250
         }
@@ -2905,8 +2905,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -101.84375,
-        "lng": 238.28125,
+        "lat": -101.84,
+        "lng": 238.28,
         "npc": {
             "id": 150250
         }
@@ -2921,8 +2921,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -101.3125,
-        "lng": 239.53125,
+        "lat": -101.31,
+        "lng": 239.53,
         "npc": {
             "id": 150251
         }
@@ -2937,8 +2937,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -100.59375,
-        "lng": 238.40625,
+        "lat": -100.59,
+        "lng": 238.41,
         "npc": {
             "id": 150249
         }
@@ -2953,8 +2953,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -97.4375,
-        "lng": 237.21875,
+        "lat": -97.44,
+        "lng": 237.22,
         "npc": {
             "id": 150251
         }
@@ -2969,8 +2969,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -96.375,
-        "lng": 237.21875,
+        "lat": -96.38,
+        "lng": 237.22,
         "npc": {
             "id": 150249
         }
@@ -2985,8 +2985,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -96.875,
-        "lng": 238.09375,
+        "lat": -96.88,
+        "lng": 238.09,
         "npc": {
             "id": 150249
         }
@@ -3001,8 +3001,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -99.09375,
-        "lng": 242.40625,
+        "lat": -99.09,
+        "lng": 242.41,
         "npc": {
             "id": 150250
         }
@@ -3017,8 +3017,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -98.125,
-        "lng": 241.46875,
+        "lat": -98.12,
+        "lng": 241.47,
         "npc": {
             "id": 150254
         }
@@ -3033,8 +3033,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -99.34375,
-        "lng": 241.34375,
+        "lat": -99.34,
+        "lng": 241.34,
         "npc": {
             "id": 150254
         }
@@ -3050,7 +3050,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -105.75,
-        "lng": 234.5625,
+        "lng": 234.56,
         "npc": {
             "id": 150253
         }
@@ -3065,8 +3065,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -104.8125,
-        "lng": 235.1875,
+        "lat": -104.81,
+        "lng": 235.19,
         "npc": {
             "id": 150251
         }
@@ -3081,8 +3081,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -112.3125,
-        "lng": 247.625,
+        "lat": -112.31,
+        "lng": 247.62,
         "npc": {
             "id": 150254
         }
@@ -3097,8 +3097,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -113.34375,
-        "lng": 248.09375,
+        "lat": -113.34,
+        "lng": 248.09,
         "npc": {
             "id": 150250
         }
@@ -3114,7 +3114,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -112.75,
-        "lng": 249.03125,
+        "lng": 249.03,
         "npc": {
             "id": 150251
         }
@@ -3129,8 +3129,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -141.78125,
-        "lng": 259.3125,
+        "lat": -141.78,
+        "lng": 259.31,
         "npc": {
             "id": 155090
         }
@@ -3145,8 +3145,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -141.9375,
-        "lng": 257.8125,
+        "lat": -141.94,
+        "lng": 257.81,
         "npc": {
             "id": 155090
         }
@@ -3177,7 +3177,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -125.9375,
+        "lat": -125.94,
         "lng": 245.5,
         "npc": {
             "id": 150292
@@ -3193,8 +3193,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -124.5625,
-        "lng": 244.5625,
+        "lat": -124.56,
+        "lng": 244.56,
         "npc": {
             "id": 150297
         }
@@ -3209,8 +3209,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -143.65625,
-        "lng": 228.1875,
+        "lat": -143.66,
+        "lng": 228.19,
         "npc": {
             "id": 150292
         }
@@ -3225,7 +3225,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -144.96875,
+        "lat": -144.97,
         "lng": 228.5,
         "npc": {
             "id": 155094
@@ -3241,8 +3241,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -144.5625,
-        "lng": 227.40625,
+        "lat": -144.56,
+        "lng": 227.41,
         "npc": {
             "id": 155090
         }
@@ -3257,8 +3257,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -143.9375,
-        "lng": 226.625,
+        "lat": -143.94,
+        "lng": 226.62,
         "npc": {
             "id": 150297
         }
@@ -3273,8 +3273,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -142.8125,
-        "lng": 226.53125,
+        "lat": -142.81,
+        "lng": 226.53,
         "npc": {
             "id": 155094
         }
@@ -3290,7 +3290,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -134.75,
-        "lng": 232.21875,
+        "lng": 232.22,
         "npc": {
             "id": 155094
         }
@@ -3305,8 +3305,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -133.6875,
-        "lng": 231.09375,
+        "lat": -133.69,
+        "lng": 231.09,
         "npc": {
             "id": 150297
         }
@@ -3321,8 +3321,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -135.125,
-        "lng": 230.8125,
+        "lat": -135.12,
+        "lng": 230.81,
         "npc": {
             "id": 155094
         }
@@ -3337,8 +3337,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -137.84375,
-        "lng": 226.3125,
+        "lat": -137.84,
+        "lng": 226.31,
         "npc": {
             "id": 155094
         }
@@ -3353,8 +3353,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -136.84375,
-        "lng": 227.28125,
+        "lat": -136.84,
+        "lng": 227.28,
         "npc": {
             "id": 150297
         }
@@ -3369,8 +3369,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -136.4375,
-        "lng": 226.03125,
+        "lat": -136.44,
+        "lng": 226.03,
         "npc": {
             "id": 155094
         }
@@ -3385,8 +3385,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -130.53125,
-        "lng": 227.21875,
+        "lat": -130.53,
+        "lng": 227.22,
         "npc": {
             "id": 155090
         }
@@ -3401,8 +3401,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -136.03125,
-        "lng": 223.65625,
+        "lat": -136.03,
+        "lng": 223.66,
         "npc": {
             "id": 155094
         }
@@ -3417,7 +3417,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -134.46875,
+        "lat": -134.47,
         "lng": 223.5,
         "npc": {
             "id": 155094
@@ -3433,8 +3433,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -133.15625,
-        "lng": 223.03125,
+        "lat": -133.16,
+        "lng": 223.03,
         "npc": {
             "id": 155094
         }
@@ -3449,8 +3449,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -131.4375,
-        "lng": 223.59375,
+        "lat": -131.44,
+        "lng": 223.59,
         "npc": {
             "id": 155090
         }
@@ -3465,7 +3465,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -142.90625,
+        "lat": -142.91,
         "lng": 239.5,
         "npc": {
             "id": 155090
@@ -3481,8 +3481,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -140.0625,
-        "lng": 247.15625,
+        "lat": -140.06,
+        "lng": 247.16,
         "npc": {
             "id": 155094
         }
@@ -3497,8 +3497,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -140.875,
-        "lng": 247.40625,
+        "lat": -140.88,
+        "lng": 247.41,
         "npc": {
             "id": 150292
         }
@@ -3513,8 +3513,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -141.84375,
-        "lng": 247.625,
+        "lat": -141.84,
+        "lng": 247.62,
         "npc": {
             "id": 155094
         }
@@ -3529,8 +3529,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -140.125,
-        "lng": 242.125,
+        "lat": -140.12,
+        "lng": 242.12,
         "npc": {
             "id": 150293
         }
@@ -3545,8 +3545,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -139.46875,
-        "lng": 243.78125,
+        "lat": -139.47,
+        "lng": 243.78,
         "npc": {
             "id": 150293
         }
@@ -3561,8 +3561,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -149.9375,
-        "lng": 244.15625,
+        "lat": -149.94,
+        "lng": 244.16,
         "npc": {
             "id": 155094
         }
@@ -3577,8 +3577,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -148.96875,
-        "lng": 245.5625,
+        "lat": -148.97,
+        "lng": 245.56,
         "npc": {
             "id": 155094
         }
@@ -3593,8 +3593,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -148.375,
-        "lng": 244.1875,
+        "lat": -148.38,
+        "lng": 244.19,
         "npc": {
             "id": 150293
         }
@@ -3610,7 +3610,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -151.75,
-        "lng": 238.03125,
+        "lng": 238.03,
         "npc": {
             "id": 155094
         }
@@ -3625,8 +3625,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -151.5625,
-        "lng": 239.53125,
+        "lat": -151.56,
+        "lng": 239.53,
         "npc": {
             "id": 150297
         }
@@ -3641,8 +3641,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -150.15625,
-        "lng": 238.6875,
+        "lat": -150.16,
+        "lng": 238.69,
         "npc": {
             "id": 150293
         }
@@ -3657,8 +3657,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -98.59375,
-        "lng": 240.5625,
+        "lat": -98.59,
+        "lng": 240.56,
         "npc": {
             "id": 150254
         }
@@ -3673,8 +3673,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -95.90625,
-        "lng": 238.4375,
+        "lat": -95.91,
+        "lng": 238.44,
         "npc": {
             "id": 150254
         }
@@ -3689,8 +3689,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -128.875,
-        "lng": 276.84375,
+        "lat": -128.88,
+        "lng": 276.84,
         "npc": {
             "id": 152009
         }
@@ -3705,8 +3705,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -128.71875,
-        "lng": 222.875,
+        "lat": -128.72,
+        "lng": 222.88,
         "npc": {
             "id": 161244
         }
@@ -3721,8 +3721,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -120.84375,
-        "lng": 263.59375,
+        "lat": -120.84,
+        "lng": 263.59,
         "npc": {
             "id": 161243
         }
@@ -3737,8 +3737,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -78.96875,
-        "lng": 245.09375,
+        "lat": -78.97,
+        "lng": 245.09,
         "npc": {
             "id": 161124
         }
@@ -3753,7 +3753,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -145.6875,
+        "lat": -145.69,
         "lng": 241.75,
         "npc": {
             "id": 161241
@@ -3769,8 +3769,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -66.09375,
-        "lng": 232.21875,
+        "lat": -66.09,
+        "lng": 232.22,
         "npc": {
             "id": 150146
         }
@@ -3785,8 +3785,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -149.96875,
-        "lng": 245.28125,
+        "lat": -149.97,
+        "lng": 245.28,
         "npc": {
             "id": 150292
         }
@@ -3801,8 +3801,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -153.375,
-        "lng": 267.375,
+        "lat": -153.38,
+        "lng": 267.38,
         "npc": {
             "id": 150169
         }
@@ -3817,8 +3817,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -160.875,
-        "lng": 275.59375,
+        "lat": -160.88,
+        "lng": 275.59,
         "npc": {
             "id": 150165
         }
@@ -3834,7 +3834,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -148.5,
-        "lng": 297.5625,
+        "lng": 297.56,
         "npc": {
             "id": 150165
         }
@@ -3849,8 +3849,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -118.46875,
-        "lng": 237.46875,
+        "lat": -118.47,
+        "lng": 237.47,
         "npc": {
             "id": 150293
         }
@@ -3865,8 +3865,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -120.03125,
-        "lng": 236.34375,
+        "lat": -120.03,
+        "lng": 236.34,
         "npc": {
             "id": 150293
         }
@@ -3881,8 +3881,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -118.375,
-        "lng": 235.3125,
+        "lat": -118.38,
+        "lng": 235.31,
         "npc": {
             "id": 150293
         }
@@ -3897,8 +3897,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -124.65625,
-        "lng": 234.875,
+        "lat": -124.66,
+        "lng": 234.88,
         "npc": {
             "id": 150293
         }
@@ -3913,8 +3913,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -136.03125,
-        "lng": 266.28125,
+        "lat": -136.03,
+        "lng": 266.28,
         "npc": {
             "id": 150297
         }
@@ -3930,7 +3930,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -137.75,
-        "lng": 264.84375,
+        "lng": 264.84,
         "npc": {
             "id": 155094
         }
@@ -3945,8 +3945,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -137.28125,
-        "lng": 267.90625,
+        "lat": -137.28,
+        "lng": 267.91,
         "npc": {
             "id": 155094
         }
@@ -3961,8 +3961,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -157.65625,
-        "lng": 271.34375,
+        "lat": -157.66,
+        "lng": 271.34,
         "npc": {
             "id": 150222
         }
@@ -3977,8 +3977,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -151.375,
-        "lng": 217.4375,
+        "lat": -151.38,
+        "lng": 217.44,
         "npc": {
             "id": 150295
         }
@@ -3993,8 +3993,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -120.125,
-        "lng": 260.53125,
+        "lat": -120.12,
+        "lng": 260.53,
         "npc": {
             "id": 161244
         }
@@ -4009,8 +4009,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -129.59375,
-        "lng": 220.375,
+        "lat": -129.59,
+        "lng": 220.38,
         "npc": {
             "id": 161243
         }
@@ -4026,7 +4026,7 @@
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
         "lat": -80.25,
-        "lng": 261.53125,
+        "lng": 261.53,
         "npc": {
             "id": 150547
         }
@@ -4041,7 +4041,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -151.03125,
+        "lat": -151.03,
         "lng": 213.25,
         "npc": {
             "id": 161124
@@ -4057,8 +4057,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -155.625,
-        "lng": 218.0625,
+        "lat": -155.62,
+        "lng": 218.06,
         "npc": {
             "id": 161241
         }
@@ -4073,7 +4073,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -152.90625,
+        "lat": -152.91,
         "lng": 212.25,
         "npc": {
             "id": 161243
@@ -4089,8 +4089,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -156.59375,
-        "lng": 215.8125,
+        "lat": -156.59,
+        "lng": 215.81,
         "npc": {
             "id": 161244
         }
@@ -4105,8 +4105,8 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -155.46875,
-        "lng": 214.53125,
+        "lat": -155.47,
+        "lng": 214.53,
         "npc": {
             "id": 161244
         }
@@ -4121,7 +4121,7 @@
         "faction": "any",
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -154.125,
+        "lat": -154.12,
         "lng": 213,
         "npc": {
             "id": 161243
