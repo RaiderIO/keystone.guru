@@ -476,7 +476,6 @@ class Enemy extends MapObject {
         if (!getState().isMapAdmin()) {
             // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
             if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
-                // console.warn(`Hiding enemy due to being part of the last boss, but linked enemy is killed elsewhere ${this.id}`);
                 return false;
             }
         }

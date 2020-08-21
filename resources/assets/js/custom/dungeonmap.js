@@ -38,17 +38,38 @@ class DungeonMap extends Signalable {
             mapObjectGroup.register('object:add', this, function (addEvent) {
                 let mapObject = addEvent.data.object;
                 self.mapObjects.push(mapObject);
-                if (mapObject.shouldBeVisible() && mapObject.layer !== null) {
-                    self.drawnLayers.addLayer(mapObject.layer);
-
-                    // Make sure we know it's editable
-                    if (mapObject.isEditable() && addEvent.data.objectgroup.editable && self.options.edit) {
-                        self.editableLayers.addLayer(mapObject.layer);
-                    }
-                }
 
                 if (mapObject instanceof Enemy && !(self instanceof AdminDungeonMap)) {
                     mapObject.register('enemy:clicked', self, self._enemyClicked.bind(self));
+                }
+            });
+
+            // Add and remove layers as they are added to the layer
+            mapObjectGroup.register('object:layerchanged', this, function (layerChangedEvent) {
+                let mapObject = layerChangedEvent.data.object;
+
+                // Remove the old layer if there was any
+                let oldLayer = layerChangedEvent.data.oldLayer;
+                if (oldLayer !== null) {
+                    if (self.drawnLayers.hasLayer(oldLayer)) {
+                        self.drawnLayers.removeLayer(oldLayer);
+                    }
+                    if (self.editableLayers.hasLayer(oldLayer)) {
+                        self.editableLayers.removeLayer(oldLayer);
+                    }
+                }
+
+                // Add the new layer when we should
+                let newLayer = layerChangedEvent.data.newLayer;
+                if (newLayer !== null) {
+                    if (mapObject.shouldBeVisible()) {
+                        self.drawnLayers.addLayer(newLayer);
+
+                        // Make sure we know it's editable
+                        if (mapObject.isEditable() && layerChangedEvent.data.objectgroup.editable && self.options.edit) {
+                            self.editableLayers.addLayer(newLayer);
+                        }
+                    }
                 }
             });
 
@@ -98,8 +119,8 @@ class DungeonMap extends Signalable {
                 }
             });
 
-            mapObjectGroup.register('visibility:changed', this, function(visibilityChangedEvent) {
-                if( visibilityChangedEvent.data.visible ) {
+            mapObjectGroup.register('visibility:changed', this, function (visibilityChangedEvent) {
+                if (visibilityChangedEvent.data.visible) {
                     self.leafletMap.addLayer(visibilityChangedEvent.context.layerGroup);
                 } else {
                     self.leafletMap.removeLayer(visibilityChangedEvent.context.layerGroup);

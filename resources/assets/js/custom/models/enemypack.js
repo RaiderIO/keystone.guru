@@ -67,9 +67,7 @@ class EnemyPack extends MapObject {
     _onEnemyVisibilityToggled(triggeredEvent) {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
-        if (!this.map.isRefreshingMap()) {
-            this._updateHullLayer();
-        }
+        this._updateHullLayer();
     }
 
     /**
@@ -145,11 +143,6 @@ class EnemyPack extends MapObject {
             }
         }
 
-
-        if (result === null) {
-            console.warn(`Unable to create hull layer for enemypack ${this.id}; not enough data points`);
-        }
-
         let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
         enemyPackMapObjectGroup.setLayerToMapObject(result, this);
     }
@@ -178,16 +171,6 @@ class EnemyPack extends MapObject {
     // });
     // this.decorator.addTo(this.map.leafletMap);
     // }
-
-    // To be overridden by any implementing classes
-    onLayerInit() {
-        // this.constructor.name.indexOf('EnemyPack') >= 0
-        console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
-        super.onLayerInit();
-
-        // Show a permanent tooltip for the pack's name
-        // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
-    }
 
     getVertices() {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);

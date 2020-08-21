@@ -522,6 +522,7 @@ class MapObjectGroup extends Signalable {
         console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
 
         // Unset previous layer
+        let oldLayer = mapObject.layer;
         if (mapObject.layer !== null) {
             this.layerGroup.removeLayer(mapObject.layer);
             mapObject.layer = null;
@@ -534,6 +535,15 @@ class MapObjectGroup extends Signalable {
             this.layerGroup.addLayer(mapObject.layer);
             mapObject.setVisible(true);
             mapObject.onLayerInit();
+        }
+
+        if (oldLayer !== layer) {
+            this.signal('object:layerchanged', {
+                object: mapObject,
+                oldLayer: oldLayer,
+                newLayer: mapObject.layer,
+                objectgroup: this
+            });
         }
     }
 

@@ -7,7 +7,7 @@ class PolygonMapObjectGroup extends MapObjectGroup {
      * Converts vertices_json to a list of L.LatLngs
      * @param remoteMapObject {Object}
      * @returns {[]}
-     * @private
+     * @protected
      */
     _restorePoints(remoteMapObject) {
         let points = [];
