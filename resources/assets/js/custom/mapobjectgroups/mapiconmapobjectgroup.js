@@ -1,30 +1,38 @@
 class MapIconMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, [MAP_OBJECT_GROUP_MAPICON, MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK], 'mapicon', editable);
-
-        let self = this;
+        super(manager, [MAP_OBJECT_GROUP_MAPICON, MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK], editable);
 
         this.title = 'Hide/show map icons';
         this.fa_class = 'fa-icons';
 
-        if (this.manager.map.options.echo) {
-            window.Echo.join(this.manager.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
-                .listen('.mapicon-changed', (e) => {
-                    if (e.mapicon.floor_id === getState().getCurrentFloor().id) {
-                        self._restoreObject(e.mapicon, e.user);
-                    }
-                })
-                .listen('.mapicon-deleted', (e) => {
-                    let mapObject = self.findMapObjectById(e.id);
-                    if (mapObject !== null) {
-                        mapObject.localDelete();
-                        self._showDeletedFromEcho(mapObject, e.user);
-                    }
-                });
-        }
+        // Defined in mapicon.js, need to fix this somehow
+        initAwakenedObeliskGatewayIcon();
     }
 
-    _createObject(layer, options) {
+    /**
+     * @inheritDoc
+     **/
+    _getRawObjects() {
+        return getState().getMapContext().getMapIcons();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getOptions(remoteMapObject) {
+        return {mapIconType: getState().getMapContext().getMapIconType(remoteMapObject.map_icon_type_id)};
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _createLayer(remoteMapObject) {
+        let layer = new LeafletMapIconMarker();
+        layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+        return layer;
+    }
+
+    _createMapObject(layer, options = {}) {
         console.assert(this instanceof MapIconMapObjectGroup, 'this is not an MapIconMapObjectGroup', this);
 
         let mapIcon;
@@ -32,7 +40,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
             mapIcon = new AdminMapIcon(this.manager.map, layer);
         }
         // If we're actively placing the obelisk, make sure we create the correct map icon, or if we're restoring the gateway
-        else if (typeof options !== 'undefined' && options.mapIconType.isAwakenedObelisk()) {
+        else if (options.hasOwnProperty('mapIconType') && options.mapIconType.isAwakenedObelisk()) {
             mapIcon = new MapIconAwakenedObelisk(this.manager.map, layer);
         } else {
             mapIcon = new MapIcon(this.manager.map, layer);
@@ -41,45 +49,6 @@ class MapIconMapObjectGroup extends MapObjectGroup {
         // if (typeof options !== 'undefined' && typeof options.mapIconType !== 'undefined') {
         //     mapIcon._setMapIconType(options.mapIconType);
         // }
-
-        return mapIcon;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _restoreObject(remoteMapObject, username = null) {
-        console.assert(this instanceof MapIconMapObjectGroup, 'this is not a MapIconMapObjectGroup', this);
-        // Fetch the existing map icon if it exists
-        /** @type {MapIcon} */
-        let mapIcon = this.findMapObjectById(remoteMapObject.id);
-        let createdNew;
-
-        // Only create a new one if it's new for us
-        if (createdNew = (mapIcon === null)) {
-            // Find the layer we should display on the map
-            let layer = new LeafletMapIconMarker();
-            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-
-            // Pass the map icon type here so layer initialization can take the type into account
-            mapIcon = this.createNew(layer, {mapIconType: getState().getMapIconType(remoteMapObject.map_icon_type_id)});
-        }
-
-        mapIcon.loadRemoteMapObject(remoteMapObject);
-
-        // When in admin mode, show all map icons
-        if (!(this.manager.map instanceof AdminDungeonMap) && (mapIcon.seasonal_index !== null && getState().getSeasonalIndex() !== mapIcon.seasonal_index)) {
-            // Hide this enemy by default
-            mapIcon.setDefaultVisible(false);
-        }
-
-        // We just downloaded the map icon, it's synced alright!
-        mapIcon.setSynced(true);
-        // Refresh the tooltip; it may have been permanent before and no longer, or vice versa
-        mapIcon.bindTooltip();
-
-        // Show echo notification or not
-        this._showReceivedFromEcho(mapIcon, username);
 
         return mapIcon;
     }

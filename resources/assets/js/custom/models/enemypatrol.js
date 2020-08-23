@@ -1,4 +1,4 @@
-$(function () {
+// $(function () {
     L.Draw.EnemyPatrol = L.Draw.Polyline.extend({
         statics: {
             TYPE: 'enemypatrol'
@@ -9,17 +9,22 @@ $(function () {
             L.Draw.Feature.prototype.initialize.call(this, map, options);
         }
     });
-});
+// });
 
 class EnemyPatrol extends Polyline {
     constructor(map, layer) {
         super(map, layer, {name: 'enemypatrol'});
 
         this.label = 'EnemyPatrol';
-        // console.log(rand);
-        // let hex = "#" + color.values[0].toString(16) + color.values[1].toString(16) + color.values[2].toString(16);
+    }
 
-        this.setColor(c.map.enemypatrol.defaultColor());
+    /**
+     *
+     * @returns {function}
+     * @protected
+     */
+    _getPolylineColorDefault() {
+        return c.map.enemypatrol.defaultColor;
     }
 
     /**
@@ -27,7 +32,7 @@ class EnemyPatrol extends Polyline {
      * @returns {*}
      * @private
      */
-    _getDecorator(){
+    _getDecorator() {
         return L.polylineDecorator(this.layer, {
             patterns: [
                 {
@@ -43,7 +48,7 @@ class EnemyPatrol extends Polyline {
                     repeat: 50,
                     symbol: L.Symbol.arrowHead({
                         pixelSize: 12,
-                        pathOptions: {fillOpacity: 1, weight: 0, color: this.color}
+                        pathOptions: {fillOpacity: 1, weight: 0, color: this.polyline.color}
                     })
                 }
             ]

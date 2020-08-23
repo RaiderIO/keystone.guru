@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\KillZoneChangedEvent;
-use App\Events\KillZoneDeletedEvent;
+use App\Events\DungeonRoute\KillZoneChangedEvent;
+use App\Events\DungeonRoute\KillZoneDeletedEvent;
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
@@ -33,21 +35,19 @@ class APIKillZoneController extends Controller
         $killZone = KillZone::findOrNew($data['id']);
 
         $killZone->dungeon_route_id = $dungeonroute->id;
-        $killZone->floor_id = $data['floor_id'] ?? $killZone->floor_id;
-        $killZone->color = $data['color'] ?? $killZone->color;
-        $killZone->lat = $data['lat'] ?? $killZone->lat;
-        $killZone->lng = $data['lng'] ?? $killZone->lng;
-        $killZone->index = $data['index'] ?? $killZone->index;
-
+        $killZone->floor_id = (int)(isset($data['floor_id']) && $data['floor_id'] !== null) ? $data['floor_id'] : $killZone->floor_id;
+        $killZone->color = (isset($data['color']) && $data['color'] !== null) ? $data['color'] : $killZone->color;
+        $killZone->lat = (isset($data['lat']) && $data['lat'] !== null) ? $data['lat'] : $killZone->lat;
+        $killZone->lng = (isset($data['lng']) && $data['lng'] !== null) ? $data['lng'] : $killZone->lng;
+        $killZone->index = (int)(isset($data['index']) && $data['index'] !== null) ? $data['index'] : $killZone->index;
 
         if (!$killZone->exists) {
             // Find out of there is a duplicate
             $this->checkForDuplicate($killZone);
         }
 
-        if (!$killZone->save()) {
-            throw new \Exception('Unable to save kill zone!');
-        } else {
+        if ($killZone->save()) {
+
             // Only when the enemies are actually set
             if (isset($data['enemies'])) {
                 $killZone->deleteEnemies();
@@ -74,10 +74,15 @@ class APIKillZoneController extends Controller
                 KillZoneEnemy::insert($killZoneEnemies);
             }
 
+            // Refresh the enemies that may or may not have been set
+            $killZone->load(['killzoneenemies']);
+
             if (Auth::check()) {
                 // Something's updated; broadcast it
-                broadcast(new KillZoneChangedEvent($dungeonroute, $killZone, Auth::user()));
+                broadcast(new ModelChangedEvent($dungeonroute, Auth::user(), $killZone));
             }
+        } else {
+            throw new \Exception('Unable to save kill zone!');
         }
 
         return $killZone;
@@ -87,7 +92,7 @@ class APIKillZoneController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array|ResponseFactory|Response
+     * @return KillZone
      * @throws \Exception
      */
     function store(Request $request, DungeonRoute $dungeonroute)
@@ -96,14 +101,19 @@ class APIKillZoneController extends Controller
             $this->authorize('edit', $dungeonroute);
         }
 
-
         try {
-            $killZone = $this->_saveKillZone($dungeonroute, $request->all());
+            $data = $request->all();
+            // Make sure that if we're unsetting all enemies from the killzone, it's handled differently
+            // than mass-updating and not wanting to update the enemies at all
+            if (!isset($data['enemies'])) {
+                $data['enemies'] = [];
+            }
+            $killZone = $this->_saveKillZone($dungeonroute, $data);
 
             // Touch the route so that the thumbnail gets updated
             $dungeonroute->touch();
 
-            $result = ['id' => $killZone->id, 'enemy_forces' => $dungeonroute->getEnemyForces()];
+            $result = $killZone;
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
@@ -116,6 +126,7 @@ class APIKillZoneController extends Controller
      * @param DungeonRoute $dungeonroute
      * @return array|ResponseFactory|Response|null
      * @throws AuthorizationException
+     * @throws \Exception
      */
     function storeall(Request $request, DungeonRoute $dungeonroute)
     {
@@ -157,7 +168,7 @@ class APIKillZoneController extends Controller
 
             if ($killzone->delete()) {
                 if (Auth::check()) {
-                    broadcast(new KillZoneDeletedEvent($dungeonroute, $killzone, Auth::user()));
+                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $killzone));
                 }
 
                 // Refresh the killzones relation

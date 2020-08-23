@@ -34,7 +34,7 @@ class Echo extends Signalable {
         });
 
         // Keep track of the current users in this channel
-        window.Echo.join(this.map.options.appType + '-route-edit.' + getState().getDungeonRoute().publicKey)
+        window.Echo.join(getState().getEchoChannelName())
             .here(users => {
                 // Join any existing users already
                 for (let index in users) {
@@ -51,7 +51,7 @@ class Echo extends Signalable {
                 self._removeUser(user);
             })
             .listen('.user-color-changed', (e) => {
-                self._setUserColor(e.name, e.color);
+                self._setUserColor(e.user, e.color);
             });
     }
 
@@ -87,6 +87,7 @@ class Echo extends Signalable {
         for (let i = 0; i < this._users.length; i++) {
             if (this._users[i].name === name) {
                 result = this._users[i];
+                break;
             }
         }
 

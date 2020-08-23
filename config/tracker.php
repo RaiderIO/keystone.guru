@@ -5,7 +5,7 @@ return [
     /*
      * Enable it?
      */
-    'enabled' => true,
+    'enabled' => env('TRACKER_ENABLED', true),
 
     /*
      * Enable cache?

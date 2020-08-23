@@ -9,7 +9,7 @@ class EnemyForcesControls extends MapControl {
         this.lastFooterMessage = null;
         this.map = map;
         // Just the initial enemy forces upon page load.
-        this._setEnemyForces(getState().getDungeonRoute().enemyForces); // Defined in map.blade.php
+        this._setEnemyForces(getState().getMapContext().getEnemyForces()); // Defined in map.blade.php
 
         this.mapControlOptions = {
             onAdd: function (leafletMap) {
@@ -29,7 +29,7 @@ class EnemyForcesControls extends MapControl {
         };
 
         // Listen for when all enemies are loaded
-        this.map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+        this.map.register('map:mapobjectgroupsloaded', this, function () {
             let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
             // For each enemy we've loaded
@@ -51,22 +51,22 @@ class EnemyForcesControls extends MapControl {
 
         let killzoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.register('object:add', this, function (addEvent) {
-            addEvent.data.object.register('killzone:synced', self, self._killzoneSynced.bind(self));
+            addEvent.data.object.register('killzone:changed', self, self._onKillZoneChanged.bind(self));
         });
 
         // Update the total count when teeming was changed
-        getState().register('teeming:changed', this, function () {
+        getState().getMapContext().register('teeming:changed', this, function () {
             self.refreshUI();
         });
 
         this.loaded = true;
     }
 
-    _killzoneSynced(syncedEvent) {
+    _onKillZoneChanged(objectChangedEvent) {
         console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
 
-        if (typeof syncedEvent.data.enemy_forces !== 'undefined') {
-            this._setEnemyForces(syncedEvent.data.enemy_forces);
+        if (typeof objectChangedEvent.data.enemy_forces !== 'undefined') {
+            this._setEnemyForces(objectChangedEvent.data.enemy_forces);
         }
     }
 
@@ -82,7 +82,7 @@ class EnemyForcesControls extends MapControl {
 
         this.enemyForces = value;
         // Write the enemy forces into the state so we can remember it when switching floors and this control is re-created
-        getState().getDungeonRoute().enemyForces = value;
+        getState().getMapContext().setEnemyForces(value);
         this.refreshUI();
 
         // Don't trigger this when loading in the route and the value actually changed
@@ -189,9 +189,9 @@ class EnemyForcesControls extends MapControl {
         console.assert(this instanceof EnemyForcesControls, 'this is not EnemyForcesControls', this);
         let self = this;
 
-        getState().unregister('teeming:changed', this);
+        getState().getMapContext().unregister('teeming:changed', this);
         // Unreg from map
-        this.map.unregister('map:mapobjectgroupsfetchsuccess', this);
+        this.map.unregister('map:mapobjectgroupsloaded', this);
         // Unreg killzones
         let killzoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killzoneMapObjectGroup.unregister('object:add', this);

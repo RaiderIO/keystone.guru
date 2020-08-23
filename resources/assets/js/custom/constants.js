@@ -15,19 +15,6 @@ let c = {
     map: {
         admin: {
             mapobject: {
-                colors: {
-                    unsaved: '#E25D5D',
-                    unsavedBorder: '#7C3434',
-
-                    edited: '#E2915D',
-                    editedBorder: '#7C5034',
-
-                    saved: '#5DE27F',
-                    savedBorder: '#347D47',
-
-                    mouseoverAddEnemy: '#5993D2',
-                    mouseoverAddEnemyBorder: '#34577D',
-                }
             }
         },
         enemy: {
@@ -87,16 +74,6 @@ let c = {
             }
         },
         enemypack: {
-            colors: {
-                unsaved: '#E25D5D',
-                unsavedBorder: '#7C3434',
-
-                edited: '#E2915D',
-                editedBorder: '#7C5034',
-
-                saved: '#5993D2',
-                savedBorder: '#34577D'
-            },
             margin: 2,
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
@@ -130,7 +107,7 @@ let c = {
                 dashArray: [10, 20],
                 // pulseColorLight: '#FFF',
                 // pulseColorDark: '#000',
-                hardwareAccelerated: true,
+                hardwareAcceleration: true,
                 use: L.polyline
             },
             awakenedObeliskGatewayPolylineColor: '#80FF1A',
@@ -171,7 +148,7 @@ let c = {
                 dashArray: [10, 20],
                 pulseColorLight: '#FFF',
                 pulseColorDark: '#000',
-                hardwareAccelerated: true,
+                hardwareAcceleration: true,
                 use: L.polygon
             },
             margin: 2,
@@ -212,7 +189,8 @@ let c = {
             }
         },
         echo: {
-            tooltipFadeOutTimeout: 3000
+            tooltipFadeOutTimeout: 3000,
+            mouseSendFrequency: 1000
         }
     }
 };

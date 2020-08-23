@@ -44,61 +44,63 @@ class CommonMapsMap extends InlineCode {
             this._dungeonMap = new DungeonMap('map', this.options);
         }
 
-        $('#start_virtual_tour').bind('click', function () {
-            introjs().start();
-        });
+        if (this.options.try) {
+            $('#start_virtual_tour').bind('click', function () {
+                introjs().start();
+            });
 
-        // Bind leaflet virtual tour classes
-        let selectors = [
-            ['#sidebar', 'right'],
-            ['#sidebarToggle', 'right'],
+            // Bind leaflet virtual tour classes
+            let selectors = [
+                ['#sidebar', 'right'],
+                ['#sidebarToggle', 'right'],
 
-            ['.visibility_tools', 'right'],
-            ['#map_enemy_visuals', 'right'],
-            ['.floor_selection', 'right'],
+                ['.visibility_tools', 'right'],
+                ['#map_enemy_visuals', 'right'],
+                ['.floor_selection', 'right'],
 
-            ['.route_actions', 'right'],
+                ['.route_actions', 'right'],
 
-            ['.route_manipulation_tools', 'left'],
-            ['#map_enemy_forces_numbers', 'left'],
-            ['.leaflet-draw-draw-path', 'left'],
-            ['.leaflet-draw-draw-killzone', 'left'],
-            ['.leaflet-draw-draw-icon', 'left'],
-            ['.leaflet-draw-draw-brushline', 'left'],
+                ['.route_manipulation_tools', 'left'],
+                ['#map_enemy_forces_numbers', 'left'],
+                ['.leaflet-draw-draw-path', 'left'],
+                ['.leaflet-draw-draw-killzone', 'left'],
+                ['.leaflet-draw-draw-icon', 'left'],
+                ['.leaflet-draw-draw-brushline', 'left'],
 
-            ['.leaflet-draw-edit-edit', 'left'],
-            ['.leaflet-draw-edit-remove', 'left'],
+                ['.leaflet-draw-edit-edit', 'left'],
+                ['.leaflet-draw-edit-remove', 'left'],
 
-            ['#edit_route_freedraw_options_color', 'left'],
-            ['.draw_element .bootstrap-select', 'left'],
+                ['#edit_route_freedraw_options_color', 'left'],
+                ['.draw_element .bootstrap-select', 'left'],
 
-            ['#map_controls .leaflet-draw-toolbar', 'left'],
-        ];
+                ['#map_controls .leaflet-draw-toolbar', 'left'],
+            ];
 
-        this._dungeonMap.register('map:refresh', null, function () {
-            // Upon map refresh, re-init the tutorial selectors
-            for (let i = 0; i < selectors.length; i++) {
-                let $selector = $(selectors[i][0]);
-                // Floor selection may not exist
-                if ($selector.length > 0) {
-                    $selector.attr('data-intro', self._introTexts[i]);
-                    $selector.attr('data-position', selectors[i][1]);
-                    $selector.attr('data-step', i + 1);
-                }
-            }
-
-            // If the map is opened on mobile hide the sidebar
-            if (isMobile()) {
-                let fn = function () {
-                    if (typeof _hideSidebar === 'function') {
-                        // @TODO This introduces a dependency on sidebar, but sidebar loads before dungeonMap is instantiated
-                        _hideSidebar();
+            this._dungeonMap.register('map:refresh', null, function () {
+                // Upon map refresh, re-init the tutorial selectors
+                for (let i = 0; i < selectors.length; i++) {
+                    let $selector = $(selectors[i][0]);
+                    // Floor selection may not exist
+                    if ($selector.length > 0) {
+                        $selector.attr('data-intro', self._introTexts[i]);
+                        $selector.attr('data-position', selectors[i][1]);
+                        $selector.attr('data-step', i + 1);
                     }
-                };
-                self._dungeonMap.leafletMap.off('move', fn);
-                self._dungeonMap.leafletMap.on('move', fn);
-            }
-        });
+                }
+
+                // If the map is opened on mobile hide the sidebar
+                if (isMobile()) {
+                    let fn = function () {
+                        if (typeof _hideSidebar === 'function') {
+                            // @TODO This introduces a dependency on sidebar, but sidebar loads before dungeonMap is instantiated
+                            _hideSidebar();
+                        }
+                    };
+                    self._dungeonMap.leafletMap.off('move', fn);
+                    self._dungeonMap.leafletMap.on('move', fn);
+                }
+            });
+        }
 
         // Refresh the map; draw the layers on it
         this._dungeonMap.refreshLeafletMap();

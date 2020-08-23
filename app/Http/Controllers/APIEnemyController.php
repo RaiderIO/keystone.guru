@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
@@ -10,7 +12,11 @@ use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\RaidMarker;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
@@ -45,50 +51,52 @@ class APIEnemyController extends Controller
 
     /**
      * @param Request $request
-     * @return array
-     * @throws \Exception
+     * @return Enemy
+     * @throws Exception
      */
     function store(Request $request)
     {
         /** @var Enemy $enemy */
         $enemy = Enemy::findOrNew($request->get('id'));
 
-        $enemy->enemy_pack_id = $request->get('enemy_pack_id');
+        $enemy->enemy_pack_id = (int) $request->get('enemy_pack_id');
         $npcId = $request->get('npc_id', -1);
-        $enemy->npc_id = $npcId === null ? -1 : $npcId;
+        $enemy->npc_id = $npcId === null ? -1 : (int) $npcId;
         // Only when set, otherwise default of -1
         $mdtId = $request->get('mdt_id', -1);
-        $enemy->mdt_id = $mdtId === null ? -1 : $mdtId;
+        $enemy->mdt_id = $mdtId === null ? -1 : (int) $mdtId;
         $seasonalIndex = $request->get('seasonal_index');
         // don't use is_empty since 0 is valid
-        $enemy->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : $seasonalIndex;
-        $enemy->floor_id = $request->get('floor_id');
-        $enemy->teeming = $request->get('teeming');
+        $enemy->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int) $seasonalIndex;
+        $enemy->floor_id = (int) $request->get('floor_id');
+        $enemy->teeming = (int) $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');
-        $enemy->enemy_forces_override = $request->get('enemy_forces_override', -1);
-        $enemy->enemy_forces_override_teeming = $request->get('enemy_forces_override_teeming', -1);
+        $enemy->enemy_forces_override = (int) $request->get('enemy_forces_override', -1);
+        $enemy->enemy_forces_override_teeming = (int) $request->get('enemy_forces_override_teeming', -1);
         $enemy->lat = $request->get('lat');
         $enemy->lng = $request->get('lng');
 
         if (!$enemy->save()) {
-            throw new \Exception('Unable to save enemy!');
+            throw new Exception('Unable to save enemy!');
         }
-
-        $result = ['id' => $enemy->id];
 
         if ($enemy->npc_id > 0) {
-            $result['npc'] = Npc::findOrFail($enemy->npc_id);
+            $enemy->load(['npc']);
         }
 
-        return $result;
+        if (Auth::check()) {
+            broadcast(new ModelChangedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
+        }
+
+        return $enemy;
     }
 
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param Enemy $enemy
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return array|ResponseFactory|Response
+     * @throws AuthorizationException
      */
     function setRaidMarker(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
     {
@@ -113,7 +121,7 @@ class APIEnemyController extends Controller
                 $result = ['name' => ''];
             }
 
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 
@@ -123,14 +131,18 @@ class APIEnemyController extends Controller
     /**
      * @param Request $request
      * @param Enemy $enemy
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return array|ResponseFactory|Response
      */
     function delete(Request $request, Enemy $enemy)
     {
         try {
-            $enemy->delete();
+            if( $enemy->delete() ){
+                if (Auth::check()) {
+                    broadcast(new ModelDeletedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
+                }
+            }
             $result = response()->noContent();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 

@@ -197,8 +197,10 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                     @if( $user->hasRole('admin'))
                                         <a class="dropdown-item"
                                            href="{{ route('dashboard.home') }}">{{__('Admin dashboard')}}</a>
+                                        @if( env('TRACKER_ENABLED'))
                                         <a class="dropdown-item"
                                            href="{{ route('tracker.stats.index') }}">{{__('Admin stats')}}</a>
+                                        @endif
                                         <a class="dropdown-item"
                                            href="{{ route('admin.tools') }}">{{__('Admin tools')}}</a>
                                         <div class="dropdown-divider"></div>
@@ -503,5 +505,13 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 <script src="{{ asset('js/custom-' . $version . '.js') .$devCacheBuster }}"></script>
 <script src="{{ asset('js/lib-' . $version . '.js') . $devCacheBuster }}"></script>
 @yield('scripts')
+<script type="application/javascript">
+    $(function(){
+        // Do this once and not a bunch of times for all different elements
+        refreshSelectPickers();
+        // All layers have been fetched and everything rebuilt, refresh tooltips for all elements
+        refreshTooltips();
+    });
+</script>
 </body>
 </html>

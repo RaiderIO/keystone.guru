@@ -4,6 +4,9 @@
     "version": "v2.2.1",
     "created_at": "2019-03-04T14:14:17+00:00",
     "updated_at": "2019-03-04T14:14:17+00:00",
+    "github_body": "General changes:\n    * #146 Fixed an error that occurred MDT Importer when your imported routes had any drawn lines.",
+    "discord_body": "v2.2.1 (2019\/03\/04)(https:\/\/keystone.guru\/release\/v2.2.1)\nGeneral changes:\n    * #146 Fixed an error that occurred MDT Importer when your imported routes had any drawn lines.",
+    "reddit_body": "[https:\/\/keystone.guru\/release\/v2.2.1](https:\/\/keystone.guru\/release\/v2.2.1)\n\nGeneral changes:\n* [\\#146](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/146) Fixed an error that occurred MDT Importer when your imported routes had any drawn lines.",
     "changelog": {
         "id": 26,
         "release_id": 22,

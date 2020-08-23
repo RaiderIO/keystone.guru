@@ -33,9 +33,14 @@ class EnemyVisual extends Signalable {
 
         let self = this;
         // Build and/or destroy the visual based on visibility
-        this.enemy.register(['shown', 'hidden'], this, function (event) {
-            if (event.data.visible) {
-                self.buildVisual();
+        this.enemy.register(['shown', 'hidden'], this, function (shownHiddenEvent) {
+            if (shownHiddenEvent.data.visible && enemy.shouldBeVisible()) {
+                if (self._divIcon === null) {
+                    self.buildVisual();
+                } else {
+                    self.refreshJQuerySelectors();
+                    self.refreshSize();
+                }
             } else {
                 // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
                 // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
@@ -47,25 +52,25 @@ class EnemyVisual extends Signalable {
         this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
             let killZone = self.enemy.getKillZone();
-            killZone.register('killzone:changed', self, self.buildVisual.bind(self));
+            killZone.register('object:changed', self, self.buildVisual.bind(self));
             killZone.register('object:deleted', self, self.buildVisual.bind(self));
 
             // Check if we can shortcut by updating just the border
-            if ((killZoneAttachedEvent.data.previousKillZone instanceof KillZone && !(killZone instanceof KillZone)) ||
-                (!(killZoneAttachedEvent.data.previousKillZone instanceof KillZone) && killZone instanceof KillZone)) {
-                // We cannot
-                self.buildVisual();
-            } else {
-                // From killzone to killzone we can, otherwise we can't
-                self._updateBorder(killZone.color);
-            }
+            // if ((killZoneAttachedEvent.data.previousKillZone instanceof KillZone && !(killZone instanceof KillZone)) ||
+            //     (!(killZoneAttachedEvent.data.previousKillZone instanceof KillZone) && killZone instanceof KillZone)) {
+            //     // We cannot
+            //     self.buildVisual();
+            // } else {
+            // From killzone to killzone we can, otherwise we can't
+            self._updateBorder(killZone.color);
+            // }
         });
         // Cleanup if it's detached
         this.enemy.register('killzone:detached', this, function (event) {
             // Only if it was attached to something
             if (event.data.previous instanceof KillZone) {
                 event.data.previous.unregister('object:deleted', self);
-                event.data.previous.unregister('killzone:changed', self);
+                event.data.previous.unregister('object:changed', self);
             }
             self._updateBorder('white');
         });
@@ -136,9 +141,9 @@ class EnemyVisual extends Signalable {
 
                 getState().setFocusedEnemy(null);
             }
-
-            this.layer.closeTooltip();
         }
+
+        this.layer.closeTooltip();
     }
 
     /**
@@ -204,9 +209,9 @@ class EnemyVisual extends Signalable {
         // Some exclusions as to when the menu should not pop up
         if (self.map.options.edit &&
             self.map.getMapState() === null &&
-            self.enemy.constructor.name !== 'AdminEnemy') {
+            !(self.enemy instanceof AdminEnemy)) {
 
-            if (self.circleMenu === null) {
+            if (self._circleMenu === null) {
                 let template = Handlebars.templates['map_enemy_raid_marker_template'];
                 let id = self.enemy.id;
 
@@ -231,7 +236,7 @@ class EnemyVisual extends Signalable {
                 $circleMenu.css('top', ((size / 2) + margin - 12) + 'px');
 
                 // Init circle menu and open it
-                self.circleMenu = $circleMenu.circleMenu({
+                self._circleMenu = $circleMenu.circleMenu({
                     direction: 'full',
                     step_in: 5,
                     step_out: 0,
@@ -271,13 +276,13 @@ class EnemyVisual extends Signalable {
                 });
 
                 // Force open the menu
-                self.circleMenu.circleMenu('open');
+                self._circleMenu.circleMenu('open');
 
                 // Unbind this function so we don't get repeat clicks
                 $enemyDiv.unbind('click');
                 // Give the user a way to close the menu by clicking the enemy again
                 $enemyDiv.bind('click', function () {
-                    self.circleMenu.circleMenu('close', false);
+                    self._circleMenu.circleMenu('close', false);
                     // Prevent multiple clicks triggering the close
                     $enemyDiv.unbind('click');
                 });
@@ -302,7 +307,7 @@ class EnemyVisual extends Signalable {
         // Delay it by 500 ms so the animations have a chance to complete
         $('#map_enemy_raid_marker_radial_' + id).delay(500).queue(function () {
             $(this).remove().dequeue();
-            self.circleMenu = null;
+            self._circleMenu = null;
 
             // Slight hack to restore the state we were in prior to selecting the icon (otherwise we may get stuck in mouse over state)
             self._mouseOut();
@@ -324,11 +329,13 @@ class EnemyVisual extends Signalable {
     buildVisual() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
-        // Determine which modifiers the visual should have
-
         // If the object is invisible, don't build the visual
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        // Determine which modifiers the visual should have
+        // console.warn(`building visual`, enemyMapObjectGroup.isMapObjectVisible(this.enemy));
+
         if (enemyMapObjectGroup.isMapObjectVisible(this.enemy)) {
+
             let template = Handlebars.templates['map_enemy_visual_template'];
 
             // Set a default color which may be overridden by any visuals
@@ -389,10 +396,7 @@ class EnemyVisual extends Signalable {
             // Set the structure as HTML for the layer
             this.layer.setIcon(this._divIcon);
 
-            this._$mainVisual = $(`#map_enemy_visual_${this.enemy.id}`);
-            this._$mainVisualOuter = $(`#map_enemy_visual_${this.enemy.id}_outer`);
-            this._$mainVisualInner = $(`#map_enemy_visual_${this.enemy.id}_inner`);
-            this.$mainVisualParent = $(this._$mainVisual.closest('.leaflet-div-icon'));
+            this.refreshJQuerySelectors();
 
             // Apply current size to the icon
             this.refreshSize(false);
@@ -428,10 +432,29 @@ class EnemyVisual extends Signalable {
     }
 
     /**
+     * Refreshes all _$xxxVisual variables.
+     */
+    refreshJQuerySelectors() {
+        this._$mainVisual = $(`#map_enemy_visual_${this.enemy.id}`);
+        this._$mainVisualOuter = $(`#map_enemy_visual_${this.enemy.id}_outer`);
+        this._$mainVisualInner = $(`#map_enemy_visual_${this.enemy.id}_inner`);
+        this._$mainVisualParent = $(this._$mainVisual.closest('.leaflet-div-icon'));
+    }
+
+    /**
      *
      */
     refreshSize(adjustParent = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+
+        // if (adjustParent) {
+        //     console.warn(`refreshing size`);
+        // }
+
+        if (this._$mainVisual.length === 0) {
+            console.warn('Unable to refresh size of visual that no longer exists');
+            return;
+        }
 
         let size = this.mainVisual.getSize();
 
@@ -469,12 +492,12 @@ class EnemyVisual extends Signalable {
             let parentMargin = outerWidth * -0.5;
             let parentMarginStr = `${parentMargin}px`;
 
-            this.$mainVisualParent[0].style.marginLeft = parentMarginStr;
-            this.$mainVisualParent[0].style.marginTop = parentMarginStr;
-            this.$mainVisualParent[0].style.width = outerWidthStr;
-            this.$mainVisualParent[0].style.height = outerHeightStr;
+            this._$mainVisualParent[0].style.marginLeft = parentMarginStr;
+            this._$mainVisualParent[0].style.marginTop = parentMarginStr;
+            this._$mainVisualParent[0].style.width = outerWidthStr;
+            this._$mainVisualParent[0].style.height = outerHeightStr;
 
-            // this.$mainVisualParent.css('margin-left', `${parentMargin}px`).css('margin-top', `${parentMargin}px`)
+            // this._$mainVisualParent.css('margin-left', `${parentMargin}px`).css('margin-top', `${parentMargin}px`)
             //     .css('width', `${outerWidth}px`).css('height', `${outerHeight}px`);
         }
 
@@ -496,6 +519,7 @@ class EnemyVisual extends Signalable {
         let result = 1000000;
 
         if (this._$mainVisual !== null && this._$mainVisual.length > 0 && this._managedBy === this.enemy.id) {
+
             let offset = this._$mainVisual.offset();
             let iconSize = this.mainVisual.getSize();
             let size = iconSize.iconSize[0];
@@ -554,7 +578,10 @@ class EnemyVisual extends Signalable {
                 }
             }
 
-            this.buildVisual();
+            // Don't do this on page load - it's pointless since show/hidden events will do this again
+            if (this.enemy.isVisible()) {
+                this.buildVisual();
+            }
 
             this.visualType = name;
         }

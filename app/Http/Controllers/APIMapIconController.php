@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MapIconChangedEvent;
-use App\Events\MapIconDeletedEvent;
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
@@ -11,7 +11,10 @@ use App\Models\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Team;
+use Exception;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
@@ -32,9 +35,9 @@ class APIMapIconController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @return array
-     * @throws \Exception
+     * @param ?DungeonRoute $dungeonroute
+     * @return MapIcon
+     * @throws Exception
      */
     function store(Request $request, ?DungeonRoute $dungeonroute)
     {
@@ -42,14 +45,14 @@ class APIMapIconController extends Controller
         // Must be an admin to use this endpoint like this!
         if ($dungeonroute === null) {
             if (!$isUserAdmin) {
-                throw new \Exception('Unable to save map icon!');
+                throw new Exception('Unable to save map icon!');
             }
         } // We're editing a map comment for the user, carry on
         else if ($dungeonroute !== null && !$dungeonroute->isTry()) {
             $this->authorize('edit', $dungeonroute);
         }
 
-        $mapIconTypeId = $request->get('map_icon_type_id', 0);
+        $mapIconTypeId = (int) $request->get('map_icon_type_id', 0);
 
         if ($mapIconTypeId > 0) {
             /** @var MapIconType $mapIconType */
@@ -57,7 +60,7 @@ class APIMapIconController extends Controller
 
             // Only allow admins to save admin_only icons
             if ($mapIconType === null || $mapIconType->admin_only && !$isUserAdmin) {
-                throw new \Exception('Unable to save map icon!');
+                throw new Exception('Unable to save map icon!');
             }
         }
 
@@ -76,17 +79,17 @@ class APIMapIconController extends Controller
 
         // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
         if ($mapIcon->exists && $mapIcon->dungeon_route_id === -1 && $dungeonroute !== null && $mapIcon->team_id === null) {
-            throw new \Exception('Unable to save map icon!');
+            throw new Exception('Unable to save map icon!');
         }
 
         // Only admins may make global comments for all routes
-        $mapIcon->floor_id = $request->get('floor_id');
+        $mapIcon->floor_id = (int) $request->get('floor_id');
         $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
         $mapIcon->map_icon_type_id = $mapIconTypeId;
-        $mapIcon->permanent_tooltip = $request->get('permanent_tooltip', false);
+        $mapIcon->permanent_tooltip = (int) $request->get('permanent_tooltip', false);
         $seasonalIndex = $request->get('seasonal_index');
         // don't use empty() since 0 is valid
-        $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : $seasonalIndex;
+        $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int) $seasonalIndex;
         $mapIcon->comment = $request->get('comment', '') ?? '';
         $mapIcon->lat = $request->get('lat');
         $mapIcon->lng = $request->get('lng');
@@ -96,25 +99,25 @@ class APIMapIconController extends Controller
         }
 
         if (!$mapIcon->save()) {
-            throw new \Exception('Unable to save map icon!');
+            throw new Exception('Unable to save map icon!');
         } else {
             // Set or unset the linked awakened obelisks now that we have an ID
             $mapIcon->setLinkedAwakenedObeliskByMapIconId($request->get('linked_awakened_obelisk_id', null));
 
-            if ($dungeonroute !== null && Auth::check()) {
-                broadcast(new MapIconChangedEvent($dungeonroute, $mapIcon, Auth::user()));
+            if (Auth::check()) {
+                broadcast(new ModelChangedEvent($dungeonroute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
             }
         }
 
-        return ['id' => $mapIcon->id];
+        return $mapIcon;
     }
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute|null $dungeonroute
      * @param MapIcon $mapicon
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Exception
+     * @return array|ResponseFactory|Response
+     * @throws Exception
      */
     function delete(Request $request, ?DungeonRoute $dungeonroute, MapIcon $mapicon)
     {
@@ -130,14 +133,14 @@ class APIMapIconController extends Controller
 
         try {
             if ($mapicon->delete()) {
-                if ($dungeonroute !== null && Auth::check()) {
-                    broadcast(new MapIconDeletedEvent($dungeonroute, $mapicon, Auth::user()));
+                if (Auth::check()) {
+                    broadcast(new ModelDeletedEvent($dungeonroute ?? $mapicon->floor->dungeon, Auth::user(), $mapicon));
                 }
                 $result = response()->noContent();
             } else {
                 $result = ['result' => 'error'];
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 
@@ -146,8 +149,8 @@ class APIMapIconController extends Controller
 
     /**
      * @param Request $request
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Exception
+     * @return array|ResponseFactory|Response
+     * @throws Exception
      */
     function adminStore(Request $request)
     {
@@ -158,8 +161,8 @@ class APIMapIconController extends Controller
     /**
      * @param Request $request
      * @param MapIcon $mapicon
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Exception
+     * @return array|ResponseFactory|Response
+     * @throws Exception
      */
     function adminDelete(Request $request, MapIcon $mapicon)
     {

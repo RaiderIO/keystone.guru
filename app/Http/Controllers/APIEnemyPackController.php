@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
-use App\Models\Enemy;
 use App\Models\EnemyPack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class APIEnemyPackController extends Controller
 
     /**
      * @param Request $request
-     * @return array
+     * @return EnemyPack
      * @throws \Exception
      */
     function store(Request $request)
@@ -45,15 +46,19 @@ class APIEnemyPackController extends Controller
         $enemyPack->teeming = $request->get('teeming');
         $enemyPack->faction = $request->get('faction', 'any');
         $enemyPack->label = $request->get('label');
-        $enemyPack->floor_id = $request->get('floor_id');
+        $enemyPack->floor_id = (int) $request->get('floor_id');
         $enemyPack->vertices_json = json_encode($request->get('vertices'));
 
         // Upon successful save!
-        if (!$enemyPack->save()) {
+        if ($enemyPack->save()) {
+            if (Auth::check()) {
+                broadcast(new ModelChangedEvent($enemyPack->floor->dungeon, Auth::getUser(), $enemyPack));
+            }
+        } else {
             throw new \Exception("Unable to save pack!");
         }
 
-        return ['id' => $enemyPack->id];
+        return $enemyPack;
     }
 
     /**
@@ -64,7 +69,11 @@ class APIEnemyPackController extends Controller
     function delete(Request $request, EnemyPack $enemypack)
     {
         try {
-            $enemypack->delete();
+            if ($enemypack->delete()) {
+                if (Auth::check()) {
+                    broadcast(new ModelDeletedEvent($enemypack->floor->dungeon, Auth::getUser(), $enemypack));
+                }
+            }
             $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

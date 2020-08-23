@@ -23,14 +23,17 @@ class EnemyVisualManager extends Signalable {
 
         let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         enemyMapObjectGroup.register('object:add', this, function (objectAddEvent) {
-            self._enemyVisibilityMap[objectAddEvent.data.object.id] = {
-                wasVisible: objectAddEvent.data.object.isVisibleOnScreen(),
-                lastRefreshedZoomLevel: getState().getMapZoomLevel()
-            };
-            self._enemyMouseMoveDistanceData[objectAddEvent.data.object.id] = {
-                lastCheckTime: 0,
-                lastDistanceSquared: 99999
-            };
+            let addedEnemy = objectAddEvent.data.object;
+            if (addedEnemy.id > 0) {
+                self._enemyVisibilityMap[addedEnemy.id] = {
+                    wasVisible: objectAddEvent.data.object.isVisibleOnScreen(),
+                    lastRefreshedZoomLevel: getState().getMapZoomLevel()
+                };
+                self._enemyMouseMoveDistanceData[addedEnemy.id] = {
+                    lastCheckTime: 0,
+                    lastDistanceSquared: 99999
+                };
+            }
         });
 
         getState().register('mapzoomlevel:changed', this, this._onZoomLevelChanged.bind(this));
@@ -64,7 +67,7 @@ class EnemyVisualManager extends Signalable {
             let enemy = enemyMapObjectGroup.objects[i];
 
             // Only refresh what we can see
-            if (enemy.isVisibleOnScreen()) {
+            if (enemy.id > 0 && enemy.isVisibleOnScreen()) {
                 // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
                 // reworking to support a full refresh of the visual
                 if (enemy.visual.isHighlighted()) {
@@ -96,7 +99,7 @@ class EnemyVisualManager extends Signalable {
                 for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
                     let enemy = enemyMapObjectGroup.objects[i];
 
-                    if (enemy.isVisibleOnScreen()) {
+                    if (enemy.id > 0 && enemy.isVisibleOnScreen()) {
                         let lastCheckData = this._enemyMouseMoveDistanceData[enemy.id];
                         if (currTime - lastCheckData.lastCheckTime > 500 * (lastCheckData.lastDistanceSquared / 1000000)) {
                             this._enemyMouseMoveDistanceData[enemy.id].lastDistanceSquared =
@@ -147,17 +150,19 @@ class EnemyVisualManager extends Signalable {
             for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
                 let enemy = enemyMapObjectGroup.objects[i];
 
-                let isVisible = enemy.isVisibleOnScreen();
+                if (enemy.id > 0) {
+                    let isVisible = enemy.isVisibleOnScreen();
 
-                // If panned into view AND we didn't already refresh the zoom earlier
-                if (this._enemyVisibilityMap[enemy.id].wasVisible === false && isVisible &&
-                    this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel !== currentZoomLevel) {
-                    window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
-                    this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = currentZoomLevel;
+                    // If panned into view AND we didn't already refresh the zoom earlier
+                    if (this._enemyVisibilityMap[enemy.id].wasVisible === false && isVisible &&
+                        this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel !== currentZoomLevel) {
+                        window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
+                        this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = currentZoomLevel;
+                    }
+
+                    // Write new visible state
+                    this._enemyVisibilityMap[enemy.id].wasVisible = isVisible;
                 }
-
-                // Write new visible state
-                this._enemyVisibilityMap[enemy.id].wasVisible = isVisible;
             }
 
             this._lastMapMoveDistanceCheckTime = currTime;

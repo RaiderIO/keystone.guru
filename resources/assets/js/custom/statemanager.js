@@ -2,11 +2,15 @@ class StateManager extends Signalable {
     constructor() {
         super();
 
+        // Used by Echo to join the correct channels
+        this._appType = '';
         // Any dungeon route we may be editing at this time
-        this.dungeonRoute = null;
-        // The data of the dungeon that we're editing
-        this.dungeonData = null;
+        this._mapContext = null;
 
+        // Echo handler
+        this._echo = null;
+        this._echoMouseLocationHandler = null;
+        /** @type {DungeonMap} The DungeonMap instance */
         this._map = null;
         // What enemy visual type we're displaying
         this._enemyDisplayType = null;
@@ -14,108 +18,56 @@ class StateManager extends Signalable {
         this._floorId = null;
         // Map zoom level (default = 2)
         this._mapZoomLevel = 2;
-        // Seasonal index (shows certain enemies or not)
-        this._seasonalIndex = 0;
-        // Teeming or not (shows certain enemies or not)
-        this._teeming = false;
-        // Pull gradient variables
-        this._pullGradient = '';
-        this._pullGradientApplyAlways = false;
         // The enemy that is focused by the user (mouse overed)
         this._focusedEnemy = null;
+        // Details about the currently logged in user
+        this._userData = null;
+        // Whether we're currently in MDT select mode or not
+        this._mdtMappingModeEnabled = false;
 
         // List of static arrays
         this.mapIconTypes = [];
         this.classColors = [];
         this.enemies = [];
-        this.rawEnemies = [];
-        this.mdtEnemies = [];
-        this.factions = [];
-        this.raidMarkers = [];
-        this.killZones = [];
         this.paidTiers = [];
-
-        // Bit of a hack? But for now best solution
-        this.unknownMapIconId = 1;
-        this.awakenedObeliskGatewayMapIconId = 11;
-        // The map icon as found using above ID once the list of map icons is known
-        this.unknownMapIcon = null;
-        this.awakenedObeliskGatewayMapIcon = null;
     }
 
     /**
-     * Sets the dungeon route that we're currently editing (may be null)
-     * @param dungeonRoute
+     * Enables the Laravel Echo for this session.
      */
-    setDungeonRoute(dungeonRoute) {
+    enableEcho() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        console.assert(dungeonRoute instanceof Object, 'dungeonRoute is not an Object', dungeonRoute);
+        this._echo = new Echo(this);
+        this._echo.connect();
 
-        this.dungeonRoute = dungeonRoute;
-        // Load this from the start here
-        this.setSeasonalIndex(parseInt(this.dungeonRoute.seasonalIndex));
-        this.setTeeming(this.dungeonRoute.teeming);
-        this.setPullGradient(this.dungeonRoute.pullGradient);
-        this.setPullGradientApplyAlways(this.dungeonRoute.pullGradientApplyAlways);
+        this.signal('echo:enabled');
     }
 
     /**
-     * Sets the data that describes the current dungeon.
-     * @param dungeonData
+     * Set the app type (local, staging, live etc).
+     * @param appType {string}
      */
-    setDungeonData(dungeonData) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        console.assert(dungeonData instanceof Object, 'dungeonData is not an Object', dungeonData);
-
-        this.dungeonData = dungeonData;
-    }
-
-    /**
-     *
-     * @param seasonalIndex {int}
-     */
-    setSeasonalIndex(seasonalIndex) {
+    setAppType(appType) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        this._seasonalIndex = seasonalIndex;
-
-        // Let everyone know it's changed
-        this.signal('seasonalindex:changed', {seasonalIndex: this._seasonalIndex});
+        this._appType = appType;
     }
 
     /**
-     * Sets the Teeming state of the map.
-     * @param teeming {boolean}
+     * Sets the mapContext, may either be options for a dungeonroute or options for a dungeon (admin pages)
+     * @param mapContext {Object}
      */
-    setTeeming(teeming) {
+    setMapContext(mapContext) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        console.assert(mapContext instanceof Object, 'mapContext is not an Object', mapContext);
 
-        this._teeming = teeming;
-
-        // Let everyone know it's changed
-        this.signal('teeming:changed', {teeming: this._teeming});
-    }
-
-    /**
-     * Sets the pull gradient of the current dungeon route.
-     * @param value {string}
-     */
-    setPullGradient(value) {
-        this._pullGradient = value;
-
-        // Let everyone know it's changed
-        this.signal('pullgradient:changed', {pullgradient: this._pullGradient});
-    }
-
-    /**
-     * Sets the pull gradient to always apply when a change is made to any pulls.
-     * @param value {boolean}
-     */
-    setPullGradientApplyAlways(value) {
-        this._pullGradientApplyAlways = value;
-
-        // Let everyone know it's changed
-        this.signal('pullgradientapplyalways:changed', {pullgradientapplyalways: this._pullGradientApplyAlways});
+        if (mapContext.type === 'dungeonroute') {
+            this._mapContext = new MapContextDungeonRoute(mapContext);
+        } else if (mapContext.type === 'dungeon') {
+            this._mapContext = new MapContextDungeon(mapContext);
+        } else {
+            console.error(`Unable to find map context type '${mapContext.type}'`);
+        }
     }
 
     /**
@@ -130,31 +82,22 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Sets the MDT mapping mode to be enabled or not.
+     * @param enabled {boolean}
+     */
+    setMdtMappingModeEnabled(enabled) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._mdtMappingModeEnabled = enabled;
+        this.signal('mdtmappingmodeenabled:changed', {mdtmappingmodeenabled: this._mdtMappingModeEnabled});
+    }
+
+    /**
      * Sets the map icon types to be used in the state.
      * @param mapIconTypes int
      */
     setMapIconTypes(mapIconTypes) {
         this.mapIconTypes = [];
-        for (let i = 0; i < mapIconTypes.length; i++) {
-            this.mapIconTypes.push(
-                new MapIconType(mapIconTypes[i])
-            )
-        }
-        this.unknownMapIcon = this.getMapIconType(this.unknownMapIconId);
-        this.awakenedObeliskGatewayMapIcon = this.getMapIconType(this.awakenedObeliskGatewayMapIconId);
-
-        // Defined in mapicon.js, need to fix this somehow
-        initAwakenedObeliskGatewayIcon();
-    }
-
-    /**
-     * Sets the class colors.
-     * @param classColors
-     */
-    setClassColors(classColors) {
-        this.classColors = classColors;
-
-        c.map.colorPickerDefaultOptions.swatches = this.classColors;
     }
 
     /**
@@ -163,46 +106,6 @@ class StateManager extends Signalable {
      */
     setEnemies(enemies) {
         this.enemies = enemies;
-    }
-
-    /**
-     * Sets the raw enemies (not converted to Enemy classes yet; pure objects)
-     * @param rawEnemies
-     */
-    setRawEnemies(rawEnemies) {
-        this.rawEnemies = rawEnemies;
-    }
-
-    /**
-     * Sets the MDT enemies.
-     * @param mdtEnemies
-     */
-    setMdtEnemies(mdtEnemies) {
-        this.mdtEnemies = mdtEnemies;
-    }
-
-    /**
-     * Sets the raid markers.
-     * @param raidMarkers
-     */
-    setRaidMarkers(raidMarkers) {
-        this.raidMarkers = raidMarkers;
-    }
-
-    /**
-     *
-     * @param factions
-     */
-    setFactions(factions) {
-        this.factions = factions;
-    }
-
-    /**
-     *
-     * @param killZones
-     */
-    setKillZones(killZones) {
-        this.killZones = killZones;
     }
 
     /**
@@ -222,17 +125,17 @@ class StateManager extends Signalable {
 
         // Unreg ourselves if necessary
         if (this._map !== null) {
-            this._map.unregister('map:mapobjectgroupsfetchsuccess', this);
+            this._map.unregister('map:mapobjectgroupsloaded', this);
         }
 
         this._map = map;
 
         this.setEnemyDisplayType(this._map.options.defaultEnemyVisualType);
-        this.setFloorId(this._map.options.floorId);
+        this.setFloorId(this.getMapContext().getFloorId());
 
         // Change defaults based on the hash if necessary
         if (window.location.hash.length > 0) {
-            this._map.register('map:mapobjectgroupsfetchsuccess', this, function () {
+            this._map.register('map:mapobjectgroupsloaded', this, function () {
                 // Fill the hashVariables with key=>value pairs
                 let hashVariables = {};
                 let variables = window.location.hash.replace('#', '').split('&');
@@ -249,6 +152,10 @@ class StateManager extends Signalable {
                     self.setEnemyDisplayType(hashVariables.display);
                 }
             });
+        }
+
+        if (this.isEchoEnabled()) {
+            this._echoMouseLocationHandler = new EchoMouseLocationHandler(this._map);
         }
     }
 
@@ -295,6 +202,36 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Sets the data of the currently logged in user.
+     * @param userData {Object|null}
+     */
+    setUserData(userData) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._userData = userData;
+    }
+
+    /**
+     * Checks if Echo is enabled for the current session.
+     * @returns {boolean}
+     */
+    isEchoEnabled() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._echo !== null;
+    }
+
+    /**
+     * Gets the Echo instance used for Echo communication.
+     * @returns {Echo}
+     */
+    getEcho() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._echo;
+    }
+
+    /**
      * Gets the dungeon map if it's set before.
      * @returns {DungeonMap}
      */
@@ -304,39 +241,21 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Get the dungeon route we may or may not be editing at this time.
-     * @returns {null}
+     * Get the context of the map we are editing at this point.
+     * @returns {MapContextDungeon|MapContextDungeonRoute}
      */
-    getDungeonRoute() {
+    getMapContext() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.dungeonRoute;
+        return this._mapContext;
     }
 
     /**
-     * Gets the current seasonal index.
-     * @returns {number}
+     * Gets if the MDT mapping mode is currently enabled or not.
+     * @returns {boolean}
      */
-    getSeasonalIndex() {
+    getMdtMappingModeEnabled() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._seasonalIndex;
-    }
-
-    /**
-     * Gets the current teeming state of the map.
-     * @returns {number}
-     */
-    getTeeming() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._teeming;
-    }
-
-    /**
-     * Get the pull gradient for the current dungeon route.
-     * @returns {string}
-     */
-    getPullGradient() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._pullGradient;
+        return this._mdtMappingModeEnabled;
     }
 
     /**
@@ -369,24 +288,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Gets if the current pull gradient should always be applied when new pulls are added/re-ordered.
-     * @returns {boolean}
-     */
-    getPullGradientApplyAlways() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._pullGradientApplyAlways;
-    }
-
-    /**
-     * Gets the data of the dungeon that we're currently editing.
-     * @returns {null}
-     */
-    getDungeonData() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.dungeonData;
-    }
-
-    /**
      * Get the default visual to display for all enemies.
      * @returns {string}
      */
@@ -396,36 +297,11 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Get all the colors of all current classes.
-     * @returns {[]}
-     */
-    getClassColors() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.classColors;
-    }
-
-    /**
      * Get a list of all map icon types.
      * @returns {[]|*[]}
      */
     getMapIconTypes() {
         return this.mapIconTypes;
-    }
-
-    /**
-     * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
-     * @param mapIconTypeId
-     * @returns {null}
-     */
-    getMapIconType(mapIconTypeId) {
-        let mapIconType = this.unknownMapIcon;
-        for (let i = 0; i < this.mapIconTypes.length; i++) {
-            if (this.mapIconTypes[i].id === mapIconTypeId) {
-                mapIconType = this.mapIconTypes[i];
-                break;
-            }
-        }
-        return mapIconType;
     }
 
     /**
@@ -451,51 +327,6 @@ class StateManager extends Signalable {
             }
         }
         return enemy;
-    }
-
-    /**
-     * Get all the raw enemies of this dungeon.
-     * @returns {[]}
-     */
-    getRawEnemies() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.rawEnemies;
-    }
-
-    /**
-     * Get all the mdt enemies of this dungeon.
-     * @returns {[]}
-     */
-    getMdtEnemies() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.mdtEnemies;
-    }
-
-    /**
-     * Get all factions.
-     * @returns {[]}
-     */
-    getFactions() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.factions;
-    }
-
-    /**
-     * Get all raid markers.
-     * @returns {[]}
-     */
-    getRaidMarkers() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.raidMarkers;
-    }
-
-    /**
-     * Get all killzones
-     * @returns {[]}
-     */
-    getKillZones() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.killZones;
     }
 
     /**
@@ -567,7 +398,7 @@ class StateManager extends Signalable {
         let self = this;
         let result = false;
         // Iterate over the found floors
-        $.each(this.dungeonData.floors, function (index, value) {
+        $.each(this._mapContext.getDungeon().floors, function (index, value) {
             // Find the floor we're looking for
             if (parseInt(value.id) === parseInt(self._floorId)) {
                 result = value;
@@ -579,26 +410,39 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Gets the default map icon for initializing; when the map icon is unknown.
-     * @returns {MapIconType}
-     */
-    getUnknownMapIconType() {
-        return this.unknownMapIcon;
-    }
-
-    /**
-     * Gets the map icon when clicking the obelisk to place a gateway.
-     * @returns {number}
-     */
-    getAwakenedObeliskGatewayMapIconType() {
-        return this.awakenedObeliskGatewayMapIcon;
-    }
-
-    /**
      * Returns true if the map is currently in admin mode, false if not.
      * @returns {boolean}
      */
     isMapAdmin() {
-        return this.dungeonRoute.publicKey === 'admin';
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._mapContext.getType() === 'dungeon';
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getEchoChannelName() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        let channelName = '';
+
+        if (this.isMapAdmin()) {
+            channelName = `${this._appType}-dungeon-edit.${this._mapContext.getDungeon().id}`;
+        } else {
+            channelName = `${this._appType}-route-edit.${this._mapContext.getPublicKey()}`;
+        }
+
+        return channelName;
+    }
+
+    /**
+     * Gets the currently logged in user's name, or null if not logged in.
+     * @returns {*|null}
+     */
+    getUserName() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._userData !== null ? this._userData.name : null;
     }
 }

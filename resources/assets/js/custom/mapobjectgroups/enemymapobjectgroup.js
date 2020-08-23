@@ -1,22 +1,48 @@
 class EnemyMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
-        super(manager, MAP_OBJECT_GROUP_ENEMY, '', editable);
+        super(manager, MAP_OBJECT_GROUP_ENEMY, editable);
 
         this.title = 'Hide/show enemies';
         this.fa_class = 'fa-users';
+
+        getState().register('mdtmappingmodeenabled:changed', this, this._onMdtMappingModeEnabledChanged.bind(this));
     }
 
-    //
-    // _onBeforeRefresh() {
-    //     console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-    //
-    //     // Remove any layers that were added before
-    //     this._removeObjectsFromLayer.call(this);
-    //
-    //     this.setVisibility(false);
-    // }
+    /**
+     * Called when the MDT mapping mode enabled has changed
+     * @private
+     */
+    _onMdtMappingModeEnabledChanged() {
+        // Refresh visibility of all enemies
+        this._updateVisibility();
+    }
 
-    _createObject(layer) {
+    /**
+     * @inheritDoc
+     **/
+    _getRawObjects() {
+        let enemies = [];
+        let mapContext = getState().getMapContext();
+        if( mapContext instanceof MapContextDungeon ) {
+            // Union to create new array
+            enemies = _.union(enemies, mapContext.getMdtEnemies());
+        }
+        return _.union(enemies, mapContext.getEnemies());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _createLayer(remoteMapObject) {
+        let layer = new LeafletEnemyMarker();
+        layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+        return layer;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _createMapObject(layer, options = {}) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
         if (getState().isMapAdmin()) {
@@ -28,74 +54,24 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
     /**
      *
-     * @param remoteMapObject
-     * @param username
-     * @returns {Enemy}
-     * @private
+     * @param remoteMapObject {Object}
+     * @param mapObject {Enemy|MapObject}
+     * @param options {Object}
+     * @returns {MapObject}
+     * @protected
      */
-    _restoreObject(remoteMapObject, username = null) {
-        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+    _updateMapObject(remoteMapObject, mapObject, options = {}) {
+        super._updateMapObject(remoteMapObject, mapObject, options);
 
-        // Only create a visual if we should display this enemy
-        let layer = null;
-        if (remoteMapObject.floor_id === getState().getCurrentFloor().id) {
-            layer = new LeafletEnemyMarker();
-            layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-        }
+        // Refresh visual if not created new, AFTER setting the NPC again etc.
+        mapObject.visual.refresh();
 
-        /** @type {Enemy} */
-        let enemy = this.createNew(layer);
-        enemy.loadRemoteMapObject(remoteMapObject);
-
-        if (remoteMapObject.hasOwnProperty('is_mdt')) {
-            // Exception for MDT enemies
-            enemy.is_mdt = remoteMapObject.is_mdt;
-            // Whatever enemy this MDT enemy is linked to
-            enemy.enemy_id = remoteMapObject.enemy_id;
-            // Hide this enemy by default
-            enemy.setDefaultVisible(false);
-            enemy.setIsLocal(remoteMapObject.local);
-        }
-
-        // When in admin mode, show all enemies
-        if (!getState().isMapAdmin()) {
-            // Hide this enemy by default
-            enemy.setDefaultVisible(enemy.shouldBeVisible());
-        }
-
-        // Do this last
-        enemy.setNpc(remoteMapObject.npc);
-
-        // We just downloaded the enemy, it's synced alright!
-        enemy.setSynced(true);
-
-        return enemy;
+        return mapObject;
     }
 
-    _fetchSuccess(response) {
-        // no super call, we're handling this by ourselves
-        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+    load() {
+        super.load();
 
-        // Only generate the enemies once
-        // if (getState().getEnemies().length === 0) {
-        // The enemies are no longer returned from the response; get it from the getState() instead
-        let enemySets = [
-            getState().getRawEnemies(),
-            getState().getMdtEnemies(),
-        ];
-
-        // For each set of enemies..
-        for (let i = 0; i < enemySets.length; i++) {
-            let enemySet = enemySets[i];
-            // Now draw the enemies on the map, if any
-            for (let index in enemySet) {
-                // Only if actually set
-                if (enemySet.hasOwnProperty(index)) {
-                    // Only restore enemies for the current floor
-                    this._restoreObject(enemySet[index]);
-                }
-            }
-        }
 
         // Couple awakened enemies to each other
         for (let i = 0; i < this.objects.length; i++) {
@@ -118,6 +94,32 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 }
             }
         }
+    }
+
+    _fetchSuccess(response) {
+        // no super call, we're handling this by ourselves
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+
+        // Only generate the enemies once
+        // if (getState().getEnemies().length === 0) {
+        // The enemies are no longer returned from the response; get it from the getState() instead
+        let enemySets = [
+            getState().getMapContext().getEnemies(),
+            getState().getMapContext().getMdtEnemies(),
+        ];
+
+        // For each set of enemies..
+        for (let i = 0; i < enemySets.length; i++) {
+            let enemySet = enemySets[i];
+            // Now draw the enemies on the map, if any
+            for (let index in enemySet) {
+                // Only if actually set
+                if (enemySet.hasOwnProperty(index)) {
+                    // Only restore enemies for the current floor
+                    this._loadMapObject(enemySet[index]);
+                }
+            }
+        }
 
         // Set the enemies back to our state
         getState().setEnemies(this.objects);
@@ -129,7 +131,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         //     }
         // }
 
-        this.signal('restorecomplete');
+        this.signal('loadcomplete');
     }
 
     /**

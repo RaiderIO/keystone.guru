@@ -23,7 +23,7 @@ class Sidebar {
             }
 
             let pathname = window.location.pathname;
-            let pathSplit = window.location.pathname.split('/');
+            let pathSplit = trimEnd(pathname, '/').split('/');
             if (Number.isInteger(parseInt(pathSplit[pathSplit.length - 1]))) {
                 // Strip the last one from it
                 pathSplit.splice(-1, 1);
@@ -82,7 +82,7 @@ class Sidebar {
             // Clear of all options
             $switchDungeonFloorSelect.find('option').remove();
             // Add each new floor to the select
-            $.each(getState().getDungeonData().floors, function (index, floor) {
+            $.each(getState().getMapContext().getDungeon().floors, function (index, floor) {
                 // Reconstruct the dungeon floor select
                 $switchDungeonFloorSelect.append($('<option>', {
                     text: floor.name,

@@ -10,7 +10,6 @@ if (count($affixes) == 0) {
     $selectedAffixes = -1;
 }
 $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
-$floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 ?>
 @section('scripts')
     @parent
@@ -23,7 +22,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
     <div class="wrapper">
         @include('common.maps.viewsidebar', [
             'model' => $model,
-            'floorSelection' => $floorSelection,
+            'floorSelection' => (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1,
             'floorId' => $floor->id
         ])
 

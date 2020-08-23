@@ -138,7 +138,7 @@ class ReleaseController extends Controller
      */
     public function list()
     {
-        return view('admin.release.list', ['models' => Release::all()]);
+        return view('admin.release.list', ['models' => Release::orderBy('id', 'desc')->get()]);
     }
 
     /**

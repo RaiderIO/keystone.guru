@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\UserColorChangedEvent;
+use App\Events\DungeonRoute\UserColorChangedEvent;
 use App\Models\DungeonRoute;
-use App\Service\DiscordApiService;
+use App\Service\EchoServerHttpApiService;
 use App\User;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+use Session;
 
 class ProfileController extends Controller
 {
@@ -21,11 +26,11 @@ class ProfileController extends Controller
     /**
      * @param Request $request
      * @param User $user
-     * @param DiscordApiService $echoServerHttpApiService
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @param EchoServerHttpApiService $echoServerHttpApiService
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function update(Request $request, User $user, DiscordApiService $echoServerHttpApiService)
+    public function update(Request $request, User $user, EchoServerHttpApiService $echoServerHttpApiService)
     {
         // Allow username change once!
         if ($user->isOAuth()) {
@@ -48,18 +53,18 @@ class ProfileController extends Controller
         // Check if these things already exist or not, if so notify the user that they couldn't be saved
         $emailExists = User::where('email', $user->email)->where('id', '<>', $user->id)->get()->count() > 0;
         if ($emailExists) {
-            \Session::flash('warning', __('That e-mail is already in use.'));
+            Session::flash('warning', __('That e-mail is already in use.'));
         }
 
         $nameExists = User::where('name', $user->name)->where('id', '<>', $user->id)->get()->count() > 0;
         if ($nameExists) {
-            \Session::flash('warning', __('That username is already in use.'));
+            Session::flash('warning', __('That username is already in use.'));
         }
 
         // Only when no duplicates are found!
         if (!$emailExists && !$nameExists) {
             if ($user->save()) {
-                \Session::flash('status', __('Profile updated'));
+                Session::flash('status', __('Profile updated'));
 
                 try {
                     // Propagate changes to any channel the user may be in
@@ -88,7 +93,7 @@ class ProfileController extends Controller
                             broadcast(new UserColorChangedEvent($dungeonRoute, $user));
                         }
                     }
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     Log::warning('Echo server is probably not running!');
                 }
             } else {
@@ -102,7 +107,7 @@ class ProfileController extends Controller
     /**
      * @param Request $request
      * @param User $user
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function updatePrivacy(Request $request, User $user)
     {
@@ -112,7 +117,7 @@ class ProfileController extends Controller
         if (!$user->save()) {
             abort(500, __('An unexpected error occurred trying to save your profile'));
         } else {
-            \Session::flash('status', __('Privacy settings updated'));
+            Session::flash('status', __('Privacy settings updated'));
         }
 
         return redirect()->route('profile.edit');
@@ -125,7 +130,7 @@ class ProfileController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function changepassword(Request $request)
     {
@@ -144,7 +149,7 @@ class ProfileController extends Controller
                 if ($currentPw !== $newPassword) {
                     $user->password = Hash::make($newPassword);
                     $user->save();
-                    \Session::flash('status', __('Password changed'));
+                    Session::flash('status', __('Password changed'));
 
                     // @todo Send an e-mail letting the user know the password has been changed
                 } else {
@@ -168,15 +173,15 @@ class ProfileController extends Controller
     public function delete(Request $request)
     {
         if (Auth::getUser()->hasRole('admin')) {
-            throw new \Exception('Admins cannot delete themselves!');
+            throw new Exception('Admins cannot delete themselves!');
         }
 
         try {
             User::findOrFail(Auth::id())->delete();
             Auth::logout();
-            \Session::flash('status', __('Account deleted successfully.'));
-        } catch (\Exception $e) {
-            \Session::flash('warning', __('An error occurred. Please try again.'));
+            Session::flash('status', __('Account deleted successfully.'));
+        } catch (Exception $e) {
+            Session::flash('warning', __('An error occurred. Please try again.'));
         }
 
         return redirect()->route('home');

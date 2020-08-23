@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property $id int
@@ -12,11 +14,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property $lng float
  * @property $direction string
  *
- * @mixin \Eloquent
+ * @property Floor $floor
+ *
+ * @mixin Eloquent
  */
 class DungeonFloorSwitchMarker extends Model
 {
     protected $appends = ['direction'];
+    protected $hidden = ['floor', 'targetfloor'];
 
     public $timestamps = false;
 
@@ -27,7 +32,7 @@ class DungeonFloorSwitchMarker extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function floor()
     {
@@ -35,7 +40,7 @@ class DungeonFloorSwitchMarker extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function targetfloor()
     {

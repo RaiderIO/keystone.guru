@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PathChangedEvent;
-use App\Events\PathDeletedEvent;
+use App\Events\ModelChangedEvent;
+use App\Events\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsPaths;
+use App\Http\Controllers\Traits\SavesPolylines;
 use App\Models\DungeonRoute;
 use App\Models\PaidTier;
 use App\Models\Path;
@@ -20,6 +21,7 @@ class APIPathController extends Controller
 {
     use ChecksForDuplicates;
     use ListsPaths;
+    use SavesPolylines;
 
     function list(Request $request)
     {
@@ -32,7 +34,7 @@ class APIPathController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array
+     * @return Path
      * @throws \Exception
      */
     function store(Request $request, DungeonRoute $dungeonroute)
@@ -46,48 +48,39 @@ class APIPathController extends Controller
 
         try {
             $path->dungeon_route_id = $dungeonroute->id;
-            $path->floor_id = $request->get('floor_id');
+            $path->floor_id = (int) $request->get('floor_id');
 
             // Init to a default value if new
             if (!$path->exists) {
                 $path->polyline_id = -1;
             }
 
-            if (!$path->save()) {
-                throw new \Exception("Unable to save path!");
-            } else {
+            if ($path->save()) {
                 // Create a new polyline and save it
-                /** @var Polyline $polyline */
-                $polyline = Polyline::findOrNew($path->polyline_id);
-                $polyline->model_id = $path->id;
-                $polyline->model_class = get_class($path);
-                $polyline->color = $request->get('color', '#f00');
-                // Only set the animated color if the user has paid for it
-                if (Auth::check() && User::findOrFail(Auth::id())->hasPaidTier(PaidTier::ANIMATED_POLYLINES)) {
-                    $colorAnimated = $request->get('color_animated', null);
-                    $polyline->color_animated = empty($colorAnimated) ? null : $colorAnimated;
-                }
-                $polyline->weight = $request->get('weight', 2);
-                $polyline->vertices_json = json_encode($request->get('vertices'));
-                $polyline->save();
+                $polyline = $this->_savePolyline(Polyline::findOrNew($path->polyline_id), $path, $request->get('polyline'));
 
                 // Couple the path to the polyline
                 $path->polyline_id = $polyline->id;
                 $path->save();
+
+                // Load the polyline so it can be echoed back to the user
+                $path->load(['polyline']);
 
                 // Set or unset the linked awakened obelisks now that we have an ID
                 $path->setLinkedAwakenedObeliskByMapIconId($request->get('linked_awakened_obelisk_id', null));
 
                 // Something's updated; broadcast it
                 if (Auth::check()) {
-                    broadcast(new PathChangedEvent($dungeonroute, $path, Auth::user()));
+                    broadcast(new ModelChangedEvent($dungeonroute, Auth::user(), $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonroute->touch();
+            } else {
+                throw new \Exception('Unable to save path!');
             }
 
-            $result = ['id' => $path->id];
+            $result = $path;
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
@@ -109,10 +102,9 @@ class APIPathController extends Controller
         }
 
         try {
-
             if ($path->delete()) {
                 if (Auth::check()) {
-                    broadcast(new PathDeletedEvent($dungeonroute, $path, Auth::user()));
+                    broadcast(new ModelDeletedEvent($dungeonroute, Auth::user(), $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated
@@ -122,7 +114,6 @@ class APIPathController extends Controller
             } else {
                 $result = response('Unable to save Path', Http::INTERNAL_SERVER_ERROR);
             }
-
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }

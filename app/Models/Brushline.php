@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Brushline extends Model
 {
-    public $visible = ['id', 'polyline'];
+    public $visible = ['id', 'floor_id', 'polyline'];
     public $with = ['polyline'];
 
     /**

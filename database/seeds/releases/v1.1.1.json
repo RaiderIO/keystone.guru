@@ -4,6 +4,9 @@
     "version": "v1.1.1",
     "created_at": "2018-10-18T05:16:06+00:00",
     "updated_at": "2018-10-18T05:16:06+00:00",
+    "github_body": "General changes:\n    *  Increased performance of the website. I'll continue to monitor the performance as the amount of users & routes grow.\nMap changes:\n    *  You can no longer attempt to assign raid markers while in view mode.\n    *  Raid markers can now be unassigned from enemies (in edit mode, of course).",
+    "discord_body": "v1.1.1 (2018\/10\/18)(https:\/\/keystone.guru\/release\/v1.1.1)\nGeneral changes:\n    *  Increased performance of the website. I'll continue to monitor the performance as the amount of users & routes grow.\n\nMap changes:\n    *  You can no longer attempt to assign raid markers while in view mode.\n    *  Raid markers can now be unassigned from enemies (in edit mode, of course).",
+    "reddit_body": "[https:\/\/keystone.guru\/release\/v1.1.1](https:\/\/keystone.guru\/release\/v1.1.1)\n\nGeneral changes:\n*  Increased performance of the website. I'll continue to monitor the performance as the amount of users & routes grow.\n\nMap changes:\n*  You can no longer attempt to assign raid markers while in view mode.\n*  Raid markers can now be unassigned from enemies (in edit mode, of course).",
     "changelog": {
         "id": 13,
         "release_id": 9,

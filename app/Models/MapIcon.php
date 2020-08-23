@@ -27,9 +27,9 @@ class MapIcon extends Model
 {
     use HasLinkedAwakenedObelisk;
 
-    protected $visible = ['id', 'floor_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
+    protected $visible = ['id', 'floor_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'is_admin', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
     protected $fillable = ['floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
-    protected $appends = ['linked_awakened_obelisk_id'];
+    protected $appends = ['linked_awakened_obelisk_id', 'is_admin'];
 
     protected $with = ['mapicontype'];
 
@@ -56,6 +56,11 @@ class MapIcon extends Model
     {
         // Need the foreign key for some reason
         return $this->belongsTo('App\Models\MapIconType', 'map_icon_type_id');
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->dungeon_route_id === -1;
     }
 
     /**

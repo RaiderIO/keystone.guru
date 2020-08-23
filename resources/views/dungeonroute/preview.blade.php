@@ -14,7 +14,7 @@ $dungeon->load('floors');
         $(function(){
             // We need to fetch the enemies so the killzone polygon knows what to draw, but we don't want to display
             // the enemies themselves so hide those for displaying.
-            dungeonMap.register('map:mapobjectgroupsfetchsuccess', null, function(){
+            dungeonMap.register('map:mapobjectgroupsloaded', null, function(){
                 dungeonMap.mapObjectGroupManager.getByName('enemy').setVisibility(false);
             });
         });
@@ -22,7 +22,6 @@ $dungeon->load('floors');
 @endsection
 @section('content')
     @include('common.maps.map', [
-        'dungeon' => $dungeon,
         'dungeonroute' => $model,
         'showAds' => false,
         'edit' => false,
@@ -33,7 +32,6 @@ $dungeon->load('floors');
         'hiddenMapObjectGroups' => [
             'enemypatrol',
             'enemypack',
-            'mapicon',
             'dungeonfloorswitchmarker',
         ]
     ])

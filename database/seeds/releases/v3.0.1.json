@@ -4,6 +4,9 @@
     "version": "v3.0.1",
     "created_at": "2020-05-22T07:21:18+00:00",
     "updated_at": "2020-05-22T07:21:18+00:00",
+    "github_body": "Map changes:\n    * #292 Fixed cooperative route sharing synchronization of pulls. Fixed left sidebar in map view not being able to be collapsed. Fixed pull top text not showing when viewing a route. Added a 'Loading' message when Pulls are still loading, rather than a 'No pulls created yet' message.",
+    "discord_body": "v3.0.1 (2020\/05\/22)(https:\/\/keystone.guru\/release\/v3.0.1)\nMap changes:\n    * #292 Fixed cooperative route sharing synchronization of pulls. Fixed left sidebar in map view not being able to be collapsed. Fixed pull top text not showing when viewing a route. Added a 'Loading' message when Pulls are still loading, rather than a 'No pulls created yet' message.",
+    "reddit_body": "[https:\/\/keystone.guru\/release\/v3.0.1](https:\/\/keystone.guru\/release\/v3.0.1)\n\nMap changes:\n* [\\#292](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/292) Fixed cooperative route sharing synchronization of pulls. Fixed left sidebar in map view not being able to be collapsed. Fixed pull top text not showing when viewing a route. Added a 'Loading' message when Pulls are still loading, rather than a 'No pulls created yet' message.",
     "changelog": {
         "id": 46,
         "release_id": 42,

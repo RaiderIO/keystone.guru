@@ -7,9 +7,9 @@ class Signalable {
 
     /**
      * Registers for listening to a signal sent by this Signalable.
-     * @param name string|array The name of the event you want to listen for.
-     * @param listener object Who are you? Pass this.
-     * @param fn function The function that should be triggered.
+     * @param name {string|array} The name of the event you want to listen for.
+     * @param listener {object} Who are you? Pass this.
+     * @param fn {callable} The function that should be triggered.
      */
     register(name, listener, fn) {
         console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
@@ -51,9 +51,9 @@ class Signalable {
 
     /**
      * Stop listening to a signal.
-     * @param name string|array The name of the event you want to stop listening to.
-     * @param listener object Whoever you are and what you used to register yourself with.
-     * @param fn callable|null The function you wish to unregister. Null to remove everything.
+     * @param name {string|array} The name of the event you want to stop listening to.
+     * @param listener {object} Whoever you are and what you used to register yourself with.
+     * @param fn {callable|null} The function you wish to unregister. Null to remove everything.
      */
     unregister(name, listener, fn = null) {
         console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
@@ -87,8 +87,8 @@ class Signalable {
 
     /**
      * Signals to listeners that something has happened.
-     * @param name string The name of the signal you're sending.
-     * @param data object Any data you wish to pass, optional.
+     * @param name {string} The name of the signal you're sending.
+     * @param data {object} Any data you wish to pass, optional.
      */
     signal(name, data = {}) {
         console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
@@ -98,10 +98,10 @@ class Signalable {
             let caller = this.signals[i];
 
             if (caller.name === name) {
-                if( caller.listener instanceof Signalable && caller.listener.cleanedUp ){
+                if (caller.listener instanceof Signalable && caller.listener.cleanedUp) {
                     console.error(`Unable to send signal '${caller.name}' to object because it's cleaned up and it should have unregged!`, caller);
                 } else {
-                    caller.callback({name:name, context: self, data: data});
+                    caller.callback({name: name, context: self, data: data});
                 }
             }
         }
@@ -116,7 +116,7 @@ class Signalable {
         this.signals = [];
     }
 
-    cleanup(){
+    cleanup() {
         this.cleanedUp = true;
     }
 }

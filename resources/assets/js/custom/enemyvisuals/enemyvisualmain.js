@@ -5,7 +5,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let self = this;
 
         // Listen to changes in the NPC to update the icon and re-draw the visual
-        this.enemyvisual.enemy.register('enemy:set_npc', this, this._refreshNpc.bind(this));
+        this.enemyvisual.enemy.register('enemy:set_npc', this, function(){
+            self._refreshNpc();
+        });
         this._sizeCache = [];
     }
 

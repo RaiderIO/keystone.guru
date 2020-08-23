@@ -1,10 +1,21 @@
+/** This is because PhpStorm won't shut up about how getState() is not defined. It really is defined in statemanager.blade.php */
+if (typeof getState !== 'function') {
+    /**
+     *
+     * @returns {StateManager}
+     */
+    function getState() {
+        return false;
+    }
+}
+
 // Gives access to Object.id() method which will uniquely identify an object
-(function() {
-    if ( typeof Object.id == "undefined" ) {
+(function () {
+    if (typeof Object.id == "undefined") {
         let id = 0;
 
-        Object.id = function(o) {
-            if ( typeof o.__uniqueid == "undefined" ) {
+        Object.id = function (o) {
+            if (typeof o.__uniqueid == "undefined") {
                 Object.defineProperty(o, "__uniqueid", {
                     value: ++id,
                     enumerable: false,
@@ -18,6 +29,18 @@
         };
     }
 })();
+
+/**
+ * Converts 'This is a text' to 'this-is-a-text'.
+ * @param text {string}
+ * @returns {string}
+ */
+function convertToSlug(text) {
+    return text
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-');
+}
 
 function getDistanceSquared(xy1, xy2) {
     return Math.pow(xy1[0] - xy2[0], 2) + Math.pow(xy1[1] - xy2[1], 2);
@@ -58,7 +81,7 @@ let _defaultVariables = null;
 function getHandlebarsDefaultVariables() {
     if (_defaultVariables === null) {
         _defaultVariables = $.extend({}, _getHandlebarsTranslations(), {
-            is_map_admin: typeof getState !== 'function' ? false : getState().isMapAdmin(),
+            is_map_admin: typeof getState === 'function' && getState() !== false ? getState().isMapAdmin() : false,
             is_user_admin: isUserAdmin, // Defined in sitescripts
             csrf_token: csrfToken // Defined in sitescripts
         });
@@ -83,6 +106,22 @@ function decodeHtmlEntity(str) {
 function toSnakeCase(key) {
     let result = key.replace(/([A-Z])/g, " $1");
     return result.split(' ').join('_').toLowerCase().substring(1);
+}
+
+/**
+ * https://stackoverflow.com/a/55292366/771270
+ * @param str
+ * @param ch
+ * @returns {string|*}
+ */
+function trimEnd(str, ch) {
+    let end = str.length;
+
+    while (str[end - 1] === ch) {
+        --end;
+    }
+
+    return (end < str.length) ? str.substring(0, end) : str;
 }
 
 /**
@@ -198,40 +237,61 @@ function pickHexFromHandlers(handlers, weight) {
 }
 
 
+function getEnemies() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+}
+
+function getEnemyPacks() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+}
+
+function getEnemyPatrols() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+}
+
+function getKillZones() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+}
+
+function getPaths() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
+}
+
+function getBrushlines() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
+}
+
+function getMapIcons() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
+}
+
 /**
  * Helper functions to help debug the site.
  */
 function getEnemy(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-    return mapObjectGroup.findMapObjectById(id);
+    return getEnemies().findMapObjectById(id);
 }
 
 function getEnemyPack(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
-    return mapObjectGroup.findMapObjectById(id);
+    return getEnemyPacks().findMapObjectById(id);
 }
 
 function getEnemyPatrol(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
-    return mapObjectGroup.findMapObjectById(id);
+    return getEnemyPatrols().findMapObjectById(id);
 }
 
 function getKillZone(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-    return mapObjectGroup.findMapObjectById(id);
+    return getKillZones().findMapObjectById(id);
 }
 
 function getPath(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
-    return mapObjectGroup.findMapObjectById(id);
+    return getPaths().findMapObjectById(id);
 }
 
 function getBrushline(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
-    return mapObjectGroup.findMapObjectById(id);
+    return getBrushlines().findMapObjectById(id);
 }
 
 function getMapIcon(id) {
-    let mapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
-    return mapObjectGroup.findMapObjectById(id);
+    return getMapIcons().findMapObjectById(id);
 }

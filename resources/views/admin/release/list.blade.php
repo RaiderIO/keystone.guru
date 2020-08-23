@@ -6,7 +6,8 @@
             <h4>{{ __('View releases') }}</h4>
         </div>
         <div class="ml-auto">
-            <a href="{{ route('admin.release.new') }}" class="btn btn-success text-white pull-right ml-auto" role="button">
+            <a href="{{ route('admin.release.new') }}" class="btn btn-success text-white pull-right ml-auto"
+               role="button">
                 <i class="fas fa-plus"></i> {{ __('Create release') }}
             </a>
         </div>
@@ -16,7 +17,9 @@
 @section('scripts')
     <script type="text/javascript">
         $(function () {
-            $('#admin_release_table').DataTable({});
+            $('#admin_release_table').DataTable({
+                'order': [[0, 'desc']]
+            });
         });
     </script>
 @endsection
@@ -37,7 +40,8 @@
                 <td>{{ $release->id }}</td>
                 <td>{{ $release->version }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('admin.release.edit', ['release' => $release->version]) }}">
+                    <a class="btn btn-primary"
+                       href="{{ route('admin.release.edit', ['release' => $release->version]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
                     </a>
                 </td>
