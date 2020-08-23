@@ -737,7 +737,7 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'deotherside_ardenweald',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
-                'active'                        => true,
+                'active'                        => false,
                 'floors'                        => [
                     'De Other Side' => [
                         'index'   => 1,
@@ -793,7 +793,7 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'hallsofatonement_a',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
-                'active'                        => true,
+                'active'                        => false,
                 'floors'                        => [
                     'Exterior <TEMP>'        => [
                         'index'   => 1,
@@ -835,7 +835,7 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'mistsoftirnescithe',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
-                'active'                        => true,
+                'active'                        => false,
                 'floors'                        => [
                     'Mists of Tirna Scithe' => [
                         'index'   => 1,
@@ -849,7 +849,7 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'plaguefall',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
-                'active'                        => true,
+                'active'                        => false,
                 'floors'                        => [
                     'Plaguefall'            => [
                         'index'   => 1,
@@ -877,7 +877,7 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'sanguinedepths_a',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
-                'active'                        => true,
+                'active'                        => false,
                 'floors'                        => [
                     'A' => [
                         'index'   => 1,
@@ -905,7 +905,7 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'spiresofascension_a',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
-                'active'                        => true,
+                'active'                        => false,
                 'floors'                        => [
                     'Honor\'s Ascent'         => [
                         'index' => 1,
@@ -961,7 +961,7 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'necroticwake_a',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
-                'active'                        => true,
+                'active'                        => false,
                 'floors'                        => [
                     'The Necrotic Wake' => [
                         'index'   => 1,
@@ -1003,7 +1003,7 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'theaterofpain',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
-                'active'                        => true,
+                'active'                        => false,
                 'floors'                        => [
                     'Theater of Pain'    => [
                         'index'   => 1,
