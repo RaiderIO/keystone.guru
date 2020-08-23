@@ -189,7 +189,8 @@ let c = {
             }
         },
         echo: {
-            tooltipFadeOutTimeout: 3000
+            tooltipFadeOutTimeout: 3000,
+            mouseSendFrequency: 1000
         }
     }
 };

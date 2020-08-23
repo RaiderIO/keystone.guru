@@ -459,9 +459,6 @@ class Enemy extends MapObject {
         let oldKillZone = this.kill_zone;
         this.kill_zone = killZone;
 
-        if (this.id === 4284) {
-            console.warn('setKillZone', this, oldKillZone, this.kill_zone);
-        }
         if (this.kill_zone instanceof KillZone) {
             this.signal('killzone:attached', {previous: oldKillZone});
         }

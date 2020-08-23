@@ -118,6 +118,7 @@ let scripts = [
     // Depends on map object groups + Map Context
     'resources/assets/js/custom/statemanager.js',
     'resources/assets/js/custom/echo.js',
+    'resources/assets/js/custom/echomouselocationhandler.js',
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/hotkeys.js',
 

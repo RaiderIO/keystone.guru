@@ -45,7 +45,8 @@ class MapObjectGroup extends Signalable {
                 if (this.names.hasOwnProperty(index)) {
                     presenceChannel.listen(`.${this.names[index]}-changed`, (e) => {
                         if (self._shouldHandleChangedEchoEvent(e)) {
-                            self._loadMapObject(e.model, e.user);
+                            let mapObject = self._loadMapObject(e.model, null, e.user);
+                            self.setMapObjectVisibility(mapObject, true);
                         }
                     }).listen(`.${this.names[index]}-deleted`, (e) => {
                         if (self._shouldHandleDeletedEchoEvent(e)) {

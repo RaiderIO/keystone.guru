@@ -9,6 +9,7 @@ class StateManager extends Signalable {
 
         // Echo handler
         this._echo = null;
+        this._echoMouseLocationHandler = null;
         /** @type {DungeonMap} The DungeonMap instance */
         this._map = null;
         // What enemy visual type we're displaying
@@ -84,7 +85,7 @@ class StateManager extends Signalable {
      * Sets the MDT mapping mode to be enabled or not.
      * @param enabled {boolean}
      */
-    setMdtMappingModeEnabled(enabled ){
+    setMdtMappingModeEnabled(enabled) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         this._mdtMappingModeEnabled = enabled;
@@ -151,6 +152,10 @@ class StateManager extends Signalable {
                     self.setEnemyDisplayType(hashVariables.display);
                 }
             });
+        }
+
+        if (this.isEchoEnabled()) {
+            this._echoMouseLocationHandler = new EchoMouseLocationHandler(this._map);
         }
     }
 
@@ -220,7 +225,7 @@ class StateManager extends Signalable {
      * Gets the Echo instance used for Echo communication.
      * @returns {Echo}
      */
-    getEcho(){
+    getEcho() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this._echo;
