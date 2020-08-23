@@ -81,7 +81,7 @@ let _defaultVariables = null;
 function getHandlebarsDefaultVariables() {
     if (_defaultVariables === null) {
         _defaultVariables = $.extend({}, _getHandlebarsTranslations(), {
-            is_map_admin: getState() !== false ? getState().isMapAdmin() : false,
+            is_map_admin: typeof getState === 'function' && getState() !== false ? getState().isMapAdmin() : false,
             is_user_admin: isUserAdmin, // Defined in sitescripts
             csrf_token: csrfToken // Defined in sitescripts
         });
