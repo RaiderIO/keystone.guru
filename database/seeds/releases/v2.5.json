@@ -4,6 +4,9 @@
     "version": "v2.5",
     "created_at": "2019-06-12T05:24:14+00:00",
     "updated_at": "2019-06-12T05:24:14+00:00",
+    "github_body": "General changes:\n    * #37 You can now co-operatively edit your routes with your Team members! To get started, create a group, invite your party and finally set them to be collaborators in the \"members\" section. Add some routes to the team, then start editing them with your team members. All changes you and your team members perform will be synchronized to each other, Google-docs style!",
+    "discord_body": "v2.5 (2019\/06\/12)(https:\/\/keystone.guru\/release\/v2.5)\nGeneral changes:\n    * #37 You can now co-operatively edit your routes with your Team members! To get started, create a group, invite your party and finally set them to be collaborators in the \"members\" section. Add some routes to the team, then start editing them with your team members. All changes you and your team members perform will be synchronized to each other, Google-docs style!",
+    "reddit_body": "[https:\/\/keystone.guru\/release\/v2.5](https:\/\/keystone.guru\/release\/v2.5)\n\nGeneral changes:\n* [\\#37](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/37) You can now co-operatively edit your routes with your Team members! To get started, create a group, invite your party and finally set them to be collaborators in the \"members\" section. Add some routes to the team, then start editing them with your team members. All changes you and your team members perform will be synchronized to each other, Google-docs style!",
     "changelog": {
         "id": 30,
         "release_id": 26,

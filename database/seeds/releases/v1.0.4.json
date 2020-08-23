@@ -4,6 +4,9 @@
     "version": "v1.0.4",
     "created_at": "2018-10-11T05:16:06+00:00",
     "updated_at": "2018-10-11T05:16:06+00:00",
+    "github_body": "Map changes:\n    *  Fixed where switching maps while having a killzone selected would leave you locked out of selecting new killzones.\n    *  Interacting with the toolbox while having a killzone selected will now disable the selection on the killzone. This led to multiple issues.",
+    "discord_body": "v1.0.4 (2018\/10\/11)(https:\/\/keystone.guru\/release\/v1.0.4)\nMap changes:\n    *  Fixed where switching maps while having a killzone selected would leave you locked out of selecting new killzones.\n    *  Interacting with the toolbox while having a killzone selected will now disable the selection on the killzone. This led to multiple issues.",
+    "reddit_body": "[https:\/\/keystone.guru\/release\/v1.0.4](https:\/\/keystone.guru\/release\/v1.0.4)\n\nMap changes:\n*  Fixed where switching maps while having a killzone selected would leave you locked out of selecting new killzones.\n*  Interacting with the toolbox while having a killzone selected will now disable the selection on the killzone. This led to multiple issues.",
     "changelog": {
         "id": 9,
         "release_id": 5,

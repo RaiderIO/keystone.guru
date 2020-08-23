@@ -1,0 +1,87 @@
+{
+    "id": 56,
+    "release_changelog_id": 60,
+    "version": "v3.4",
+    "created_at": "2020-08-23T12:03:08+00:00",
+    "updated_at": "2020-08-23T12:03:08+00:00",
+    "github_body": "Map changes:\n    * #415 Rewritten the way the site handles displaying everything on the map. The benefits are greatly improved performance, mostly related to switching floors (should be instant now) but also in general when using the site. Many things were overhauled and\/or rethought, hoping to improve the mapping experience as a whole. Also, various minor bugs have been fixed in the process of this rewrite.\n    * #204 Enemy packs are no longer sometimes drawn multiple times when switching floors, leading to a layered polygon with ever increasing opacity.\n    * #413 Raid marker assigning (using right click on an enemy) now works again.\n    * #414 Switching floors while actively drawing lines will no longer result in a cascade of \"Finish\" lines, eventually clogging up the entire screen if you let it go that far.\n    * #358 Internal change to make sure client and server are more up-to-date with one another.\nMDT importer changes:\n    * #390 By ConnerS: if a pull that is imported from MDT were to be empty when importing it in Keystone.guru, the importer would skip the pull altogether. However, this would create a gap in your pull indices, for example: 1, 2, 4, 5 (where 3 would be a pull that was removed). This has been fixed so the counter properly increments as expected.\nTeam changes:\n    * #416 If you received an invite link for a team you're already a part of, the 'Return to Team' button would produce a 404 not found error.",
+    "discord_body": "v3.4 (2020\/08\/23)(https:\/\/keystone.guru\/release\/v3.4)\nMap changes:\n    * #415 Rewritten the way the site handles displaying everything on the map. The benefits are greatly improved performance, mostly related to switching floors (should be instant now) but also in general when using the site. Many things were overhauled and\/or rethought, hoping to improve the mapping experience as a whole. Also, various minor bugs have been fixed in the process of this rewrite.\n    * #204 Enemy packs are no longer sometimes drawn multiple times when switching floors, leading to a layered polygon with ever increasing opacity.\n    * #413 Raid marker assigning (using right click on an enemy) now works again.\n    * #414 Switching floors while actively drawing lines will no longer result in a cascade of \"Finish\" lines, eventually clogging up the entire screen if you let it go that far.\n    * #358 Internal change to make sure client and server are more up-to-date with one another.\n\nMDT importer changes:\n    * #390 By ConnerS: if a pull that is imported from MDT were to be empty when importing it in Keystone.guru, the importer would skip the pull altogether. However, this would create a gap in your pull indices, for example: 1, 2, 4, 5 (where 3 would be a pull that was removed). This has been fixed so the counter properly increments as expected.\n\nTeam changes:\n    * #416 If you received an invite link for a team you're already a part of, the 'Return to Team' button would produce a 404 not found error.",
+    "reddit_body": "[https:\/\/keystone.guru\/release\/v3.4](https:\/\/keystone.guru\/release\/v3.4)\n\nMap changes:\n* [\\#415](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/415) Rewritten the way the site handles displaying everything on the map. The benefits are greatly improved performance, mostly related to switching floors (should be instant now) but also in general when using the site. Many things were overhauled and\/or rethought, hoping to improve the mapping experience as a whole. Also, various minor bugs have been fixed in the process of this rewrite.\n* [\\#204](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/204) Enemy packs are no longer sometimes drawn multiple times when switching floors, leading to a layered polygon with ever increasing opacity.\n* [\\#413](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/413) Raid marker assigning (using right click on an enemy) now works again.\n* [\\#414](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/414) Switching floors while actively drawing lines will no longer result in a cascade of \"Finish\" lines, eventually clogging up the entire screen if you let it go that far.\n* [\\#358](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/358) Internal change to make sure client and server are more up-to-date with one another.\n\nMDT importer changes:\n* [\\#390](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/390) By ConnerS: if a pull that is imported from MDT were to be empty when importing it in Keystone.guru, the importer would skip the pull altogether. However, this would create a gap in your pull indices, for example: 1, 2, 4, 5 (where 3 would be a pull that was removed). This has been fixed so the counter properly increments as expected.\n\nTeam changes:\n* [\\#416](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/416) If you received an invite link for a team you're already a part of, the 'Return to Team' button would produce a 404 not found error.",
+    "changelog": {
+        "id": 60,
+        "release_id": 56,
+        "description": "This update features a major rewrite of the map backend code. If you find any issues, please don't hesittate to report them to me directly on Discord, Reddit or Github!",
+        "changes": [
+            {
+                "release_changelog_id": 60,
+                "release_changelog_category_id": 3,
+                "ticket_id": 415,
+                "change": "Rewritten the way the site handles displaying everything on the map. The benefits are greatly improved performance, mostly related to switching floors (should be instant now) but also in general when using the site. Many things were overhauled and\/or rethought, hoping to improve the mapping experience as a whole. Also, various minor bugs have been fixed in the process of this rewrite.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 60,
+                "release_changelog_category_id": 3,
+                "ticket_id": 204,
+                "change": "Enemy packs are no longer sometimes drawn multiple times when switching floors, leading to a layered polygon with ever increasing opacity.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 60,
+                "release_changelog_category_id": 3,
+                "ticket_id": 413,
+                "change": "Raid marker assigning (using right click on an enemy) now works again.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 60,
+                "release_changelog_category_id": 3,
+                "ticket_id": 414,
+                "change": "Switching floors while actively drawing lines will no longer result in a cascade of \"Finish\" lines, eventually clogging up the entire screen if you let it go that far.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 60,
+                "release_changelog_category_id": 3,
+                "ticket_id": 358,
+                "change": "Internal change to make sure client and server are more up-to-date with one another.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 60,
+                "release_changelog_category_id": 6,
+                "ticket_id": 390,
+                "change": "By ConnerS: if a pull that is imported from MDT were to be empty when importing it in Keystone.guru, the importer would skip the pull altogether. However, this would create a gap in your pull indices, for example: 1, 2, 4, 5 (where 3 would be a pull that was removed). This has been fixed so the counter properly increments as expected.",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            },
+            {
+                "release_changelog_id": 60,
+                "release_changelog_category_id": 7,
+                "ticket_id": 416,
+                "change": "If you received an invite link for a team you're already a part of, the 'Return to Team' button would produce a 404 not found error.",
+                "category": {
+                    "id": 7,
+                    "category": "Team changes"
+                }
+            }
+        ]
+    }
+}

@@ -1,9 +1,12 @@
 {
     "id": 7,
     "release_changelog_id": 11,
-    "version": "v1.0.5.1",
+    "version": "v1.0.6",
     "created_at": "2018-10-13T05:16:06+00:00",
     "updated_at": "2018-10-13T05:16:06+00:00",
+    "github_body": "Map changes:\n    *  Corrected Teeming enemy forces needed for The Underrot, King's Rest.",
+    "discord_body": "v1.0.6 (2018\/10\/13)(https:\/\/keystone.guru\/release\/v1.0.6)\nMap changes:\n    *  Corrected Teeming enemy forces needed for The Underrot, King's Rest.",
+    "reddit_body": "[https:\/\/keystone.guru\/release\/v1.0.6](https:\/\/keystone.guru\/release\/v1.0.6)\n\nMap changes:\n*  Corrected Teeming enemy forces needed for The Underrot, King's Rest.",
     "changelog": {
         "id": 11,
         "release_id": 7,
