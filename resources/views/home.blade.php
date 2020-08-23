@@ -8,25 +8,26 @@
     @if((new Jenssegers\Agent\Agent())->browser() === 'IE')
         <div class="container-fluid alert alert-warning text-center mt-4">
             <div class="container">
-            {{ __('It appears you\'re browsing Keystone.guru using Internet Explorer. Unfortunately Internet Explorer is
-             not a supported browser. No really, it really do not work at all. Please try either Google Chrome, Mozilla
-             Firefox or Microsoft Edge. My apologies.') }}
+                {{ __('It appears you\'re browsing Keystone.guru using Internet Explorer. Unfortunately Internet Explorer is
+                 not a supported browser. No really, it really do not work at all. Please try either Google Chrome, Mozilla
+                 Firefox or Microsoft Edge. My apologies.') }}
             </div>
         </div>
     @endif
     <section class="probootstrap-hero mt-4">
         <div class="container">
             <div class="row">
-                <div class="col-md-8 offset-md-2 col-sm-8 offset-sm-2 text-center probootstrap-hero-text pb0 probootstrap-animate"
-                     data-animate-effect="fadeIn">
+                <div
+                    class="col-md-8 offset-md-2 col-sm-8 offset-sm-2 text-center probootstrap-hero-text pb0 probootstrap-animate"
+                    data-animate-effect="fadeIn">
                     <h1>{{ __('Welcome to Keystone.guru!') }}</h1>
                     <p>{{ __('Plan your World of Warcraft Mythic Plus routes and share them with your group and the world!') }}</p>
                     <p>
-                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-ghost btn-lg mt-1"
+                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-lg mt-1"
                            data-toggle="modal" data-target="#try_modal">{{ __('Try it!') }}</a>
-                        <a href="{{ route('dungeonroute.view', ['dungeonroute' => \App\Models\DungeonRoute::where('demo', 1)->first()->public_key]) }}"
-                           class="btn btn-primary btn-ghost btn-lg mt-1"
-                           role="button">{{ __('Demo') }}</a>
+                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-lg mt-1"
+                           data-toggle="modal" data-target="#try_mdt_import_modal">{{ __('Try by importing MDT string') }}</a>
+
                         @guest
                             <a href="#" class="btn btn-primary btn-lg mt-1" role="button" data-toggle="modal"
                                data-target="#register_modal">{{ __('Register and start planning') }}</a>
@@ -34,9 +35,19 @@
                     </p>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="row probootstrap-feature-showcase">
-                <div class="col-md-4 order-md-8 probootstrap-showcase-nav probootstrap-animate bg-secondary">
+    <section class="probootstrap-section probootstrap-bg-white bg-secondary">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate"
+                     data-animate-effect="fadeIn">
+                    <h2>{{ __('Features') }}</h2>
+                </div>
+            </div>
+            <div class="row probootstrap-feature-showcase mt-4">
+                <div class="col-md-4 order-md-8 probootstrap-showcase-nav probootstrap-animate bg-dark">
                     <ul>
                         <li class="active">
                             <a href="#">{{ __('Interactive maps') }}</a>
@@ -70,7 +81,7 @@
                 </div>
                 <div class="col-md-8 order-md-4 probootstrap-animate" style="position: relative;">
                     <div class="probootstrap-home-showcase-wrap">
-                        <div class="probootstrap-home-showcase-inner bg-secondary">
+                        <div class="probootstrap-home-showcase-inner">
                             <div class="probootstrap-image-showcase">
                                 <ul class="probootstrap-images-list">
                                     <li class="active">
@@ -104,7 +115,22 @@
         </div>
     </section>
 
-    <section class="probootstrap-section probootstrap-bg-white probootstrap-zindex-above-showcase bg-secondary">
+    <section class="probootstrap-section probootstrap-zindex-above-showcase">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate"
+                     data-animate-effect="fadeIn">
+                    <h2>{{ __('Demo routes') }}</h2>
+                </div>
+            </div>
+
+            @include('common.dungeon.demoroutesgrid', [
+                'expansionService' => $expansionService
+            ])
+        </div>
+    </section>
+
+    <section class="probootstrap-section probootstrap-bg-white bg-secondary">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate"

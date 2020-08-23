@@ -201,6 +201,7 @@ class Dungeon extends Model
         return $query->where('active', 0);
     }
 
+
     /**
      * Get the minimum amount of health of all NPCs in this dungeon.
      */

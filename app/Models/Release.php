@@ -30,8 +30,6 @@ class Release extends Model
 {
     use SerializesDates;
 
-    public $timestamps = true;
-
     protected $with = ['changelog'];
     protected $appends = ['github_body', 'discord_body', 'reddit_body'];
 

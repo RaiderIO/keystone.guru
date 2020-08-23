@@ -38,6 +38,8 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
     Route::get('affixes', 'SiteController@affixes')->name('misc.affixes');
 
+    Route::get('demo', 'SiteController@demo')->name('misc.demo');
+
     Route::get('timetest', 'SiteController@timetest')->name('misc.timetest');
 
     Route::get('looptest', 'SiteController@looptest')->name('misc.looptest');

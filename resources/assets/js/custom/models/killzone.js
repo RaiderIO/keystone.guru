@@ -412,11 +412,12 @@ class KillZone extends MapObject {
 
         let latLngs = [];
         let otherFloorsWithEnemies = [];
+        let currentFloorId = getState().getCurrentFloor().id;
         $.each(this.enemies, function (i, id) {
             let enemy = enemyMapObjectGroup.findMapObjectById(id);
 
             if (enemy !== null) {
-                if (enemy.shouldBeVisible()) {
+                if (enemy.floor_id === currentFloorId) {
                     let latLng = enemy.layer.getLatLng();
                     latLngs.push([latLng.lat, latLng.lng]);
                 }
@@ -434,7 +435,7 @@ class KillZone extends MapObject {
         // Alpha shapes
         if (this.layer !== null && this.floor_id > 0) {
             // Killzone not on this floor, draw a line to the floor that it is
-            if (getState().getCurrentFloor().id !== this.floor_id && this.floor_id !== null) {
+            if (currentFloorId !== this.floor_id && this.floor_id !== null) {
                 otherFloorsWithEnemies.push(this.floor_id);
             }
             // Killzone on this floor, include the lat/lng in our bounds
@@ -446,45 +447,47 @@ class KillZone extends MapObject {
 
         // If there are other floors with enemies AND enemies on this floor..
         if (otherFloorsWithEnemies.length > 0 && latLngs.length > 0) {
-            // console.warn(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
+            console.warn(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
             let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
-            $.each(otherFloorsWithEnemies, function (i, floorId) {
-                // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
-                // In the case of Waycrest, we want to select the closest floor switch marker, not the 1st index which
-                // may be really far away
-                let floorSwitchMarkerCandidates = [];
-                $.each(floorSwitchMapObjectGroup.objects, function (j, floorSwitchMapObject) {
-                    if (floorSwitchMapObject.target_floor_id === floorId) {
-                        floorSwitchMarkerCandidates.push(floorSwitchMapObject);
-                    }
+            if (floorSwitchMapObjectGroup.objects.length > 0) {
+                $.each(otherFloorsWithEnemies, function (i, floorId) {
+                    // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
+                    // In the case of Waycrest, we want to select the closest floor switch marker, not the 1st index which
+                    // may be really far away
+                    let floorSwitchMarkerCandidates = [];
+                    $.each(floorSwitchMapObjectGroup.objects, function (j, floorSwitchMapObject) {
+                        if (floorSwitchMapObject.target_floor_id === floorId) {
+                            floorSwitchMarkerCandidates.push(floorSwitchMapObject);
+                        }
+                    });
+
+                    console.assert(floorSwitchMarkerCandidates.length > 0, 'floorSwitchMarkerCandidates.length is <= 0', self);
+
+                    // Calculate a rough center of our bounds
+                    let ourCenterLatLng = latLngs.length === 1 ? latLngs[0] : self._getLayerCenteroid(latLngs);
+                    let closestFloorSwitchMarker = null;
+                    let closestDistance = 999999999999999;
+
+                    // console.log('ourCenterLatLng', ourCenterLatLng);
+                    //
+                    // console.log('floorSwitchMarkerCandidates', floorSwitchMarkerCandidates);
+                    // Find the closest floor switch marker
+                    $.each(floorSwitchMarkerCandidates, function (j, floorSwitchMapObject) {
+                        let distance = floorSwitchMapObject.layer.getLatLng().distanceTo(ourCenterLatLng);
+                        // console.log(closestDistance, distance);
+                        if (closestDistance > distance) {
+                            closestDistance = distance;
+                            closestFloorSwitchMarker = floorSwitchMapObject;
+                        }
+                    });
+                    console.assert(closestFloorSwitchMarker instanceof DungeonFloorSwitchMarker,
+                        'closestFloorSwitchMarker is not a DungeonFloorSwitchMarker', closestFloorSwitchMarker);
+
+                    // Add its location to the list!
+                    let latLng = closestFloorSwitchMarker.layer.getLatLng();
+                    latLngs.push([latLng.lat, latLng.lng]);
                 });
-
-                console.assert(floorSwitchMarkerCandidates.length > 0, 'floorSwitchMarkerCandidates.length is <= 0', self);
-
-                // Calculate a rough center of our bounds
-                let ourCenterLatLng = latLngs.length === 1 ? latLngs[0] : self._getLayerCenteroid(latLngs);
-                let closestFloorSwitchMarker = null;
-                let closestDistance = 999999999999999;
-
-                // console.log('ourCenterLatLng', ourCenterLatLng);
-                //
-                // console.log('floorSwitchMarkerCandidates', floorSwitchMarkerCandidates);
-                // Find the closest floor switch marker
-                $.each(floorSwitchMarkerCandidates, function (j, floorSwitchMapObject) {
-                    let distance = floorSwitchMapObject.layer.getLatLng().distanceTo(ourCenterLatLng);
-                    // console.log(closestDistance, distance);
-                    if (closestDistance > distance) {
-                        closestDistance = distance;
-                        closestFloorSwitchMarker = floorSwitchMapObject;
-                    }
-                });
-                console.assert(closestFloorSwitchMarker instanceof DungeonFloorSwitchMarker,
-                    'closestFloorSwitchMarker is not a DungeonFloorSwitchMarker', closestFloorSwitchMarker);
-
-                // Add its location to the list!
-                let latLng = closestFloorSwitchMarker.layer.getLatLng();
-                latLngs.push([latLng.lat, latLng.lng]);
-            });
+            }
         }
 
         // If finally we only have one enemy and that's it, add a dummy location so that the pull index will be shown on the layer
