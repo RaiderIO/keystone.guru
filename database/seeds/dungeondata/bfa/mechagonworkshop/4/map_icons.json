@@ -7,7 +7,8 @@
         "lng": 121,
         "comment": "From Machinist's Garden",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     },
     {
         "floor_id": 69,
@@ -17,6 +18,18 @@
         "lng": 184.25,
         "comment": "To Mechagon City",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 69,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -142.5,
+        "lng": 238.5,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
     }
 ]

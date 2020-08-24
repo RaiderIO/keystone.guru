@@ -7,7 +7,8 @@
         "lng": 289.5,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -17,7 +18,8 @@
         "lng": 240.8125,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -27,7 +29,8 @@
         "lng": 207.9375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -37,7 +40,8 @@
         "lng": 185.6875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -47,7 +51,8 @@
         "lng": 245.6875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -57,7 +62,8 @@
         "lng": 225.75,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -67,7 +73,8 @@
         "lng": 244.625,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -77,7 +84,8 @@
         "lng": 195.84375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -87,7 +95,8 @@
         "lng": 294.53125,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -97,7 +106,8 @@
         "lng": 245.78125,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 1
+        "seasonal_index": 1,
+        "is_admin": true
     },
     {
         "floor_id": 47,
@@ -107,6 +117,7 @@
         "lng": 194.5,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 1
+        "seasonal_index": 1,
+        "is_admin": true
     }
 ]

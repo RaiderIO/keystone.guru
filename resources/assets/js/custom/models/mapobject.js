@@ -342,7 +342,7 @@ class MapObject extends Signalable {
                 let name = attribute.name;
 
                 // Color is already set by Pickr
-                if (attribute.type === 'object') {
+                if (attribute.type === 'object' && attribute.hasOwnProperty('attributes')) {
                     this._popupSubmitClicked(attribute);
                 } else if (attribute.isEditable()) {
                     let $element = $(`#map_${mapObjectName}_edit_popup_${name}_${this.id}`);

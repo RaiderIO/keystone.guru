@@ -7,7 +7,8 @@
         "lng": 261.5625,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 48,
@@ -17,7 +18,8 @@
         "lng": 257.4375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 48,
@@ -27,7 +29,8 @@
         "lng": 204.6875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 1
+        "seasonal_index": 1,
+        "is_admin": true
     },
     {
         "floor_id": 48,
@@ -37,7 +40,8 @@
         "lng": 171.4375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 48,
@@ -47,7 +51,8 @@
         "lng": 195.875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     },
     {
         "floor_id": 48,
@@ -57,7 +62,8 @@
         "lng": 203.875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     },
     {
         "floor_id": 48,
@@ -67,6 +73,7 @@
         "lng": 195.5625,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 1
+        "seasonal_index": 1,
+        "is_admin": true
     }
 ]

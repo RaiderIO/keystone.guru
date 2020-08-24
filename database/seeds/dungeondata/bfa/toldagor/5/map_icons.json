@@ -7,7 +7,8 @@
         "lng": 221,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 57,
@@ -17,6 +18,7 @@
         "lng": 216.875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

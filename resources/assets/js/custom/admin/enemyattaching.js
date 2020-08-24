@@ -84,9 +84,9 @@ class EnemyAttaching {
         // When a pack is created, own all objects that it was placed under
         let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
         // When an enemy pack is added..
-        enemyPackMapObjectGroup.register('object:add', this, function (event) {
+        enemyPackMapObjectGroup.register('object:add', this, function (objectAddEvent) {
             // Gather some data
-            let newEnemyPack = event.data.object;
+            let newEnemyPack = objectAddEvent.data.object;
             let enemyPackPolygon = newEnemyPack.layer;
 
             // For each enemy we know of
@@ -107,6 +107,20 @@ class EnemyAttaching {
                             enemy.save();
                         }
                     }
+                }
+            });
+        });
+
+        // When an enemy pack is removed..
+        enemyPackMapObjectGroup.register('object:deleted', this, function (objectDeletedEvent) {
+            // Gather some data
+            let deletedEnemyPack = objectDeletedEvent.data.object;
+
+            // For each enemy we know of, cannot use rawEnemies for reasons I can't be bothered to figure out rn
+            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+                if (enemy.enemy_pack_id === deletedEnemyPack.id) {
+                    enemy.enemy_pack_id = -1;
+                    enemy.save();
                 }
             });
         });

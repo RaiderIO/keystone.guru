@@ -7,7 +7,8 @@
         "lng": 244.625,
         "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 51,
@@ -17,7 +18,8 @@
         "lng": 182.25,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     },
     {
         "floor_id": 51,
@@ -27,7 +29,8 @@
         "lng": 218.5,
         "comment": "Skip unlocks after killing Sporecaller Zancha",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 51,
@@ -37,7 +40,8 @@
         "lng": 287.84375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 51,
@@ -47,7 +51,8 @@
         "lng": 219.875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 51,
@@ -57,7 +62,8 @@
         "lng": 178.1875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     },
     {
         "floor_id": 51,
@@ -67,7 +73,8 @@
         "lng": 175.25,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 51,
@@ -77,7 +84,8 @@
         "lng": 179.375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 1
+        "seasonal_index": 1,
+        "is_admin": true
     },
     {
         "floor_id": 51,
@@ -87,6 +95,7 @@
         "lng": 178.65625,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 1
+        "seasonal_index": 1,
+        "is_admin": true
     }
 ]

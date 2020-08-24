@@ -7,7 +7,8 @@
         "lng": 199.5,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 50,
@@ -17,7 +18,8 @@
         "lng": 208.8125,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 50,
@@ -27,7 +29,8 @@
         "lng": 167.375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 50,
@@ -37,7 +40,8 @@
         "lng": 138.5625,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 1
+        "seasonal_index": 1,
+        "is_admin": true
     },
     {
         "floor_id": 50,
@@ -47,7 +51,8 @@
         "lng": 128.75,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 50,
@@ -57,7 +62,8 @@
         "lng": 158.34375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 1
+        "seasonal_index": 1,
+        "is_admin": true
     },
     {
         "floor_id": 50,
@@ -67,7 +73,8 @@
         "lng": 219,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 50,
@@ -77,7 +84,8 @@
         "lng": 242.6875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 50,
@@ -87,7 +95,8 @@
         "lng": 137.4375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     },
     {
         "floor_id": 50,
@@ -97,6 +106,7 @@
         "lng": 160.46875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     }
 ]
