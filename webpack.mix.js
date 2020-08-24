@@ -234,6 +234,7 @@ if (images) {
 
     mix.copy('resources/assets/images/affixes', 'public/images/affixes', false);
     mix.copy('resources/assets/images/classes', 'public/images/classes', false);
+    mix.copy('resources/assets/images/dungeons', 'public/images/dungeons', false);
     mix.copy('resources/assets/images/echo', 'public/images/echo', false);
     mix.copy('resources/assets/images/enemyclasses', 'public/images/enemyclasses', false);
     mix.copy('resources/assets/images/enemyclassifications', 'public/images/enemyclassifications', false);

@@ -24,9 +24,13 @@
                     <p>{{ __('Plan your World of Warcraft Mythic Plus routes and share them with your group and the world!') }}</p>
                     <p>
                         <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-lg mt-1"
-                           data-toggle="modal" data-target="#try_modal">{{ __('Try it!') }}</a>
+                           data-toggle="modal" data-target="#try_modal">
+                            <i class="fas fa-play"></i> {{ __('Try it!') }}
+                        </a>
                         <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-lg mt-1"
-                           data-toggle="modal" data-target="#try_mdt_import_modal">{{ __('Try by importing MDT string') }}</a>
+                           data-toggle="modal" data-target="#try_mdt_import_modal">
+                            <i class="fas fa-file-import"></i> {{ __('Try by importing MDT string') }}
+                        </a>
 
                         @guest
                             <a href="#" class="btn btn-primary btn-lg mt-1" role="button" data-toggle="modal"
@@ -58,8 +62,8 @@
                             <p>{{ __('From the depths of The Underrot to the pirate city of Freehold, all current BFA dungeons are supported. In the future, any new dungeons will also be added.') }}</p>
                         </li>
                         <li>
-                            <a href="#">{{ __('All enemies added - teeming included') }}</a>
-                            <p>{{ __('Ever wondered what different route you could possibly take while still hitting a 100% enemy forces? All enemies are visible on the map, find the alternative route to make your run a success. Includes all enemies that are added on Teeming weeks!') }}</p>
+                            <a href="#">{{ __('Mythic Dungeon Tools import available') }}</a>
+                            <p>{{ __('Seamless importing of your Mythic Dungeon Tools export strings allows for easy testing & migration.') }}</p>
                         </li>
                         <li>
                             <a href="#">{{ __('Awakened affix supported') }}</a>
