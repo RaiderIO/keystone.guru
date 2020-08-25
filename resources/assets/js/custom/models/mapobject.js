@@ -26,6 +26,8 @@ class MapObject extends Signalable {
 
         let self = this;
 
+        // Set to true when its map object has received its first mapobject:changed event
+        this._initialized = false;
         // Null by default; TBD - false
         this._visible = null;
         this._defaultVisible = true;
@@ -466,6 +468,17 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Sets this map object to be initialized
+     * @private
+     */
+    _setInitialized() {
+
+
+        this._initialized = true;
+        this.signal('object:initialized');
+    }
+
+    /**
      * Cleans up the decorator of this route, removing it from the map.
      * @private
      */
@@ -553,6 +566,11 @@ class MapObject extends Signalable {
                 }
             }
         }
+
+        // If the root has finished, we're now initialized
+        if (parentAttribute === null) {
+            this._setInitialized();
+        }
     }
 
     /**
@@ -562,6 +580,14 @@ class MapObject extends Signalable {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         this.signal('object:deleted');
+    }
+
+    /**
+     * Checks if this map object is initialized yet.
+     * @returns {boolean}
+     */
+    isInitialized() {
+        return this._initialized;
     }
 
     /**
