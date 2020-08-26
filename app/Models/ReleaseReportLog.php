@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class ReportLog extends Model
+class ReleaseReportLog extends Model
 {
     protected $fillable = ['release_id', 'platform'];
 
