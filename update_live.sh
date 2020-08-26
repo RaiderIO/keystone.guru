@@ -33,8 +33,8 @@ php artisan route:cache
 php artisan config:clear
 # Restart queue processors
 php artisan queue:restart
-
-./sh/start_supervisor.sh
+# Start supervisor related tasks
+php artisan keystoneguru:startsupervisor
 
 # All done!
 php artisan up
