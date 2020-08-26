@@ -27,7 +27,7 @@
         "map_icon_type_id": 6,
         "lat": -142.5,
         "lng": 238.5,
-        "comment": "",
+        "comment": "Unlocks after Head Machinist Sparkflux is dead.",
         "permanent_tooltip": 0,
         "seasonal_index": 0,
         "is_admin": true

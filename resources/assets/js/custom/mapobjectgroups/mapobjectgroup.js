@@ -272,8 +272,9 @@ class MapObjectGroup extends Signalable {
         }
         this.objects.push(mapObject);
 
-        mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
+        mapObject.register('object:initialized', this, (this._onObjectInitialized).bind(this));
         mapObject.register('object:changed', this, (this._onObjectChanged).bind(this));
+        mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
 
         return mapObject;
     }
@@ -350,35 +351,21 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
-     * Called whenever an object has deleted itself.
-     * @param objectDeletedEvent {object}
+     * Called whenever a map object is initialized for the first time
+     * @param objectInitializedEvent {object}
      * @private
      */
-    _onObjectDeleted(objectDeletedEvent) {
+    _onObjectInitialized(objectInitializedEvent){
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (objectDeletedEvent.context.layer !== null) {
-            this.layerGroup.removeLayer(objectDeletedEvent.context.layer);
-            // @TODO Should this be put in the dungeonmap instead?
-            this.manager.map.leafletMap.removeLayer(objectDeletedEvent.context.layer);
-            // Clean it up properly
-            objectDeletedEvent.context.setVisible(false);
+        let object = objectInitializedEvent.context;
+
+        this.signal('object:add', {object: object, objectgroup: this});
+
+        // Hide the objects if they're not visible by default
+        if (!object.isDefaultVisible()) {
+            this.setMapObjectVisibility(object, false);
         }
-
-        let object = objectDeletedEvent.context;
-
-        // Remove it from our records
-        let newObjects = [];
-        for (let i = 0; i < this.objects.length; i++) {
-            let objectCandidate = this.objects[i];
-            if (objectCandidate.id !== object.id) {
-                newObjects.push(objectCandidate);
-            }
-        }
-        this.objects = newObjects;
-
-        // Fire the event
-        this.signal('object:deleted', {object: object, objectgroup: this});
     }
 
     /**
@@ -389,17 +376,44 @@ class MapObjectGroup extends Signalable {
     _onObjectChanged(objectChangedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        let object = objectChangedEvent.context;
+        this.signal('object:changed', {object: objectChangedEvent.context, objectgroup: this});
+    }
 
-        // We only use this trigger once to fire the object:add event, so unregister..
-        object.unregister('object:changed', this);
-        // Fire the event
-        this.signal('object:add', {object: object, objectgroup: this});
+    /**
+     * Called whenever an object has deleted itself.
+     * @param objectDeletedEvent {object}
+     * @private
+     */
+    _onObjectDeleted(objectDeletedEvent) {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        // Hide the objects if they're not visible by default
-        if (!object.isDefaultVisible()) {
-            this.setMapObjectVisibility(object, false);
+        let mapObject = objectDeletedEvent.context;
+
+        if (mapObject.layer !== null) {
+            this.layerGroup.removeLayer(mapObject.layer);
+            // @TODO Should this be put in the dungeonmap instead?
+            this.manager.map.leafletMap.removeLayer(mapObject.layer);
+            // Clean it up properly
+            mapObject.setVisible(false);
         }
+
+        // Remove it from our records
+        let newObjects = [];
+        for (let i = 0; i < this.objects.length; i++) {
+            let objectCandidate = this.objects[i];
+            if (objectCandidate.id !== mapObject.id) {
+                newObjects.push(objectCandidate);
+            }
+        }
+        this.objects = newObjects;
+
+        // Fire the event
+        this.signal('object:deleted', {object: mapObject, objectgroup: this});
+
+        // Not _really_ required but doing it anyways
+        mapObject.unregister('object:initialized', this);
+        mapObject.unregister('object:changed', this);
+        mapObject.unregister('object:deleted', this);
     }
 
     /**
