@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Release;
+use App\Models\ReleaseGithubReleaseLog;
 use Github\Api\Repo;
 use Github\Exception\MissingArgumentException;
 use GrahamCampbell\GitHub\Facades\GitHub;
@@ -44,27 +45,42 @@ class CreateGithubRelease extends Command
     {
         $version = $this->argument('version');
 
-        if (substr($version, 0, 1) !== 'v') {
-            $version = 'v' . $version;
-        }
-
-        /** @var Release $release */
-        $release = Release::where('version', $version)->first();
-
-        $username = config('keystoneguru.github_username');
-        $repository = config('keystoneguru.github_repository');
-
-        /** @var Repo $githubRepoClient */
-        $githubRepoClient = GitHub::repo();
-        // May throw an exception if it doesn't exist
-        foreach ($githubRepoClient->releases()->all($username, $repository) as $githubRelease) {
-            if ($githubRelease['name'] === $version) {
-                $this->error(sprintf('Unable to create release for %s; already exists!', $version));
-                return;
+        if ($version === null) {
+            $release = Release::latest()->first();
+        } else {
+            if (substr($version, 0, 1) !== 'v') {
+                $version = 'v' . $version;
             }
+
+            /** @var Release $release */
+            $release = Release::where('version', $version)->first();
         }
 
-        $githubRepoClient->releases()->create($username, $repository, ['tag_name' => $release->version]);
-        $this->info(sprintf('Successfully created GitHub release %s', $version));
+        if ($release !== null) {
+            $username = config('keystoneguru.github_username');
+            $repository = config('keystoneguru.github_repository');
+
+            /** @var Repo $githubRepoClient */
+            $githubRepoClient = GitHub::repo();
+            // May throw an exception if it doesn't exist
+            foreach ($githubRepoClient->releases()->all($username, $repository) as $githubRelease) {
+                if ($githubRelease['name'] === $version) {
+                    $this->error(sprintf('Unable to create release for %s; already exists!', $version));
+                    return;
+                }
+            }
+
+            $body = $release->getGithubBodyAttribute();
+
+            $githubRepoClient->releases()->create($username, $repository, [
+                'tag_name' => $release->version,
+                'name'     => $release->version,
+                'body'     => $body
+            ]);
+
+            $this->info(sprintf('Successfully created GitHub release %s', $version));
+        } else {
+            $this->error(sprintf('Unable to find release %s', $version));
+        }
     }
 }

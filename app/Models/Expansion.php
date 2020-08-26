@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Eloquent;
+use Exception;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -11,15 +16,28 @@ use Illuminate\Http\Request;
  * @property string $shortname
  * @property string $color
  *
- * @mixin \Eloquent
+ * @property Carbon $released_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
+ * @property Collection|Dungeon[] $dungeons
+ *
+ * @mixin Eloquent
  */
 class Expansion extends IconFileModel
 {
+    public $fillable = ['icon_file_id', 'name', 'shortname', 'color', 'released_at'];
 
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
 
+    protected $dates = [
+//        'released_at',
+        'created_at',
+        'updated_at'
+    ];
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function dungeons()
     {
@@ -31,7 +49,7 @@ class Expansion extends IconFileModel
      *
      * @param Request $request
      * @param string $fileUploadDirectory
-     * @throws \Exception
+     * @throws Exception
      */
     public function saveFromRequest(Request $request, $fileUploadDirectory = 'uploads')
     {
@@ -54,7 +72,7 @@ class Expansion extends IconFileModel
                     // Update the expansion to reflect the new file ID
                     $this->icon_file_id = $icon->id;
                     $this->save();
-                } catch (\Exception $ex) {
+                } catch (Exception $ex) {
                     if ($new) {
                         // Roll back the saving of the expansion since something went wrong with the file.
                         $this->delete();

@@ -7,6 +7,7 @@
         "lng": 116.125,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

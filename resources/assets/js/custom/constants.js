@@ -15,6 +15,10 @@ let c = {
     map: {
         admin: {
             mapobject: {
+                colors: {
+                    mouseoverAddEnemy: '#5DE27F',
+                    mouseoverAddEnemyBorder: '#347D47',
+                }
             }
         },
         enemy: {

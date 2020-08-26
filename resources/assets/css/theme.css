@@ -4,6 +4,10 @@
     color: #495057;
 }
 
+.bg-dark {
+    background-color: #2B3E50 !important;
+}
+
 .border-dark {
     border-color: #2B3E50 !important;
 }

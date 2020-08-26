@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use App\Models\File;
+use Carbon\Carbon;
 
 class ExpansionsSeeder extends Seeder
 {
@@ -19,13 +21,16 @@ class ExpansionsSeeder extends Seeder
         $expansions = [
             'Legion' => new App\Models\Expansion([
                 'shortname' => 'legion',
-                'color' => '#27ff0f'
+                'color' => '#27ff0f',
+                'released_at' => Carbon::make('2016-08-30 00:00:00')
             ]), 'Battle for Azeroth' => new App\Models\Expansion([
                 'shortname' => 'bfa',
-                'color' => '#906554'
+                'color' => '#906554',
+                'released_at' => Carbon::make('2018-08-14 00:00:00')
             ]), 'Shadowlands' => new App\Models\Expansion([
                 'shortname' => 'shadowlands',
-                'color' => '#5832a8'
+                'color' => '#5832a8',
+                'released_at' => Carbon::make('2020-12-31 00:00:00')
             ])
         ];
 
@@ -34,7 +39,6 @@ class ExpansionsSeeder extends Seeder
             $expansion->name = $name;
             // Temp file
             $expansion->icon_file_id = -1;
-            /** @var $race \Illuminate\Database\Eloquent\Model */
             $expansion->save();
 
             $icon = new File();
@@ -52,6 +56,6 @@ class ExpansionsSeeder extends Seeder
     private function _rollback()
     {
         DB::table('expansions')->truncate();
-        DB::table('files')->where('model_class', '=', 'App\Models\Expansion')->delete();
+        DB::table('files')->where('model_class', 'App\Models\Expansion')->delete();
     }
 }

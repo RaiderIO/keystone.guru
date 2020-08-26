@@ -7,7 +7,8 @@
         "lng": 121,
         "comment": "From Machinist's Garden",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
     },
     {
         "floor_id": 69,
@@ -17,6 +18,73 @@
         "lng": 184.25,
         "comment": "To Mechagon City",
         "permanent_tooltip": 0,
-        "seasonal_index": 0
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 69,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -142.5,
+        "lng": 238.5,
+        "comment": "Unlocks after Head Machinist Sparkflux is dead.",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 69,
+        "team_id": null,
+        "map_icon_type_id": 18,
+        "lat": -153.875,
+        "lng": 235.5,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 1,
+        "is_admin": true
+    },
+    {
+        "floor_id": 69,
+        "team_id": null,
+        "map_icon_type_id": 17,
+        "lat": -152,
+        "lng": 233.9375,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 2,
+        "is_admin": true
+    },
+    {
+        "floor_id": 69,
+        "team_id": null,
+        "map_icon_type_id": 19,
+        "lat": -82.25,
+        "lng": 272.4375,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 69,
+        "team_id": null,
+        "map_icon_type_id": 18,
+        "lat": -216.625,
+        "lng": 120.0625,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 2,
+        "is_admin": true
+    },
+    {
+        "floor_id": 69,
+        "team_id": null,
+        "map_icon_type_id": 17,
+        "lat": -217.75,
+        "lng": 123.8125,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 1,
+        "is_admin": true
     }
 ]

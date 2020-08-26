@@ -18,5 +18,6 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.live/ &&
             ./update_live.sh &&
+            php artisan make:githubrelease &&
             php artisan report:release discord &&
             php artisan report:release reddit

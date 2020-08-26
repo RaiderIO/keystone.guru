@@ -86,7 +86,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 <body>
 <div id="app">
     @if($header)
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
             <div class="container">
                 <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -148,11 +148,11 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                 <div class="dropdown-menu text-center text-lg-left"
                                      aria-labelledby="newRouteDropdownMenuButton">
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#try_modal">
-                                        {{__('New route')}}
+                                        <i class="fas fa-play"></i> {{__('New route')}}
                                     </a>
                                     <a class="dropdown-item" href="#" data-toggle="modal"
                                        data-target="#try_mdt_import_modal">
-                                        {{__('Import from MDT')}}
+                                        <i class="fas fa-file-import"></i> {{__('Import from MDT')}}
                                     </a>
                                 </div>
                             </div>
@@ -179,11 +179,11 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                     <div class="dropdown-menu text-center text-lg-left"
                                          aria-labelledby="newRouteDropdownMenuButton">
                                         <a class="dropdown-item" href="{{ route('dungeonroute.new') }}">
-                                            {{ __('New route') }}
+                                            <i class="fas fa-play"></i> {{ __('New route') }}
                                         </a>
                                         <a class="dropdown-item" href="#" data-toggle="modal"
                                            data-target="#mdt_import_modal">
-                                            {{__('Import from MDT')}}
+                                            <i class="fas fa-file-import"></i> {{__('Import from MDT')}}
                                         </a>
                                     </div>
                                 </div>

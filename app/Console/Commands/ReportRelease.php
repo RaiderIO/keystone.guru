@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Release;
-use App\Models\ReportLog;
+use App\Models\ReleaseReportLog;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Reddit\RedditApiService;
 use Illuminate\Console\Command;
@@ -58,7 +58,7 @@ class ReportRelease extends Command
             $release = Release::where('version', $version)->first();
         }
 
-        if (!ReportLog::where('release_id', $release->id)->where('platform', $platform)->exists()) {
+        if (!ReleaseReportLog::where('release_id', $release->id)->where('platform', $platform)->exists()) {
             switch ($platform) {
                 case 'reddit':
                     $result = $redditApiService->createPost(
@@ -75,7 +75,7 @@ class ReportRelease extends Command
             }
 
             // Log this release so that we don't mention things multiple times
-            (new ReportLog([
+            (new ReleaseReportLog([
                 'release_id' => $release->id,
                 'platform'   => $platform,
             ]))->save();

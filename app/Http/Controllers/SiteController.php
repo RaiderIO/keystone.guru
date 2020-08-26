@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Release;
-use App\Models\ReleaseChangelog;
+use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
 
 class SiteController extends Controller
 {
@@ -13,16 +18,18 @@ class SiteController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @param ExpansionService $expansionService
+     *
+     * @return Application|Factory|View
      */
-    public function index()
+    public function index(ExpansionService $expansionService)
     {
-        return view('home');
+        return view('home', ['expansionService' => $expansionService]);
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function home(Request $request)
     {
@@ -31,7 +38,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function credits(Request $request)
     {
@@ -40,7 +47,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function about(Request $request)
     {
@@ -49,7 +56,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function privacy(Request $request)
     {
@@ -58,7 +65,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function terms(Request $request)
     {
@@ -67,7 +74,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function cookies(Request $request)
     {
@@ -76,7 +83,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function changelog(Request $request)
     {
@@ -85,7 +92,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function mapping(Request $request)
     {
@@ -94,7 +101,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function timetest(Request $request)
     {
@@ -104,7 +111,7 @@ class SiteController extends Controller
     /**
      * @param Request $request
      * @param SeasonService $seasonService
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function affixes(Request $request, SeasonService $seasonService)
     {
@@ -113,7 +120,17 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param ExpansionService $expansionService
+     * @return Factory|View
+     */
+    public function demo(Request $request, ExpansionService $expansionService)
+    {
+        return view('misc.demo', ['expansionService' => $expansionService]);
+    }
+
+    /**
+     * @param Request $request
+     * @return Factory|View
      */
     public function looptest(Request $request)
     {
@@ -122,7 +139,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function status(Request $request)
     {
@@ -131,7 +148,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function dungeonroutes(Request $request)
     {

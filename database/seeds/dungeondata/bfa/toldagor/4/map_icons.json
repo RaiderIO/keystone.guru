@@ -7,7 +7,8 @@
         "lng": 140,
         "comment": "Keystone Guru: There's a third holding cell here, the map is incorrect.",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 56,
@@ -17,7 +18,8 @@
         "lng": 145.375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 56,
@@ -27,7 +29,8 @@
         "lng": 154.125,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 56,
@@ -37,7 +40,8 @@
         "lng": 162.5,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 56,
@@ -47,7 +51,8 @@
         "lng": 212.3125,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 56,
@@ -57,7 +62,8 @@
         "lng": 220.25,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 56,
@@ -67,7 +73,8 @@
         "lng": 228.1875,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     },
     {
         "floor_id": 56,
@@ -77,6 +84,7 @@
         "lng": 156.625,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": null
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

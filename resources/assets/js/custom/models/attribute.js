@@ -1,3 +1,12 @@
+/**
+ * @property name {string}
+ * @property type {string}
+ * @property values {Array}
+ * @property admin {boolean}
+ * @property show_default {boolean}
+ * @property edit {boolean}
+ * @property save {boolean}
+ */
 class Attribute {
     constructor(options) {
         this.options = options;
@@ -13,7 +22,7 @@ class Attribute {
     /**
      * If `admin` is true and we are in an admin map, return true. If not set or of `admin` is false (and we are NOT in an admin state)
      * return true as well. False in all other cases.
-     * @returns {*|boolean|boolean}
+     * @returns {boolean}
      */
     isEditableAdmin() {
         return (
