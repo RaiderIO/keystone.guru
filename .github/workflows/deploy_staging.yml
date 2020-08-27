@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run update_live.sh on staging
+      - name: Update staging environment
         # Only trigger this pipeline when our source development
         if: github.actor == 'Wotuu'
         uses: appleboy/ssh-action@master
@@ -21,5 +21,5 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: echo ${{github}} &&
             cd /var/www/html/keystone.guru.staging/ &&
-            ./update_live.sh &&
+            php artisan update staging &&
             php artisan report:release discord

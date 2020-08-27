@@ -2,10 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Traits\ExecutesShellCommands;
 use Illuminate\Console\Command;
 
 class StartSupervisor extends Command
 {
+    use ExecutesShellCommands;
+
     /**
      * The name and signature of the console command.
      *
@@ -37,18 +40,18 @@ class StartSupervisor extends Command
      */
     public function handle()
     {
-        $this->info(trim(shell_exec('sudo supervisorctl reread')));
-        $this->info(trim(shell_exec('sudo supervisorctl update')));
-
         $appType = env('APP_TYPE');
         // Local environments don't call it local, but empty instead
         $appType = $appType === 'local' ? '' : $appType;
 
-        $this->info(trim(shell_exec(sprintf('sudo supervisorctl stop laravel-echo-server:%s', $appType))));
-        $this->info(trim(shell_exec(sprintf('sudo supervisorctl start laravel-echo-server:%s', $appType))));
-
-        $this->info(trim(shell_exec(sprintf('sudo supervisorctl stop laravel-horizon:%s', $appType))));
-        $this->info(trim(shell_exec(sprintf('sudo supervisorctl start laravel-horizon:%s', $appType))));
+        $this->shell([
+            'sudo supervisorctl reread',
+            'sudo supervisorctl update',
+            sprintf('sudo supervisorctl stop laravel-echo-server:%s', $appType),
+            sprintf('sudo supervisorctl start laravel-echo-server:%s', $appType),
+            sprintf('sudo supervisorctl stop laravel-horizon:%s', $appType),
+            sprintf('sudo supervisorctl start laravel-horizon:%s', $appType)
+        ]);
 
         return 0;
     }

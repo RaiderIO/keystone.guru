@@ -3,8 +3,13 @@
 namespace App\Console;
 
 use App\Console\Commands\CreateGithubRelease;
+use App\Console\Commands\Environment\UpdateLive;
+use App\Console\Commands\Environment\UpdateLocal;
+use App\Console\Commands\Environment\UpdateMapping;
+use App\Console\Commands\Environment\UpdateStaging;
 use App\Console\Commands\GetCurrentRelease;
 use App\Console\Commands\GetReleaseBody;
+use App\Console\Commands\Mapping\Save as MappingSave;
 use App\Console\Commands\ReportRelease;
 use App\Console\Commands\StartSupervisor;
 use App\Logic\Scheduler\FindOutdatedThumbnails;
@@ -26,6 +31,15 @@ class Kernel extends ConsoleKernel
         GetReleaseBody::class,
         ReportRelease::class,
         StartSupervisor::class,
+
+        // Environment
+        UpdateLive::class,
+        UpdateLocal::class,
+        UpdateMapping::class,
+        UpdateStaging::class,
+
+        // Mapping
+        MappingSave::class
     ];
 
     /**
