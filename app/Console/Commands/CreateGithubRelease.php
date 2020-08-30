@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Release;
-use App\Models\ReleaseGithubReleaseLog;
 use Github\Api\Repo;
 use Github\Exception\MissingArgumentException;
 use GrahamCampbell\GitHub\Facades\GitHub;
@@ -16,7 +15,7 @@ class CreateGithubRelease extends Command
      *
      * @var string
      */
-    protected $signature = 'make:githubrelease {version}';
+    protected $signature = 'make:githubrelease {version?}';
 
     /**
      * The console command description.

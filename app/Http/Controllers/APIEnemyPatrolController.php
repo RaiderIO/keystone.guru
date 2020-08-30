@@ -4,17 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Events\ModelChangedEvent;
 use App\Events\ModelDeletedEvent;
+use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Models\EnemyPatrol;
 use App\Models\Polyline;
+use Exception;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
 class APIEnemyPatrolController extends Controller
 {
+    use ChangesMapping;
     use ChecksForDuplicates;
     use ListsEnemyPatrols;
     use SavesPolylines;
@@ -27,12 +32,14 @@ class APIEnemyPatrolController extends Controller
     /**
      * @param Request $request
      * @return EnemyPatrol
-     * @throws \Exception
+     * @throws Exception
      */
     function store(Request $request)
     {
         /** @var EnemyPatrol $enemyPatrol */
         $enemyPatrol = EnemyPatrol::findOrNew($request->get('id'));
+
+        $enemyPatrolBefore = clone $enemyPatrol;
 
         $enemyPatrol->floor_id = $request->get('floor_id');
         $enemyPatrol->teeming = $request->get('teeming');
@@ -52,11 +59,16 @@ class APIEnemyPatrolController extends Controller
             // Load the polyline so it can be echoed back to the user
             $enemyPatrol->load(['polyline']);
 
-            if ($enemyPatrol->save() && Auth::check()) {
-                broadcast(new ModelChangedEvent($enemyPatrol->floor->dungeon, Auth::getUser(), $enemyPatrol));
+            if ($enemyPatrol->save()) {
+                if (Auth::check()) {
+                    broadcast(new ModelChangedEvent($enemyPatrol->floor->dungeon, Auth::getUser(), $enemyPatrol));
+                }
+
+                // Trigger mapping changed event so the mapping gets saved across all environments
+                $this->mappingChanged($enemyPatrolBefore, $enemyPatrol);
             }
         } else {
-            throw new \Exception('Unable to save enemy patrol!');
+            throw new Exception('Unable to save enemy patrol!');
         }
 
         return $enemyPatrol;
@@ -65,7 +77,7 @@ class APIEnemyPatrolController extends Controller
     /**
      * @param Request $request
      * @param EnemyPatrol $enemypatrol
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return array|ResponseFactory|Response
      */
     function delete(Request $request, EnemyPatrol $enemypatrol)
     {
@@ -74,9 +86,12 @@ class APIEnemyPatrolController extends Controller
                 if (Auth::check()) {
                     broadcast(new ModelDeletedEvent($enemypatrol->floor->dungeon, Auth::getUser(), $enemypatrol));
                 }
+
+                // Trigger mapping changed event so the mapping gets saved across all environments
+                $this->mappingChanged($enemypatrol, null);
             }
             $result = response()->noContent();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 

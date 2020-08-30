@@ -13,6 +13,7 @@ use App\Models\DungeonRoute;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Queue;
 
 class FindOutdatedThumbnails
 {
@@ -21,7 +22,6 @@ class FindOutdatedThumbnails
     function __invoke()
     {
         Log::channel('scheduler')->debug('>> Finding thumbnails');
-        /** @var Collection $routes */
         // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
         $routes = DungeonRoute::orderBy('published', 'desc')->get();
         Log::channel('scheduler')->debug(sprintf('Checking %s routes for thumbnails', $routes->count()));
@@ -30,7 +30,7 @@ class FindOutdatedThumbnails
         $processed = 0;
         $alreadyExists = 0;
 
-        $currentJobCount = \Queue::size($queue);
+        $currentJobCount = Queue::size($queue);
         foreach ($routes as $dungeonRoute) {
             /** @var DungeonRoute $dungeonRoute */
             $updatedAt = Carbon::createFromTimeString($dungeonRoute->updated_at);
@@ -56,7 +56,7 @@ class FindOutdatedThumbnails
                     !ProcessRouteFloorThumbnail::thumbnailsExistsForRoute($dungeonRoute)
                 )) {
 
-                if (!$this->isJobQueuedForModel(\App\Jobs\ProcessRouteFloorThumbnail::class, $dungeonRoute, $queue)) {
+                if (!$this->isJobQueuedForModel(ProcessRouteFloorThumbnail::class, $dungeonRoute, $queue)) {
                     Log::channel('scheduler')->debug(
                         sprintf('Queueing job for route %s (%s floors)',
                             $dungeonRoute->public_key, $dungeonRoute->dungeon->floors->count())
@@ -65,7 +65,7 @@ class FindOutdatedThumbnails
                     $dungeonRoute->queueRefreshThumbnails();
 
                     // Refresh the current job count, it should be increased now
-                    $currentJobCount = \Queue::size($queue);
+                    $currentJobCount = Queue::size($queue);
                     $processed++;
                 } else {
                     Log::channel('scheduler')->debug(

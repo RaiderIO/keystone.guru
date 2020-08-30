@@ -9,7 +9,7 @@ return [
 
     'reddit_subreddit' => 'KeystoneGuru',
 
-    'cache'          => [
+    'cache'                             => [
         'npcs'        => [
             'ttl' => '1 hour'
         ],
@@ -22,16 +22,22 @@ return [
     ],
 
     /**
+     * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
+     * This prevents active mapping efforts from getting commits every 2 minutes or something
+     */
+    'mapping_commit_after_change_hours' => 1,
+
+    /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
      */
-    'party_size'     => 5,
+    'party_size'                        => 5,
 
     /**
      * States of aggressiveness of NPCs. Aggressive = will aggro upon getting close, unfriendly = will not aggro,
      * but will soon turn aggressive (not sure if it's going to be used), neutral = will not aggro unless provoked.
      */
-    'aggressiveness' => ['aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'],
+    'aggressiveness'                    => ['aggressive', 'unfriendly', 'neutral', 'friendly', 'awakened'],
 
     'aggressiveness_pretty'              => ['Aggressive', 'Unfriendly', 'Neutral', 'Friendly', 'Awakened'],
 
