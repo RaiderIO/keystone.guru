@@ -44,8 +44,8 @@ class Update extends Command
     {
         $environment= $this->argument('environment');
 
-        $this->call('artisan:up');
-        $this->call('artisan:down', [
+        $this->call('up');
+        $this->call('down', [
             '--message' => 'Upgrading keystone.guru, we will be back stronger than ever shortly!',
             '--retry'   => 60
         ]);
