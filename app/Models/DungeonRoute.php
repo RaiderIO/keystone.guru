@@ -7,6 +7,7 @@ use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Service\Season\SeasonService;
 use App\User;
+use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -42,10 +43,10 @@ use Illuminate\Support\Facades\DB;
  * @property $pull_gradient string
  * @property $pull_gradient_apply_always boolean
  *
- * @property $thumbnail_updated_at string
- * @property $updated_at string
- * @property $created_at string
- * @property $expires_at string
+ * @property Carbon $thumbnail_updated_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $expires_at
  *
  * @property Dungeon $dungeon
  * @property Path $route

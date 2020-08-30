@@ -22,15 +22,15 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
- * @property Collection $floors
- * @property Collection $dungeonroutes
- * @property Collection $npcs
+ * @property Collection|Floor[] $floors
+ * @property Collection|DungeonRoute[] $dungeonroutes
+ * @property Collection|Npc[] $npcs
  *
- * @property Collection $enemies
- * @property Collection $enemypacks
- * @property Collection $enemypatrols
- * @property Collection $mapicons
- * @property Collection $floorswitchmarkers
+ * @property Collection|Enemy[] $enemies
+ * @property Collection|EnemyPack[] $enemypacks
+ * @property Collection|EnemyPatrol[] $enemypatrols
+ * @property Collection|MapIcon[] $mapicons
+ * @property Collection|DungeonFloorSwitchMarker[] $floorswitchmarkers
  *
  * @method static Builder active()
  * @method static Builder inactive()

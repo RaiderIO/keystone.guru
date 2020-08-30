@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ModelChangedEvent;
 use App\Events\ModelDeletedEvent;
+use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
@@ -21,6 +22,7 @@ use Teapot\StatusCode\Http;
 
 class APIMapIconController extends Controller
 {
+    use ChangesMapping;
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
     use ListsMapIcons;
@@ -52,7 +54,7 @@ class APIMapIconController extends Controller
             $this->authorize('edit', $dungeonroute);
         }
 
-        $mapIconTypeId = (int) $request->get('map_icon_type_id', 0);
+        $mapIconTypeId = (int)$request->get('map_icon_type_id', 0);
 
         if ($mapIconTypeId > 0) {
             /** @var MapIconType $mapIconType */
@@ -66,6 +68,8 @@ class APIMapIconController extends Controller
 
         /** @var MapIcon $mapIcon */
         $mapIcon = MapIcon::findOrNew($request->get('id'));
+
+        $mapIconBefore = clone $mapIcon;
 
         // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
         $teamId = $request->get('team_id', null);
@@ -83,13 +87,13 @@ class APIMapIconController extends Controller
         }
 
         // Only admins may make global comments for all routes
-        $mapIcon->floor_id = (int) $request->get('floor_id');
+        $mapIcon->floor_id = (int)$request->get('floor_id');
         $mapIcon->dungeon_route_id = $dungeonroute === null ? -1 : $dungeonroute->id;
         $mapIcon->map_icon_type_id = $mapIconTypeId;
-        $mapIcon->permanent_tooltip = (int) $request->get('permanent_tooltip', false);
+        $mapIcon->permanent_tooltip = (int)$request->get('permanent_tooltip', false);
         $seasonalIndex = $request->get('seasonal_index');
         // don't use empty() since 0 is valid
-        $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int) $seasonalIndex;
+        $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int)$seasonalIndex;
         $mapIcon->comment = $request->get('comment', '') ?? '';
         $mapIcon->lat = $request->get('lat');
         $mapIcon->lng = $request->get('lng');
@@ -98,15 +102,21 @@ class APIMapIconController extends Controller
             $this->checkForDuplicate($mapIcon);
         }
 
-        if (!$mapIcon->save()) {
-            throw new Exception('Unable to save map icon!');
-        } else {
+        if ($mapIcon->save()) {
             // Set or unset the linked awakened obelisks now that we have an ID
             $mapIcon->setLinkedAwakenedObeliskByMapIconId($request->get('linked_awakened_obelisk_id', null));
 
             if (Auth::check()) {
                 broadcast(new ModelChangedEvent($dungeonroute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
             }
+
+            // Only when icons that are sticky to the map are saved
+            if ($dungeonroute === null) {
+                // Trigger mapping changed event so the mapping gets saved across all environments
+                $this->mappingChanged($mapIconBefore, $mapIcon);
+            }
+        } else {
+            throw new Exception('Unable to save map icon!');
         }
 
         return $mapIcon;
@@ -136,6 +146,13 @@ class APIMapIconController extends Controller
                 if (Auth::check()) {
                     broadcast(new ModelDeletedEvent($dungeonroute ?? $mapicon->floor->dungeon, Auth::user(), $mapicon));
                 }
+
+                // Only when icons that are sticky to the map are saved
+                if ($dungeonroute === null) {
+                    // Trigger mapping changed event so the mapping gets saved across all environments
+                    $this->mappingChanged($mapicon, null);
+                }
+
                 $result = response()->noContent();
             } else {
                 $result = ['result' => 'error'];

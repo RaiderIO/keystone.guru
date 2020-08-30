@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Events\ModelChangedEvent;
 use App\Events\ModelDeletedEvent;
+use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Controllers\Traits\ChecksForDuplicates;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
-use App\Models\Npc;
 use App\Models\RaidMarker;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -22,6 +22,7 @@ use Teapot\StatusCode\Http;
 
 class APIEnemyController extends Controller
 {
+    use ChangesMapping;
     use PublicKeyDungeonRoute;
     use ChecksForDuplicates;
     use ListsEnemies;
@@ -59,24 +60,29 @@ class APIEnemyController extends Controller
         /** @var Enemy $enemy */
         $enemy = Enemy::findOrNew($request->get('id'));
 
-        $enemy->enemy_pack_id = (int) $request->get('enemy_pack_id');
+        $beforeEnemy = clone $enemy;
+
+        $enemy->enemy_pack_id = (int)$request->get('enemy_pack_id');
         $npcId = $request->get('npc_id', -1);
-        $enemy->npc_id = $npcId === null ? -1 : (int) $npcId;
+        $enemy->npc_id = $npcId === null ? -1 : (int)$npcId;
         // Only when set, otherwise default of -1
         $mdtId = $request->get('mdt_id', -1);
-        $enemy->mdt_id = $mdtId === null ? -1 : (int) $mdtId;
+        $enemy->mdt_id = $mdtId === null ? -1 : (int)$mdtId;
         $seasonalIndex = $request->get('seasonal_index');
         // don't use is_empty since 0 is valid
-        $enemy->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int) $seasonalIndex;
-        $enemy->floor_id = (int) $request->get('floor_id');
+        $enemy->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int)$seasonalIndex;
+        $enemy->floor_id = (int)$request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');
-        $enemy->enemy_forces_override = (int) $request->get('enemy_forces_override', -1);
-        $enemy->enemy_forces_override_teeming = (int) $request->get('enemy_forces_override_teeming', -1);
+        $enemy->enemy_forces_override = (int)$request->get('enemy_forces_override', -1);
+        $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
         $enemy->lat = $request->get('lat');
         $enemy->lng = $request->get('lng');
 
-        if (!$enemy->save()) {
+        if ($enemy->save()) {
+            // Trigger mapping changed event so the mapping gets saved across all environments
+            $this->mappingChanged($beforeEnemy, $enemy);
+        } else {
             throw new Exception('Unable to save enemy!');
         }
 
@@ -136,10 +142,13 @@ class APIEnemyController extends Controller
     function delete(Request $request, Enemy $enemy)
     {
         try {
-            if( $enemy->delete() ){
+            if ($enemy->delete()) {
                 if (Auth::check()) {
                     broadcast(new ModelDeletedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
                 }
+
+                // Trigger mapping changed event so the mapping gets saved across all environments
+                $this->mappingChanged($enemy, null);
             }
             $result = response()->noContent();
         } catch (Exception $ex) {
