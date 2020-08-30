@@ -40,8 +40,10 @@ class Update extends Command
      *
      * @return int
      */
-    public function handle($environment)
+    public function handle()
     {
+        $environment= $this->argument('environment');
+
         $this->call('artisan:up');
         $this->call('artisan:down', [
             '--message' => 'Upgrading keystone.guru, we will be back stronger than ever shortly!',
