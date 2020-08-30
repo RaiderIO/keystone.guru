@@ -47,10 +47,10 @@ class StartSupervisor extends Command
         $this->shell([
             'sudo supervisorctl reread',
             'sudo supervisorctl update',
-            sprintf('sudo supervisorctl stop laravel-echo-server:%s', $appType),
-            sprintf('sudo supervisorctl start laravel-echo-server:%s', $appType),
-            sprintf('sudo supervisorctl stop laravel-horizon:%s', $appType),
-            sprintf('sudo supervisorctl start laravel-horizon:%s', $appType)
+            sprintf('sudo supervisorctl stop laravel-echo-server-%s:*', $appType),
+            sprintf('sudo supervisorctl start laravel-echo-server-%s:*', $appType),
+            sprintf('sudo supervisorctl stop laravel-horizon-%s:*', $appType),
+            sprintf('sudo supervisorctl start laravel-horizon-%s:*', $appType)
         ]);
 
         return 0;

@@ -9,7 +9,9 @@
 namespace App\Logic\Scheduler;
 
 use App\Models\DungeonRoute;
+use Exception;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -22,7 +24,7 @@ class DeleteExpiredDungeonRoutes
         Log::channel('scheduler')->debug('>> Deleting expired routes');
 
         /** @var Collection $dungeonRoutes */
-        $dungeonRoutes = \App\Models\DungeonRoute::whereDate('expires_at', '<', \Illuminate\Support\Carbon::now()->toDateTimeString())
+        $dungeonRoutes = DungeonRoute::whereDate('expires_at', '<', Carbon::now()->toDateTimeString())
             ->where('expires_at', '!=', 0)->whereNotNull('expires_at')->get();
 
         // Retrieve all routes and then delete them
@@ -30,7 +32,7 @@ class DeleteExpiredDungeonRoutes
             /** @var $dungeonRoute DungeonRoute */
             try {
                 $dungeonRoute->delete();
-            } catch (\Exception $ex) {
+            } catch (Exception $ex) {
                 Log::channel('scheduler')->error($ex);
             }
         }

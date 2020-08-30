@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Models\Mapping\MappingCommitLog;
 use Illuminate\Console\Command;
 
 class Commit extends Command
@@ -31,10 +32,12 @@ class Commit extends Command
     public function handle()
     {
         $this->shell([
-            'git add database/seeds/dungeondata/*',
-            'git commit -m "Automated commit for mapping updates"',
-            'git push'
+            // Commit current changes
+            sprintf('cd %s && git add database/seeds/dungeondata/* && git commit -m "Automated commit for mapping updates" && git push', base_path()),
         ]);
+
+        // Does not have any real properties aside from a save date
+        (new MappingCommitLog())->save();
 
         return 0;
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ModelChangedEvent;
+use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\NpcFormRequest;
 use App\Models\Enemy;
 use App\Models\Npc;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class NpcController extends Controller
 {
+    use ChangesMapping;
 
     /**
      * Checks if the incoming request is a save as new request or not.
@@ -39,6 +41,8 @@ class NpcController extends Controller
         } else {
             $oldId = $npc->id;
         }
+
+        $npcBefore = clone $npc;
 
         $npc->id = $request->get('id');
         $npc->dungeon_id = $request->get('dungeon_id');
@@ -73,6 +77,9 @@ class NpcController extends Controller
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
             }
             broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
+
+            // Trigger mapping changed event so the mapping gets saved across all environments
+            $this->mappingChanged($npcBefore, $npc);
         } // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
         else {
             abort(500, 'Unable to save npc!');

@@ -17,6 +17,11 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.mapping/ &&
+            # Export mapping as-is
             php artisan mapping:save &&
+            # Commit and push mapping changes
             php artisan mapping:commit &&
+            # Create a merge request for the mapping branch
+            php artisan mapping:merge &&
+            # Perform updates for this environment
             php artisan update mapping

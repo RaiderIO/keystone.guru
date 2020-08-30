@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ModelDeletedEvent;
+use App\Http\Controllers\Traits\ChangesMapping;
 use App\Logic\Datatables\ColumnHandler\Users\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Users\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Users\NameColumnHandler;
@@ -14,6 +15,7 @@ use Teapot\StatusCode\Http;
 
 class APINpcController extends Controller
 {
+    use ChangesMapping;
 
     public function delete(Request $request)
     {
@@ -24,6 +26,10 @@ class APINpcController extends Controller
             if ($npc->delete()) {
                 broadcast(new ModelDeletedEvent($npc->dungeon, Auth::user(), $npc));
             }
+
+            // Trigger mapping changed event so the mapping gets saved across all environments
+            $this->mappingChanged($npc, null);
+
             $result = response()->noContent();
         } catch (\Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

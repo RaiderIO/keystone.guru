@@ -9,11 +9,15 @@ use App\Console\Commands\Environment\UpdateMapping;
 use App\Console\Commands\Environment\UpdateStaging;
 use App\Console\Commands\GetCurrentRelease;
 use App\Console\Commands\GetReleaseBody;
+use App\Console\Commands\Mapping\Commit as MappingCommit;
+use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Save as MappingSave;
 use App\Console\Commands\ReportRelease;
 use App\Console\Commands\StartSupervisor;
-use App\Logic\Scheduler\FindOutdatedThumbnails;
+use App\Console\Commands\Test;
 use App\Logic\Scheduler\DeleteExpiredDungeonRoutes;
+use App\Logic\Scheduler\FindOutdatedThumbnails;
+use App\Logic\Scheduler\SynchronizeMapping;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -39,13 +43,18 @@ class Kernel extends ConsoleKernel
         UpdateStaging::class,
 
         // Mapping
-        MappingSave::class
+        MappingCommit::class,
+        MappingMerge::class,
+        MappingSave::class,
+
+        // Test
+        Test::class
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -53,6 +62,9 @@ class Kernel extends ConsoleKernel
         Log::channel('scheduler')->debug('Starting scheduler');
         $schedule->call(new FindOutdatedThumbnails)->everyFiveMinutes();
         $schedule->call(new DeleteExpiredDungeonRoutes)->hourly();
+//        if (env('APP_TYPE') === 'mapping') {
+            $schedule->call(new SynchronizeMapping)->everyFiveMinutes();
+//        }
         Log::channel('scheduler')->debug('Finished scheduler');
     }
 
