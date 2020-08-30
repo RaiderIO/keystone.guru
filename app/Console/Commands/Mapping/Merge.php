@@ -4,6 +4,7 @@ namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use Github\Api\PullRequest;
+use Github\Exception\ValidationFailedException;
 use GrahamCampbell\GitHub\Facades\GitHub;
 use Illuminate\Console\Command;
 
@@ -56,13 +57,17 @@ class Merge extends Command
         }
 
         if (!$mrAlreadyExists) {
-            $githubPrClient->create($username, $repository, [
-                'title' => 'Mapping update',
-                'head'  => $head,
-                'base'  => $base,
-                'body'  => 'This is an automatically generated pull request because changes were detected and committed in https://mapping.keystone.guru/',
-            ]);
-            $this->info('Merge request created!');
+            try {
+                $githubPrClient->create($username, $repository, [
+                    'title' => 'Mapping update',
+                    'head'  => $head,
+                    'base'  => $base,
+                    'body'  => 'This is an automatically generated pull request because changes were detected and committed in https://mapping.keystone.guru/',
+                ]);
+                $this->info('Merge request created!');
+            } catch (ValidationFailedException $ex) {
+                $this->warn('Merge request not created - no changes between branches!');
+            }
         }
 
 

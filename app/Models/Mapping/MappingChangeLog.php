@@ -30,4 +30,12 @@ class MappingChangeLog extends Model
     {
         return $this->hasOne($this->model_class, 'model_id');
     }
+
+    public function shouldSynchronize(MappingCommitLog $mostRecentMappingCommitLog): bool
+    {
+        // If there is a more recent mapping change that we should update
+        return $this->created_at->isAfter($mostRecentMappingCommitLog->created_at) &&
+            // If the most recent change was far away enough in time
+            $this->created_at->addHours(config('keystoneguru.mapping_commit_after_change_hours'))->isPast();
+    }
 }
