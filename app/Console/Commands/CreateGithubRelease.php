@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Release;
 use Github\Api\Repo;
 use Github\Exception\MissingArgumentException;
+use Github\Exception\ValidationFailedException;
 use GrahamCampbell\GitHub\Facades\GitHub;
 use Illuminate\Console\Command;
 
@@ -71,13 +72,17 @@ class CreateGithubRelease extends Command
 
             $body = $release->getGithubBodyAttribute();
 
-            $githubRepoClient->releases()->create($username, $repository, [
-                'tag_name' => $release->version,
-                'name'     => $release->version,
-                'body'     => $body
-            ]);
+            try {
+                $githubRepoClient->releases()->create($username, $repository, [
+                    'tag_name' => $release->version,
+                    'name'     => $release->version,
+                    'body'     => $body
+                ]);
+                $this->info(sprintf('Successfully created GitHub release %s', $version));
+            } catch (ValidationFailedException $exception) {
+                $this->warn(sprintf('Unable to create Github release for %s: %s', $version, $exception->getMessage()));
+            }
 
-            $this->info(sprintf('Successfully created GitHub release %s', $version));
         } else {
             $this->error(sprintf('Unable to find release %s', $version));
         }
