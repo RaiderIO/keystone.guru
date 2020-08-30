@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\CreateGithubRelease;
+use App\Console\Commands\Environment\Update;
 use App\Console\Commands\Environment\UpdateLive;
 use App\Console\Commands\Environment\UpdateLocal;
 use App\Console\Commands\Environment\UpdateMapping;
@@ -37,6 +38,7 @@ class Kernel extends ConsoleKernel
         StartSupervisor::class,
 
         // Environment
+        Update::class,
         UpdateLive::class,
         UpdateLocal::class,
         UpdateMapping::class,

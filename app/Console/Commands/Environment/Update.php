@@ -5,7 +5,7 @@ namespace App\Console\Commands\Environment;
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use Illuminate\Console\Command;
 
-abstract class Update extends Command
+class Update extends Command
 {
     use ExecutesShellCommands;
 
@@ -14,7 +14,7 @@ abstract class Update extends Command
      *
      * @var string
      */
-    protected $description = 'Updates the currently running environment in a specific manner';
+    protected $description = 'Updates the environment using the default settings';
 
     /**
      * @var bool True to compile the project when updating, false not to
@@ -25,6 +25,11 @@ abstract class Update extends Command
      * @var string How to compile the project, may be either 'dev' or 'production'
      */
     protected $compileAs = 'production';
+
+    /**
+     * @var string
+     */
+    protected $signature = 'update';
 
     /**
      * Execute the console command.
