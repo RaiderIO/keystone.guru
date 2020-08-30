@@ -20,5 +20,5 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.staging/ &&
-            php artisan update:staging &&
+            php artisan environment:update staging &&
             php artisan report:release discord

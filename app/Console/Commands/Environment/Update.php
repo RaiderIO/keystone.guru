@@ -9,6 +9,20 @@ class Update extends Command
 {
     use ExecutesShellCommands;
 
+    const COMPILE = [
+        'live' => true,
+        'local' => false,
+        'mapping' => true,
+        'staging' => true
+    ];
+
+    const COMPILE_AS = [
+        'live' => 'production',
+        'local' => 'dev',
+        'mapping' => 'production',
+        'staging' => 'dev'
+    ];
+
     /**
      * The console command description.
      *
@@ -17,26 +31,16 @@ class Update extends Command
     protected $description = 'Updates the environment using the default settings';
 
     /**
-     * @var bool True to compile the project when updating, false not to
-     */
-    protected $compile = true;
-
-    /**
-     * @var string How to compile the project, may be either 'dev' or 'production'
-     */
-    protected $compileAs = 'production';
-
-    /**
      * @var string
      */
-    protected $signature = 'update';
+    protected $signature = 'environment:update {environment}';
 
     /**
      * Execute the console command.
      *
      * @return int
      */
-    public function handle()
+    public function handle($environment)
     {
         $this->call('artisan:up');
         $this->call('artisan:down', [
@@ -67,7 +71,7 @@ class Update extends Command
 
             // Write current version to file
             'git tag | (tail -n 1) > version',
-            $this->compile ? sprintf('npm run %s -- --env.full true', $this->compileAs) : null,
+            self::COMPILE[$environment] ? sprintf('npm run %s -- --env.full true', self::COMPILE_AS[$environment]) : null,
         ]);
 
         $this->call('horizon:publish');
