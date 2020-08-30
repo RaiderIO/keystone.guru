@@ -32,8 +32,17 @@ class Commit extends Command
     public function handle()
     {
         $this->shell([
-            // Commit current changes
-            sprintf('cd %s && git add database/seeds/dungeondata/* && git commit -m "Automated commit for mapping updates" && git push', base_path()),
+            sprintf('cd %s && ' .
+                // Commit current changes
+                'git add database/seeds/dungeondata/* && ' .
+                'git commit -m "Automated commit for mapping updates" && ' .
+                // Merge master into mapping
+                'git checkout master && ' .
+                'git pull && ' .
+                'git checkout mapping && ' .
+                'git merge master && ' .
+                // Push all changes
+                'git push', base_path()),
         ]);
 
         // Does not have any real properties aside from a save date
