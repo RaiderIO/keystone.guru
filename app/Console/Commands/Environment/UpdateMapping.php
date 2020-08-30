@@ -9,7 +9,7 @@ class UpdateMapping extends Update
      *
      * @var string
      */
-    protected $signature = 'keystoneguru:update live';
+    protected $signature = 'update:live';
 
     /**
      * Execute the console command.

@@ -9,7 +9,7 @@ class UpdateStaging extends Update
      *
      * @var string
      */
-    protected $signature = 'keystoneguru:update staging';
+    protected $signature = 'update:staging';
 
     protected $compileAs = 'dev';
 

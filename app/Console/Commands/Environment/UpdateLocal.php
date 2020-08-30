@@ -9,7 +9,7 @@ class UpdateLocal extends Update
      *
      * @var string
      */
-    protected $signature = 'keystoneguru:update local';
+    protected $signature = 'update:local';
 
     protected $compile = false;
 
