@@ -24,4 +24,4 @@ jobs:
             # Create a merge request for the mapping branch
             php artisan mapping:merge &&
             # Perform updates for this environment
-            php artisan update mapping
+            php artisan keystoneguru:update mapping

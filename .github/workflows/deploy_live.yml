@@ -17,7 +17,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.live/ &&
-            php artisan update live &&
+            php artisan keystoneguru:update live &&
             php artisan make:githubrelease &&
             php artisan report:release discord &&
             php artisan report:release reddit

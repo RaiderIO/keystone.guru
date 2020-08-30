@@ -21,5 +21,5 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: echo ${{github}} &&
             cd /var/www/html/keystone.guru.staging/ &&
-            php artisan update staging &&
+            php artisan keystoneguru:update staging &&
             php artisan report:release discord
