@@ -29,12 +29,7 @@ class SynchronizeMapping
 
         if ($mostRecentMappingChangeLog !== null) {
             // If not synced at all yet, or if we've synced, but it was before any changes were done
-            if ($mostRecentMappingCommitLog === null || (
-                    // If there is a more recent mapping change that we should update
-                    $mostRecentMappingChangeLog->created_at->isAfter($mostRecentMappingCommitLog->created_at) &&
-                    // If the most recent change was far away enough in time
-                    $mostRecentMappingChangeLog->created_at->addHours(config('keystoneguru.mapping_commit_after_change_hours'))->isPast()
-                )) {
+            if ($mostRecentMappingCommitLog === null || $mostRecentMappingChangeLog->shouldSynchronize($mostRecentMappingCommitLog)) {
                 if (Artisan::call('mapping:save') === 0 &&
                     Artisan::call('mapping:commit') === 0 &&
                     Artisan::call('mapping:merge') === 0) {
