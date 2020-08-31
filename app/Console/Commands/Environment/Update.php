@@ -80,12 +80,12 @@ class Update extends Command
 
         $this->call('migrate', [
             '--database' => 'migrate',
-            '--force'
+            '--force' => true
         ]);
 
         $this->call('db:seed', [
             '--database' => 'migrate',
-            '--force'
+            '--force' => true
         ]);
 
         $this->call('optimize:clear');
