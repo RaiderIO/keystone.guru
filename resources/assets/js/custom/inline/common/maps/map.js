@@ -3,16 +3,6 @@ class CommonMapsMap extends InlineCode {
     constructor(options) {
         super(options);
         this._dungeonMap = null;
-        this._introTexts = [];
-
-        // Add all intro texts that exist
-        let count = 1;
-        let text;
-        while ((text = lang.get('messages.intro_' + count)) !== 'messages.intro_' + count) {
-            this._introTexts.push(text);
-
-            count++;
-        }
     }
 
     /**
@@ -51,40 +41,46 @@ class CommonMapsMap extends InlineCode {
 
             // Bind leaflet virtual tour classes
             let selectors = [
-                ['#sidebar', 'right'],
-                ['#sidebarToggle', 'right'],
+                ['intro_sidebar', '#editsidebar', 'right'],
+                ['intro_sidebar_toggle', '#editsidebarToggle', 'right'],
 
-                ['.visibility_tools', 'right'],
-                ['#map_enemy_visuals', 'right'],
-                ['.floor_selection', 'right'],
+                ['intro_visibility_tools', '.visibility_tools', 'right'],
+                ['intro_map_enemy_visuals', '#map_enemy_visuals', 'right'],
+                ['intro_map_map_object_group_visibility_container', '#map_map_object_group_visibility_container', 'right'],
+                ['intro_floor_selection', '#map_floor_selection', 'right'],
 
-                ['.route_actions', 'right'],
+                ['intro_route_actions', '.route_actions', 'right'],
+                ['intro_route_actions_draw_settings', '#map_draw_settings_btn_container', 'right'],
+                ['intro_route_actions_map_login_and_continue', '#map_login_and_continue', 'right'],
+                ['intro_route_actions_map_register_and_continue', '#map_register_and_continue', 'right'],
+                ['intro_route_actions_save_and_continue', '#map_save_and_continue', 'right'],
 
-                ['.route_manipulation_tools', 'left'],
-                ['#map_enemy_forces_numbers', 'left'],
-                ['.leaflet-draw-draw-path', 'left'],
-                ['.leaflet-draw-draw-killzone', 'left'],
-                ['.leaflet-draw-draw-icon', 'left'],
-                ['.leaflet-draw-draw-brushline', 'left'],
+                ['intro_route_manipulation_tools', '.route_manipulation_tools', 'top'],
+                ['intro_map_enemy_forces_numbers', '#map_enemy_forces_numbers', 'left'],
+                ['intro_draw_path', '.leaflet-draw-draw-path', 'left'],
+                ['intro_draw_killzone', '.leaflet-draw-draw-killzone', 'left'],
+                ['intro_draw_icon', '.leaflet-draw-draw-icon', 'left'],
+                ['intro_draw_brushline', '.leaflet-draw-draw-brushline', 'left'],
 
-                ['.leaflet-draw-edit-edit', 'left'],
-                ['.leaflet-draw-edit-remove', 'left'],
+                ['intro_draw_edit', '.leaflet-draw-edit-edit', 'left'],
+                ['intro_draw_remove', '.leaflet-draw-edit-remove', 'left'],
 
-                ['#edit_route_freedraw_options_color', 'left'],
-                ['.draw_element .bootstrap-select', 'left'],
-
-                ['#map_controls .leaflet-draw-toolbar', 'left'],
+                ['intro_draw_freedraw', '#edit_route_freedraw_options_color', 'left'],
             ];
 
             this._dungeonMap.register('map:refresh', null, function () {
                 // Upon map refresh, re-init the tutorial selectors
+                let step = 1;
                 for (let i = 0; i < selectors.length; i++) {
-                    let $selector = $(selectors[i][0]);
+                    let $selector = $(selectors[i][1]);
                     // Floor selection may not exist
                     if ($selector.length > 0) {
-                        $selector.attr('data-intro', self._introTexts[i]);
-                        $selector.attr('data-position', selectors[i][1]);
-                        $selector.attr('data-step', i + 1);
+                        let messageKey = selectors[i][0];
+                        $selector.attr('data-intro', lang.get(`messages.${messageKey}`));
+                        $selector.attr('data-position', selectors[i][2]);
+                        $selector.attr('data-step', step);
+
+                        step++;
                     }
                 }
 

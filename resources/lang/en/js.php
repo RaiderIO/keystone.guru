@@ -151,35 +151,36 @@ return [
     'route_table_route_unpublished' => 'This route is unpublished',
 
     // Map
-    'intro_1'                       => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
-    'intro_2'                       => 'You can use this button to hide or show the sidebar.',
+    'intro_sidebar'                       => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
+    'intro_sidebar_toggle'                       => 'You can use this button to hide or show the sidebar.',
 
-    'intro_3' => 'Here you can select different visualization options.',
-    'intro_4' => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',
+    'intro_visibility_tools' => 'Here you can select different visualization options.',
+    'intro_map_map_object_group_visibility_container' => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',
 
-    'intro_5' => 'If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.',
+    'intro_map_elements' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own pulls, all map icons, start markers and floor switch markers.',
 
-    'intro_6' => 'These are some actions you can perform on the current route, register if you\'re not registered or login if you have.',
+    'intro_floor_selection' => 'If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.',
 
-    'intro_7'  => 'These are your route manipulation tools.',
-    'intro_8'  => 'This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).',
-    'intro_9'  => 'You can draw paths with this tool. Click it, then draw a path (which is a simple line with directional arrows) from A to B, with as many points are you like. Once finished, you can click
+    'intro_route_actions' => 'These are some actions you can perform while viewing or editing this route.',
+    'intro_route_actions_draw_settings'  => 'Opening the draw settings will allow you adjust some default variables and behaviour to make your life easier.',
+    'intro_route_actions_map_login_and_continue' => 'If you\'re already a member of Keystone.guru but not logged in, you can log in here and save the current route to your profile.',
+    'intro_route_actions_map_register_and_continue' => 'If you\'re not yet a member of Keystone.guru, you can register here and save the current route to your profile.',
+    'intro_route_actions_save_and_continue'  => 'While trying out a route, you can opt to save it to your profile.',
+
+    'intro_route_manipulation_tools'  => 'These are your route manipulation tools.',
+    'intro_map_enemy_forces_numbers'  => 'This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).',
+    'intro_draw_path'  => 'You can draw paths with this tool. Click it, then draw a path (which is a simple line with directional arrows) from A to B, with as many points are you like. Once finished, you can click
             the line on the map to change its color. You can add as many paths as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
             or purple for a Warlock Gateway, for example.',
-    'intro_10' => 'This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
+    'intro_draw_killzone' => 'This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
             You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
             Once you have selected enemies your enemy forces (the label above here) will update to reflect your new enemy forces counter.',
-    'intro_11' => 'Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.',
-    'intro_12' => 'Use this control to free draw lines on your route.',
+    'intro_draw_icon' => 'Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.',
+    'intro_draw_brushline' => 'Use this control to free draw lines on your route.',
 
-    'intro_13' => 'This is the edit button. You can use it to adjust your created routes, move your killzones, comments or free drawn lines.',
-    'intro_14' => 'This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
+    'intro_draw_edit' => 'This is the edit button. You can use it to adjust your created routes, move your killzones, comments or free drawn lines.',
+    'intro_draw_remove' => 'This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
             that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!',
-
-    'intro_15' => 'The color selection affect newly placed free drawn lines and routes. Killzones get the selected color by default.',
-    'intro_16' => 'The weight (thickness) of newly placed free drawn lines and routes.',
-
-    'intro_17'                                                      => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own killzones, all map icons, start markers and floor switch markers.',
 
     // Sidebar
     'sidebar_expand'                                                => 'Expand the sidebar',
