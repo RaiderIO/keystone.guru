@@ -56,16 +56,14 @@ class CommonMapsMap extends InlineCode {
                 ['intro_route_actions_save_and_continue', '#map_save_and_continue', 'right'],
 
                 ['intro_route_manipulation_tools', '.route_manipulation_tools', 'top'],
-                ['intro_map_enemy_forces_numbers', '#map_enemy_forces_numbers', 'left'],
                 ['intro_draw_path', '.leaflet-draw-draw-path', 'left'],
-                ['intro_draw_killzone', '.leaflet-draw-draw-killzone', 'left'],
-                ['intro_draw_icon', '.leaflet-draw-draw-icon', 'left'],
+                ['intro_draw_mapicon', '.leaflet-draw-draw-mapicon', 'left'],
                 ['intro_draw_brushline', '.leaflet-draw-draw-brushline', 'left'],
 
                 ['intro_draw_edit', '.leaflet-draw-edit-edit', 'left'],
                 ['intro_draw_remove', '.leaflet-draw-edit-remove', 'left'],
 
-                ['intro_draw_freedraw', '#edit_route_freedraw_options_color', 'left'],
+                ['intro_map_enemy_forces_numbers', '#map_enemy_forces_numbers', 'left'],
             ];
 
             this._dungeonMap.register('map:refresh', null, function () {

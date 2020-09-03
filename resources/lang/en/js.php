@@ -151,36 +151,30 @@ return [
     'route_table_route_unpublished' => 'This route is unpublished',
 
     // Map
-    'intro_sidebar'                       => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
-    'intro_sidebar_toggle'                       => 'You can use this button to hide or show the sidebar.',
+    'intro_sidebar'                 => 'Welcome to Keystone.guru! To begin, this is the sidebar. Here you can adjust options for your route or view information about it.',
+    'intro_sidebar_toggle'          => 'You can use this button to hide or show the sidebar.',
 
-    'intro_visibility_tools' => 'Here you can select different visualization options.',
-    'intro_map_map_object_group_visibility_container' => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',
+    'intro_visibility_tools'                          => 'Here you can select different visualization options.',
+    'intro_map_enemy_visuals'                         => 'You can choose from multiple different enemy visualizations to help you quickly find the information you need.',
+    'intro_map_map_object_group_visibility_container' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own pulls, all map icons, start markers and floor switch markers.',
+    'intro_floor_selection'                           => 'If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.',
 
-    'intro_map_elements' => 'These are your visibility toggles. You can hide enemies, enemy patrols, enemy packs, your own routes, your own pulls, all map icons, start markers and floor switch markers.',
-
-    'intro_floor_selection' => 'If your dungeon has multiple floors, this is where you can change floors. You can also click the doors on the map to go to the next floor.',
-
-    'intro_route_actions' => 'These are some actions you can perform while viewing or editing this route.',
-    'intro_route_actions_draw_settings'  => 'Opening the draw settings will allow you adjust some default variables and behaviour to make your life easier.',
-    'intro_route_actions_map_login_and_continue' => 'If you\'re already a member of Keystone.guru but not logged in, you can log in here and save the current route to your profile.',
+    'intro_route_actions'                           => 'These are various actions you can perform while viewing or editing your route.',
+    'intro_route_actions_draw_settings'             => 'Opening the draw settings will allow you adjust some default variables and behaviour to make editing your route easier.',
+    'intro_route_actions_map_login_and_continue'    => 'If you\'re already a member of Keystone.guru but not logged in, you can log in here and save the current route to your profile.',
     'intro_route_actions_map_register_and_continue' => 'If you\'re not yet a member of Keystone.guru, you can register here and save the current route to your profile.',
-    'intro_route_actions_save_and_continue'  => 'While trying out a route, you can opt to save it to your profile.',
+    'intro_route_actions_save_and_continue'         => 'While trying out a route when you\'re loggedin, you can opt to save it to your profile.',
 
-    'intro_route_manipulation_tools'  => 'These are your route manipulation tools.',
-    'intro_map_enemy_forces_numbers'  => 'This label indicates the current progress with enemy forces. Use \'killzones\' to mark an enemy as killed and see this label updated (more on this in a bit!).',
-    'intro_draw_path'  => 'You can draw paths with this tool. Click it, then draw a path (which is a simple line with directional arrows) from A to B, with as many points are you like. Once finished, you can click
-            the line on the map to change its color. You can add as many paths as you want, use the colors to your advantage. Color the line yellow for Rogue Shrouding,
-            or purple for a Warlock Gateway, for example.',
-    'intro_draw_killzone' => 'This is a \'killzone\'. You use these zones to indicate what enemies you are killing, and most importantly, where. Place a zone on the map and click it again.
-            You can then select any enemy on the map that has not already \'been killed\' by another kill zone. When you select a pack, you automatically select all enemies in the pack.
-            Once you have selected enemies your enemy forces (the label above here) will update to reflect your new enemy forces counter.',
-    'intro_draw_icon' => 'Use this control to place comments on the map, for example to indicate you\'re skipping a patrol or to indicate details and background info in your route.',
-    'intro_draw_brushline' => 'Use this control to free draw lines on your route.',
+    'intro_route_manipulation_tools' => 'These are your route manipulation tools.',
+    'intro_draw_path'                => 'You can draw paths with this tool. Click it, then draw a path (which is a simple line with directional arrows) from A to B, with as many points are you like. Once finished, you can click
+            the line on the map to change its color or thickness.',
+    'intro_draw_mapicon'             => 'Use this tool to place icons on the map with an optional comment.',
+    'intro_draw_brushline'           => 'Use this tool to draw lines in a more flexible manner on your route.',
 
-    'intro_draw_edit' => 'This is the edit button. You can use it to adjust your created routes, move your killzones, comments or free drawn lines.',
-    'intro_draw_remove' => 'This is the delete button. Click it once, then select the controls you wish to delete. Deleting happens in a preview mode, you have to confirm your delete in a label
-            that pops up once you press the button. You can then confirm or cancel your staged changes. If you confirm the deletion, there is no turning back!',
+    'intro_draw_edit'   => 'You can use the edit button to adjust your created elements such as icons or drawn lines.',
+    'intro_draw_remove' => 'You can use the delete button to remove elements you have created. Click it once, then select the highlighted elements you wish to delete. Deleting happens in a preview mode, you have to confirm your delete by pressing the \'Finish\' button, or hit the \'Cancel\' button to undo them. If you confirm the deletion, there is no turning back!',
+
+    'intro_map_enemy_forces_numbers'                                => 'This label indicates the current progress with enemy forces. You can click on enemies to add them to a new pull, or select a pull from the list below and add enemies to it.',
 
     // Sidebar
     'sidebar_expand'                                                => 'Expand the sidebar',
