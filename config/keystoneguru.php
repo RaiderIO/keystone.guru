@@ -21,6 +21,51 @@ return [
         ]
     ],
 
+    'echo' => [
+        'randomsuffixes' => [
+            // Basilisks
+            'Stonegazer',
+            // Bats
+            'Shrieker',
+            'Duskbat',
+            // Bears
+            'Grizzly',
+            'Shardtooth',
+            // Birds
+            'Falcon',
+            'Raven',
+            'Seagull',
+            // Cat
+            'Shadow Stalker',
+            'Sabercat',
+            'Panther',
+            'Frostsaber',
+            'Lynx',
+            // Clefthoof
+            'Clefthoof',
+            'Calf',
+            'Bull',
+            // Crab
+            'Sharpclaw',
+            'Glimmershell',
+            'Crab',
+            'Rockshell',
+            'Crawler',
+            // Devilsaur
+            'Devilsaur',
+            'Fleshrender',
+            // Dog
+            'Hound',
+            'Darkhound',
+            'Watchdog',
+            'Mastiff',
+            'Deathhound',
+            'Felbeast',
+
+            // Can add more here, see https://www.wowhead.com/basilisk-npcs
+        ]
+    ],
+
     /**
      * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
      * This prevents active mapping efforts from getting commits every 2 minutes or something

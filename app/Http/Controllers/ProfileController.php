@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\DungeonRoute\UserColorChangedEvent;
+use App\Events\UserColorChangedEvent;
 use App\Models\DungeonRoute;
 use App\Service\EchoServerHttpApiService;
 use App\User;
@@ -47,6 +47,7 @@ class ProfileController extends Controller
             $user->email = $request->get('email');
         }
         $user->echo_color = $request->get('echo_color');
+        $user->echo_anonymous = $request->get('echo_anonymous', false);
         $user->game_server_region_id = $request->get('game_server_region_id');
         $user->timezone = $request->get('timezone');
 

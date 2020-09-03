@@ -26,6 +26,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property string $name
  * @property string $email
  * @property string $echo_color
+ * @property boolean $echo_anonymous
  * @property string $password
  * @property boolean $legal_agreed
  * @property int $legal_agreed_ms

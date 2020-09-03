@@ -51,6 +51,8 @@ $deleteConsequences = $user->getDeleteConsequences();
         <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
             <h3>{{ __('My routes') }}</h3>
 
+            @include('common.general.messages')
+
             @include('common.dungeonroute.table', ['view' => 'profile'])
         </div>
 
@@ -59,7 +61,6 @@ $deleteConsequences = $user->getDeleteConsequences();
             <h4>
                 {{ $menuTitle }}
             </h4>
-            @include('common.general.messages')
 
             @if($isOAuth && !$user->changed_username)
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -86,6 +87,15 @@ $deleteConsequences = $user->getDeleteConsequences();
             </div>
             <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }}">
                 @include('common.forms.timezoneselect', ['selected' => $user->timezone])
+            </div>
+            <div class="form-group{{ $errors->has('echo_anonymous') ? ' has-error' : '' }}">
+                <label for="echo_anonymous">
+                    {{ __('Show as Anonymous') }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                       title="{{ __('Enabling this option will show you as \'Anonymous\' when viewing routes that are not part of any teams you are a part of.
+                            For your own routes and for routes part of your teams, your name will always be visible.') }}"></i>
+                </label>
+                {!! Form::checkbox('echo_anonymous', 1, $user->echo_anonymous, ['class' => 'form-control left_checkbox']) !!}
             </div>
             <div class="form-group{{ $errors->has('echo_color') ? ' has-error' : '' }}">
                 <label for="echo_color">
