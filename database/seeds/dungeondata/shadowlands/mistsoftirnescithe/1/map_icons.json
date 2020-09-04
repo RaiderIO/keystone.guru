@@ -1,1 +1,35 @@
-[]
+[
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -49.375,
+        "lng": 354.375,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -60.3125,
+        "lng": 347.625,
+        "comment": "Requires Night Fae to unlock",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -62.75,
+        "lng": 273,
+        "comment": "Unlocks after killing the first boss.",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    }
+]

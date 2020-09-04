@@ -1,1 +1,79 @@
-[]
+[
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 11,
+        "lat": -112.125,
+        "lng": 227.5,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 11,
+        "lat": -112,
+        "lng": 160.5,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 11,
+        "lat": -185.625,
+        "lng": 161.875,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 11,
+        "lat": -185.5,
+        "lng": 227.625,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 12,
+        "lat": -149.21875,
+        "lng": 253.25,
+        "comment": "Activates after entering Ardenweald.",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 37,
+        "lat": -136.78125,
+        "lng": 251.25,
+        "comment": "Night Fae: Haunted Urn",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 39,
+        "lat": -200.125,
+        "lng": 157,
+        "comment": "Night Fae: Haunted Urn",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    }
+]
