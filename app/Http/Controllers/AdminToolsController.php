@@ -73,7 +73,7 @@ class AdminToolsController extends Controller
 
         $aggressivenessMapping = [
             -1 => 'aggressive',
-            0  => 'neutal',
+            0  => 'neutral',
             1  => 'friendly'
         ];
 

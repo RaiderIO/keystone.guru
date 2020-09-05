@@ -729,7 +729,7 @@
         "base_health": 12345,
         "enemy_forces": -1,
         "enemy_forces_teeming": -1,
-        "aggressiveness": "",
+        "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
