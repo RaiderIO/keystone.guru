@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
         MappingSave::class,
 
         // Test
-        Test::class
+        Test::class,
     ];
 
     /**

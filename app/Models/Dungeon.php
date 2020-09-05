@@ -14,6 +14,7 @@ use Mockery\Exception;
 /**
  * @property int $id The ID of this Dungeon.
  * @property int $expansion_id The linked expansion to this dungeon.
+ * @property int $zone_id The ID of the location that WoW has given this dungeon.
  * @property string $name The name of the dungeon.
  * @property string $key Shorthand key of the dungeon
  * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.

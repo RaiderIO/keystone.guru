@@ -18,6 +18,13 @@ if (isset($model)) {
 } else {
     $bolsteringNpcs += \App\Models\Npc::all()->pluck('name', 'id')->toArray();
 }
+
+$dungeonsSelect = ['All' => [-1 => __('All dungeons')]];
+$dungeonsByExpansion = \App\Models\Dungeon::orderByRaw('expansion_id, name')->get()->groupBy('expansion_id');
+
+foreach ($dungeonsByExpansion as $expansionId => $dungeons) {
+    $dungeonsSelect[\App\Models\Expansion::findOrFail($expansionId)->name] = $dungeons->pluck('name', 'id')->toArray();
+}
 ?>
 
 @section('content')
@@ -47,7 +54,7 @@ if (isset($model)) {
 
     <div class="form-group">
         {!! Form::label('dungeon_id', __('Dungeon') . '<span class="form-required">*</span>', [], false) !!}
-        {!! Form::select('dungeon_id', [-1 => __('All dungeons')] + \App\Models\Dungeon::active()->orderBy('name')->get()->pluck('name', 'id')->toArray(), null, ['class' => 'form-control']) !!}
+        {!! Form::select('dungeon_id', $dungeonsSelect, null, ['class' => 'form-control']) !!}
     </div>
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
