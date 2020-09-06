@@ -1,1 +1,35 @@
-[]
+[
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -73.375,
+        "lng": 262.125,
+        "comment": "Bloody Javelin",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -87.75,
+        "lng": 282,
+        "comment": "Forgotten Forgehammer",
+        "permanent_tooltip": 0,
+        "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 41,
+        "lat": -20.25,
+        "lng": 36.5,
+        "comment": "1 Chest 32:00\n2 Chests 25:36\n3 Chests 19:12",
+        "permanent_tooltip": 1,
+        "seasonal_index": 0,
+        "is_admin": true
+    }
+]
