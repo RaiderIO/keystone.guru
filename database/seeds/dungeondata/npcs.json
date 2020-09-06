@@ -70,5 +70,23 @@
         "bolstering": 0,
         "sanguine": 0,
         "npcbolsteringwhitelists": []
+    },
+    {
+        "id": 173729,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "name": "Manifestation of Pride",
+        "base_health": 12345,
+        "enemy_forces": -1,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
     }
 ]
