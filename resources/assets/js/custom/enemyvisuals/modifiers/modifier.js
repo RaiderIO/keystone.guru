@@ -71,7 +71,7 @@ class EnemyVisualModifier extends EnemyVisualIcon {
      * @param width {float}
      * @param height {float}
      * @param margin {float}
-     * @returns {}
+     * @returns {Object}
      * @private
      */
     _getLocation(width, height, margin) {

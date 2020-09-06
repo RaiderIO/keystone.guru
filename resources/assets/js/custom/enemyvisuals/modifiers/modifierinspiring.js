@@ -1,15 +1,15 @@
-class EnemyVisualModifierAwakened extends EnemyVisualModifier {
+class EnemyVisualModifierInspiring extends EnemyVisualModifier {
     constructor(enemyvisual, index) {
         super(enemyvisual, index);
         // If it's loaded already, set it now
-        this.iconName = 'awakened_obelisk';
+        this.iconName = 'inspiring';
     }
 
     /**
      * @inheritDoc
      */
     _getName() {
-        return 'awakened';
+        return 'inspiring';
     }
 
     /**
@@ -18,7 +18,7 @@ class EnemyVisualModifierAwakened extends EnemyVisualModifier {
     _getValidIconNames() {
         return [
             '', // we are allowed to have nothing
-            'awakened_obelisk',
+            'inspiring',
         ];
     }
 
@@ -26,7 +26,7 @@ class EnemyVisualModifierAwakened extends EnemyVisualModifier {
      * @inheritDoc
      */
     _getVisibleAtZoomLevel(){
-        return c.map.enemy.awakened_display_zoom;
+        return c.map.enemy.inspiring_display_zoom;
     }
 
     /**
@@ -44,7 +44,7 @@ class EnemyVisualModifierAwakened extends EnemyVisualModifier {
      * @inheritDoc
      */
     _getTemplateData(width, height, margin) {
-        console.assert(this instanceof EnemyVisualModifierAwakened, 'this is not an EnemyVisualModifierAwakened!', this);
+        console.assert(this instanceof EnemyVisualModifierInspiring, 'this is not an EnemyVisualModifierAwakened!', this);
 
         return $.extend({}, super._getTemplateData(width, height, margin), this._getLocation(width, height, margin), {
             classes: 'modifier_external ' + this.iconName,

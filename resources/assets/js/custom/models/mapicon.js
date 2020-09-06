@@ -183,9 +183,23 @@ class MapIcon extends MapObject {
             }),
             new Attribute({
                 name: 'seasonal_index',
-                type: 'int',
+                type: 'select',
                 admin: true,
-                default: null
+                default: null,
+                values: [
+                    {id: 0, name: 'Week 1'},
+                    {id: 1, name: 'Week 2'},
+                    {id: 2, name: 'Week 3'},
+                    {id: 3, name: 'Week 4'},
+                    {id: 4, name: 'Week 5'}
+                ],
+                setter: function (value) {
+                    // NaN check
+                    if (value === -1 || value === '' || value !== value) {
+                        value = null;
+                    }
+                    self.seasonal_index = value;
+                }
             }),
             new Attribute({
                 name: 'comment',

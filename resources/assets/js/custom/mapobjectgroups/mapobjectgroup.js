@@ -120,7 +120,10 @@ class MapObjectGroup extends Signalable {
         for (let i = 0; i < this.objects.length; i++) {
             let mapObject = this.objects[i];
             if (mapObject.hasOwnProperty('seasonal_index') && mapObject.seasonal_index !== null) {
-                this.setMapObjectVisibility(mapObject, mapObject.seasonal_index === seasonalIndexChangedEvent.data.seasonalIndex);
+                // Only hide/show awakened enemies based on their seasonal index
+                if (!mapObject.hasOwnProperty('seasonal_type') || mapObject.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) {
+                    this.setMapObjectVisibility(mapObject, mapObject.seasonal_index === seasonalIndexChangedEvent.data.seasonalIndex);
+                }
             }
         }
     }
@@ -355,7 +358,7 @@ class MapObjectGroup extends Signalable {
      * @param objectInitializedEvent {object}
      * @private
      */
-    _onObjectInitialized(objectInitializedEvent){
+    _onObjectInitialized(objectInitializedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let object = objectInitializedEvent.context;

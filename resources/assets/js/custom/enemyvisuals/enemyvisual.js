@@ -186,8 +186,12 @@ class EnemyVisual extends Signalable {
             }
 
             // Awakened marker
-            if (this.enemy.npc.dungeon_id === -1) {
+            if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) {
                 modifiers.push(new EnemyVisualModifierAwakened(this, 3));
+            }
+            // Inspiring marker
+            else if (this.enemy.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING) {
+                modifiers.push(new EnemyVisualModifierInspiring(this, 3));
             }
         }
 
