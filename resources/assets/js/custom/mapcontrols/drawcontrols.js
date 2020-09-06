@@ -30,6 +30,10 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
             handler: new L.Draw.Enemy(map, this.options.enemy),
             title: this.options.enemy.title
         }, {
+            enabled: this.options.pridefulenemy,
+            handler: new L.Draw.PridefulEnemy(map, this.options.pridefulenemy),
+            title: this.options.pridefulenemy.title
+        }, {
             enabled: this.options.enemypatrol,
             handler: new L.Draw.EnemyPatrol(map, this.options.enemypatrol),
             title: this.options.enemypatrol.title
@@ -116,6 +120,9 @@ class DrawControls extends MapControl {
             cssClass: 'leaflet-draw-draw-brushline',
         }, {
             hotkey: '4',
+            cssClass: 'leaflet-draw-draw-pridefulenemy',
+        }, {
+            hotkey: '5',
             cssClass: 'leaflet-draw-edit-edit',
         }];
     }
@@ -207,6 +214,13 @@ class DrawControls extends MapControl {
                     cssClass: 'd-none',
                     faClass: 'fa-icons',
                     title: 'Create an awakened obelisk gateway icon',
+                },
+                pridefulenemy: {
+                    repeatMode: false,
+                    zIndexOffset: 1000,
+                    faClass: 'fa-user',
+                    title: 'Create a prideful enemy',
+                    hotkey: this._findHotkeyByCssClass('pridefulenemy')
                 },
                 brushline: false,
                 // Brushlines are added in a custom way since I'm using Pather for this

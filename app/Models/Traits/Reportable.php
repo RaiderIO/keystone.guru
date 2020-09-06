@@ -10,6 +10,6 @@ trait Reportable
      */
     function userreports()
     {
-        return $this->hasMany('App\Models\UserReport', 'model_id')->where('model_class', '=', get_class($this));
+        return $this->hasMany('App\Models\UserReport', 'model_id')->where('model_class', get_class($this));
     }
 }

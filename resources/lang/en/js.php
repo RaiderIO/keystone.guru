@@ -91,6 +91,7 @@ return [
 
     'enemypack'                      => 'Pack',
     'enemy'                          => 'Enemy',
+    'pridefulenemy'                  => 'Prideful',
     'enemypatrol'                    => 'Patrol',
     'dungeonfloorswitchmarker'       => 'Floor',
 

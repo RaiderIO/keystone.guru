@@ -26,6 +26,7 @@ L.Draw.Enemy = L.Draw.Marker.extend({
 
 let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
 let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
+let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
 
 /**
  * @property floor_id int
@@ -44,8 +45,8 @@ let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
  * @property L.Layer layer
  */
 class Enemy extends MapObject {
-    constructor(map, layer) {
-        super(map, layer, {name: 'enemy'});
+    constructor(map, layer, options = {name: 'enemy'}) {
+        super(map, layer, options);
 
         this.label = 'Enemy';
         // Used for keeping track of what kill zone this enemy is attached to
@@ -140,10 +141,11 @@ class Enemy extends MapObject {
                 type: 'select',
                 admin: true,
                 default: null,
-                values: [{id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'}, {
-                    id: ENEMY_SEASONAL_TYPE_INSPIRING,
-                    name: 'Inspiring'
-                }],
+                values: [
+                    {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'},
+                    {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: 'Inspiring'},
+                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'}
+                ],
                 setter: function (value) {
                     self.seasonal_type = value;
                 }
@@ -497,6 +499,11 @@ class Enemy extends MapObject {
         if (!getState().isMapAdmin()) {
             // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
             if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
+                return false;
+            }
+
+            // If we're a prideful enemy, hide ourselves unless we're placed on the map
+            if (this.seasonal_type === ENEMY_SEASONAL_TYPE_PRIDEFUL) {
                 return false;
             }
         }

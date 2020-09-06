@@ -23,7 +23,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _getRawObjects() {
         let enemies = [];
         let mapContext = getState().getMapContext();
-        if( mapContext instanceof MapContextDungeon ) {
+        if (mapContext instanceof MapContextDungeon) {
             // Union to create new array
             enemies = _.union(enemies, mapContext.getMdtEnemies());
         }
@@ -42,11 +42,20 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     /**
      * @inheritDoc
      */
+    _getOptions(remoteMapObject) {
+        return {seasonalType: remoteMapObject.seasonal_type};
+    }
+
+    /**
+     * @inheritDoc
+     */
     _createMapObject(layer, options = {}) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
         if (getState().isMapAdmin()) {
             return new AdminEnemy(this.manager.map, layer);
+        } else if (options.hasOwnProperty('seasonalType') && options.seasonalType === 'prideful') {
+            return new PridefulEnemy(this.manager.map, layer);
         } else {
             return new Enemy(this.manager.map, layer);
         }
