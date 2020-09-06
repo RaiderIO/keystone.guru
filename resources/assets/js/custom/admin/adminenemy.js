@@ -386,6 +386,7 @@ class AdminEnemy extends Enemy {
                     this.map.options.npcsMaxHealth
                 ),
                 faction: this.faction,
+                seasonal_type: this.seasonal_type,
                 seasonal_index: this.seasonal_index,
                 npc_id: this.npc_id,
                 npc_id_type: typeof this.npc_id,

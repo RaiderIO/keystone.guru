@@ -26,6 +26,7 @@ return [
 
     'admin_only_label'       => 'Admin only',
     'id_label'               => 'ID',
+    'seasonal_type_label'    => 'Seasonal type',
     'seasonal_index_label'   => 'Seasonal index',
     'size_label'             => 'Size',
     'faction_label'          => 'Faction',
@@ -227,7 +228,9 @@ return [
     'map_icon_map_icon_type_id_label'                               => 'Icon',
     'map_icon_comment_label'                                        => 'Comment',
     'map_icon_map_icon_type_id_select_default_label'                => 'Select icon',
-    'map_icon_seasonal_index_label'                                 => 'Seasonal index (empty to unset)',
+    'map_icon_seasonal_type_label'                                  => 'Seasonal type',
+    'map_icon_seasonal_index_label'                                 => 'Seasonal index',
+    'map_icon_seasonal_index_select_default_label'                  => 'Not set',
 
     // Admin map icon
     'admin_map_icon_faction_label'                                  => 'Faction',
@@ -236,13 +239,18 @@ return [
     'admin_map_icon_map_icon_type_id_label'                         => 'Icon',
     'admin_map_icon_comment_label'                                  => 'Comment',
     'admin_map_icon_map_icon_type_id_select_default_label'          => 'Select icon',
-    'admin_map_icon_seasonal_index_label'                           => 'Seasonal index (empty to unset)',
+    'admin_map_icon_seasonal_type_label'                            => 'Seasonal type',
+    'admin_map_icon_seasonal_index_label'                           => 'Seasonal index',
+    'admin_map_icon_seasonal_index_select_default_label'            => 'Not set',
 
     // Enemy
     'enemy_faction_label'                                           => 'Faction',
     'enemy_teeming_label'                                           => 'Teeming',
     'enemy_npc_id_label'                                            => 'Npc',
-    'enemy_seasonal_index_label'                                    => 'Seasonal index (empty to unset)',
+    'enemy_seasonal_type_label'                                     => 'Seasonal type',
+    'enemy_seasonal_type_select_default_label'                      => 'Not set',
+    'enemy_seasonal_index_label'                                    => 'Seasonal index',
+    'enemy_seasonal_index_select_default_label'                     => 'Not set',
     'enemy_enemy_forces_override_label'                             => 'Enemy forces override (-1 to inherit)',
     'enemy_enemy_forces_override_teeming_label'                     => 'Enemy forces override teeming (-1 to inherit)',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',

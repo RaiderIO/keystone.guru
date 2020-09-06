@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChangesMapping;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\IO\ImportString;
 use App\Logic\MDT\IO\ImportWarning;
@@ -23,6 +24,7 @@ use Throwable;
 
 class AdminToolsController extends Controller
 {
+    use ChangesMapping;
     use SavesArrayToJsonFile;
 
     /**
@@ -81,6 +83,8 @@ class AdminToolsController extends Controller
             foreach ($decoded['data'] as $npcData) {
                 $npcCandidate = Npc::findOrNew($npcData['id']);
 
+                $beforeModel = clone $npcCandidate;
+
                 /** @var Dungeon $dungeon */
                 $dungeon = Dungeon::where('zone_id', $npcData['location'][0])->first();
                 if ($dungeon === null) {
@@ -107,6 +111,9 @@ class AdminToolsController extends Controller
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
                 $npcCandidate->save();
+
+                // Changed the mapping; so make sure we synchronize it
+                $this->mappingChanged($beforeModel->exists ? $beforeModel : null, $npcCandidate);
             }
         } catch (Exception $ex) {
 

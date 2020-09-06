@@ -7,7 +7,7 @@
         "lng": 354.375,
         "comment": "",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -18,7 +18,7 @@
         "lng": 347.625,
         "comment": "Requires Night Fae to unlock",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -29,7 +29,7 @@
         "lng": 273,
         "comment": "Unlocks after killing the first boss.",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     }
 ]
