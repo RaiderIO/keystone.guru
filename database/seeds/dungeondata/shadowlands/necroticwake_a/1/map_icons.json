@@ -31,5 +31,60 @@
         "permanent_tooltip": 1,
         "seasonal_index": 0,
         "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -155.25,
+        "lng": 86.5,
+        "comment": "Malfunctioning Goliath\npossible covenant use?",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -118.4375,
+        "lng": 147.625,
+        "comment": "Forgotten Forgehammer",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -79.25,
+        "lng": 136.6875,
+        "comment": "Bloody Javelin",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -77.625,
+        "lng": 51.125,
+        "comment": "Discharged Anima",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 8,
+        "lat": -103.4375,
+        "lng": 94.625,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
