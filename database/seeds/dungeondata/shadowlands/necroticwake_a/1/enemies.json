@@ -18,7 +18,7 @@
     },
     {
         "id": 4615,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 702,
         "floor_id": 89,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -35,7 +35,7 @@
     },
     {
         "id": 4616,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 702,
         "floor_id": 89,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -52,7 +52,7 @@
     },
     {
         "id": 4618,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 702,
         "floor_id": 89,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -69,7 +69,7 @@
     },
     {
         "id": 4619,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 702,
         "floor_id": 89,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -1137,6 +1137,329 @@
         "lng": 70.375,
         "npc": {
             "id": 163157
+        }
+    },
+    {
+        "id": 4686,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -186.75,
+        "lng": 237,
+        "npc": {
+            "id": 162691
+        }
+    },
+    {
+        "id": 4687,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -191.8125,
+        "lng": 234.9375,
+        "npc": {
+            "id": 163128
+        }
+    },
+    {
+        "id": 4688,
+        "enemy_pack_id": 700,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -193.5625,
+        "lng": 212.5,
+        "npc": {
+            "id": 163126
+        }
+    },
+    {
+        "id": 4689,
+        "enemy_pack_id": 700,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -189.4375,
+        "lng": 214.125,
+        "npc": {
+            "id": 163122
+        }
+    },
+    {
+        "id": 4690,
+        "enemy_pack_id": 700,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -193.3125,
+        "lng": 216.125,
+        "npc": {
+            "id": 163618
+        }
+    },
+    {
+        "id": 4691,
+        "enemy_pack_id": 700,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -197.5625,
+        "lng": 215.75,
+        "npc": {
+            "id": 163122
+        }
+    },
+    {
+        "id": 4692,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -205.9375,
+        "lng": 199.875,
+        "npc": {
+            "id": 165138
+        }
+    },
+    {
+        "id": 4693,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -208.3125,
+        "lng": 203.6875,
+        "npc": {
+            "id": 165138
+        }
+    },
+    {
+        "id": 4694,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -208.5,
+        "lng": 200.75,
+        "npc": {
+            "id": 165138
+        }
+    },
+    {
+        "id": 4695,
+        "enemy_pack_id": 701,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -209.125,
+        "lng": 172.5625,
+        "npc": {
+            "id": 165919
+        }
+    },
+    {
+        "id": 4696,
+        "enemy_pack_id": 701,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -211,
+        "lng": 168.125,
+        "npc": {
+            "id": 165222
+        }
+    },
+    {
+        "id": 4697,
+        "enemy_pack_id": 701,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -213.0625,
+        "lng": 170.125,
+        "npc": {
+            "id": 163128
+        }
+    },
+    {
+        "id": 4698,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -197.4375,
+        "lng": 166.4375,
+        "npc": {
+            "id": 165824
+        }
+    },
+    {
+        "id": 4699,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -187.5,
+        "lng": 169.3125,
+        "npc": {
+            "id": 163128
+        }
+    },
+    {
+        "id": 4700,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -187.3125,
+        "lng": 176.5625,
+        "npc": {
+            "id": 163619
+        }
+    },
+    {
+        "id": 4701,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -194.5,
+        "lng": 177.125,
+        "npc": {
+            "id": 163128
+        }
+    },
+    {
+        "id": 4702,
+        "enemy_pack_id": 699,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -142.5,
+        "lng": 120.75,
+        "npc": {
+            "id": 165919
+        }
+    },
+    {
+        "id": 4703,
+        "enemy_pack_id": 699,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -136,
+        "lng": 127.5,
+        "npc": {
+            "id": 165919
+        }
+    },
+    {
+        "id": 4704,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -116.25,
+        "lng": 122.5,
+        "npc": {
+            "id": 165197
         }
     }
 ]
