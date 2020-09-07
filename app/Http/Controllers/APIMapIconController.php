@@ -95,8 +95,8 @@ class APIMapIconController extends Controller
         // don't use empty() since 0 is valid
         $mapIcon->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int)$seasonalIndex;
         $mapIcon->comment = $request->get('comment', '') ?? '';
-        $mapIcon->lat = $request->get('lat');
-        $mapIcon->lng = $request->get('lng');
+        $mapIcon->lat = (float) $request->get('lat');
+        $mapIcon->lng = (float) $request->get('lng');
 
         if (!$mapIcon->exists) {
             $this->checkForDuplicate($mapIcon);

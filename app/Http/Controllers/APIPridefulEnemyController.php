@@ -40,10 +40,10 @@ class APIPridefulEnemyController extends Controller
         }
 
         $pridefulEnemy->dungeon_route_id = $dungeonroute->id;
-        $pridefulEnemy->enemy_id = (int)$request->get('enemy_id');
+        $pridefulEnemy->enemy_id = (int)$enemy->id;
         $pridefulEnemy->floor_id = (int)$request->get('floor_id');
-        $pridefulEnemy->lat = $request->get('lat');
-        $pridefulEnemy->lng = $request->get('lng');
+        $pridefulEnemy->lat = (float)$request->get('lat');
+        $pridefulEnemy->lng = (float)$request->get('lng');
 
         if (!$pridefulEnemy->save()) {
             throw new Exception('Unable to save prideful enemy!');
@@ -65,7 +65,7 @@ class APIPridefulEnemyController extends Controller
     function delete(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
     {
         try {
-        /** @var PridefulEnemy $pridefulEnemy */
+            /** @var PridefulEnemy $pridefulEnemy */
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonroute->id)->where('enemy_id', $enemy->id)->first();
             if ($pridefulEnemy->delete()) {
                 if (Auth::check()) {

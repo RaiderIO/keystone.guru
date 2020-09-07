@@ -80,7 +80,15 @@ class DrawControls extends MapControl {
         // Add a created item to the list of drawn items
         this.map.leafletMap.on(L.Draw.Event.CREATED, function (event) {
             let layer = event.layer;
-            self.editableItemsLayer.addLayer(layer);
+            // Prideful enemies are replaced with a real enemy that was hidden on the map. This is easier for various
+            // reasons.
+            if (event.layerType !== 'pridefulenemy') {
+                self.editableItemsLayer.addLayer(layer);
+            }
+            // If it was a prideful enemy however..
+            else {
+                self._refreshPridefulButtonText();
+            }
         });
 
         // Make sure that when pather is toggled, the button changes state accordingly
@@ -157,6 +165,24 @@ class DrawControls extends MapControl {
                 this.map.hotkeys.attach(hotkey.hotkey, hotkey.cssClass);
             }
         }
+    }
+
+    /**
+     *
+     * @private
+     */
+    _refreshPridefulButtonText(){
+        console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
+
+        /** @type EnemyMapObjectGroup */
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        let assignedPridefulEnemies = enemyMapObjectGroup.getAssignedPridefulEnemies();
+        $('.leaflet-draw-draw-pridefulenemy .button-text').text(
+            `${lang.get(`messages.pridefulenemy`)} (${assignedPridefulEnemies}/${c.map.enemy.maxPridefulEnemies})`
+        );
+
+        $('.leaflet-draw-draw-pridefulenemy').toggleClass('leaflet-disabled draw-control-disabled', assignedPridefulEnemies === c.map.enemy.maxPridefulEnemies);
     }
 
     /**
@@ -337,7 +363,8 @@ class DrawControls extends MapControl {
                 $a.last()[0].click();
             }
         });
-        $buttonContainer.append($brushlineButton);
+
+        $brushlineButton.insertBefore('.leaflet-draw-draw-pridefulenemy');
 
 
         // Cancel button container
@@ -423,6 +450,9 @@ class DrawControls extends MapControl {
                 }
             }
         }
+
+        // Update the prideful button text to show (x/y)
+        this._refreshPridefulButtonText();
 
         // Add the leaflet draw control to the bottom bar
         this._addControlSetupBottomBar();

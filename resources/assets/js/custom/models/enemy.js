@@ -501,11 +501,6 @@ class Enemy extends MapObject {
             if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
                 return false;
             }
-
-            // If we're a prideful enemy, hide ourselves unless we're placed on the map
-            if (this.seasonal_type === ENEMY_SEASONAL_TYPE_PRIDEFUL) {
-                return false;
-            }
         }
 
         // Hide MDT enemies

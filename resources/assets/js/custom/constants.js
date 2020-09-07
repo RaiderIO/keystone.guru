@@ -22,6 +22,7 @@ let c = {
             }
         },
         enemy: {
+            maxPridefulEnemies: 5,
             /**
              * At whatever zoom various modifiers are displayed on the map
              */

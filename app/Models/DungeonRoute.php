@@ -70,6 +70,7 @@ use Illuminate\Support\Facades\DB;
  * @property Collection|Brushline[] $brushlines
  * @property Collection|Path[] $paths
  * @property Collection|KillZone[] $killzones
+ * @property Collection|PridefulEnemy[] $pridefulenemies
  *
  * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyraidmarkers
  * @property Collection|MapIcon[] $mapicons
@@ -226,6 +227,14 @@ class DungeonRoute extends Model
     public function killzones()
     {
         return $this->hasMany('App\Models\KillZone');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function pridefulenemies()
+    {
+        return $this->hasMany('App\Models\PridefulEnemy');
     }
 
     /**

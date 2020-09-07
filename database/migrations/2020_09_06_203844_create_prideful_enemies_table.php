@@ -14,13 +14,13 @@ class CreatePridefulEnemiesTable extends Migration
     public function up()
     {
         Schema::create('prideful_enemies', function (Blueprint $table) {
+            $table->id();
             $table->integer('dungeon_route_id');
             $table->integer('enemy_id');
             $table->integer('floor_id');
             $table->double('lat');
             $table->double('lng');
             $table->timestamps();
-            $table->primary(['dungeon_route_id', 'enemy_id']);
         });
     }
 

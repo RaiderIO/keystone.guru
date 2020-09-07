@@ -78,7 +78,7 @@ class APIEnemyController extends Controller
         $enemy->faction = $request->get('faction', 'any');
         $enemy->enemy_forces_override = (int)$request->get('enemy_forces_override', -1);
         $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
-        $enemy->lat = $request->get('lat');
+        $enemy->lat = (float) $request->get('lat');
         $enemy->lng = $request->get('lng');
 
         if ($enemy->save()) {

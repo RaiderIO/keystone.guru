@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * @property int $id
  * @property int $dungeon_route_id
  * @property int $enemy_id
  * @property int $floor_id
@@ -23,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PridefulEnemy extends Model
 {
     use Reportable;
+
+    protected $visible = ['enemy_id', 'floor_id', 'lat', 'lng'];
 
     /**
      * @return BelongsTo

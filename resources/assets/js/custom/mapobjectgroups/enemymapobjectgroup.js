@@ -81,7 +81,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     load() {
         super.load();
 
-
         // Couple awakened enemies to each other
         for (let i = 0; i < this.objects.length; i++) {
             let enemy = this.objects[i];
@@ -102,45 +101,22 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     }
                 }
             }
-        }
-    }
 
-    _fetchSuccess(response) {
-        // no super call, we're handling this by ourselves
-        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+            // Check if the enemy is a Prideful enemy, and if so if we should move it to a different floor / lat+lng
+            if (enemy instanceof PridefulEnemy) {
+                let pridefulEnemies = getState().getMapContext().getPridefulEnemies();
+                for (let i = 0; i < pridefulEnemies.length; i++) {
+                    let pridefulEnemy = pridefulEnemies[i];
 
-        // Only generate the enemies once
-        // if (getState().getEnemies().length === 0) {
-        // The enemies are no longer returned from the response; get it from the getState() instead
-        let enemySets = [
-            getState().getMapContext().getEnemies(),
-            getState().getMapContext().getMdtEnemies(),
-        ];
-
-        // For each set of enemies..
-        for (let i = 0; i < enemySets.length; i++) {
-            let enemySet = enemySets[i];
-            // Now draw the enemies on the map, if any
-            for (let index in enemySet) {
-                // Only if actually set
-                if (enemySet.hasOwnProperty(index)) {
-                    // Only restore enemies for the current floor
-                    this._loadMapObject(enemySet[index]);
+                    // If we have a match..
+                    if (pridefulEnemy.enemy_id === enemy.id) {
+                        enemy.setAssignedLocation(pridefulEnemy.lat, pridefulEnemy.lng, pridefulEnemy.floor_id);
+                        // May stop now
+                        break;
+                    }
                 }
             }
         }
-
-        // Set the enemies back to our state
-        getState().setEnemies(this.objects);
-        // } else {
-        //     // Update the visibility of the existing enemies
-        //     for (let i = 0; i < this.objects.length; i++) {
-        //         let enemy = this.objects[i];
-        //         this.setMapObjectVisibility(enemy, enemy.shouldBeVisible());
-        //     }
-        // }
-
-        this.signal('loadcomplete');
     }
 
     /**
@@ -159,5 +135,44 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
 
         return finalBoss;
+    }
+
+    /**
+     *
+     * @returns {PridefulEnemy|null}
+     */
+    getFreePridefulEnemy() {
+        let result = null;
+
+        for (let i = 0; i < this.objects.length; i++) {
+            let enemy = this.objects[i];
+            if (enemy instanceof PridefulEnemy) {
+                if (!enemy.isAssigned()) {
+                    result = enemy;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Get the amount of free prideful enemies.
+     * @returns {number}
+     */
+    getAssignedPridefulEnemies() {
+        let result = 0;
+
+        for (let i = 0; i < this.objects.length; i++) {
+            let enemy = this.objects[i];
+            if (enemy instanceof PridefulEnemy) {
+                if (enemy.isAssigned()) {
+                    result++;
+                }
+            }
+        }
+
+        return result;
     }
 }

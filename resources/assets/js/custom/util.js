@@ -295,3 +295,17 @@ function getBrushline(id) {
 function getMapIcon(id) {
     return getMapIcons().findMapObjectById(id);
 }
+
+$.fn.insertIndex = function (i) {
+    // The element we want to swap with
+    var $target = this.parent().children().eq(i);
+
+    // Determine the direction of the appended index so we know what side to place it on
+    if (this.index() > i) {
+        $target.before(this);
+    } else {
+        $target.after(this);
+    }
+
+    return this;
+};
