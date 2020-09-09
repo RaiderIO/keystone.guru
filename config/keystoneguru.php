@@ -2,6 +2,10 @@
 
 
 return [
+    'super_admins' => [
+        'Admin',
+        'gallypsa'
+    ],
 
     'github_username' => 'Wotuu',
 
