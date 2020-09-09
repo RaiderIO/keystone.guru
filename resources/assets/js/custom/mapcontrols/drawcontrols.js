@@ -134,7 +134,7 @@ class DrawControls extends MapControl {
             cssClass: 'leaflet-draw-draw-pridefulenemy',
             enabled: function () {
                 let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                return enemyMapObjectGroup.getAssignedPridefulEnemies() < c.map.enemy.maxPridefulEnemies;
+                return c.map.pridefulenemy.isEnabled() && enemyMapObjectGroup.getAssignedPridefulEnemies() < c.map.pridefulenemy.max;
             }
         }, {
             hotkey: '5',
@@ -188,10 +188,10 @@ class DrawControls extends MapControl {
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
         let assignedPridefulEnemies = enemyMapObjectGroup.getAssignedPridefulEnemies();
-        let buttonText = `${lang.get(`messages.pridefulenemy`)} (${assignedPridefulEnemies}/${c.map.enemy.maxPridefulEnemies})`;
+        let buttonText = `${lang.get(`messages.pridefulenemy`)} (${assignedPridefulEnemies}/${c.map.pridefulenemy.max})`;
         $('.leaflet-draw-draw-pridefulenemy .button-text').text(buttonText);
 
-        let limitReached = assignedPridefulEnemies === c.map.enemy.maxPridefulEnemies;
+        let limitReached = assignedPridefulEnemies === c.map.pridefulenemy.max || !c.map.pridefulenemy.isEnabled();
 
         $('#disabled_pridefulenemy_button .button-text').text(buttonText);
         $('#disabled_pridefulenemy_button').toggle(limitReached);
@@ -311,7 +311,7 @@ class DrawControls extends MapControl {
             class: 'col draw_icon mt-2 leaflet-disabled draw-control-disabled',
             href: '#',
             'data-toggle': 'tooltip',
-            title: lang.get('messages.pridefulenemy_disabled_title'),
+            title: c.map.pridefulenemy.isEnabled() ? lang.get('messages.pridefulenemy_disabled_title') : lang.get('messages.pridefulenemy_disabled_no_shadowlands_title'),
         });
         $disabledPridefulButton.html(
             this._getButtonHtml('fa-user', lang.get('messages.brushline'))
