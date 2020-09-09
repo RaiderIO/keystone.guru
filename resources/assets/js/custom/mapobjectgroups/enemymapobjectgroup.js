@@ -17,6 +17,18 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this._updateVisibility();
     }
 
+    _onPridefulEnemyAssigned(assignedEvent) {
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+
+        this.signal('pridefulenemy:assigned', {pridefulenemy: assignedEvent.context});
+    }
+
+    _onPridefulEnemyUnassigned(unassignedEvent) {
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+
+        this.signal('pridefulenemy:unassigned', {pridefulenemy: unassignedEvent.context});
+    }
+
     /**
      * @inheritDoc
      **/
@@ -104,17 +116,20 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
             // Check if the enemy is a Prideful enemy, and if so if we should move it to a different floor / lat+lng
             if (enemy instanceof PridefulEnemy) {
-                let pridefulEnemies = getState().getMapContext().getPridefulEnemies();
-                for (let i = 0; i < pridefulEnemies.length; i++) {
-                    let pridefulEnemy = pridefulEnemies[i];
+                let pridefulEnemiesData = getState().getMapContext().getPridefulEnemies();
+                for (let i = 0; i < pridefulEnemiesData.length; i++) {
+                    let pridefulEnemyData = pridefulEnemiesData[i];
 
                     // If we have a match..
-                    if (pridefulEnemy.enemy_id === enemy.id) {
-                        enemy.setAssignedLocation(pridefulEnemy.lat, pridefulEnemy.lng, pridefulEnemy.floor_id);
+                    if (pridefulEnemyData.enemy_id === enemy.id) {
+                        enemy.setAssignedLocation(pridefulEnemyData.lat, pridefulEnemyData.lng, pridefulEnemyData.floor_id);
                         // May stop now
                         break;
                     }
                 }
+
+                enemy.register('pridefulenemy:assigned', this, this._onPridefulEnemyAssigned.bind(this));
+                enemy.register('pridefulenemy:unassigned', this, this._onPridefulEnemyUnassigned.bind(this));
             }
         }
     }

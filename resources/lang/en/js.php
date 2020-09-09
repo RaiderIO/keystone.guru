@@ -92,6 +92,8 @@ return [
     'enemypack'                      => 'Pack',
     'enemy'                          => 'Enemy',
     'pridefulenemy'                  => 'Prideful',
+    'pridefulenemy_title'            => 'Create a Prideful Enemy',
+    'pridefulenemy_disabled_title'   => 'Remove a Prideful Enemy first',
     'enemypatrol'                    => 'Patrol',
     'dungeonfloorswitchmarker'       => 'Floor',
 

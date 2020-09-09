@@ -75,22 +75,41 @@ class PridefulEnemy extends Enemy {
      * @param floorId {int}
      */
     setAssignedLocation(lat, lng, floorId) {
+        console.assert(this instanceof PridefulEnemy, 'this was not a PridefulEnemy', this);
+
         this.lat = lat;
         this.lng = lng;
 
         this.layer.setLatLng(L.latLng(lat, lng));
         this.floor_id = floorId;
         this.assigned = true;
+
+        this.signal('pridefulenemy:assigned');
     }
 
     /**
      *
      */
     unsetAssignedLocation() {
+        console.assert(this instanceof PridefulEnemy, 'this was not a PridefulEnemy', this);
         this.assigned = false;
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        enemyMapObjectGroup.setMapObjectVisibility(this, false);
+
+        let oldKillZone = this.getKillZone();
+
+        // Remove ourselves from the killzone and save it
+        if (oldKillZone !== null) {
+            this.setKillZone(null);
+            oldKillZone.save();
+        }
+
+        this.signal('pridefulenemy:unassigned');
     }
 
     save() {
+        console.assert(this instanceof PridefulEnemy, 'this was not a PridefulEnemy', this);
         let self = this;
 
         $.ajax({
@@ -115,6 +134,24 @@ class PridefulEnemy extends Enemy {
                 self.signal('save:success', {json: json});
 
                 self.onSaveSuccess(json);
+            }
+        });
+    }
+
+    delete() {
+        console.assert(this instanceof PridefulEnemy, 'this was not a PridefulEnemy', this);
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/pridefulenemy/${this.id}`,
+            dataType: 'json',
+            data: {
+                _method: 'DELETE'
+            },
+            success: function (json) {
+                // Unassign from any killzones we have
+                self.unsetAssignedLocation();
             }
         });
     }
