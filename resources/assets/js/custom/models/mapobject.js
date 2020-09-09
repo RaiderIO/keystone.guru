@@ -472,10 +472,12 @@ class MapObject extends Signalable {
      * @private
      */
     _setInitialized() {
-
-
+        let wasInitialized = this._initialized;
         this._initialized = true;
-        this.signal('object:initialized');
+
+        if( wasInitialized !== this._initialized ){
+            this.signal('object:initialized');
+        }
     }
 
     /**

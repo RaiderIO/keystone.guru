@@ -489,8 +489,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
             // We do not know the ID before this so we cannot scroll to the new killzone instantly
             self._newPullKillZone = killZoneCreatedEvent.data.newKillZone;
         });
-        killZoneMapObjectGroup.register('object:add', this, function (killZoneAddedEvent) {
-            self._onKillZoneAdded(killZoneAddedEvent.data.object);
+        killZoneMapObjectGroup.register('save:success', this, function (killZoneSaveSuccessEvent) {
+            self._onKillZoneAdded(killZoneSaveSuccessEvent.data.object);
         });
         // If the killzone was deleted, get rid of our display too
         killZoneMapObjectGroup.register('object:deleted', this, function (killZoneDeletedEvent) {

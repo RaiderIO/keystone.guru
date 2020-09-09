@@ -9,7 +9,7 @@ class Signalable {
      * Registers for listening to a signal sent by this Signalable.
      * @param name {string|array} The name of the event you want to listen for.
      * @param listener {object} Who are you? Pass this.
-     * @param fn {callable} The function that should be triggered.
+     * @param fn {function(*): void} The function that should be triggered.
      */
     register(name, listener, fn) {
         console.assert(this instanceof Signalable, 'this is not a Signalable!', this);
