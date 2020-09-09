@@ -997,39 +997,39 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'necroticwake_a',
                 'enemy_forces_required'         => -1,
                 'enemy_forces_required_teeming' => -1,
-                'active'                        => $isMapping,
+                'active'                        => true,
                 'floors'                        => [
                     'The Necrotic Wake' => [
                         'index'   => 1,
                         'default' => true
                     ],
-                    'Necrotic Wake A'   => [
+                    'Stitchwerks'   => [
                         'index' => 2,
                     ],
-                    'Necrotic Wake B'   => [
+                    'Zolramus'   => [
                         'index' => 3,
                     ],
                 ],
                 'floor_couplings'               => [
                     [
                         'from'      => 'The Necrotic Wake',
-                        'to'        => 'Necrotic Wake A',
+                        'to'        => 'Stitchwerks',
                         'direction' => 'up'
                     ],
                     [
-                        'from'      => 'Necrotic Wake A',
+                        'from'      => 'Stitchwerks',
                         'to'        => 'The Necrotic Wake',
                         'direction' => 'down'
                     ],
 
                     [
-                        'from'      => 'Necrotic Wake A',
-                        'to'        => 'Necrotic Wake B',
+                        'from'      => 'Stitchwerks',
+                        'to'        => 'Zolramus',
                         'direction' => 'up'
                     ],
                     [
-                        'from'      => 'Necrotic Wake B',
-                        'to'        => 'Necrotic Wake A',
+                        'from'      => 'Zolramus',
+                        'to'        => 'Stitchwerks',
                         'direction' => 'down'
                     ],
                 ]
