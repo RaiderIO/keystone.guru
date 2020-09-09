@@ -267,6 +267,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::post('/mapicon', 'APIMapIconController@store');
             Route::delete('/mapicon/{mapicon}', 'APIMapIconController@delete');
 
+            Route::post('/pridefulenemy/{enemy}', 'APIPridefulEnemyController@store');
+            Route::delete('/pridefulenemy/{enemy}', 'APIPridefulEnemyController@delete');
+
             Route::post('/path', 'APIPathController@store');
             Route::delete('/path/{path}', 'APIPathController@delete');
 

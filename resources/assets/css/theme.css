@@ -16,6 +16,11 @@
     background-color: #58697A;
 }
 
+.dropdown .dropdown-header {
+    font-weight: bold;
+    color: #DF691A !important;
+}
+
 #map .dropdown-item:hover, .dropdown-item:focus {
     color: black;
 }

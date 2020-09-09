@@ -27,11 +27,13 @@ class Hotkeys {
      * Associates a key with a classname to press (of the button in the drawcontrol)
      * @param key string
      * @param className string
+     * @param enabled function|null
      */
-    attach(key, className){
+    attach(key, className, enabled) {
         this.keys.push({
             key: key,
-            className: className
+            className: className,
+            enabled: enabled
         })
     }
 
@@ -44,15 +46,17 @@ class Hotkeys {
 
         let keyEvent = event.originalEvent;
         let className = '';
-        for( let i = 0; i < this.keys.length; i++ ){
+        for (let i = 0; i < this.keys.length; i++) {
             let keyObj = this.keys[i];
-            if( keyObj.key === keyEvent.key ){
+            if (keyObj.key === keyEvent.key &&
+                (typeof keyObj.enabled !== 'function' || (typeof keyObj.enabled === 'function' && keyObj.enabled()))
+            ) {
                 className = keyObj.className;
                 break;
             }
         }
 
-        if( className !== ''){
+        if (className !== '') {
             this._triggerClickOnClass(className);
         }
     }

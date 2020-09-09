@@ -47,17 +47,20 @@
                     {
                         'title': lang.get('messages.route_count_label'),
                         'data': 'routes',
-                        'name': 'routes'
+                        'name': 'routes',
+                        'searchable': false
                     },
                     {
                         'title': lang.get('messages.roles_label'),
                         'data': 'roles_string',
-                        'name': 'roles_string'
+                        'name': 'roles_string',
+                        'searchable': false
                     },
                     {
                         'title': lang.get('messages.registered_label'),
                         'data': 'created_at',
                         'name': 'created_at',
+                        'searchable': false,
                         'render': function (data, type, row, meta) {
                             let createdAtDate = (new Date(row.created_at));
                             return createdAtDate.getFullYear() +
@@ -73,6 +76,7 @@
                         'data': 'id',
                         'name': 'id',
                         'orderable': false,
+                        'searchable': false,
                         'render': function (data, type, row, meta) {
                             let template = Handlebars.templates['admin_users_table_row_actions'];
 
@@ -84,6 +88,7 @@
                         'data': 'id',
                         'name': 'id',
                         'orderable': false,
+                        'searchable': false,
                         'render': function (data, type, row, meta) {
                             let result = '';
                             if (row.patreondata !== null) {

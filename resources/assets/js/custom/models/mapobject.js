@@ -472,10 +472,12 @@ class MapObject extends Signalable {
      * @private
      */
     _setInitialized() {
-
-
+        let wasInitialized = this._initialized;
         this._initialized = true;
-        this.signal('object:initialized');
+
+        if( wasInitialized !== this._initialized ){
+            this.signal('object:initialized');
+        }
     }
 
     /**
@@ -866,7 +868,8 @@ class MapObject extends Signalable {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`,
+            url: this.options.hasOwnProperty('save_url') ? this.options.save_url :
+                `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`,
             dataType: 'json',
             data: this.getSaveData(),
             beforeSend: function () {
@@ -913,7 +916,8 @@ class MapObject extends Signalable {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}/${this.id}`,
+            url: this.options.hasOwnProperty('delete_url') ? this.options.delete_url :
+                `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}/${this.id}`,
             dataType: 'json',
             data: {
                 _method: 'DELETE'

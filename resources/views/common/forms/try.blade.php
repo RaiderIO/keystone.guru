@@ -40,10 +40,8 @@ $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
         </div>
     </div>
 
-    <div class="form-group">
-        {!! Form::label('dungeon_id', __('Dungeon') . '<span class="form-required">*</span>', [], false) !!}
-        {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->orderBy('name')->pluck('name', 'id'), null, ['class' => 'form-control']) !!}
-    </div>
+
+    @include('common.dungeon.select', ['showAll' => false])
 
     <div class="form-group">
         {!! Form::label('teeming', __('Teeming')) !!}
