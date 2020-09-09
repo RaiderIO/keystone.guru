@@ -68,12 +68,12 @@
     {
         "floor_id": 73,
         "team_id": null,
-        "map_icon_type_id": 39,
+        "map_icon_type_id": 37,
         "lat": -200.125,
         "lng": 157,
         "comment": "Night Fae: Haunted Urn",
         "permanent_tooltip": 0,
-        "seasonal_index": null,
+        "seasonal_index": 0,
         "is_admin": true
     }
 ]

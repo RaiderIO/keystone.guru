@@ -1,1 +1,19 @@
-[]
+[
+    {
+        "id": 4752,
+        "enemy_pack_id": -1,
+        "floor_id": 91,
+        "mdt_id": -1,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -106.75,
+        "lng": 194.75,
+        "npc": {
+            "id": 162693
+        }
+    }
+]
