@@ -1,7 +1,7 @@
 [
     {
         "id": 4755,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 749,
         "floor_id": 78,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -18,7 +18,7 @@
     },
     {
         "id": 4756,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 749,
         "floor_id": 78,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -35,7 +35,7 @@
     },
     {
         "id": 4757,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 749,
         "floor_id": 78,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -52,7 +52,7 @@
     },
     {
         "id": 4758,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 749,
         "floor_id": 78,
         "mdt_id": -1,
         "seasonal_type": null,
