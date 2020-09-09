@@ -87,7 +87,6 @@ class CommonGroupAffixes extends InlineCode {
 
         let $list = $('#affixes_list_custom');
         let selection = $('#affixes').val();
-        console.log(selection);
         let selectedSeasonalIndices = [];
 
         $.each($list.children(), function (index, child) {

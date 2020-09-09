@@ -3,21 +3,21 @@
         "id": 90,
         "floor_id": 73,
         "target_floor_id": 76,
-        "lat": -147,
-        "lng": 107
+        "lat": -148.5,
+        "lng": 282
     },
     {
         "id": 92,
         "floor_id": 73,
         "target_floor_id": 74,
-        "lat": -28.5,
-        "lng": 193.75
+        "lat": -224.75,
+        "lng": 194
     },
     {
         "id": 93,
         "floor_id": 73,
         "target_floor_id": 75,
-        "lat": -148,
-        "lng": 285.25
+        "lat": -148.75,
+        "lng": 106.5
     }
 ]

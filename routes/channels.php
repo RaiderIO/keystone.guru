@@ -16,12 +16,23 @@
 ////});
 
 // https://laravel.com/docs/5.8/broadcasting#presence-channels
-Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (\App\User $user, \App\Models\DungeonRoute $dungeonroute)
+Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (?\App\User $user, \App\Models\DungeonRoute $dungeonroute)
 {
     $result = false;
-    if ($dungeonroute->published || $dungeonroute->author_id === $user->id) {
-        $result = ['name' => $user->name, 'color' => $user->echo_color];
+
+    if (Auth::check()) {
+        if ($user->echo_anonymous &&
+            // If we didn't create this route, don't show our name
+            $dungeonroute->author_id !== $user->id &&
+            // If the route is now not part of a team, OR if we're not a member of the team, we're anonymous
+            ($dungeonroute->team === null || ($dungeonroute->team !== null && !$dungeonroute->team->isUserMember($user)))) {
+
+            $result = ['name' => sprintf('Anonymous %s', collect(config('keystoneguru.echo.randomsuffixes'))->random()), 'color' => \Faker\Provider\Color::hexColor()];
+        } else {
+            $result = ['name' => $user->name, 'color' => $user->echo_color];
+        }
     }
+
     return $result;
 });
 

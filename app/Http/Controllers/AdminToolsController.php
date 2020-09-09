@@ -2,25 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChangesMapping;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\IO\ImportString;
 use App\Logic\MDT\IO\ImportWarning;
 use App\Models\Dungeon;
-use App\Models\DungeonFloorSwitchMarker;
-use App\Models\DungeonRoute;
-use App\Models\Enemy;
-use App\Models\EnemyPack;
-use App\Models\EnemyPatrol;
-use App\Models\Floor;
-use App\Models\MapIcon;
 use App\Models\Npc;
 use App\Models\NpcType;
 use App\Models\Release;
 use App\Service\Season\SeasonService;
 use App\Traits\SavesArrayToJsonFile;
+use Artisan;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -29,6 +24,7 @@ use Throwable;
 
 class AdminToolsController extends Controller
 {
+    use ChangesMapping;
     use SavesArrayToJsonFile;
 
     /**
@@ -37,6 +33,94 @@ class AdminToolsController extends Controller
     public function index()
     {
         return view('admin.tools.list');
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function npcimport()
+    {
+        return view('admin.tools.npcimport.import');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|View
+     */
+    public function npcimportsubmit(Request $request)
+    {
+        $importString = $request->get('import_string');
+
+        // Correct the string since wowhead sucks
+        $importString = str_replace('[Listview.extraCols.popularity]', '["Listview.extraCols.popularity"]', $importString);
+
+        $decoded = json_decode($importString, true);
+
+        $log = [];
+
+        // Wowhead type => keystone.guru type
+        $npcTypeMapping = [
+            15 => NpcType::ABERRATION,
+            1  => NpcType::BEAST,
+            8  => NpcType::CRITTER,
+            3  => NpcType::DEMON,
+            2  => NpcType::DRAGONKIN,
+            4  => NpcType::ELEMENTAL,
+            5  => NpcType::GIANT,
+            7  => NpcType::HUMANOID,
+            9  => NpcType::MECHANICAL,
+            6  => NpcType::UNDEAD,
+            10 => NpcType::UNCATEGORIZED,
+        ];
+
+        $aggressivenessMapping = [
+            -1 => 'aggressive',
+            0  => 'neutral',
+            1  => 'friendly'
+        ];
+
+        try {
+            foreach ($decoded['data'] as $npcData) {
+                $npcCandidate = Npc::findOrNew($npcData['id']);
+
+                $beforeModel = clone $npcCandidate;
+
+                /** @var Dungeon $dungeon */
+                $dungeon = Dungeon::where('zone_id', $npcData['location'][0])->first();
+                if ($dungeon === null) {
+                    $log[] = sprintf('*** Unable to find dungeon with zone_id %s; npc %s (%s) NOT added; needs manual work', $npcData['location'][0], $npcData['id'], $npcData['name']);
+                    continue;
+                }
+
+                if ($npcCandidate->exists) {
+                    $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], $dungeon->name);
+                } else {
+                    $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], $dungeon->name);
+                }
+
+                $npcCandidate->id = $npcData['id'];
+                $npcCandidate->classification_id = ($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1;
+                $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
+                // 8 since we start the expansion with 8 dungeons usually
+                $npcCandidate->dungeon_id = count($npcData['location']) >= 8 ? -1 : $dungeon->id;
+                $npcCandidate->name = $npcData['name'];
+                // Do not overwrite health if it was set already
+                if ($npcCandidate->base_health <= 0) {
+                    $npcCandidate->base_health = 12345;
+                }
+                $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
+
+                $npcCandidate->save();
+
+                // Changed the mapping; so make sure we synchronize it
+                $this->mappingChanged($beforeModel->exists ? $beforeModel : null, $npcCandidate);
+            }
+        } catch (Exception $ex) {
+
+            dump($ex);
+        } finally {
+            dump($log);
+        }
     }
 
     /**
@@ -261,7 +345,7 @@ class AdminToolsController extends Controller
      */
     public function exportdungeondata(Request $request)
     {
-        \Artisan::call('mapping:save');
+        Artisan::call('mapping:save');
 
         return view('admin.tools.datadump.viewexporteddungeondata');
     }

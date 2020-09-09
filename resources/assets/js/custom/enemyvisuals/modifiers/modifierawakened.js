@@ -2,7 +2,7 @@ class EnemyVisualModifierAwakened extends EnemyVisualModifier {
     constructor(enemyvisual, index) {
         super(enemyvisual, index);
         // If it's loaded already, set it now
-        this.iconName = this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dungeon_id === -1 ? 'awakened_obelisk' : '';
+        this.iconName = 'awakened_obelisk';
     }
 
     /**

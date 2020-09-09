@@ -10,15 +10,15 @@ class Update extends Command
     use ExecutesShellCommands;
 
     const COMPILE = [
-        'live' => true,
-        'local' => false,
+        'live'    => true,
+        'local'   => false,
         'mapping' => true,
         'staging' => true
     ];
 
     const COMPILE_AS = [
-        'live' => 'production',
-        'local' => 'dev',
+        'live'    => 'production',
+        'local'   => 'dev',
         'mapping' => 'production',
         'staging' => 'dev'
     ];
@@ -42,7 +42,7 @@ class Update extends Command
      */
     public function handle()
     {
-        $environment= $this->argument('environment');
+        $environment = $this->argument('environment');
 
         $this->call('up');
         $this->call('down', [
@@ -50,15 +50,22 @@ class Update extends Command
             '--retry'   => 60
         ]);
 
-        $this->shell([
-            // Git commands
-            'git checkout .',
-            'git clean -f',
-            'git pull',
+        // Local environment GIT is managed by user - cannot update NPM from inside the VM; nor git pulls
+        if ($environment !== 'local') {
+            $this->shell([
+                // Git commands
+                'git checkout .',
+                'git clean -f',
+                'git pull',
+            ]);
 
-            // Update externals
-            'npm install',
-            'npm audit fix',
+            $this->shell([
+                'npm install',
+                'npm audit fix',
+            ]);
+        }
+        // Composer is fine though
+        $this->shell([
             'composer install',
         ]);
 
@@ -80,12 +87,12 @@ class Update extends Command
 
         $this->call('migrate', [
             '--database' => 'migrate',
-            '--force' => true
+            '--force'    => true
         ]);
 
         $this->call('db:seed', [
             '--database' => 'migrate',
-            '--force' => true
+            '--force'    => true
         ]);
 
         $this->call('optimize:clear');

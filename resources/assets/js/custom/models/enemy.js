@@ -24,11 +24,16 @@ L.Draw.Enemy = L.Draw.Marker.extend({
     }
 });
 
+let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
+let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
+let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
+
 /**
  * @property floor_id int
  * @property enemy_pack_id int
  * @property npc_id int
  * @property mdt_id int
+ * @property seasonal_type string
  * @property seasonal_index int
  * @property enemy_forces_override int
  * @property enemy_forces_override_teeming int
@@ -40,8 +45,8 @@ L.Draw.Enemy = L.Draw.Marker.extend({
  * @property L.Layer layer
  */
 class Enemy extends MapObject {
-    constructor(map, layer) {
-        super(map, layer, {name: 'enemy'});
+    constructor(map, layer, options = {name: 'enemy'}) {
+        super(map, layer, options);
 
         this.label = 'Enemy';
         // Used for keeping track of what kill zone this enemy is attached to
@@ -132,13 +137,34 @@ class Enemy extends MapObject {
                 default: -1
             }),
             new Attribute({
-                name: 'seasonal_index',
-                type: 'int',
+                name: 'seasonal_type',
+                type: 'select',
                 admin: true,
                 default: null,
+                values: [
+                    {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'},
+                    {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: 'Inspiring'},
+                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'}
+                ],
+                setter: function (value) {
+                    self.seasonal_type = value;
+                }
+            }),
+            new Attribute({
+                name: 'seasonal_index',
+                type: 'select',
+                admin: true,
+                default: null,
+                values: [
+                    {id: 0, name: 'Week 1'},
+                    {id: 1, name: 'Week 2'},
+                    {id: 2, name: 'Week 3'},
+                    {id: 3, name: 'Week 4'},
+                    {id: 4, name: 'Week 5'}
+                ],
                 setter: function (value) {
                     // NaN check
-                    if (value === '' || value !== value) {
+                    if (value === -1 || value === '' || value !== value) {
                         value = null;
                     }
                     self.seasonal_index = value;

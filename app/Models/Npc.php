@@ -41,7 +41,7 @@ class Npc extends Model
     public $timestamps = false;
 
     protected $with = ['type', 'class', 'npcbolsteringwhitelists'];
-    protected $fillable = ['id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming'];
+    protected $fillable = ['id', 'npc_type_id', 'npc_class_id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming', 'aggressiveness'];
 
     /**
      * @return bool

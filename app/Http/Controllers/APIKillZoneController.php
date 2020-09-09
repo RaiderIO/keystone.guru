@@ -35,7 +35,7 @@ class APIKillZoneController extends Controller
         $killZone = KillZone::findOrNew($data['id']);
 
         $killZone->dungeon_route_id = $dungeonroute->id;
-        $killZone->floor_id = (int)(isset($data['floor_id']) && $data['floor_id'] !== null) ? $data['floor_id'] : $killZone->floor_id;
+        $killZone->floor_id = (int)((isset($data['floor_id']) && $data['floor_id'] !== null) ? $data['floor_id'] : $killZone->floor_id);
         $killZone->color = (isset($data['color']) && $data['color'] !== null) ? $data['color'] : $killZone->color;
         $killZone->lat = (isset($data['lat']) && $data['lat'] !== null) ? $data['lat'] : $killZone->lat;
         $killZone->lng = (isset($data['lng']) && $data['lng'] !== null) ? $data['lng'] : $killZone->lng;

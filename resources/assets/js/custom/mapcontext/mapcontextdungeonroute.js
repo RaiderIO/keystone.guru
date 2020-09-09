@@ -120,4 +120,11 @@ class MapContextDungeonRoute extends MapContext {
     getBrushlines() {
         return this._options.brushlines;
     }
+
+    /**
+     * @returns {[]}
+     */
+    getPridefulEnemies() {
+        return this._options.pridefulenemies;
+    }
 }

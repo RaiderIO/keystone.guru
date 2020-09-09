@@ -5,6 +5,9 @@
 @section('content')
     <h3>{{ __('Tools') }}</h3>
     <div class="form-group">
+        <a href="{{ route('admin.tools.npcimport') }}">{{ __('Mass import NPCs') }}</a>
+    </div>
+    <div class="form-group">
         <a href="{{ route('admin.tools.mdt.string.view') }}">{{ __('View MDT String contents') }}</a>
     </div>
     <div class="form-group">

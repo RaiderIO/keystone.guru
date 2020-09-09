@@ -1,7 +1,5 @@
 <?php
 
-use App\Providers\ChatServiceProvider;
-
 return [
 
     /*
@@ -258,7 +256,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
-        'GitHub' => GrahamCampbell\GitHub\GitHubServiceProvider::class
+        'GitHub' => GrahamCampbell\GitHub\GitHubServiceProvider::class,
     ],
 
 ];

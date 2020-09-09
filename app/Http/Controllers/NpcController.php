@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ModelChangedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\NpcFormRequest;
+use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\NpcBolsteringWhitelist;
@@ -76,7 +77,15 @@ class NpcController extends Controller
             if ($oldId > 0) {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
             }
-            broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
+            // If no dungeon is set, user selected 'All Dungeons'
+            if ($npc->dungeon === null) {
+                // Broadcast the event for all dungeons
+                foreach (Dungeon::all() as $dungeon) {
+                    broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
+                }
+            } else {
+                broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
+            }
 
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($npcBefore, $npc);

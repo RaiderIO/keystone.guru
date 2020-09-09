@@ -70,13 +70,15 @@ class APIEnemyController extends Controller
         $enemy->mdt_id = $mdtId === null ? -1 : (int)$mdtId;
         $seasonalIndex = $request->get('seasonal_index');
         // don't use is_empty since 0 is valid
-        $enemy->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' ? null : (int)$seasonalIndex;
+        $enemy->seasonal_index = $seasonalIndex === null || $seasonalIndex === '' || $seasonalIndex < 0 ? null : (int)$seasonalIndex;
+        $seasonalType = $request->get('seasonal_type', null);
+        $enemy->seasonal_type = $seasonalType === null || $seasonalType === '' || $seasonalType < 0 ? null : $seasonalType;
         $enemy->floor_id = (int)$request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');
         $enemy->enemy_forces_override = (int)$request->get('enemy_forces_override', -1);
         $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
-        $enemy->lat = $request->get('lat');
+        $enemy->lat = (float) $request->get('lat');
         $enemy->lng = $request->get('lng');
 
         if ($enemy->save()) {

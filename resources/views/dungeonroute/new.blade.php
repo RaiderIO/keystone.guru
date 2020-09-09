@@ -9,24 +9,6 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
 @extends('layouts.app', ['wide' => true, 'title' => __('New route')])
 @section('header-title', $headerTitle)
 
-@section('scripts')
-    @parent
-
-    <script>
-        $(function () {
-            let $dungeonIdSelect = $('#dungeon_id_select');
-            $dungeonIdSelect.bind('change', function () {
-                let $factionWarning = $('#siege_of_boralus_faction_warning');
-                if (parseInt($dungeonIdSelect.val()) === {{ \App\Models\Dungeon::siegeOfBoralus()->get()->first()->id }} ) {
-                    $factionWarning.show();
-                } else {
-                    $factionWarning.hide();
-                }
-            });
-        })
-    </script>
-@endsection
-
 @section('content')
     @isset($model)
         {{ Form::model($model, ['route' => ['dungeonroute.update', $model->id], 'method' => 'patch']) }}
@@ -46,13 +28,7 @@ $defaultSelectedAffixes = old('affixes') ?? [$currentAffixGroup->id];
             </label>
             {!! Form::text('dungeon_route_title', '', ['class' => 'form-control']) !!}
         </div>
-        <div class="form-group">
-            {!! Form::label('dungeon_id', __('Dungeon') . '<span class="form-required">*</span>', [], false) !!}
-            {!! Form::select('dungeon_id', \App\Models\Dungeon::active()->orderBy('name')->pluck('name', 'id'), null, ['id' => 'dungeon_id_select', 'class' => 'form-control selectpicker']) !!}
-            <div id="siege_of_boralus_faction_warning" class="text-warning" style="display: none;">
-                {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
-            </div>
-        </div>
+        @include('common.dungeon.select', ['id' => 'dungeon_id_select', 'showAll' => false, 'showSiegeWarning' => true])
 
         <div class="form-group">
             <label for="teeming">

@@ -45,10 +45,7 @@ if (isset($model)) {
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
 
-    <div class="form-group">
-        {!! Form::label('dungeon_id', __('Dungeon') . '<span class="form-required">*</span>', [], false) !!}
-        {!! Form::select('dungeon_id', [-1 => __('All dungeons')] + \App\Models\Dungeon::active()->orderBy('name')->get()->pluck('name', 'id')->toArray(), null, ['class' => 'form-control']) !!}
-    </div>
+    @include('common.dungeon.select', ['activeOnly' => false, 'showShadowlandsPromo' => false])
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
         {!! Form::label('classification_id', __('Classification') . '<span class="form-required">*</span>', [], false) !!}

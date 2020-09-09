@@ -85,6 +85,12 @@ abstract class MapContext
             ];
         });
 
+        $npcMinHealth = $this->_floor->dungeon->getNpcsMinHealth();
+        $npcMaxHealth = $this->_floor->dungeon->getNpcsMaxHealth();
+
+        // Prevent the values being exactly the same, which causes issues in the front end
+        $npcMaxHealth = $npcMaxHealth + ($npcMinHealth === $npcMaxHealth ? 1 : 0);
+
         return [
             'type'          => $this->getType(),
             'floorId'       => $this->_floor->id,
@@ -93,8 +99,8 @@ abstract class MapContext
             'dungeon'       => $dungeonData,
             'static'        => $static,
             // @TODO Probably move this? Temp fix
-            'npcsMinHealth' => $this->_floor->dungeon->getNpcsMinHealth(),
-            'npcsMaxHealth' => $this->_floor->dungeon->getNpcsMaxHealth()
+            'npcsMinHealth' => $npcMinHealth,
+            'npcsMaxHealth' => $npcMaxHealth
         ];
     }
 }

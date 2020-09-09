@@ -50,8 +50,6 @@ if ($isAdmin) {
 }
 ?>
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
-    // Only activate Echo when we are logged in (guest access WIP)
-    'echo' => Auth::check(),
     'edit' => $edit,
     'try' => $tryMode,
     'defaultEnemyVisualType' => $enemyVisualType,
@@ -72,7 +70,7 @@ if ($isAdmin) {
     @include('common.general.statemanager', [
         // Required by echo to join the correct channels
         'appType' => env('APP_TYPE'),
-        'echo' => !$tryMode,
+        'echo' => Auth::check() && !$tryMode,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
         'mapContext' => $mapContext,

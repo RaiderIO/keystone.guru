@@ -57,32 +57,36 @@ if (isset($model)) {
                 </div>
             </div>
 
-            <div class="row view_dungeonroute_details_row">
-                <div class="col font-weight-bold">
-                    {{ __('Map elements') }}:
+            <div id="map_map_object_group_visibility_container">
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col font-weight-bold">
+                        {{ __('Map elements') }}:
+                    </div>
                 </div>
-            </div>
-            <div class="row view_dungeonroute_details_row">
-                <div class="col">
-                    {!! Form::select('map_map_object_group_visibility', [], 0,
-                        ['id' => 'map_map_object_group_visibility',
-                        'class' => 'form-control selectpicker',
-                        'multiple' => 'multiple',
-                        'data-selected-text-format' => 'count > 1',
-                        'data-count-selected-text' => __('{0} visible')]) !!}
+                <div class="row view_dungeonroute_details_row">
+                    <div class="col">
+                        {!! Form::select('map_map_object_group_visibility', [], 0,
+                            ['id' => 'map_map_object_group_visibility',
+                            'class' => 'form-control selectpicker',
+                            'multiple' => 'multiple',
+                            'data-selected-text-format' => 'count > 1',
+                            'data-count-selected-text' => __('{0} visible')]) !!}
+                    </div>
                 </div>
             </div>
 
             @if($floorSelection)
-                <div class="row view_dungeonroute_details_row mt-3">
-                    <div class="col font-weight-bold">
-                        {{ __('Floor') }}:
+                <div id="map_floor_selection">
+                    <div class="row view_dungeonroute_details_row mt-3">
+                        <div class="col font-weight-bold">
+                            {{ __('Floor') }}:
+                        </div>
                     </div>
-                </div>
-                <div class="row view_dungeonroute_details_row">
-                    <div class="col floor_selection">
-                        <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-                        {!! Form::select('map_floor_selection', [__('Select floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
+                    <div class="row view_dungeonroute_details_row">
+                        <div class="col">
+                            <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+                            {!! Form::select('map_floor_selection', [__('Select floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
+                        </div>
                     </div>
                 </div>
             @else
@@ -115,7 +119,7 @@ if (isset($model)) {
                 <div class="form-group">
                     <!-- Route settings -->
                     <div class="row">
-                        <div class="col">
+                        <div id="map_draw_settings_btn_container" class="col">
                             <button class="btn btn-info col" data-toggle="modal" data-target="#draw_settings_modal">
                                 <i class='fas fa-palette'></i> {{ __('Draw settings') }}
                             </button>
@@ -161,19 +165,19 @@ if (isset($model)) {
 
             @isset($show['tryout'])
                 @if (Auth::guest())
-                    <div class="form-group">
+                    <div id="map_login_and_continue" class="form-group">
                         <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
                             <i class="fas fa-sign-in-alt"></i> {{__('Login and continue')}}
                         </button>
                     </div>
-                    <div class="form-group">
+                    <div id="map_register_and_continue" class="form-group">
                         <button class="btn btn-primary mt-1 w-100" data-toggle="modal"
                                 data-target="#register_modal">
                             <i class="fas fa-user-plus"></i> {{ __('Register and continue') }}
                         </button>
                     </div>
                 @else
-                    <div class="form-group">
+                    <div id="map_save_and_continue" class="form-group">
                         <a href="{{ route('dungeonroute.claim', ['dungeonroute' => $model->public_key]) }}"
                            class="btn btn-primary mt-1 w-100" role="button">
                             <i class="fas fa-save"></i> {{ __('Save and continue') }}

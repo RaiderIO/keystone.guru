@@ -472,10 +472,12 @@ class MapObject extends Signalable {
      * @private
      */
     _setInitialized() {
-
-
+        let wasInitialized = this._initialized;
         this._initialized = true;
-        this.signal('object:initialized');
+
+        if( wasInitialized !== this._initialized ){
+            this.signal('object:initialized');
+        }
     }
 
     /**
@@ -681,7 +683,9 @@ class MapObject extends Signalable {
             }
 
             if (this.hasOwnProperty('seasonal_index')) {
-                if (this.seasonal_index !== null && mapContext.getSeasonalIndex() !== this.seasonal_index) {
+                // Ignore seasonal type if not set, but if it's set it must be awakened to hide the enemies based on seasonal_index
+                if ((!this.hasOwnProperty('seasonal_type') || this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) &&
+                    this.seasonal_index !== null && mapContext.getSeasonalIndex() !== this.seasonal_index) {
                     // console.warn(`Hiding enemy due to seasonal_index ${this.id}`);
                     return false;
                 }
@@ -864,7 +868,8 @@ class MapObject extends Signalable {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`,
+            url: this.options.hasOwnProperty('save_url') ? this.options.save_url :
+                `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`,
             dataType: 'json',
             data: this.getSaveData(),
             beforeSend: function () {
@@ -911,7 +916,8 @@ class MapObject extends Signalable {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}/${this.id}`,
+            url: this.options.hasOwnProperty('delete_url') ? this.options.delete_url :
+                `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}/${this.id}`,
             dataType: 'json',
             data: {
                 _method: 'DELETE'

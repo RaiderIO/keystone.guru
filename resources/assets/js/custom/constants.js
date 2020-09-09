@@ -21,20 +21,22 @@ let c = {
                 }
             }
         },
+        pridefulenemy: {
+            max: 5,
+            isEnabled: function () {
+                // Shadowlands dungeons only
+                return [28, 29, 30, 31, 32, 33, 34, 35].includes(getState().getMapContext().getDungeon().id);
+            }
+        },
         enemy: {
             /**
-             * At whatever zoom the classifications are displayed on the map
+             * At whatever zoom various modifiers are displayed on the map
              */
             classification_display_zoom: 3,
-            /**
-             * At whatever zoom the truesight modifier are displayed on the map
-             */
             truesight_display_zoom: 3,
-            /**
-             * At whatever zoom the teeming modifier are displayed on the map
-             */
             teeming_display_zoom: 3,
             awakened_display_zoom: 3,
+            inspiring_display_zoom: 3,
             colors: [
                 /*'#C000F0',
                 '#E25D5D',

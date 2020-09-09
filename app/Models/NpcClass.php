@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
  * @property string $name
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class NpcClass extends Model
 {
@@ -23,7 +25,7 @@ class NpcClass extends Model
     /**
      * Gets all derived NPCs from this class.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function npcs()
     {

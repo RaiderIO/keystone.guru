@@ -2,6 +2,10 @@
 
 
 return [
+    'super_admins' => [
+        'Admin',
+        'gallypsa'
+    ],
 
     'github_username' => 'Wotuu',
 
@@ -18,6 +22,51 @@ return [
         ],
         'static_data' => [
             'ttl' => '1 day'
+        ]
+    ],
+
+    'echo' => [
+        'randomsuffixes' => [
+            // Basilisks
+            'Stonegazer',
+            // Bats
+            'Shrieker',
+            'Duskbat',
+            // Bears
+            'Grizzly',
+            'Shardtooth',
+            // Birds
+            'Falcon',
+            'Raven',
+            'Seagull',
+            // Cat
+            'Shadow Stalker',
+            'Sabercat',
+            'Panther',
+            'Frostsaber',
+            'Lynx',
+            // Clefthoof
+            'Clefthoof',
+            'Calf',
+            'Bull',
+            // Crab
+            'Sharpclaw',
+            'Glimmershell',
+            'Crab',
+            'Rockshell',
+            'Crawler',
+            // Devilsaur
+            'Devilsaur',
+            'Fleshrender',
+            // Dog
+            'Hound',
+            'Darkhound',
+            'Watchdog',
+            'Mastiff',
+            'Deathhound',
+            'Felbeast',
+
+            // Can add more here, see https://www.wowhead.com/basilisk-npcs
         ]
     ],
 

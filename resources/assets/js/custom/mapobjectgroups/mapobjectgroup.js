@@ -120,7 +120,10 @@ class MapObjectGroup extends Signalable {
         for (let i = 0; i < this.objects.length; i++) {
             let mapObject = this.objects[i];
             if (mapObject.hasOwnProperty('seasonal_index') && mapObject.seasonal_index !== null) {
-                this.setMapObjectVisibility(mapObject, mapObject.seasonal_index === seasonalIndexChangedEvent.data.seasonalIndex);
+                // Only hide/show awakened enemies based on their seasonal index
+                if (!mapObject.hasOwnProperty('seasonal_type') || mapObject.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) {
+                    this.setMapObjectVisibility(mapObject, mapObject.seasonal_index === seasonalIndexChangedEvent.data.seasonalIndex);
+                }
             }
         }
     }
@@ -275,6 +278,7 @@ class MapObjectGroup extends Signalable {
         mapObject.register('object:initialized', this, (this._onObjectInitialized).bind(this));
         mapObject.register('object:changed', this, (this._onObjectChanged).bind(this));
         mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
+        mapObject.register('save:success', this, (this._onObjectSaveSuccess).bind(this));
 
         return mapObject;
     }
@@ -355,7 +359,7 @@ class MapObjectGroup extends Signalable {
      * @param objectInitializedEvent {object}
      * @private
      */
-    _onObjectInitialized(objectInitializedEvent){
+    _onObjectInitialized(objectInitializedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let object = objectInitializedEvent.context;
@@ -414,6 +418,16 @@ class MapObjectGroup extends Signalable {
         mapObject.unregister('object:initialized', this);
         mapObject.unregister('object:changed', this);
         mapObject.unregister('object:deleted', this);
+        mapObject.unregister('save:success', this);
+    }
+
+    /**
+     * Called when an object in our map object group is saved to the server
+     * @param objectSaveSuccess {object}
+     * @private
+     */
+    _onObjectSaveSuccess(objectSaveSuccess) {
+        this.signal('save:success', {object: objectSaveSuccess.context, objectgroup: this});
     }
 
     /**

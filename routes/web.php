@@ -176,6 +176,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             {
                 Route::get('/', 'AdminToolsController@index')->name('admin.tools');
 
+                Route::get('/npcimport', 'AdminToolsController@npcimport')->name('admin.tools.npcimport');
+                Route::post('/npcimport', 'AdminToolsController@npcimportsubmit')->name('admin.tools.npcimport.submit');
+
                 // View string contents
                 Route::get('mdt/string', 'AdminToolsController@mdtview')->name('admin.tools.mdt.string.view');
                 Route::post('mdt/string', 'AdminToolsController@mdtviewsubmit')->name('admin.tools.mdt.string.submit');
@@ -263,6 +266,9 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::post('/mapicon', 'APIMapIconController@store');
             Route::delete('/mapicon/{mapicon}', 'APIMapIconController@delete');
+
+            Route::post('/pridefulenemy/{enemy}', 'APIPridefulEnemyController@store');
+            Route::delete('/pridefulenemy/{enemy}', 'APIPridefulEnemyController@delete');
 
             Route::post('/path', 'APIPathController@store');
             Route::delete('/path/{path}', 'APIPathController@delete');

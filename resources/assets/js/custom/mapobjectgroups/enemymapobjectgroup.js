@@ -17,13 +17,25 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this._updateVisibility();
     }
 
+    _onPridefulEnemyAssigned(assignedEvent) {
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+
+        this.signal('pridefulenemy:assigned', {pridefulenemy: assignedEvent.context});
+    }
+
+    _onPridefulEnemyUnassigned(unassignedEvent) {
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+
+        this.signal('pridefulenemy:unassigned', {pridefulenemy: unassignedEvent.context});
+    }
+
     /**
      * @inheritDoc
      **/
     _getRawObjects() {
         let enemies = [];
         let mapContext = getState().getMapContext();
-        if( mapContext instanceof MapContextDungeon ) {
+        if (mapContext instanceof MapContextDungeon) {
             // Union to create new array
             enemies = _.union(enemies, mapContext.getMdtEnemies());
         }
@@ -42,11 +54,20 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     /**
      * @inheritDoc
      */
+    _getOptions(remoteMapObject) {
+        return {seasonalType: remoteMapObject.seasonal_type};
+    }
+
+    /**
+     * @inheritDoc
+     */
     _createMapObject(layer, options = {}) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
         if (getState().isMapAdmin()) {
             return new AdminEnemy(this.manager.map, layer);
+        } else if (options.hasOwnProperty('seasonalType') && options.seasonalType === 'prideful') {
+            return new PridefulEnemy(this.manager.map, layer);
         } else {
             return new Enemy(this.manager.map, layer);
         }
@@ -72,7 +93,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     load() {
         super.load();
 
-
         // Couple awakened enemies to each other
         for (let i = 0; i < this.objects.length; i++) {
             let enemy = this.objects[i];
@@ -93,45 +113,25 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     }
                 }
             }
-        }
-    }
 
-    _fetchSuccess(response) {
-        // no super call, we're handling this by ourselves
-        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+            // Check if the enemy is a Prideful enemy, and if so if we should move it to a different floor / lat+lng
+            if (enemy instanceof PridefulEnemy) {
+                let pridefulEnemiesData = getState().getMapContext().getPridefulEnemies();
+                for (let i = 0; i < pridefulEnemiesData.length; i++) {
+                    let pridefulEnemyData = pridefulEnemiesData[i];
 
-        // Only generate the enemies once
-        // if (getState().getEnemies().length === 0) {
-        // The enemies are no longer returned from the response; get it from the getState() instead
-        let enemySets = [
-            getState().getMapContext().getEnemies(),
-            getState().getMapContext().getMdtEnemies(),
-        ];
-
-        // For each set of enemies..
-        for (let i = 0; i < enemySets.length; i++) {
-            let enemySet = enemySets[i];
-            // Now draw the enemies on the map, if any
-            for (let index in enemySet) {
-                // Only if actually set
-                if (enemySet.hasOwnProperty(index)) {
-                    // Only restore enemies for the current floor
-                    this._loadMapObject(enemySet[index]);
+                    // If we have a match..
+                    if (pridefulEnemyData.enemy_id === enemy.id) {
+                        enemy.setAssignedLocation(pridefulEnemyData.lat, pridefulEnemyData.lng, pridefulEnemyData.floor_id);
+                        // May stop now
+                        break;
+                    }
                 }
+
+                enemy.register('pridefulenemy:assigned', this, this._onPridefulEnemyAssigned.bind(this));
+                enemy.register('pridefulenemy:unassigned', this, this._onPridefulEnemyUnassigned.bind(this));
             }
         }
-
-        // Set the enemies back to our state
-        getState().setEnemies(this.objects);
-        // } else {
-        //     // Update the visibility of the existing enemies
-        //     for (let i = 0; i < this.objects.length; i++) {
-        //         let enemy = this.objects[i];
-        //         this.setMapObjectVisibility(enemy, enemy.shouldBeVisible());
-        //     }
-        // }
-
-        this.signal('loadcomplete');
     }
 
     /**
@@ -150,5 +150,44 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
 
         return finalBoss;
+    }
+
+    /**
+     *
+     * @returns {PridefulEnemy|null}
+     */
+    getFreePridefulEnemy() {
+        let result = null;
+
+        for (let i = 0; i < this.objects.length; i++) {
+            let enemy = this.objects[i];
+            if (enemy instanceof PridefulEnemy) {
+                if (!enemy.isAssigned()) {
+                    result = enemy;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Get the amount of free prideful enemies.
+     * @returns {number}
+     */
+    getAssignedPridefulEnemies() {
+        let result = 0;
+
+        for (let i = 0; i < this.objects.length; i++) {
+            let enemy = this.objects[i];
+            if (enemy instanceof PridefulEnemy) {
+                if (enemy.isAssigned()) {
+                    result++;
+                }
+            }
+        }
+
+        return result;
     }
 }

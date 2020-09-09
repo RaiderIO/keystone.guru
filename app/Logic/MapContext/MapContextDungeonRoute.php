@@ -59,6 +59,7 @@ class MapContextDungeonRoute extends MapContext
             'mapIcons'                => $this->_context->mapicons,
             'paths'                   => $this->_context->paths,
             'brushlines'              => $this->_context->brushlines,
+            'pridefulenemies'         => $this->_context->pridefulenemies,
         ]);
     }
 

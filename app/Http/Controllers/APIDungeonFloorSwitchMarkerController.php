@@ -37,8 +37,8 @@ class APIDungeonFloorSwitchMarkerController extends Controller
 
         $dungeonFloorSwitchMarker->floor_id = (int) $request->get('floor_id');
         $dungeonFloorSwitchMarker->target_floor_id = (int) $request->get('target_floor_id');
-        $dungeonFloorSwitchMarker->lat = $request->get('lat');
-        $dungeonFloorSwitchMarker->lng = $request->get('lng');
+        $dungeonFloorSwitchMarker->lat = (float) $request->get('lat');
+        $dungeonFloorSwitchMarker->lng = (float) $request->get('lng');
 
         // Find out of there is a duplicate
         if (!$dungeonFloorSwitchMarker->exists) {
