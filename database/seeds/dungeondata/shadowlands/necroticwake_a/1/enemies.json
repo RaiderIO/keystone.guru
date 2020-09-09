@@ -1630,5 +1630,90 @@
         "npc": {
             "id": 166079
         }
+    },
+    {
+        "id": 4935,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -96,
+        "lng": 333.75,
+        "npc": {
+            "id": 173729
+        }
+    },
+    {
+        "id": 4936,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -96,
+        "lng": 341.625,
+        "npc": {
+            "id": 173729
+        }
+    },
+    {
+        "id": 4937,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -102,
+        "lng": 337.5625,
+        "npc": {
+            "id": 173729
+        }
+    },
+    {
+        "id": 4938,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -109.375,
+        "lng": 333.5,
+        "npc": {
+            "id": 173729
+        }
+    },
+    {
+        "id": 4939,
+        "enemy_pack_id": -1,
+        "floor_id": 89,
+        "mdt_id": -1,
+        "seasonal_type": "prideful",
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "enemy_forces_override": -1,
+        "enemy_forces_override_teeming": -1,
+        "lat": -109.625,
+        "lng": 341.125,
+        "npc": {
+            "id": 173729
+        }
     }
 ]
