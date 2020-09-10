@@ -72,6 +72,24 @@
         "npcbolsteringwhitelists": []
     },
     {
+        "id": 171474,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Finger Food",
+        "base_health": 248000,
+        "enemy_forces": -1,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": []
+    },
+    {
         "id": 173729,
         "dungeon_id": -1,
         "classification_id": 2,
