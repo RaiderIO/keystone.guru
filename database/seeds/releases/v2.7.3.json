@@ -4,7 +4,7 @@
     "version": "v2.7.3",
     "created_at": "2019-12-05T00:22:13+00:00",
     "updated_at": "2019-12-05T00:22:13+00:00",
-    "github_body": "Bugfixes:\n    *  Fixed being unable to delete routes.\n    *  Fixed issue where if someone edited ?offset=something it'd crash.\n    *  Fixed affixes not being saved.\n    *  Fixed crash when attempting to edit route details.",
+    "github_body": "Bugfixes:\n*  Fixed being unable to delete routes.\n*  Fixed issue where if someone edited ?offset=something it'd crash.\n*  Fixed affixes not being saved.\n*  Fixed crash when attempting to edit route details.",
     "discord_body": "v2.7.3 (2019\/12\/05)(https:\/\/keystone.guru\/release\/v2.7.3)\nBugfixes:\n    *  Fixed being unable to delete routes.\n    *  Fixed issue where if someone edited ?offset=something it'd crash.\n    *  Fixed affixes not being saved.\n    *  Fixed crash when attempting to edit route details.",
     "reddit_body": "[https:\/\/keystone.guru\/release\/v2.7.3](https:\/\/keystone.guru\/release\/v2.7.3)\n\nBugfixes:\n*  Fixed being unable to delete routes.\n*  Fixed issue where if someone edited ?offset=something it'd crash.\n*  Fixed affixes not being saved.\n*  Fixed crash when attempting to edit route details.",
     "changelog": {
