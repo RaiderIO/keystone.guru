@@ -490,7 +490,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             self._newPullKillZone = killZoneCreatedEvent.data.newKillZone;
         });
         killZoneMapObjectGroup.register('save:success', this, function (killZoneSaveSuccessEvent) {
-            self._onKillZoneAdded(killZoneSaveSuccessEvent.data.object);
+            self._onKillZoneSaved(killZoneSaveSuccessEvent.data.object);
         });
         // If the killzone was deleted, get rid of our display too
         killZoneMapObjectGroup.register('object:deleted', this, function (killZoneDeletedEvent) {
@@ -509,7 +509,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         } else {
             // Load all existing killzones
             for (let i = 0; i < killZoneMapObjectGroup.objects.length; i++) {
-                self._onKillZoneAdded(killZoneMapObjectGroup.objects[i]);
+                self._onKillZoneSaved(killZoneMapObjectGroup.objects[i]);
             }
         }
 
@@ -534,17 +534,20 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @param killZone
      * @private
      */
-    _onKillZoneAdded(killZone) {
+    _onKillZoneSaved(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
-        let self = this;
+        // On save, add the row first time 'round
+        if ($(`#map_killzonessidebar_killzone_${killZone.id}`).length === 0) {
+            let self = this;
 
-        // Add the killzone to our list
-        this._addKillZone(killZone);
-        // Listen to changes in the killzone
-        killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], this, function (killZoneChangedEvent) {
-            self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
-        });
+            // Add the killzone to our list
+            this._addKillZone(killZone);
+            // Listen to changes in the killzone
+            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], this, function (killZoneChangedEvent) {
+                self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
+            });
+        }
     }
 
     /**
