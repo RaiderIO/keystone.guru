@@ -81,18 +81,6 @@ class CommonMapsMap extends InlineCode {
                         step++;
                     }
                 }
-
-                // If the map is opened on mobile hide the sidebar
-                if (isMobile()) {
-                    let fn = function () {
-                        if (typeof _hideSidebar === 'function') {
-                            // @TODO This introduces a dependency on sidebar, but sidebar loads before dungeonMap is instantiated
-                            _hideSidebar();
-                        }
-                    };
-                    self._dungeonMap.leafletMap.off('move', fn);
-                    self._dungeonMap.leafletMap.on('move', fn);
-                }
             });
         }
 
