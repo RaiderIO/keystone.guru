@@ -4,7 +4,7 @@
     "version": "v3.1.1",
     "created_at": "2020-07-02T08:10:02+00:00",
     "updated_at": "2020-07-02T08:10:02+00:00",
-    "github_body": "MDT importer changes:\n    * #374 Fixed an issue where importing strings with week = 1 (current affix week) would cause a 400 bad request.\n    * #371 Importing strings will now correctly set the pull index.",
+    "github_body": "MDT importer changes:\n* #374 Fixed an issue where importing strings with week = 1 (current affix week) would cause a 400 bad request.\n* #371 Importing strings will now correctly set the pull index.",
     "discord_body": "v3.1.1 (2020\/07\/02)(https:\/\/keystone.guru\/release\/v3.1.1)\nMDT importer changes:\n    * #374 Fixed an issue where importing strings with week = 1 (current affix week) would cause a 400 bad request.\n    * #371 Importing strings will now correctly set the pull index.",
     "reddit_body": "[https:\/\/keystone.guru\/release\/v3.1.1](https:\/\/keystone.guru\/release\/v3.1.1)\n\nMDT importer changes:\n* [\\#374](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/374) Fixed an issue where importing strings with week = 1 (current affix week) would cause a 400 bad request.\n* [\\#371](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/371) Importing strings will now correctly set the pull index.",
     "changelog": {
