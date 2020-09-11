@@ -4,7 +4,7 @@
     "version": "v2.9",
     "created_at": "2020-04-17T05:20:31+00:00",
     "updated_at": "2020-04-17T05:20:31+00:00",
-    "github_body": "Map changes:\n    * #263 Map comment fixed width is removed; the comment now always scales to the width of the text.\nMDT importer changes:\n    * #266 MDT importer works again; fixed various errors and updated to the latest version of Mythic Dungeon Tools.",
+    "github_body": "Map changes:\n* #263 Map comment fixed width is removed; the comment now always scales to the width of the text.\n\nMDT importer changes:\n* #266 MDT importer works again; fixed various errors and updated to the latest version of Mythic Dungeon Tools.",
     "discord_body": "v2.9 (2020\/04\/17)(https:\/\/keystone.guru\/release\/v2.9)\nMap changes:\n    * #263 Map comment fixed width is removed; the comment now always scales to the width of the text.\n\nMDT importer changes:\n    * #266 MDT importer works again; fixed various errors and updated to the latest version of Mythic Dungeon Tools.",
     "reddit_body": "[https:\/\/keystone.guru\/release\/v2.9](https:\/\/keystone.guru\/release\/v2.9)\n\nMap changes:\n* [\\#263](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/263) Map comment fixed width is removed; the comment now always scales to the width of the text.\n\nMDT importer changes:\n* [\\#266](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/266) MDT importer works again; fixed various errors and updated to the latest version of Mythic Dungeon Tools.",
     "changelog": {

@@ -4,7 +4,7 @@
     "version": "v1.5.1",
     "created_at": "2018-12-17T12:46:19+00:00",
     "updated_at": "2018-12-17T12:46:19+00:00",
-    "github_body": "General changes:\n    *  Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by dungeon.\n    *  Fixed some route thumbnails not being generated.\n    *  Fixed creating a new route with Attributes assigned from the start giving a 500 server error.",
+    "github_body": "General changes:\n*  Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by dungeon.\n*  Fixed some route thumbnails not being generated.\n*  Fixed creating a new route with Attributes assigned from the start giving a 500 server error.",
     "discord_body": "v1.5.1 (2018\/12\/17)(https:\/\/keystone.guru\/release\/v1.5.1)\nGeneral changes:\n    *  Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by dungeon.\n    *  Fixed some route thumbnails not being generated.\n    *  Fixed creating a new route with Attributes assigned from the start giving a 500 server error.",
     "reddit_body": "[https:\/\/keystone.guru\/release\/v1.5.1](https:\/\/keystone.guru\/release\/v1.5.1)\n\nGeneral changes:\n*  Fixed default sorting on Routes preview page to properly default to the current week's affixes, not by dungeon.\n*  Fixed some route thumbnails not being generated.\n*  Fixed creating a new route with Attributes assigned from the start giving a 500 server error.",
     "changelog": {
