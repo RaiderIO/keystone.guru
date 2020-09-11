@@ -1137,6 +1137,7 @@ class DungeonsSeeder extends Seeder
                 $floor->dungeon_id = $dungeon->id;
                 $floor->name = $floorName;
                 $floor->index = $floorData['index'];
+                $floor->default = $floorData['default'] ?? false;
 
                 $floor->save();
                 // Save the floor back to the array so we can recall it later
