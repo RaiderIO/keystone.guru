@@ -20,8 +20,7 @@ class DungeonsSeeder extends Seeder
         $bfa = $expansions->where('shortname', 'bfa')->first();
         $shadowlands = $expansions->where('shortname', 'shadowlands')->first();
 
-        $isMapping = env('APP_TYPE') === 'mapping';
-
+        $isMapping = env('APP_TYPE') === 'mapping' || env('APP_TYPE') === 'local';
 
         $dungeonsDataLegion = [
             'Arcway'                         => [

@@ -47,7 +47,7 @@ class CommonMapsMap extends InlineCode {
                 ['intro_visibility_tools', '.visibility_tools', 'right'],
                 ['intro_map_enemy_visuals', '#map_enemy_visuals', 'right'],
                 ['intro_map_map_object_group_visibility_container', '#map_map_object_group_visibility_container', 'right'],
-                ['intro_floor_selection', '#map_floor_selection', 'right'],
+                ['intro_floor_selection', '#map_floor_selection_container', 'right'],
 
                 ['intro_route_actions', '.route_actions', 'right'],
                 ['intro_route_actions_draw_settings', '#map_draw_settings_btn_container', 'right'],
