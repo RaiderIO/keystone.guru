@@ -31,5 +31,71 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -206.875,
+        "lng": 54.625,
+        "comment": "Exit",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -83.0625,
+        "lng": 260.4375,
+        "comment": "Depleted Anima Seed",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -60.4375,
+        "lng": 241.625,
+        "comment": "Blocked\/Not a path",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -153.625,
+        "lng": 245.25,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -167.25,
+        "lng": 226,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -166.25,
+        "lng": 202.125,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
