@@ -2,18 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\DungeonFormRequest;
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Session;
 
 class DungeonController extends Controller
 {
+    use ChangesMapping;
+
     /**
      * @param DungeonFormRequest $request
-     * @param Dungeon $dungeon
+     * @param Dungeon|null $dungeon
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function store($request, Dungeon $dungeon = null)
     {
@@ -21,16 +29,21 @@ class DungeonController extends Controller
             $dungeon = new Dungeon();
         }
 
+        $beforeDungeon = clone $dungeon;
+
         /** @var Dungeon $dungeon */
+        // May not be set when editing
+//        $dungeon->expansion_id = $request->get('expansion_id');
+        $dungeon->zone_id = $request->get('zone_id');
         $dungeon->name = $request->get('name');
         $dungeon->enemy_forces_required = $request->get('enemy_forces_required');
         $dungeon->enemy_forces_required_teeming = $request->get('enemy_forces_required_teeming');
-        // May not be set when editing
-        $dungeon->expansion_id = $request->get('expansion_id');
         $dungeon->active = $request->get('active', 0);
 
         // Update or insert it
-        if (!$dungeon->save()) {
+        if ($dungeon->save()) {
+            $this->mappingChanged($beforeDungeon, $dungeon);
+        } else {
             abort(500, 'Unable to save dungeon');
         }
 
@@ -38,7 +51,7 @@ class DungeonController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function new()
     {
@@ -51,7 +64,7 @@ class DungeonController extends Controller
     /**
      * @param Request $request
      * @param Dungeon $dungeon
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function edit(Request $request, Dungeon $dungeon)
     {
@@ -65,8 +78,8 @@ class DungeonController extends Controller
     /**
      * @param DungeonFormRequest $request
      * @param Dungeon $dungeon
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function update(DungeonFormRequest $request, Dungeon $dungeon)
     {
@@ -74,7 +87,7 @@ class DungeonController extends Controller
         $dungeon = $this->store($request, $dungeon);
 
         // Message to the user
-        \Session::flash('status', __('Dungeon updated'));
+        Session::flash('status', __('Dungeon updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeon);
@@ -82,8 +95,8 @@ class DungeonController extends Controller
 
     /**
      * @param DungeonFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function savenew(DungeonFormRequest $request)
     {
@@ -91,7 +104,7 @@ class DungeonController extends Controller
         $dungeon = $this->store($request);
 
         // Message to the user
-        \Session::flash('status', __('Dungeon created'));
+        Session::flash('status', __('Dungeon created'));
 
         return redirect()->route('admin.dungeon.edit', ["dungeon" => $dungeon]);
     }
@@ -99,7 +112,7 @@ class DungeonController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory|
      */
     public function list()
     {

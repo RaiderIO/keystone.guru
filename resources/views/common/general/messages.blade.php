@@ -13,12 +13,12 @@ $center = isset($center) && $center ? true : false;
 
 @if (session('status'))
     <div id="app_session_status_message" class="alert alert-success {{ $center ? 'text-center' : '' }}">
-        {{ session('status') }}
+        <i class="fas fa-check-circle"></i> {{ session('status') }}
     </div>
 @endif
 
 @if (session('warning'))
     <div id="app_session_warning_message" class="alert alert-warning {{ $center ? 'text-center' : '' }}">
-        {{ session('warning') }}
+        <i class="fas fa-exclamation-triangle"></i> {{ session('warning') }}
     </div>
 @endif
