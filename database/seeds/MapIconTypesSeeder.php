@@ -64,6 +64,15 @@ class MapIconTypesSeeder extends Seeder
             'exclamation_yellow' => ['name' => 'Exclamation'],
             'exclamation_blue'   => ['name' => 'Exclamation'],
             'exclamation_orange' => ['name' => 'Exclamation'],
+
+            'neonbutton_blue'   => ['name' => 'Button blue'],
+            'neonbutton_cyan'   => ['name' => 'Button cyan'],
+            'neonbutton_green'  => ['name' => 'Button green'],
+            'neonbutton_orange' => ['name' => 'Button orange'],
+            'neonbutton_pink'   => ['name' => 'Button pink'],
+            'neonbutton_purple' => ['name' => 'Button purple'],
+            'neonbutton_red'    => ['name' => 'Button red'],
+            'neonbutton_yellow' => ['name' => 'Button yellow'],
         ];
 
         foreach ($mapIconData as $key => $mapIcon) {

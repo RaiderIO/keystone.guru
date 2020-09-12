@@ -76,7 +76,7 @@ if (isset($model)) {
             </div>
 
             @if($floorSelection)
-                <div id="map_floor_selection">
+                <div id="map_floor_selection_container">
                     <div class="row view_dungeonroute_details_row mt-3">
                         <div class="col font-weight-bold">
                             {{ __('Floor') }}:

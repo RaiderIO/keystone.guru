@@ -13,6 +13,15 @@ class Sidebar {
     activate() {
         let self = this;
 
+        if( isMobile() ) {
+            let dungeonMap = getState().getDungeonMap();
+            let fn = function () {
+                self._hideSidebar();
+            };
+            dungeonMap.leafletMap.off('move', fn);
+            dungeonMap.leafletMap.on('move', fn);
+        }
+
         // Register for external changes so that we update our dropdown
         getState().register('floorid:changed', this, function (floorIdChangedEvent) {
             if (self._floorIdChangeSource === null) {
