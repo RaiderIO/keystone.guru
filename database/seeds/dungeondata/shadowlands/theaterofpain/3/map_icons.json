@@ -1,1 +1,134 @@
-[]
+[
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 24,
+        "lat": -164.15625,
+        "lng": 194.59375,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 25,
+        "lat": -162.15625,
+        "lng": 199.90625,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 24,
+        "lat": -146.75,
+        "lng": 164.625,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 26,
+        "lat": -137.25,
+        "lng": 154.875,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 26,
+        "lat": -112.375,
+        "lng": 83.75,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 27,
+        "lat": -108,
+        "lng": 119.5,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 29,
+        "lat": -116.25,
+        "lng": 119.25,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 27,
+        "lat": -63,
+        "lng": 145.25,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 28,
+        "lat": -57.75,
+        "lng": 183.25,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 28,
+        "lat": -85,
+        "lng": 302.75,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 30,
+        "lat": -88,
+        "lng": 317.5,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 94,
+        "team_id": null,
+        "map_icon_type_id": 30,
+        "lat": -111.75,
+        "lng": 338.75,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
