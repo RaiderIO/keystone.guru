@@ -19,6 +19,7 @@ class DungeonDataSeeder extends Seeder
 
         $nameMapping = [
             // Loose files
+            'dungeons'                     => 'App\Models\Dungeon',
             'npcs'                         => 'App\Models\Npc',
             'dungeonroutes'                => 'App\Models\DungeonRoute',
 
@@ -97,12 +98,13 @@ class DungeonDataSeeder extends Seeder
     }
 
     /**
-     * @param $filePath
+     * @param $filePath string
      * @param $modelClassName \Illuminate\Database\Eloquent\Model
+     * @param $update boolean
      * @return int The amount of models loaded from the file
      * @throws \Exception
      */
-    private function _loadModelsFromFile($filePath, $modelClassName)
+    private function _loadModelsFromFile($filePath, $modelClassName, $update = false)
     {
         // $this->command->info('>> _loadModelsFromFile ' . $filePath . ' ' . $modelClassName);
         // Load contents
@@ -141,6 +143,7 @@ class DungeonDataSeeder extends Seeder
             new DungeonRouteKillZoneRelationParser(),
 
             new DungeonRouteEnemyRaidMarkersRelationParser(),
+            new DungeonRoutePridefulEnemiesRelationParser(),
 
             new DungeonRouteMapIconsRelationParser()
         ];
@@ -180,7 +183,15 @@ class DungeonDataSeeder extends Seeder
             // $this->command->info("Creating model " . json_encode($modelData));
             // Create and save a new instance to the database
             /** @var \Illuminate\Database\Eloquent\Model $createdModel */
-            $createdModel = $modelClassName::create($modelData);
+            if (isset($modelData['id'])) {
+                // Load first
+                $createdModel = $modelClassName::findOrNew($modelData['id']);
+                // Apply, then save
+                $createdModel->setRawAttributes($modelData);
+                $createdModel->save();
+            } else {
+                $createdModel = $modelClassName::create($modelData);
+            }
             $modelData['id'] = $createdModel->id;
 
             // Merge the unset relations with the model again so we can parse the model again

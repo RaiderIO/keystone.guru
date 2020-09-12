@@ -17,8 +17,7 @@
 @section('scripts')
 <script type="text/javascript">
     $(function () {
-        $('#admin_dungeon_floor_table').DataTable({
-        });
+        $('#admin_dungeon_floor_table').DataTable({});
     });
 </script>
 @endsection
@@ -37,10 +36,16 @@
     @include('common.forms.form-error', ['key' => 'active'])
 </div>
 
-<div class="form-group{{ $errors->has('expansion_id') ? ' has-error' : '' }}">
-    {!! Form::label('expansion_id', __('Expansion')) !!}
-    {!! Form::select('expansion_id', $expansions, null, ['class' => 'form-control']) !!}
-    @include('common.forms.form-error', ['key' => 'expansion_id'])
+{{--<div class="form-group{{ $errors->has('expansion_id') ? ' has-error' : '' }}">--}}
+{{--    {!! Form::label('expansion_id', __('Expansion')) !!}--}}
+{{--    {!! Form::select('expansion_id', $expansions, null, ['class' => 'form-control']) !!}--}}
+{{--    @include('common.forms.form-error', ['key' => 'expansion_id'])--}}
+{{--</div>--}}
+
+<div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">
+    {!! Form::label('zone_id', __('Zone ID')) !!}
+    {!! Form::number('zone_id', null, ['class' => 'form-control']) !!}
+    @include('common.forms.form-error', ['key' => 'zone_id'])
 </div>
 
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -51,13 +56,13 @@
 
 <div class="form-group{{ $errors->has('enemy_forces_required') ? ' has-error' : '' }}">
     {!! Form::label('enemy_forces_required', __('Enemy forces required')) !!}
-    {!! Form::text('enemy_forces_required', null, ['class' => 'form-control']) !!}
+    {!! Form::number('enemy_forces_required', null, ['class' => 'form-control']) !!}
     @include('common.forms.form-error', ['key' => 'enemy_forces_required'])
 </div>
 
 <div class="form-group{{ $errors->has('enemy_forces_required_teeming') ? ' has-error' : '' }}">
     {!! Form::label('enemy_forces_required_teeming', __('Enemy forces required (teeming)')) !!}
-    {!! Form::text('enemy_forces_required_teeming', null, ['class' => 'form-control']) !!}
+    {!! Form::number('enemy_forces_required_teeming', null, ['class' => 'form-control']) !!}
     @include('common.forms.form-error', ['key' => 'enemy_forces_required_teeming'])
 </div>
 
@@ -67,11 +72,12 @@
 @isset($model)
 </div>
 <h4>{{ __('Floor management') }}</h4>
-<div class="float-right">
-    <a href="{{ route('admin.floor.new', array('dungeon' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('Add floor') }}
-    </a>
-</div>
+{{--Disabled since floors should only be created through seeders--}}
+{{--<div class="float-right">--}}
+{{--    <a href="{{ route('admin.floor.new', array('dungeon' => $model->id)) }}" class="btn btn-success text-white pull-right" role="button">--}}
+{{--        <i class="fas fa-plus"></i> {{ __('Add floor') }}--}}
+{{--    </a>--}}
+{{--</div>--}}
 
 <table id="admin_dungeon_floor_table" class="tablesorter default_table table-striped">
     <thead>

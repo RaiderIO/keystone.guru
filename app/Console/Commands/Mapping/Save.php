@@ -40,6 +40,11 @@ class Save extends Command
      */
     public function handle()
     {
+        $dungeonDataDir = database_path('/seeds/dungeondata/');
+
+        // Save all dungeon data
+        $dungeons = Dungeon::without(['expansion', 'floors'])->get();
+        $this->saveDataToJsonFile($dungeons->makeHidden(['key', 'active', 'floor_count', 'expansion', 'floors'])->toArray(), $dungeonDataDir, 'dungeons.json');
 
         // Save all NPCs which aren't directly tied to a dungeon
         $npcs = Npc::all()->where('dungeon_id', -1)->values();
@@ -49,7 +54,6 @@ class Save extends Command
         }
 
         // Save NPC data in the root of folder
-        $dungeonDataDir = database_path('/seeds/dungeondata/');
         $this->info('Saving global NPCs');
         $this->saveDataToJsonFile($npcs->toArray(), $dungeonDataDir, 'npcs.json');
 
@@ -74,7 +78,8 @@ class Save extends Command
                 // for each and every re-import
                 $demoRoute->setHidden(['id', 'thumbnail_updated_at']);
                 $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
-                                  'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers', 'mapicons']);
+                                  'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers',
+                                  'pridefulenemies', 'mapicons']);
 
                 // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
                 // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
@@ -112,6 +117,9 @@ class Save extends Command
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->enemyraidmarkers as $item) {
+                    $toHide->add($item);
+                }
+                foreach ($demoRoute->pridefulenemies as $item) {
                     $toHide->add($item);
                 }
                 foreach ($demoRoute->mapicons as $item) {
