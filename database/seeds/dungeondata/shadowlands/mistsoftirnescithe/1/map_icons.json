@@ -119,5 +119,16 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "floor_id": 80,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -67.5625,
+        "lng": 249.9375,
+        "comment": "Wall that doesn't appear on map",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
