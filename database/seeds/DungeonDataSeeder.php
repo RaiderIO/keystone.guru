@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\DungeonRoute;
+use App\Models\Expansion;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 
 class DungeonDataSeeder extends Seeder
@@ -39,7 +42,7 @@ class DungeonDataSeeder extends Seeder
             $rootDirChildBaseName = basename($rootDirChild);
 
             // Only folders which have the correct shortname
-            if (\App\Models\Expansion::where('shortname', $rootDirChildBaseName)->first() !== null) {
+            if (Expansion::where('shortname', $rootDirChildBaseName)->first() !== null) {
                 $this->command->info('Expansion ' . $rootDirChildBaseName);
                 $expansionDirIterator = new FilesystemIterator($rootDirChild);
 
@@ -99,10 +102,10 @@ class DungeonDataSeeder extends Seeder
 
     /**
      * @param $filePath string
-     * @param $modelClassName \Illuminate\Database\Eloquent\Model
+     * @param $modelClassName Model
      * @param $update boolean
      * @return int The amount of models loaded from the file
-     * @throws \Exception
+     * @throws Exception
      */
     private function _loadModelsFromFile($filePath, $modelClassName, $update = false)
     {
@@ -182,7 +185,7 @@ class DungeonDataSeeder extends Seeder
 
             // $this->command->info("Creating model " . json_encode($modelData));
             // Create and save a new instance to the database
-            /** @var \Illuminate\Database\Eloquent\Model $createdModel */
+            /** @var Model $createdModel */
             if (isset($modelData['id'])) {
                 // Load first
                 $createdModel = $modelClassName::findOrNew($modelData['id']);
@@ -232,14 +235,14 @@ class DungeonDataSeeder extends Seeder
         DB::table('polylines')->where('model_class', 'App\Models\EnemyPatrol')->delete();
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
-        $demoRoutes = \App\Models\DungeonRoute::all()->where('demo', true);
+        $demoRoutes = DungeonRoute::all()->where('demo', true);
 
         // Delete each found route that was a demo (controlled by me only)
         // This will remove all killzones, brushlines, paths etc related to the route.
         foreach ($demoRoutes as $demoRoute) {
-            /** @var $demoRoute \App\Models\DungeonRoute */
+            /** @var $demoRoute DungeonRoute */
             try {
-                /** @var $demoRoute \Illuminate\Database\Eloquent\Model */
+                /** @var $demoRoute Model */
                 $demoRoute->delete();
             } catch (Exception $ex) {
                 $this->command->error('Exception deleting demo dungeonroute');

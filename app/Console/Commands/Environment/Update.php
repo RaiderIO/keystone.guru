@@ -64,6 +64,12 @@ class Update extends Command
                 'npm audit fix',
             ]);
         }
+
+        // AFter pulling, make a github release
+        if( $environment === 'live' ){
+            $this->call('make:githubrelease');
+        }
+
         // Composer is fine though
         $this->shell([
             'composer install',

@@ -837,6 +837,7 @@ class DungeonRoute extends Model
             $item->paths()->delete();
             $item->killzones()->delete();
             $item->mapicons()->delete();
+            $item->pridefulenemies()->delete();
 
             // External
             $item->ratings()->delete();
