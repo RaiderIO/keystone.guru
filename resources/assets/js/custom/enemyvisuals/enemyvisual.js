@@ -358,6 +358,10 @@ class EnemyVisual extends Signalable {
                 data.root_classes = 'map_enemy_visual_fade';
             }
 
+            if (this.enemy.unskippable) {
+                data.root_classes += ' unskippable';
+            }
+
             data.outer_border = border;
 
             if (isSelectable) {

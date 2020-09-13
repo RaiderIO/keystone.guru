@@ -60,7 +60,6 @@ if ($isAdmin) {
     // @TODO Temp fix
     'npcsMinHealth' => $mapContext['npcsMinHealth'],
     'npcsMaxHealth' => $mapContext['npcsMaxHealth'],
-    'dependencies' => $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null
 ], $adminOptions)])
 
 @section('scripts')

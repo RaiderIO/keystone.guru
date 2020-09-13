@@ -39,6 +39,7 @@ let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
  * @property enemy_forces_override_teeming int
  * @property raid_marker_name string
  * @property dangerous bool
+ * @property unskippable bool
  * @property lat float
  * @property lng float
  *
@@ -183,6 +184,12 @@ class Enemy extends MapObject {
                 default: -1
             }),
             new Attribute({
+                name: 'unskippable',
+                type: 'bool',
+                admin: true,
+                default: false
+            }),
+            new Attribute({
                 name: 'lat',
                 type: 'float',
                 edit: false,
@@ -283,11 +290,12 @@ class Enemy extends MapObject {
         if (this.npc !== null) {
             result = {info: []};
             // @formatter:off
-            result.info.push({key: lang.get('messages.sidebar_enemy_name_label'), value: this.npc.name})
-            result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()})
-            result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting})
-            result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering})
-            result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine})
+            result.info.push({key: lang.get('messages.sidebar_enemy_name_label'), value: this.npc.name});
+            result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()});
+            result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
+            result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
+            result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
+            result.info.push({key: lang.get('messages.sidebar_enemy_skippable_label'), value: this.unskippable ? 0 : 1});
             // @formatter:on
 
             if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {

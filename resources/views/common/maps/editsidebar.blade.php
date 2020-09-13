@@ -151,7 +151,8 @@ if (isset($model)) {
                             <button id="map_route_publish"
                                     class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}"
                                     data-toggle="tooltip"
-                                    title="{{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}">
+                                    title="{{ __('Reach enough enemy forces and kill all unskippable enemies to publish your route') }}"
+                                    disabled>
                                 <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
                             </button>
                             <button id="map_route_unpublish"

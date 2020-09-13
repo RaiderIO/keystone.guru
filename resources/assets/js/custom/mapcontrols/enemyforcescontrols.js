@@ -111,7 +111,15 @@ class EnemyForcesControls extends MapControl {
 
         $numbers.removeClass('map_enemy_forces_too_much_warning');
         $numbers.removeClass('map_enemy_forces_ok');
-        if (this.enemyForces >= enemyForcesRequired) {
+        $enemyForces.removeAttr('title');
+
+        let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        if (!killZoneMapObjectGroup.hasKilledAllUnskippables()) {
+            $enemyForces.attr('title', 'Warning: this route does not kill all unskippable enemies!');
+            $numbers.addClass('map_enemy_forces_too_little_warning');
+            $('#map_enemy_forces_success').hide();
+            $('#map_enemy_forces_warning').show();
+        } else if (this.enemyForces >= enemyForcesRequired) {
             // When editing the route..
             if (this.map.options.edit) {
                 if (enemyForcesPercent > 110) {

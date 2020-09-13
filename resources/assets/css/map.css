@@ -575,6 +575,10 @@ html, body, #map, #app, .wrapper {
     opacity: 40%;
 }
 
+.map_enemy_visual_fade.unskippable {
+    opacity: 80%;
+}
+
 .enemy_icon_npc_mdt {
     background-color: hotpink;
 }

@@ -185,12 +185,13 @@ return [
     'sidebar_expand'                                                => 'Expand the sidebar',
     'sidebar_collapse'                                              => 'Collapse the sidebar',
     'copied_to_clipboard'                                           => 'Copied to clipboard',
-    'sidebar_enemy_name_label'                                      => 'Name:',
-    'sidebar_enemy_health_label'                                    => 'Health:',
-    'sidebar_enemy_bursting_label'                                  => 'Bursts:',
-    'sidebar_enemy_sanguine_label'                                  => 'Sanguine:',
-    'sidebar_enemy_bolstering_label'                                => 'Bolsters:',
-    'sidebar_enemy_bolstering_whitelist_npcs_label'                 => 'Bolsters only:',
+    'sidebar_enemy_name_label'                                      => 'Name',
+    'sidebar_enemy_health_label'                                    => 'Health',
+    'sidebar_enemy_bursting_label'                                  => 'Bursts',
+    'sidebar_enemy_sanguine_label'                                  => 'Sanguine',
+    'sidebar_enemy_bolstering_label'                                => 'Bolsters',
+    'sidebar_enemy_bolstering_whitelist_npcs_label'                 => 'Bolsters only',
+    'sidebar_enemy_skippable_label'                                 => 'Skippable',
     'user_report_enemy_success'                                     => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
     'dungeonroute_report_enemy_success'                             => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
 
@@ -257,6 +258,7 @@ return [
     'enemy_seasonal_index_select_default_label'                     => 'Not set',
     'enemy_enemy_forces_override_label'                             => 'Enemy forces override (-1 to inherit)',
     'enemy_enemy_forces_override_teeming_label'                     => 'Enemy forces override teeming (-1 to inherit)',
+    'enemy_unskippable_label'                                       => 'Unskippable',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',
 
     // Admin enemy pack
