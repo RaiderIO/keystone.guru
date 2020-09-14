@@ -507,16 +507,16 @@ class DungeonRoute extends Model
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
-        $this->dungeon_id = (int) $request->get('dungeon_id', $this->dungeon_id);
-        $this->faction_id = (int) $request->get('faction_id', $this->faction_id);
+        $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
-        $this->seasonal_index = (int) $request->get('seasonal_index', $this->seasonal_index);
-        $this->teeming = (int) $request->get('teeming', $this->teeming) ?? 0;
+        $this->seasonal_index = (int)$request->get('seasonal_index', $this->seasonal_index);
+        $this->teeming = (int)$request->get('teeming', $this->teeming) ?? 0;
 
         $this->pull_gradient = $request->get('pull_gradient', '');
-        $this->pull_gradient_apply_always = (int) $request->get('pull_gradient_apply_always', 0);
+        $this->pull_gradient_apply_always = (int)$request->get('pull_gradient_apply_always', 0);
 
         if (Auth::check()) {
             $user = User::findOrFail(Auth::id());
@@ -555,7 +555,7 @@ class DungeonRoute extends Model
                     // Only if they exist
                     if (CharacterClassSpecialization::where('id', $value)->exists()) {
                         $drpSpec = new DungeonRoutePlayerSpecialization();
-                        $drpSpec->character_class_specialization_id = (int) $value;
+                        $drpSpec->character_class_specialization_id = (int)$value;
                         $drpSpec->dungeon_route_id = $this->id;
                         $drpSpec->save();
                     }
@@ -569,7 +569,7 @@ class DungeonRoute extends Model
                 foreach ($newClasses as $key => $value) {
                     if (CharacterClass::where('id', $value)->exists()) {
                         $drpClass = new DungeonRoutePlayerClass();
-                        $drpClass->character_class_id = (int) $value;
+                        $drpClass->character_class_id = (int)$value;
                         $drpClass->dungeon_route_id = $this->id;
                         $drpClass->save();
                     }
@@ -584,7 +584,7 @@ class DungeonRoute extends Model
                 // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
                 foreach ($newRaces as $key => $value) {
                     $drpRace = new DungeonRoutePlayerRace();
-                    $drpRace->character_race_id = (int) $value;
+                    $drpRace->character_race_id = (int)$value;
                     $drpRace->dungeon_route_id = $this->id;
                     $drpRace->save();
                 }
@@ -789,6 +789,52 @@ class DungeonRoute extends Model
         }
 
         return $user !== null && $this->author_id === $user->id;
+    }
+
+    /**
+     * Checks if this dungeon route kills a specific enemy or not.
+     *
+     * @param int $enemyId
+     * @return bool
+     */
+    public function isEnemyKilled(int $enemyId)
+    {
+        $result = false;
+
+        foreach ($this->killzones as $killZone) {
+            if ($killZone->enemies->filter(function ($enemy) use ($enemyId)
+            {
+                return $enemy->id === $enemyId;
+            })->isNotEmpty()) {
+                $result = true;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Checks if this route has killed all unskippable enemies.
+     *
+     * @return bool
+     */
+    public function hasKilledAllUnskippables()
+    {
+        $result = true;
+
+        foreach ($this->dungeon->enemies as $enemy) {
+            if ($enemy->unskippable &&
+                ($enemy->teeming === null || ($enemy->teeming === 'visible' && $this->teeming) || ($enemy->teeming === 'invisible' && $this->teeming))) {
+
+                if (!$this->isEnemyKilled($enemy->id)) {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**

@@ -190,6 +190,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     hasKilledAllUnskippables() {
         let result = true;
 
+        return result;
+
         let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
         let mapContext = getState().getMapContext();
 
@@ -198,11 +200,11 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             // If this enemy SHOULD have been killed by the user
             if (enemy.unskippable &&
                 // If not teeming, OR if enemy is teeming AND we're teeming, or inverse that. THEN this enemy counts, otherwise it does not
-                (enemy.teeming === null || (enemy.teeming === 'visible' && mapContext.getTeeming()) || mapContext.getTeeming() && enemy.teeming === 'invisible')
+                (enemy.teeming === null || (enemy.teeming === 'visible' && mapContext.getTeeming()) || (enemy.teeming === 'invisible' && !mapContext.getTeeming()))
             ) {
                 // But if it's not..
                 if( !this.isEnemyKilled(enemy.id) ){
-                    console.warn(`Has not killed enemy ${enemy.id}!`);
+                    // console.warn(`Has not killed enemy ${enemy.id}!`);
                     result = false;
                     break;
                 }

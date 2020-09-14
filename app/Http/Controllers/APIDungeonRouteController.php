@@ -25,8 +25,10 @@ use App\Models\DungeonRouteRating;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
@@ -247,25 +249,31 @@ class APIDungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array
+     *
+     * @return Response
      * @throws Exception
      */
     function publish(Request $request, DungeonRoute $dungeonroute)
     {
         $this->authorize('publish', $dungeonroute);
 
-        $dungeonroute->published = intval($request->get('published', 0)) === 1;
-        $dungeonroute->save();
+        // Verify if all unskippable enemies have in fact been killed
+        if($dungeonroute->hasKilledAllUnskippables() ) {
+            $dungeonroute->published = intval($request->get('published', 0)) === 1;
 
-        return ['result' => 'success'];
+            $dungeonroute->save();
+            return response()->noContent();
+        } else {
+            abort(Http::BAD_REQUEST, 'Unable to publish route: not all unskippable enemies have been killed');
+        }
     }
 
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param Team $team
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return Response
+     * @throws AuthorizationException
      */
     function cloneToTeam(Request $request, DungeonRoute $dungeonroute, Team $team)
     {

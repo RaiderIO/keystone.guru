@@ -25,8 +25,6 @@ class DungeonrouteEdit extends InlineCode {
     }
 
     _refreshRoutePublishButton() {
-        console.warn('_refreshRoutePublishButton');
-
         let $mapRoutePublish = $('#map_route_publish');
 
         // Remove disabled from the
