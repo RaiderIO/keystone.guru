@@ -140,8 +140,8 @@ return [
     // Dungeonroute edit
     'settings_saved'                => 'Settings saved successfully',
     'pull_gradient_settings_saved'  => 'Pull gradient settings saved successfully',
-    'route_published'               => 'Route published',
-    'route_unpublished'             => 'Route unpublished',
+    'route_published'               => 'Route published successfully',
+    'route_unpublished'             => 'Route unpublished successfully',
     'datatable_no_routes_in_table'  => 'No routes found',
 
     // Dungeonroute table

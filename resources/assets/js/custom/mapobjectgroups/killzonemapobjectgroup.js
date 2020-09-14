@@ -190,8 +190,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     hasKilledAllUnskippables() {
         let result = true;
 
-        return result;
-
         let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
         let mapContext = getState().getMapContext();
 

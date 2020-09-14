@@ -257,15 +257,27 @@ class APIDungeonRouteController extends Controller
     {
         $this->authorize('publish', $dungeonroute);
 
-        // Verify if all unskippable enemies have in fact been killed
-        if($dungeonroute->hasKilledAllUnskippables() ) {
-            $dungeonroute->published = intval($request->get('published', 0)) === 1;
+        $dungeonroute->published = 1;
+        $dungeonroute->save();
 
-            $dungeonroute->save();
-            return response()->noContent();
-        } else {
-            abort(Http::BAD_REQUEST, 'Unable to publish route: not all unskippable enemies have been killed');
-        }
+        return response()->noContent();
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     *
+     * @return Response
+     * @throws Exception
+     */
+    function unpublish(Request $request, DungeonRoute $dungeonroute)
+    {
+        $this->authorize('unpublish', $dungeonroute);
+
+        $dungeonroute->published = 0;
+        $dungeonroute->save();
+
+        return response()->noContent();
     }
 
     /**

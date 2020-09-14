@@ -35,7 +35,7 @@ class DungeonrouteEdit extends InlineCode {
     _setPublished(value) {
         $.ajax({
             type: 'POST',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/publish`,
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/${value ? 'publish' : 'unpublish'}`,
             dataType: 'json',
             data: {
                 published: value === true ? 1 : 0
