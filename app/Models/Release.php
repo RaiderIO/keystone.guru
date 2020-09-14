@@ -74,6 +74,54 @@ class Release extends Model
     }
 
     /**
+     * @return array
+     */
+    public function getDiscordEmbeds()
+    {
+        $result = [];
+
+        // Header
+        $result[] = [
+            'color'       => 14641434, // '#DF691A'
+            'title'       => sprintf('Release %s (%s)', $this->version, $this->created_at->format('Y/m/d')),
+            'description' => $this->changelog->description,
+            'url'         => sprintf('%s/release/%s', env('APP_URL'), $this->version),
+        ];
+
+        // Categories
+        foreach ($this->changelog->getRelation('changes')->groupBy('release_changelog_category_id') as $categoryId => $changes) {
+            /** @var ReleaseChangelogChange[] $changes */
+            $category = ReleaseChangelogCategory::findOrFail($categoryId);
+
+            $embed = [
+                'color'  => 14641434, // '#DF691A'
+                'title'  => $category->category,
+                'fields' => [],
+            ];
+
+            foreach($changes as $change){
+                $embed['fields'][] = [
+                    'name' => sprintf('#%s', $change->ticket_id),
+                    'value' => $change->change,
+                ];
+            }
+
+            $result[] = $embed;
+        }
+
+        // Footer
+//        $result[] = [
+//            'color'     => 14641434, // '#DF691A'
+//            'timestamp' => Carbon::now()->toIso8601String(),
+//            'footer'    => [
+//                'text' => 'Keystone.guru Release Notifier'
+//            ]
+//        ];
+
+        return $result;
+    }
+
+    /**
      * @return Version|\PHLAK\SemVer\Version
      * @throws InvalidVersionException
      */

@@ -4,9 +4,6 @@
     "version": "v2.0.2",
     "created_at": "2019-02-05T13:04:30+00:00",
     "updated_at": "2019-02-05T13:04:30+00:00",
-    "github_body": "General changes:\n*  Fixed Virtual Tour not working properly.\n*  Assigned raid markers are now displayed properly again.",
-    "discord_body": "v2.0.2 (2019\/02\/05)(https:\/\/keystone.guru\/release\/v2.0.2)\nGeneral changes:\n    *  Fixed Virtual Tour not working properly.\n    *  Assigned raid markers are now displayed properly again.",
-    "reddit_body": "[https:\/\/keystone.guru\/release\/v2.0.2](https:\/\/keystone.guru\/release\/v2.0.2)\n\nGeneral changes:\n*  Fixed Virtual Tour not working properly.\n*  Assigned raid markers are now displayed properly again.",
     "changelog": {
         "id": 23,
         "release_id": 19,

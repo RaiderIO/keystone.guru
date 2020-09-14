@@ -4,9 +4,6 @@
     "version": "v3.5.2",
     "created_at": "2020-09-12T21:26:34+00:00",
     "updated_at": "2020-09-12T21:26:34+00:00",
-    "github_body": "Map changes:\n* #455 Added new neon colored button Map Icons.\n\nMapping changes:\n* #452 Admin: Dungeon settings location has been moved from seeder to file instead (so changes can be done through UI and they will persist during updates).\n\nBugfixes:\n*  Fixed floor selection being empty when in map view.",
-    "discord_body": "v3.5.2 (2020\/09\/12)(https:\/\/keystone.guru\/release\/v3.5.2)\nMap changes:\n    * #455 Added new neon colored button Map Icons.\n\nMapping changes:\n    * #452 Admin: Dungeon settings location has been moved from seeder to file instead (so changes can be done through UI and they will persist during updates).\n\nBugfixes:\n    *  Fixed floor selection being empty when in map view.",
-    "reddit_body": "[https:\/\/keystone.guru\/release\/v3.5.2](https:\/\/keystone.guru\/release\/v3.5.2)\n\nMap changes:\n* [\\#455](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/455) Added new neon colored button Map Icons.\n\nMapping changes:\n* [\\#452](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/452) Admin: Dungeon settings location has been moved from seeder to file instead (so changes can be done through UI and they will persist during updates).\n\nBugfixes:\n*  Fixed floor selection being empty when in map view.",
     "changelog": {
         "id": 66,
         "release_id": 62,

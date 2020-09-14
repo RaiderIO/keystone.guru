@@ -58,7 +58,7 @@ class ReportRelease extends Command
             $release = Release::where('version', $version)->first();
         }
 
-        if (!ReleaseReportLog::where('release_id', $release->id)->where('platform', $platform)->exists()) {
+        if (env('APP_TYPE') === 'local' || !ReleaseReportLog::where('release_id', $release->id)->where('platform', $platform)->exists()) {
             switch ($platform) {
                 case 'reddit':
                     $result = $redditApiService->createPost(
@@ -68,7 +68,7 @@ class ReportRelease extends Command
                     );
                     break;
                 case 'discord':
-                    $result = $discordApiService->sendMessage(env('DISCORD_NEW_RELEASE_WEBHOOK'), $release->discord_body);
+                    $result = $discordApiService->sendEmbeds(env('DISCORD_NEW_RELEASE_WEBHOOK'), $release->getDiscordEmbeds());
                     break;
                 default:
                     throw new \Exception(sprintf('Unsupported platform %s', $platform));
