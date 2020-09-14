@@ -6,7 +6,7 @@ on:
     branches: master
 
 jobs:
-  setup:
+  deploy-live:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +17,11 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.live/ &&
+            php artisan up &&
+            php artsian down --message "Upgrading keystone.guru, we will be back stronger than ever shortly!" --retry 60 &&
+            php artisan environment:updateprepare &&
+            php artisan make:githubrelease &&
             php artisan environment:update live &&
             php artisan report:release discord &&
-            php artisan report:release reddit
+            php artisan report:release reddit &&
+            php artisan up
