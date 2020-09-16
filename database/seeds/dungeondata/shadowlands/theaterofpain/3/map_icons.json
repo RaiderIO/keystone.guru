@@ -68,7 +68,7 @@
     {
         "floor_id": 94,
         "team_id": null,
-        "map_icon_type_id": 45,
+        "map_icon_type_id": 47,
         "lat": -116.125,
         "lng": 119.875,
         "comment": "",
@@ -156,7 +156,7 @@
     {
         "floor_id": 94,
         "team_id": null,
-        "map_icon_type_id": 45,
+        "map_icon_type_id": 47,
         "lat": -80.375,
         "lng": 219.5,
         "comment": "",
