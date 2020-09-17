@@ -37,10 +37,10 @@ class AdminDungeonMap extends DungeonMap {
     }
 
     /**
-     * There's no try mode for admins, they just know.
+     * There's no sandbox mode for admins, they just know.
      * @returns {boolean}
      */
-    isTryModeEnabled() {
+    isSandboxModeEnabled() {
         return false;
     }
 }

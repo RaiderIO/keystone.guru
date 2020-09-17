@@ -9,8 +9,8 @@ $isAdmin = isset($admin) && $admin;
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? true : false;
 
-// Set the key to 'try' if try mode is enabled
-$tryMode = isset($tryMode) && $tryMode ? true : false;
+// Set the key to 'sandbox' if sandbox mode is enabled
+$sandboxMode = isset($sandboxMode) && $sandboxMode ? true : false;
 $enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
@@ -51,7 +51,7 @@ if ($isAdmin) {
 ?>
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'edit' => $edit,
-    'try' => $tryMode,
+    'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
     'noUI' => $noUI,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
@@ -69,7 +69,7 @@ if ($isAdmin) {
     @include('common.general.statemanager', [
         // Required by echo to join the correct channels
         'appType' => env('APP_TYPE'),
-        'echo' => Auth::check() && !$tryMode,
+        'echo' => Auth::check() && !$sandboxMode,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
         'mapContext' => $mapContext,

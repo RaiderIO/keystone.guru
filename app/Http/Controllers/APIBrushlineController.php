@@ -36,7 +36,7 @@ class APIBrushlineController extends Controller
      */
     function store(Request $request, DungeonRoute $dungeonroute)
     {
-        if (!$dungeonroute->isTry()) {
+        if (!$dungeonroute->isSandbox()) {
             $this->authorize('edit', $dungeonroute);
         }
 
@@ -84,7 +84,7 @@ class APIBrushlineController extends Controller
      */
     function delete(Request $request, DungeonRoute $dungeonroute, Brushline $brushline)
     {
-        if (!$dungeonroute->isTry()) {
+        if (!$dungeonroute->isSandbox()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
             $this->authorize('edit', $dungeonroute);
         }

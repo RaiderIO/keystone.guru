@@ -4,10 +4,10 @@ $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
 /** @var \App\Service\Season\SeasonService $seasonService */
 $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
 ?>
-{{ Form::open(['route' => 'dungeonroute.try.post']) }}
+{{ Form::open(['route' => 'dungeonroute.sandbox.post']) }}
 <div class="container">
     <h3>
-        {{ __('Try') }} {{ config('app.name') }}
+        {{ config('app.name') }} {{ __('Sandbox') }}
     </h3>
 
     <div class="form-group">
@@ -49,7 +49,7 @@ $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
     </div>
 
     <div class="form-group">
-        {!! Form::submit(__('Try it!'), ['class' => 'btn btn-primary col-md-auto']) !!}
+        {!! Form::submit(__('Play around!'), ['class' => 'btn btn-primary col-md-auto']) !!}
         <div class="col-md">
 
         </div>

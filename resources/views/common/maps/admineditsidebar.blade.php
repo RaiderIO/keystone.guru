@@ -2,7 +2,7 @@
 /** @var \App\Models\DungeonRoute $model */
 
 $show = isset($show) ? $show : [];
-// May not be set in the case of a tryout version
+// May not be set in the case of a sandbox version
 if (isset($model)) {
     $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
 }

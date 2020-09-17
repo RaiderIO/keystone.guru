@@ -67,7 +67,7 @@ class Release extends Model
             'homeUrl' => route('home'),
             'changelogUrl' => route('misc.changelog'),
             'affixesUrl' => route('misc.affixes'),
-            'tryUrl' => route('dungeonroute.try'),
+            'sandboxUrl' => route('dungeonroute.sandbox'),
             'patreonUrl' => 'https://www.patreon.com/keystoneguru',
         ])->render());
     }

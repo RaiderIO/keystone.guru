@@ -5,16 +5,16 @@
     'custom' => isset($model),
     'footer' => !isset($model),
     'header' => !isset($model),
-    'title' => __('Try'),
-    'loginParams' => isset($model) ? ['redirect' => route('dungeonroute.try', ['dungeonroute' => $model->public_key])] : [],
-    'registerParams' => isset($model) ? ['redirect' => route('dungeonroute.try', ['dungeonroute' => $model->public_key])] : []
+    'title' => __('Sandbox'),
+    'loginParams' => isset($model) ? ['redirect' => route('dungeonroute.sandbox', ['dungeonroute' => $model->public_key])] : [],
+    'registerParams' => isset($model) ? ['redirect' => route('dungeonroute.sandbox', ['dungeonroute' => $model->public_key])] : []
 ])
 
 @section('content')
     <?php
     // If the user navigated to /try itself
     if(!isset($model)) { ?>
-    @include('common.forms.try')
+    @include('common.forms.sandbox')
     <?php } else {
     $dungeon = $model->dungeon;
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
@@ -24,7 +24,7 @@
         @include('common.maps.editsidebar', [
             'show' => [
                 'virtual-tour' => true,
-                'tryout' => true,
+                'sandbox' => true,
                 'draw-settings' => true
             ],
             'floorId' => $floor->id,
@@ -35,7 +35,7 @@
         @include('common.maps.map', [
             'dungeonroute' => $model,
             'edit' => true,
-            'tryMode' => true,
+            'sandboxMode' => true,
             'floorId' => $floor->id
         ])
 

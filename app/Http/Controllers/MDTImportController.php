@@ -89,16 +89,16 @@ class MDTImportController extends Controller
     {
         $user = Auth::user();
 
-        $try = (bool)$request->get('try', false);
+        $sandbox = (bool)$request->get('sandbox', false);
         // @TODO This should be handled differently imho
-        if ($try || $user->canCreateDungeonRoute()) {
+        if ($sandbox || $user->canCreateDungeonRoute()) {
             $string = $request->get('import_string');
             $importString = new ImportString($seasonService);
 
             try {
                 // @TODO improve exception handling
                 $warnings = new Collection();
-                $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, $try, true);
+                $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, $sandbox, true);
 
                 // Keep track of the import
                 $mdtImport = new MDTImport();
@@ -114,8 +114,8 @@ class MDTImportController extends Controller
 
                 throw $error;
             }
-            if ($try) {
-                $result = view('dungeonroute.try', ['model' => $dungeonRoute]);
+            if ($sandbox) {
+                $result = view('dungeonroute.sandbox', ['model' => $dungeonRoute]);
             } else {
                 $result = redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]);
             }

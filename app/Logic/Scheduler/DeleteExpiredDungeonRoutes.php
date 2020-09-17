@@ -37,7 +37,7 @@ class DeleteExpiredDungeonRoutes
             }
         }
 
-        Log::channel('scheduler')->debug(sprintf('Deleted %s routes because they expired (from try functionality)', $dungeonRoutes->count()));
+        Log::channel('scheduler')->debug(sprintf('Deleted %s routes because they expired (from sandbox functionality)', $dungeonRoutes->count()));
         Log::channel('scheduler')->debug('OK Deleting expired routes');
     }
 }

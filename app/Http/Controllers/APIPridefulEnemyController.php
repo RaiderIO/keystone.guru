@@ -28,7 +28,7 @@ class APIPridefulEnemyController extends Controller
      */
     function store(Request $request, DungeonRoute $dungeonroute, Enemy $enemy)
     {
-        if (!$dungeonroute->isTry()) {
+        if (!$dungeonroute->isSandbox()) {
             $this->authorize('edit', $dungeonroute);
         }
 

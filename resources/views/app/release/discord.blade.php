@@ -13,4 +13,4 @@
 @endforeach
 
 @endforeach
-[Home]({{$homeUrl}}) - [Changelog]({{$changelogUrl}}) - [Affixes]({{$affixesUrl}}) - [Patreon]({{$patreonUrl}}) - [Get started]({{$tryUrl}})
+[Home]({{$homeUrl}}) - [Changelog]({{$changelogUrl}}) - [Affixes]({{$affixesUrl}}) - [Patreon]({{$patreonUrl}}) - [Get started]({{$sandboxUrl}})

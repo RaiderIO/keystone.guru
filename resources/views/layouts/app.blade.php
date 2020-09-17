@@ -141,17 +141,17 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                         <li class="nav-item mr-lg-2">
                             <div class="dropdown">
                                 <button class="btn btn-primary dropdown-toggle col-lg-auto" type="button"
-                                        id="tryImportMDTDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-                                    {{__('Try it!')}}
+                                    {{__('Sandbox')}}
                                 </button>
                                 <div class="dropdown-menu text-center text-lg-left"
                                      aria-labelledby="newRouteDropdownMenuButton">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#try_modal">
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#sandbox_modal">
                                         <i class="fas fa-play"></i> {{__('New route')}}
                                     </a>
                                     <a class="dropdown-item" href="#" data-toggle="modal"
-                                       data-target="#try_mdt_import_modal">
+                                       data-target="#sandbox_mdt_import_modal">
                                         <i class="fas fa-file-import"></i> {{__('Import from MDT')}}
                                     </a>
                                 </div>
@@ -436,12 +436,12 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
 @endif
 @endauth
 
-<!-- Modal try -->
+<!-- Modal sandbox -->
 @section('modal-content')
-    @include('common.forms.try', ['modal' => true])
+    @include('common.forms.sandbox', ['modal' => true])
 @overwrite
-@include('common.general.modal', ['id' => 'try_modal'])
-<!-- END modal try -->
+@include('common.general.modal', ['id' => 'sandbox_modal'])
+<!-- END modal sandbox -->
 
 <!-- Modal MDT import -->
 @section('modal-content')
@@ -471,7 +471,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
         </div>
     </div>
     <div class="form-group">
-        {!! Form::hidden('try', 0, ['class' => 'hidden_try']) !!}
+        {!! Form::hidden('sandbox', 0, ['class' => 'hidden_sandbox']) !!}
         {!! Form::submit(__('Import'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
         <div class="col-md">
 
@@ -480,7 +480,7 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
     {{ Form::close() }}
 @overwrite
 @include('common.general.modal', ['id' => 'mdt_import_modal'])
-@include('common.general.modal', ['id' => 'try_mdt_import_modal'])
+@include('common.general.modal', ['id' => 'sandbox_mdt_import_modal'])
 <!-- END modal MDT import -->
 
 @guest

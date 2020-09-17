@@ -303,12 +303,12 @@ class DungeonRoute extends Model
     }
 
     /**
-     * Scope a query to only include dungeon routes that are set in try mode.
+     * Scope a query to only include dungeon routes that are set in sandbox mode.
      *
      * @param Builder $query
      * @return Builder
      */
-    public function scopeIsTry($query)
+    public function scopeIsSandbox($query)
     {
         return $query->where('expires_at', '!=', null);
     }
@@ -458,22 +458,22 @@ class DungeonRoute extends Model
     public function mayUserEdit(?User $user)
     {
         if ($user === null) {
-            return $this->isTry();
+            return $this->isSandbox();
         } else {
-            return $this->isOwnedByUser($user) || $this->isTry() || $user->hasRole('admin')
+            return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole('admin')
                 || ($this->team !== null && $this->team->isUserCollaborator($user));
         }
     }
 
     /**
-     * If this dungeon is in try mode, have a specific user claim this route as theirs.
+     * If this dungeon is in sandbox mode, have a specific user claim this route as theirs.
      *
      * @param int $userId
      * @return bool
      */
     public function claim(int $userId)
     {
-        if ($result = $this->isTry()) {
+        if ($result = $this->isSandbox()) {
             $this->author_id = $userId;
             $this->expires_at = null;
             $this->save();
@@ -482,9 +482,9 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return bool True if this route is in try mode, false if it is not.
+     * @return bool True if this route is in sandbox mode, false if it is not.
      */
-    public function isTry()
+    public function isSandbox()
     {
         return $this->author_id === -1 && $this->expires_at !== null;
     }

@@ -119,10 +119,10 @@ return [
     'thumbnail_refresh_min'              => 30,
 
     /**
-     * The amount of hours it takes before a dungeon route that is created through the 'try' functionality expires and
+     * The amount of hours it takes before a dungeon route that is created through the 'sandbox' functionality expires and
      * is deleted from the server.
      */
-    'try_dungeon_route_expires_hours'    => 24,
+    'sandbox_dungeon_route_expires_hours'    => 24,
 
     /**
      * @var array List of current roles for a user in a team.

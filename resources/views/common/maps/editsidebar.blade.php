@@ -3,7 +3,7 @@
 /** @var \App\Models\Dungeon $dungeon */
 
 $show = isset($show) ? $show : [];
-// May not be set in the case of a tryout version
+// May not be set in the case of a sandbox version
 if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
@@ -165,7 +165,7 @@ if (isset($model)) {
                 </div>
             @endisset
 
-            @isset($show['tryout'])
+            @isset($show['sandbox'])
                 @if (Auth::guest())
                     <div id="map_login_and_continue" class="form-group">
                         <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">

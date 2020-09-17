@@ -55,15 +55,15 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
     Route::get('login/discord', 'Auth\DiscordLoginController@redirectToProvider')->name('login.discord');
     Route::get('login/discord/callback', 'Auth\DiscordLoginController@handleProviderCallback')->name('login.discord.callback');
 
-    Route::get('try', 'DungeonRouteController@try')->name('dungeonroute.try');
-    Route::post('try', 'DungeonRouteController@try')->name('dungeonroute.try.post');
+    Route::get('sandbox', 'DungeonRouteController@sandbox')->name('dungeonroute.sandbox');
+    Route::post('sandbox', 'DungeonRouteController@sandbox')->name('dungeonroute.sandbox.post');
 
     // Edit your own dungeon routes
     Route::get('{dungeonroute}/edit', 'DungeonRouteController@edit')->name('dungeonroute.edit');
     Route::get('{dungeonroute}/edit/{floor}', 'DungeonRouteController@editfloor')->name('dungeonroute.edit.floor');
     // Submit a patch for your own dungeon route
     Route::patch('{dungeonroute}/edit', 'DungeonRouteController@update')->name('dungeonroute.update');
-    // Claiming a route that was made by /try functionality
+    // Claiming a route that was made by /sandbox functionality
     Route::get('{dungeonroute}/claim', 'DungeonRouteController@claim')->name('dungeonroute.claim');
 
     Route::post('new/mdtimport', 'MDTImportController@import')->name('dungeonroute.new.mdtimport');
@@ -254,7 +254,7 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::put('/user/{user}/patreon/paidtier', 'UserController@storepaidtiers');
         });
 
-        // May be performed without being logged in (try functionality)
+        // May be performed without being logged in (sandbox functionality)
         Route::group(['prefix' => '{dungeonroute}'], function ()
         {
             Route::post('/brushline', 'APIBrushlineController@store');

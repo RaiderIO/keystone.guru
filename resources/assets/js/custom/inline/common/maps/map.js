@@ -34,7 +34,7 @@ class CommonMapsMap extends InlineCode {
             this._dungeonMap = new DungeonMap('map', this.options);
         }
 
-        if (this.options.try) {
+        if (this.options.sandbox) {
             $('#start_virtual_tour').bind('click', function () {
                 introjs().start();
             });

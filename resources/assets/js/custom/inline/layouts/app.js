@@ -80,9 +80,9 @@ class LayoutsApp extends InlineCode {
         let $importString = $root.find('.import_string');
         let $submitBtn = $root.find('input[type="submit"]');
 
-        // Identify the type; try or not.
-        let $type = $root.find('.hidden_try');
-        $type.val($root.attr('id').includes('try') ? 1 : 0);
+        // Identify the type; sandbox or not.
+        let $type = $root.find('.hidden_sandbox');
+        $type.val($root.attr('id').includes('sandbox') ? 1 : 0);
 
         // Ugly, but needed since otherwise the field would be disabled prior to the value being actually assigned
         setTimeout(function () {

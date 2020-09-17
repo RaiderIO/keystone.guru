@@ -223,7 +223,7 @@ class User extends Authenticatable
                 'unlinked' => $this->patreondata !== null
             ],
             'dungeonroutes' => [
-                'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isTry()->count())
+                'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isSandbox()->count())
             ],
             'reports' => [
                 'delete_count' => ($this->reports()->where('status', 0)->count())
