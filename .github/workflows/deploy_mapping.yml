@@ -16,8 +16,8 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          script: cd /var/www/html/keystone.guru.mapping/ &&
-            php artisan up &&
+          script: cd /var/www/html/keystone.guru.mapping/;
+            php artisan up;
             php artsian down --message "Upgrading keystone.guru, we will be back stronger than ever shortly!" --retry 60 &&
             php artisan mapping:save &&
             php artisan mapping:commit &&
