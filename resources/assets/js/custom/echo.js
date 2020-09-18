@@ -125,8 +125,14 @@ class Echo extends Signalable {
     _addUser(user) {
         console.assert(this instanceof Echo, 'this is not an Echo', this);
 
-        let existingUser = this.getUserByName(name);
+        let existingUser = this.getUserByName(user.name);
         if (existingUser === null) {
+            // May be unset when not our own user, but this confuses handlebars
+            user.self = user.name === getState().getUserName();
+
+            // Make sure spaces and special characters don't cause issues
+            user.slug = convertToSlug(user.name);
+
             this._users.push(user);
             this.signal('user:add', {user: user});
         }

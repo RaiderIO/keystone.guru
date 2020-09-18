@@ -131,6 +131,7 @@ html, body, #map, #app, .wrapper {
 .sidebar .sidebar-header {
     padding: 10px 20px;
     background: #2B3E50;
+    height: 106px;
 }
 
 /* Force reserve height */
@@ -234,49 +235,53 @@ html, body, #map, #app, .wrapper {
 
 /*    padding: 3px;*/
 /*}*/
-
 #edit_route_echo_members_container .list-group-item,
 #edit_route_echo_status_container .list-group-item {
     background-color: inherit;
 }
 
-.route_echo_status,
 .route_manipulation_tools {
     background-color: rgba(78, 93, 108, 0.75);
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);*/
 
-    border-left: #2B3E50 solid 1px;
-    border-right: #2B3E50 solid 1px;
     margin: auto;
 }
 
-.route_echo_status {
-    border-bottom: #2B3E50 solid 1px;
+.route_echo {
+    cursor: pointer;
+    -ms-flex: 0 0 100px;
+    flex: 0 0 100px;
 }
 
-.route_manipulation_tools {
-    border-top: #2B3E50 solid 1px;
-    padding-bottom: 10px;
+#route_echo_container {
+    font-size: 1.3em;
 }
 
 @media screen and (min-width: 1100px) {
     .route_echo_status {
-        width: 1100px;
+        width: 400px;
+    }
+
+    #route_echo_container {
+        width: 400px;
     }
 
     .route_manipulation_tools {
-        width: 900px;
+        width: 1000px;
     }
+}
+
+.echo_connected {
+    color: green;
+}
+
+.echo_disconnected {
+    color: red;
 }
 
 .echo_member_header_column_container {
     -ms-flex: 0 0 50px;
     flex: 0 0 50px;
-}
-
-.echo_member_header_column {
-    -ms-flex: 0 0 100px;
-    flex: 0 0 100px;
 }
 
 .echo_member_column_container {

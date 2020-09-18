@@ -114,12 +114,6 @@ if ($isAdmin) {
 
 </div>
 
-<header class="fixed-top route_echo_status">
-    <!-- Draw actions are injected here through echocontrols.js -->
-    <div id="route_echo_container" class="container">
-    </div>
-</header>
-
 @section('modal-content')
     @include('common.userreport.dungeonroute')
 @overwrite
@@ -133,16 +127,27 @@ if ($isAdmin) {
 @if($edit)
     <footer class="fixed-bottom route_manipulation_tools">
         <div class="container">
-            <!-- Draw actions are injected here through enemyforces.js -->
+            <!-- Draw actions are injected here through drawcontrols.js -->
             <div class="row m-auto text-center">
                 <div id="edit_route_draw_actions_container" class="col">
 
                 </div>
             </div>
 
-            <!-- Draw controls are injected here through drawcontrols.js -->
-            <div id="edit_route_draw_container" class="row">
+            <div class="row">
+                <div class="col">
+                    <!-- Draw controls are injected here through drawcontrols.js -->
+                    <div id="edit_route_draw_container" class="row">
 
+
+                    </div>
+                </div>
+                <div class="col route_echo mt-2 mb-2">
+                    <!-- Echo controls injected here through echocontrols.js -->
+                    <span id="route_echo_container" class="text-center">
+
+                    </span>
+                </div>
             </div>
         </div>
     </footer>

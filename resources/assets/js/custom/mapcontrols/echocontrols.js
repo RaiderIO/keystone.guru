@@ -72,16 +72,16 @@ class EchoControls extends MapControl {
     _setStatus(status) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
-        let $connecting = $('.connecting');
-        let $connected = $('.connected');
+        let $connectedContainer = $('#echo_connected_container');
+
         switch (status) {
             case ECHO_STATUS_DISCONNECTED:
-                $connecting.show();
-                $connected.hide();
+                console.log('disconnected');
+                $connectedContainer.removeClass('text-success').addClass('text-warning');
                 break;
             case ECHO_STATUS_CONNECTED:
-                $connecting.hide();
-                $connected.show();
+                console.log('connected');
+                $connectedContainer.removeClass('text-warning').addClass('text-success');
                 break;
             default:
                 console.error('Invalid echo state found!');
@@ -96,18 +96,15 @@ class EchoControls extends MapControl {
      */
     _addUser(user) {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
-        let template = Handlebars.templates['map_controls_route_echo_member_template'];
 
-        // May be unset when not our own user, but this confuses handlebars
-        user.self = user.name === getState().getUserName();
+        let template = Handlebars.templates['map_controls_route_echo_popover_template'];
 
-        // Make sure spaces and special characters don't cause issues
-        user.slug = convertToSlug(user.name);
+        let result = template($.extend({}, getHandlebarsDefaultVariables(), {
+            users: getState().getEcho().getUsers()
+        }));
 
-        let result = template($.extend({}, getHandlebarsDefaultVariables(), user));
-        $('#edit_route_echo_members_container').append(
-            result
-        );
+        $('#echo_connected_container').data('content', result).popover();
+        $('#echo_connected_users_count').text(getState().getEcho().getUsers().length);
 
         // Update the color
         this._applyUserColor(user);
