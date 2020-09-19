@@ -26,6 +26,7 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
 ]])
 
 @component('common.maps.sidebar', [
+    'dungeon' => $dungeon,
     'header' => $model->title,
     'subHeader' => $subTitle,
     'anchor' => 'left',

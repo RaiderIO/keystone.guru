@@ -17,6 +17,7 @@
 @endsection
 
 @component('common.maps.sidebar', [
+    'dungeon' => $dungeon,
     'header' => __('Pulls'),
     'anchor' => 'right',
     'id' => 'killzonesidebar',

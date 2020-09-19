@@ -21,6 +21,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
 @section('content')
     <div class="wrapper">
         @include('common.maps.viewsidebar', [
+            'dungeon' => $dungeon,
             'model' => $model,
             'floorSelection' => (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1,
             'floorId' => $floor->id

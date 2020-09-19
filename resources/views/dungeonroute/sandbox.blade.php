@@ -17,6 +17,7 @@
     @include('common.forms.sandbox')
     <?php } else {
     $dungeon = $model->dungeon;
+    $dungeon->load(['expansion']);
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
     ?>
 

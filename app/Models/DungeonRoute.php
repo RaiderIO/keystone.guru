@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\DB;
  * @property $setup array
  * @property $avg_rating double
  * @property $rating_count int
+ * @property $has_thumbnail boolean
  *
  * @property $pull_gradient string
  * @property $pull_gradient_apply_always boolean
@@ -94,7 +95,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'avg_rating', 'rating_count', 'views', 'has_team'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count', 'has_thumbnail', 'views', 'has_team'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'team_id', 'unlisted', 'demo',
                          'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
@@ -385,6 +386,14 @@ class DungeonRoute extends Model
     public function getRatingCountAttribute()
     {
         return $this->ratings->count();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasThumbnailAttribute()
+    {
+        return Carbon::createFromTimeString($this->thumbnail_updated_at)->diffInYears(Carbon::now()) === 0;
     }
 
     /**

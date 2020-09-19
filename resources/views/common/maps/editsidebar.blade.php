@@ -19,6 +19,7 @@ if (isset($model)) {
 ]])
 
 @component('common.maps.sidebar', [
+    'dungeon' => $dungeon,
     'header' => __('Toolbox'),
     'anchor' => 'left',
     'id' => 'editsidebar'

@@ -19,6 +19,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
 ]])
 
 @component('common.maps.sidebar', [
+    'dungeon' => $dungeon,
     'header' => __('Admin toolbox'),
     'anchor' => 'left',
     'id' => 'admineditsidebar'

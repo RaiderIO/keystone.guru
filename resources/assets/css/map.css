@@ -132,6 +132,13 @@ html, body, #map, #app, .wrapper {
     padding: 10px 20px;
     background: #2B3E50;
     height: 106px;
+    text-shadow: black 2px 2px;
+}
+
+.sidebar-background {
+    background-color: #0c0c0caa;
+    border-radius: 5px;
+    padding: 3px;
 }
 
 /* Force reserve height */
