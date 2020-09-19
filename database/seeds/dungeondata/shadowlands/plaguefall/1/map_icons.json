@@ -27,6 +27,17 @@
         "map_icon_type_id": 12,
         "lat": -96.25,
         "lng": 239.75,
+        "comment": "Graveyard: activates after killing Doctor Ickus",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 81,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -48.9375,
+        "lng": 121.1875,
         "comment": "",
         "permanent_tooltip": 0,
         "seasonal_index": null,
