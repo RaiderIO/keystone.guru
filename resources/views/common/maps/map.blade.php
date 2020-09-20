@@ -113,6 +113,16 @@ if ($isAdmin) {
      data-position="auto">
 
 </div>
+@if(!$edit)
+<header class="fixed-top route_echo_top_header">
+    <div class="container">
+        <!-- Echo controls injected here through echocontrols.js -->
+        <span id="route_echo_container" class="text-center">
+
+        </span>
+    </div>
+</header>
+@endif
 
 @section('modal-content')
     @include('common.userreport.dungeonroute')

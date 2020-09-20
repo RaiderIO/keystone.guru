@@ -1012,6 +1012,7 @@ class DungeonsSeeder extends Seeder
             $dungeon->name = $name;
             $dungeon->enemy_forces_required = -1;
             $dungeon->enemy_forces_required_teeming = -1;
+            $dungeon->timer_max_seconds = -1;
             $dungeon->active = $dungeonData['active'];
 
             if (!isset($dungeonData['key'])) {

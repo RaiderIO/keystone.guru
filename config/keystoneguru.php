@@ -13,6 +13,11 @@ return [
 
     'reddit_subreddit' => 'KeystoneGuru',
 
+    'timer' => [
+        'plustwofactor' => 0.8,
+        'plusthreefactor' => 0.6,
+    ],
+
     'cache'                             => [
         'npcs'        => [
             'ttl' => '1 hour'

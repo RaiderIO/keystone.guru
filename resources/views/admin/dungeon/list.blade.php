@@ -20,7 +20,7 @@
 <script type="text/javascript">
     $(function () {
         var dt = $('#admin_dungeon_table').DataTable({
-            'lengthMenu': [25],
+            'lengthMenu': [50],
         });
 
         dt.on('draw.dt', function (e, settings, json, xhr) {
@@ -34,10 +34,12 @@
 <table id="admin_dungeon_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('Exp.') }}</th>
-        <th width="40%">{{ __('Name') }}</th>
-        <th width="20%">{{ __('Enemy Forces') }}</th>
-        <th width="20%">{{ __('Enemy Forces (Teeming)') }}</th>
+        <th width="50px">{{ __('Active') }}</th>
+        <th width="50px">{{ __('Exp.') }}</th>
+        <th width="45%">{{ __('Name') }}</th>
+        <th width="10%">{{ __('Enemy Forces') }}</th>
+        <th width="10%">{{ __('Teeming EF') }}</th>
+        <th width="10%">{{ __('Timer') }}</th>
         <th width="10%">{{ __('Actions') }}</th>
     </tr>
     </thead>
@@ -46,7 +48,16 @@
     @foreach ($models as $dungeon)
         <?php /** @var $dungeon \App\Models\Dungeon */?>
     <tr>
-        <td>
+            @if($dungeon->active)
+        <td data-order="{{ $dungeon->id }}">
+            <i class="fas fa-check-circle text-success"></i>
+        </td>
+            @else
+        <td data-order="{{ $dungeon->id + 1000 }}">
+            <i class="fas fa-times-circle text-danger"></i>
+        </td>
+            @endif
+        <td data-order="{{ $dungeon->expansion_id }}">
             <img src="{{ Image::url($dungeon->expansion->iconfile->getUrl(), 32, 32) }}"
                  title="{{ $dungeon->expansion->name }}"
                  data-toggle="tooltip"/>
@@ -54,6 +65,7 @@
         <td>{{ $dungeon->name }}</td>
         <td>{{ $dungeon->enemy_forces_required }}</td>
         <td>{{ $dungeon->enemy_forces_required_teeming }}</td>
+        <td data-order="{{$dungeon->timer_max_seconds}}">{{ gmdate('i:s', $dungeon->timer_max_seconds) }}</td>
         <td>
             <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon->id]) }}">
                 <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}

@@ -19,6 +19,7 @@ use Mockery\Exception;
  * @property string $key Shorthand key of the dungeon
  * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
  * @property int $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
+ * @property int $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
  * @property boolean $active True if this dungeon is active, false if it is not.
  *
  * @property Expansion $expansion
@@ -238,6 +239,14 @@ class Dungeon extends Model
     public function isTolDagor()
     {
         return $this->name === 'Tol Dagor';
+    }
+
+    public function getTimerUpgradePlusTwoSeconds(){
+        return $this->timer_max_seconds * config('keystoneguru.timer.plustwofactor');
+    }
+
+    public function getTimerUpgradePlusThreeSeconds() {
+        return $this->timer_max_seconds * config('keystoneguru.timer.plusthreefactor');
     }
 
 

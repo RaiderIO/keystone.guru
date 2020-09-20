@@ -4,6 +4,8 @@ class EchoControls extends MapControl {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
         console.assert(map instanceof DungeonMap, 'map is not DungeonMap', map);
 
+        let self = this;
+
         this._mapControl = null;
 
         let echo = getState().getEcho();
@@ -19,7 +21,9 @@ class EchoControls extends MapControl {
             onAdd: function (leafletMap) {
                 let template = Handlebars.templates['map_controls_route_echo_template'];
 
-                let data = getHandlebarsDefaultVariables();
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
+                    edit: self.map.options.edit
+                });
 
                 return $(template(data))[0];
             }

@@ -1,7 +1,11 @@
 <div id="echo_connected_container"
      data-toggle="popover"
      data-html="true"
+     {{#if edit}}
      data-placement="top"
+     {{else}}
+     data-placement="bottom"
+     {{/if}}
      title="{{connected_users_label}}">
     <i class="fa fa-users"></i> <span id="echo_connected_users_count"></span>
 </div>
