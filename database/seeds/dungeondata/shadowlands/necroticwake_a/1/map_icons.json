@@ -38,7 +38,7 @@
         "map_icon_type_id": 42,
         "lat": -155.25,
         "lng": 86.5,
-        "comment": "Malfunctioning Goliath\npossible covenant use?",
+        "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 42,
         "lat": -65,
         "lng": 233,
-        "comment": "Malfunctioning Goliath",
+        "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
