@@ -11,6 +11,7 @@ use App\Models\EnemyPatrol;
 use App\Models\Floor;
 use App\Models\MapIcon;
 use App\Models\Npc;
+use App\Models\Spell;
 use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -42,7 +43,19 @@ class Save extends Command
     {
         $dungeonDataDir = database_path('/seeds/dungeondata/');
 
-        // Save all dungeon data
+        $this->_saveNpcs($dungeonDataDir);
+        $this->_saveSpells($dungeonDataDir);
+        $this->_saveDungeons($dungeonDataDir);
+
+        return 0;
+    }
+
+    /**
+     * @param $dungeonDataDir string
+     */
+    private function _saveNpcs(string $dungeonDataDir)
+    {
+        // Save all npcs
         $dungeons = Dungeon::without(['expansion', 'floors'])->get();
         $this->saveDataToJsonFile($dungeons->makeHidden(['key', 'active', 'floor_count', 'expansion', 'floors'])->toArray(), $dungeonDataDir, 'dungeons.json');
 
@@ -56,6 +69,22 @@ class Save extends Command
         // Save NPC data in the root of folder
         $this->info('Saving global NPCs');
         $this->saveDataToJsonFile($npcs->toArray(), $dungeonDataDir, 'npcs.json');
+    }
+
+    /**
+     * @param $dungeonDataDir string
+     */
+    private function _saveSpells(string $dungeonDataDir){
+        // Save all spells
+        $spells = Spell::all();
+        $this->info('Saving Spells');
+        $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
+    }
+
+    /**
+     * @param $dungeonDataDir string
+     */
+    private function _saveDungeons(string $dungeonDataDir) {
 
         foreach (Dungeon::all() as $dungeon) {
             $this->info(sprintf('- Saving dungeon %s', $dungeon->name));
@@ -189,7 +218,5 @@ class Save extends Command
                 }
             }
         }
-
-        return 0;
     }
 }

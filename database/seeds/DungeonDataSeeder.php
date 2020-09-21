@@ -25,6 +25,7 @@ class DungeonDataSeeder extends Seeder
             'dungeons'                     => 'App\Models\Dungeon',
             'npcs'                         => 'App\Models\Npc',
             'dungeonroutes'                => 'App\Models\DungeonRoute',
+            'spells'                       => 'App\Models\Spell',
 
             // Files inside floor folder
             'enemies'                      => 'App\Models\Enemy',
@@ -223,6 +224,7 @@ class DungeonDataSeeder extends Seeder
     protected function _rollback()
     {
         $this->command->warn('Truncating all relevant data...');
+        DB::table('spells')->truncate();
         DB::table('npcs')->truncate();
         DB::table('npc_bolstering_whitelists')->truncate();
         DB::table('enemies')->truncate();

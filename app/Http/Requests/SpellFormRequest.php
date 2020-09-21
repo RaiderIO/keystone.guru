@@ -32,7 +32,7 @@ class SpellFormRequest extends FormRequest
             'name'                 => 'required|string',
             'icon_name'            => 'required|string',
             'dispel_type'          => Rule::in(Spell::ALL_DISPEL_TYPES),
-            'schools'              => 'required|array',
+            'schools'              => 'array',
             'schools.*'            => Rule::in(Spell::ALL_SCHOOLS),
             'aura'                 => 'boolean'
         ];
