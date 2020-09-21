@@ -254,5 +254,6 @@ if (images) {
     mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);
     mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes', false);
     mix.copy('resources/assets/images/specializations', 'public/images/specializations', false);
+    mix.copy('resources/assets/images/spells', 'public/images/spells', false);
     // }
 }

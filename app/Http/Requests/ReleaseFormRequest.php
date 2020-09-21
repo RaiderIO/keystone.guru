@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Expansion;
 use App\Models\Release;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

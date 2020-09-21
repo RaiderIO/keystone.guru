@@ -163,6 +163,15 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
 
             Route::get('npcs', 'NpcController@list')->name('admin.npcs');
 
+            // Spells
+            Route::get('spell/new', 'SpellController@new')->name('admin.spell.new');
+            Route::get('spell/{spell}', 'SpellController@edit')->name('admin.spell.edit');
+
+            Route::post('spell/new', 'SpellController@savenew')->name('admin.spell.savenew');
+            Route::patch('spell/{spell}', 'SpellController@update')->name('admin.spell.update');
+
+            Route::get('spells', 'SpellController@list')->name('admin.spells');
+
             Route::get('users', 'UserController@list')->name('admin.users');
             Route::post('user/{user}/makeadmin', 'UserController@makeadmin')->name('admin.user.makeadmin');
             Route::post('user/{user}/makeuser', 'UserController@makeuser')->name('admin.user.makeuser');

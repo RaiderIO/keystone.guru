@@ -219,6 +219,8 @@ $newToTeams = isset($_COOKIE['viewed_teams']) ? $_COOKIE['viewed_teams'] === 1 :
                                                href="{{ route('admin.npcs') }}">{{__('View NPCs')}}</a>
                                         @endif
                                         <a class="dropdown-item"
+                                           href="{{ route('admin.spells') }}">{{__('View spells')}}</a>
+                                        <a class="dropdown-item"
                                            href="{{ route('admin.users') }}">{{__('View users')}}</a>
                                         <a class="dropdown-item"
                                            href="{{ route('admin.userreports') }}">{{__('View user reports') }}
