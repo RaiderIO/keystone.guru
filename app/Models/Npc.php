@@ -41,7 +41,7 @@ class Npc extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
+    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'npcspells'];
     protected $fillable = ['id', 'npc_type_id', 'npc_class_id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming', 'aggressiveness'];
 
     /**
@@ -117,5 +117,20 @@ class Npc extends Model
      */
     function npcspells(){
         return $this->hasMany('App\Models\NpcSpell');
+    }
+
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete Path properly if it gets deleted
+        static::deleting(function ($item) {
+            /** @var $item Npc */
+
+            $item->npcbolsteringwhitelists()->delete();
+            $item->npcspells()->delete();
+        });
     }
 }

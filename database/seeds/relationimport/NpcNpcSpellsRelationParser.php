@@ -2,8 +2,9 @@
 
 
 use App\Models\NpcBolsteringWhitelist;
+use App\Models\NpcSpell;
 
-class NpcNpcBolsteringWhitelistRelationParser implements RelationParser
+class NpcNpcSpellsRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -21,7 +22,7 @@ class NpcNpcBolsteringWhitelistRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'npcbolsteringwhitelists';
+        return $name === 'npcspells';
     }
 
     /**
@@ -33,8 +34,8 @@ class NpcNpcBolsteringWhitelistRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $npcBolsteringWhitelist) {
-            NpcBolsteringWhitelist::insert($npcBolsteringWhitelist);
+        foreach ($value as $spell) {
+            NpcSpell::insert($spell);
         }
 
         // Didn't really change anything so just return the value.

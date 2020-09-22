@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class NpcSpell extends Model
 {
-    public $hidden = ['id'];
-
     public $timestamps = false;
+
+    protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];
 
     /**
      * @return BelongsTo

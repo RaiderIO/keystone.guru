@@ -10,8 +10,15 @@ use App\Models\Enemy;
 use App\Models\Npc;
 use App\Models\NpcBolsteringWhitelist;
 use App\Models\NpcClassification;
+use App\Models\NpcSpell;
+use App\Models\Spell;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Session;
 
 class NpcController extends Controller
 {
@@ -31,7 +38,7 @@ class NpcController extends Controller
      * @param NpcFormRequest $request
      * @param Npc $npc
      * @return array|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(NpcFormRequest $request, Npc $npc = null)
     {
@@ -73,6 +80,17 @@ class NpcController extends Controller
             ]);
         }
 
+        // Spells, if set
+        $spells = $request->get('spells', []);
+        // Clear current spells
+        $npc->npcspells()->delete();
+        foreach ($spells as $spellId) {
+            NpcSpell::insert([
+                'npc_id'   => $npc->id,
+                'spell_id' => $spellId
+            ]);
+        }
+
         if ($npc->save()) {
             if ($oldId > 0) {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
@@ -108,12 +126,18 @@ class NpcController extends Controller
     /**
      * Show a page for creating a new npc.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function new()
     {
         return view('admin.npc.edit', [
             'classifications' => NpcClassification::all()->pluck('name', 'id'),
+            'spells'          => Spell::all(),
+            'bolsteringNpcs'  =>
+                [-1 => __('All npcs')] +
+                Npc::orderByRaw('dungeon_id, name')
+                    ->pluck('name', 'id')
+                    ->toArray(),
             'headerTitle'     => __('New npc')
         ]);
     }
@@ -121,13 +145,21 @@ class NpcController extends Controller
     /**
      * @param Request $request
      * @param Npc $npc
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function edit(Request $request, Npc $npc)
     {
         return view('admin.npc.edit', [
             'model'           => $npc,
             'classifications' => NpcClassification::all()->pluck('name', 'id'),
+            'spells'          => Spell::all(),
+            'bolsteringNpcs'  =>
+                [-1 => __('All npcs')] +
+                Npc::where('dungeon_id', $npc->dungeon_id)
+                    ->orWhere('dungeon_id', -1)
+                    ->orderByRaw('dungeon_id, name')
+                    ->pluck('name', 'id')
+                    ->toArray(),
             'headerTitle'     => __('Edit npc')
         ]);
     }
@@ -136,8 +168,8 @@ class NpcController extends Controller
      * Override to give the type hint which is required.
      * @param NpcFormRequest $request
      * @param Npc $npc
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|RedirectResponse|View
+     * @throws Exception
      */
     public function update(NpcFormRequest $request, Npc $npc)
     {
@@ -148,7 +180,7 @@ class NpcController extends Controller
             $npc = $this->store($request, $npc);
 
             // Message to the user
-            \Session::flash('status', __('Npc updated'));
+            Session::flash('status', __('Npc updated'));
 
             // Display the edit page
             return $this->edit($request, $npc);
@@ -157,8 +189,8 @@ class NpcController extends Controller
 
     /**
      * @param NpcFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function savenew(NpcFormRequest $request)
     {
@@ -166,7 +198,7 @@ class NpcController extends Controller
         $npc = $this->store($request);
 
         // Message to the user
-        \Session::flash('status', sprintf(__('Npc %s created'), $npc->name));
+        Session::flash('status', sprintf(__('Npc %s created'), $npc->name));
 
         return redirect()->route('admin.npc.edit', ['npc' => $npc->id]);
     }
@@ -174,7 +206,7 @@ class NpcController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory|
      */
     public function list()
     {

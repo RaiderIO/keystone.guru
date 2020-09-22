@@ -11,13 +11,10 @@
 /**
  * @var $model \App\Models\Npc
  * @var $floor \App\Models\Floor
+ * @var $classifications array
+ * @var $spells \App\Models\Spell[]
+ * @var $bolsteringNpcs array
  */
-$bolsteringNpcs = [-1 => __('All npcs')];
-if (isset($model)) {
-    $bolsteringNpcs += \App\Models\Npc::where('dungeon_id', $model->dungeon_id)->orWhere('dungeon_id', -1)->pluck('name', 'id')->toArray();
-} else {
-    $bolsteringNpcs += \App\Models\Npc::all()->pluck('name', 'id')->toArray();
-}
 ?>
 
 @section('content')
@@ -132,6 +129,20 @@ if (isset($model)) {
                 'data-selected-text-format' => 'count > 1',
                 'data-count-selected-text' => __('{0} NPCs'),
             ]) !!}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('spells[]', __('Spells'), [], false) !!}
+        @php($selectedSpells = isset($model) ? $model->spells->pluck(['id'])->toArray() : [])
+         <select class="form-control selectpicker" name="spells[]" multiple="multiple"
+                 data-live-search="true" data-selected-text-format="count > 1" data-count-selected-text="{{ __('{0} Spells') }}">
+             @foreach($spells as $spell)
+             <option value="{{$spell->id}}" {{in_array($spell->id, $selectedSpells) ? 'selected="selected"' : ''}}
+                data-content="<span><img src='{{$spell->getIconUrl()}}' width='24px'/> {{$spell->name}} </span>">
+                 {{$spell->name}}
+             </option>
+             @endforeach
+         </select>
     </div>
 
 

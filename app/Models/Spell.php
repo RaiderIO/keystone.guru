@@ -60,4 +60,9 @@ class Spell extends Model
 
         return $result;
     }
+
+    public function getIconUrl()
+    {
+        return url(sprintf('/images/spells/%s.png', $this->icon_name));
+    }
 }

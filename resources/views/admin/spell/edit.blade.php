@@ -11,6 +11,7 @@
 /**
  * @var $model \App\Models\Spell
  * @var $floor \App\Models\Floor
+ * @var $dispelTypes array
  */
 ?>
 

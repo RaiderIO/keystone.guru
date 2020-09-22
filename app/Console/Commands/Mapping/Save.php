@@ -188,6 +188,7 @@ class Save extends Command
                 foreach ($enemies as $enemy) {
                     /** @var $enemy Enemy */
                     if ($enemy->npc !== null) {
+                        $enemy->npc->unsetRelation('npcspells');
                         $enemy->npc->unsetRelation('npcbolsteringwhitelists');
                         $enemy->npc->unsetRelation('type');
                         $enemy->npc->unsetRelation('class');

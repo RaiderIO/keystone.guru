@@ -31,7 +31,7 @@
         <tbody>
         @foreach ($models->all() as $spell)
             <tr>
-                <td><img src="/images/spells/{{ $spell->icon_name }}.png"/></td>
+                <td><img src="{{ $spell->getIconUrl() }}" width="48px"/></td>
                 <td>{{ $spell->id }}</td>
                 <td>{{ $spell->name }}</td>
                 <td>

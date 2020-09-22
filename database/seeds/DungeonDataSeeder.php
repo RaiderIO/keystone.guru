@@ -128,6 +128,7 @@ class DungeonDataSeeder extends Seeder
 
             // Npc
             new NpcNpcBolsteringWhitelistRelationParser(),
+            new NpcNpcSpellsRelationParser(),
         ];
 
         // Parse these attributes AFTER the model has been inserted into the database (so we know its ID)
@@ -227,6 +228,7 @@ class DungeonDataSeeder extends Seeder
         DB::table('spells')->truncate();
         DB::table('npcs')->truncate();
         DB::table('npc_bolstering_whitelists')->truncate();
+        DB::table('npc_spells')->truncate();
         DB::table('enemies')->truncate();
         DB::table('enemy_packs')->truncate();
         DB::table('enemy_patrols')->truncate();
