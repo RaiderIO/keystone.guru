@@ -50,5 +50,14 @@ class Spell extends Model
     public $incrementing = false;
     public $timestamps = false;
 
+    public function getSchoolsAsArray()
+    {
+        $result = [];
 
+        foreach (self::ALL_SCHOOLS as $school) {
+            $result[$school] = $this->schools_mask & $school;
+        }
+
+        return $result;
+    }
 }

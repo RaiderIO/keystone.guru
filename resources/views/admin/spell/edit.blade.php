@@ -47,7 +47,7 @@
 
     <div class="form-group{{ $errors->has('schools') ? ' has-error' : '' }}">
         {!! Form::label('schools[]', __('Schools'), [], false) !!}
-        {!! Form::select('schools[]', array_flip($schools), null, ['class' => 'form-control', 'multiple' => 'multiple', 'size' => count($schools)]) !!}
+        {!! Form::select('schools[]', array_flip($schools), isset($model) ? $model->getSchoolsAsArray() : null, ['class' => 'form-control', 'multiple' => 'multiple', 'size' => count($schools)]) !!}
         @include('common.forms.form-error', ['key' => 'schools'])
     </div>
 

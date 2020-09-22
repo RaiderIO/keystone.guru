@@ -25,8 +25,6 @@ class SpellFormRequest extends FormRequest
      */
     public function rules()
     {
-        $npc = $this->route()->parameter('npc');
-
         $rules = [
             'id'                   => 'required',
             'name'                 => 'required|string',
