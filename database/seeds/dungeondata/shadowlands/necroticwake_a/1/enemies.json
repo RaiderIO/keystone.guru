@@ -902,7 +902,7 @@
     },
     {
         "id": 4670,
-        "enemy_pack_id": 696,
+        "enemy_pack_id": -1,
         "floor_id": 89,
         "mdt_id": -1,
         "seasonal_type": null,
