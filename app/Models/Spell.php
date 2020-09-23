@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $schools_mask
  * @property boolean $aura
  *
+ * @property string $icon_url
+ *
  * @mixin Eloquent
  */
 class Spell extends Model
@@ -50,6 +52,9 @@ class Spell extends Model
     public $incrementing = false;
     public $timestamps = false;
 
+    public $hidden = ['pivot'];
+    protected $appends = ['icon_url'];
+
     public function getSchoolsAsArray()
     {
         $result = [];
@@ -61,8 +66,7 @@ class Spell extends Model
         return $result;
     }
 
-    public function getIconUrl()
-    {
+    public function getIconUrlAttribute(){
         return url(sprintf('/images/spells/%s.png', $this->icon_name));
     }
 }

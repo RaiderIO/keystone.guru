@@ -109,21 +109,30 @@ class Enemy extends MapObject {
                 edit: false, // Not directly changeable by user
                 default: -1
             }),
-            new Attribute({
-                name: 'npc',
-                type: 'object',
-                default: null,
-                setter: this.setNpc.bind(this),
-                edit: false,
-                save: false
-            }),
+            // new Attribute({
+            //     name: 'npc',
+            //     type: 'object',
+            //     default: null,
+            //     setter: this.setNpc.bind(this),
+            //     edit: false,
+            //     save: false
+            // }),
             new Attribute({
                 name: 'npc_id',
                 type: 'select',
                 admin: true,
                 values: selectNpcs,
                 default: -1,
-                live_search: true
+                live_search: true,
+                setter: function (value) {
+
+                    // Only called when not in admin state
+                    let mapContext = getState().getMapContext();
+
+                    self.setNpc(mapContext.findNpcById(value));
+
+                    this.npc_id = value;
+                }
             }),
             new Attribute({
                 name: 'floor_id',
@@ -288,9 +297,8 @@ class Enemy extends MapObject {
         let result = null;
 
         if (this.npc !== null) {
-            result = {info: []};
+            result = {info: [], custom: []};
             // @formatter:off
-            result.info.push({key: lang.get('messages.sidebar_enemy_name_label'), value: this.npc.name});
             result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()});
             result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
             result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
@@ -299,23 +307,52 @@ class Enemy extends MapObject {
             // @formatter:on
 
             if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {
-                let npcBolsteringWhitelistValues = '';
+                let npcBolsteringWhitelistHtml = '';
                 let count = 0;
                 for (let index in this.npc.npcbolsteringwhitelists) {
                     if (this.npc.npcbolsteringwhitelists.hasOwnProperty(index)) {
                         let whitelistedNpc = this.npc.npcbolsteringwhitelists[index];
-                        npcBolsteringWhitelistValues += whitelistedNpc.whitelistnpc.name;
+                        npcBolsteringWhitelistHtml += whitelistedNpc.whitelistnpc.name;
                         // Stop before the end
                         if (count < this.npc.npcbolsteringwhitelists.length - 1) {
-                            npcBolsteringWhitelistValues += '<br>';
+                            npcBolsteringWhitelistHtml += '<br>';
                         }
                     }
                     count++;
                 }
-                result.info.push({
-                    key: lang.get('messages.sidebar_enemy_bolstering_whitelist_npcs_label'),
-                    value: npcBolsteringWhitelistValues
-                })
+
+
+                let customTemplate = Handlebars.templates['map_sidebar_enemy_info_custom_template'];
+
+                result.custom.push({
+                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('messages.sidebar_enemy_bolstering_whitelist_npcs_label')}:</span>`}) +
+                        customTemplate({html: npcBolsteringWhitelistHtml})
+                });
+            }
+
+            if (typeof this.npc.spells !== 'undefined' && this.npc.spells.length > 0) {
+                let spellHtml = '';
+                let count = 0;
+                let spellTemplate = Handlebars.templates['spell_template'];
+
+                for (let index in this.npc.spells) {
+                    if (this.npc.spells.hasOwnProperty(index)) {
+                        let spell = this.npc.spells[index];
+                        spellHtml += spellTemplate(spell);
+                        // Stop before the end
+                        if (count < this.npc.spells.length - 1) {
+                            spellHtml += '<br>';
+                        }
+                    }
+                    count++;
+                }
+
+                let customTemplate = Handlebars.templates['map_sidebar_enemy_info_custom_template'];
+
+                result.custom.push({
+                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('messages.sidebar_enemy_spell_label')}:</span>`}) +
+                        customTemplate({html: spellHtml})
+                });
             }
         }
 

@@ -127,7 +127,7 @@ class Dungeon extends Model
      */
     public function npcs()
     {
-        return $this->hasMany('App\Models\Npc');
+        return $this->hasMany('App\Models\Npc')->orWhere('dungeon_id', -1);
     }
 
     /**

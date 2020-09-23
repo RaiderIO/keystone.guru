@@ -28,7 +28,6 @@ class StateManager extends Signalable {
         // List of static arrays
         this.mapIconTypes = [];
         this.classColors = [];
-        this.enemies = [];
         this.paidTiers = [];
     }
 
@@ -99,15 +98,6 @@ class StateManager extends Signalable {
     setMapIconTypes(mapIconTypes) {
         this.mapIconTypes = [];
     }
-
-    /**
-     * Sets the enemies.
-     * @param enemies
-     */
-    setEnemies(enemies) {
-        this.enemies = enemies;
-    }
-
     /**
      *
      * @param paidTiers
@@ -302,31 +292,6 @@ class StateManager extends Signalable {
      */
     getMapIconTypes() {
         return this.mapIconTypes;
-    }
-
-    /**
-     * Get all the enemies of this dungeon.
-     * @returns {[]}
-     */
-    getEnemies() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this.enemies;
-    }
-
-    /**
-     * Find an enemy by an ID
-     * @param enemyId
-     * @returns {null}
-     */
-    getEnemyById(enemyId) {
-        let enemy = null;
-        for (let i = 0; i < this.enemies.length; i++) {
-            if (this.enemies[i].id === enemyId) {
-                enemy = this.enemies[i];
-                break;
-            }
-        }
-        return enemy;
     }
 
     /**

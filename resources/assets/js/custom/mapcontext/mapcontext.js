@@ -190,4 +190,21 @@ class MapContext extends Signalable {
     getNpcs() {
         return this._options.npcs;
     }
+
+    /**
+     * @param npcId {Number}
+     * @returns {[]}
+     */
+    findNpcById(npcId) {
+        let result = npcId;
+
+        for(let i = 0; i < this._options.dungeon.npcs.length; i++ ){
+            if( this._options.dungeon.npcs[i].id === npcId ){
+                result = this._options.dungeon.npcs[i];
+                break;
+            }
+        }
+
+        return result;
+    }
 }

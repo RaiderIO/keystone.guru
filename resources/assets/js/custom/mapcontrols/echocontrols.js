@@ -80,11 +80,9 @@ class EchoControls extends MapControl {
 
         switch (status) {
             case ECHO_STATUS_DISCONNECTED:
-                console.log('disconnected');
                 $connectedContainer.removeClass('text-success').addClass('text-warning');
                 break;
             case ECHO_STATUS_CONNECTED:
-                console.log('connected');
                 $connectedContainer.removeClass('text-warning').addClass('text-success');
                 break;
             default:

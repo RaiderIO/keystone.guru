@@ -37,7 +37,7 @@ class Enemy extends Model
     use Reportable;
 
     public $with = ['npc'];
-    public $hidden = ['npc_id'];
+//    public $hidden = ['npc_id'];
     public $timestamps = false;
 
     /**

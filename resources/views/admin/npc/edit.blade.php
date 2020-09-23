@@ -138,7 +138,7 @@
                  data-live-search="true" data-selected-text-format="count > 1" data-count-selected-text="{{ __('{0} Spells') }}">
              @foreach($spells as $spell)
              <option value="{{$spell->id}}" {{in_array($spell->id, $selectedSpells) ? 'selected="selected"' : ''}}
-                data-content="<span><img src='{{$spell->getIconUrl()}}' width='24px'/> {{$spell->name}} </span>">
+                data-content="<span><img src='{{$spell->icon_url}}' width='24px'/> {{$spell->name}} </span>">
                  {{$spell->name}}
              </option>
              @endforeach

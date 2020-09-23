@@ -200,7 +200,7 @@ if (isset($model)) {
             <div id="enemy_info_key_value_container">
 
             </div>
-            <div class="row mt-1">
+            <div class="row mt-2">
                 <div class="col">
                     <a href="#" data-toggle="modal"
                        data-target="#userreport_enemy_modal">

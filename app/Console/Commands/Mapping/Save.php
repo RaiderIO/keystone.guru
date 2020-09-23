@@ -43,9 +43,10 @@ class Save extends Command
     {
         $dungeonDataDir = database_path('/seeds/dungeondata/');
 
+        $this->_saveDungeons($dungeonDataDir);
         $this->_saveNpcs($dungeonDataDir);
         $this->_saveSpells($dungeonDataDir);
-        $this->_saveDungeons($dungeonDataDir);
+        $this->_saveDungeonData($dungeonDataDir);
 
         return 0;
     }
@@ -53,14 +54,20 @@ class Save extends Command
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveNpcs(string $dungeonDataDir)
+    private function _saveDungeons(string $dungeonDataDir)
     {
-        // Save all npcs
+        // Save all dungeons
         $dungeons = Dungeon::without(['expansion', 'floors'])->get();
         $this->saveDataToJsonFile($dungeons->makeHidden(['key', 'active', 'floor_count', 'expansion', 'floors'])->toArray(), $dungeonDataDir, 'dungeons.json');
+    }
 
+    /**
+     * @param $dungeonDataDir string
+     */
+    private function _saveNpcs(string $dungeonDataDir)
+    {
         // Save all NPCs which aren't directly tied to a dungeon
-        $npcs = Npc::all()->where('dungeon_id', -1)->values();
+        $npcs = Npc::without(['spells'])->with(['npcspells'])->where('dungeon_id', -1)->get()->values();
         $npcs->makeHidden(['type', 'class']);
         foreach ($npcs as $item) {
             $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
@@ -74,17 +81,18 @@ class Save extends Command
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveSpells(string $dungeonDataDir){
+    private function _saveSpells(string $dungeonDataDir)
+    {
         // Save all spells
-        $spells = Spell::all();
         $this->info('Saving Spells');
-        $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
+        $this->saveDataToJsonFile(Spell::all()->toArray(), $dungeonDataDir, 'spells.json');
     }
 
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveDungeons(string $dungeonDataDir) {
+    private function _saveDungeonData(string $dungeonDataDir)
+    {
 
         foreach (Dungeon::all() as $dungeon) {
             $this->info(sprintf('- Saving dungeon %s', $dungeon->name));
@@ -167,7 +175,7 @@ class Save extends Command
             }
             $this->saveDataToJsonFile($demoRoutes->toArray(), $rootDirPath, 'dungeonroutes.json');
 
-            $npcs = Npc::all()->where('dungeon_id', $dungeon->id)->values();
+            $npcs = Npc::without(['spells'])->with(['npcspells'])->where('dungeon_id', $dungeon->id)->get()->values();
             $npcs->makeHidden(['type', 'class']);
             foreach ($npcs as $item) {
                 $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
@@ -188,7 +196,7 @@ class Save extends Command
                 foreach ($enemies as $enemy) {
                     /** @var $enemy Enemy */
                     if ($enemy->npc !== null) {
-                        $enemy->npc->unsetRelation('npcspells');
+                        $enemy->npc->unsetRelation('spells');
                         $enemy->npc->unsetRelation('npcbolsteringwhitelists');
                         $enemy->npc->unsetRelation('type');
                         $enemy->npc->unsetRelation('class');

@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\hasOne;
 
 /**
  * @property int $id
@@ -11,11 +14,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $teeming
  * @property string $faction
  *
- * @property \App\Models\Floor $floor
- * @property \App\Models\Enemy $enemy
- * @property \App\Models\Polyline $polyline
+ * @property Floor $floor
+ * @property Enemy $enemy
+ * @property Polyline $polyline
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class EnemyPatrol extends Model
 {
@@ -24,7 +27,7 @@ class EnemyPatrol extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function floor()
     {
@@ -34,7 +37,7 @@ class EnemyPatrol extends Model
     /**
      * Get the dungeon route that this brushline is attached to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     * @return hasOne
      */
     function polyline()
     {
