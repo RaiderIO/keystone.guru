@@ -114,11 +114,8 @@ class MDTImportController extends Controller
 
                 throw $error;
             }
-            if ($sandbox) {
-                $result = view('dungeonroute.sandbox', ['model' => $dungeonRoute]);
-            } else {
-                $result = redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]);
-            }
+
+            $result = redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]);
         } else {
             $result = view('dungeonroute.limitreached');
         }
