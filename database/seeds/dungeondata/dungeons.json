@@ -275,7 +275,7 @@
         "id": 35,
         "zone_id": 12841,
         "name": "Theater of Pain",
-        "enemy_forces_required": -1,
+        "enemy_forces_required": 271,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 0
     }
