@@ -235,7 +235,7 @@
         "id": 30,
         "zone_id": 13334,
         "name": "Mists of Tirna Scithe",
-        "enemy_forces_required": -1,
+        "enemy_forces_required": 260,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 0
     },
@@ -243,7 +243,7 @@
         "id": 31,
         "zone_id": 13228,
         "name": "Plaguefall",
-        "enemy_forces_required": -1,
+        "enemy_forces_required": 600,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 2280
     },
@@ -259,7 +259,7 @@
         "id": 33,
         "zone_id": 12837,
         "name": "Spires of Ascension",
-        "enemy_forces_required": -1,
+        "enemy_forces_required": 285,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 0
     },
@@ -267,7 +267,7 @@
         "id": 34,
         "zone_id": 12916,
         "name": "The Necrotic Wake",
-        "enemy_forces_required": -1,
+        "enemy_forces_required": 262,
         "enemy_forces_required_teeming": -1,
         "timer_max_seconds": 0
     },

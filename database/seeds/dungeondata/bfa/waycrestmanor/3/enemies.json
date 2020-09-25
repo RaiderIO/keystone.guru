@@ -274,7 +274,7 @@
         "enemy_pack_id": -1,
         "floor_id": 62,
         "mdt_id": 1,
-        "seasonal_type": "awakened",
+        "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",

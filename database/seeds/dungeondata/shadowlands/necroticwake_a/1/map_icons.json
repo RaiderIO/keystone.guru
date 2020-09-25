@@ -31,5 +31,137 @@
         "permanent_tooltip": 1,
         "seasonal_index": 0,
         "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -155.25,
+        "lng": 86.5,
+        "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -118.375,
+        "lng": 149.625,
+        "comment": "Forgotten Forgehammer",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -79.25,
+        "lng": 136.6875,
+        "comment": "Bloody Javelin",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -77.625,
+        "lng": 51.125,
+        "comment": "Discharged Anima",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -203.8125,
+        "lng": 159.0625,
+        "comment": "Forgotten Forgehammer",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -140.5,
+        "lng": 264,
+        "comment": "Discarded Shield",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -229.25,
+        "lng": 202.25,
+        "comment": "Anima Crystal Shard",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 41,
+        "lat": -143.25,
+        "lng": 63.5,
+        "comment": "Grisly Curio",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -50.5,
+        "lng": 143.75,
+        "comment": "Anima Crystal Shard",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -65,
+        "lng": 233,
+        "comment": "KYRIAN: Malfunctioning Goliath:  The Goliath will then activate, ejecting 20 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants  Anima Exhaust granting 4% movement speed, haste, healing done and damage reduction for 40 seconds and  Anima Exhaust stacks.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -215.5,
+        "lng": 227,
+        "comment": "Discharged Anima",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 89,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -104,
+        "lng": 315.625,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
