@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\CreateGithubRelease;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
+use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
 use App\Console\Commands\GetCurrentRelease;
 use App\Console\Commands\GetReleaseBody;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
@@ -34,6 +35,7 @@ class Kernel extends ConsoleKernel
         StartSupervisor::class,
 
         // Environment
+        EnvironmentUpdatePrepare::class,
         EnvironmentUpdate::class,
 
         // Mapping

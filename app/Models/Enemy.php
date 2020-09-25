@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $is_mdt Only used for temp MDT enemies (not saved in DB)
  * @property string $teeming
  * @property string $faction
+ * @property boolean $unskippable
  * @property string $enemy_forces_override
  * @property string $enemy_forces_override_teeming
  * @property double $lat
@@ -36,7 +37,7 @@ class Enemy extends Model
     use Reportable;
 
     public $with = ['npc'];
-    public $hidden = ['npc_id'];
+//    public $hidden = ['npc_id'];
     public $timestamps = false;
 
     /**

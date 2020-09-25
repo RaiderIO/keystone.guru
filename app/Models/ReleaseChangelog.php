@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
@@ -13,7 +16,7 @@ use Illuminate\Support\Collection;
  * @property Release $release
  * @property ReleaseChangelogChange[]|Collection $changes
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class ReleaseChangelog extends Model
 {
@@ -23,7 +26,7 @@ class ReleaseChangelog extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     function release()
     {
@@ -31,7 +34,7 @@ class ReleaseChangelog extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function changes()
     {

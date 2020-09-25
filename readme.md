@@ -3,6 +3,8 @@ Keystone.guru is a website where users can build and find their favorite routes 
 This repository contains the source code of (most parts of) the website. It is built with [Laravel](https://github.com/laravel/laravel) using [jQuery](https://github.com/jquery/jquery), [PHP](http://www.php.net/) and [MySql](https://www.mysql.com/).
 It uses a ton of other libraries such as Leaflet for map displaying, Puppeteer for thumbnail generation, REDIS for cache, Laravel Echo Server for real-time communication and much, much more.
 
+The website is free to use, now and forever. You may support the creation of this website by becoming a Patron on [Patreon](https://www.patreon.com/keystoneguru).
+
 # Features
 * Full interactive Leaflet map of all Battle for Azeroth™ dungeons
 * All known enemies and patrols inside dungeons (updated to 8.3)
@@ -28,7 +30,7 @@ It uses a ton of other libraries such as Leaflet for map displaying, Puppeteer f
   * Multiple route listing display modes to suit your needs
 * An up-to-date overview of upcoming affixes and their time based on your region
 * When not registered, you are free to view any routes found in the search function, or when directly linked by others
-  * Tryout mode available in which you can sandbox your route/the website with no strings attached
+  * Sandbox mode available in which you can try out your route/the website with no strings attached
 * Log in through Google, Discord or Battle.net if you don't want to register
 
 # Patreon features

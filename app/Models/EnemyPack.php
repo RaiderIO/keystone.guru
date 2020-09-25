@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -12,17 +16,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $label
  * @property string $vertices_json
  *
- * @property \App\Models\Floor $floor
- * @property \Illuminate\Support\Collection $enemies
+ * @property Floor $floor
+ * @property Collection $enemies
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class EnemyPack extends Model
 {
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function floor()
     {
@@ -30,7 +34,7 @@ class EnemyPack extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function enemies()
     {

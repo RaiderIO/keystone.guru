@@ -6,7 +6,7 @@ on:
     branches: master
 
 jobs:
-  setup:
+  deploy-mapping:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,8 +16,12 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          script: cd /var/www/html/keystone.guru.mapping/ &&
+          script: cd /var/www/html/keystone.guru.mapping/;
+            php artisan up;
+            php artisan down --message "Upgrading keystone.guru, we will be back stronger than ever shortly!" --retry 60 &&
             php artisan mapping:save &&
             php artisan mapping:commit &&
             php artisan mapping:merge &&
+            php artisan environment:updateprepare &&
             php artisan environment:update mapping
+            php artisan up

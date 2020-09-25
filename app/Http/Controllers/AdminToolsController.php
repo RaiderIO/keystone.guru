@@ -326,6 +326,7 @@ class AdminToolsController extends Controller
         $result = [];
 
         foreach (Release::all() as $release) {
+            $release->makeHidden(['reddit_body', 'discord_body', 'github_body']);
             $releaseArr = $release->toArray();
 
             /** @var $release Release */

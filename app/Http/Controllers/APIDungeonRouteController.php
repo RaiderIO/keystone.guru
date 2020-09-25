@@ -25,8 +25,10 @@ use App\Models\DungeonRouteRating;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
@@ -53,7 +55,7 @@ class APIDungeonRouteController extends Controller
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, dungeons.enemy_forces_required_teeming, dungeons.enemy_forces_required,
-             IFNULL(
+             CAST(IFNULL(
                  IF(dungeon_routes.teeming = 1,
                       SUM(
                           IF(
@@ -70,7 +72,7 @@ class APIDungeonRouteController extends Controller
                           )
                       )
                 ),  0
-            ) as enemy_forces')
+            ) AS SIGNED ) as enemy_forces')
             // Select enemy forces
             ->leftJoin('kill_zones', 'kill_zones.dungeon_route_id', '=', 'dungeon_routes.id')
             ->leftJoin('kill_zone_enemies', 'kill_zone_enemies.kill_zone_id', '=', 'kill_zones.id')
@@ -247,25 +249,43 @@ class APIDungeonRouteController extends Controller
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
-     * @return array
+     *
+     * @return Response
      * @throws Exception
      */
     function publish(Request $request, DungeonRoute $dungeonroute)
     {
         $this->authorize('publish', $dungeonroute);
 
-        $dungeonroute->published = intval($request->get('published', 0)) === 1;
+        $dungeonroute->published = 1;
         $dungeonroute->save();
 
-        return ['result' => 'success'];
+        return response()->noContent();
+    }
+
+    /**
+     * @param Request $request
+     * @param DungeonRoute $dungeonroute
+     *
+     * @return Response
+     * @throws Exception
+     */
+    function unpublish(Request $request, DungeonRoute $dungeonroute)
+    {
+        $this->authorize('unpublish', $dungeonroute);
+
+        $dungeonroute->published = 0;
+        $dungeonroute->save();
+
+        return response()->noContent();
     }
 
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonroute
      * @param Team $team
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return Response
+     * @throws AuthorizationException
      */
     function cloneToTeam(Request $request, DungeonRoute $dungeonroute, Team $team)
     {

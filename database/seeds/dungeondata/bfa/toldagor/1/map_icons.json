@@ -42,5 +42,16 @@
         "permanent_tooltip": 0,
         "seasonal_index": 1,
         "is_admin": true
+    },
+    {
+        "floor_id": 53,
+        "team_id": null,
+        "map_icon_type_id": 12,
+        "lat": -148,
+        "lng": 280.875,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

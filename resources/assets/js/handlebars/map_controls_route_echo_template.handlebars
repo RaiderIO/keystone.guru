@@ -1,35 +1,11 @@
-<div class="row">
-    <div id="edit_route_echo_status_container" class="col-4">
-        <div class="connecting">
-            <ul class="list-group list-group-horizontal">
-                <li class="list-group-item pl-1 pr-1" data-toggle="tooltip" title="{{connecting_title_label}}">
-                    <img src="/images/echo/connecting.gif" style="max-height: 25px;" alt=""/>
-                </li>
-                <li class="list-group-item pl-1" data-toggle="tooltip" title="{{connecting_title_label}}">
-                    <span>
-                        {{echo_connecting_label}}
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <div class="connected" style="display: none;">
-            <ul class="list-group list-group-horizontal">
-                <li class="list-group-item pl-1 pr-1" data-toggle="tooltip" title="{{connected_title_label}}">
-                    <img src="/images/echo/connected.gif" style="max-height: 25px;" alt=""/>
-                </li>
-                <li class="list-group-item pl-1" data-toggle="tooltip" title="{{connected_title_label}}">
-                    <span>
-                        {{echo_connected_label}}
-                    </span>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="col-8 d-flex justify-content-end">
-        <ul id="edit_route_echo_members_container" class="list-group list-group-horizontal">
-            <li class="list-group-item" data-toggle="tooltip" title="{{members_title_label}}">
-                <i class="fa fa-users"></i>
-            </li>
-        </ul>
-    </div>
+<div id="echo_connected_container"
+     data-toggle="popover"
+     data-html="true"
+     {{#if edit}}
+     data-placement="top"
+     {{else}}
+     data-placement="bottom"
+     {{/if}}
+     title="{{connected_users_label}}">
+    <i class="fa fa-users"></i> <span id="echo_connected_users_count"></span>
 </div>

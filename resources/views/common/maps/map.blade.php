@@ -9,8 +9,8 @@ $isAdmin = isset($admin) && $admin;
 // Do not show if it does not make sense (only one floor)
 $edit = isset($edit) && $edit ? true : false;
 
-// Set the key to 'try' if try mode is enabled
-$tryMode = isset($tryMode) && $tryMode ? true : false;
+// Set the key to 'sandbox' if sandbox mode is enabled
+$sandboxMode = isset($sandboxMode) && $sandboxMode ? true : false;
 $enemyVisualType = isset($_COOKIE['enemy_display_type']) ? $_COOKIE['enemy_display_type'] : 'npc_class';
 
 // Easy switch
@@ -51,7 +51,7 @@ if ($isAdmin) {
 ?>
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'edit' => $edit,
-    'try' => $tryMode,
+    'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
     'noUI' => $noUI,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
@@ -60,7 +60,6 @@ if ($isAdmin) {
     // @TODO Temp fix
     'npcsMinHealth' => $mapContext['npcsMinHealth'],
     'npcsMaxHealth' => $mapContext['npcsMaxHealth'],
-    'dependencies' => $edit && !$tryMode && !$isAdmin ? ['dungeonroute/edit'] : null
 ], $adminOptions)])
 
 @section('scripts')
@@ -70,7 +69,7 @@ if ($isAdmin) {
     @include('common.general.statemanager', [
         // Required by echo to join the correct channels
         'appType' => env('APP_TYPE'),
-        'echo' => Auth::check() && !$tryMode,
+        'echo' => Auth::check() && !$sandboxMode,
         'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
         'userData' => $user,
         'mapContext' => $mapContext,
@@ -114,12 +113,16 @@ if ($isAdmin) {
      data-position="auto">
 
 </div>
+@if(!$edit)
+<header class="fixed-top route_echo_top_header">
+    <div class="container">
+        <!-- Echo controls injected here through echocontrols.js -->
+        <span id="route_echo_container" class="text-center">
 
-<header class="fixed-top route_echo_status">
-    <!-- Draw actions are injected here through echocontrols.js -->
-    <div id="route_echo_container" class="container">
+        </span>
     </div>
 </header>
+@endif
 
 @section('modal-content')
     @include('common.userreport.dungeonroute')
@@ -134,16 +137,27 @@ if ($isAdmin) {
 @if($edit)
     <footer class="fixed-bottom route_manipulation_tools">
         <div class="container">
-            <!-- Draw actions are injected here through enemyforces.js -->
+            <!-- Draw actions are injected here through drawcontrols.js -->
             <div class="row m-auto text-center">
                 <div id="edit_route_draw_actions_container" class="col">
 
                 </div>
             </div>
 
-            <!-- Draw controls are injected here through drawcontrols.js -->
-            <div id="edit_route_draw_container" class="row">
+            <div class="row">
+                <div class="col">
+                    <!-- Draw controls are injected here through drawcontrols.js -->
+                    <div id="edit_route_draw_container" class="row">
 
+
+                    </div>
+                </div>
+                <div class="col route_echo mt-2 mb-2">
+                    <!-- Echo controls injected here through echocontrols.js -->
+                    <span id="route_echo_container" class="text-center">
+
+                    </span>
+                </div>
             </div>
         </div>
     </footer>

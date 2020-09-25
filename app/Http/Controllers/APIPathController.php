@@ -39,7 +39,7 @@ class APIPathController extends Controller
      */
     function store(Request $request, DungeonRoute $dungeonroute)
     {
-        if (!$dungeonroute->isTry()) {
+        if (!$dungeonroute->isSandbox()) {
             $this->authorize('edit', $dungeonroute);
         }
 
@@ -97,7 +97,7 @@ class APIPathController extends Controller
     function delete(Request $request, DungeonRoute $dungeonroute, Path $path)
     {
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's route
-        if (!$dungeonroute->isTry()) {
+        if (!$dungeonroute->isSandbox()) {
             $this->authorize('edit', $dungeonroute);
         }
 

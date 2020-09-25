@@ -21,7 +21,8 @@ $dungeonsByExpansion = $dungeonsBuilder->get()->groupBy('expansion_id');
 
 foreach ($dungeonsByExpansion as $expansionId => $dungeons) {
     $dungeonsSelect[\App\Models\Expansion::findOrFail($expansionId)->name] = $dungeons->pluck('name', 'id')->toArray();
-} ?>
+}
+?>
 
 @if($showSiegeWarning)
     @section('scripts')

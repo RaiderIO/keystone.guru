@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "id": 219,
+        "floor_id": 96,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#E25D5D",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-152.75,\"lng\":142},{\"lat\":-99.75,\"lng\":160.5}]"
+        }
+    }
+]

@@ -66,6 +66,12 @@
     @include('common.forms.form-error', ['key' => 'enemy_forces_required_teeming'])
 </div>
 
+<div class="form-group{{ $errors->has('timer_max_seconds') ? ' has-error' : '' }}">
+    {!! Form::label('timer_max_seconds', __('Timer (seconds)')) !!}
+    {!! Form::number('timer_max_seconds', null, ['class' => 'form-control']) !!}
+    @include('common.forms.form-error', ['key' => 'timer_max_seconds'])
+</div>
+
 {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
 
 {!! Form::close() !!}

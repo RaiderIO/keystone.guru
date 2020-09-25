@@ -64,9 +64,11 @@ abstract class MapContext
         {
             $dungeon = $this->_floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons']);
 
-            return array_merge($this->_floor->dungeon->toArray(), $this->getEnemies(), [
-                'enemies'                   => $dungeon->enemies,
-                'enemyPacks'                => $dungeon->enemypacks()->with(['enemies:enemies.id,enemies.enemy_pack_id,enemies.lat,enemies.lng'])->get(),
+            // Bit of a loss why the [0] is needed - was introduced after including the without() function
+            return array_merge(($this->_floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
+                'enemies'                   => $dungeon->enemies()->without(['npc'])->get(),
+                'npcs'                      => $dungeon->npcs()->with(['spells'])->get(),
+                'enemyPacks'                => $dungeon->enemypacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
                 'enemyPatrols'              => $dungeon->enemypatrols,
                 'mapIcons'                  => $dungeon->mapicons,
                 'dungeonFloorSwitchMarkers' => $dungeon->floorswitchmarkers

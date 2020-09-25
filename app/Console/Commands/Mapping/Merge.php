@@ -62,7 +62,7 @@ class Merge extends Command
         }
 
 
-        $changedDungeons = $mappingService->getRecentlyChangedDungeons();
+        $changedDungeons = $mappingService->getRecentlyChangedDungeons(true);
 
         $changedDungeonNames = $changedDungeons->map(function (Dungeon $dungeon)
         {

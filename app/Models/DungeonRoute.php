@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\DB;
  * @property $setup array
  * @property $avg_rating double
  * @property $rating_count int
+ * @property $has_thumbnail boolean
  *
  * @property $pull_gradient string
  * @property $pull_gradient_apply_always boolean
@@ -94,7 +95,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'avg_rating', 'rating_count', 'views', 'has_team'];
+    protected $appends = ['setup', 'avg_rating', 'rating_count', 'has_thumbnail', 'views', 'has_team'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'team_id', 'unlisted', 'demo',
                          'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
@@ -303,12 +304,12 @@ class DungeonRoute extends Model
     }
 
     /**
-     * Scope a query to only include dungeon routes that are set in try mode.
+     * Scope a query to only include dungeon routes that are set in sandbox mode.
      *
      * @param Builder $query
      * @return Builder
      */
-    public function scopeIsTry($query)
+    public function scopeIsSandbox($query)
     {
         return $query->where('expires_at', '!=', null);
     }
@@ -388,6 +389,14 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return bool
+     */
+    public function getHasThumbnailAttribute()
+    {
+        return Carbon::createFromTimeString($this->thumbnail_updated_at)->diffInYears(Carbon::now()) === 0;
+    }
+
+    /**
      * Gets the current amount of enemy forces that have been targeted for killing in this dungeon route.
      */
     public function getEnemyForces()
@@ -458,22 +467,22 @@ class DungeonRoute extends Model
     public function mayUserEdit(?User $user)
     {
         if ($user === null) {
-            return $this->isTry();
+            return $this->isSandbox();
         } else {
-            return $this->isOwnedByUser($user) || $this->isTry() || $user->hasRole('admin')
+            return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole('admin')
                 || ($this->team !== null && $this->team->isUserCollaborator($user));
         }
     }
 
     /**
-     * If this dungeon is in try mode, have a specific user claim this route as theirs.
+     * If this dungeon is in sandbox mode, have a specific user claim this route as theirs.
      *
      * @param int $userId
      * @return bool
      */
     public function claim(int $userId)
     {
-        if ($result = $this->isTry()) {
+        if ($result = $this->isSandbox()) {
             $this->author_id = $userId;
             $this->expires_at = null;
             $this->save();
@@ -482,9 +491,9 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return bool True if this route is in try mode, false if it is not.
+     * @return bool True if this route is in sandbox mode, false if it is not.
      */
-    public function isTry()
+    public function isSandbox()
     {
         return $this->author_id === -1 && $this->expires_at !== null;
     }
@@ -507,16 +516,16 @@ class DungeonRoute extends Model
             $this->public_key = DungeonRoute::generateRandomPublicKey();
         }
 
-        $this->dungeon_id = (int) $request->get('dungeon_id', $this->dungeon_id);
-        $this->faction_id = (int) $request->get('faction_id', $this->faction_id);
+        $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
         $this->title = $request->get('dungeon_route_title', $this->title);
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty = 1;
-        $this->seasonal_index = (int) $request->get('seasonal_index', $this->seasonal_index);
-        $this->teeming = (int) $request->get('teeming', $this->teeming) ?? 0;
+        $this->seasonal_index = (int)$request->get('seasonal_index', $this->seasonal_index);
+        $this->teeming = (int)$request->get('teeming', $this->teeming) ?? 0;
 
         $this->pull_gradient = $request->get('pull_gradient', '');
-        $this->pull_gradient_apply_always = (int) $request->get('pull_gradient_apply_always', 0);
+        $this->pull_gradient_apply_always = (int)$request->get('pull_gradient_apply_always', 0);
 
         if (Auth::check()) {
             $user = User::findOrFail(Auth::id());
@@ -555,7 +564,7 @@ class DungeonRoute extends Model
                     // Only if they exist
                     if (CharacterClassSpecialization::where('id', $value)->exists()) {
                         $drpSpec = new DungeonRoutePlayerSpecialization();
-                        $drpSpec->character_class_specialization_id = (int) $value;
+                        $drpSpec->character_class_specialization_id = (int)$value;
                         $drpSpec->dungeon_route_id = $this->id;
                         $drpSpec->save();
                     }
@@ -569,7 +578,7 @@ class DungeonRoute extends Model
                 foreach ($newClasses as $key => $value) {
                     if (CharacterClass::where('id', $value)->exists()) {
                         $drpClass = new DungeonRoutePlayerClass();
-                        $drpClass->character_class_id = (int) $value;
+                        $drpClass->character_class_id = (int)$value;
                         $drpClass->dungeon_route_id = $this->id;
                         $drpClass->save();
                     }
@@ -584,7 +593,7 @@ class DungeonRoute extends Model
                 // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
                 foreach ($newRaces as $key => $value) {
                     $drpRace = new DungeonRoutePlayerRace();
-                    $drpRace->character_race_id = (int) $value;
+                    $drpRace->character_race_id = (int)$value;
                     $drpRace->dungeon_route_id = $this->id;
                     $drpRace->save();
                 }
@@ -792,6 +801,52 @@ class DungeonRoute extends Model
     }
 
     /**
+     * Checks if this dungeon route kills a specific enemy or not.
+     *
+     * @param int $enemyId
+     * @return bool
+     */
+    public function isEnemyKilled(int $enemyId)
+    {
+        $result = false;
+
+        foreach ($this->killzones as $killZone) {
+            if ($killZone->enemies->filter(function ($enemy) use ($enemyId)
+            {
+                return $enemy->id === $enemyId;
+            })->isNotEmpty()) {
+                $result = true;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Checks if this route has killed all unskippable enemies.
+     *
+     * @return bool
+     */
+    public function hasKilledAllUnskippables()
+    {
+        $result = true;
+
+        foreach ($this->dungeon->enemies as $enemy) {
+            if ($enemy->unskippable &&
+                ($enemy->teeming === null || ($enemy->teeming === 'visible' && $this->teeming) || ($enemy->teeming === 'invisible' && $this->teeming))) {
+
+                if (!$this->isEnemyKilled($enemy->id)) {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @return string Generates a random public key that is displayed to the user in the URL.
      */
     public static function generateRandomPublicKey()
@@ -837,6 +892,7 @@ class DungeonRoute extends Model
             $item->paths()->delete();
             $item->killzones()->delete();
             $item->mapicons()->delete();
+            $item->pridefulenemies()->delete();
 
             // External
             $item->ratings()->delete();

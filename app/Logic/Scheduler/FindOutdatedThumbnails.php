@@ -43,7 +43,7 @@ class FindOutdatedThumbnails
             // it will cause the server to come to a crawl for no real reason. Thus, this magic 100 is introduced.
             if ($currentJobCount < 100 &&
                 // Only take a look at routes that are NOT in trial mode
-                !$dungeonRoute->isTry() &&
+                !$dungeonRoute->isSandbox() &&
                 ((// Updated at is greater than the thumbnail updated at (don't keep updating thumbnails..)
                         $updatedAt->greaterThan($thumbnailUpdatedAt) &&
                         // If the route has been updated in the past x minutes...

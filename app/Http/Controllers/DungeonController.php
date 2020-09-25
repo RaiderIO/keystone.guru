@@ -38,6 +38,7 @@ class DungeonController extends Controller
         $dungeon->name = $request->get('name');
         $dungeon->enemy_forces_required = $request->get('enemy_forces_required');
         $dungeon->enemy_forces_required_teeming = $request->get('enemy_forces_required_teeming');
+        $dungeon->timer_max_seconds = $request->get('timer_max_seconds');
         $dungeon->active = $request->get('active', 0);
 
         // Update or insert it

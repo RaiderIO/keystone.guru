@@ -2,10 +2,54 @@
     {
         "floor_id": 81,
         "team_id": null,
-        "map_icon_type_id": 9,
-        "lat": -67.25,
-        "lng": 205.8125,
-        "comment": "Unstable Canister",
+        "map_icon_type_id": 12,
+        "lat": -96.25,
+        "lng": 239.75,
+        "comment": "Graveyard: activates after killing Doctor Ickus",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 81,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -48.9375,
+        "lng": 121.1875,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 81,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -34.5625,
+        "lng": 187.0625,
+        "comment": "NECROLORDS: AoE Damage Proc Aura -\n\nUsing  Fleshcraft on the Gushing Slime's corpse will grant the Corrosive Gunk aura for 3 minutes.\n\nThis aura will apply the  Corrosive Gunk buff to any nearby party member, giving a 10% chance to proc AoE damage around your character!",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 81,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -64.625,
+        "lng": 234.4375,
+        "comment": "NECROLORD: 25% Damage Reduction Aura - \nUsing  Fleshcraft on the Congealed Slime's corpse will grant the Congealed Contagion aura for 3 minutes.\n\nThis aura will apply the  Congealed Contagion buff to any nearby party member within 10 yards, giving them with 25% Damage Reduction!",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 81,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -74.84375,
+        "lng": 218.09375,
+        "comment": "NECROLORDS: 25% Haste Aura -  \nUsing  Fleshcraft on the Pestilence Slime's corpse will grant the   Rapid Infection aura for 3 minutes.\n\nThis aura will apply the  Rapid Infection buff to any nearby party member within 10 yards, providing them with 25% Haste!",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

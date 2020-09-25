@@ -73,6 +73,9 @@ class MapIconTypesSeeder extends Seeder
             'neonbutton_purple' => ['name' => 'Button purple'],
             'neonbutton_red'    => ['name' => 'Button red'],
             'neonbutton_yellow' => ['name' => 'Button yellow'],
+            'neonbutton_darkred' => ['name' => 'Button dark red'],
+            'neonbutton_darkgreen' => ['name' => 'Button dark green'],
+            'neonbutton_darkblue' => ['name' => 'Button dark blue'],
         ];
 
         foreach ($mapIconData as $key => $mapIcon) {

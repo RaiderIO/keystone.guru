@@ -416,6 +416,6 @@ class AdminEnemy extends Enemy {
 
         // We're done with this event now (after finishing! otherwise we won't process the result)
         this.map.unregister('map:mapstatechanged', this);
-        this.unregister('save:success');
+        this.unregister('save:success', this);
     }
 }

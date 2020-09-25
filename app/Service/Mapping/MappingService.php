@@ -24,12 +24,18 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
+     * @param bool $ignoreMostRecentCommit
      * @return Collection|MappingChangeLog[]
      */
-    function getUnsynchronizedMappingChanges(): Collection
+    function getUnsynchronizedMappingChanges(bool $ignoreMostRecentCommit = false): Collection
     {
         /** @var MappingCommitLog $mostRecentMappingCommitLog */
-        $mostRecentMappingCommitLog = MappingCommitLog::latest()->first();
+        if ($ignoreMostRecentCommit) {
+            $allCommits = MappingCommitLog::all();
+            $mostRecentMappingCommitLog = $allCommits->count() > 1 ? $allCommits->get($allCommits->count() - 2) : null;
+        } else {
+            $mostRecentMappingCommitLog = MappingCommitLog::latest()->first();
+        }
 
         if ($mostRecentMappingCommitLog !== null) {
             $result = MappingChangeLog::where('created_at', '>', $mostRecentMappingCommitLog->created_at->toDateTimeString())->get();
@@ -41,21 +47,22 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
+     * @param bool $ignoreMostRecentCommit
      * @return Collection|Dungeon[]
      */
-    function getRecentlyChangedDungeons(): Collection
+    function getRecentlyChangedDungeons(bool $ignoreMostRecentCommit = false): Collection
     {
         /** @var Collection|Dungeon[] $result */
         $result = collect();
 
-        $mostRecentMappingChanges = $this->getUnsynchronizedMappingChanges();
+        $mostRecentMappingChanges = $this->getUnsynchronizedMappingChanges($ignoreMostRecentCommit);
 
         foreach ($mostRecentMappingChanges as $mappingChange) {
             // Decode the latest known value
             $decoded = json_decode(!empty($mappingChange->after_model) ? $mappingChange->after_model : $mappingChange->before_model, true);
 
             // Only if we actually decoded something; prevents crashes
-            if ($decoded !== false) {
+            if ($decoded !== false && isset($decoded['floor_id'])) {
                 $changedFloor = Floor::find($decoded['floor_id']);
 
                 // If we found the floor that was changed, add its dungeon to the list if it wasn't already in there

@@ -2,7 +2,7 @@
 /** @var \App\Models\DungeonRoute $model */
 
 $show = isset($show) ? $show : [];
-// May not be set in the case of a tryout version
+// May not be set in the case of a sandbox version
 if (isset($model)) {
     $dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
 }
@@ -19,6 +19,7 @@ $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->co
 ]])
 
 @component('common.maps.sidebar', [
+    'dungeon' => $dungeon,
     'header' => __('Admin toolbox'),
     'anchor' => 'left',
     'id' => 'admineditsidebar'

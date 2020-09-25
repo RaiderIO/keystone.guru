@@ -90,7 +90,7 @@ class EnemyVisualManager extends Signalable {
     _onLeafletMapMouseMove(mouseMoveEvent, organic = true) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        if (!this._isMapBeingDragged) {
+        if (!this._isMapBeingDragged && typeof mouseMoveEvent.originalEvent !== 'undefined') {
             let currTime = (new Date()).getTime();
 
             // Once every 50 ms, calculation is expensive

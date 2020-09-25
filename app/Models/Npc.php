@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\hasMany;
 use Illuminate\Support\Collection;
 
@@ -40,7 +41,7 @@ class Npc extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $with = ['type', 'class', 'npcbolsteringwhitelists'];
+    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
     protected $fillable = ['id', 'npc_type_id', 'npc_class_id', 'dungeon_id', 'name', 'base_health', 'enemy_forces', 'enemy_forces_teeming', 'aggressiveness'];
 
     /**
@@ -101,5 +102,35 @@ class Npc extends Model
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo('App\Models\NpcClass', 'npc_class_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function spells()
+    {
+        return $this->belongsToMany('App\Models\Spell', 'npc_spells');
+    }
+
+    /**
+     * @return HasMany
+     */
+    function npcspells(){
+        return $this->hasMany('App\Models\NpcSpell');
+    }
+
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Delete Path properly if it gets deleted
+        static::deleting(function ($item) {
+            /** @var $item Npc */
+
+            $item->npcbolsteringwhitelists()->delete();
+            $item->npcspells()->delete();
+        });
     }
 }

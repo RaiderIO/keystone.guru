@@ -34,9 +34,6 @@ class NpcNpcBolsteringWhitelistRelationParser implements RelationParser
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
         foreach ($value as $npcBolsteringWhitelist) {
-            // We now know the dungeon route ID, set it back to the player class
-            $npcBolsteringWhitelist['npc_id'] = $modelData['id'];
-
             NpcBolsteringWhitelist::insert($npcBolsteringWhitelist);
         }
 

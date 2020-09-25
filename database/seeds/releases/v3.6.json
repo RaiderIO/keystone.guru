@@ -1,0 +1,74 @@
+{
+    "id": 63,
+    "release_changelog_id": 67,
+    "version": "v3.6",
+    "created_at": "2020-09-25T18:40:29+00:00",
+    "updated_at": "2020-09-25T18:40:29+00:00",
+    "changelog": {
+        "id": 67,
+        "release_id": 63,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 67,
+                "release_changelog_category_id": 1,
+                "ticket_id": 459,
+                "change": "Automatic release notifier for Discord has been given a make over. Releases are prettier now!",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 67,
+                "release_changelog_category_id": 1,
+                "ticket_id": 460,
+                "change": "Try functionality has been renamed to Sandbox to better convey what the feature is about.",
+                "category": {
+                    "id": 1,
+                    "category": "General changes"
+                }
+            },
+            {
+                "release_changelog_id": 67,
+                "release_changelog_category_id": 3,
+                "ticket_id": 437,
+                "change": "Certain enemies are now marked as unskippable. This means that you MUST include these enemies in a pull if you want to be able to publish your route. Think of the first boss room in King's Rest which you have to clear before the boss spawns, or the gauntlet after that you have to clear. Or just all bosses in general. This will improve the quality of routes that are published and prevent unfinished routes from being visible to the world.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 67,
+                "release_changelog_category_id": 3,
+                "ticket_id": 345,
+                "change": "Route synchronization indicator has been made less obtrusive - the top bar has been removed and the indicator icon is now just right of your draw tools at the bottom.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 67,
+                "release_changelog_category_id": 3,
+                "ticket_id": 461,
+                "change": "Timer information is now added to all dungeons and is visible from the sidebar. Mouse over for +2 and +3 times.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            },
+            {
+                "release_changelog_id": 67,
+                "release_changelog_category_id": 6,
+                "ticket_id": 463,
+                "change": "Fixed an issue with entering try (now sandbox) mode when importing an MDT string.",
+                "category": {
+                    "id": 6,
+                    "category": "MDT importer changes"
+                }
+            }
+        ]
+    }
+}

@@ -31,5 +31,27 @@
         "permanent_tooltip": 0,
         "seasonal_index": 1,
         "is_admin": true
+    },
+    {
+        "floor_id": 58,
+        "team_id": null,
+        "map_icon_type_id": 40,
+        "lat": -46,
+        "lng": 177.875,
+        "comment": "Cannon",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 58,
+        "team_id": null,
+        "map_icon_type_id": 40,
+        "lat": -159.75,
+        "lng": 98.125,
+        "comment": "Cannon",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

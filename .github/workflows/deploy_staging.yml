@@ -19,6 +19,10 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          script: cd /var/www/html/keystone.guru.staging/ &&
+          script: cd /var/www/html/keystone.guru.staging/;
+            php artisan up;
+            php artisan down --message "Upgrading keystone.guru, we will be back stronger than ever shortly!" --retry 60 &&
+            php artisan environment:updateprepare &&
             php artisan environment:update staging &&
-            php artisan report:release discord
+            php artisan report:release discord &&
+            php artisan up

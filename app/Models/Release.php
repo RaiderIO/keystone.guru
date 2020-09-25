@@ -61,7 +61,15 @@ class Release extends Model
      */
     public function getDiscordBodyAttribute()
     {
-        return trim(view('app.release.discord', ['model' => $this, 'mention' => $this->isMajorUpgrade()])->render());
+        return trim(view('app.release.discord', [
+            'model' => $this,
+            'mention' => $this->isMajorUpgrade(),
+            'homeUrl' => route('home'),
+            'changelogUrl' => route('misc.changelog'),
+            'affixesUrl' => route('misc.affixes'),
+            'sandboxUrl' => route('dungeonroute.sandbox'),
+            'patreonUrl' => 'https://www.patreon.com/keystoneguru',
+        ])->render());
     }
 
     /**
@@ -71,6 +79,61 @@ class Release extends Model
     public function getRedditBodyAttribute()
     {
         return trim(view('app.release.reddit', ['model' => $this])->render());
+    }
+
+    /**
+     * @return array
+     */
+    public function getDiscordEmbeds()
+    {
+//        $result = [];
+//
+//        $description = $this->changelog->description;
+//
+//        // Categories
+//        foreach ($this->changelog->getRelation('changes')->groupBy('release_changelog_category_id') as $categoryId => $changes) {
+//
+//            /** @var ReleaseChangelogChange[] $changes */
+//            $category = ReleaseChangelogCategory::findOrFail($categoryId);
+//
+//            $embed = [
+//                'color'  => 14641434, // '#DF691A'
+//                'title'  => $category->category,
+//                'fields' => [],
+//            ];
+//
+//            foreach($changes as $change){
+//                $embed['fields'][] = [
+//                    'name' => sprintf('#%s', $change->ticket_id),
+//                    'value' => $change->change,
+//                ];
+//            }
+//
+//            $result[] = $embed;
+//        }
+//
+//        // Footer
+////        $result[] = [
+////            'color'     => 14641434, // '#DF691A'
+////            'timestamp' => Carbon::now()->toIso8601String(),
+////            'footer'    => [
+////                'text' => 'Keystone.guru Release Notifier'
+////            ]
+////        ];
+
+        return [
+            [
+                'color'       => 14641434, // '#DF691A'
+                'title'       => sprintf('Release %s (%s)', $this->version, $this->created_at->format('Y/m/d')),
+                'description' => $this->discord_body,
+                'url'         => sprintf('%s/release/%s', env('APP_URL'), $this->version),
+                'timestamp'   => Carbon::now()->toIso8601String(),
+                'footer'      => [
+                    'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
+                    'text'     => 'Keystone.guru Discord Bot'
+                ],
+            ]
+        ];
     }
 
     /**

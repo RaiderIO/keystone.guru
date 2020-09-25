@@ -2,9 +2,12 @@
 <?php
 /** @var $model \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
-$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load('floors');
+$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load(['expansion', 'floors']);
 ?>
-@include('common.general.inline', ['path' => 'dungeonroute/edit'])
+@include('common.general.inline', [
+    'path' => 'dungeonroute/edit',
+    'dependencies' => ['common/maps/map']
+])
 
 @section('content')
     <div class="wrapper">

@@ -1,1 +1,35 @@
-[]
+[
+    {
+        "floor_id": 86,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -230.53125,
+        "lng": 217.53125,
+        "comment": "KYRIAN: Spear of Destiny - throw the Spear of Destiny at a location, hitting all enemies within 8 yards, stunning them and making them take 20% additional damage for 10 seconds.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 86,
+        "team_id": null,
+        "map_icon_type_id": 12,
+        "lat": -109.5,
+        "lng": 257,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 86,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -54.75,
+        "lng": 137.5,
+        "comment": "KYRIAN: Spear of Destiny - throw the Spear of Destiny at a location, hitting all enemies within 8 yards, stunning them and making them take 20% additional damage for 10 seconds.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

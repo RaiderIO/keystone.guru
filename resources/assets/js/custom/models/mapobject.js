@@ -694,8 +694,8 @@ class MapObject extends Signalable {
 
         if (this.hasOwnProperty('faction')) {
             let faction = mapContext.getFaction();
-            // Only when not in try mode! (no idea why, it was like this)
-            if (!this.map.isTryModeEnabled() && (this.faction !== 'any' && faction !== 'any' && this.faction !== faction)) {
+            // Only when not in sandbox mode! (no idea why, it was like this)
+            if (!this.map.isSandboxModeEnabled() && (this.faction !== 'any' && faction !== 'any' && this.faction !== faction)) {
                 // console.log(`Hiding enemy due to faction ${this.id}`);
                 return false;
             }

@@ -244,6 +244,7 @@ if (images) {
     mix.copy('resources/assets/images/enemyportraits', 'public/images/enemyportraits', false);
     mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes', false);
     mix.copy('resources/assets/images/expansions', 'public/images/expansions', false);
+    mix.copy('resources/assets/images/external', 'public/images/external', false);
     mix.copy('resources/assets/images/factions', 'public/images/factions', false);
     mix.copy('resources/assets/images/home', 'public/images/home', false);
     mix.copy('resources/assets/images/icon', 'public/images/icon', false);
@@ -253,5 +254,6 @@ if (images) {
     mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers', false);
     mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes', false);
     mix.copy('resources/assets/images/specializations', 'public/images/specializations', false);
+    mix.copy('resources/assets/images/spells', 'public/images/spells', false);
     // }
 }

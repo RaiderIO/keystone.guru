@@ -21,6 +21,10 @@
     color: #DF691A !important;
 }
 
+.dropdown-item.selected {
+    background-color: #4E5D6C !important;
+}
+
 #map .dropdown-item:hover, .dropdown-item:focus {
     color: black;
 }

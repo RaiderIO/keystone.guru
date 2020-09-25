@@ -1,7 +1,7 @@
 {{#each info}}
     <div class="row">
         <div class="col-6 font-weight-bold">
-            {{key}}
+            {{key}}:
         </div>
         <div class="col-6">
             {{#ifCond value '===' 1}}
@@ -15,4 +15,7 @@
             {{/ifCond}}
         </div>
     </div>
+{{/each}}
+{{#each custom}}
+    {{{html}}}
 {{/each}}

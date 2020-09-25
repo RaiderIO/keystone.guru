@@ -3,7 +3,7 @@
 /** @var \App\Models\Dungeon $dungeon */
 
 $show = isset($show) ? $show : [];
-// May not be set in the case of a tryout version
+// May not be set in the case of a sandbox version
 if (isset($model)) {
     $floorSelection = (!isset($floorSelect) || $floorSelect) && $dungeon->floors->count() !== 1;
 }
@@ -19,6 +19,7 @@ if (isset($model)) {
 ]])
 
 @component('common.maps.sidebar', [
+    'dungeon' => $dungeon,
     'header' => __('Toolbox'),
     'anchor' => 'left',
     'id' => 'editsidebar'
@@ -147,11 +148,13 @@ if (isset($model)) {
             <!-- Published state -->
                 <div class="form-group mb-0">
                     <div class="row">
-                        <div class="col">
+                        <div id="map_route_publish_container" class="col"
+                                    data-toggle="tooltip"
+                                    title="{{ __('Kill enough enemy forces and kill all unskippable enemies to publish your route') }}"
+                                    style="display: block">
                             <button id="map_route_publish"
                                     class="btn btn-success col-md {{ $model->published === 1 ? 'd-none' : '' }}"
-                                    data-toggle="tooltip"
-                                    title="{{ __('Your route is currently unpublished. Nobody can view your route until you publish it.') }}">
+                                    disabled>
                                 <i class="fa fa-plane-departure"></i> {{ __('Publish route') }}
                             </button>
                             <button id="map_route_unpublish"
@@ -163,7 +166,7 @@ if (isset($model)) {
                 </div>
             @endisset
 
-            @isset($show['tryout'])
+            @isset($show['sandbox'])
                 @if (Auth::guest())
                     <div id="map_login_and_continue" class="form-group">
                         <button class="btn btn-primary mt-1 w-100" data-toggle="modal" data-target="#login_modal">
@@ -197,7 +200,7 @@ if (isset($model)) {
             <div id="enemy_info_key_value_container">
 
             </div>
-            <div class="row mt-1">
+            <div class="row mt-2">
                 <div class="col">
                     <a href="#" data-toggle="modal"
                        data-target="#userreport_enemy_modal">

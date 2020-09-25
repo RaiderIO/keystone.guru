@@ -44,26 +44,6 @@ class Update extends Command
     {
         $environment = $this->argument('environment');
 
-        $this->call('up');
-        $this->call('down', [
-            '--message' => 'Upgrading keystone.guru, we will be back stronger than ever shortly!',
-            '--retry'   => 60
-        ]);
-
-        // Local environment GIT is managed by user - cannot update NPM from inside the VM; nor git pulls
-        if ($environment !== 'local') {
-            $this->shell([
-                // Git commands
-                'git checkout .',
-                'git clean -f',
-                'git pull',
-            ]);
-
-            $this->shell([
-                'npm install',
-                'npm audit fix',
-            ]);
-        }
         // Composer is fine though
         $this->shell([
             'composer install',
@@ -100,8 +80,6 @@ class Update extends Command
         $this->call('config:clear');
         $this->call('queue:restart');
         $this->call('keystoneguru:startsupervisor');
-
-        $this->call('up');
 
         return 0;
     }

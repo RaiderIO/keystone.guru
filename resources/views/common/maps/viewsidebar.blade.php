@@ -26,6 +26,7 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
 ]])
 
 @component('common.maps.sidebar', [
+    'dungeon' => $dungeon,
     'header' => $model->title,
     'subHeader' => $subTitle,
     'anchor' => 'left',
@@ -41,6 +42,17 @@ if (isset($model->clone_of) && \App\Models\DungeonRoute::where('public_key', $mo
                     </div>
                     <div class="col-7 col-md-6">
                         {{ $model->dungeon->name }}
+                    </div>
+                </div>
+                <div class="row view_dungeonroute_details_row mt-2">
+                    <div class="col-5 col-md-6 font-weight-bold">
+                        {{ __('Timer') }}:
+                    </div>
+                    <div class="col-7 col-md-6" data-toggle="tooltip" title="{{ sprintf(__('+2: %s, +3: %s'),
+                        gmdate('i:s', $model->dungeon->getTimerUpgradePlusTwoSeconds()),
+                        gmdate('i:s', $model->dungeon->getTimerUpgradePlusThreeSeconds()))
+                        }}">
+                        {{ gmdate('i:s', $model->dungeon->timer_max_seconds) }}
                     </div>
                 </div>
                 {{--<div class="row view_dungeonroute_details_row mt-2">--}}

@@ -23,13 +23,13 @@
                     <h1>{{ __('Welcome to Keystone.guru!') }}</h1>
                     <p>{{ __('Plan your World of Warcraft Mythic Plus routes and share them with your group and the world!') }}</p>
                     <p>
-                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-lg mt-1"
-                           data-toggle="modal" data-target="#try_modal">
-                            <i class="fas fa-play"></i> {{ __('Try it!') }}
+                        <a href="{{ route('dungeonroute.sandbox') }}" class="btn btn-primary btn-lg mt-1"
+                           data-toggle="modal" data-target="#sandbox_modal">
+                            <i class="fas fa-play"></i> {{ __('Sandbox') }}
                         </a>
-                        <a href="{{ route('dungeonroute.try') }}" class="btn btn-primary btn-lg mt-1"
-                           data-toggle="modal" data-target="#try_mdt_import_modal">
-                            <i class="fas fa-file-import"></i> {{ __('Try by importing MDT string') }}
+                        <a href="{{ route('dungeonroute.sandbox') }}" class="btn btn-primary btn-lg mt-1"
+                           data-toggle="modal" data-target="#sandbox_mdt_import_modal">
+                            <i class="fas fa-file-import"></i> {{ __('Sandbox by importing MDT string') }}
                         </a>
 
                         @guest

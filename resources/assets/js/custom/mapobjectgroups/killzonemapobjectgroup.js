@@ -43,6 +43,23 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return new KillZone(this.manager.map, layer);
     }
 
+    _createNewMapObject(layer, options){
+        let mapObject = super._createNewMapObject(layer, options);
+
+        mapObject.register('killzone:enemyremoved', this, this._onKillZoneEnemyRemoved.bind(this));
+        mapObject.register('killzone:enemyadded', this, this._onKillZoneEnemyAdded.bind(this));
+
+        return mapObject;
+    }
+
+    _onKillZoneEnemyRemoved(killZoneEnemyRemovedEvent){
+        this.signal('killzone:enemyremoved', {killzone: killZoneEnemyRemovedEvent.context});
+    }
+
+    _onKillZoneEnemyAdded(killZoneEnemyAddedEvent){
+        this.signal('killzone:enemyadded', {killzone: killZoneEnemyAddedEvent.context});
+    }
+
     /**
      * Creates a whole new pull.
      * @param enemyIds array Any enemies that must be in the pull from the start
@@ -146,6 +163,53 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 }
             }
         });
+    }
+
+    /**
+     * Checks if a specific enemy is killed by any kill zone.
+     * @param enemyId {number}
+     * @returns {boolean}
+     */
+    isEnemyKilled(enemyId) {
+        let result = false;
+
+        for (let i = 0; i < this.objects.length; i++) {
+            if (this.objects[i].enemies.includes(enemyId)) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if the user has killed all unskippables, if not, returns false. True otherwise
+     * @returns {boolean}
+     */
+    hasKilledAllUnskippables() {
+        let result = true;
+
+        let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let mapContext = getState().getMapContext();
+
+        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
+            let enemy = enemyMapObjectGroup.objects[i];
+            // If this enemy SHOULD have been killed by the user
+            if (enemy.unskippable &&
+                // If not teeming, OR if enemy is teeming AND we're teeming, or inverse that. THEN this enemy counts, otherwise it does not
+                (enemy.teeming === null || (enemy.teeming === 'visible' && mapContext.getTeeming()) || (enemy.teeming === 'invisible' && !mapContext.getTeeming()))
+            ) {
+                // But if it's not..
+                if( !this.isEnemyKilled(enemy.id) ){
+                    // console.warn(`Has not killed enemy ${enemy.id}!`);
+                    result = false;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     // _fetchSuccess(response) {

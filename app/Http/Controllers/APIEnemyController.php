@@ -76,10 +76,11 @@ class APIEnemyController extends Controller
         $enemy->floor_id = (int)$request->get('floor_id');
         $enemy->teeming = $request->get('teeming');
         $enemy->faction = $request->get('faction', 'any');
+        $enemy->unskippable = (int) $request->get('unskippable', false);
         $enemy->enemy_forces_override = (int)$request->get('enemy_forces_override', -1);
         $enemy->enemy_forces_override_teeming = (int)$request->get('enemy_forces_override_teeming', -1);
         $enemy->lat = (float) $request->get('lat');
-        $enemy->lng = $request->get('lng');
+        $enemy->lng = (float) $request->get('lng');
 
         if ($enemy->save()) {
             // Trigger mapping changed event so the mapping gets saved across all environments

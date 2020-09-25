@@ -479,7 +479,7 @@ class DungeonMap extends Signalable {
             }
             mapControls.push(new EnemyVisualControls(this));
 
-            if (this.isTryModeEnabled() && getState().getMapContext().getDungeon().name === 'Siege of Boralus') {
+            if (this.isSandboxModeEnabled() && getState().getMapContext().getDungeon().name === 'Siege of Boralus') {
                 mapControls.push(new FactionDisplayControls(this));
             }
 
@@ -713,13 +713,13 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Checks if try (hard) mode is currently enabled or not.
+     * Checks if sandbox mode is currently enabled or not.
      * @returns {boolean|*}
      */
-    isTryModeEnabled() {
+    isSandboxModeEnabled() {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        return this.options.try && this.options.edit;
+        return this.options.sandbox && this.options.edit;
     }
 
     /**

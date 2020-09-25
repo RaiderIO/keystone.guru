@@ -134,7 +134,7 @@ class CommonMapsEditsidebar extends InlineCode {
         if (!isNull) {
             let visualData = focusedEnemy.getVisualData();
             if (visualData !== null) {
-                $('#enemy_info_container').show();
+                $('#enemy_info_container').show().find('.card-title').html(focusedEnemy.npc.name);
 
                 // Update the focused enemy in the sidebar
                 let template = Handlebars.templates['map_sidebar_enemy_info_template'];
