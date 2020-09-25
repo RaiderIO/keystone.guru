@@ -738,37 +738,37 @@ class DungeonsSeeder extends Seeder
                 'key'                           => 'hallsofatonement_a',
                 'active'                        => $isMapping,
                 'floors'                        => [
-                    'Exterior <TEMP>'        => [
+                    'Halls of Atonement'        => [
                         'index'   => 1,
                         'default' => true
                     ],
-                    'Lower Cathedral <TEMP>' => [
+                    'The Nave of Pain' => [
                         'index' => 2
                     ],
-                    'Upper Cathedral <TEMP>' => [
+                    'The Sanctuary of Souls' => [
                         'index' => 3
                     ],
                 ],
                 'floor_couplings'               => [
                     [
-                        'from'      => 'Exterior <TEMP>',
-                        'to'        => 'Lower Cathedral <TEMP>',
+                        'from'      => 'Halls of Atonement',
+                        'to'        => 'The Nave of Pain',
                         'direction' => 'left'
                     ],
                     [
-                        'from'      => 'Lower Cathedral <TEMP>',
-                        'to'        => 'Exterior <TEMP>',
+                        'from'      => 'The Nave of Pain',
+                        'to'        => 'Halls of Atonement',
                         'direction' => 'right'
                     ],
 
                     [
-                        'from'      => 'Lower Cathedral <TEMP>',
-                        'to'        => 'Upper Cathedral <TEMP>',
+                        'from'      => 'The Nave of Pain',
+                        'to'        => 'The Sanctuary of Souls',
                         'direction' => 'up'
                     ],
                     [
-                        'from'      => 'Upper Cathedral <TEMP>',
-                        'to'        => 'Lower Cathedral <TEMP>',
+                        'from'      => 'The Sanctuary of Souls',
+                        'to'        => 'The Nave of Pain',
                         'direction' => 'down'
                     ],
                 ]
@@ -940,61 +940,61 @@ class DungeonsSeeder extends Seeder
                         'index'   => 1,
                         'default' => true
                     ],
-                    'Warlord'            => [
+                    'Chamber of Conquest'            => [
                         'index' => 2,
                     ],
-                    'Lich'               => [
+                    'Altars of Agony'               => [
                         'index' => 3,
                     ],
-                    'Abomination Top'    => [
+                    'Upper Barrow of Carnage'    => [
                         'index' => 4,
                     ],
-                    'Abomination Bottom' => [
+                    'Lower Barrow of Carnage' => [
                         'index' => 5,
                     ],
                 ],
                 'floor_couplings'               => [
                     [
                         'from'      => 'Theater of Pain',
-                        'to'        => 'Warlord',
+                        'to'        => 'Chamber of Conquest',
                         'direction' => 'right'
                     ],
                     [
-                        'from'      => 'Warlord',
+                        'from'      => 'Chamber of Conquest',
                         'to'        => 'Theater of Pain',
                         'direction' => 'left'
                     ],
 
                     [
                         'from'      => 'Theater of Pain',
-                        'to'        => 'Lich',
+                        'to'        => 'Altars of Agony',
                         'direction' => 'up'
                     ],
                     [
-                        'from'      => 'Lich',
+                        'from'      => 'Altars of Agony',
                         'to'        => 'Theater of Pain',
                         'direction' => 'down'
                     ],
 
                     [
                         'from'      => 'Theater of Pain',
-                        'to'        => 'Abomination Top',
+                        'to'        => 'Upper Barrow of Carnage',
                         'direction' => 'down'
                     ],
                     [
-                        'from'      => 'Abomination Top',
+                        'from'      => 'Upper Barrow of Carnage',
                         'to'        => 'Theater of Pain',
                         'direction' => 'up'
                     ],
 
                     [
-                        'from'      => 'Abomination Top',
-                        'to'        => 'Abomination Bottom',
+                        'from'      => 'Upper Barrow of Carnage',
+                        'to'        => 'Lower Barrow of Carnage',
                         'direction' => 'down'
                     ],
                     [
-                        'from'      => 'Abomination Bottom',
-                        'to'        => 'Abomination Top',
+                        'from'      => 'Lower Barrow of Carnage',
+                        'to'        => 'Upper Barrow of Carnage',
                         'direction' => 'up'
                     ],
                 ]
