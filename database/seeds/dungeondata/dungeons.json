@@ -109,7 +109,7 @@
         "name": "Atal'Dazar",
         "enemy_forces_required": 198,
         "enemy_forces_required_teeming": 237,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 1800
     },
     {
         "id": 15,
@@ -117,7 +117,7 @@
         "name": "Freehold",
         "enemy_forces_required": 261,
         "enemy_forces_required_teeming": 313,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 1960
     },
     {
         "id": 16,
@@ -125,7 +125,7 @@
         "name": "Kings' Rest",
         "enemy_forces_required": 246,
         "enemy_forces_required_teeming": 286,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2520
     },
     {
         "id": 17,
@@ -133,7 +133,7 @@
         "name": "Shrine of the Storm",
         "enemy_forces_required": 695,
         "enemy_forces_required_teeming": 834,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2520
     },
     {
         "id": 18,
@@ -141,7 +141,7 @@
         "name": "Siege of Boralus",
         "enemy_forces_required": 319,
         "enemy_forces_required_teeming": 383,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2160
     },
     {
         "id": 19,
@@ -149,7 +149,7 @@
         "name": "Temple of Sethraliss",
         "enemy_forces_required": 220,
         "enemy_forces_required_teeming": 264,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2160
     },
     {
         "id": 20,
@@ -157,7 +157,7 @@
         "name": "The MOTHERLODE!!",
         "enemy_forces_required": 384,
         "enemy_forces_required_teeming": 460,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2340
     },
     {
         "id": 21,
@@ -165,7 +165,7 @@
         "name": "The Underrot",
         "enemy_forces_required": 252,
         "enemy_forces_required_teeming": 286,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 1980
     },
     {
         "id": 22,
@@ -173,7 +173,7 @@
         "name": "Tol Dagor",
         "enemy_forces_required": 400,
         "enemy_forces_required_teeming": 479,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2160
     },
     {
         "id": 23,
@@ -181,7 +181,7 @@
         "name": "Waycrest Manor",
         "enemy_forces_required": 303,
         "enemy_forces_required_teeming": 363,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2340
     },
     {
         "id": 24,
@@ -189,7 +189,7 @@
         "name": "Mechagon: Junkyard",
         "enemy_forces_required": 332,
         "enemy_forces_required_teeming": 398,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2280
     },
     {
         "id": 25,
@@ -197,7 +197,7 @@
         "name": "Mechagon: Workshop",
         "enemy_forces_required": 160,
         "enemy_forces_required_teeming": 192,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 1920
     },
     {
         "id": 26,
@@ -245,7 +245,7 @@
         "name": "Plaguefall",
         "enemy_forces_required": -1,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2280
     },
     {
         "id": 32,
