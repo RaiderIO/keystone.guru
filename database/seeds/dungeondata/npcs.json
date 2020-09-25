@@ -72,6 +72,24 @@
         "npcbolsteringwhitelists": []
     },
     {
+        "id": 169617,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Duraka the Unbreakable",
+        "base_health": 720900,
+        "enemy_forces": -1,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": []
+    },
+    {
         "id": 169838,
         "dungeon_id": -1,
         "classification_id": 2,
