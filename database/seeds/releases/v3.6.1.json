@@ -1,0 +1,24 @@
+{
+    "id": 64,
+    "release_changelog_id": 68,
+    "version": "v3.6.1",
+    "created_at": "2020-09-25T22:21:54+00:00",
+    "updated_at": "2020-09-25T22:21:54+00:00",
+    "changelog": {
+        "id": 68,
+        "release_id": 64,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 68,
+                "release_changelog_category_id": 3,
+                "ticket_id": 466,
+                "change": "Fixed crash when no npc was assigned to an enemy.",
+                "category": {
+                    "id": 3,
+                    "category": "Map changes"
+                }
+            }
+        ]
+    }
+}

@@ -129,7 +129,10 @@ class Enemy extends MapObject {
                     // Only called when not in admin state
                     let mapContext = getState().getMapContext();
 
-                    self.setNpc(mapContext.findNpcById(value));
+                    let npc = mapContext.findNpcById(value);
+                    if( npc !== null ) {
+                        self.setNpc(npc);
+                    }
 
                     this.npc_id = value;
                 }
