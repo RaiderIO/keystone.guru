@@ -14,7 +14,7 @@ class AddUnskippableColumnToEnemiesTable extends Migration
     public function up()
     {
         Schema::table('enemies', function (Blueprint $table) {
-            $table->boolean('unskippable')->after('faction');
+            $table->boolean('unskippable')->default(false)->after('faction');
         });
     }
 
