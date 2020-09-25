@@ -196,7 +196,7 @@ class MapContext extends Signalable {
      * @returns {[]}
      */
     findNpcById(npcId) {
-        let result = npcId;
+        let result = null;
 
         for(let i = 0; i < this._options.dungeon.npcs.length; i++ ){
             if( this._options.dungeon.npcs[i].id === npcId ){
