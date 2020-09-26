@@ -126,8 +126,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -128.375,
-        "lng": 157.75,
+        "lat": -138.625,
+        "lng": 187.875,
         "npc": {
             "id": 163086
         }
@@ -164,8 +164,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -130,
-        "lng": 149.5,
+        "lat": -127.5,
+        "lng": 150.75,
         "npc": {
             "id": 163089
         }
@@ -183,8 +183,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -128.25,
-        "lng": 167.5,
+        "lat": -120.5,
+        "lng": 143.6875,
         "npc": {
             "id": 163089
         }
@@ -202,8 +202,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -133.625,
-        "lng": 166.375,
+        "lat": -125.8125,
+        "lng": 143.125,
         "npc": {
             "id": 163089
         }
@@ -221,8 +221,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -123.5,
-        "lng": 161.25,
+        "lat": -121.375,
+        "lng": 147.9375,
         "npc": {
             "id": 163089
         }
@@ -240,8 +240,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -134.125,
-        "lng": 156.875,
+        "lat": -127.1875,
+        "lng": 146.625,
         "npc": {
             "id": 174210
         }
@@ -249,7 +249,7 @@
     {
         "id": 5219,
         "enemy_pack_id": -1,
-        "npc_id": 163086,
+        "npc_id": 170690,
         "floor_id": 95,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -259,16 +259,16 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -140,
-        "lng": 213.5,
+        "lat": -141.125,
+        "lng": 215.625,
         "npc": {
-            "id": 163086
+            "id": 170690
         }
     },
     {
         "id": 5220,
         "enemy_pack_id": -1,
-        "npc_id": 163086,
+        "npc_id": 169927,
         "floor_id": 95,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -281,7 +281,7 @@
         "lat": -150.5,
         "lng": 212.25,
         "npc": {
-            "id": 163086
+            "id": 169927
         }
     }
 ]

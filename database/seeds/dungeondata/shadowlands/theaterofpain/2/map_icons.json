@@ -9,5 +9,16 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "floor_id": 93,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -178.75,
+        "lng": 189.75,
+        "comment": "NECROLORD: Click Necrolord Banners to grant a 5-minute 10% speed and versatility buff to all party members.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

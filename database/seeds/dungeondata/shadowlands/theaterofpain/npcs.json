@@ -342,6 +342,25 @@
         "npcspells": []
     },
     {
+        "id": 167536,
+        "dungeon_id": 35,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Harugia the Bloodthirsty",
+        "base_health": 256000,
+        "enemy_forces": 20,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    },
+    {
         "id": 167994,
         "dungeon_id": 35,
         "classification_id": 2,

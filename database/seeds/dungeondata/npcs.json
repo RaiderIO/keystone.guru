@@ -83,7 +83,7 @@
         "npc_class_id": 1,
         "name": "Duraka the Unbreakable",
         "base_health": 720900,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 0,

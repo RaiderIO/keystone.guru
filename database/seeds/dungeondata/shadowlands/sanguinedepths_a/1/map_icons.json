@@ -16,7 +16,7 @@
         "map_icon_type_id": 49,
         "lat": -91.125,
         "lng": 110.375,
-        "comment": "Anima Cage\nCovenant: Venthyr",
+        "comment": "VENTHYR: Dmg and Healing Buff - Activate Anima Cages to debuff enemies within 40 yds with  Anima Drain. After 20 seconds, it will deactivate and give entire party 1 stack of  Sinfall Boon for every enemy that died within range with  Anima Drain active.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -27,7 +27,7 @@
         "map_icon_type_id": 49,
         "lat": -91,
         "lng": 276.625,
-        "comment": "Anima Cage\nCovenant: Venthyr",
+        "comment": "VENTHYR: Dmg and Healing Buff - Activate Anima Cages to debuff enemies within 40 yds with  Anima Drain. After 20 seconds, it will deactivate and give entire party 1 stack of  Sinfall Boon for every enemy that died within range with  Anima Drain active.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -38,7 +38,7 @@
         "map_icon_type_id": 49,
         "lat": -198.25,
         "lng": 256.375,
-        "comment": "Anima Cage\nCovenant: Venthyr",
+        "comment": "VENTHYR: Dmg and Healing Buff - Activate Anima Cages to debuff enemies within 40 yds with  Anima Drain. After 20 seconds, it will deactivate and give entire party 1 stack of  Sinfall Boon for every enemy that died within range with  Anima Drain active.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -61,6 +61,17 @@
         "lat": -37.75,
         "lng": 190.625,
         "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "floor_id": 83,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -152,
+        "lng": 194.25,
+        "comment": "VENTHYR: Dmg and Healing Buff - Activate Anima Cages to debuff enemies within 40 yds with  Anima Drain. After 20 seconds, it will deactivate and give entire party 1 stack of  Sinfall Boon for every enemy that died within range with  Anima Drain active.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
