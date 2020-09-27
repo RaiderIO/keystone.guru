@@ -39,7 +39,7 @@
     },
     {
         "id": 4584,
-        "enemy_pack_id": 687,
+        "enemy_pack_id": -1,
         "npc_id": 168949,
         "floor_id": 73,
         "mdt_id": -1,
@@ -58,7 +58,7 @@
     },
     {
         "id": 4585,
-        "enemy_pack_id": 687,
+        "enemy_pack_id": -1,
         "npc_id": 168949,
         "floor_id": 73,
         "mdt_id": -1,
@@ -69,15 +69,15 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -85.03125,
-        "lng": 195.625,
+        "lat": -84.78125,
+        "lng": 195.8125,
         "npc": {
             "id": 168949
         }
     },
     {
         "id": 4586,
-        "enemy_pack_id": 687,
+        "enemy_pack_id": -1,
         "npc_id": 168992,
         "floor_id": 73,
         "mdt_id": -1,
@@ -96,7 +96,7 @@
     },
     {
         "id": 4587,
-        "enemy_pack_id": 687,
+        "enemy_pack_id": -1,
         "npc_id": 168992,
         "floor_id": 73,
         "mdt_id": -1,
@@ -115,7 +115,7 @@
     },
     {
         "id": 4588,
-        "enemy_pack_id": 687,
+        "enemy_pack_id": -1,
         "npc_id": 169905,
         "floor_id": 73,
         "mdt_id": -1,
@@ -278,8 +278,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -188,
-        "lng": 154.125,
+        "lat": -207.3125,
+        "lng": 178.75,
         "npc": {
             "id": 168934
         }
@@ -297,8 +297,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -212.75,
-        "lng": 192.8125,
+        "lat": -212.5,
+        "lng": 191.4375,
         "npc": {
             "id": 169905
         }
@@ -316,8 +316,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -212.78125,
-        "lng": 195.71875,
+        "lat": -212.8125,
+        "lng": 197.3125,
         "npc": {
             "id": 169905
         }
@@ -430,8 +430,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -188.375,
-        "lng": 234.125,
+        "lat": -207.78125,
+        "lng": 209.65625,
         "npc": {
             "id": 168934
         }
@@ -468,8 +468,8 @@
         "unskippable": 0,
         "enemy_forces_override": -1,
         "enemy_forces_override_teeming": -1,
-        "lat": -138.625,
-        "lng": 240.8125,
+        "lat": -137.875,
+        "lng": 240.875,
         "npc": {
             "id": 168986
         }

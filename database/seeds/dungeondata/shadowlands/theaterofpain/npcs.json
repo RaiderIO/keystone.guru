@@ -334,7 +334,7 @@
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0,
+        "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
