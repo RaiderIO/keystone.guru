@@ -55,13 +55,7 @@ class Update extends Command
         $this->call('ide-helper:meta');
 
         //
-        $this->shell([
-            'composer dump-autoload',
-
-            // Write current version to file
-            'git tag | (tail -n 1) > version',
-            self::COMPILE[$environment] ? sprintf('npm run %s -- --env.full true', self::COMPILE_AS[$environment]) : null,
-        ]);
+        $this->shell('composer dump-autoload');
 
         $this->call('horizon:publish');
 
@@ -73,6 +67,18 @@ class Update extends Command
         $this->call('db:seed', [
             '--database' => 'migrate',
             '--force'    => true
+        ]);
+
+        // After seed, create a release if necessary
+        if( $environment === 'live' ) {
+            $this->call('make:githubrelease');
+        }
+
+        //
+        $this->shell([
+            // Write current version to file
+            'git tag | (tail -n 1) > version',
+            self::COMPILE[$environment] ? sprintf('npm run %s -- --env.full true', self::COMPILE_AS[$environment]) : null,
         ]);
 
         $this->call('optimize:clear');
