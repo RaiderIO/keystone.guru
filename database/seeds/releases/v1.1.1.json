@@ -2,6 +2,7 @@
     "id": 9,
     "release_changelog_id": 13,
     "version": "v1.1.1",
+    "silent": 0,
     "created_at": "2018-10-18T05:16:06+00:00",
     "updated_at": "2018-10-18T05:16:06+00:00",
     "changelog": {

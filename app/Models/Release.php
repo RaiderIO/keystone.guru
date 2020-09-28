@@ -15,6 +15,7 @@ use Throwable;
  * @property int $id
  * @property int $release_changelog_id
  * @property string $version
+ * @property boolean $silent
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
@@ -62,13 +63,13 @@ class Release extends Model
     public function getDiscordBodyAttribute()
     {
         return trim(view('app.release.discord', [
-            'model' => $this,
-            'mention' => $this->isMajorUpgrade(),
-            'homeUrl' => route('home'),
+            'model'        => $this,
+            'mention'      => $this->isMajorUpgrade(),
+            'homeUrl'      => route('home'),
             'changelogUrl' => route('misc.changelog'),
-            'affixesUrl' => route('misc.affixes'),
-            'sandboxUrl' => route('dungeonroute.sandbox'),
-            'patreonUrl' => 'https://www.patreon.com/keystoneguru',
+            'affixesUrl'   => route('misc.affixes'),
+            'sandboxUrl'   => route('dungeonroute.sandbox'),
+            'patreonUrl'   => 'https://www.patreon.com/keystoneguru',
         ])->render());
     }
 
