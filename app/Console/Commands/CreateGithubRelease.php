@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Release;
 use Github\Api\Repo;
 use Github\Exception\MissingArgumentException;
@@ -11,6 +12,8 @@ use Illuminate\Console\Command;
 
 class CreateGithubRelease extends Command
 {
+    use ExecutesShellCommands;
+
     /**
      * The name and signature of the console command.
      *
@@ -79,6 +82,9 @@ class CreateGithubRelease extends Command
                     'body'     => $body
                 ]);
                 $this->info(sprintf('Successfully created GitHub release %s', $version));
+
+                // Fetch the created version from Github so we can use it later on
+                $this->shell('git fetch');
             } catch (ValidationFailedException $exception) {
                 $this->warn(sprintf('Unable to create Github release for %s: %s', $version, $exception->getMessage()));
             }

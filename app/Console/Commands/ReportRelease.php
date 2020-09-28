@@ -58,7 +58,9 @@ class ReportRelease extends Command
             $release = Release::where('version', $version)->first();
         }
 
-        if (env('APP_TYPE') === 'local' || !ReleaseReportLog::where('release_id', $release->id)->where('platform', $platform)->exists()) {
+        if (!$release->silent &&
+            (env('APP_TYPE') === 'local' ||
+                ReleaseReportLog::where('release_id', $release->id)->where('platform', $platform)->doesntExist())) {
             switch ($platform) {
                 case 'reddit':
                     $result = $redditApiService->createPost(

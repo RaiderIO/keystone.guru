@@ -24,6 +24,11 @@ $changelog = isset($model) ? $model->changelog : new \App\Models\ReleaseChangelo
         {!! Form::text('version', null, ['class' => 'form-control']) !!}
     </div>
 
+    <div class="form-group{{ $errors->has('silent') ? ' has-error' : '' }}">
+        {!! Form::label('silent', __('Silent')) !!}
+        {!! Form::checkbox('silent', 1, isset($model) ? $model->silent : 0, ['class' => 'form-control left_checkbox']) !!}
+    </div>
+
     <h4>{{ __('Changelog') }}</h4>
 
     <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">

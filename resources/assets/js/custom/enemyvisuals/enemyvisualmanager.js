@@ -22,9 +22,9 @@ class EnemyVisualManager extends Signalable {
         this._mouseStoppedMovingTimeoutId = -1;
 
         let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        enemyMapObjectGroup.register('object:add', this, function (objectAddEvent) {
+        enemyMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
             let addedEnemy = objectAddEvent.data.object;
-            if (addedEnemy.id > 0) {
+            if (addedEnemy.id > 0 && !self._enemyVisibilityMap.hasOwnProperty(addedEnemy.id)) {
                 self._enemyVisibilityMap[addedEnemy.id] = {
                     wasVisible: objectAddEvent.data.object.isVisibleOnScreen(),
                     lastRefreshedZoomLevel: getState().getMapZoomLevel()

@@ -55,6 +55,7 @@ class ReleaseController extends Controller
 
 
         $release->version = $request->get('version');
+        $release->silent = $request->get('silent');
 
         // Match the changelog to the release
         $release->release_changelog_id = $changelog->id;
