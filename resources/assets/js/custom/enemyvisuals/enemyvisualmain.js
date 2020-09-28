@@ -5,7 +5,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let self = this;
 
         // Listen to changes in the NPC to update the icon and re-draw the visual
-        this.enemyvisual.enemy.register('enemy:set_npc', this, function(){
+        this.enemyvisual.enemy.register('enemy:set_npc', this, function () {
             self._refreshNpc();
         });
         this._sizeCache = [];
@@ -53,13 +53,15 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let zoomLevelOffset = getState().getMapZoomLevel() * 2;
 
         // Don't do expensive calculations if we don't need to
-        if( this._sizeCache.hasOwnProperty(zoomLevelOffset) ) {
+        if (this._sizeCache.hasOwnProperty(zoomLevelOffset)) {
             return this._sizeCache[zoomLevelOffset];
         }
 
         let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health;
         if (this.enemyvisual.enemy.npc === null) {
-            console.warn('Enemy has no NPC!', this.enemyvisual.enemy);
+            if (!getState().isMapAdmin()) {
+                console.warn('Enemy has no NPC!', this.enemyvisual.enemy);
+            }
         } else {
             // Special catch for all dungeon enemies
             if (this.enemyvisual.enemy.npc.dungeon_id === -1) {

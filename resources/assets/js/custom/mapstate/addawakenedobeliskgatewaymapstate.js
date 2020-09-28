@@ -5,7 +5,7 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
         console.assert(sourceMapObject.getMapIconType().isAwakenedObelisk(), 'sourceMapObject is not an Awakened Obelisk!', sourceMapObject);
 
         let mapIconManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK);
-        mapIconManager.register('object:add', this, this._onObjectAdded.bind(this));
+        mapIconManager.register('save:success', this, this._onSaveSuccess.bind(this));
     }
 
     start() {
@@ -23,17 +23,17 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
         this.sourceMapObject.floor_id = getState().getCurrentFloor().id;
 
         let mapIconManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK);
-        mapIconManager.unregister('object:add', this);
+        mapIconManager.unregister('save:success', this);
     }
 
     /**
      *
-     * @param objectAddedEvent
+     * @param saveSuccessEvent
      * @private
      */
-    _onObjectAdded(objectAddedEvent) {
+    _onSaveSuccess(saveSuccessEvent) {
         console.assert(this instanceof AddAwakenedObeliskGatewayMapState, 'this is not a AddAwakenedObeliskGatewayMapState', this);
-        let addedGateway = objectAddedEvent.data.object;
+        let addedGateway = saveSuccessEvent.data.object;
 
         // Find the gateway that was potentially already there
         let mapIconManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);

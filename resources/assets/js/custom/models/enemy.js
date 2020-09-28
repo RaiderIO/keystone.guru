@@ -63,6 +63,7 @@ class Enemy extends MapObject {
 
         // MDT
         this.mdt_id = -1;
+        this.is_mdt = false;
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
