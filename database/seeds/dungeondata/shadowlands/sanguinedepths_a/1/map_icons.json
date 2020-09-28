@@ -49,7 +49,7 @@
         "map_icon_type_id": 12,
         "lat": -165.5,
         "lng": 231.375,
-        "comment": "",
+        "comment": "Unlocks after killing boss (Executor Tarvold)",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -60,7 +60,7 @@
         "map_icon_type_id": 12,
         "lat": -37.75,
         "lng": 190.625,
-        "comment": "",
+        "comment": "Unlocks after killing boss (Kryxis the Voracious)",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

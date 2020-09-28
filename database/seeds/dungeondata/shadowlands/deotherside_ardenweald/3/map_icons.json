@@ -1,1 +1,13 @@
-[]
+[
+    {
+        "floor_id": 75,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -113.5625,
+        "lng": 226.21875,
+        "comment": "NIGHT FAE: AoE Stun - Allows use of Haunted Urns in set locations which procs a large AoE stun ( Haunted Urn), 30 yds for 10 sec.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
