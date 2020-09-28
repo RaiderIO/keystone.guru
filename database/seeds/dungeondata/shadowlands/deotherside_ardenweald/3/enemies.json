@@ -1,7 +1,7 @@
 [
     {
         "id": 5676,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1004,
         "npc_id": 170490,
         "floor_id": 75,
         "mdt_id": -1,
@@ -20,7 +20,7 @@
     },
     {
         "id": 5677,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1004,
         "npc_id": 170486,
         "floor_id": 75,
         "mdt_id": -1,
@@ -39,7 +39,7 @@
     },
     {
         "id": 5681,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1004,
         "npc_id": 170486,
         "floor_id": 75,
         "mdt_id": -1,
@@ -134,7 +134,7 @@
     },
     {
         "id": 5689,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1005,
         "npc_id": 170572,
         "floor_id": 75,
         "mdt_id": -1,
@@ -153,7 +153,7 @@
     },
     {
         "id": 5690,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1005,
         "npc_id": 170486,
         "floor_id": 75,
         "mdt_id": -1,
@@ -172,7 +172,7 @@
     },
     {
         "id": 5691,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1005,
         "npc_id": 170486,
         "floor_id": 75,
         "mdt_id": -1,
@@ -191,7 +191,7 @@
     },
     {
         "id": 5692,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1005,
         "npc_id": 170486,
         "floor_id": 75,
         "mdt_id": -1,
@@ -210,7 +210,7 @@
     },
     {
         "id": 5696,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1006,
         "npc_id": 170572,
         "floor_id": 75,
         "mdt_id": -1,
@@ -229,7 +229,7 @@
     },
     {
         "id": 5697,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1006,
         "npc_id": 170480,
         "floor_id": 75,
         "mdt_id": -1,
@@ -248,7 +248,7 @@
     },
     {
         "id": 5698,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1006,
         "npc_id": 170490,
         "floor_id": 75,
         "mdt_id": -1,
@@ -267,7 +267,7 @@
     },
     {
         "id": 5699,
-        "enemy_pack_id": -1,
+        "enemy_pack_id": 1006,
         "npc_id": 170480,
         "floor_id": 75,
         "mdt_id": -1,
