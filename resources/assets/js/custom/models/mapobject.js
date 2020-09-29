@@ -445,7 +445,9 @@ class MapObject extends Signalable {
                         map_object_name: mapObjectName,
                         label: lang.get(`messages.${mapObjectName}_${name}_label`),
                         value: this._getValue(name, parentAttribute),
-                        values: attribute.hasOwnProperty('values') ? attribute.values : [],
+                        values: attribute.hasOwnProperty('values') ?
+                            (typeof attribute.values === 'function' ? attribute.values() : attribute.values)
+                            : [],
                         select_default_label: attribute.type === 'select' ? lang.get(`messages.${mapObjectName}_${name}_select_default_label`) : '',
                         show_default: attribute.hasOwnProperty('show_default') ? attribute.show_default : true,
                         live_search: attribute.hasOwnProperty('live_search') ? attribute.live_search : false
@@ -475,7 +477,7 @@ class MapObject extends Signalable {
         let wasInitialized = this._initialized;
         this._initialized = true;
 
-        if( wasInitialized !== this._initialized ){
+        if (wasInitialized !== this._initialized) {
             this.signal('object:initialized');
         }
     }

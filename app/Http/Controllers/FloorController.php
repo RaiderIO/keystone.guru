@@ -31,6 +31,7 @@ class FloorController extends Controller
 
         $floor->index = $request->get('index');
         $floor->name = $request->get('name');
+        $floor->default = $request->get('default', false);
 
         // Update or insert it
         if (!$floor->save()) {

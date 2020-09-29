@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property $direction string
  *
  * @property Floor $floor
+ * @property Floor $targetfloor
  *
  * @mixin Eloquent
  */
@@ -26,6 +27,7 @@ class DungeonFloorSwitchMarker extends Model
     public $timestamps = false;
 
     public function getDirectionAttribute(){
+        /** @var FloorCoupling $floorCoupling */
         $floorCoupling = FloorCoupling::where('floor1_id', $this->floor_id)->where('floor2_id', $this->target_floor_id)->first();
 
         return $floorCoupling === null ? 'unknown' : $floorCoupling->direction;

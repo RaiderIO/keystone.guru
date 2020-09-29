@@ -39,6 +39,15 @@ $connectedFloors = $model->dungeon->floors->except($model->id);
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
 
+    <div class="form-group{{ $errors->has('default') ? ' has-error' : '' }}">
+        {!! Form::label('default', __('Default'), ['class' => 'font-weight-bold']) !!}
+        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                __('If marked as default, this floor is opened first when editing routes for this dungeon (only one should be marked as default)')
+                 }}"></i>
+        {!! Form::checkbox('default', 1, isset($model) ? $model->default : 1, ['class' => 'form-control left_checkbox']) !!}
+        @include('common.forms.form-error', ['key' => 'default'])
+    </div>
+
     @if($connectedFloors->isNotEmpty())
         <div class="form-group">
             {!! Form::label('connectedfloors[]', __('Connected floors'), ['class' => 'font-weight-bold']) !!}
