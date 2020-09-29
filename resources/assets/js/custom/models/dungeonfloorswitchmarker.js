@@ -115,6 +115,40 @@ class DungeonFloorSwitchMarker extends MapObject {
 
     /**
      * @inheritDoc
+     **/
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
+
+        console.warn(remoteMapObject);
+
+        switch (remoteMapObject.direction) {
+            case 'up':
+                this.layer = new LeafletDungeonFloorSwitchMarkerUp();
+                break;
+            case 'down':
+                this.layer = new LeafletDungeonFloorSwitchMarkerDown();
+                break;
+            case 'left':
+                this.layer = new LeafletDungeonFloorSwitchMarkerLeft();
+                break;
+            case 'right':
+                this.layer = new LeafletDungeonFloorSwitchMarkerRight();
+                break;
+            default:
+                // layer = new LeafletDungeonFloorSwitchMarker();
+                break;
+        }
+
+        if( this.layer !== null ) {
+            this.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
+
+            let mapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+            mapObjectGroup.setLayerToMapObject(this.layer, this);
+        }
+    }
+
+    /**
+     * @inheritDoc
      */
     onLayerInit() {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
@@ -138,11 +172,11 @@ class DungeonFloorSwitchMarker extends MapObject {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
 
         // If we've fully loaded this marker
-        if (value && typeof this.layer !== 'undefined') {
+        if (value && this.layer !== null) {
             let targetFloor = this.map.getFloorById(this.target_floor_id);
 
             if (targetFloor !== false) {
-                this.layer.bindTooltip('Go to ' + targetFloor.name, {
+                this.layer.bindTooltip(`Go to ${targetFloor.name}`, {
                     direction: 'top'
                 });
             }

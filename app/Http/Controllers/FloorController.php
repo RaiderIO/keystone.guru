@@ -6,8 +6,12 @@ use App\Http\Requests\FloorFormRequest;
 use App\Logic\MapContext\MapContextDungeon;
 use App\Models\Dungeon;
 use App\Models\Floor;
-use App\Models\Npc;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Session;
 
 class FloorController extends Controller
 {
@@ -45,29 +49,47 @@ class FloorController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function new(Request $request)
     {
         /** @var Dungeon $dungeon */
         $dungeon = Dungeon::findOrFail($request->get('dungeon'));
 
-        return view('admin.floor.edit', [
+        return view('admin.floor.new', [
             'headerTitle' => __('New floor'),
-            'mapContext' => (new MapContextDungeon($dungeon, $dungeon->floors->first()))->toArray()
+            'dungeon' => $dungeon
         ]);
     }
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param Floor $floor
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function edit(Request $request, Floor $floor)
+    public function edit(Request $request, Dungeon $dungeon, Floor $floor)
     {
         $dungeon = $floor->dungeon->load('floors');
 
         return view('admin.floor.edit', [
+            'headerTitle' => sprintf(__('%s - Edit floor'), $dungeon->name),
+            'dungeon' => $dungeon,
+            'model' => $floor,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Dungeon $dungeon
+     * @param Floor $floor
+     * @return Factory|View
+     */
+    public function mapping(Request $request, Dungeon $dungeon, Floor $floor)
+    {
+        $dungeon = $floor->dungeon->load('floors');
+
+        return view('admin.floor.mapping', [
             'model' => $floor,
             'headerTitle' => __('Edit floor'),
             'mapContext' => (new MapContextDungeon($dungeon, $floor))->toArray(),
@@ -76,36 +98,38 @@ class FloorController extends Controller
 
     /**
      * @param FloorFormRequest $request
+     * @param Dungeon $dungeon
      * @param Floor $floor
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
-    public function update(FloorFormRequest $request, Floor $floor)
+    public function update(FloorFormRequest $request, Dungeon $dungeon, Floor $floor)
     {
         // Store it and show the edit page again
         $floor = $this->store($request, $floor);
 
         // Message to the user
-        \Session::flash('status', __('Floor updated'));
+        Session::flash('status', __('Floor updated'));
 
         // Display the edit page
-        return $this->edit($request, $floor);
+        return $this->mapping($request, $dungeon, $floor);
     }
 
     /**
      * @param FloorFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @param Dungeon $dungeon
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function savenew(FloorFormRequest $request)
+    public function savenew(FloorFormRequest $request, Dungeon $dungeon)
     {
         // Store it and show the edit page
         $floor = $this->store($request);
 
         // Message to the user
-        \Session::flash('status', __('Floor created'));
+        Session::flash('status', __('Floor created'));
 
-        return redirect()->route('admin.floor.edit', [
+        return redirect()->route('admin.floor.edit.mapping', [
             'dungeon' => $request->get('dungeon'),
             'floor'   => $floor
         ]);

@@ -130,11 +130,12 @@ Route::group(['middleware' => ['viewcachebuster', 'admindebugbar']], function ()
             Route::get('dungeons', 'DungeonController@list')->name('admin.dungeons');
 
             // Floors
-            Route::get('floor/new', 'FloorController@new')->name('admin.floor.new')->where(['dungeon' => '[0-9]+']);
-            Route::get('floor/{floor}', 'FloorController@edit')->name('admin.floor.edit');
+            Route::get('dungeon/{dungeon}/floor/new', 'FloorController@new')->name('admin.floor.new');
+            Route::get('dungeon/{dungeon}/floor/{floor}', 'FloorController@edit')->name('admin.floor.edit');
+            Route::get('dungeon/{dungeon}/floor/{floor}/mapping', 'FloorController@mapping')->name('admin.floor.edit.mapping');
 
-            Route::post('floor/new', 'FloorController@savenew')->name('admin.floor.savenew')->where(['dungeon' => '[0-9]+']);
-            Route::patch('floor/{floor}', 'FloorController@update')->name('admin.floor.update');
+            Route::post('dungeon/{dungeon}/floor/new', 'FloorController@savenew')->name('admin.floor.savenew');
+            Route::patch('dungeon/{dungeon}/floor/{floor}', 'FloorController@update')->name('admin.floor.update');
 
             // Expansions
             Route::get('expansion/new', 'ExpansionController@new')->name('admin.expansion.new');

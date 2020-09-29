@@ -946,10 +946,10 @@ class DungeonsSeeder extends Seeder
                     'Altars of Agony'               => [
                         'index' => 3,
                     ],
-                    'Upper Barrow of Carnage'    => [
+                    'Lower Barrow of Carnage'    => [
                         'index' => 4,
                     ],
-                    'Lower Barrow of Carnage' => [
+                    'Upper Barrow of Carnage' => [
                         'index' => 5,
                     ],
                 ],
@@ -988,13 +988,13 @@ class DungeonsSeeder extends Seeder
                     ],
 
                     [
-                        'from'      => 'Upper Barrow of Carnage',
-                        'to'        => 'Lower Barrow of Carnage',
+                        'from'      => 'Lower Barrow of Carnage',
+                        'to'        => 'Upper Barrow of Carnage',
                         'direction' => 'down'
                     ],
                     [
-                        'from'      => 'Lower Barrow of Carnage',
-                        'to'        => 'Upper Barrow of Carnage',
+                        'from'      => 'Upper Barrow of Carnage',
+                        'to'        => 'Lower Barrow of Carnage',
                         'direction' => 'up'
                     ],
                 ]

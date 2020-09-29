@@ -18,29 +18,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
      */
     _createLayer(remoteMapObject) {
         console.assert(this instanceof DungeonFloorSwitchMarkerMapObjectGroup, 'this is not an DungeonFloorSwitchMarkerMapObjectGroup', this);
-
-        let layer;
-        switch (remoteMapObject.direction) {
-            case 'up':
-                layer = new LeafletDungeonFloorSwitchMarkerUp();
-                break;
-            case 'down':
-                layer = new LeafletDungeonFloorSwitchMarkerDown();
-                break;
-            case 'left':
-                layer = new LeafletDungeonFloorSwitchMarkerLeft();
-                break;
-            case 'right':
-                layer = new LeafletDungeonFloorSwitchMarkerRight();
-                break;
-            default:
-                layer = new LeafletDungeonFloorSwitchMarker();
-                break;
-        }
-
-        layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-
-        return layer;
+        return null;
     }
 
     /**

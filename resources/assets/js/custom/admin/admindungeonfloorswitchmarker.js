@@ -31,7 +31,7 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
 
         // If we've fully loaded this marker
-        if (this.layer !== 'undefined') {
+        if (this.layer !== null) {
             let targetFloor = this.map.getFloorById(this.target_floor_id);
 
             if (targetFloor !== false) {

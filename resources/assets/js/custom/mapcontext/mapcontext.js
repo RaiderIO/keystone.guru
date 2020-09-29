@@ -94,7 +94,7 @@ class MapContext extends Signalable {
 
     /**
      *
-     * @returns {Number}
+     * @returns {string}
      */
     getFaction() {
         return this._options.faction;

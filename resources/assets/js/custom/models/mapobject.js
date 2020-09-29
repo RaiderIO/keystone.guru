@@ -661,7 +661,7 @@ class MapObject extends Signalable {
 
         // Floor states; most common reason for not being visible
         if (state.getCurrentFloor().id !== this.floor_id) {
-            // console.log(`Hiding enemy due to floor ${this.id}`);
+            // console.log(`Hiding map object ${this.id} due to floor ${this.floor_id} !== ${state.getCurrentFloor().id}`);
             return false;
         }
 
