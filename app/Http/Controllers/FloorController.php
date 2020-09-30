@@ -7,6 +7,7 @@ use App\Logic\MapContext\MapContextDungeon;
 use App\Models\Dungeon;
 use App\Models\Floor;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,7 +60,7 @@ class FloorController extends Controller
 
         return view('admin.floor.new', [
             'headerTitle' => __('New floor'),
-            'dungeon' => $dungeon
+            'dungeon'     => $dungeon
         ]);
     }
 
@@ -67,17 +68,22 @@ class FloorController extends Controller
      * @param Request $request
      * @param Dungeon $dungeon
      * @param Floor $floor
-     * @return Factory|View
+     * @return Application|Factory|RedirectResponse|View
      */
     public function edit(Request $request, Dungeon $dungeon, Floor $floor)
     {
-        $dungeon = $floor->dungeon->load('floors');
+        if ($floor->dungeon->id === $dungeon->id) {
+            $dungeon = $floor->dungeon->load('floors');
 
-        return view('admin.floor.edit', [
-            'headerTitle' => sprintf(__('%s - Edit floor'), $dungeon->name),
-            'dungeon' => $dungeon,
-            'model' => $floor,
-        ]);
+            return view('admin.floor.edit', [
+                'headerTitle' => sprintf(__('%s - Edit floor'), $dungeon->name),
+                'dungeon'     => $dungeon,
+                'model'       => $floor,
+            ]);
+        } else {
+            Session::flash('warning', sprintf('Floor %s is not a part of dungeon %s', $floor->name, $dungeon->name));
+            return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
+        }
     }
 
     /**
@@ -91,9 +97,9 @@ class FloorController extends Controller
         $dungeon = $floor->dungeon->load('floors');
 
         return view('admin.floor.mapping', [
-            'model' => $floor,
+            'model'       => $floor,
             'headerTitle' => __('Edit floor'),
-            'mapContext' => (new MapContextDungeon($dungeon, $floor))->toArray(),
+            'mapContext'  => (new MapContextDungeon($dungeon, $floor))->toArray(),
         ]);
     }
 

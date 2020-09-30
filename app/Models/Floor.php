@@ -73,6 +73,14 @@ class Floor extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    function floorcouplings()
+    {
+        return $this->hasMany('App\Models\FloorCoupling', 'floor1_id');
+    }
+
+    /**
      * @return Collection A list of all connected floors, regardless of direction
      */
     public function connectedFloors()

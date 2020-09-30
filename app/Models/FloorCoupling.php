@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $floor2_id
  * @property string $direction
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class FloorCoupling extends Model
 {
