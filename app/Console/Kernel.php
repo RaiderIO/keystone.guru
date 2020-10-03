@@ -5,12 +5,13 @@ namespace App\Console;
 use App\Console\Commands\CreateGithubRelease;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
-use App\Console\Commands\GetCurrentRelease;
-use App\Console\Commands\GetReleaseBody;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Save as MappingSave;
-use App\Console\Commands\ReportRelease;
+use App\Console\Commands\Release\GetCurrentRelease;
+use App\Console\Commands\Release\GetReleaseBody;
+use App\Console\Commands\Release\ReportRelease;
+use App\Console\Commands\Release\Save as ReleaseSave;
 use App\Console\Commands\StartSupervisor;
 use App\Console\Commands\Test;
 use App\Logic\Scheduler\DeleteExpiredDungeonRoutes;
@@ -29,10 +30,13 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         CreateGithubRelease::class,
+        StartSupervisor::class,
+
+        // Release
         GetCurrentRelease::class,
         GetReleaseBody::class,
         ReportRelease::class,
-        StartSupervisor::class,
+        ReleaseSave::class,
 
         // Environment
         EnvironmentUpdatePrepare::class,

@@ -8,6 +8,7 @@ use App\Models\ReleaseChangelog;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\ReleaseChangelogChange;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class ReleaseController extends Controller
 {
@@ -63,6 +64,8 @@ class ReleaseController extends Controller
         if ($release->save()) {
             $changelog->release_id = $release->id;
             $changelog->save();
+
+            Artisan::call('release:save');
         } // Something went wrong with saving
         else {
             abort(500, 'Unable to save release');

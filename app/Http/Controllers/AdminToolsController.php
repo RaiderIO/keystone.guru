@@ -323,20 +323,11 @@ class AdminToolsController extends Controller
      */
     public function exportreleases(Request $request)
     {
-        $result = [];
+        Artisan::call('release:save');
 
-        foreach (Release::all() as $release) {
-            $release->makeHidden(['reddit_body', 'discord_body', 'github_body']);
-            $releaseArr = $release->toArray();
+        \Session::flash('status', __('Releases exported'));
 
-            /** @var $release Release */
-            $rootDirPath = database_path('/seeds/releases/');
-            $this->saveDataToJsonFile($releaseArr, $rootDirPath, sprintf('%s.json', $release->version));
-
-            $result[] = $releaseArr;
-        }
-
-        dd($result);
+        return view('admin.tools.list');
     }
 
     /**
