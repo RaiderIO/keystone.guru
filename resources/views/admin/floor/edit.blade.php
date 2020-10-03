@@ -1,7 +1,8 @@
 <?php
 /** @var $dungeon \App\Models\Dungeon */
 /* @var $model \App\Models\Floor */
-$connectedFloors = $model->dungeon->floors->except($model->id);
+/* @var $floorCouplings \App\Models\FloorCoupling[]|\Illuminate\Support\Collection */
+$connectedFloorCandidates = $model->dungeon->floors->except($model->id);
 ?>
 @extends('layouts.app', ['showAds' => false, 'title' => $headerTitle])
 @section('header-title')
@@ -48,15 +49,48 @@ $connectedFloors = $model->dungeon->floors->except($model->id);
         @include('common.forms.form-error', ['key' => 'default'])
     </div>
 
-    @if($connectedFloors->isNotEmpty())
-        <div class="form-group">
-            {!! Form::label('connectedfloors[]', __('Connected floors'), ['class' => 'font-weight-bold']) !!}
-            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __('A connected floor is any other floor that we may reach from this floor')
-                 }}"></i>
-            {!! Form::select('connectedfloors[]', $connectedFloors->pluck('name', 'id'), $model->connectedFloors()->pluck('id')->all(),
-                ['multiple' => 'multiple', 'class' => 'form-control selectpicker']) !!}
+    @if($connectedFloorCandidates->isNotEmpty())
+        {!! Form::label('connectedfloors[]', __('Connected floors'), ['class' => 'font-weight-bold']) !!}
+        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+            __('A connected floor is any other floor that we may reach from this floor')
+             }}"></i>
+
+        <div class="row mb-4">
+            <div class="col-2">
+                {{ __('Connected') }}
+            </div>
+            <div class="col-8">
+                {{ __('Floor name') }}
+            </div>
+            <div class="col-2">
+                {{ __('Direction') }}
+            </div>
         </div>
+
+        <?php
+        foreach($connectedFloorCandidates as $connectedFloorCandidate){
+        /** @var \App\Models\FloorCoupling $floorCoupling */
+        $floorCoupling = $floorCouplings->where('floor1_id', $model->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
+        ?>
+        <div class="row mb-3">
+            <div class="col-2">
+                {!! Form::checkbox(sprintf('floor_%s_connected', $connectedFloorCandidate->id),
+                    $connectedFloorCandidate->id, isset($floorCoupling) ? 1 : 0, ['class' => 'form-control left_checkbox']) !!}
+            </div>
+            <div class="col-8">
+                {{ $connectedFloorCandidate->name }}
+            </div>
+            <div class="col-2">
+                {!! Form::select(sprintf('floor_%s_direction', $connectedFloorCandidate->id), [
+                            'none' => __('None'),
+                            'up' => __('Up'),
+                            'down' => __('Down'),
+                            'left' => __('Left'),
+                            'right' => __('Right')
+                        ], isset($floorCoupling) ? $floorCoupling->direction : '', ['class' => 'form-control selectpicker']) !!}
+            </div>
+        </div>
+        <?php } ?>
     @endif
 
     {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}

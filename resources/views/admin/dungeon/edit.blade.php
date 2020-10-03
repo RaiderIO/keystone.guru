@@ -54,6 +54,12 @@
             @include('common.forms.form-error', ['key' => 'name'])
         </div>
 
+        <div class="form-group{{ $errors->has('key') ? ' has-error' : '' }}">
+            {!! Form::label('key', __('Key')) !!}
+            {!! Form::text('key', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'key'])
+        </div>
+
         <div class="form-group{{ $errors->has('enemy_forces_required') ? ' has-error' : '' }}">
             {!! Form::label('enemy_forces_required', __('Enemy forces required')) !!}
             {!! Form::number('enemy_forces_required', null, ['class' => 'form-control']) !!}

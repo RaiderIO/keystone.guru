@@ -17,4 +17,6 @@ class FloorCoupling extends Model
 {
     //
     public $timestamps = false;
+
+    protected $fillable = ['floor1_id', 'floor2_id', 'direction'];
 }

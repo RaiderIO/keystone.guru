@@ -60,7 +60,7 @@ class Save extends Command
         $dungeons = Dungeon::without(['expansion'])->with('floors.floorcouplings')->get();
 
         $this->saveDataToJsonFile(
-            $dungeons->makeHidden(['key', 'active', 'floor_count', 'expansion'])
+            $dungeons->makeHidden(['active', 'floor_count', 'expansion'])
                 ->makeVisible(['expansion_id'])
                 ->toArray(),
             $dungeonDataDir, 'dungeons.json');

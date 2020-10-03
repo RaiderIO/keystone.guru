@@ -36,6 +36,7 @@ class DungeonController extends Controller
 //        $dungeon->expansion_id = $request->get('expansion_id');
         $dungeon->zone_id = $request->get('zone_id');
         $dungeon->name = $request->get('name');
+        $dungeon->key = $request->get('key');
         $dungeon->enemy_forces_required = $request->get('enemy_forces_required');
         $dungeon->enemy_forces_required_teeming = $request->get('enemy_forces_required_teeming');
         $dungeon->timer_max_seconds = $request->get('timer_max_seconds');

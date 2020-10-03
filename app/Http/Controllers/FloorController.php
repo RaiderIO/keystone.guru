@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\FloorFormRequest;
 use App\Logic\MapContext\MapContextDungeon;
 use App\Models\Dungeon;
 use App\Models\Floor;
+use App\Models\FloorCoupling;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -16,6 +18,7 @@ use Session;
 
 class FloorController extends Controller
 {
+    use ChangesMapping;
 
     /**
      * @param Request $request
@@ -24,6 +27,8 @@ class FloorController extends Controller
      */
     public function store(Request $request, Floor $floor = null)
     {
+        $beforeFloor = clone $floor;
+
         if ($floor === null) {
             $floor = new Floor();
             // May not be set when editing
@@ -38,12 +43,25 @@ class FloorController extends Controller
         if (!$floor->save()) {
             abort(500, 'Unable to save floor');
         } else {
-            // Remove all existing relationships
-            $floor->directConnectedFloors()->detach($request->get('connectedfloors'));
-            $floor->reverseConnectedFloors()->detach($request->get('connectedfloors'));
+            // Delete all directly connected floors
+            $floor->floorcouplings()->delete();
 
-            // Create a new direct relationship
-            $floor->directConnectedFloors()->sync($request->get('connectedfloors'));
+            foreach ($floor->dungeon->floors as $connectedFloorCandidate) {
+                $isConnected = $request->get(sprintf('floor_%s_connected', $connectedFloorCandidate->id), false);
+
+                if ($isConnected) {
+                    $direction = $request->get(sprintf('floor_%s_direction', $connectedFloorCandidate->id));
+
+                    // Recreate one by one
+                    FloorCoupling::insert([
+                        'floor1_id' => $floor->id,
+                        'floor2_id' => $connectedFloorCandidate->id,
+                        'direction' => $direction
+                    ]);
+                }
+            }
+
+            $this->mappingChanged($beforeFloor, $floor);
         }
 
         return $floor;
@@ -76,9 +94,10 @@ class FloorController extends Controller
             $dungeon = $floor->dungeon->load('floors');
 
             return view('admin.floor.edit', [
-                'headerTitle' => sprintf(__('%s - Edit floor'), $dungeon->name),
-                'dungeon'     => $dungeon,
-                'model'       => $floor,
+                'headerTitle'    => sprintf(__('%s - Edit floor'), $dungeon->name),
+                'dungeon'        => $dungeon,
+                'model'          => $floor,
+                'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get()
             ]);
         } else {
             Session::flash('warning', sprintf('Floor %s is not a part of dungeon %s', $floor->name, $dungeon->name));
@@ -119,7 +138,7 @@ class FloorController extends Controller
         Session::flash('status', __('Floor updated'));
 
         // Display the edit page
-        return $this->mapping($request, $dungeon, $floor);
+        return $this->edit($request, $dungeon, $floor);
     }
 
     /**
