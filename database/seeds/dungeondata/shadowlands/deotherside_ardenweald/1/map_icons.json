@@ -57,10 +57,10 @@
     {
         "floor_id": 73,
         "team_id": null,
-        "map_icon_type_id": 37,
+        "map_icon_type_id": 43,
         "lat": -136.78125,
         "lng": 251.25,
-        "comment": "Night Fae: Haunted Urn",
+        "comment": "NIGHT FAE: AoE Stun - Allows use of Haunted Urns in set locations which procs a large AoE stun ( Haunted Urn), 30 yds for 10 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -68,12 +68,23 @@
     {
         "floor_id": 73,
         "team_id": null,
-        "map_icon_type_id": 37,
+        "map_icon_type_id": 43,
         "lat": -200.125,
         "lng": 157,
-        "comment": "Night Fae: Haunted Urn",
+        "comment": "NIGHT FAE: AoE Stun - Allows use of Haunted Urns in set locations which procs a large AoE stun ( Haunted Urn), 30 yds for 10 sec.",
         "permanent_tooltip": 0,
         "seasonal_index": 0,
+        "is_admin": true
+    },
+    {
+        "floor_id": 73,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -45.25,
+        "lng": 194.125,
+        "comment": "",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
         "is_admin": true
     }
 ]

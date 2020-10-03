@@ -2,8 +2,8 @@
     {
         "id": 94,
         "floor_id": 74,
-        "target_floor_id": -1,
-        "lat": -33.25,
-        "lng": 188.25
+        "target_floor_id": 73,
+        "lat": -63,
+        "lng": 189.5
     }
 ]

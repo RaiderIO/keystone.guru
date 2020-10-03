@@ -15,7 +15,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164501,
@@ -33,7 +34,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164517,
@@ -51,7 +53,8 @@
         "bursting": 0,
         "bolstering": 0,
         "sanguine": 0,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164567,
@@ -69,7 +72,8 @@
         "bursting": 0,
         "bolstering": 0,
         "sanguine": 0,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164804,
@@ -87,7 +91,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164920,
@@ -105,7 +110,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164921,
@@ -123,7 +129,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164926,
@@ -141,7 +148,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164929,
@@ -159,7 +167,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 165108,
@@ -177,7 +186,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 165111,
@@ -195,7 +205,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 165251,
@@ -213,7 +224,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 165512,
@@ -231,7 +243,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 165560,
@@ -249,7 +262,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 166275,
@@ -267,7 +281,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 166276,
@@ -285,7 +300,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 166299,
@@ -303,7 +319,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 166301,
@@ -321,7 +338,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 166304,
@@ -339,7 +357,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167111,
@@ -357,7 +376,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167113,
@@ -375,7 +395,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167116,
@@ -393,7 +414,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167117,
@@ -411,7 +433,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168988,
@@ -429,7 +452,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170217,
@@ -447,7 +471,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170218,
@@ -465,7 +490,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170229,
@@ -483,7 +509,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171772,
@@ -501,7 +528,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 172312,
@@ -519,7 +547,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 172647,
@@ -537,7 +566,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 172995,
@@ -555,7 +585,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 173655,
@@ -573,7 +604,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 173679,
@@ -591,7 +623,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 173680,
@@ -609,7 +642,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 173714,
@@ -627,7 +661,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 173720,
@@ -645,6 +680,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     }
 ]

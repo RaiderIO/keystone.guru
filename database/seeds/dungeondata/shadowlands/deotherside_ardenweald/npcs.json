@@ -7,87 +7,92 @@
         "npc_class_id": 1,
         "name": "Millificent Manastorm",
         "base_health": 12345,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164450,
         "dungeon_id": 28,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Dealer Xy'exa",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 544700,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164555,
         "dungeon_id": 28,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Millificent Manastorm",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 368500,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164556,
         "dungeon_id": 28,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Millhouse Manastorm",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 432500,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164558,
         "dungeon_id": 28,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 2,
         "npc_class_id": 1,
         "name": "Hakkar the Soulflayer",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 464600,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164857,
@@ -97,15 +102,16 @@
         "npc_class_id": 1,
         "name": "Spriggan Mendbender",
         "base_health": 56070,
-        "enemy_forces": -1,
+        "enemy_forces": 2,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164861,
@@ -115,15 +121,16 @@
         "npc_class_id": 1,
         "name": "Spriggan Barkbinder",
         "base_health": 56070,
-        "enemy_forces": -1,
+        "enemy_forces": 2,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164862,
@@ -133,15 +140,16 @@
         "npc_class_id": 1,
         "name": "Weald Shimmermoth",
         "base_health": 72090,
-        "enemy_forces": -1,
+        "enemy_forces": 3,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 164873,
@@ -151,15 +159,16 @@
         "npc_class_id": 1,
         "name": "Runestag Elderhorn",
         "base_health": 96120,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 165905,
@@ -177,7 +186,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 166473,
@@ -187,15 +197,16 @@
         "npc_class_id": 1,
         "name": "Hakkar the Soulflayer",
         "base_health": 12345,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167962,
@@ -204,16 +215,17 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "name": "Defunct Dental Drill",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 144200,
+        "enemy_forces": 8,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167963,
@@ -222,8 +234,8 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "name": "Headless Client",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 96100,
+        "enemy_forces": 5,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -231,7 +243,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167964,
@@ -240,8 +253,8 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "name": "4.RF-4.RF",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 144200,
+        "enemy_forces": 8,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -249,7 +262,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167965,
@@ -258,8 +272,8 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "name": "Lubricator",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 112100,
+        "enemy_forces": 5,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -267,7 +281,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167966,
@@ -276,7 +291,7 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "name": "Experimental Sludge",
-        "base_health": 12345,
+        "base_health": 8000,
         "enemy_forces": -1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
@@ -285,7 +300,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167967,
@@ -294,8 +310,8 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "name": "Sentient Oil",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 88100,
+        "enemy_forces": 6,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -303,7 +319,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168141,
@@ -313,15 +330,16 @@
         "npc_class_id": 1,
         "name": "Bwonsamdi",
         "base_health": 1602000,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "friendly",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168934,
@@ -330,8 +348,8 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "name": "Enraged Spirit",
-        "base_health": 144000,
-        "enemy_forces": -1,
+        "base_health": 144200,
+        "enemy_forces": 8,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -339,7 +357,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168942,
@@ -348,16 +367,17 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "name": "Death Speaker",
-        "base_health": 39759,
-        "enemy_forces": -1,
+        "base_health": 136000,
+        "enemy_forces": 6,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168949,
@@ -366,16 +386,17 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "name": "Risen Bonesoldier",
-        "base_health": 67537,
-        "enemy_forces": -1,
+        "base_health": 64100,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168986,
@@ -384,16 +405,17 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "name": "Skeletal Raptor",
-        "base_health": 39759,
-        "enemy_forces": -1,
+        "base_health": 39800,
+        "enemy_forces": 3,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168992,
@@ -403,33 +425,35 @@
         "npc_class_id": 1,
         "name": "Risen Cultist",
         "base_health": 80100,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 169769,
         "dungeon_id": 28,
-        "classification_id": 3,
+        "classification_id": 4,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Mueh'zala",
         "base_health": 6408000,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 169905,
@@ -439,7 +463,7 @@
         "npc_class_id": 1,
         "name": "Risen Warlord",
         "base_health": 144000,
-        "enemy_forces": -1,
+        "enemy_forces": 6,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -447,7 +471,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 169912,
@@ -465,7 +490,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170147,
@@ -474,8 +500,8 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "name": "Volatile Memory",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 16000,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -483,7 +509,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170480,
@@ -492,8 +519,8 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "name": "Atal'ai Deathwalker",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 88100,
+        "enemy_forces": 5,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -501,7 +528,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170483,
@@ -519,7 +547,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170486,
@@ -528,8 +557,8 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Atal'ai Devoted",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 20000,
+        "enemy_forces": 2,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -537,7 +566,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170488,
@@ -547,7 +577,7 @@
         "npc_class_id": 1,
         "name": "Son of Hakkar",
         "base_health": 12345,
-        "enemy_forces": -1,
+        "enemy_forces": 1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -555,7 +585,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170490,
@@ -564,8 +595,8 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Atal'ai High Priest",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 88100,
+        "enemy_forces": 5,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -573,7 +604,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 170572,
@@ -582,8 +614,8 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Atal'ai Hoodoo Hexxer",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 128200,
+        "enemy_forces": 6,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -591,7 +623,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171181,
@@ -601,15 +634,16 @@
         "npc_class_id": 1,
         "name": "Territorial Bladebeak",
         "base_health": 80100,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171184,
@@ -619,7 +653,7 @@
         "npc_class_id": 1,
         "name": "Mythresh, Sky's Talons",
         "base_health": 192000,
-        "enemy_forces": -1,
+        "enemy_forces": 12,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -627,7 +661,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171333,
@@ -636,16 +671,17 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "Atal'ai Devoted",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 16000,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171341,
@@ -655,15 +691,16 @@
         "npc_class_id": 1,
         "name": "Bladebeak Hatchling",
         "base_health": 16020,
-        "enemy_forces": -1,
+        "enemy_forces": 1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171342,
@@ -673,15 +710,16 @@
         "npc_class_id": 1,
         "name": "Juvenile Runestag",
         "base_health": 64080,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171343,
@@ -691,15 +729,16 @@
         "npc_class_id": 1,
         "name": "Bladebeak Matriarch",
         "base_health": 160000,
-        "enemy_forces": -1,
+        "enemy_forces": 5,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 1,
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 174327,
@@ -717,6 +756,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     }
 ]

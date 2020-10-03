@@ -117,7 +117,7 @@
         "name": "Freehold",
         "enemy_forces_required": 261,
         "enemy_forces_required_teeming": 313,
-        "timer_max_seconds": 1960
+        "timer_max_seconds": 1980
     },
     {
         "id": 16,
@@ -219,17 +219,17 @@
         "id": 28,
         "zone_id": 13309,
         "name": "De Other Side",
-        "enemy_forces_required": -1,
+        "enemy_forces_required": 399,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2340
     },
     {
         "id": 29,
         "zone_id": 12831,
         "name": "Halls of Atonement",
-        "enemy_forces_required": -1,
+        "enemy_forces_required": 273,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 1920
     },
     {
         "id": 30,
@@ -237,7 +237,7 @@
         "name": "Mists of Tirna Scithe",
         "enemy_forces_required": 260,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 1800
     },
     {
         "id": 31,
@@ -251,9 +251,9 @@
         "id": 32,
         "zone_id": 12842,
         "name": "Sanguine Depths",
-        "enemy_forces_required": -1,
+        "enemy_forces_required": 392,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2460
     },
     {
         "id": 33,
@@ -261,22 +261,22 @@
         "name": "Spires of Ascension",
         "enemy_forces_required": 285,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2340
     },
     {
         "id": 34,
         "zone_id": 12916,
         "name": "The Necrotic Wake",
-        "enemy_forces_required": 262,
+        "enemy_forces_required": 275,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2040
     },
     {
         "id": 35,
         "zone_id": 12841,
         "name": "Theater of Pain",
-        "enemy_forces_required": -1,
+        "enemy_forces_required": 271,
         "enemy_forces_required_teeming": -1,
-        "timer_max_seconds": 0
+        "timer_max_seconds": 2220
     }
 ]

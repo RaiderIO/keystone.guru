@@ -2,6 +2,7 @@
     {
         "id": 3927,
         "enemy_pack_id": 631,
+        "npc_id": 150190,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -20,6 +21,7 @@
     {
         "id": 3928,
         "enemy_pack_id": -1,
+        "npc_id": 150712,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -38,6 +40,7 @@
     {
         "id": 3929,
         "enemy_pack_id": -1,
+        "npc_id": 153755,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -56,6 +59,7 @@
     {
         "id": 3930,
         "enemy_pack_id": -1,
+        "npc_id": 150159,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -74,6 +78,7 @@
     {
         "id": 3931,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -92,6 +97,7 @@
     {
         "id": 3932,
         "enemy_pack_id": -1,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -110,6 +116,7 @@
     {
         "id": 3933,
         "enemy_pack_id": -1,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -128,6 +135,7 @@
     {
         "id": 3934,
         "enemy_pack_id": 587,
+        "npc_id": 150249,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -146,6 +154,7 @@
     {
         "id": 3935,
         "enemy_pack_id": 587,
+        "npc_id": 150249,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -164,6 +173,7 @@
     {
         "id": 3936,
         "enemy_pack_id": 587,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -182,6 +192,7 @@
     {
         "id": 3937,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -200,6 +211,7 @@
     {
         "id": 3938,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -218,6 +230,7 @@
     {
         "id": 3939,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -236,6 +249,7 @@
     {
         "id": 3940,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -254,6 +268,7 @@
     {
         "id": 3941,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 16,
         "seasonal_type": null,
@@ -272,6 +287,7 @@
     {
         "id": 3942,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 17,
         "seasonal_type": null,
@@ -290,6 +306,7 @@
     {
         "id": 3943,
         "enemy_pack_id": -1,
+        "npc_id": 152009,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -308,6 +325,7 @@
     {
         "id": 3944,
         "enemy_pack_id": -1,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -326,6 +344,7 @@
     {
         "id": 3945,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 19,
         "seasonal_type": null,
@@ -344,6 +363,7 @@
     {
         "id": 3946,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 21,
         "seasonal_type": null,
@@ -362,6 +382,7 @@
     {
         "id": 3947,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 20,
         "seasonal_type": null,
@@ -380,6 +401,7 @@
     {
         "id": 3948,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -398,6 +420,7 @@
     {
         "id": 3949,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 22,
         "seasonal_type": null,
@@ -416,6 +439,7 @@
     {
         "id": 3950,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 24,
         "seasonal_type": null,
@@ -434,6 +458,7 @@
     {
         "id": 3951,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 23,
         "seasonal_type": null,
@@ -452,6 +477,7 @@
     {
         "id": 3952,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -470,6 +496,7 @@
     {
         "id": 3953,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -488,6 +515,7 @@
     {
         "id": 3954,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -506,6 +534,7 @@
     {
         "id": 3955,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -524,6 +553,7 @@
     {
         "id": 3956,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -542,6 +572,7 @@
     {
         "id": 3957,
         "enemy_pack_id": -1,
+        "npc_id": 150146,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -560,6 +591,7 @@
     {
         "id": 3958,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -578,6 +610,7 @@
     {
         "id": 3959,
         "enemy_pack_id": -1,
+        "npc_id": 150160,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -596,6 +629,7 @@
     {
         "id": 3960,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -614,6 +648,7 @@
     {
         "id": 3961,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -632,6 +667,7 @@
     {
         "id": 3962,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -650,6 +686,7 @@
     {
         "id": 3963,
         "enemy_pack_id": -1,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -668,6 +705,7 @@
     {
         "id": 3964,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -686,6 +724,7 @@
     {
         "id": 3965,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -704,6 +743,7 @@
     {
         "id": 3966,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -722,6 +762,7 @@
     {
         "id": 3967,
         "enemy_pack_id": -1,
+        "npc_id": 150146,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -740,6 +781,7 @@
     {
         "id": 3968,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -758,6 +800,7 @@
     {
         "id": 3969,
         "enemy_pack_id": -1,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -776,6 +819,7 @@
     {
         "id": 3970,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -794,6 +838,7 @@
     {
         "id": 3971,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -812,6 +857,7 @@
     {
         "id": 3972,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -830,6 +876,7 @@
     {
         "id": 3973,
         "enemy_pack_id": -1,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -848,6 +895,7 @@
     {
         "id": 3974,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -866,6 +914,7 @@
     {
         "id": 3975,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -884,6 +933,7 @@
     {
         "id": 3976,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -902,6 +952,7 @@
     {
         "id": 3977,
         "enemy_pack_id": -1,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -920,6 +971,7 @@
     {
         "id": 3978,
         "enemy_pack_id": -1,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -938,6 +990,7 @@
     {
         "id": 3979,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -956,6 +1009,7 @@
     {
         "id": 3980,
         "enemy_pack_id": -1,
+        "npc_id": 150146,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -974,6 +1028,7 @@
     {
         "id": 3981,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 13,
         "seasonal_type": null,
@@ -992,6 +1047,7 @@
     {
         "id": 3982,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 12,
         "seasonal_type": null,
@@ -1010,6 +1066,7 @@
     {
         "id": 3983,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 14,
         "seasonal_type": null,
@@ -1028,6 +1085,7 @@
     {
         "id": 3984,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 15,
         "seasonal_type": null,
@@ -1046,6 +1104,7 @@
     {
         "id": 3985,
         "enemy_pack_id": 588,
+        "npc_id": 150146,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -1064,6 +1123,7 @@
     {
         "id": 3986,
         "enemy_pack_id": 588,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -1082,6 +1142,7 @@
     {
         "id": 3987,
         "enemy_pack_id": 588,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -1100,6 +1161,7 @@
     {
         "id": 3988,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 26,
         "seasonal_type": null,
@@ -1118,6 +1180,7 @@
     {
         "id": 3989,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 27,
         "seasonal_type": null,
@@ -1136,6 +1199,7 @@
     {
         "id": 3990,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 25,
         "seasonal_type": null,
@@ -1154,6 +1218,7 @@
     {
         "id": 3991,
         "enemy_pack_id": -1,
+        "npc_id": 150160,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -1172,6 +1237,7 @@
     {
         "id": 3992,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 28,
         "seasonal_type": null,
@@ -1190,6 +1256,7 @@
     {
         "id": 3993,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 29,
         "seasonal_type": null,
@@ -1208,6 +1275,7 @@
     {
         "id": 3994,
         "enemy_pack_id": 589,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -1226,6 +1294,7 @@
     {
         "id": 3995,
         "enemy_pack_id": 589,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -1244,6 +1313,7 @@
     {
         "id": 3996,
         "enemy_pack_id": 589,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -1262,6 +1332,7 @@
     {
         "id": 3997,
         "enemy_pack_id": -1,
+        "npc_id": 152009,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -1280,6 +1351,7 @@
     {
         "id": 3998,
         "enemy_pack_id": -1,
+        "npc_id": 150160,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -1298,6 +1370,7 @@
     {
         "id": 3999,
         "enemy_pack_id": -1,
+        "npc_id": 150160,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -1316,6 +1389,7 @@
     {
         "id": 4000,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -1334,6 +1408,7 @@
     {
         "id": 4001,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -1352,6 +1427,7 @@
     {
         "id": 4002,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 36,
         "seasonal_type": null,
@@ -1370,6 +1446,7 @@
     {
         "id": 4003,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 34,
         "seasonal_type": null,
@@ -1388,6 +1465,7 @@
     {
         "id": 4004,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 35,
         "seasonal_type": null,
@@ -1406,6 +1484,7 @@
     {
         "id": 4005,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 33,
         "seasonal_type": null,
@@ -1424,6 +1503,7 @@
     {
         "id": 4006,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 31,
         "seasonal_type": null,
@@ -1442,6 +1522,7 @@
     {
         "id": 4007,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 32,
         "seasonal_type": null,
@@ -1460,6 +1541,7 @@
     {
         "id": 4008,
         "enemy_pack_id": -1,
+        "npc_id": 152009,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -1478,6 +1560,7 @@
     {
         "id": 4009,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 30,
         "seasonal_type": null,
@@ -1496,6 +1579,7 @@
     {
         "id": 4010,
         "enemy_pack_id": -1,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -1514,6 +1598,7 @@
     {
         "id": 4011,
         "enemy_pack_id": -1,
+        "npc_id": 150146,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -1532,6 +1617,7 @@
     {
         "id": 4012,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -1550,6 +1636,7 @@
     {
         "id": 4013,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 42,
         "seasonal_type": null,
@@ -1568,6 +1655,7 @@
     {
         "id": 4014,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 13,
         "seasonal_type": null,
@@ -1586,6 +1674,7 @@
     {
         "id": 4015,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 41,
         "seasonal_type": null,
@@ -1604,6 +1693,7 @@
     {
         "id": 4016,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 40,
         "seasonal_type": null,
@@ -1622,6 +1712,7 @@
     {
         "id": 4017,
         "enemy_pack_id": -1,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 12,
         "seasonal_type": null,
@@ -1640,6 +1731,7 @@
     {
         "id": 4018,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -1658,6 +1750,7 @@
     {
         "id": 4019,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 39,
         "seasonal_type": null,
@@ -1676,6 +1769,7 @@
     {
         "id": 4020,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -1694,6 +1788,7 @@
     {
         "id": 4021,
         "enemy_pack_id": -1,
+        "npc_id": 150160,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -1712,6 +1807,7 @@
     {
         "id": 4022,
         "enemy_pack_id": -1,
+        "npc_id": 152009,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -1730,6 +1826,7 @@
     {
         "id": 4023,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 37,
         "seasonal_type": null,
@@ -1748,6 +1845,7 @@
     {
         "id": 4024,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 38,
         "seasonal_type": null,
@@ -1766,6 +1864,7 @@
     {
         "id": 4025,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 12,
         "seasonal_type": null,
@@ -1784,6 +1883,7 @@
     {
         "id": 4026,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 14,
         "seasonal_type": null,
@@ -1802,6 +1902,7 @@
     {
         "id": 4027,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 13,
         "seasonal_type": null,
@@ -1820,6 +1921,7 @@
     {
         "id": 4028,
         "enemy_pack_id": -1,
+        "npc_id": 150154,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -1838,6 +1940,7 @@
     {
         "id": 4029,
         "enemy_pack_id": 590,
+        "npc_id": 150146,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -1856,6 +1959,7 @@
     {
         "id": 4030,
         "enemy_pack_id": 590,
+        "npc_id": 150142,
         "floor_id": 65,
         "mdt_id": 14,
         "seasonal_type": null,
@@ -1874,6 +1978,7 @@
     {
         "id": 4031,
         "enemy_pack_id": 590,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 12,
         "seasonal_type": null,
@@ -1892,6 +1997,7 @@
     {
         "id": 4032,
         "enemy_pack_id": 590,
+        "npc_id": 150143,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -1910,6 +2016,7 @@
     {
         "id": 4033,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 43,
         "seasonal_type": null,
@@ -1928,6 +2035,7 @@
     {
         "id": 4034,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 44,
         "seasonal_type": null,
@@ -1946,6 +2054,7 @@
     {
         "id": 4035,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 45,
         "seasonal_type": null,
@@ -1964,6 +2073,7 @@
     {
         "id": 4036,
         "enemy_pack_id": -1,
+        "npc_id": 152009,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -1982,6 +2092,7 @@
     {
         "id": 4037,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -2000,6 +2111,7 @@
     {
         "id": 4038,
         "enemy_pack_id": -1,
+        "npc_id": 152009,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -2018,6 +2130,7 @@
     {
         "id": 4039,
         "enemy_pack_id": -1,
+        "npc_id": 150276,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -2036,6 +2149,7 @@
     {
         "id": 4040,
         "enemy_pack_id": -1,
+        "npc_id": 150276,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -2054,6 +2168,7 @@
     {
         "id": 4041,
         "enemy_pack_id": 593,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -2072,6 +2187,7 @@
     {
         "id": 4042,
         "enemy_pack_id": 593,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -2090,6 +2206,7 @@
     {
         "id": 4043,
         "enemy_pack_id": 593,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -2108,6 +2225,7 @@
     {
         "id": 4044,
         "enemy_pack_id": -1,
+        "npc_id": 150253,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -2126,6 +2244,7 @@
     {
         "id": 4045,
         "enemy_pack_id": 592,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -2144,6 +2263,7 @@
     {
         "id": 4046,
         "enemy_pack_id": 592,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -2162,6 +2282,7 @@
     {
         "id": 4047,
         "enemy_pack_id": 592,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -2180,6 +2301,7 @@
     {
         "id": 4048,
         "enemy_pack_id": 594,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -2198,6 +2320,7 @@
     {
         "id": 4049,
         "enemy_pack_id": 594,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -2216,6 +2339,7 @@
     {
         "id": 4050,
         "enemy_pack_id": 594,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -2234,6 +2358,7 @@
     {
         "id": 4051,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -2252,6 +2377,7 @@
     {
         "id": 4052,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 14,
         "seasonal_type": null,
@@ -2270,6 +2396,7 @@
     {
         "id": 4053,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 15,
         "seasonal_type": null,
@@ -2288,6 +2415,7 @@
     {
         "id": 4054,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 13,
         "seasonal_type": null,
@@ -2306,6 +2434,7 @@
     {
         "id": 4055,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -2324,6 +2453,7 @@
     {
         "id": 4056,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 13,
         "seasonal_type": null,
@@ -2342,6 +2472,7 @@
     {
         "id": 4057,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 14,
         "seasonal_type": null,
@@ -2360,6 +2491,7 @@
     {
         "id": 4058,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 12,
         "seasonal_type": null,
@@ -2378,6 +2510,7 @@
     {
         "id": 4059,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 12,
         "seasonal_type": null,
@@ -2396,6 +2529,7 @@
     {
         "id": 4060,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -2414,6 +2548,7 @@
     {
         "id": 4061,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -2432,6 +2567,7 @@
     {
         "id": 4062,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -2450,6 +2586,7 @@
     {
         "id": 4063,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -2468,6 +2605,7 @@
     {
         "id": 4064,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -2486,6 +2624,7 @@
     {
         "id": 4065,
         "enemy_pack_id": -1,
+        "npc_id": 150168,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -2504,6 +2643,7 @@
     {
         "id": 4066,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -2522,6 +2662,7 @@
     {
         "id": 4067,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -2540,6 +2681,7 @@
     {
         "id": 4068,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -2558,6 +2700,7 @@
     {
         "id": 4069,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -2576,6 +2719,7 @@
     {
         "id": 4070,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -2594,6 +2738,7 @@
     {
         "id": 4071,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -2612,6 +2757,7 @@
     {
         "id": 4072,
         "enemy_pack_id": -1,
+        "npc_id": 150168,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -2630,6 +2776,7 @@
     {
         "id": 4073,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -2648,6 +2795,7 @@
     {
         "id": 4074,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -2666,6 +2814,7 @@
     {
         "id": 4075,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -2684,6 +2833,7 @@
     {
         "id": 4076,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -2702,6 +2852,7 @@
     {
         "id": 4077,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -2720,6 +2871,7 @@
     {
         "id": 4078,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -2738,6 +2890,7 @@
     {
         "id": 4079,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -2756,6 +2909,7 @@
     {
         "id": 4080,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -2774,6 +2928,7 @@
     {
         "id": 4081,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -2792,6 +2947,7 @@
     {
         "id": 4082,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -2810,6 +2966,7 @@
     {
         "id": 4083,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -2828,6 +2985,7 @@
     {
         "id": 4084,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -2846,6 +3004,7 @@
     {
         "id": 4085,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -2864,6 +3023,7 @@
     {
         "id": 4086,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -2882,6 +3042,7 @@
     {
         "id": 4087,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -2900,6 +3061,7 @@
     {
         "id": 4088,
         "enemy_pack_id": -1,
+        "npc_id": 150168,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -2918,6 +3080,7 @@
     {
         "id": 4089,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -2936,6 +3099,7 @@
     {
         "id": 4090,
         "enemy_pack_id": -1,
+        "npc_id": 152009,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -2954,6 +3118,7 @@
     {
         "id": 4091,
         "enemy_pack_id": -1,
+        "npc_id": 152009,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -2972,6 +3137,7 @@
     {
         "id": 4092,
         "enemy_pack_id": -1,
+        "npc_id": 150253,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -2990,6 +3156,7 @@
     {
         "id": 4093,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -3008,6 +3175,7 @@
     {
         "id": 4094,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -3026,6 +3194,7 @@
     {
         "id": 4095,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -3044,6 +3213,7 @@
     {
         "id": 4096,
         "enemy_pack_id": -1,
+        "npc_id": 150195,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -3062,6 +3232,7 @@
     {
         "id": 4097,
         "enemy_pack_id": 591,
+        "npc_id": 150276,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -3080,6 +3251,7 @@
     {
         "id": 4098,
         "enemy_pack_id": 591,
+        "npc_id": 150276,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -3098,6 +3270,7 @@
     {
         "id": 4099,
         "enemy_pack_id": 598,
+        "npc_id": 150249,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -3116,6 +3289,7 @@
     {
         "id": 4100,
         "enemy_pack_id": 598,
+        "npc_id": 150249,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -3134,6 +3308,7 @@
     {
         "id": 4101,
         "enemy_pack_id": 598,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -3152,6 +3327,7 @@
     {
         "id": 4102,
         "enemy_pack_id": -1,
+        "npc_id": 150253,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -3170,6 +3346,7 @@
     {
         "id": 4103,
         "enemy_pack_id": 597,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -3188,6 +3365,7 @@
     {
         "id": 4104,
         "enemy_pack_id": 597,
+        "npc_id": 150249,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -3206,6 +3384,7 @@
     {
         "id": 4105,
         "enemy_pack_id": 597,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -3224,6 +3403,7 @@
     {
         "id": 4106,
         "enemy_pack_id": 595,
+        "npc_id": 150249,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -3242,6 +3422,7 @@
     {
         "id": 4107,
         "enemy_pack_id": 595,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -3260,6 +3441,7 @@
     {
         "id": 4108,
         "enemy_pack_id": 595,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -3278,6 +3460,7 @@
     {
         "id": 4109,
         "enemy_pack_id": 595,
+        "npc_id": 150251,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -3296,6 +3479,7 @@
     {
         "id": 4110,
         "enemy_pack_id": 595,
+        "npc_id": 150249,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -3314,6 +3498,7 @@
     {
         "id": 4111,
         "enemy_pack_id": 600,
+        "npc_id": 150251,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -3332,6 +3517,7 @@
     {
         "id": 4112,
         "enemy_pack_id": 600,
+        "npc_id": 150249,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -3350,6 +3536,7 @@
     {
         "id": 4113,
         "enemy_pack_id": 600,
+        "npc_id": 150249,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -3368,6 +3555,7 @@
     {
         "id": 4114,
         "enemy_pack_id": 599,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -3386,6 +3574,7 @@
     {
         "id": 4115,
         "enemy_pack_id": 599,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -3404,6 +3593,7 @@
     {
         "id": 4116,
         "enemy_pack_id": 599,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -3422,6 +3612,7 @@
     {
         "id": 4117,
         "enemy_pack_id": 596,
+        "npc_id": 150253,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -3440,6 +3631,7 @@
     {
         "id": 4118,
         "enemy_pack_id": 596,
+        "npc_id": 150251,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -3458,6 +3650,7 @@
     {
         "id": 4119,
         "enemy_pack_id": 611,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -3476,6 +3669,7 @@
     {
         "id": 4120,
         "enemy_pack_id": 611,
+        "npc_id": 150250,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -3494,6 +3688,7 @@
     {
         "id": 4121,
         "enemy_pack_id": 611,
+        "npc_id": 150251,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -3512,6 +3707,7 @@
     {
         "id": 4122,
         "enemy_pack_id": 601,
+        "npc_id": 155090,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -3530,6 +3726,7 @@
     {
         "id": 4123,
         "enemy_pack_id": 601,
+        "npc_id": 155090,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -3548,6 +3745,7 @@
     {
         "id": 4129,
         "enemy_pack_id": 604,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 17,
         "seasonal_type": null,
@@ -3566,6 +3764,7 @@
     {
         "id": 4130,
         "enemy_pack_id": 604,
+        "npc_id": 150292,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -3584,6 +3783,7 @@
     {
         "id": 4131,
         "enemy_pack_id": 604,
+        "npc_id": 150297,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -3602,6 +3802,7 @@
     {
         "id": 4132,
         "enemy_pack_id": 605,
+        "npc_id": 150292,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -3620,6 +3821,7 @@
     {
         "id": 4133,
         "enemy_pack_id": 605,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -3638,6 +3840,7 @@
     {
         "id": 4134,
         "enemy_pack_id": 605,
+        "npc_id": 155090,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -3656,6 +3859,7 @@
     {
         "id": 4135,
         "enemy_pack_id": 605,
+        "npc_id": 150297,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -3674,6 +3878,7 @@
     {
         "id": 4136,
         "enemy_pack_id": 605,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -3692,6 +3897,7 @@
     {
         "id": 4137,
         "enemy_pack_id": 607,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 13,
         "seasonal_type": null,
@@ -3710,6 +3916,7 @@
     {
         "id": 4138,
         "enemy_pack_id": 607,
+        "npc_id": 150297,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -3728,6 +3935,7 @@
     {
         "id": 4139,
         "enemy_pack_id": 607,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 14,
         "seasonal_type": null,
@@ -3746,6 +3954,7 @@
     {
         "id": 4140,
         "enemy_pack_id": 606,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -3764,6 +3973,7 @@
     {
         "id": 4141,
         "enemy_pack_id": 606,
+        "npc_id": 150297,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -3782,6 +3992,7 @@
     {
         "id": 4142,
         "enemy_pack_id": 606,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 12,
         "seasonal_type": null,
@@ -3800,6 +4011,7 @@
     {
         "id": 4143,
         "enemy_pack_id": -1,
+        "npc_id": 155090,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -3818,6 +4030,7 @@
     {
         "id": 4144,
         "enemy_pack_id": -1,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -3836,6 +4049,7 @@
     {
         "id": 4145,
         "enemy_pack_id": -1,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 9,
         "seasonal_type": null,
@@ -3854,6 +4068,7 @@
     {
         "id": 4146,
         "enemy_pack_id": -1,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -3872,6 +4087,7 @@
     {
         "id": 4147,
         "enemy_pack_id": -1,
+        "npc_id": 155090,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -3890,6 +4106,7 @@
     {
         "id": 4148,
         "enemy_pack_id": -1,
+        "npc_id": 155090,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -3908,6 +4125,7 @@
     {
         "id": 4149,
         "enemy_pack_id": 610,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -3926,6 +4144,7 @@
     {
         "id": 4150,
         "enemy_pack_id": 610,
+        "npc_id": 150292,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -3944,6 +4163,7 @@
     {
         "id": 4151,
         "enemy_pack_id": 610,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -3962,6 +4182,7 @@
     {
         "id": 4152,
         "enemy_pack_id": -1,
+        "npc_id": 150293,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -3980,6 +4201,7 @@
     {
         "id": 4153,
         "enemy_pack_id": -1,
+        "npc_id": 150293,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -3998,6 +4220,7 @@
     {
         "id": 4154,
         "enemy_pack_id": 609,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -4016,6 +4239,7 @@
     {
         "id": 4155,
         "enemy_pack_id": 609,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -4034,6 +4258,7 @@
     {
         "id": 4156,
         "enemy_pack_id": 609,
+        "npc_id": 150293,
         "floor_id": 65,
         "mdt_id": 3,
         "seasonal_type": null,
@@ -4052,6 +4277,7 @@
     {
         "id": 4157,
         "enemy_pack_id": 608,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -4070,6 +4296,7 @@
     {
         "id": 4158,
         "enemy_pack_id": 608,
+        "npc_id": 150297,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -4088,6 +4315,7 @@
     {
         "id": 4159,
         "enemy_pack_id": 608,
+        "npc_id": 150293,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -4106,6 +4334,7 @@
     {
         "id": 4199,
         "enemy_pack_id": 599,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 11,
         "seasonal_type": null,
@@ -4124,6 +4353,7 @@
     {
         "id": 4200,
         "enemy_pack_id": 600,
+        "npc_id": 150254,
         "floor_id": 65,
         "mdt_id": 10,
         "seasonal_type": null,
@@ -4142,6 +4372,7 @@
     {
         "id": 4201,
         "enemy_pack_id": -1,
+        "npc_id": 152009,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -4160,6 +4391,7 @@
     {
         "id": 4202,
         "enemy_pack_id": -1,
+        "npc_id": 161244,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": "awakened",
@@ -4178,6 +4410,7 @@
     {
         "id": 4203,
         "enemy_pack_id": -1,
+        "npc_id": 161243,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": "awakened",
@@ -4196,6 +4429,7 @@
     {
         "id": 4204,
         "enemy_pack_id": -1,
+        "npc_id": 161124,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -4214,6 +4448,7 @@
     {
         "id": 4205,
         "enemy_pack_id": -1,
+        "npc_id": 161241,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -4232,6 +4467,7 @@
     {
         "id": 4206,
         "enemy_pack_id": 589,
+        "npc_id": 150146,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -4250,6 +4486,7 @@
     {
         "id": 4207,
         "enemy_pack_id": 609,
+        "npc_id": 150292,
         "floor_id": 65,
         "mdt_id": 4,
         "seasonal_type": null,
@@ -4268,6 +4505,7 @@
     {
         "id": 4208,
         "enemy_pack_id": -1,
+        "npc_id": 150169,
         "floor_id": 65,
         "mdt_id": 14,
         "seasonal_type": null,
@@ -4286,6 +4524,7 @@
     {
         "id": 4209,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 17,
         "seasonal_type": null,
@@ -4304,6 +4543,7 @@
     {
         "id": 4210,
         "enemy_pack_id": -1,
+        "npc_id": 150165,
         "floor_id": 65,
         "mdt_id": 16,
         "seasonal_type": null,
@@ -4322,6 +4562,7 @@
     {
         "id": 4211,
         "enemy_pack_id": 612,
+        "npc_id": 150293,
         "floor_id": 65,
         "mdt_id": 7,
         "seasonal_type": null,
@@ -4340,6 +4581,7 @@
     {
         "id": 4212,
         "enemy_pack_id": 612,
+        "npc_id": 150293,
         "floor_id": 65,
         "mdt_id": 5,
         "seasonal_type": null,
@@ -4358,6 +4600,7 @@
     {
         "id": 4213,
         "enemy_pack_id": 612,
+        "npc_id": 150293,
         "floor_id": 65,
         "mdt_id": 6,
         "seasonal_type": null,
@@ -4376,6 +4619,7 @@
     {
         "id": 4214,
         "enemy_pack_id": -1,
+        "npc_id": 150293,
         "floor_id": 65,
         "mdt_id": 8,
         "seasonal_type": null,
@@ -4394,6 +4638,7 @@
     {
         "id": 4215,
         "enemy_pack_id": 613,
+        "npc_id": 150297,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -4412,6 +4657,7 @@
     {
         "id": 4216,
         "enemy_pack_id": 613,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 2,
         "seasonal_type": null,
@@ -4430,6 +4676,7 @@
     {
         "id": 4217,
         "enemy_pack_id": 613,
+        "npc_id": 155094,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -4448,6 +4695,7 @@
     {
         "id": 4218,
         "enemy_pack_id": -1,
+        "npc_id": 150222,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -4466,6 +4714,7 @@
     {
         "id": 4219,
         "enemy_pack_id": 631,
+        "npc_id": 150295,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": null,
@@ -4484,6 +4733,7 @@
     {
         "id": 4243,
         "enemy_pack_id": -1,
+        "npc_id": 161244,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": "awakened",
@@ -4502,6 +4752,7 @@
     {
         "id": 4244,
         "enemy_pack_id": -1,
+        "npc_id": 161243,
         "floor_id": 65,
         "mdt_id": 1,
         "seasonal_type": "awakened",
@@ -4520,6 +4771,7 @@
     {
         "id": 4245,
         "enemy_pack_id": -1,
+        "npc_id": 150547,
         "floor_id": 65,
         "mdt_id": 18,
         "seasonal_type": null,
@@ -4538,6 +4790,7 @@
     {
         "id": 4340,
         "enemy_pack_id": 631,
+        "npc_id": 161124,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -4556,6 +4809,7 @@
     {
         "id": 4341,
         "enemy_pack_id": 631,
+        "npc_id": 161241,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": null,
@@ -4574,6 +4828,7 @@
     {
         "id": 4342,
         "enemy_pack_id": 631,
+        "npc_id": 161243,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": "awakened",
@@ -4592,6 +4847,7 @@
     {
         "id": 4343,
         "enemy_pack_id": 631,
+        "npc_id": 161244,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": "awakened",
@@ -4610,6 +4866,7 @@
     {
         "id": 4344,
         "enemy_pack_id": 631,
+        "npc_id": 161244,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": "awakened",
@@ -4628,6 +4885,7 @@
     {
         "id": 4345,
         "enemy_pack_id": 631,
+        "npc_id": 161243,
         "floor_id": 65,
         "mdt_id": -1,
         "seasonal_type": "awakened",

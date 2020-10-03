@@ -1,1 +1,18 @@
-[]
+[
+    {
+        "id": 1111,
+        "floor_id": 92,
+        "teeming": null,
+        "faction": "any",
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-169.1875\",\"lng\":\"188.875\"},{\"lat\":\"-164.625\",\"lng\":\"193.75\"},{\"lat\":\"-169.375\",\"lng\":\"197.75\"}]"
+    },
+    {
+        "id": 1112,
+        "floor_id": 92,
+        "teeming": null,
+        "faction": "any",
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-134.3125\",\"lng\":\"188.3125\"},{\"lat\":\"-128.625\",\"lng\":\"194.6875\"},{\"lat\":\"-135.125\",\"lng\":\"199.125\"}]"
+    }
+]

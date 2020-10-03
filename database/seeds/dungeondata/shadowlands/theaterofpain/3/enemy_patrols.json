@@ -20,7 +20,7 @@
             "color": "#00ff96",
             "color_animated": null,
             "weight": 3,
-            "vertices_json": "[{\"lat\":-162,\"lng\":199.75},{\"lat\":-124.125,\"lng\":190.5}]"
+            "vertices_json": "[{\"lat\":-162,\"lng\":199.75},{\"lat\":-119.8125,\"lng\":197.25}]"
         }
     },
     {
@@ -44,7 +44,7 @@
             "color": "#0070de",
             "color_animated": null,
             "weight": 3,
-            "vertices_json": "[{\"lat\":-109.875,\"lng\":193.875},{\"lat\":-77.375,\"lng\":94.875},{\"lat\":-113.375,\"lng\":83}]"
+            "vertices_json": "[{\"lat\":-116.1875,\"lng\":184.75},{\"lat\":-77.375,\"lng\":94.875},{\"lat\":-113.375,\"lng\":83}]"
         }
     },
     {
