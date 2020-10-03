@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "name": "Regal Mistdancer",
         "base_health": 128200,
-        "enemy_forces": -1,
+        "enemy_forces": 7,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -15,7 +15,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162039,
@@ -25,7 +26,7 @@
         "npc_class_id": 1,
         "name": "Wicked Oppressor",
         "base_health": 67300,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -33,7 +34,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162040,
@@ -43,7 +45,7 @@
         "npc_class_id": 1,
         "name": "Grand Overseer",
         "base_health": 112100,
-        "enemy_forces": -1,
+        "enemy_forces": 7,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -51,7 +53,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162041,
@@ -61,7 +64,7 @@
         "npc_class_id": 1,
         "name": "Grubby Dirtcruncher",
         "base_health": 48100,
-        "enemy_forces": -1,
+        "enemy_forces": 2,
         "enemy_forces_teeming": -1,
         "aggressiveness": "neutral",
         "dangerous": 0,
@@ -69,7 +72,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162046,
@@ -79,7 +83,7 @@
         "npc_class_id": 1,
         "name": "Famished Tick",
         "base_health": 48100,
-        "enemy_forces": -1,
+        "enemy_forces": 1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -87,7 +91,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162047,
@@ -97,7 +102,7 @@
         "npc_class_id": 1,
         "name": "Insatiable Brute",
         "base_health": 120200,
-        "enemy_forces": -1,
+        "enemy_forces": 7,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -105,7 +110,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162049,
@@ -115,7 +121,7 @@
         "npc_class_id": 1,
         "name": "Vestige of Doubt",
         "base_health": 72100,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -123,7 +129,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162051,
@@ -133,7 +140,7 @@
         "npc_class_id": 1,
         "name": "Frenzied Ghoul",
         "base_health": 80100,
-        "enemy_forces": -1,
+        "enemy_forces": 2,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -141,7 +148,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162056,
@@ -151,7 +159,7 @@
         "npc_class_id": 1,
         "name": "Rockbound Sprite",
         "base_health": 24000,
-        "enemy_forces": -1,
+        "enemy_forces": 1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -159,7 +167,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162057,
@@ -169,7 +178,7 @@
         "npc_class_id": 1,
         "name": "Chamber Sentinel",
         "base_health": 136200,
-        "enemy_forces": -1,
+        "enemy_forces": 7,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -177,25 +186,27 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162099,
         "dungeon_id": 32,
-        "classification_id": 2,
+        "classification_id": 4,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "name": "General Kaal",
         "base_health": 2240000,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162100,
@@ -213,7 +224,8 @@
         "bursting": 0,
         "bolstering": 0,
         "sanguine": 0,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162102,
@@ -223,15 +235,16 @@
         "npc_class_id": 1,
         "name": "Grand Proctor Beryllia",
         "base_health": 560700,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162103,
@@ -241,15 +254,16 @@
         "npc_class_id": 1,
         "name": "Executor Tarvold",
         "base_health": 448000,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 162133,
@@ -267,7 +281,27 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    },
+    {
+        "id": 162158,
+        "dungeon_id": 32,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "name": "Starving Prisoner",
+        "base_health": 48100,
+        "enemy_forces": 1,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 165073,
@@ -285,7 +319,8 @@
         "bursting": 0,
         "bolstering": 0,
         "sanguine": 0,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 165076,
@@ -295,7 +330,7 @@
         "npc_class_id": 1,
         "name": "Gluttonous Tick",
         "base_health": 72100,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -303,7 +338,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 165556,
@@ -321,7 +357,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 166396,
@@ -331,7 +368,7 @@
         "npc_class_id": 1,
         "name": "Noble Skirmisher",
         "base_health": 80100,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -339,7 +376,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 166589,
@@ -357,7 +395,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 166689,
@@ -375,7 +414,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167955,
@@ -385,7 +425,7 @@
         "npc_class_id": 1,
         "name": "Sanguine Cadet",
         "base_health": 32000,
-        "enemy_forces": -1,
+        "enemy_forces": 1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -393,7 +433,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 167956,
@@ -403,7 +444,7 @@
         "npc_class_id": 1,
         "name": "Dark Acolyte",
         "base_health": 28000,
-        "enemy_forces": -1,
+        "enemy_forces": 1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -411,7 +452,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168058,
@@ -421,7 +463,7 @@
         "npc_class_id": 1,
         "name": "Infused Quill-feather",
         "base_health": 16000,
-        "enemy_forces": -1,
+        "enemy_forces": 1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -429,7 +471,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168457,
@@ -447,7 +490,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168591,
@@ -456,8 +500,8 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "name": "Ravenous Dreadbat",
-        "base_health": 12345,
-        "enemy_forces": -1,
+        "base_health": 80100,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -465,7 +509,27 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
+    },
+    {
+        "id": 168594,
+        "dungeon_id": 32,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
+        "name": "Chamber Sentinel",
+        "base_health": 128200,
+        "enemy_forces": 0,
+        "enemy_forces_teeming": -1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 168882,
@@ -475,7 +539,7 @@
         "npc_class_id": 1,
         "name": "Fleeting Manifestation",
         "base_health": 48100,
-        "enemy_forces": -1,
+        "enemy_forces": 0,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -483,7 +547,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 169753,
@@ -501,7 +566,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 169898,
@@ -519,7 +585,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171376,
@@ -529,7 +596,7 @@
         "npc_class_id": 1,
         "name": "Head Custodian Javlin",
         "base_health": 192200,
-        "enemy_forces": -1,
+        "enemy_forces": 10,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -537,7 +604,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171384,
@@ -547,7 +615,7 @@
         "npc_class_id": 1,
         "name": "Research Scribe",
         "base_health": 80100,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -555,7 +623,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171448,
@@ -565,7 +634,7 @@
         "npc_class_id": 1,
         "name": "Dreadful Huntmaster",
         "base_health": 72100,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -573,7 +642,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171455,
@@ -583,7 +653,7 @@
         "npc_class_id": 1,
         "name": "Stonewall Gargon",
         "base_health": 16000,
-        "enemy_forces": -1,
+        "enemy_forces": 1,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -591,7 +661,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171799,
@@ -601,7 +672,7 @@
         "npc_class_id": 1,
         "name": "Depths Warden",
         "base_health": 128200,
-        "enemy_forces": -1,
+        "enemy_forces": 7,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -609,7 +680,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 171805,
@@ -619,7 +691,7 @@
         "npc_class_id": 1,
         "name": "Research Scribe",
         "base_health": 80100,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -627,7 +699,8 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     },
     {
         "id": 172265,
@@ -637,7 +710,7 @@
         "npc_class_id": 1,
         "name": "Remnant of Fury",
         "base_health": 72100,
-        "enemy_forces": -1,
+        "enemy_forces": 4,
         "enemy_forces_teeming": -1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -645,6 +718,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
-        "npcbolsteringwhitelists": []
+        "npcbolsteringwhitelists": [],
+        "npcspells": []
     }
 ]

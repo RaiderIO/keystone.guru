@@ -1,6 +1,6 @@
 [
     {
-        "id": 219,
+        "id": 249,
         "floor_id": 96,
         "teeming": null,
         "faction": "any",
@@ -8,7 +8,7 @@
             "color": "#E25D5D",
             "color_animated": null,
             "weight": 3,
-            "vertices_json": "[{\"lat\":-152.75,\"lng\":142},{\"lat\":-99.75,\"lng\":160.5}]"
+            "vertices_json": "[{\"lat\":-125.25,\"lng\":154},{\"lat\":-143.5,\"lng\":207},{\"lat\":-147.375,\"lng\":219.4375}]"
         }
     }
 ]
