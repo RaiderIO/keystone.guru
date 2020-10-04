@@ -7,16 +7,20 @@ use App\Models\Release;
 use App\Models\ReleaseChangelog;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\ReleaseChangelogChange;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\View\View;
+use Session;
 
 class ReleaseController extends Controller
 {
     /**
      * @param ReleaseFormRequest $request
-     * @param Release $release
+     * @param Release|null $release
      * @return mixed
-     * @throws \Exception
      */
     public function store(ReleaseFormRequest $request, Release $release = null)
     {
@@ -65,7 +69,18 @@ class ReleaseController extends Controller
             $changelog->release_id = $release->id;
             $changelog->save();
 
-            Artisan::call('release:save');
+            if (Artisan::call('release:save') === 0 && $new) {
+                $createReleaseTicketResult = Artisan::call(sprintf('make:githubreleaseticket %s', $release->version));
+                switch ($createReleaseTicketResult) {
+                    case 1:
+                        Session::flash('warning', __('Release ticket was already created'));
+                        break;
+                    case 0:
+                    default:
+                        Session::flash('status', __('Release ticket was created'));
+                        break;
+                }
+            }
         } // Something went wrong with saving
         else {
             abort(500, 'Unable to save release');
@@ -77,7 +92,7 @@ class ReleaseController extends Controller
     /**
      * Show a page for creating a new release.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function new()
     {
@@ -90,7 +105,7 @@ class ReleaseController extends Controller
     /**
      * @param Request $request
      * @param Release $release
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function edit(Request $request, Release $release)
     {
@@ -104,8 +119,8 @@ class ReleaseController extends Controller
     /**
      * @param ReleaseFormRequest $request
      * @param Release $release
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function update(ReleaseFormRequest $request, Release $release)
     {
@@ -113,7 +128,7 @@ class ReleaseController extends Controller
         $release = $this->store($request, $release);
 
         // Message to the user
-        \Session::flash('status', __('Release updated'));
+        Session::flash('status', __('Release updated'));
 
         // Display the edit page
         return $this->edit($request, $release);
@@ -121,8 +136,8 @@ class ReleaseController extends Controller
 
     /**
      * @param ReleaseFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function savenew(ReleaseFormRequest $request)
     {
@@ -130,7 +145,7 @@ class ReleaseController extends Controller
         $release = $this->store($request);
 
         // Message to the user
-        \Session::flash('status', __('Release created'));
+        Session::flash('status', __('Release created'));
 
         return redirect()->route('admin.release.edit', ['release' => $release]);
     }
@@ -138,7 +153,7 @@ class ReleaseController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\
+     * @return Factory
      */
     public function list()
     {
@@ -147,7 +162,7 @@ class ReleaseController extends Controller
 
     /**
      * @param Release $release
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function view(Release $release)
     {

@@ -29,8 +29,8 @@
         <thead>
         <tr>
             <th width="10%">{{ __('Id') }}</th>
-            <th width="80%">{{ __('Version') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
+            <th width="75%">{{ __('Version') }}</th>
+            <th width="15%">{{ __('Actions') }}</th>
         </tr>
         </thead>
 
@@ -44,6 +44,10 @@
                        href="{{ route('admin.release.edit', ['release' => $release->version]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
                     </a>
+{{--                    <a class="btn btn-primary"--}}
+{{--                       href="{{ route('admin.release.', ['release' => $release->version]) }}">--}}
+{{--                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}--}}
+{{--                    </a>--}}
                 </td>
             </tr>
         @endforeach
