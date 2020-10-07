@@ -1,9 +1,12 @@
 <?php
 
 
-use App\Models\DungeonRouteAffixGroup;
+use App\Models\Floor;
+use App\Models\FloorCoupling;
+use App\Models\NpcBolsteringWhitelist;
+use App\Models\NpcSpell;
 
-class DungeonRouteAffixGroupRelationParser implements RelationParser
+class DungeonFloorsRelationParser implements RelationParser
 {
     /**
      * @param $modelClassName string
@@ -11,7 +14,7 @@ class DungeonRouteAffixGroupRelationParser implements RelationParser
      */
     public function canParseModel($modelClassName)
     {
-        return $modelClassName === 'App\Models\DungeonRoute';
+        return $modelClassName === 'App\Models\Dungeon';
     }
 
     /**
@@ -21,7 +24,7 @@ class DungeonRouteAffixGroupRelationParser implements RelationParser
      */
     public function canParseRelation($name, $value)
     {
-        return $name === 'affixgroups' && is_array($value);
+        return $name === 'floors';
     }
 
     /**
@@ -33,11 +36,15 @@ class DungeonRouteAffixGroupRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        foreach ($value as $affixGroup) {
-            // We now know the dungeon route ID, set it back to the Route
-            $affixGroup['dungeon_route_id'] = $modelData['id'];
+        foreach ($value as $floor) {
+            $floor['dungeon_id'] = $modelData['id'];
 
-            DungeonRouteAffixGroup::insert($affixGroup);
+            foreach($floor['floorcouplings'] as $floorcoupling ){
+                FloorCoupling::insert($floorcoupling);
+            }
+
+            unset($floor['floorcouplings']);
+            Floor::insert($floor);
         }
 
         // Didn't really change anything so just return the value.

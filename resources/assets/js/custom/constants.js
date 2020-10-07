@@ -43,12 +43,32 @@ let c = {
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple'
             ],
-            minSize: 12,
-            maxSize: 26,
+            minSize: function () {
+                let result = getState().getMapContext().getMinEnemySizeDefault();
+
+                let currentFloor = getState().getCurrentFloor();
+
+                if (currentFloor.min_enemy_size !== null) {
+                    result = currentFloor.min_enemy_size;
+                }
+
+                return result;
+            },
+            maxSize: function () {
+                let result = getState().getMapContext().getMaxEnemySizeDefault();
+
+                let currentFloor = getState().getCurrentFloor();
+
+                if (currentFloor.max_enemy_size !== null) {
+                    result = currentFloor.max_enemy_size;
+                }
+
+                return result;
+            },
             margin: 2,
             calculateMargin: function (size) {
-                let range = c.map.enemy.maxSize - c.map.enemy.minSize;
-                let zeroBased = (size - c.map.enemy.minSize);
+                let range = c.map.enemy.maxSize() - c.map.enemy.minSize();
+                let zeroBased = (size - c.map.enemy.minSize());
                 return (zeroBased / range) * c.map.enemy.margin;
             },
             calculateSize: function (health, minHealth, maxHealth) {
@@ -62,7 +82,7 @@ let c = {
                 // Scale factor
                 let scale = getState().getMapZoomLevel() / 2.0;
 
-                let result = (c.map.enemy.minSize + ((health / maxHealth) * (c.map.enemy.maxSize - c.map.enemy.minSize))) * scale;
+                let result = (c.map.enemy.minSize() + ((health / maxHealth) * (c.map.enemy.maxSize() - c.map.enemy.minSize()))) * scale;
                 // console.log(typeof result, result, typeof Math.floor(result), Math.floor(result));
 
                 // Return the correct size

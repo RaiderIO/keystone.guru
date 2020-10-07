@@ -20,7 +20,6 @@ jobs:
             php artisan up;
             php artisan down --message "Upgrading keystone.guru, we will be back stronger than ever shortly!" --retry 60;
             php artisan environment:updateprepare &&
-            php artisan make:githubrelease &&
             php artisan environment:update live &&
             php artisan report:release discord &&
             php artisan report:release reddit;

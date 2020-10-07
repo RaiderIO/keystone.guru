@@ -129,6 +129,9 @@ class DungeonDataSeeder extends Seeder
             // Npc
             new NpcNpcBolsteringWhitelistRelationParser(),
             new NpcNpcSpellsRelationParser(),
+
+            // Dungeon
+            new DungeonFloorsRelationParser(),
         ];
 
         // Parse these attributes AFTER the model has been inserted into the database (so we know its ID)
@@ -225,6 +228,23 @@ class DungeonDataSeeder extends Seeder
     protected function _rollback()
     {
         $this->command->warn('Truncating all relevant data...');
+
+        // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
+        $demoRoutes = DungeonRoute::all()->where('demo', true);
+
+        // Delete each found route that was a demo (controlled by me only)
+        // This will remove all killzones, brushlines, paths etc related to the route.
+        foreach ($demoRoutes as $demoRoute) {
+            /** @var $demoRoute DungeonRoute */
+            try {
+                /** @var $demoRoute Model */
+                $demoRoute->delete();
+            } catch (Exception $ex) {
+                $this->command->error(sprintf('%s: Exception deleting demo dungeonroute', $ex->getMessage()));
+            }
+        }
+
+
         DB::table('spells')->truncate();
         DB::table('npcs')->truncate();
         DB::table('npc_bolstering_whitelists')->truncate();
@@ -238,19 +258,9 @@ class DungeonDataSeeder extends Seeder
         // Delete polylines related to enemy patrols
         DB::table('polylines')->where('model_class', 'App\Models\EnemyPatrol')->delete();
 
-        // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
-        $demoRoutes = DungeonRoute::all()->where('demo', true);
-
-        // Delete each found route that was a demo (controlled by me only)
-        // This will remove all killzones, brushlines, paths etc related to the route.
-        foreach ($demoRoutes as $demoRoute) {
-            /** @var $demoRoute DungeonRoute */
-            try {
-                /** @var $demoRoute Model */
-                $demoRoute->delete();
-            } catch (Exception $ex) {
-                $this->command->error('Exception deleting demo dungeonroute');
-            }
-        }
+        // Truncating these before the above will cause some issues
+        DB::table('dungeons')->truncate();
+        DB::table('floors')->truncate();
+        DB::table('floor_couplings')->truncate();
     }
 }

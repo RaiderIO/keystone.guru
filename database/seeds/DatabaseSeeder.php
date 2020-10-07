@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
         // Seeders which don't depend on anything else
         $this->call(GameServerRegionsSeeder::class);
         $this->call(ExpansionsSeeder::class);
-        $this->call(DungeonsSeeder::class);
         $this->call(RouteAttributesSeeder::class);
         $this->call(PaidTiersSeeder::class);
         $this->call(FactionsSeeder::class);

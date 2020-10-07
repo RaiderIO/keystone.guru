@@ -94,7 +94,7 @@ class MapContext extends Signalable {
 
     /**
      *
-     * @returns {Number}
+     * @returns {string}
      */
     getFaction() {
         return this._options.faction;
@@ -198,13 +198,29 @@ class MapContext extends Signalable {
     findNpcById(npcId) {
         let result = null;
 
-        for(let i = 0; i < this._options.dungeon.npcs.length; i++ ){
-            if( this._options.dungeon.npcs[i].id === npcId ){
+        for (let i = 0; i < this._options.dungeon.npcs.length; i++) {
+            if (this._options.dungeon.npcs[i].id === npcId) {
                 result = this._options.dungeon.npcs[i];
                 break;
             }
         }
 
         return result;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getMinEnemySizeDefault() {
+        return this._options.minEnemySizeDefault;
+    }
+    
+    /**
+     *
+     * @returns {Number}
+     */
+    getMaxEnemySizeDefault() {
+        return this._options.maxEnemySizeDefault;
     }
 }

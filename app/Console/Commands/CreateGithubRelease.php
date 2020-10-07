@@ -47,6 +47,7 @@ class CreateGithubRelease extends Command
     public function handle()
     {
         $version = $this->argument('version');
+        $this->info(sprintf('>> Creating Github release for %s', $version));
 
         if ($version === null) {
             $release = Release::latest()->first();
@@ -92,5 +93,7 @@ class CreateGithubRelease extends Command
         } else {
             $this->error(sprintf('Unable to find release %s', $version));
         }
+
+        $this->info(sprintf('OK Creating Github release for %s', $version));
     }
 }

@@ -13,7 +13,7 @@ class Sidebar {
     activate() {
         let self = this;
 
-        if( isMobile() ) {
+        if (isMobile()) {
             let dungeonMap = getState().getDungeonMap();
             let fn = function () {
                 self._hideSidebar();
@@ -33,14 +33,24 @@ class Sidebar {
 
             let pathname = window.location.pathname;
             let pathSplit = trimEnd(pathname, '/').split('/');
-            if (Number.isInteger(parseInt(pathSplit[pathSplit.length - 1]))) {
-                // Strip the last one from it
-                pathSplit.splice(-1, 1);
+            let newUrl = window.location.protocol + '//' + window.location.host;
+
+            if (getState().isMapAdmin()) {
+                // Example url: https://keystone.test/admin/dungeon/14/floor/42/mapping
+                // Strip the last two elements (<number>/mapping)
+                pathSplit.splice(-2);
                 pathname = pathSplit.join('/');
+                newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping`;
+            } else {
+                // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
+                if (Number.isInteger(parseInt(pathSplit[pathSplit.length - 1]))) {
+                    // Strip the last two elements (<number>/mapping)
+                    pathSplit.splice(-1);
+                    pathname = pathSplit.join('/');
+                }
+                newUrl += `${pathname}/${getState().getCurrentFloor().index}`;
             }
 
-            let newUrl = window.location.protocol + '//' + window.location.host + pathname + '/' +
-                (getState().isMapAdmin() ? floorIdChangedEvent.data.floorId : getState().getCurrentFloor().index);
 
             history.pushState({page: 1},
                 newUrl,
