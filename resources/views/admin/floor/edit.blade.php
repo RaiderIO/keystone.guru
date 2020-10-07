@@ -40,6 +40,18 @@ $connectedFloorCandidates = $model->dungeon->floors->except($model->id);
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
 
+    <div class="form-group{{ $errors->has('min_enemy_size') ? ' has-error' : '' }}">
+        {!! Form::label('min_enemy_size', sprintf(__('Minimum enemy size (empty for default (%s))'), config('keystoneguru.min_enemy_size_default')), ['class' => 'font-weight-bold']) !!}
+        {!! Form::number('min_enemy_size', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'min_enemy_size'])
+    </div>
+
+    <div class="form-group{{ $errors->has('max_enemy_size') ? ' has-error' : '' }}">
+        {!! Form::label('max_enemy_size', sprintf(__('Maximum enemy size (empty for default (%s))'), config('keystoneguru.max_enemy_size_default')), ['class' => 'font-weight-bold']) !!}
+        {!! Form::number('max_enemy_size', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'max_enemy_size'])
+    </div>
+
     <div class="form-group{{ $errors->has('default') ? ' has-error' : '' }}">
         {!! Form::label('default', __('Default'), ['class' => 'font-weight-bold']) !!}
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{

@@ -94,15 +94,17 @@ abstract class MapContext
         $npcMaxHealth = $npcMaxHealth + ($npcMinHealth === $npcMaxHealth ? 1 : 0);
 
         return [
-            'type'          => $this->getType(),
-            'floorId'       => $this->_floor->id,
-            'teeming'       => $this->isTeeming(),
-            'seasonalIndex' => $this->getSeasonalIndex(),
-            'dungeon'       => $dungeonData,
-            'static'        => $static,
+            'type'                => $this->getType(),
+            'floorId'             => $this->_floor->id,
+            'teeming'             => $this->isTeeming(),
+            'seasonalIndex'       => $this->getSeasonalIndex(),
+            'dungeon'             => $dungeonData,
+            'static'              => $static,
+            'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),
+            'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
             // @TODO Probably move this? Temp fix
-            'npcsMinHealth' => $npcMinHealth,
-            'npcsMaxHealth' => $npcMaxHealth
+            'npcsMinHealth'       => $npcMinHealth,
+            'npcsMaxHealth'       => $npcMaxHealth,
         ];
     }
 }

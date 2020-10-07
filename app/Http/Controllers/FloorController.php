@@ -38,11 +38,16 @@ class FloorController extends Controller
         $floor->index = $request->get('index');
         $floor->name = $request->get('name');
         $floor->default = $request->get('default', false);
+        $defaultMinEnemySize = config('keystoneguru.min_enemy_size_default');
+        $floor->min_enemy_size = $request->get('min_enemy_size', $defaultMinEnemySize);
+        $floor->min_enemy_size = empty($floor->min_enemy_size) ? null : $floor->min_enemy_size;
+
+        $defaultMaxEnemySize = config('keystoneguru.max_enemy_size_default');
+        $floor->max_enemy_size = $request->get('max_enemy_size', $defaultMaxEnemySize);
+        $floor->max_enemy_size = empty($floor->max_enemy_size) ? null : $floor->max_enemy_size;
 
         // Update or insert it
-        if (!$floor->save()) {
-            abort(500, 'Unable to save floor');
-        } else {
+        if ($floor->save()) {
             // Delete all directly connected floors
             $floor->floorcouplings()->delete();
 
@@ -62,6 +67,8 @@ class FloorController extends Controller
             }
 
             $this->mappingChanged($beforeFloor, $floor);
+        } else {
+            abort(500, 'Unable to save floor');
         }
 
         return $floor;

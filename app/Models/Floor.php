@@ -13,8 +13,10 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $dungeon_id
  * @property int $index
- * @property boolean $default
  * @property string $name
+ * @property boolean $default
+ * @property int $min_enemy_size
+ * @property int $max_enemy_size
  *
  * @property Dungeon $dungeon
  *
@@ -30,6 +32,8 @@ use Illuminate\Support\Collection;
  */
 class Floor extends Model
 {
+    public $timestamps = false;
+    
     public $hidden = ['dungeon_id', 'created_at', 'updated_at'];
 
     /**

@@ -36,7 +36,6 @@ class DungeonFloorsRelationParser implements RelationParser
      */
     public function parseRelation($modelClassName, $modelData, $name, $value)
     {
-        dump($modelClassName, $modelData, $name, $value);
         foreach ($value as $floor) {
             $floor['dungeon_id'] = $modelData['id'];
 

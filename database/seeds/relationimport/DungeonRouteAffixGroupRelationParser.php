@@ -1,6 +1,8 @@
 <?php
 
 
+use App\Models\DungeonRouteAffixGroup;
+
 class DungeonRouteAffixGroupRelationParser implements RelationParser
 {
     /**
@@ -35,7 +37,7 @@ class DungeonRouteAffixGroupRelationParser implements RelationParser
             // We now know the dungeon route ID, set it back to the Route
             $affixGroup['dungeon_route_id'] = $modelData['id'];
 
-            \App\Models\DungeonRouteAffixGroup::insert($affixGroup);
+            DungeonRouteAffixGroup::insert($affixGroup);
         }
 
         // Didn't really change anything so just return the value.
