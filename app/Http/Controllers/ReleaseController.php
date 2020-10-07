@@ -60,7 +60,7 @@ class ReleaseController extends Controller
 
 
         $release->version = $request->get('version');
-        $release->silent = $request->get('silent');
+        $release->silent = $request->get('silent', 0);
 
         // Match the changelog to the release
         $release->release_changelog_id = $changelog->id;
@@ -72,13 +72,13 @@ class ReleaseController extends Controller
             if (Artisan::call('release:save') === 0 && $new) {
                 $createReleaseTicketResult = Artisan::call(sprintf('make:githubreleaseticket %s', $release->version));
                 switch ($createReleaseTicketResult) {
-                    case 1:
+                    case 0:
                         Session::flash('warning', __('Release ticket was already created'));
                         break;
-                    case 0:
-                    default:
-                        Session::flash('status', __('Release ticket was created'));
-                        break;
+//                    case 0:
+//                    default:
+//                        Session::flash('status', __('Release ticket was created'));
+//                        break;
                 }
             }
         } // Something went wrong with saving

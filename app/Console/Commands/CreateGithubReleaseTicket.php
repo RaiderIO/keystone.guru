@@ -76,7 +76,7 @@ class CreateGithubReleaseTicket extends Command
             }
 
             $githubIssueClient->create($username, $repository, [
-                'title'     => $release->version,
+                'title'     => sprintf('Release %s', $release->version),
                 'body'      => $release->github_body,
                 'labels'    => [
                     'release'
