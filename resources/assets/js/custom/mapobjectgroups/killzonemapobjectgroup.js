@@ -29,7 +29,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
     _onObjectDeleted(data) {
         super._onObjectDeleted(data);
-        let mapObject = objectDeletedEvent.context;
+        let mapObject = data.context;
 
         $.each(this.objects, function (i, obj) {
             obj.setIndex(i + 1);
@@ -37,8 +37,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         this.saveAll();
 
-        mapObject.register('killzone:enemyremoved', this);
-        mapObject.register('killzone:enemyadded', this);
+        mapObject.unregister('killzone:enemyremoved', this);
+        mapObject.unregister('killzone:enemyadded', this);
     }
 
     _createMapObject(layer, options = {}) {
@@ -206,7 +206,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             ) {
                 // But if it's not..
                 if( !this.isEnemyKilled(enemy.id) ){
-                    console.warn(`Has not killed enemy ${enemy.id}!`);
+                    // console.warn(`Has not killed enemy ${enemy.id}!`);
                     result = false;
                     break;
                 }
