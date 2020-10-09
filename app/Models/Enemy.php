@@ -6,6 +6,7 @@ use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -36,7 +37,7 @@ class Enemy extends Model
 {
     use Reportable;
 
-    public $with = ['npc'];
+    public $with = ['npc', 'activeauras'];
 //    public $hidden = ['npc_id'];
     public $timestamps = false;
 
@@ -62,5 +63,13 @@ class Enemy extends Model
     function npc()
     {
         return $this->belongsTo('App\Models\Npc');
+    }
+
+    /**
+     * @return HasMany
+     */
+    function activeauras()
+    {
+        return $this->hasMany('App\Models\EnemyActiveAura');
     }
 }

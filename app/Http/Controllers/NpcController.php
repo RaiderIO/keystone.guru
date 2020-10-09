@@ -36,7 +36,7 @@ class NpcController extends Controller
 
     /**
      * @param NpcFormRequest $request
-     * @param Npc $npc
+     * @param Npc|null $npc
      * @return array|mixed
      * @throws Exception
      */
@@ -104,6 +104,9 @@ class NpcController extends Controller
             } else {
                 broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
             }
+
+            // Re-load the relations so we're echoing back a fully updated npc
+            $npc->load(['npcbolsteringwhitelists', 'spells']);
 
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($npcBefore, $npc);

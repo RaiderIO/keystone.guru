@@ -9,6 +9,7 @@ use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\MapIconType;
 use App\Models\RaidMarker;
+use App\Models\Spell;
 use App\Service\Cache\CacheService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
@@ -68,6 +69,7 @@ abstract class MapContext
             return array_merge(($this->_floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
                 'enemies'                   => $dungeon->enemies()->without(['npc'])->get(),
                 'npcs'                      => $dungeon->npcs()->with(['spells'])->get(),
+                'auras'                     => Spell::where('aura', true)->get(),
                 'enemyPacks'                => $dungeon->enemypacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
                 'enemyPatrols'              => $dungeon->enemypatrols,
                 'mapIcons'                  => $dungeon->mapicons,
